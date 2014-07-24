@@ -1785,6 +1785,9 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
         Imp()->GetDrawView()->AddWindowToPaintView(&rDevice);
     }
 
+    Rectangle aOutRect = Rectangle(Point(tilePosX, tilePosY),
+                                   rDevice.PixelToLogic(Size(contextWidth, contextHeight)));
+
     // Make the requested area visible -- we can't use MakeVisible as that will
     // only scroll the contents, but won't zoom/resize if needed.
     // Without this, items/text that are outside the visible area (in the SwView)
@@ -1792,10 +1795,10 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // tiledrendering app, or the gtktiledviewer) -- although ultimately we
     // probably want to fix things so that the SwView's area doesn't affect
     // tiled rendering?
-    VisPortChgd(SwRect(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+    VisPortChgd(SwRect(aOutRect));
 
     // draw - works in logic coordinates
-    Paint(Rectangle(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+    Paint(aOutRect);
 
     // Remove this device in DrawLayer
     if (Imp()->GetDrawView())
