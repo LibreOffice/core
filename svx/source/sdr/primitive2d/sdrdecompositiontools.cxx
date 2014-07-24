@@ -317,7 +317,7 @@ namespace drawinglayer
                 else // text in range
                 {
                     // FIXME(matteocam)
-                    bool b = false;
+                    bool b = true; // XXX: Chained Text by default!
                     if (b)
                         pNew = new SdrChainedTextPrimitive2D( &rText.getSdrText(), rText.getOutlinerParaObject() );
                     else // end FIXME
