@@ -140,7 +140,7 @@ public class JavaLoader implements XImplementationLoader,
      * Creates a new <code>JavaLoader</code> object.
      *
      * <p>The specified <code>com.sun.star.lang.XMultiServiceFactory</code> is
-     * the <code>ServiceManager</code> service which can be deliviert to all
+     * the <code>ServiceManager</code> service which can be delivered to all
      * components the <code>JavaLoader</code> is loading.</p>
      *
      * <p>To set the <code>MultiServiceFactory</code> you can use the
