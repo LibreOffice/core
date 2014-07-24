@@ -2301,9 +2301,9 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
         else if(aEffectProps[i].Name == "RgbClrTransparency")
         {
             sal_Int32 nTransparency;
-            aEffectProps[i].Value >>= nTransparency;
-            // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
-            nAlpha = MAX_PERCENT - ( PER_PERCENT * nTransparency );
+            if (aEffectProps[i].Value >>= nTransparency)
+                // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
+                nAlpha = MAX_PERCENT - ( PER_PERCENT * nTransparency );
         }
         else if(aEffectProps[i].Name == "SchemeClr")
         {
