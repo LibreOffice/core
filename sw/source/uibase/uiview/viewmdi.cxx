@@ -75,7 +75,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     m_pWrtShell->LockView( true );
     m_pWrtShell->LockPaint();
 
-    {
+    { // start of SwActContext scope
     SwActContext aActContext(m_pWrtShell);
 
     long nFac = nFactor;
@@ -197,7 +197,8 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     m_pHRuler->SetZoom( aFrac );
     m_pHRuler->ForceUpdate();
     ((SwViewOption*)m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
-    }
+    } // end of SwActContext scope
+
     m_pWrtShell->UnlockPaint();
     if( bUnLockView )
         m_pWrtShell->LockView( false );
