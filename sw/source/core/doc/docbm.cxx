@@ -1628,34 +1628,30 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
     MarkEntry aSave;
     BOOST_FOREACH(const SwFrmFmt* pFrmFmt, *pDoc->GetSpzFrmFmts())
     {
-        if ( RES_FLYFRMFMT != pFrmFmt->Which() && RES_DRAWFRMFMT != pFrmFmt->Which() )
+        if ( RES_FLYFRMFMT == pFrmFmt->Which() || RES_DRAWFRMFMT == pFrmFmt->Which() )
         {
-            ++aSave.m_nIdx;
-            continue;
-        }
-
-        const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
-        if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
-             ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
-               FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
-        {
-            aSave.m_bOther = false;
-            aSave.m_nCntnt = pAPos->nContent.GetIndex();
-            if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
+            bool bSkip = false;
+            const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
+            SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+            if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
+                 ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
+                   FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
             {
-                if( nCntnt <= aSave.m_nCntnt )
+                aSave.m_bOther = false;
+                aSave.m_nCntnt = pAPos->nContent.GetIndex();
+                if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                 {
-                    if( SAVEFLY_SPLIT == nSaveFly )
-                        aSave.m_bOther = true;
-                    else
+                    if( nCntnt <= aSave.m_nCntnt )
                     {
-                        ++aSave.m_nIdx;
-                        continue;
+                        if( SAVEFLY_SPLIT == nSaveFly )
+                            aSave.m_bOther = true;
+                        else
+                            bSkip = true;
                     }
                 }
+                if(!bSkip)
+                    m_aFlyEntries.push_back(aSave);
             }
-            m_aFlyEntries.push_back(aSave);
         }
         ++aSave.m_nIdx;
     }
