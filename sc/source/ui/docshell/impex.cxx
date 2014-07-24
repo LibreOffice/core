@@ -1297,9 +1297,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     }
 
     // Determine range for Undo.
-    // TODO: we don't need this during import of a file to a new sheet or
-    // document, could set bDetermineRange=false then.
-    bool bDetermineRange = true;
+    // We don't need this during import of a file to a new sheet or document...
+    bool bDetermineRange = bUndo;
 
     // Row heights don't need to be adjusted on the fly if EndPaste() is called
     // afterwards, which happens only if bDetermineRange. This variable also
