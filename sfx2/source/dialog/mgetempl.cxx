@@ -193,6 +193,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
 
             if ( pTupel->nFlags != SFXSTYLEBIT_AUTO     &&
                  pTupel->nFlags != SFXSTYLEBIT_USED     &&
+                 pTupel->nFlags != SFXSTYLEBIT_ALL_VISIBLE &&
                  pTupel->nFlags != SFXSTYLEBIT_ALL )
             {
                 m_pFilterLb->InsertEntry( pTupel->aName, nIdx );
