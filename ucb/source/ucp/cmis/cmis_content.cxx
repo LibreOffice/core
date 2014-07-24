@@ -48,6 +48,7 @@
 #include <ucbhelper/std_outputstream.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/proxydecider.hxx>
+#include <sax/tools/converter.hxx>
 
 #include "auth_provider.hxx"
 #include "certvalidation_handler.hxx"
@@ -177,17 +178,66 @@ namespace
         bool bMultiValued = prop.MultiValued;
         bool bOpenChoice = prop.OpenChoice;
         uno::Any value = prop.Value;
+        std::vector< std::string > values;
+
         libcmis::PropertyType::Type type = libcmis::PropertyType::String;
         if ( prop.Type == CMIS_TYPE_STRING )
+        {
+            uno::Sequence< OUString > seqValue;
+            value >>= seqValue;
+            sal_Int32 m_nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            {
+                values.push_back( OUSTR_TO_STDSTR( seqValue[i] ) );
+            }
             type = libcmis::PropertyType::String;
+        }
         else if ( prop.Type == CMIS_TYPE_BOOL )
+        {
+            uno::Sequence< sal_Bool > seqValue;
+            value >>= seqValue;
+            sal_Int32 m_nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            {
+                values.push_back( OUSTR_TO_STDSTR( OUString::boolean( seqValue[i] ) ) );
+            }
             type = libcmis::PropertyType::Bool;
+        }
         else if ( prop.Type == CMIS_TYPE_INTEGER )
+        {
+            uno::Sequence< sal_Int64 > seqValue;
+            value >>= seqValue;
+            sal_Int32 m_nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            {
+                values.push_back( OUSTR_TO_STDSTR( OUString::number( seqValue[i] ) ) );
+            }
             type = libcmis::PropertyType::Integer;
+        }
         else if ( prop.Type == CMIS_TYPE_DECIMAL )
+        {
+            uno::Sequence< double > seqValue;
+            value >>= seqValue;
+            sal_Int32 m_nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            {
+                values.push_back( OUSTR_TO_STDSTR( OUString::number( seqValue[i] ) ) );
+            }
             type = libcmis::PropertyType::Decimal;
+        }
         else if ( prop.Type == CMIS_TYPE_DATETIME )
+        {
+            uno::Sequence< util::DateTime > seqValue;
+            value >>= seqValue;
+            sal_Int32 m_nNumValue = seqValue.getLength( );
+            for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
+            {
+                OUStringBuffer aBuffer;
+                ::sax::Converter::convertDateTime( aBuffer, seqValue[i], 0, false );
+                values.push_back( OUSTR_TO_STDSTR( aBuffer.makeStringAndClear( )  ) );
+            }
             type = libcmis::PropertyType::DateTime;
+        }
 
         propertyType->setId( OUSTR_TO_STDSTR( id ));
         propertyType->setDisplayName( OUSTR_TO_STDSTR( name ) );
@@ -197,23 +247,10 @@ namespace
         propertyType->setOpenChoice( bOpenChoice );
         propertyType->setType( type );
 
-        std::vector< std::string > values;
-
-        // convert UNO value to string vector
-        uno::Sequence< OUString > aStrings;
-        value >>= aStrings;
-        sal_Int32 len = aStrings.getLength( );
-        for ( sal_Int32 i = 0; i < len; i++ )
-        {
-            string str = OUSTR_TO_STDSTR( aStrings[i] );
-            values.push_back( str );
-        }
-
         libcmis::PropertyPtr property( new libcmis::Property( propertyType, values ) );
 
         return property;
     }
-
 }
 
 namespace cmis
