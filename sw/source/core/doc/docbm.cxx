@@ -1616,7 +1616,15 @@ void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
 
 void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly)
 {
-    // Paragraph anchored objects
+    SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
+    if( !pNode )
+        return;
+    SwFrm* pFrm = pNode->getLayoutFrm( pDoc->GetCurrentLayout() );
+    if( pFrm )
+    {
+        if( !pFrm->GetDrawObjs() )
+            return; // if we have a layout and no DrawObjs, we can skip this
+    }
     MarkEntry aSave;
     for( aSave.m_nIdx = pDoc->GetSpzFrmFmts()->size(); aSave.m_nIdx ; )
     {
