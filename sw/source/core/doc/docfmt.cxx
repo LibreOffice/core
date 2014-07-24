@@ -907,6 +907,13 @@ SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const OUString &rFmtName,
     pFmtColl->SetAuto( false );
     SetModified();
 
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoCondTxtFmtCollCreate(pFmtColl, pDerivedFrom,
+                                                        this);
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
+    }
+
     if (bBroadcast)
         BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
                                 SFX_STYLESHEET_CREATED);
@@ -942,8 +949,15 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        SwUndoTxtFmtCollDelete * pUndo =
-            new SwUndoTxtFmtCollDelete(pDel, this);
+        SwUndoTxtFmtCollDelete * pUndo;
+        if (RES_CONDTXTFMTCOLL == pDel->Which())
+        {
+            pUndo = new SwUndoCondTxtFmtCollDelete(pDel, this);
+        }
+        else
+        {
+            pUndo = new SwUndoTxtFmtCollDelete(pDel, this);
+        }
 
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }

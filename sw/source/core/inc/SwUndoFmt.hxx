@@ -26,6 +26,7 @@
 
 class SwDoc;
 class SwTxtFmtColl;
+class SwConditionTxtFmtColl;
 class SwRewriter;
 class SfxItemSet;
 
@@ -118,6 +119,20 @@ public:
     virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
     virtual void Delete(SwFmt * pFmt) SAL_OVERRIDE;
     virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+};
+
+class SwUndoCondTxtFmtCollCreate : public SwUndoTxtFmtCollCreate
+{
+public:
+    SwUndoCondTxtFmtCollCreate(SwConditionTxtFmtColl * pNew, SwTxtFmtColl * pDerivedFrom, SwDoc * pDoc);
+    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+};
+
+class SwUndoCondTxtFmtCollDelete : public SwUndoTxtFmtCollDelete
+{
+public:
+    SwUndoCondTxtFmtCollDelete(SwTxtFmtColl * pOld, SwDoc * pDoc);
+    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
 };
 
 class SwUndoRenameFmtColl : public SwUndoRenameFmt

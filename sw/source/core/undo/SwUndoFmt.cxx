@@ -232,6 +232,28 @@ SwFmt * SwUndoTxtFmtCollDelete::Find(const OUString & rName) const
     return pDoc->FindTxtFmtCollByName(rName);
 }
 
+SwUndoCondTxtFmtCollCreate::SwUndoCondTxtFmtCollCreate(SwConditionTxtFmtColl *_pNew,
+    SwTxtFmtColl *_pDerivedFrom, SwDoc *_pDoc)
+    : SwUndoTxtFmtCollCreate(_pNew, _pDerivedFrom, _pDoc)
+{
+}
+
+SwFmt * SwUndoCondTxtFmtCollCreate::Create(SwFmt * pDerivedFrom)
+{
+    return pDoc->MakeCondTxtFmtColl(sNewName, (SwTxtFmtColl *)pDerivedFrom, true);
+}
+
+SwUndoCondTxtFmtCollDelete::SwUndoCondTxtFmtCollDelete(SwTxtFmtColl * _pOld,
+                                                       SwDoc * _pDoc)
+    : SwUndoTxtFmtCollDelete(_pOld, _pDoc)
+{
+}
+
+SwFmt * SwUndoCondTxtFmtCollDelete::Create(SwFmt * pDerivedFrom)
+{
+    return pDoc->MakeCondTxtFmtColl(sOldName, (SwTxtFmtColl *) pDerivedFrom, true);
+}
+
 SwUndoRenameFmtColl::SwUndoRenameFmtColl(const OUString & sInitOldName,
                                          const OUString & sInitNewName,
                                          SwDoc * _pDoc)
