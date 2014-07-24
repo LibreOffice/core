@@ -140,23 +140,24 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     }
 
     nFac = std::max( long( MINZOOM ), nFac );
+    const sal_uInt16 nZoomFac = static_cast<sal_uInt16>(nFac);
 
     SwViewOption aOpt( *pOpt );
     if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {
         //Update MasterUsrPrefs and after that update the ViewOptions of the current View.
         if ( !bViewOnly &&
-                (sal_uInt16(nFac)      != pUsrPref->GetZoom() ||
-                sal_uInt8  (eZoomType) != pUsrPref->GetZoomType()) )
+                (nZoomFac != pUsrPref->GetZoom() ||
+                eZoomType != pUsrPref->GetZoomType()) )
         {
-            pUsrPref->SetZoom(sal_uInt16(nFac));
+            pUsrPref->SetZoom(nZoomFac);
             pUsrPref->SetZoomType(eZoomType);
             SW_MOD()->ApplyUsrPref(*pUsrPref, 0, 0);
             pUsrPref->SetModified();
         }
-        if ( pOpt->GetZoom() != (sal_uInt16) nFac )
+        if ( pOpt->GetZoom() != nZoomFac )
         {
-            aOpt.SetZoom    ( sal_uInt16(nFac) );
+            aOpt.SetZoom(nZoomFac);
             aOpt.SetReadonly(pOpt->IsReadonly());
             m_pWrtShell->ApplyViewOptions( aOpt );
         }
@@ -185,9 +186,9 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         ((SwViewOption*)m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
         CalcVisArea( rEditSize );   // for the recalculation of the viewable area
     }
-    else if ( sal_uInt16(nFac) != pOpt->GetZoom() )
+    else if ( nZoomFac != pOpt->GetZoom() )
     {
-        aOpt.SetZoom    ( sal_uInt16(nFac) );
+        aOpt.SetZoom( nZoomFac );
         m_pWrtShell->ApplyViewOptions( aOpt );
     }
 
