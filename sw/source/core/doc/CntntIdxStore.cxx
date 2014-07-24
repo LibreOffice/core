@@ -156,8 +156,8 @@ namespace
             RestoreBkmks(pDoc, aUpdater);
             RestoreRedlines(pDoc, aUpdater);
             RestoreFlys(pDoc, aUpdater, bAuto);
-            RestoreUnoCrsrs(pDoc, aUpdater);
-            RestoreShellCrsrs(pDoc, aUpdater);
+            RestoreUnoCrsrs(aUpdater);
+            RestoreShellCrsrs(aUpdater);
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
@@ -167,8 +167,8 @@ namespace
             RestoreBkmks(pDoc, aUpdater);
             RestoreRedlines(pDoc, aUpdater);
             RestoreFlys(pDoc, aUpdater, false);
-            RestoreUnoCrsrs(pDoc, aUpdater);
-            RestoreShellCrsrs(pDoc, aUpdater);
+            RestoreUnoCrsrs(aUpdater);
+            RestoreShellCrsrs(aUpdater);
         }
         virtual ~CntntIdxStoreImpl(){};
         private:
@@ -179,9 +179,9 @@ namespace
             inline void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplit);
             inline void RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto);
             inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
-            inline void RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater);
+            inline void RestoreUnoCrsrs(updater_t& rUpdater);
             inline void SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
-            inline void RestoreShellCrsrs(SwDoc* pDoc, updater_t& rUpdater);
+            inline void RestoreShellCrsrs(updater_t& rUpdater);
             inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
             inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
@@ -392,7 +392,7 @@ void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
     }
 }
 
-void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* /* pDoc */, updater_t& rUpdater)
+void CntntIdxStoreImpl::RestoreUnoCrsrs(updater_t& rUpdater)
 {
     BOOST_FOREACH(const PaMEntry& aEntry, m_aUnoCrsrEntries)
     {
@@ -423,7 +423,7 @@ void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
     } while((_pStartShell=(SwViewShell*)_pStartShell->GetNext())!= pShell );
 }
 
-void CntntIdxStoreImpl::RestoreShellCrsrs(SwDoc* /* pDoc */, updater_t& rUpdater)
+void CntntIdxStoreImpl::RestoreShellCrsrs(updater_t& rUpdater)
 {
     BOOST_FOREACH(const PaMEntry& aEntry, m_aShellCrsrEntries)
     {
