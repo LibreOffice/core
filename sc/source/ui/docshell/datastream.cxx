@@ -501,16 +501,17 @@ void DataStream::MoveData()
         default:
             ;
     }
-    if(mbIsFirst&&mbIsUpdate)
+
+    if(mbIsFirst && mbIsUpdate)
     {
-         int importTimeout = 0;
-         char * cenv = getenv( "streamtimeout" );
+         int nImportTimeout = 0;
+         static char * cenv = getenv( "streamtimeout" );
          if(cenv)
          {
-             double denv = atof(cenv);
-             importTimeout = 1000 * denv;
+             double nEnv = atof(cenv);
+             nImportTimeout = 1000 * nEnv;
          }
-         maImportTimer.SetTimeout(importTimeout);
+         maImportTimer.SetTimeout(nImportTimeout);
          mbIsFirst = false;
     }
 }
