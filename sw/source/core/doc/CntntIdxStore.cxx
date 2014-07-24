@@ -22,6 +22,7 @@
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 #include <boost/function.hpp>
+#include <boost/make_shared.hpp>
 #include <cntfrm.hxx>
 #include <crossrefbookmark.hxx>
 #include <annotationmark.hxx>
@@ -449,7 +450,7 @@ void CntntIdxStoreImpl::RestoreShellCrsrs(SwDoc* /* pDoc */, updater_t& rUpdater
 namespace sw { namespace mark {
     boost::shared_ptr<CntntIdxStore> CntntIdxStore::Create()
     {
-       return boost::shared_ptr<CntntIdxStore>(new CntntIdxStoreImpl());
+       return boost::make_shared<CntntIdxStoreImpl>();
     }
 }}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
