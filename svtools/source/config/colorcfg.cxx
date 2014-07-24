@@ -418,7 +418,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
     {
         COL_WHITE, // DOCCOLOR
         0xc0c0c0, // DOCBOUNDARIES
-        0xA9A9A9, // APPBACKGROUND
+        0xCFCFCF, // APPBACKGROUND
         0xc0c0c0, // OBJECTBOUNDARIES
         0xc0c0c0, // TABLEBOUNDARIES
         COL_BLACK, // FONTCOLOR
