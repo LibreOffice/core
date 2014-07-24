@@ -1244,10 +1244,7 @@ namespace svgio
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        if(aNum.isPositive())
-                        {
-                            setFillOpacity(aNum);
-                        }
+                        setFillOpacity(SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet()));
                     }
                     break;
                 }
