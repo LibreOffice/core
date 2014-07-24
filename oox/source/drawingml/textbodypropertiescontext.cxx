@@ -132,7 +132,11 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
                 break;
             case A_TOKEN( spAutoFit ):
-                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
+                {
+                    const sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
+                    if( tVert != XML_vert && tVert != XML_eaVert && tVert != XML_vert270 && tVert != XML_mongolianVert )
+                        mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
+                }
                 break;
 
             case A_TOKEN( scene3d ):        // CT_Scene3D
