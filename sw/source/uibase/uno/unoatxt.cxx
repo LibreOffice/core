@@ -98,13 +98,10 @@ uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
     const size_t nCount = pGlossaries->GetGroupCnt();
-    if ( 0 <= nIndex && static_cast<size_t>(nIndex) < nCount )
-        aRet = getByName(pGlossaries->GetGroupName( static_cast<size_t>(nIndex) ));
-    else
+    if ( nIndex < 0 || static_cast<size_t>(nIndex) >= nCount )
         throw lang::IndexOutOfBoundsException();
-    return aRet;
+    return getByName(pGlossaries->GetGroupName( static_cast<size_t>(nIndex) ));
 }
 
 uno::Type SwXAutoTextContainer::getElementType(void) throw( uno::RuntimeException, std::exception )
@@ -272,12 +269,10 @@ SwXAutoTextGroup::~SwXAutoTextGroup()
 uno::Sequence< OUString > SwXAutoTextGroup::getTitles(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = 0;
     boost::scoped_ptr<SwTextBlocks> pGlosGroup(pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0);
-    if(pGlosGroup && !pGlosGroup->GetError())
-        nCount = pGlosGroup->GetCount();
-    else
+    if (!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
+    const sal_uInt16 nCount = pGlosGroup->GetCount();
 
     uno::Sequence< OUString > aEntryTitles(nCount);
     OUString *pArr = aEntryTitles.getArray();
@@ -494,42 +489,31 @@ void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeExcepti
     OUString sPreserveTitle( pGlossaries->GetGroupTitle( sName ) );
     if ( !pGlossaries->RenameGroupDoc( sName, sNewGroup, sPreserveTitle ) )
         throw uno::RuntimeException();
-    else
-    {
-        sName = rName;
-        m_sGroupName = sNewGroup;
-        pGlossaries = pTempGlossaries;
-    }
+    sName = rName;
+    m_sGroupName = sNewGroup;
+    pGlossaries = pTempGlossaries;
 }
 
 sal_Int32 SwXAutoTextGroup::getCount(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    int nCount = 0;
     boost::scoped_ptr<SwTextBlocks> pGlosGroup(pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0);
-    if(pGlosGroup && !pGlosGroup->GetError())
-        nCount = pGlosGroup->GetCount();
-    else
+    if (!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
-    return nCount;
+    return static_cast<sal_Int32>(pGlosGroup->GetCount());
 }
 
 uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
-    sal_uInt16 nCount = 0;
     boost::scoped_ptr<SwTextBlocks> pGlosGroup(pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0);
-    if(pGlosGroup && !pGlosGroup->GetError())
-        nCount = pGlosGroup->GetCount();
-    else
+    if (!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
-    if(0 <= nIndex && nIndex < nCount)
-        aRet = getByName(pGlosGroup->GetShortName((sal_uInt16) nIndex));
-    else
+    const sal_uInt16 nCount = pGlosGroup->GetCount();
+    if (nIndex < 0 || nIndex >= static_cast<sal_Int32>(nCount))
         throw lang::IndexOutOfBoundsException();
-    return aRet;
+    return getByName(pGlosGroup->GetShortName(static_cast<sal_uInt16>(nIndex)));
 }
 
 uno::Type SwXAutoTextGroup::getElementType(void) throw( uno::RuntimeException, std::exception )
@@ -542,12 +526,9 @@ sal_Bool SwXAutoTextGroup::hasElements(void) throw( uno::RuntimeException, std::
 {
     SolarMutexGuard aGuard;
     boost::scoped_ptr<SwTextBlocks> pGlosGroup(pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0);
-    sal_uInt16 nCount = 0;
-    if(pGlosGroup && !pGlosGroup->GetError())
-        nCount = pGlosGroup->GetCount();
-    else
+    if (!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
-    return nCount > 0;
+    return pGlosGroup->GetCount() > 0;
 
 }
 
@@ -565,13 +546,11 @@ uno::Sequence< OUString > SwXAutoTextGroup::getElementNames(void)
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = 0;
     boost::scoped_ptr<SwTextBlocks> pGlosGroup(pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0);
-    if(pGlosGroup && !pGlosGroup->GetError())
-        nCount = pGlosGroup->GetCount();
-    else
+    if (!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
 
+    const sal_uInt16 nCount = pGlosGroup->GetCount();
     uno::Sequence< OUString > aEntryNames(nCount);
     OUString *pArr = aEntryNames.getArray();
 
@@ -585,13 +564,11 @@ sal_Bool SwXAutoTextGroup::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
-    sal_uInt16 nCount = 0;
     boost::scoped_ptr<SwTextBlocks> pGlosGroup(pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, false) : 0);
-    if(pGlosGroup && !pGlosGroup->GetError())
-        nCount = pGlosGroup->GetCount();
-    else
+    if (!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
 
+    const sal_uInt16 nCount = pGlosGroup->GetCount();
     for( sal_uInt16 i = 0; i < nCount; ++i )
     {
         OUString sCompare(pGlosGroup->GetShortName(i));
