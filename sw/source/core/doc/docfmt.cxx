@@ -800,17 +800,17 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const OUString &rFmtName,
     mpFrmFmtTbl->push_back( pFmt );
     SetModified();
 
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoFrmFmtCreate(pFmt, pDerivedFrom, this);
+
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
+    }
+
     if (bBroadcast)
     {
         BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
                                 SFX_STYLESHEET_CREATED);
-
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            SwUndo * pUndo = new SwUndoFrmFmtCreate(pFmt, pDerivedFrom, this);
-
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
-        }
     }
 
     return pFmt;
