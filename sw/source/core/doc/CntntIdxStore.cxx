@@ -141,11 +141,11 @@ namespace
         {
             return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aFlyEntries.empty() && m_aUnoCrsrEntries.empty() && m_aShellCrsrEntries.empty();
         }
-        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplt=false) SAL_OVERRIDE
+        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplit=false) SAL_OVERRIDE
         {
             SaveBkmks(pDoc, nNode, nCntnt);
             SaveRedlines(pDoc, nNode, nCntnt);
-            SaveFlys(pDoc, nNode, nCntnt, bSaveFlySplt ? SAVEFLY_SPLIT : 0);
+            SaveFlys(pDoc, nNode, nCntnt, bSaveFlySplit);
             SaveUnoCrsrs(pDoc, nNode, nCntnt);
             SaveShellCrsrs(pDoc, nNode, nCntnt);
         }
@@ -176,7 +176,7 @@ namespace
             inline void RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater);
-            inline void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly);
+            inline void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplit);
             inline void RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto);
             inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater);
@@ -301,7 +301,7 @@ void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
     }
 }
 
-void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly)
+void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplit)
 {
     SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
     if( !pNode )
@@ -330,7 +330,7 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
                 {
                     if( nCntnt <= aSave.m_nCntnt )
                     {
-                        if( SAVEFLY_SPLIT == nSaveFly )
+                        if( bSaveFlySplit )
                             aSave.m_bOther = true;
                         else
                             bSkip = true;

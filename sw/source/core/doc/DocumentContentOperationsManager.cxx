@@ -1958,7 +1958,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         const sal_Int32 nMkCntnt = rPaM.GetMark()->nContent.GetIndex();
 
         const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
-        pCntntStore->Save( &m_rSwdoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), SAVEFLY_SPLIT );
+        pCntntStore->Save( &m_rSwdoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
 
         pTNd = static_cast<SwTxtNode*>(pTNd->SplitCntntNode( rPos ));
 
@@ -2876,7 +2876,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
     }
 
     const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
-    pCntntStore->Save( &m_rSwdoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), SAVEFLY_SPLIT );
+    pCntntStore->Save( &m_rSwdoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
     // FIXME: only SwTxtNode has a valid implementation of SplitCntntNode!
     OSL_ENSURE(pNode->IsTxtNode(), "splitting non-text node?");
     pNode = pNode->SplitCntntNode( rPos );

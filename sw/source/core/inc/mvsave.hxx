@@ -85,8 +85,6 @@ namespace sw { namespace mark
     };
 }}
 
-#define SAVEFLY_SPLIT true
-
 void _DelBookmarks(const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,
     ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =0,
