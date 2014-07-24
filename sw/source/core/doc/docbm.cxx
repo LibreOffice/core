@@ -1767,14 +1767,12 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
 void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, SwCntntNode* pCNd, sal_Int32 nOffset, bool bAuto)
 {
     SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
-    sal_uInt16 n = 0;
-    while( n < m_aFlyEntries.size() )
+    BOOST_FOREACH(const MarkEntry& aEntry, m_aFlyEntries)
     {
-        MarkEntry aSave = m_aFlyEntries[n++];
         SwPosition* pPos = 0;
-        if(!aSave.m_bOther)
+        if(!aEntry.m_bOther)
         {
-            SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
+            SwFrmFmt *pFrmFmt = (*pSpz)[ aEntry.m_nIdx ];
             const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
             if( rFlyAnchor.GetCntntAnchor() )
             {
@@ -1784,7 +1782,7 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, SwCntntNode* pCNd, sal_Int32 nO
                 if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
                 {
                     aNewPos.nContent.Assign( pCNd,
-                                             aSave.m_nCntnt + nOffset );
+                                             aEntry.m_nCntnt + nOffset );
                 }
                 else
                 {
@@ -1796,15 +1794,15 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, SwCntntNode* pCNd, sal_Int32 nO
         }
         else if( bAuto )
         {
-            SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
+            SwFrmFmt *pFrmFmt = (*pSpz)[ aEntry.m_nIdx ];
             SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
             pFrmFmt->NotifyClients( pAnchor, pAnchor );
         }
         if( pPos )
         {
-            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.m_nIdx << " on Node " << pCNd << " from " << pPos->nContent.GetIndex() << " to " << (aSave.m_nCntnt + nOffset));
+            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aEntry.m_nIdx << " on Node " << pCNd << " from " << pPos->nContent.GetIndex() << " to " << (aEntry.m_nCntnt + nOffset));
             pPos->nNode = *pCNd;
-            pPos->nContent.Assign( pCNd, aSave.m_nCntnt + nOffset );
+            pPos->nContent.Assign( pCNd, aEntry.m_nCntnt + nOffset );
         }
     }
 }
