@@ -96,16 +96,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     if ( pStyle->GetName().isEmpty() && pPool )
     {
         // NullString as Name -> generate Name
-        OUString aNoName( SfxResId(STR_NONAME).toString() );
-        sal_uInt16 nNo = 1;
-        OUString aNo( aNoName );
-        aNoName += OUString::number( nNo );
-        while ( pPool->Find( aNoName ) )
-        {
-            ++nNo;
-            aNoName = aNo;
-            aNoName += OUString::number( nNo );
-        }
+        OUString aNoName(SfxStyleDialog::GenerateUnusedName(*pPool));
         pStyle->SetName( aNoName );
         aName = aNoName;
         aFollow = pStyle->GetFollow();

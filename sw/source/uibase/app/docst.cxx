@@ -25,6 +25,7 @@
 
 #include <hintids.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/styledlg.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/tplpitem.hxx>
@@ -290,6 +291,9 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             if( SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_REFERENCE,
                 false, &pItem ))
                 sParent = ((const SfxStringItem*)pItem)->GetValue();
+
+            if (sName.isEmpty() && mxBasePool.get())
+                sName = SfxStyleDialog::GenerateUnusedName(*mxBasePool);
 
             nRet = Edit( sName, sParent, nFamily, nMask, true, OString(), 0, rReq.IsAPI() );
         }

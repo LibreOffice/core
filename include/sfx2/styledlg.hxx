@@ -25,6 +25,7 @@
 #include <sfx2/tabdlg.hxx>
 
 class SfxStyleSheetBase;
+class SfxStyleSheetBasePool;
 
 class SFX2_DLLPUBLIC SfxStyleDialog: public SfxTabDialog
 {
@@ -45,6 +46,8 @@ public:
     const SfxStyleSheetBase&    GetStyleSheet() const { return *pStyle; }
 
     virtual short               Ok() SAL_OVERRIDE;
+
+    static OUString GenerateUnusedName(SfxStyleSheetBasePool &rPool);
 };
 
 #endif
