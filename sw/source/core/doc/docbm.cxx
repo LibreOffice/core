@@ -1274,7 +1274,7 @@ void SaveBookmark::SetInDoc(
     }
 }
 
-// _DelBookmarks, _{Save,Restore}CntntIdx
+// _DelBookmarks
 
 void _DelBookmarks(
     const SwNodeIndex& rStt,
