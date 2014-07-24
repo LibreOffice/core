@@ -19,6 +19,7 @@
 
 #include "backingwindow.hxx"
 
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
@@ -59,7 +60,7 @@ const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
-const int nButtonsFontSize = 15;
+float fMultiplier = 1.2;
 const Color aButtonsBackground(114, 168, 84); // TDF green
 const Color aButtonsText(COL_WHITE);
 
@@ -241,8 +242,8 @@ void BackingWindow::initControls()
 
     // setup nice colors
     mpCreateLabel->SetControlForeground(aButtonsText);
-    Font aFont(mpCreateLabel->GetControlFont());
-    aFont.SetHeight(nButtonsFontSize);
+    Font aFont(mpCreateLabel->GetSettings().GetStyleSettings().GetLabelFont());
+    aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
     mpCreateLabel->SetControlFont(aFont);
 
     mpHelpButton->SetControlForeground(aButtonsText);
@@ -273,8 +274,8 @@ void BackingWindow::initControls()
 void BackingWindow::setupButton( PushButton* pButton )
 {
     // the buttons should have a bit bigger font
-    Font aFont(pButton->GetControlFont());
-    aFont.SetHeight(nButtonsFontSize);
+    Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
+    aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
     pButton->SetControlFont(aFont);
 
     // color that fits the theme
