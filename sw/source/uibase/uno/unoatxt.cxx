@@ -406,7 +406,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         else
             pGlosGroup->SetBaseURL( OUString() );
 
-        sal_uInt16 nRet;
+        sal_uInt16 nRet = USHRT_MAX;
         if( pOnlyTxt )
             nRet = pGlosGroup->PutText( sShortName, sLongName, *pOnlyTxt );
         else
@@ -419,11 +419,9 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
                 pGDoc->SetRedlineMode_intern((RedlineMode_t)( 0 ));
                 nRet = pGlosGroup->PutDoc();
             }
-            else
-                nRet = (sal_uInt16) -1;
         }
 
-        if(nRet == (sal_uInt16) -1 )
+        if (nRet == USHRT_MAX)
         {
             throw uno::RuntimeException();
         }
