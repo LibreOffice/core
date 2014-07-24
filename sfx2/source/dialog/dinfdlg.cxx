@@ -1098,6 +1098,55 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
             m_pInfoItem->getEditingCycles() ) );
     }
 
+    // Check for cmis properties where otherwise unavailable
+    if ( m_pInfoItem->isCmisDocument( ) )
+    {
+        uno::Sequence< document::CmisProperty > aCmisProps = m_pInfoItem->GetCmisProperties();
+        for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
+        {
+            if ( aCmisProps[i].Id == "cmis:contentStreamLength" &&
+                 aSizeText == m_aUnknownSize )
+            {
+                Sequence< sal_Int64 > seqValue;
+                aCmisProps[i].Value >>= seqValue;
+                SvNumberFormatter m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
+                        Application::GetSettings().GetLanguageTag().getLanguageType() );
+                sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
+                if ( seqValue.getLength( ) > 0 )
+                {
+                    OUString sValue;
+                    m_aNumberFormatter.GetInputLineString( seqValue[0], nIndex, sValue );
+                    m_pShowSizeFT->SetText( CreateSizeText( sValue.toInt64( ) ) );
+                }
+            }
+
+            util::DateTime uDT;
+            OUString emptyDate = ConvertDateTime_Impl( "", uDT, rLocaleWrapper );
+            if ( aCmisProps[i].Id == "cmis:creationDate" &&
+                 m_pCreateValFt->GetText( ) == emptyDate ||
+                 m_pCreateValFt->GetText( ).isEmpty( ) )
+            {
+                Sequence< util::DateTime > seqValue;
+                aCmisProps[i].Value >>= seqValue;
+                if ( seqValue.getLength( ) > 0 )
+                {
+                    m_pCreateValFt->SetText( ConvertDateTime_Impl( "", seqValue[0], rLocaleWrapper ) );
+                }
+            }
+            if ( aCmisProps[i].Id == "cmis:lastModificationDate" &&
+                 m_pChangeValFt->GetText( ) == emptyDate ||
+                 m_pChangeValFt->GetText( ).isEmpty( ) )
+            {
+                Sequence< util::DateTime > seqValue;
+                aCmisProps[i].Value >>= seqValue;
+                if ( seqValue.getLength( ) > 0 )
+                {
+                    m_pChangeValFt->SetText( ConvertDateTime_Impl( "", seqValue[0], rLocaleWrapper ) );
+                }
+            }
+        }
+    }
+
     m_pUseUserDataCB->SetState( static_cast<TriState>(m_bUseUserData) );
     m_pUseUserDataCB->SaveValue();
     m_pUseUserDataCB->Enable( bEnableUseUserData );
