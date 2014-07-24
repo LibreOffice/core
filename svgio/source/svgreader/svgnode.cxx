@@ -40,7 +40,7 @@ namespace svgio
             return 0;
         }
 
-        const SvgStyleAttributes* SvgNode::checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
+        const SvgStyleAttributes* SvgNode::checkForCssStyle(const OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
         {
             if(maCssStyleVector.empty()) // #120435# Evaluate for CSS styles only once, this cannot change
             {
@@ -48,16 +48,16 @@ namespace svgio
 
                 if(rDocument.hasSvgStyleAttributesById())
                 {
-                    // #i125293# If we have CssStyles we need to buuild a linked list of SvgStyleAttributes
+                    // #i125293# If we have CssStyles we need to build a linked list of SvgStyleAttributes
                     // which represent this for the current object. There are various methods to
                     // specify CssStyles which need to be taken into account in a given order:
                     // - 'id' element
                     // - 'class' element(s)
                     // - type-dependent elements (e..g. 'rect' for all rect elements)
-                    // - local firect attributes (rOriginal)
+                    // - local direct attributes (rOriginal)
                     // - inherited attributes (up the hierarchy)
                     // The first three will be collected in maCssStyleVector for the current element
-                    // (once, this will not change) and be linked in the needed order using the
+                    // (only once, this will not change) and be linked in the needed order using the
                     // get/setCssStyleParent at the SvgStyleAttributes which will be used preferred in
                     // member evaluation over the existing parent hierarchy
 
@@ -77,7 +77,7 @@ namespace svgio
                     if(getClass())
                     {
                         // find all referenced CSS styles, a list of entries is allowed
-                        const rtl::OUString* pClassList = getClass();
+                        const OUString* pClassList = getClass();
                         const sal_Int32 nLen(pClassList->getLength());
                         sal_Int32 nPos(0);
                         const SvgStyleAttributes* pNew = 0;
@@ -86,13 +86,13 @@ namespace svgio
 
                         while(nPos < nLen)
                         {
-                            rtl::OUStringBuffer aTokenValue;
+                            OUStringBuffer aTokenValue;
 
                             copyToLimiter(*pClassList, ' ', nPos, aTokenValue, nLen);
                             skip_char(*pClassList, ' ', nPos, nLen);
 
-                            rtl::OUString aId(".");
-                            const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
+                            OUString aId(".");
+                            const OUString aOUTokenValue(aTokenValue.makeStringAndClear());
 
                             // look for CSS style common to token
                             aId += aOUTokenValue;
@@ -136,7 +136,7 @@ namespace svgio
             {
                 // #i125293# rOriginal will be the last element in the linked list; use no CssStyleParent
                 // there (reset it) to ensure that the parent hierarchy will be used when it's base
-                // is referenced. This new chaning inserts the CssStyles before the original style,
+                // is referenced. This new chaining inserts the CssStyles before the original style,
                 // this makes the whole process much safer since the original style when used will
                 // be not different to the situation without CssStyles; thus loops which may be caused
                 // by trying to use the parent hierarchy of the owner of the style will be avoided
@@ -254,13 +254,13 @@ namespace svgio
             for(sal_uInt32 b(0); b < aSVGTokenStyleIndexes.size(); b++)
             {
                 const sal_uInt32 nSVGTokenStyleIndex(aSVGTokenStyleIndexes[b]);
-                const ::rtl::OUString aTokenName(xAttribs->getNameByIndex(nSVGTokenStyleIndex));
+                const ::OUString aTokenName(xAttribs->getNameByIndex(nSVGTokenStyleIndex));
 
                 parseAttribute(aTokenName, SVGTokenStyle, xAttribs->getValueByIndex(nSVGTokenStyleIndex));
             }
         }
 
-        Display getDisplayFromContent(const rtl::OUString& aContent)
+        Display getDisplayFromContent(const OUString& aContent)
         {
             if(aContent.getLength())
             {
