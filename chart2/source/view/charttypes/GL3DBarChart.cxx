@@ -664,8 +664,8 @@ void GL3DBarChart::moveToCorner()
 
     Size aSize = mrWindow.GetSizePixel();
     mrWindow.getContext().setWinSize(aSize);
-    mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, getCornerPosition(mnCornerId),
-                maCameraPosition, STEPS));
+    mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, maCameraPosition,
+                getCornerPosition(mnCornerId), STEPS));
     mrWindow.getContext().resetCurrent();
     mpRenderThread->launch();
 
