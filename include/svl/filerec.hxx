@@ -45,13 +45,6 @@
 #define SFX_REC_HEADERSIZE_SINGLE   4   // additional HEADERSIZE_MINI => 8
 #define SFX_REC_HEADERSIZE_MULTI    6   // additional HEADERSIZE_SINGLE => 14
 
-#ifndef DBG
-#ifdef DBG_UTIL
-#define DBG(x) x
-#else
-#define DBG(x)
-#endif
-#endif
 
 // General file format: documented at class SfxMiniRecordReader below
 

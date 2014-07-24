@@ -33,11 +33,6 @@ typedef SfxPoolItem const** SfxItemArray;
 
 #define USHORT_ARG int
 
-#ifdef DBG
-#undef DBG
-#endif
-#define DBG(s)
-
 #define SFX_ITEMSET_GET( rSet, pItem, ItemType, nSlotId, bDeep ) \
     const ItemType *pItem = (const ItemType*) \
                             (rSet).GetItem( nSlotId, bDeep, TYPE(ItemType) )
@@ -146,9 +141,7 @@ public:
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
 {
-    DBG( if (_pParent) --*_pChildCount(_pParent) );
     _pParent = pNew;
-    DBG( if (_pParent) ++*_pChildCount(_pParent) );
 }
 
 class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet

@@ -94,7 +94,6 @@ SfxItemSet::SfxItemSet
     _nCount( 0 )
 {
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
-    DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 //  DBG_ASSERT( bTotalRanges || abs( &bTotalRanges - this ) < 1000,
 //              "please use suitable ranges" );
 #if defined DBG_UTIL && defined SFX_ITEMSET_NO_DEFAULT_CTOR
@@ -123,7 +122,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhic
 {
     DBG_ASSERT( nWhich1 <= nWhich2, "Invalid range" );
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
-    DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 
     InitRanges_Impl(nWhich1, nWhich2);
 }
@@ -161,7 +159,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
 {
     DBG_ASSERT( nWh1 <= nWh2, "Invalid range" );
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
-    DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 
     if(!nNull)
         InitRanges_Impl(
@@ -213,7 +210,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
     , _nCount(0)
 {
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
-    DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 
     // pWhichPairTable == 0 ist f"ur das SfxAllEnumItemSet
     if ( pWhichPairTable )
@@ -226,8 +222,6 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
     _nCount( rASet._nCount )
 {
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
-    DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
-    DBG( ++*_pChildCount(_pParent) );
 
     // Calculate the attribute count
     sal_uInt16 nCnt = 0;
@@ -273,10 +267,6 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
 
 SfxItemSet::~SfxItemSet()
 {
-#ifdef DBG_UTIL
-    DBG( DBG_ASSERT( 0 == *_pChildCount(this), "SfxItemSet: deleting parent-itemset" ) )
-#endif
-
     sal_uInt16 nCount = TotalCount();
     if( Count() )
     {
@@ -303,9 +293,6 @@ SfxItemSet::~SfxItemSet()
     if ( _pWhichRanges != _pPool->GetFrozenIdRanges() )
         delete[] _pWhichRanges;
     _pWhichRanges = 0; // for invariant-testing
-
-    DBG( --*_pChildCount(_pParent) );
-    DBG( delete _pChildCount(this); _pChildCountDtor );
 }
 
 

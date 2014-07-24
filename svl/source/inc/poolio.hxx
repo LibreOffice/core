@@ -168,18 +168,6 @@ struct SfxItemPool_Impl
 };
 
 
-
-// IBM-C-Set mag keine doppelten Defines
-#ifdef DBG
-#  undef DBG
-#endif
-
-#if defined(DBG_UTIL) && defined(_MSC_VER)
-#define DBG(x) x
-#else
-#define DBG(x)
-#endif
-
 #define CHECK_FILEFORMAT( rStream, nTag ) \
     {   sal_uInt16 nFileTag; \
         rStream.ReadUInt16( nFileTag ); \
