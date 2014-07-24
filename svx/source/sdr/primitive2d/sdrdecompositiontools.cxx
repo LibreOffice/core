@@ -316,6 +316,11 @@ namespace drawinglayer
                 }
                 else // text in range
                 {
+                    // FIXME(matteocam)
+                    bool b = false;
+                    if (b)
+                        pNew = new SdrChainedTextPrimitive2D( &rText.getSdrText(), rText.getOutlinerParaObject() );
+                    else // end FIXME
                     // build new primitive
                     pNew = new SdrBlockTextPrimitive2D(
                         &rText.getSdrText(),
