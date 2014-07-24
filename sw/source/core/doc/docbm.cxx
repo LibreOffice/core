@@ -1475,36 +1475,7 @@ namespace
             inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
-    static void lcl_ChkUnoCrsrPaM( std::vector<PaMEntry>& rMarkEntries, sal_uLong nNode, sal_Int32 nCntnt,
-                    const SwPaM& rPam,
-                    bool bChkSelDirection )
-    {
-        // Respect direction of selection
-        bool bBound1IsStart = !bChkSelDirection ||
-                            ( *rPam.GetPoint() < *rPam.GetMark()
-                                ? rPam.GetPoint() == &rPam.GetBound()
-                                : rPam.GetMark() == &rPam.GetBound());
-
-        const SwPosition* pPos = &rPam.GetBound( true );
-        if( pPos->nNode.GetIndex() == nNode &&
-            ( bBound1IsStart ? pPos->nContent.GetIndex() < nCntnt
-                                : pPos->nContent.GetIndex() <= nCntnt ))
-        {
-            const PaMEntry aEntry = { const_cast<SwPaM*>(&rPam), false, pPos->nContent.GetIndex() };
-            rMarkEntries.push_back(aEntry);
-        }
-
-        pPos = &rPam.GetBound( false );
-        if( pPos->nNode.GetIndex() == nNode &&
-            ( (bBound1IsStart && bChkSelDirection)
-                        ? pPos->nContent.GetIndex() <= nCntnt
-                        : pPos->nContent.GetIndex() < nCntnt ))
-        {
-            const PaMEntry aEntry = { const_cast<SwPaM*>(&rPam), true, pPos->nContent.GetIndex() };
-            rMarkEntries.push_back(aEntry);
-        }
-    }
-    static void lcl_ChkPaM( std::vector<PaMEntry> &rPaMEntries, sal_uLong nNode, sal_Int32 nCntnt, SwPaM& rPaM, const bool bPoint)
+    static inline void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nCntnt, SwPaM& rPaM, const bool bPoint)
     {
         const SwPosition* pPos = &rPaM.GetBound( bPoint );
         if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nCntnt )
@@ -1512,6 +1483,11 @@ namespace
             const PaMEntry aEntry = { &rPaM, bPoint, pPos->nContent.GetIndex() };
             rPaMEntries.push_back(aEntry);
         }
+    }
+    static inline void lcl_ChkPaMBoth( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nCntnt, SwPaM& rPaM)
+    {
+        lcl_ChkPaM(rPaMEntries, nNode, nCntnt, rPaM, true);
+        lcl_ChkPaM(rPaMEntries, nNode, nCntnt, rPaM, false);
     }
 
 #if 0
@@ -1693,13 +1669,13 @@ void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
     BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
     {
         FOREACHPAM_START( const_cast<SwUnoCrsr*>(pUnoCrsr) )
-            lcl_ChkUnoCrsrPaM( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR, false );
+            lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR );
         FOREACHPAM_END()
         const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
         if( pUnoTblCrsr )
         {
             FOREACHPAM_START( &(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing() )
-                lcl_ChkUnoCrsrPaM( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR, false );
+                lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR );
             FOREACHPAM_END()
         }
     }
@@ -1725,14 +1701,12 @@ void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
             SwPaM *_pStkCrsr = ((SwCrsrShell*)_pStartShell)->GetStkCrsr();
             if( _pStkCrsr )
                 do {
-                    lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, true);
-                    lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, false);
+                    lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr);
                 } while ( (_pStkCrsr != 0 ) &&
                     ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != ((SwCrsrShell*)_pStartShell)->GetStkCrsr()) );
 
             FOREACHPAM_START( ((SwCrsrShell*)_pStartShell)->_GetCrsr() )
-                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, true);
-                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, false);
+                lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR);
             FOREACHPAM_END()
         }
     } while((_pStartShell=(SwViewShell*)_pStartShell->GetNext())!= pShell );
