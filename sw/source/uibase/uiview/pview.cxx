@@ -1667,7 +1667,7 @@ sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, sal_uInt16 nDiffFlags, 
     {
         rESh.StartAllAction();
         if ( bChgOri )
-            rSh.ChgAllPageOrientation( sal_uInt16(pNew->GetOrientation()) );
+            rSh.ChgAllPageOrientation( pNew->GetOrientation() );
         if ( bChgSize )
         {
             Size aSz( SvxPaperInfo::GetPaperSize( pNew ) );

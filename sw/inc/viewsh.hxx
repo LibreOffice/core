@@ -351,7 +351,7 @@ public:
     static inline bool IsLstEndAction() { return SwViewShell::mbLstAct; }
 
     // Change of all page descriptors.
-    void   ChgAllPageOrientation( sal_uInt16 eOri );
+    void   ChgAllPageOrientation( Orientation eOri );
     void   ChgAllPageSize( Size &rSz );
 
     // Printing of one page.

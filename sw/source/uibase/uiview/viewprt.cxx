@@ -121,13 +121,13 @@ sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool  )
     if ( nDiffFlags & SFX_PRINTER_OPTIONS )
         ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, bWeb );
 
-    const bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? sal_True : sal_False;
-    const bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? sal_True : sal_False;
+    const bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION;
+    const bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE;
     if ( bChgOri || bChgSize )
     {
         rSh.StartAllAction();
         if ( bChgOri )
-            rSh.ChgAllPageOrientation( sal_uInt16(pNew->GetOrientation()) );
+            rSh.ChgAllPageOrientation( pNew->GetOrientation() );
         if ( bChgSize )
         {
             Size aSz( SvxPaperInfo::GetPaperSize( pNew ) );

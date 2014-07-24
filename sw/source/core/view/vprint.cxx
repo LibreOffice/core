@@ -216,13 +216,13 @@ void SwViewShell::InitPrt( OutputDevice *pOutDev )
         mpOut = pOutDev;
 }
 
-void SwViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
+void SwViewShell::ChgAllPageOrientation( Orientation eOri )
 {
     OSL_ENSURE( mnStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
 
     const sal_uInt16 nAll = GetDoc()->GetPageDescCnt();
-    bool bNewOri = Orientation(eOri) == ORIENTATION_PORTRAIT ? sal_False : sal_True;
+    bool bNewOri = eOri != ORIENTATION_PORTRAIT;
 
     for( sal_uInt16 i = 0; i < nAll; ++ i )
     {
