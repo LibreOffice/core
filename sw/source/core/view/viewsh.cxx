@@ -1785,14 +1785,8 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
         Imp()->GetDrawView()->AddWindowToPaintView(&rDevice);
     }
 
-    // Make the requested area visible -- we can't use MakeVisible as that will
-    // only scroll the contents, but won't zoom/resize if needed.
-    // Without this, items/text that are outside the visible area (in the SwView)
-    // won't be painted when rendering tiles (at least when using either the
-    // tiledrendering app, or the gtktiledviewer) -- although ultimately we
-    // probably want to fix things so that the SwView's area doesn't affect
-    // tiled rendering?
-    mpDoc->GetDocShell()->SetVisArea(Rectangle(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+    // scroll the requested area into view if necessary
+    MakeVisible(SwRect(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
 
     // draw - works in logic coordinates
     Paint(Rectangle(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
