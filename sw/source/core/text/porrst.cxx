@@ -59,13 +59,22 @@ SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion )
 
 void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    if( rInf.OnWin() && rInf.GetOpt().IsParagraph() )
+    if (rInf.OnWin() && rInf.GetOpt().IsParagraph())
     {
         #ifdef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
         const OUString aTmp( CH_PAR );
         rInf.DrawText( aTmp, *this );
         #else
-        rInf.DrawSpecial( *this, CH_PAR, Color(NON_PRINTING_CHARACTER_COLOR) );
+        const SwFont* pOldFnt = rInf.GetFont();
+
+        SwFont aFont(*pOldFnt);
+        aFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
+        const_cast<SwTxtPaintInfo&>(rInf).SetFont(&aFont);
+
+        // draw the pilcrow
+        rInf.DrawText(OUString(CH_PAR), *this);
+
+        const_cast<SwTxtPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
         #endif
     }
 }
