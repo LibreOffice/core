@@ -1489,4 +1489,41 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
     }
 }
 
+void SdrTextObj::impDecomposeChainedTextPrimitive(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
+{
+    /* BEGIN Experiments */
+    // FIXME(matteocam)
+
+    // we use (text) object 0 and 1 for these experiments:
+    // copying text from one to the other.
+
+    SdrTextObj *pNextTextObj;
+    if ( pPage && pPage->GetObjCount() > 1) {
+        pNextTextObj =  dynamic_cast< SdrTextObj * >(
+                                            pPage->GetObj(1) );
+        if ( pNextTextObj == NULL)
+            return;
+    } else {
+        fprintf(stderr, "Make New Object please\n");
+        return;
+    }
+
+    // for debugging purposes:
+    // carry out experiments only when setting b=false from gdb
+    //bool b = true;
+    //if (!b) {
+    impCopyTextInTextObj(pNextTextObj); // just do it
+    //    return;
+    //}
+
+    drawinglayer::primitive2d::Primitive2DSequence aRetval(0);
+    rTarget = aRetval;
+    /* END Experiments */
+}
+
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

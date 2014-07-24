@@ -55,6 +55,7 @@ namespace drawinglayer { namespace primitive2d {
     class SdrBlockTextPrimitive2D;
     class SdrAutoFitTextPrimitive2D;
     class SdrStretchTextPrimitive2D;
+    class SdrChainedTextPrimitive2D;
 }}
 
 namespace drawinglayer { namespace animation {
@@ -269,7 +270,6 @@ private:
                                        Rectangle&       rPaintRect,
                                        Fraction&        aFitXKorreg ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner ) const;
-    void ImpChainText() const;
     static void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting );
     SVX_DLLPRIVATE SdrObject* ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpLinkAnmeldung();
@@ -593,6 +593,10 @@ public:
     void impDecomposeStretchTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
         const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
+    void impDecomposeChainedTextPrimitive(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
 
     void impCopyTextInTextObj(SdrTextObj *pNextTextObj) const;

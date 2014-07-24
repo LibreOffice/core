@@ -494,9 +494,16 @@ namespace drawinglayer
         Primitive2DSequence SdrChainedTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            getSdrText()->GetObject().impDecomposeChainedPrimitive(aRetval, *this, aViewInformation);
+            getSdrText()->GetObject().impDecomposeChainedTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
+        }
+
+        SdrTextPrimitive2D* SdrChainedTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
+        {
+            //FIXME(matteocam)
+            assert(0);
+            return NULL;
         }
 
         // provide unique ID

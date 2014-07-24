@@ -353,6 +353,9 @@ namespace drawinglayer
             // compare operator
             //virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
+            // transformed clone operator
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const SAL_OVERRIDE;
+
             // provide unique ID
             DeclPrimitive2DIDBlock()
         };

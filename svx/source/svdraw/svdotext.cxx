@@ -1946,42 +1946,11 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         }
         else if (/* TODO: IsChained() && */ pEditStatus->IsPageOverflow())
         {
-            ImpChainText();
+            // XXX: Do nothing for now, later here we'll set the need for chaining
+            //impDecomposeChainedTextPrimitive();
         }
     }
 }
-
-
-void SdrTextObj::ImpChainText() const
-{
-    /* BEGIN Experiments */
-    // FIXME(matteocam)
-
-    // we use (text) object 0 and 1 for these experiments:
-    // copying text from one to the other.
-
-    SdrTextObj *pNextTextObj;
-    if ( pPage && pPage->GetObjCount() > 1) {
-        pNextTextObj =  dynamic_cast< SdrTextObj * >(
-                                            pPage->GetObj(1) );
-        if ( pNextTextObj == NULL)
-            return;
-    } else {
-        fprintf(stderr, "Make New Object please\n");
-        return;
-    }
-
-    // for debugging purposes:
-    // carry out experiments only when setting b=false from gdb
-    //bool b = true;
-    //if (!b) {
-    impCopyTextInTextObj(pNextTextObj); // just do it
-    //    return;
-    //}
-
-    /* END Experiments */
-}
-
 
 
 /** returns the currently active text. */
