@@ -127,7 +127,7 @@ void SwSrcView::InitInterface_Impl()
 
 TYPEINIT1(SwSrcView, SfxViewShell)
 
-static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt16 nCurPage, const OUString& rTitle )
+static void lcl_PrintHeader( OutputDevice &rOutDev, sal_Int32 nPages, sal_Int32 nCurPage, const OUString& rTitle )
 {
     short nLeftMargin   = LMARGPRN;
     Size aSz = rOutDev.GetOutputSize();
@@ -287,9 +287,8 @@ void SwSrcView::SaveContent(const OUString& rTmpFile)
 
 void SwSrcView::Execute(SfxRequest& rReq)
 {
-    sal_uInt16 nSlot = rReq.GetSlot();
     TextView* pTextView = aEditWin.GetTextView();
-    switch( nSlot )
+    switch( rReq.GetSlot() )
     {
         case SID_SAVEACOPY:
         case SID_SAVEASDOC:
@@ -364,7 +363,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
         {
             const SfxItemSet* pTmpArgs = rReq.GetArgs();
 
-            sal_uInt16 nWhich = pTmpArgs->GetWhichByPos( 0 );
+            const sal_uInt16 nWhich = pTmpArgs->GetWhichByPos( 0 );
             OSL_ENSURE( nWhich, "Which for SearchItem ?" );
             const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
             SetSearchItem( (const SvxSearchItem&)rItem);
@@ -578,7 +577,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     bool bAtStart = pTextView->GetSelection() == TextSelection( aPaM, aPaM );
 
     if( !bForward )
-        aPaM = TextPaM( (sal_uLong)-1, (sal_uInt16)-1 );
+        aPaM = TextPaM( (sal_uLong)-1, USHRT_MAX );
 
     if( bFromStart )
     {
@@ -712,28 +711,28 @@ sal_Int32 SwSrcView::PrintSource(
 
     OUString aTitle( GetViewFrame()->GetWindow().GetText() );
 
-    sal_uInt16 nLineHeight = (sal_uInt16) pOutDev->GetTextHeight(); // slightly more
-    sal_uInt16 nParaSpace = 10;
+    const long nLineHeight = pOutDev->GetTextHeight(); // slightly more
+    const long nParaSpace = 10;
 
     Size aPaperSz = pOutDev->GetOutputSize();
     aPaperSz.Width() -= (LMARGPRN + RMARGPRN);
     aPaperSz.Height() -= (TMARGPRN + BMARGPRN);
 
     // nLinepPage is not true, if lines have to be wrapped...
-    sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height() / nLineHeight);
+    const long nLinespPage = aPaperSz.Height() / nLineHeight;
     const sal_Int32 nCharspLine =
         static_cast<sal_Int32>(aPaperSz.Width() / pOutDev->GetTextWidth("X"));
-    sal_uInt16 nParas = static_cast< sal_uInt16 >( pTextEngine->GetParagraphCount() );
+    const sal_uLong nParas = pTextEngine->GetParagraphCount();
 
-    sal_uInt16 nPages = (sal_uInt16) (nParas / nLinespPage + 1 );
-    sal_uInt16 nCurPage = 1;
+    const sal_Int32 nPages = static_cast<sal_Int32>(nParas / nLinespPage + 1 );
+    sal_Int32 nCurPage = 1;
 
     // Print header...
     if (!bCalcNumPagesOnly && nPage == nCurPage)
         lcl_PrintHeader( *pOutDev, nPages, nCurPage, aTitle );
     const Point aStartPos( LMARGPRN, TMARGPRN );
     Point aPos( aStartPos );
-    for ( sal_uInt16 nPara = 0; nPara < nParas; ++nPara )
+    for ( sal_uLong nPara = 0; nPara < nParas; ++nPara )
     {
         const OUString aLine( lcl_ConvertTabsToSpaces(pTextEngine->GetText( nPara )) );
         const sal_Int32 nLineLen = aLine.getLength();

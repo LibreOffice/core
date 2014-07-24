@@ -121,8 +121,7 @@ SwXTextView*    SwView_Impl::GetUNOObject_Impl()
 
 void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 {
-    sal_uInt16 nSlot = rReq.GetSlot();
-    switch(nSlot)
+    switch(rReq.GetSlot())
     {
         case SID_TWAIN_SELECT:
         {
