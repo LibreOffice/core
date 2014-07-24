@@ -330,7 +330,7 @@ void SwView::SpellError(LanguageType eLang)
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bFocus = GetEditWin().HasFocus();
 #endif
-    sal_uInt16 nPend = 0;
+    int nPend = 0;
 
     if ( m_pWrtShell->ActionPend() )
     {
@@ -349,7 +349,7 @@ void SwView::SpellError(LanguageType eLang)
 #if OSL_DEBUG_LEVEL > 1
     bFocus = rEditWin.HasFocus();
 #endif
-    sal_uInt16 nWaitCnt = 0;
+    int nWaitCnt = 0;
     while( rEditWin.IsWait() )
     {
         rEditWin.LeaveWait();
@@ -708,7 +708,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if ( pMenu )
                     {
-                        sal_uInt16 nId = ((PopupMenu*)pMenu)->Execute(m_pEditWin, aPixPos);
+                        const sal_uInt16 nId = ((PopupMenu*)pMenu)->Execute(m_pEditWin, aPixPos);
                         OUString aCommand = ((PopupMenu*)pMenu)->GetItemCommand(nId);
                         if (aCommand.isEmpty() )
                         {
