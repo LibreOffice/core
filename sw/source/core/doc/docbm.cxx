@@ -1626,11 +1626,13 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
             return; // if we have a layout and no DrawObjs, we can skip this
     }
     MarkEntry aSave;
-    for( aSave.m_nIdx = pDoc->GetSpzFrmFmts()->size(); aSave.m_nIdx ; )
+    BOOST_FOREACH(const SwFrmFmt* pFrmFmt, *pDoc->GetSpzFrmFmts())
     {
-        SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ --aSave.m_nIdx ];
         if ( RES_FLYFRMFMT != pFrmFmt->Which() && RES_DRAWFRMFMT != pFrmFmt->Which() )
+        {
+            ++aSave.m_nIdx;
             continue;
+        }
 
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
         SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
@@ -1647,11 +1649,15 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
                     if( SAVEFLY_SPLIT == nSaveFly )
                         aSave.m_bOther = true;
                     else
+                    {
+                        ++aSave.m_nIdx;
                         continue;
+                    }
                 }
             }
             m_aFlyEntries.push_back(aSave);
         }
+        ++aSave.m_nIdx;
     }
 }
 
