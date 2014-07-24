@@ -134,9 +134,9 @@ void TiledRenderingTest::testOverlay()
         // Iterate over our array of tiles
         // However for now we only bother with the top-left
         // tile as the other ones don't match yet...
-        for ( int x = 0; x < 1; x++ )
+        for ( int x = 0; x < 2; x++ )
         {
-            for ( int y = 0; y < 1; y++ )
+            for ( int y = 0; y < 2; y++ )
             {
                 int xLarge = (x * (4 * nTotalWidthPix / 2)) + xSmall;
                 int yLarge = (y * (nTotalHeightPix / 2)) + ySmall;
