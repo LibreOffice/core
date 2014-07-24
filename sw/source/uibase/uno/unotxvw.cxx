@@ -563,9 +563,9 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         pRet[n].realloc(5);
         PropertyValue* pValues = pRet[n].getArray();
         pValues[0].Name = UNO_NAME_RUBY_BASE_TEXT;
-        pValues[0].Value <<= OUString(rEntryText);
+        pValues[0].Value <<= rEntryText;
         pValues[1].Name = UNO_NAME_RUBY_TEXT;
-        pValues[1].Value <<= OUString(rAttr.GetText());
+        pValues[1].Value <<= rAttr.GetText();
         pValues[2].Name = UNO_NAME_RUBY_CHAR_STYLE_NAME;
         SwStyleNameMapper::FillProgName(rAttr.GetCharFmtName(), aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
         pValues[2].Value <<= aString;
