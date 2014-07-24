@@ -1502,7 +1502,7 @@ namespace
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
             RestoreBkmks(pDoc, aUpdater);
             RestoreRedlines(pDoc, aUpdater);
-            RestoreFlys(pDoc, pCNd, nOffset, bAuto);
+            RestoreFlys(pDoc, aUpdater, bAuto);
             RestoreUnoCrsrs(pDoc, aUpdater);
             RestoreShellCrsrs(pDoc, aUpdater);
         }
@@ -1524,7 +1524,7 @@ namespace
             inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly);
-            inline void RestoreFlys(SwDoc* pDoc, SwCntntNode* pCNd, sal_Int32 nOffset, bool bAuto);
+            inline void RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto);
             inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
@@ -1764,7 +1764,7 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
     }
 }
 
-void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, SwCntntNode* pCNd, sal_Int32 nOffset, bool bAuto)
+void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto)
 {
     SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     BOOST_FOREACH(const MarkEntry& aEntry, m_aFlyEntries)
@@ -1778,13 +1778,8 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, SwCntntNode* pCNd, sal_Int32 nO
             {
                 SwFmtAnchor aNew( rFlyAnchor );
                 SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
-                aNewPos.nNode = *pCNd;
-                if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
-                {
-                    aNewPos.nContent.Assign( pCNd,
-                                             aEntry.m_nCntnt + nOffset );
-                }
-                else
+                rUpdater(aNewPos, aEntry.m_nCntnt);
+                if ( FLY_AT_CHAR != rFlyAnchor.GetAnchorId() )
                 {
                     aNewPos.nContent.Assign( 0, 0 );
                 }
@@ -1800,9 +1795,8 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, SwCntntNode* pCNd, sal_Int32 nO
         }
         if( pPos )
         {
-            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aEntry.m_nIdx << " on Node " << pCNd << " from " << pPos->nContent.GetIndex() << " to " << (aEntry.m_nCntnt + nOffset));
-            pPos->nNode = *pCNd;
-            pPos->nContent.Assign( pCNd, aEntry.m_nCntnt + nOffset );
+            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aEntry.m_nIdx << " from " << pPos->nContent.GetIndex());
+            rUpdater(*pPos, aEntry.m_nCntnt);
         }
     }
 }
