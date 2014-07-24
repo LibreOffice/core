@@ -117,4 +117,9 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text [ en-US ] = "Couldn't open the document." ;
 };
 
+String RID_SVXSTR_EDITHINT
+{
+    Text [ en-US ] = "[Enter text here]";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
