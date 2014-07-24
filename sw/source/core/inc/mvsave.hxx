@@ -77,7 +77,7 @@ namespace sw { namespace mark
         public:
             virtual void Clear() =0;
             virtual bool Empty() =0;
-            virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) =0;
+            virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplit=false) =0;
             virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) =0;
             virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) =0;
             virtual ~CntntIdxStore() {};
@@ -85,8 +85,7 @@ namespace sw { namespace mark
     };
 }}
 
-#define SAVEFLY 1
-#define SAVEFLY_SPLIT 2
+#define SAVEFLY_SPLIT true
 
 void _DelBookmarks(const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,

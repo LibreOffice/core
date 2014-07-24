@@ -141,11 +141,11 @@ namespace
         {
             return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aFlyEntries.empty() && m_aUnoCrsrEntries.empty() && m_aShellCrsrEntries.empty();
         }
-        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) SAL_OVERRIDE
+        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplt=false) SAL_OVERRIDE
         {
             SaveBkmks(pDoc, nNode, nCntnt);
             SaveRedlines(pDoc, nNode, nCntnt);
-            SaveFlys(pDoc, nNode, nCntnt, nSaveFly);
+            SaveFlys(pDoc, nNode, nCntnt, bSaveFlySplt ? SAVEFLY_SPLIT : 0);
             SaveUnoCrsrs(pDoc, nNode, nCntnt);
             SaveShellCrsrs(pDoc, nNode, nCntnt);
         }

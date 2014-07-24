@@ -630,7 +630,7 @@ SwCntntNode *SwTxtNode::JoinNext()
     {
         SwDoc* pDoc = rNds.GetDoc();
         const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
-        pCntntStore->Save(pDoc, aIdx.GetIndex(), SAL_MAX_INT32, SAVEFLY);
+        pCntntStore->Save(pDoc, aIdx.GetIndex(), SAL_MAX_INT32);
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         sal_Int32 nOldLen = m_Text.getLength();
 
@@ -724,7 +724,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
     {
         SwDoc* pDoc = rNds.GetDoc();
         const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
-        pCntntStore->Save( pDoc, aIdx.GetIndex(), SAL_MAX_INT32, SAVEFLY );
+        pCntntStore->Save( pDoc, aIdx.GetIndex(), SAL_MAX_INT32);
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         const sal_Int32 nLen = pTxtNode->Len();
 
