@@ -100,104 +100,56 @@ bool SwFmtCharFmt::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
+    const SwCharFmt *pCharFmt = GetCharFmt();
+    if ( pCharFmt )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            const SwCharFmt *pCharFmt = GetCharFmt();
-            if ( pCharFmt )
-            {
-                OUString aStr;
-                rText = OUString( SW_RESSTR( STR_CHARFMT ) );
-                pCharFmt->GetPresentation( ePres, eCoreUnit, ePresUnit, aStr );
-                rText = rText + "(" + aStr + ")";
-            }
-            else
-                rText = OUString( SW_RESSTR( STR_NO_CHARFMT ) );
-            return true;
-        }
-        default:;//prevent warning
+        OUString aStr;
+        rText = OUString( SW_RESSTR( STR_CHARFMT ) );
+        pCharFmt->GetPresentation( ePres, eCoreUnit, ePresUnit, aStr );
+        rText = rText + "(" + aStr + ")";
     }
-    return false;
+    else
+        rText = OUString( SW_RESSTR( STR_NO_CHARFMT ) );
+    return true;
 }
 
 bool SwFmtAutoFmt::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            rText = OUString(); //TODO
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    rText = OUString(); //TODO
+    return true;
 }
 
 bool SwFmtINetFmt::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            rText = GetValue();
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    rText = GetValue();
+    return true;
 }
 
-bool SwFmtRuby::GetPresentation( SfxItemPresentation ePres,
+bool SwFmtRuby::GetPresentation( SfxItemPresentation /*ePres*/,
                             SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
                             OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            {
-                rText = OUString();
-                return true;
-            }
-        default:;//prevent warning
-    }
-    return false;
+    rText = OUString();
+    return true;
 }
 
 bool SwFmtDrop::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
@@ -205,169 +157,108 @@ bool SwFmtDrop::GetPresentation
 )   const
 {
     rText = OUString();
-    switch ( ePres )
+    if ( GetLines() > 1 )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        if ( GetChars() > 1 )
         {
-            if ( GetLines() > 1 )
-            {
-                if ( GetChars() > 1 )
-                {
-                    rText = OUString::number( GetChars() ) + " ";
-                }
-                rText = rText +
-                        OUString( SW_RESSTR( STR_DROP_OVER ) ) +
-                        " " +
-                        OUString::number( GetLines() ) +
-                        " " +
-                        OUString( SW_RESSTR( STR_DROP_LINES ) );
-            }
-            else
-                rText = SW_RESSTR( STR_NO_DROP_LINES );
-            return true;
+            rText = OUString::number( GetChars() ) + " ";
         }
-        default:;//prevent warning
+        rText = rText +
+                OUString( SW_RESSTR( STR_DROP_OVER ) ) +
+                " " +
+                OUString::number( GetLines() ) +
+                " " +
+                OUString( SW_RESSTR( STR_DROP_LINES ) );
     }
-    return false;
+    else
+        rText = SW_RESSTR( STR_NO_DROP_LINES );
+    return true;
 }
 
 bool SwRegisterItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            const sal_uInt16 nId = GetValue() ? STR_REGISTER_ON : STR_REGISTER_OFF;
-            rText = SW_RESSTR( nId );
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    const sal_uInt16 nId = GetValue() ? STR_REGISTER_ON : STR_REGISTER_OFF;
+    rText = SW_RESSTR( nId );
+    return true;
 }
 
 bool SwNumRuleItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            if( !GetValue().isEmpty() )
-                rText = SW_RESSTR( STR_NUMRULE_ON ) +
-                    "(" + GetValue() + ")";
-            else
-                rText = SW_RESSTR( STR_NUMRULE_OFF );
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    if( !GetValue().isEmpty() )
+        rText = SW_RESSTR( STR_NUMRULE_ON ) +
+            "(" + GetValue() + ")";
+    else
+        rText = SW_RESSTR( STR_NUMRULE_OFF );
+    return true;
 }
 
 bool SwParaConnectBorderItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            const sal_uInt16 nId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
-            rText = SW_RESSTR( nId );
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    const sal_uInt16 nId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
+    rText = SW_RESSTR( nId );
+    return true;
 }
 
 // Frame attribute
 
 bool SwFmtFrmSize::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     OUString&           rText,
     const IntlWrapper*        pIntl
 )   const
 {
-    switch ( ePres )
+    rText = SW_RESSTR( STR_FRM_WIDTH ) + " ";
+    if ( GetWidthPercent() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-        {
-            rText = OUString();
-            break;
-        }
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            rText = SW_RESSTR( STR_FRM_WIDTH ) + " ";
-            if ( GetWidthPercent() )
-            {
-                rText = rText + unicode::formatPercent(GetWidthPercent(),
-                    Application::GetSettings().GetUILanguageTag());
-            }
-            else
-            {
-                rText = rText + ::GetMetricText( GetWidth(), eCoreUnit, ePresUnit, pIntl ) +
-                    " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
-            }
-            if ( ATT_VAR_SIZE != GetHeightSizeType() )
-            {
-                const sal_uInt16 nId = ATT_FIX_SIZE == m_eFrmHeightType ?
-                                        STR_FRM_FIXEDHEIGHT : STR_FRM_MINHEIGHT;
-                rText = rText + ", " + SW_RESSTR( nId ) + " ";
-                if ( GetHeightPercent() )
-                {
-                    rText = rText + unicode::formatPercent(GetHeightPercent(),
-                        Application::GetSettings().GetUILanguageTag());
-                }
-                else
-                {
-                    rText = OUString( ::GetMetricText( GetHeight(), eCoreUnit, ePresUnit, pIntl ) ) +
-                            " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
-                }
-            }
-            return true;
-        }
-        default:;//prevent warning
+        rText = rText + unicode::formatPercent(GetWidthPercent(),
+            Application::GetSettings().GetUILanguageTag());
     }
-    return false;
+    else
+    {
+        rText = rText + ::GetMetricText( GetWidth(), eCoreUnit, ePresUnit, pIntl ) +
+            " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
+    }
+    if ( ATT_VAR_SIZE != GetHeightSizeType() )
+    {
+        const sal_uInt16 nId = ATT_FIX_SIZE == m_eFrmHeightType ?
+                                STR_FRM_FIXEDHEIGHT : STR_FRM_MINHEIGHT;
+        rText = rText + ", " + SW_RESSTR( nId ) + " ";
+        if ( GetHeightPercent() )
+        {
+            rText = rText + unicode::formatPercent(GetHeightPercent(),
+                Application::GetSettings().GetUILanguageTag());
+        }
+        else
+        {
+            rText = OUString( ::GetMetricText( GetHeight(), eCoreUnit, ePresUnit, pIntl ) ) +
+                    " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
+        }
+    }
+    return true;
 }
 
 //Header for page formats.
@@ -375,28 +266,16 @@ bool SwFmtFrmSize::GetPresentation
 
 bool SwFmtHeader::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            const sal_uInt16 nId = GetHeaderFmt() ? STR_HEADER : STR_NO_HEADER;
-            rText = SW_RESSTR( nId );
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    const sal_uInt16 nId = GetHeaderFmt() ? STR_HEADER : STR_NO_HEADER;
+    rText = SW_RESSTR( nId );
+    return true;
 }
 
 //Footer for page formats.
@@ -404,316 +283,232 @@ bool SwFmtHeader::GetPresentation
 
 bool SwFmtFooter::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            const sal_uInt16 nId = GetFooterFmt() ? STR_FOOTER : STR_NO_FOOTER;
-            rText = SW_RESSTR( nId );
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    const sal_uInt16 nId = GetFooterFmt() ? STR_FOOTER : STR_NO_FOOTER;
+    rText = SW_RESSTR( nId );
+    return true;
 }
 
 bool SwFmtSurround::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
+    sal_uInt16 nId = 0;
+    switch ( (SwSurround)GetValue() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            sal_uInt16 nId = 0;
-            switch ( (SwSurround)GetValue() )
-            {
-                case SURROUND_NONE:
-                    nId = STR_SURROUND_NONE;
-                break;
-                case SURROUND_THROUGHT:
-                    nId = STR_SURROUND_THROUGHT;
-                break;
-                case SURROUND_PARALLEL:
-                    nId = STR_SURROUND_PARALLEL;
-                break;
-                case SURROUND_IDEAL:
-                    nId = STR_SURROUND_IDEAL;
-                break;
-                case SURROUND_LEFT:
-                    nId = STR_SURROUND_LEFT;
-                break;
-                case SURROUND_RIGHT:
-                    nId = STR_SURROUND_RIGHT;
-                break;
-                default:;//prevent warning
-            }
-            if ( nId )
-                rText = SW_RESSTR( nId );
-
-            if ( IsAnchorOnly() )
-            {
-                rText = rText + " " + SW_RESSTR( STR_SURROUND_ANCHORONLY );
-            }
-            return true;
-        }
+        case SURROUND_NONE:
+            nId = STR_SURROUND_NONE;
+        break;
+        case SURROUND_THROUGHT:
+            nId = STR_SURROUND_THROUGHT;
+        break;
+        case SURROUND_PARALLEL:
+            nId = STR_SURROUND_PARALLEL;
+        break;
+        case SURROUND_IDEAL:
+            nId = STR_SURROUND_IDEAL;
+        break;
+        case SURROUND_LEFT:
+            nId = STR_SURROUND_LEFT;
+        break;
+        case SURROUND_RIGHT:
+            nId = STR_SURROUND_RIGHT;
+        break;
         default:;//prevent warning
     }
-    return false;
+    if ( nId )
+        rText = SW_RESSTR( nId );
+
+    if ( IsAnchorOnly() )
+    {
+        rText = rText + " " + SW_RESSTR( STR_SURROUND_ANCHORONLY );
+    }
+    return true;
 }
 
 //VertOrientation, how and by what orientate the FlyFrm in the vertical?
 
 bool SwFmtVertOrient::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     OUString&           rText,
     const IntlWrapper*        pIntl
 )   const
 {
-    switch ( ePres )
+    sal_uInt16 nId = 0;
+    switch ( GetVertOrient() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case text::VertOrientation::NONE:
         {
-            sal_uInt16 nId = 0;
-            switch ( GetVertOrient() )
-            {
-                case text::VertOrientation::NONE:
-                {
-                    rText = rText + SW_RESSTR( STR_POS_Y ) + " " +
-                            ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl ) +
-                            " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
-                }
-                break;
-                case text::VertOrientation::TOP:
-                    nId = STR_VERT_TOP;
-                    break;
-                case text::VertOrientation::CENTER:
-                    nId = STR_VERT_CENTER;
-                    break;
-                case text::VertOrientation::BOTTOM:
-                    nId = STR_VERT_BOTTOM;
-                    break;
-                case text::VertOrientation::LINE_TOP:
-                    nId = STR_LINE_TOP;
-                    break;
-                case text::VertOrientation::LINE_CENTER:
-                    nId = STR_LINE_CENTER;
-                    break;
-                case text::VertOrientation::LINE_BOTTOM:
-                    nId = STR_LINE_BOTTOM;
-                    break;
-                default:;//prevent warning
-            }
-            if ( nId )
-                rText += SW_RESSTR( nId );
-            return true;
+            rText = rText + SW_RESSTR( STR_POS_Y ) + " " +
+                    ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl ) +
+                    " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
         }
+        break;
+        case text::VertOrientation::TOP:
+            nId = STR_VERT_TOP;
+            break;
+        case text::VertOrientation::CENTER:
+            nId = STR_VERT_CENTER;
+            break;
+        case text::VertOrientation::BOTTOM:
+            nId = STR_VERT_BOTTOM;
+            break;
+        case text::VertOrientation::LINE_TOP:
+            nId = STR_LINE_TOP;
+            break;
+        case text::VertOrientation::LINE_CENTER:
+            nId = STR_LINE_CENTER;
+            break;
+        case text::VertOrientation::LINE_BOTTOM:
+            nId = STR_LINE_BOTTOM;
+            break;
         default:;//prevent warning
     }
-    return false;
+    if ( nId )
+        rText += SW_RESSTR( nId );
+    return true;
 }
 
 //HoriOrientation, how and by what orientate the FlyFrm in the horizontal?
 
 bool SwFmtHoriOrient::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     OUString&           rText,
     const IntlWrapper*        pIntl
 )   const
 {
-    switch ( ePres )
+    sal_uInt16 nId = 0;
+    switch ( GetHoriOrient() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case text::HoriOrientation::NONE:
         {
-            sal_uInt16 nId = 0;
-            switch ( GetHoriOrient() )
-            {
-                case text::HoriOrientation::NONE:
-                {
-                    rText = rText + SW_RESSTR( STR_POS_X ) + " " +
-                            ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl ) +
-                            " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
-                }
-                break;
-                case text::HoriOrientation::RIGHT:
-                    nId = STR_HORI_RIGHT;
-                break;
-                case text::HoriOrientation::CENTER:
-                    nId = STR_HORI_CENTER;
-                break;
-                case text::HoriOrientation::LEFT:
-                    nId = STR_HORI_LEFT;
-                break;
-                case text::HoriOrientation::INSIDE:
-                    nId = STR_HORI_INSIDE;
-                break;
-                case text::HoriOrientation::OUTSIDE:
-                    nId = STR_HORI_OUTSIDE;
-                break;
-                case text::HoriOrientation::FULL:
-                    nId = STR_HORI_FULL;
-                break;
-                default:;//prevent warning
-            }
-            if ( nId )
-                rText += SW_RESSTR( nId );
-            return true;
+            rText = rText + SW_RESSTR( STR_POS_X ) + " " +
+                    ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl ) +
+                    " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
         }
+        break;
+        case text::HoriOrientation::RIGHT:
+            nId = STR_HORI_RIGHT;
+        break;
+        case text::HoriOrientation::CENTER:
+            nId = STR_HORI_CENTER;
+        break;
+        case text::HoriOrientation::LEFT:
+            nId = STR_HORI_LEFT;
+        break;
+        case text::HoriOrientation::INSIDE:
+            nId = STR_HORI_INSIDE;
+        break;
+        case text::HoriOrientation::OUTSIDE:
+            nId = STR_HORI_OUTSIDE;
+        break;
+        case text::HoriOrientation::FULL:
+            nId = STR_HORI_FULL;
+        break;
         default:;//prevent warning
     }
-    return false;
+    if ( nId )
+        rText += SW_RESSTR( nId );
+    return true;
 }
 
 // FlyAnchor, Anchor of the free-flying frame
 
 bool SwFmtAnchor::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
+    sal_uInt16 nId = 0;
+    switch ( GetAnchorId() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
+        case FLY_AT_PARA:
+            nId = STR_FLY_AT_PARA;
             break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            sal_uInt16 nId = 0;
-            switch ( GetAnchorId() )
-            {
-                case FLY_AT_PARA:
-                    nId = STR_FLY_AT_PARA;
-                    break;
-                case FLY_AS_CHAR:
-                    nId = STR_FLY_AS_CHAR;
-                    break;
-                case FLY_AT_PAGE:
-                    nId = STR_FLY_AT_PAGE;
-                    break;
-                default:;//prevent warning
-            }
-            if ( nId )
-                rText += SW_RESSTR( nId );
-            return true;
-        }
+        case FLY_AS_CHAR:
+            nId = STR_FLY_AS_CHAR;
+            break;
+        case FLY_AT_PAGE:
+            nId = STR_FLY_AT_PAGE;
+            break;
         default:;//prevent warning
     }
-    return false;
+    if ( nId )
+        rText += SW_RESSTR( nId );
+    return true;
 }
 
 bool SwFmtPageDesc::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            const SwPageDesc *pPageDesc = GetPageDesc();
-            if ( pPageDesc )
-                rText = pPageDesc->GetName();
-            else
-                rText = SW_RESSTR( STR_NO_PAGEDESC );
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    const SwPageDesc *pPageDesc = GetPageDesc();
+    if ( pPageDesc )
+        rText = pPageDesc->GetName();
+    else
+        rText = SW_RESSTR( STR_NO_PAGEDESC );
+    return true;
 }
 
 //The ColumnDescriptor
 
 bool SwFmtCol::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        pIntl
 )   const
 {
-    switch ( ePres )
+    sal_uInt16 nCnt = GetNumCols();
+    if ( nCnt > 1 )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        rText = OUString::number(nCnt) + " " + SW_RESSTR( STR_COLUMNS );
+        if ( COLADJ_NONE != GetLineAdj() )
         {
-            sal_uInt16 nCnt = GetNumCols();
-            if ( nCnt > 1 )
-            {
-                rText = OUString::number(nCnt) + " " + SW_RESSTR( STR_COLUMNS );
-                if ( COLADJ_NONE != GetLineAdj() )
-                {
-                    const long nWdth = static_cast<long>(GetLineWidth());
-                    rText = rText + " " + SW_RESSTR( STR_LINE_WIDTH ) + " " +
-                            ::GetMetricText( nWdth, eCoreUnit,
-                                              SFX_MAPUNIT_POINT, pIntl );
-                }
-            }
-            else
-                rText = OUString();
-            return true;
+            const long nWdth = static_cast<long>(GetLineWidth());
+            rText = rText + " " + SW_RESSTR( STR_LINE_WIDTH ) + " " +
+                    ::GetMetricText( nWdth, eCoreUnit,
+                                      SFX_MAPUNIT_POINT, pIntl );
         }
-        default:;//prevent warning
     }
-    return false;
+    else
+        rText = OUString();
+    return true;
 }
 
 //URL's and maps
 
 bool SwFmtURL::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
@@ -721,37 +516,26 @@ bool SwFmtURL::GetPresentation
 )   const
 {
     rText = OUString();
-    switch ( ePres )
+    if ( pMap )
+        rText += "Client-Map";
+    if ( !sURL.isEmpty() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            if ( pMap )
-                rText += "Client-Map";
-            if ( !sURL.isEmpty() )
-            {
-                if ( pMap )
-                    rText += " - ";
-                rText = rText + "URL: " + sURL;
-                if ( bIsServerMap )
-                    rText += " (Server-Map)";
-            }
-            if ( !sTargetFrameName.isEmpty() )
-            {
-                rText = rText + ", Target: " + sTargetFrameName;
-            }
-            return true;
-        }
-        default:;//prevent warning
+        if ( pMap )
+            rText += " - ";
+        rText = rText + "URL: " + sURL;
+        if ( bIsServerMap )
+            rText += " (Server-Map)";
     }
-    return false;
+    if ( !sTargetFrameName.isEmpty() )
+    {
+        rText = rText + ", Target: " + sTargetFrameName;
+    }
+    return true;
 }
 
 bool SwFmtEditInReadonly::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
@@ -759,47 +543,23 @@ bool SwFmtEditInReadonly::GetPresentation
 )   const
 {
     rText = OUString();
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            if ( GetValue() )
-                rText = SW_RESSTR(STR_EDIT_IN_READONLY);
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    if ( GetValue() )
+        rText = SW_RESSTR(STR_EDIT_IN_READONLY);
+    return true;
 }
 
 bool SwFmtLayoutSplit::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            if ( GetValue() )
-                rText = SW_RESSTR(STR_LAYOUT_SPLIT);
-            return true;
-        }
-        default:;//prevent warning
-    }
-    return false;
+    if ( GetValue() )
+        rText = SW_RESSTR(STR_LAYOUT_SPLIT);
+    return true;
 }
 
 bool SwFmtRowSplit::GetPresentation
@@ -816,151 +576,87 @@ bool SwFmtRowSplit::GetPresentation
 
 bool SwFmtFtnEndAtTxtEnd::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    OUString&           rText,
+    OUString&           /*rText*/,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            {
-                switch( GetValue() )
-                {
-                case FTNEND_ATPGORDOCEND:
-                    break;
-
-                case FTNEND_ATTXTEND:
-                    break;
-
-                case FTNEND_ATTXTEND_OWNNUMSEQ:
-                    break;
-                }
-            }
-            break;
-
-        default:
-            ePres = SFX_ITEM_PRESENTATION_NONE;
-            break;
-    }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SwFmtChain::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    switch ( ePres )
+    if ( GetPrev() || GetNext() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        rText = SW_RESSTR(STR_CONNECT1);
+        if ( GetPrev() )
         {
-            if ( GetPrev() || GetNext() )
-            {
-                rText = SW_RESSTR(STR_CONNECT1);
-                if ( GetPrev() )
-                {
-                    rText += GetPrev()->GetName();
-                    if ( GetNext() )
-                        rText += SW_RESSTR(STR_CONNECT2);
-                }
-                if ( GetNext() )
-                    rText += GetNext()->GetName();
-            }
-            return true;
+            rText += GetPrev()->GetName();
+            if ( GetNext() )
+                rText += SW_RESSTR(STR_CONNECT2);
         }
-        default:;//prevent warning
+        if ( GetNext() )
+            rText += GetNext()->GetName();
     }
-    return false;
+    return true;
 }
 
 bool SwFmtLineNumber::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*    /*pIntl*/
 )   const
 {
-    switch ( ePres )
+    if ( IsCount() )
+        rText += SW_RESSTR(STR_LINECOUNT);
+    else
+        rText += SW_RESSTR(STR_DONTLINECOUNT);
+    if ( GetStartValue() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            if ( IsCount() )
-                rText += SW_RESSTR(STR_LINECOUNT);
-            else
-                rText += SW_RESSTR(STR_DONTLINECOUNT);
-            if ( GetStartValue() )
-            {
-                rText = rText + " " + SW_RESSTR(STR_LINCOUNT_START) +
-                        OUString::number( GetStartValue() );
-            }
-            return true;
-        }
-        default:;//prevent warning
+        rText = rText + " " + SW_RESSTR(STR_LINCOUNT_START) +
+                OUString::number( GetStartValue() );
     }
-    return false;
+    return true;
 }
 
 bool SwTextGridItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*  /*pIntl*/
 )   const
 {
-    switch ( ePres )
+    sal_uInt16 nId = 0;
+
+    switch ( GetGridType() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            sal_uInt16 nId = 0;
-
-            switch ( GetGridType() )
-            {
-            case GRID_NONE :
-                nId = STR_GRID_NONE;
-                break;
-            case GRID_LINES_ONLY :
-                nId = STR_GRID_LINES_ONLY;
-                break;
-            case GRID_LINES_CHARS :
-                nId = STR_GRID_LINES_CHARS;
-                break;
-            }
-            if ( nId )
-                rText += SW_RESSTR( nId );
-            return true;
-        }
-        default:;//prevent warning
+    case GRID_NONE :
+        nId = STR_GRID_NONE;
+        break;
+    case GRID_LINES_ONLY :
+        nId = STR_GRID_LINES_ONLY;
+        break;
+    case GRID_LINES_CHARS :
+        nId = STR_GRID_LINES_CHARS;
+        break;
     }
-
-    return false;
+    if ( nId )
+        rText += SW_RESSTR( nId );
+    return true;
 }
 
 bool SwHeaderAndFooterEatSpacingItem::GetPresentation
@@ -978,145 +674,89 @@ bool SwHeaderAndFooterEatSpacingItem::GetPresentation
 // Graphic attributes
 
 bool SwMirrorGrf::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation /*ePres*/, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     OUString& rText, const IntlWrapper* /*pIntl*/ ) const
 {
-    switch ( ePres )
+    sal_uInt16 nId;
+    switch( GetValue() )
     {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            sal_uInt16 nId;
-            switch( GetValue() )
-            {
-            case RES_MIRROR_GRAPH_DONT:     nId = STR_NO_MIRROR;    break;
-            case RES_MIRROR_GRAPH_VERT: nId = STR_VERT_MIRROR;  break;
-            case RES_MIRROR_GRAPH_HOR:  nId = STR_HORI_MIRROR;  break;
-            case RES_MIRROR_GRAPH_BOTH: nId = STR_BOTH_MIRROR;  break;
-            default:                    nId = 0;    break;
-            }
-            if ( nId )
-            {
-                rText = SW_RESSTR( nId );
-                if (bGrfToggle)
-                    rText += SW_RESSTR( STR_MIRROR_TOGGLE );
-            }
-        }
-        break;
-    default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
-        rText = OUString();
-        break;
+    case RES_MIRROR_GRAPH_DONT:     nId = STR_NO_MIRROR;    break;
+    case RES_MIRROR_GRAPH_VERT: nId = STR_VERT_MIRROR;  break;
+    case RES_MIRROR_GRAPH_HOR:  nId = STR_HORI_MIRROR;  break;
+    case RES_MIRROR_GRAPH_BOTH: nId = STR_BOTH_MIRROR;  break;
+    default:                    nId = 0;    break;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    if ( nId )
+    {
+        rText = SW_RESSTR( nId );
+        if (bGrfToggle)
+            rText += SW_RESSTR( STR_MIRROR_TOGGLE );
+    }
+    return true;
 }
 
 bool SwRotationGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    switch( ePres )
-    {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
-            rText = SW_RESSTR( STR_ROTATION );
-        else if( rText.getLength() )
-            rText = OUString();
-        rText = rText + OUString::number( GetValue() ) + "\xB0";
-        break;
-
-    default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
+    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+        rText = SW_RESSTR( STR_ROTATION );
+    else if( rText.getLength() )
         rText = OUString();
-        break;
-    }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    rText = rText + OUString::number( GetValue() ) + "\xB0";
+    return true;
 }
 
 bool SwLuminanceGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    switch( ePres )
-    {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
-            rText = SW_RESSTR( STR_LUMINANCE );
-        else if( rText.getLength() )
-            rText = OUString();
-        rText = rText + unicode::formatPercent(GetValue(),
-            Application::GetSettings().GetUILanguageTag());
-        break;
-
-    default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
+    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+        rText = SW_RESSTR( STR_LUMINANCE );
+    else if( rText.getLength() )
         rText = OUString();
-        break;
-    }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    rText = rText + unicode::formatPercent(GetValue(),
+        Application::GetSettings().GetUILanguageTag());
+    return true;
 }
 
 bool SwContrastGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    switch( ePres )
-    {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
-            rText = SW_RESSTR( STR_CONTRAST );
-        else if( rText.getLength() )
-            rText = OUString();
-        rText = rText + unicode::formatPercent(GetValue(),
-            Application::GetSettings().GetUILanguageTag());
-        break;
-
-    default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
+    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+        rText = SW_RESSTR( STR_CONTRAST );
+    else if( rText.getLength() )
         rText = OUString();
-        break;
-    }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    rText = rText + unicode::formatPercent(GetValue(),
+        Application::GetSettings().GetUILanguageTag());
+    return true;
 }
 
 bool SwChannelGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    switch( ePres )
+    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
     {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+        sal_uInt16 nId;
+        switch ( Which() )
         {
-            sal_uInt16 nId;
-            switch ( Which() )
-            {
-            case RES_GRFATR_CHANNELR:   nId = STR_CHANNELR; break;
-            case RES_GRFATR_CHANNELG:   nId = STR_CHANNELG; break;
-            case RES_GRFATR_CHANNELB:   nId = STR_CHANNELB; break;
-            default:                    nId = 0; break;
-            }
-            if( nId )
-                rText = SW_RESSTR( nId );
-            else if( rText.getLength() )
-                rText = OUString();
+        case RES_GRFATR_CHANNELR:   nId = STR_CHANNELR; break;
+        case RES_GRFATR_CHANNELG:   nId = STR_CHANNELG; break;
+        case RES_GRFATR_CHANNELB:   nId = STR_CHANNELB; break;
+        default:                    nId = 0; break;
         }
+        if( nId )
+            rText = SW_RESSTR( nId );
         else if( rText.getLength() )
             rText = OUString();
-        rText = rText + unicode::formatPercent(GetValue(),
-            Application::GetSettings().GetUILanguageTag());
-        break;
-
-    default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
-        rText = OUString();
-        break;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    else if( rText.getLength() )
+        rText = OUString();
+    rText = rText + unicode::formatPercent(GetValue(),
+        Application::GetSettings().GetUILanguageTag());
+    return true;
 }
 
 bool SwGammaGrf::GetPresentation(
@@ -1124,22 +764,12 @@ bool SwGammaGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     OUStringBuffer aText;
-    switch( ePres )
-    {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
-            aText.append(SW_RESSTR(STR_GAMMA));
-        aText.append(unicode::formatPercent(GetValue(),
-            Application::GetSettings().GetUILanguageTag()));
-        break;
-
-    default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
-        break;
-    }
+    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+        aText.append(SW_RESSTR(STR_GAMMA));
+    aText.append(unicode::formatPercent(GetValue(),
+        Application::GetSettings().GetUILanguageTag()));
     rText = aText.makeStringAndClear();
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SwInvertGrf::GetPresentation(
@@ -1147,46 +777,25 @@ bool SwInvertGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     rText = OUString();
-    switch( ePres )
+    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
     {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
-        {
-            const sal_uInt16 nId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
-            rText = SW_RESSTR( nId );
-        }
-        break;
-
-    default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
-        break;
+        const sal_uInt16 nId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
+        rText = SW_RESSTR( nId );
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SwTransparencyGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    switch( ePres )
-    {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
-            rText = SW_RESSTR( STR_TRANSPARENCY );
-        else if( rText.getLength() )
-            rText = OUString();
-        rText = rText + unicode::formatPercent(GetValue(),
-            Application::GetSettings().GetUILanguageTag());
-        break;
-
-    default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
+    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+        rText = SW_RESSTR( STR_TRANSPARENCY );
+    else if( rText.getLength() )
         rText = OUString();
-        break;
-    }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    rText = rText + unicode::formatPercent(GetValue(),
+        Application::GetSettings().GetUILanguageTag());
+    return true;
 }
 
 bool SwDrawModeGrf::GetPresentation(
@@ -1194,30 +803,20 @@ bool SwDrawModeGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     rText = OUString();
-    switch( ePres )
+    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
     {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
-    case SFX_ITEM_PRESENTATION_COMPLETE:
-        if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+        sal_uInt16 nId;
+        switch ( GetValue() )
         {
-            sal_uInt16 nId;
-            switch ( GetValue() )
-            {
 
-            case GRAPHICDRAWMODE_GREYS:     nId = STR_DRAWMODE_GREY; break;
-            case GRAPHICDRAWMODE_MONO:      nId = STR_DRAWMODE_BLACKWHITE; break;
-            case GRAPHICDRAWMODE_WATERMARK: nId = STR_DRAWMODE_WATERMARK; break;
-            default:                        nId = STR_DRAWMODE_STD; break;
-            }
-            rText = SW_RESSTR( STR_DRAWMODE ) + SW_RESSTR( nId );
+        case GRAPHICDRAWMODE_GREYS:     nId = STR_DRAWMODE_GREY; break;
+        case GRAPHICDRAWMODE_MONO:      nId = STR_DRAWMODE_BLACKWHITE; break;
+        case GRAPHICDRAWMODE_WATERMARK: nId = STR_DRAWMODE_WATERMARK; break;
+        default:                        nId = STR_DRAWMODE_STD; break;
         }
-        break;
-
-    default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
-        break;
+        rText = SW_RESSTR( STR_DRAWMODE ) + SW_RESSTR( nId );
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SwFmtFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
@@ -1227,22 +826,12 @@ bool SwFmtFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
                                     const IntlWrapper*    /*pIntl*/ ) const
 {
     rText = OUString();
-    switch( ePres )
+    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        break;
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            {
-                const sal_uInt16 nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
-                rText = SW_RESSTR( nId );
-            }
-        break;
-
-        default:
-            ePres = SFX_ITEM_PRESENTATION_NONE;
-        break;
+        const sal_uInt16 nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
+        rText = SW_RESSTR( nId );
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

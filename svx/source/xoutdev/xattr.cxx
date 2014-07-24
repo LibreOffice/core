@@ -377,7 +377,7 @@ SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 bool XLineStyleItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
@@ -385,32 +385,21 @@ bool XLineStyleItem::GetPresentation
 {
     rText = OUString();
 
-    switch ( ePres )
+    sal_uInt16 nId = 0;
+
+    switch( (sal_uInt16)GetValue() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            return false;
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        {
-            sal_uInt16 nId = 0;
-
-            switch( (sal_uInt16)GetValue() )
-            {
-                case XLINE_NONE:
-                    nId = RID_SVXSTR_INVISIBLE;
-                    break;
-                case XLINE_SOLID:
-                    nId = RID_SVXSTR_SOLID;
-                    break;
-            }
-
-            if ( nId )
-                rText = SVX_RESSTR( nId );
-            return true;
-        }
-        default:
-            return false;
+        case XLINE_NONE:
+            nId = RID_SVXSTR_INVISIBLE;
+            break;
+        case XLINE_SOLID:
+            nId = RID_SVXSTR_SOLID;
+            break;
     }
+
+    if ( nId )
+        rText = SVX_RESSTR( nId );
+    return true;
 }
 
 bool XLineStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -733,24 +722,14 @@ SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 bool XLineDashItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetName();
-            return true;
-        default:
-            return false;
-    }
+    rText = GetName();
+    return true;
 }
 
 bool XLineDashItem::HasMetrics() const
@@ -1061,26 +1040,16 @@ SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 bool XLineWidthItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     OUString&           rText, const IntlWrapper * pIntl
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetMetricText( (long) GetValue(),
-                                    eCoreUnit, ePresUnit, pIntl) +
-                    " " + EE_RESSTR( GetMetricId( ePresUnit) );
-            return true;
-        default:
-            return false;
-    }
+    rText = GetMetricText( (long) GetValue(),
+                            eCoreUnit, ePresUnit, pIntl) +
+            " " + EE_RESSTR( GetMetricId( ePresUnit) );
+    return true;
 }
 
 bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1135,24 +1104,14 @@ SfxPoolItem* XLineColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 bool XLineColorItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetName();
-            return true;
-        default:
-            return false;
-    }
+    rText = GetName();
+    return true;
 }
 
 bool XLineColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1333,24 +1292,14 @@ SvStream& XLineStartItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 bool XLineStartItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetName();
-            return true;
-        default:
-        return false;
-    }
+    rText = GetName();
+    return true;
 }
 
 bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1908,24 +1857,14 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
 bool XLineEndItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetName();
-            return true;
-        default:
-            return false;
-    }
+    rText = GetName();
+    return true;
 }
 
 bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2000,26 +1939,16 @@ SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
 
 bool XLineStartWidthItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     OUString&           rText, const IntlWrapper * pIntl
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetMetricText( (long) GetValue(),
-                                    eCoreUnit, ePresUnit, pIntl) +
-                    " " + EE_RESSTR( GetMetricId( ePresUnit) );
-            return true;
-        default:
-            return false;
-    }
+    rText = GetMetricText( (long) GetValue(),
+                            eCoreUnit, ePresUnit, pIntl) +
+            " " + EE_RESSTR( GetMetricId( ePresUnit) );
+    return true;
 }
 
 bool XLineStartWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -2062,26 +1991,16 @@ SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 bool XLineEndWidthItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetMetricText( (long) GetValue(),
-                                    eCoreUnit, ePresUnit, pIntl) +
-                    " " + EE_RESSTR( GetMetricId( ePresUnit) );
-            return true;
-        default:
-            return false;
-    }
+    rText = GetMetricText( (long) GetValue(),
+                            eCoreUnit, ePresUnit, pIntl) +
+            " " + EE_RESSTR( GetMetricId( ePresUnit) );
+    return true;
 }
 
 bool XLineEndWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -2124,25 +2043,15 @@ SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) co
 
 bool XLineStartCenterItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = OUString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
-                            RID_SVXSTR_NOTCENTERED, DIALOG_MGR() ) );
-            return true;
-        default:
-            return false;
-    }
+    rText = OUString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
+                    RID_SVXSTR_NOTCENTERED, DIALOG_MGR() ) );
+    return true;
 }
 
 bool XLineStartCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -2187,25 +2096,15 @@ SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
 
 bool XLineEndCenterItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = OUString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
-                            RID_SVXSTR_NOTCENTERED, DIALOG_MGR() ) );
-            return true;
-        default:
-            return false;
-    }
+    rText = OUString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
+                    RID_SVXSTR_NOTCENTERED, DIALOG_MGR() ) );
+    return true;
 }
 
 bool XLineEndCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -2252,7 +2151,7 @@ SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 bool XFillStyleItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
@@ -2260,42 +2159,30 @@ bool XFillStyleItem::GetPresentation
 {
     rText = OUString();
 
-    switch ( ePres )
+    sal_uInt16 nId = 0;
+
+    switch( (sal_uInt16)GetValue() )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            return false;
-
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            sal_uInt16 nId = 0;
-
-            switch( (sal_uInt16)GetValue() )
-            {
-                case drawing::FillStyle_NONE:
-                    nId = RID_SVXSTR_INVISIBLE;
-                    break;
-                case drawing::FillStyle_SOLID:
-                    nId = RID_SVXSTR_SOLID;
-                    break;
-                case drawing::FillStyle_GRADIENT:
-                    nId = RID_SVXSTR_GRADIENT;
-                    break;
-                case drawing::FillStyle_HATCH:
-                    nId = RID_SVXSTR_HATCH;
-                    break;
-                case drawing::FillStyle_BITMAP:
-                    nId = RID_SVXSTR_BITMAP;
-                    break;
-            }
-
-            if ( nId )
-                rText = SVX_RESSTR( nId );
-            return true;
-        }
-        default:
-            return false;
+        case drawing::FillStyle_NONE:
+            nId = RID_SVXSTR_INVISIBLE;
+            break;
+        case drawing::FillStyle_SOLID:
+            nId = RID_SVXSTR_SOLID;
+            break;
+        case drawing::FillStyle_GRADIENT:
+            nId = RID_SVXSTR_GRADIENT;
+            break;
+        case drawing::FillStyle_HATCH:
+            nId = RID_SVXSTR_HATCH;
+            break;
+        case drawing::FillStyle_BITMAP:
+            nId = RID_SVXSTR_BITMAP;
+            break;
     }
+
+    if ( nId )
+        rText = SVX_RESSTR( nId );
+    return true;
 }
 
 sal_uInt16 XFillStyleItem::GetValueCount() const
@@ -2360,24 +2247,14 @@ SfxPoolItem* XFillColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 bool XFillColorItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetName();
-            return true;
-        default:
-            return false;
-    }
+    rText = GetName();
+    return true;
 }
 
 bool XFillColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -2431,24 +2308,14 @@ sal_uInt16 XSecondaryFillColorItem::GetVersion( sal_uInt16 /*nFileFormatVersion*
 
 bool XSecondaryFillColorItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetName();
-            return true;
-        default:
-            return false;
-    }
+    rText = GetName();
+    return true;
 }
 
 // class XGradient
@@ -2634,24 +2501,14 @@ sal_uInt16 XFillGradientItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) con
 
 bool XFillGradientItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetName();
-            return true;
-        default:
-            return false;
-    }
+    rText = GetName();
+    return true;
 }
 
 bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -3110,24 +2967,14 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 bool XFillHatchItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetName();
-            return true;
-        default:
-            return false;
-    }
+    rText = GetName();
+    return true;
 }
 
 bool XFillHatchItem::HasMetrics() const

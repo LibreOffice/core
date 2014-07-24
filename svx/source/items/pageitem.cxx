@@ -109,8 +109,6 @@ bool SvxPageItem::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
             if ( !aDescName.isEmpty() )

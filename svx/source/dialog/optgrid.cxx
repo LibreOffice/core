@@ -105,24 +105,14 @@ bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool  SvxGridItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = "SvxGridItem";
-            return ePres;
-        default:
-            return false;
-    }
+    rText = "SvxGridItem";
+    return true;
 }
 
 // TabPage Screen Settings

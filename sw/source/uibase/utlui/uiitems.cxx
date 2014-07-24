@@ -61,33 +61,21 @@ bool SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool  SwPageFtnInfoItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     OUString&           rText,
     const IntlWrapper*  pIntl
 )   const
 {
-    switch ( ePres )
+    const SwTwips nHght = GetPageFtnInfo().GetHeight();
+    if ( nHght )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        {
-            const SwTwips nHght = GetPageFtnInfo().GetHeight();
-            if ( nHght )
-            {
-                rText = SW_RESSTR( STR_MAX_FTN_HEIGHT ) + " " +
-                        ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl ) + " " +
-                        ::GetSvxString( ::GetMetricId( ePresUnit ) );
-            }
-            return true;
-        }
-        default:; //prevent warning
+        rText = SW_RESSTR( STR_MAX_FTN_HEIGHT ) + " " +
+                ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl ) + " " +
+                ::GetSvxString( ::GetMetricId( ePresUnit ) );
     }
-    return false;
+    return true;
 }
 
 bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const

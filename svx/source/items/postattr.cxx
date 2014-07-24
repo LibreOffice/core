@@ -55,9 +55,6 @@ bool SvxPostItAuthorItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValue();
             return true;
@@ -103,9 +100,6 @@ bool SvxPostItDateItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValue();
             return true;
@@ -151,9 +145,6 @@ bool SvxPostItTextItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValue();
             return true;

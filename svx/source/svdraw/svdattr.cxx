@@ -741,7 +741,7 @@ bool SdrScaleItem::GetPresentation(
         rText = aStr + " " + rText;
     }
 
-    return ePresentation != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 SfxPoolItem* SdrScaleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
@@ -787,7 +787,7 @@ bool SdrOnOffItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrYesNoItem,SfxBoolItem);
@@ -819,7 +819,7 @@ bool SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 
@@ -853,7 +853,7 @@ bool SdrPercentItem::GetPresentation(
         rText = aStr + " " + rText;
     }
 
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 
@@ -942,7 +942,7 @@ bool SdrAngleItem::GetPresentation(
     }
 
     rText = aText.makeStringAndClear();
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 
@@ -993,7 +993,7 @@ bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr2);
         rText = aStr2 + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 
@@ -1023,7 +1023,7 @@ bool SdrCaptionTypeItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrCaptionEscDirItem,SfxEnumItem);
@@ -1049,7 +1049,7 @@ bool SdrCaptionEscDirItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 
@@ -1080,7 +1080,7 @@ bool SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrTextFitToSizeTypeItem::HasBoolValue() const { return true; }
@@ -1140,7 +1140,7 @@ bool SdrTextVertAdjustItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrTextVertAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1189,7 +1189,7 @@ bool SdrTextHorzAdjustItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrTextHorzAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1238,7 +1238,7 @@ bool SdrTextAniKindItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrTextAniKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1286,7 +1286,7 @@ bool SdrTextAniDirectionItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrTextAniDirectionItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1332,7 +1332,7 @@ bool SdrTextAniDelayItem::GetPresentation(
         rText = aStr + " " + rText;
     }
 
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrTextAniAmountItem,SfxInt16Item);
@@ -1389,7 +1389,7 @@ bool SdrTextAniAmountItem::GetPresentation(
         rText = aStr + " " + rText;
     }
 
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY( SdrTextFixedCellHeightItem, SfxBoolItem );
@@ -1418,7 +1418,7 @@ bool SdrTextFixedCellHeightItem::GetPresentation( SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 SfxPoolItem* SdrTextFixedCellHeightItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
 {
@@ -1516,7 +1516,7 @@ bool SdrCustomShapeAdjustmentItem::GetPresentation(
         SdrItemPool::TakeItemName( Which(), aStr );
         rText = aStr + " " + rText;
     }
-    return ePresentation != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 SfxPoolItem* SdrCustomShapeAdjustmentItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
@@ -1633,7 +1633,7 @@ bool SdrEdgeKindItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrEdgeKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1822,7 +1822,7 @@ bool SdrMeasureKindItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrMeasureKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1870,7 +1870,7 @@ bool SdrMeasureTextHPosItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrMeasureTextHPosItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1918,7 +1918,7 @@ bool SdrMeasureTextVPosItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrMeasureTextVPosItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1973,7 +1973,7 @@ bool SdrMeasureUnitItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrMeasureUnitItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -2019,7 +2019,7 @@ bool SdrCircKindItem::GetPresentation(SfxItemPresentation ePres,
         SdrItemPool::TakeItemName(Which(), aStr);
         rText = aStr + " " + rText;
     }
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool SdrCircKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -2076,7 +2076,7 @@ bool SdrSignedPercentItem::GetPresentation(
         rText = aStr + " " + rText;
     }
 
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2289,7 +2289,7 @@ bool SdrGrafModeItem::GetPresentation( SfxItemPresentation ePres,
         rText = aStr + " " + rText;
     }
 
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

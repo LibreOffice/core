@@ -382,24 +382,14 @@ sal_uInt16 XFillBitmapItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 }
 
 bool XFillBitmapItem::GetPresentation(
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit /*eCoreUnit*/,
     SfxMapUnit /*ePresUnit*/,
     OUString& rText,
     const IntlWrapper*) const
 {
-    switch (ePres)
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return false;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText += GetName();
-            return true;
-        default:
-            return false;
-    }
+    rText += GetName();
+    return true;
 }
 
 bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId) const

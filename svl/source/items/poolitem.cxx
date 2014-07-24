@@ -172,11 +172,7 @@ SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
  * The corresponding unit of measure is passed as 'ePresentationMetric'.
  *
  *
- * @return SfxItemPresentation     SFX_ITEM_PRESENTATION_NONE
- *                                 A textual representation could not be
- *                                 created
- *
- *                                 SFX_ITEM_PRESENTATION_NAMELESS
+ * @return SfxItemPresentation     SFX_ITEM_PRESENTATION_NAMELESS
  *                                 A textual representation (if applicable
  *                                 with a unit of measure) could be created,
  *                                 but it doesn't contain any semantic meaning

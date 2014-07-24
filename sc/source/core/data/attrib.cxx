@@ -302,10 +302,6 @@ bool ScProtectionAttr::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            break;
-
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValueText();
             break;
@@ -328,11 +324,10 @@ bool ScProtectionAttr::GetPresentation
                 + (!bHidePrint ? aStrYes : aStrNo);
             break;
 
-        default:
-            ePres = SFX_ITEM_PRESENTATION_NONE;
+        default: break;
     }
 
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
@@ -433,7 +428,7 @@ bool ScRangeItem::GetPresentation
         }
     }
 
-    return ePres != SFX_ITEM_PRESENTATION_NONE;
+    return true;
 }
 
 //      ScTableListItem - List from Tables (-numbers)
@@ -514,10 +509,6 @@ bool ScTableListItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            return ePres;
-
         case SFX_ITEM_PRESENTATION_NAMELESS:
             {
             rText  = "(";
@@ -1025,7 +1016,7 @@ bool ScPageScaleToItem::GetPresentation(
         SfxItemPresentation ePres, SfxMapUnit, SfxMapUnit, OUString& rText, const IntlWrapper* ) const
 {
     rText = OUString();
-    if( !IsValid() || (ePres == SFX_ITEM_PRESENTATION_NONE) )
+    if( !IsValid())
         return false;
 
     OUString aName( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETO ) );
@@ -1036,10 +1027,6 @@ bool ScPageScaleToItem::GetPresentation(
 
     switch( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NONE:
-        return false;
-        break;
-
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = aValue;
             return true;

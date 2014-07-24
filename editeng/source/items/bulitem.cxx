@@ -380,28 +380,14 @@ OUString SvxBulletItem::GetFullText() const
 
 bool SvxBulletItem::GetPresentation
 (
-    SfxItemPresentation ePres,
+    SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    bool eRet = false;
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            rText = OUString();
-            eRet = false;
-            break;
-
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = GetFullText();
-            eRet = true;
-            break;
-        default: ; //prevent warning
-    }
-    return eRet;
+    rText = GetFullText();
+    return true;
 }
 
 
