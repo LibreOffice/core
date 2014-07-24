@@ -1389,57 +1389,6 @@ namespace
         bool m_isMark;
         sal_Int32 m_nCntnt;
     };
-
-    void _RestoreCntntIdx(std::vector<MarkEntry> &rSaveArr,
-        const SwNode& rNd,
-        sal_Int32 nLen,
-        sal_Int32 nChkLen)
-    {
-        const SwDoc* pDoc = rNd.GetDoc();
-        const SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
-        SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
-
-        sal_uInt16 n = 0;
-        while( n < rSaveArr.size() )
-        {
-            MarkEntry aSave = rSaveArr[n];
-            if( aSave.m_nCntnt >= nChkLen )
-                rSaveArr[n].m_nCntnt -= nChkLen;
-            else
-            {
-                SwPosition* pPos = 0;
-                {
-                    SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
-                    const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
-                    if( rFlyAnchor.GetCntntAnchor() )
-                    {
-                        SwFmtAnchor aNew( rFlyAnchor );
-                        SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
-                        aNewPos.nNode = rNd;
-                        if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
-                        {
-                            aNewPos.nContent.Assign( pCNd, std::min(
-                                                     aSave.m_nCntnt, nLen ) );
-                        }
-                        else
-                        {
-                            aNewPos.nContent.Assign( 0, 0 );
-                        }
-                        aNew.SetAnchor( &aNewPos );
-                        pFrmFmt->SetFmtAttr( aNew );
-                    }
-                }
-
-                if( pPos )
-                {
-                    pPos->nNode = rNd;
-                    pPos->nContent.Assign( pCNd, std::min( aSave.m_nCntnt, nLen ) );
-                }
-                n -= 1;
-                rSaveArr.erase( rSaveArr.begin() + n, rSaveArr.begin() + n + 1);
-            }
-        }
-    }
     struct OffsetUpdater
     {
         const SwCntntNode* m_pNewCntntNode;
@@ -1518,7 +1467,7 @@ namespace
             updater_t aUpdater = LimitUpdater(pCNd, nLen, nCorrLen);
             RestoreBkmks(pDoc, aUpdater);
             RestoreRedlines(pDoc, aUpdater);
-            _RestoreCntntIdx(m_aFlyEntries, rNd, nLen, nCorrLen);
+            RestoreFlys(pDoc, aUpdater, false);
             RestoreUnoCrsrs(pDoc, aUpdater);
             RestoreShellCrsrs(pDoc, aUpdater);
         }
