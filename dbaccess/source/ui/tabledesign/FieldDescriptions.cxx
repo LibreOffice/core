@@ -28,9 +28,9 @@
 #include "UITools.hxx"
 #include <com/sun/star/util/NumberFormat.hpp>
 
-#define DEFAULT_VARCHAR_PRECSION    100
-#define DEFAULT_OTHER_PRECSION      16
-#define DEFAULT_NUMERIC_PRECSION    5
+#define DEFAULT_VARCHAR_PRECISION    100
+#define DEFAULT_OTHER_PRECISION      16
+#define DEFAULT_NUMERIC_PRECISION    5
 #define DEFAULT_NUMERIC_SCALE       0
 
 using namespace dbaui;
@@ -186,7 +186,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce
             case DataType::VARCHAR:
                 if ( bForce )
                 {
-                    sal_Int32 nPrec = DEFAULT_VARCHAR_PRECSION;
+                    sal_Int32 nPrec = DEFAULT_VARCHAR_PRECISION;
                     if ( GetPrecision() )
                         nPrec = GetPrecision();
                     SetPrecision(::std::min<sal_Int32>(nPrec,_pType->nPrecision));
@@ -201,7 +201,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce
             default:
                 if ( bForce )
                 {
-                    sal_Int32 nPrec = DEFAULT_OTHER_PRECSION;
+                    sal_Int32 nPrec = DEFAULT_OTHER_PRECISION;
                     switch ( _pType->nType )
                     {
                         case DataType::BIT:
@@ -216,7 +216,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce
                     }
 
                     if ( _pType->nPrecision )
-                        SetPrecision(::std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECSION,_pType->nPrecision));
+                        SetPrecision(::std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECISION,_pType->nPrecision));
                     if ( _pType->nMaximumScale )
                         SetScale(::std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
                 }
