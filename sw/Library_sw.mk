@@ -159,6 +159,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/crsr/overlayrangesoutline \
     sw/source/core/doc/SwStyleNameMapper \
     sw/source/core/doc/acmplwrd \
+    sw/source/core/doc/CntntIdxStore \
     sw/source/core/doc/dbgoutsw \
     sw/source/core/doc/doc \
     sw/source/core/doc/docbasic \
