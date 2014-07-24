@@ -1414,7 +1414,7 @@ namespace
         std::vector<MarkEntry> m_aBkmkEntries;
         std::vector<MarkEntry> m_aRedlineEntries;
         std::vector<MarkEntry> m_aFlyEntries;
-        std::vector<MarkEntry> m_aUnoCrsrEntries;
+        std::vector<PaMEntry> m_aUnoCrsrEntries;
         std::vector<PaMEntry> m_aShellCrsrEntries;
         typedef boost::function<void (SwPosition& rPos, sal_Int32 nCntnt)> updater_t;
         virtual void Clear() SAL_OVERRIDE
@@ -1475,8 +1475,8 @@ namespace
             inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
-    static void lcl_ChkPaM( std::vector<MarkEntry>& rMarkEntries, sal_uLong nNode, sal_Int32 nCntnt,
-                    const SwPaM& rPam, const long int nIdx,
+    static void lcl_ChkUnoCrsrPaM( std::vector<PaMEntry>& rMarkEntries, sal_uLong nNode, sal_Int32 nCntnt,
+                    const SwPaM& rPam,
                     bool bChkSelDirection )
     {
         // Respect direction of selection
@@ -1490,7 +1490,7 @@ namespace
             ( bBound1IsStart ? pPos->nContent.GetIndex() < nCntnt
                                 : pPos->nContent.GetIndex() <= nCntnt ))
         {
-            const MarkEntry aEntry = { nIdx, false, pPos->nContent.GetIndex() };
+            const PaMEntry aEntry = { const_cast<SwPaM*>(&rPam), false, pPos->nContent.GetIndex() };
             rMarkEntries.push_back(aEntry);
         }
 
@@ -1500,7 +1500,7 @@ namespace
                         ? pPos->nContent.GetIndex() <= nCntnt
                         : pPos->nContent.GetIndex() < nCntnt ))
         {
-            const MarkEntry aEntry = { nIdx, true, pPos->nContent.GetIndex() };
+            const PaMEntry aEntry = { const_cast<SwPaM*>(&rPam), true, pPos->nContent.GetIndex() };
             rMarkEntries.push_back(aEntry);
         }
     }
@@ -1690,64 +1690,26 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto
 
 void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
 {
-    long int nIdx = 0;
     BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
     {
         FOREACHPAM_START( const_cast<SwUnoCrsr*>(pUnoCrsr) )
-            lcl_ChkPaM( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR, nIdx++, false );
+            lcl_ChkUnoCrsrPaM( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR, false );
         FOREACHPAM_END()
         const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
         if( pUnoTblCrsr )
         {
             FOREACHPAM_START( &(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing() )
-                lcl_ChkPaM( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR, nIdx++, false );
+                lcl_ChkUnoCrsrPaM( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR, false );
             FOREACHPAM_END()
         }
     }
 }
 
-void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater)
+void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* /* pDoc */, updater_t& rUpdater)
 {
-    BOOST_FOREACH(const MarkEntry& aEntry, m_aUnoCrsrEntries)
+    BOOST_FOREACH(const PaMEntry& aEntry, m_aUnoCrsrEntries)
     {
-        sal_uInt16 nCnt = 0;
-        BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
-        {
-            SAL_INFO("sw.core", "Looking for Index " << aEntry.m_nIdx << " now at PaM Index" << nCnt << ": " << pUnoCrsr);
-            SwPosition* pPos = NULL;
-            FOREACHPAM_START( const_cast<SwUnoCrsr*>(pUnoCrsr) )
-                if( aEntry.m_nIdx == nCnt )
-                {
-                    SAL_INFO("sw.core", "Found PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
-                    pPos = &PCURCRSR->GetBound( !aEntry.m_bOther );
-                    break;
-                }
-                else
-                    SAL_INFO("sw.core", "Skipping PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
-                ++nCnt;
-            FOREACHPAM_END()
-            const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
-            if( !pPos && pUnoTblCrsr )
-            {
-                FOREACHPAM_START( &(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing() )
-                    if( aEntry.m_nIdx == nCnt )
-                    {
-                        SAL_INFO("sw.core", "Found Table PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
-                        pPos = &PCURCRSR->GetBound( !aEntry.m_bOther );
-                        break;
-                    }
-                    else
-                        SAL_INFO("sw.core", "Skipping Table PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
-                    ++nCnt;
-                FOREACHPAM_END()
-            }
-            if( pPos )
-            {
-                SAL_INFO("sw.core", "Would be setting " << pPos << " for Index " << aEntry.m_nIdx);
-                rUpdater(*pPos, aEntry.m_nCntnt);
-                break;
-            }
-        }
+        rUpdater(aEntry.m_pPaM->GetBound(!aEntry.m_isMark), aEntry.m_nCntnt);
     }
 }
 
