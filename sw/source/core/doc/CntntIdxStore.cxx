@@ -292,10 +292,9 @@ void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
 void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
 {
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
-    SwPosition* pPos = NULL;
     BOOST_FOREACH(const MarkEntry& aEntry, m_aRedlineEntries)
     {
-        pPos = (SwPosition*)( aEntry.m_bOther
+        SwPosition* const pPos = (SwPosition*)( aEntry.m_bOther
             ? rRedlTbl[ aEntry.m_nIdx ]->GetMark()
             : rRedlTbl[ aEntry.m_nIdx ]->GetPoint());
         rUpdater(*pPos, aEntry.m_nCntnt);
