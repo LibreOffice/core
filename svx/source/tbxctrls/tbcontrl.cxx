@@ -1010,8 +1010,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SfxPopupWindow( nSlotId, pParentWindow,
                     "palette_popup_window", "svx/ui/colorwindow.ui",
                     rFrame ),
-    maWindowSize( 250, 350 ),
     theSlotId( nSlotId ),
+    maWindowSize( 250, 350 ),
     maCommand( rCommand ),
     mrPaletteManager( rPaletteManager )
 
@@ -2205,6 +2205,11 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
         case SID_EXTRUSION_3D_COLOR:
             addStatusListener( OUString( ".uno:Extrusion3DColor"));
             break;
+
+        case SID_ATTR_LINE_COLOR:
+            addStatusListener( OUString( ".uno:XLineColor" ));
+            mPaletteManager.SetLastColor( COL_BLACK );
+            break;
     }
 
     pBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
@@ -2247,6 +2252,10 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
 
         case SID_EXTRUSION_3D_COLOR:
             pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR ) );
+            break;
+
+        case SID_ATTR_LINE_COLOR:
+            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
             break;
     }
 
@@ -2318,6 +2327,11 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
         case SID_EXTRUSION_3D_COLOR:
             aCommand    = ".uno:Extrusion3DColor";
             aParamName  = "Extrusion3DColor";
+            break;
+
+        case SID_ATTR_LINE_COLOR:
+            aCommand    = ".uno:XLineColor";
+            aParamName  = "XLineColor";
             break;
     }
 
