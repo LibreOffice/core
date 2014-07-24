@@ -84,7 +84,9 @@ void SfxMenuControl::Bind(
     else
         SetId( nSlotId );
 
-    DBG( CheckConfigure_Impl(SFX_SLOT_MENUCONFIG) );
+#ifdef DBG_UTIL
+    CheckConfigure_Impl(SFX_SLOT_MENUCONFIG);
+#endif
 }
 
 

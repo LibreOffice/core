@@ -41,15 +41,6 @@
 #endif
 #endif
 
-#ifndef DBG
-#ifdef DBG_UTIL
-#define DBG(statement) statement
-#else
-#define DBG(statement)
-#endif
-#endif
-
-
 
 #if defined(DBG_UTIL)
 

@@ -1249,14 +1249,10 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
                 const SfxSlot *pSlot = aSvr.GetSlot();
                 SfxShell *pSh = GetShell(aSvr.GetShellLevel());
 
-                DBG( SfxApplication *pSfxApp = SfxGetpApp() );
-                DBG( pSfxApp->EnterAsynchronCall_Impl() );
-
                 // When the pSlot is a "Pseudoslot" for macros or Verbs, it can
                 // be destroyed in the Call_Impl, thus do not use it anymore!
                 pReq->SetSynchronCall( false );
                 Call_Impl( *pSh, *pSlot, *pReq, pReq->AllowsRecording() ); //! why bRecord?
-                DBG( pSfxApp->LeaveAsynchronCall_Impl() );
             }
         }
         else
