@@ -67,7 +67,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     m_pBaseLb->setMaxWidthChars(nMaxWidth);
     get(m_pFilterFt, "categoryft");
     get(m_pFilterLb, "category");
-    m_pFilterLb->SetStyle(m_pFilterLb->GetStyle() | WB_SORT);
+    //note that the code depends on categories not being lexically
+    //sorted, so if its changed to sorted, the code needs to
+    //be adapted to be position unaware
     m_pFilterLb->setMaxWidthChars(nMaxWidth);
     get(m_pDescFt, "desc");
 
@@ -94,16 +96,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     if ( pStyle->GetName().isEmpty() && pPool )
     {
         // NullString as Name -> generate Name
-        OUString aNoName( SfxResId(STR_NONAME).toString() );
-        sal_uInt16 nNo = 1;
-        OUString aNo( aNoName );
-        aNoName += OUString::number( nNo );
-        while ( pPool->Find( aNoName ) )
-        {
-            ++nNo;
-            aNoName = aNo;
-            aNoName += OUString::number( nNo );
-        }
+        OUString aNoName(SfxStyleDialog::GenerateUnusedName(*pPool));
         pStyle->SetName( aNoName );
         aName = aNoName;
         aFollow = pStyle->GetFollow();
@@ -193,6 +186,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
 
             if ( pTupel->nFlags != SFXSTYLEBIT_AUTO     &&
                  pTupel->nFlags != SFXSTYLEBIT_USED     &&
+                 pTupel->nFlags != SFXSTYLEBIT_ALL_VISIBLE &&
                  pTupel->nFlags != SFXSTYLEBIT_ALL )
             {
                 m_pFilterLb->InsertEntry( pTupel->aName, nIdx );

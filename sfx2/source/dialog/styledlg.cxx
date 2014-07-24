@@ -147,5 +147,19 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
     return 0;
 }
 
+OUString SfxStyleDialog::GenerateUnusedName(SfxStyleSheetBasePool &rPool)
+{
+    OUString aNoName(SfxResId(STR_NONAME).toString());
+    sal_uInt16 nNo = 1;
+    OUString aNo(aNoName);
+    aNoName += OUString::number(nNo);
+    while (rPool.Find(aNoName))
+    {
+        ++nNo;
+        aNoName = aNo;
+        aNoName += OUString::number(nNo);
+    }
+    return aNoName;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
