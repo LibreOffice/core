@@ -870,41 +870,38 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
             // Only at the End!
             // If pCurr does not have a width, it can however aready have content.
             // E.g. for non-displayable characters
-            if( rInf.GetLen() > 0 )
+            if (rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FIELDSTART)
+                pPor = new SwFieldMarkPortion();
+            else if (rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FIELDEND)
+                pPor = new SwFieldMarkPortion();
+            else if (rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FORMELEMENT)
             {
-                if( rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FIELDSTART )
-                    pPor = new SwFieldMarkPortion();
-                else if( rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FIELDEND )
-                    pPor = new SwFieldMarkPortion();
-                else if( rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FORMELEMENT )
+                SwTxtNode *pNd = const_cast<SwTxtNode *>(rInf.GetTxtFrm()->GetTxtNode());
+                const SwDoc *doc = pNd->GetDoc();
+                SwIndex aIndex(pNd, rInf.GetIdx());
+                SwPosition aPosition(*pNd, aIndex);
+                sw::mark::IFieldmark *pBM = doc->getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
+                OSL_ENSURE(pBM != NULL, "Where is my form field bookmark???");
+                if (pBM != NULL)
                 {
-                    SwTxtNode *pNd = const_cast<SwTxtNode *>(rInf.GetTxtFrm()->GetTxtNode());
-                    const SwDoc *doc = pNd->GetDoc();
-                    SwIndex aIndex(pNd, rInf.GetIdx());
-                    SwPosition aPosition(*pNd, aIndex);
-                    sw::mark::IFieldmark *pBM = doc->getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
-                    OSL_ENSURE(pBM != NULL, "Where is my form field bookmark???");
-                    if (pBM != NULL)
+                    if (pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
                     {
-                        if (pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
-                        {
-                            pPor = new SwFieldFormCheckboxPortion();
-                        }
-                        else if (pBM->GetFieldname( ) == ODF_FORMDROPDOWN)
-                        {
-                            pPor = new SwFieldFormDropDownPortion(sw::mark::ExpandFieldmark(pBM));
-                        }
-                        /* we need to check for ODF_FORMTEXT for scenario having FormFields inside FORMTEXT.
-                         * Otherwise file will crash on open.
-                         */
-                        else if (pBM->GetFieldname( ) == ODF_FORMTEXT)
-                        {
-                            pPor = new SwFieldMarkPortion();
-                        }
-                        else
-                        {
-                            assert( false );        // unknown type...
-                        }
+                        pPor = new SwFieldFormCheckboxPortion();
+                    }
+                    else if (pBM->GetFieldname( ) == ODF_FORMDROPDOWN)
+                    {
+                        pPor = new SwFieldFormDropDownPortion(sw::mark::ExpandFieldmark(pBM));
+                    }
+                    /* we need to check for ODF_FORMTEXT for scenario having FormFields inside FORMTEXT.
+                     * Otherwise file will crash on open.
+                     */
+                    else if (pBM->GetFieldname( ) == ODF_FORMTEXT)
+                    {
+                        pPor = new SwFieldMarkPortion();
+                    }
+                    else
+                    {
+                        assert( false );        // unknown type...
                     }
                 }
             }

@@ -517,12 +517,14 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetTxt()[rInf.GetIdx()])
     {
+        assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
         const OUString aTxt(CH_TXT_ATR_SUBST_FIELDEND);
         rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
     }
     else if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetTxt()[rInf.GetIdx()])
     {
+        assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
         const OUString aTxt(CH_TXT_ATR_SUBST_FIELDSTART);
         rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
