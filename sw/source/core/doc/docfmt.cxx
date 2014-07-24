@@ -809,7 +809,7 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const OUString &rFmtName,
 
     if (bBroadcast)
     {
-        BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
+        BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_FRAME,
                                 SFX_STYLESHEET_CREATED);
     }
 
