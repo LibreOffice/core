@@ -962,7 +962,11 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
             OSL_ENSURE(pCharFmt, "SwCharFormat missing!");
             if( pCharFmt && pCharFmt->GetName() != rStr )
             {
-                pCharFmt->SetName( rStr );
+                if (!pCharFmt->GetName().isEmpty())
+                    rDoc.RenameFmt(*pCharFmt, rStr);
+                else
+                    pCharFmt->SetName(rStr);
+
                 bChg = true;
             }
             break;
