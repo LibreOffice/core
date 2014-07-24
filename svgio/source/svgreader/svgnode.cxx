@@ -556,8 +556,8 @@ namespace svgio
             if(mpId)
             {
                 mrDocument.removeSvgNodeFromMapper(*mpId);
-                delete mpId;
                 mpId = 0;
+                delete mpId;
             }
 
             if(pfId)
