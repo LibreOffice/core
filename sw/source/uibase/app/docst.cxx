@@ -634,7 +634,7 @@ sal_uInt16 SwDocShell::Edit(
 
     if( bNew )
     {
-        if( SFXSTYLEBIT_ALL != nMask && SFXSTYLEBIT_USED != nMask )
+        if( SFXSTYLEBIT_ALL != nMask && SFXSTYLEBIT_ALL_VISIBLE != nMask && SFXSTYLEBIT_USED != nMask )
             nMask |= SFXSTYLEBIT_USERDEF;
         else
             nMask = SFXSTYLEBIT_USERDEF;
