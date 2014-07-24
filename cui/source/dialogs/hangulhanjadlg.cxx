@@ -1354,12 +1354,12 @@ namespace svx
         if( _bUp )
         {
             if( !m_pPrev )
-                bRet = m_rScrollBar.GetThumbPos() > m_rScrollBar.GetRangeMin();
+                bRet = m_rScrollBar->GetThumbPos() > m_rScrollBar->GetRangeMin();
         }
         else
         {
             if( !m_pNext )
-                bRet = m_rScrollBar.GetThumbPos() < ( m_rScrollBar.GetRangeMax() - 4 );
+                bRet = m_rScrollBar->GetThumbPos() < ( m_rScrollBar->GetRangeMax() - 4 );
         }
 
         return bRet;
@@ -1370,17 +1370,13 @@ namespace svx
         const Link&     rLoseFocusHdl = GetLoseFocusHdl();
         if( rLoseFocusHdl.IsSet() )
             rLoseFocusHdl.Call( this );
-        m_rScrollBar.SetThumbPos( m_rScrollBar.GetThumbPos() + ( _bUp? -1 : 1 ) );
+        m_rScrollBar->SetThumbPos( m_rScrollBar->GetThumbPos() + ( _bUp? -1 : 1 ) );
 
         ( static_cast< HangulHanjaEditDictDialog* >( GetParentDialog() ) )->UpdateScrollbar();
     }
 
-    SuggestionEdit::SuggestionEdit( Window* pParent, const ResId& rResId,
-        ScrollBar& _rScrollBar, SuggestionEdit* _pPrev, SuggestionEdit* _pNext  )
-        :Edit( pParent, rResId )
-        ,m_pPrev( _pPrev )
-        ,m_pNext( _pNext )
-        ,m_rScrollBar( _rScrollBar )
+    SuggestionEdit::SuggestionEdit( Window* pParent, WinBits nBits )
+        :Edit( pParent, nBits )
     {
     }
 
@@ -1437,6 +1433,17 @@ namespace svx
         return nHandled;
     }
 
+    void SuggestionEdit::init( ScrollBar* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext)
+    {
+        m_rScrollBar = pScrollBar;
+        m_pPrev = pPrev;
+        m_pNext = pNext;
+    }
+
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSuggestionEdit( Window *pParent, VclBuilder::stringmap & )
+    {
+        return new SuggestionEdit( pParent, WB_LEFT|WB_VCENTER|WB_BORDER );
+    }
 
     namespace
     {
@@ -1466,17 +1473,17 @@ namespace svx
     }
 
 
-    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, ScrollHdl)
+    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, ScrollHdl )
     {
         UpdateScrollbar();
 
         return 0;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, OriginalModifyHdl)
+    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, OriginalModifyHdl )
     {
         m_bModifiedOriginal = true;
-        m_aOriginal = comphelper::string::stripEnd(m_aOriginalLB.GetText(), ' ');
+        m_aOriginal = comphelper::string::stripEnd( m_aOriginalLB->GetText(), ' ' );
 
         UpdateSuggestions();
         UpdateButtonStates();
@@ -1508,13 +1515,13 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, BookLBSelectHdl)
+    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, BookLBSelectHdl )
     {
-        InitEditDictDialog( m_aBookLB.GetSelectEntryPos() );
+        InitEditDictDialog( m_aBookLB->GetSelectEntryPos() );
         return 0;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, NewPBPushHdl)
+    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, NewPBPushHdl )
     {
         DBG_ASSERT( m_pSuggestions, "-HangulHanjaEditDictDialog::NewPBPushHdl(): no suggestions... search in hell..." );
         Reference< XConversionDictionary >  xDict = m_rDictList[ m_nCurrentDict ];
@@ -1544,7 +1551,7 @@ namespace svx
                 pRight = m_pSuggestions->Next();
             }
 
-            if(bAddedSomething||bRemovedSomething)
+            if( bAddedSomething || bRemovedSomething )
                 InitEditDictDialog( m_nCurrentDict );
         }
         else
@@ -1583,7 +1590,7 @@ namespace svx
         return bRemovedSomething;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, DeletePBPushHdl)
+    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, DeletePBPushHdl )
     {
         if( DeleteEntryFromDictionary( m_aOriginal, m_rDictList[ m_nCurrentDict ] ) )
         {
@@ -1608,8 +1615,8 @@ namespace svx
 
         UpdateOriginalLB();
 
-        m_aOriginalLB.SetText( !m_aOriginal.isEmpty() ? m_aOriginal : m_aEditHintText, Selection( 0, SELECTION_MAX ) );
-        m_aOriginalLB.GrabFocus();
+        m_aOriginalLB->SetText( !m_aOriginal.isEmpty() ? m_aOriginal : m_aEditHintText, Selection( 0, SELECTION_MAX ) );
+        m_aOriginalLB->GrabFocus();
 
         UpdateSuggestions();
         UpdateButtonStates();
@@ -1617,7 +1624,7 @@ namespace svx
 
     void HangulHanjaEditDictDialog::UpdateOriginalLB( void )
     {
-        m_aOriginalLB.Clear();
+        m_aOriginalLB->Clear();
         Reference< XConversionDictionary >  xDict = m_rDictList[ m_nCurrentDict ];
         if( xDict.is() )
         {
@@ -1626,7 +1633,7 @@ namespace svx
             OUString*               pEntry = aEntries.getArray();
             while( n )
             {
-                m_aOriginalLB.InsertEntry( *pEntry );
+                m_aOriginalLB->InsertEntry( *pEntry );
 
                 ++pEntry;
                 --n;
@@ -1642,10 +1649,10 @@ namespace svx
     {
         bool bHaveValidOriginalString = !m_aOriginal.isEmpty() && m_aOriginal != m_aEditHintText;
         bool bNew = bHaveValidOriginalString && m_pSuggestions && m_pSuggestions->GetCount() > 0;
-        bNew = bNew && (m_bModifiedSuggestions || m_bModifiedOriginal);
+        bNew = bNew && ( m_bModifiedSuggestions || m_bModifiedOriginal );
 
-        m_aNewPB.Enable(bNew);
-        m_aDeletePB.Enable(!m_bModifiedOriginal && bHaveValidOriginalString);
+        m_aNewPB->Enable( bNew );
+        m_aDeletePB->Enable(!m_bModifiedOriginal && bHaveValidOriginalString);
     }
 
     void HangulHanjaEditDictDialog::UpdateSuggestions( void )
@@ -1675,10 +1682,10 @@ namespace svx
                     --nCnt;
                 }
             }
-            m_bModifiedSuggestions=false;
+            m_bModifiedSuggestions = false;
         }
 
-        m_aScrollSB.SetThumbPos( 0 );
+        m_aScrollSB->SetThumbPos( 0 );
         UpdateScrollbar();              // will force edits to be filled new
     }
 
@@ -1719,68 +1726,66 @@ namespace svx
     }
 
     HangulHanjaEditDictDialog::HangulHanjaEditDictDialog( Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict )
-        :ModalDialog            ( _pParent, CUI_RES( RID_SVX_MDLG_HANGULHANJA_EDIT ) )
-        ,m_aEditHintText        ( CUI_RES( STR_EDITHINT ) )
+        :ModalDialog            ( _pParent, "HangulHanjaEditDictDialog", "cui/ui/hangulhanjaeditdictdialog.ui" )
+        ,m_aEditHintText        ( CUI_RESSTR(RID_SVXSTR_EDITHINT) )
         ,m_rDictList            ( _rDictList )
         ,m_nCurrentDict         ( 0xFFFFFFFF )
         ,m_pSuggestions         ( NULL )
-        ,m_aBookFT              ( this, CUI_RES( FT_BOOK ) )
-        ,m_aBookLB              ( this, CUI_RES( LB_BOOK ) )
-        ,m_aOriginalFT          ( this, CUI_RES( FT_ORIGINAL ) )
-        ,m_aOriginalLB          ( this, CUI_RES( LB_ORIGINAL ) )
-        ,m_aSuggestionsFT       ( this, CUI_RES( FT_SUGGESTIONS ) )
-        ,m_aEdit1               ( this, CUI_RES( ED_1 ), m_aScrollSB, NULL, &m_aEdit2 )
-        ,m_aEdit2               ( this, CUI_RES( ED_2 ), m_aScrollSB, &m_aEdit1, &m_aEdit3 )
-        ,m_aEdit3               ( this, CUI_RES( ED_3 ), m_aScrollSB, &m_aEdit2, &m_aEdit4 )
-        ,m_aEdit4               ( this, CUI_RES( ED_4 ), m_aScrollSB, &m_aEdit3, NULL )
-        ,m_aScrollSB            ( this, CUI_RES( SB_SCROLL ) )
-        ,m_aNewPB               ( this, CUI_RES( PB_HHE_NEW ) )
-        ,m_aDeletePB            ( this, CUI_RES( PB_HHE_DELETE ) )
-        ,m_aHelpPB              ( this, CUI_RES( PB_HHE_HELP ) )
-        ,m_aClosePB             ( this, CUI_RES( PB_HHE_CLOSE ) )
         ,m_nTopPos              ( 0 )
         ,m_bModifiedSuggestions ( false )
         ,m_bModifiedOriginal    ( false )
     {
-        m_aOriginalLB.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, OriginalModifyHdl ) );
+        get( m_aBookLB, "book" );
+        get( m_aOriginalLB, "original" );
+        get( m_aNewPB, "new" );
+        get( m_aDeletePB, "delete" );
+        get( m_aScrollSB, "scrollbar" );
+        get( m_aEdit1, "edit1" );
+        get( m_aEdit2, "edit2" );
+        get( m_aEdit3, "edit3" );
+        get( m_aEdit4, "edit4" );
 
-        m_aNewPB.SetClickHdl( LINK( this, HangulHanjaEditDictDialog, NewPBPushHdl ) );
-        m_aNewPB.Enable( false );
+        m_aEdit1->init( m_aScrollSB, NULL, m_aEdit2 );
+        m_aEdit2->init( m_aScrollSB, m_aEdit1, m_aEdit3 );
+        m_aEdit3->init( m_aScrollSB, m_aEdit2, m_aEdit4 );
+        m_aEdit4->init( m_aScrollSB, m_aEdit3, NULL );
 
-        m_aDeletePB.SetClickHdl( LINK( this, HangulHanjaEditDictDialog, DeletePBPushHdl ) );
+        m_aOriginalLB->SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, OriginalModifyHdl ) );
 
-        m_aDeletePB.Enable( false );
+        m_aNewPB->SetClickHdl( LINK( this, HangulHanjaEditDictDialog, NewPBPushHdl ) );
+        m_aNewPB->Enable( false );
+
+        m_aDeletePB->SetClickHdl( LINK( this, HangulHanjaEditDictDialog, DeletePBPushHdl ) );
+        m_aDeletePB->Enable( false );
 
     #if( MAXNUM_SUGGESTIONS <= 4 )
         #error number of suggestions should not under-run the value of 5
     #endif
 
         Link    aScrLk( LINK( this, HangulHanjaEditDictDialog, ScrollHdl ) );
-        m_aScrollSB.SetScrollHdl( aScrLk );
-        m_aScrollSB.SetEndScrollHdl( aScrLk );
-        m_aScrollSB.SetRangeMin( 0 );
-        m_aScrollSB.SetRangeMax( MAXNUM_SUGGESTIONS );
-        m_aScrollSB.SetPageSize( 4 );       // because we have 4 edits / page
-        m_aScrollSB.SetVisibleSize( 4 );
+        m_aScrollSB->SetScrollHdl( aScrLk );
+        m_aScrollSB->SetEndScrollHdl( aScrLk );
+        m_aScrollSB->SetRangeMin( 0 );
+        m_aScrollSB->SetRangeMax( MAXNUM_SUGGESTIONS );
+        m_aScrollSB->SetPageSize( 4 );       // because we have 4 edits / page
+        m_aScrollSB->SetVisibleSize( 4 );
 
-        m_aEdit1.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl1 ) );
-        m_aEdit2.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl2 ) );
-        m_aEdit3.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl3 ) );
-        m_aEdit4.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl4 ) );
+        m_aEdit1->SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl1 ) );
+        m_aEdit2->SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl2 ) );
+        m_aEdit3->SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl3 ) );
+        m_aEdit4->SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl4 ) );
 
-        m_aBookLB.SetSelectHdl( LINK( this, HangulHanjaEditDictDialog, BookLBSelectHdl ) );
+        m_aBookLB->SetSelectHdl( LINK( this, HangulHanjaEditDictDialog, BookLBSelectHdl ) );
         sal_uInt32  nDictCnt = m_rDictList.size();
         for( sal_uInt32 n = 0 ; n < nDictCnt ; ++n )
         {
             Reference< XConversionDictionary >  xDic( m_rDictList[n] );
             OUString aName;
-            if(xDic.is())
+            if( xDic.is() )
                 aName = xDic->getName();
-            m_aBookLB.InsertEntry( aName );
+            m_aBookLB->InsertEntry( aName );
         }
-        m_aBookLB.SelectEntryPos( sal_uInt16( _nSelDict ) );
-
-        FreeResource();
+        m_aBookLB->SelectEntryPos( sal_uInt16( _nSelDict ) );
 
         InitEditDictDialog( _nSelDict );
     }
@@ -1793,13 +1798,13 @@ namespace svx
 
     void HangulHanjaEditDictDialog::UpdateScrollbar( void )
     {
-        sal_uInt16  nPos = sal_uInt16( m_aScrollSB.GetThumbPos() );
+        sal_uInt16  nPos = sal_uInt16( m_aScrollSB->GetThumbPos() );
         m_nTopPos = nPos;
 
-        SetEditText( m_aEdit1, nPos++ );
-        SetEditText( m_aEdit2, nPos++ );
-        SetEditText( m_aEdit3, nPos++ );
-        SetEditText( m_aEdit4, nPos );
+        SetEditText( *m_aEdit1, nPos++ );
+        SetEditText( *m_aEdit2, nPos++ );
+        SetEditText( *m_aEdit3, nPos++ );
+        SetEditText( *m_aEdit4, nPos );
     }
 
 

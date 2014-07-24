@@ -70,6 +70,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/gallerytitledialog \
 	cui/uiconfig/ui/galleryupdateprogress \
 	cui/uiconfig/ui/hangulhanjaadddialog \
+	cui/uiconfig/ui/hangulhanjaeditdictdialog \
 	cui/uiconfig/ui/hangulhanjaoptdialog \
 	cui/uiconfig/ui/hatchpage \
 	cui/uiconfig/ui/hyperlinkdialog \

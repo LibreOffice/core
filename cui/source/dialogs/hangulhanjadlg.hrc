@@ -71,61 +71,9 @@
 // metrics
 
 #define HHO_DLGWIDTH                287
-#define HHx_DLGHIGHT                175
 
 // Hangul Hanja Edit Custom Dictionary Dialog
 #define MAXNUM_SUGGESTIONS          50
-
-#define STR_EDITHINT                1
-
-#define FT_BOOK                     1
-#define FT_ORIGINAL                 2
-#define FT_SUGGESTIONS              3
-
-#define LB_BOOK                     1
-#define LB_ORIGINAL                 2
-
-#define PB_HHE_NEW                  1
-#define PB_HHE_DELETE               2
-#define PB_HHE_HELP                 3
-#define PB_HHE_CLOSE                4
-
-#define SB_SCROLL                   1
-
-#define ED_1                        1
-#define ED_2                        2
-#define ED_3                        3
-#define ED_4                        4
-
-// metrics
-
-#define RSC_CD_VSCRLWIDTH           8       // vertical scroll bar width
-#define HHE_DLGWIDTH                HHO_DLGWIDTH
-#define HHE_COL_1                   RSC_SP_DLG_INNERBORDER_LEFT
-#define HHE_COL_6                   (HHE_DLGWIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define HHE_COL_5                   (HHE_COL_6-RSC_CD_PUSHBUTTON_WIDTH)
-#define HHE_COL_4                   (HHE_COL_5-6)
-#define HHE_COL_3_2                 (HHE_COL_4-RSC_CD_VSCRLWIDTH)
-#define HHE_COL_3_1                 (HHE_COL_3_2-RSC_SP_CTRL_GROUP_X)
-#define HHE_COL_3_0                 (HHE_COL_3_2-RSC_CD_PUSHBUTTON_WIDTH)
-#define HHE_COL_2                   (HHE_COL_1+50)
-#define HHE_COL_3                   (HHE_COL_2+1)
-
-#define HHE_ROW_1                   RSC_SP_DLG_INNERBORDER_TOP
-#define HHE_ROW_2                   (HHE_ROW_1+2)
-#define HHE_ROW_3                   (HHE_ROW_2+12)
-#define HHE_ROW_4                   (HHE_ROW_3+12)
-#define HHE_ROW_5                   (HHE_ROW_4+8+2)
-#define HHE_ROW_6                   (HHE_ROW_5+12)
-#define HHE_ROW_7                   (HHE_ROW_6+2)
-#define HHE_ROW_8                   (HHE_ROW_7+2)
-#define HHE_ROW_10                  (HHE_ROW_8+RSC_SP_CTRL_GROUP_Y)
-#define HHE_ROW_11                  (HHE_ROW_10+8+2)
-#define HHE_ROW_12                  (HHE_ROW_11+4*12)
-#define HHE_ROW_14                  (HHx_DLGHIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
-#define HHE_ROW_13                  (HHE_ROW_14-RSC_CD_PUSHBUTTON_HEIGHT)
-#define HHE_ROW_a1                  (HHE_ROW_5)
-#define HHE_ROW_a3                  (HHE_ROW_a1+RSC_CD_PUSHBUTTON_HEIGHT+2)
 
 #endif // SVX_HANGUL_HANJA_DLG_HRC
 

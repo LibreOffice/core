@@ -255,16 +255,15 @@ namespace svx
     private:
         SuggestionEdit*     m_pPrev;
         SuggestionEdit*     m_pNext;
-        ScrollBar&          m_rScrollBar;
+        ScrollBar*          m_rScrollBar;
 
         bool                ShouldScroll( bool _bUp ) const;
         void                DoJump( bool _bUp );
     public:
-                            SuggestionEdit( Window* pParent, const ResId& rResId,
-                                    ScrollBar& _rScrollBar,
-                                    SuggestionEdit* _pPrev, SuggestionEdit* _pNext );
+                            SuggestionEdit( Window* pParent, WinBits nBits );
         virtual             ~SuggestionEdit();
         virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        void init( ScrollBar* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext);
     };
 
 
@@ -278,20 +277,15 @@ namespace svx
         OUString        m_aOriginal;
         SuggestionList* m_pSuggestions;
 
-        FixedText       m_aBookFT;
-        ListBox         m_aBookLB;
-        FixedText       m_aOriginalFT;
-        ComboBox        m_aOriginalLB;
-        FixedText       m_aSuggestionsFT;
-        SuggestionEdit  m_aEdit1;
-        SuggestionEdit  m_aEdit2;
-        SuggestionEdit  m_aEdit3;
-        SuggestionEdit  m_aEdit4;
-        ScrollBar       m_aScrollSB;
-        PushButton      m_aNewPB;
-        PushButton      m_aDeletePB;
-        HelpButton      m_aHelpPB;
-        CancelButton    m_aClosePB;
+        ListBox*        m_aBookLB;
+        ComboBox*       m_aOriginalLB;
+        SuggestionEdit* m_aEdit1;
+        SuggestionEdit* m_aEdit2;
+        SuggestionEdit* m_aEdit3;
+        SuggestionEdit* m_aEdit4;
+        ScrollBar*      m_aScrollSB;
+        PushButton*     m_aNewPB;
+        PushButton*     m_aDeletePB;
 
         sal_uInt16      m_nTopPos;
         bool            m_bModifiedSuggestions;

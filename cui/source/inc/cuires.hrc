@@ -215,7 +215,6 @@
 
 // hangulhanja
 #define RID_SVX_MDLG_HANGULHANJA            (RID_SVX_START +  1 )
-#define RID_SVX_MDLG_HANGULHANJA_EDIT       ( RID_SVX_START +  5 )
 
 // icon choice
 #define RID_SVXSTR_ICONCHOICEDLG_RESETBUT   (RID_SVX_START + 580)
@@ -441,6 +440,8 @@
 #define RID_SVXSTR_SAVEACCELCONFIG                          (RID_SVX_START + 1263)
 #define RID_SVXSTR_FILTERNAME_CFG                           (RID_SVX_START + 1264)
 #define RID_SVXSTR_LOAD_ERROR                               (RID_SVX_START + 1265)
+
+#define RID_SVXSTR_EDITHINT                                 (RID_SVX_START + 1266)
 
 #endif
 

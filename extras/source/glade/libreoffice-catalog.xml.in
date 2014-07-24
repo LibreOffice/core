@@ -770,5 +770,9 @@
     <glade-widget-class title="DataTreeListBox" name="svxlo-DataTreeListBox"
                         generic-name="DataTreeListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
+
+    <glade-widget-class title="Suggestion Edit" name="cuilo-SuggestionEdit"
+                        generic-name="SuggestionEdit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
   </glade-widget-classes>
 </glade-catalog>
