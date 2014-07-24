@@ -1821,24 +1821,23 @@ void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater)
 void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
 {
     SwCrsrShell* pShell = pDoc->GetEditShell();
-    if( pShell )
-    {
-        FOREACHSHELL_START( pShell )
-            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-            if( _pStkCrsr )
-                do {
-                    lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, true);
-                    lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, false);
-                } while ( (_pStkCrsr != 0 ) &&
-                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+    if( !pShell )
+        return;
+    FOREACHSHELL_START( pShell )
+        SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+        if( _pStkCrsr )
+            do {
+                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, true);
+                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, false);
+            } while ( (_pStkCrsr != 0 ) &&
+                ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
-            FOREACHPAM_START( PCURSH->_GetCrsr() )
-                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, true);
-                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, false);
-            FOREACHPAM_END()
+        FOREACHPAM_START( PCURSH->_GetCrsr() )
+            lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, true);
+            lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, false);
+        FOREACHPAM_END()
 
-        FOREACHSHELL_END( pShell )
-    }
+    FOREACHSHELL_END( pShell )
 }
 
 void CntntIdxStoreImpl::RestoreShellCrsrs(SwDoc* /* pDoc */, updater_t& rUpdater)
