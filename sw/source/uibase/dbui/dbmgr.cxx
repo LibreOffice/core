@@ -318,7 +318,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam,
 };
 
 // import data
-bool SwDBManager::MergeNew(const SwMergeDescriptor& rMergeDesc )
+bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc )
 {
     OSL_ENSURE(!bInMerge && !pImpl->pMergeData, "merge already activated!");
 
@@ -434,6 +434,7 @@ bool SwDBManager::MergeNew(const SwMergeDescriptor& rMergeDesc )
         case DBMGR_MERGE_MAILING:
         case DBMGR_MERGE_MAILFILES:
         case DBMGR_MERGE_SINGLE_FILE:
+        case DBMGR_MERGE_ONLY:
             // save files and send them as e-Mail if required
             bRet = MergeMailFiles(&rMergeDesc.rSh,
                     rMergeDesc);
@@ -849,13 +850,14 @@ static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
 #endif
 
 bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
-        const SwMergeDescriptor& rMergeDescriptor)
+                                 const SwMergeDescriptor& rMergeDescriptor)
 {
     //check if the doc is synchronized and contains at least one linked section
     bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFmtCount() > 1;
     bool bNoError = true;
     bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_MAILING;
     const bool bAsSingleFile = rMergeDescriptor.nMergeType == DBMGR_MERGE_SINGLE_FILE;
+    bool bMergeOnly = rMergeDescriptor.nMergeType == DBMGR_MERGE_ONLY;
 
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     OUString sBodyMimeType;
@@ -925,9 +927,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             SwWrtShell* pTargetShell = 0;
             SwDoc* pTargetDoc = 0;
 
-            // the shell will be explicitly closed at the end of the method, but it is
-            // still more safe to use SfxObjectShellLock here
-            SfxObjectShellLock xTargetDocShell;
+            SfxObjectShellRef xTargetDocShell;
 
             SwView* pTargetView = 0;
             boost::scoped_ptr< utl::TempFile > aTempFile;
@@ -1126,6 +1126,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 else
                                     pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
+                                sal_uInt16 nStartPage = pTargetShell->GetPageCnt();
 #ifdef DBG_UTIL
                                 if ( nDocNo <= MAX_DOC_DUMP )
                                     lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
@@ -1138,6 +1139,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 if ( nDocNo <= MAX_DOC_DUMP )
                                     lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
 #endif
+                                if (bMergeOnly)
+                                {
+                                    SwDocMergeInfo aMergeInfo;
+                                    aMergeInfo.nStartPageInTarget = nStartPage;
+                                    aMergeInfo.nEndPageInTarget =
+                                        nStartPage + pSourceShell->GetPageCnt() - 1;
+                                    aMergeInfo.nDBRow = nStartRow;
+                                    rMergeDescriptor.pMailMergeConfigItem->AddMergedDocument( aMergeInfo );
+                                }
                             }
                             else
                             {
@@ -1277,7 +1287,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             aPrtMonDlg.Show( false );
 
             // save the single output document
-            if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
+            if (bMergeOnly)
+            {
+                rMergeDescriptor.pMailMergeConfigItem->SetTargetView( pTargetView );
+            }
+            else if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
             {
                 if( rMergeDescriptor.nMergeType != DBMGR_MERGE_MAILMERGE )
                 {
@@ -1346,7 +1360,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                         pTargetView->ExecPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
                 }
-                xTargetDocShell->DoClose();
+
+                // Leave docshell available for caller (e.g. MM wizard)
+                if (!bMergeOnly)
+                    xTargetDocShell->DoClose();
             }
 
             //remove the temporary files
@@ -2764,7 +2781,7 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     bInMerge = true;
     sal_Int32 nRet  = 0;
     pImpl->pMergeData = new SwDSParam(
-                rMMConfig.GetCurrentDBData(), xResultSet, rMMConfig.GetSelection());
+        rMMConfig.GetCurrentDBData(), xResultSet, rMMConfig.GetSelection());
 
     try{
         //set to start position
