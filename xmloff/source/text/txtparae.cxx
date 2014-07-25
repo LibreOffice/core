@@ -99,6 +99,7 @@
 #include <xmloff/formlayerexport.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
 #include <xmloff/odffields.hxx>
+#include <xmloff/maptype.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

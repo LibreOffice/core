@@ -22,6 +22,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/families.hxx>
+#include <xmloff/xmltypes.hxx>
+#include <tools/debug.hxx>
 
 #include "XMLChartPropertyContext.hxx"
 

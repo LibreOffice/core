@@ -19,7 +19,6 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
@@ -35,6 +34,9 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlprmap.hxx>
+#include <xmloff/maptype.hxx>
+#include <xmloff/xmltypes.hxx>
+#include <xmloff/xmlprhdl.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -568,9 +570,20 @@ void SvXMLExportPropertyMapper::ChainExportMapper(
     }
 }
 
-vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
-        const Reference< XPropertySet > xPropSet,
-        bool bDefault, bool bEnableFoFontFamily) const
+std::vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter(
+    const uno::Reference<beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily ) const
+{
+    return _Filter(rPropSet, false, bEnableFoFontFamily);
+}
+
+std::vector<XMLPropertyState> SvXMLExportPropertyMapper::FilterDefaults(
+    const uno::Reference<beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily ) const
+{
+    return _Filter(rPropSet, true, bEnableFoFontFamily);
+}
+
+vector<XMLPropertyState> SvXMLExportPropertyMapper::_Filter(
+    const Reference<XPropertySet>& xPropSet, bool bDefault, bool bEnableFoFontFamily ) const
 {
     vector< XMLPropertyState > aPropStateArray;
 

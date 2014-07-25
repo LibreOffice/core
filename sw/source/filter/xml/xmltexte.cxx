@@ -30,6 +30,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtprmap.hxx>
+#include <xmloff/maptype.hxx>
 
 #include <svx/svdobj.hxx>
 #include <doc.hxx>

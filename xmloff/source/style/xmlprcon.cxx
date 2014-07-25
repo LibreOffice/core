@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xmloff/xmlimp.hxx>
-
-
 #include <xmloff/xmlprcon.hxx>
-
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/xmltypes.hxx>
+#include <xmloff/maptype.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::std;

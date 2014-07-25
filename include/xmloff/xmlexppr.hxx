@@ -26,12 +26,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-
-class SvXMLUnitConverter;
-class SvXMLAttributeList;
-class SvXMLNamespaceMap;
-class FilterPropertiesInfos_Impl;
-class SvXMLExport;
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #define XML_EXPORT_FLAG_DEFAULTS    0x0001      // export also default items
 #define XML_EXPORT_FLAG_DEEP        0x0002      // export also items from
@@ -39,6 +34,12 @@ class SvXMLExport;
 #define XML_EXPORT_FLAG_EMPTY       0x0004      // export attribs element
                                                 // even if its empty
 #define XML_EXPORT_FLAG_IGN_WS      0x0008
+
+class SvXMLUnitConverter;
+class SvXMLAttributeList;
+class SvXMLNamespaceMap;
+class FilterPropertiesInfos_Impl;
+class SvXMLExport;
 
 class XMLOFF_DLLPUBLIC SvXMLExportPropertyMapper : public salhelper::SimpleReferenceObject
 {
@@ -53,10 +54,9 @@ protected:
         default and isn't inherited, apart from bDefault is true)
         After this process It'll called 'Contextfilter' for application-specific
         filter-processes. */
-    ::std::vector< XMLPropertyState > _Filter(
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > rPropSet,
-            bool bDefault, bool bDisableFoFontFamily) const;
+    std::vector<XMLPropertyState> _Filter(
+            const css::uno::Reference<css::beans::XPropertySet>& rPropSet,
+            bool bDefault, bool bDisableFoFontFamily ) const;
 
     /** Application-specific filter. By default do nothing. */
     virtual void ContextFilter(
@@ -107,20 +107,16 @@ public:
         default and isn't inherited)
         After this process It'll called 'Contextfilter' for application-specific
         filter-processes. */
-    ::std::vector< XMLPropertyState > Filter(
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > rPropSet, bool bEnableFoFontFamily = false) const
-                    { return _Filter(rPropSet, false, bEnableFoFontFamily); }
+    std::vector<XMLPropertyState> Filter(
+        const css::uno::Reference<css::beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily = false ) const;
 
     /** Like Filter(), except that:
       * - only properties that have the map flag MID_FLAG_DEFAULT_ITEM_EXPORT
       *   set are exported,
       * - instead of the property's value, its default value is exported.
       */
-    ::std::vector< XMLPropertyState > FilterDefaults(
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > rPropSet, bool bEnableFoFontFamily = false) const
-                    { return _Filter(rPropSet, true, bEnableFoFontFamily); }
+    std::vector<XMLPropertyState> FilterDefaults(
+        const css::uno::Reference<css::beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily = false ) const;
 
     /** Compare to arrays of XMLPropertyState */
     bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,

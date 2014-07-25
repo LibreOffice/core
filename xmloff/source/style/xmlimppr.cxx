@@ -35,6 +35,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/contextid.hxx>
+#include <xmloff/xmltypes.hxx>
+#include <xmloff/maptype.hxx>
 
 #include <algorithm>
 #include <functional>

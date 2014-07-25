@@ -33,6 +33,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/xmlnumi.hxx>
+#include <tools/debug.hxx>
+#include <xmloff/maptype.hxx>
 
 #include "txtparai.hxx"
 #include <xmloff/txtprmap.hxx>

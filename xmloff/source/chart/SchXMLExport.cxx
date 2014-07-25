@@ -1178,18 +1178,15 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     {
         try
         {
-            Any aAny( xDocPropSet->getPropertyValue(
-                OUString(  "HasMainTitle" )));
+            Any aAny = xDocPropSet->getPropertyValue("HasMainTitle");
             aAny >>= bHasMainTitle;
-            aAny = xDocPropSet->getPropertyValue(
-                OUString(  "HasSubTitle" ));
+            aAny = xDocPropSet->getPropertyValue("HasSubTitle");
             aAny >>= bHasSubTitle;
-            aAny = xDocPropSet->getPropertyValue(
-                OUString(  "HasLegend" ));
+            aAny = xDocPropSet->getPropertyValue("HasLegend");
             aAny >>= bHasLegend;
             if ( bIncludeTable )
             {
-                OUString sNullDate(  "NullDate" );
+                OUString sNullDate("NullDate");
                 aAny = xDocPropSet->getPropertyValue(sNullDate);
                 if ( !aAny.hasValue() )
                 {

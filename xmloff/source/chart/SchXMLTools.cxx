@@ -29,6 +29,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetai.hxx>
+#include <xmloff/maptype.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

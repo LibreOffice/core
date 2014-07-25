@@ -54,6 +54,7 @@
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/maptype.hxx>
 #include <tools/time.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>

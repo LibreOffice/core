@@ -28,6 +28,8 @@
 #include "XMLTextColumnsContext.hxx"
 #include "XMLBackgroundImageContext.hxx"
 #include <xmloff/txtprmap.hxx>
+#include <xmloff/xmltypes.hxx>
+#include <xmloff/maptype.hxx>
 
 #include <xmloff/XMLTextShapeStyleContext.hxx>
 

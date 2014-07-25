@@ -21,6 +21,8 @@
 #include <tools/debug.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/maptype.hxx>
+#include <xmloff/xmltypes.hxx>
 #include "txtprhdl.hxx"
 
 //UUUU

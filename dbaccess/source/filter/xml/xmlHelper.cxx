@@ -18,14 +18,17 @@
  */
 
 #include "xmlHelper.hxx"
+#include <xmloff/XMLConstantsPropertyHandler.hxx>
+#include <xmloff/contextid.hxx>
+#include <xmloff/xmlement.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmltypes.hxx>
+#include <xmloff/maptype.hxx>
+
 #include <com/sun/star/awt/TextAlign.hpp>
 #include "xmlstrings.hrc"
 #include "xmlEnums.hxx"
-#include <xmloff/contextid.hxx>
-#include <xmloff/XMLConstantsPropertyHandler.hxx>
-#include <xmloff/xmlement.hxx>
 #include <tools/debug.hxx>
 
 namespace dbaxml

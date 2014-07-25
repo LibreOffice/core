@@ -29,6 +29,7 @@
 #include <tools/debug.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
+#include <xmloff/maptype.hxx>
 #include "XMLSectionFootnoteConfigExport.hxx"
 
 //UUUU

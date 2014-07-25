@@ -17,21 +17,61 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
-#include <xmloff/xmlprhdl.hxx>
-#include "xmlbahdl.hxx"
 #include <xmloff/xmlprmap.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmltypes.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/maptype.hxx>
+#include <xmloff/prhdlfac.hxx>
+#include <tools/debug.hxx>
+
+#include "xmlbahdl.hxx"
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <xmloff/xmltoken.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
+#include <vector>
 
 using namespace ::std;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using ::xmloff::token::GetXMLToken;
+
+/** Helper-class for XML-im/export:
+    - Holds a pointer to a given array of XMLPropertyMapEntry
+    - Provides several methods to access data from this array
+    - Holds a Sequence of XML-names (for properties)
+    - The filter takes all properties of the XPropertySet which are also
+      in the XMLPropertyMapEntry and which are have not a default value
+      and put them into a vector of XMLPropertyStae
+    - this class knows how to compare, im/export properties
+
+    Attention: At all methods, which get an index as parameter, there is no
+               range validation to save runtime !!
+*/
+struct XMLPropertySetMapperEntry_Impl
+{
+    OUString                           sXMLAttributeName;
+    OUString                           sAPIPropertyName;
+    sal_Int32                          nType;
+    sal_uInt16                         nXMLNameSpace;
+    sal_Int16                          nContextId;
+    SvtSaveOptions::ODFDefaultVersion  nEarliestODFVersionForExport;
+    bool                               bImportOnly;
+    const XMLPropertyHandler          *pHdl;
+
+    XMLPropertySetMapperEntry_Impl(
+        const XMLPropertyMapEntry& rMapEntry,
+        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory );
+
+    XMLPropertySetMapperEntry_Impl(
+        const XMLPropertySetMapperEntry_Impl& rEntry );
+
+    sal_uInt32 GetPropType() const { return nType & XML_TYPE_PROP_MASK; }
+};
 
 XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     const XMLPropertyMapEntry& rMapEntry,
@@ -62,27 +102,35 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     DBG_ASSERT( pHdl, "Unknown XML property type handler!" );
 }
 
+struct XMLPropertySetMapper::Impl
+{
+    std::vector<XMLPropertySetMapperEntry_Impl> maMapEntries;
+    std::vector<rtl::Reference <XMLPropertyHandlerFactory> > maHdlFactories;
+
+    bool mbOnlyExportMappings;
+
+    Impl( bool bForExport ) : mbOnlyExportMappings(bForExport) {}
+};
+
 // Ctor
 XMLPropertySetMapper::XMLPropertySetMapper(
-        const XMLPropertyMapEntry* pEntries,
-        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory,
-        bool bForExport )
-    :
-        mbOnlyExportMappings( bForExport)
+    const XMLPropertyMapEntry* pEntries, const rtl::Reference<XMLPropertyHandlerFactory>& rFactory,
+    bool bForExport ) :
+    mpImpl(new Impl(bForExport))
 {
-    aHdlFactories.push_back( rFactory );
+    mpImpl->maHdlFactories.push_back(rFactory);
     if( pEntries )
     {
         const XMLPropertyMapEntry* pIter = pEntries;
 
-        if (mbOnlyExportMappings)
+        if (mpImpl->mbOnlyExportMappings)
         {
             while( pIter->msApiName )
             {
                 if (!pIter->mbImportOnly)
                 {
                     XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
-                    aMapEntries.push_back( aEntry );
+                    mpImpl->maMapEntries.push_back( aEntry );
                 }
                 pIter++;
             }
@@ -92,7 +140,7 @@ XMLPropertySetMapper::XMLPropertySetMapper(
             while( pIter->msApiName )
             {
                 XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
-                aMapEntries.push_back( aEntry );
+                mpImpl->maMapEntries.push_back( aEntry );
                 pIter++;
             }
         }
@@ -101,27 +149,84 @@ XMLPropertySetMapper::XMLPropertySetMapper(
 
 XMLPropertySetMapper::~XMLPropertySetMapper()
 {
+    delete mpImpl;
 }
 
 void XMLPropertySetMapper::AddMapperEntry(
     const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
     for( vector < rtl::Reference < XMLPropertyHandlerFactory > >::iterator
-            aFIter = rMapper->aHdlFactories.begin();
-         aFIter != rMapper->aHdlFactories.end();
+            aFIter = rMapper->mpImpl->maHdlFactories.begin();
+         aFIter != rMapper->mpImpl->maHdlFactories.end();
          ++aFIter )
     {
-        aHdlFactories.push_back( *aFIter );
+        mpImpl->maHdlFactories.push_back(*aFIter);
     }
 
     for( vector < XMLPropertySetMapperEntry_Impl >::iterator
-            aEIter = rMapper->aMapEntries.begin();
-         aEIter != rMapper->aMapEntries.end();
+            aEIter = rMapper->mpImpl->maMapEntries.begin();
+         aEIter != rMapper->mpImpl->maMapEntries.end();
          ++aEIter )
     {
-        if (!mbOnlyExportMappings || !(*aEIter).bImportOnly)
-            aMapEntries.push_back( *aEIter );
+        if (!mpImpl->mbOnlyExportMappings || !(*aEIter).bImportOnly)
+            mpImpl->maMapEntries.push_back( *aEIter );
     }
+}
+
+sal_Int32 XMLPropertySetMapper::GetEntryCount() const
+{
+    return mpImpl->maMapEntries.size();
+}
+
+sal_uInt32 XMLPropertySetMapper::GetEntryFlags( sal_Int32 nIndex ) const
+{
+    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    return mpImpl->maMapEntries[nIndex].nType & ~MID_FLAG_MASK;
+}
+
+sal_uInt32 XMLPropertySetMapper::GetEntryType( sal_Int32 nIndex, bool bWithFlags ) const
+{
+    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    sal_uInt32 nType = mpImpl->maMapEntries[nIndex].nType;
+    if( !bWithFlags )
+        nType = nType & MID_FLAG_MASK;
+    return nType;
+}
+
+sal_uInt16 XMLPropertySetMapper::GetEntryNameSpace( sal_Int32 nIndex ) const
+{
+    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    return mpImpl->maMapEntries[nIndex].nXMLNameSpace;
+}
+
+const OUString& XMLPropertySetMapper::GetEntryXMLName( sal_Int32 nIndex ) const
+{
+    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    return mpImpl->maMapEntries[nIndex].sXMLAttributeName;
+}
+
+const OUString& XMLPropertySetMapper::GetEntryAPIName( sal_Int32 nIndex ) const
+{
+    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    return mpImpl->maMapEntries[nIndex].sAPIPropertyName;
+}
+
+sal_Int16 XMLPropertySetMapper::GetEntryContextId( sal_Int32 nIndex ) const
+{
+    DBG_ASSERT( (nIndex >= -1) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    return nIndex == -1 ? 0 : mpImpl->maMapEntries[nIndex].nContextId;
+}
+
+SvtSaveOptions::ODFDefaultVersion XMLPropertySetMapper::GetEarliestODFVersionForExport( sal_Int32 nIndex ) const
+{
+    DBG_ASSERT( (nIndex >= -1) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    return nIndex == -1 ? SvtSaveOptions::ODFVER_UNKNOWN : mpImpl->maMapEntries[nIndex].nEarliestODFVersionForExport;
+}
+
+const XMLPropertyHandler* XMLPropertySetMapper::GetPropertyHandler( sal_Int32 nIndex ) const
+{
+    DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)mpImpl->maMapEntries.size() ), "illegal access to invalid entry!" );
+    return mpImpl->maMapEntries[nIndex].pHdl;
 }
 
 // Export a Property
@@ -175,7 +280,7 @@ sal_Int32 XMLPropertySetMapper::GetEntryIndex(
     {
         do
         {
-            const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
+            const XMLPropertySetMapperEntry_Impl& rEntry = mpImpl->maMapEntries[nIndex];
             if( (!nPropType || nPropType == rEntry.GetPropType()) &&
                 rEntry.nXMLNameSpace == nNamespace &&
                 rStrName == rEntry.sXMLAttributeName )
@@ -200,7 +305,7 @@ sal_Int32 XMLPropertySetMapper::FindEntryIndex(
 
     do
     {
-        const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
+        const XMLPropertySetMapperEntry_Impl& rEntry = mpImpl->maMapEntries[nIndex];
         if( rEntry.nXMLNameSpace == nNameSpace &&
             rEntry.sXMLAttributeName.equals( sXMLName ) &&
             rEntry.sAPIPropertyName.equalsAscii( sApiName ) )
@@ -222,7 +327,7 @@ sal_Int32 XMLPropertySetMapper::FindEntryIndex( const sal_Int16 nContextId ) con
         sal_Int32 nIndex = 0;
         do
         {
-            const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
+            const XMLPropertySetMapperEntry_Impl& rEntry = mpImpl->maMapEntries[nIndex];
             if( rEntry.nContextId == nContextId )
                 return nIndex;
             else
@@ -239,10 +344,10 @@ void XMLPropertySetMapper::RemoveEntry( sal_Int32 nIndex )
     const sal_Int32 nEntries = GetEntryCount();
     if( nIndex>=nEntries || nIndex<0 )
         return;
-    vector < XMLPropertySetMapperEntry_Impl >::iterator aEIter = aMapEntries.begin();
+    vector < XMLPropertySetMapperEntry_Impl >::iterator aEIter = mpImpl->maMapEntries.begin();
     for( sal_Int32 nN=0; nN<nIndex; nN++ )
         ++aEIter;
-    aMapEntries.erase( aEIter );
+    mpImpl->maMapEntries.erase( aEIter );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

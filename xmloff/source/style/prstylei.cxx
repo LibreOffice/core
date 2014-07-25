@@ -33,6 +33,8 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmlerror.hxx>
+#include <xmloff/xmltypes.hxx>
+#include <xmloff/maptype.hxx>
 
 //UUUU
 #include <com/sun/star/drawing/FillStyle.hpp>

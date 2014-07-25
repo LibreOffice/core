@@ -38,6 +38,7 @@
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLEventExport.hxx>
+#include <xmloff/maptype.hxx>
 #include <set>
 #include <boost/scoped_ptr.hpp>
 

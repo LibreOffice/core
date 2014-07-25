@@ -27,8 +27,10 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-
 #include <xmloff/families.hxx>
+#include <xmloff/xmltypes.hxx>
+#include <xmloff/maptype.hxx>
+
 #include "XMLShapePropertySetContext.hxx"
 
 using namespace ::com::sun::star;

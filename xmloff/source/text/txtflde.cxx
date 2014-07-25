@@ -23,18 +23,19 @@
  *  export of all text fields
  */
 #include "txtflde.hxx"
+#include <xmloff/XMLEventExport.hxx>
+#include <xmloff/families.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/numehelp.hxx>
+#include <xmloff/xmlement.hxx>
 #include <xmloff/xmlexp.hxx>
+#include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlnumfe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlement.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/xmlnume.hxx>
-#include <xmloff/numehelp.hxx>
+#include <xmloff/maptype.hxx>
 
-#include <xmloff/families.hxx>
-#include <xmloff/XMLEventExport.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
-#include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>

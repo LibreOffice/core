@@ -22,6 +22,7 @@
 
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlictxt.hxx>
+#include <xmloff/maptype.hxx>
 
 class SvXMLImport;
 

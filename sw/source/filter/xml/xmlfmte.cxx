@@ -28,6 +28,7 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
+#include <xmloff/maptype.hxx>
 #include <format.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>

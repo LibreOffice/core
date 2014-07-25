@@ -20,6 +20,7 @@
 #include "PageHeaderFooterContext.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmltypes.hxx>
 #include "PagePropertySetContext.hxx"
 
 using namespace com::sun::star;

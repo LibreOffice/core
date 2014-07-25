@@ -28,6 +28,7 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimppr.hxx>
+#include <xmloff/maptype.hxx>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1

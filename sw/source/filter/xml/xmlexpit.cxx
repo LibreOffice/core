@@ -28,6 +28,8 @@
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/prhdlfac.hxx>
+#include <xmloff/xmltypes.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <editeng/memberids.hrc>
