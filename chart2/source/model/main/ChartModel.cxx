@@ -1428,7 +1428,7 @@ void ChartModel::update()
     {
         mpChartView->setViewDirty();
         mpChartView->update();
-    mpChartView->updateOpenGLWindow();
+        mpChartView->updateOpenGLWindow();
     }
 }
 
