@@ -369,8 +369,6 @@ public:
                             sal_Int32 _nCommandType,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                             );
-    //merge into one document - returns the number of merged docs
-    sal_Int32 MergeDocuments( SwMailMergeConfigItem& rMMConfig, SwView& rSourceView );
 };
 
 #endif
