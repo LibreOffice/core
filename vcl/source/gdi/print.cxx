@@ -1352,7 +1352,6 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
     int     nLandscapeAngle = GetLandscapeAngle();
     int     nPaperCount     = GetPaperInfoCount();
     bool    bFound = false;
-    bool    bToggleOrient = false;
 
     PaperInfo aInfo(pSetupData->mnPaperWidth, pSetupData->mnPaperHeight);
 
@@ -1365,6 +1364,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
         {
             pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.getWidth(),
                                                             rPaperInfo.getHeight() );
+            pSetupData->meOrientation = ORIENTATION_PORTRAIT;
             bFound = true;
             break;
         }
@@ -1388,8 +1388,8 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
             {
                 pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.getWidth(),
                                                                 rPaperInfo.getHeight() );
+                pSetupData->meOrientation = ORIENTATION_LANDSCAPE;
                 bFound = true;
-                bToggleOrient = true;
                 break;
             }
         }
@@ -1399,6 +1399,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
     {
          sal_Int64 nBestMatch = SAL_MAX_INT64;
          int nBestIndex = 0;
+         Orientation eBestOrientation = ORIENTATION_PORTRAIT;
          for( int i = 0; i < nPaperCount; i++ )
          {
              const PaperInfo& rPaperInfo = GetPaperInfo( i );
@@ -1411,7 +1412,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
              {
                  nBestMatch = nMatch;
                  nBestIndex = i;
-                 bToggleOrient = false;
+                 eBestOrientation = ORIENTATION_PORTRAIT;
              }
 
              // check landscape match
@@ -1422,20 +1423,13 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
              {
                  nBestMatch = nMatch;
                  nBestIndex = i;
-                 bToggleOrient = true;
+                 eBestOrientation = ORIENTATION_LANDSCAPE;
              }
          }
          const PaperInfo& rBestInfo = GetPaperInfo( nBestIndex );
          pSetupData->mePaperFormat = ImplGetPaperFormat( rBestInfo.getWidth(),
                                                          rBestInfo.getHeight() );
-    }
-
-    if (bToggleOrient)
-    {
-        if (pSetupData->meOrientation == ORIENTATION_PORTRAIT)
-            pSetupData->meOrientation = ORIENTATION_LANDSCAPE;
-        else
-            pSetupData->meOrientation = ORIENTATION_PORTRAIT;
+         pSetupData->meOrientation = eBestOrientation;
     }
 }
 
