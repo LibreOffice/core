@@ -47,6 +47,7 @@
 #include "fmtlsplt.hxx"
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmltypes.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
 

@@ -20,13 +20,12 @@
 #ifndef INCLUDED_XMLOFF_PRHDLFAC_HXX
 #define INCLUDED_XMLOFF_PRHDLFAC_HXX
 
-#include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 
-#include <map>
 #include <salhelper/simplereferenceobject.hxx>
-#include <xmloff/xmlprhdl.hxx>
+
+class XMLPropertyHandler;
 
 /**
  This class is a base-class to create XMLPropertyHandler.
@@ -39,7 +38,14 @@
 */
 class XMLOFF_DLLPUBLIC XMLPropertyHandlerFactory : public salhelper::SimpleReferenceObject
 {
+    struct Impl;
+    Impl* mpImpl;
+
+    XMLPropertyHandlerFactory( const XMLPropertyHandlerFactory& ); // disabled
+    XMLPropertyHandlerFactory& operator= ( const XMLPropertyHandlerFactory& ); // disabled
+
 public:
+    XMLPropertyHandlerFactory();
     virtual ~XMLPropertyHandlerFactory();
 
     /**
@@ -91,11 +97,7 @@ protected:
 private:
     /** Retrieves ( creates if necessary ) PropertyHandler for
         basic XML-types */
-    SAL_DLLPRIVATE const XMLPropertyHandler* GetBasicHandler( sal_Int32 nType )
-        const;
-
-    typedef ::std::map<sal_Int32, const XMLPropertyHandler*> CacheMap;
-    mutable CacheMap maHandlerCache;
+    SAL_DLLPRIVATE const XMLPropertyHandler* GetBasicHandler( sal_Int32 nType ) const;
 };
 
 #endif // INCLUDED_XMLOFF_PRHDLFAC_HXX

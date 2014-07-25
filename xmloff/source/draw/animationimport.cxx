@@ -61,6 +61,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <osl/mutex.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #include "anim.hxx"
 #include "facreg.hxx"
 

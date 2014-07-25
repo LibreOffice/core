@@ -28,6 +28,7 @@
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/contextid.hxx>
+#include <xmloff/xmlprhdl.hxx>
 
 extern const XMLPropertyMapEntry aXMLScCellStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScColumnStylesProperties[];

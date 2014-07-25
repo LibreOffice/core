@@ -17,15 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <xmloff/prhdlfac.hxx>
+
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
 #include <tools/debug.hxx>
 
-#include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #include "xmlbahdl.hxx"
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
@@ -51,6 +53,8 @@
 #include "durationhdl.hxx"
 #include "XMLRectangleMembersHandler.hxx"
 #include "DrawAspectHdl.hxx"
+
+#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -94,11 +98,22 @@ static SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-// Dtor
+typedef std::map<sal_Int32, const XMLPropertyHandler*> CacheMap;
+
+struct XMLPropertyHandlerFactory::Impl
+{
+    mutable CacheMap maHandlerCache;
+};
+
+XMLPropertyHandlerFactory::XMLPropertyHandlerFactory() :
+    mpImpl(new Impl) {}
+
 XMLPropertyHandlerFactory::~XMLPropertyHandlerFactory()
 {
-    for( CacheMap::iterator pPos = maHandlerCache.begin(); pPos != maHandlerCache.end(); ++pPos )
+    for( CacheMap::iterator pPos = mpImpl->maHandlerCache.begin(); pPos != mpImpl->maHandlerCache.end(); ++pPos )
         delete pPos->second;
+
+    delete mpImpl;
 }
 
 // Interface
@@ -114,15 +129,15 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetHdlCache( sal_Int32 nTyp
 {
     const XMLPropertyHandler* pRet = NULL;
 
-    if( maHandlerCache.find( nType ) != maHandlerCache.end() )
-        pRet = maHandlerCache.find( nType )->second;
+    if( mpImpl->maHandlerCache.find( nType ) != mpImpl->maHandlerCache.end() )
+        pRet = mpImpl->maHandlerCache.find( nType )->second;
 
     return pRet;
 }
 
 void XMLPropertyHandlerFactory::PutHdlCache( sal_Int32 nType, const XMLPropertyHandler* pHdl ) const
 {
-    maHandlerCache[nType] = pHdl;
+    mpImpl->maHandlerCache[nType] = pHdl;
 }
 
 const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 nType ) const

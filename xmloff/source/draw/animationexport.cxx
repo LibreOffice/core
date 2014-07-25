@@ -63,6 +63,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/shapeexport.hxx>
+#include <xmloff/xmlprhdl.hxx>
 
 #include "animations.hxx"
 #include <xmloff/animationexport.hxx>

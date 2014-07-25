@@ -32,6 +32,7 @@
 #include <xmloff/xmltypes.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <xmloff/xmlexp.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #include <editeng/memberids.hrc>
 #include "hintids.hxx"
 #include "unomid.h"
