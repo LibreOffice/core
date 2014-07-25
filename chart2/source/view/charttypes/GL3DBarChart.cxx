@@ -139,7 +139,6 @@ public:
     RenderThread(pChart)
     {
     }
-    void SetAnimationCamera(glm::vec3 startPos, glm::vec3 endPos, sal_Int32 steps);
 protected:
     virtual void execute() SAL_OVERRIDE;
 private:
@@ -149,13 +148,6 @@ private:
     glm::vec3 maEndPos;
     sal_Int32 mnSteps;
 };
-
-void RenderBenchMarkThread::SetAnimationCamera(glm::vec3 startPos, glm::vec3 endPos, sal_Int32 steps)
-{
-    maStartPos = startPos;
-    maEndPos = endPos;
-    mnSteps = steps;
-}
 
 void RenderBenchMarkThread::ProcessMouseEvent()
 {
