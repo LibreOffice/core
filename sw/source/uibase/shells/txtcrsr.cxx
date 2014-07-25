@@ -86,7 +86,7 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
         rReq.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nCount) );
         rReq.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, bSelect) );
     }
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     rReq.Done();
     // Get EditWin before calling the move functions (shell change may occur!)
     SwEditWin& rTmpEditWin = GetView().GetEditWin();
@@ -122,9 +122,8 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
     SwEditWin& rTmpEditWin = GetView().GetEditWin();
     rTmpEditWin.FlushInBuffer();
 
-    sal_uInt16 nSlot = rReq.GetSlot();
     bool bRet = false;
-    switch ( nSlot )
+    switch ( rReq.GetSlot() )
     {
         case FN_START_OF_LINE_SEL:
             bRet = rSh.LeftMargin( true, false );
@@ -175,8 +174,7 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     GetView().GetEditWin().FlushInBuffer();
 
-    sal_uInt16 nSlot = rReq.GetSlot();
-    switch( nSlot )
+    switch( rReq.GetSlot() )
     {
         case FN_START_OF_NEXT_PAGE_SEL :
             rSh.SttNxtPg( true );
@@ -256,8 +254,7 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     GetView().GetEditWin().FlushInBuffer();
 
-    sal_uInt16 nSlot = rReq.GetSlot();
-    switch ( nSlot )
+    switch ( rReq.GetSlot() )
     {
         case FN_NEXT_WORD_SEL:
             rSh.NxtWrd( true );
@@ -311,7 +308,7 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
 void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     bool bSetRetVal = true, bRet = true;
     switch ( nSlot )
     {
