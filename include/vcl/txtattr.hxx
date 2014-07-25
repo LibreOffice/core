@@ -171,7 +171,7 @@ public:
 
     inline bool     IsIn( sal_uInt16 nIndex );
     inline bool     IsInside( sal_uInt16 nIndex );
-    inline bool     IsEmpty();
+    inline bool     IsEmpty() const;
 
 };
 
@@ -217,7 +217,7 @@ inline bool TextCharAttrib::IsInside( sal_uInt16 nIndex )
     return ( ( mnStart < nIndex ) && ( mnEnd > nIndex ) );
 }
 
-inline bool TextCharAttrib::IsEmpty()
+inline bool TextCharAttrib::IsEmpty() const
 {
     return mnStart == mnEnd;
 }

@@ -2590,7 +2590,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
                 sal_uInt16 nTmpEnd = nEndPos;
                 do
                 {
-                    TextCharAttrib* pAttr = pNode->GetCharAttribs().FindNextAttrib( TEXTATTR_HYPERLINK, nTmpStart, nEndPos );
+                    const TextCharAttrib* pAttr = pNode->GetCharAttribs().FindNextAttrib( TEXTATTR_HYPERLINK, nTmpStart, nEndPos );
                     nTmpEnd = pAttr ? pAttr->GetStart() : nEndPos;
 
                     // Text before Attribute
@@ -2635,7 +2635,7 @@ void TextEngine::RemoveAttribs( sal_uLong nPara, bool bIdleFormatAndUpdate )
         TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
         if ( pNode->GetCharAttribs().Count() )
         {
-            pNode->GetCharAttribs().Clear( true );
+            pNode->GetCharAttribs().Clear();
 
             TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
             pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().getLength() );
