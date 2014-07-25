@@ -703,7 +703,7 @@ void Desktop::DeInit()
         // this will leave some garbage behind..
     }
 
-    SAL_INFO( "desktop.app", "FINISHED WITH Destop::DeInit" );
+    SAL_INFO( "desktop.app", "FINISHED WITH Desktop::DeInit" );
 }
 
 bool Desktop::QueryExit()
@@ -1781,7 +1781,7 @@ int Desktop::doShutdown()
     bool bRR = pExecGlobals->bRestartRequested;
     delete pExecGlobals, pExecGlobals = NULL;
 
-    SAL_INFO( "desktop.app", "FINISHED WITH Destop::Main" );
+    SAL_INFO( "desktop.app", "FINISHED WITH Desktop::Main" );
     if ( bRR )
     {
         restartOnMac(true);
