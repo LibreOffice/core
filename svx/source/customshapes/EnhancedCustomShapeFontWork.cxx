@@ -392,7 +392,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     while( aOutlineIter != aOutlineIEnd )
                     {
                         Rectangle aPolyPolyBoundRect( aOutlineIter->GetBoundRect() );
-                        if ( aPolyPolyBoundRect.GetHeight() != rParagraphBoundRect.GetHeight() )
+                        if (aPolyPolyBoundRect.GetHeight() != rParagraphBoundRect.GetHeight() && aPolyPolyBoundRect.GetHeight())
                             aOutlineIter->Scale( 1.0, (double)rParagraphBoundRect.GetHeight() / aPolyPolyBoundRect.GetHeight() );
                         aPolyPolyBoundRect = aOutlineIter->GetBoundRect();
                         sal_Int32 nMove = aPolyPolyBoundRect.Top() - rParagraphBoundRect.Top();
