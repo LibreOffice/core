@@ -264,6 +264,7 @@ struct OStorage_Impl
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::packages::NoEncryptionException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );

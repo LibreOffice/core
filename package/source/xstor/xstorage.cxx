@@ -1651,6 +1651,7 @@ void OStorage_Impl::CloneStreamElement( const OUString& aStreamName,
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
                 packages::WrongPasswordException,
+                packages::NoEncryptionException,
                 io::IOException,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
