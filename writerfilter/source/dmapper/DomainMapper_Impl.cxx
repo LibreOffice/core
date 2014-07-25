@@ -1190,8 +1190,9 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
 
     if (m_aTextAppendStack.empty())
         return;
-
-    if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty())
+    // Before placing call to processDeferredCharacterProperties(), TopContextType should be CONTEXT_CHARACTER
+    // processDeferredCharacterProperties() invokes only if character inserted
+    if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
         processDeferredCharacterProperties();
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
     if(xTextAppend.is() && ! getTableManager( ).isIgnore())
