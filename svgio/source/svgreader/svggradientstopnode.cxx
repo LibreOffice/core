@@ -38,7 +38,9 @@ namespace svgio
 
         const SvgStyleAttributes* SvgGradientStopNode::getSvgStyleAttributes() const
         {
-            return &maSvgStyleAttributes;
+            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("stop"));
+
+            return checkForCssStyle(aClassStr, maSvgStyleAttributes);
         }
 
         void SvgGradientStopNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
@@ -54,7 +56,7 @@ namespace svgio
             {
                 case SVGTokenStyle:
                 {
-                    maSvgStyleAttributes.readStyle(aContent);
+                    readLocalCssStyle(aContent);
                     break;
                 }
                 case SVGTokenOffset:

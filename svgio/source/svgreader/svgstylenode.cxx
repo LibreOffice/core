@@ -92,17 +92,42 @@ namespace svgio
 
                 while(nPos < nLen)
                 {
+                    // read the full style node names (may be multiple) and put to aStyleName
                     const sal_Int32 nInitPos(nPos);
-                    skip_char(aContent, ' ', '#', nPos, nLen);
-                    copyToLimiter(aContent, '{', nPos, aTokenValue, nLen);
-                    const OUString aStyleName = aTokenValue.makeStringAndClear().trim();
+                    skip_char(aContent, sal_Unicode(' '), nPos, nLen);
+                    copyToLimiter(aContent, sal_Unicode('{'), nPos, aTokenValue, nLen);
+                    skip_char(aContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
 
-                    if(!aStyleName.isEmpty() && nPos < nLen)
+                    const rtl::OUString aStyleName(aTokenValue.makeStringAndClear().trim());
+                    const sal_Int32 nLen2(aStyleName.getLength());
+                    std::vector< rtl::OUString > aStyleNames;
+
+                    if(nLen2)
                     {
-                        skip_char(aContent, ' ', '{', nPos, nLen);
-                        copyToLimiter(aContent, '}', nPos, aTokenValue, nLen);
-                        skip_char(aContent, ' ', '}', nPos, nLen);
-                        const OUString aStyleContent = aTokenValue.makeStringAndClear().trim();
+                        // extract names
+                        sal_Int32 nPos2(0);
+                        rtl::OUStringBuffer aSingleName;
+
+                        while(nPos2 < nLen2)
+                        {
+                            skip_char(aStyleName, sal_Unicode('#'), nPos2, nLen2);
+                            copyToLimiter(aStyleName, sal_Unicode(' '), nPos2, aSingleName, nLen2);
+                            skip_char(aStyleName, sal_Unicode(' '), nPos2, nLen2);
+
+                            const rtl::OUString aOUSingleName(aSingleName.makeStringAndClear().trim());
+
+                            if(aOUSingleName.getLength())
+                            {
+                                aStyleNames.push_back(aOUSingleName);
+                            }
+                        }
+                    }
+
+                    if(aStyleNames.size() && nPos < nLen)
+                    {
+                        copyToLimiter(aContent, sal_Unicode('}'), nPos, aTokenValue, nLen);
+                        skip_char(aContent, sal_Unicode(' '), sal_Unicode('}'), nPos, nLen);
+                        const rtl::OUString aStyleContent(aTokenValue.makeStringAndClear().trim());
 
                         if(!aStyleContent.isEmpty())
                         {
@@ -113,8 +138,16 @@ namespace svgio
                             // fill with content
                             pNewStyle->readStyle(aStyleContent);
 
-                            // register new style at document
-                            const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aStyleName, *pNewStyle);
+                            // concatenate combined style name
+                            rtl::OUString aConcatenatedStyleName;
+
+                            for(sal_uInt32 a(0); a < aStyleNames.size(); a++)
+                            {
+                                aConcatenatedStyleName += aStyleNames[a];
+                            }
+
+                            // register new style at document for (evtl. concatenated) stylename
+                            const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aConcatenatedStyleName, *pNewStyle);
                         }
                     }
 

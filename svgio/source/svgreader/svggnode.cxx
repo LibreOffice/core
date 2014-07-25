@@ -68,7 +68,7 @@ namespace svgio
             {
                 case SVGTokenStyle:
                 {
-                    maSvgStyleAttributes.readStyle(aContent);
+                    readLocalCssStyle(aContent);
                     break;
                 }
                 case SVGTokenTransform:

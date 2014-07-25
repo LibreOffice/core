@@ -108,12 +108,24 @@ namespace svgio
             /// Display value #i121656#
             Display                     maDisplay;
 
-            /// CSS styles
+            // CSS style vector chain, used in decompose phase and built up once per node.
+            // It contains the StyleHierarchy for the local node. INdependent from the
+            // node hierarchy itself which also needs to be used in style entry solving
             SvgStyleAttributeVector     maCssStyleVector;
+
+            /// possibbe local CssStyle, e.g. style="fill:red; stroke:red;"
+            SvgStyleAttributes*         mpLocalCssStyle;
+
+            /// bitfield
+            // flag if maCssStyleVector is already computed (done only once)
+            bool                        mbCssStyleVectorBuilt : 1;
 
         protected:
             /// helper to evtl. link to css style
             const SvgStyleAttributes* checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const;
+
+            /// helper for filling the CssStyle vector once dependent on mbCssStyleVectorBuilt
+            void fillCssStyleVector(const rtl::OUString& rClassStr);
 
         public:
             SvgNode(
@@ -122,6 +134,10 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgNode();
 
+            /// scan helper to read and interpret a local CssStyle to mpLocalCssStyle
+            void readLocalCssStyle(const rtl::OUString& aContent);
+
+            /// style helpers
             void parseAttributes(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs);
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);

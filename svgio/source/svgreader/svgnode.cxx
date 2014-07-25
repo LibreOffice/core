@@ -40,96 +40,131 @@ namespace svgio
             return 0;
         }
 
-        const SvgStyleAttributes* SvgNode::checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
+        void SvgNode::fillCssStyleVector(const rtl::OUString& rClassStr)
         {
-            if(maCssStyleVector.empty()) // #120435# Evaluate for CSS styles only once, this cannot change
+            OSL_ENSURE(!mbCssStyleVectorBuilt, "OOps, fillCssStyleVector called double ?!?");
+            mbCssStyleVectorBuilt = true;
+
+            // #125293# If we have CssStyles we need to buuild a linked list of SvgStyleAttributes
+            // which represent this for the current object. There are various methods to
+            // specify CssStyles which need to be taken into account in a given order:
+            // - local CssStyle (independent from global CssStyles at SvgDocument)
+            // - 'id' CssStyle
+            // - 'class' CssStyle(s)
+            // - type-dependent elements (e..g. 'rect' for all rect elements)
+            // - local attributes (rOriginal)
+            // - inherited attributes (up the hierarchy)
+            // The first four will be collected in maCssStyleVector for the current element
+            // (once, this will not change) and be linked in the needed order using the
+            // get/setCssStyleParent at the SvgStyleAttributes which will be used preferred in
+            // member evaluation over the existing parent hierarchy
+
+            // check for local CssStyle with highest priority
+            if(mpLocalCssStyle)
             {
-                const SvgDocument& rDocument = getDocument();
+                // if we have one, use as first entry
+                maCssStyleVector.push_back(mpLocalCssStyle);
+            }
 
-                if(rDocument.hasSvgStyleAttributesById())
+            const SvgDocument& rDocument = getDocument();
+
+            if(rDocument.hasSvgStyleAttributesById())
+            {
+                // check for 'id' references
+                if(getId())
                 {
-                    // #i125293# If we have CssStyles we need to buuild a linked list of SvgStyleAttributes
-                    // which represent this for the current object. There are various methods to
-                    // specify CssStyles which need to be taken into account in a given order:
-                    // - 'id' element
-                    // - 'class' element(s)
-                    // - type-dependent elements (e..g. 'rect' for all rect elements)
-                    // - local firect attributes (rOriginal)
-                    // - inherited attributes (up the hierarchy)
-                    // The first three will be collected in maCssStyleVector for the current element
-                    // (once, this will not change) and be linked in the needed order using the
-                    // get/setCssStyleParent at the SvgStyleAttributes which will be used preferred in
-                    // member evaluation over the existing parent hierarchy
+                    // concatenate combined style name during search for CSS style equal to Id
+                    // when travelling over node parents
+                    rtl::OUString aConcatenatedStyleName;
+                    const SvgNode* pCurrent = this;
+                    const SvgStyleAttributes* pNew = 0;
 
-                    // check for 'id' references
-                    if(getId())
+                    while(!pNew && pCurrent)
                     {
-                        // search for CSS style equal to Id
-                        const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(*getId());
-
-                        if(pNew)
+                        if(pCurrent->getId())
                         {
-                            const_cast< SvgNode* >(this)->maCssStyleVector.push_back(pNew);
+                            aConcatenatedStyleName = *pCurrent->getId() + aConcatenatedStyleName;
                         }
+
+                        if(aConcatenatedStyleName.getLength())
+                        {
+                            pNew = rDocument.findSvgStyleAttributesById(aConcatenatedStyleName);
+                        }
+
+                        pCurrent = pCurrent->getParent();
                     }
 
-                    // check for 'class' references
-                    if(getClass())
+                    if(pNew)
                     {
-                        // find all referenced CSS styles, a list of entries is allowed
-                        const rtl::OUString* pClassList = getClass();
-                        const sal_Int32 nLen(pClassList->getLength());
-                        sal_Int32 nPos(0);
-                        const SvgStyleAttributes* pNew = 0;
+                        maCssStyleVector.push_back(pNew);
+                    }
+                }
 
-                        skip_char(*pClassList, ' ', nPos, nLen);
+                // check for 'class' references
+                if(getClass())
+                {
+                    // find all referenced CSS styles (a list of entries is allowed)
+                    const rtl::OUString* pClassList = getClass();
+                    const sal_Int32 nLen(pClassList->getLength());
+                    sal_Int32 nPos(0);
+                    const SvgStyleAttributes* pNew = 0;
 
-                        while(nPos < nLen)
+                    skip_char(*pClassList, sal_Unicode(' '), nPos, nLen);
+
+                    while(nPos < nLen)
+                    {
+                        rtl::OUStringBuffer aTokenValue;
+
+                        copyToLimiter(*pClassList, sal_Unicode(' '), nPos, aTokenValue, nLen);
+                        skip_char(*pClassList, sal_Unicode(' '), nPos, nLen);
+
+                        rtl::OUString aId(rtl::OUString::createFromAscii("."));
+                        const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
+
+                        // look for CSS style common to token
+                        aId = aId + aOUTokenValue;
+                        pNew = rDocument.findSvgStyleAttributesById(aId);
+
+                        if(!pNew && rClassStr.getLength())
                         {
-                            rtl::OUStringBuffer aTokenValue;
+                            // look for CSS style common to class.token
+                            aId = rClassStr + aId;
 
-                            copyToLimiter(*pClassList, ' ', nPos, aTokenValue, nLen);
-                            skip_char(*pClassList, ' ', nPos, nLen);
-
-                            rtl::OUString aId(".");
-                            const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
-
-                            // look for CSS style common to token
-                            aId += aOUTokenValue;
                             pNew = rDocument.findSvgStyleAttributesById(aId);
-
-                            if(!pNew && !rClassStr.isEmpty())
-                            {
-                                // look for CSS style common to class.token
-                                aId = rClassStr + aId;
-
-                                pNew = rDocument.findSvgStyleAttributesById(aId);
-                            }
-
-                            if(pNew)
-                            {
-                                const_cast< SvgNode* >(this)->maCssStyleVector.push_back(pNew);
-                            }
                         }
-                    }
-
-                    // check for class-dependent references to CssStyles
-                    if(rClassStr.getLength())
-                    {
-                        // search for CSS style equal to class type
-                        const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(rClassStr);
 
                         if(pNew)
                         {
-                            const_cast< SvgNode* >(this)->maCssStyleVector.push_back(pNew);
+                            maCssStyleVector.push_back(pNew);
                         }
                     }
                 }
+
+                // check for class-dependent references to CssStyles
+                if(rClassStr.getLength())
+                {
+                    // search for CSS style equal to class type
+                    const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(rClassStr);
+
+                    if(pNew)
+                    {
+                        maCssStyleVector.push_back(pNew);
+                    }
+                }
+            }
+        }
+
+        const SvgStyleAttributes* SvgNode::checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
+        {
+            if(!mbCssStyleVectorBuilt)
+            {
+                // build needed CssStyleVector for local node
+                const_cast< SvgNode* >(this)->fillCssStyleVector(rClassStr);
             }
 
             if(maCssStyleVector.empty())
             {
-                // return original if no CssStlyes found
+                // return given original if no CssStlyes found
                 return &rOriginal;
             }
             else
@@ -186,7 +221,9 @@ namespace svgio
             mpClass(0),
             maXmlSpace(XmlSpace_notset),
             maDisplay(Display_inline),
-            maCssStyleVector()
+            maCssStyleVector(),
+            mpLocalCssStyle(0),
+            mbCssStyleVectorBuilt(false)
         {
             OSL_ENSURE(SVGTokenUnknown != maType, "SvgNode with unknown type created (!)");
 
@@ -213,50 +250,59 @@ namespace svgio
                 maChildren.pop_back();
             }
 
-            if(mpId) delete mpId;
-            if(mpClass) delete mpClass;
+            if(mpId)
+            {
+                delete mpId;
+            }
+
+            if(mpClass)
+            {
+                delete mpClass;
+            }
+
+            if(mpLocalCssStyle)
+            {
+                delete mpLocalCssStyle;
+            }
+        }
+
+        void SvgNode::readLocalCssStyle(const rtl::OUString& aContent)
+        {
+            if(!mpLocalCssStyle)
+            {
+                // create LocalCssStyle if needed but not yet added
+                mpLocalCssStyle = new SvgStyleAttributes(*this);
+            }
+            else
+            {
+                // 2nd fill would be an error
+                OSL_ENSURE(false, "Svg node has two local CssStyles, this may lead to problems (!)");
+            }
+
+            if(mpLocalCssStyle)
+            {
+                // parse and set values to it
+                mpLocalCssStyle->readStyle(aContent);
+            }
+            else
+            {
+                OSL_ENSURE(false, "Could not get/create a local CssStyle for a node (!)");
+            }
         }
 
         void SvgNode::parseAttributes(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs)
         {
+            // no longer need to pre-sort moving 'style' entries to the back so that
+            // values get overwritten - that was the previous, not complete solution for
+            // handling the priorities between svg and Css properties
             const sal_uInt32 nAttributes(xAttribs->getLength());
-            // #i122522# SVG defines that 'In general, this means that the presentation attributes have
-            // lower priority than other CSS style rules specified in author style sheets or style
-            // attributes.' in http://www.w3.org/TR/SVG/styling.html#UsingPresentationAttributes
-            // (6.4 Specifying properties using the presentation attributes SVG 1.1). That means that
-            // e.g. font-size will appear as presentation attribute and CSS style attribute. In these
-            // cases, CSS style attributes need to have precedence. To do so it is possible to create
-            // a proirity system for all properties of a shape, but it will also work to parse the
-            // presentation attributes of type 'style' last, so they will overwrite the less-prioritized
-            // already interpreted ones. Thus, remember SVGTokenStyle entries and parse them last.
-            // To make this work it is required that parseAttribute is only called by parseAttributes
-            // which is the case.
-            std::vector< sal_uInt32 > aSVGTokenStyleIndexes;
 
             for(sal_uInt32 a(0); a < nAttributes; a++)
             {
                 const OUString aTokenName(xAttribs->getNameByIndex(a));
                 const SVGToken aSVGToken(StrToSVGToken(aTokenName));
 
-                if(SVGTokenStyle == aSVGToken)
-                {
-                    // #i122522# remember SVGTokenStyle entry
-                    aSVGTokenStyleIndexes.push_back(a);
-                }
-                else
-                {
-                    parseAttribute(aTokenName, aSVGToken, xAttribs->getValueByIndex(a));
-                }
-            }
-
-            // #i122522# parse SVGTokenStyle entries last to override already interpreted
-            // 'presentation attributes' of potenially the same type
-            for(sal_uInt32 b(0); b < aSVGTokenStyleIndexes.size(); b++)
-            {
-                const sal_uInt32 nSVGTokenStyleIndex(aSVGTokenStyleIndexes[b]);
-                const ::rtl::OUString aTokenName(xAttribs->getNameByIndex(nSVGTokenStyleIndex));
-
-                parseAttribute(aTokenName, SVGTokenStyle, xAttribs->getValueByIndex(nSVGTokenStyleIndex));
+                parseAttribute(aTokenName, aSVGToken, xAttribs->getValueByIndex(a));
             }
         }
 
