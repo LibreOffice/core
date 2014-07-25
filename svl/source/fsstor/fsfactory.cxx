@@ -79,18 +79,17 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
         uno::UNO_QUERY );
 }
 
+/**
+ * The request for storage can be done with up to three arguments.
+ * The first argument specifies a source for the storage it must be URL.
+ * The second value is a mode the storage should be open in.
+ * The third value is a media descriptor.
+ */
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithArguments(
             const uno::Sequence< uno::Any >& aArguments )
     throw ( uno::Exception,
             uno::RuntimeException, std::exception )
 {
-    // The request for storage can be done with up to three arguments
-
-    // The first argument specifies a source for the storage
-    // it must be URL.
-    // The second value is a mode the storage should be open in.
-    // And the third value is a media descriptor.
-
     sal_Int32 nArgNum = aArguments.getLength();
     OSL_ENSURE( nArgNum < 4, "Wrong parameter number" );
 

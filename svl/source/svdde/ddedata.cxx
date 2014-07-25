@@ -18,10 +18,9 @@
  */
 
 
-// ACHTUNG: es wird angenommen, dass StarView-Clipboard-Foamatnummern
-// und Windows-Formatnummern identisch sind! Ist dies einmal nicht der
-// Fall, muessen die Routinen hier angepasst werden. Die Implementation
-// verwendet die hier defineirten Konversionen.
+// ATTENTION: We assume StarView Clipboard format numbers and Windows
+// Format numbers to be the same! If that's not the case, we need to
+// adapt the code here. The implementation uses the conversions here.
 
 #define UNICODE
 

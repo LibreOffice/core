@@ -35,8 +35,9 @@
 class SvNumberFormatsSupplierObj;
 
 
-//  SvNumberFormatterServiceObj wird global als Service angemeldet
-
+/**
+ * SvNumberFormatterServiceObj is registered globally as a Service
+ */
 class SvNumberFormatterServiceObj : public cppu::WeakImplHelper2<
                                         com::sun::star::util::XNumberFormatter2,
                                         com::sun::star::lang::XServiceInfo>
@@ -49,7 +50,7 @@ public:
                         SvNumberFormatterServiceObj();
     virtual             ~SvNumberFormatterServiceObj();
 
-                        // XNumberFormatter
+    // XNumberFormatter
     virtual void SAL_CALL attachNumberFormatsSupplier(
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier )
@@ -77,7 +78,7 @@ public:
     virtual OUString SAL_CALL getInputString( sal_Int32 nKey, double fValue )
                             throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                        // XNumberFormatPreviewer
+    // XNumberFormatPreviewer
     virtual OUString SAL_CALL convertNumberToPreviewString(
                             const OUString& aFormat, double fValue,
                             const ::com::sun::star::lang::Locale& nLocale, sal_Bool bAllowEnglish )
@@ -90,7 +91,7 @@ public:
                                 throw(::com::sun::star::util::MalformedNumberFormatException,
                                         ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                        // XServiceInfo
+    // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
                             throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -114,7 +115,7 @@ public:
     virtual         ~SvNumberFormatsObj();
 
 
-                        // XNumberFormats
+    // XNumberFormats
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
                             getByKey( sal_Int32 nKey ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL queryKeys( sal_Int16 nType,
@@ -138,7 +139,7 @@ public:
                             sal_Bool bRed, sal_Int16 nDecimals, sal_Int16 nLeading )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                        // XNumberFormatTypes
+    // XNumberFormatTypes
     virtual sal_Int32 SAL_CALL getStandardIndex( const ::com::sun::star::lang::Locale& nLocale )
                             throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getStandardFormat( sal_Int16 nType,
@@ -153,7 +154,7 @@ public:
                             const ::com::sun::star::lang::Locale& nLocale )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                        // XServiceInfo
+    // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
                             throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -180,7 +181,7 @@ public:
     SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, const ::comphelper::SharedMutex& _rMutex );
     virtual         ~SvNumberFormatObj();
 
-                            // XPropertySet
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -221,7 +222,7 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                            // XPropertyAccess
+    // XPropertyAccess
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             getPropertyValues() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setPropertyValues( const ::com::sun::star::uno::Sequence<
@@ -232,7 +233,7 @@ public:
                                             ::com::sun::star::lang::WrappedTargetException,
                                             ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                            // XServiceInfo
+    // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -255,7 +256,7 @@ public:
     virtual         ~SvNumberFormatSettingsObj();
 
 
-                            // XPropertySet
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -296,7 +297,7 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                            // XServiceInfo
+    // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )

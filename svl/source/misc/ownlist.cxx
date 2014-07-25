@@ -61,22 +61,19 @@ static void eatSpace(const OUString & rCmd, sal_Int32 * pIndex)
         (*pIndex) ++;
 }
 
-
+/**
+ * Text is parsed and the single commands are added to the list.
+ *
+ * @returns bool  true
+ *                The text was correctly parsed
+                  false
+                  The text was not parsed correctly
+*/
 bool SvCommandList::AppendCommands
 (
- const OUString & rCmd,    /* Dieser Text wird in Kommandos umgesetzt */
- sal_Int32 * pEaten         /* Anzahl der Zeichen, die gelesen wurden */
+ const OUString & rCmd,    /* This text is translated to commands */
+ sal_Int32 * pEaten        /* Count of chars that have been read */
 )
-/*  [Beschreibung]
-
-    Es wird eine Text geparsed und die einzelnen Kommandos werden an
-    die Liste angeh"angt.
-
-    [R"uckgabewert]
-
-    bool        true, der Text wurde korrekt geparsed.
-                false, der Text wurde nicht korrekt geparsed.
-*/
 {
     sal_Int32 index = 0;
     while(index < rCmd.getLength())
@@ -103,20 +100,17 @@ bool SvCommandList::AppendCommands
     return true;
 }
 
+/**
+ * An object of the type SvCommand is created and the list is
+ * attached.
+ *
+ * @returns SvCommand & The created object
+*/
 SvCommand & SvCommandList::Append
 (
- const OUString & rCommand,    /* das Kommando */
- const OUString & rArg         /* dasArgument des Kommandos */
+ const OUString & rCommand,    /* The command */
+ const OUString & rArg         /* The command's argument */
 )
-/*  [Beschreibung]
-
-    Es wird eine Objekt vom Typ SvCommand erzeugt und an die Liste
-    angeh"angt.
-
-    [R"uckgabewert]
-
-    SvCommand &     Das erteugte Objekt wird zur"uckgegeben.
-*/
 {
     aCommandList.push_back( SvCommand( rCommand, rArg ) );
     return aCommandList.back();

@@ -333,11 +333,10 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter(sal_uInt8  nRecordType,
     pStream->SeekRel( + SFX_REC_HEADERSIZE_MULTI );
 }
 
-
+/**
+ * @see SfxMiniRecordWriter
+ */
 sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
-
-//  see <SfxMiniRecordWriter>
-
 {
     // Header not written yet?
     if ( !_bHeaderOk )
@@ -430,11 +429,10 @@ void SfxMultiVarRecordWriter::FlushContent_Impl()
             SFX_REC_CONTENT_HEADER(_nContentVer,_nStartPos,_nContentStartPos));
 }
 
-
+/**
+ * @see SfxMultiFixRecordWriter
+ */
 void SfxMultiVarRecordWriter::NewContent()
-
-// see <SfxMultiFixRecordWriter>
-
 {
     // written Content already?
     if ( _nContentCount )
@@ -445,11 +443,10 @@ void SfxMultiVarRecordWriter::NewContent()
     ++_nContentCount;
 }
 
-
+/**
+ * @see SfxMiniRecordWriter
+ */
 sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
-
-// see <SfxMiniRecordWriter>
-
 {
     // Header not written yet?
     if ( !_bHeaderOk )
@@ -609,7 +606,7 @@ bool SfxMultiRecordReader::GetContent()
         // if ( nNewPos > _pStream->Tell() )
         _pStream->Seek( nNewPos );
 
-        // ggf. Content-Header lesen
+        // Read Content Header if available
         if ( _nRecordType == SFX_REC_TYPE_MIXTAGS ||
              _nRecordType == SFX_REC_TYPE_MIXTAGS_RELOC )
         {
@@ -618,7 +615,7 @@ bool SfxMultiRecordReader::GetContent()
             _pStream->ReadUInt16( _nContentTag );
         }
 
-        // ContentNo weiterz"ahlen
+        // Increment ContentNo
         ++_nContentNo;
         return true;
     }

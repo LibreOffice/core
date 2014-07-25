@@ -91,7 +91,7 @@ struct SfxItemPool_Impl
     SfxBroadcaster                  aBC;
     std::vector<SfxPoolItemArray_Impl*> maPoolItems;
     std::vector<SfxItemPoolUser*> maSfxItemPoolUsers; /// ObjectUser section
-    OUString                   aName;
+    OUString                        aName;
     SfxPoolItem**                   ppPoolDefaults;
     SfxPoolItem**                   ppStaticDefaults;
     SfxItemPool*                    mpMaster;
@@ -101,15 +101,15 @@ struct SfxItemPool_Impl
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
     sal_uInt16                      mnFileFormatVersion;
-    sal_uInt16                          nVersion;
-    sal_uInt16                          nLoadingVersion;
-    sal_uInt16                          nInitRefCount; // 1, beim Laden ggf. 2
-    sal_uInt16                          nVerStart, nVerEnd; // WhichRange in Versions
-    sal_uInt16                          nStoringStart, nStoringEnd; // zu speichernder Range
-    sal_uInt8                           nMajorVer, nMinorVer; // Pool selbst
+    sal_uInt16                      nVersion;
+    sal_uInt16                      nLoadingVersion;
+    sal_uInt16                      nInitRefCount; // 1, during load, may be 2
+    sal_uInt16                      nVerStart, nVerEnd; // WhichRange in versions
+    sal_uInt16                      nStoringStart, nStoringEnd; // Range to be saved
+    sal_uInt8                       nMajorVer, nMinorVer; // The Pool itself
     SfxMapUnit                      eDefMetric;
     bool                            bInSetItem;
-    bool                            bStreaming; // in Load() bzw. Store()
+    bool                            bStreaming; // in Load() or Store()
     bool                            mbPersistentRefCounts;
 
     SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
@@ -174,7 +174,7 @@ struct SfxItemPool_Impl
         if ( nTag != nFileTag ) \
         { \
             OSL_FAIL( #nTag ); /*! s.u. */ \
-            /*! error-code setzen und auswerten! */ \
+            /*! Set error code and evaluate! */ \
             (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
             pImp->bStreaming = false; \
             return rStream; \
@@ -187,7 +187,7 @@ struct SfxItemPool_Impl
        if ( nTag != nFileTag ) \
         { \
            OSL_FAIL( #nTag ); /*! s.u. */ \
-           /*! error-code setzen und auswerten! */ \
+           /*! Set error code and evaluate! */ \
            (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
            pImp->bStreaming = false; \
            delete pPointer; \
@@ -201,7 +201,7 @@ struct SfxItemPool_Impl
         if ( nTag1 != nFileTag && nTag2 != nFileTag ) \
         { \
             OSL_FAIL( #nTag1 ); /*! s.u. */ \
-            /*! error-code setzen und auswerten! */ \
+            /*! Set error code and evaluate! */ \
             (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
             pImp->bStreaming = false; \
             return rStream; \

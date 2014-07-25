@@ -24,14 +24,10 @@
 
 TYPEINIT1(SfxItemSetHint, SfxHint);
 
-
+/**
+ * Copies the SfxItemSet passed as a parameter.
+ */
 SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
-
-/*  [Beschreibung]
-
-    Dieser Ctor kopiert das als Parameter "ubergeben <SfxItemSet>.
-*/
-
 :   _pItemSet( rItemSet.Clone() )
 {
 }
