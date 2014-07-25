@@ -102,8 +102,6 @@ using ::com::sun::star::text::XTextField;
 using ::com::sun::star::text::XTextRange;
 using ::sax_fastparser::FSHelperPtr;
 
-DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
-
 namespace oox {
 namespace drawingml {
 
