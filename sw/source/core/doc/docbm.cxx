@@ -584,7 +584,8 @@ namespace sw { namespace mark
             if (pMark->IsExpanded() &&
                 &pMark->GetOtherMarkPos().nNode.GetNode() == pOldNode)
             {
-                pMark->SetMarkPos(aNewPos);
+                // shift the OtherMark to aNewPos
+                pMark->SetOtherMarkPos(aNewPos);
                 bChangedOPos= true;
             }
             // illegal selection? collapse the mark and restore sorting later
