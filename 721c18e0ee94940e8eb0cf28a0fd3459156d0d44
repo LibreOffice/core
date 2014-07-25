@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_01ff7002",
+        "filename": "include/tools/ref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-07-25T08:32:11Z",
+      "side": 1,
+      "message": "I imagine we want nRefCount to be initialized to 0 here",
+      "revId": "721c18e0ee94940e8eb0cf28a0fd3459156d0d44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_e1035c0c",
+        "filename": "include/tools/ref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-07-25T08:32:11Z",
+      "side": 1,
+      "message": "might as well drop the conditional and just assign it",
+      "range": {
+        "startLine": 163,
+        "startChar": 29,
+        "endLine": 163,
+        "endChar": 38
+      },
+      "revId": "721c18e0ee94940e8eb0cf28a0fd3459156d0d44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_c108582b",
+        "filename": "include/tools/ref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-07-25T08:32:11Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 172,
+        "startChar": 28,
+        "endLine": 172,
+        "endChar": 37
+      },
+      "revId": "721c18e0ee94940e8eb0cf28a0fd3459156d0d44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_a10d6439",
+        "filename": "tools/source/ref/ref.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-07-25T08:32:11Z",
+      "side": 1,
+      "message": "I wonder what the old code wants to do, maybe its setting it to a \"big number\" in case there are some intermediate add/remove ref calls in the objects dtor chain.",
+      "revId": "721c18e0ee94940e8eb0cf28a0fd3459156d0d44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
