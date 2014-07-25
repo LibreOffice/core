@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_014d3072",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-07-25T09:18:35Z",
+      "side": 1,
+      "message": "if we do that the text won\u0027t be translated, one option is a hidden label in the .ui, the other is a global resource string",
+      "revId": "3ddddff98ee8c43b0082d09b25052bf1407ca988",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_e1511c10",
+        "filename": "cui/uiconfig/ui/hangulhanjaeditdictdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-07-25T09:18:35Z",
+      "side": 1,
+      "message": "We generally avoid widths for dialogs in pixels in favour of e.g. setting the widths of the edits boxes in characters and letting the dialog figure out its own size.",
+      "revId": "3ddddff98ee8c43b0082d09b25052bf1407ca988",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
