@@ -247,8 +247,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
 
 void AutoEdit::KeyInput( const KeyEvent& rEvt )
 {
-    sal_uInt16 nCode = rEvt.GetKeyCode().GetCode();
-    if( nCode != KEY_SPACE )
+    if( rEvt.GetKeyCode().GetCode() != KEY_SPACE )
         Edit::KeyInput( rEvt );
 }
 

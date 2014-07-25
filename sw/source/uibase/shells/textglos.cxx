@@ -33,7 +33,7 @@
 
 void SwTextShell::ExecGlossary(SfxRequest &rReq)
 {
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     ::GetGlossaries()->UpdateGlosPath(!rReq.IsAPI() ||
                                         FN_GLOSSARY_DLG == nSlot );
     SwGlossaryHdl* pGlosHdl = GetView().GetGlosHdl();

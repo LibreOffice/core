@@ -308,10 +308,9 @@ IMPL_LINK(PageMarginControl, ImplMarginHdl, void *, pControl)
 {
     if ( pControl == mpMarginValueSet )
     {
-        const sal_uInt16 iPos = mpMarginValueSet->GetSelectItemId();
         bool bMirrored = false;
         bool bApplyNewPageMargins = true;
-        switch ( iPos )
+        switch ( mpMarginValueSet->GetSelectItemId() )
         {
         case 1:
             mnPageLeftMargin = SWPAGE_NARROW_VALUE;
