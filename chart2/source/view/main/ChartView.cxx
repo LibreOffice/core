@@ -3278,7 +3278,8 @@ void ChartView::createShapes3D()
 
 void ChartView::updateOpenGLWindow()
 {
-    mp2DRenderer->updateOpenGLWindow();
+    if(!isReal3DChart())
+        mp2DRenderer->updateOpenGLWindow();
 }
 
 } //namespace chart
