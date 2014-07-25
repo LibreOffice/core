@@ -4763,7 +4763,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
     // The old document might have no version in the manifest.xml, so we have to allow to set the version
     // even for readonly storages, so that the version from content.xml can be used.
     if ( m_pData->m_bReadOnlyWrap && aPropertyName != "Version" )
-        throw io::IOException( THROW_WHERE ); // TODO: Access denied
+        throw uno::RuntimeException( THROW_WHERE ); // TODO: Access denied
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
         throw beans::UnknownPropertyException( THROW_WHERE );
