@@ -187,7 +187,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell()));
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
-        sal_uInt16 nRet = pDlg->Execute();
+        const short nRet = pDlg->Execute();
         const SfxPoolItem* pItem;
         if ( RET_OK == nRet )
         {
@@ -262,10 +262,10 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                     if ( pNBOTypeMgr != NULL )
                     {
                         const SwNumRule* pNumRuleAtCurrentSelection = GetShell().GetNumRuleAtCurrentSelection();
-                        sal_uInt16 nActNumLvl = (sal_uInt16) 0xFFFF;
+                        sal_uInt16 nActNumLvl = USHRT_MAX;
                         if ( pNumRuleAtCurrentSelection != NULL )
                         {
-                            sal_uInt16 nLevel = GetShell().GetNumLevel();
+                            const sal_uInt16 nLevel = GetShell().GetNumLevel();
                             if ( nLevel < MAXLEVEL )
                             {
                                 nActNumLvl = 1 << nLevel;
