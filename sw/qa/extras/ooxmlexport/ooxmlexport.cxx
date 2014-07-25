@@ -3334,6 +3334,17 @@ DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testHeaderFooterData, "testHeaderFooterData.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    //fdo#81426: At the export the header and footer data was getting lost.
+    assertXPath(pXmlDoc,"//w:p[4]/w:pPr/w:sectPr/w:headerReference",1);
+    assertXPath(pXmlDoc,"//w:p[4]/w:pPr/w:sectPr/w:footerReference",1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();

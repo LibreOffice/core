@@ -1823,8 +1823,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         ? &pPd->GetFollow()->GetMaster()
         : &pPd->GetLeft();
 
-    if ( nBreakCode != 0 )
-    {
         if ( titlePage )
         {
             // there is a First Page:
@@ -1840,7 +1838,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         if ( !pPd->IsFooterShared() || bLeftRightPgChain )
             MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdLeftFmt, WW8_FOOTER_EVEN );
         AttrOutput().SectionWW6HeaderFooterFlags( nHeadFootFlags );
-    }
 
     // binary filters only
     SetupSectionPositions( pA );
