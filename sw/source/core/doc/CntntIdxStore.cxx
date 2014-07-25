@@ -264,10 +264,9 @@ void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
 
 void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
 {
-    const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
-    for( long int nIdx = 0 ; static_cast<unsigned long int>(nIdx) < rRedlTbl.size(); ++nIdx )
+    long int nIdx = 0;
+    BOOST_FOREACH(const SwRangeRedline* pRdl, pDoc->GetRedlineTbl())
     {
-        const SwRangeRedline* pRdl = rRedlTbl[ nIdx ];
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
         int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
                                           nPointPos;
@@ -286,6 +285,7 @@ void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
             const MarkEntry aEntry = { nIdx, true, pRdl->GetMark()->nContent.GetIndex() };
             m_aRedlineEntries.push_back(aEntry);
         }
+        ++nIdx;
     }
 }
 
