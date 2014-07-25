@@ -80,9 +80,10 @@ enum DBManagerOptions
     DBMGR_INSERT,            ///< Data records in text.
     DBMGR_MERGE_MAILMERGE,   ///< Print mail merge.
     DBMGR_MERGE_MAILING,     ///< Send mail merge as email.
-    DBMGR_MERGE_MAILFILES,   ///< Save mail merg as files.
+    DBMGR_MERGE_MAILFILES,   ///< Save mail merge as files.
     DBMGR_MERGE_DOCUMENTS,   ///< Print merged documents.
-    DBMGR_MERGE_SINGLE_FILE  ///< Save merge as single file.
+    DBMGR_MERGE_SINGLE_FILE, ///< Save merge as single file.
+    DBMGR_MERGE_ONLY         ///< Create merge doc w/o save/print.
 };
 
 // Administration of (new) logical databases.
