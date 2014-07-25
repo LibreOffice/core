@@ -122,6 +122,38 @@ int RTFTokenizer::resolveParse()
                         return ret;
                     break;
                 case '}':
+                    if (m_nGroup == 1)
+                    {
+                        // Handle bogus RTF documents that have
+                        // several top-level groups: Ignore the group
+                        // end and following group start characters,
+                        // i.e. pretend it is one group.
+                        bool bSkipping(true), bDidIt(false);
+                        char oldch(ch);
+                        while (bSkipping && ((Strm() >> ch, !Strm().IsEof())))
+                        {
+                            switch (ch)
+                            {
+                            case 0x0d:
+                                break; // ignore this
+                            case 0x0a:
+                                m_nLineNumber++;
+                                m_nLineStartPos = nCurrentPos;
+                                break;
+                            case '{':
+                                bSkipping = false;
+                                bDidIt = true;
+                                break;
+                            default:
+                                Strm().PutBack(ch);
+                                ch = oldch;
+                                bSkipping = false;
+                                break;
+                            }
+                        }
+                        if (bDidIt)
+                            break;
+                    }
                     ret = m_rImport.popState();
                     if (ret)
                         return ret;
@@ -295,7 +327,7 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
     if (m_rImport.getState().nDestinationState == DESTINATION_SKIP)
         return 0;
-    /*SAL_INFO("writefilter", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
+    /*SAL_INFO("writerfilter", "keyword '\\" << rKeyword.getStr() <<
                "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");*/
     RTFSymbol aSymbol;
     aSymbol.sKeyword = rKeyword.getStr();
