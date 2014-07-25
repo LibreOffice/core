@@ -59,6 +59,7 @@ namespace basegfx
             while(nPos < nLen)
             {
                 bool bRelative(false);
+                bool bPosFound(false);
                 const sal_Unicode aCurrChar(rSvgDStatement[nPos]);
 
                 if(o_rPolyPolygon.count() && !aCurrPoly.count() && !('m' == aCurrChar || 'M' == aCurrChar))
@@ -155,23 +156,28 @@ namespace basegfx
                         nPos++;
                         ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while( nPos < nLen &&
+                            (::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos) || rSvgDStatement[nPos] == '.') )
                         {
                             double nX, nY(nLastY);
-
                             if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
 
-                            if(bRelative)
+                            // We should also add up to the last number if we already found one
+                            // for example: d="M 20 120 H 40.5 0.6"
+                            // in this case we should have nX = 41.1 as final nX
+                            if(bRelative || bPosFound)
                             {
                                 nX += nLastX;
                             }
 
                             // set last position
                             nLastX = nX;
+                            bPosFound = true;
 
                             // add point
                             aCurrPoly.append(B2DPoint(nX, nY));
                         }
+                        bPosFound = false;
                         break;
                     }
 
@@ -185,23 +191,27 @@ namespace basegfx
                         nPos++;
                         ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen &&
+                            (::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos) || rSvgDStatement[nPos] == '.'))
                         {
                             double nX(nLastX), nY;
 
                             if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
-                            if(bRelative)
+                            // We should also add up to the last number if we already found one
+                            if(bRelative || bPosFound == true)
                             {
                                 nY += nLastY;
                             }
 
                             // set last position
                             nLastY = nY;
+                            bPosFound = true;
 
                             // add point
                             aCurrPoly.append(B2DPoint(nX, nY));
                         }
+                        bPosFound = false;
                         break;
                     }
 

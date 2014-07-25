@@ -61,9 +61,27 @@ namespace basegfx
             }
 
             while(('0' <= aChar && '9' >= aChar)
-                     || (!separator_seen && '.' == aChar))
+                     || ('.' == aChar))
             {
-                if ('.' == aChar) separator_seen = true;
+                if ('.' == aChar)
+                {
+                    /* for example: d="M 20 120 H 40.5.6"
+                     * in the first H-run this method reads the '40.5' string
+                     * in the next H-run we'll read '.6' which we should handle
+                     * like it is '0.6' and add it up
+                     * FIXME: currently we don't add it up, but just skip it to avoid
+                     * warnings in importFromSvgD */
+                    if (separator_seen == true)
+                    {
+                        while (('0' <= aChar && '9' >= aChar) || ('.' == aChar))
+                        {
+                            io_rPos++;
+                            aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+                        }
+                        break;
+                    }
+                    separator_seen = true;
+                }
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
