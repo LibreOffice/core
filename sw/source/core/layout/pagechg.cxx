@@ -2159,7 +2159,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
                     }
                 }
             }
-            while ( pPageToAdjust != pEndOfRow );
+            while (pPageToAdjust && pPageToAdjust != pEndOfRow);
 
             // adjust values for root frame size
             nSumRowHeight = nSumRowHeight + nCurrentRowHeight;
