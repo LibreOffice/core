@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_PALETTEMANAGER_HXX
 
 #include <svx/SvxColorValueSet.hxx>
+#include <svx/Palette.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/tbxcolorupdate.hxx>
 
@@ -32,9 +33,10 @@ class PaletteManager
     svx::ToolboxButtonColorUpdater* mpBtnUpdater;
 
     Color       mLastColor;
-    std::vector<Palette> maPalettes;
+    std::vector<Palette*> maPalettes;
 public:
     PaletteManager();
+    ~PaletteManager();
     void        LoadPalettes();
     void        ReloadColorSet(SvxColorValueSet& rColorSet);
     std::vector<OUString> GetPaletteList();
