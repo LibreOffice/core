@@ -192,6 +192,9 @@ public:
     */
     const SwRangeRedline* FindAtPosition( const SwPosition& startPosition, sal_uInt16& tableIndex, bool next = true ) const;
 
+    using _SwRedlineTbl::const_iterator;
+    using _SwRedlineTbl::begin;
+    using _SwRedlineTbl::end;
     using _SwRedlineTbl::size;
     using _SwRedlineTbl::operator[];
     using _SwRedlineTbl::empty;
