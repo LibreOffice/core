@@ -6044,6 +6044,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
                 lang::IllegalArgumentException,
                 packages::NoEncryptionException,
                 packages::WrongPasswordException,
+                container::NoSuchElementException,
                 io::IOException,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )

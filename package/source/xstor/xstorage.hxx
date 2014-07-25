@@ -804,6 +804,7 @@ public:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::packages::NoEncryptionException,
                 ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
