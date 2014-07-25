@@ -383,8 +383,8 @@ bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
         CFRelease(pCTLine);
         return true;
     }
-    else
 #endif
+    else
     {
         return SalLayout::DrawTextSpecial(rGraphics, flags);
     }
