@@ -117,7 +117,6 @@ using namespace com::sun::star;
         ePageMove(MV_NO),\
         pCrsrStack(0),  \
         rView(rShell),\
-        aNavigationMgr(*this), \
         bDestOnStack(false)
 
 #define BITFLD_INI_LIST \
@@ -936,7 +935,6 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
             Left(CRSR_SKIP_CHARS, false, 1, false );
             GotoFtnTxt();
         }
-        aNavigationMgr.addEntry(aPos);
     }
 }
 
@@ -1475,11 +1473,6 @@ SwFrmFmt *SwWrtShell::GetTblStyle(const OUString &rFmtName)
     return 0;
 }
 
-void SwWrtShell::addCurrentPosition() {
-    SwPaM* pPaM = GetCrsr();
-    aNavigationMgr.addEntry(*pPaM->GetPoint());
-}
-
 // Applying templates
 
 void SwWrtShell::SetPageStyle(const OUString &rCollName)
@@ -1731,7 +1724,6 @@ void SwWrtShell::SetReadonlyOption(bool bSet)
 void SwWrtShell::ChangeHeaderOrFooter(
     const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning)
 {
-    addCurrentPosition();
     StartAllAction();
     StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
     bool bExecute = true;

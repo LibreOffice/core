@@ -311,7 +311,6 @@ modules/swriter/toolbar/graphicobjectbar.xml
 modules/swriter/toolbar/insertbar.xml
 modules/swriter/toolbar/mediaobjectbar.xml
 modules/swriter/toolbar/moreformcontrols.xml
-modules/swriter/toolbar/navigationobjectbar.xml
 modules/swriter/toolbar/numobjectbar.xml
 modules/swriter/toolbar/oleobjectbar.xml
 modules/swriter/toolbar/optimizetablebar.xml

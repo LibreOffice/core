@@ -85,9 +85,7 @@
 
 #define RID_MEDIA_TOOLBOX           (RC_SHELLS_BEGIN + 61)
 
-#define STR_SHELLNAME_NAVIGATION   (RC_SHELLS_BEGIN +  62)
-
-#define SHELLS_ACT_END              STR_SHELLNAME_NAVIGATION
+#define SHELLS_ACT_END              RID_MEDIA_TOOLBOX
 
 #if SHELLS_ACT_END > RC_SHELLS_END
 #error Resource-Id Ueberlauf in #file, #line

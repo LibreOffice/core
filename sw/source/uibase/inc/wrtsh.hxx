@@ -25,7 +25,6 @@
 #include <sortopt.hxx>
 #include <swurl.hxx>
 #include <IMark.hxx>
-#include "navmgr.hxx"
 #include <boost/optional.hpp>
 
 class Window;
@@ -455,9 +454,6 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     OUString GetSelDescr() const;
 
-    SwNavigationMgr& GetNavigationMgr() { return aNavigationMgr; }
-
-    void addCurrentPosition();
     bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
          bool bSelFrame = true );
     bool GotoINetAttr( const SwTxtINetFmt& rAttr );
@@ -525,7 +521,6 @@ private:
     } *pCrsrStack;
 
     SwView  &rView;
-    SwNavigationMgr aNavigationMgr;
 
     Point   aDest;
     bool    bDestOnStack;

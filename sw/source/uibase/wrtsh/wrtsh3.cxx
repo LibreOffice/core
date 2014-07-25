@@ -42,7 +42,6 @@ extern bool bNoInterrupt;       // in mainwn.cxx
 
 bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
-    addCurrentPosition();
     (this->*fnKillSel)( 0, false );
 
     bool bRet = true;

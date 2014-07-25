@@ -187,10 +187,6 @@ String STR_SHELLNAME_MEDIA
 {
         Text [ en-US ] = "Media" ;
 };
-String STR_SHELLNAME_NAVIGATION
-{
-        Text [ en-US ] = "Navigation" ;
-};
  //Strings for gallery/background
 String STR_SWBG_PARAGRAPH
 {

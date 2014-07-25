@@ -582,95 +582,65 @@ bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect, b
 {
     ShellMoveCrsr aTmp( this, bSelect );
     SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwCrsrShell::GotoMark( pMark, bStart );
-    if (bRet)
-        aNavigationMgr.addEntry(aPos);
-    return bRet;
+    return SwCrsrShell::GotoMark( pMark, bStart );
 }
 
 bool SwWrtShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwFEShell::GotoFly(rName, eType, bSelFrame);
-    if (bRet)
-        aNavigationMgr.addEntry(aPos);
-    return bRet;
+    return SwFEShell::GotoFly(rName, eType, bSelFrame);
 }
 
 bool SwWrtShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwCrsrShell::GotoINetAttr(rAttr);
-    if (bRet)
-        aNavigationMgr.addEntry(aPos);
-    return bRet;
+    return SwCrsrShell::GotoINetAttr(rAttr);
 }
 
 void SwWrtShell::GotoOutline( sal_uInt16 nIdx )
 {
-    addCurrentPosition();
     SwCrsrShell::GotoOutline (nIdx);
 }
 
 bool SwWrtShell::GotoOutline( const OUString& rName )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwCrsrShell::GotoOutline (rName);
-    if (bRet)
-        aNavigationMgr.addEntry(aPos);
-    return bRet;
+    return SwCrsrShell::GotoOutline (rName);
 }
 
 bool SwWrtShell::GotoRegion( const OUString& rName )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwCrsrShell::GotoRegion (rName);
-    if (bRet)
-        aNavigationMgr.addEntry(aPos);
-    return bRet;
- }
+    return SwCrsrShell::GotoRegion (rName);
+}
 
 bool SwWrtShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
                                     sal_uInt16 nSeqNo )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwCrsrShell::GotoRefMark(rRefMark, nSubType, nSeqNo);
-    if (bRet)
-        aNavigationMgr.addEntry(aPos);
-    return bRet;
+    return SwCrsrShell::GotoRefMark(rRefMark, nSubType, nSeqNo);
 }
 
 bool SwWrtShell::GotoNextTOXBase( const OUString* pName )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwCrsrShell::GotoNextTOXBase(pName);
-    if (bRet)
-        aNavigationMgr.addEntry(aPos);
-    return bRet;
+    return SwCrsrShell::GotoNextTOXBase(pName);
 }
 
 bool SwWrtShell::GotoTable( const OUString& rName )
 {
    SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwCrsrShell::GotoTable(rName);
-    if (bRet)
-        aNavigationMgr.addEntry(aPos);
-    return bRet;
+    return SwCrsrShell::GotoTable(rName);
 }
 
 bool SwWrtShell::GotoFld( const SwFmtFld& rFld ) {
     SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwCrsrShell::GotoFld(rFld);
-    if (bRet)
-        aNavigationMgr.addEntry(aPos);
-    return bRet;
+    return SwCrsrShell::GotoFld(rFld);
 }
 
 const SwRangeRedline* SwWrtShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect ) {
     SwPosition aPos = *GetCrsr()->GetPoint();
     const SwRangeRedline *pRedline = SwCrsrShell::GotoRedline(nArrPos, bSelect);
-    if (pRedline)
-        aNavigationMgr.addEntry(aPos);
     return pRedline;
 }
 

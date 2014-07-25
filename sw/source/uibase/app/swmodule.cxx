@@ -125,7 +125,6 @@
 #include <avmedia/mediatoolbox.hxx>
 
 #include <annotsh.hxx>
-#include <navsh.hxx>
 
 #include <app.hrc>
 #include <svx/xmlsecctrl.hxx>
@@ -278,7 +277,6 @@ void SwDLL::RegisterInterfaces()
     SwBezierShell::RegisterInterface(pMod);
     SwGrfShell::RegisterInterface(pMod);
     SwOleShell::RegisterInterface(pMod);
-    SwNavigationShell::RegisterInterface(pMod);
     SwWebTextShell::RegisterInterface(pMod);
     SwWebFrameShell::RegisterInterface(pMod);
     SwWebGrfShell::RegisterInterface(pMod);

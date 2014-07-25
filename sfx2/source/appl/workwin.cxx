@@ -138,7 +138,6 @@ static const ResIdToResName pToolBarResToName[] =
     { 23031,    "mediaobjectbar"       },      //draw/impress
     { 25060,    "mediaobjectbar"       },      //calc
     { 23311,    "mediaobjectbar"       },      //writer
-    { 23313,    "navigationobjectbar"  },      //writer
     { 0,        ""                     }
 };
 

@@ -657,7 +657,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/shells/langhelper \
     sw/source/uibase/shells/listsh \
     sw/source/uibase/shells/mediash \
-    sw/source/uibase/shells/navsh \
     sw/source/uibase/shells/olesh \
     sw/source/uibase/shells/slotadd \
     sw/source/uibase/shells/tabsh \
@@ -745,7 +744,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/web/wview \
     sw/source/uibase/wrtsh/delete \
     sw/source/uibase/wrtsh/move \
-    sw/source/uibase/wrtsh/navmgr \
     sw/source/uibase/wrtsh/select \
     sw/source/uibase/wrtsh/wrtsh1 \
     sw/source/uibase/wrtsh/wrtsh2 \

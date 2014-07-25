@@ -45,7 +45,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 	sw/uiconfig/swriter/toolbar/insertbar \
 	sw/uiconfig/swriter/toolbar/mediaobjectbar \
 	sw/uiconfig/swriter/toolbar/moreformcontrols \
-	sw/uiconfig/swriter/toolbar/navigationobjectbar \
 	sw/uiconfig/swriter/toolbar/numobjectbar \
 	sw/uiconfig/swriter/toolbar/oleobjectbar \
 	sw/uiconfig/swriter/toolbar/optimizetablebar \

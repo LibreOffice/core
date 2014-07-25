@@ -88,7 +88,6 @@
 #include "globals.hrc"
 #include <unomid.h>
 
-#include "navmgr.hxx"
 #include <boost/scoped_ptr.hpp>
 
 #define CTYPE_CNT   0
@@ -3357,7 +3356,6 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                         }
                     }
                 }
-                pActiveShell->GetNavigationMgr().addEntry(aPos);
             }
         }
         break;
