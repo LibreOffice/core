@@ -103,20 +103,18 @@ bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             break;
         }
 
-    sal_uInt16 i;
     SwTwips nPos = 0;
-    SwTwips nLeft = GetLeftSpace();
+    const SwTwips nLeft = GetLeftSpace();
     rTabCols.SetLeft(nLeft);
     if(bSingleLine)
     {
         // The invisible separators are taken from the old TabCols,
         // the visible coming from pTColumns.
         boost::scoped_array<TColumn> pOldTColumns(new TColumn[nAllCols + 1]);
-        SwTwips nStart = 0,
-                nEnd;
-        for(i = 0; i < nAllCols - 1; i++)
+        SwTwips nStart = 0;
+        for ( sal_uInt16 i = 0; i < nAllCols - 1; ++i )
         {
-            nEnd  = rTabCols[i] - rTabCols.GetLeft();
+            const SwTwips nEnd = rTabCols[i] - rTabCols.GetLeft();
             pOldTColumns[i].nWidth = nEnd - nStart;
             pOldTColumns[i].bVisible = !rTabCols.IsHidden(i);
             nStart = nEnd;
@@ -130,9 +128,8 @@ bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
         SwTwips nNew = 0;
         bool bOld = false;
         bool bFirst = true;
-        i = 0;
 
-        while ( i < nAllCols -1 )
+        for ( sal_uInt16 i = 0; i < nAllCols - 1; ++i )
         {
             while((bFirst || bOld ) && nOldPos < nAllCols )
             {
@@ -151,16 +148,15 @@ bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             bFirst = false;
             // They have to be inserted sorted.
             bOld = nOld < nNew;
-            nPos = sal_uInt16(bOld ? nOld : nNew);
+            nPos = bOld ? nOld : nNew;
             rTabCols[i] = nPos + nLeft;
             rTabCols.SetHidden( i, bOld );
-            i++;
         }
         rTabCols.SetRight(nLeft + nTblWidth);
     }
     else
     {
-        for ( i = 0; i < nAllCols - 1; ++i )
+        for ( sal_uInt16 i = 0; i < nAllCols - 1; ++i )
         {
             nPos += pTColumns[i].nWidth;
             rTabCols[i] = nPos + rTabCols.GetLeft();
