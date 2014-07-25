@@ -72,7 +72,12 @@ namespace svgio
 
         const SvgStyleAttributes* SvgGradientNode::getSvgStyleAttributes() const
         {
-            return &maSvgStyleAttributes;
+            static rtl::OUString aClassStrA(rtl::OUString::createFromAscii("linearGradient"));
+            static rtl::OUString aClassStrB(rtl::OUString::createFromAscii("radialGradient"));
+
+            return checkForCssStyle(
+                SVGTokenLinearGradient == getType() ? aClassStrA : aClassStrB,
+                maSvgStyleAttributes);
         }
 
         void SvgGradientNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
@@ -88,7 +93,7 @@ namespace svgio
             {
                 case SVGTokenStyle:
                 {
-                    maSvgStyleAttributes.readStyle(aContent);
+                    readLocalCssStyle(aContent);
                     break;
                 }
                 case SVGTokenX1:

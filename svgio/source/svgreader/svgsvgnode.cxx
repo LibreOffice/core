@@ -76,8 +76,23 @@ namespace svgio
 
                     if(pStyles && pStyles->getParentStyle())
                     {
-                        // #125258# no initial values when SVG has a parent style (probably CssStyle)
-                        bSetInitialValues = false;
+                        // SVG has a parent style (probably CssStyle), check if fill is set there anywhere
+                        // already. If yes, do not set the default fill (black)
+                        bool bFillSet(false);
+                        const SvgStyleAttributes* pParentStyle = pStyles->getParentStyle();
+
+                        while(pParentStyle && !bFillSet)
+                        {
+                            bFillSet = pParentStyle->isFillSet();
+                            pParentStyle = pParentStyle->getParentStyle();
+                        }
+
+                        if(bFillSet)
+                        {
+                            // #125258# no initial values when SVG has a parent style at which a fill
+                            // is already set
+                            bSetInitialValues = false;
+                        }
                     }
                 }
 
@@ -122,7 +137,7 @@ namespace svgio
             {
                 case SVGTokenStyle:
                 {
-                    maSvgStyleAttributes.readStyle(aContent);
+                    readLocalCssStyle(aContent);
                     break;
                 }
                 case SVGTokenViewBox:
