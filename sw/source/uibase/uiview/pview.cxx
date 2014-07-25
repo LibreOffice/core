@@ -112,7 +112,7 @@ static sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, bool bZoomIn)
     {
         25, 50, 75, 100, 150, 200, 400, 600
     };
-    const sal_uInt16 nZoomArrSize = sizeof(aZoomArr)/sizeof(sal_uInt16);
+    const int nZoomArrSize = static_cast<int>(SAL_N_ELEMENTS(aZoomArr));
     if (bZoomIn)
     {
         for(int i = nZoomArrSize - 1; i >= 0; --i)
@@ -229,11 +229,11 @@ void SwPagePreviewWin::CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol )
     if( !mpViewShell || !mpViewShell->GetLayout() )
         return;
 
-    sal_uInt16 nOldCol = mnCol;
+    const sal_uInt8 nOldCol = mnCol;
     mnRow = nNewRow;
     mnCol = nNewCol;
-    sal_uInt16 nPages = mnRow * mnCol,
-           nLastSttPg = mrView.GetPageCount()+1 > nPages
+    const sal_uInt16 nPages = mnRow * mnCol;
+    const sal_uInt16 nLastSttPg = mrView.GetPageCount()+1 > nPages
                             ? mrView.GetPageCount()+1 - nPages : 0;
     if( mnSttPage > nLastSttPg )
         mnSttPage = nLastSttPg;
@@ -273,10 +273,10 @@ void SwPagePreviewWin::CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol )
 int SwPagePreviewWin::MovePage( int eMoveMode )
 {
     // number of pages up
-    sal_uInt16 nPages = mnRow * mnCol;
+    const sal_uInt16 nPages = mnRow * mnCol;
     sal_uInt16 nNewSttPage = mnSttPage;
-    sal_uInt16 nPageCount = mrView.GetPageCount();
-    sal_uInt16 nDefSttPg = GetDefSttPage();
+    const sal_uInt16 nPageCount = mrView.GetPageCount();
+    const sal_uInt16 nDefSttPg = GetDefSttPage();
     bool bPaintPageAtFirstCol = true;
 
     switch( eMoveMode )
@@ -301,11 +301,11 @@ int SwPagePreviewWin::MovePage( int eMoveMode )
     {
         const sal_uInt16 nRelSttPage = mpPgPreviewLayout->ConvertAbsoluteToRelativePageNum( mnSttPage );
         const sal_uInt16 nNewAbsSttPage = mpPgPreviewLayout->ConvertRelativeToAbsolutePageNum( nRelSttPage + nPages );
-        nNewSttPage = nNewAbsSttPage < nPageCount ? nNewAbsSttPage : nPageCount;
+        nNewSttPage = std::min(nNewAbsSttPage, nPageCount);
 
         const sal_uInt16 nRelSelPage = mpPgPreviewLayout->ConvertAbsoluteToRelativePageNum( SelectedPage() );
         const sal_uInt16 nNewAbsSelPage = mpPgPreviewLayout->ConvertRelativeToAbsolutePageNum( nRelSelPage + nPages );
-        SetSelectedPage( nNewAbsSelPage < nPageCount ? nNewAbsSelPage : nPageCount );
+        SetSelectedPage( std::min(nNewAbsSelPage, nPageCount) );
 
         break;
     }
@@ -402,17 +402,11 @@ OUString SwPagePreviewWin::GetStatusStr( sal_uInt16 nPageCnt ) const
 {
     // show physical and virtual page number of
     // selected page, if it's visible.
-    sal_uInt16 nPageNum;
-    if ( mpPgPreviewLayout->IsPageVisible( mpPgPreviewLayout->SelectedPage() ) )
-    {
-        nPageNum = mpPgPreviewLayout->SelectedPage();
-    }
-    else
-    {
-        nPageNum = mnSttPage > 1 ? mnSttPage : 1;
-    }
+    const sal_uInt16 nPageNum = mpPgPreviewLayout->IsPageVisible( mpPgPreviewLayout->SelectedPage() )
+        ? mpPgPreviewLayout->SelectedPage() : std::max<sal_uInt16>(mnSttPage, 1);
+
     OUStringBuffer aStatusStr;
-    sal_uInt16 nVirtPageNum = mpPgPreviewLayout->GetVirtPageNumByPageNum( nPageNum );
+    const sal_uInt16 nVirtPageNum = mpPgPreviewLayout->GetVirtPageNumByPageNum( nPageNum );
     if( nVirtPageNum && nVirtPageNum != nPageNum )
     {
         aStatusStr.append( OUString::number(nVirtPageNum) + " " );
@@ -424,12 +418,11 @@ OUString SwPagePreviewWin::GetStatusStr( sal_uInt16 nPageCnt ) const
 void  SwPagePreviewWin::KeyInput( const KeyEvent &rKEvt )
 {
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    sal_uInt16 nKey = rKeyCode.GetCode();
     bool bHandled = false;
     if(!rKeyCode.GetModifier())
     {
         sal_uInt16 nSlot = 0;
-        switch(nKey)
+        switch(rKeyCode.GetCode())
         {
             case KEY_ADD : nSlot = SID_ZOOM_OUT;         break;
             case KEY_ESCAPE: nSlot = FN_CLOSE_PAGEPREVIEW; break;
@@ -903,8 +896,7 @@ MOVEPAGE:
             }
             ::SetAppPrintOptions( pViewWin->GetViewShell(), false );
             bNormalPrint = false;
-            sal_uInt16 nPrtSlot = SID_PRINTDOC;
-            rReq.SetSlot( nPrtSlot );
+            rReq.SetSlot( SID_PRINTDOC );
             SfxViewShell::ExecuteSlot( rReq, SfxViewShell::GetInterface() );
             rReq.SetSlot( FN_PRINT_PAGEPREVIEW );
             return;
@@ -1403,7 +1395,7 @@ IMPL_LINK( SwPagePreview, ScrollHdl, SwScrollbar *, pScrollbar )
     {
         // Scroll how many pages??
         OUString sStateStr(sPageStr);
-        sal_uInt16 nThmbPos = (sal_uInt16)pScrollbar->GetThumbPos();
+        long nThmbPos = pScrollbar->GetThumbPos();
         if( 1 == pViewWin->GetCol() || !nThmbPos )
             ++nThmbPos;
         sStateStr += OUString::number( nThmbPos );
@@ -1440,7 +1432,7 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, SwScrollbar *, pScrollbar )
         if ( GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow() )
         {
             // Scroll how many pages ??
-            sal_uInt16 nThmbPos = (sal_uInt16)pScrollbar->GetThumbPos();
+            const sal_uInt16 nThmbPos = (sal_uInt16)pScrollbar->GetThumbPos();
             // adjust to new preview functionality
             if( nThmbPos != pViewWin->SelectedPage() )
             {
@@ -1555,7 +1547,7 @@ void SwPagePreview::ScrollViewSzChg()
         {
             //vertical scrolling by row
             // adjust to new preview functionality
-            sal_uInt16 nVisPages = pViewWin->GetRow() * pViewWin->GetCol();
+            const sal_uInt16 nVisPages = pViewWin->GetRow() * pViewWin->GetCol();
 
             pVScrollbar->SetVisibleSize( nVisPages );
             // set selected page as scroll bar position,
