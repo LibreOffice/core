@@ -188,7 +188,7 @@ sal_uInt16 SvNumberFormatter::nSystemCurrencyPosition = 0;
 #define NF_BANKSYMBOL_FIX_POSITION 1
 
 
-/***********************Funktionen SvNumberFormatter**************************/
+/************* SvNumberFormatter functions **************************/
 
 const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION   = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limits<sal_uInt16>::max()-1;
@@ -1616,7 +1616,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
     sal_uInt32 nKey = ImpIsEntry( aFormatStringUpper, nCLOffset, eLnge );
     if ( nKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        // Zielformat vorhanden
+        // Target format present
         GetOutputString( fPreviewNumber, nKey, sOutString, ppColor );
         return true;
     }
@@ -1637,7 +1637,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
         nKey = ImpIsEntry( aFormatStringUpper, nCLOffset, LANGUAGE_ENGLISH_US );
         bool bEnglishFormat = (nKey != NUMBERFORMAT_ENTRY_NOT_FOUND);
 
-        // try english --> other bzw. english nach other konvertieren
+        // Try English -> other or convert english to other
         LanguageType eFormatLang = LANGUAGE_ENGLISH_US;
         pFormatScanner->SetConvertMode( LANGUAGE_ENGLISH_US, eLnge );
         sTmpString = sFormatString;
@@ -2452,7 +2452,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
                                 CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYY, ZF_STANDARD_DATE+9 ),
                                 SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
-    //! Unfortunally TLOT intended only 10 builtin formats per category, more
+    //! Unfortunately TLOT intended only 10 builtin formats per category, more
     //! would overwrite the next category (ZF_STANDARD_TIME) :-((
     //! Therefore they are inserted with nNewExtended++ (which is also limited)
 
@@ -3673,7 +3673,7 @@ bool SvNumberFormatter::IsLocaleInstalled( LanguageType eLang )
 // static
 void SvNumberFormatter::ImpInitCurrencyTable()
 {
-    // racing condition possible:
+    // Race condition possible:
     // ::osl::MutexGuard aGuard( GetMutex() );
     // while ( !bCurrencyTableInitialized )
     //      ImpInitCurrencyTable();

@@ -222,7 +222,7 @@ found:
     case XTYP_REQUEST:
     case XTYP_ADVREQ:
         {
-            OUString aRes;          // darf erst am Ende freigegeben werden!!
+            OUString aRes; // Must be free not until the end!
             if ( pTopic->IsSystemTopic() )
             {
                 if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_TOPICS) )
@@ -285,10 +285,10 @@ found:
 
     case XTYP_ADVSTART:
         {
-            // wird das Item zum erstenmal ein HotLink ?
+            // Is the Item turning into a HotLink for the first time?
             if( !pItem->pImpData && pTopic->StartAdviseLoop() )
             {
-                // dann wurde das Item ausgewechselt
+                // Then the Item has been exchanged
                 std::vector<DdeItem*>::iterator it(std::find(pTopic->aItems.begin(),
                                                              pTopic->aItems.end(),
                                                              pItem));
@@ -302,7 +302,7 @@ found:
                 {
                     if( *(*iter)->pName == hText2 )
                     {
-                        // es wurde tatsaechlich ausgewechselt
+                        // It was exchanged indeed
                         delete pItem;
                         pItem = 0;
                         break;
@@ -310,7 +310,7 @@ found:
                 }
 
                 if( pItem )
-                    // es wurde doch nicht ausgewechselt, also wieder rein
+                    // It was not exchange, so back in
                     pTopic->aItems.push_back(pItem);
                 else
                     pItem = iter != pTopic->aItems.end() ? *iter : NULL;
@@ -383,7 +383,7 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
     DBG_ASSERT(pInst,"SVDDE:No instance data");
 
     do
-    {            // middle check loop
+    {   // middle check loop
         for ( iter = rTopics.begin(); iter != rTopics.end(); ++iter )
         {
             if ( *(*iter)->pName == hTopic )
@@ -394,11 +394,11 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
         if( !bContinue )
             break;
 
-        // dann befragen wir doch mal unsere Ableitung:
+        // Let's query our subclass
         TCHAR chBuf[250];
         DdeQueryString(pInst->hDdeInstSvr,hTopic,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
         bContinue = rService.MakeTopic( reinterpret_cast<const sal_Unicode*>(chBuf) );
-        // dann muessen wir noch mal suchen
+        // We need to search again
     }
     while( bContinue );
 
@@ -416,8 +416,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
     bool bContinue = false;
 
     do
-    {            // middle check loop
-
+    {   // middle check loop
         for ( iter = rItems.begin(); iter != rItems.end(); ++iter )
         {
             if ( *(*iter)->pName == hItem )
@@ -427,11 +426,11 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
         if( !bContinue )
             break;
 
-        // dann befragen wir doch mal unsere Ableitung:
+        // Let's query our subclass
         TCHAR chBuf[250];
         DdeQueryString(pInst->hDdeInstSvr,hItem,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
         bContinue = rTopic.MakeItem( reinterpret_cast<const sal_Unicode*>(chBuf) );
-        // dann muessen wir noch mal suchen
+        // We need to search again
     }
     while( bContinue );
 
@@ -494,12 +493,6 @@ DdeService::~DdeService()
     if ( pInst->pServicesSvr )
         pInst->pServicesSvr->erase(std::remove(pInst->pServicesSvr->begin(), pInst->pServicesSvr->end(), this), pInst->pServicesSvr->end());
 
-    // MT: Im Auftrage des Herrn (AM) auskommentiert...
-    // Grund:
-    // Bei Client/Server werden die Server nicht beendet, wenn mehr
-    // als einer gestartet.
-    // Weil keine System-Messagequeue ?!
-
     delete pSysTopic;
     delete pName;
 
@@ -553,8 +546,8 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
         if ( !DdeCmpStringHandles (*(*iter)->pName, *rTopic.pName ) )
         {
             aTopics.erase(iter);
-            // JP 27.07.95: und alle Conversions loeschen !!!
-            //              (sonst wird auf geloeschten Topics gearbeitet!!)
+            // Delete all conversions!
+            // Or else we work on deleted topics!
             for( size_t n = pConv->size(); n; )
             {
                 Conversation* pC = (*pConv)[ --n ];

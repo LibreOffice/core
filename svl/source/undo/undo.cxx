@@ -97,7 +97,7 @@ OUString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 
 void SfxUndoAction::Undo()
 {
-    // die sind nur konzeptuell pure virtual
+    // These are only conceptually pure virtual
     OSL_FAIL( "pure virtual function called: SfxUndoAction::Undo()" );
 }
 
@@ -111,7 +111,7 @@ void SfxUndoAction::UndoWithContext( SfxUndoContext& i_context )
 
 void SfxUndoAction::Redo()
 {
-    // die sind nur konzeptuell pure virtual
+    // These are only conceptually pure virtual
     OSL_FAIL( "pure virtual function called: SfxUndoAction::Redo()" );
 }
 
@@ -125,7 +125,7 @@ void SfxUndoAction::RedoWithContext( SfxUndoContext& i_context )
 
 void SfxUndoAction::Repeat(SfxRepeatTarget&)
 {
-    // die sind nur konzeptuell pure virtual
+    // These are only conceptually pure virtual
     OSL_FAIL( "pure virtual function called: SfxUndoAction::Repeat()" );
 }
 
@@ -931,15 +931,11 @@ void SfxUndoManager::RemoveUndoListener( SfxUndoListener& i_listener )
     }
 }
 
-
+/**
+ * Inserts a ListUndoAction and sets its UndoArray as current.
+ */
 void SfxUndoManager::EnterListAction( const OUString& rComment,
                                       const OUString &rRepeatComment, sal_uInt16 nId )
-
-/*  [Beschreibung]
-
-    Fuegt eine ListUndoAction ein und setzt dessen UndoArray als aktuelles.
-*/
-
 {
     UndoManagerGuard aGuard( *m_pData );
 
@@ -952,7 +948,7 @@ void SfxUndoManager::EnterListAction( const OUString& rComment,
     m_pData->pFatherUndoArray = m_pData->pActUndoArray;
     SfxListUndoAction* pAction = new SfxListUndoAction( rComment, rRepeatComment, nId, m_pData->pActUndoArray );
     OSL_VERIFY( ImplAddUndoAction_NoNotify( pAction, false, false, aGuard ) );
-        // expected to succeed: all conditions under which it could fail should have been checked already
+    // expected to succeed: all conditions under which it could fail should have been checked already
     m_pData->pActUndoArray = pAction;
 
     // notification
@@ -1292,22 +1288,20 @@ bool SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
     return !aUndoActions.empty() && aUndoActions[aUndoActions.size()-1].pAction->Merge( pNextAction );
 }
 
-
+/**
+ * Creates a LinkAction which points to another UndoManager.
+ * Gets that UndoManagers current Action and sets it as that UndoManager's
+ * associated Action.
+ */
 SfxLinkUndoAction::SfxLinkUndoAction(::svl::IUndoManager *pManager)
-/*  [Beschreibung]
-
-    Richtet eine LinkAction ein, die auf einen weiteren UndoManager zeigt.
-    Holt sich als zugehoerige Action des weiteren UndoManagers dessen
-    aktuelle Action.
-*/
-
 {
     pUndoManager = pManager;
     SfxUndoManager* pUndoManagerImplementation = dynamic_cast< SfxUndoManager* >( pManager );
     ENSURE_OR_THROW( pUndoManagerImplementation != NULL, "unsupported undo manager implementation!" );
-        // yes, this cast is dirty. But reaching into the SfxUndoManager's implementation,
-        // directly accessing its internal stack, and tampering with an action on that stack
-        // is dirty, too.
+
+    // yes, this cast is dirty. But reaching into the SfxUndoManager's implementation,
+    // directly accessing its internal stack, and tampering with an action on that stack
+    // is dirty, too.
     if ( pManager->GetMaxUndoActionCount() )
     {
         size_t nPos = pManager->GetUndoActionCount()-1;

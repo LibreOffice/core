@@ -62,7 +62,7 @@ namespace svt
                     if ( xCurrent.is() )
                     {
                         if ( aCleanedHistory.empty() )
-                            // make some room, assume that all interfaces (from here on) are valie
+                            // make some room, assume that all interfaces (from here on) are valid
                             aCleanedHistory.reserve( _rHistory.size() - ( aLoop - _rHistory.begin() ) );
                         aCleanedHistory.push_back( InterfaceAdapter( xCurrent ) );
                     }

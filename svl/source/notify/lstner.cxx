@@ -99,7 +99,7 @@ void SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 
 void SfxListener::EndListeningAll()
 {
-    // MI: bei Optimierung beachten: Seiteneffekte von RemoveListener beachten!
+    // Attention: when optimizing this: Respect sideffects of RemoveListener!
     while ( !aBCs.empty() )
     {
         SfxBroadcaster *pBC = aBCs.front();
