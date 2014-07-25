@@ -19,16 +19,30 @@
 #ifndef INCLUDED_SVX_PALETTE_HXX
 #define INCLUDED_SVX_PALETTE_HXX
 
+#include <svx/SvxColorValueSet.hxx>
+#include <svx/xtable.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
 
+
+typedef std::pair<Color, OString> NamedColor;
+typedef std::vector< NamedColor > ColorList;
+
+
 class Palette
 {
 public:
-    typedef std::pair<Color, OString> NamedColor;
-    typedef std::vector< NamedColor > ColorList;
-private:
+    virtual ~Palette();
+
+    virtual const OUString&     GetName() = 0;
+    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) = 0;
+
+    virtual bool                IsValid() = 0;
+};
+
+class PaletteGPL : public Palette
+{
     bool        mbLoadedPalette;
     bool        mbValidPalette;
     OUString    maFName;
@@ -40,12 +54,28 @@ private:
     void        LoadPaletteHeader();
     void        LoadPalette();
 public:
-    Palette( const OUString &rFPath, const OUString &rFName );
+    PaletteGPL( const OUString &rFPath, const OUString &rFName );
+    virtual ~PaletteGPL();
 
-    const OUString&     GetName();
-    const ColorList&    GetPaletteColors();
+    virtual const OUString&     GetName();
+    virtual void                LoadColorSet( SvxColorValueSet& rColorSet );
 
-    bool                IsValid();
+    virtual bool                IsValid();
+};
+
+class PaletteSOC : public Palette
+{
+    //TODO add lazy loading
+    OUString        maName;
+    XColorListRef   mpColorList;
+public:
+    PaletteSOC( const OUString &rFPath, const OUString &rFName );
+    virtual ~PaletteSOC();
+
+    virtual const OUString&     GetName();
+    virtual void                LoadColorSet( SvxColorValueSet& rColorSet );
+
+    virtual bool                IsValid();
 };
 
 #endif // INCLUDED_SVX_PALETTE_HXX

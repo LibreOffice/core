@@ -106,20 +106,6 @@ void SvxColorValueSet::loadColorVector(const std::vector<Color>& rColorVector, c
     }
 }
 
-
-void SvxColorValueSet::loadPalette(Palette& rPalette)
-{
-    const Palette::ColorList &rColors = rPalette.GetPaletteColors();
-    Clear();
-    int nIx = 1;
-    for(Palette::ColorList::const_iterator it = rColors.begin();
-        it != rColors.end(); ++it)
-    {
-        InsertItem(nIx, it->first, OStringToOUString(it->second, RTL_TEXTENCODING_ASCII_US));
-        ++nIx;
-    }
-}
-
 Size SvxColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
 {
     if(!nEntryCount)

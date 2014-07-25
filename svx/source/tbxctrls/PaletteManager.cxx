@@ -39,6 +39,16 @@ PaletteManager::PaletteManager() :
     mnNumOfPalettes += maPalettes.size();
 }
 
+PaletteManager::~PaletteManager()
+{
+    for( std::vector<Palette*>::iterator it = maPalettes.begin();
+         it != maPalettes.end();
+         ++it)
+    {
+        delete *it;
+    }
+}
+
 void PaletteManager::LoadPalettes()
 {
     OUString aPalPath = SvtPathOptions().GetPalettePath();
@@ -57,12 +67,14 @@ void PaletteManager::LoadPalettes()
             if(aFileStat.isRegular() || aFileStat.isLink())
             {
                 OUString aFName = aFileStat.getFileName();
+                Palette* pPalette = 0;
                 if( aFName.endsWithIgnoreAsciiCase(".gpl") )
-                {
-                    Palette aPalette( aFileStat.getFileURL(), aFName );
-                    if( aPalette.IsValid() )
-                        maPalettes.push_back( aPalette );
-                }
+                    pPalette = new PaletteGPL( aFileStat.getFileURL(), aFName );
+                else if( aFName.endsWithIgnoreAsciiCase(".soc") )
+                    pPalette = new PaletteSOC( aFileStat.getFileURL(), aFName );
+
+                if( pPalette && pPalette->IsValid() )
+                    maPalettes.push_back( pPalette );
             }
         }
     }
@@ -104,10 +116,8 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
     else
     {
-        Palette& rPal = maPalettes[mnCurrentPalette-1];
-        mnColorCount = rPal.GetPaletteColors().size();
-        rColorSet.Clear();
-        rColorSet.loadPalette(rPal);
+        maPalettes[mnCurrentPalette-1]->LoadColorSet( rColorSet );
+        mnColorCount = rColorSet.GetItemCount();
     }
 }
 
@@ -117,11 +127,11 @@ std::vector<OUString> PaletteManager::GetPaletteList()
 
     aPaletteNames.push_back( STR_DEFAULT_PAL );
 
-    for( std::vector<Palette>::iterator it = maPalettes.begin();
+    for( std::vector<Palette*>::iterator it = maPalettes.begin();
          it != maPalettes.end();
          ++it)
     {
-        aPaletteNames.push_back( it->GetName() );
+        aPaletteNames.push_back( (*it)->GetName() );
     }
 
     aPaletteNames.push_back( STR_DOC_COLORS );
@@ -151,7 +161,7 @@ OUString PaletteManager::GetPaletteName()
     else if( mnCurrentPalette == mnNumOfPalettes - 1 )
         return OUString( STR_DOC_COLORS );
     else
-        return maPalettes[mnCurrentPalette - 1].GetName();
+        return maPalettes[mnCurrentPalette - 1]->GetName();
 }
 
 const Color& PaletteManager::GetLastColor()

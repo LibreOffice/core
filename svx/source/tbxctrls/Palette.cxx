@@ -19,39 +19,16 @@
 
 #include <svx/Palette.hxx>
 
-// finds first token in rStr from index, separated by whitespace
-// returns position of next token in index
-OString lcl_getToken(const OString& rStr, sal_Int32& index)
+
+Palette::~Palette()
 {
-    sal_Int32 substart, toklen = 0;
-
-    while(index < rStr.getLength() &&
-          (rStr[index] == ' ' || rStr[index] == '\n' || rStr[index] == '\t'))
-        ++index;
-    if(index == rStr.getLength())
-    {
-        index = -1;
-        return OString();
-    }
-    substart = index;
-
-    while(index < rStr.getLength() &&
-          !(rStr[index] == ' ' || rStr[index] == '\n' || rStr[index] == '\t'))
-    {
-        ++index;
-        ++toklen;
-    }
-
-    while(index < rStr.getLength() &&
-          (rStr[index] == ' ' || rStr[index] == '\n' || rStr[index] == '\t'))
-        ++index;
-    if(index == rStr.getLength())
-        index = -1;
-
-    return rStr.copy(substart, toklen);
 }
 
-Palette::Palette( const OUString &rFPath, const OUString &rFName ) :
+// PaletteGPL ------------------------------------------------------------------
+
+OString lcl_getToken(const OString& rStr, sal_Int32& index);
+
+PaletteGPL::PaletteGPL( const OUString &rFPath, const OUString &rFName ) :
     mbLoadedPalette( false ),
     mbValidPalette( false ),
     maFName( rFName ),
@@ -60,23 +37,36 @@ Palette::Palette( const OUString &rFPath, const OUString &rFName ) :
     LoadPaletteHeader();
 }
 
-const OUString& Palette::GetName()
+PaletteGPL::~PaletteGPL()
+{
+}
+
+const OUString& PaletteGPL::GetName()
 {
     return maName;
 }
 
-const Palette::ColorList& Palette::GetPaletteColors()
+void PaletteGPL::LoadColorSet( SvxColorValueSet& rColorSet )
 {
     LoadPalette();
-    return maColors;
+
+    rColorSet.Clear();
+    int nIx = 1;
+    for(ColorList::const_iterator it = maColors.begin();
+        it != maColors.end(); ++it)
+    {
+        // TODO make it->second OUString
+        rColorSet.InsertItem(nIx, it->first, OStringToOUString(it->second, RTL_TEXTENCODING_ASCII_US));
+        ++nIx;
+    }
 }
 
-bool Palette::IsValid()
+bool PaletteGPL::IsValid()
 {
     return mbValidPalette;
 }
 
-bool Palette::ReadPaletteHeader(SvFileStream& rFileStream)
+bool PaletteGPL::ReadPaletteHeader(SvFileStream& rFileStream)
 {
     OString aLine;
     OString aName;
@@ -98,14 +88,13 @@ bool Palette::ReadPaletteHeader(SvFileStream& rFileStream)
     return true;
 }
 
-//TODO make this LoadPaletteHeader and set a bool if palette is incorrect
-void Palette::LoadPaletteHeader()
+void PaletteGPL::LoadPaletteHeader()
 {
     SvFileStream aFile(maFPath, STREAM_READ);
     mbValidPalette = ReadPaletteHeader( aFile );
 }
 
-void Palette::LoadPalette()
+void PaletteGPL::LoadPalette()
 {
     if( mbLoadedPalette ) return;
     mbLoadedPalette = true;
@@ -143,6 +132,70 @@ void Palette::LoadPalette()
             maColors.push_back(std::make_pair(Color(r, g, b), name));
         }
     } while (aFile.ReadLine(aLine));
+}
+
+// finds first token in rStr from index, separated by whitespace
+// returns position of next token in index
+OString lcl_getToken(const OString& rStr, sal_Int32& index)
+{
+    sal_Int32 substart, toklen = 0;
+    OUString aWhitespaceChars( " \n\t" );
+
+    while(index < rStr.getLength() &&
+            aWhitespaceChars.indexOf( rStr[index] ) != -1)
+        ++index;
+    if(index == rStr.getLength())
+    {
+        index = -1;
+        return OString();
+    }
+    substart = index;
+
+    //counts length of token
+    while(index < rStr.getLength() &&
+            aWhitespaceChars.indexOf( rStr[index] ) == -1 )
+    {
+        ++index;
+        ++toklen;
+    }
+
+    //counts to position of next token
+    while(index < rStr.getLength() &&
+            aWhitespaceChars.indexOf( rStr[index] ) != -1 )
+        ++index;
+    if(index == rStr.getLength())
+        index = -1;
+
+    return rStr.copy(substart, toklen);
+}
+
+// PaletteSOC ------------------------------------------------------------------
+
+PaletteSOC::PaletteSOC( const OUString &rFPath, const OUString &rFName )
+{
+    maName = rFName;
+    mpColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(XCOLOR_LIST, rFPath));
+    mpColorList->Load();
+}
+
+PaletteSOC::~PaletteSOC()
+{
+}
+
+const OUString& PaletteSOC::GetName()
+{
+    return maName;
+}
+
+void PaletteSOC::LoadColorSet( SvxColorValueSet& rColorSet )
+{
+    rColorSet.Clear();
+    rColorSet.addEntriesForXColorList( *mpColorList );
+}
+
+bool PaletteSOC::IsValid()
+{
+    return mpColorList.is();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
