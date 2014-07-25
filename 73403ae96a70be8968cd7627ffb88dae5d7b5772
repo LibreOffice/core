@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_5e22e5ba",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-25T07:25:53Z",
+      "side": 1,
+      "message": "How did this compile? OUString is not in the root namespace.",
+      "revId": "73403ae96a70be8968cd7627ffb88dae5d7b5772",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
