@@ -19,11 +19,12 @@
 
 #include <textdoc.hxx>
 #include <stdlib.h>
+#include <boost/mem_fn.hpp>
 
 // compare function called by QuickSort
-static bool CompareStart( const TextCharAttrib* pFirst, const TextCharAttrib* pSecond )
+static bool CompareStart( const TextCharAttrib& pFirst, const TextCharAttrib& pSecond )
 {
-    return pFirst->GetStart() < pSecond->GetStart();
+    return pFirst.GetStart() < pSecond.GetStart();
 }
 
 TextCharAttrib::TextCharAttrib( const TextAttrib& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd )
@@ -55,12 +56,9 @@ TextCharAttribList::~TextCharAttribList()
     // PTRARR_DEL
 }
 
-void TextCharAttribList::Clear( bool bDestroyAttribs )
+void TextCharAttribList::Clear()
 {
-    if ( bDestroyAttribs )
-        for(iterator it = begin(); it != end(); ++it)
-            delete *it;
-    TextCharAttribs::clear();
+    maAttribs.clear();
 }
 
 void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
@@ -68,67 +66,57 @@ void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
     if ( pAttrib->IsEmpty() )
         mbHasEmptyAttribs = true;
 
-    const sal_uInt16 nCount = size();
     const sal_uInt16 nStart = pAttrib->GetStart(); // maybe better for Comp.Opt.
     bool bInserted = false;
-    for ( sal_uInt16 x = 0; x < nCount; x++ )
+    for (TextCharAttribs::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
     {
-        TextCharAttrib* pCurAttrib = GetAttrib( x );
-        if ( pCurAttrib->GetStart() > nStart )
+        if ( it->GetStart() > nStart )
         {
-            insert( begin() + x, pAttrib );
+            maAttribs.insert( it, pAttrib );
             bInserted = true;
             break;
         }
     }
     if ( !bInserted )
-        push_back( pAttrib );
+        maAttribs.push_back( pAttrib );
 }
 
 void TextCharAttribList::ResortAttribs()
 {
-    if ( !empty() )
-        std::sort( begin(), end(), CompareStart );
+    maAttribs.sort(CompareStart);
 }
 
 TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
 {
-    // backwards; if one ends there and the next starts there
-    // ==> the starting one counts
-    for ( sal_uInt16 nAttr = size(); nAttr; )
+    for (TextCharAttribs::reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
     {
-        TextCharAttrib* pAttr = GetAttrib( --nAttr );
-
-        if ( pAttr->GetEnd() < nPos )
+        if ( it->GetEnd() < nPos )
             return 0;
 
-        if ( ( pAttr->Which() == nWhich ) && pAttr->IsIn(nPos) )
-            return pAttr;
+        if ( ( it->Which() == nWhich ) && it->IsIn(nPos) )
+            return &*it;
     }
     return NULL;
 }
 
-TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos ) const
+const TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos ) const
 {
     DBG_ASSERT( nWhich, "FindNextAttrib: Which?" );
-    const sal_uInt16 nAttribs = size();
-    for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
+    for (TextCharAttribs::const_iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
     {
-        TextCharAttrib* pAttr = GetAttrib( nAttr );
-        if ( ( pAttr->GetStart() >= nFromPos ) &&
-             ( pAttr->GetEnd() <= nMaxPos ) &&
-             ( pAttr->Which() == nWhich ) )
-            return pAttr;
+        if ( ( it->GetStart() >= nFromPos ) &&
+             ( it->GetEnd() <= nMaxPos ) &&
+             ( it->Which() == nWhich ) )
+            return &*it;
     }
     return NULL;
 }
 
 bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
 {
-    for ( sal_uInt16 nAttr = size(); nAttr; )
+    for (TextCharAttribs::const_reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
     {
-        const TextCharAttrib* pAttr = GetAttrib( --nAttr );
-        if ( pAttr->Which() == nWhich )
+        if ( it->Which() == nWhich )
             return true;
     }
     return false;
@@ -136,16 +124,12 @@ bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
 
 bool TextCharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
 {
-    // backwards; if one ends there and the next starts there
-    // ==> the starting one counts
-    for ( sal_uInt16 nAttr = size(); nAttr; )
+    for (TextCharAttribs::reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
     {
-        TextCharAttrib* pAttr = GetAttrib( --nAttr );
-
-        if ( pAttr->GetEnd() < nBound )
+        if ( it->GetEnd() < nBound )
             return false;
 
-        if ( ( pAttr->GetStart() == nBound ) || ( pAttr->GetEnd() == nBound ) )
+        if ( ( it->GetStart() == nBound ) || ( it->GetEnd() == nBound ) )
             return true;
     }
     return false;
@@ -156,31 +140,20 @@ TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt
     if ( !mbHasEmptyAttribs )
         return 0;
 
-    const sal_uInt16 nAttribs = size();
-    for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
+    for (TextCharAttribs::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
     {
-        TextCharAttrib* pAttr = GetAttrib( nAttr );
-        if ( pAttr->GetStart() > nPos )
+        if ( it->GetStart() > nPos )
             return 0;
 
-        if ( ( pAttr->GetStart() == nPos ) && ( pAttr->GetEnd() == nPos ) && ( pAttr->Which() == nWhich ) )
-            return pAttr;
+        if ( ( it->GetStart() == nPos ) && ( it->GetEnd() == nPos ) && ( it->Which() == nWhich ) )
+            return &*it;
     }
     return 0;
 }
 
 void TextCharAttribList::DeleteEmptyAttribs()
 {
-    for ( sal_uInt16 nAttr = 0; nAttr < size(); nAttr++ )
-    {
-        TextCharAttrib* pAttr = GetAttrib( nAttr );
-        if ( pAttr->IsEmpty() )
-        {
-            erase( begin() + nAttr );
-            delete pAttr;
-            nAttr--;
-        }
-    }
+    maAttribs.erase_if(boost::mem_fn(&TextCharAttrib::IsEmpty));
     mbHasEmptyAttribs = false;
 }
 
@@ -399,9 +372,9 @@ void TextNode::Append( const TextNode& rNode )
     const sal_uInt16 nAttribs = rNode.GetCharAttribs().Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
-        TextCharAttrib* pAttrib = rNode.GetCharAttribs().GetAttrib( nAttr );
+        const TextCharAttrib& rAttrib = rNode.GetCharAttrib( nAttr );
         bool bMelted = false;
-        if ( pAttrib->GetStart() == 0 )
+        if ( rAttrib.GetStart() == 0 )
         {
             // potentially merge attributes
             sal_uInt16 nTmpAttribs = maCharAttribs.Count();
@@ -411,11 +384,11 @@ void TextNode::Append( const TextNode& rNode )
 
                 if ( pTmpAttrib->GetEnd() == nOldLen )
                 {
-                    if ( ( pTmpAttrib->Which() == pAttrib->Which() ) &&
-                         ( pTmpAttrib->GetAttr() == pAttrib->GetAttr() ) )
+                    if ( ( pTmpAttrib->Which() == rAttrib.Which() ) &&
+                         ( pTmpAttrib->GetAttr() == rAttrib.GetAttr() ) )
                     {
                         pTmpAttrib->GetEnd() =
-                            pTmpAttrib->GetEnd() + pAttrib->GetLen();
+                            pTmpAttrib->GetEnd() + rAttrib.GetLen();
                         bMelted = true;
                         break;  // there can be only one of this type at this position
                     }
@@ -425,7 +398,7 @@ void TextNode::Append( const TextNode& rNode )
 
         if ( !bMelted )
         {
-            TextCharAttrib* pNewAttrib = new TextCharAttrib( *pAttrib );
+            TextCharAttrib* pNewAttrib = new TextCharAttrib( rAttrib );
             pNewAttrib->GetStart() = pNewAttrib->GetStart() + nOldLen;
             pNewAttrib->GetEnd() = pNewAttrib->GetEnd() + nOldLen;
             maCharAttribs.InsertAttrib( pNewAttrib );

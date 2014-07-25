@@ -23,33 +23,26 @@
 #include <rtl/ustring.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>
-#include <vector>
+#include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
-class TextCharAttribs : public std::vector<TextCharAttrib*> {
-public:
-    ~TextCharAttribs()
-    {
-        for( iterator it = begin(); it != end(); ++it )
-            delete *it;
-    }
-};
-
-class TextCharAttribList : private TextCharAttribs
+class TextCharAttribList : boost::noncopyable
 {
 private:
+    typedef boost::ptr_vector<TextCharAttrib> TextCharAttribs;
+    TextCharAttribs maAttribs;
     bool            mbHasEmptyAttribs;
-
-                    TextCharAttribList( const TextCharAttribList& ) : TextCharAttribs() {}
 
 public:
                     TextCharAttribList();
                     ~TextCharAttribList();
 
-    void            Clear( bool bDestroyAttribs );
-    sal_uInt16          Count() const               { return TextCharAttribs::size(); }
+    void            Clear();
+    sal_uInt16          Count() const               { return maAttribs.size(); }
 
-    TextCharAttrib* GetAttrib( sal_uInt16 n ) const { return TextCharAttribs::operator[]( n ); }
-    void            RemoveAttrib( sal_uInt16 n )    { TextCharAttribs::erase( begin() + n ); }
+    const TextCharAttrib& GetAttrib( sal_uInt16 n ) const { return maAttribs[n]; }
+    TextCharAttrib* GetAttrib( sal_uInt16 n )       { return &maAttribs[n]; }
+    void            RemoveAttrib( sal_uInt16 n )    { maAttribs.release( maAttribs.begin() + n ).release(); }
 
     void            InsertAttrib( TextCharAttrib* pAttrib );
 
@@ -60,7 +53,7 @@ public:
     bool&           HasEmptyAttribs()       { return mbHasEmptyAttribs; }
 
     TextCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    TextCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos = 0xFFFF ) const;
+    const TextCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos = 0xFFFF ) const;
     TextCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
     bool            HasAttrib( sal_uInt16 nWhich ) const;
     bool            HasBoundingAttrib( sal_uInt16 nBound );
@@ -82,6 +75,7 @@ public:
 
     const OUString&     GetText() const         { return maText; }
 
+    const TextCharAttrib&   GetCharAttrib(sal_uInt16 nPos) const  { return maCharAttribs.GetAttrib(nPos); }
     const TextCharAttribList&   GetCharAttribs() const  { return maCharAttribs; }
     TextCharAttribList&         GetCharAttribs()        { return maCharAttribs; }
 
