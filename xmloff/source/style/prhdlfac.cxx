@@ -110,9 +110,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetPropertyHandler( sal_Int
 }
 
 // Helper-methods to create and cache PropertyHandler
-XMLPropertyHandler* XMLPropertyHandlerFactory::GetHdlCache( sal_Int32 nType ) const
+const XMLPropertyHandler* XMLPropertyHandlerFactory::GetHdlCache( sal_Int32 nType ) const
 {
-    XMLPropertyHandler* pRet = NULL;
+    const XMLPropertyHandler* pRet = NULL;
 
     if( maHandlerCache.find( nType ) != maHandlerCache.end() )
         pRet = maHandlerCache.find( nType )->second;
@@ -122,7 +122,7 @@ XMLPropertyHandler* XMLPropertyHandlerFactory::GetHdlCache( sal_Int32 nType ) co
 
 void XMLPropertyHandlerFactory::PutHdlCache( sal_Int32 nType, const XMLPropertyHandler* pHdl ) const
 {
-    maHandlerCache[nType] = (XMLPropertyHandler*)pHdl;
+    maHandlerCache[nType] = pHdl;
 }
 
 const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 nType ) const

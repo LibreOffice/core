@@ -84,7 +84,7 @@ public:
 
 protected:
     /** Retrieves a PropertyHandler from the internal cache */
-    XMLPropertyHandler* GetHdlCache( sal_Int32 nType ) const;
+    const XMLPropertyHandler* GetHdlCache( sal_Int32 nType ) const;
     /** Puts a PropertyHandler into the internal cache */
     void PutHdlCache( sal_Int32 nType, const XMLPropertyHandler* pHdl ) const;
 
@@ -94,7 +94,7 @@ private:
     SAL_DLLPRIVATE const XMLPropertyHandler* GetBasicHandler( sal_Int32 nType )
         const;
 
-    typedef ::std::map< sal_Int32, XMLPropertyHandler* > CacheMap;
+    typedef ::std::map<sal_Int32, const XMLPropertyHandler*> CacheMap;
     mutable CacheMap maHandlerCache;
 };
 
