@@ -63,7 +63,7 @@ struct XMLPropertyMapEntry
      *     <li>XML_TYPE_PROP_CHART</li>
      * </ul>
      *
-     * <p>The next 6 bits are not used.</p>
+     * <p>The next 2 bits are not used.</p>
      *
      * <p>The last 12 bits specify additional rules on how to special-case the
      * value during import and export.  This value may be a combination of the
