@@ -6820,7 +6820,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     {
         case ifCOUNT:   nErg = nCount; break;
         case ifSUM:     nErg = ::rtl::math::approxAdd( nErg, fMem ); break;
-        case ifAVERAGE: nErg = ::rtl::math::approxAdd( nErg, fMem ) / nCount; break;
+        case ifAVERAGE: nErg = div(::rtl::math::approxAdd(nErg, fMem), nCount); break;
         default: ; // nothing
     }
     PushDouble( nErg );
