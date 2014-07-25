@@ -130,7 +130,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     if( !rDataLabel.mbDeleted )
     {
         // data label number format (percentage format wins over value format)
-        rFormatter.convertNumberFormat( rPropSet, rDataLabel.maNumberFormat, bShowPercent );
+        rFormatter.convertNumberFormat( rPropSet, rDataLabel.maNumberFormat );
 
         // data label text formatting (frame formatting not supported by Chart2)
         rFormatter.convertTextFormatting( rPropSet, rDataLabel.mxTextProp, OBJECTTYPE_DATALABEL );

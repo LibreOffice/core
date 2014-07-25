@@ -1084,18 +1084,17 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
     }
 }
 
-void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFormat& rNumberFormat, bool bPercentFormat )
+void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFormat& rNumberFormat )
 {
     if( mxData->mxNumFmts.is() )
     {
-        sal_Int32 nPropId = bPercentFormat ? PROP_PercentageNumberFormat : PROP_NumberFormat;
         try
         {
             sal_Int32 nIndex = rNumberFormat.maFormatCode.equalsIgnoreAsciiCase("general") ?
                 mxData->mxNumTypes->getStandardIndex( mxData->maFromLocale ) :
                 mxData->mxNumFmts->addNewConverted( rNumberFormat.maFormatCode, mxData->maEnUsLocale, mxData->maFromLocale );
             if( nIndex >= 0 )
-                rPropSet.setProperty( nPropId, nIndex );
+                rPropSet.setProperty( PROP_NumberFormat, nIndex );
         }
         catch( Exception& )
         {

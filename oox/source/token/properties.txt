@@ -350,7 +350,6 @@ ParaRightMargin
 ParaTabStops
 ParaTopMargin
 Path
-PercentageNumberFormat
 PersistName
 Perspective
 PolygonKind

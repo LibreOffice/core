@@ -130,8 +130,7 @@ public:
     /** Sets number format properties to the passed property set. */
     void                convertNumberFormat(
                             PropertySet& rPropSet,
-                            const NumberFormat& rNumberFormat,
-                            bool bPercentFormat = false );
+                            const NumberFormat& rNumberFormat );
 
     /** Sets automatic fill properties to the passed property set. */
     void                convertAutomaticFill(
