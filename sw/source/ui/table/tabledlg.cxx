@@ -67,7 +67,6 @@ SwFormatTablePage::SwFormatTablePage(Window* pParent, const SfxItemSet& rSet)
     , pTblData(0)
     , nSaveWidth(0)
     , nMinTableWidth(MINLAY)
-    , nOldAlign(0)
     , bModified(false)
     , bFull(false)
     , bHtmlMode(false)
@@ -485,10 +484,8 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
         m_aLeftMF.SaveValue();
         m_aRightMF.SaveValue();
 
-        nOldAlign = pTblData->GetAlign();
-
         bool bSetRight = false, bSetLeft = false;
-        switch( nOldAlign )
+        switch( pTblData->GetAlign() )
         {
             case text::HoriOrientation::NONE:
                 m_pFreeBtn->Check();

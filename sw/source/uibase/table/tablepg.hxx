@@ -64,7 +64,6 @@ class SwFormatTablePage : public SfxTabPage
     SwTableRep*     pTblData;
     SwTwips         nSaveWidth;
     SwTwips         nMinTableWidth;
-    sal_uInt16          nOldAlign;
     bool            bModified;
     bool            bFull:1;
     bool            bHtmlMode : 1;
