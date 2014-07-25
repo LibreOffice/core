@@ -1599,15 +1599,24 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     } else {
         m_RDFaXHTMLContentSet.insert(sXmlId);
     }
-    for (::std::vector< ::boost::shared_ptr<librdf_TypeConverter::Resource> >
-            ::iterator iter = predicates.begin(); iter != predicates.end();
-         ++iter)
+    try
     {
-        addStatementGraph_Lock(
-            librdf_TypeConverter::Statement(pSubject,
-                ::boost::dynamic_pointer_cast<librdf_TypeConverter::URI>(*iter),
-                pContent),
-            sContext, true);
+        for (::std::vector< ::boost::shared_ptr<librdf_TypeConverter::Resource> >
+                ::iterator iter = predicates.begin(); iter != predicates.end();
+             ++iter)
+        {
+            addStatementGraph_Lock(
+                librdf_TypeConverter::Statement(pSubject,
+                    ::boost::dynamic_pointer_cast<librdf_TypeConverter::URI>(*iter),
+                    pContent),
+                sContext, true);
+        }
+    }
+    catch (const container::NoSuchElementException& e)
+    {
+        throw lang::WrappedTargetRuntimeException(
+                "librdf_Repository::setStatementRDFa: "
+                "cannot addStatementGraph", *this, uno::makeAny(e));
     }
 }
 
