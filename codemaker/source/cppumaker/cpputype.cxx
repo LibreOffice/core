@@ -3039,6 +3039,9 @@ bool ExceptionType::dumpBaseMembers(
         rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
             dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
         assert(ent2.is());
+        if (!ent2.is()) {
+            return false;
+        }
         hasMember = dumpBaseMembers( out, ent2->getDirectBase(), withType,
                         eligibleForDefaults && ent2->getDirectMembers().empty() );
         int memberCount = 0;
