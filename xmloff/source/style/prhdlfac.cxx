@@ -122,9 +122,7 @@ XMLPropertyHandler* XMLPropertyHandlerFactory::GetHdlCache( sal_Int32 nType ) co
 
 void XMLPropertyHandlerFactory::PutHdlCache( sal_Int32 nType, const XMLPropertyHandler* pHdl ) const
 {
-    // Don't be wondered about the following construct. The  sense is to be able to provide a const-
-    // method as class-interface.
-    ((XMLPropertyHandlerFactory*)this)->maHandlerCache[ nType ] = (XMLPropertyHandler*)pHdl;
+    maHandlerCache[nType] = (XMLPropertyHandler*)pHdl;
 }
 
 const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 nType ) const

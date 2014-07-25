@@ -95,7 +95,7 @@ private:
         const;
 
     typedef ::std::map< sal_Int32, XMLPropertyHandler* > CacheMap;
-    CacheMap maHandlerCache;
+    mutable CacheMap maHandlerCache;
 };
 
 #endif // INCLUDED_XMLOFF_PRHDLFAC_HXX
