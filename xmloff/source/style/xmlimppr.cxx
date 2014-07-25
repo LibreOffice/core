@@ -489,7 +489,7 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
             {
                 // illegal value: check whether this property is
                 // allowed to throw this exception
-                if ( 0 == ( nPropFlags & MID_FLAG_PROPERTY_MAY_EXCEPT ) )
+                if ( 0 == ( nPropFlags & MID_FLAG_PROPERTY_MAY_THROW ) )
                 {
                     Sequence<OUString> aSeq(1);
                     aSeq[0] = rPropName;

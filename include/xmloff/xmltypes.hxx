@@ -35,6 +35,48 @@
 
 #define MID_FLAG_MASK                   0x00003fff
 
+// Import only: In general, properties may not throw exception, but
+// this one may. If it throws an IllegalArgumentException, it will be
+// silently ignored. This should be used for properties whose values
+// cannot be checked. (E.g., the printer paper tray: The tray names
+// are different for all printers, and we don't know ahead whether a
+// printer supports the trays in the current document.)
+#define MID_FLAG_PROPERTY_MAY_THROW     0x00100000
+
+// Export only: When exporting defaults, export this property even if it is
+// not set
+#define MID_FLAG_DEFAULT_ITEM_EXPORT    0x00200000
+
+// Import and Export: The property in question must exist. No call to
+// hasPropertyByName is required.
+#define MID_FLAG_MUST_EXIST             0x00400000
+
+// Export only: If an xml attribute with the same name has been exported
+// already, supply its value to the exportXML call and delete the existing
+// attribute afterwards.
+#define MID_FLAG_MERGE_ATTRIBUTE        0x00800000
+
+// Import only: If a property with the same name has been set already, supply
+// the current value to the importXML call.
+#define MID_FLAG_MERGE_PROPERTY         0x01000000
+
+// Import only: there are more entries for the same xml attribute existing
+#define MID_FLAG_MULTI_PROPERTY         0x02000000
+
+// the map entry denotes the name of an element item
+#define MID_FLAG_ELEMENT_ITEM_EXPORT    0x04000000
+#define MID_FLAG_ELEMENT_ITEM_IMPORT    0x08000000
+
+#define MID_FLAG_ELEMENT_ITEM           0x0c000000  // both import and export
+
+// the property is ignored
+#define MID_FLAG_NO_PROPERTY_EXPORT     0x10000000
+
+// the attribute is ignored (not yet implemented)
+#define MID_FLAG_NO_PROPERTY_IMPORT     0x40000000
+
+#define MID_FLAG_NO_PROPERTY            0x50000000  // both import and export
+
 // Import only: the xml attribute's value is evaluated by a call to
 // handleSpecialItem instead of calling the property handler's importXML method
 #define MID_FLAG_SPECIAL_ITEM_IMPORT    0x80000000
@@ -44,70 +86,37 @@
 #define MID_FLAG_SPECIAL_ITEM_EXPORT    0x20000000
 #define MID_FLAG_SPECIAL_ITEM           0xa0000000  // both import and export
 
-// the map entry denotes the name of an element item
-#define MID_FLAG_ELEMENT_ITEM_IMPORT    0x08000000
-#define MID_FLAG_ELEMENT_ITEM_EXPORT    0x04000000
-#define MID_FLAG_ELEMENT_ITEM           0x0c000000  // both import and export
-
-// the attribute is ignored (not yet implemented)
-#define MID_FLAG_NO_PROPERTY_IMPORT     0x40000000
-
-// the property is ignored
-#define MID_FLAG_NO_PROPERTY_EXPORT     0x10000000
-#define MID_FLAG_NO_PROPERTY            0x50000000  // both import and export
-
-// Import only: there are more entries for the same xml attribute existing
-#define MID_FLAG_MULTI_PROPERTY         0x02000000
-
-// Import only: If a property with the same name has been set already, supply
-// the current value to the importXML call.
-#define MID_FLAG_MERGE_PROPERTY         0x01000000
-
-// Export only: If an xml attribute with the same name has been exported
-// already, supply its value to the exportXML call and delete the existing
-// attribute afterwards.
-#define MID_FLAG_MERGE_ATTRIBUTE        0x00800000
-
-// Import and Export: The property in question must exist. No call to
-// hasPropertyByName is required.
-#define MID_FLAG_MUST_EXIST             0x00400000
-
-// Export only: When exporting defaults, export this property even if it is
-// not set
-#define MID_FLAG_DEFAULT_ITEM_EXPORT    0x00200000
-
-// Import only: In general, properties may not throw exception, but
-// this one may. If it throws an IllegalArgumentException, it will be
-// silently ignored. This should be used for properties whose values
-// cannot be checked. (E.g., the printer paper tray: The tray names
-// are different for all printers, and we don't know ahead whether a
-// printer supports the trays in the current document.)
-#define MID_FLAG_PROPERTY_MAY_EXCEPT    0x00100000
 
 #define XML_TYPE_PROP_SHIFT 14
 #define XML_TYPE_PROP_MASK (0xf << XML_TYPE_PROP_SHIFT)
 
-#define XML_TYPE_PROP_START (0x1 << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_GRAPHIC (0x1 << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_DRAWING_PAGE (0x2 << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_PAGE_LAYOUT (0x3 << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_START         (0x1 << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_GRAPHIC       (0x1 << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_DRAWING_PAGE  (0x2 << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_PAGE_LAYOUT   (0x3 << XML_TYPE_PROP_SHIFT)
 #define XML_TYPE_PROP_HEADER_FOOTER (0x4 << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_TEXT (0x5 << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_PARAGRAPH (0x6 << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_RUBY (0x7 << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_SECTION (0x8 << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_TABLE (0x9 << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_TABLE_COLUMN (0xa << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_TABLE_ROW (0xb << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_TABLE_CELL (0xc << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_LIST_LEVEL (0xd << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_CHART (0xe << XML_TYPE_PROP_SHIFT)
-#define XML_TYPE_PROP_END (0xf << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_TEXT          (0x5 << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_PARAGRAPH     (0x6 << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_RUBY          (0x7 << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_SECTION       (0x8 << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_TABLE         (0x9 << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_TABLE_COLUMN  (0xa << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_TABLE_ROW     (0xb << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_TABLE_CELL    (0xc << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_LIST_LEVEL    (0xd << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_CHART         (0xe << XML_TYPE_PROP_SHIFT)
+#define XML_TYPE_PROP_END           (0xf << XML_TYPE_PROP_SHIFT)
 
+#define XML_TYPE_APP_SHIFT 10
 
+#define XML_SC_TYPES_START   (0x1 << XML_TYPE_APP_SHIFT)
+#define XML_SD_TYPES_START   (0x2 << XML_TYPE_APP_SHIFT)
+#define XML_TEXT_TYPES_START (0x3 << XML_TYPE_APP_SHIFT)
+#define XML_SCH_TYPES_START  (0x4 << XML_TYPE_APP_SHIFT)
+#define XML_PM_TYPES_START   (0x5 << XML_TYPE_APP_SHIFT) // page master
+#define XML_DB_TYPES_START   (0x6 << XML_TYPE_APP_SHIFT)
 
 // XML-data-type-ID's
-
 
 // simple types, no special compare necessary
 #define XML_TYPE_BUILDIN_CMP 0x00002000
@@ -151,11 +160,6 @@
 #define XML_TYPE_RECTANGLE_WIDTH    0x00000102          // the Width member of a awt::Rectangle as a measure
 #define XML_TYPE_RECTANGLE_HEIGHT   0x00000103          // the Height member of a awt::Rectangle as a measure
 
-#define XML_TYPE_APP_SHIFT 10
-#define XML_SC_TYPES_START  (0x1 << XML_TYPE_APP_SHIFT)
-#define XML_SD_TYPES_START  (0x2 << XML_TYPE_APP_SHIFT)
-
-#define XML_TEXT_TYPES_START (0x3 << XML_TYPE_APP_SHIFT)
 #define XML_TYPE_TEXT_CROSSEDOUT_STYLE  (XML_TEXT_TYPES_START +   0)
 #define XML_TYPE_TEXT_CASEMAP       (XML_TEXT_TYPES_START +   1)
 #define XML_TYPE_TEXT_FONTFAMILYNAME (XML_TEXT_TYPES_START +   2)
@@ -285,10 +289,6 @@
 #define XML_SW_TYPE_BITMAP_MODE         (XML_TEXT_TYPES_START + 123)
 #define XML_SW_TYPE_BITMAPREPOFFSETX    (XML_TEXT_TYPES_START + 124)
 #define XML_SW_TYPE_BITMAPREPOFFSETY    (XML_TEXT_TYPES_START + 125)
-
-#define XML_SCH_TYPES_START (0x4 << XML_TYPE_APP_SHIFT)
-#define XML_PM_TYPES_START  (0x5 << XML_TYPE_APP_SHIFT) // page master
-#define XML_DB_TYPES_START  (0x6 << XML_TYPE_APP_SHIFT)
 
 #endif // INCLUDED_XMLOFF_XMLTYPES_HXX
 

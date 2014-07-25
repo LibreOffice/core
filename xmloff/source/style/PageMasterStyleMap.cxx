@@ -45,7 +45,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "Height",                    XML_NAMESPACE_FO,        XML_PAGE_HEIGHT,                XML_TYPE_MEASURE,                                        0 ),
     PLMAP( "NumberingType",            XML_NAMESPACE_STYLE,    XML_NUM_FORMAT,                    XML_PM_TYPE_NUMFORMAT | MID_FLAG_MERGE_PROPERTY,        0 ),
     PLMAP( "NumberingType",            XML_NAMESPACE_STYLE,    XML_NUM_LETTER_SYNC,            XML_PM_TYPE_NUMLETTERSYNC,                                0 ),
-    PLMAP( "PrinterPaperTray",        XML_NAMESPACE_STYLE,    XML_PAPER_TRAY_NAME,            XML_TYPE_STRING | MID_FLAG_PROPERTY_MAY_EXCEPT,         0 ),
+    PLMAP( "PrinterPaperTray",        XML_NAMESPACE_STYLE,    XML_PAPER_TRAY_NAME,            XML_TYPE_STRING | MID_FLAG_PROPERTY_MAY_THROW,         0 ),
     PLMAP( "IsLandscape",                XML_NAMESPACE_STYLE,    XML_PRINT_ORIENTATION,            XML_PM_TYPE_PRINTORIENTATION,                            0 ),
     PLMAP( "TopMargin",                XML_NAMESPACE_FO,        XML_MARGIN,                        XML_TYPE_MEASURE,                                        CTF_PM_MARGINALL ),
     PLMAP( "TopMargin",                XML_NAMESPACE_FO,        XML_MARGIN_TOP,                    XML_TYPE_MEASURE,                                        CTF_PM_MARGINTOP ),
