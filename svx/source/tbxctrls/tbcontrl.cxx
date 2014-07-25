@@ -945,6 +945,12 @@ void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
         Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
         SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
     }
+    else if ( rDCEvt.GetType() == DATACHANGED_FONTS )
+    {
+        // The old font list in shell has likely been destroyed at this point, so we need to get
+        // the new one before doing anything further.
+        lcl_GetDocFontList( &pFontList, this );
+    }
 
     FontNameBox::DataChanged( rDCEvt );
 }
