@@ -50,9 +50,6 @@ public:
 
                     /// DLL-init/exit-code must be linked to the DLL only
     static SC_DLLPUBLIC void     Init();     ///< called directly after loading the DLL
-
-    static sal_uLong    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
-                                    SfxFilterFlags nMust, SfxFilterFlags nDont );
 };
 
 #endif

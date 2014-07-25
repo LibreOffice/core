@@ -295,7 +295,4 @@ void ScDLL::Init()
     //  StarOne Services are now handled in the registry
 }
 
-// DetectFilter functionality has moved - please update your bookmarks
-// see sc/source/ui/unoobj/scdetect.cxx, have a nice day.
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
