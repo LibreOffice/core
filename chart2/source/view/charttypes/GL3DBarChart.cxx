@@ -146,7 +146,6 @@ private:
 private:
     glm::vec3 maStartPos;
     glm::vec3 maEndPos;
-    sal_Int32 mnSteps;
 };
 
 void RenderBenchMarkThread::ProcessMouseEvent()
