@@ -32,6 +32,46 @@ namespace chart {
 
 const size_t STEPS = 200;
 
+namespace {
+
+const float TEXT_HEIGHT = 10.0f;
+float DEFAULT_CAMERA_HEIGHT = 500.0f;
+const sal_uInt32 ID_STEP = 10;
+
+#if 0
+const float BAR_SIZE_X = 15.0f;
+const float BAR_SIZE_Y = 15.0f;
+#else
+const float BAR_SIZE_X = 30.0f;
+const float BAR_SIZE_Y = 5.0f;
+#endif
+const float BAR_DISTANCE_X = 5.0f;
+const float BAR_DISTANCE_Y = 5.0;
+
+float calculateTextWidth(const OUString& rText)
+{
+    return rText.getLength() * 10;
+}
+
+double findMaxValue(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer)
+{
+    double nMax = 0.0;
+    for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
+            itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
+    {
+        const VDataSeries& rDataSeries = *itr;
+        sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
+        for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
+        {
+            double nVal = rDataSeries.getYValue(nIndex);
+            nMax = std::max(nMax, nVal);
+        }
+    }
+    return nMax;
+}
+
+}
+
 class RenderThread : public salhelper::Thread
 {
 public:
@@ -136,20 +176,117 @@ class RenderBenchMarkThread : public RenderThread
 {
 public:
     RenderBenchMarkThread(GL3DBarChart * pChart):
-    RenderThread(pChart)
+    RenderThread(pChart),
+    mbExecuting(false)
     {
     }
+
+    void SetAnimationCamera(glm::vec3 aStartPos, glm::vec3 aEndPos, sal_Int32 nSteps);
 protected:
     virtual void execute() SAL_OVERRIDE;
 private:
     void ProcessMouseEvent();
+    void MoveCamera();
+    void MoveToBar();
+    void MoveToDefault();
 private:
     glm::vec3 maStartPos;
     glm::vec3 maEndPos;
+    sal_Int32 mnSteps;
+    bool mbExecuting;
+    glm::vec3 maStep;
+    glm::vec3 maStepDirection;
+    size_t mnStep;
+    size_t mnStepsTotal;
 };
+
+void RenderBenchMarkThread::SetAnimationCamera(glm::vec3 startPos, glm::vec3 endPos, sal_Int32 steps)
+{
+    maStartPos = startPos;
+    maEndPos = endPos;
+    mnSteps = steps;
+}
+
+void RenderBenchMarkThread::MoveCamera()
+{
+    if(mnStep < mnStepsTotal)
+    {
+        ++mnStep;
+        mpChart->maCameraPosition += maStep;
+        mpChart->mpCamera->setPosition(mpChart->maCameraPosition);
+        mpChart->maCameraDirection += maStepDirection;
+        mpChart->mpCamera->setDirection(mpChart->maCameraDirection);
+    }
+    else
+    {
+        mnStep = 0;
+        mbExecuting = false;
+        mpChart->maRenderEvent = EVENT_NON;
+    }
+}
+
+void RenderBenchMarkThread::MoveToDefault()
+{
+    if ((mpChart->maCameraPosition == mpChart->maDefaultCameraDirection) &&
+        (mpChart->maCameraDirection == mpChart->maDefaultCameraDirection))
+    {
+        mnStep = 0;
+        mbExecuting = false;
+        mpChart->maRenderEvent = EVENT_NON;
+        return;
+    }
+    if (!mbExecuting)
+    {
+        mnStepsTotal = STEPS;
+        maStep = (mpChart->maDefaultCameraPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
+        maStepDirection = (mpChart->maDefaultCameraDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
+        mbExecuting = true;
+    }
+    MoveCamera();
+}
+
+void RenderBenchMarkThread::MoveToBar()
+{
+    if (!mbExecuting)
+    {
+        mpChart->mpRenderer->SetPickingMode(true);
+        mpChart->mpCamera->render();
+        mpChart->mpRenderer->ProcessUnrenderedShape(mpChart->mbNeedsNewRender);
+        mpChart->mSelectBarId = mpChart->mpRenderer->GetPixelColorFromPoint(mpChart->maClickPos.X(), mpChart->maClickPos.Y());
+        mpChart->mpRenderer->SetPickingMode(false);
+        std::map<sal_uInt32, const GL3DBarChart::BarInformation>::const_iterator itr = mpChart->maBarMap.find(mpChart->mSelectBarId);
+        if(itr == mpChart->maBarMap.end())
+        {
+            mpChart->maRenderEvent = EVENT_NON;
+            mpChart->maClickCond.set();
+            return;
+        }
+        const GL3DBarChart::BarInformation& rBarInfo = itr->second;
+        mnStepsTotal = STEPS;
+        glm::vec3 maTargetPosition = rBarInfo.maPos;
+        maTargetPosition.z += 240;
+        maTargetPosition.x += BAR_SIZE_X / 2.0f;
+        maStep = (maTargetPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
+        glm::vec3 maTargetDirection = rBarInfo.maPos;
+        maTargetDirection.x += BAR_SIZE_X / 2.0f;
+        maTargetDirection.y += BAR_SIZE_Y / 2.0f;
+        maStepDirection = (maTargetDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
+        mpChart->maClickCond.set();
+        mbExecuting = true;
+    }
+    MoveCamera();
+}
 
 void RenderBenchMarkThread::ProcessMouseEvent()
 {
+    if (mpChart->maRenderEvent == EVENT_CLICK)
+    {
+        MoveToBar();
+    }
+    else if (mpChart->maRenderEvent == EVENT_MOVE_TO_DEFAULT)
+    {
+        MoveToDefault();
+    }
 }
 
 void RenderBenchMarkThread::execute()
@@ -189,7 +326,8 @@ GL3DBarChart::GL3DBarChart(
     mnCornerId(0),
     mbNeedsNewRender(true),
     mbCameraInit(false),
-    mbRenderDie(false)
+    mbRenderDie(false),
+    maRenderEvent(EVENT_NON)
 {
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -219,46 +357,6 @@ GL3DBarChart::~GL3DBarChart()
 
     if(mbValidContext)
         mrWindow.setRenderer(NULL);
-}
-
-namespace {
-
-const float TEXT_HEIGHT = 10.0f;
-float DEFAULT_CAMERA_HEIGHT = 500.0f;
-const sal_uInt32 ID_STEP = 10;
-
-#if 0
-const float BAR_SIZE_X = 15.0f;
-const float BAR_SIZE_Y = 15.0f;
-#else
-const float BAR_SIZE_X = 30.0f;
-const float BAR_SIZE_Y = 5.0f;
-#endif
-const float BAR_DISTANCE_X = 5.0f;
-const float BAR_DISTANCE_Y = 5.0;
-
-float calculateTextWidth(const OUString& rText)
-{
-    return rText.getLength() * 10;
-}
-
-double findMaxValue(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer)
-{
-    double nMax = 0.0;
-    for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
-            itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
-    {
-        const VDataSeries& rDataSeries = *itr;
-        sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
-        for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
-        {
-            double nVal = rDataSeries.getYValue(nIndex);
-            nMax = std::max(nMax, nVal);
-        }
-    }
-    return nMax;
-}
-
 }
 
 void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer,
@@ -503,6 +601,13 @@ void GL3DBarChart::moveToDefault()
     if(BENCH_MARK_MODE)
     {
         // add correct handling here!!
+        if (maRenderEvent != EVENT_NON)
+            return;
+
+        {
+            osl::MutexGuard aGuard(maMutex);
+            maRenderEvent = EVENT_MOVE_TO_DEFAULT;
+        }
         return;
     }
 
@@ -537,6 +642,16 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     if (BENCH_MARK_MODE)
     {
         // add correct handling here !!
+        if (maRenderEvent != EVENT_NON)
+            return;
+
+        {
+            osl::MutexGuard aGuard(maMutex);
+            maClickPos = rPos;
+            maRenderEvent = EVENT_CLICK;
+            maClickCond.reset();
+        }
+        maClickCond.wait();
         return;
     }
 
@@ -668,7 +783,6 @@ void GL3DBarChart::scroll(long nDelta)
 {
     {
         osl::MutexGuard aGuard(maMutex);
-
         glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
         maCameraPosition -= (float((nDelta/10)) * maDir);
         mpCamera->setPosition(maCameraPosition);

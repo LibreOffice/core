@@ -23,6 +23,7 @@
 
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
+#include <osl/conditn.hxx>
 
 namespace chart {
 
@@ -36,6 +37,19 @@ class TextCache;
 class Camera;
 
 }
+
+enum RenderEventType
+{
+    EVENT_NON,
+    EVENT_CLICK,
+    EVENT_MOVE_TO_DEFAULT,
+    EVENT_DRAG_LEFT,
+    EVENT_DRAG_RIGHT,
+    EVENT_SCROLL,
+    EVENT_SHOW_SCROLL,
+    EVENT_DIE
+};
+
 
 class RenderThread;
 class RenderOneFrameThread;
@@ -119,6 +133,10 @@ private:
     osl::Mutex maMutex;
     rtl::Reference<RenderThread> mpRenderThread;
     bool mbRenderDie;
+    ::osl::Condition maClickCond;
+    RenderEventType maRenderEvent;
+    sal_uInt32 mSelectBarId;
+    Point maClickPos;
 };
 
 }
