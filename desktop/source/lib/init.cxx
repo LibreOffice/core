@@ -626,13 +626,24 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 
     try
     {
+        // We specifically need to make sure we have the "headless"
+        // command arg set (various code specifically checks via
+        // CommandLineArgs). We could alternatively add some other
+        // flag elsewhere to indicate headlessness, which would
+        // then be set from here or via CommandLineArgs.
+        // (The first argument is treated specially by osl_setCommandArgs
+        // however it is valid to make it \0 instead.)
+        char sName[] = "";
+        char sHeadless[] = "--headless";
+        char* pArgs[2] = { sName, sHeadless };
+
         // If we've set up the command args elsewhere then we cannot do it
         // again (as an assert will fire), this will be the case e.g.
         // for unit tests (and possibly if UNO is being used in addition
         // to LOK in an external program).
         if (!osl_areCommandArgsSet())
         {
-            osl_setCommandArgs(0, NULL);
+            osl_setCommandArgs(2, pArgs);
         }
         initialize_uno(aAppURL);
         force_c_locale();
