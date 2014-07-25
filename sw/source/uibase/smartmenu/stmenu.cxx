@@ -43,7 +43,6 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
     const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetAppLanguageTag() ) );
 
     sal_uInt16 nMenuPos = 0;
-    sal_uInt16 nSubMenuPos = 0;
     sal_uInt16 nMenuId = 1;
     sal_uInt16 nSubMenuId = MN_ST_INSERT_START;
 
@@ -61,7 +60,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
 
     InsertSeparator(OString(), 0);
 
-    for ( sal_uInt16 j = 0; j < aActionComponentsSequence.getLength(); ++j )
+    for ( sal_Int32 j = 0; j < aActionComponentsSequence.getLength(); ++j )
     {
         Reference< container::XStringKeyMap > xSmartTagProperties = rStringKeyMaps[j];
 
@@ -93,12 +92,12 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
 
         // sub-menu starts with smart tag caption and separator
         const OUString aSmartTagCaption2 = aSmartTagCaption + ": " + aRangeText;
-        nSubMenuPos = 0;
+        sal_uInt16 nSubMenuPos = 0;
         pSbMenu->InsertItem(nMenuId++, aSmartTagCaption2, MIB_NOSELECT, OString(), nSubMenuPos++);
         pSbMenu->InsertSeparator(OString(), nSubMenuPos++);
 
         // Add subitem for every action reference for the current smart tag type:
-        for ( sal_uInt16 i = 0; i < rActionComponents.getLength(); ++i )
+        for ( sal_Int32 i = 0; i < rActionComponents.getLength(); ++i )
         {
             xAction = rActionComponents[i];
 
