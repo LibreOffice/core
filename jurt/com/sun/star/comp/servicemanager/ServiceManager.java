@@ -296,10 +296,7 @@ public class ServiceManager implements XMultiServiceFactory,
         throws com.sun.star.uno.RuntimeException
     {
         if (eventListener != null) {
-            java.util.Iterator<XEventListener> enumer = eventListener.iterator();
-
-            while (enumer.hasNext()) {
-                XEventListener listener = enumer.next();
+            for (XEventListener listener : eventListener) {
                 listener.disposing(new com.sun.star.lang.EventObject(this));
             }
             eventListener.clear();
@@ -468,16 +465,17 @@ public class ServiceManager implements XMultiServiceFactory,
 
         String[] serviceNames = xServiceInfo.getSupportedServiceNames();
 
-        for ( int i=0; i<serviceNames.length; i++ ) {
-            if ( factoriesByServiceNames.containsKey( serviceNames[i] ) ) {
-                ArrayList<Object> vec = factoriesByServiceNames.get(serviceNames[i]);
-
-                if ( !vec.remove(object) )
+        for (String serviceName : serviceNames) {
+            if (factoriesByServiceNames.containsKey(serviceName)) {
+                ArrayList<Object> vec = factoriesByServiceNames.get(serviceName);
+                if (!vec.remove(object)) {
                     System.err.println("The implementation " + xServiceInfo.getImplementationName() +
-                        " is not registered for the service " + serviceNames[i] + " - ignoring!");
-
-                if ( vec.isEmpty() ) // remove the vector if no implementations aviable for the service
-                    factoriesByServiceNames.remove( serviceNames[i] );
+                            " is not registered for the service " + serviceName + " - ignoring!");
+                }
+                // remove the vector if no implementations aviable for the service
+                if (vec.isEmpty()) {
+                    factoriesByServiceNames.remove(serviceName);
+                }
             }
         }
     }
@@ -565,12 +563,14 @@ public class ServiceManager implements XMultiServiceFactory,
     public boolean supportsService( String serviceName )
             throws com.sun.star.uno.RuntimeException
     {
-        for (int i=0; i<supportedServiceNames.length; i++)
-            if (supportedServiceNames[i].equals( serviceName )) return true;
+        for (String supportedServiceName : supportedServiceNames) {
+            if (supportedServiceName.equals(serviceName)) {
+                return true;
+            }
+        }
 
         return getImplementationName().equals(serviceName);
-
-        }
+    }
 
     /**
      * Supplies list of all supported services.
