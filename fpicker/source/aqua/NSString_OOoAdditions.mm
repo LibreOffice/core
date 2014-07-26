@@ -28,25 +28,10 @@
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "ouString", ouString);
 
-    NSString *string = [[NSString alloc] initWithOUString:ouString];
+    NSString *string = [[NSString alloc] initWithCharacters:ouString.getStr() length:ouString.getLength()];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, string);
     return [string autorelease];
-}
-
-- (id) initWithOUString:(const rtl::OUString&)ouString
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "ouString", ouString);
-    if ((self = [super init])) {
-        self = [self initWithCharacters:ouString.getStr() length:ouString.getLength()];
-        
-        DBG_PRINT_EXIT(CLASS_NAME, __func__, self);
-        
-        return self;
-    }
-    
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, self);
-    return nil;
 }
 
 - (rtl::OUString) OUString

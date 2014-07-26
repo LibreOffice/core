@@ -28,7 +28,6 @@
 //for Cocoa types
 @interface NSString (OOoAdditions)
 + (id) stringWithOUString:(const OUString&)ouString;
-- (id) initWithOUString:(const OUString&)ouString;
 - (OUString) OUString;
 @end
 
