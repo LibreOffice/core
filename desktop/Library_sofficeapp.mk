@@ -17,6 +17,13 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
     -I$(SRCDIR)/vcl/inc \
 ))
 
+$(eval $(call gb_Library_add_libs,sofficeapp,\
+    $(if $(filter $(OS),LINUX), \
+        -ldl \
+        -lpthread \
+    ) \
+))
+
 $(eval $(call gb_Library_use_external,sofficeapp,boost_headers))
 
 $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
@@ -47,6 +54,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     sfx \
     svl \
     svt \
+    sw \
     tk \
     tl \
     ucbhelper \
