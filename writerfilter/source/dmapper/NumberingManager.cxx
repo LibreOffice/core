@@ -210,33 +210,36 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetProperties( )
     return aLevelProps;
 }
 
+static bool IgnoreForCharStyle(const OUString& aStr)
+{
+    //Names found in PropertyIds.cxx, Lines 56-396
+    return (aStr=="Adjust" || aStr=="IndentAt" || aStr=="FirstLineIndent"
+            || aStr=="FirstLineOffset" || aStr=="LeftMargin" || aStr=="CharFontName"
+        );
+}
 uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
 {
     PropertyValueVector_t rProperties;
     PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-    _PropertyMap::const_iterator aMapIter = begin();
-    _PropertyMap::const_iterator aEndIter = end();
-    for( ; aMapIter != aEndIter; ++aMapIter )
+    uno::Sequence< beans::PropertyValue > vPropVals = PropertyMap::GetPropertyValues();
+    beans::PropertyValue* aValIter = vPropVals.begin();
+    beans::PropertyValue* aEndIter = vPropVals.end();
+    for( ; aValIter != aEndIter; ++aValIter )
     {
-        switch( aMapIter->first )
-        {
-            case PROP_ADJUST:
-            case PROP_INDENT_AT:
-            case PROP_FIRST_LINE_INDENT:
-            case PROP_FIRST_LINE_OFFSET:
-            case PROP_LEFT_MARGIN:
-            case PROP_CHAR_FONT_NAME:
-                // Do nothing: handled in the GetPropertyValues method
-            break;
-            default:
-            {
-                rProperties.push_back(
-                        beans::PropertyValue(
-                            aPropNameSupplier.GetName( aMapIter->first ), 0,
-                            aMapIter->second.getValue(), beans::PropertyState_DIRECT_VALUE ));
+        if (IgnoreForCharStyle(aValIter->Name))
+            continue;
+        else if(aValIter->Name=="CharInteropGrabBag" || aValIter->Name=="ParaInteropGrabBag") {
+            uno::Sequence<beans::PropertyValue> vGrabVals;
+            aValIter->Value >>= vGrabVals;
+            beans::PropertyValue* aGrabIter = vGrabVals.begin();
+            for(; aGrabIter!=vGrabVals.end(); ++aGrabIter) {
+                if(!IgnoreForCharStyle(aGrabIter->Name))
+                    rProperties.push_back(beans::PropertyValue(aGrabIter->Name, 0, aGrabIter->Value, beans::PropertyState_DIRECT_VALUE));
             }
         }
+        else
+            rProperties.push_back(beans::PropertyValue(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE));
     }
 
     uno::Sequence< beans::PropertyValue > aRet( rProperties.size() );
@@ -320,35 +323,25 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
 //  nXChFollow; following character 0 - tab, 1 - space, 2 - nothing
     aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LEVEL_FOLLOW, m_nXChFollow ));
 
-
-    _PropertyMap::const_iterator aMapIter = begin();
-    _PropertyMap::const_iterator aEndIter = end();
-    for( ; aMapIter != aEndIter; ++aMapIter )
+    const int nIds = 5;
+    PropertyIds aReadIds[nIds] =
     {
-        switch( aMapIter->first )
-        {
-            case PROP_ADJUST:
-            case PROP_INDENT_AT:
-            case PROP_FIRST_LINE_INDENT:
-            case PROP_FIRST_LINE_OFFSET:
-            case PROP_LEFT_MARGIN:
-                aNumberingProperties.push_back(
-                    beans::PropertyValue( aPropNameSupplier.GetName( aMapIter->first ), 0, aMapIter->second.getValue(), beans::PropertyState_DIRECT_VALUE ));
-            break;
-            case PROP_CHAR_FONT_NAME:
-                if( !isOutlineNumbering())
-                {
-                    aNumberingProperties.push_back(
-                        beans::PropertyValue( aPropNameSupplier.GetName( PROP_BULLET_FONT_NAME ), 0, aMapIter->second.getValue(), beans::PropertyState_DIRECT_VALUE ));
-                }
-            break;
-            default:
-            {
-                // Handled in GetCharStyleProperties method
-            }
-
-        }
+        PROP_ADJUST, PROP_INDENT_AT, PROP_FIRST_LINE_INDENT,
+            PROP_FIRST_LINE_OFFSET, PROP_LEFT_MARGIN
+    };
+    for(int i=0; i<nIds; ++i) {
+        boost::optional<PropertyMap::Property> aProp = getProperty(aReadIds[i]);
+        if (aProp)
+            aNumberingProperties.push_back(
+                    beans::PropertyValue( aPropNameSupplier.GetName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE )
+                    );
     }
+
+    boost::optional<PropertyMap::Property> aPropFont = getProperty(PROP_CHAR_FONT_NAME);
+    if(aPropFont && !isOutlineNumbering())
+        aNumberingProperties.push_back(
+                beans::PropertyValue( aPropNameSupplier.GetName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE )
+                );
 
     uno::Sequence< beans::PropertyValue > aRet(aNumberingProperties.size());
     beans::PropertyValue* pValues = aRet.getArray();
