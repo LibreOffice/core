@@ -633,7 +633,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
             }
 
             sal_Int32 nRefValue = xColumns->getReferenceValue();
-            double fRel = double( nRefValue ) / double( nColSum );
+            double fRel = nColSum ? double( nRefValue ) / double( nColSum ) : 0.0;
             uno::Sequence< text::TextColumn > aColumns( m_nColumnCount + 1 );
             text::TextColumn* pColumn = aColumns.getArray();
 
