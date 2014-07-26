@@ -166,7 +166,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     {
                         sal_Int32 nValue;
                         pAttribs->getAsInteger(nToken,nValue);
-                        OOXMLValue::Pointer_t xValue(new OOXMLIntegerValue(nValue));
+                        OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
                         pHandler->newProperty(nId, xValue);
                         pFactory->attributeAction(pHandler, nToken, xValue);
                     }
@@ -198,7 +198,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                         {
                             OUString aValue(Attribs->getValue(nToken));
                             sal_uInt32 nValue = (*pListValueMap)[aValue];
-                            OOXMLValue::Pointer_t xValue(new OOXMLIntegerValue(nValue));
+                            OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
                             pHandler->newProperty(nId, xValue);
                             pFactory->attributeAction(pHandler, nToken, xValue);
                         }
