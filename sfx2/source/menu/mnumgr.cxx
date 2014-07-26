@@ -298,13 +298,13 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
     {
         PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
         nCount = aPop.GetItemCount();
-        pSVMenu->InsertSeparator();
         for ( n=0; n<nCount; n++ )
         {
             sal_uInt16 nId = aPop.GetItemId( n );
-            pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
+            pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ), OString(), n );
             pSVMenu->SetHelpId( nId, aPop.GetHelpId( nId ));
         }
+        pSVMenu->InsertSeparator( OString(), n );
     }
 
     InsertVerbs_Impl( &pFrame->GetBindings(), pFrame->GetViewShell()->GetVerbs(), pSVMenu );
@@ -348,13 +348,13 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
     {
         PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
         nCount = aPop.GetItemCount();
-        pSVMenu->InsertSeparator();
         for ( n=0; n<nCount; n++ )
         {
             sal_uInt16 nId = aPop.GetItemId( n );
-            pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
+            pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ), OString(), n );
             pSVMenu->SetHelpId( nId, aPop.GetHelpId( nId ));
         }
+        pSVMenu->InsertSeparator( OString(), n );
     }
 
     InsertVerbs_Impl( &pFrame->GetBindings(), pFrame->GetViewShell()->GetVerbs(), pSVMenu );
