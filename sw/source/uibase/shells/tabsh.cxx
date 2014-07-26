@@ -155,7 +155,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     SvxULSpaceItem aULSpace( pFmt->GetULSpace() );
     rSet.Put( aULSpace );
 
-    sal_uInt16  nBackgroundDestination = rSh.GetViewOptions()->GetTblDest();
+    const sal_uInt16  nBackgroundDestination = rSh.GetViewOptions()->GetTblDest();
     rSet.Put(SwBackgroundDestinationItem(SID_BACKGRND_DESTINATION, nBackgroundDestination ));
     SvxBrushItem aBrush( RES_BACKGROUND );
     if(rSh.GetRowBackground(aBrush))
@@ -227,7 +227,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     // The table width is wrong for relative values.
     if(nPercent)
         nWidth = pRep->GetSpace() * nPercent / 100;
-    sal_uInt16 nAlign = pFmt->GetHoriOrient().GetHoriOrient();
+    const sal_uInt16 nAlign = pFmt->GetHoriOrient().GetHoriOrient();
     pRep->SetAlign(nAlign);
     SvxLRSpaceItem aLRSpace( pFmt->GetLRSpace() );
     SwTwips nLeft = aLRSpace.GetLeft();
@@ -274,8 +274,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     if(SFX_ITEM_SET == rSet.GetItemState(SID_BACKGRND_DESTINATION, false, &pItem))
     {
         SwViewOption aUsrPref( *rSh.GetViewOptions() );
-        sal_uInt16 nBackgroundDestination = ((SfxUInt16Item*)pItem)->GetValue();
-        aUsrPref.SetTblDest((sal_uInt8)nBackgroundDestination);
+        aUsrPref.SetTblDest((sal_uInt8)((SfxUInt16Item*)pItem)->GetValue());
         SW_MOD()->ApplyUsrPref(aUsrPref, &rSh.GetView());
     }
     bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
@@ -660,7 +659,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         const sal_uInt32* pDelArr = ((SvxNumberInfoItem*)
                                                         pNumberFormatItem)->GetDelArray();
 
-                        for ( sal_uInt16 i = 0; i < ((SvxNumberInfoItem*)pNumberFormatItem)->GetDelCount(); i++ )
+                        for ( sal_uInt32 i = 0; i < ((SvxNumberInfoItem*)pNumberFormatItem)->GetDelCount(); i++ )
                             ((SvxNumberInfoItem*)pNumberFormatItem)->
                             GetNumberFormatter()->DeleteEntry( pDelArr[i] );
                     }
@@ -882,7 +881,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
                 if( pDlg.get() && (pDlg->Execute() == 1) )
                 {
-                    sal_uInt16 nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG) ? FN_TABLE_INSERT_COL : FN_TABLE_INSERT_ROW;
+                    const sal_uInt16 nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG)
+                        ? FN_TABLE_INSERT_COL : FN_TABLE_INSERT_ROW;
                     SfxUInt16Item aCountItem( nDispatchSlot, static_cast< sal_uInt16 >(pDlg->getInsertCount()) );
                     SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
                        SfxViewFrame* pVFrame = GetView().GetViewFrame();
@@ -1095,7 +1095,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case SID_TABLE_VERT_CENTER:
         case SID_TABLE_VERT_BOTTOM:
         {
-                sal_uInt16 nAlign = nSlot == SID_TABLE_VERT_NONE ?
+            const sal_uInt16 nAlign = nSlot == SID_TABLE_VERT_NONE ?
                                 text::VertOrientation::NONE :
                                     nSlot == SID_TABLE_VERT_CENTER ?
                                         text::VertOrientation::CENTER : text::VertOrientation::BOTTOM;
@@ -1237,7 +1237,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case SID_TABLE_VERT_CENTER:
             case SID_TABLE_VERT_BOTTOM:
             {
-                sal_uInt16 nAlign = rSh.GetBoxAlign();
+                const sal_uInt16 nAlign = rSh.GetBoxAlign();
                 bool bSet = (nSlot == SID_TABLE_VERT_NONE && nAlign == text::VertOrientation::NONE) ||
                             (nSlot == SID_TABLE_VERT_CENTER && nAlign == text::VertOrientation::CENTER) ||
                             (nSlot == SID_TABLE_VERT_BOTTOM && nAlign == text::VertOrientation::BOTTOM);
@@ -1411,7 +1411,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
 
     // At first the slots, which doesn't need a FrmMgr.
     const SfxPoolItem* pItem = 0;
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
 
