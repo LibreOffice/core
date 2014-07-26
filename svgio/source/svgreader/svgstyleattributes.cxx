@@ -184,21 +184,21 @@ namespace svgio
                 if(!aTokenName.isEmpty())
                 {
                     skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(':'), nPos, nLen);
-                    rtl::OUStringBuffer aTokenValue;
+                    OUStringBuffer aTokenValue;
                     copyToLimiter(rCandidate, sal_Unicode(';'), nPos, aTokenValue, nLen);
                     skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(';'), nPos, nLen);
-                    const rtl::OUString aOUTokenName(aTokenName.makeStringAndClear());
-                    rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
+                    const OUString aOUTokenName(aTokenName.makeStringAndClear());
+                    OUString aOUTokenValue(aTokenValue.makeStringAndClear());
 
                     // check for '!important' CssStyle mark, currently not supported
                     // but neds to be extracted for correct parsing
-                    static rtl::OUString aTokenImportant(RTL_CONSTASCII_USTRINGPARAM("!important"));
+                    OUString aTokenImportant("!important");
                     const sal_Int32 nIndexTokenImportant(aOUTokenValue.indexOf(aTokenImportant));
 
                     if(-1 != nIndexTokenImportant)
                     {
                         // if there currently just remove it and remove spaces to have the value only
-                        rtl::OUString aNewOUTokenValue;
+                        OUString aNewOUTokenValue;
 
                         if(nIndexTokenImportant > 0)
                         {

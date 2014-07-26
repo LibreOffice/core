@@ -82,7 +82,7 @@ namespace svgio
         // helper to convert a string associated with a token of type SVGTokenDisplay
         // to the enum Display. Empty trings return the default 'Display_inline' with
         // which members should be initialized
-        Display getDisplayFromContent(const rtl::OUString& aContent);
+        Display getDisplayFromContent(const OUString& aContent);
 
         class SvgNode : private boost::noncopyable, public InfoProvider
         {
@@ -122,10 +122,10 @@ namespace svgio
 
         protected:
             /// helper to evtl. link to css style
-            const SvgStyleAttributes* checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const;
+            const SvgStyleAttributes* checkForCssStyle(const OUString& rClassStr, const SvgStyleAttributes& rOriginal) const;
 
             /// helper for filling the CssStyle vector once dependent on mbCssStyleVectorBuilt
-            void fillCssStyleVector(const rtl::OUString& rClassStr);
+            void fillCssStyleVector(const OUString& rClassStr);
 
         public:
             SvgNode(
@@ -135,7 +135,7 @@ namespace svgio
             virtual ~SvgNode();
 
             /// scan helper to read and interpret a local CssStyle to mpLocalCssStyle
-            void readLocalCssStyle(const rtl::OUString& aContent);
+            void readLocalCssStyle(const OUString& aContent);
 
             /// style helpers
             void parseAttributes(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs);

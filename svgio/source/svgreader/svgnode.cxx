@@ -40,7 +40,7 @@ namespace svgio
             return 0;
         }
 
-        void SvgNode::fillCssStyleVector(const rtl::OUString& rClassStr)
+        void SvgNode::fillCssStyleVector(const OUString& rClassStr)
         {
             OSL_ENSURE(!mbCssStyleVectorBuilt, "OOps, fillCssStyleVector called double ?!?");
             mbCssStyleVectorBuilt = true;
@@ -75,7 +75,7 @@ namespace svgio
                 {
                     // concatenate combined style name during search for CSS style equal to Id
                     // when travelling over node parents
-                    rtl::OUString aConcatenatedStyleName;
+                    OUString aConcatenatedStyleName;
                     const SvgNode* pCurrent = this;
                     const SvgStyleAttributes* pNew = 0;
 
@@ -104,7 +104,7 @@ namespace svgio
                 if(getClass())
                 {
                     // find all referenced CSS styles (a list of entries is allowed)
-                    const rtl::OUString* pClassList = getClass();
+                    const OUString* pClassList = getClass();
                     const sal_Int32 nLen(pClassList->getLength());
                     sal_Int32 nPos(0);
                     const SvgStyleAttributes* pNew = 0;
@@ -113,13 +113,13 @@ namespace svgio
 
                     while(nPos < nLen)
                     {
-                        rtl::OUStringBuffer aTokenValue;
+                        OUStringBuffer aTokenValue;
 
                         copyToLimiter(*pClassList, sal_Unicode(' '), nPos, aTokenValue, nLen);
                         skip_char(*pClassList, sal_Unicode(' '), nPos, nLen);
 
-                        rtl::OUString aId(rtl::OUString::createFromAscii("."));
-                        const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
+                        OUString aId(OUString::createFromAscii("."));
+                        const OUString aOUTokenValue(aTokenValue.makeStringAndClear());
 
                         // look for CSS style common to token
                         aId = aId + aOUTokenValue;
@@ -154,7 +154,7 @@ namespace svgio
             }
         }
 
-        const SvgStyleAttributes* SvgNode::checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
+        const SvgStyleAttributes* SvgNode::checkForCssStyle(const OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
         {
             if(!mbCssStyleVectorBuilt)
             {
@@ -266,7 +266,7 @@ namespace svgio
             }
         }
 
-        void SvgNode::readLocalCssStyle(const rtl::OUString& aContent)
+        void SvgNode::readLocalCssStyle(const OUString& aContent)
         {
             if(!mpLocalCssStyle)
             {
@@ -306,7 +306,7 @@ namespace svgio
             }
         }
 
-        Display getDisplayFromContent(const rtl::OUString& aContent)
+        Display getDisplayFromContent(const OUString& aContent)
         {
             if(aContent.getLength())
             {

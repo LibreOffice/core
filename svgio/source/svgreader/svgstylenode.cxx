@@ -98,15 +98,15 @@ namespace svgio
                     copyToLimiter(aContent, sal_Unicode('{'), nPos, aTokenValue, nLen);
                     skip_char(aContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
 
-                    const rtl::OUString aStyleName(aTokenValue.makeStringAndClear().trim());
+                    const OUString aStyleName(aTokenValue.makeStringAndClear().trim());
                     const sal_Int32 nLen2(aStyleName.getLength());
-                    std::vector< rtl::OUString > aStyleNames;
+                    std::vector< OUString > aStyleNames;
 
                     if(nLen2)
                     {
                         // extract names
                         sal_Int32 nPos2(0);
-                        rtl::OUStringBuffer aSingleName;
+                        OUStringBuffer aSingleName;
 
                         while(nPos2 < nLen2)
                         {
@@ -114,7 +114,7 @@ namespace svgio
                             copyToLimiter(aStyleName, sal_Unicode(' '), nPos2, aSingleName, nLen2);
                             skip_char(aStyleName, sal_Unicode(' '), nPos2, nLen2);
 
-                            const rtl::OUString aOUSingleName(aSingleName.makeStringAndClear().trim());
+                            const OUString aOUSingleName(aSingleName.makeStringAndClear().trim());
 
                             if(aOUSingleName.getLength())
                             {
@@ -127,7 +127,7 @@ namespace svgio
                     {
                         copyToLimiter(aContent, sal_Unicode('}'), nPos, aTokenValue, nLen);
                         skip_char(aContent, sal_Unicode(' '), sal_Unicode('}'), nPos, nLen);
-                        const rtl::OUString aStyleContent(aTokenValue.makeStringAndClear().trim());
+                        const OUString aStyleContent(aTokenValue.makeStringAndClear().trim());
 
                         if(!aStyleContent.isEmpty())
                         {
@@ -139,7 +139,7 @@ namespace svgio
                             pNewStyle->readStyle(aStyleContent);
 
                             // concatenate combined style name
-                            rtl::OUString aConcatenatedStyleName;
+                            OUString aConcatenatedStyleName;
 
                             for(sal_uInt32 a(0); a < aStyleNames.size(); a++)
                             {

@@ -38,7 +38,7 @@ namespace svgio
 
         const SvgStyleAttributes* SvgGradientStopNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("stop"));
+            OUString aClassStr("stop");
 
             return checkForCssStyle(aClassStr, maSvgStyleAttributes);
         }
