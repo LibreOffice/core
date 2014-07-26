@@ -119,7 +119,7 @@ public:
     OInterfaceContainer( ::osl::Mutex& _rMutex, const OInterfaceContainer& _cloneSource );
 
     // late constructor for cloning
-    void clonedFrom( const OInterfaceContainer& _cloneSource );
+    void clonedFrom(const OInterfaceContainer& _cloneSource) throw(css::uno::RuntimeException, std::exception);
 
 protected:
     virtual ~OInterfaceContainer();

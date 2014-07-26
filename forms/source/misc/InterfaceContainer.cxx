@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/form/XForm.hpp>
@@ -199,8 +200,7 @@ OInterfaceContainer::OInterfaceContainer( ::osl::Mutex& _rMutex, const OInterfac
     impl_createEventAttacher_nothrow();
 }
 
-
-void OInterfaceContainer::clonedFrom( const OInterfaceContainer& _cloneSource )
+void OInterfaceContainer::clonedFrom(const OInterfaceContainer& _cloneSource) throw(RuntimeException, std::exception)
 {
     try
     {
@@ -213,16 +213,19 @@ void OInterfaceContainer::clonedFrom( const OInterfaceContainer& _cloneSource )
             insertByIndex( i, makeAny( xClone ) );
         }
     }
-    catch( const Exception& )
+    catch (const RuntimeException&)
     {
-        throw WrappedTargetException(
+        throw;
+    }
+    catch (const Exception&)
+    {
+        throw WrappedTargetRuntimeException(
             "Could not clone the given interface hierarchy.",
             static_cast< XIndexContainer* >( const_cast< OInterfaceContainer* >( &_cloneSource ) ),
             ::cppu::getCaughtException()
         );
     }
 }
-
 
 void OInterfaceContainer::impl_createEventAttacher_nothrow()
 {
