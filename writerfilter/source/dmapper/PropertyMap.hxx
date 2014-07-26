@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Any.h>
 #include "PropertyIds.hxx"
 #include <boost/shared_ptr.hpp>
+#include <boost/optional.hpp>
 #include <map>
 #include <vector>
 
@@ -82,18 +83,16 @@ public:
 
     PropValue() : m_aValue(), m_rGrabBagType(NO_GRAB_BAG) {}
 
-    PropValue& operator=(const PropValue& rProp) { m_aValue = rProp.m_aValue; m_rGrabBagType = rProp.m_rGrabBagType; return *this; }
-
     const css::uno::Any& getValue() const { return m_aValue; }
     bool hasGrabBag() const { return m_rGrabBagType != NO_GRAB_BAG; }
     GrabBagType getGrabBagType() const { return m_rGrabBagType; }
 };
-typedef std::map< PropertyIds, PropValue > _PropertyMap;
 
-class PropertyMap : public _PropertyMap
+class PropertyMap
 {
     /// Cache the property values for the GetPropertyValues() call(s).
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aValues;
+
     //marks context as footnote context - ::text( ) events contain either the footnote character or can be ignored
     //depending on sprmCSymbol
     sal_Unicode                                                                 m_cFootnoteSymbol; // 0 == invalid
@@ -101,6 +100,9 @@ class PropertyMap : public _PropertyMap
     OUString                                                             m_sFootnoteFontName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote >       m_xFootnote;
 
+    std::map< PropertyIds, PropValue >                                          m_vMap;
+
+    typedef std::map<PropertyIds,PropValue>::const_iterator                     MapIterator;
 protected:
     void Invalidate()
     {
@@ -109,16 +111,31 @@ protected:
     }
 
 public:
+    typedef std::pair<PropertyIds,css::uno::Any> Property;
+
     PropertyMap();
     virtual ~PropertyMap();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues(bool bCharGrabBag = true);
+        //Sequence: Grab Bags: The CHAR_GRAB_BAG has Name "CharInteropGrabBag" and the PARA_GRAB_BAG has Name "ParaInteropGrabBag"
+        //  the contained properties are their Value.
     bool hasEmptyPropertyValues() const {return !m_aValues.getLength();}
-    /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
-     */
+
+    //Add property, optionally overwriting existing attributes
     void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, GrabBagType rGrabBagType = NO_GRAB_BAG );
     void Insert( PropertyIds eId, const PropValue& rValue, bool bOverwrite = true );
+    //Remove a named property from *this, does nothing if the property id has not been set
+    void Erase( PropertyIds eId);
+
+    //Imports properties from pMap, overwriting those with the same PropertyIds as the current map
     void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
+
+    //Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
+    boost::optional<Property> getProperty( PropertyIds eId ) const;
+
+    //Has the property named been set (via Insert or Set)?
+    bool isSet( PropertyIds eId ) const;
+
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const { return m_xFootnote;}
     void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> const& xF ) { m_xFootnote = xF; }
 
@@ -140,8 +157,6 @@ public:
 
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
-
-
 
 class SectionPropertyMap : public PropertyMap
 {
