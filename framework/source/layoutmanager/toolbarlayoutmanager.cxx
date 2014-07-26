@@ -3676,7 +3676,7 @@ throw (uno::RuntimeException, std::exception)
                 {
                     if ( pToolBox )
                         aUIDockingElement.m_aFloatingData.m_aSize = AWTSize(pToolBox->CalcFloatingWindowSizePixel());
-                    else
+                    else if ( pWindow )
                         aUIDockingElement.m_aFloatingData.m_aSize = AWTSize(pWindow->GetOutputSizePixel());
                 }
 
