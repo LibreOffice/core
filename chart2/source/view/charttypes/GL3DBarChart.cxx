@@ -189,6 +189,7 @@ private:
     void MoveToBar();
     void MoveToDefault();
     void MoveToCorner();
+    void ProcessScroll();
 private:
     glm::vec3 maStartPos;
     glm::vec3 maEndPos;
@@ -282,6 +283,13 @@ void RenderBenchMarkThread::MoveToCorner()
     MoveCamera();
 }
 
+void RenderBenchMarkThread::ProcessScroll()
+{
+    //will add other process later
+    mpChart->maRenderEvent = EVENT_NON;
+}
+
+
 void RenderBenchMarkThread::ProcessMouseEvent()
 {
     if (mpChart->maRenderEvent == EVENT_CLICK)
@@ -295,6 +303,10 @@ void RenderBenchMarkThread::ProcessMouseEvent()
     else if ((mpChart->maRenderEvent == EVENT_DRAG_LEFT) || (mpChart->maRenderEvent == EVENT_DRAG_RIGHT))
     {
         MoveToCorner();
+    }
+    else if (mpChart->maRenderEvent == EVENT_SCROLL)
+    {
+        ProcessScroll();
     }
 }
 
@@ -798,6 +810,8 @@ void GL3DBarChart::scroll(long nDelta)
         glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
         maCameraPosition -= (float((nDelta/10)) * maDir);
         mpCamera->setPosition(maCameraPosition);
+        if(BENCH_MARK_MODE)
+            maRenderEvent = EVENT_SCROLL;
     }
 
     update();
