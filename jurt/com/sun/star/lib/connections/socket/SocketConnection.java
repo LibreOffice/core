@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnectionBroadcaster;
@@ -89,25 +88,19 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
     }
 
     private void notifyListeners_open() {
-        Iterator<XStreamListener> elements = _listeners.iterator();
-        while(elements.hasNext()) {
-            XStreamListener xStreamListener = elements.next();
+        for (XStreamListener xStreamListener : _listeners) {
             xStreamListener.started();
         }
     }
 
     private void notifyListeners_close() {
-        Iterator<XStreamListener> elements = _listeners.iterator();
-        while(elements.hasNext()) {
-            XStreamListener xStreamListener = elements.next();
+        for (XStreamListener xStreamListener : _listeners) {
             xStreamListener.closed();
         }
     }
 
     private void notifyListeners_error(com.sun.star.uno.Exception exception) {
-        Iterator<XStreamListener> elements = _listeners.iterator();
-        while(elements.hasNext()) {
-            XStreamListener xStreamListener = elements.next();
+        for (XStreamListener xStreamListener : _listeners) {
             xStreamListener.error(exception);
         }
     }
