@@ -19,7 +19,6 @@ package com.sun.star.lib.connections.pipe;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import com.sun.star.connection.XConnection;
@@ -103,25 +102,19 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     }
 
     private void notifyListeners_open() {
-        Iterator<XStreamListener> elements = _aListeners.iterator();
-        while(elements.hasNext()) {
-            XStreamListener xStreamListener = elements.next();
+        for (XStreamListener xStreamListener : _aListeners) {
             xStreamListener.started();
         }
     }
 
     private void notifyListeners_close() {
-        Iterator<XStreamListener> elements = _aListeners.iterator();
-        while(elements.hasNext()) {
-            XStreamListener xStreamListener = elements.next();
+        for (XStreamListener xStreamListener : _aListeners) {
             xStreamListener.closed();
         }
     }
 
     private void notifyListeners_error(com.sun.star.uno.Exception exception) {
-        Iterator<XStreamListener> elements = _aListeners.iterator();
-        while(elements.hasNext()) {
-            XStreamListener xStreamListener = elements.next();
+        for (XStreamListener xStreamListener : _aListeners) {
             xStreamListener.error(exception);
         }
     }
@@ -215,4 +208,3 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     }
 
 }
-

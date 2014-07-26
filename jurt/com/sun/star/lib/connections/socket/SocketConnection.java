@@ -89,25 +89,19 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
     }
 
     private void notifyListeners_open() {
-        Iterator<XStreamListener> elements = _listeners.iterator();
-        while(elements.hasNext()) {
-            XStreamListener xStreamListener = elements.next();
+        for (XStreamListener xStreamListener : _listeners) {
             xStreamListener.started();
         }
     }
 
     private void notifyListeners_close() {
-        Iterator<XStreamListener> elements = _listeners.iterator();
-        while(elements.hasNext()) {
-            XStreamListener xStreamListener = elements.next();
+        for (XStreamListener xStreamListener : _listeners) {
             xStreamListener.closed();
         }
     }
 
     private void notifyListeners_error(com.sun.star.uno.Exception exception) {
-        Iterator<XStreamListener> elements = _listeners.iterator();
-        while(elements.hasNext()) {
-            XStreamListener xStreamListener = elements.next();
+        for (XStreamListener xStreamListener : _listeners) {
             xStreamListener.error(exception);
         }
     }
