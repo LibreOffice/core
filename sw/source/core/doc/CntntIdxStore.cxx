@@ -312,7 +312,7 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
         if( !pFrm->GetDrawObjs() )
             return; // if we have a layout and no DrawObjs, we can skip this
     }
-    MarkEntry aSave;
+    MarkEntry aSave = { 0, false, 0 };
     BOOST_FOREACH(const SwFrmFmt* pFrmFmt, *pDoc->GetSpzFrmFmts())
     {
         if ( RES_FLYFRMFMT == pFrmFmt->Which() || RES_DRAWFRMFMT == pFrmFmt->Which() )
