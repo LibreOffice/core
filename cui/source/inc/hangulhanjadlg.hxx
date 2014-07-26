@@ -255,7 +255,7 @@ namespace svx
     private:
         SuggestionEdit*     m_pPrev;
         SuggestionEdit*     m_pNext;
-        ScrollBar*          m_rScrollBar;
+        ScrollBar*          m_pScrollBar;
 
         bool                ShouldScroll( bool _bUp ) const;
         void                DoJump( bool _bUp );

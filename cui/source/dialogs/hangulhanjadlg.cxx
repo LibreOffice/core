@@ -1354,12 +1354,12 @@ namespace svx
         if( _bUp )
         {
             if( !m_pPrev )
-                bRet = m_rScrollBar->GetThumbPos() > m_rScrollBar->GetRangeMin();
+                bRet = m_pScrollBar->GetThumbPos() > m_pScrollBar->GetRangeMin();
         }
         else
         {
             if( !m_pNext )
-                bRet = m_rScrollBar->GetThumbPos() < ( m_rScrollBar->GetRangeMax() - 4 );
+                bRet = m_pScrollBar->GetThumbPos() < ( m_pScrollBar->GetRangeMax() - 4 );
         }
 
         return bRet;
@@ -1370,13 +1370,16 @@ namespace svx
         const Link&     rLoseFocusHdl = GetLoseFocusHdl();
         if( rLoseFocusHdl.IsSet() )
             rLoseFocusHdl.Call( this );
-        m_rScrollBar->SetThumbPos( m_rScrollBar->GetThumbPos() + ( _bUp? -1 : 1 ) );
+        m_pScrollBar->SetThumbPos( m_pScrollBar->GetThumbPos() + ( _bUp? -1 : 1 ) );
 
         ( static_cast< HangulHanjaEditDictDialog* >( GetParentDialog() ) )->UpdateScrollbar();
     }
 
     SuggestionEdit::SuggestionEdit( Window* pParent, WinBits nBits )
-        :Edit( pParent, nBits )
+        : Edit(pParent, nBits)
+        , m_pPrev(NULL)
+        , m_pNext(NULL)
+        , m_pScrollBar(NULL)
     {
     }
 
@@ -1435,7 +1438,7 @@ namespace svx
 
     void SuggestionEdit::init( ScrollBar* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext)
     {
-        m_rScrollBar = pScrollBar;
+        m_pScrollBar = pScrollBar;
         m_pPrev = pPrev;
         m_pNext = pNext;
     }
