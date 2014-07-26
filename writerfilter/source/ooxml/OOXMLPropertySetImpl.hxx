@@ -103,12 +103,12 @@ class OOXMLBooleanValue : public OOXMLValue
 {
 protected:
     bool mbValue;
+    explicit OOXMLBooleanValue(bool bValue);
+    explicit OOXMLBooleanValue(const char *pValue);
 public:
     static OOXMLValue::Pointer_t Create (bool bValue);
     static OOXMLValue::Pointer_t Create (const char *pValue);
 
-    explicit OOXMLBooleanValue(bool bValue);
-    explicit OOXMLBooleanValue(const char *pValue);
     virtual ~OOXMLBooleanValue();
 
     virtual int getInt() const SAL_OVERRIDE;
@@ -205,8 +205,9 @@ class OOXMLIntegerValue : public OOXMLValue
 {
 protected:
     sal_Int32 mnValue;
-public:
     explicit OOXMLIntegerValue(sal_Int32 nValue);
+public:
+    static OOXMLValue::Pointer_t Create (sal_Int32 nValue);
     virtual ~OOXMLIntegerValue();
 
     virtual int getInt() const SAL_OVERRIDE;

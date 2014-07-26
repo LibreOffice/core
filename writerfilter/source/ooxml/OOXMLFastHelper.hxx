@@ -78,7 +78,7 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
                                      Id nId,
                                      sal_Int32 nVal)
 {
-    OOXMLValue::Pointer_t pVal(new T(nVal));
+    OOXMLValue::Pointer_t pVal(T::Create(nVal));
 
     pHandler->newProperty(nId, pVal);
 }

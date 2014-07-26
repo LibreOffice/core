@@ -583,6 +583,38 @@ OOXMLValue * OOXMLPropertySetValue::clone() const
   class OOXMLIntegerValue
 */
 
+OOXMLValue::Pointer_t OOXMLIntegerValue::Create(sal_Int32 nValue)
+{
+    static OOXMLValue::Pointer_t Zero(new OOXMLIntegerValue (0));
+    static OOXMLValue::Pointer_t One(new OOXMLIntegerValue (1));
+    static OOXMLValue::Pointer_t Two(new OOXMLIntegerValue (2));
+    static OOXMLValue::Pointer_t Three(new OOXMLIntegerValue (3));
+    static OOXMLValue::Pointer_t Four(new OOXMLIntegerValue (4));
+    static OOXMLValue::Pointer_t Five(new OOXMLIntegerValue (5));
+    static OOXMLValue::Pointer_t Six(new OOXMLIntegerValue (6));
+    static OOXMLValue::Pointer_t Seven(new OOXMLIntegerValue (7));
+    static OOXMLValue::Pointer_t Eight(new OOXMLIntegerValue (8));
+    static OOXMLValue::Pointer_t Nine(new OOXMLIntegerValue (9));
+
+    switch (nValue) {
+    case 0: return Zero;
+    case 1: return One;
+    case 2: return Two;
+    case 3: return Three;
+    case 4: return Four;
+    case 5: return Five;
+    case 6: return Six;
+    case 7: return Seven;
+    case 8: return Eight;
+    case 9: return Nine;
+    default: break;
+    }
+
+    OOXMLValue::Pointer_t value(new OOXMLIntegerValue(nValue));
+
+    return value;
+}
+
 OOXMLIntegerValue::OOXMLIntegerValue(sal_Int32 nValue)
 : mnValue(nValue)
 {
