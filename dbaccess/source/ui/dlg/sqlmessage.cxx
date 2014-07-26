@@ -254,7 +254,7 @@ namespace
                 &&  !lcl_hasDetails( aDisplayInfo )
                 )
             {
-                OSL_FAIL( "lcl_buildExceptionChain: useles exception: no state, no error code, no message!" );
+                OSL_FAIL( "lcl_buildExceptionChain: useless exception: no state, no error code, no message!" );
                 continue;
             }
 
