@@ -87,7 +87,6 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwDBManager* pDBManager = GetShell().GetDBManager();
-    sal_uInt16 nSlot = rReq.GetSlot();
     OUString sSourceArg, sCommandArg;
     sal_Int32 nCommandTypeArg = 0;
 
@@ -139,7 +138,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     if ( pCursorItem )
         ((const SfxUsrAnyItem*)pCursorItem)->GetValue() >>= xCursor;
 
-    switch (nSlot)
+    switch (rReq.GetSlot())
     {
         case FN_QRY_INSERT:
             {

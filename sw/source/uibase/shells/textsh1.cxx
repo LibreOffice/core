@@ -257,7 +257,7 @@ static short lcl_AskRedlineMode(Window *pWin)
                     OUString( SW_RES( STR_REDLINE_TITLE ) ),
                     OUString( SW_RES( STR_REDLINE_MSG ) ) );
     aQBox.SetImage( QueryBox::GetStandardImage() );
-    sal_uInt16 nBtnFlags = BUTTONDIALOG_DEFBUTTON |
+    const sal_uInt16 nBtnFlags = BUTTONDIALOG_DEFBUTTON |
                         BUTTONDIALOG_OKBUTTON |
                         BUTTONDIALOG_FOCUSBUTTON;
 
@@ -278,7 +278,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwWrtShell& rWrtSh = GetShell();
     const SfxPoolItem* pItem = 0;
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
     switch( nSlot )
@@ -455,7 +455,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
             {
-                sal_uInt16 nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
+                const sal_uInt16 nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
                 SfxRequest aReq( GetView().GetViewFrame(), nId );
                 if ( !pDlg->GetStr().isEmpty() )
                     aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
@@ -500,13 +500,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                 0
             };
-            sal_uInt16 *pUShorts = aResetableSetRange;
+            const sal_uInt16 *pUShorts = aResetableSetRange;
             while (*pUShorts)
             {
-                sal_uInt16 nL = pUShorts[1] - pUShorts[0] + 1;
-                sal_uInt16 nE = pUShorts[0];
-                for (sal_uInt16 i = 0; i < nL; ++i)
-                    aAttribs.insert( aAttribs.end(), nE++ );
+                for (sal_uInt16 i = pUShorts[0]; i <= pUShorts[1]; ++i)
+                    aAttribs.insert( aAttribs.end(), i );
                 pUShorts += 2;
             }
             // we don't want to change writing direction.
@@ -832,7 +830,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_TXTATR_INET :
         case FN_INSERT_HYPERLINK:
         {
-            sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
+            const sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
                 bUseDialog = false;
             // intentionally no break
@@ -865,7 +863,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_DROP_TEXT:
         case SID_ATTR_PARA_LRSPACE:
         {
-            sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
+            const sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
                 bUseDialog = false;
             // intentionally no break
@@ -1061,14 +1059,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     //SetNumRuleStart(sal_True) restarts the numbering at the value
                     //that is defined at the starting point of the numbering level
                     //otherwise the SetNodeNumStart() value determines the start
-                    //if it's set to something different than (sal_uInt16)0xFFFF
+                    //if it's set to something different than USHRT_MAX
 
                     bool bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
 
-                    // Default value for restart value has to be (sal_uInt16)0xFFFF
+                    // Default value for restart value has to be USHRT_MAX
                     // in order to indicate that the restart value of the list
                     // style has to be used on restart.
-                    sal_uInt16 nNumStart = (sal_uInt16)0xFFFF;
+                    sal_uInt16 nNumStart = USHRT_MAX;
                     if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
                         nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
@@ -1078,8 +1076,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
                 else if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                 {
-                    sal_uInt16 nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
-                    rWrtSh.SetNodeNumStart(nNumStart);
+                    rWrtSh.SetNodeNumStart(((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue());
                     rWrtSh.SetNumRuleStart(false, pPaM);
                 }
                 // #i56253#
@@ -1766,7 +1763,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_NUM_NUM_RULE_INDEX:
         {
             SwNumRule* pCurRule = (SwNumRule*)(GetShell().GetNumRuleAtCurrCrsrPos());
-            sal_uInt16  nActNumLvl = (sal_uInt16)0xFFFF;
+            sal_uInt16  nActNumLvl = USHRT_MAX;
             rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,DEFAULT_NONE));
             rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,DEFAULT_NONE));
             if( pCurRule )
@@ -1779,22 +1776,22 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 SvxNumRule aSvxRule = pCurRule->MakeSvxNumRule();
                 if ( GetShell().HasBullet())
                 {
-                    rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
-                    rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
+                    rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX, USHRT_MAX));
+                    rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX, USHRT_MAX));
                     NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(eNBOType::MIXBULLETS);
                     if ( pBullets )
                     {
-                        sal_uInt16 nBulIndex = pBullets->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
+                        const sal_uInt16 nBulIndex = pBullets->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
                         rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,nBulIndex));
                     }
                 }else if ( GetShell().HasNumber() )
                 {
-                    rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
-                    rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
+                    rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX, USHRT_MAX));
+                    rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX, USHRT_MAX));
                     NBOTypeMgrBase* pNumbering = NBOutlineTypeMgrFact::CreateInstance(eNBOType::NUMBERING);
                     if ( pNumbering )
                     {
-                        sal_uInt16 nBulIndex = pNumbering->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
+                        const sal_uInt16 nBulIndex = pNumbering->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
                         rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,nBulIndex));
                     }
                 }

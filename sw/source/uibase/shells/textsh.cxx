@@ -143,7 +143,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
         pArgs->GetItemState(nSlot, false, &pItem );
 
@@ -529,8 +529,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         if( 0!= dynamic_cast< SwWebDocShell*>( GetView().GetDocShell()) )
         {
             SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-            sal_uInt16 nExport = rHtmlOpt.GetExportMode();
-            if( HTML_CFG_MSIE == nExport )
+            if( HTML_CFG_MSIE == rHtmlOpt.GetExportMode() )
             {
                 bSingleCol = true;
             }
@@ -552,7 +551,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 aSize = ((SvxSizeItem *)pItem)->GetSize();
             if(pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem)  == SFX_ITEM_SET)
             {
-                sal_uInt16 nCols = ((SfxUInt16Item *)pItem)->GetValue();
+                const sal_uInt16 nCols = ((SfxUInt16Item *)pItem)->GetValue();
                 if( !bSingleCol && 1 < nCols )
                 {
                     SwFmtCol aFmtCol;
@@ -684,7 +683,7 @@ static bool lcl_IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect 
 
 void SwTextShell::StateInsert( SfxItemSet &rSet )
 {
-    sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
+    const bool bHtmlModeOn = ::GetHtmlMode(GetView().GetDocShell()) & HTMLMODE_ON;
     SfxWhichIter aIter( rSet );
     SwWrtShell &rSh = GetShell();
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -745,10 +744,10 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     {
                         rSet.DisableItem( nWhich );
                     }
-                    else if(SID_INSERT_FLOATINGFRAME == nWhich && nHtmlMode&HTMLMODE_ON)
+                    else if(SID_INSERT_FLOATINGFRAME == nWhich && bHtmlModeOn)
                     {
                         SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-                        sal_uInt16 nExport = rHtmlOpt.GetExportMode();
+                        const sal_uInt16 nExport = rHtmlOpt.GetExportMode();
                         if(HTML_CFG_MSIE != nExport && HTML_CFG_WRITER != nExport )
                             rSet.DisableItem(nWhich);
                     }
@@ -808,7 +807,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     }
 
                     aHLinkItem.SetInsertMode((SvxLinkInsertMode)(aHLinkItem.GetInsertMode() |
-                        ((nHtmlMode & HTMLMODE_ON) != 0 ? HLINK_HTMLMODE : 0)));
+                        (bHtmlModeOn ? HLINK_HTMLMODE : 0)));
                     aHLinkItem.SetMacroEvents ( HYPERDLG_EVENT_MOUSEOVER_OBJECT|
                         HYPERDLG_EVENT_MOUSECLICK_OBJECT | HYPERDLG_EVENT_MOUSEOUT_OBJECT );
 
@@ -838,7 +837,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 if( bDisable )
                 {
                     const SwSection* pCurrSection = rSh.GetCurrSection();
-                    sal_uInt16 nFullSectCnt = rSh.GetFullSelectedSectionCount();
+                    const sal_uInt16 nFullSectCnt = rSh.GetFullSelectedSectionCount();
                     if( pCurrSection && ( !rSh.HasSelection() || 0 != nFullSectCnt ))
                         bDisable = false;
                     else if(
