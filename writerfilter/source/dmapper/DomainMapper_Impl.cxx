@@ -623,11 +623,11 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
         //is there a tab stop set?
         if(pEntry->pProperties)
         {
-            PropertyMap::const_iterator aPropertyIter =
-                    pEntry->pProperties->find(eId);
-            if( aPropertyIter != pEntry->pProperties->end())
+            boost::optional<PropertyMap::Property> aProperty =
+                    pEntry->pProperties->getProperty(eId);
+            if( aProperty )
             {
-                return aPropertyIter->second.getValue();
+                return aProperty->second;
             }
         }
         //search until the property is set or no parent is available
@@ -775,11 +775,11 @@ void lcl_AddRangeAndStyle(
     pToBeSavedProperties->SetStartingRange(xParaCursor->getStart());
     if(pPropertyMap)
     {
-        PropertyMap::iterator aParaStyleIter = pPropertyMap->find(PROP_PARA_STYLE_NAME);
-        if( aParaStyleIter != pPropertyMap->end())
+        boost::optional<PropertyMap::Property> aParaStyle = pPropertyMap->getProperty(PROP_PARA_STYLE_NAME);
+        if( aParaStyle )
         {
             OUString sName;
-            aParaStyleIter->second.getValue() >>= sName;
+            aParaStyle->second >>= sName;
             pToBeSavedProperties->SetParaStyleName(sName);
         }
     }
@@ -1855,9 +1855,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 // Fix spacing for as-character objects. If the paragraph has CT_Spacing_after set,
                 // it needs to be set on the object too, as that's what object placement code uses.
                 PropertyMapPtr paragraphContext = GetTopContextOfType( CONTEXT_PARAGRAPH );
-                PropertyMap::const_iterator pos = paragraphContext->find(PROP_PARA_BOTTOM_MARGIN);
-                if( pos != paragraphContext->end())
-                    xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), (*pos).second.getValue() );
+                boost::optional<PropertyMap::Property> aPropMargin = paragraphContext->getProperty(PROP_PARA_BOTTOM_MARGIN);
+                if(aPropMargin)
+                    xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), aPropMargin->second );
             }
             else
             {
@@ -2244,16 +2244,16 @@ bool lcl_FindInCommand(
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
 {
     PropertyMapPtr pTopContext = GetTopContext();
-    PropertyMap::iterator aLocaleIter = pTopContext->find(PROP_CHAR_LOCALE);
-    if( aLocaleIter != pTopContext->end())
-        aLocaleIter->second.getValue() >>= rLocale;
+    boost::optional<PropertyMap::Property> pLocale = pTopContext->getProperty(PROP_CHAR_LOCALE);
+    if( pLocale )
+        pLocale->second >>= rLocale;
     else
     {
         PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
-        aLocaleIter = pParaContext->find(PROP_CHAR_LOCALE);
-        if( aLocaleIter != pParaContext->end())
+        pLocale = pParaContext->getProperty(PROP_CHAR_LOCALE);
+        if( pLocale )
         {
-            aLocaleIter->second.getValue() >>= rLocale;
+            pLocale->second >>= rLocale;
         }
     }
 }
@@ -4747,14 +4747,14 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
 {
     sal_Int32 nRet = 0;
 
-    PropertyMap::iterator it = m_pTopContext->find(PROP_NUMBERING_RULES);
+    boost::optional<PropertyMap::Property> pProp = m_pTopContext->getProperty(PROP_NUMBERING_RULES);
     uno::Reference<container::XIndexAccess> xNumberingRules;
-    if (it != m_pTopContext->end())
-        xNumberingRules.set(it->second.getValue(), uno::UNO_QUERY);
-    it = m_pTopContext->find(PROP_NUMBERING_LEVEL);
+    if (pProp)
+        xNumberingRules.set(pProp->second, uno::UNO_QUERY);
+    pProp = m_pTopContext->getProperty(PROP_NUMBERING_LEVEL);
     sal_Int32 nNumberingLevel = -1;
-    if (it != m_pTopContext->end())
-        it->second.getValue() >>= nNumberingLevel;
+    if (pProp)
+        pProp->second >>= nNumberingLevel;
     if (xNumberingRules.is() && nNumberingLevel != -1)
     {
         uno::Sequence<beans::PropertyValue> aProps;
