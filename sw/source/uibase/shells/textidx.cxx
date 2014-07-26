@@ -45,7 +45,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
        pArgs->GetItemState(nSlot, false, &pItem );
 
@@ -79,7 +79,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         case FN_EDIT_IDX_ENTRY_DLG:
         {
             SwTOXMgr aMgr(GetShellPtr());
-            sal_uInt16 nRet = RET_OK;
+            short nRet = RET_OK;
             if(aMgr.GetTOXMarkCount() > 1)
             {   // Several marks, which should it be?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
