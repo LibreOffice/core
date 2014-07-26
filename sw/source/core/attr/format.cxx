@@ -304,7 +304,8 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         // the new one
 
         // skip my own Modify
-        if( ((SwFmtChg*)pOldValue)->pChangedFmt != this &&
+        if ( pOldValue && pNewValue &&
+            ((SwFmtChg*)pOldValue)->pChangedFmt != this &&
             ((SwFmtChg*)pNewValue)->pChangedFmt == DerivedFrom() )
         {
             // attach Set to new parent
