@@ -154,7 +154,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 }
             }
 
-            if (pArgs->GetItemState(nSId) == SFX_ITEM_SET)
+            if (pArgs && pArgs->GetItemState(nSId) == SFX_ITEM_SET)
                 aStyleName = ( ( (const SfxStringItem &) pArgs->Get( nSId ) ).GetValue() );
         }
     }
@@ -171,7 +171,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             }
             pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
 
-            if (pArgs->GetItemState(SID_STYLE_REFERENCE) == SFX_ITEM_ON)
+            if (pArgs && pArgs->GetItemState(SID_STYLE_REFERENCE) == SFX_ITEM_ON)
             {
                 OUString aParentName(((const SfxStringItem&) pArgs->Get(SID_STYLE_REFERENCE)).GetValue());
                 pStyleSheet->SetParent(aParentName);
