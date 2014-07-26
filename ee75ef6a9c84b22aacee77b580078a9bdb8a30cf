@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_01bad0e1",
+        "filename": "jurt/com/sun/star/comp/loader/JavaLoader.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-26T15:55:09Z",
+      "side": 1,
+      "message": "Is this not actually a change in the other direction?",
+      "revId": "ee75ef6a9c84b22aacee77b580078a9bdb8a30cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_21eef4ec",
+        "filename": "jurt/com/sun/star/comp/servicemanager/ServiceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-26T15:55:09Z",
+      "side": 1,
+      "message": "Please do not mix code reformatting with other things.",
+      "revId": "ee75ef6a9c84b22aacee77b580078a9bdb8a30cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
