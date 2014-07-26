@@ -76,20 +76,33 @@ using namespace nsSwDocInfoSubType;
 
 extern bool bNoInterrupt;       // in mainwn.cxx
 
-static OUString& lcl_AppendRedlineStr( OUString& rStr, sal_uInt16 nRedlId )
+static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 {
+    const OUString sTitle(SW_RESSTR(STR_REDLINE_COMMENT));
+
     sal_uInt16 nResId = 0;
-    switch( nRedlId )
+    switch( pRedline->GetType() )
     {
-    case nsRedlineType_t::REDLINE_INSERT:   nResId = STR_REDLINE_INSERTED;      break;
-    case nsRedlineType_t::REDLINE_DELETE:   nResId = STR_REDLINE_DELETED;       break;
-    case nsRedlineType_t::REDLINE_FORMAT:   nResId = STR_REDLINE_FORMATED;      break;
-    case nsRedlineType_t::REDLINE_TABLE:        nResId = STR_REDLINE_TABLECHG;      break;
-    case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLLSET;    break;
+        case nsRedlineType_t::REDLINE_INSERT:
+            nResId = STR_REDLINE_INSERTED;
+            break;
+        case nsRedlineType_t::REDLINE_DELETE:
+            nResId = STR_REDLINE_DELETED;
+            break;
+        case nsRedlineType_t::REDLINE_FORMAT:
+            nResId = STR_REDLINE_FORMATED;
+            break;
+        case nsRedlineType_t::REDLINE_TABLE:
+            nResId = STR_REDLINE_TABLECHG;
+            break;
+        case nsRedlineType_t::REDLINE_FMTCOLL:
+            nResId = STR_REDLINE_FMTCOLLSET;
+            break;
+        default:
+            return sTitle;
     }
-    if( nResId )
-        rStr += SW_RESSTR( nResId );
-    return rStr;
+
+    return sTitle + SW_RESSTR( nResId );
 }
 
 void SwTextShell::ExecField(SfxRequest &rReq)
@@ -478,10 +491,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     assert(pDlg && "Dialog creation failed!");
                     pDlg->HideAuthor();
 
-                    OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
-                    ::lcl_AppendRedlineStr( sTitle, pRedline->GetType() );
-
-                    pDlg->SetText(sTitle);
+                    pDlg->SetText(lcl_BuildTitleWithRedline(pRedline));
 
                     if (bTravel)
                     {
@@ -874,10 +884,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
                     GetAppLangDateTimeString(
                                 pRedline->GetRedlineData().GetTimeStamp() ));
 
-        OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
-        ::lcl_AppendRedlineStr( sTitle, pRedline->GetType() );
-
-        pDlg->SetText(sTitle);
+        pDlg->SetText(lcl_BuildTitleWithRedline(pRedline));
     }
 
     return 0;
@@ -921,10 +928,7 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
                 GetAppLangDateTimeString(
                                 pRedline->GetRedlineData().GetTimeStamp() ));
 
-        OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
-        ::lcl_AppendRedlineStr( sTitle, pRedline->GetType() );
-
-        pDlg->SetText(sTitle);
+        pDlg->SetText(lcl_BuildTitleWithRedline(pRedline));
     }
 
     return 0;
