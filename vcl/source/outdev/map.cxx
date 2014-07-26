@@ -1601,6 +1601,10 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     aMapResSource.mnMapScNumY        = 1;                               \
     aMapResSource.mnMapScDenomX      = 1;                               \
     aMapResSource.mnMapScDenomY      = 1;                               \
+    aMapResSource.mfOffsetX          = 0.0;                             \
+    aMapResSource.mfOffsetY          = 0.0;                             \
+    aMapResSource.mfScaleX           = 1.0;                             \
+    aMapResSource.mfScaleY           = 1.0;                             \
     ImplMapRes aMapResDest(aMapResSource);                              \
                                                                         \
     if ( !mbMap || pMapModeSource != &maMapMode )                       \
@@ -1661,6 +1665,10 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     aMapResSource.mnMapScNumY        = 1;                               \
     aMapResSource.mnMapScDenomX      = 1;                               \
     aMapResSource.mnMapScDenomY      = 1;                               \
+    aMapResSource.mfOffsetX          = 0.0;                             \
+    aMapResSource.mfOffsetY          = 0.0;                             \
+    aMapResSource.mfScaleX           = 1.0;                             \
+    aMapResSource.mfScaleY           = 1.0;                             \
     ImplMapRes aMapResDest(aMapResSource);                              \
                                                                         \
     ImplCalcMapResolution( rMapModeSource, 72, 72, aMapResSource );     \
