@@ -8,7 +8,6 @@
  */
 
 #include "Util.hxx"
-
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::connectivity;
@@ -39,11 +38,18 @@ void firebird::evaluateStatusVector(ISC_STATUS_ARRAY& aStatusVector,
         const ISC_STATUS* pStatus = (const ISC_STATUS*) &aStatusVector;
 
         buf.appendAscii("firebird_sdbc error:");
-        while(fb_interpret(msg, sizeof(msg), &pStatus))
+        try
         {
-            // TODO: verify encoding
-            buf.appendAscii("\n*");
-            buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
+            while(fb_interpret(msg, sizeof(msg), &pStatus))
+            {
+                // TODO: verify encoding
+                buf.appendAscii("\n*");
+                buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
+            }
+        }
+        catch (...)
+        {
+            SAL_WARN("connectivity.firebird", "ignore fb_interpret exception");
         }
         buf.appendAscii("\ncaused by\n'").append(aCause).appendAscii("'\n");
 
