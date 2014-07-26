@@ -3287,225 +3287,225 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     // do have own attributes.  This increases the performance substantially.
 
     // more performant version for #93600#
-    if( mxExpPropMapper.is())
+    if (!mxExpPropMapper.is())
+        return;
+
+    uno::Reference< chart2::XDataSeries > xSeries( xSeriesProperties, uno::UNO_QUERY );
+
+    std::vector< XMLPropertyState > aPropertyStates;
+
+    const OUString sNumFormat("NumberFormat");
+    const OUString sPercentageNumFormat( "PercentageNumberFormat");
+
+    bool bVaryColorsByPoint = false;
+    Sequence< sal_Int32 > aDataPointSeq;
+    if( xSeriesProperties.is())
     {
-        uno::Reference< chart2::XDataSeries > xSeries( xSeriesProperties, uno::UNO_QUERY );
+        Any aAny = xSeriesProperties->getPropertyValue(
+            OUString(  "AttributedDataPoints" ));
+        aAny >>= aDataPointSeq;
+        xSeriesProperties->getPropertyValue(
+            OUString(  "VaryColorsByPoint" )) >>= bVaryColorsByPoint;
+    }
 
-        std::vector< XMLPropertyState > aPropertyStates;
+    sal_Int32 nSize = aDataPointSeq.getLength();
+    SAL_WARN_IF( nSize > nSeriesLength, "xmloff.chart", "Too many point attributes" );
 
-        const OUString sNumFormat("NumberFormat");
-        const OUString sPercentageNumFormat( "PercentageNumberFormat");
+    const sal_Int32 * pPoints = aDataPointSeq.getConstArray();
+    sal_Int32 nElement;
+    sal_Int32 nRepeat;
+    Reference< chart2::XColorScheme > xColorScheme;
+    if( xDiagram.is())
+        xColorScheme.set( xDiagram->getDefaultColorScheme());
 
-        bool bVaryColorsByPoint = false;
-        Sequence< sal_Int32 > aDataPointSeq;
-        if( xSeriesProperties.is())
+    ::std::list< SchXMLDataPointStruct > aDataPointList;
+
+    sal_Int32 nLastIndex = -1;
+    sal_Int32 nCurrIndex = 0;
+
+    // collect elements
+    if( bVaryColorsByPoint && xColorScheme.is() )
+    {
+        ::std::set< sal_Int32 > aAttrPointSet;
+        ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
+                        ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
+        const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
+        for( nElement = 0; nElement < nSeriesLength; ++nElement )
         {
-            Any aAny = xSeriesProperties->getPropertyValue(
-                OUString(  "AttributedDataPoints" ));
-            aAny >>= aDataPointSeq;
-            xSeriesProperties->getPropertyValue(
-                OUString(  "VaryColorsByPoint" )) >>= bVaryColorsByPoint;
-        }
-
-        sal_Int32 nSize = aDataPointSeq.getLength();
-        SAL_WARN_IF( nSize > nSeriesLength, "xmloff.chart", "Too many point attributes" );
-
-        const sal_Int32 * pPoints = aDataPointSeq.getConstArray();
-        sal_Int32 nElement;
-        sal_Int32 nRepeat;
-        Reference< chart2::XColorScheme > xColorScheme;
-        if( xDiagram.is())
-            xColorScheme.set( xDiagram->getDefaultColorScheme());
-
-        ::std::list< SchXMLDataPointStruct > aDataPointList;
-
-        sal_Int32 nLastIndex = -1;
-        sal_Int32 nCurrIndex = 0;
-
-        // collect elements
-        if( bVaryColorsByPoint && xColorScheme.is() )
-        {
-            ::std::set< sal_Int32 > aAttrPointSet;
-            ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
-                            ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
-            const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
-            for( nElement = 0; nElement < nSeriesLength; ++nElement )
+            aPropertyStates.clear();
+            uno::Reference< beans::XPropertySet > xPropSet;
+            bool bExportNumFmt = false;
+            if( aAttrPointSet.find( nElement ) != aEndIt )
             {
-                aPropertyStates.clear();
-                uno::Reference< beans::XPropertySet > xPropSet;
-                bool bExportNumFmt = false;
-                if( aAttrPointSet.find( nElement ) != aEndIt )
-                {
-                    try
-                    {
-                        xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
-                                    xSeries, nElement, mrExport.GetModel() );
-                        bExportNumFmt = true;
-                    }
-                    catch( const uno::Exception & rEx )
-                    {
-                        SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx.Message );
-                    }
-                }
-                else
-                {
-                    // property set only containing the color
-                    xPropSet.set( new ::xmloff::chart::ColorPropertySet(
-                                        xColorScheme->getColorByIndex( nElement )));
-                }
-                SAL_WARN_IF( !xPropSet.is(), "xmloff.chart", "Pie Segments should have properties" );
-                if( xPropSet.is())
-                {
-                    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                    if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 && bExportNumFmt )
-                    {
-                        lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                        lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
-                    }
-
-                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                    if( !aPropertyStates.empty() )
-                    {
-                        if( bExportContent )
-                        {
-                            // write data-point with style
-                            SAL_WARN_IF( maAutoStyleNameQueue.empty(), "xmloff.chart", "Autostyle queue empty!" );
-
-                            SchXMLDataPointStruct aPoint;
-                            aPoint.maStyleName = maAutoStyleNameQueue.front();
-                            maAutoStyleNameQueue.pop();
-                            aDataPointList.push_back( aPoint );
-                        }
-                        else
-                        {
-                            CollectAutoStyle( aPropertyStates );
-                        }
-                    }
-                }
-            }
-            SAL_WARN_IF( bExportContent && (static_cast<sal_Int32>(aDataPointList.size()) != nSeriesLength), "xmloff.chart", "not enough data points on content export" );
-        }
-        else
-        {
-            for( nElement = 0; nElement < nSize; ++nElement )
-            {
-                aPropertyStates.clear();
-                nCurrIndex = pPoints[ nElement ];
-                //assuming sorted indices in pPoints
-
-                if( nCurrIndex<0 || nCurrIndex>=nSeriesLength )
-                    break;
-
-                // write leading empty data points
-                if( nCurrIndex - nLastIndex > 1 )
-                {
-                    SchXMLDataPointStruct aPoint;
-                    aPoint.mnRepeat = nCurrIndex - nLastIndex - 1;
-                    aDataPointList.push_back( aPoint );
-                }
-
-                uno::Reference< beans::XPropertySet > xPropSet;
-                // get property states
                 try
                 {
                     xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
-                                    xSeries, nCurrIndex, mrExport.GetModel() );
+                                xSeries, nElement, mrExport.GetModel() );
+                    bExportNumFmt = true;
                 }
                 catch( const uno::Exception & rEx )
                 {
                     SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx.Message );
                 }
-                if( xPropSet.is())
+            }
+            else
+            {
+                // property set only containing the color
+                xPropSet.set( new ::xmloff::chart::ColorPropertySet(
+                                    xColorScheme->getColorByIndex( nElement )));
+            }
+            SAL_WARN_IF( !xPropSet.is(), "xmloff.chart", "Pie Segments should have properties" );
+            if( xPropSet.is())
+            {
+                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 && bExportNumFmt )
                 {
-                    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                    if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
-                    {
-                        lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                        lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
-                    }
-
-                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                    if( !aPropertyStates.empty() )
-                    {
-                        if( bExportContent )
-                        {
-                            // write data-point with style
-                            SAL_WARN_IF( maAutoStyleNameQueue.empty(), "xmloff.chart", "Autostyle queue empty!" );
-                            SchXMLDataPointStruct aPoint;
-                            aPoint.maStyleName = maAutoStyleNameQueue.front();
-                            maAutoStyleNameQueue.pop();
-
-                            aDataPointList.push_back( aPoint );
-                            nLastIndex = nCurrIndex;
-                        }
-                        else
-                        {
-                            CollectAutoStyle( aPropertyStates );
-                        }
-                        continue;
-                    }
+                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
+                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
                 }
 
-                // if we get here the property states are empty
-                SchXMLDataPointStruct aPoint;
-                aDataPointList.push_back( aPoint );
+                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                if( !aPropertyStates.empty() )
+                {
+                    if( bExportContent )
+                    {
+                        // write data-point with style
+                        SAL_WARN_IF( maAutoStyleNameQueue.empty(), "xmloff.chart", "Autostyle queue empty!" );
 
-                nLastIndex = nCurrIndex;
-            }
-            // final empty elements
-            nRepeat = nSeriesLength - nLastIndex - 1;
-            if( nRepeat > 0 )
-            {
-                SchXMLDataPointStruct aPoint;
-                aPoint.mnRepeat = nRepeat;
-                aDataPointList.push_back( aPoint );
+                        SchXMLDataPointStruct aPoint;
+                        aPoint.maStyleName = maAutoStyleNameQueue.front();
+                        maAutoStyleNameQueue.pop();
+                        aDataPointList.push_back( aPoint );
+                    }
+                    else
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                }
             }
         }
-
-        if( bExportContent )
+        SAL_WARN_IF( bExportContent && (static_cast<sal_Int32>(aDataPointList.size()) != nSeriesLength), "xmloff.chart", "not enough data points on content export" );
+    }
+    else
+    {
+        for( nElement = 0; nElement < nSize; ++nElement )
         {
-            // write elements (merge equal ones)
-            ::std::list< SchXMLDataPointStruct >::iterator aIter = aDataPointList.begin();
-            SchXMLDataPointStruct aPoint;
-            SchXMLDataPointStruct aLastPoint;
+            aPropertyStates.clear();
+            nCurrIndex = pPoints[ nElement ];
+            //assuming sorted indices in pPoints
 
-            // initialize so that it doesn't matter if
-            // the element is counted in the first iteration
-            aLastPoint.mnRepeat = 0;
+            if( nCurrIndex<0 || nCurrIndex>=nSeriesLength )
+                break;
 
-            for( ; aIter != aDataPointList.end(); ++aIter )
+            // write leading empty data points
+            if( nCurrIndex - nLastIndex > 1 )
             {
-                aPoint = (*aIter);
+                SchXMLDataPointStruct aPoint;
+                aPoint.mnRepeat = nCurrIndex - nLastIndex - 1;
+                aDataPointList.push_back( aPoint );
+            }
 
-                if( aPoint.maStyleName == aLastPoint.maStyleName )
-                    aPoint.mnRepeat += aLastPoint.mnRepeat;
-                else if( aLastPoint.mnRepeat > 0 )
+            uno::Reference< beans::XPropertySet > xPropSet;
+            // get property states
+            try
+            {
+                xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
+                                xSeries, nCurrIndex, mrExport.GetModel() );
+            }
+            catch( const uno::Exception & rEx )
+            {
+                SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx.Message );
+            }
+            if( xPropSet.is())
+            {
+                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
                 {
-                    // write last element
-                    if( !aLastPoint.maStyleName.isEmpty() )
-                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
-
-                    if( aLastPoint.mnRepeat > 1 )
-                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
-                                            OUString::number( ( aLastPoint.mnRepeat ) ));
-
-                    SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
+                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
+                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
                 }
-                aLastPoint = aPoint;
-            }
-            // write last element if it hasn't been written in last iteration
-            if( aPoint.maStyleName == aLastPoint.maStyleName )
-            {
-                if( !aLastPoint.maStyleName.isEmpty() )
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
 
-                if( aLastPoint.mnRepeat > 1 )
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
-                                        OUString::number( ( aLastPoint.mnRepeat ) ));
+                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                if( !aPropertyStates.empty() )
+                {
+                    if( bExportContent )
+                    {
+                        // write data-point with style
+                        SAL_WARN_IF( maAutoStyleNameQueue.empty(), "xmloff.chart", "Autostyle queue empty!" );
+                        SchXMLDataPointStruct aPoint;
+                        aPoint.maStyleName = maAutoStyleNameQueue.front();
+                        maAutoStyleNameQueue.pop();
 
-                SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
+                        aDataPointList.push_back( aPoint );
+                        nLastIndex = nCurrIndex;
+                    }
+                    else
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                    continue;
+                }
             }
+
+            // if we get here the property states are empty
+            SchXMLDataPointStruct aPoint;
+            aDataPointList.push_back( aPoint );
+
+            nLastIndex = nCurrIndex;
         }
+        // final empty elements
+        nRepeat = nSeriesLength - nLastIndex - 1;
+        if( nRepeat > 0 )
+        {
+            SchXMLDataPointStruct aPoint;
+            aPoint.mnRepeat = nRepeat;
+            aDataPointList.push_back( aPoint );
+        }
+    }
+
+    if (!bExportContent)
+        return;
+
+    // write elements (merge equal ones)
+    ::std::list< SchXMLDataPointStruct >::iterator aIter = aDataPointList.begin();
+    SchXMLDataPointStruct aPoint;
+    SchXMLDataPointStruct aLastPoint;
+
+    // initialize so that it doesn't matter if
+    // the element is counted in the first iteration
+    aLastPoint.mnRepeat = 0;
+
+    for( ; aIter != aDataPointList.end(); ++aIter )
+    {
+        aPoint = (*aIter);
+
+        if( aPoint.maStyleName == aLastPoint.maStyleName )
+            aPoint.mnRepeat += aLastPoint.mnRepeat;
+        else if( aLastPoint.mnRepeat > 0 )
+        {
+            // write last element
+            if( !aLastPoint.maStyleName.isEmpty() )
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
+
+            if( aLastPoint.mnRepeat > 1 )
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
+                                    OUString::number( ( aLastPoint.mnRepeat ) ));
+
+            SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
+        }
+        aLastPoint = aPoint;
+    }
+    // write last element if it hasn't been written in last iteration
+    if( aPoint.maStyleName == aLastPoint.maStyleName )
+    {
+        if( !aLastPoint.maStyleName.isEmpty() )
+            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
+
+        if( aLastPoint.mnRepeat > 1 )
+            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
+                                OUString::number( ( aLastPoint.mnRepeat ) ));
+
+        SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
     }
 }
 
