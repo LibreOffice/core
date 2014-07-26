@@ -34,6 +34,7 @@
 #include "XMLTextOrientationHdl.hxx"
 #include "XMLSymbolTypePropertyHdl.hxx"
 #include "XMLAxisPositionPropertyHdl.hxx"
+#include "../draw/propimp0.hxx"
 
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
@@ -65,6 +66,18 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+
+namespace {
+
+SvXMLEnumMapEntry const aLineStyleMap[] =
+{
+    { XML_NONE,     drawing::LineStyle_NONE },
+    { XML_SOLID,    drawing::LineStyle_SOLID },
+    { XML_DASH,     drawing::LineStyle_DASH },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+}
 
 // the following class implementations are in this file:
 
@@ -154,6 +167,14 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 pHdl = new XMLEnumPropertyHdl( aXMLChartMissingValueTreatmentEnumMap,
                                                ::cppu::UnoType<sal_Int32>::get() );
                 break;
+            case XML_SCH_TYPE_LABEL_BORDER_STYLE:
+                pHdl = new XMLEnumPropertyHdl(aLineStyleMap, cppu::UnoType<drawing::LineStyle>::get());
+            break;
+            case XML_SCH_TYPE_LABEL_BORDER_OPACITY:
+                pHdl = new XMLOpacityPropertyHdl(NULL);
+            break;
+            default:
+                ;
         }
         if( pHdl )
             PutHdlCache( nType, pHdl );
