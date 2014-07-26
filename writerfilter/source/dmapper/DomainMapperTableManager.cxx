@@ -352,7 +352,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
 
                         // We're faking a text direction, so don't allow multiple lines.
-                        if (!getCellProps() || getCellProps()->find(PROP_VERTICAL_MERGE) == getCellProps()->end())
+                        if (!getCellProps() || !getCellProps()->isSet(PROP_VERTICAL_MERGE))
                         {
                             // Though in case there will be a vertical merge, don't do this, it hides text that is supposed to be visible.
                             m_bRowSizeTypeInserted = true;

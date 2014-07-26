@@ -99,7 +99,8 @@ TableStyleSheetEntry::~TableStyleSheetEntry( )
 
 void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps )
 {
-    static const TblStyleType pTypesToFix[] =
+    static const int nTypesProps = 4;
+    static const TblStyleType pTypesToFix[nTypesProps] =
     {
         TBL_STYLE_FIRSTROW,
         TBL_STYLE_LASTROW,
@@ -107,7 +108,7 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
         TBL_STYLE_LASTCOL
     };
 
-    static const PropertyIds pPropsToCheck[] =
+    static const PropertyIds pPropsToCheck[nTypesProps] =
     {
         PROP_BOTTOM_BORDER,
         PROP_TOP_BORDER,
@@ -115,29 +116,24 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
         PROP_LEFT_BORDER
     };
 
-    int i = 0;
-    while ( i < 4 )
+    for (int i=0; i < nTypesProps; ++i )
     {
         if ( nType == pTypesToFix[i] )
         {
             PropertyIds nChecked = pPropsToCheck[i];
-            PropertyMap::iterator pCheckedIt = pProps->find(nChecked);
+            boost::optional<PropertyMap::Property> pChecked = pProps->getProperty(nChecked);
 
             PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
-            PropertyMap::iterator pInsideIt = pProps->find(nInsideProp);
+            boost::optional<PropertyMap::Property> pInside = pProps->getProperty(nInsideProp);
 
-            bool bHasChecked = pCheckedIt != pProps->end( );
-            bool bHasInside = pInsideIt != pProps->end( );
-
-            if ( bHasChecked && bHasInside )
+            if ( pChecked && pProps )
             {
                 // In this case, remove the inside border
-                pProps->erase( pInsideIt );
+                pProps->Erase( nInsideProp );
             }
 
-            i = 4; // Stop looping stupidly
+            break;
         }
-        i++;
     }
 
     // Append the tblStylePr
@@ -162,11 +158,11 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
         {
             pStack->push_back(pEntry);
 
-        TableStyleSheetEntry* pParent = static_cast<TableStyleSheetEntry *>( pEntry.get( ) );
+            TableStyleSheetEntry* pParent = static_cast<TableStyleSheetEntry *>( pEntry.get( ) );
             pProps->InsertProps(pParent->GetProperties(nMask));
 
             pStack->pop_back();
-    }
+        }
     }
 
     // And finally get the mask ones
@@ -221,19 +217,15 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
     for ( unsigned i = 0 ; i != sizeof(pPropsToCheck) / sizeof(PropertyIds); i++ )
     {
         PropertyIds nId = pPropsToCheck[i];
-        PropertyMap::iterator pIt = pToAdd->find(nId);
+        boost::optional<PropertyMap::Property> pProp = pToAdd->getProperty(nId);
 
-        if ( pIt != pToAdd->end( ) )
+        if ( pProp )
         {
-            PropertyMap::iterator pDestIt = pToFill->find(nId);
-
             if ( pRemoveInside[i] )
             {
                 // Remove the insideH and insideV depending on the cell pos
                 PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
-                pDestIt = pToFill->find(nInsideProp);
-                if ( pDestIt != pToFill->end( ) )
-                    pToFill->erase( pDestIt );
+                pToFill->Erase(nInsideProp);
             }
         }
     }
@@ -792,12 +784,12 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     {
                         // The current style is the default paragraph style.
                         PropertyMapPtr pProperties = m_pImpl->m_pCurrentEntry->pProperties;
-                        if (pProperties->find(PROP_CHAR_HEIGHT) != pProperties->end() && m_pImpl->m_pDefaultParaProps->find(PROP_CHAR_HEIGHT) == m_pImpl->m_pDefaultParaProps->end())
+                        if (pProperties->isSet(PROP_CHAR_HEIGHT) && !m_pImpl->m_pDefaultParaProps->isSet(PROP_CHAR_HEIGHT))
                         {
                             // We provide a character height value, but a document-level default wasn't set.
                             if (m_pImpl->m_xTextDefaults.is())
                             {
-                                m_pImpl->m_xTextDefaults->setPropertyValue("CharHeight", pProperties->operator[](PROP_CHAR_HEIGHT).getValue());
+                                m_pImpl->m_xTextDefaults->setPropertyValue("CharHeight", pProperties->getProperty(PROP_CHAR_HEIGHT)->second);
                             }
                         }
                     }
@@ -1536,7 +1528,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 m_pImpl->m_rDMapper.GetTextFactory()->createInstance("com.sun.star.text.Defaults"),
                 uno::UNO_QUERY_THROW );
         }
-        if( bParaProperties && m_pImpl->m_pDefaultParaProps.get() && m_pImpl->m_pDefaultParaProps->size())
+        if( bParaProperties && m_pImpl->m_pDefaultParaProps.get())
         {
             uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultParaProps->GetPropertyValues();
             for( sal_Int32 i = 0; i < aPropValues.getLength(); ++i )
@@ -1551,7 +1543,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 }
             }
         }
-        if( !bParaProperties && m_pImpl->m_pDefaultCharProps.get() && m_pImpl->m_pDefaultCharProps->size())
+        if( !bParaProperties && m_pImpl->m_pDefaultCharProps.get())
         {
             uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultCharProps->GetPropertyValues();
             for( sal_Int32 i = 0; i < aPropValues.getLength(); ++i )
