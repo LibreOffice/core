@@ -53,6 +53,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
+#include <map>
 
 using namespace desktop;
 using namespace ::com::sun::star::uno;
@@ -153,6 +154,8 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
         m_bServicesRegistered = true;
     }
 }
+
+typedef std::map< OUString, css::uno::Reference<css::lang::XInitialization> > AcceptorMap;
 
 namespace
 {

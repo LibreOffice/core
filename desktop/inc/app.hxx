@@ -20,8 +20,6 @@
 #ifndef INCLUDED_DESKTOP_INC_APP_HXX
 #define INCLUDED_DESKTOP_INC_APP_HXX
 
-// stl includes first
-#include <map>
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -29,7 +27,6 @@
 #include <vcl/timer.hxx>
 #include <tools/resmgr.hxx>
 #include <unotools/bootstrap.hxx>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
@@ -46,7 +43,6 @@ namespace desktop
  --------------------------------------------------------------------*/
 class CommandLineArgs;
 class Lockfile;
-class AcceptorMap : public std::map< OUString, css::uno::Reference<css::lang::XInitialization> > {};
 struct ConvertData;
 class Desktop : public Application
 {
