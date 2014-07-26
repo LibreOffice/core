@@ -202,8 +202,8 @@ public class JavaLoader implements XImplementationLoader,
     public boolean supportsService(String serviceName)
             throws com.sun.star.uno.RuntimeException
     {
-        for (String supportedService : supportedServices) {
-            if (supportedService.equals(serviceName)) {
+        for ( int i = 0; i < supportedServices.length; i++ ) {
+            if (supportedServices[i].equals(serviceName)) {
                 return true;
             }
         }
