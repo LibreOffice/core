@@ -100,7 +100,7 @@ void SwTableShell::InitInterface_Impl()
 
 TYPEINIT1(SwTableShell,SwBaseShell)
 
-const sal_uInt16 aUITableAttrRange[] =
+static const sal_uInt16 aUITableAttrRange[] =
 {
     FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
     FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,
