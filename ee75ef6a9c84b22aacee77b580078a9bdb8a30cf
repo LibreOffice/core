@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bab921fb_61cbcc73",
+        "filename": "jurt/com/sun/star/comp/loader/JavaLoader.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-07-26T16:36:37Z",
+      "side": 1,
+      "message": "The return statement acts as a loop-break, so there is no benefit to use a enhanced for-loop, because it\u0027s not really for each element.",
+      "parentUuid": "bab921fb_01bad0e1",
+      "revId": "ee75ef6a9c84b22aacee77b580078a9bdb8a30cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bab921fb_21eef4ec",
         "filename": "jurt/com/sun/star/comp/servicemanager/ServiceManager.java",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2014-07-26T15:55:09Z",
       "side": 1,
       "message": "Please do not mix code reformatting with other things.",
+      "revId": "ee75ef6a9c84b22aacee77b580078a9bdb8a30cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_41c8c874",
+        "filename": "jurt/com/sun/star/comp/servicemanager/ServiceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-07-26T16:36:37Z",
+      "side": 1,
+      "message": "OK, I\u0027m sorry.",
+      "parentUuid": "bab921fb_21eef4ec",
       "revId": "ee75ef6a9c84b22aacee77b580078a9bdb8a30cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
