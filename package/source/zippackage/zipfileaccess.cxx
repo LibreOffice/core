@@ -252,7 +252,19 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
                                                   false,
                                                   m_aMutexHolder);
     }
-    catch (const io::IOException& e)
+    catch (const container::NoSuchElementException&)
+    {
+        throw;
+    }
+    catch (const lang::WrappedTargetException&)
+    {
+        throw;
+    }
+    catch (const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (const uno::Exception& e)
     {
         throw lang::WrappedTargetException( "This package is unusable!",
                   static_cast < OWeakObject * > ( this ),
