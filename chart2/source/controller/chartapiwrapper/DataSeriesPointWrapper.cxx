@@ -80,7 +80,11 @@ enum
     PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
     //other series properties
     PROP_SERIES_ATTACHED_AXIS,
-    PROP_SERIES_DATAPOINT_TEXT_ROTATION
+    PROP_SERIES_DATAPOINT_TEXT_ROTATION,
+    PROP_SERIES_DATAPOINT_LABEL_BORDER_STYLE,
+    PROP_SERIES_DATAPOINT_LABEL_BORDER_WIDTH,
+    PROP_SERIES_DATAPOINT_LABEL_BORDER_COLOR,
+    PROP_SERIES_DATAPOINT_LABEL_BORDER_TRANS
 };
 
 void lcl_AddPropertiesToVector_PointProperties(
@@ -140,6 +144,35 @@ void lcl_AddPropertiesToVector_PointProperties(
         Property( "TextRotation",
                   PROP_SERIES_DATAPOINT_TEXT_ROTATION,
                   cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LABEL_BORDER_STYLE,
+                  PROP_SERIES_DATAPOINT_LABEL_BORDER_STYLE,
+                  cppu::UnoType<drawing::LineStyle>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LABEL_BORDER_WIDTH,
+                  PROP_SERIES_DATAPOINT_LABEL_BORDER_WIDTH,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LABEL_BORDER_COLOR,
+                  PROP_SERIES_DATAPOINT_LABEL_BORDER_COLOR,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LABEL_BORDER_TRANS,
+                  PROP_SERIES_DATAPOINT_LABEL_BORDER_TRANS,
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
