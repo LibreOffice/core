@@ -184,7 +184,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
     OUString sStringValue = val.getString();
 
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
-    PropertyMap::iterator oldPropValue;
         switch( nName )
         {
         case NS_ooxml::LN_CT_Lvl_start:
@@ -374,16 +373,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 #define SINGLE_LINE_SPACING 240
             style::LineSpacing aSpacing;
             PropertyMapPtr pTopContext = m_pImpl->GetTopContext();
-            bool bFound = false;
-            PropertyMap::iterator aLineSpacingIter;
-            if (pTopContext)
+            boost::optional<PropertyMap::Property> aLineSpacingVal;
+            if (pTopContext && (aLineSpacingVal = pTopContext->getProperty(PROP_PARA_LINE_SPACING)) )
             {
-                aLineSpacingIter = pTopContext->find(PROP_PARA_LINE_SPACING);
-                bFound = aLineSpacingIter != pTopContext->end();
-            }
-            if (bFound)
-            {
-                aLineSpacingIter->second.getValue() >>= aSpacing;
+                aLineSpacingVal->second >>= aSpacing;
             }
             else
             {
@@ -404,7 +397,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 {
                     // direct formatting is applied for table cell data
                     TablePropertyMapPtr pTblCellWithDirectFormatting(new TablePropertyMap);
-                    pTblCellWithDirectFormatting->insert(std::pair< PropertyIds, PropValue >(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing )));
+                    pTblCellWithDirectFormatting->Insert(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing ), false);
                     m_pImpl->getTableManager().cellProps(pTblCellWithDirectFormatting);
                 }
             }
@@ -1035,11 +1028,11 @@ sal_Int32 lcl_getCurrentNumberingProperty(
 static bool ExchangeLeftRight( const PropertyMapPtr rContext, DomainMapper_Impl* m_pImpl )
 {
     bool bExchangeLeftRight = false;
-    PropertyMap::const_iterator aPropParaIte = rContext->find(PROP_WRITING_MODE);
-    if( aPropParaIte != rContext->end())
+    boost::optional<PropertyMap::Property> aPropPara = rContext->getProperty(PROP_WRITING_MODE);
+    if( aPropPara )
     {
         sal_Int32 aAdjust ;
-        if( (aPropParaIte->second.getValue() >>= aAdjust) && aAdjust == text::WritingMode2::RL_TB )
+        if( (aPropPara->second >>= aAdjust) && aAdjust == text::WritingMode2::RL_TB )
             bExchangeLeftRight = true;
     }
     else
@@ -1048,11 +1041,11 @@ static bool ExchangeLeftRight( const PropertyMapPtr rContext, DomainMapper_Impl*
         StyleSheetEntryPtr pTable = m_pImpl->GetStyleSheetTable()->FindDefaultParaStyle();
         if ( pTable )
         {
-            PropertyMap::const_iterator aPropStyle = pTable->pProperties->find(PROP_WRITING_MODE);
-            if( aPropStyle != pTable->pProperties->end())
+            boost::optional<PropertyMap::Property> aPropStyle = pTable->pProperties->getProperty(PROP_WRITING_MODE);
+            if( aPropStyle )
             {
                 sal_Int32 aDirect;
-                if( (aPropStyle->second.getValue() >>= aDirect) && aDirect == text::WritingMode2::RL_TB )
+                if( (aPropStyle->second >>= aDirect) && aDirect == text::WritingMode2::RL_TB )
                     bExchangeLeftRight = true;
             }
         }
@@ -1140,7 +1133,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                     uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
                     rContext->Insert( PROP_NUMBERING_RULES, aRules );
                     // erase numbering from pStyle if already set
-                    rContext->erase(PROP_NUMBERING_STYLE_NAME);
+                    rContext->Erase(PROP_NUMBERING_STYLE_NAME);
                 }
             }
             else
@@ -1511,7 +1504,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                     break;
                     case NS_ooxml::LN_EG_RPrBase_smallCaps:
                         // If smallcaps would be just disabled and an other casemap is already inserted, don't do anything.
-                        if (nIntValue || rContext->find(ePropertyId) == rContext->end())
+                        if (nIntValue || !rContext->isSet(ePropertyId) )
                             rContext->Insert(ePropertyId, uno::makeAny( nIntValue ? style::CaseMap::SMALLCAPS : style::CaseMap::NONE));
                         m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "smallCaps", OUString::number(nIntValue));
                     break;
@@ -1546,7 +1539,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                 {
                     // If the default para style contains PROP_CHAR_HEIGHT, that should have priority over the table style.
                     StyleSheetEntryPtr pTable = m_pImpl->GetStyleSheetTable()->FindDefaultParaStyle();
-                    if (pTable && pTable->pProperties->find(PROP_CHAR_HEIGHT) != pTable->pProperties->end())
+                    if (pTable && pTable->pProperties->isSet(PROP_CHAR_HEIGHT) )
                         bIgnore = true;
                 }
                 if (!bIgnore)
@@ -2005,7 +1998,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( sConvertedStyleName ));
         //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
         //does not specify the numbering
-        if( rContext->find(PROP_NUMBERING_RULES) == rContext->end()) // !contains
+        if( !rContext->isSet(PROP_NUMBERING_RULES) ) // !contains
         {
             const StyleSheetEntryPtr pEntry = pStyleTable->FindStyleSheetByISTD(sStringValue);
             OSL_ENSURE( pEntry.get(), "no style sheet found" );
@@ -2022,8 +2015,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                 {
                     const StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
                     const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : 0);
-                    if (pParentProperties && pParentProperties->find(PROP_PARA_RIGHT_MARGIN) != pParentProperties->end())
-                        nParaRightMargin = pParentProperties->find(PROP_PARA_RIGHT_MARGIN)->second.getValue().get<sal_Int32>();
+                    boost::optional<PropertyMap::Property> pPropMargin;
+                    if (pParentProperties && (pPropMargin = pParentProperties->getProperty(PROP_PARA_RIGHT_MARGIN)) )
+                        nParaRightMargin = pPropMargin->second.get<sal_Int32>();
                 }
                 if (nParaRightMargin != 0)
                 {
@@ -2502,7 +2496,7 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
             {
                 std::map< sal_Int32, uno::Any >::const_iterator font = deferredCharacterProperties.find( NS_ooxml::LN_EG_RPrBase_sz );
                 PropertyMapPtr pDefaultCharProps = m_pImpl->GetStyleSheetTable()->GetDefaultCharProps();
-                PropertyMap::iterator aDefaultFont = pDefaultCharProps->find(PROP_CHAR_HEIGHT);
+                boost::optional<PropertyMap::Property> aDefaultFont = pDefaultCharProps->getProperty(PROP_CHAR_HEIGHT);
                 if( font != deferredCharacterProperties.end())
                 {
                     double fontSize = 0;
@@ -2510,10 +2504,10 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
                     nEscapement = nIntValue * 100 / fontSize;
                 }
                 // TODO if not direct formatting, check the style first, not directly the default char props.
-                else if (aDefaultFont != pDefaultCharProps->end())
+                else if (aDefaultFont)
                 {
                     double fHeight = 0;
-                    aDefaultFont->second.getValue() >>= fHeight;
+                    aDefaultFont->second >>= fHeight;
                     // fHeight is in points, nIntValue is in half points, nEscapement is in percents.
                     nEscapement = nIntValue * 100 / fHeight / 2;
                 }
