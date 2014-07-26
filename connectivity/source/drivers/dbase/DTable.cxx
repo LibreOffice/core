@@ -1102,8 +1102,19 @@ bool ODbaseTable::CreateImpl()
         if (!CreateMemoFile(aURL))
         {
             aURL.setExtension(aExt);      // kill dbf file
-            Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aMemoContent.executeCommand( "delete", css::uno::Any( true ) );
+            try
+            {
+                Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
+                aMemoContent.executeCommand( "delete", css::uno::Any( true ) );
+            }
+            catch(const ContentCreationException&)
+            {
+                const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                        STR_COULD_NOT_DELETE_FILE,
+                        "$name$", aName
+                     ) );
+                ::dbtools::throwGenericSQLException( sError, *this );
+            }
             return false;
         }
         m_aHeader.db_typ = dBaseIIIMemo;
