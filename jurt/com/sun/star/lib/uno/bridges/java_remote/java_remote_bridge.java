@@ -222,7 +222,8 @@ public class java_remote_bridge
         synchronized (refHolders) {
             LinkedList<RefHolder> l = refHolders.get(oid);
             if (l != null) {
-                for (RefHolder rh : l) {
+                for (Iterator<RefHolder> i = l.iterator(); i.hasNext();) {
+                    RefHolder rh = i.next();
                     if (type.isSupertypeOf(rh.getType())) {
                         return true;
                     }
