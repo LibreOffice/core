@@ -181,7 +181,6 @@ public:
     {
     }
 
-    void SetAnimationCamera(glm::vec3 aStartPos, glm::vec3 aEndPos, sal_Int32 nSteps);
 protected:
     virtual void execute() SAL_OVERRIDE;
 private:
@@ -189,6 +188,7 @@ private:
     void MoveCamera();
     void MoveToBar();
     void MoveToDefault();
+    void MoveToCorner();
 private:
     glm::vec3 maStartPos;
     glm::vec3 maEndPos;
@@ -199,13 +199,6 @@ private:
     size_t mnStep;
     size_t mnStepsTotal;
 };
-
-void RenderBenchMarkThread::SetAnimationCamera(glm::vec3 startPos, glm::vec3 endPos, sal_Int32 steps)
-{
-    maStartPos = startPos;
-    maEndPos = endPos;
-    mnSteps = steps;
-}
 
 void RenderBenchMarkThread::MoveCamera()
 {
@@ -277,6 +270,18 @@ void RenderBenchMarkThread::MoveToBar()
     MoveCamera();
 }
 
+void RenderBenchMarkThread::MoveToCorner()
+{
+    if (!mbExecuting)
+    {
+        mnStepsTotal = STEPS;
+        maStep = (mpChart->getCornerPosition(mpChart->mnCornerId) - mpChart->maCameraPosition) / float(mnStepsTotal);
+        maStepDirection = (glm::vec3(mpChart->mnMaxX/2.0f, mpChart->mnMaxY/2.0f, 0) - mpChart->maCameraDirection)/ float(mnStepsTotal);
+        mbExecuting = true;
+    }
+    MoveCamera();
+}
+
 void RenderBenchMarkThread::ProcessMouseEvent()
 {
     if (mpChart->maRenderEvent == EVENT_CLICK)
@@ -286,6 +291,10 @@ void RenderBenchMarkThread::ProcessMouseEvent()
     else if (mpChart->maRenderEvent == EVENT_MOVE_TO_DEFAULT)
     {
         MoveToDefault();
+    }
+    else if ((mpChart->maRenderEvent == EVENT_DRAG_LEFT) || (mpChart->maRenderEvent == EVENT_DRAG_RIGHT))
+    {
+        MoveToCorner();
     }
 }
 
@@ -710,6 +719,9 @@ void GL3DBarChart::render()
 void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 )
 {
     long direction = rEndPos.X() - rStartPos.X();
+    osl::MutexGuard aGuard(maMutex);
+    if (maRenderEvent == EVENT_NON)
+        maRenderEvent = direction > 0 ? EVENT_DRAG_RIGHT : EVENT_DRAG_LEFT;
     if(direction < 0)
     {
         mnCornerId = (mnCornerId + 1) % 4;
