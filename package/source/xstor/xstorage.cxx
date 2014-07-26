@@ -3874,7 +3874,7 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const OUString& aStreamName,
     }
 
     if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
-        throw packages::NoEncryptionException( THROW_WHERE );
+        throw embed::InvalidStorageException( THROW_WHERE );
 
     if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
