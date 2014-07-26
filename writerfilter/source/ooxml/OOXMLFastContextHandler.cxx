@@ -1298,7 +1298,7 @@ void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 {
     if (mpValue.get() == NULL)
     {
-        OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(true));
+        OOXMLValue::Pointer_t pValue = OOXMLBooleanValue::Create(true);
         setValue(pValue);
     }
 }
@@ -1482,8 +1482,7 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
             pProps->add(pProp);
         }
         {
-            OOXMLValue::Pointer_t pVal
-                (new OOXMLBooleanValue(mnTableDepth > 0));
+            OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
             OOXMLProperty::Pointer_t pProp
                 (new OOXMLPropertyImpl(NS_ooxml::LN_tblCell, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
@@ -1582,8 +1581,7 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( OOXMLValue::Pointer_
                 pProps->add(pProp);
             }
             {
-                OOXMLValue::Pointer_t pVal
-                    (new OOXMLBooleanValue(mnTableDepth > 0));
+                OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
                 OOXMLProperty::Pointer_t pProp
                     (new OOXMLPropertyImpl(NS_ooxml::LN_tblCell, pVal, OOXMLPropertyImpl::SPRM));
                 pProps->add(pProp);

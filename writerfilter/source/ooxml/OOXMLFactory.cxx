@@ -149,7 +149,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     {
                         const char *pValue = "";
                         pAttribs->getAsChar(nToken, pValue);
-                        OOXMLValue::Pointer_t xValue(new OOXMLBooleanValue(pValue));
+                        OOXMLValue::Pointer_t xValue(OOXMLBooleanValue::Create(pValue));
                         pHandler->newProperty(nId, xValue);
                         pFactory->attributeAction(pHandler, nToken, xValue);
                     }

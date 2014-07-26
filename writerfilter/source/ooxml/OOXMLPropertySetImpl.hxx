@@ -104,6 +104,9 @@ class OOXMLBooleanValue : public OOXMLValue
 protected:
     bool mbValue;
 public:
+    static OOXMLValue::Pointer_t Create (bool bValue);
+    static OOXMLValue::Pointer_t Create (const char *pValue);
+
     explicit OOXMLBooleanValue(bool bValue);
     explicit OOXMLBooleanValue(const char *pValue);
     virtual ~OOXMLBooleanValue();

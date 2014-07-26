@@ -259,6 +259,28 @@ OOXMLValue * OOXMLBinaryValue::clone() const
   class OOXMLBooleanValue
 */
 
+static bool GetBooleanValue(const char *pValue)
+{
+    return !strcmp(pValue, "true")
+           || !strcmp(pValue, "True")
+           || !strcmp(pValue, "1")
+           || !strcmp(pValue, "on")
+           || !strcmp(pValue, "On");
+}
+
+OOXMLValue::Pointer_t OOXMLBooleanValue::Create(bool bValue)
+{
+    static OOXMLValue::Pointer_t False(new OOXMLBooleanValue (false));
+    static OOXMLValue::Pointer_t True(new OOXMLBooleanValue (true));
+
+    return bValue ? True : False;
+}
+
+OOXMLValue::Pointer_t OOXMLBooleanValue::Create(const char *pValue)
+{
+    return Create (GetBooleanValue(pValue));
+}
+
 OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 : mbValue(bValue)
 {
@@ -267,11 +289,7 @@ OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 OOXMLBooleanValue::OOXMLBooleanValue(const char *pValue)
 : mbValue(false)
 {
-    mbValue = !strcmp(pValue, "true")
-           || !strcmp(pValue, "True")
-           || !strcmp(pValue, "1")
-           || !strcmp(pValue, "on")
-           || !strcmp(pValue, "On");
+    mbValue = GetBooleanValue(pValue);
 }
 
 OOXMLBooleanValue::~OOXMLBooleanValue()
