@@ -94,6 +94,7 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 
 #include "dlgname.hxx"
+#include <boost/scoped_ptr.hpp>
 
 #define PRTSTR(x) OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
 
@@ -2403,7 +2404,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
         OUString aNewName( stripHotKey( pMenuData->GetName() ) );
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-        SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
+        boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
@@ -2415,17 +2416,14 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
 
             GetSaveInData()->SetModified( true );
         }
-
-        // #i68101# Memory leak (!)
-        delete pNameDialog;
     }
     else if (sIdent == "move")
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-        SvxMainMenuOrganizerDialog* pDialog =
+        boost::scoped_ptr<SvxMainMenuOrganizerDialog> pDialog(
             new SvxMainMenuOrganizerDialog( this,
-                GetSaveInData()->GetEntries(), pMenuData );
+                GetSaveInData()->GetEntries(), pMenuData ));
 
         if ( pDialog->Execute() == RET_OK )
         {
@@ -2435,8 +2433,6 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
 
             GetSaveInData()->SetModified( true );
         }
-
-        delete pDialog;
     }
     else
         return sal_False;
@@ -2451,7 +2447,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         OUString aNewName;
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
 
-        SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
+        boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
         pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
 
@@ -2468,8 +2464,6 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
 
             GetSaveInData()->SetModified( true );
         }
-
-        delete pNameDialog;
     }
     else if (sIdent == "addseparator")
     {
@@ -2490,7 +2484,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         OUString aNewName( stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-        SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
+        boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
@@ -2502,8 +2496,6 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
 
             GetSaveInData()->SetModified( true );
         }
-
-        delete pNameDialog;
     }
     else
     {
@@ -2532,9 +2524,9 @@ IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
 {
     (void)pButton;
 
-    SvxMainMenuOrganizerDialog* pDialog =
+    boost::scoped_ptr<SvxMainMenuOrganizerDialog> pDialog(
         new SvxMainMenuOrganizerDialog( 0,
-            GetSaveInData()->GetEntries(), NULL, true );
+            GetSaveInData()->GetEntries(), NULL, true ));
 
     if ( pDialog->Execute() == RET_OK )
     {
@@ -2542,8 +2534,6 @@ IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
         ReloadTopLevelListBox( pDialog->GetSelectedEntry() );
         GetSaveInData()->SetModified( true );
     }
-
-    delete pDialog;
 
     return 0;
 }
@@ -3062,7 +3052,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
             OUString aNewName( stripHotKey( pToolbar->GetName() ) );
             OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-            SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
+            boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
@@ -3080,9 +3070,6 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
                 m_pTopLevelListBox->SetEntryData( nSelectionPos, pToolbar );
                 m_pTopLevelListBox->SelectEntryPos( nSelectionPos );
             }
-
-            delete pNameDialog;
-
             break;
         }
         case ID_DEFAULT_STYLE:
@@ -3151,7 +3138,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             OUString aNewName( stripHotKey( pEntry->GetName() ) );
             OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-            SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
+            boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
@@ -3163,8 +3150,6 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
 
                 bNeedsApply = true;
             }
-
-            delete pNameDialog;
             break;
         }
         case ID_DEFAULT_COMMAND:
@@ -3283,10 +3268,10 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 }
             }
 
-            SvxIconSelectorDialog* pIconDialog =
+            boost::scoped_ptr<SvxIconSelectorDialog> pIconDialog(
                 new SvxIconSelectorDialog( 0,
                     GetSaveInData()->GetImageManager(),
-                    GetSaveInData()->GetParentImageManager() );
+                    GetSaveInData()->GetParentImageManager() ));
 
             if ( pIconDialog->Execute() == RET_OK )
             {
@@ -3341,9 +3326,6 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                     }
                 }
             }
-
-            delete pIconDialog;
-
             break;
         }
         case ID_RESET_SYMBOL:
@@ -4416,7 +4398,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     OUString aNewURL =
         generateCustomURL( GetSaveInData()->GetEntries() );
 
-    SvxNewToolbarDialog* pNameDialog = new SvxNewToolbarDialog( 0, aNewName );
+    boost::scoped_ptr<SvxNewToolbarDialog> pNameDialog(new SvxNewToolbarDialog( 0, aNewName ));
 
     sal_uInt16 nInsertPos;
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
@@ -4463,8 +4445,6 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
 
         pData->SetModified( true );
     }
-
-    delete pNameDialog;
 
     return 0;
 }

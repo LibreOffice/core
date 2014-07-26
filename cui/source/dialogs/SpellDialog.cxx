@@ -59,6 +59,7 @@
 #include <svtools/langtab.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -497,8 +498,8 @@ void SpellDialog::StartSpellOptDlg_Impl()
     };
     SfxItemSet aSet( SfxGetpApp()->GetPool(), aSpellInfos);
     aSet.Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
-    SfxSingleTabDialog* pDlg =
-        new SfxSingleTabDialog(this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui");
+    boost::scoped_ptr<SfxSingleTabDialog> pDlg(
+        new SfxSingleTabDialog(this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui"));
     SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), &aSet );
     ( (SvxLinguTabPage*)pPage )->HideGroups( GROUP_MODULES );
     pDlg->SetTabPage( pPage );
@@ -509,7 +510,6 @@ void SpellDialog::StartSpellOptDlg_Impl()
         if(pOutSet)
             OfaTreeOptionsDialog::ApplyLanguageOptions(*pOutSet);
     }
-    delete pDlg;
 }
 
 namespace
@@ -1459,7 +1459,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 //text has been added on the right and only the 'error attribute has to be corrected
                 if(pErrorAttrLeft)
                 {
-                    TextAttrib* pNewError =  pErrorAttrLeft->GetAttr().Clone();
+                    boost::scoped_ptr<TextAttrib> pNewError(pErrorAttrLeft->GetAttr().Clone());
                     sal_uInt16 nStart = pErrorAttrLeft->GetStart();
                     sal_uInt16 nEnd = pErrorAttrLeft->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttrLeft );
@@ -1470,7 +1470,6 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                         bool bGrammar = static_cast<const SpellErrorAttrib&>(*pNewError).GetErrorDescription().bIsGrammarError;
                         MoveErrorMarkTo(nStart, nEnd, bGrammar);
                     }
-                    delete pNewError;
                 }
                 //text has been added on the left then the error attribute has to be expanded and the
                 //field attribute on the right - if any - has to be contracted
@@ -1479,7 +1478,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     //determine the change
                     sal_Int32 nAddedChars = GetText().getLength() - nCurrentLen;
 
-                    TextAttrib* pNewError =  pErrorAttr->GetAttr().Clone();
+                    boost::scoped_ptr<TextAttrib> pNewError(pErrorAttr->GetAttr().Clone());
                     sal_Int32 nStart = pErrorAttr->GetStart();
                     sal_Int32 nEnd = pErrorAttr->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttr );
@@ -1491,16 +1490,15 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                         bool bGrammar = static_cast<const SpellErrorAttrib&>(*pNewError).GetErrorDescription().bIsGrammarError;
                         MoveErrorMarkTo(nStart, nEnd, bGrammar);
                     }
-                    delete pNewError;
+                    pNewError.reset();
 
                     if(pBackAttrLeft)
                     {
-                        TextAttrib* pNewBack =  pBackAttrLeft->GetAttr().Clone();
+                        boost::scoped_ptr<TextAttrib> pNewBack(pBackAttrLeft->GetAttr().Clone());
                         sal_uInt16 _nStart = pBackAttrLeft->GetStart();
                         sal_uInt16 _nEnd = pBackAttrLeft->GetEnd();
                         pTextEngine->RemoveAttrib( 0, *pBackAttrLeft );
                         SetAttrib( *pNewBack, 0, _nStart, _nEnd - nAddedChars);
-                        delete pNewBack;
                     }
                 }
             }
@@ -1522,10 +1520,9 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     m_nErrorEnd = pFontColor->GetEnd();
                     if(pErrorAttrib->GetStart() != m_nErrorStart || pErrorAttrib->GetEnd() != m_nErrorEnd)
                     {
-                        TextAttrib* pNewError =  pErrorAttrib->GetAttr().Clone();
+                        boost::scoped_ptr<TextAttrib> pNewError(pErrorAttrib->GetAttr().Clone());
                         pTextEngine->RemoveAttrib( 0, *pErrorAttr );
                         SetAttrib( *pNewError, 0, m_nErrorStart, m_nErrorEnd );
-                        delete pNewError;
                     }
                 }
             }
@@ -1683,11 +1680,10 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
     // undo expanded attributes!
     if( pBackAttrib && pBackAttrib->GetStart() < m_nErrorStart && pBackAttrib->GetEnd() == m_nErrorEnd + nDiffLen)
     {
-        TextAttrib* pNewBackground = pBackAttrib->GetAttr().Clone();
+        boost::scoped_ptr<TextAttrib> pNewBackground(pBackAttrib->GetAttr().Clone());
         sal_uInt16 nStart = pBackAttrib->GetStart();
         pTextEngine->RemoveAttrib(0, *pBackAttrib);
         pTextEngine->SetAttrib(*pNewBackground, 0, nStart, m_nErrorStart);
-        delete pNewBackground;
     }
     pTextEngine->SetModified(true);
 

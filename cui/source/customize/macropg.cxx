@@ -45,6 +45,7 @@
 
 #include <algorithm>
 #include <set>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -643,7 +644,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
                 )
             )
     {
-        AssignComponentDialog* pAssignDlg = new AssignComponentDialog( pThis, sEventURL );
+        boost::scoped_ptr<AssignComponentDialog> pAssignDlg(new AssignComponentDialog( pThis, sEventURL ));
 
         short ret = pAssignDlg->Execute();
         if( ret )
@@ -653,7 +654,6 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
             if(!pThis->bAppEvents)
                 pThis->bDocModified = true;
         }
-        delete pAssignDlg;
     }
     else if( bAssEnabled )
     {
