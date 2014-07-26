@@ -480,7 +480,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
 void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
 {
-    if( !pArgs )
+    if (!pArgs || !mpDrawViewShell)
         return;
 
     // Set new page-attributes
