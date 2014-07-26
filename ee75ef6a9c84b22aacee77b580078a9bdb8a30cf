@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "bab921fb_6192ac59",
+        "filename": "jurt/com/sun/star/comp/loader/JavaLoader.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-07-26T17:30:08Z",
+      "side": 1,
+      "message": "I going to undo the foreach-\u003efor change, to continue to use the foreach statement introduced 2 days ago.\nhttps://gerrit.libreoffice.org/#/c/10495/\n\nI will also do it in JavaLoaderFactory.java \u0026 java_remote_bridge.java files.",
+      "parentUuid": "bab921fb_e1a59cb5",
+      "revId": "ee75ef6a9c84b22aacee77b580078a9bdb8a30cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bab921fb_21eef4ec",
         "filename": "jurt/com/sun/star/comp/servicemanager/ServiceManager.java",
         "patchSetId": 4
