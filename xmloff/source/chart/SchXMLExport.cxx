@@ -3301,11 +3301,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     Sequence< sal_Int32 > aDataPointSeq;
     if( xSeriesProperties.is())
     {
-        Any aAny = xSeriesProperties->getPropertyValue(
-            OUString(  "AttributedDataPoints" ));
-        aAny >>= aDataPointSeq;
-        xSeriesProperties->getPropertyValue(
-            OUString(  "VaryColorsByPoint" )) >>= bVaryColorsByPoint;
+        xSeriesProperties->getPropertyValue("AttributedDataPoints") >>= aDataPointSeq;
+        xSeriesProperties->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint;
     }
 
     sal_Int32 nSize = aDataPointSeq.getLength();
