@@ -295,7 +295,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
         }
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
     m_nSelectId = AddTabPage("index", SwTOXSelectTabPage::Create, 0);
     m_nStylesId = AddTabPage("styles", SwTOXStylesTabPage::Create, 0);
     m_nColumnId = AddTabPage("columns", SwColumnPage::Create, 0);

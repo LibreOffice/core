@@ -738,7 +738,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(pButton, rSh.GetAttrPool(), pTblSet, &rSh));
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute() )
         pTblSet->Put( *pDlg->GetOutputItemSet() );
     else if( bNewSet )
@@ -756,7 +756,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, AutoFmtHdl, PushButton*, pButton )
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     boost::scoped_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(), false, pTAutoFmt));
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );
     return 0;

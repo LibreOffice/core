@@ -41,7 +41,7 @@ SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
 {
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
 
     mnCharName = AddTabPage( "RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
     mnCharEffects =  AddTabPage( "RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );

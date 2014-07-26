@@ -325,7 +325,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 assert(pFact && "SwAbstractDialogFactory fail!");
 
                 boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(pView->GetWindow(), *pView, aDlgAttr, DLG_CHAR_DRAW));
-                assert(pDlg && "Dialogdiet fail!");
+                assert(pDlg && "Dialog creation failed!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");
@@ -349,7 +349,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             assert(pFact && "SwAbstractDialogFactory fail!");
 
             boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), rView.GetWrtShell()));
-            assert(pDlg && "Dialogdiet fail!");
+            assert(pDlg && "Dialog creation failed!");
             pDlg->Execute();
             break;
         }
@@ -357,10 +357,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            assert(pFact && "Dialogdiet fail!");
+            assert(pFact && "Dialog creation failed!");
             boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, GetView().GetWrtShell()));
-            assert(pDlg && "Dialogdiet fail!");
+            assert(pDlg && "Dialog creation failed!");
             pDlg->Execute();
             pDlg.reset();
             rReq.Done();
@@ -422,7 +422,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 assert(pFact && "SwAbstractDialogFactory fail!");
 
                 boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, 0, true ));
-                assert(pDlg && "Dialogdiet fail!");
+                assert(pDlg && "Dialog creation failed!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {

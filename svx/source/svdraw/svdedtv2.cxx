@@ -774,7 +774,7 @@ void SdrEditView::DistributeMarkedObjects()
         if(pFact)
         {
             boost::scoped_ptr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(NULL, aNewAttr));
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            DBG_ASSERT(pDlg, "Dialog creation failed!");
 
             sal_uInt16 nResult = pDlg->Execute();
 

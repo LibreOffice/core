@@ -450,9 +450,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OUString aPageName = pCurrentPage->GetName();
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                DBG_ASSERT(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr ));
-                DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
+                DBG_ASSERT(aNameDlg, "Dialog creation failed!");
                 aNameDlg->SetText( aTitle );
                 aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
                 aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
@@ -2121,9 +2121,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OUString aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(NULL, aName));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
 
@@ -2154,9 +2154,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OUString aDescription(pSelected->GetDescription());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if(RET_OK == pDlg->Execute())
                 {

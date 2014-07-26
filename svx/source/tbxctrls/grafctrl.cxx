@@ -740,9 +740,9 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     const OUString aCropStr(SVX_RESSTR(RID_SVXSTR_GRAFCROP));
 
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    assert(pFact && "Dialogdiet error!");
+                    assert(pFact && "Dialog creation failed!");
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
-                    assert(fnCreatePage && "Dialogdiet error!");
+                    assert(fnCreatePage && "Dialog creation failed!");
                     SfxTabPage* pTabPage = (*fnCreatePage)( aCropDialog.get_content_area(), &aCropDlgAttr );
 
                     pTabPage->SetText( aCropStr );

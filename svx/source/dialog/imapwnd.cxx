@@ -674,7 +674,7 @@ void IMapWindow::DoPropertyDialog()
         {
             boost::scoped_ptr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
                                             pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList ));
-            DBG_ASSERT(aDlg, "Dialogdiet fail!");
+            DBG_ASSERT(aDlg, "Dialog creation failed!");
             if ( aDlg->Execute() == RET_OK )
             {
                 const OUString aURLText( aDlg->GetURL() );

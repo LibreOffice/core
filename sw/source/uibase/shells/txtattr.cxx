@@ -442,7 +442,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
 
                 boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
                     rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if (pDlg->Execute() == RET_OK)
                 {
                     rSh.StartAction();

@@ -99,7 +99,7 @@ namespace svx {
         if(pFact)
         {
             boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, bEnableBackgroundSelector ));
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            DBG_ASSERT(pDlg, "Dialog creation failed!");
             if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
             {
                 SfxItemIter aIter( *pDlg->GetOutputItemSet() );
@@ -681,7 +681,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
             mbEnableBackgroundSelector,
             mbEnableDrawingLayerFillStyles);
 
-        DBG_ASSERT(pDlg,"Dialogdiet fail!");
+        DBG_ASSERT(pDlg,"Dialog creation failed!");
         if(RET_OK == pDlg->Execute() && pDlg->GetOutputItemSet())
         {
             SfxItemIter aIter(*pDlg->GetOutputItemSet());

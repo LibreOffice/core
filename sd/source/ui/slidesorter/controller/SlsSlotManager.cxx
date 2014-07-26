@@ -904,11 +904,11 @@ void SlotManager::RenameSlide (void)
             OUString aPageName = pSelectedPage->GetName();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            DBG_ASSERT(pFact, "Dialog creation failed!");
             boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
                 mrSlideSorter.GetContentWindow().get(),
                 aPageName, aDescr));
-            DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
+            DBG_ASSERT(aNameDlg, "Dialog creation failed!");
             aNameDlg->SetText( aTitle );
             aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
             aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );

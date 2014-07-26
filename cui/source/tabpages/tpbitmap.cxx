@@ -432,7 +432,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
                                                         SVX_RES( RID_SVXSTR_BITMAP ),
                                                         CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
                                                         &aWarningBoxImage  );
-            DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
+            DBG_ASSERT(aMessDlg, "Dialog creation failed!");
             aMessDlg->SetButtonText( MESS_BTN_1, ResId( RID_SVXSTR_CHANGE, rMgr ) );
             aMessDlg->SetButtonText( MESS_BTN_2, ResId( RID_SVXSTR_ADD, rMgr ) );
 
@@ -491,9 +491,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    DBG_ASSERT(pFact, "Dialog creation failed!");
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    DBG_ASSERT(pDlg, "Dialog creation failed!");
     MessageDialog*    pWarnBox = NULL;
     sal_uInt16         nError(1);
 
@@ -600,9 +600,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
             OUString        aName;
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            DBG_ASSERT(pFact, "Dialog creation failed!");
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aURL.GetName().getToken( 0, '.' ), aDesc );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            DBG_ASSERT(pDlg, "Dialog creation failed!");
             nError = 1;
 
             while( pDlg->Execute() == RET_OK )
@@ -673,9 +673,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
         OUString aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        DBG_ASSERT(pFact, "Dialog creation failed!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pBitmapList->Count();
         bool bDifferent = false;

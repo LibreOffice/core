@@ -183,7 +183,7 @@ IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     boost::scoped_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pShell, false, pTAutoFmt));
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );
     return 0;

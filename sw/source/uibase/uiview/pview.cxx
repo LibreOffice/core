@@ -761,7 +761,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 if(pFact)
                 {
                     pDlg.reset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet));
-                    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                    OSL_ENSURE(pDlg, "Dialog creation failed!");
                 }
 
                 pDlg->SetLimits( MINZOOM, MAXZOOM );

@@ -138,7 +138,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         assert(pFact && "SwAbstractDialogFactory fail!");
 
                         boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG ));
-                        assert(pDlg && "Dialogdiet fail!");
+                        assert(pDlg && "Dialog creation failed!");
                         pDlg->Execute();
                     }
                 }
@@ -427,9 +427,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bool bTravel = false;
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    assert(pFact && "Dialogdiet fail!");
+                    assert(pFact && "Dialog creation failed!");
                     ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();
-                    assert(fnGetRange && "Dialogdiet fail! GetRanges()");
+                    assert(fnGetRange && "Dialog creation failed! GetRanges()");
                     SfxItemSet aSet(GetPool(), fnGetRange());
                     aSet.Put(SvxPostItTextItem(sComment, SID_ATTR_POSTIT_TEXT));
                     aSet.Put(SvxPostItAuthorItem(pRedline->GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
@@ -472,9 +472,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bTravel |= bNext || bPrev;
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
-                    assert(pFact2 && "Dialogdiet fail!");
+                    assert(pFact2 && "Dialog creation failed!");
                     boost::scoped_ptr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel ));
-                    assert(pDlg && "Dialogdiet fail!");
+                    assert(pDlg && "Dialog creation failed!");
                     pDlg->HideAuthor();
 
                     OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
@@ -534,9 +534,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 else
                 {
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    assert(pFact && "Dialogdiet fail!");
+                    assert(pFact && "Dialog creation failed!");
                     boost::scoped_ptr<AbstractJavaEditDialog> pDlg(pFact->CreateJavaEditDialog(pMDI, &rSh));
-                    assert(pDlg && "Dialogdiet fail!");
+                    assert(pDlg && "Dialog creation failed!");
                     if ( pDlg->Execute() )
                     {
                         aType = pDlg->GetScriptType();

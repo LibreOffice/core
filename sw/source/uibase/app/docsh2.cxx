@@ -685,7 +685,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             boost::scoped_ptr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg(0));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             if(RET_OK == pDlg->Execute())
             {
                 sal_uInt8 nLevel = pDlg->GetLevel();

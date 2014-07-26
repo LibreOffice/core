@@ -879,14 +879,14 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                             0);
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                assert(pFact && "Dialogdiet fail!");
+                assert(pFact && "Dialog creation failed!");
                 boost::scoped_ptr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         this, aSet,
                                                         *pActiveShell,
                                                         0,
                                                         USHRT_MAX,
                                                         true));
-                assert(pDlg && "Dialogdiet fail!");
+                assert(pDlg && "Dialog creation failed!");
                 if(RET_OK == pDlg->Execute())
                 {
                     SwTOXDescription&  rDesc = pDlg->GetTOXDescription(

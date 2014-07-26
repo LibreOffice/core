@@ -175,7 +175,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         pDlg.reset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, DLG_CHAR_STD));
-        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialog creation failed!");
         if( FN_INSERT_HYPERLINK == nSlot )
             pDlg->SetCurPageId("hyperlink");
     }
@@ -448,10 +448,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialog creation failed!");
             boost::scoped_ptr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
                 GetView().GetWindow(), rWrtSh, false));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
             {
@@ -473,7 +473,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), rWrtSh));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
         }
@@ -535,7 +535,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 boost::scoped_ptr<AbstractSwBreakDlg> pDlg(pFact->CreateSwBreakDlg(GetView().GetWindow(), rWrtSh));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     nKind = pDlg->GetKind();
@@ -593,7 +593,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq, DLG_INSERT_BOOKMARK ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
             }
 
@@ -625,7 +625,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             boost::scoped_ptr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin()));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
 
             switch (lcl_AskRedlineMode(&GetView().GetEditWin()))
             {
@@ -689,7 +689,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING ));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             pDlg.reset();
             rReq.Done();
@@ -699,10 +699,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialog creation failed!");
             boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, rWrtSh));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             pDlg.reset();
             rReq.Done();
@@ -978,7 +978,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, NULL, false, sDefPage ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
             }
             SfxItemSet* pSet = NULL;
             if ( !bUseDialog )

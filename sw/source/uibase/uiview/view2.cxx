@@ -533,9 +533,9 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_LINE_NUMBERING_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialog creation failed!");
             boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
         }
@@ -1136,9 +1136,9 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg(&pTmpFrame->GetWindow());
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if(RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
                 else
@@ -2329,9 +2329,9 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             {
                 //take an existing data source or create a new one?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 AbstractMailMergeFieldConnectionsDlg* pConnectionsDlg = pFact->CreateMailMergeFieldConnectionsDlg(&GetViewFrame()->GetWindow());
-                OSL_ENSURE(pConnectionsDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pConnectionsDlg, "Dialog creation failed!");
                 if(RET_OK == pConnectionsDlg->Execute())
                     bCallAddressPilot = !pConnectionsDlg->IsUseExistingConnections();
                 else

@@ -66,7 +66,7 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
     , m_nSheetId(0)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
     switch ( nRscId )
     {
         case RID_SCDLG_STYLES_PAR:  // Zellformatvorlagen

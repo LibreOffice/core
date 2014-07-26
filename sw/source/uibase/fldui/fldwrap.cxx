@@ -84,7 +84,7 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, sal_uInt16 nId,
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert(pFact && "SwAbstractDialogFactory fail!");
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent);
-    assert(pDlg && "Dialogdiet fail!");
+    assert(pDlg && "Dialog creation failed!");
     pDlgInterface = pDlg;
     pWindow = pDlg->GetWindow();
     pDlg->Start();
@@ -129,7 +129,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, sal_uInt16 n
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent);
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlgInterface = pDlg;
 
     pWindow = pDlg->GetWindow();

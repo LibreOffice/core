@@ -313,7 +313,7 @@ IMPL_LINK_NOARG(SwFldEditDlg, AddressHdl)
     boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aSet,
         pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         RC_DLG_ADDR ));
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(RET_OK == pDlg->Execute())
     {
         pSh->UpdateFlds( *pCurFld );

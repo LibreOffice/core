@@ -759,7 +759,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 if ( pFact )
                 {
                     boost::scoped_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL ) );
-                    DBG_ASSERT( dlg.get(), "Dialogdiet fail!" );
+                    DBG_ASSERT( dlg.get(), "Dialog creation failed!" );
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )
                         nRecord = dlg->GetValue();

@@ -106,7 +106,7 @@ static const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem
     if(!rItem.bSynchron || !(nCol|nRow))
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialog creation failed!");
         ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
         if ( fnSetActGroup )
             (*fnSetActGroup)( rItem.sGlossaryGroup );
@@ -179,7 +179,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                                                                             NULL,
 #endif
                                                                             bLabel));
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
 
     if ( RET_OK == pDlg->Execute() )
     {

@@ -57,9 +57,9 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         case FN_EDIT_AUTH_ENTRY_DLG :
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialog creation failed!");
             boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( pMDI, GetShell(), DLG_EDIT_AUTHMARK));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
         }
         break;
@@ -83,18 +83,18 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             if(aMgr.GetTOXMarkCount() > 1)
             {   // Several marks, which should it be?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 VclAbstractDialog* pMultDlg = pFact->CreateMultiTOXMarkDlg(pMDI, aMgr);
-                OSL_ENSURE(pMultDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pMultDlg, "Dialog creation failed!");
                 nRet = pMultDlg->Execute();
                 delete pMultDlg;
             }
             if( nRet == RET_OK)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark()));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
             }
             break;
@@ -138,11 +138,11 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                     aSet.Put(*pSet);
             }
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialog creation failed!");
             boost::scoped_ptr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         pMDI, aSet, rSh, (SwTOXBase* )pCurTOX,
                                                         USHRT_MAX, bGlobal));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
         }
         break;

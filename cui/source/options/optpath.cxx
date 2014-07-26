@@ -553,7 +553,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
         {
             AbstractSvxMultiPathDialog* pMultiDlg =
                 pFact->CreateSvxMultiPathDialog( this );
-            DBG_ASSERT( pMultiDlg, "Dialogdiet fail!" );
+            DBG_ASSERT( pMultiDlg, "Dialog creation failed!" );
 
             OUString sPath( sUser );
             if ( !sPath.isEmpty() )

@@ -822,7 +822,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 boost::scoped_ptr<AbstractSwConvertTableDlg> pDlg(pFact->CreateSwConvertTableDlg(GetView(), bToTable));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {
                     pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
@@ -2402,7 +2402,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg.reset(pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE, RC_DLG_SWBORDERDLG ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetTabBorders( *pDlg->GetOutputItemSet() );
@@ -2419,7 +2419,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg.reset(pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME, RC_DLG_SWBORDERDLG ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     aMgr.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2437,7 +2437,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg.reset(pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA, RC_DLG_SWBORDERDLG ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2469,7 +2469,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2487,7 +2487,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetFlyFrmAttr((SfxItemSet &) *pDlg->GetOutputItemSet() );
@@ -2502,7 +2502,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2611,9 +2611,9 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             if( !nCols || !nRows )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<AbstractInsTableDlg> pDlg(pFact->CreateInsTableDlg(rTempView));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {
                     pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTAFmt );
@@ -2827,7 +2827,7 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwChangeDBDlg(GetView()));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
         }
         break;

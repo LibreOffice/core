@@ -2394,7 +2394,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         pFound = FindDSConnection(sDataSource, true);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
     pImpl->pMergeDialog = pFact->CreateMailMergeDlg( DLG_MAILMERGE,
                                                         &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                                                         sDataSource,
@@ -2402,7 +2402,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                                                         nCmdType,
                                                         xConnection,
                                                         bWithDataSourceBrowser ? 0 : &aSelection);
-    OSL_ENSURE(pImpl->pMergeDialog, "Dialogdiet fail!");
+    OSL_ENSURE(pImpl->pMergeDialog, "Dialog creation failed!");
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
         aDescriptor[daSelection] <<= pImpl->pMergeDialog->GetSelection();
@@ -2568,7 +2568,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData ));
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute() )
     {
         OUString sDummy;

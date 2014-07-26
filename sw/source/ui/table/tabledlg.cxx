@@ -1207,7 +1207,7 @@ SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool&,
     , m_nHtmlMode(::GetHtmlMode(pSh->GetView().GetDocShell()))
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
     AddTabPage("table", &SwFormatTablePage::Create, 0);
     m_nTextFlowId = AddTabPage("textflow", &SwTextFlowPage::Create, 0);
     AddTabPage("columns", &SwTableColumnPage::Create, 0);

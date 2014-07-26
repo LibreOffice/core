@@ -607,12 +607,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialog creation failed!");
             boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog("FrameDialog",
                                                     GetView().GetViewFrame(),
                                                     &GetView().GetViewFrame()->GetWindow(),
                                                     aSet, true));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())
             {
                 //local variable necessary at least after call of .AutoCaption() because this could be deleted at this point
@@ -660,9 +660,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_FORMAT_COLUMN :
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialog creation failed!");
         boost::scoped_ptr<VclAbstractDialog> pColDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN));
-        OSL_ENSURE(pColDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pColDlg, "Dialog creation failed!");
         pColDlg->Execute();
     }
     break;

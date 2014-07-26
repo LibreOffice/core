@@ -54,9 +54,9 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, sal_uInt16 nId,
 
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    DBG_ASSERT(pFact, "Dialog creation failed!");
     mpDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, SID_HYPERLINK_DIALOG );
-    DBG_ASSERT(mpDlg, "Dialogdiet fail!");
+    DBG_ASSERT(mpDlg, "Dialog creation failed!");
     pWindow = mpDlg->GetWindow();
     ((MyStruct*)pImp)->bVisible = false;
 

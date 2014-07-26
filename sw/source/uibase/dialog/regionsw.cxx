@@ -82,10 +82,10 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         // height=width for more consistent preview (analog to edit region)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialog creation failed!");
         boost::scoped_ptr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
             &GetView().GetViewFrame()->GetWindow(), aSet , rSh));
-        OSL_ENSURE(aTabDlg, "Dialogdiet fail!");
+        OSL_ENSURE(aTabDlg, "Dialog creation failed!");
         aTabDlg->Execute();
         rReq.Ignore();
     }
@@ -192,10 +192,10 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         // height=width for more consistent preview (analog to edit region)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialog creation failed!");
         boost::scoped_ptr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
             &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis));
-        OSL_ENSURE(aTabDlg, "Dialogdiet fail!");
+        OSL_ENSURE(aTabDlg, "Dialog creation failed!");
         aTabDlg->SetSectionData(*xSectionData);
         aTabDlg->Execute();
     }
@@ -218,9 +218,9 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
             Window* pParentWin = &GetView().GetViewFrame()->GetWindow();
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));
-                OSL_ENSURE(pEditRegionDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pEditRegionDlg, "Dialog creation failed!");
                 if(pItem && pItem->ISA(SfxStringItem))
                 {
                     pEditRegionDlg->SelectSection(((const SfxStringItem*)pItem)->GetValue());

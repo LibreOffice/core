@@ -35,7 +35,7 @@ SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
 {
     // Create TabPage
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
 
     if ( fnCreatePage )

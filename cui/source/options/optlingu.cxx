@@ -1625,7 +1625,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         if(pFact)
         {
             AbstractSvxNewDictionaryDialog* aDlg = pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1 );
-            DBG_ASSERT(aDlg, "Dialogdiet fail!");
+            DBG_ASSERT(aDlg, "Dialog creation failed!");
             uno::Reference< XDictionary >  xNewDic;
             if ( aDlg->Execute() == RET_OK )
                 xNewDic = uno::Reference< XDictionary >( aDlg->GetNewDictionary(), UNO_QUERY );
@@ -1661,7 +1661,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                     if(pFact)
                     {
                         VclAbstractDialog* aDlg = pFact->CreateSvxEditDictionaryDialog( this, xDic->getName(), xSpellChecker1, RID_SFXDLG_EDITDICT );
-                        DBG_ASSERT(aDlg, "Dialogdiet fail!");
+                        DBG_ASSERT(aDlg, "Dialog creation failed!");
                         aDlg->Execute();
                         delete aDlg;
                     }

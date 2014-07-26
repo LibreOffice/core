@@ -399,7 +399,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aCoreSet,
             GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RC_DLG_SWNUMFMTDLG ));
-        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialog creation failed!");
 
         if (RET_OK == pDlg->Execute())
         {

@@ -259,7 +259,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 
         const OUString sFmtStr = pColl->GetName();
         boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_CHAR_ENV, &sFmtStr));
-        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialog creation failed!");
         if (pDlg->Execute() == RET_OK)
         {
             SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );

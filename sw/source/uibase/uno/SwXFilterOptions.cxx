@@ -122,7 +122,7 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException, std::excepti
 
         boost::scoped_ptr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(NULL, *pDocShell,
             pInStream.get()));
-        OSL_ENSURE(pAsciiDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pAsciiDlg, "Dialog creation failed!");
         if(RET_OK == pAsciiDlg->Execute())
         {
             SwAsciiOptions aOptions;

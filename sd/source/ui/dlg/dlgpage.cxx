@@ -55,7 +55,7 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
     mpBitmapList = aBitmapListItem.GetBitmapList();
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
 
     mnPage = AddTabPage( "RID_SVXPAGE_PAGE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), 0 );
     mnArea = AddTabPage( "RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), 0 );

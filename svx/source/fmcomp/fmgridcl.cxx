@@ -861,7 +861,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             if(pFact)
             {
                 boost::scoped_ptr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog(NULL));
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                DBG_ASSERT(pDlg, "Dialog creation failed!");
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();
             }

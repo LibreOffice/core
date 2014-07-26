@@ -1207,7 +1207,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
                     if(pFact)
                     {
                         boost::scoped_ptr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldTitle ));
-                        DBG_ASSERT(aDlg, "Dialogdiet fail!");
+                        DBG_ASSERT(aDlg, "Dialog creation failed!");
                         if( aDlg->Execute() == RET_OK )
                         {
                             OUString aNewTitle( aDlg->GetTitle() );

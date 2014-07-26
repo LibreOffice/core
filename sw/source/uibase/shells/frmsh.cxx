@@ -243,7 +243,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), GetView().GetWrtShell()));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
         }
@@ -251,10 +251,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialog creation failed!");
             boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, GetView().GetWrtShell()));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             pDlg.reset();
             rReq.Done();
@@ -497,7 +497,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog(
                                                         nSel & nsSelectionType::SEL_GRF ? "PictureDialog" :
                                                         nSel & nsSelectionType::SEL_OLE ? "ObjectDialog":
@@ -507,7 +507,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                         aSet, false,
                                                         false,
                                                         sDefPage));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if ( nSlot == FN_DRAW_WRAP_DLG )
                 {
@@ -655,12 +655,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 OUString aTitle(rSh.GetObjTitle());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<AbstractSvxObjectTitleDescDialog> pDlg(
                     pFact->CreateSvxObjectTitleDescDialog( NULL,
                                                            aTitle,
                                                            aDescription ));
-                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -1288,13 +1288,13 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
                 rSh.GetFlyFrmAttr(aNewAttr);
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+                DBG_ASSERT(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
                     NULL,
                     &aNewAttr,
                     pDoc,
                     false));
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                DBG_ASSERT(pDlg, "Dialog creation failed!");
 
                 if(RET_OK == pDlg->Execute())
                 {

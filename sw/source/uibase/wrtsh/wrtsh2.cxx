@@ -195,9 +195,9 @@ bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
 {
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
     boost::scoped_ptr<AbstractFldInputDlg> pDlg(pFact->CreateFldInputDlg(pParentWin, *this, pFld, bNextButton));
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
 
@@ -224,7 +224,7 @@ bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, bool bNextButton, OString* p
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     boost::scoped_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(NULL, *this, pFld, bNextButton));
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
     const short nRet = pDlg->Execute();

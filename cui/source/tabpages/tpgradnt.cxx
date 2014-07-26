@@ -267,7 +267,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
                                                         SVX_RESSTR( RID_SVXSTR_GRADIENT ),
                                                         CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
                                                         &aWarningBoxImage );
-            DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
+            DBG_ASSERT(aMessDlg, "Dialog creation failed!");
             aMessDlg->SetButtonText( MESS_BTN_1,
                                     OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
             aMessDlg->SetButtonText( MESS_BTN_2,
@@ -429,9 +429,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    DBG_ASSERT(pFact, "Dialog creation failed!");
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    DBG_ASSERT(pDlg, "Dialog creation failed!");
     MessageDialog*    pWarnBox = NULL;
     sal_uInt16         nError   = 1;
 
@@ -520,9 +520,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
         OUString aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        DBG_ASSERT(pFact, "Dialog creation failed!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pGradientList->Count();
         bool bDifferent = false;

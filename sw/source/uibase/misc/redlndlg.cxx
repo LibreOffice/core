@@ -1062,9 +1062,9 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
 
                         OUString sComment = convertLineEnd(rRedline.GetComment(), GetSystemLineEnd());
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "Dialogdiet fail!");
+                        OSL_ENSURE(pFact, "Dialog creation failed!");
                         ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();
-                        OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
+                        OSL_ENSURE(fnGetRange, "Dialog creation failed! GetRanges()");
                         SfxItemSet aSet( pSh->GetAttrPool(), fnGetRange() );
 
                         aSet.Put(SvxPostItTextItem(sComment, SID_ATTR_POSTIT_TEXT));
@@ -1075,7 +1075,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                                     SID_ATTR_POSTIT_DATE ));
 
                         boost::scoped_ptr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( pParentDlg, aSet, false ));
-                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                         pDlg->HideAuthor();
 

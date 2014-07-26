@@ -1759,7 +1759,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     if(pFact)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
-                        SAL_WARN_IF( !pDlg, "starmath", "Dialogdiet fail!" );
+                        SAL_WARN_IF( !pDlg, "starmath", "Dialog creation failed!" );
                         pDlg->SetLimits( MINZOOM, MAXZOOM );
                         if( pDlg->Execute() != RET_CANCEL )
                             pSet = pDlg->GetOutputItemSet();

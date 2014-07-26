@@ -56,7 +56,7 @@ void SwTableFUNC::ColWidthDlg( Window *pParent )
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();
 }
 

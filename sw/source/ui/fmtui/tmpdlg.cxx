@@ -116,7 +116,7 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
 {
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
     // tinker TabPages together
     switch( nRegion )
     {

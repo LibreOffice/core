@@ -363,7 +363,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
             if(pFact)
             {
                 boost::scoped_ptr<VclAbstractRefreshableDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog( this, pTheme ));
-                DBG_ASSERT(aActualizeProgress, "Dialogdiet fail!");
+                DBG_ASSERT(aActualizeProgress, "Dialog creation failed!");
 
                 aActualizeProgress->Update();
                 aActualizeProgress->Execute();
@@ -385,9 +385,9 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
             const OUString  aOldName( pTheme->GetName() );
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            DBG_ASSERT(pFact, "Dialog creation failed!");
             boost::scoped_ptr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldName ));
-            DBG_ASSERT(aDlg, "Dialogdiet fail!");
+            DBG_ASSERT(aDlg, "Dialog creation failed!");
 
             if( aDlg->Execute() == RET_OK )
             {
@@ -423,7 +423,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
                 if(pFact)
                 {
                     boost::scoped_ptr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog( this, pTheme ));
-                    DBG_ASSERT(aDlg, "Dialogdiet fail!");
+                    DBG_ASSERT(aDlg, "Dialog creation failed!");
 
                     if( aDlg->Execute() == RET_OK )
                         pTheme->SetId( aDlg->GetId(), true );

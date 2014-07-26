@@ -25,7 +25,7 @@ SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialog creation failed!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SFXPAGE_GENERAL );
     if ( fnCreatePage )
     {

@@ -75,9 +75,9 @@ typedef boost::ptr_vector<TextBlockInfo_Impl> TextBlockInfoArr;
 void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert(pFact && "Dialogdiet fail!");
+    assert(pFact && "Dialog creation failed!");
     boost::scoped_ptr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(pViewFrame, this, pWrtShell));
-    assert(pDlg && "Dialogdiet fail!");
+    assert(pDlg && "Dialog creation failed!");
     OUString sName;
     OUString sShortName;
 
@@ -361,9 +361,9 @@ bool SwGlossaryHdl::ExpandGlossary()
     OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
     SwTextBlocks *pGlossary;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    assert(pFact && "Dialogdiet fail!");
+    assert(pFact && "Dialog creation failed!");
     ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc();
-    assert(fnGetCurrGroup && "Dialogdiet fail!");
+    assert(fnGetCurrGroup && "Dialog creation failed!");
     OUString sGroupName( (*fnGetCurrGroup)() );
     if (sGroupName.indexOf(GLOS_DELIM)<0)
         FindGroupName(sGroupName);
@@ -450,7 +450,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 assert(pFact && "SwAbstractDialogFactory fail!");
 
                 boost::scoped_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(0, aShortName));
-                assert(pDlg && "Dialogdiet fail!");
+                assert(pDlg && "Dialog creation failed!");
                 for(sal_uInt16 i = 0; i < aFoundArr.size(); ++i)
                 {
                     TextBlockInfo_Impl* pData = &aFoundArr[i];

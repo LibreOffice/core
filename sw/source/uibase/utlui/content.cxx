@@ -3248,7 +3248,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         boost::scoped_ptr<AbstractSwRenameXNamedDlg> pDlg(pFact->CreateSwRenameXNamedDlg(this, xNamed, xNameAccess));
-        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialog creation failed!");
         if(xSecond.is())
             pDlg->SetAlternativeAccess( xSecond, xThird);
 
