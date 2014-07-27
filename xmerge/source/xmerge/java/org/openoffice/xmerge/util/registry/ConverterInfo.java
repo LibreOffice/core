@@ -384,8 +384,8 @@ public class ConverterInfo {
     public static boolean isValidOfficeType(String officeMime) {
 
         boolean rc = false;
-        for (int i=0; i < validOfficeTypes.length; i++) {
-            if (officeMime.equals(validOfficeTypes[i])) {
+        for (String validOfficeType : validOfficeTypes) {
+            if (officeMime.equals(validOfficeType)) {
                 rc = true;
             }
         }

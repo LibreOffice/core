@@ -53,8 +53,6 @@ public final class ConverterInfoMgr {
     */
     public static void addPlugIn(ConverterInfo ci) throws RegistryException {
 
-        ConverterInfo converterInfo;
-
         // Validate
 
         if (ci.getDisplayName() == null) {
@@ -80,13 +78,10 @@ public final class ConverterInfoMgr {
 
         // Verify there is no converter with the same Display Name in
         // the registry.
-
-        Iterator<ConverterInfo> ciEnum = converterInfoList.iterator();
-        while (ciEnum.hasNext()) {
-            converterInfo = ciEnum.next();
+        for (ConverterInfo converterInfo : converterInfoList) {
             if (ci.getDisplayName().equals(converterInfo.getDisplayName())) {
                 RegistryException re = new RegistryException(
-                    "Converter with specified display name already exists.");
+                        "Converter with specified display name already exists.");
                 throw re;
             }
         }
@@ -179,16 +174,12 @@ public final class ConverterInfoMgr {
     */
    public static boolean removeByName(String name) {
 
-        ConverterInfo converterInfo;
         boolean       rc = false;
 
-        Iterator<ConverterInfo> ciEnum = converterInfoList.iterator();
-        while (ciEnum.hasNext())
-        {
-            converterInfo = ciEnum.next();
+        for (ConverterInfo converterInfo : converterInfoList) {
             if (name.equals(converterInfo.getDisplayName())) {
-               converterInfoList.remove(converterInfo);
-               rc = true;
+                converterInfoList.remove(converterInfo);
+                rc = true;
             }
         }
         return rc;
@@ -208,29 +199,22 @@ public final class ConverterInfoMgr {
     */
     public static ConverterInfo findConverterInfo(String deviceMime, String officeMime) {
 
-        ConverterInfo converterInfo;
-
         if (deviceMime == null ||
             ConverterInfo.isValidOfficeType(officeMime) == false) {
             return null;
         }
 
         // Loop over elements comparing with deviceFromMime
-
-        Iterator<ConverterInfo> ciEnum = converterInfoList.iterator();
-        while (ciEnum.hasNext()) {
-
-            converterInfo = ciEnum.next();
+        for (ConverterInfo converterInfo : converterInfoList) {
             String toDeviceInfo = converterInfo.getOfficeMime();
             Iterator<String> fromEnum = converterInfo.getDeviceMime();
 
             // Loop over the deviceMime types.
-
             while (fromEnum.hasNext()) {
                 String fromDeviceInfo = fromEnum.next();
                 if (deviceMime.trim().equals(fromDeviceInfo) &&
-                    officeMime.trim().equals(toDeviceInfo)) {
-                   return (converterInfo);
+                        officeMime.trim().equals(toDeviceInfo)) {
+                    return (converterInfo);
                 }
             }
         }
