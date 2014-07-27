@@ -751,6 +751,14 @@ void ScTable::SortReorderByRow(
     ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
     assert(pRows); // In sort-by-row mode we must have data rows already populated.
 
+    // Split formula groups at the sort range boundaries (if applicable).
+    std::vector<SCROW> aRowBounds;
+    aRowBounds.reserve(2);
+    aRowBounds.push_back(nRow1);
+    aRowBounds.push_back(nRow2+1);
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        SplitFormulaGroups(nCol, aRowBounds);
+
     // Cells in the data rows only reference values in the document. Make
     // a copy before updating the document.
 
