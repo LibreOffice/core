@@ -143,10 +143,7 @@ public class ColumnRowInfo {
      */
     public boolean isRow() {
 
-        if(type==ROW)
-            return true;
-        else
-            return false;
+        return type==ROW;
     }
 
     /**
@@ -156,10 +153,7 @@ public class ColumnRowInfo {
      */
     public boolean isColumn() {
 
-        if(type==COLUMN)
-            return true;
-        else
-            return false;
+        return type==COLUMN;
     }
 
     /**
@@ -179,11 +173,8 @@ public class ColumnRowInfo {
      */
     public boolean isDefaultSize() {
 
-        if( type==ROW &&
-            dimension>DEFAULTROWSIZE_MIN &&
-            dimension<DEFAULTROWSIZE_MAX)
-            return true;
-        else
-            return false;
+        return type==ROW &&
+                dimension>DEFAULTROWSIZE_MIN &&
+                dimension<DEFAULTROWSIZE_MAX;
     }
 }
