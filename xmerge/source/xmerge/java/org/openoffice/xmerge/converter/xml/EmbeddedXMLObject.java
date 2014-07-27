@@ -191,7 +191,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
                 builder = factory.newDocumentBuilder();
             }
 
-            byte[] data = zipFile.getNamedBytes(new String(objName + "/" + name));
+            byte[] data = zipFile.getNamedBytes((objName + "/" + name));
             if (data != null) {
                 return OfficeDocument.parse(builder, data);
             }
@@ -222,15 +222,15 @@ public class EmbeddedXMLObject extends EmbeddedObject {
     void write(OfficeZip zip) throws IOException {
         if (hasChanged == true) {
             if (contentDOM != null) {
-                zip.setNamedBytes(new String(objName + "/content.xml"),
+                zip.setNamedBytes((objName + "/content.xml"),
                                         OfficeDocument.docToBytes(contentDOM));
             }
             if (settingsDOM != null) {
-                zip.setNamedBytes(new String(objName + "/settings.xml"),
+                zip.setNamedBytes((objName + "/settings.xml"),
                                         OfficeDocument.docToBytes(settingsDOM));
             }
             if (stylesDOM != null) {
-                zip.setNamedBytes(new String(objName + "/styles.xml"),
+                zip.setNamedBytes((objName + "/styles.xml"),
                                         OfficeDocument.docToBytes(stylesDOM));
             }
         }
@@ -249,8 +249,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
             Element contentNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
 
             contentNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
-            contentNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,
-                                        new String(objName + "/content.xml"));
+            contentNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH, (objName + "/content.xml"));
 
             root.appendChild(contentNode);
         }
@@ -259,8 +258,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
             Element settingsNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
 
             settingsNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
-            settingsNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,
-                                        new String(objName + "/settings.xml"));
+            settingsNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH, (objName + "/settings.xml"));
 
             root.appendChild(settingsNode);
         }
@@ -269,16 +267,14 @@ public class EmbeddedXMLObject extends EmbeddedObject {
             Element stylesNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
 
             stylesNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
-            stylesNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,
-                                        new String(objName + "/styles.xml"));
+            stylesNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH, (objName + "/styles.xml"));
         }
 
 
         Element objectNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
 
         objectNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, objType);
-        objectNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,
-                                    new String(objName + "/"));
+        objectNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH, (objName + "/"));
 
         root.appendChild(objectNode);
     }
