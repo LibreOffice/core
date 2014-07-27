@@ -48,7 +48,7 @@ void SwNavigationShell::Execute(SfxRequest &rReq)
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    sal_uInt16      nSlotId = rReq.GetSlot();
+    const sal_uInt16 nSlotId = rReq.GetSlot();
     bool        bChanged = pSdrView->GetModel()->IsChanged();
     pSdrView->GetModel()->SetChanged(false);
     SwNavigationMgr& aSwNavigationMgr = pSh->GetNavigationMgr();

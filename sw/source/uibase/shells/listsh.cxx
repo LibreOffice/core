@@ -76,8 +76,8 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
         if ( bMove )
         {
             const IDocumentOutlineNodes* pIDoc( rSh.getIDocumentOutlineNodesAccess() );
-            const sal_uInt16 nActLevel = static_cast<sal_uInt16>(pIDoc->getOutlineLevel( nActPos ));
-            sal_uInt16 nActEndPos = nActPos + 1;
+            const int nActLevel = pIDoc->getOutlineLevel( nActPos );
+            sal_Int32 nActEndPos = nActPos + 1;
             sal_Int16 nDir = 0;
 
             if ( !bUp )
@@ -92,7 +92,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
                     // The current subpoint which should be moved
                     // starts at nActPos and ends at nActEndPos - 1
                     --nActEndPos;
-                    sal_uInt16 nDest = nActEndPos + 2;
+                    sal_Int32 nDest = nActEndPos + 2;
                     while ( nDest < pIDoc->getOutlineNodesCount() &&
                             pIDoc->getOutlineLevel( nDest ) > nActLevel )
                         ++nDest;
@@ -106,7 +106,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
                 if ( nActPos > 0 )
                 {
                     --nActEndPos;
-                    sal_uInt16 nDest = nActPos - 1;
+                    sal_Int32 nDest = nActPos - 1;
                     while ( nDest > 0 && pIDoc->getOutlineLevel( nDest ) > nActLevel )
                         --nDest;
 
@@ -134,7 +134,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
 void SwListShell::Execute(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     SwWrtShell& rSh = GetShell();
 
     // #i35572#

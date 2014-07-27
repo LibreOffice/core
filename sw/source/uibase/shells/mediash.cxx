@@ -86,12 +86,11 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
     if( pSdrView )
     {
         const SfxItemSet*   pArgs = rReq.GetArgs();
-        sal_uInt16              nSlotId = rReq.GetSlot();
         bool                bChanged = pSdrView->GetModel()->IsChanged();
 
         pSdrView->GetModel()->SetChanged( false );
 
-        switch( nSlotId )
+        switch( rReq.GetSlot() )
         {
             case SID_DELETE:
             {
