@@ -31,7 +31,6 @@ import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentSerializer;
-import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
 import org.openoffice.xmerge.converter.dom.DOMDocument;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
