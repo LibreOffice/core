@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_61518c62",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/registry/ConverterInfoMgr.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-27T17:20:10Z",
+      "side": 1,
+      "message": "Again, please avoid formatting changes in unrelated code. If you really think such change is needed, do it as a separate commit.",
+      "revId": "0c02dd7bf7ae6263fd0548d9141c3838cfc8dbbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_8154a054",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/registry/ConverterInfoMgr.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-27T17:20:10Z",
+      "side": 1,
+      "message": "Why not convert this iterator too?",
+      "revId": "0c02dd7bf7ae6263fd0548d9141c3838cfc8dbbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
