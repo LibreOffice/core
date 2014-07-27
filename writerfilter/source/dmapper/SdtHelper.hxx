@@ -62,11 +62,8 @@ class SdtHelper
     bool m_bHasElements;
 
     /// Create and append the drawing::XControlShape, containing the various models.
-    void createControlShape(com::sun::star::awt::Size aSize,
-        com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&);
-    void createControlShape(com::sun::star::awt::Size aSize,
-        com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&,
-                            const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rGrabBag);
+    void createControlShape(css::awt::Size aSize, css::uno::Reference<css::awt::XControlModel> const&);
+    void createControlShape(css::awt::Size aSize, css::uno::Reference<css::awt::XControlModel> const&, const css::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
 public:
     SdtHelper(DomainMapper_Impl& rDM_Impl);
     virtual ~SdtHelper();

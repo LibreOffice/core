@@ -271,7 +271,7 @@ public:
     /// Text from special destinations.
     OUStringBuffer aDestinationText;
     /// point to the buffer of the current destination
-    OUStringBuffer * pDestinationText;
+    OUStringBuffer* pDestinationText;
 
     /// Index of the current style.
     int nCurrentStyleIndex;

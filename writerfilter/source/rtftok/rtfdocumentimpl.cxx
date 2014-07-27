@@ -705,9 +705,7 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         int b = 0, count = 2;
 
         // Feed the destination text to a stream.
-        OString aStr = OUStringToOString(
-                m_aStates.top().aDestinationText.makeStringAndClear(),
-                RTL_TEXTENCODING_ASCII_US);
+        OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
         const char* str = aStr.getStr();
         for (int i = 0; i < aStr.getLength(); ++i)
         {
@@ -4882,8 +4880,7 @@ int RTFDocumentImpl::popState()
     case DESTINATION_SHAPEPROPERTYNAME:
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
             break; // not for nested group
-        aState.aShape.aProperties.push_back(make_pair(
-            m_aStates.top().pDestinationText->makeStringAndClear(), OUString()));
+        aState.aShape.aProperties.push_back(make_pair(m_aStates.top().pDestinationText->makeStringAndClear(), OUString()));
         break;
     case DESTINATION_SHAPEPROPERTYVALUE:
         if (aState.aShape.aProperties.size())

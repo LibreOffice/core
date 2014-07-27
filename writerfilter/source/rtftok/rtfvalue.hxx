@@ -27,10 +27,10 @@ class RTFValue
 public:
     typedef boost::shared_ptr<RTFValue> Pointer_t;
     RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes, RTFSprms rSprms,
-            css::uno::Reference<css::drawing::XShape> const& xShape,
-            css::uno::Reference<css::io::XInputStream> const& xStream,
-            css::uno::Reference<css::embed::XEmbeddedObject> const& xObject,
-            bool bForceString, const RTFShape& aShape);
+             css::uno::Reference<css::drawing::XShape> const& xShape,
+             css::uno::Reference<css::io::XInputStream> const& xStream,
+             css::uno::Reference<css::embed::XEmbeddedObject> const& xObject,
+             bool bForceString, const RTFShape& aShape);
     RTFValue();
     RTFValue(int nValue);
     RTFValue(const OUString& sValue, bool bForce = false);

@@ -853,7 +853,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFm
 
     // In case we are already inside a DML block, then write the shape only as VML, turn out that's allowed to do.
     // A common service created in util to check for VML shapes which are allowed to have textbox in content
-    if ( (msfilter::util::HasTextBoxContent(eShapeType)) && m_pImpl->isSupportedDMLShape(xShape) && !bDMLAndVMLDrawingOpen)
+    if ((msfilter::util::HasTextBoxContent(eShapeType)) && m_pImpl->isSupportedDMLShape(xShape) && !bDMLAndVMLDrawingOpen)
     {
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
 
