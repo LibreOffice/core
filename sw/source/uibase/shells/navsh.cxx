@@ -35,28 +35,27 @@ void SwNavigationShell::InitInterface_Impl()
 {
 }
 
-SwNavigationShell::SwNavigationShell(SwView &_rView):
-  SwBaseShell( _rView )
-
+SwNavigationShell::SwNavigationShell(SwView &_rView)
+    : SwBaseShell( _rView )
 {
-  SetName(OUString("Navigation"));
-  SetHelpId(SW_NAVIGATIONSHELL);
+    SetName(OUString("Navigation"));
+    SetHelpId(SW_NAVIGATIONSHELL);
 }
 
 void SwNavigationShell::Execute(SfxRequest &rReq)
 {
     SwWrtShell *pSh = &GetShell();
-    SdrView*    pSdrView = pSh->GetDrawView();
+    SdrView* pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
     const sal_uInt16 nSlotId = rReq.GetSlot();
-    bool        bChanged = pSdrView->GetModel()->IsChanged();
+    bool bChanged = pSdrView->GetModel()->IsChanged();
     pSdrView->GetModel()->SetChanged(false);
     SwNavigationMgr& aSwNavigationMgr = pSh->GetNavigationMgr();
     const SfxPoolItem* pItem;
     if(pArgs)
         pArgs->GetItemState(nSlotId, false, &pItem);
     switch (nSlotId)
-        {
+    {
         case FN_NAVIGATION_BACK:
             aSwNavigationMgr.goBack();
             break;
@@ -66,7 +65,7 @@ void SwNavigationShell::Execute(SfxRequest &rReq)
             break;
         default:
             break;
-        }
+    }
     if (pSdrView->GetModel()->IsChanged())
         GetShell().SetModified();
     else if (bChanged)
@@ -77,31 +76,30 @@ void SwNavigationShell::Execute(SfxRequest &rReq)
 
 void SwNavigationShell::GetState(SfxItemSet &rSet)
 {
-  SwWrtShell *pSh = &GetShell();
-  SfxWhichIter aIter( rSet );
-  sal_uInt16 nWhich = aIter.FirstWhich();
-  SwNavigationMgr& aNavigationMgr = pSh->GetNavigationMgr();
-  while( nWhich )
+    SwWrtShell *pSh = &GetShell();
+    SfxWhichIter aIter( rSet );
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    SwNavigationMgr& aNavigationMgr = pSh->GetNavigationMgr();
+    while( nWhich )
     {
-      switch( nWhich )
-    {
-    case FN_NAVIGATION_BACK:
-      {
-        if (!aNavigationMgr.backEnabled()) {
-          rSet.DisableItem(FN_NAVIGATION_BACK);
+        switch( nWhich )
+        {
+            case FN_NAVIGATION_BACK:
+                if (!aNavigationMgr.backEnabled())
+                {
+                    rSet.DisableItem(FN_NAVIGATION_BACK);
+                }
+                break;
+            case FN_NAVIGATION_FORWARD:
+                if (!aNavigationMgr.forwardEnabled())
+                {
+                    rSet.DisableItem(FN_NAVIGATION_FORWARD);
+                }
+                break;
+            default:
+                break;
         }
-      }
-      break;
-    case FN_NAVIGATION_FORWARD:
-      {
-        if (!aNavigationMgr.forwardEnabled())
-          rSet.DisableItem(FN_NAVIGATION_FORWARD);
-      }
-      break;
-    default:
-      break;
-    }
-      nWhich = aIter.NextWhich();
+        nWhich = aIter.NextWhich();
     }
 }
 
