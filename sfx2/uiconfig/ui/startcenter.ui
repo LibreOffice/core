@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Wed Jul  2 15:37:52 2014 -->
+<!-- Generated with glade 3.16.0 on Wed Jul 23 16:41:24 2014 -->
 <interface>
-  <!-- interface-requires LibreOffice 1.0 -->
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkImage" id="calc_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -86,7 +86,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="templates_all">
+                  <object class="GtkButton" id="templates_all:filtermenu">
                     <property name="label" translatable="yes">T_emplates</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -428,6 +428,61 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+  </object>
+  <object class="GtkMenu" id="filtermenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="filter_writer">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Writer Templates</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="filter_calc">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Calc Templates</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="filter_impress">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Impress Templates</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="filter_draw">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Draw Templates</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="filter_math">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Math Templates</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="menuitem3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="edit">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Edit Templates</property>
+      </object>
     </child>
   </object>
 </interface>

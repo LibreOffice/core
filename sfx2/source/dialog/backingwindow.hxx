@@ -27,6 +27,8 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
 
+#include <vcl/menubtn.hxx>
+
 #include <sfx2/recentdocsview.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/templateabstractview.hxx>
@@ -59,7 +61,8 @@ class BackingWindow
     com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
 
     PushButton*                     mpOpenButton;
-    PushButton*                     mpTemplateButton;
+    //PushButton*                     mpTemplateButton;
+    MenuButton*                     mpTemplateButton;
 
     FixedText*                      mpCreateLabel;
 
@@ -111,7 +114,7 @@ class BackingWindow
     std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelFolders;
 
     DECL_LINK(ClickHdl, Button*);
-    DECL_LINK(ActivateHdl, Button*);
+    DECL_LINK(MenuSelectHdl, MenuButton*);
     DECL_LINK(ExtLinkClickHdl, Button*);
     DECL_LINK(OpenRegionHdl, void*);
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
