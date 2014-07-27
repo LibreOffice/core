@@ -97,7 +97,7 @@ public class PalmDocument
         PdbDecoder decoder = new PdbDecoder();
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buf = new byte[4096];
-        int n = 0;
+        int n;
     while ((n = is.read(buf)) > 0) {
         baos.write(buf, 0, n);
         }
