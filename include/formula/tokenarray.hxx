@@ -257,19 +257,19 @@ inline OpCode FormulaTokenArray::GetOuterFuncOpCode()
     return ocNone;
 }
 
-struct ImpTokenIterator
-{
-    ImpTokenIterator* pNext;
-    const FormulaTokenArray* pArr;
-    short nPC;
-    short nStop;
-
-    DECL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator );
-};
-
 class FORMULA_DLLPUBLIC FormulaTokenIterator
 {
-    ImpTokenIterator* pCur;
+    struct Item
+    {
+    public:
+        const FormulaTokenArray* pArr;
+        short nPC;
+        short nStop;
+
+        Item(const FormulaTokenArray* arr, short pc, short stop);
+    };
+
+    std::vector<Item> *maStack;
 
 public:
     FormulaTokenIterator( const FormulaTokenArray& );
@@ -278,8 +278,8 @@ public:
     const   FormulaToken* Next();
     const   FormulaToken* PeekNextOperator();
     bool    IsEndOfPath() const;    /// if a jump or subroutine path is done
-    bool    HasStacked() const { return pCur->pNext != 0; }
-    short   GetPC() const { return pCur->nPC; }
+    bool    HasStacked() const { return maStack->size() > 1; }
+    short   GetPC() const { return maStack->back().nPC; }
 
     /** Jump or subroutine call.
         Program counter values will be incremented before code is executed =>
