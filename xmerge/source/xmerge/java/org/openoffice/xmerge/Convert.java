@@ -154,7 +154,7 @@ public class Convert implements Cloneable {
 
     /**
      *  Clones a Convert object so another Convert object can
-     *  do the same conversion.  <code>InputStream<code> objects passed
+     *  do the same conversion.  <code>InputStream</code> objects passed
      *  in via calls to the <code>addInputStream</code> method are not
      *  copied.
      *
