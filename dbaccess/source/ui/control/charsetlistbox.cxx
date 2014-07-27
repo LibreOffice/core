@@ -39,6 +39,24 @@ namespace dbaui
         }
     }
 
+    CharSetListBox::CharSetListBox( Window* _pParent, WinBits _nBits = WB_DROPDOWN )
+        :ListBox( _pParent, _nBits )
+    {
+        SetDropDownLineCount( 20 );
+
+        OCharsetDisplay::const_iterator charSet = m_aCharSets.begin();
+        while ( charSet != m_aCharSets.end() )
+        {
+            InsertEntry( (*charSet).getDisplayName() );
+            ++charSet;
+        }
+    }
+
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCharSetListBox(Window *pParent)
+    {
+        return new CharSetListBox(pParent);
+    }
+
     CharSetListBox::~CharSetListBox()
     {
     }

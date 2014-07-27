@@ -26,7 +26,6 @@
 
 #define STR_DBASE_HELPTEXT                  28
 #define STR_MSACCESS_HELPTEXT               29
-#define STR_TEXT_HELPTEXT                   30
     // FREE
 #define STR_ADO_HELPTEXT                    32
 #define STR_JDBC_HELPTEXT                   33
@@ -37,7 +36,6 @@
 #define STR_ORACLE_HELPTEXT                 40
 #define STR_DBASE_HEADERTEXT                41
 #define STR_MSACCESS_HEADERTEXT             42
-#define STR_TEXT_HEADERTEXT                 43
     // FREE
 #define STR_ADO_HEADERTEXT                  45
 #define STR_JDBC_HEADERTEXT                 46

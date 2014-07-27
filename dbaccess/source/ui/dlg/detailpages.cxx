@@ -115,6 +115,45 @@ namespace dbaui
             FreeResource();
     }
 
+    OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, const OString& rId, const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs,
+        sal_uInt32 nControlFlags)
+
+        :OGenericAdministrationPage(pParent, rId, rUIXMLDescription, _rCoreAttrs)
+        ,m_pOptionsLabel(NULL)
+        ,m_pOptions(NULL)
+        ,m_pDataConvertFixedLine(NULL)
+        ,m_pCharsetLabel(NULL)
+        ,m_pCharset(NULL)
+        ,m_pAutoFixedLine(NULL)
+        ,m_pAutoRetrievingEnabled(NULL)
+        ,m_pAutoIncrementLabel(NULL)
+        ,m_pAutoIncrement(NULL)
+        ,m_pAutoRetrievingLabel(NULL)
+        ,m_pAutoRetrieving(NULL)
+        ,m_nControlFlags(nControlFlags)
+    {
+
+        if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
+        {
+            m_pOptionsLabel = get<FixedText>("optionslabel");
+            m_pOptionsLabel->Show();
+            m_pOptions = get<Edit>("options");
+            m_pOptions->Show();
+            m_pOptions->SetModifyHdl(getControlModifiedLink());
+        }
+
+        if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
+        {
+            m_pDataConvertLabel = get<FixedText>("charsetheader");
+            m_pDataConvertLabel->Show();
+            m_pCharsetLabel = get<FixedText>("charsetlabel");
+            m_pCharsetLabel->Show();
+            m_pCharset = get<CharSetListBox>("charset");
+            m_pCharset->Show();
+            m_pCharset->SetSelectHdl(getControlModifiedLink());
+        }
+    }
+
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     {
         DELETEZ(m_pOptionsLabel);
@@ -143,7 +182,7 @@ namespace dbaui
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
-            _rControlList.push_back(new ODisableWrapper<FixedLine>(m_pDataConvertFixedLine));
+            //_rControlList.push_back(new ODisableWrapper<FixedLine>(m_pDataConvertFixedLine));
             _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharsetLabel));
         }
     }
@@ -788,11 +827,10 @@ namespace dbaui
 
     // OTextDetailsPage
     OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, 0, false )
+        :OCommonBehaviourTabPage(pParent, "EmptyPage", "dbaccess/ui/emptypage.ui", _rCoreAttrs, 0)
     {
 
-        m_pTextConnectionHelper = new OTextConnectionHelper( this, TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET );
-        FreeResource();
+        m_pTextConnectionHelper = new OTextConnectionHelper( get<VclVBox>("EmptyPage"), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET );
     }
 
     OTextDetailsPage::~OTextDetailsPage()

@@ -42,6 +42,7 @@ class OConnectionURLEdit : public Edit
 
 public:
     OConnectionURLEdit(Window* pParent, const ResId& rResId,bool _bShowPrefix = false);
+    OConnectionURLEdit(Window* pParent, WinBits _nBits,bool _bShowPrefix = false);
     virtual ~OConnectionURLEdit();
 
 public:

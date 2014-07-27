@@ -39,7 +39,8 @@ namespace dbaui
         bool            m_bUserGrabFocus : 1;
     protected:
 
-        FixedText           m_aFT_HelpText;
+        FixedText           *m_pHelpText;
+        FixedText           *m_pHeaderText;
 
         // called when the test connection button was clicked
         DECL_LINK(OnEditModified,Edit*);
@@ -56,8 +57,8 @@ namespace dbaui
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
-        inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(false); }
-        inline void disableConnectionURL() { m_aConnectionURL.SetReadOnly(); }
+        inline void enableConnectionURL() { m_pConnectionURL->SetReadOnly(false); }
+        inline void disableConnectionURL() { m_pConnectionURL->SetReadOnly(); }
 
         /** changes the connection URL.
             <p>The new URL must be of the type which is currently selected, only the parts which do not
@@ -68,6 +69,7 @@ namespace dbaui
 
     protected:
         OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
+        OConnectionTabPageSetup(Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
         virtual bool checkTestConnection() SAL_OVERRIDE;
             // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~OConnectionTabPageSetup();

@@ -314,26 +314,21 @@ TabPage PAGE_DBWIZARD_DBASE
      AUTO_HELP_BROWSECONTROLGROUP( 3, HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION,HID_PAGE_DBWIZARD_DBASE_PB_DBASELOCATION)
 };
 
-TabPage PAGE_DBWIZARD_TEXT
+
+String STR_TEXT_HEADERTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_TEXT";
-    String STR_TEXT_HEADERTEXT
-    {
-        Text[ en-US ]   = "Set up a connection to text files" ;
-    };
+    Text[ en-US ]   = "Set up a connection to text files" ;
+};
 
-    String STR_TEXT_HELPTEXT
-    {
-        Text[ en-US ]   = "Select the folder where the CSV (Comma Separated Values) text files are stored. %PRODUCTNAME Base will open these files in read-only mode." ;
-    };
+String STR_TEXT_HELPTEXT
+{
+    Text[ en-US ]   = "Select the folder where the CSV (Comma Separated Values) text files are stored. %PRODUCTNAME Base will open these files in read-only mode." ;
+};
 
-    String STR_TEXT_PATH_OR_FILE{
-        Text[ en-US ]  = "Path to text files";
-    };
-
-    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE,HID_PAGE_DBWIZARD_TEXT_PB_LOCATIONTEXTFILE)
-    AUTO_SEPARATORCONTROLGROUP(82, WIZARD_PAGE_X)
- };
+String STR_TEXT_PATH_OR_FILE
+{
+    Text[ en-US ]  = "Path to text files";
+};
 
 TabPage PAGE_DBWIZARD_MSACCESS
 {

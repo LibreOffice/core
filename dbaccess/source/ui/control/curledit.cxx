@@ -33,6 +33,19 @@ OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,bo
 {
 }
 
+OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, WinBits _nBits,bool _bShowPrefix)
+    :Edit(_pParent, _nBits)
+    ,m_pTypeCollection(NULL)
+    ,m_pForcedPrefix(NULL)
+    ,m_bShowPrefix(_bShowPrefix)
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeConnectionURLEdit(Window *pParent)
+{
+    return new OConnectionURLEdit(pParent, WB_BORDER, false);
+}
+
 OConnectionURLEdit::~OConnectionURLEdit()
 {
     // delete my sub controls

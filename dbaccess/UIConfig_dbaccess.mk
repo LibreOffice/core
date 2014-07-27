@@ -18,7 +18,9 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/colwidthdialog \
     dbaccess/uiconfig/ui/copytablepage \
     dbaccess/uiconfig/ui/dbaseindexdialog \
+    dbaccess/uiconfig/ui/dbwiztextpage \
     dbaccess/uiconfig/ui/directsqldialog  \
+    dbaccess/uiconfig/ui/emptypage \
     dbaccess/uiconfig/ui/fielddialog \
     dbaccess/uiconfig/ui/finalpagewizard \
     dbaccess/uiconfig/ui/generalpagedialog \
@@ -38,6 +40,8 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/tablesfilterdialog \
     dbaccess/uiconfig/ui/tablesfilterpage \
     dbaccess/uiconfig/ui/tablesjoindialog \
+    dbaccess/uiconfig/ui/textconnectionsettings \
+    dbaccess/uiconfig/ui/textpage \
     dbaccess/uiconfig/ui/useradmindialog \
 ))
 

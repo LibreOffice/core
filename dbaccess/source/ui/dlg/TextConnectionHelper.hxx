@@ -40,7 +40,7 @@ namespace dbaui
     #define TC_CHARSET      ((short)0x08)   // not yet implemented
 
     // OTextConnectionPage
-    class OTextConnectionHelper : public Control
+    class OTextConnectionHelper : public TabPage
     {
         OTextConnectionHelper();
 
@@ -51,25 +51,25 @@ namespace dbaui
         virtual ~OTextConnectionHelper();
 
     private:
-        FixedText   m_aFTExtensionHeader;
-        RadioButton m_aRBAccessTextFiles;
-        RadioButton m_aRBAccessCSVFiles;
-        RadioButton m_aRBAccessOtherFiles;
-        Edit        m_aETOwnExtension;
-        FixedText   m_aFTExtensionExample;
-        FixedLine   m_aLineFormat;
-        FixedText   m_aFieldSeparatorLabel;
-        ComboBox    m_aFieldSeparator;
-        FixedText   m_aTextSeparatorLabel;
-        ComboBox    m_aTextSeparator;
-        FixedText   m_aDecimalSeparatorLabel;
-        ComboBox    m_aDecimalSeparator;
-        FixedText   m_aThousandsSeparatorLabel;
-        ComboBox    m_aThousandsSeparator;
-          CheckBox  m_aRowHeader;
-        FixedLine   m_aCharSetHeader;
-        FixedText   m_aCharSetLabel;
-        CharSetListBox  m_aCharSet;
+        FixedText        *m_pExtensionHeader;
+        RadioButton      *m_pAccessTextFiles;
+        RadioButton      *m_pAccessCSVFiles;
+        RadioButton      *m_pAccessOtherFiles;
+        Edit             *m_pOwnExtension;
+        FixedText        *m_pExtensionExample;
+        FixedText        *m_pFormatHeader;
+        FixedText        *m_pFieldSeparatorLabel;
+        ComboBox         *m_pFieldSeparator;
+        FixedText        *m_pTextSeparatorLabel;
+        ComboBox         *m_pTextSeparator;
+        FixedText        *m_pDecimalSeparatorLabel;
+        ComboBox         *m_pDecimalSeparator;
+        FixedText        *m_pThousandsSeparatorLabel;
+        ComboBox         *m_pThousandsSeparator;
+        CheckBox         *m_pRowHeader;
+        FixedText        *m_pCharSetHeader;
+        FixedText        *m_pCharSetLabel;
+        CharSetListBox   *m_pCharSet;
         OUString    m_aFieldSeparatorList;
         OUString    m_aTextSeparatorList;
         OUString    m_aTextNone;

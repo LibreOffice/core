@@ -58,69 +58,69 @@ namespace dbaui
 {
 
     OTextConnectionHelper::OTextConnectionHelper( Window* pParent, const short _nAvailableSections )
-        :Control( pParent, WB_DIALOGCONTROL )
-        ,m_aFTExtensionHeader       (this, ModuleRes(FT_AUTOEXTENSIONHEADER))
-        ,m_aRBAccessTextFiles       (this, ModuleRes(RB_AUTOACCESSCTEXTFILES))
-        ,m_aRBAccessCSVFiles        (this, ModuleRes(RB_AUTOACCESSCCSVFILES))
-        ,m_aRBAccessOtherFiles      (this, ModuleRes(RB_AUTOACCESSOTHERS))
-        ,m_aETOwnExtension          (this, ModuleRes(ET_AUTOOWNEXTENSION))
-        ,m_aFTExtensionExample      (this, ModuleRes(FT_AUTOOWNEXTENSIONAPPENDIX))
-        ,m_aLineFormat              (this, ModuleRes(FL_AUTOSEPARATOR2))
-        ,m_aFieldSeparatorLabel     (this, ModuleRes(FT_AUTOFIELDSEPARATOR))
-        ,m_aFieldSeparator          (this, ModuleRes(CM_AUTOFIELDSEPARATOR))
-        ,m_aTextSeparatorLabel      (this, ModuleRes(FT_AUTOTEXTSEPARATOR))
-        ,m_aTextSeparator           (this, ModuleRes(CM_AUTOTEXTSEPARATOR))
-        ,m_aDecimalSeparatorLabel   (this, ModuleRes(FT_AUTODECIMALSEPARATOR))
-        ,m_aDecimalSeparator        (this, ModuleRes(CM_AUTODECIMALSEPARATOR))
-        ,m_aThousandsSeparatorLabel (this, ModuleRes(FT_AUTOTHOUSANDSSEPARATOR))
-        ,m_aThousandsSeparator      (this, ModuleRes(CM_AUTOTHOUSANDSSEPARATOR))
-        ,m_aRowHeader               (this, ModuleRes(CB_AUTOHEADER))
-        ,m_aCharSetHeader           (this, ModuleRes(FL_DATACONVERT))
-        ,m_aCharSetLabel            (this, ModuleRes(FT_CHARSET))
-        ,m_aCharSet                 (this, ModuleRes(LB_CHARSET))
+        :TabPage(pParent, "TextPage", "dbaccess/ui/textpage.ui")
         ,m_aFieldSeparatorList      (ModuleRes(STR_AUTOFIELDSEPARATORLIST))
         ,m_aTextSeparatorList       (ModuleRes(STR_AUTOTEXTSEPARATORLIST))
         ,m_aTextNone                (ModuleRes(STR_AUTOTEXT_FIELD_SEP_NONE))
         ,m_nAvailableSections( _nAvailableSections )
     {
+        get(m_pExtensionHeader, "extensionheader");
+        get(m_pAccessTextFiles, "textfile");
+        get(m_pAccessCSVFiles, "csvfile");
+        get(m_pAccessOtherFiles, "custom");
+        get(m_pOwnExtension, "extension");
+        get(m_pExtensionExample, "example");
+        get(m_pFormatHeader, "formatlabel");
+        get(m_pFieldSeparatorLabel, "fieldlabel");
+        get(m_pFieldSeparator, "fieldseparator");
+        get(m_pTextSeparatorLabel, "textlabel");
+        get(m_pTextSeparator, "textseparator");
+        get(m_pDecimalSeparatorLabel, "decimallabel");
+        get(m_pDecimalSeparator, "decimalseparator");
+        get(m_pThousandsSeparatorLabel, "thousandslabel");
+        get(m_pThousandsSeparator, "thousandsseparator");
+        get(m_pRowHeader, "containsheaders");
+        get(m_pCharSetHeader, "charsetheader");
+        get(m_pCharSetLabel, "charsetlabel");
+        get(m_pCharSet, "charset");
 
         sal_Int32 nCnt = comphelper::string::getTokenCount(m_aFieldSeparatorList, '\t');
         sal_Int32 i;
 
         for( i = 0 ; i < nCnt ; i += 2 )
-            m_aFieldSeparator.InsertEntry( m_aFieldSeparatorList.getToken( i, '\t' ) );
+            m_pFieldSeparator->InsertEntry( m_aFieldSeparatorList.getToken( i, '\t' ) );
 
         nCnt = comphelper::string::getTokenCount(m_aTextSeparatorList, '\t');
         for( i=0 ; i<nCnt ; i+=2 )
-            m_aTextSeparator.InsertEntry( m_aTextSeparatorList.getToken( i, '\t' ) );
-        m_aTextSeparator.InsertEntry(m_aTextNone);
+            m_pTextSeparator->InsertEntry( m_aTextSeparatorList.getToken( i, '\t' ) );
+        m_pTextSeparator->InsertEntry(m_aTextNone);
 
         // set the modify handlers
-        m_aFieldSeparator.SetUpdateDataHdl(getControlModifiedLink());
-        m_aFieldSeparator.SetSelectHdl(getControlModifiedLink());
-        m_aTextSeparator.SetUpdateDataHdl(getControlModifiedLink());
-        m_aTextSeparator.SetSelectHdl(getControlModifiedLink());
-        m_aCharSet.SetSelectHdl(getControlModifiedLink());
+        m_pFieldSeparator->SetUpdateDataHdl(getControlModifiedLink());
+        m_pFieldSeparator->SetSelectHdl(getControlModifiedLink());
+        m_pTextSeparator->SetUpdateDataHdl(getControlModifiedLink());
+        m_pTextSeparator->SetSelectHdl(getControlModifiedLink());
+        m_pCharSet->SetSelectHdl(getControlModifiedLink());
 
-        m_aFieldSeparator.SetModifyHdl(getControlModifiedLink());
-        m_aTextSeparator.SetModifyHdl(getControlModifiedLink());
-        m_aDecimalSeparator.SetModifyHdl(getControlModifiedLink());
-        m_aThousandsSeparator.SetModifyHdl(getControlModifiedLink());
-        m_aETOwnExtension.SetModifyHdl(LINK(this, OTextConnectionHelper, OnEditModified));
-           m_aRBAccessTextFiles.SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
-           m_aRBAccessCSVFiles.SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
-        m_aRBAccessOtherFiles.SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
-        m_aRBAccessCSVFiles.Check(true);
+        m_pFieldSeparator->SetModifyHdl(getControlModifiedLink());
+        m_pTextSeparator->SetModifyHdl(getControlModifiedLink());
+        m_pDecimalSeparator->SetModifyHdl(getControlModifiedLink());
+        m_pThousandsSeparator->SetModifyHdl(getControlModifiedLink());
+        m_pOwnExtension->SetModifyHdl(LINK(this, OTextConnectionHelper, OnEditModified));
+        m_pAccessTextFiles->SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
+        m_pAccessCSVFiles->SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
+        m_pAccessOtherFiles->SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
+        m_pAccessCSVFiles->Check(true);
 
         struct SectionDescriptor
         {
             short   nFlag;
             Window* pFirstControl;
         } aSections[] = {
-            { TC_EXTENSION,     &m_aFTExtensionHeader },
-            { TC_SEPARATORS,    &m_aLineFormat },
-            { TC_HEADER,        &m_aRowHeader },
-            { TC_CHARSET,       &m_aCharSetHeader },
+            { TC_EXTENSION,     m_pExtensionHeader },
+            { TC_SEPARATORS,    m_pFormatHeader },
+            { TC_HEADER,        m_pRowHeader },
+            { TC_CHARSET,       m_pCharSetHeader },
             { 0, NULL }
         };
 
@@ -147,58 +147,8 @@ namespace dbaui
                 pRealWindow->Hide();
                 pControl = pControl->GetWindow( WINDOW_NEXT );
             }
-
-            // move all controls in following sections up
-            if ( !pNextSection )
-                continue;
-            const long nThisSectionStart = pThisSection->GetPosPixel().Y();
-            const long nNextSectionStart = pNextSection->GetPosPixel().Y();
-            const long nMoveOffset( nThisSectionStart - nNextSectionStart );
-            while ( pControl )
-            {
-                Point aPos = pControl->GetPosPixel();
-                aPos.Move( 0, nMoveOffset );
-                pControl->SetPosPixel( aPos );
-                pControl = pControl->GetWindow( WINDOW_NEXT );
-            }
         }
 
-        Rectangle aControlRectUnion;
-        for (   Window* pControl = aSections[0].pFirstControl;
-                pControl != NULL;
-                pControl = pControl->GetWindow( WINDOW_NEXT )
-            )
-        {
-            aControlRectUnion = aControlRectUnion.Union( Rectangle( pControl->GetPosPixel(), pControl->GetSizePixel() ) );
-        }
-
-        // need some adjustments to the positions, since the resource-specified
-        // positions for the control were relative to *our* parent, while by now
-        // the controls have |this| as parent.
-
-        // first, move ourself to the upper left of the area occupied by all controls
-        SetPosPixel( aControlRectUnion.TopLeft() );
-
-        // then, compensate in the control positions, by moving them the up/left
-        for (   Window* pControl = aSections[0].pFirstControl;
-                pControl != NULL;
-                pControl = pControl->GetWindow( WINDOW_NEXT )
-            )
-        {
-            Point aPos( pControl->GetPosPixel() );
-            aPos.Move( -aControlRectUnion.Left(), -aControlRectUnion.Top() );
-            pControl->SetPosPixel( aPos );
-
-            // while we are here ... the controls should not have an own background
-            // (this would not be needed when our outer dialog were also the parent
-            // of the controls)
-            pControl->SetBackground();
-        }
-
-        // now, change our own size so all controls fit
-        SetSizePixel( aControlRectUnion.GetSize() );
-
-        SetBackground();
         Show();
     }
 
@@ -221,32 +171,32 @@ namespace dbaui
 
     IMPL_LINK(OTextConnectionHelper, OnSetExtensionHdl, RadioButton*, /*_pRadioButton*/)
     {
-        bool bDoEnable = m_aRBAccessOtherFiles.IsChecked();
-        m_aETOwnExtension.Enable(bDoEnable);
-        m_aFTExtensionExample.Enable(bDoEnable);
+        bool bDoEnable = m_pAccessOtherFiles->IsChecked();
+        m_pOwnExtension->Enable(bDoEnable);
+        m_pExtensionExample->Enable(bDoEnable);
         m_aGetExtensionHandler.Call(this);
         return 0L;
     }
 
     void OTextConnectionHelper::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aFieldSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aTextSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aDecimalSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aThousandsSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aRowHeader));
-        _rControlList.push_back(new OSaveValueWrapper<ListBox>(&m_aCharSet));
+        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pFieldSeparator));
+        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pTextSeparator));
+        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pDecimalSeparator));
+        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pThousandsSeparator));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pRowHeader));
+        _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pCharSet));
     }
 
     void OTextConnectionHelper::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFieldSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aTextSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aDecimalSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aThousandsSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aCharSetHeader));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aCharSetLabel));
-        _rControlList.push_back(new ODisableWrapper<ListBox>(&m_aCharSet));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFieldSeparatorLabel));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pTextSeparatorLabel));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pDecimalSeparatorLabel));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pThousandsSeparatorLabel));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharSetHeader));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharSetLabel));
+        _rControlList.push_back(new ODisableWrapper<ListBox>(m_pCharSet));
     }
 
     void OTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bValid)
@@ -270,90 +220,88 @@ namespace dbaui
         if ( ( m_nAvailableSections & TC_HEADER ) != 0 )
         {
             SFX_ITEMSET_GET( _rSet, pHdrItem, SfxBoolItem, DSID_TEXTFILEHEADER, true );
-            m_aRowHeader.Check( pHdrItem->GetValue() );
+            m_pRowHeader->Check( pHdrItem->GetValue() );
         }
 
         if ( ( m_nAvailableSections & TC_SEPARATORS ) != 0 )
         {
-            SetSeparator( m_aFieldSeparator, m_aFieldSeparatorList, pDelItem->GetValue() );
-            SetSeparator( m_aTextSeparator, m_aTextSeparatorList, pStrItem->GetValue() );
-            m_aDecimalSeparator.SetText( pDecdelItem->GetValue() );
-            m_aThousandsSeparator.SetText( pThodelItem->GetValue() );
+            SetSeparator( *m_pFieldSeparator, m_aFieldSeparatorList, pDelItem->GetValue() );
+            SetSeparator( *m_pTextSeparator, m_aTextSeparatorList, pStrItem->GetValue() );
+            m_pDecimalSeparator->SetText( pDecdelItem->GetValue() );
+            m_pThousandsSeparator->SetText( pThodelItem->GetValue() );
         }
 
         if ( ( m_nAvailableSections & TC_CHARSET ) != 0 )
         {
-            m_aCharSet.SelectEntryByIanaName( pCharsetItem->GetValue() );
+            m_pCharSet->SelectEntryByIanaName( pCharsetItem->GetValue() );
         }
     }
 
     bool OTextConnectionHelper::prepareLeave()
     {
-        LocalResourceAccess aStringResAccess(PAGE_TEXT, RSC_TABPAGE);
-            // for accessing the strings which are local to our own resource block
         OUString sExtension = GetExtension();
         OUString aErrorText;
         Control* pErrorWin = NULL;
-        OUString aDelText(m_aFieldSeparator.GetText());
+        OUString aDelText(m_pFieldSeparator->GetText());
         if(aDelText.isEmpty())
         {   // No FieldSeparator
             aErrorText = ModuleRes(STR_AUTODELIMITER_MISSING);
-            aErrorText = aErrorText.replaceFirst("#1",m_aFieldSeparatorLabel.GetText());
-            pErrorWin = &m_aFieldSeparator;
+            aErrorText = aErrorText.replaceFirst("#1",m_pFieldSeparatorLabel->GetText());
+            pErrorWin = m_pFieldSeparator;
         }
-        else if (m_aDecimalSeparator.GetText().isEmpty())
+        else if (m_pDecimalSeparator->GetText().isEmpty())
         {   // No DecimalSeparator
             aErrorText = ModuleRes(STR_AUTODELIMITER_MISSING);
-            aErrorText = aErrorText.replaceFirst("#1",m_aDecimalSeparatorLabel.GetText());
-            pErrorWin = &m_aDecimalSeparator;
+            aErrorText = aErrorText.replaceFirst("#1",m_pDecimalSeparatorLabel->GetText());
+            pErrorWin = m_pDecimalSeparator;
         }
-        else if (m_aTextSeparator.GetText() == m_aFieldSeparator.GetText())
+        else if (m_pTextSeparator->GetText() == m_pFieldSeparator->GetText())
         {   // Field and TextSeparator must not be the same
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
-            aErrorText = aErrorText.replaceFirst("#1",m_aTextSeparatorLabel.GetText());
-            aErrorText = aErrorText.replaceFirst("#2",m_aFieldSeparatorLabel.GetText());
-            pErrorWin = &m_aTextSeparator;
+            aErrorText = aErrorText.replaceFirst("#1",m_pTextSeparatorLabel->GetText());
+            aErrorText = aErrorText.replaceFirst("#2",m_pFieldSeparatorLabel->GetText());
+            pErrorWin = m_pTextSeparator;
         }
-        else if (m_aDecimalSeparator.GetText() == m_aThousandsSeparator.GetText())
+        else if (m_pDecimalSeparator->GetText() == m_pThousandsSeparator->GetText())
         {   // Thousands and DecimalSeparator must not be the same
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
-            aErrorText = aErrorText.replaceFirst("#1",m_aDecimalSeparatorLabel.GetText());
-            aErrorText = aErrorText.replaceFirst("#2",m_aThousandsSeparatorLabel.GetText());
-            pErrorWin = &m_aDecimalSeparator;
+            aErrorText = aErrorText.replaceFirst("#1",m_pDecimalSeparatorLabel->GetText());
+            aErrorText = aErrorText.replaceFirst("#2",m_pThousandsSeparatorLabel->GetText());
+            pErrorWin = m_pDecimalSeparator;
         }
-        else if (m_aFieldSeparator.GetText() == m_aThousandsSeparator.GetText())
+        else if (m_pFieldSeparator->GetText() == m_pThousandsSeparator->GetText())
         {   // Thousands and FieldSeparator must not be the same
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
-            aErrorText = aErrorText.replaceFirst("#1",m_aFieldSeparatorLabel.GetText());
-            aErrorText = aErrorText.replaceFirst("#2",m_aThousandsSeparatorLabel.GetText());
-            pErrorWin = &m_aFieldSeparator;
+            aErrorText = aErrorText.replaceFirst("#1",m_pFieldSeparatorLabel->GetText());
+            aErrorText = aErrorText.replaceFirst("#2",m_pThousandsSeparatorLabel->GetText());
+            pErrorWin = m_pFieldSeparator;
         }
-        else if (m_aFieldSeparator.GetText() == m_aDecimalSeparator.GetText())
+        else if (m_pFieldSeparator->GetText() == m_pDecimalSeparator->GetText())
         {   // Tenner and FieldSeparator must not be the same
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
-            aErrorText = aErrorText.replaceFirst("#1",m_aFieldSeparatorLabel.GetText());
-            aErrorText = aErrorText.replaceFirst("#2",m_aDecimalSeparatorLabel.GetText());
-            pErrorWin = &m_aFieldSeparator;
+            aErrorText = aErrorText.replaceFirst("#1",m_pFieldSeparatorLabel->GetText());
+            aErrorText = aErrorText.replaceFirst("#2",m_pDecimalSeparatorLabel->GetText());
+            pErrorWin = m_pFieldSeparator;
         }
-        else if (m_aTextSeparator.GetText() == m_aThousandsSeparator.GetText())
+        else if (m_pTextSeparator->GetText() == m_pThousandsSeparator->GetText())
         {   // Thousands and TextSeparator must not be the same
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
-            aErrorText = aErrorText.replaceFirst("#1",m_aTextSeparatorLabel.GetText());
-            aErrorText = aErrorText.replaceFirst("#2",m_aThousandsSeparatorLabel.GetText());
-            pErrorWin = &m_aTextSeparator;
+            aErrorText = aErrorText.replaceFirst("#1",m_pTextSeparatorLabel->GetText());
+            aErrorText = aErrorText.replaceFirst("#2",m_pThousandsSeparatorLabel->GetText());
+            pErrorWin = m_pTextSeparator;
         }
-        else if (m_aTextSeparator.GetText() == m_aDecimalSeparator.GetText())
+        else if (m_pTextSeparator->GetText() == m_pDecimalSeparator->GetText())
         {   // Tenner and TextSeparator must not be the same
             aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
-            aErrorText = aErrorText.replaceFirst("#1",m_aTextSeparatorLabel.GetText());
-            aErrorText = aErrorText.replaceFirst("#2",m_aDecimalSeparatorLabel.GetText());
-            pErrorWin = &m_aTextSeparator;
+            aErrorText = aErrorText.replaceFirst("#1",m_pTextSeparatorLabel->GetText());
+            aErrorText = aErrorText.replaceFirst("#2",m_pDecimalSeparatorLabel->GetText());
+            pErrorWin = m_pTextSeparator;
         }
         else if ((sExtension.indexOf('*') != -1) || (sExtension.indexOf('?') != -1))
         {
             aErrorText = ModuleRes(STR_AUTONO_WILDCARDS);
             aErrorText = aErrorText.replaceFirst("#1",sExtension);
-            pErrorWin = &m_aETOwnExtension;
+            pErrorWin = m_pOwnExtension;
         }
         else
             return true;
@@ -378,41 +326,41 @@ namespace dbaui
 
         if ( ( m_nAvailableSections & TC_HEADER ) != 0 )
         {
-            if( m_aRowHeader.IsValueChangedFromSaved() )
+            if( m_pRowHeader->IsValueChangedFromSaved() )
             {
-                rSet.Put(SfxBoolItem(DSID_TEXTFILEHEADER, m_aRowHeader.IsChecked()));
+                rSet.Put(SfxBoolItem(DSID_TEXTFILEHEADER, m_pRowHeader->IsChecked()));
                 bChangedSomething = true;
             }
         }
 
         if ( ( m_nAvailableSections & TC_SEPARATORS ) != 0 )
         {
-            if( m_aFieldSeparator.IsValueChangedFromSaved() )
+            if( m_pFieldSeparator->IsValueChangedFromSaved() )
             {
-                rSet.Put( SfxStringItem(DSID_FIELDDELIMITER, GetSeparator( m_aFieldSeparator, m_aFieldSeparatorList) ) );
+                rSet.Put( SfxStringItem(DSID_FIELDDELIMITER, GetSeparator( *m_pFieldSeparator, m_aFieldSeparatorList) ) );
                 bChangedSomething = true;
             }
-            if( m_aTextSeparator.IsValueChangedFromSaved() )
+            if( m_pTextSeparator->IsValueChangedFromSaved() )
             {
-                rSet.Put( SfxStringItem(DSID_TEXTDELIMITER, GetSeparator( m_aTextSeparator, m_aTextSeparatorList) ) );
+                rSet.Put( SfxStringItem(DSID_TEXTDELIMITER, GetSeparator( *m_pTextSeparator, m_aTextSeparatorList) ) );
                 bChangedSomething = true;
             }
 
-            if( m_aDecimalSeparator.IsValueChangedFromSaved() )
+            if( m_pDecimalSeparator->IsValueChangedFromSaved() )
             {
-                rSet.Put( SfxStringItem(DSID_DECIMALDELIMITER, m_aDecimalSeparator.GetText().copy(0, 1) ) );
+                rSet.Put( SfxStringItem(DSID_DECIMALDELIMITER, m_pDecimalSeparator->GetText().copy(0, 1) ) );
                 bChangedSomething = true;
             }
-            if( m_aThousandsSeparator.IsValueChangedFromSaved() )
+            if( m_pThousandsSeparator->IsValueChangedFromSaved() )
             {
-                rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_aThousandsSeparator.GetText().copy(0,1) ) );
+                rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_pThousandsSeparator->GetText().copy(0,1) ) );
                 bChangedSomething = true;
             }
         }
 
         if ( ( m_nAvailableSections & TC_CHARSET ) != 0 )
         {
-            if ( m_aCharSet.StoreSelectedCharSet( rSet, DSID_CHARSET ) )
+            if ( m_pCharSet->StoreSelectedCharSet( rSet, DSID_CHARSET ) )
                 bChangedSomething = true;
         }
 
@@ -422,26 +370,26 @@ namespace dbaui
     void OTextConnectionHelper::SetExtension(const OUString& _rVal)
     {
         if (_rVal == "txt")
-            m_aRBAccessTextFiles.Check(true);
+            m_pAccessTextFiles->Check(true);
         else if (_rVal == "csv")
-            m_aRBAccessCSVFiles.Check(true);
+            m_pAccessCSVFiles->Check(true);
         else
         {
-            m_aRBAccessOtherFiles.Check(true);
-            m_aFTExtensionExample.SetText(_rVal);
+            m_pAccessOtherFiles->Check(true);
+            m_pExtensionExample->SetText(_rVal);
         }
     }
 
     OUString OTextConnectionHelper::GetExtension()
     {
         OUString sExtension;
-        if (m_aRBAccessTextFiles.IsChecked())
+        if (m_pAccessTextFiles->IsChecked())
             sExtension = "txt";
-        else if (m_aRBAccessCSVFiles.IsChecked())
+        else if (m_pAccessCSVFiles->IsChecked())
             sExtension = "csv";
         else
         {
-            sExtension = m_aETOwnExtension.GetText();
+            sExtension = m_pOwnExtension->GetText();
             if ( comphelper::string::equals(sExtension.getToken(0,'.'), '*') )
                 sExtension = sExtension.copy(2);
         }
@@ -456,7 +404,7 @@ namespace dbaui
         if( nPos == COMBOBOX_ENTRY_NOTFOUND )
             return rBox.GetText().copy(0);
 
-        if ( !( &m_aTextSeparator == &rBox && nPos == (rBox.GetEntryCount()-1) ) )
+        if ( !( m_pTextSeparator == &rBox && nPos == (rBox.GetEntryCount()-1) ) )
             return OUString(
                 static_cast< sal_Unicode >( rList.getToken((nPos*2)+1, nTok ).toInt32() ));
         // somewhat strange ... translates for instance an "32" into " "
@@ -483,7 +431,7 @@ namespace dbaui
 
         if ( i >= nCnt )
         {
-            if ( &m_aTextSeparator == &rBox && rVal.isEmpty() )
+            if ( m_pTextSeparator == &rBox && rVal.isEmpty() )
                 rBox.SetText(m_aTextNone);
             else
                 rBox.SetText( rVal.copy(0, 1) );
