@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_81d140fe",
+        "filename": "jurt/com/sun/star/comp/servicemanager/ServiceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-27T08:11:45Z",
+      "side": 1,
+      "message": "Again: please, do not mix formatting changes with other changes :-)",
+      "revId": "c8a7e4769aeb9a60b50857d3770fe2590086fb39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
