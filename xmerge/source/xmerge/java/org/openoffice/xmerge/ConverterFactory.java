@@ -55,10 +55,7 @@ public class ConverterFactory {
         else
             foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeOut, mimeTypeIn);
 
-        if (foundInfo != null)
-            return true;
-        else
-            return false;
+        return foundInfo != null;
     }
 
 
