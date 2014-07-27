@@ -178,6 +178,9 @@
 namespace {
     const char CustomAnimationPanelId[] = "CustomAnimationPanel";
     const char SlideTransitionPanelId[] = "SlideTransitionPanel";
+    const char NavigatorPanelId[] = "SdNavigatorPanel";
+    const char GalleryPanelId[] = "GalleryPanel";
+    const char StyleListPanelId[] = "StyleListPanel";
 }
 
 using namespace ::com::sun::star;
@@ -2724,26 +2727,23 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_GALLERY:
         {
-            GetViewFrame()->ToggleChildWindow( GalleryChildWindow::GetChildWindowId() );
-            GetViewFrame()->GetBindings().Invalidate( SID_GALLERY );
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                GalleryPanelId,
+                GetViewFrame()->GetFrame().GetFrameInterface());
 
             Cancel();
-            rReq.Ignore ();
+            rReq.Done();
         }
         break;
 
         case SID_NAVIGATOR:
         {
-            if ( rReq.GetArgs() )
-                GetViewFrame()->SetChildWindow(SID_NAVIGATOR,
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get(SID_NAVIGATOR))).GetValue());
-            else
-                GetViewFrame()->ToggleChildWindow( SID_NAVIGATOR );
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                NavigatorPanelId,
+                GetViewFrame()->GetFrame().GetFrameInterface());
 
-            GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
             Cancel();
-            rReq.Ignore ();
+            rReq.Done();
         }
         break;
 
