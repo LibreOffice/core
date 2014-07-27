@@ -49,13 +49,10 @@ public final class PdbUtil {
      */
     public static int intID(String s) {
 
-        int id = -1;
-        int temp = 0;
-
         // grab the first char and put it in the high bits
         // note that we only want 8 lower bits of it.
-        temp = s.charAt(0);
-        id = temp << 24;
+        int temp = s.charAt(0);
+        int id = temp << 24;
 
         // grab the second char and add it in.
         temp = s.charAt(1) & 0x00ff;
