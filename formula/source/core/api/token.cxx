@@ -35,9 +35,6 @@
 namespace formula
 {
     using namespace com::sun::star;
-// ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
-// SubCode via FormulaTokenIterator Push/Pop moeglich
-IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator )
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
@@ -1285,49 +1282,46 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
 
 /*----------------------------------------------------------------------*/
 
+FormulaTokenIterator::Item::Item(const FormulaTokenArray* pArray, short pc, short stop) :
+    pArr(pArray), nPC(pc), nStop(stop)
+{
+}
+
 FormulaTokenIterator::FormulaTokenIterator( const FormulaTokenArray& rArr )
 {
-    pCur = NULL;
+    maStack = new std::vector<FormulaTokenIterator::Item> ();
     Push( &rArr );
 }
 
 FormulaTokenIterator::~FormulaTokenIterator()
 {
-    while( pCur )
-        Pop();
+    delete maStack;
 }
 
 void FormulaTokenIterator::Push( const FormulaTokenArray* pArr )
 {
-    ImpTokenIterator* p = new ImpTokenIterator;
-    p->pArr  = pArr;
-    p->nPC   = -1;
-    p->nStop = SHRT_MAX;
-    p->pNext = pCur;
-    pCur     = p;
+    FormulaTokenIterator::Item item(pArr, -1, SHRT_MAX);
+
+    maStack->push_back(item);
 }
 
 void FormulaTokenIterator::Pop()
 {
-    ImpTokenIterator* p = pCur;
-    if( p )
-    {
-        pCur = p->pNext;
-        delete p;
-    }
+    maStack->pop_back();
 }
 
 void FormulaTokenIterator::Reset()
 {
-    while( pCur->pNext )
-        Pop();
-    pCur->nPC = -1;
+    while( maStack->size() > 1 )
+        maStack->pop_back();
+
+    maStack->back().nPC = -1;
 }
 
 const FormulaToken* FormulaTokenIterator::Next()
 {
-    const FormulaToken* t = GetNonEndOfPathToken( ++pCur->nPC );
-    if( !t && pCur->pNext )
+    const FormulaToken* t = GetNonEndOfPathToken( ++maStack->back().nPC );
+    if( !t && maStack->size() > 1 )
     {
         Pop();
         t = Next();
@@ -1338,18 +1332,18 @@ const FormulaToken* FormulaTokenIterator::Next()
 const FormulaToken* FormulaTokenIterator::PeekNextOperator()
 {
     const FormulaToken* t = NULL;
-    short nIdx = pCur->nPC;
+    short nIdx = maStack->back().nPC;
     while (!t && ((t = GetNonEndOfPathToken( ++nIdx)) != NULL))
     {
         if (t->GetOpCode() == ocPush)
             t = NULL;   // ignore operands
     }
-    if (!t && pCur->pNext)
+    if (!t && maStack->size() > 1)
     {
-        ImpTokenIterator* pHere = pCur;
-        pCur = pCur->pNext;
+        FormulaTokenIterator::Item pHere = maStack->back();
+        maStack->pop_back();
         t = PeekNextOperator();
-        pCur = pHere;
+        maStack->push_back(pHere);
     }
     return t;
 }
@@ -1358,20 +1352,22 @@ const FormulaToken* FormulaTokenIterator::PeekNextOperator()
 
 void FormulaTokenIterator::Jump( short nStart, short nNext, short nStop )
 {
-    pCur->nPC = nNext;
+    maStack->back().nPC = nNext;
     if( nStart != nNext )
     {
-        Push( pCur->pArr );
-        pCur->nPC = nStart;
-        pCur->nStop = nStop;
+        Push( maStack->back().pArr );
+        maStack->back().nPC = nStart;
+        maStack->back().nStop = nStop;
     }
 }
 
 const FormulaToken* FormulaTokenIterator::GetNonEndOfPathToken( short nIdx ) const
 {
-    if (nIdx < pCur->pArr->nRPN && nIdx < pCur->nStop)
+    FormulaTokenIterator::Item cur = maStack->back();
+
+    if (nIdx < cur.pArr->nRPN && nIdx < cur.nStop)
     {
-        const FormulaToken* t = pCur->pArr->pRPN[ nIdx ];
+        const FormulaToken* t = cur.pArr->pRPN[ nIdx ];
         // such an OpCode ends an IF() or CHOOSE() path
         return (t->GetOpCode() == ocSep || t->GetOpCode() == ocClose) ? NULL : t;
     }
@@ -1380,7 +1376,7 @@ const FormulaToken* FormulaTokenIterator::GetNonEndOfPathToken( short nIdx ) con
 
 bool FormulaTokenIterator::IsEndOfPath() const
 {
-    return GetNonEndOfPathToken( pCur->nPC + 1) == NULL;
+    return GetNonEndOfPathToken( maStack->back().nPC + 1) == NULL;
 }
 
 
