@@ -208,29 +208,22 @@ public final class ConverterInfoMgr {
     */
     public static ConverterInfo findConverterInfo(String deviceMime, String officeMime) {
 
-        ConverterInfo converterInfo;
-
         if (deviceMime == null ||
             ConverterInfo.isValidOfficeType(officeMime) == false) {
             return null;
         }
 
         // Loop over elements comparing with deviceFromMime
-
-        Iterator<ConverterInfo> ciEnum = converterInfoList.iterator();
-        while (ciEnum.hasNext()) {
-
-            converterInfo = ciEnum.next();
+        for (ConverterInfo converterInfo : converterInfoList) {
             String toDeviceInfo = converterInfo.getOfficeMime();
             Iterator<String> fromEnum = converterInfo.getDeviceMime();
 
             // Loop over the deviceMime types.
-
             while (fromEnum.hasNext()) {
                 String fromDeviceInfo = fromEnum.next();
                 if (deviceMime.trim().equals(fromDeviceInfo) &&
-                    officeMime.trim().equals(toDeviceInfo)) {
-                   return (converterInfo);
+                        officeMime.trim().equals(toDeviceInfo)) {
+                    return (converterInfo);
                 }
             }
         }
