@@ -12,7 +12,6 @@ $(eval $(call gb_CustomTarget_CustomTarget,writerfilter/source))
 writerfilter_WORK := $(call gb_CustomTarget_get_workdir,writerfilter/source)
 writerfilter_SRC := $(SRCDIR)/writerfilter/source
 
-writerfilter_XSLTCOMMAND := $(call gb_ExternalExecutable_get_command,xsltproc)
 writerfilter_PYTHONCOMMAND := $(call gb_ExternalExecutable_get_command,python)
 
 writerfilter_OOXMLNAMESPACES= \
@@ -66,11 +65,9 @@ writerfilter_GEN_ooxml_FastTokens_hxx=$(writerfilter_WORK)/ooxml/OOXMLFastTokens
 writerfilter_GEN_ooxml_GperfFastToken_hxx=$(writerfilter_WORK)/ooxml/gperffasttoken.hxx
 writerfilter_GEN_ooxml_Model_processed=$(writerfilter_WORK)/ooxml/model_preprocessed.xml
 writerfilter_GEN_ooxml_NamespaceIds_hxx=$(writerfilter_WORK)/ooxml/OOXMLnamespaceids.hxx
-writerfilter_GEN_ooxml_Namespacesmap_xsl=$(writerfilter_WORK)/ooxml/namespacesmap.xsl
 writerfilter_GEN_ooxml_QNameToStr_cxx=$(writerfilter_WORK)/ooxml/qnametostr.cxx
 writerfilter_GEN_ooxml_ResourceIds_hxx=$(writerfilter_WORK)/ooxml/resourceids.hxx
 writerfilter_GEN_ooxml_Token_xml=$(writerfilter_WORK)/ooxml/token.xml
-writerfilter_SRC_ooxml_FactoryTools_xsl=$(writerfilter_SRC)/ooxml/factorytools.xsl
 writerfilter_SRC_ooxml_FactoryValues_py=$(writerfilter_SRC)/ooxml/factory_values.py
 writerfilter_SRC_ooxml_FastTokens_py=$(writerfilter_SRC)/ooxml/fasttokens.py
 writerfilter_SRC_ooxml_GperfFastTokenHandler_py=$(writerfilter_SRC)/ooxml/gperffasttokenhandler.py
@@ -121,9 +118,9 @@ $(writerfilter_GEN_ooxml_Token_xml) : $(SRCDIR)/oox/source/token/tokens.txt $(wr
 	sed -f $(writerfilter_SRC)/ooxml/tokens-to-xml.sed \
 		< $(SRCDIR)/oox/source/token/tokens.txt > $@
 
-$(writerfilter_WORK)/ooxml/OOXMLFactory%.cxx : $(writerfilter_SRC)/ooxml/factoryimpl_ns.xsl $(writerfilter_GEN_ooxml_Model_processed)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) --stringparam file $@ $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
+$(writerfilter_WORK)/ooxml/OOXMLFactory%.cxx : $(writerfilter_SRC)/ooxml/factoryimpl_ns.py $(writerfilter_GEN_ooxml_Model_processed)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
+	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed) $@) > $@
 
 $(writerfilter_WORK)/ooxml/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory_ns.py $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
@@ -132,6 +129,6 @@ $(writerfilter_WORK)/ooxml/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory
 
 $(call gb_CustomTarget_get_target,writerfilter/source) : $(writerfilter_ALL)
 
-$(writerfilter_ALL) :| $(call gb_ExternalExecutable_get_dependencies,xsltproc) $(call gb_ExternalExecutable_get_dependencies,python) $(writerfilter_WORK)/ooxml/.dir
+$(writerfilter_ALL) :| $(call gb_ExternalExecutable_get_dependencies,python) $(writerfilter_WORK)/ooxml/.dir
 
 # vim: set noet sw=4 ts=4:
