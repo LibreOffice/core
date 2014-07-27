@@ -64,18 +64,18 @@ public class DocumentMerge implements MergeAlgorithm {
         int currentPosition = -1;
         boolean haveDeleteOperation = false;
 
-        for (int i = 0; i < differences.length; i++) {
-            if (differences[i].getOrgPosition() > currentPosition) {
-                currentPosition = differences[i].getOrgPosition();
-                if (differences[i].getOperation() == Difference.DELETE) {
+        for (Difference difference : differences) {
+            if (difference.getOrgPosition() > currentPosition) {
+                currentPosition = difference.getOrgPosition();
+                if (difference.getOperation() == Difference.DELETE) {
                     haveDeleteOperation = true;
                 } else  {
                     haveDeleteOperation = false;
                 }
-            } else if (differences[i].getOrgPosition() == currentPosition) {
-                if (differences[i].getOperation() == Difference.DELETE) {
+            } else if (difference.getOrgPosition() == currentPosition) {
+                if (difference.getOperation() == Difference.DELETE) {
                     haveDeleteOperation = true;
-                } else if (differences[i].getOperation() == Difference.ADD &&
+                } else if (difference.getOperation() == Difference.ADD &&
                             haveDeleteOperation == true) {
                     throw new MergeException(
                          "Differences array is not sorted. Delete before Add");
@@ -93,9 +93,7 @@ public class DocumentMerge implements MergeAlgorithm {
         int modSeqCounter = 0;
 
         // check for each diff unit in the diff array to apply the diff
-        for (int i = 0; i < differences.length; i++) {
-
-            Difference currentDiff = differences[i];
+        for (Difference currentDiff : differences) {
 
             int operation = currentDiff.getOperation();
 
