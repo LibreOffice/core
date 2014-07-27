@@ -19,7 +19,6 @@
 package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.util.Debug;
@@ -138,8 +137,7 @@ public class BookSettings implements OfficeConstants {
         this.settings = settings;
         Element configItemMapNamed      = settings.createElement(TAG_CONFIG_ITEM_MAP_NAMED);
         configItemMapNamed.setAttribute(ATTRIBUTE_CONFIG_NAME, "Tables");
-        for(Iterator<SheetSettings> e = worksheetSettings.iterator();e.hasNext();) {
-            SheetSettings s = e.next();
+        for (SheetSettings s : worksheetSettings) {
             s.writeNode(settings, configItemMapNamed);
         }
         addConfigItem(root, "ActiveTable", "string", activeSheet);
