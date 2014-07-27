@@ -247,6 +247,8 @@ private:
     CharAttribList  aCharAttribList;
     boost::scoped_ptr<WrongList> mpWrongList;
 
+    void UnExpandPosition( sal_Int32 &rStartPos, bool bBiasStart );
+
 public:
                     ContentNode( SfxItemPool& rItemPool );
                     ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs );
@@ -282,8 +284,16 @@ public:
     sal_uInt16 Len() const;
     const OUString& GetString() const;
 
+    /// return length including expanded fields
+    sal_uLong GetExpandedLen() const;
+    /// return content including expanded fields
+    OUString  GetExpandedText(sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1, bool bResolveFields = true) const;
+    /// re-write offsets in the expanded text to string offsets
+    void      UnExpandPositions( sal_Int32 &rStartPos, sal_Int32 &rEndPos );
+
     void SetChar(sal_uInt16 nPos, sal_Unicode c);
     void Insert(const OUString& rStr, sal_uInt16 nPos);
+
     void Append(const OUString& rStr);
     void Erase(sal_uInt16 nPos);
     void Erase(sal_uInt16 nPos, sal_uInt16 nCount);
@@ -769,7 +779,7 @@ public:
     sal_uLong       GetTextLen() const;
 
     OUString       GetParaAsString( sal_Int32 nNode ) const;
-    OUString       GetParaAsString(const ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, bool bResolveFields = true) const;
+    OUString       GetParaAsString(const ContentNode* pNode, sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1, bool bResolveFields = true) const;
 
     EditPaM GetStartPaM() const;
     EditPaM GetEndPaM() const;
