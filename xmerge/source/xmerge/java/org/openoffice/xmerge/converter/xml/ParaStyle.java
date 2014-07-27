@@ -381,6 +381,7 @@ public class ParaStyle extends Style implements Cloneable {
      *
      *  @return  The fully-resolved copy of the <code>Style</code> in use.
      */
+    @Override
     public Style getResolved() {
         ParaStyle resolved = null;
         try {
@@ -493,6 +494,7 @@ public class ParaStyle extends Style implements Cloneable {
      *
      *  @return  The created <code>Node</code>.
      */
+    @Override
     public Node createNode(org.w3c.dom.Document parentDoc, String name) {
         Element node = parentDoc.createElement(name);
         writeAttributes(node);
@@ -509,6 +511,7 @@ public class ParaStyle extends Style implements Cloneable {
      *  @return  true if <code>style</code> is a subset, false
      *           otherwise.
      */
+    @Override
     public boolean isSubset(Style style) {
 
         if (!super.isSubset(style))
