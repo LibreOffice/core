@@ -79,6 +79,14 @@ bool ScTable::HasUniformRowHeight( SCROW nRow1, SCROW nRow2 ) const
     return nRow2 <= aData.mnRow2;
 }
 
+void ScTable::SplitFormulaGroups( SCCOL nCol, std::vector<SCROW>& rRows )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    sc::SharedFormulaUtil::splitFormulaCellGroups(aCol[nCol].maCells, rRows);
+}
+
 void ScTable::UnshareFormulaCells( SCCOL nCol, std::vector<SCROW>& rRows )
 {
     if (!ValidCol(nCol))

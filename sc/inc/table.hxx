@@ -888,6 +888,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     formula::VectorRefArray FetchVectorRefArray( SCCOL nCol, SCROW nRow1, SCROW nRow2 );
 
+    void SplitFormulaGroups( SCCOL nCol, std::vector<SCROW>& rRows );
     void UnshareFormulaCells( SCCOL nCol, std::vector<SCROW>& rRows );
     void RegroupFormulaCells( SCCOL nCol );
 
