@@ -26,7 +26,7 @@ import java.io.IOException;
  *  &quot;Office&quot; <code>Document</code> format.</p>
  *
  *  <p>The <code>DocumentDeserializer</code> object is created by
- *  the </code>PluginFactory</code> {@link
+ *  the <code>PluginFactory</code> {@link
  *  org.openoffice.xmerge.DocumentDeserializerFactory#createDocumentDeserializer
  *  createDocumentDeserializer} method.  When it is constructed, a
  *  <code>ConvertData</code> object is passed in to be used as input.</p>
