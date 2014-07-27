@@ -261,6 +261,26 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Executable_get_target,$(2))
 
 endef
 
+define gb_CppunitTest__use_java_ure
+$(call gb_CppunitTest_get_target,$(1)) : \
+    $(foreach jar,java_uno juh jurt unoil unoloader,$(call gb_Jar_get_target,$(jar))) \
+    $(call gb_Library_get_target,affine_uno_uno) \
+    $(call gb_Package_get_target,jvmfwk_javavendors) \
+    $(call gb_Package_get_target,jvmfwk_jreproperties)
+
+endef
+
+define gb_CppunitTest_use_jar
+$(call gb_CppunitTest__use_java_ure,$(1))
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Jar_get_target,$(2))
+
+endef
+
+define gb_CppunitTest_use_jars
+$(foreach jar,$(2),$(call gb_CppunitTest_use_jar,$(1),$(jar)))
+
+endef
+
 define gb_CppunitTest__forward_to_Linktarget
 gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest_get_linktarget,$$(1)),$$(2),$$(3),CppunitTest_$$(1))
 

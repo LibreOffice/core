@@ -71,6 +71,10 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_hsqldb_test,\
     xmloff/util/xo \
 ))
 
+$(eval $(call gb_CppunitTest_use_jars,dbaccess_hsqldb_test,\
+	sdbc_hsqldb \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_hsqldb_test))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,dbaccess_hsqldb_test))
