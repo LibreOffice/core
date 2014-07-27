@@ -101,24 +101,21 @@ public final class PdbDecoder {
 
             // read the records
 
-            int len = 0;
-            byte[] bytes = null;
-
             int lastIndex = header.numRecords - 1;
 
             for (int i = 0; i < lastIndex; i++) {
 
                 file.seek(recOffset[i]);
-                len = recOffset[i+1] - recOffset[i];
-                bytes = new byte[len];
+                int len = recOffset[i+1] - recOffset[i];
+                byte[] bytes = new byte[len];
                 file.readFully(bytes);
         recArray[i] = new Record(bytes, recAttrs[i]);
         }
 
             // last record
             file.seek(recOffset[lastIndex]);
-            len = (int) file.length() - recOffset[lastIndex];
-            bytes = new byte[len];
+            int len = (int) file.length() - recOffset[lastIndex];
+            byte[] bytes = new byte[len];
             file.readFully(bytes);
             recArray[lastIndex] = new Record(bytes, recAttrs[lastIndex]);
 
@@ -181,9 +178,6 @@ public final class PdbDecoder {
 
             // read the records
 
-            int len = 0;
-            byte[] bytes = null;
-
             int lastIndex = header.numRecords - 1;
 
             for (int i = 0; i < lastIndex; i++) {
@@ -191,8 +185,8 @@ public final class PdbDecoder {
                 //dis.seek(recOffset[i]);
         dis.reset();
         dis.skip(recOffset[i]);
-                len = recOffset[i+1] - recOffset[i];
-                bytes = new byte[len];
+                int len = recOffset[i+1] - recOffset[i];
+                byte[] bytes = new byte[len];
                 dis.readFully(bytes);
                 recArray[i] = new Record(bytes, recAttrs[i]);
             }
@@ -200,9 +194,9 @@ public final class PdbDecoder {
             // last record
 
             dis.reset();
-        len = dis.available() - recOffset[lastIndex];
+        int len = dis.available() - recOffset[lastIndex];
         dis.skip(recOffset[lastIndex]);
-        bytes = new byte[len];
+        byte[] bytes = new byte[len];
             dis.readFully(bytes);
             recArray[lastIndex] = new Record(bytes, recAttrs[lastIndex]);
         }
