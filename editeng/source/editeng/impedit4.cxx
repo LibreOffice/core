@@ -2647,7 +2647,7 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
         ContentNode* pNode = aEditDoc.GetObject( nNode );
 
         sal_Int32 nStartPos = 0;
-        sal_Int32 nEndPos = pNode->Len();
+        sal_Int32 nEndPos = pNode->GetExpandedLen();
         if ( nNode == nStartNode )
         {
             if ( bBack )
@@ -2664,7 +2664,7 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
         }
 
         // Searching ...
-        OUString aParaStr( GetEditDoc().GetParaAsString( pNode ) );
+        OUString aParaStr( pNode->GetExpandedText() );
         bool bFound = false;
         if ( bBack )
         {
@@ -2681,6 +2681,8 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
         }
         if ( bFound )
         {
+            pNode->UnExpandPositions( nStartPos, nEndPos );
+
             rFoundSel.Min().SetNode( pNode );
             rFoundSel.Min().SetIndex( nStartPos );
             rFoundSel.Max().SetNode( pNode );

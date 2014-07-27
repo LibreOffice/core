@@ -25,6 +25,9 @@
 #include "editeng/postitem.hxx"
 #include "editeng/section.hxx"
 #include "editeng/editobj.hxx"
+#include "editeng/flditem.hxx"
+#include "svl/srchitem.hxx"
+#include "rtl/strbuf.hxx"
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -44,15 +47,14 @@ public:
 
     void testConstruction();
 
-    /**
-     * Test UNO service class that implements text field items.
-     */
+    /// Test UNO service class that implements text field items.
     void testUnoTextFields();
 
-    /**
-     * AutoCorrect tests
-     */
+    /// AutoCorrect tests
     void testAutocorrect();
+
+    /// Test hyperlinks
+    void testHyperlinkSearch();
 
     void testSectionAttributes();
 
@@ -60,6 +62,7 @@ public:
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testAutocorrect);
+    CPPUNIT_TEST(testHyperlinkSearch);
     CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST_SUITE_END();
 
@@ -338,6 +341,91 @@ void Test::testAutocorrect()
 
         CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
     }
+}
+
+namespace {
+    class UrlEditEngine : public EditEngine
+    {
+    public:
+        UrlEditEngine(SfxItemPool *pPool) : EditEngine(pPool) {}
+
+        virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_uInt16, Color*&, Color*& )
+        {
+            return OUString("jim@bob.com"); // a sophisticated view of value:
+        }
+    };
+}
+
+// Odd accounting for hyperlink position & size etc.
+// https://bugzilla.novell.com/show_bug.cgi?id=467459
+void Test::testHyperlinkSearch()
+{
+    UrlEditEngine aEngine(mpItemPool);
+    EditDoc &rDoc = aEngine.GetEditDoc();
+
+    OUString aSampleText = "Please write email to . if you find a fish(not a dog).";
+    aEngine.SetText(aSampleText);
+
+    CPPUNIT_ASSERT_MESSAGE("set text", rDoc.GetParaAsString(sal_Int32(0)) == aSampleText);
+
+    ContentNode *pNode = rDoc.GetObject(0);
+    EditSelection aSel(EditPaM(pNode, 22), EditPaM(pNode, 22));
+    SvxURLField aURLField("mailto:///jim@bob.com", "jim@bob.com",
+                          SVXURLFORMAT_REPR);
+    SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
+
+    aEngine.InsertField(aSel, aField);
+    aEngine.UpdateFields();
+
+    OUString aContent = pNode->GetExpandedText();
+    CPPUNIT_ASSERT_MESSAGE("get text", aContent ==
+                           "Please write email to jim@bob.com. if you find a fish(not a dog).");
+    CPPUNIT_ASSERT_MESSAGE("wrong length", rDoc.GetTextLen() == (sal_uLong)aContent.getLength());
+
+    // Check expansion and positioning re-work
+    CPPUNIT_ASSERT_MESSAGE("wrong length", pNode->GetExpandedLen() ==
+                           (sal_uLong)aContent.getLength());
+    for (sal_Int32 n = 0; n < aContent.getLength(); n++)
+    {
+        sal_Int32 nStart = n, nEnd = n;
+        pNode->UnExpandPositions(nStart,nEnd);
+        CPPUNIT_ASSERT_MESSAGE("out of bound start", nStart < pNode->Len());
+        CPPUNIT_ASSERT_MESSAGE("out of bound end", nEnd <= pNode->Len());
+    }
+
+    static const struct {
+        sal_Int32 mnStart, mnEnd;
+        sal_Int32 mnNewStart, mnNewEnd;
+    } aTrickyOnes[] = {
+        {  0,  1, /* -> */  0, 1 },
+        { 21, 25, /* -> */ 21, 23 }, // the field is really just one char
+        { 25, 27, /* -> */ 22, 23 },
+        { 50, 56, /* -> */ 40, 46 }
+    };
+    for (size_t n = 0; n < SAL_N_ELEMENTS(aTrickyOnes); n++)
+    {
+        sal_Int32 nStart = aTrickyOnes[n].mnStart;
+        sal_Int32 nEnd = aTrickyOnes[n].mnEnd;
+        pNode->UnExpandPositions(nStart,nEnd);
+
+        rtl::OStringBuffer aBuf;
+        aBuf = "bound check start is ";
+        aBuf.append(nStart).append(" but should be ").append(aTrickyOnes[n].mnNewStart);
+        aBuf.append(" in row ").append((sal_Int32)n);
+        CPPUNIT_ASSERT_MESSAGE(aBuf.getStr(), nStart == aTrickyOnes[n].mnNewStart);
+        aBuf = "bound check end is ";
+        aBuf.append(nEnd).append(" but should be ").append(aTrickyOnes[n].mnNewEnd);
+        aBuf.append(" in row ").append((sal_Int32)n);
+        CPPUNIT_ASSERT_MESSAGE(aBuf.getStr(), nEnd == aTrickyOnes[n].mnNewEnd);
+    }
+
+    SvxSearchItem aItem(1); //SID_SEARCH_ITEM);
+    aItem.SetBackward(false);
+    aItem.SetSelection(false);
+    aItem.SetSearchString("fish");
+    CPPUNIT_ASSERT_MESSAGE("no fish", aEngine.HasText(aItem));
+    aItem.SetSearchString("dog");
+    CPPUNIT_ASSERT_MESSAGE("no dog", aEngine.HasText(aItem));
 }
 
 bool hasBold(const editeng::Section& rSecAttr)
