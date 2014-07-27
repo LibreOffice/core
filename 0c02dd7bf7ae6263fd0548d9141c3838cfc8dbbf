@@ -33,6 +33,24 @@
       "revId": "0c02dd7bf7ae6263fd0548d9141c3838cfc8dbbf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_61d86cf0",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/registry/ConverterInfoMgr.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-07-27T21:03:05Z",
+      "side": 1,
+      "message": "Because now, here we don\u0027t have access to the iterable ´piDeviceMime´, an ArrayList\u003cString\u003e.  piDeviceMime is accessible in ConverterInfo but it isn\u0027t accessible in ConverterInfoMgr.\n\n// Old way\nIterator\u003cFoo\u003e it \u003d iterable.iterator();\nwhile (it.hasNext()) {\n    Foo foo \u003d it.next();\n    // Use foo\n}\n\n// New way\nfor (Foo foo : iterable) {\n    // Use foo\n}",
+      "parentUuid": "bab921fb_8154a054",
+      "revId": "0c02dd7bf7ae6263fd0548d9141c3838cfc8dbbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
