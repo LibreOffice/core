@@ -353,8 +353,9 @@ public final class PalmDB {
         out.writeShort(records.length);
 
         // let each Record object write out its own info.
-        for (int i = 0; i < records.length; i++)
-            records[i].write(out);
+        for (Record record : records) {
+            record.write(out);
+        }
     }
 
     /**
