@@ -70,6 +70,7 @@ define gb_Jar__command
 endef
 
 # clean target reuses clean target of ClassSet
+.PHONY : $(call gb_Jar_get_clean_target,%)
 $(call gb_Jar_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_Jar_get_classsetname,%))
 	$(call gb_Output_announce,$*,$(false),JAR,3)
 	$(call gb_Helper_abbreviate_dirs,\
