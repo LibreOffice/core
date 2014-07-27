@@ -659,9 +659,10 @@ public class TextStyle extends Style implements Cloneable {
      *           otherwise false.
      */
     private boolean isIgnored(String attribute) {
-        for (int i = 0; i < ignored.length; i++) {
-            if (ignored[i].equals(attribute))
+        for (String ignored1 : ignored) {
+            if (ignored1.equals(attribute)) {
                 return true;
+            }
         }
         return false;
     }
