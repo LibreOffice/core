@@ -5705,6 +5705,81 @@ void Test::testSortOutOfPlaceResult()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSortPartialFormulaGroup()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    m_pDoc->InsertTab(0, "Sort");
+
+    // Set up the sheet.
+    const char* aData[][2] = {
+        { "F1", "F2" },
+        { "43", "=RC[-1]" },
+        { "50", "=RC[-1]" },
+        {  "8", "=RC[-1]" },
+        { "47", "=RC[-1]" },
+        { "28", "=RC[-1]" },
+        { 0, 0 } // terminator
+    };
+
+    // A1:B6.
+    for (SCROW i = 0; aData[i][0]; ++i)
+    {
+        m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i][0]));
+        m_pDoc->SetString(1, i, 0, OUString::createFromAscii(aData[i][1]));
+    }
+
+    // Check the initial condition.
+    for (SCROW i = 1; i <= 5; ++i)
+        // A2:A6 should equal B2:B6.
+        CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(ScAddress(0,i,0)), m_pDoc->GetValue(ScAddress(1,i,0)));
+
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_MESSAGE("This formula cell should be the first in a group.", pFC->IsSharedTop());
+    CPPUNIT_ASSERT_MESSAGE("Incorrect formula group length.", pFC->GetSharedLength() == 5);
+
+    ScDBDocFunc aFunc(getDocShell());
+
+    // Sort only B2:B4.  This caused crash at one point (c.f. fdo#81617).
+
+    m_pDoc->SetAnonymousDBData(0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 1, 1, 1, 3));
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 1;
+    aSortData.nCol2 = 1;
+    aSortData.nRow1 = 1;
+    aSortData.nRow2 = 3;
+    aSortData.bHasHeader = false;
+    aSortData.bInplace = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    m_pDoc->CalcAll(); // just in case...
+
+    // Check the cell values after the partial sort.
+
+    // Column A
+    CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(50.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL( 8.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    // Column B
+    CPPUNIT_ASSERT_EQUAL( 8.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(50.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(1,5,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testShiftCells()
 {
     m_pDoc->InsertTab(0, "foo");
