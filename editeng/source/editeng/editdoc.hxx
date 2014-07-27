@@ -246,6 +246,8 @@ private:
     CharAttribList  aCharAttribList;
     boost::scoped_ptr<WrongList> mpWrongList;
 
+    void UnExpandPosition( sal_Int32 &rStartPos, bool bBiasStart );
+
 public:
                     ContentNode( SfxItemPool& rItemPool );
                     ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs );
@@ -280,6 +282,13 @@ public:
 
     sal_Int32 Len() const;
     const OUString& GetString() const { return maString;}
+
+    /// return length including expanded fields
+    sal_uLong GetExpandedLen() const;
+    /// return content including expanded fields
+    OUString  GetExpandedText(sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1, bool bResolveFields = true) const;
+    /// re-write offsets in the expanded text to string offsets
+    void      UnExpandPositions( sal_Int32 &rStartPos, sal_Int32 &rEndPos );
 
     void SetChar(sal_Int32 nPos, sal_Unicode c);
     void Insert(const OUString& rStr, sal_Int32 nPos);

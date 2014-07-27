@@ -1650,6 +1650,118 @@ sal_Int32 ContentNode::Len() const
     return maString.getLength();
 }
 
+sal_uLong ContentNode::GetExpandedLen() const
+{
+    sal_uLong nLen = maString.getLength();
+
+    // Fields can be longer than the placeholder in the Node
+    const CharAttribList::AttribsType& rAttrs = GetCharAttribs().GetAttribs();
+    for (sal_Int32 nAttr = rAttrs.size(); nAttr; )
+    {
+        const EditCharAttrib& rAttr = rAttrs[--nAttr];
+        if (rAttr.Which() == EE_FEATURE_FIELD)
+        {
+            nLen += static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().getLength();
+            --nLen; // Standalone, to avoid corner cases when previous getLength() returns 0
+        }
+    }
+
+    return nLen;
+}
+
+OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos, bool bResolveFields) const
+{
+    if ( nEndPos < 0 || nEndPos > Len() )
+        nEndPos = Len();
+
+    DBG_ASSERT( nStartPos <= nEndPos, "Start and End reversed?" );
+
+    sal_Int32 nIndex = nStartPos;
+    OUString aStr;
+    const EditCharAttrib* pNextFeature = GetCharAttribs().FindFeature( nIndex );
+    while ( nIndex < nEndPos )
+    {
+        sal_Int32 nEnd = nEndPos;
+        if ( pNextFeature && ( pNextFeature->GetStart() < nEnd ) )
+            nEnd = pNextFeature->GetStart();
+        else
+            pNextFeature = 0;   // Feature does not interest the below
+
+        DBG_ASSERT( nEnd >= nIndex, "End in front of the index?" );
+        //!! beware of sub string length  of -1
+        if (nEnd > nIndex)
+            aStr += GetString().copy(nIndex, nEnd - nIndex);
+
+        if ( pNextFeature )
+        {
+            switch ( pNextFeature->GetItem()->Which() )
+            {
+                case EE_FEATURE_TAB:    aStr += "\t";
+                break;
+                case EE_FEATURE_LINEBR: aStr += "\x0A";
+                break;
+                case EE_FEATURE_FIELD:
+                    if ( bResolveFields )
+                        aStr += static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
+                break;
+                default:    OSL_FAIL( "What feature?" );
+            }
+            pNextFeature = GetCharAttribs().FindFeature( ++nEnd );
+        }
+        nIndex = nEnd;
+    }
+    return aStr;
+}
+
+void ContentNode::UnExpandPosition( sal_Int32 &rPos, bool bBiasStart )
+{
+    sal_Int32 nOffset = 0;
+
+    const CharAttribList::AttribsType& rAttrs = GetCharAttribs().GetAttribs();
+    for (size_t nAttr = 0; nAttr < rAttrs.size(); ++nAttr )
+    {
+        const EditCharAttrib& rAttr = rAttrs[nAttr];
+        assert (!(nAttr < rAttrs.size() - 1) ||
+                rAttrs[nAttr].GetStart() < rAttrs[nAttr + 1].GetStart());
+
+        nOffset = rAttr.GetStart();
+
+        if (nOffset >= rPos) // happens after the position
+            return;
+
+        sal_Int32 nChunk = 0;
+        if (rAttr.Which() == EE_FEATURE_FIELD)
+        {
+            nChunk += static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().getLength();
+            nChunk--; // Character representing the field in the string
+
+            if (nOffset + nChunk >= rPos) // we're inside the field
+            {
+                if (bBiasStart)
+                    rPos = rAttr.GetStart();
+                else
+                    rPos = rAttr.GetEnd();
+                return;
+            }
+            // Adjust for the position
+            rPos -= nChunk;
+        }
+    }
+    assert (rPos <= Len());
+}
+
+/*
+ * Fields are represented by a single character in the underlying string
+ * and/or selection, however, they can be expanded to the full value of
+ * the field. When we're dealing with selection / offsets however we need
+ * to deal in character positions inside the real (unexpanded) string.
+ * This method maps us back to character offsets.
+ */
+void ContentNode::UnExpandPositions( sal_Int32 &rStartPos, sal_Int32 &rEndPos )
+{
+    UnExpandPosition( rStartPos, true );
+    UnExpandPosition( rEndPos, false );
+}
 
 void ContentNode::SetChar(sal_Int32 nPos, sal_Unicode c)
 {
@@ -2081,48 +2193,10 @@ OUString EditDoc::GetParaAsString( sal_Int32 nNode ) const
 }
 
 OUString EditDoc::GetParaAsString(
-    const ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos, bool bResolveFields) const
+    const ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos,
+    bool bResolveFields) const
 {
-    if ( nEndPos < 0 || nEndPos > pNode->Len() )
-        nEndPos = pNode->Len();
-
-    DBG_ASSERT( nStartPos <= nEndPos, "Start and End reversed?" );
-
-    sal_Int32 nIndex = nStartPos;
-    OUString aStr;
-    const EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( nIndex );
-    while ( nIndex < nEndPos )
-    {
-        sal_Int32 nEnd = nEndPos;
-        if ( pNextFeature && ( pNextFeature->GetStart() < nEnd ) )
-            nEnd = pNextFeature->GetStart();
-        else
-            pNextFeature = 0;   // Feature does not interest the below
-
-        DBG_ASSERT( nEnd >= nIndex, "End in front of the index?" );
-        //!! beware of sub string length  of -1
-        if (nEnd > nIndex)
-            aStr += pNode->GetString().copy(nIndex, nEnd - nIndex);
-
-        if ( pNextFeature )
-        {
-            switch ( pNextFeature->GetItem()->Which() )
-            {
-                case EE_FEATURE_TAB:    aStr += "\t";
-                break;
-                case EE_FEATURE_LINEBR: aStr += "\x0A";
-                break;
-                case EE_FEATURE_FIELD:
-                    if ( bResolveFields )
-                        aStr += static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
-                break;
-                default:    OSL_FAIL( "What feature?" );
-            }
-            pNextFeature = pNode->GetCharAttribs().FindFeature( ++nEnd );
-        }
-        nIndex = nEnd;
-    }
-    return aStr;
+    return pNode->GetExpandedText(nStartPos, nEndPos, bResolveFields);
 }
 
 EditPaM EditDoc::GetStartPaM() const
@@ -2143,18 +2217,7 @@ sal_uLong EditDoc::GetTextLen() const
     for ( sal_Int32 nNode = 0; nNode < Count(); nNode++ )
     {
         const ContentNode* pNode = GetObject( nNode );
-        nLen += pNode->Len();
-        // Fields can be longer than the placeholder in the Node
-        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        for (sal_Int32 nAttr = rAttrs.size(); nAttr; )
-        {
-            const EditCharAttrib& rAttr = rAttrs[--nAttr];
-            if (rAttr.Which() == EE_FEATURE_FIELD)
-            {
-                nLen += static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().getLength();
-                --nLen; // Standalone, to avoid corner cases when previous getLength() returns 0
-            }
-        }
+        nLen += pNode->GetExpandedLen();
     }
     return nLen;
 }
