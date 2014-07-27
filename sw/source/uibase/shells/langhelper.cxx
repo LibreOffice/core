@@ -236,15 +236,13 @@ namespace SwLangHelper
         const LanguageType nLang = SvtLanguageTable::GetLanguageType( rLangText );
         if (nLang != LANGUAGE_DONTKNOW)
         {
-            sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLang );
-
             EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : NULL;
             OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
 
             //get ScriptType
             sal_uInt16 nLangWhichId = 0;
             bool bIsSingleScriptType = true;
-            switch (nScriptType)
+            switch (SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ))
             {
                 case SCRIPTTYPE_LATIN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE : RES_CHRATR_LANGUAGE; break;
                 case SCRIPTTYPE_ASIAN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CJK : RES_CHRATR_CJK_LANGUAGE; break;
@@ -288,7 +286,7 @@ namespace SwLangHelper
                     //Resolves: fdo#35282 Clear the language from all Text Styles, and
                     //fallback to default document language
                     const SwTxtFmtColls *pColls = rWrtSh.GetDoc()->GetTxtFmtColls();
-                    for(sal_uInt16 i = 0, nCount = pColls->size(); i < nCount; ++i)
+                    for(size_t i = 0, nCount = pColls->size(); i < nCount; ++i)
                     {
                         SwTxtFmtColl &rTxtColl = *(*pColls)[ i ];
                         rTxtColl.ResetFmtAttr(nLangWhichId);
@@ -296,7 +294,7 @@ namespace SwLangHelper
                     //Resolves: fdo#35282 Clear the language from all Character Styles,
                     //and fallback to default document language
                     const SwCharFmts *pCharFmts = rWrtSh.GetDoc()->GetCharFmts();
-                    for(sal_uInt16 i = 0, nCount = pCharFmts->size(); i < nCount; ++i)
+                    for(size_t i = 0, nCount = pCharFmts->size(); i < nCount; ++i)
                     {
                         SwCharFmt &rCharFmt = *(*pCharFmts)[ i ];
                         rCharFmt.ResetFmtAttr(nLangWhichId);
@@ -343,14 +341,14 @@ namespace SwLangHelper
             OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
             if (pEditEngine)
             {
-                for (sal_uInt16 i = 0; i < 3; ++i)
+                for (size_t i = 0; i < SAL_N_ELEMENTS(aLangWhichId_EE); ++i)
                     rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_EE[i] ));
                 pEditEngine->QuickSetAttribs( rCoreSet, aSelection);
             }
             else
             {
                 rWrtSh.GetCurAttr( rCoreSet );
-                for (sal_uInt16 i = 0; i < 3; ++i)
+                for (size_t i = 0; i < SAL_N_ELEMENTS(aLangWhichId_Writer); ++i)
                     rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_Writer[i] ));
                 rWrtSh.SetAttrSet( rCoreSet );
             }
@@ -358,7 +356,7 @@ namespace SwLangHelper
         else // change language for all text
         {
             std::set<sal_uInt16> aAttribs;
-            for (sal_uInt16 i = 0; i < 3; ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aLangWhichId_Writer); ++i)
             {
                 rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_Writer[i] ) );
                 aAttribs.insert( aLangWhichId_Writer[i] );
@@ -448,13 +446,10 @@ namespace SwLangHelper
     ///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
     LanguageType GetCurrentLanguage( SwWrtShell &rSh )
     {
-        // get all script types used in current selection
-        const sal_uInt16 nScriptType = rSh.GetScriptType();
-
         //set language attribute to use according to the script type
         sal_uInt16 nLangWhichId = 0;
         bool bIsSingleScriptType = true;
-        switch (nScriptType)
+        switch (rSh.GetScriptType())
         {
              case SCRIPTTYPE_LATIN :    nLangWhichId = RES_CHRATR_LANGUAGE; break;
              case SCRIPTTYPE_ASIAN :    nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
@@ -478,7 +473,7 @@ namespace SwLangHelper
                 RES_CHRATR_CTL_LANGUAGE
             };
             nCurrentLang = LANGUAGE_NONE;
-            for (sal_uInt16 i = 0; i < 3; ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aScriptTypes); ++i)
             {
                 LanguageType nTmpLang = GetLanguage( rSh, aScriptTypes[i] );
                 if (nTmpLang != LANGUAGE_NONE)
@@ -526,7 +521,7 @@ namespace SwLangHelper
                 EE_CHAR_LANGUAGE_CTL
             };
             nCurrentLang = LANGUAGE_NONE;
-            for (sal_uInt16 i = 0; i < 3; ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aScriptTypes); ++i)
             {
                 LanguageType nTmpLang = GetLanguage( aSet, aScriptTypes[i] );
                 if (nTmpLang != LANGUAGE_NONE)
