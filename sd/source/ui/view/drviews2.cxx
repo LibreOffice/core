@@ -171,6 +171,7 @@
 #include "undolayer.hxx"
 #include "unmodpg.hxx"
 #include <sfx2/sidebar/Sidebar.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 
 #include "ViewShellBase.hxx"
 #include <boost/scoped_ptr.hpp>
@@ -178,6 +179,8 @@
 namespace {
     const char CustomAnimationPanelId[] = "CustomAnimationPanel";
     const char SlideTransitionPanelId[] = "SlideTransitionPanel";
+    const char NavigatorPanelId[] = "SdNavigatorPanel";
+    const char GalleryPanelId[] = "GalleryPanel";
 }
 
 using namespace ::com::sun::star;
@@ -2722,28 +2725,27 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_CUSTOM_ANIMATION_PANEL:
+        case SID_NAVIGATOR:
         case SID_GALLERY:
         {
-            GetViewFrame()->ToggleChildWindow( GalleryChildWindow::GetChildWindowId() );
-            GetViewFrame()->GetBindings().Invalidate( SID_GALLERY );
+            // First make sure that the sidebar is visible
+            GetViewFrame()->ShowChildWindow( ::sfx2::sidebar::SidebarChildWindow::GetChildWindowId() );
+
+            OUString panelId;
+            if (nSId == SID_CUSTOM_ANIMATION_PANEL)
+                panelId = CustomAnimationPanelId;
+            else if (nSId == SID_NAVIGATOR)
+                panelId = NavigatorPanelId;
+            else if (nSId == SID_GALLERY)
+                panelId = GalleryPanelId;
+
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                panelId,
+                GetViewFrame()->GetFrame().GetFrameInterface());
 
             Cancel();
-            rReq.Ignore ();
-        }
-        break;
-
-        case SID_NAVIGATOR:
-        {
-            if ( rReq.GetArgs() )
-                GetViewFrame()->SetChildWindow(SID_NAVIGATOR,
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get(SID_NAVIGATOR))).GetValue());
-            else
-                GetViewFrame()->ToggleChildWindow( SID_NAVIGATOR );
-
-            GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
-            Cancel();
-            rReq.Ignore ();
+            rReq.Done();
         }
         break;
 
@@ -2761,18 +2763,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             GetViewFrame()->GetBindings().Invalidate(SID_ANIMATION_OBJECTS);
             Cancel();
             rReq.Ignore ();
-        }
-        break;
-
-        case SID_CUSTOM_ANIMATION_PANEL:
-        {
-            // Make the slide transition panel visible in the sidebar.
-            ::sfx2::sidebar::Sidebar::ShowPanel(
-                CustomAnimationPanelId,
-                GetViewFrame()->GetFrame().GetFrameInterface());
-
-            Cancel();
-            rReq.Done ();
         }
         break;
 
