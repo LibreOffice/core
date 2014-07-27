@@ -37,13 +37,11 @@ void Sidebar::ShowPanel (
     {
         // This should be a lot more sophisticated:
         // - Make the deck switching asynchronous
-        // - Make sure that the panel is visible and expanded after
-        // the switch.
         // - Make sure to use a context that really shows the panel
 
         // All that is not necessary for the current use cases so lets
         // keep it simple for the time being.
-        pController->RequestSwitchToDeck(pPanelDescriptor->msDeckId);
+        pController->OpenThenSwitchToDeck(pPanelDescriptor->msDeckId);
     }
 }
 
