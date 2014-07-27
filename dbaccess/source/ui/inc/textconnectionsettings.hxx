@@ -49,8 +49,7 @@ namespace dbaui
 
     private:
         ::std::auto_ptr< OTextConnectionHelper >    m_pTextConnectionHelper;
-        OKButton                                    m_aOK;
-        CancelButton                                m_aCancel;
+        OKButton                                    *m_pOK;
         SfxItemSet&                                 m_rItems;
 
     private:

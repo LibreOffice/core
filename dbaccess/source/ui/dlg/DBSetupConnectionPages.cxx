@@ -68,13 +68,11 @@ using namespace ::com::sun::star;
 
     // OTextConnectionPageSetup
     OTextConnectionPageSetup::OTextConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_TEXT, _rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
+        :OConnectionTabPageSetup(pParent, "DBWizTextPage", "dbaccess/ui/dbwiztextpage.ui", _rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
     {
 
-        m_pTextConnectionHelper = new OTextConnectionHelper( this, TC_EXTENSION | TC_SEPARATORS );
+        m_pTextConnectionHelper = new OTextConnectionHelper( get<VclVBox>("TextPageContainer"), TC_EXTENSION | TC_SEPARATORS );
         m_pTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
-
-        FreeResource();
     }
 
     OTextConnectionPageSetup::~OTextConnectionPageSetup()
@@ -596,7 +594,7 @@ using namespace ::com::sun::star;
     bool OJDBCConnectionPageSetup::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
+        bool bEnableTestConnection = !m_pConnectionURL->IsVisible() || !m_pConnectionURL->GetTextNoPrefix().isEmpty();
         bEnableTestConnection = bEnableTestConnection && (!m_aETDriverClass.GetText().isEmpty());
         return bEnableTestConnection;
     }

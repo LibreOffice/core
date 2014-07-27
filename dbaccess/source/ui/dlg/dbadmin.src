@@ -383,17 +383,6 @@ TabPage PAGE_LDAP
     };
 };
 
-TabPage PAGE_TEXT
-{
-    SVLook = TRUE ;
-    Hide = TRUE;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    HelpId = HID_DSADMIN_PAGE_TEXT;
-
-    AUTO_SEPARATORCONTROLGROUP(UNRELATED_CONTROLS, PAGE_X)
-};
-
 TabPage PAGE_USERDRIVER
 {
     SVLook = TRUE ;
@@ -468,6 +457,37 @@ String STR_COULD_NOT_LOAD_ODBC_LIB
 String STR_UNSUPPORTED_DATASOURCE_TYPE
 {
     Text [ en-US ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably will not be able to connect to the database.";
+};
+
+String STR_AUTOTEXT_FIELD_SEP_NONE
+{
+    Text[ en-US ]  = "{None}";
+};
+
+String STR_AUTOTEXTSEPARATORLIST
+{
+    Text  = "\"\t34\t'\t39" ;
+};
+
+String STR_AUTOFIELDSEPARATORLIST
+{
+    Text [ x-comment ] = "EM Dec 2002: 'Space' refers to what you get when you hit the space bar on your keyboard.";
+    Text [ en-US ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;
+};
+
+String STR_AUTODELIMITER_MISSING
+{
+    Text[ en-US ]  = "#1 must be set." ;
+};
+
+String STR_AUTODELIMITER_MUST_DIFFER
+{
+    Text[ en-US ]  = "#1 and #2 must be different." ;
+};
+
+String STR_AUTONO_WILDCARDS
+{
+    Text[ en-US ]  = "Wildcards such as ?,* are not allowed in #1." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

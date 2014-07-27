@@ -30,15 +30,13 @@ namespace dbaui
 {
     // TextConnectionSettingsDialog
     TextConnectionSettingsDialog::TextConnectionSettingsDialog( Window* _pParent, SfxItemSet& _rItems )
-        :ModalDialog( _pParent, ModuleRes( DLG_TEXT_CONNECTION_SETTINGS ) )
-        ,m_aOK( this, ModuleRes( 1 ) )
-        ,m_aCancel( this, ModuleRes( 1 ) )
+        :ModalDialog( _pParent, "TextConnectionSettingsDialog", "dbaccess/ui/textconnectionsettings.ui" )
         ,m_rItems( _rItems )
     {
-        m_pTextConnectionHelper.reset( new OTextConnectionHelper( this, TC_HEADER | TC_SEPARATORS | TC_CHARSET ) );
-        FreeResource();
+        get(m_pOK, "ok");
+        m_pTextConnectionHelper.reset( new OTextConnectionHelper( get<VclVBox>("TextPageContainer"), TC_HEADER | TC_SEPARATORS | TC_CHARSET ) );
 
-        m_aOK.SetClickHdl( LINK( this, TextConnectionSettingsDialog, OnOK ) );
+        m_pOK->SetClickHdl( LINK( this, TextConnectionSettingsDialog, OnOK ) );
     }
 
     TextConnectionSettingsDialog::~TextConnectionSettingsDialog()

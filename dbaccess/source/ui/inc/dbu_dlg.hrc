@@ -22,9 +22,9 @@
 #include "dbu_resource.hrc"
 
 #define PAGE_X              281
-#define PAGE_Y              185
+#define PAGE_Y              215
 #define WIZARD_PAGE_X       225
-#define WIZARD_PAGE_Y       210
+#define WIZARD_PAGE_Y       240
 #define START_X             6
 
 #define CHECKBOX_HEIGHT      8
@@ -83,6 +83,8 @@
 #define STR_MSACCESS_FILTERNAME             RID_STR_DLG_START + 39
 #define STR_CONNECTION_NO_SUCCESS           RID_STR_DLG_START + 40
 #define STR_DBASE_PATH_OR_FILE              RID_STR_DLG_START + 41
+#define STR_TEXT_HEADERTEXT                 RID_STR_DLG_START + 42
+#define STR_TEXT_HELPTEXT                   RID_STR_DLG_START + 43
 #define STR_TEXT_PATH_OR_FILE               RID_STR_DLG_START + 45
 #define STR_FLAT_PATH_OR_FILE               RID_STR_DLG_START + 46
 #define STR_CALC_PATH_OR_FILE               RID_STR_DLG_START + 47

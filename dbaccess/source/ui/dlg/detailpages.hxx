@@ -54,6 +54,7 @@ namespace dbaui
         Edit*               m_pOptions;
 
         FixedLine*          m_pDataConvertFixedLine;
+        FixedText*          m_pDataConvertLabel;
         FixedText*          m_pCharsetLabel;
         CharSetListBox*     m_pCharset;
 
@@ -71,6 +72,7 @@ namespace dbaui
 
         // nControlFlags is a combination of the CBTP_xxx-constants
         OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags,bool _bFreeResource = true);
+        OCommonBehaviourTabPage(Window* pParent, const OString& rId, const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags);
     protected:
 
         virtual ~OCommonBehaviourTabPage();

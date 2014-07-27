@@ -105,16 +105,16 @@ namespace dbaui
     OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
         :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
         ,m_bUserGrabFocus(true)
-        ,m_aFT_HelpText(this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
+        ,m_pHelpText(new FixedText(this, ModuleRes(FT_AUTOWIZARDHELPTEXT)))
     {
 
         if ( USHRT_MAX != _nHelpTextResId )
         {
             OUString sHelpText = ModuleRes(_nHelpTextResId);
-            m_aFT_HelpText.SetText(sHelpText);
+            m_pHelpText->SetText(sHelpText);
         }
         else
-            m_aFT_HelpText.Hide();
+            m_pHelpText->Hide();
 
         if ( USHRT_MAX != _nHeaderResId )
             SetHeaderText(FT_AUTOWIZARDHEADER, _nHeaderResId);
@@ -122,26 +122,57 @@ namespace dbaui
         if ( USHRT_MAX != _nUrlResId )
         {
             OUString sLabelText = ModuleRes(_nUrlResId);
-            m_aFT_Connection.SetText(sLabelText);
+            m_pFT_Connection->SetText(sLabelText);
             if ( USHRT_MAX == _nHelpTextResId )
             {
-                Point aPos = m_aFT_HelpText.GetPosPixel();
-                Point aFTPos = m_aFT_Connection.GetPosPixel();
-                Point aEDPos = m_aConnectionURL.GetPosPixel();
-                Point aPBPos = m_aPB_Connection.GetPosPixel();
+                Point aPos = m_pHelpText->GetPosPixel();
+                Point aFTPos = m_pFT_Connection->GetPosPixel();
+                Point aEDPos = m_pConnectionURL->GetPosPixel();
+                Point aPBPos = m_pPB_Connection->GetPosPixel();
 
                 aEDPos.Y() = aPos.Y() + aEDPos.Y() - aFTPos.Y();
                 aPBPos.Y() = aPos.Y() + aPBPos.Y() - aFTPos.Y();
                 aFTPos.Y() = aPos.Y();
-                m_aFT_Connection.SetPosPixel(aFTPos);
-                m_aConnectionURL.SetPosPixel(aEDPos);
-                m_aPB_Connection.SetPosPixel(aPBPos);
+                m_pFT_Connection->SetPosPixel(aFTPos);
+                m_pConnectionURL->SetPosPixel(aEDPos);
+                m_pPB_Connection->SetPosPixel(aPBPos);
             }
         }
         else
-            m_aFT_Connection.Hide();
+            m_pFT_Connection->Hide();
 
-        m_aConnectionURL.SetModifyHdl(LINK(this, OConnectionTabPageSetup, OnEditModified));
+        m_pConnectionURL->SetModifyHdl(LINK(this, OConnectionTabPageSetup, OnEditModified));
+
+        SetRoadmapStateValue(false);
+    }
+
+    OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
+        :OConnectionHelper(pParent, _rId, _rUIXMLDescription, _rCoreAttrs)
+        ,m_bUserGrabFocus(true)
+    {
+        get(m_pHelpText, "helptext");
+        get(m_pHeaderText, "header");
+
+        if ( USHRT_MAX != _nHelpTextResId )
+        {
+            OUString sHelpText = ModuleRes(_nHelpTextResId);
+            m_pHelpText->SetText(sHelpText);
+        }
+        else
+            m_pHelpText->Hide();
+
+        if ( USHRT_MAX != _nHeaderResId )
+            m_pHeaderText->SetText(ModuleRes(_nHeaderResId));
+
+        if ( USHRT_MAX != _nUrlResId )
+        {
+            OUString sLabelText = ModuleRes(_nUrlResId);
+            m_pFT_Connection->SetText(sLabelText);
+        }
+        else
+            m_pFT_Connection->Hide();
+
+        m_pConnectionURL->SetModifyHdl(LINK(this, OConnectionTabPageSetup, OnEditModified));
 
         SetRoadmapStateValue(false);
     }
@@ -183,12 +214,12 @@ namespace dbaui
     bool OConnectionTabPageSetup::FillItemSet(SfxItemSet* _rSet)
     {
         bool bChangedSomething = false;
-        fillString(*_rSet,&m_aConnectionURL, DSID_CONNECTURL, bChangedSomething);
+        fillString(*_rSet,m_pConnectionURL, DSID_CONNECTURL, bChangedSomething);
         return bChangedSomething;
     }
     bool OConnectionTabPageSetup::checkTestConnection()
     {
-        return !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
+        return !m_pConnectionURL->IsVisible() || !m_pConnectionURL->GetTextNoPrefix().isEmpty();
     }
 
     IMPL_LINK(OConnectionTabPageSetup, OnEditModified, Edit*, /*_pEdit*/)

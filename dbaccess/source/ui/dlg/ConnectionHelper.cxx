@@ -92,25 +92,53 @@ namespace dbaui
     OConnectionHelper::OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs)
         : OGenericAdministrationPage(pParent, _rId, _rCoreAttrs)
         , m_bUserGrabFocus(false)
-        , m_aFT_Connection(this, ResId(FT_AUTOBROWSEURL, *_rId.GetResMgr()))
-        , m_aConnectionURL(this, ResId(ET_AUTOBROWSEURL, *_rId.GetResMgr()))
-        , m_aPB_Connection(this, ResId(PB_AUTOBROWSEURL, *_rId.GetResMgr()))
-        , m_aPB_CreateDB(this, ResId(PB_CREATEDB, *_rId.GetResMgr()))
+        , m_pFT_Connection(new FixedText(this, ResId(FT_AUTOBROWSEURL, *_rId.GetResMgr())))
+        , m_pConnectionURL(new OConnectionURLEdit(this, ResId(ET_AUTOBROWSEURL, *_rId.GetResMgr())))
+        , m_pPB_Connection(new PushButton(this, ResId(PB_AUTOBROWSEURL, *_rId.GetResMgr())))
+        , m_pPB_CreateDB(new PushButton(this, ResId(PB_CREATEDB, *_rId.GetResMgr())))
         , m_pCollection(NULL)
+        , m_bDelete(true)
     {
         // extract the datasource type collection from the item set
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
-        m_aPB_Connection.SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));
-        m_aPB_CreateDB.SetClickHdl(LINK(this, OConnectionHelper, OnCreateDatabase));
+        m_pPB_Connection->SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));
+        m_pPB_CreateDB->SetClickHdl(LINK(this, OConnectionHelper, OnCreateDatabase));
         OSL_ENSURE(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
-        m_aConnectionURL.SetTypeCollection(m_pCollection);
+        m_pConnectionURL->SetTypeCollection(m_pCollection);
+    }
+
+    OConnectionHelper::OConnectionHelper( Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pParent, _rId, _rUIXMLDescription, _rCoreAttrs)
+        , m_bUserGrabFocus(false)
+        , m_pCollection(NULL)
+        , m_bDelete(false)
+    {
+        get(m_pFT_Connection, "browseurllabel");
+        get(m_pConnectionURL, "browseurl");
+        get(m_pPB_Connection, "browse");
+        get(m_pPB_CreateDB, "create");
+
+        // extract the datasource type collection from the item set
+        DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
+        if (pCollectionItem)
+            m_pCollection = pCollectionItem->getCollection();
+        m_pPB_Connection->SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));
+        m_pPB_CreateDB->SetClickHdl(LINK(this, OConnectionHelper, OnCreateDatabase));
+        OSL_ENSURE(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
+        m_pConnectionURL->SetTypeCollection(m_pCollection);
     }
 
     OConnectionHelper::~OConnectionHelper()
     {
-
+        if(m_bDelete)
+        {
+            delete m_pFT_Connection;
+            delete m_pConnectionURL;
+            delete m_pPB_Connection;
+            delete m_pPB_CreateDB;
+        }
     }
 
     void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -119,15 +147,15 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        m_aFT_Connection.Show();
-        m_aConnectionURL.Show();
-        m_aConnectionURL.ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
+        m_pFT_Connection->Show();
+        m_pConnectionURL->Show();
+        m_pConnectionURL->ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
 
         bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
-        m_aPB_Connection.Show( bEnableBrowseButton );
+        m_pPB_Connection->Show( bEnableBrowseButton );
 
         bool bEnableCreateButton = m_pCollection->supportsDBCreation( m_eType );
-        m_aPB_CreateDB.Show( bEnableCreateButton );
+        m_pPB_CreateDB->Show( bEnableCreateButton );
 
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
 
@@ -138,7 +166,7 @@ namespace dbaui
             setURL( sUrl );
 
             checkTestConnection();
-            m_aConnectionURL.ClearModifyFlag();
+            m_pConnectionURL->ClearModifyFlag();
         }
 
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
@@ -398,9 +426,9 @@ namespace dbaui
         }
 
         if ( _bPrefix )
-            m_aConnectionURL.SetText( sURL );
+            m_pConnectionURL->SetText( sURL );
         else
-            m_aConnectionURL.SetTextNoPrefix( sURL );
+            m_pConnectionURL->SetTextNoPrefix( sURL );
 
         implUpdateURLDependentStates();
     }
@@ -408,7 +436,7 @@ namespace dbaui
     OUString OConnectionHelper::impl_getURL( bool _bPrefix ) const
     {
         // get the pure text
-        OUString sURL = _bPrefix ? m_aConnectionURL.GetText() : OUString(m_aConnectionURL.GetTextNoPrefix());
+        OUString sURL = _bPrefix ? m_pConnectionURL->GetText() : OUString(m_pConnectionURL->GetTextNoPrefix());
 
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
 
@@ -555,14 +583,14 @@ namespace dbaui
             switch (_rNEvt.GetType())
             {
                 case EVENT_GETFOCUS:
-                    if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
+                    if (m_pConnectionURL->IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
                     {   // a descendant of the URL edit field got the focus
-                        m_aConnectionURL.SaveValueNoPrefix();
+                        m_pConnectionURL->SaveValueNoPrefix();
                     }
                     break;
 
                 case EVENT_LOSEFOCUS:
-                    if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
+                    if (m_pConnectionURL->IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
                     {   // a descendant of the URL edit field lost the focus
                         if (!commitURL())
                             return true;  // handled
@@ -644,22 +672,22 @@ namespace dbaui
 
     void OConnectionHelper::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFT_Connection));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aPB_Connection));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aPB_CreateDB));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFT_Connection));
+        _rControlList.push_back(new ODisableWrapper<PushButton>(m_pPB_Connection));
+        _rControlList.push_back(new ODisableWrapper<PushButton>(m_pPB_CreateDB));
     }
 
     void OConnectionHelper::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back( new OSaveValueWrapper<Edit>( &m_aConnectionURL ) );
+        _rControlList.push_back( new OSaveValueWrapper<Edit>( m_pConnectionURL ) );
     }
 
     bool OConnectionHelper::commitURL()
     {
         OUString sURL;
         OUString sOldPath;
-        sOldPath = m_aConnectionURL.GetSavedValueNoPrefix();
-        sURL = m_aConnectionURL.GetTextNoPrefix();
+        sOldPath = m_pConnectionURL->GetSavedValueNoPrefix();
+        sURL = m_pConnectionURL->GetTextNoPrefix();
 
         if ( m_pCollection->isFileSystemBased(m_eType) )
         {
@@ -691,7 +719,7 @@ namespace dbaui
                     {
                         case RET_RETRY:
                             m_bUserGrabFocus = false;
-                            m_aConnectionURL.GrabFocus();
+                            m_pConnectionURL->GrabFocus();
                             m_bUserGrabFocus = true;
                             return false;
 
@@ -704,7 +732,7 @@ namespace dbaui
         }
 
         setURLNoPrefix(sURL);
-        m_aConnectionURL.SaveValueNoPrefix();
+        m_pConnectionURL->SaveValueNoPrefix();
         return true;
     }
     void OConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)

@@ -54,6 +54,12 @@
     <glade-widget-class title="OSQL NameEdit" name="dbulo-OSQLNameEdit"
                         generic-name="OSQLNameEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="CharSetListBox" name="dbulo-CharSetListBox"
+                        generic-name="CharSetListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="ConnectionURLEdit" name="dbulo-ConnectionURLEdit"
+                        generic-name="ConnectionURLEdit" parent="GtkEntry"
+                        icon-name="widget-gtk-entry"/>
 
     <glade-widget-class title="VclComboBoxText" name="VclComboBoxText"
                         generic-name="ComboBoxText" parent="GtkComboBoxText"

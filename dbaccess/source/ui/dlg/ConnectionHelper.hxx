@@ -41,11 +41,12 @@ namespace dbaui
 
     public:
         OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs);
+        OConnectionHelper( Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs);
         virtual ~OConnectionHelper();
-        FixedText           m_aFT_Connection;
-        OConnectionURLEdit  m_aConnectionURL;
-        PushButton          m_aPB_Connection;
-        PushButton          m_aPB_CreateDB;
+        FixedText           *m_pFT_Connection;
+        OConnectionURLEdit  *m_pConnectionURL;
+        PushButton          *m_pPB_Connection;
+        PushButton          *m_pPB_CreateDB;
         OUString     m_eType;          // the type can't be changed in this class, so we hold it as member.
 
     public:
@@ -95,6 +96,7 @@ namespace dbaui
         OUString    impl_getURL( bool _bPrefix ) const;
         void        impl_setURL( const OUString& _rURL, bool _bPrefix );
         void        implUpdateURLDependentStates() const;
+        bool        m_bDelete;
     };
 
 }   // namespace dbaui
