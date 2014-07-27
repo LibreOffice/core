@@ -311,11 +311,14 @@ void BackingWindow::initControls()
     mpTemplateButton->SetControlForeground(aButtonsText);
 
 
-    mpTemplateButton->SetDropDown( PUSHBUTTON_DROPDOWN_MENUBUTTON );
-    MenuButton *pMenuButton = static_cast<MenuButton*> (mpTemplateButton);
-    pMenuButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
-    pMenuButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ));
-    //pMenuButton->Activate();
+
+    //Menubutton implementation
+    PopupMenu* pMenu = mpTemplateButton->GetPopupMenu();
+    pMenu->SetMenuFlags(
+            pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+
+    mpTemplateButton->SetSelectHdl(LINK(this,BackingWindow,MenuSelectHdl));
+    mpTemplateButton->SetClickHdl( LINK(this, BackingWindow, ClickHdl) );
 
     setupButton( mpWriterAllButton );
     setupButton( mpDrawAllButton );
@@ -588,18 +591,30 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     return 0;
 }
 
-IMPL_LINK( BackingWindow, ActivateHdl, Button*, pButton )
+IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
 {
-    printf("---------------------------------");
-    MenuButton *pMenuButton = static_cast<MenuButton*> (pButton);
-    PopupMenu *pFilterMenu = new PopupMenu;
+    OString sId = pButton->GetCurItemIdent();
 
-    //pFilterMenu->SetSelectHdl(LINK( this, BackingWindow, FilterMenuSelectHdl));
-    pFilterMenu->InsertItem(0, "Writer");
+    if( sId == "filter_writer" )
+    {
+        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_WRITER));
+    }
+    else if( sId == "filter_calc" )
+    {
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_CALC));
+    }
+    else if( sId == "filter_impress" )
+    {
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_IMPRESS));
+    }
+    else if( sId == "filter_draw" )
+    {
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_DRAW));
+    }
 
 
-    pMenuButton->SetPopupMenu( pFilterMenu );
-
+    mpAllRecentThumbnails->Hide();
+    mpLocalView->Show();
 
     return 0;
 }
