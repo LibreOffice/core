@@ -33,11 +33,11 @@ package org.openoffice.xmerge;
 public interface DocumentDeserializerFactory {
 
     /**
-     *  The <code>DocumentDeserializer</code> is used to convert
+     *  <p>The <code>DocumentDeserializer</code> is used to convert
      *  from the &quot;Device&quot; <code>Document</code> format to
      *  the &quot;Office&quot; <code>Document</code> format.</p>
      *
-     *  The <code>ConvertData</code> object is passed along to the
+     *  <p>The <code>ConvertData</code> object is passed along to the
      *  created <code>DocumentDeserializer</code> via its constructor.
      *  The <code>ConvertData</code> is read and converted when the
      *  the <code>DocumentDeserializer</code> object's
