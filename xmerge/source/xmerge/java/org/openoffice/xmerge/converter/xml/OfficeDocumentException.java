@@ -112,6 +112,7 @@ public final class OfficeDocumentException extends IOException {
     *
     * @return  The message value for the <code>Exception</code>.
     */
+    @Override
     public String getMessage() {
         return message.toString() + super.getMessage();
     }

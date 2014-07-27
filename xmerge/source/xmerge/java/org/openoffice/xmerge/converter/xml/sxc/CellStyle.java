@@ -263,6 +263,7 @@ public class CellStyle extends Style implements Cloneable {
      *  @return  The <code>StyleCatalog</code> in which to look up
      *           ancestors.
      */
+    @Override
     public Style getResolved() {
         // Create a new object to return, which is a clone of this one.
         CellStyle resolved = null;
@@ -332,6 +333,7 @@ public class CellStyle extends Style implements Cloneable {
      *
      *  @return  Created <code>Node</code>.
      */
+    @Override
     public Node createNode(org.w3c.dom.Document parentDoc, String name) {
         Element node = parentDoc.createElement(name);
         writeAttributes(node);
@@ -349,6 +351,7 @@ public class CellStyle extends Style implements Cloneable {
      *  @return  true if <code>style</code> is a subset, false
      *           otherwise.
      */
+    @Override
     public boolean isSubset(Style style) {
         if (style.getClass() != this.getClass())
                 return false;

@@ -160,6 +160,7 @@ public class Convert implements Cloneable {
      *
      *  @return  The cloned <code>Convert</code> object.
      */
+    @Override
     public Object clone() {
 
         Convert aClone = null;
