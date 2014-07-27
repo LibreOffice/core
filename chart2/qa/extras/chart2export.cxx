@@ -17,6 +17,7 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
@@ -68,6 +69,7 @@ public:
     void testFdo78290ScatterChartMarkerX();
     void testFdo78290CombinationChartMarkerX();
     void testAxisNumberFormatODS();
+    void testDataLabelBordersDOCX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -102,6 +104,7 @@ public:
     CPPUNIT_TEST(testFdo78290ScatterChartMarkerX);
     CPPUNIT_TEST(testFdo78290CombinationChartMarkerX);
     CPPUNIT_TEST(testAxisNumberFormatODS);
+    CPPUNIT_TEST(testDataLabelBordersDOCX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -686,6 +689,106 @@ void Chart2ExportTest::testAxisNumberFormatODS()
     reload("calc8");
     xChartDoc = getChartDocFromSheet(0, mxComponent);
     aTest.check(xChartDoc);
+}
+
+void Chart2ExportTest::testDataLabelBordersDOCX()
+{
+    struct Check
+    {
+        sal_Int32 mnIndex;
+        css::drawing::LineStyle meStyle;
+        sal_Int32 mnColor;
+    };
+
+    struct
+    {
+        /**
+         * Chart 1 has 4 bars of which 1st and 3rd have labels with borders
+         * around them.
+         */
+        void checkObject1( const Reference<chart2::XChartDocument>& xChartDoc )
+        {
+            CPPUNIT_ASSERT(xChartDoc.is());
+
+            Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+            CPPUNIT_ASSERT(xDataSeries.is());
+
+            // Check to make sure that data points 0 and 2 have local properties.
+            Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY);
+            CPPUNIT_ASSERT(xPropSet.is());
+
+            Sequence<sal_Int32> aIndices;
+            xPropSet->getPropertyValue("AttributedDataPoints") >>= aIndices;
+            CPPUNIT_ASSERT_MESSAGE("There should be 2 data points with local properties.", aIndices.getLength() == 2);
+            CPPUNIT_ASSERT(aIndices[0] == 0);
+            CPPUNIT_ASSERT(aIndices[1] == 2);
+
+            const Check aDataPoints[] =
+            {
+                { 0, css::drawing::LineStyle_SOLID, 0x00FFFF00 }, // solid yellow
+                { 2, css::drawing::LineStyle_SOLID, 0x00FF0000 }  // solid red
+            };
+
+            for (size_t i = 0, n = SAL_N_ELEMENTS(aDataPoints); i < n; ++i)
+            {
+                xPropSet = xDataSeries->getDataPointByIndex(aDataPoints[i].mnIndex);
+                CPPUNIT_ASSERT(xPropSet.is());
+
+                css::drawing::LineStyle eLineStyle = css::drawing::LineStyle_NONE;
+                xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_STYLE) >>= eLineStyle;
+                CPPUNIT_ASSERT(eLineStyle == aDataPoints[i].meStyle);
+
+                sal_Int32 nWidth = -1;
+                xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
+                CPPUNIT_ASSERT(nWidth > 0);
+
+                sal_Int32 nColor = -1;
+                xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
+                CPPUNIT_ASSERT_MESSAGE("Border color is wrong.", nColor == aDataPoints[i].mnColor);
+            }
+        }
+
+        /**
+         * Chart 2 has all its data labels with identical borders.
+         */
+        void checkObject2( const Reference<chart2::XChartDocument>& xChartDoc )
+        {
+            CPPUNIT_ASSERT(xChartDoc.is());
+
+            Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+            CPPUNIT_ASSERT(xDataSeries.is());
+
+            Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY);
+            CPPUNIT_ASSERT(xPropSet.is());
+
+            css::drawing::LineStyle eLineStyle = css::drawing::LineStyle_NONE;
+            xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_STYLE) >>= eLineStyle;
+            CPPUNIT_ASSERT(eLineStyle == css::drawing::LineStyle_SOLID);
+
+            sal_Int32 nWidth = -1;
+            xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
+            CPPUNIT_ASSERT(nWidth > 0);
+
+            sal_Int32 nColor = -1;
+            xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
+            CPPUNIT_ASSERT_MESSAGE("Border color should be green.", nColor == 0x0000FF00);
+        }
+
+    } aTest;
+
+    load("/chart2/qa/extras/data/docx/", "data-label-borders.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    aTest.checkObject1(xChartDoc);
+    xChartDoc.set(getChartDocFromWriter(1), uno::UNO_QUERY);
+    aTest.checkObject2(xChartDoc);
+
+    reload("Office Open XML Text");
+
+    xChartDoc.set(getChartDocFromWriter(0), uno::UNO_QUERY);
+    aTest.checkObject1(xChartDoc);
+    xChartDoc.set(getChartDocFromWriter(1), uno::UNO_QUERY);
+    aTest.checkObject2(xChartDoc);
 }
 
 void Chart2ExportTest::testBarChartRotation()
