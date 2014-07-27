@@ -101,8 +101,8 @@ public final class PdbDecoder {
 
             // read the records
 
-            int len = 0;
-            byte[] bytes = null;
+            int len;
+            byte[] bytes;
 
             int lastIndex = header.numRecords - 1;
 
@@ -181,8 +181,8 @@ public final class PdbDecoder {
 
             // read the records
 
-            int len = 0;
-            byte[] bytes = null;
+            int len;
+            byte[] bytes;
 
             int lastIndex = header.numRecords - 1;
 
