@@ -67,13 +67,9 @@ public final class ParaNodeIterator extends NodeIterator {
 
         // can use an array later to check all possible tags for
         // future expansion
-        if (node.getNodeType() == Node.ELEMENT_NODE &&
-            (node.getNodeName().equals(SUPPORTED_TAG1) ||
-             node.getNodeName().equals(SUPPORTED_TAG2))) {
-            return true;
-        } else {
-            return false;
-        }
+        return node.getNodeType() == Node.ELEMENT_NODE &&
+                (node.getNodeName().equals(SUPPORTED_TAG1) ||
+                node.getNodeName().equals(SUPPORTED_TAG2));
     }
 }
 
