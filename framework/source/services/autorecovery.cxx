@@ -1984,7 +1984,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         css::uno::Sequence< OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(OUString(TYPE_PROP_EXTENSIONS), css::uno::Sequence< OUString >());
         if (lExtensions.getLength())
         {
-            rInfo.Extension  = lExtensions[0];
+            rInfo.Extension = "." + lExtensions[0];
         }
         else
             rInfo.Extension = ".unknown";
