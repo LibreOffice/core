@@ -15,6 +15,7 @@
 #include <sys/time.h>
 #include <sal/types.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
+#include <LibreOfficeKit/LibreOfficeKitInit.h>
 
 using namespace ::lok;
 

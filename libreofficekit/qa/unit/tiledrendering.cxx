@@ -24,6 +24,7 @@
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
+#include <LibreOfficeKit/LibreOfficeKitInit.h>
 
 using namespace ::boost;
 using namespace ::lok;

@@ -105,7 +105,25 @@ struct _LibreOfficeKitDocumentClass
 #endif // LOK_USE_UNSTABLE_API
 };
 
-LibreOfficeKit* lok_init (const char* pInstallPath);
+#if defined(__GNUC__)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
+#if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wunused-function"
+#endif
+
+static LibreOfficeKit* lok_init (const char* pInstallPath);
+
+#if defined(__GNUC__)
+#   pragma GCC diagnostic pop
+#endif
+
+#if defined(__clang__)
+#   pragma clang diagnostic pop
+#endif
 
 #ifdef __cplusplus
 }

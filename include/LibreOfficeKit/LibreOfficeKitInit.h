@@ -7,17 +7,28 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifdef LINUX
+#ifndef INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_INIT_H
+#define INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_INIT_H
+
+// LibreOfficeKit.h only contains a declaration for lok_init,
+// however it's still important that we include it here to prevent
+// issues in case the client should include it AFTER including
+// LibreOfficeKitInit.h.
+#include "LibreOfficeKit.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#if defined(__linux__) || defined(_AIX)
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <sal/types.h>
-#include <LibreOfficeKit/LibreOfficeKit.h>
-
 #include <dlfcn.h>
-#ifdef AIX
+#ifdef  _AIX
 #  include <sys/ldr.h>
 #endif
 
@@ -26,7 +37,7 @@
 
 typedef LibreOfficeKit *(HookFunction)( const char *install_path);
 
-SAL_DLLPUBLIC_EXPORT LibreOfficeKit *lok_init( const char *install_path )
+static LibreOfficeKit *lok_init( const char *install_path )
 {
     char *imp_lib;
     size_t partial_length;
@@ -58,7 +69,8 @@ SAL_DLLPUBLIC_EXPORT LibreOfficeKit *lok_init( const char *install_path )
         dlhandle = dlopen(imp_lib, RTLD_LAZY);
         if (!dlhandle)
         {
-            fprintf(stderr, "failed to open library '%s' or '%s' in '%s/'\n", TARGET_LIB, TARGET_MERGED_LIB, install_path);
+            fprintf(stderr, "failed to open library '%s' or '%s' in '%s/'\n",
+                    TARGET_LIB, TARGET_MERGED_LIB, install_path);
             free(imp_lib);
             return NULL;
         }
@@ -77,6 +89,12 @@ SAL_DLLPUBLIC_EXPORT LibreOfficeKit *lok_init( const char *install_path )
     return pSym( install_path );
 }
 
-#endif // not LINUX => port me !
+#endif // defined(__linux__) || defined(_AIX)
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
