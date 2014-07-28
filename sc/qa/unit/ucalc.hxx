@@ -299,6 +299,7 @@ public:
     void testSharedFormulaInsertColumn();
     void testSharedFormulaMoveBlock();
     void testSharedFormulaUpdateOnNamedRangeChange();
+    void testSharedFormulaUpdateOnDBChange();
     void testFormulaPosition();
 
     void testMixData();
@@ -503,6 +504,7 @@ public:
     CPPUNIT_TEST(testSharedFormulasCopyPaste);
     CPPUNIT_TEST(testSharedFormulaInsertColumn);
     CPPUNIT_TEST(testSharedFormulaUpdateOnNamedRangeChange);
+    CPPUNIT_TEST(testSharedFormulaUpdateOnDBChange);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testMixData);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);

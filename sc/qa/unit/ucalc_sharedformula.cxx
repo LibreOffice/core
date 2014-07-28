@@ -16,9 +16,11 @@
 #include "undoblk.hxx"
 #include "scopetools.hxx"
 #include <docfunc.hxx>
+#include <dbdocfun.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
 #include <globalnames.hxx>
+#include <dbdata.hxx>
 
 #include <svl/sharedstring.hxx>
 
@@ -1303,6 +1305,72 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSharedFormulaUpdateOnDBChange()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "RangeTest");
+
+    // Put 1, 2, 3, 4 in A1:A4.
+    for (SCROW i = 0; i <= 3; ++i)
+        m_pDoc->SetValue(ScAddress(0,i,0), (i+1));
+
+    ScDBCollection* pDBs = m_pDoc->GetDBCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
+
+    // Define database range 'MyRange' for A1:A2.
+    ScDBData* pData = new ScDBData("MyRange", 0, 0, 0, 0, 1);
+    bool bInserted = pDBs->getNamedDBs().insert(pData);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert a new database range.", bInserted);
+
+    // Insert in C2:C4 a group of formula cells that reference MyRange.
+    for (SCROW i = 1; i <= 3; ++i)
+        m_pDoc->SetString(ScAddress(2,i,0), "=SUM(MyRange)");
+
+    // Make sure C2:C4 is a formula group.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(2,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(pFC->IsSharedTop());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+
+    // Check the initial formula results.
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,3,0)));
+
+    ScDBDocFunc aFunc(getDocShell());
+
+    // Change the range referenced by MyRange to A1:A4.
+    ScDBCollection aNewDBs(m_pDoc);
+    bInserted = aNewDBs.getNamedDBs().insert(new ScDBData("MyRange", 0, 0, 0, 0, 3));
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert a new database range.", bInserted);
+
+    std::vector<ScRange> aDeleted;
+    aFunc.ModifyAllDBData(aNewDBs, aDeleted);
+
+    // Check the updated formula results.
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,3,0)));
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    // Undo and check the results.
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,3,0)));
+
+    // Redo and check the results.
+    pUndoMgr->Redo();
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
     m_pDoc->DeleteTab(0);
 }
