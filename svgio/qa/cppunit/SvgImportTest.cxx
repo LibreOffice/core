@@ -18,6 +18,9 @@
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+
 #include <boost/scoped_array.hpp>
 
 namespace
@@ -26,6 +29,8 @@ namespace
 using namespace css::uno;
 using namespace css::io;
 using namespace css::graphic;
+using namespace drawinglayer;
+using namespace drawinglayer::primitive2d;
 
 class Test : public test::BootstrapFixture
 {
@@ -85,8 +90,8 @@ void Test::testStyles()
     Primitive2DSequence maSequenceRectWithStylesByGroup = parseSvg("/svgio/qa/cppunit/data/RectWithStylesByGroup.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRectWithStylesByGroup.getLength());
 
-    // TODO: Test if the 3 sequences are equal..
-    //const Primitive2DReference xReference(maSequenceRect[0]);
+    CPPUNIT_ASSERT_EQUAL(true, (bool) arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithStyle));
+    CPPUNIT_ASSERT_EQUAL(true, (bool) arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithParentStyle));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
