@@ -761,37 +761,32 @@ void XMLConfigItemMapIndexedContext::EndElement()
                         beans::PropertyValue *pForChar = aProps.getArray();
                         i18n::ForbiddenCharacters aForbid;
                         lang::Locale aLocale;
-                        const OUString sLanguage  ( "Language" );
-                        const OUString sCountry   ( "Country" );
-                        const OUString sVariant   ( "Variant" );
-                        const OUString sBeginLine ( "BeginLine" );
-                        const OUString sEndLine   ( "EndLine" );
                         bool bHaveLanguage = false, bHaveCountry = false, bHaveVariant = false,
                              bHaveBegin = false, bHaveEnd = false;
 
                         for ( sal_Int32 j = 0 ; j < XML_FORBIDDEN_CHARACTER_MAX ; j++ )
                         {
-                            if (pForChar->Name.equals (sLanguage ) )
+                            if (pForChar->Name.equals ( "Language" ) )
                             {
                                 pForChar->Value >>= aLocale.Language;
                                 bHaveLanguage = true;
                             }
-                            else if (pForChar->Name.equals (sCountry ) )
+                            else if (pForChar->Name.equals ( "Country" ) )
                             {
                                 pForChar->Value >>= aLocale.Country;
                                 bHaveCountry = true;
                             }
-                            else if (pForChar->Name.equals (sVariant ) )
+                            else if (pForChar->Name.equals ( "Variant" ) )
                             {
                                 pForChar->Value >>= aLocale.Variant;
                                 bHaveVariant = true;
                             }
-                            else if (pForChar->Name.equals (sBeginLine ) )
+                            else if (pForChar->Name.equals ( "BeginLine" ) )
                             {
                                 pForChar->Value >>= aForbid.beginLine;
                                 bHaveBegin = true;
                             }
-                            else if (pForChar->Name.equals (sEndLine ) )
+                            else if (pForChar->Name.equals ( "EndLine" ) )
                             {
                                 pForChar->Value >>= aForbid.endLine;
                                 bHaveEnd = true;
@@ -829,16 +824,6 @@ void XMLConfigItemMapIndexedContext::EndElement()
 
             formula::SymbolDescriptor *pDescriptor = aSymbolList.getArray();
 
-            const OUString sName     ( "Name" );
-            const OUString sExportName ( "ExportName" );
-            const OUString sFontName ( "FontName" );
-            const OUString sSymbolSet ( "SymbolSet" );
-            const OUString sCharacter ( "Character" );
-            const OUString sCharSet  ( "CharSet" );
-            const OUString sFamily   ( "Family" );
-            const OUString sPitch    ( "Pitch" );
-            const OUString sWeight   ( "Weight" );
-            const OUString sItalic   ( "Italic" );
             sal_Int16 nNumFullEntries = 0;
 
             for ( sal_Int32 i = 0; i < nCount; i++ )
@@ -853,52 +838,52 @@ void XMLConfigItemMapIndexedContext::EndElement()
 
                     for ( sal_Int32 j = 0 ; j < XML_SYMBOL_DESCRIPTOR_MAX ; j++ )
                     {
-                        if (pSymbol->Name.equals ( sName ) )
+                        if (pSymbol->Name.equals ( "Name" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sName;
                             bHaveName = true;
                         }
-                        else if (pSymbol->Name.equals (sExportName ) )
+                        else if (pSymbol->Name.equals ( "ExportName" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sExportName;
                             bHaveExportName = true;
                         }
-                        else if (pSymbol->Name.equals (sFontName ) )
+                        else if (pSymbol->Name.equals ( "FontName" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sFontName;
                             bHaveFontName = true;
                         }
-                        else if (pSymbol->Name.equals (sCharSet ) )
+                        else if (pSymbol->Name.equals ( "CharSet" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nCharSet;
                             bHaveCharSet = true;
                         }
-                        else if (pSymbol->Name.equals (sFamily ) )
+                        else if (pSymbol->Name.equals ( "Family" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nFamily;
                             bHaveFamily = true;
                         }
-                        else if (pSymbol->Name.equals (sPitch ) )
+                        else if (pSymbol->Name.equals ( "Pitch" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nPitch;
                             bHavePitch = true;
                         }
-                        else if (pSymbol->Name.equals (sWeight ) )
+                        else if (pSymbol->Name.equals ( "Weight" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nWeight;
                             bHaveWeight = true;
                         }
-                        else if (pSymbol->Name.equals (sItalic ) )
+                        else if (pSymbol->Name.equals ( "Italic" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nItalic;
                             bHaveItalic = true;
                         }
-                        else if (pSymbol->Name.equals (sSymbolSet ) )
+                        else if (pSymbol->Name.equals ( "SymbolSet" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sSymbolSet;
                             bHaveSymbolSet = true;
                         }
-                        else if (pSymbol->Name.equals (sCharacter ) )
+                        else if (pSymbol->Name.equals ( "Character" ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nCharacter;
                             bHaveCharacter = true;

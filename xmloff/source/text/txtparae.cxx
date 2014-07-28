@@ -157,16 +157,13 @@ namespace
 
     static bool lcl_ShapeFilter(const Reference<XTextContent>& xTxtContent)
     {
-        static const OUString sTextFrameService("com.sun.star.text.TextFrame");
-        static const OUString sTextGraphicService("com.sun.star.text.TextGraphicObject");
-        static const OUString sTextEmbeddedService("com.sun.star.text.TextEmbeddedObject");
         Reference<XShape> xShape(xTxtContent, UNO_QUERY);
         if(!xShape.is())
             return false;
         Reference<XServiceInfo> xServiceInfo(xTxtContent, UNO_QUERY);
-        if(xServiceInfo->supportsService(sTextFrameService) ||
-            xServiceInfo->supportsService(sTextGraphicService) ||
-            xServiceInfo->supportsService(sTextEmbeddedService) )
+        if(xServiceInfo->supportsService("com.sun.star.text.TextFrame") ||
+            xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject") ||
+            xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject") )
             return false;
         return true;
     };
@@ -397,14 +394,14 @@ void FieldParamExporter::Export()
                 // Save the OLE object
                 Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();
                 Reference< embed::XStorage > xDstStg = xTargetStg->openStorageElement(
-                        OUString("OLELinks"), embed::ElementModes::WRITE );
+                        "OLELinks", embed::ElementModes::WRITE );
 
                 if ( !xDstStg->hasByName( sValue ) ) {
                     Reference< XStorageBasedDocument > xStgDoc (
                             m_pExport->GetModel( ), UNO_QUERY );
                     Reference< embed::XStorage > xDocStg = xStgDoc->getDocumentStorage();
                     Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                            OUString("OLELinks"), embed::ElementModes::READ );
+                            "OLELinks", embed::ElementModes::READ );
 
                     xOleStg->copyElementTo( sValue, xDstStg, sValue );
                     Reference< embed::XTransactedObject > xTransact( xDstStg, UNO_QUERY );
@@ -417,7 +414,7 @@ void FieldParamExporter::Export()
         {
             bool bValue = false;
             aValue >>= bValue;
-            ExportParameter(*pCurrent, (bValue ? OUString("true" ) : OUString("false")) );
+            ExportParameter(*pCurrent, OUString::boolean(bValue) );
         }
         else if(aValueType == aSeqType)
         {
@@ -512,19 +509,17 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                     {
                         Reference < XPropertySet > xNumPropSet( xNumRule,
                                                                 UNO_QUERY );
-                        const OUString sIsAutomatic( "IsAutomatic"  );
                         if( xNumPropSet.is() &&
                             xNumPropSet->getPropertySetInfo()
-                                       ->hasPropertyByName( sIsAutomatic ) )
+                                       ->hasPropertyByName( "IsAutomatic" ) )
                         {
-                            bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
+                            bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue();
                             // Check on outline style (#i73361#)
-                            const OUString sNumberingIsOutline( "NumberingIsOutline"  );
                             if ( bAdd &&
                                  xNumPropSet->getPropertySetInfo()
-                                           ->hasPropertyByName( sNumberingIsOutline ) )
+                                           ->hasPropertyByName( "NumberingIsOutline" ) )
                             {
-                                bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( sNumberingIsOutline ).getValue());
+                                bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue());
                             }
                         }
                         else
@@ -629,19 +624,17 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             {
                 Reference < XPropertySet > xNumPropSet( xNumRule,
                                                         UNO_QUERY );
-                const OUString sIsAutomatic( "IsAutomatic"  );
                 if( xNumPropSet.is() &&
                     xNumPropSet->getPropertySetInfo()
-                               ->hasPropertyByName( sIsAutomatic ) )
+                               ->hasPropertyByName( "IsAutomatic" ) )
                 {
-                    bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
+                    bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue();
                     // Check on outline style (#i73361#)
-                    const OUString sNumberingIsOutline( "NumberingIsOutline"  );
                     if ( bAdd &&
                          xNumPropSet->getPropertySetInfo()
-                                   ->hasPropertyByName( sNumberingIsOutline ) )
+                                   ->hasPropertyByName( "NumberingIsOutline" ) )
                     {
-                        bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( sNumberingIsOutline ).getValue());
+                        bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue());
                     }
                 }
                 else
@@ -1615,7 +1608,6 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
         Reference< XIndexAccess > xNumberingRules = xNumberingRulesSupp->getNumberingRules();
         nCount = xNumberingRules->getCount();
         // Custom outline assignment lost after re-importing sxw (#i73361#)
-        const OUString sNumberingIsOutline( "NumberingIsOutline"  );
         for( sal_Int32 i = 0; i < nCount; ++i )
         {
             Reference< XIndexReplace > xNumRule( xNumberingRules->getByIndex( i ), UNO_QUERY );
@@ -1630,18 +1622,17 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
                 {
                     Reference < XPropertySet > xNumPropSet( xNumRule,
                                                             UNO_QUERY );
-                    const OUString sIsAutomatic( "IsAutomatic"  );
                     if( xNumPropSet.is() &&
                         xNumPropSet->getPropertySetInfo()
-                                   ->hasPropertyByName( sIsAutomatic ) )
+                                   ->hasPropertyByName( "IsAutomatic" ) )
                     {
-                        bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
+                        bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue();
                         // Check on outline style (#i73361#)
                         if ( bAdd &&
                              xNumPropSet->getPropertySetInfo()
-                                       ->hasPropertyByName( sNumberingIsOutline ) )
+                                       ->hasPropertyByName( "NumberingIsOutline" ) )
                         {
-                            bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( sNumberingIsOutline ).getValue());
+                            bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue());
                         }
                     }
                     else
@@ -2057,7 +2048,7 @@ void XMLTextParagraphExport::exportParagraph(
                                 {
                                     Reference< XPropertySet > xNumRulePropSet( xNumRule, UNO_QUERY );
                                     xNumRulePropSet->getPropertyValue(
-                                        OUString("Name") ) >>= sOutlineName;
+                                        "Name" ) >>= sOutlineName;
                                     bAssignedtoOutlineStyle = ( sListStyleName == sOutlineName );
                                 }
                             }
@@ -2070,7 +2061,6 @@ void XMLTextParagraphExport::exportParagraph(
                     }
 
                     {
-                        OUString sParaIsNumberingRestart("ParaIsNumberingRestart");
                         bool bIsRestartNumbering = false;
 
                         Reference< XPropertySetInfo >
@@ -2079,9 +2069,9 @@ void XMLTextParagraphExport::exportParagraph(
                                      xPropSet->getPropertySetInfo());
 
                         if (xPropSetInfo->
-                            hasPropertyByName(sParaIsNumberingRestart))
+                            hasPropertyByName("ParaIsNumberingRestart"))
                         {
-                            xPropSet->getPropertyValue(sParaIsNumberingRestart)
+                            xPropSet->getPropertyValue("ParaIsNumberingRestart")
                                 >>= bIsRestartNumbering;
                         }
 
@@ -2091,14 +2081,12 @@ void XMLTextParagraphExport::exportParagraph(
                                                      XML_RESTART_NUMBERING,
                                                      XML_TRUE);
 
-                            OUString sNumberingStartValue("NumberingStartValue");
-
                             if (xPropSetInfo->
-                                hasPropertyByName(sNumberingStartValue))
+                                hasPropertyByName("NumberingStartValue"))
                             {
                                 sal_Int32 nStartValue = 0;
 
-                                xPropSet->getPropertyValue(sNumberingStartValue)
+                                xPropSet->getPropertyValue("NumberingStartValue")
                                     >>= nStartValue;
 
                                 OUStringBuffer sTmpStartValue;
