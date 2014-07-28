@@ -5317,9 +5317,9 @@ find_dotnetsdk()
 find_winsdk_version()
 {
     # Args: $1 : SDK version as in "6.0A", "7.0" etc
-    # Return value: $winsdktest
+    # Return values: $winsdktest, $winsdklibsubdir
 
-    unset winsdktest
+    unset winsdktest winsdklibsubdir
 
     # Why we look for them in this particular order I don't know. But OTOH I
     case "$1" in
@@ -5327,6 +5327,15 @@ find_winsdk_version()
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
+            winsdklibsubdir=.
+            return
+        fi
+        ;;
+    8.1)
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
+        if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            winsdklibsubdir=winv6.3
             return
         fi
         ;;
@@ -5334,6 +5343,7 @@ find_winsdk_version()
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
+            winsdklibsubdir=win8
             return
         fi
         ;;
@@ -5463,13 +5473,13 @@ if test "$build_os" = "cygwin"; then
         DOTNET_FRAMEWORK_HOME="$frametest"
     else
         find_winsdk
-        if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/win8/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
+        if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
             DOTNET_FRAMEWORK_HOME="$winsdktest"
         fi
     fi
 
-    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/win8/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
-        AC_MSG_ERROR([mscoree.lib (.NET Framework) not found])
+    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
+        AC_MSG_ERROR([mscoree.lib not found])
     fi
     AC_MSG_RESULT(found)
 
@@ -9729,6 +9739,8 @@ if test "$_os" = "WINNT"; then
             WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
             WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
         fi
+
+        WINDOWS_SDK_LIB_SUBDIR=$winsdklibsubdir
     fi
 
     if test -n "$WINDOWS_SDK_HOME"; then
@@ -9749,7 +9761,7 @@ if test "$_os" = "WINNT"; then
 
         if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
             have_windows_sdk_libs=yes
-        elif test -f "$WINDOWS_SDK_HOME/lib/win8/um/$WINDOWS_SDK_ARCH/user32.lib"; then
+        elif test -f "$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/user32.lib"; then
             have_windows_sdk_libs=yes
         else
             have_windows_sdk_libs=no
@@ -9794,6 +9806,9 @@ the  Windows SDK are installed.])
             add_warning "If a build created with VS 2012 should run on Windows XP,"
             add_warning "use --with-windows-sdk=7.1A (requires VS 2012 Update 1 or newer)"
         fi
+    elif echo $WINDOWS_SDK_HOME | grep "8.1" >/dev/null 2>/dev/null; then
+        WINDOWS_SDK_VERSION=81
+        AC_MSG_RESULT([found Windows SDK 8.1 ($WINDOWS_SDK_HOME)])
     else
         AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
@@ -9828,6 +9843,7 @@ the  Windows SDK are installed.])
     fi
 fi
 AC_SUBST(WINDOWS_SDK_HOME)
+AC_SUBST(WINDOWS_SDK_LIB_SUBDIR)
 AC_SUBST(WINDOWS_SDK_VERSION)
 AC_SUBST(WINDOWS_SDK_WILANGID)
 
@@ -12787,14 +12803,14 @@ if test "$build_os" = "cygwin"; then
     if test "$BITNESS_OVERRIDE" = 64; then
         ILIB="$ILIB;$COMPATH/lib/amd64"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/x64"
-        if test "$WINDOWS_SDK_VERSION" = "80"; then
-            ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x64"
+        if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81; then
+            ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
         fi
     else
         ILIB="$ILIB;$COMPATH/lib"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib"
-        if test "$WINDOWS_SDK_VERSION" = "80"; then
-            ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x86"
+        if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81; then
+            ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x86"
         fi
     fi
     ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
