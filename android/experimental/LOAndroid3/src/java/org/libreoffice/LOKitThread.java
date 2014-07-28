@@ -5,6 +5,7 @@ import android.graphics.RectF;
 import android.util.Log;
 
 import org.mozilla.gecko.gfx.FloatSize;
+import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.SubTile;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 
@@ -32,10 +33,13 @@ public class LOKitThread extends Thread {
         mViewportMetrics = new ViewportMetrics();
         mViewportMetrics.setPageSize(new FloatSize(pageWidth, pageHeight));
 
-        RectF viewport = mApplication.getLayerController().getViewportMetrics().getClampedViewport();
-        float zoomFactor = mApplication.getLayerController().getViewportMetrics().getZoomFactor();
+        GeckoLayerClient layerClient = mApplication.getLayerClient();
+        ViewportMetrics metrics = mApplication.getLayerController().getViewportMetrics();
 
-        boolean shouldContinue = mApplication.getLayerClient().beginDrawing(mViewportMetrics);
+        RectF viewport = metrics.getClampedViewport();
+        float zoomFactor = metrics.getZoomFactor();
+
+        boolean shouldContinue = layerClient.beginDrawing(mViewportMetrics);
 
         if (!shouldContinue) {
             return false;
@@ -53,12 +57,12 @@ public class LOKitThread extends Thread {
                 Math.round(maxY / zoomFactor));
 
         ArrayList<SubTile> removeTiles = new ArrayList<SubTile>();
-        for (SubTile tile : mApplication.getLayerClient().getTiles()) {
+        for (SubTile tile : layerClient.getTiles()) {
             if (!rect.intersects(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE)) {
                 removeTiles.add(tile);
             }
         }
-        mApplication.getLayerClient().getTiles().removeAll(removeTiles);
+        layerClient.getTiles().removeAll(removeTiles);
 
         for (int y = minY; y <= maxY; y+=TILE_SIZE) {
             for (int x = minX; x <= maxX; x+=TILE_SIZE) {
@@ -69,19 +73,19 @@ public class LOKitThread extends Thread {
                     continue;
                 }
                 boolean contains = false;
-                for (SubTile tile : mApplication.getLayerClient().getTiles()) {
+                for (SubTile tile : layerClient.getTiles()) {
                     if (tile.x == x && tile.y == y) {
                         contains = true;
                     }
                 }
                 if (!contains) {
                     SubTile tile = mTileProvider.createTile(x, y);
-                    mApplication.getLayerClient().addTile(tile);
+                    layerClient.addTile(tile);
                 }
             }
         }
 
-        mApplication.getLayerClient().endDrawing();
+        layerClient.endDrawing();
 
         return true;
     }
