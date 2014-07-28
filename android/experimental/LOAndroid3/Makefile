@@ -13,7 +13,7 @@ BOOTSTRAPDIR=../../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
-	$< -j -g core -g writer > $@
+	$< -j -g core -g writer -g calc > $@
 
 build-ant: android_version_setup copy-stuff link-so properties
 #
