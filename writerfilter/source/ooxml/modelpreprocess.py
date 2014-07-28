@@ -149,15 +149,6 @@ def preprocess(model):
             j.setAttribute("prefix", prefix)
             j.setAttribute("localname", localname)
 
-        for j in i.getElementsByTagName("define") + i.getElementsByTagName("ref"):
-            name = j.getAttribute("name")
-            if name.startswith("CT_") or name.startswith("EG_") or name.startswith("AG_"):
-                j.setAttribute("classfordefine", "1")
-            elif name in startElements:
-                j.setAttribute("classfordefine", "1")
-            else:
-                j.setAttribute("classfordefine", "0")
-
     for i in model.getElementsByTagName("grammar"):
         if i.getAttribute("ns").startswith("http://schemas.openxmlformats.org/"):
             i.setAttribute("application", i.getAttribute("ns").replace('http://schemas.openxmlformats.org/', '').split('/')[0])

@@ -32,6 +32,9 @@ reference)
 compare)
     for i in $writerfilter_ALL
     do
+        if [ "$(basename $i)" == "model_preprocessed.xml" ]; then
+            continue
+        fi
         diff -u $mydir-reference/$i $mydir/$i
     done
     ;;
