@@ -56,7 +56,7 @@ void PaletteGPL::LoadColorSet( SvxColorValueSet& rColorSet )
         it != maColors.end(); ++it)
     {
         // TODO make it->second OUString
-        rColorSet.InsertItem(nIx, it->first, OStringToOUString(it->second, RTL_TEXTENCODING_ASCII_US));
+        rColorSet.InsertItem(nIx, it->first, it->second);
         ++nIx;
     }
 }
@@ -129,7 +129,9 @@ void PaletteGPL::LoadPalette()
             if(nIndex != -1)
                 name = aLine.copy(nIndex);
 
-            maColors.push_back(std::make_pair(Color(r, g, b), name));
+            maColors.push_back(std::make_pair(
+                Color(r, g, b),
+                OStringToOUString(name, RTL_TEXTENCODING_ASCII_US)));
         }
     } while (aFile.ReadLine(aLine));
 }

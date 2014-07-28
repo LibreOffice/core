@@ -26,7 +26,7 @@
 #include <tools/stream.hxx>
 
 
-typedef std::pair<Color, OString> NamedColor;
+typedef std::pair<Color, OUString> NamedColor;
 typedef std::vector< NamedColor > ColorList;
 
 
