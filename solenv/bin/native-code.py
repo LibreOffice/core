@@ -129,6 +129,7 @@ calc_factory_list = [
     ("libscdlo.a", "scd_component_getFactory"),
     ("libscfiltlo.a", "scfilt_component_getFactory"),
     ("libsclo.a", "sc_component_getFactory"),
+    ("libavmedialo.a", "avmedia_component_getFactory"),
     ]
 
 calc_constructor_list = [

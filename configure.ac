@@ -2446,10 +2446,9 @@ fi
 AC_SUBST(DISABLE_EXPORT)
 
 # Whether to build "avmedia" functionality or not.
-# We probably don't want it for non-desktop.
 
 if test -z "$enable_avmedia"; then
-    if test $_os != iOS -a $_os != Android; then
+    if test $_os != iOS; then
         enable_avmedia=yes
     fi
 fi
