@@ -191,51 +191,6 @@ ScDBData* ScDBFunc::GetAnonymousDBData()
     return pDocSh->GetAnonymousDBData(aRange);
 }
 
-//  change database range (dialog)
-
-void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::vector<ScRange> &rDelAreaList )
-{
-
-    ScDocShell* pDocShell = GetViewData().GetDocShell();
-    ScDocShellModificator aModificator( *pDocShell );
-    ScDocument& rDoc = pDocShell->GetDocument();
-    ScDBCollection* pOldColl = rDoc.GetDBCollection();
-    ScDBCollection* pUndoColl = NULL;
-    const bool bRecord (rDoc.IsUndoEnabled());
-
-    std::vector<ScRange>::const_iterator iter;
-    for (iter = rDelAreaList.begin(); iter != rDelAreaList.end(); ++iter)
-    {
-        // unregistering target in SBA no longer necessary
-        const ScAddress& rStart = iter->aStart;
-        const ScAddress& rEnd   = iter->aEnd;
-        pDocShell->DBAreaDeleted( rStart.Tab(),
-                                  rStart.Col(), rStart.Row(),
-                                  rEnd.Col(),   rEnd.Row() );
-
-    }
-
-    if (bRecord)
-        pUndoColl = new ScDBCollection( *pOldColl );
-
-    //  register target in SBA no longer necessary
-
-    rDoc.CompileDBFormula( true );     // CreateFormulaString
-    rDoc.SetDBCollection( new ScDBCollection( rNewColl ) );
-    rDoc.CompileDBFormula( false );    // CompileFormulaString
-    pOldColl = NULL;
-    pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
-    aModificator.SetDocumentModified();
-    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
-
-    if (bRecord)
-    {
-        ScDBCollection* pRedoColl = new ScDBCollection( rNewColl );
-        pDocShell->GetUndoManager()->AddUndoAction(
-            new ScUndoDBData( pDocShell, pUndoColl, pRedoColl ) );
-    }
-}
-
 //      main functions
 
 // Sort

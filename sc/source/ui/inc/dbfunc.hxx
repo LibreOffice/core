@@ -70,8 +70,6 @@ public:
     ScDBData*       GetDBData( bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP);
     ScDBData*       GetAnonymousDBData();
 
-    void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::vector<ScRange> &rDelAreaList );
-
     void            Consolidate( const ScConsolidateParam& rParam, bool bRecord = true );
 
     bool MakePivotTable(

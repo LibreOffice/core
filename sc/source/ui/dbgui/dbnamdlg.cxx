@@ -31,6 +31,7 @@
 #include "rangenam.hxx"
 #include "globalnames.hxx"
 #include "dbnamdlg.hxx"
+#include <dbdocfun.hxx>
 
 #define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
@@ -373,8 +374,10 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
     // beide werden nur als Referenz uebergeben, so dass an dieser
     // Stelle keine Speicherleichen entstehen koennen:
     if ( pViewData )
-        pViewData->GetView()->
-            NotifyCloseDbNameDlg( aLocalDbCol, aRemoveList );
+    {
+        ScDBDocFunc aFunc(*pViewData->GetDocShell());
+        aFunc.ModifyAllDBData(aLocalDbCol, aRemoveList);
+    }
 
     Close();
     return 0;

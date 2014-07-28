@@ -241,6 +241,45 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     return bDone;
 }
 
+void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::vector<ScRange>& rDelAreaList )
+{
+    ScDocShellModificator aModificator(rDocShell);
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pOldColl = rDoc.GetDBCollection();
+    ScDBCollection* pUndoColl = NULL;
+    bool bRecord = rDoc.IsUndoEnabled();
+
+    std::vector<ScRange>::const_iterator iter;
+    for (iter = rDelAreaList.begin(); iter != rDelAreaList.end(); ++iter)
+    {
+        // unregistering target in SBA no longer necessary
+        const ScAddress& rStart = iter->aStart;
+        const ScAddress& rEnd   = iter->aEnd;
+        rDocShell.DBAreaDeleted(
+            rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row());
+    }
+
+    if (bRecord)
+        pUndoColl = new ScDBCollection( *pOldColl );
+
+    //  register target in SBA no longer necessary
+
+    rDoc.CompileDBFormula( true );     // CreateFormulaString
+    rDoc.SetDBCollection( new ScDBCollection( rNewColl ) );
+    rDoc.CompileDBFormula( false );    // CompileFormulaString
+    pOldColl = NULL;
+    rDocShell.PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
+    aModificator.SetDocumentModified();
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+
+    if (bRecord)
+    {
+        ScDBCollection* pRedoColl = new ScDBCollection(rNewColl);
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoDBData(&rDocShell, pUndoColl, pRedoColl));
+    }
+}
+
 bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed, SCTAB aTab )
 {
     //! auch fuer ScDBFunc::RepeatDB benutzen!

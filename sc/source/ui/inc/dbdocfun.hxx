@@ -35,6 +35,7 @@ class ScDocShell;
 class ScAddress;
 class ScRange;
 class ScDPObject;
+class ScDBCollection;
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -84,6 +85,8 @@ public:
     bool DeleteDBRange( const OUString& rName );
     bool RenameDBRange( const OUString& rOld, const OUString& rNew );
     bool ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
+
+    void ModifyAllDBData( const ScDBCollection& rNewColl, const std::vector<ScRange>& rDelAreaList );
 
     bool RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
 
