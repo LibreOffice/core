@@ -1032,7 +1032,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     mrPaletteManager( rPaletteManager )
 
 {
-    get(mpPaletteComboBox,  "palette_list_combobox");
+    get(mpPaletteListBox,   "palette_listbox");
     get(mpButtonPicker,     "color_picker_button");
     get(mpColorSet,         "colorset");
 
@@ -1068,15 +1068,15 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
     }
 
-    mpPaletteComboBox->SetStyle( mpPaletteComboBox->GetStyle() | WB_BORDER | WB_AUTOSIZE );
-    mpPaletteComboBox->SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectPaletteHdl ) );
-    mpPaletteComboBox->AdaptDropDownLineCountToMaximum();
+    mpPaletteListBox->SetStyle( mpPaletteListBox->GetStyle() | WB_BORDER | WB_AUTOSIZE );
+    mpPaletteListBox->SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectPaletteHdl ) );
+    mpPaletteListBox->AdaptDropDownLineCountToMaximum();
     std::vector<OUString> aPaletteList = mrPaletteManager.GetPaletteList();
-    mpPaletteComboBox->SetText( aPaletteList[ mrPaletteManager.GetPalette() ] );
     for( std::vector<OUString>::iterator it = aPaletteList.begin(); it != aPaletteList.end(); ++it )
     {
-        mpPaletteComboBox->InsertEntry( *it );
+        mpPaletteListBox->InsertEntry( *it );
     }
+    mpPaletteListBox->SelectEntryPos(mrPaletteManager.GetPalette(), true);
 
     mpButtonPicker->SetClickHdl( LINK( this, SvxColorWindow_Impl, OpenPickerClickHdl ) );
 
@@ -1088,7 +1088,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     AddStatusListener( maCommand );
 
     mrPaletteManager.ReloadColorSet(*mpColorSet);
-    mpPaletteComboBox->Show();
+    mpPaletteListBox->Show();
     mpButtonPicker->Show();
     mpColorSet->Show();
 }
@@ -1146,11 +1146,9 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
 {
-    OUString sSrchTxt = mpPaletteComboBox->GetText();
-    sal_Int32 nPos = mpPaletteComboBox->GetEntryPos( sSrchTxt );
+    sal_Int32 nPos = mpPaletteListBox->GetSelectEntryPos();
     mrPaletteManager.SetPalette( nPos );
     mrPaletteManager.ReloadColorSet(*mpColorSet);
-    Resize();
     return 0;
 }
 
@@ -1162,7 +1160,6 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, OpenPickerClickHdl)
 
 void SvxColorWindow_Impl::Resize()
 {
-    mpColorSet->layoutAllVisible(mrPaletteManager.GetColorCount());
     SetOutputSizePixel(maWindowSize);
 }
 
