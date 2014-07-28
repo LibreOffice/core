@@ -39,6 +39,9 @@ public class LOKitTileProvider implements TileProvider {
     public LOKitTileProvider(LayerController layerController, String input) {
         mLayerController = layerController;
         mDPI = (double) LOKitShell.getDpi();
+        mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
+        mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
+
         LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl-INFO.i18nlangtag");
         LibreOfficeKit.init(LibreOfficeMainActivity.mAppContext);
 
@@ -53,8 +56,6 @@ public class LOKitTileProvider implements TileProvider {
             if (mDocument.getParts() >= 1) {
                 mDocument.setPart(1);
             }
-            mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
-            mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
         }
     }
 
