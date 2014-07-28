@@ -425,9 +425,7 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
 
     bool bSameLetterHeights = false;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    const OUString sTextPath( "TextPath"  );
-    const OUString sSameLetterHeights( "SameLetterHeights"  );
-    com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sSameLetterHeights );
+    com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "SameLetterHeights" );
     if ( pAny )
         *pAny >>= bSameLetterHeights;
 
