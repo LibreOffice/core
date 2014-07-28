@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/PaletteManager.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/lstbox.hxx>
 
 class SvxColorWindow_Impl : public SfxPopupWindow
 {
@@ -37,7 +37,7 @@ private:
     const sal_uInt16    theSlotId;
     SvxColorValueSet*   mpColorSet;
     Size                maWindowSize;
-    ComboBox*           mpPaletteComboBox;
+    ListBox*            mpPaletteListBox;
     PushButton*         mpButtonPicker;
     OUString            maCommand;
     Link                maSelectedLink;
