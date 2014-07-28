@@ -242,6 +242,8 @@ void ScDocument::CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellVal
 
 std::vector<Color> ScDocument::GetDocColors()
 {
+    // list of color attributes to collect
+    const std::vector<sal_uInt16> aColAttrs({ATTR_FONT_COLOR, ATTR_BACKGROUND});
     std::vector<Color> docColors;
 
     for( unsigned int nTabIx = 0; nTabIx < maTabs.size(); ++nTabIx )
@@ -265,8 +267,7 @@ std::vector<Color> ScDocument::GetDocColors()
                 if( SFX_ITEM_SET == rItemSet.GetItemState( nWhich, false, &pItem ) )
                 {
                     sal_uInt16 aWhich = pItem->Which();
-                    if( ATTR_FONT_COLOR     == aWhich ||
-                        ATTR_BACKGROUND     == aWhich )
+                    if( std::find(aColAttrs.begin(), aColAttrs.end(), aWhich) != aColAttrs.end() )
                     {
                         Color aColor( ((SvxColorItem*)pItem)->GetValue() );
                         if( COL_AUTO != aColor.GetColor() &&
