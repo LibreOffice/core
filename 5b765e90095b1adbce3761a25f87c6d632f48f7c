@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_21a71451",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2014-07-28T08:10:39Z",
+      "side": 1,
+      "message": "Could you please give more details on the problem: other hackers may need to know in what cases the problem was encountered.",
+      "revId": "5b765e90095b1adbce3761a25f87c6d632f48f7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_c1b5f87e",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2014-07-28T08:10:39Z",
+      "side": 1,
+      "message": "It\u0027s pretty unlikely to happen, but too depending on the server implementation: you should check for the sequence size before seqValue[0].",
+      "revId": "5b765e90095b1adbce3761a25f87c6d632f48f7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_a1ba046d",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2014-07-28T08:10:39Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "5b765e90095b1adbce3761a25f87c6d632f48f7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_81b0208d",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2014-07-28T08:10:39Z",
+      "side": 1,
+      "message": "And here too",
+      "revId": "5b765e90095b1adbce3761a25f87c6d632f48f7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
