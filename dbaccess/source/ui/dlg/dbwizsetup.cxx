@@ -107,8 +107,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                                ,const Reference< XComponentContext >& _rxORB
                                ,const ::com::sun::star::uno::Any& _aDataSourceName
                                )
-    :svt::RoadmapWizard( _pParent, ModuleRes(DLG_DATABASE_WIZARD),
-                        WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP )
+    :svt::RoadmapWizard( _pParent, static_cast<sal_uInt32>(WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP) )
 
     , m_pOutSet(NULL)
     , m_bResetting(false)
@@ -142,8 +141,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
         m_pCollection = pCollectionItem->getCollection();
 
     OSL_ENSURE(m_pCollection, "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
-
-    FreeResource();
 
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
@@ -183,6 +180,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
     SetRoadmapInteractive( true );
     ActivatePage();
+    SetText(ModuleRes(STR_DBWIZARDTITLE));
 }
 
 void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths)
