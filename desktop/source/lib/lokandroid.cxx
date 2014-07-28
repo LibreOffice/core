@@ -41,7 +41,7 @@ void setHandle(JNIEnv* pEnv, jobject aObject, T* aType)
     pEnv->SetLongField(aObject, getHandleField(pEnv, aObject), aHandle);
 }
 
-extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getErrorNative(JNIEnv* pEnv, jobject aObject)
+extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getError(JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
     char* pError = pLibreOfficeKit->pClass->getError(pLibreOfficeKit);
