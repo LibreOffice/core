@@ -215,8 +215,13 @@ typedef std::stack< AnchoredContext >           TextContentStack;
 struct DeletableTabStop : public ::com::sun::star::style::TabStop
 {
     bool bDeleted;
-    DeletableTabStop() :
-        bDeleted( false ){}
+    DeletableTabStop()
+        : bDeleted(false)
+    {
+        // same defaults as SvxXMLTabStopContext_Impl
+        FillChar = ' ';
+        DecimalChar = ',';
+    }
     DeletableTabStop( const ::com::sun::star::style::TabStop& rTabStop ) :
         TabStop( rTabStop ),
             bDeleted( false ){}
