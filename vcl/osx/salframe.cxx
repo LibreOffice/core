@@ -1060,7 +1060,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         // we do not really handle Alt (see below)
         // we map it to MOD3, whichis actually Command
         if( (nKeyCode & (KEY_MOD2|KEY_MOD3)) != 0 )
-            aResult.append( sal_Unicode( 0x2303 ) );
+            aResult.append( sal_Unicode( 0x2325 ) );
 
         aResult.append( it->second );
     }
