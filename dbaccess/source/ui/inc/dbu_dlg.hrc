@@ -109,6 +109,22 @@
 #define STR_MSACCESS_2007_FILTERNAME        RID_STR_DLG_START + 66
 #define STR_FIREBIRD_FILTERNAME             RID_STR_DLG_START + 67
 
+#define STR_DBWIZARDTITLE                   RID_STR_DLG_START + 469
+#define STR_PAGETITLE_INTROPAGE             RID_STR_DLG_START + 470
+#define STR_PAGETITLE_DBASE                 RID_STR_DLG_START + 471
+#define STR_PAGETITLE_TEXT                  RID_STR_DLG_START + 472
+#define STR_PAGETITLE_MSACCESS              RID_STR_DLG_START + 473
+#define STR_PAGETITLE_LDAP                  RID_STR_DLG_START + 474
+#define STR_PAGETITLE_ADO                   RID_STR_DLG_START + 475
+#define STR_PAGETITLE_JDBC                  RID_STR_DLG_START + 476
+#define STR_PAGETITLE_ORACLE                RID_STR_DLG_START + 477
+#define STR_PAGETITLE_MYSQL                 RID_STR_DLG_START + 478
+#define STR_PAGETITLE_ODBC                  RID_STR_DLG_START + 479
+#define STR_PAGETITLE_SPREADSHEET           RID_STR_DLG_START + 480
+#define STR_PAGETITLE_AUTHENTIFICATION      RID_STR_DLG_START + 481
+#define STR_PAGETITLE_MYSQL_NATIVE          RID_STR_DLG_START + 482
+#define STR_PAGETITLE_FINAL                 RID_STR_DLG_START + 483
+
 // please adjust checking before insert new strings
 
 #define LAST_STR_HERE                       RID_STR_DLG_START + 68

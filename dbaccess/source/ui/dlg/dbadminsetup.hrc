@@ -45,31 +45,16 @@
 #define STR_SPREADSHEET_HEADERTEXT          50
     // FREE
 #define STR_ORACLE_HEADERTEXT               54
-#define STR_DBWIZARDTITLE                   56
 
     // FREE
 #define STR_SPREADSHEETPATH             64
 
 #define STR_ORACLE_DEFAULT              67
-#define STR_PAGETITLE_INTROPAGE         69
-#define STR_PAGETITLE_DBASE             70
-#define STR_PAGETITLE_TEXT              71
-#define STR_PAGETITLE_MSACCESS          72
-#define STR_PAGETITLE_LDAP              73
     // FREE
-#define STR_PAGETITLE_ADO               75
-#define STR_PAGETITLE_JDBC              76
-#define STR_PAGETITLE_ORACLE            77
-#define STR_PAGETITLE_MYSQL             78
-#define STR_PAGETITLE_ODBC              79
-#define STR_PAGETITLE_SPREADSHEET       80
-#define STR_PAGETITLE_AUTHENTIFICATION  81
-#define STR_PAGETITLE_FINAL             82
 #define STR_MYSQL_DEFAULT               83
 #define STR_ORACLE_DRIVERCLASSTEXT      84
 #define STR_MYSQL_DRIVERCLASSTEXT       85
 #define STR_LDAP_DEFAULT                86
-#define STR_PAGETITLE_MYSQL_NATIVE      87
 
 #define FT_LDAP_HELPTEXT                2
 #define FT_MYSQL_HELPTEXT               3

@@ -125,6 +125,8 @@ public:
     */
     bool IsTableWizardToBeStarted() const;
 
+    void SetTitle();
+
 protected:
     /// to override to create new pages
     virtual TabPage*    createPage(WizardState _nState) SAL_OVERRIDE;
