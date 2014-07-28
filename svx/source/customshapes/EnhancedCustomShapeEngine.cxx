@@ -282,8 +282,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
             pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         bool bTextPathOn = false;
-        const OUString sTextPath( "TextPath" );
-        uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
+        uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "TextPath" );
         if ( pAny )
             *pAny >>= bTextPathOn;
 
