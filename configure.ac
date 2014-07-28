@@ -183,9 +183,9 @@ cd $BUILDDIR
 x_Cygwin=[\#]
 
 dnl ===================================================================
-dnl Search all the common names for GNU make
+dnl Search all the common names for GNU Make
 dnl ===================================================================
-AC_MSG_CHECKING([for GNU make])
+AC_MSG_CHECKING([for GNU Make])
 
 # try to use our own make if it is available and GNUMAKE was not already defined
 if test -z "$GNUMAKE"; then
@@ -215,10 +215,10 @@ for a in "$MAKE" "$GNUMAKE" make gmake gnumake; do
 done
 AC_MSG_RESULT($GNUMAKE)
 if test -z "$GNUMAKE"; then
-    AC_MSG_ERROR([not found. install GNU make.])
+    AC_MSG_ERROR([not found. install GNU Make.])
 else
     if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-        AC_MSG_NOTICE([Using a native Win32 gnumake version.])
+        AC_MSG_NOTICE([Using a native Win32 GNU Make version.])
     fi
 fi
 
@@ -5020,7 +5020,7 @@ AC_SUBST(ENABLE_PCH)
 
 TAB=`printf '\t'`
 
-AC_MSG_CHECKING([the GNU make version])
+AC_MSG_CHECKING([the GNU Make version])
 _make_version=`$GNUMAKE --version | grep GNU | $GREP -v GPL | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
 _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 if test "$_make_longver" -ge "038200"; then
@@ -5041,7 +5041,7 @@ elif test "$_make_longver" -ge "038100"; then
     elif test "$SHA1SUM" = "openssl"; then
         SHA1SUM="openssl sha1"
     fi
-    AC_MSG_CHECKING([for GNU make bug 20033])
+    AC_MSG_CHECKING([for GNU Make bug 20033])
     TESTGMAKEBUG20033=`mktemp -d tmp.XXXXXX`
     $SED -e "s/<TAB>/$TAB/g" > $TESTGMAKEBUG20033/Makefile << EOF
 A := \$(wildcard *.a)
@@ -5081,7 +5081,7 @@ else
 fi
 
 # find if gnumake support file function
-AC_MSG_CHECKING([whether GNU make supports the 'file' function])
+AC_MSG_CHECKING([whether GNU Make supports the 'file' function])
 TESTGMAKEFILEFUNC="`mktemp -d -t tst.XXXXXX`"
 if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
     TESTGMAKEFILEFUNC=`cygpath -m $TESTGMAKEFILEFUNC`
