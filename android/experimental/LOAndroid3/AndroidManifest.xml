@@ -25,13 +25,50 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-             <intent-filter>
-                 <action android:name="android.intent.action.VIEW" />
-                 <action android:name="android.intent.action.EDIT" />
-                 <action android:name="android.intent.action.PICK" />
-                 <category android:name="android.intent.category.DEFAULT" />
-                 <data android:mimeType="application/vnd.oasis.opendocument.text" />
-             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.PICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <!-- ODT -->
+                <data android:mimeType="application/vnd.oasis.opendocument.text" />
+                <data android:mimeType="application/vnd.oasis.opendocument.graphics" />
+                <data android:mimeType="application/vnd.oasis.opendocument.presentation" />
+                <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet" />
+                <data android:mimeType="application/vnd.oasis.opendocument.text-flat-xml" />
+                <data android:mimeType="application/vnd.oasis.opendocument.graphics-flat-xml" />
+                <data android:mimeType="application/vnd.oasis.opendocument.presentation-flat-xml" />
+                <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet-flat-xml" />
+
+                <!-- MS -->
+                <data android:mimeType="application/rtf" />
+                <data android:mimeType="text/rtf" />
+                <data android:mimeType="application/msword" />
+                <data android:mimeType="application/vnd.ms-powerpoint" />
+                <data android:mimeType="application/vnd.ms-excel" />
+                <data android:mimeType="application/vnd.visio" />
+                <data android:mimeType="application/vnd.visio.xml" />
+                <data android:mimeType="application/x-mspublisher" />
+
+                <!-- OOXML -->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+
+                <!-- OTHER -->
+                <data android:mimeType="text/csv" />
+                <data android:mimeType="text/spreadsheet" />
+                <data android:mimeType="application/vnd.ms-works" />
+                <data android:mimeType="application/vnd.apple.keynote" />
+                <data android:mimeType="application/x-abiword" />
+                <data android:mimeType="application/x-pagemaker" />
+                <data android:mimeType="image/x-emf" />
+                <data android:mimeType="image/x-svm" />
+                <data android:mimeType="image/x-wmf" />
+                <data android:mimeType="image/svg+xml" />
+
+            </intent-filter>
         </activity>
     </application>
 </manifest>
