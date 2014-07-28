@@ -45,28 +45,28 @@
 #define RID_STR_CONTROL_END             RID_STR_CONTROL_START   + 30    //  40 -  69
 
 #define RID_STR_DLG_START               RID_STR_CONTROL_END
-#define RID_STR_DLG_END                 RID_STR_DLG_START       + 80    //  70 - 149
+#define RID_STR_DLG_END                 RID_STR_DLG_START       + 95    //  70 - 164
 
 #define RID_STR_MISC_START              RID_STR_DLG_END
-#define RID_STR_MISC_END                RID_STR_MISC_START      + 20    // 150 - 169
+#define RID_STR_MISC_END                RID_STR_MISC_START      + 20    // 165 - 184
 
 #define RID_STR_QRY_START               RID_STR_MISC_END
-#define RID_STR_QRY_END                 RID_STR_QRY_START       + 80    // 170 - 249
+#define RID_STR_QRY_END                 RID_STR_QRY_START       + 80    // 185 - 264
 
 #define RID_STR_TBL_START               RID_STR_QRY_END
-#define RID_STR_TBL_END                 RID_STR_TBL_START       + 80    // 250 - 329
+#define RID_STR_TBL_END                 RID_STR_TBL_START       + 80    // 265 - 344
 
 #define RID_STR_REL_START               RID_STR_TBL_END
-#define RID_STR_REL_END                 RID_STR_REL_START       + 10    // 330 - 349
+#define RID_STR_REL_END                 RID_STR_REL_START       + 10    // 345 - 364
 
 #define RID_STR_UNO_START               RID_STR_REL_END
-#define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 350 - 369
+#define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 365 - 384
 
 #define RID_STR_GEN_START               RID_STR_UNO_END
-#define RID_STR_GEN_END                 RID_STR_GEN_START       + 56    // 370 - 425
+#define RID_STR_GEN_END                 RID_STR_GEN_START       + 56    // 385 - 440
 
 #define RID_STR_APP_START               RID_STR_GEN_END
-#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   426 - 465
+#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   441 - 480
 
 #if RID_STR_GEN_END > RID_DBACCESS_END
 #error Resource-Id Ueberlauf in #file, #line
@@ -87,7 +87,6 @@
     // FREE
 #define DLG_COLLECTION_VIEW             RID_DIALOG_START + 27
 #define DLG_DATABASE_TYPE_CHANGE        RID_DIALOG_START + 28
-#define DLG_DATABASE_WIZARD             RID_DIALOG_START + 29
 
 // tab pages
 
