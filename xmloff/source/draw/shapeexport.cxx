@@ -433,9 +433,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     // * defaults for style properties are not written, but we need to write the "left",
                     //   because we need to distiguish this "left" from the case where not align attribute
                     //   is present which means "void"
-                    static const OUString s_sParaAdjustPropertyName(  "ParaAdjust"  );
-                    if  (   xPropSetInfo->hasPropertyByName( s_sParaAdjustPropertyName )
-                        &&  ( beans::PropertyState_DEFAULT_VALUE == xPropState->getPropertyState( s_sParaAdjustPropertyName ) )
+                    if  (   xPropSetInfo->hasPropertyByName( "ParaAdjust" )
+                        &&  ( beans::PropertyState_DEFAULT_VALUE == xPropState->getPropertyState( "ParaAdjust" ) )
                         )
                     {
                         sal_Int32 nIndex = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
@@ -443,7 +442,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                             //          as member, thus saving time.
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for the ParaAdjust context id!");
 
-                        uno::Any aParaAdjustValue = xPropSet->getPropertyValue( s_sParaAdjustPropertyName );
+                        uno::Any aParaAdjustValue = xPropSet->getPropertyValue( "ParaAdjust" );
                         XMLPropertyState aAlignDefaultState( nIndex, aParaAdjustValue );
 
                         xPropStates.push_back( aAlignDefaultState );
@@ -1311,8 +1310,7 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
     */
     uno::Any aAny;
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
-         xPropSet->getPropertySetInfo()->hasPropertyByName(
-            OUString("TransformationInHoriL2R")) )
+         xPropSet->getPropertySetInfo()->hasPropertyByName("TransformationInHoriL2R") )
     {
         aAny = xPropSet->getPropertyValue("TransformationInHoriL2R");
     }
@@ -2271,7 +2269,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                         sRequestedName = sRequestedName.copy( 0, nLastIndex );
                     if ( !sRequestedName.isEmpty() )
                     {
-                        aResolveURL = aResolveURL.concat( OUString("?requestedName="));
+                        aResolveURL = aResolveURL.concat( "?requestedName=");
                         aResolveURL = aResolveURL.concat( sRequestedName );
                     }
                 }
@@ -2296,7 +2294,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
                         uno::Any aAny;
                         aAny <<= aStreamURL;
-                        xPropSet->setPropertyValue( OUString("GraphicStreamURL"), aAny );
+                        xPropSet->setPropertyValue( "GraphicStreamURL", aAny );
                     }
 
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
@@ -2470,10 +2468,8 @@ void XMLShapeExport::ImpExportConnectorShape(
        the OASIS Open Office file format to the OpenOffice.org file format. (#i36248#)
     */
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
-         xProps->getPropertySetInfo()->hasPropertyByName(
-            OUString("StartPositionInHoriL2R")) &&
-         xProps->getPropertySetInfo()->hasPropertyByName(
-            OUString("EndPositionInHoriL2R")) )
+         xProps->getPropertySetInfo()->hasPropertyByName("StartPositionInHoriL2R") &&
+         xProps->getPropertySetInfo()->hasPropertyByName("EndPositionInHoriL2R") )
     {
         xProps->getPropertyValue("StartPositionInHoriL2R") >>= aStart;
         xProps->getPropertyValue("EndPositionInHoriL2R") >>= aEnd;
@@ -2644,10 +2640,8 @@ void XMLShapeExport::ImpExportMeasureShape(
        the OASIS Open Office file format to the OpenOffice.org file format. (#i36248#)
     */
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
-         xProps->getPropertySetInfo()->hasPropertyByName(
-            OUString("StartPositionInHoriL2R")) &&
-         xProps->getPropertySetInfo()->hasPropertyByName(
-            OUString("EndPositionInHoriL2R")) )
+         xProps->getPropertySetInfo()->hasPropertyByName("StartPositionInHoriL2R") &&
+         xProps->getPropertySetInfo()->hasPropertyByName("EndPositionInHoriL2R") )
     {
         xProps->getPropertyValue("StartPositionInHoriL2R") >>= aStart;
         xProps->getPropertyValue("EndPositionInHoriL2R") >>= aEnd;
@@ -3107,17 +3101,15 @@ static void lcl_CopyStream(
     if (!xOutStream.is())
     {
         SAL_WARN("xmloff", "no output stream");
-        throw uno::Exception(
-            OUString("no output stream"),0);
+        throw uno::Exception("no output stream",0);
     }
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
-        xStreamProps->setPropertyValue(
-            OUString("MediaType"),
+        xStreamProps->setPropertyValue("MediaType",
             uno::makeAny(rMimeType));
         xStreamProps->setPropertyValue( // turn off compression
-            OUString("Compressed"),
+            "Compressed",
             uno::makeAny(sal_False));
     }
     ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
@@ -3138,8 +3130,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
             uno::Reference<embed::XStorage> const xTarget(
                     rExport.GetTargetStorage(), uno::UNO_QUERY_THROW);
             uno::Reference<io::XInputStream> xInStream;
-            xPropSet->getPropertyValue(
-                OUString("PrivateStream"))
+            xPropSet->getPropertyValue("PrivateStream")
                     >>= xInStream;
 
             if (!xInStream.is())
@@ -3252,9 +3243,8 @@ static void lcl_StoreGltfFallback(
             if( xGraphic.is() )
             {
                 // Fallback storage
-                const OUString sFallbackFolder("Fallbacks");
                 const uno::Reference<embed::XStorage> xFallbackTarget(
-                    xModelsTarget->openStorageElement(sFallbackFolder, embed::ElementModes::WRITE));
+                    xModelsTarget->openStorageElement("Fallbacks", embed::ElementModes::WRITE));
 
                 const OUString sModelName = sUrlPath.copy(sUrlPath.lastIndexOf("/")+1);
                 uno::Reference< io::XStream > xPictureStream(
@@ -3274,7 +3264,7 @@ static void lcl_StoreGltfFallback(
                     xFallbackTransaction->commit();
                 }
 
-                const OUString sFallbackURL( sUrlPath.copy(0,sUrlPath.lastIndexOf("/")) + "/" + sFallbackFolder + "/" + sModelName + ".png");
+                const OUString sFallbackURL( sUrlPath.copy(0,sUrlPath.lastIndexOf("/")) + "/" + "Fallbacks" + "/" + sModelName + ".png");
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sFallbackURL );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
@@ -4844,17 +4834,15 @@ void XMLShapeExport::ImpExportCustomShape(
 
         if ( xPropSetInfo.is() )
         {
-            const OUString sCustomShapeEngine( "CustomShapeEngine" );
-            if ( xPropSetInfo->hasPropertyByName( sCustomShapeEngine ) )
+            if ( xPropSetInfo->hasPropertyByName( "CustomShapeEngine" ) )
             {
-                uno::Any aEngine( xPropSet->getPropertyValue( sCustomShapeEngine ) );
+                uno::Any aEngine( xPropSet->getPropertyValue( "CustomShapeEngine" ) );
                 if ( ( aEngine >>= aStr ) && !aStr.isEmpty() )
                     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ENGINE, aStr );
             }
-            const OUString sCustomShapeData( "CustomShapeData" );
-            if ( xPropSetInfo->hasPropertyByName( sCustomShapeData ) )
+            if ( xPropSetInfo->hasPropertyByName( "CustomShapeData" ) )
             {
-                uno::Any aData( xPropSet->getPropertyValue( sCustomShapeData ) );
+                uno::Any aData( xPropSet->getPropertyValue( "CustomShapeData" ) );
                 if ( ( aData >>= aStr ) && !aStr.isEmpty() )
                     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DATA, aStr );
             }
@@ -4948,16 +4936,14 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                 {
                     xStorage.set( GetExport().GetTargetStorage(), uno::UNO_QUERY_THROW );
 
-                    xPictureStorage.set( xStorage->openStorageElement( OUString( "Pictures" ), ::embed::ElementModes::READWRITE ), uno::UNO_QUERY_THROW );
-                    const OUString sPrefix( "TablePreview" );
-                    const OUString sSuffix( ".svm" );
+                    xPictureStorage.set( xStorage->openStorageElement( "Pictures" , ::embed::ElementModes::READWRITE ), uno::UNO_QUERY_THROW );
 
                     sal_Int32 nIndex = 0;
                     do
                     {
-                        sPictureName = sPrefix;
+                        sPictureName = "TablePreview";
                         sPictureName += OUString::number( ++nIndex );
-                        sPictureName += sSuffix;
+                        sPictureName += ".svm";
                     }
                     while( xPictureStorage->hasByName( sPictureName ) );
 
@@ -4983,7 +4969,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                 {
                     OUString sURL( "Pictures/" );
                     sURL += sPictureName;
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
@@ -5015,7 +5001,5 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
         OSL_FAIL( "xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!" );
     }
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

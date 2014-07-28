@@ -476,15 +476,15 @@ const TableStyleElement* getTableStyleMap()
 {
     static const struct TableStyleElement gTableStyleElements[] =
     {
-        { XML_FIRST_ROW, OUString("first-row") },
-        { XML_LAST_ROW, OUString("last-row") },
-        { XML_FIRST_COLUMN, OUString("first-column") },
-        { XML_LAST_COLUMN, OUString("last-column") },
-        { XML_EVEN_ROWS, OUString("even-rows") },
-        { XML_ODD_ROWS, OUString("odd-rows") },
-        { XML_EVEN_COLUMNS, OUString("even-columns") },
-        { XML_ODD_COLUMNS, OUString("odd-columns") },
-        { XML_BODY, OUString("body") },
+        { XML_FIRST_ROW, "first-row" },
+        { XML_LAST_ROW, "last-row" },
+        { XML_FIRST_COLUMN, "first-column" },
+        { XML_LAST_COLUMN, "last-column" },
+        { XML_EVEN_ROWS, "even-rows" },
+        { XML_ODD_ROWS, "odd-rows" },
+        { XML_EVEN_COLUMNS, "even-columns" },
+        { XML_ODD_COLUMNS, "odd-columns" },
+        { XML_BODY, "body" },
         { XML_TOKEN_END, OUString() }
     };
 

@@ -375,43 +375,37 @@ void SdXMLShapeContext::EndElement()
     {
         uno::Reference< beans::XPropertySet > xProp( mxShape, uno::UNO_QUERY );
 
-        OUString sLink(  "Hyperlink"  );
-        if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName( sLink ) )
-            xProp->setPropertyValue( sLink, uno::Any( msHyperlink ) );
+        if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName( "Hyperlink" ) )
+            xProp->setPropertyValue( "Hyperlink", uno::Any( msHyperlink ) );
         Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY );
-        const OUString sBookmark(  "Bookmark"  );
 
         if( xEventsSupplier.is() )
         {
-            const OUString sEventType(  "EventType"  );
-            const OUString sClickAction(  "ClickAction"  );
-
             Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
 
             uno::Sequence< beans::PropertyValue > aProperties( 3 );
-            aProperties[0].Name = sEventType;
+            aProperties[0].Name = "EventType";
             aProperties[0].Handle = -1;
             aProperties[0].Value <<= OUString( "Presentation" );
             aProperties[0].State = beans::PropertyState_DIRECT_VALUE;
 
-            aProperties[1].Name = sClickAction;
+            aProperties[1].Name = "ClickAction";
             aProperties[1].Handle = -1;
             aProperties[1].Value <<= ::com::sun::star::presentation::ClickAction_DOCUMENT;
             aProperties[1].State = beans::PropertyState_DIRECT_VALUE;
 
-            aProperties[2].Name = sBookmark;
+            aProperties[2].Name = "Bookmark";
             aProperties[2].Handle = -1;
             aProperties[2].Value <<= msHyperlink;
             aProperties[2].State = beans::PropertyState_DIRECT_VALUE;
 
-            const OUString sAPIEventName(  "OnClick"  );
-            xEvents->replaceByName( sAPIEventName, Any( aProperties ) );
+            xEvents->replaceByName( "OnClick", Any( aProperties ) );
         }
         else
         {
             // in draw use the Bookmark property
             Reference< beans::XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
-            xSet->setPropertyValue( sBookmark, Any( msHyperlink ) );
+            xSet->setPropertyValue( "Bookmark", Any( msHyperlink ) );
             xSet->setPropertyValue("OnClick", Any( ::com::sun::star::presentation::ClickAction_DOCUMENT ) );
         }
     }
@@ -788,16 +782,14 @@ void SdXMLShapeContext::SetThumbnail()
         if( !xPropSet.is() )
             return;
 
-        const OUString sProperty("ThumbnailGraphicURL");
-
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sProperty ) )
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( "ThumbnailGraphicURL" ) )
         {
             // load the thumbnail graphic and export it to a wmf stream so we can set
             // it at the api
 
             const OUString aInternalURL( GetImport().ResolveGraphicObjectURL( maThumbnailURL, false ) );
-            xPropSet->setPropertyValue( sProperty, uno::makeAny( aInternalURL ) );
+            xPropSet->setPropertyValue( "ThumbnailGraphicURL", uno::makeAny( aInternalURL ) );
         }
     }
     catch(const uno::Exception&)
