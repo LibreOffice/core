@@ -393,7 +393,10 @@ bool OpenGLContext::ImplInit()
 
 #if defined( WNT )
     m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
-#elif defined( MACOSX )
+#elif defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1060 )
+
+    SAL_INFO("vcl.opengl", "OpenGLContext not implemented for OS X <10.6");
+    return false;
 
 #elif defined( IOS )
 
@@ -472,7 +475,7 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
-#elif defined( MACOSX )
+#elif defined( MACOSX ) && ( MACOSX_SDK_VERSION >= 1060 )
 
     CGLPixelFormatAttribute pixelFormatAttributes[] = {
         kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute) kCGLOGLPVersion_3_2_Core,
@@ -497,7 +500,7 @@ bool OpenGLContext::ImplInit()
 
 #elif defined( ANDROID )
 
-#elif defined( UNX )
+#elif defined( UNX ) && !defined( MACOSX )
     if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
     {
         SAL_INFO("vcl.opengl", "unable to select current GLX context");
