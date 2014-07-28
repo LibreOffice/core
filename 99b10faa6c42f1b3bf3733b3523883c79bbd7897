@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_a171e4e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2014-07-28T08:18:27Z",
+      "side": 1,
+      "message": "Commit message doesn\u0027t help at all. Better have something like:\n\nUNO to CMIS properties conversion fix\n\nThe initial code always extract Strings from the UNO Any, instead of extracting a data type matching the one of the CMIS property. This patch gets the proper type from the Any and formats it for libcmis to correctly set the property.",
+      "revId": "99b10faa6c42f1b3bf3733b3523883c79bbd7897",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
