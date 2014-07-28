@@ -42,10 +42,6 @@ endif
 
 $(eval $(call gb_CppunitTest_use_sdk_api,libreofficekit_tiledrendering))
 
-$(eval $(call gb_CppunitTest_use_static_libraries,libreofficekit_tiledrendering,\
-    libreofficekit \
-))
-
 $(eval $(call gb_CppunitTest_use_ure,libreofficekit_tiledrendering))
 #$(eval $(call gb_CppunitTest_use_vcl,libreofficekit_tiledrendering))
 

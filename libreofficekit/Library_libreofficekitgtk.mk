@@ -14,10 +14,6 @@ $(eval $(call gb_Library_use_externals,libreofficekitgtk,\
     gtk \
 ))
 
-$(eval $(call gb_Library_use_static_libraries,libreofficekitgtk,\
-    libreofficekit \
-))
-
 $(eval $(call gb_Library_add_cobjects,libreofficekitgtk,\
     libreofficekit/source/gtk/lokdocview \
 ))

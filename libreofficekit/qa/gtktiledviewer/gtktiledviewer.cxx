@@ -14,6 +14,7 @@
 #include <gtk/gtk.h>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
+#include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include "../lokdocview_quad/lokdocview_quad.h"
 
 static int help()

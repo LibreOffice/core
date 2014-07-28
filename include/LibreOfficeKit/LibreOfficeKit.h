@@ -105,8 +105,6 @@ struct _LibreOfficeKitDocumentClass
 #endif // LOK_USE_UNSTABLE_API
 };
 
-LibreOfficeKit* lok_init (const char* pInstallPath);
-
 #ifdef __cplusplus
 }
 #endif
