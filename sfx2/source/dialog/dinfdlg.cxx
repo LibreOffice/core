@@ -1123,8 +1123,8 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
             util::DateTime uDT;
             OUString emptyDate = ConvertDateTime_Impl( "", uDT, rLocaleWrapper );
             if ( aCmisProps[i].Id == "cmis:creationDate" &&
-                 m_pCreateValFt->GetText( ) == emptyDate ||
-                 m_pCreateValFt->GetText( ).isEmpty( ) )
+                 (m_pCreateValFt->GetText() == emptyDate ||
+                  m_pCreateValFt->GetText().isEmpty()))
             {
                 Sequence< util::DateTime > seqValue;
                 aCmisProps[i].Value >>= seqValue;
@@ -1134,8 +1134,8 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
                 }
             }
             if ( aCmisProps[i].Id == "cmis:lastModificationDate" &&
-                 m_pChangeValFt->GetText( ) == emptyDate ||
-                 m_pChangeValFt->GetText( ).isEmpty( ) )
+                 (m_pChangeValFt->GetText() == emptyDate ||
+                  m_pChangeValFt->GetText().isEmpty()))
             {
                 Sequence< util::DateTime > seqValue;
                 aCmisProps[i].Value >>= seqValue;
