@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_libraries,ucpcmis1,\
 	cppuhelper \
 	sal \
 	salhelper \
+	sax \
 	ucbhelper \
 	tl \
 	$(gb_UWINAPI) \
