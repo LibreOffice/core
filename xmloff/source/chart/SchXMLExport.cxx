@@ -296,8 +296,7 @@ public:
         OUString aRole;
 
         return ( xProp.is() &&
-                 (xProp->getPropertyValue(
-                     OUString(  "Role" ) ) >>= aRole ) &&
+                 (xProp->getPropertyValue( "Role" ) >>= aRole ) &&
                  m_aRole.equals( aRole ));
     }
 
@@ -1186,16 +1185,15 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
             aAny >>= bHasLegend;
             if ( bIncludeTable )
             {
-                OUString sNullDate("NullDate");
-                aAny = xDocPropSet->getPropertyValue(sNullDate);
+                aAny = xDocPropSet->getPropertyValue("NullDate");
                 if ( !aAny.hasValue() )
                 {
                     Reference<container::XChild> xChild(rChartDoc, uno::UNO_QUERY );
                     if ( xChild.is() )
                     {
                         Reference< beans::XPropertySet > xParentDoc( xChild->getParent(),uno::UNO_QUERY);
-                        if ( xParentDoc.is() && xParentDoc->getPropertySetInfo()->hasPropertyByName(sNullDate) )
-                            aAny = xParentDoc->getPropertyValue(sNullDate);
+                        if ( xParentDoc.is() && xParentDoc->getPropertySetInfo()->hasPropertyByName("NullDate") )
+                            aAny = xParentDoc->getPropertyValue("NullDate");
                     }
                 }
 
@@ -2313,14 +2311,13 @@ void SchXMLExportHelper_Impl::exportAxis(
     bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid,
     bool bExportContent )
 {
-    static const OUString sNumFormat( "NumberFormat" );
     std::vector< XMLPropertyState > aPropertyStates;
     SvXMLElementExport* pAxis = NULL;
 
     // get property states for autostyles
     if( xAxisProps.is() && mxExpPropMapper.is() )
     {
-        lcl_exportNumberFormat( sNumFormat, xAxisProps, mrExport );
+        lcl_exportNumberFormat( "NumberFormat", xAxisProps, mrExport );
         aPropertyStates = mxExpPropMapper->Filter( xAxisProps );
 
         if (!maSrcShellID.isEmpty() && !maDestShellID.isEmpty() && maSrcShellID != maDestShellID)
@@ -2417,41 +2414,25 @@ void SchXMLExportHelper_Impl::exportAxes(
     // get multiple properties using XMultiPropertySet
     MultiPropertySetHandler aDiagramProperties (xDiagram);
 
-    aDiagramProperties.Add (
-        OUString("HasXAxis"), bHasXAxis);
-    aDiagramProperties.Add (
-        OUString("HasYAxis"), bHasYAxis);
-    aDiagramProperties.Add (
-        OUString("HasZAxis"), bHasZAxis);
-    aDiagramProperties.Add (
-        OUString("HasSecondaryXAxis"), bHasSecondaryXAxis);
-    aDiagramProperties.Add (
-        OUString("HasSecondaryYAxis"), bHasSecondaryYAxis);
+    aDiagramProperties.Add ("HasXAxis", bHasXAxis);
+    aDiagramProperties.Add ("HasYAxis", bHasYAxis);
+    aDiagramProperties.Add ("HasZAxis", bHasZAxis);
+    aDiagramProperties.Add ("HasSecondaryXAxis", bHasSecondaryXAxis);
+    aDiagramProperties.Add ("HasSecondaryYAxis", bHasSecondaryYAxis);
 
-    aDiagramProperties.Add (
-        OUString ("HasXAxisTitle"), bHasXAxisTitle);
-    aDiagramProperties.Add (
-        OUString ("HasYAxisTitle"), bHasYAxisTitle);
-    aDiagramProperties.Add (
-        OUString ("HasZAxisTitle"), bHasZAxisTitle);
-    aDiagramProperties.Add (
-        OUString ("HasSecondaryXAxisTitle"), bHasSecondaryXAxisTitle);
-    aDiagramProperties.Add (
-        OUString ("HasSecondaryYAxisTitle"), bHasSecondaryYAxisTitle);
+    aDiagramProperties.Add ("HasXAxisTitle", bHasXAxisTitle);
+    aDiagramProperties.Add ("HasYAxisTitle", bHasYAxisTitle);
+    aDiagramProperties.Add ("HasZAxisTitle", bHasZAxisTitle);
+    aDiagramProperties.Add ("HasSecondaryXAxisTitle", bHasSecondaryXAxisTitle);
+    aDiagramProperties.Add ("HasSecondaryYAxisTitle", bHasSecondaryYAxisTitle);
 
-    aDiagramProperties.Add (
-        OUString ("HasXAxisGrid"), bHasXAxisMajorGrid);
-    aDiagramProperties.Add (
-        OUString ("HasYAxisGrid"), bHasYAxisMajorGrid);
-    aDiagramProperties.Add (
-        OUString ("HasZAxisGrid"), bHasZAxisMajorGrid);
+    aDiagramProperties.Add ("HasXAxisGrid", bHasXAxisMajorGrid);
+    aDiagramProperties.Add ("HasYAxisGrid", bHasYAxisMajorGrid);
+    aDiagramProperties.Add ("HasZAxisGrid", bHasZAxisMajorGrid);
 
-    aDiagramProperties.Add (
-        OUString ("HasXAxisHelpGrid"), bHasXAxisMinorGrid);
-    aDiagramProperties.Add (
-        OUString ("HasYAxisHelpGrid"), bHasYAxisMinorGrid);
-    aDiagramProperties.Add (
-        OUString ("HasZAxisHelpGrid"), bHasZAxisMinorGrid);
+    aDiagramProperties.Add ("HasXAxisHelpGrid", bHasXAxisMinorGrid);
+    aDiagramProperties.Add ("HasYAxisHelpGrid", bHasYAxisMinorGrid);
+    aDiagramProperties.Add ("HasZAxisHelpGrid", bHasZAxisMinorGrid);
 
     if ( ! aDiagramProperties.GetProperties ())
     {
@@ -2604,9 +2585,6 @@ void SchXMLExportHelper_Impl::exportSeries(
 
     std::vector< XMLPropertyState > aPropertyStates;
 
-    const OUString sNumFormat("NumberFormat");
-    const OUString sPercentageNumFormat( "PercentageNumberFormat");
-
     Sequence< Reference< chart2::XCoordinateSystem > >
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
     for( sal_Int32 nCSIdx=0; nCSIdx<aCooSysSeq.getLength(); ++nCSIdx )
@@ -2716,8 +2694,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
                                 if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
                                 {
-                                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+                                    lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
+                                    lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
                                 }
 
                                 if( mxExpPropMapper.is())
@@ -3002,8 +2980,8 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             xEquationProperties.set( xRegCurve->getEquationProperties() );
             if( xEquationProperties.is())
             {
-                xEquationProperties->getPropertyValue( OUString("ShowEquation")) >>= bShowEquation;
-                xEquationProperties->getPropertyValue( OUString("ShowCorrelationCoefficient")) >>= bShowRSquared;
+                xEquationProperties->getPropertyValue( "ShowEquation") >>= bShowEquation;
+                xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowRSquared;
 
                 bExportEquation = ( bShowEquation || bShowRSquared );
                 const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
@@ -3015,7 +2993,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
                 {
                     // number format
                     sal_Int32 nNumberFormat = 0;
-                    if( (xEquationProperties->getPropertyValue(OUString("NumberFormat")) >>= nNumberFormat ) &&
+                    if( (xEquationProperties->getPropertyValue("NumberFormat") >>= nNumberFormat ) &&
                         nNumberFormat != -1 )
                     {
                         mrExport.addDataStyle( nNumberFormat );
@@ -3098,7 +3076,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
         {
             Any aAny;
 
-            aAny = xSeriesProp->getPropertyValue( bYError ? OUString("ErrorBarY") : OUString("ErrorBarX") );
+            aAny = xSeriesProp->getPropertyValue( bYError ? "ErrorBarY" : "ErrorBarX" );
             aAny >>= xErrorBarProp;
 
             if ( xErrorBarProp.is() )
@@ -3294,9 +3272,6 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
     std::vector< XMLPropertyState > aPropertyStates;
 
-    const OUString sNumFormat("NumberFormat");
-    const OUString sPercentageNumFormat( "PercentageNumberFormat");
-
     bool bVaryColorsByPoint = false;
     Sequence< sal_Int32 > aDataPointSeq;
     if( xSeriesProperties.is())
@@ -3357,8 +3332,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
                 if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 && bExportNumFmt )
                 {
-                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+                    lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
+                    lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
                 }
 
                 aPropertyStates = mxExpPropMapper->Filter( xPropSet );
@@ -3418,8 +3393,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
                 if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
                 {
-                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+                    lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
+                    lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
                 }
 
                 aPropertyStates = mxExpPropMapper->Filter( xPropSet );
