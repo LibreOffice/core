@@ -420,12 +420,8 @@ def factoryAction(nsNode, action):
         switchblock1.append("    case %s:" % idForDefine(nsNode, resourceNode))
         for actionNode in [i for i in getChildrenByName(resourceNode, "action") if i.getAttribute("name") == action]:
             switchblock1.extend(factoryChooseAction(actionNode))
-        if action == "characters":
-            switchblock1.append("    break;")
-            switchblock1.append("")
-        else:
-            switchblock1[-1] += " break;"
-            switchblock1.append("")
+        switchblock1.append("    break;")
+        switchblock1.append("")
 
     switchblock2 = []
     if action == "characters":
