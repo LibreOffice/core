@@ -23,6 +23,7 @@
 #include <vcl/pngwrite.hxx>
 
 #define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
 using namespace ::boost;
