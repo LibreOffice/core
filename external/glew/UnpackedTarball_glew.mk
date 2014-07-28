@@ -22,6 +22,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_set_patchflags,glew,--binary))
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-fix-rc-error.patch.1 \
+	external/glew/glew-vc2013-project.patch.1 \
 ))
 else
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\

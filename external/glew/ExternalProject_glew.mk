@@ -18,8 +18,7 @@ $(call gb_ExternalProject_get_state_target,glew,build) :
 	$(call gb_ExternalProject_run,build,\
 		msbuild.exe glew_shared.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) /p:VisualStudioVersion=11.0) \
-		$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 /p:VisualStudioVersion=12.0) \
-	,build/vc10)
+	,$(if $(filter 120,$(VCVER)),build/vc12,build/vc10))
 
 else
 
