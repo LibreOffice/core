@@ -9,7 +9,6 @@ Json::Json(std::__debug::map<std::basic_string<char, std::char_traits<char>, std
 Json::Json(std::__debug::map<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<libcmis::Property>, std::less<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> > const, boost::shared_ptr<libcmis::Property> > > > const&)
 Json::swap(Json&)
 MetaAction::TypeName(unsigned short)
-MetafileXmlDump::filterNoneActionTypes()
 OpenGLContext::renderToFile()
 OpenGLRender::CreateTextTexture(rtl::OUString const&, Font, long, com::sun::star::awt::Point, com::sun::star::awt::Size, long)
 OutputDevice::GetCanvas() const
@@ -24,12 +23,10 @@ SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint c
 ScDBFuncUndo::SetDrawUndoAction(SdrUndoAction*)
 ScDocument::AreaBroadcastInRange(ScRange const&, ScHint const&)
 ScDocument::CreateFormatTable() const
-ScDocument::MarkSubTotalCells(sc::ColumnSpanSet&, ScRange const&, bool) const
 ScFormulaCellGroup::scheduleCompilation()
 ScRawToken::Clone() const
 ScRawToken::Delete()
 ScTabView::DrawMarkRect(Rectangle const&)
-ScTabViewShell::SetChartArea(tools::SvRef<ScRangeList> const&, Rectangle const&)
 ScTable::AttachFormulaCells(sc::StartListeningContext&, short, int, short, int)
 ScTable::DetachFormulaCells(sc::EndListeningContext&, short, int, short, int)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
@@ -177,7 +174,6 @@ calc::OCellListSource::checkConsistency_static(void const*)
 calc::OCellValueBinding::checkConsistency_static(void const*)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 chart::ChartTypeUnoDlg::Create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
-chart::InternalData::clearDefaultData()
 chart::ShapeToolbarController::create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 chart::opengl3D::Bar::Bar(chart::opengl3D::OpenGL3DRenderer*, glm::detail::tmat4x4<float> const&, unsigned int, unsigned int)
 comphelper::OAccessibleImplementationAccess::setStateBit(short, bool)
@@ -187,7 +183,6 @@ comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::share
 connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiTypeInterfaceContainerHelper, com::sun::star::uno::Type>&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&, com::sun::star::lang::XComponent*)
 connectivity::sdbcx::OGroup::OGroup(bool)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, bool)
-formula::FormulaTokenArray::GetNextOpCodeRPN(OpCodeEnum)
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::drawingml::TextListStyle::dump() const
@@ -211,5 +206,4 @@ svl::GridPrinter::resize(unsigned long, unsigned long)
 svt::CheckInvariants(void const*)
 svt::table::TableControl_Impl::impl_checkInvariants() const
 svt::table::UnoControlTableModel::checkInvariants() const
-utl::extractTime(com::sun::star::util::DateTime const&, com::sun::star::util::Time&)
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)

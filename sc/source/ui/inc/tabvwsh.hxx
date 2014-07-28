@@ -339,7 +339,6 @@ public:
 
     void            FillFieldData( ScHeaderFieldData& rData );
 
-    void            SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest );
     bool            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
 
     void            SetEditChartName(const OUString& aStr){aEditChartName=aStr;}

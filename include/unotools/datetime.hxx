@@ -43,7 +43,6 @@ namespace utl
     UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut);
 
     UNOTOOLS_DLLPUBLIC void extractDate(const starutil::DateTime& _rDateTime, starutil::Date& _rOut);
-    UNOTOOLS_DLLPUBLIC void extractTime(const starutil::DateTime& _rDateTime, starutil::Time& _rOut);
 
     UNOTOOLS_DLLPUBLIC ::rtl::OUString toISO8601(const starutil::DateTime& _rDateTime);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseDateTime(const ::rtl::OUString &i_rIn, starutil::DateTime& o_rDateTime);

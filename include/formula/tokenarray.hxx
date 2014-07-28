@@ -114,7 +114,6 @@ public:
     FormulaToken* GetNextReferenceRPN();
     FormulaToken* GetNextReferenceOrName();
     FormulaToken* GetNextColRowName();
-    FormulaToken* GetNextOpCodeRPN( OpCode );
     /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns NULL if not.
     FormulaToken* PeekPrev( sal_uInt16 & nIdx );
     FormulaToken* PeekNext();

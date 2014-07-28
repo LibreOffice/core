@@ -1891,14 +1891,6 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     //  eNumType kennt der Dialog selber
 }
 
-void ScTabViewShell::SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest )
-{
-    bChartAreaValid = true;
-    aChartSource    = rSource;
-    aChartPos       = rDest;
-    nChartDestTab   = GetViewData().GetTabNo();
-}
-
 bool ScTabViewShell::GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const
 {
     rSource = aChartSource;

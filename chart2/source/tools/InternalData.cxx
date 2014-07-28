@@ -132,17 +132,6 @@ bool InternalData::isDefaultData()
     return false;
 }
 
-void InternalData::clearDefaultData()
-{
-    if( isDefaultData() )
-    {
-        m_nRowCount = m_nColumnCount = 1;
-        m_aData.resize( 1 );
-        m_aRowLabels.clear();
-        m_aColumnLabels.clear();
-    }
-}
-
 void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )
 {
     m_nRowCount = rDataInRows.getLength();

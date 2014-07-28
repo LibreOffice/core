@@ -245,11 +245,6 @@ void MetafileXmlDump::filterAllActionTypes()
     maFilter.assign(constMaxActionType, true);
 }
 
-void MetafileXmlDump::filterNoneActionTypes()
-{
-    maFilter.assign(constMaxActionType, false);
-}
-
 xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& rTempStreamName)
 {
     boost::scoped_ptr<SvStream> pStream;

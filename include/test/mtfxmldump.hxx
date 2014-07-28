@@ -27,7 +27,6 @@ public:
 
     void filterActionType(const sal_uInt16 nActionType, bool bShouldFilter);
     void filterAllActionTypes();
-    void filterNoneActionTypes();
 
     /** The actual result that will be used for testing.
 

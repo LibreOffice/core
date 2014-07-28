@@ -2058,7 +2058,6 @@ public:
     void AddSubTotalCell(ScFormulaCell* pCell);
     void RemoveSubTotalCell(ScFormulaCell* pCell);
     void SetSubTotalCellsDirty(const ScRange& rDirtyRange);
-    void MarkSubTotalCells( sc::ColumnSpanSet& rSet, const ScRange& rRange, bool bVal ) const;
 
     sal_uInt16 GetTextWidth( const ScAddress& rPos ) const;
 
