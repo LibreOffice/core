@@ -54,8 +54,7 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (functionName == "gdk_x11_screen_get_screen_number") {
         return true;
     }
-    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(functionDecl->getLocation());
-    if (!compat::isInMainFile( compiler.getSourceManager(), spellingLocation)) {
+    if (!compat::isInMainFile( compiler.getSourceManager(), functionDecl->getLocation())) {
         return true;
     }
     StringRef fileName { compiler.getSourceManager().getFilename(functionDecl->getLocation()) };
