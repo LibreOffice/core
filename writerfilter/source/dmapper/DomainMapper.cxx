@@ -1718,7 +1718,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_PPrBase_tabs:
     {
         // Initialize tab stop vector from style sheet
-        if( !m_pImpl->IsStyleSheetImport() )
+        // fdo#81033: for RTF, a tab stop is inherited from the style if it
+        // is also applied to the paragraph directly, and cleared if it is
+        // not applied to the paragraph directly => don't InitTabStopFromStyle
+        if (!m_pImpl->IsStyleSheetImport() && !IsRTFImport())
         {
             uno::Any aValue = m_pImpl->GetPropertyFromStyleSheet(PROP_PARA_TAB_STOPS);
             uno::Sequence< style::TabStop > aStyleTabStops;
