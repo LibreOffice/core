@@ -248,6 +248,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
 {
     OUString maLastExceptionMsg;
     shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
+    pthread_t maThread;
 
     LibLibreOffice_Impl()
     {
@@ -651,7 +652,7 @@ static void* lo_startmain(void*)
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 {
-    (void) pThis;
+    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
     static bool bInitialized = false;
     if (bInitialized)
@@ -719,8 +720,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         // then use it to wait until we're definitely ready to continue.
 
         OfficeIPCThread::EnableOfficeIPCThread();
-        pthread_t thread;
-        pthread_create(&thread, 0, lo_startmain, NULL);
+        pthread_create(&(pLib->maThread), 0, lo_startmain, NULL);
         OfficeIPCThread::WaitForReady();
 
         // If the Thread has been disabled again that indicates that a
@@ -764,8 +764,12 @@ SAL_DLLPUBLIC_EXPORT LibreOfficeKit *libreofficekit_hook(const char* install_pat
 static void lo_destroy(LibreOfficeKit *pThis)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
-    delete pLib;
     gImpl = NULL;
+
+    Application::Quit();
+    pthread_join(pLib->maThread, NULL);
+
+    delete pLib;
 }
 
 }
