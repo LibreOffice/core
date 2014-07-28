@@ -275,6 +275,10 @@ public class LayerController {
      * Scrolls the viewport by the given offset. You must hold the monitor while calling this.
      */
     public void scrollBy(PointF point) {
+        if (point.equals(0,0)) {
+            return;
+        }
+
         PointF origin = mViewportMetrics.getOrigin();
         origin.offset(point.x, point.y);
         mViewportMetrics.setOrigin(origin);
