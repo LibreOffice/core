@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_2c314bed",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/converter/palm/PdbDecoder.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-28T12:54:09Z",
+      "side": 1,
+      "message": "Would it not make more sense to declare the variables at the point of definition?\n\nBtw, I am pretty sure this class is unused...",
+      "revId": "d2e62f14e04dc7eb871eae4f39e82c10b710f7d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
