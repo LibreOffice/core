@@ -2532,7 +2532,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo77718, "fdo77718.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTableCurruption, "tableCurrupt.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/header4.xml");
+    xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
     if (!pXmlDoc)
         return;
     CPPUNIT_ASSERT(pXmlDoc) ;
@@ -2635,7 +2635,7 @@ DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
     // Problem was relationship entry for oleobject from header was
     // exported into document.xml.rels file because of this rels file
     // for headers were missing from document/word/rels.
-    xmlDocPtr pXmlDoc = parseExport("word/_rels/header3.xml.rels");
+    xmlDocPtr pXmlDoc = parseExport("word/_rels/header1.xml.rels");
     if(!pXmlDoc)
         return;
 
@@ -2971,12 +2971,12 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testfdo78420, "fdo78420.docx")
 {
-    xmlDocPtr pXmlHeader = parseExport("word/header3.xml");
+    xmlDocPtr pXmlHeader = parseExport("word/header2.xml");
 
     if (!pXmlHeader)
        return;
 
-    xmlDocPtr pXmlHeaderRels = parseExport("word/_rels/header3.xml.rels");
+    xmlDocPtr pXmlHeaderRels = parseExport("word/_rels/header2.xml.rels");
     if(!pXmlHeaderRels)
        return;
 
@@ -3407,6 +3407,13 @@ DECLARE_OOXMLEXPORT_TEST(testPlausableBorder, "plausable-border.docx")
     if (xmlDocPtr pXmlDoc = parseExport())
         // Page break was exported as section break, this was 0
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testUnwantedSectionBreak, "unwanted-section-break.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+        // This was 2: an additional sectPr was added to the document.
+        assertXPath(pXmlDoc, "//w:sectPr", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80897 , "fdo80897.docx")

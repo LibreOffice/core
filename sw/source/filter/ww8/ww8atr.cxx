@@ -443,7 +443,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
             if ( isCellOpen && ( pAktPageDesc->GetName() != pPageDesc->GetName() ) )
                 pSet = NULL;
         }
-        else
+        else if (!sw::util::IsPlausableSingleWordSection(pAktPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
         {
             bBreakSet = true;
             bNewPageDesc = true;
