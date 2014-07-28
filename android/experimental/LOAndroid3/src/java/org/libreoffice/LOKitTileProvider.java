@@ -1,6 +1,7 @@
 package org.libreoffice;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import org.libreoffice.kit.Document;
 import org.libreoffice.kit.LibreOfficeKit;
@@ -13,6 +14,8 @@ import org.mozilla.gecko.gfx.SubTile;
 import java.nio.ByteBuffer;
 
 public class LOKitTileProvider implements TileProvider {
+    private static final String LOGTAG = LOKitShell.class.getSimpleName();
+
     private final LayerController mLayerController;
 
     public static int TILE_SIZE = 256;
@@ -40,10 +43,19 @@ public class LOKitTileProvider implements TileProvider {
         LibreOfficeKit.init(LibreOfficeMainActivity.mAppContext);
 
         mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
+
         mDocument = mOffice.documentLoad(input);
 
-        mTileWidth  = pixelToTwip(TILE_SIZE, mDPI);
-        mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
+        if(mDocument == null) {
+            Log.e(LOGTAG, "Error: " + mOffice.getError());
+        } else {
+            Log.i(LOGTAG, "Document parts: " + mDocument.getParts());
+            if (mDocument.getParts() >= 1) {
+                mDocument.setPart(1);
+            }
+            mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
+            mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
+        }
     }
 
     @Override
