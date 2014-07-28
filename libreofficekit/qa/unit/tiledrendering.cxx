@@ -77,7 +77,7 @@ void TiledRenderingTest::testOverlay()
 
     scoped_ptr< Office > pOffice( lok_cpp_init(
                                       sLOPath.c_str() ) );
-    assert( pOffice.get() );
+    CPPUNIT_ASSERT( pOffice.get() );
 
     scoped_ptr< Document> pDocument( pOffice->documentLoad(
                                          sDocPath.c_str() ) );
