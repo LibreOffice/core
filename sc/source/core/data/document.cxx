@@ -5858,19 +5858,6 @@ void ScDocument::SetSubTotalCellsDirty(const ScRange& rDirtyRange)
     maSubTotalCells.swap(aNewSet); // update the list.
 }
 
-void ScDocument::MarkSubTotalCells( sc::ColumnSpanSet& rSet, const ScRange& rRange, bool bVal ) const
-{
-    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
-    {
-        const ScTable* pTab = FetchTable(nTab);
-        if (!pTab)
-            continue;
-
-        pTab->MarkSubTotalCells(
-            rSet, rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), bVal);
-    }
-}
-
 sal_uInt16 ScDocument::GetTextWidth( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();

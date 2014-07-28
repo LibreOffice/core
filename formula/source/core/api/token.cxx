@@ -464,17 +464,6 @@ FormulaToken* FormulaTokenArray::GetNextName()
     return NULL;
 }
 
-FormulaToken* FormulaTokenArray::GetNextOpCodeRPN( OpCode eOp )
-{
-    while( nIndex < nRPN )
-    {
-        FormulaToken* t = pRPN[ nIndex++ ];
-        if ( t->GetOpCode() == eOp )
-            return t;
-    }
-    return NULL;
-}
-
 FormulaToken* FormulaTokenArray::Next()
 {
     if( pCode && nIndex < nLen )
