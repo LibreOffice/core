@@ -306,11 +306,6 @@ namespace drawinglayer
                 }
                 else if(rText.isAutoFit())
                 {
-                    // FIXME(matteocam)
-                    bool b = false;
-                    if (b)
-                        pNew = new SdrChainedTextPrimitive2D( &rText.getSdrText(), rText.getOutlinerParaObject() );
-                    else // end FIXME
                     // isotrophically scaled text in range
                     pNew = new SdrAutoFitTextPrimitive2D(&rText.getSdrText(), rText.getOutlinerParaObject(), aAnchorTransform, bWordWrap);
                 }

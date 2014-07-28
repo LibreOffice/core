@@ -1515,8 +1515,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     // carry out experiments only when setting b=false from gdb
     //bool b = true;
     //if (!b) {
-    fprintf(stderr, "Object #0 = %p, Object #1 = %p\n",
-                    pPage->GetObj(0), pPage->GetObj(1));
+    /* fprintf(stderr, "Object #0 = %p, Object #1 = %p\n",
+                    pPage->GetObj(0), pPage->GetObj(1)); */
     impCopyTextInTextObj(pNextTextObj); // just do it
     //    return;
     //}

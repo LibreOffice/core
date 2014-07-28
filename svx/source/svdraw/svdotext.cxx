@@ -1946,8 +1946,16 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         }
         else if (/* TODO: IsChained() && */ pEditStatus->IsPageOverflow())
         {
-            // XXX: Do nothing for now, later here we'll set the need for chaining
+
             //impDecomposeChainedTextPrimitive();
+            /*
+             * XXX: Do nothing for now, later here we'll set the need for chaining
+             * How do you do such a thing?
+             * TODO: Look at where text primitive creation methods are called.
+             * Then what?
+             * Store the state in SdrTextObj with something like needsChaingin?
+             *
+            */
         }
     }
 }
