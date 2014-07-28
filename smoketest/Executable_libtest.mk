@@ -17,10 +17,6 @@ $(eval $(call gb_Executable_use_libraries,libtest,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,libtest,\
-	libreofficekit \
-))
-
 $(eval $(call gb_Executable_add_libs,libtest,\
 	-ldl \
 	-pthread \
