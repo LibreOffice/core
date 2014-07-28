@@ -22,6 +22,7 @@
 /* String-Class                                                            */
 /* ======================================================================= */
 
+#include <algorithm>
 #include <cassert>
 #include <limits>
 
