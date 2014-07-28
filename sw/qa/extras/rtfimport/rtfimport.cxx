@@ -1277,6 +1277,20 @@ DECLARE_RTFIMPORT_TEST(testGroupshape_notext, "groupshape-notext.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroupshape->getCount());
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo81033, "fdo81033.rtf")
+{
+    // Number of tabstops in the paragraph should be 2, was 3.
+    uno::Sequence<style::TabStop> tabs(
+        getProperty< uno::Sequence<style::TabStop> >(getParagraph(1), "ParaTabStops"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), tabs.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5808), tabs[0].Position);
+    CPPUNIT_ASSERT_EQUAL(style::TabAlign_LEFT, tabs[0].Alignment);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0), tabs[0].FillChar);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16002), tabs[1].Position);
+    CPPUNIT_ASSERT_EQUAL(style::TabAlign_LEFT, tabs[1].Alignment);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode('_'), tabs[1].FillChar);
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo66565, "fdo66565.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
