@@ -11,9 +11,9 @@ $(eval $(call gb_Module_Module,libreofficekit))
 
 ifeq ($(OS),LINUX)
 
-# $(eval $(call gb_Module_add_check_targets,libreofficekit,\
-#     CppunitTest_libreofficekit_tiledrendering \
-# ))
+$(eval $(call gb_Module_add_check_targets,libreofficekit,\
+    CppunitTest_libreofficekit_tiledrendering \
+))
 
 ifneq ($(ENABLE_GTK),)
 $(eval $(call gb_Module_add_targets,libreofficekit,\
