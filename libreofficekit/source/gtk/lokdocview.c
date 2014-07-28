@@ -98,6 +98,13 @@ void renderDocument( LOKDocView* pDocView )
     int nRenderWidth, nRenderHeight;
     unsigned char* pBuffer;
     int nRowStride;
+    // TODO: we really should scale by screen DPI here -- 10 seems to be a vaguely
+    // correct factor for my screen at least.
+    const float fScaleFactor = 0.1;
+
+    // Various things blow up if we try to draw too large a tile,
+    // this size seems to be safe. (Very rare/unlikely that
+    const int nMaxWidth = 100000;
 
     g_assert( pDocView->pDocument );
 
@@ -108,13 +115,6 @@ void renderDocument( LOKDocView* pDocView )
 
     pDocView->pDocument->pClass->getDocumentSize( pDocView->pDocument, &nWidth, &nHeight );
 
-    // TODO: we really should scale by screen DPI here -- 10 seems to be a vaguely
-    // correct factor for my screen at least.
-    const float fScaleFactor = 0.1;
-
-    // Various things blow up if we try to draw too large a tile,
-    // this size seems to be safe. (Very rare/unlikely that
-    const int nMaxWidth = 100000;
     if ( nWidth * fScaleFactor > nMaxWidth )
     {
         nWidth = nMaxWidth;
