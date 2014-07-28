@@ -109,9 +109,25 @@
 #define STR_MSACCESS_2007_FILTERNAME        RID_STR_DLG_START + 66
 #define STR_FIREBIRD_FILTERNAME             RID_STR_DLG_START + 67
 
+#define STR_DBWIZARDTITLE                   RID_STR_DLG_START + 68
+#define STR_PAGETITLE_INTROPAGE             RID_STR_DLG_START + 69
+#define STR_PAGETITLE_DBASE                 RID_STR_DLG_START + 70
+#define STR_PAGETITLE_TEXT                  RID_STR_DLG_START + 71
+#define STR_PAGETITLE_MSACCESS              RID_STR_DLG_START + 72
+#define STR_PAGETITLE_LDAP                  RID_STR_DLG_START + 73
+#define STR_PAGETITLE_ADO                   RID_STR_DLG_START + 74
+#define STR_PAGETITLE_JDBC                  RID_STR_DLG_START + 75
+#define STR_PAGETITLE_ORACLE                RID_STR_DLG_START + 76
+#define STR_PAGETITLE_MYSQL                 RID_STR_DLG_START + 77
+#define STR_PAGETITLE_ODBC                  RID_STR_DLG_START + 78
+#define STR_PAGETITLE_SPREADSHEET           RID_STR_DLG_START + 79
+#define STR_PAGETITLE_AUTHENTIFICATION      RID_STR_DLG_START + 80
+#define STR_PAGETITLE_MYSQL_NATIVE          RID_STR_DLG_START + 81
+#define STR_PAGETITLE_FINAL                 RID_STR_DLG_START + 82
+
 // please adjust checking before insert new strings
 
-#define LAST_STR_HERE                       RID_STR_DLG_START + 68
+#define LAST_STR_HERE                       RID_STR_DLG_START + 83
 
 #if LAST_STR_HERE > RID_STR_DLG_END
 #error Resource-Id Overflow in #file, #line

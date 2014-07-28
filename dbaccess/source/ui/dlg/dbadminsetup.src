@@ -27,95 +27,79 @@
 #define EDIT_HEIGHT         12
 #define EDIT_X              101
 
-ModalDialog DLG_DATABASE_WIZARD
+String STR_DBWIZARDTITLE
 {
-    OutputSize = TRUE ;
-    Moveable = TRUE;
-    Closeable = TRUE ;
-    HelpId = HID_DLG_DATABASE_WIZARD;
-    Hide = TRUE;
     Text[ en-US ]  = "Database Wizard" ;
+};
 
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-    };
+String STR_PAGETITLE_INTROPAGE
+{
+    Text[ en-US ]  = "Select database" ;
+};
 
-    String STR_DBWIZARDTITLE
-    {
-        Text[ en-US ]  = "Database Wizard" ;
-    };
+String STR_PAGETITLE_DBASE
+{
+    Text[ en-US ]  = "Set up dBASE connection" ;
+};
 
-    String STR_PAGETITLE_INTROPAGE
-    {
-        Text[ en-US ]  = "Select database" ;
-    };
+String STR_PAGETITLE_TEXT
+{
+    Text[ en-US ]  = "Set up a connection to text files" ;
+};
 
-    String STR_PAGETITLE_DBASE
-    {
-        Text[ en-US ]  = "Set up dBASE connection" ;
+String STR_PAGETITLE_MSACCESS
+{
+    Text[ en-US ]  = "Set up Microsoft Access connection" ;
+};
 
-    };
+String STR_PAGETITLE_LDAP
+{
+    Text[ en-US ]  = "Set up LDAP connection" ;
+};
 
-    String STR_PAGETITLE_TEXT
-    {
-        Text[ en-US ]  = "Set up a connection to text files" ;
-    };
+String STR_PAGETITLE_ADO
+{
+    Text[ en-US ]  = "Set up ADO connection" ;
+};
 
-    String STR_PAGETITLE_MSACCESS
-    {
-        Text[ en-US ]  = "Set up Microsoft Access connection" ;
-    };
+String STR_PAGETITLE_JDBC
+{
+    Text[ en-US ]  = "Set up JDBC connection" ;
+};
 
-    String STR_PAGETITLE_LDAP
-    {
-        Text[ en-US ]  = "Set up LDAP connection" ;
-    };
+String STR_PAGETITLE_ORACLE
+{
+    Text[ en-US ] = "Set up Oracle database connection" ;
+};
 
-    String STR_PAGETITLE_ADO
-    {
-        Text[ en-US ]  = "Set up ADO connection" ;
-    };
+String STR_PAGETITLE_MYSQL
+{
+    Text[ en-US ] = "Set up MySQL connection" ;
+};
 
-    String STR_PAGETITLE_JDBC
-    {
-        Text[ en-US ]  = "Set up JDBC connection" ;
-    };
+String STR_PAGETITLE_ODBC
+{
+    Text[ en-US ] = "Set up ODBC connection" ;
+};
 
-    String STR_PAGETITLE_ORACLE
-    {
-        Text[ en-US ] = "Set up Oracle database connection" ;
-    };
+String STR_PAGETITLE_SPREADSHEET
+{
+    Text[ en-US ] = "Set up Spreadsheet connection" ;
+};
 
-    String STR_PAGETITLE_MYSQL
-    {
-        Text[ en-US ] = "Set up MySQL connection" ;
-    };
+String STR_PAGETITLE_AUTHENTIFICATION
+{
+    Text[ en-US ] = "Set up user authentication" ;
+};
 
-    String STR_PAGETITLE_ODBC
-    {
-        Text[ en-US ] = "Set up ODBC connection" ;
-    };
+String STR_PAGETITLE_MYSQL_NATIVE
+{
+    Text [ en-US ] = "Set up MySQL server data";
+};
 
-    String STR_PAGETITLE_SPREADSHEET
-    {
-        Text[ en-US ] = "Set up Spreadsheet connection" ;
-    };
-
-    String STR_PAGETITLE_AUTHENTIFICATION
-    {
-        Text[ en-US ] = "Set up user authentication" ;
-    };
-
-    String STR_PAGETITLE_MYSQL_NATIVE
-    {
-        Text [ en-US ] = "Set up MySQL server data";
-    };
-
-    String STR_PAGETITLE_FINAL
-    {
-        Text[ en-US ] = "Save and proceed" ;
-    };
+String STR_PAGETITLE_FINAL
+{
+    Text[ en-US ] = "Save and proceed" ;
 };
 
 String STR_DATABASEDEFAULTNAME
