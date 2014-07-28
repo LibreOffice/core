@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,lcms2,3))
 $(eval $(call gb_UnpackedTarball_add_patches,lcms2,\
 	external/lcms2/lcms2.patch \
 	external/lcms2/lcms2-2.4-windows.patch \
+	external/lcms2/lcms2-vc2013-project.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
