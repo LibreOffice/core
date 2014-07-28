@@ -658,7 +658,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     else if( bAssEnabled )
     {
         // assign pressed
-        SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog( pThis, false, pThis->GetFrame() );
+        boost::scoped_ptr<SvxScriptSelectorDialog> pDlg(new SvxScriptSelectorDialog( pThis, false, pThis->GetFrame() ));
         if( pDlg )
         {
             short ret = pDlg->Execute();
