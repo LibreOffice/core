@@ -4576,6 +4576,21 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0,4,0)));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
+    // test that filling formulas vertically up does the right thing
+    for(SCROW nRow = 0; nRow < 10; ++nRow)
+        m_pDoc->SetValue(100, 100 + nRow, 0, 1);
+
+    m_pDoc->SetString(100, 110, 0, "=A111");
+
+    m_pDoc->Fill(100, 110, 100, 110, NULL, aMarkData, 10, FILL_TO_TOP, FILL_AUTO);
+    for(SCROW nRow = 110; nRow >= 100; --nRow)
+    {
+        OUString aExpected = OUString("=A") + OUString::number(nRow +1);
+        OUString aFormula;
+        m_pDoc->GetFormula(100, nRow, 0, aFormula);
+        CPPUNIT_ASSERT_EQUAL(aExpected, aFormula);
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
