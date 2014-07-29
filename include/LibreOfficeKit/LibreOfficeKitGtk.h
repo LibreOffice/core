@@ -62,7 +62,8 @@ int             lok_docview_get_parts       (LOKDocView* pDocView);
 int             lok_docview_get_part        (LOKDocView* pDocView);
 void            lok_docview_set_part        (LOKDocView* pDocView,
                                              int nPart);
-
+char*           lok_docview_get_part_name   (LOKDocView* pDocView,
+                                             int nPart);
 #ifdef __cplusplus
 }
 #endif
