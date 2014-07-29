@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_ac2afb2a",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T11:19:45Z",
+      "side": 1,
+      "message": "The original avoids an extra ctor call in case the property is present. But I guess that does not make any measurable difference in practice.",
+      "revId": "efb5a2c92d6940653eb2f6eac5be2e93dfd303a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
