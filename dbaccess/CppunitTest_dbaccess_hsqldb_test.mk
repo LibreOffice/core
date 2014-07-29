@@ -76,4 +76,7 @@ $(eval $(call gb_CppunitTest_use_filter_configuration,dbaccess_hsqldb_test))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,dbaccess_hsqldb_test))
 
+$(call gb_CppunitTest_get_target,dbaccess_hsqldb_test): \
+    $(call gb_AllLangResTarget_get_target,ofa)
+
 # vim: set noet sw=4 ts=4:
