@@ -63,10 +63,10 @@
 #define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 350 - 369
 
 #define RID_STR_GEN_START               RID_STR_UNO_END
-#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 370 - 424
+#define RID_STR_GEN_END                 RID_STR_GEN_START       + 56    // 370 - 425
 
 #define RID_STR_APP_START               RID_STR_GEN_END
-#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   425 - 464
+#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   426 - 465
 
 #if RID_STR_GEN_END > RID_DBACCESS_END
 #error Resource-Id Ueberlauf in #file, #line
@@ -120,12 +120,10 @@
 #define PAGE_DBWIZARD_MSACCESS                  RID_PAGE_START + 43
 #define PAGE_DBWIZARD_LDAP                      RID_PAGE_START + 44
     // FREE
-#define PAGE_DBWIZARD_MYSQL_INTRO               RID_PAGE_START + 46
 #define PAGE_DBWIZARD_ORACLE                    RID_PAGE_START + 48
 #define PAGE_DBWIZARD_JDBC                      RID_PAGE_START + 49
 #define PAGE_DBWIZARD_ADO                       RID_PAGE_START + 50
 #define PAGE_DBWIZARD_ODBC                      RID_PAGE_START + 51
-#define PAGE_DBWIZARD_SPREADSHEET               RID_PAGE_START + 52
 #define PAGE_DBWIZARD_AUTHENTIFICATION          RID_PAGE_START + 53
 #define PAGE_DBWIZARD_MYSQL_JDBC                RID_PAGE_START + 54
 #define PAGE_DBWIZARD_USERDEFINED               RID_PAGE_START + 56
@@ -260,6 +258,9 @@
 #define STR_AUTODELIMITER_MISSING       RID_STR_GEN_START + 50
 #define STR_AUTODELIMITER_MUST_DIFFER   RID_STR_GEN_START + 51
 #define STR_AUTONO_WILDCARDS            RID_STR_GEN_START + 52
+#define STR_SPREADSHEET_HEADERTEXT          RID_STR_GEN_START + 53
+#define STR_SPREADSHEET_HELPTEXT            RID_STR_GEN_START + 54
+#define STR_SPREADSHEETPATH                 RID_STR_GEN_START + 55
 
 // untyped resources
 

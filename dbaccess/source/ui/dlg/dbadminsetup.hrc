@@ -31,7 +31,6 @@
 #define STR_JDBC_HELPTEXT                   33
 #define STR_ODBC_HELPTEXT                   34
 #define STR_MYSQLJDBC_HELPTEXT              35
-#define STR_SPREADSHEET_HELPTEXT            36
     // FREE
 #define STR_ORACLE_HELPTEXT                 40
 #define STR_DBASE_HEADERTEXT                41
@@ -42,13 +41,10 @@
 #define STR_ODBC_HEADERTEXT                 47
 #define STR_MYSQLJDBC_HEADERTEXT            48
     // FREE
-#define STR_SPREADSHEET_HEADERTEXT          50
-    // FREE
 #define STR_ORACLE_HEADERTEXT               54
 #define STR_DBWIZARDTITLE                   56
 
     // FREE
-#define STR_SPREADSHEETPATH             64
 
 #define STR_ORACLE_DEFAULT              67
 #define STR_PAGETITLE_INTROPAGE         69
@@ -72,9 +68,6 @@
 #define STR_PAGETITLE_MYSQL_NATIVE      87
 
 #define FT_LDAP_HELPTEXT                2
-#define FT_MYSQL_HELPTEXT               3
-#define FT_MYSQL_HEADERTEXT             4
-#define FT_MYSQLCONNECTIONMODE          5
 #define FT_AUTHENTIFICATIONHELPTEXT     7
 #define FT_AUTHENTIFICATIONHEADERTEXT   8
 #define FT_LDAP_HEADERTEXT              9
@@ -86,12 +79,7 @@
 
 #define PB_TESTCONNECTION           1
 
-#define RB_CONNECTVIAODBC           1
-#define RB_CONNECTVIAJDBC           2
-#define RB_CONNECTVIANATIVE         5
-
 #define CB_WIZ_USESSL                       1
-#define CB_SPREADSHEETPASSWORDREQUIRED      4
 #define CB_GENERALPASSWORDREQUIRED          5
 
 #endif

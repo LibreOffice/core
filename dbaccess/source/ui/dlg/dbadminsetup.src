@@ -123,62 +123,6 @@ String STR_DATABASEDEFAULTNAME
     Text[ en-US ]  = "New Database" ;
 };
 
-TabPage PAGE_DBWIZARD_MYSQL_INTRO
-{
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_INTRO";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
-
-    FixedText FT_MYSQL_HEADERTEXT
-    {
-        Pos = MAP_APPFONT ( START_X , 8 ) ;
-        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Set up a connection to a MySQL database";
-        WordBreak = TRUE;
-    };
-
-    FixedText FT_MYSQL_HELPTEXT
-    {
-        Pos = MAP_APPFONT (START_X , 27 )  ;
-        Size = MAP_APPFONT ( 213 , 48 ) ;
-        Text[ en-US ]   = "You can connect to a MySQL database using either ODBC or JDBC.\nPlease contact your system administrator if you are unsure about the following settings.";
-        WordBreak = TRUE ;
-    };
-
-    FixedText FT_MYSQLCONNECTIONMODE
-    {
-        Pos = MAP_APPFONT (START_X , 79 )  ;
-        Size = MAP_APPFONT ( 209 , 8 ) ;
-        Text[ en-US ] = "How do you want to connect to your MySQL database?" ;
-    };
-
-    RadioButton RB_CONNECTVIAODBC
-    {
-        HelpId = HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAODBC ;
-        Pos = MAP_APPFONT (START_X + 6 , 91 )  ;
-        Size = MAP_APPFONT ( 205 , 9 ) ;
-        Text[ en-US ] = "Connect using ODBC (Open Database Connectivity)" ;
-    };
-
-    RadioButton RB_CONNECTVIAJDBC
-    {
-        HelpId = HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAJDBC ;
-        Pos = MAP_APPFONT (START_X + 6, 103 )  ;
-        Size = MAP_APPFONT ( 208 , 8 ) ;
-        Text[ en-US ] = "Connect using JDBC (Java Database Connectivity)" ;
-    };
-    RadioButton RB_CONNECTVIANATIVE
-    {
-        HelpID = "dbaccess:RadioButton:PAGE_DBWIZARD_MYSQL_INTRO:RB_CONNECTVIANATIVE";
-        Pos = MAP_APPFONT (START_X + 6 , 115 )  ;
-        Size = MAP_APPFONT ( 205 , 9 ) ;
-        Text[ en-US ] = "Connect directly" ;
-        Hide = TRUE ;
-    };
-};
-
 #define AUTHENTEDIT_X   (EDIT_X - 10)
 
 TabPage PAGE_DBWIZARD_AUTHENTIFICATION
@@ -492,36 +436,17 @@ TabPage PAGE_DBWIZARD_ORACLE
     AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEDBNAME,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEHOSTSERVER,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEPORT,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLECLASS,HID_PAGE_DBWIZARD_ORACLE_PB_TESTORACLECLASS)
 };
 
-TabPage PAGE_DBWIZARD_SPREADSHEET
+String STR_SPREADSHEET_HEADERTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_SPREADSHEET";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
+    Text[ en-US ] = "Set up a connection to spreadsheets";
+};
 
-    String STR_SPREADSHEET_HEADERTEXT
-    {
-        Text[ en-US ] = "Set up a connection to spreadsheets";
-    };
+String STR_SPREADSHEET_HELPTEXT{
+    Text[ en-US ] = "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
+};
 
-    String STR_SPREADSHEET_HELPTEXT{
-        Text[ en-US ] = "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
-    };
-
-    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH,HID_PAGE_DBWIZARD_SPREADSHEET_PB_SPREADSHEETPATH )
-
-    String STR_SPREADSHEETPATH{
-        Text[ en-US ] = "~Location and file name" ;
-    };
-
-    CheckBox CB_SPREADSHEETPASSWORDREQUIRED
-    {
-        HelpId = HID_PAGE_DBWIZARD_SPREADSHEET_CB_SPREADSHEETPASSWORDREQUIRED ;
-        Pos = MAP_APPFONT (START_X + UNRELATED_CONTROLS , 83 )  ;
-        Size = MAP_APPFONT ( 93 , 11 ) ;
-        Text[ en-US ] = "~Password required" ;
-    };
+String STR_SPREADSHEETPATH{
+    Text[ en-US ] = "~Location and file name" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
