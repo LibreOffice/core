@@ -31,31 +31,18 @@
 
     // FREE
 #define STR_SPREADSHEETPATH             64
-    // FREE
-#define STR_LDAP_DEFAULT                86
 
-#define FT_LDAP_HELPTEXT                2
 #define FT_MYSQL_HELPTEXT               3
 #define FT_MYSQL_HEADERTEXT             4
 #define FT_MYSQLCONNECTIONMODE          5
-#define FT_AUTHENTIFICATIONHELPTEXT     7
-#define FT_AUTHENTIFICATIONHEADERTEXT   8
-#define FT_LDAP_HEADERTEXT              9
-#define FT_GENERALUSERNAME              10
 #define FT_SETUP_WIZARD_HEADER          15
 #define FT_SETUP_WIZARD_HELP            16
-
-#define ET_GENERALUSERNAME          1
-
-#define PB_TESTCONNECTION           1
 
 #define RB_CONNECTVIAODBC           1
 #define RB_CONNECTVIAJDBC           2
 #define RB_CONNECTVIANATIVE         5
 
-#define CB_WIZ_USESSL                       1
 #define CB_SPREADSHEETPASSWORDREQUIRED      4
-#define CB_GENERALPASSWORDREQUIRED          5
 
 #endif
 
