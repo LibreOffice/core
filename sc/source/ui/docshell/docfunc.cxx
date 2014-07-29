@@ -628,6 +628,9 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
                                        aMultiMark );
     }
 
+    // To keep track of all non-empty cells within the deleted area.
+    boost::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
+
     if ( bRecord )
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -645,6 +648,27 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
         // note captions are handled in drawing undo
         nUndoDocFlags |= IDF_NOCAPTIONS;
         rDoc.CopyToDocument( aExtendedRange, nUndoDocFlags, bMulti, pUndoDoc, &aMultiMark );
+
+        pDataSpans.reset(new ScSimpleUndo::DataSpansType);
+
+        ScMarkData::iterator it = aMultiMark.begin(), itEnd = aMultiMark.end();
+        for (; it != itEnd; ++it)
+        {
+            SCTAB nTab = *it;
+
+            SCCOL nCol1 = aMarkRange.aStart.Col(), nCol2 = aMarkRange.aEnd.Col();
+            SCROW nRow1 = aMarkRange.aStart.Row(), nRow2 = aMarkRange.aEnd.Row();
+
+            std::pair<ScSimpleUndo::DataSpansType::iterator,bool> r =
+                pDataSpans->insert(nTab, new sc::ColumnSpanSet(false));
+
+            if (r.second)
+            {
+                ScSimpleUndo::DataSpansType::iterator it2 = r.first;
+                sc::ColumnSpanSet* pSet = it2->second;
+                pSet->scan(rDoc, nTab, nCol1, nRow1, nCol2, nRow2, true);
+            }
+        }
     }
 
 //! HideAllCursors();   // falls Zusammenfassung aufgehoben wird
@@ -652,9 +676,13 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
 
     // add undo action after drawing undo is complete (objects and note captions)
     if( bRecord )
-        rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoDeleteContents( &rDocShell, aMultiMark, aExtendedRange,
-                                      pUndoDoc, bMulti, nFlags, bDrawUndo ) );
+    {
+        ScUndoDeleteContents* pUndo =
+            new ScUndoDeleteContents(
+                &rDocShell, aMultiMark, aExtendedRange, pUndoDoc, bMulti, nFlags, bDrawUndo);
+        rDocShell.GetUndoManager()->AddUndoAction(pUndo);
+        pUndo->SetDataSpans(pDataSpans);
+    }
 
     if (!AdjustRowHeight( aExtendedRange ))
         rDocShell.PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
