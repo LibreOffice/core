@@ -163,64 +163,6 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
     };
 };
 
-#define AUTHENTEDIT_X   (EDIT_X - 10)
-
-TabPage PAGE_DBWIZARD_AUTHENTIFICATION
-{
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_AUTHENTIFICATION";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
-
-    FixedText FT_AUTHENTIFICATIONHEADERTEXT
-    {
-        Pos = MAP_APPFONT ( START_X , 8 ) ;
-        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Set up the user authentication";
-        WordBreak = TRUE;
-    };
-
-    FixedText FT_AUTHENTIFICATIONHELPTEXT\
-    {
-        Pos = MAP_APPFONT (START_X , 27 )  ;
-        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 3*FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Some databases require you to enter a user name." ;\
-        WordBreak = TRUE ;
-    };
-
-    FixedText FT_GENERALUSERNAME
-    {
-        Pos = MAP_APPFONT (START_X , 62 ) ;
-        Size = MAP_APPFONT ( AUTHENTEDIT_X - START_X - 1 , FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "~User name" ;
-    };
-
-    Edit ET_GENERALUSERNAME
-    {
-        Border = TRUE ;
-        HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_ET_GENERALUSERNAME ;
-        Pos = MAP_APPFONT (AUTHENTEDIT_X , 60 )  ;
-        Size = MAP_APPFONT ( (WIZARD_PAGE_X - AUTHENTEDIT_X - 6), EDIT_HEIGHT ) ;
-    };
-
-    CheckBox CB_GENERALPASSWORDREQUIRED
-    {
-        HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_CB_GENERALPASSWORDREQUIRED ;
-        Pos = MAP_APPFONT (AUTHENTEDIT_X , 76 );
-        Size = MAP_APPFONT ( 93 , CHECKBOX_HEIGHT );
-        Text[ en-US ] = "Password re~quired" ;
-    };
-
-    PushButton PB_TESTCONNECTION
-    {
-        HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_PB_TESTCONNECTION ;
-        Pos = MAP_APPFONT (WIZARD_PAGE_X - BUTTON_WIDTH - UNRELATED_CONTROLS , WIZARD_PAGE_Y - 18 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text[ en-US ] = "~Test Connection" ;
-    };
-};
-
 String STR_MYSQLJDBC_HEADERTEXT
 {
     Text[ en-US ] = "Set up connection to a MySQL database using JDBC" ;
@@ -253,7 +195,7 @@ TabPage PAGE_DBWIZARD_MYSQL_NATIVE
     {
         Pos = MAP_APPFONT ( START_X , 8 ) ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Set up connection to a MySQL database" ;
+        Text[ en-US ] = "Set up connection to a ML database" ;
         WordBreak = TRUE;
     };
 
@@ -299,46 +241,6 @@ String STR_MSACCESS_HEADERTEXT
 String STR_MSACCESS_HELPTEXT
 {
     Text[ en-US ] = "Please select the Microsoft Access file you want to access.";
-};
-
-TabPage PAGE_DBWIZARD_LDAP
-{
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_LDAP";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
-
-    FixedText FT_LDAP_HEADERTEXT
-    {
-        Pos = MAP_APPFONT ( START_X , 8 ) ;
-        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Set up a connection to an LDAP directory";
-        WordBreak = TRUE;
-    };
-
-    FixedText FT_LDAP_HELPTEXT
-    {
-        Pos = MAP_APPFONT (START_X , 27 )  ;
-        Size = MAP_APPFONT (WIZARD_PAGE_X - START_X - 6, 5 * FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Please enter the required information to connect to an LDAP directory.\nPlease contact your system administrator if you are unsure about the following settings." ;
-        WordBreak = TRUE ;
-    };
-    AUTO_HOSTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS,                         HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER)
-    AUTO_BASEDNCONTROLGROUP(INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS +     EDIT_HEIGHT +     RELATED_CONTROLS,    HID_PAGE_DBWIZARD_LDAP_ET_BASEDN)
-    AUTO_PORTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS + 2 * EDIT_HEIGHT + 2 * RELATED_CONTROLS,    HID_PAGE_DBWIZARD_LDAP_ET_PORTNUMBER)
-
-    String STR_LDAP_DEFAULT{
-        Text[ en-US ] = "Default: 389" ;
-    };
-
-    CheckBox CB_WIZ_USESSL
-    {
-        HelpId = HID_PAGE_DBWIZARD_LDAP_CB_USESSL ;
-        Pos = MAP_APPFONT (START_X , INIT_Y + 7 * FIXEDTEXT_HEIGHT +        UNRELATED_CONTROLS + 3 * EDIT_HEIGHT + 4 * RELATED_CONTROLS )  ;
-        Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text[ en-US ] = "Use ~secure connection (SSL)" ;
-    };
 };
 
 String STR_ADO_HEADERTEXT

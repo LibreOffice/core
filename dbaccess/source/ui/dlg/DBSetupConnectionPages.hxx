@@ -92,16 +92,15 @@ namespace dbaui
         DECL_LINK(OnEditModified,Edit*);
 
     private:
-        FixedText           m_aFTHeaderText;
-        FixedText           m_aFTHelpText;
-        FixedText           m_aFTHostServer;
-        Edit                m_aETHostServer;
-        FixedText           m_aFTBaseDN;
-        Edit                m_aETBaseDN;
-        FixedText           m_aFTPortNumber;
-        NumericField        m_aNFPortNumber;
-        FixedText           m_aFTDefaultPortNumber;
-        CheckBox            m_aCBUseSSL;
+        FixedText*          m_pFTHelpText;
+        FixedText*          m_pFTHostServer;
+        Edit*               m_pETHostServer;
+        FixedText*          m_pFTBaseDN;
+        Edit*               m_pETBaseDN;
+        FixedText*          m_pFTPortNumber;
+        NumericField*       m_pNFPortNumber;
+        FixedText*          m_pFTDefaultPortNumber;
+        CheckBox*           m_pCBUseSSL;
     };
 
     // MySQLNativeSetupPage
@@ -241,12 +240,11 @@ namespace dbaui
         OAuthentificationPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
 
     protected:
-        FixedText   m_aFTHelpText;
-        FixedText   m_aFTHeaderText;
-        FixedText   m_aFTUserName;
-        Edit        m_aETUserName;
-        CheckBox    m_aCBPasswordRequired;
-        PushButton  m_aPBTestConnection;
+        FixedText*  m_pFTHelpText;
+        FixedText*  m_pFTUserName;
+        Edit*       m_pETUserName;
+        CheckBox*   m_pCBPasswordRequired;
+        PushButton* m_pPBTestConnection;
         virtual ~OAuthentificationPageSetup();
 
     protected:

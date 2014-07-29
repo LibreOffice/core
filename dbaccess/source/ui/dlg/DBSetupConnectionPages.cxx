@@ -132,35 +132,32 @@ using namespace ::com::sun::star;
 
     // OLDAPPageSetup
     OLDAPConnectionPageSetup::OLDAPConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_LDAP), _rCoreAttrs)
-        ,m_aFTHeaderText        (this, ModuleRes(FT_LDAP_HEADERTEXT))
-        ,m_aFTHelpText          (this, ModuleRes(FT_LDAP_HELPTEXT))
-        ,m_aFTHostServer        (this, ModuleRes(FT_AUTOHOSTNAME))
-        ,m_aETHostServer        (this, ModuleRes(ET_AUTOHOSTNAME))
-        ,m_aFTBaseDN            (this, ModuleRes(FT_AUTOBASEDN))
-        ,m_aETBaseDN            (this, ModuleRes(ET_AUTOBASEDN))
-        ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
-        ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
-        ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
-        ,m_aCBUseSSL            (this, ModuleRes(CB_WIZ_USESSL))
+        :OGenericAdministrationPage(pParent, "LDAPConnectionPage", "dbaccess/ui/ldapconnectionpage.ui",_rCoreAttrs)
     {
-        SetControlFontWeight(&m_aFTHeaderText);
-        m_aFTDefaultPortNumber.SetText(OUString(ModuleRes(STR_LDAP_DEFAULT)));
-        m_aETHostServer.SetModifyHdl(getControlModifiedLink());
-        m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
-        m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
-        m_aCBUseSSL.SetToggleHdl(getControlModifiedLink());
+        get(m_pFTHelpText, "helpLabel");
+        get(m_pFTHostServer, "hostNameLabel");
+        get(m_pETHostServer, "hostNameEntry");
+        get(m_pFTBaseDN, "baseDNLabel");
+        get(m_pETBaseDN, "baseDNEntry");
+        get(m_pFTPortNumber, "portNumLabel");
+        get(m_pNFPortNumber, "portNumEntry");
+        get(m_pFTDefaultPortNumber, "portNumDefLabel");
+        get(m_pCBUseSSL, "useSSLCheckbutton");
+
+        m_pETHostServer->SetModifyHdl(getControlModifiedLink());
+        m_pETBaseDN->SetModifyHdl(getControlModifiedLink());
+        m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
+        m_pCBUseSSL->SetToggleHdl(getControlModifiedLink());
         SetRoadmapStateValue(false);
-        FreeResource();
     }
 
     bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
-        fillString(*_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
-        fillInt32(*_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
+        fillString(*_rSet,m_pETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
+        fillInt32(*_rSet,m_pNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
 
-        if ( m_aETHostServer.IsValueChangedFromSaved() )
+        if ( m_pETHostServer->IsValueChangedFromSaved() )
         {
             DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet->GetItem(DSID_TYPECOLLECTION));
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
@@ -170,29 +167,29 @@ using namespace ::com::sun::star;
             if (pCollection)
             {
                 OUString sUrl = pCollection->getPrefix( OUString("sdbc:address:ldap:"));
-                sUrl += m_aETHostServer.GetText();
+                sUrl += m_pETHostServer->GetText();
                 _rSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
                 bChangedSomething = true;
             }
         }
 
-        fillBool(*_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
+        fillBool(*_rSet,m_pCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
     void OLDAPConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETHostServer));
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETBaseDN));
-        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aCBUseSSL));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETHostServer));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETBaseDN));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pNFPortNumber));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pCBUseSSL));
     }
     void OLDAPConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHelpText));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostServer));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTBaseDN));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTPortNumber));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDefaultPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHelpText));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHostServer));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTBaseDN));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTDefaultPortNumber));
     }
     void OLDAPConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
@@ -205,8 +202,8 @@ using namespace ::com::sun::star;
 
         if ( bValid )
         {
-            m_aETBaseDN.SetText(pBaseDN->GetValue());
-            m_aNFPortNumber.SetValue(pPortNumber->GetValue());
+            m_pETBaseDN->SetText(pBaseDN->GetValue());
+            m_pNFPortNumber->SetValue(pPortNumber->GetValue());
         }
            OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
         callModifiedHdl();
@@ -214,7 +211,7 @@ using namespace ::com::sun::star;
 
     IMPL_LINK(OLDAPConnectionPageSetup, OnEditModified, Edit*, /*_pEdit*/)
     {
-        bool bRoadmapState = ((!m_aETHostServer.GetText().isEmpty() ) && ( !m_aETBaseDN.GetText().isEmpty() ) && (!m_aFTPortNumber.GetText().isEmpty() ));
+        bool bRoadmapState = ((!m_pETHostServer->GetText().isEmpty() ) && ( !m_pETBaseDN->GetText().isEmpty() ) && (!m_pFTPortNumber->GetText().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
         callModifiedHdl();
         return 0L;
@@ -683,22 +680,18 @@ using namespace ::com::sun::star;
 
 
     OAuthentificationPageSetup::OAuthentificationPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_AUTHENTIFICATION), _rCoreAttrs )
-        , m_aFTHelpText             (this, ModuleRes(FT_AUTHENTIFICATIONHELPTEXT))
-        , m_aFTHeaderText           (this, ModuleRes(FT_AUTHENTIFICATIONHEADERTEXT))
-        , m_aFTUserName             (this, ModuleRes(FT_GENERALUSERNAME))
-        , m_aETUserName             (this, ModuleRes(ET_GENERALUSERNAME))
-        , m_aCBPasswordRequired     (this, ModuleRes(CB_GENERALPASSWORDREQUIRED))
-        , m_aPBTestConnection       (this, ModuleRes(PB_TESTCONNECTION))
+        :OGenericAdministrationPage(pParent, "AuthentificationPage", "dbaccess/ui/authentificationpage.ui", _rCoreAttrs )
     {
+        get(m_pFTHelpText, "helptext");
+        get(m_pFTUserName, "generalUserNameLabel");
+        get(m_pETUserName, "generalUserNameEntry");
+        get(m_pCBPasswordRequired, "passRequiredCheckbutton");
+        get(m_pPBTestConnection, "testConnectionButton");
+        m_pETUserName->SetModifyHdl(getControlModifiedLink());
+        m_pCBPasswordRequired->SetClickHdl(getControlModifiedLink());
+           m_pPBTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
 
-        SetControlFontWeight(&m_aFTHeaderText);
-        m_aETUserName.SetModifyHdl(getControlModifiedLink());
-        m_aCBPasswordRequired.SetClickHdl(getControlModifiedLink());
-           m_aPBTestConnection.SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
-        FreeResource();
-
-        LayoutHelper::fitSizeRightAligned( m_aPBTestConnection );
+        LayoutHelper::fitSizeRightAligned( *m_pPBTestConnection );
     }
 
     OAuthentificationPageSetup::~OAuthentificationPageSetup()
@@ -708,15 +701,15 @@ using namespace ::com::sun::star;
 
     void OAuthentificationPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHelpText));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTUserName));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aPBTestConnection));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHelpText));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTUserName));
+        _rControlList.push_back(new ODisableWrapper<PushButton>(m_pPBTestConnection));
     }
 
     void OAuthentificationPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETUserName));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aCBPasswordRequired));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETUserName));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pCBPasswordRequired));
     }
 
     void OAuthentificationPageSetup::implInitControls(const SfxItemSet& _rSet, bool /*_bSaveValue*/)
@@ -727,23 +720,23 @@ using namespace ::com::sun::star;
         SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, true);
         SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, true);
 
-        m_aETUserName.SetText(pUidItem->GetValue());
-        m_aCBPasswordRequired.Check(pAllowEmptyPwd->GetValue());
+        m_pETUserName->SetText(pUidItem->GetValue());
+        m_pCBPasswordRequired->Check(pAllowEmptyPwd->GetValue());
 
-        m_aETUserName.ClearModifyFlag();
+        m_pETUserName->ClearModifyFlag();
     }
 
     bool OAuthentificationPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
 
-        if (m_aETUserName.IsValueChangedFromSaved())
+        if (m_pETUserName->IsValueChangedFromSaved())
         {
-            _rSet->Put(SfxStringItem(DSID_USER, m_aETUserName.GetText()));
+            _rSet->Put(SfxStringItem(DSID_USER, m_pETUserName->GetText()));
             _rSet->Put(SfxStringItem(DSID_PASSWORD, OUString()));
             bChangedSomething = true;
         }
-        fillBool(*_rSet,&m_aCBPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,m_pCBPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
         return bChangedSomething;
     }
 
