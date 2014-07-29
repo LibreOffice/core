@@ -3010,7 +3010,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 if (bSpellError)
                 {
                     // Check and see if a misspelled word is under the mouse pointer.
-                    bSpellError = IsSpellErrorAtPos(aPosPixel, nColSpellError, nCellX, nCellY);
+                    bSpellError = IsSpellErrorAtPos(aPosPixel, nColSpellError, nCellY);
                 }
             }
 
@@ -5334,7 +5334,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     return false;
 }
 
-bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCCOL nCol2, SCROW nRow )
+bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow )
 {
     if (!mpSpellCheckCxt)
         return false;
@@ -5359,17 +5359,6 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCCOL nCol
     if (rPos.Y() < aEditRect.Top())
         return false;
 
-    Rectangle aEditRect2 = pViewData->GetEditArea(eWhich, nCol2, nRow, this, pPattern, false);
-    long nWidth = aEditRect2.Right() - aEditRect.Left();
-    aEditRect.setWidth(nWidth);
-
-    MapMode aEditMode = pViewData->GetLogicMode(eWhich);
-    Rectangle aLogicEdit = PixelToLogic(aEditRect, aEditMode);
-    Point aLogicClick = PixelToLogic(rPos, aEditMode);
-
-    if (!aLogicEdit.IsInside(aLogicClick))
-        return false;
-
     boost::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
 
     Size aPaperSize = Size(1000000, 1000000);
@@ -5379,6 +5368,17 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCCOL nCol
         pEngine->SetText(*aCell.mpEditText);
     else
         pEngine->SetText(aCell.mpString->getString());
+
+    long nTextWidth = static_cast<long>(pEngine->CalcTextWidth());
+
+    MapMode aEditMode = pViewData->GetLogicMode(eWhich);
+    Rectangle aLogicEdit = PixelToLogic(aEditRect, aEditMode);
+    Point aLogicClick = PixelToLogic(rPos, aEditMode);
+
+    aLogicEdit.setWidth(nTextWidth + 1);
+
+    if (!aLogicEdit.IsInside(aLogicClick))
+        return false;
 
     pEngine->SetControlWord(pEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING);
     pEngine->SetAllMisspellRanges(*pRanges);
