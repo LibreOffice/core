@@ -357,10 +357,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         if (!getCellProps() || getCellProps()->find(PROP_VERTICAL_MERGE) == getCellProps()->end())
                         {
                             // Though in case there will be a vertical merge, don't do this, it hides text that is supposed to be visible.
-                            TablePropertyMapPtr pRowPropMap( new TablePropertyMap );
-                            pRowPropMap->Insert(PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
                             m_bRowSizeTypeInserted = true;
-                            insertRowProps(pRowPropMap);
                         }
                         m_bHasBtlrCell = true;
                         }
