@@ -6585,18 +6585,18 @@ static void impl_WriteTabElement( FSHelperPtr pSerializer,
     switch (rTab.GetAdjustment())
     {
     case SVX_TAB_ADJUST_RIGHT:
-        pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( (sal_Char *)"right") );
+        pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( "right" ) );
         break;
     case SVX_TAB_ADJUST_DECIMAL:
-        pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( (sal_Char *)"decimal") );
+        pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( "decimal" ) );
         break;
     case SVX_TAB_ADJUST_CENTER:
-        pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( (sal_Char *)"center") );
+        pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( "center" ) );
         break;
     case SVX_TAB_ADJUST_DEFAULT:
     case SVX_TAB_ADJUST_LEFT:
     default:
-        pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( (sal_Char *)"left") );
+        pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( "left" ) );
         break;
     }
 
@@ -6607,15 +6607,15 @@ static void impl_WriteTabElement( FSHelperPtr pSerializer,
     sal_Unicode cFillChar = rTab.GetFill();
 
     if ('.' == cFillChar )
-        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "dot" ) );
+        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( "dot" ) );
     else if ( '-' == cFillChar )
-        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "hyphen" ) );
+        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( "hyphen" ) );
     else if ( sal_Unicode(0xB7) == cFillChar ) // middle dot
-        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "middleDot" ) );
+        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( "middleDot" ) );
     else if ( '_' == cFillChar )
-        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "underscore" ) );
+        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( "underscore" ) );
     else
-        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "none" ) );
+        pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( "none" ) );
 
     pSerializer->singleElementNS( XML_w, XML_tab, pTabElementAttrList );
 }
