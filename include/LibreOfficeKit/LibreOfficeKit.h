@@ -83,6 +83,9 @@ struct _LibreOfficeKitDocumentClass
   void (*setPart)         (LibreOfficeKitDocument* pThis,
                            int nPart);
 
+  char* (*getPartName)    (LibreOfficeKitDocument* pThis,
+                           int nPart);
+
   // Get a pointer to a raw array, of size 3*nCanvasWidth*nCanvasHeight
   // Basebmp's bitmap device seems to round the width up if needed
   // for its internal buffer, i.e. the rowstride for the buffer may be larger
