@@ -151,6 +151,29 @@ void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
         lok_docview_set_part( LOK_DOCVIEW(pDocView), nPart );
     }
 }
+
+void populatePartModeSelector( GtkComboBoxText* pSelector )
+{
+    gtk_combo_box_text_append_text( pSelector, "Default" );
+    gtk_combo_box_text_append_text( pSelector, "Slide" );
+    gtk_combo_box_text_append_text( pSelector, "Notes" );
+    gtk_combo_box_text_append_text( pSelector, "Combined (SlideNotes)" );
+    gtk_combo_box_text_append_text( pSelector, "Embedded Objects" );
+    gtk_combo_box_set_active( GTK_COMBO_BOX(pSelector), 0 );
+}
+
+void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
+{
+    // Just convert directly back to the LibreOfficeKitPartMode enum.
+    // I.e. the ordering above should match the enum member ordering.
+    LibreOfficeKitPartMode ePartMode =
+        LibreOfficeKitPartMode( gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) ) );
+
+    if ( pDocView )
+    {
+        lok_docview_set_partmode( LOK_DOCVIEW(pDocView), ePartMode );
+    }
+}
 #endif
 
 int main( int argc, char* argv[] )
@@ -207,10 +230,19 @@ int main( int argc, char* argv[] )
     gtk_container_add( GTK_CONTAINER(pPartSelectorToolItem), pComboBox );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartSelectorToolItem, -1 );
     g_signal_connect( G_OBJECT(pComboBox), "changed", G_CALLBACK(changePart), NULL );
-#endif
 
     GtkToolItem* pSeparator2 = gtk_separator_tool_item_new();
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator2, -1);
+
+    GtkToolItem* pPartModeSelectorToolItem = gtk_tool_item_new();
+    GtkWidget* pPartModeComboBox = gtk_combo_box_text_new();
+    gtk_container_add( GTK_CONTAINER(pPartModeSelectorToolItem), pPartModeComboBox );
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartModeSelectorToolItem, -1 );
+    g_signal_connect( G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), NULL );
+#endif
+
+    GtkToolItem* pSeparator3 = gtk_separator_tool_item_new();
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator3, -1);
 
     GtkToolItem* pEnableQuadView = gtk_toggle_tool_button_new();
     gtk_tool_button_set_label( GTK_TOOL_BUTTON(pEnableQuadView), "Use Quad View" );
@@ -233,6 +265,7 @@ int main( int argc, char* argv[] )
     // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
     populatePartSelector( GTK_COMBO_BOX_TEXT(pComboBox), LOK_DOCVIEW(pDocView) );
+    populatePartModeSelector( GTK_COMBO_BOX_TEXT(pPartModeComboBox) );
 #endif
 
     gtk_main();
