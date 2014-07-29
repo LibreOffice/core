@@ -42,6 +42,41 @@ PrintMonitor::PrintMonitor(vcl::Window *pParent, PrintMonitorType eType )
     m_pPrinting->Show();
 }
 
+// Progress Indicator for Creation of personalized Mail Merge documents:
+CreateMonitor::CreateMonitor( vcl::Window *pParent )
+    : CancelableModelessDialog(pParent, "MMCreatingDialog",
+        "modules/swriter/ui/mmcreatingdialog.ui")
+    , m_sCountingPattern()
+    , m_sVariable_Total("%Y")
+    , m_sVariable_Position("%X")
+    , m_nTotalCount(0)
+    , m_nCurrentPosition(0)
+{
+    get(m_pCounting, "progress");
+    m_sCountingPattern = m_pCounting->GetText();
+    m_pCounting->SetText("...");
+}
+
+void CreateMonitor::UpdateCountingText()
+{
+    OUString sText(m_sCountingPattern);
+    sText = sText.replaceAll( m_sVariable_Total, OUString::number( m_nTotalCount ) );
+    sText = sText.replaceAll( m_sVariable_Position, OUString::number( m_nCurrentPosition ) );
+    m_pCounting->SetText(sText);
+}
+
+void CreateMonitor::SetTotalCount( sal_Int32 nTotal )
+{
+    m_nTotalCount = nTotal;
+    UpdateCountingText();
+}
+
+void CreateMonitor::SetCurrentPosition( sal_Int32 nCurrent )
+{
+    m_nCurrentPosition = nCurrent;
+    UpdateCountingText();
+}
+
 CancelableModelessDialog::CancelableModelessDialog( vcl::Window *pParent,
         const OString& rID, const OUString& rUIXMLDescription )
     : ModelessDialog( pParent , rID, rUIXMLDescription )
