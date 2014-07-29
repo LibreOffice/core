@@ -524,9 +524,10 @@ namespace drawinglayer
             bool bToBeChained = rTextObj.IsToBeChained();
             // for resetting status
             // XXX: may not work
+            // XXX: this should happen only whether the chaining has occurred though.
             if ( rTextObj.IsToBeChained() )
             {   // XXX: hack
-                const_cast<SdrTextObj*>(&rTextObj)->SetToBeChained( false );
+                //const_cast<SdrTextObj*>(&rTextObj)->SetToBeChained( false );
             }
 
             if(rText.GetOutlinerParaObject() && rText.GetModel())
