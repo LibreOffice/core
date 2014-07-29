@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_4cdb5f1c",
+        "filename": "basic/source/sbx/sbxarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-29T15:38:56Z",
+      "side": 1,
+      "message": "this omits a check on \"ub \u003c lb\" in AddDimImpl32 - but presumably it should be already checked back when it was originally inserted in rArray?",
+      "revId": "716c59d3cfe569d639e871bf746799e846e7ae8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_2cd82b1d",
+        "filename": "include/basic/sbx.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-29T15:38:56Z",
+      "side": 1,
+      "message": "at first glance the additional nSize looks like pointless duplication and potential for inconsistency - perhaps could be further improved by replacing it with a getSize() method?",
+      "revId": "716c59d3cfe569d639e871bf746799e846e7ae8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
