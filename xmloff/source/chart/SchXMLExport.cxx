@@ -3076,7 +3076,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
         {
             Any aAny;
 
-            aAny = xSeriesProp->getPropertyValue( bYError ? "ErrorBarY" : "ErrorBarX" );
+            aAny = xSeriesProp->getPropertyValue( bYError ? OUString("ErrorBarY") : OUString("ErrorBarX") );
             aAny >>= xErrorBarProp;
 
             if ( xErrorBarProp.is() )
