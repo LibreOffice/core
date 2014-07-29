@@ -266,7 +266,6 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <comphelper/attributelist.hxx>
 #include <comphelper/configuration.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>

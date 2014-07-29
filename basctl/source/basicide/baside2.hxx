@@ -55,7 +55,6 @@ class SvxSearchItem;
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/syntaxhighlight.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 
 namespace com { namespace sun { namespace star { namespace beans {

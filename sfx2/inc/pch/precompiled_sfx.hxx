@@ -469,7 +469,6 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/attributelist.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/documentconstants.hxx>
