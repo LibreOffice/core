@@ -73,13 +73,15 @@ public:
 
 static void SAL_CALL s_mapInterface(
     uno_Mapping                       * puno_Mapping,
-    uno_Interface                    ** ppOut,
-    uno_Interface                     * pUnoI,
+    void                             ** ppOut,
+    void                              * pUnoI,
     typelib_InterfaceTypeDescription  * pTypeDescr )
     SAL_THROW_EXTERN_C()
 {
     Mapping * pMapping = static_cast<Mapping *>(puno_Mapping);
-    pMapping->mapInterface(ppOut, pUnoI, pTypeDescr);
+    pMapping->mapInterface(
+        reinterpret_cast<uno_Interface **>(ppOut),
+        static_cast<uno_Interface *>(pUnoI), pTypeDescr);
 }
 
 extern "C" {
