@@ -24,22 +24,14 @@
 #include "dbu_dlg.hrc"
 #include "browserids.hxx"
 
-#define STR_DBASE_HELPTEXT                  28
-#define STR_MSACCESS_HELPTEXT               29
     // FREE
-#define STR_ADO_HELPTEXT                    32
 #define STR_JDBC_HELPTEXT                   33
-#define STR_ODBC_HELPTEXT                   34
 #define STR_MYSQLJDBC_HELPTEXT              35
 #define STR_SPREADSHEET_HELPTEXT            36
     // FREE
 #define STR_ORACLE_HELPTEXT                 40
-#define STR_DBASE_HEADERTEXT                41
-#define STR_MSACCESS_HEADERTEXT             42
     // FREE
-#define STR_ADO_HEADERTEXT                  45
 #define STR_JDBC_HEADERTEXT                 46
-#define STR_ODBC_HEADERTEXT                 47
 #define STR_MYSQLJDBC_HEADERTEXT            48
     // FREE
 #define STR_SPREADSHEET_HEADERTEXT          50

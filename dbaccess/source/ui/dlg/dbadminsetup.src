@@ -277,27 +277,15 @@ TabPage PAGE_DBWIZARD_MYSQL_NATIVE
     };
 };
 
-TabPage PAGE_DBWIZARD_DBASE
+String STR_DBASE_HEADERTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_DBASE";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
-
-    String STR_DBASE_HEADERTEXT
-    {
-        Text[ en-US ] = "Set up a connection to dBASE files" ;
-    };
-
-    String STR_DBASE_HELPTEXT
-    {
-        Text[ en-US ]  = "Select the folder where the dBASE files are stored." ;
-    };
-
-     AUTO_HELP_BROWSECONTROLGROUP( 3, HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION,HID_PAGE_DBWIZARD_DBASE_PB_DBASELOCATION)
+    Text[ en-US ] = "Set up a connection to dBASE files" ;
 };
 
+String STR_DBASE_HELPTEXT
+{
+    Text[ en-US ]  = "Select the folder where the dBASE files are stored." ;
+};
 
 String STR_TEXT_HEADERTEXT
 {
@@ -314,25 +302,14 @@ String STR_TEXT_PATH_OR_FILE
     Text[ en-US ]  = "Path to text files";
 };
 
-TabPage PAGE_DBWIZARD_MSACCESS
+String STR_MSACCESS_HEADERTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MSACCESS";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
+    Text[ en-US ] = "Set up a connection to a Microsoft Access database" ;
+};
 
-    String STR_MSACCESS_HEADERTEXT
-    {
-        Text[ en-US ] = "Set up a connection to a Microsoft Access database" ;
-    };
-
-    String STR_MSACCESS_HELPTEXT
-    {
-        Text[ en-US ] = "Please select the Microsoft Access file you want to access.";
-    };
-
-    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_MSACCESS_ET_MSACCESSLOCATION, HID_PAGE_DBWIZARD_MSACCESS_PB_MSACCESSLOCATION)
+String STR_MSACCESS_HELPTEXT
+{
+    Text[ en-US ] = "Please select the Microsoft Access file you want to access.";
 };
 
 TabPage PAGE_DBWIZARD_LDAP
@@ -375,55 +352,23 @@ TabPage PAGE_DBWIZARD_LDAP
     };
 };
 
-TabPage PAGE_DBWIZARD_ADO
+String STR_ADO_HEADERTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ADO";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
-
-    String STR_ADO_HEADERTEXT
-    {
-        Text[ en-US ] = "Set up a connection to an ADO database" ;
-    };
-
-    String STR_ADO_HELPTEXT{
-        Text[ en-US ] = "Please enter the URL of the ADO data source you want to connect to.\nClick 'Browse' to configure provider-specific settings.\nPlease contact your system administrator if you are unsure about the following settings." ;
-    };
-
-    AUTO_HELP_BROWSECONTROLGROUP(5, HID_PAGE_DBWIZARD_ADO_ET_ADOURL, HID_PAGE_DBWIZARD_ADO_PB_ADOURL)
+    Text[ en-US ] = "Set up a connection to an ADO database" ;
 };
 
-TabPage PAGE_DBWIZARD_ODBC
+String STR_ADO_HELPTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ODBC";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
-
-    String STR_ODBC_HEADERTEXT
-    {
-        Text[ en-US ] = "Set up a connection to an ODBC database" ;
-    };
-
-    String STR_ODBC_HELPTEXT{
-        Text[ en-US ] = "Enter the name of the ODBC database you want to connect to.\nClick 'Browse...' to select an ODBC database that is already registered in %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
-    };
-
-    AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_ODBC_ET_NAMEOFODBCDATASOURCE, HID_PAGE_DBWIZARD_ODBC_PB_NAMEOFODBCDATASOURCE)
+    Text[ en-US ] = "Please enter the URL of the ADO data source you want to connect to.\nClick 'Browse' to configure provider-specific settings.\nPlease contact your system administrator if you are unsure about the following settings." ;
 };
 
-TabPage PAGE_DBWIZARD_USERDEFINED
+String STR_ODBC_HEADERTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_USERDEFINED";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
+    Text[ en-US ] = "Set up a connection to an ODBC database" ;
+};
 
-    AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE, HID_PAGE_DBWIZARD_USERDEFINED_BROWSE)
+String STR_ODBC_HELPTEXT{
+    Text[ en-US ] = "Enter the name of the ODBC database you want to connect to.\nClick 'Browse...' to select an ODBC database that is already registered in %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
 };
 
 TabPage PAGE_DBWIZARD_JDBC
