@@ -46,4 +46,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 ))
 endif
 
+ifeq ($(OS)-$(COM),WNT-MSC)
+ifneq ($(filter 120,$(VCVER)),)
+$(eval $(call gb_UnpackedTarball_add_patches,python3,\
+	external/python3/python-vc2013.patch.1 \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
