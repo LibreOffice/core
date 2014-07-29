@@ -4871,7 +4871,7 @@ bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTA
     else
         pDoc->SetRangeName( pNewRanges );       // takes ownership
     if ( bCompile )
-        pDoc->PostprocessRangeNameUpdate();
+        pDoc->CompileHybridFormula();
 
     if (bModifyDoc)
     {
@@ -4897,7 +4897,7 @@ void ScDocFunc::ModifyAllRangeNames( const boost::ptr_map<OUString, ScRangeName>
 
     pDoc->PreprocessRangeNameUpdate();
     pDoc->SetAllRangeNames(rRangeMap);
-    pDoc->PostprocessRangeNameUpdate();
+    pDoc->CompileHybridFormula();
 
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
