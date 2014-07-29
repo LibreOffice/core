@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -122,10 +123,17 @@ void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
 void populatePartSelector( GtkComboBoxText* pSelector, LOKDocView* pView )
 {
-    char sText[10];
-    for ( int i = 0; i < lok_docview_get_parts(pView); i++ )
+    const int nMaxLength = 50;
+    char sText[nMaxLength];
+
+    int nParts = lok_docview_get_parts(pView);
+    for ( int i = 0; i < nParts; i++ )
     {
-        sprintf( sText, "%i", i+1 );
+        char* pName = lok_docview_get_part_name( pView, i );
+        assert( pName );
+        snprintf( sText, nMaxLength, "%i (%s)", i+1, pName );
+        free( pName );
+
         gtk_combo_box_text_append_text( pSelector, sText );
     }
     gtk_combo_box_set_active( GTK_COMBO_BOX(pSelector), 0 );
@@ -219,8 +227,10 @@ int main( int argc, char* argv[] )
     gtk_widget_show_all( pWindow );
 
     pFileName = argv[2];
-    lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
-// GtkComboBox requires gtk 2.24 or later
+    assert( lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] ) );
+    assert( LOK_DOCVIEW(pDocView)->pDocument );
+
+    // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
     populatePartSelector( GTK_COMBO_BOX_TEXT(pComboBox), LOK_DOCVIEW(pDocView) );
 #endif
