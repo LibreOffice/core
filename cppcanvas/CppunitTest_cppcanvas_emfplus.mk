@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppcanvas_emfplus, \
 $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_emfplus, \
 	comphelper \
 	cppu \
+	cppuhelper \
 	sal \
 	sfx \
 	test \
