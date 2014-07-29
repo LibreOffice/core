@@ -22,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/werror-undef.patch.0 \
 	$(if $(filter MSC,$(COM)),external/coinmp/windows.build.patch.1) \
 	$(if $(filter MACOSX,$(OS)),external/coinmp/macosx.build.patch.1) \
+	$(if $(filter MSC,$(COM)),$(if $(filter 120,$(VCVER)),external/coinmp/coinmp-vs2013.patch.1)) \
 ))
 
 # vim: set noet sw=4 ts=4:
