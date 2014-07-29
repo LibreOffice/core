@@ -136,11 +136,6 @@ def preprocess(model):
                 localname = j.getAttribute("name")
 
             # set the attributes
-            enumname = ""
-            if len(prefix):
-                enumname += prefix + ":"
-            j.setAttribute("enumname", enumname + localname)
-
             qname = ""
             if len(ns):
                 qname += ns + ":"
