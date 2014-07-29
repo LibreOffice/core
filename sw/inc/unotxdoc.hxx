@@ -439,9 +439,6 @@ public:
                             long nTileWidth,
                             long nTileHeight ) SAL_OVERRIDE;
     virtual Size getDocumentSize() SAL_OVERRIDE;
-    virtual void setPart(   int nPart ) SAL_OVERRIDE;
-    virtual int  getPart() SAL_OVERRIDE;
-    virtual int  getParts() SAL_OVERRIDE;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);

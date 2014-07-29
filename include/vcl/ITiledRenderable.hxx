@@ -47,18 +47,27 @@ public:
      * Set the document "part", i.e. slide for a slideshow, and
      * tab for a spreadsheet.
      */
-    virtual void setPart( int nPart ) = 0;
+    virtual void setPart( int nPart )
+    {
+        (void) nPart;
+    }
 
     /**
      * Get the number of parts -- see setPart for further details.
      */
-    virtual int getParts() = 0;
+    virtual int getParts()
+    {
+        return 1;
+    }
 
     /**
      * Get the currently displayed/selected part -- see setPart for further
      * details.
      */
-    virtual int getPart() = 0;
+    virtual int getPart()
+    {
+        return 0;
+    }
 
     /**
      * Get the name of the currently displayed part, i.e. sheet in a spreadsheet
