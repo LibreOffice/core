@@ -100,7 +100,7 @@ namespace svgio
             }
         }
 
-        const SvgStyleAttributes* SvgDocument::findSvgStyleAttributesById(const rtl::OUString& rStr) const
+        const SvgStyleAttributes* SvgDocument::findGlobalCssStyleAttributes(const rtl::OUString& rStr) const
         {
             const IdStyleTokenMapper::const_iterator aResult(maIdStyleTokenMapperList.find(rStr));
 

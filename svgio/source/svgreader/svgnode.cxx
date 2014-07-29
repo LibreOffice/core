@@ -47,6 +47,132 @@ namespace svgio
             return 0;
         }
 
+        void SvgNode::fillCssStyleVectorUsingHierarchyAndSelectors(
+            const rtl::OUString& rClassStr,
+            const SvgNode& rCurrent,
+            rtl::OUString aConcatenated)
+        {
+            const SvgDocument& rDocument = getDocument();
+
+            if(rDocument.hasGlobalCssStyleAttributes())
+            {
+                const SvgNode* pParent = rCurrent.getParent();
+
+                // check for ID (highest priority)
+                if(rCurrent.getId())
+                {
+                    const rtl::OUString& rId = *rCurrent.getId();
+
+                    if(rId.getLength())
+                    {
+                        const rtl::OUString aNewConcatenated(
+                            rtl::OUString::createFromAscii("#") +
+                            rId +
+                            aConcatenated);
+
+                        if(pParent)
+                        {
+                            // check for combined selectors at parent firstso that higher specificity will be in front
+                            fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
+                        }
+
+                        const SvgStyleAttributes* pNew = rDocument.findGlobalCssStyleAttributes(aNewConcatenated);
+
+                        if(pNew)
+                        {
+                            // add CssStyle if found
+                            maCssStyleVector.push_back(pNew);
+                        }
+                    }
+                }
+
+                // check for 'class' references (a list of entries is allowed)
+                if(rCurrent.getClass())
+                {
+                    const rtl::OUString& rClassList = *rCurrent.getClass();
+                    const sal_Int32 nLen(rClassList.getLength());
+
+                    if(nLen)
+                    {
+                        std::vector< rtl::OUString > aParts;
+                        sal_Int32 nPos(0);
+                        rtl::OUStringBuffer aToken;
+
+                        while(nPos < nLen)
+                        {
+                            const sal_Int32 nInitPos(nPos);
+                            copyToLimiter(rClassList, sal_Unicode(' '), nPos, aToken, nLen);
+                            skip_char(rClassList, sal_Unicode(' '), nPos, nLen);
+                            const rtl::OUString aPart(aToken.makeStringAndClear().trim());
+
+                            if(aPart.getLength())
+                            {
+                                aParts.push_back(aPart);
+                            }
+
+                            if(nInitPos == nPos)
+                            {
+                                OSL_ENSURE(false, "Could not interpret on current position (!)");
+                                nPos++;
+                            }
+                        }
+
+                        for(sal_uInt32 a(0); a < aParts.size(); a++)
+                        {
+                            const rtl::OUString aNewConcatenated(
+                                rtl::OUString::createFromAscii(".") +
+                                aParts[a] +
+                                aConcatenated);
+
+                            if(pParent)
+                            {
+                                // check for combined selectors at parent firstso that higher specificity will be in front
+                                fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
+                            }
+
+                            const SvgStyleAttributes* pNew = rDocument.findGlobalCssStyleAttributes(aNewConcatenated);
+
+                            if(pNew)
+                            {
+                                // add CssStyle if found
+                                maCssStyleVector.push_back(pNew);
+                            }
+                        }
+                    }
+                }
+
+                // check for class-dependent references to CssStyles
+                if(rClassStr.getLength())
+                {
+                    rtl::OUString aNewConcatenated(aConcatenated);
+
+                    if(!rCurrent.getId() && !rCurrent.getClass() && 0 == aConcatenated.indexOf(rClassStr))
+                    {
+                        // no new CssStyle Selector and already starts with rClassStr, do not concatenate;
+                        // we pass an 'empty' node (in the sense of CssStyle Selector)
+                    }
+                    else
+                    {
+                        aNewConcatenated = rClassStr + aConcatenated;
+                    }
+
+                    if(pParent)
+                    {
+                        // check for combined selectors at parent firstso that higher specificity will be in front
+                        fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *pParent, aNewConcatenated);
+                    }
+
+                    const SvgStyleAttributes* pNew = rDocument.findGlobalCssStyleAttributes(aNewConcatenated);
+
+                    if(pNew)
+                    {
+                        // add CssStyle if found
+                        maCssStyleVector.push_back(pNew);
+                    }
+                }
+            }
+        }
+
         void SvgNode::fillCssStyleVector(const rtl::OUString& rClassStr)
         {
             OSL_ENSURE(!mbCssStyleVectorBuilt, "OOps, fillCssStyleVector called double ?!?");
@@ -73,92 +199,8 @@ namespace svgio
                 maCssStyleVector.push_back(mpLocalCssStyle);
             }
 
-            const SvgDocument& rDocument = getDocument();
-
-            if(rDocument.hasSvgStyleAttributesById())
-            {
-                // check for 'id' references
-                if(getId())
-                {
-                    // concatenate combined style name during search for CSS style equal to Id
-                    // when travelling over node parents
-                    rtl::OUString aConcatenatedStyleName;
-                    const SvgNode* pCurrent = this;
-                    const SvgStyleAttributes* pNew = 0;
-
-                    while(!pNew && pCurrent)
-                    {
-                        if(pCurrent->getId())
-                        {
-                            aConcatenatedStyleName = *pCurrent->getId() + aConcatenatedStyleName;
-                        }
-
-                        if(aConcatenatedStyleName.getLength())
-                        {
-                            pNew = rDocument.findSvgStyleAttributesById(aConcatenatedStyleName);
-                        }
-
-                        pCurrent = pCurrent->getParent();
-                    }
-
-                    if(pNew)
-                    {
-                        maCssStyleVector.push_back(pNew);
-                    }
-                }
-
-                // check for 'class' references
-                if(getClass())
-                {
-                    // find all referenced CSS styles (a list of entries is allowed)
-                    const rtl::OUString* pClassList = getClass();
-                    const sal_Int32 nLen(pClassList->getLength());
-                    sal_Int32 nPos(0);
-                    const SvgStyleAttributes* pNew = 0;
-
-                    skip_char(*pClassList, sal_Unicode(' '), nPos, nLen);
-
-                    while(nPos < nLen)
-                    {
-                        rtl::OUStringBuffer aTokenValue;
-
-                        copyToLimiter(*pClassList, sal_Unicode(' '), nPos, aTokenValue, nLen);
-                        skip_char(*pClassList, sal_Unicode(' '), nPos, nLen);
-
-                        rtl::OUString aId(rtl::OUString::createFromAscii("."));
-                        const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
-
-                        // look for CSS style common to token
-                        aId = aId + aOUTokenValue;
-                        pNew = rDocument.findSvgStyleAttributesById(aId);
-
-                        if(!pNew && rClassStr.getLength())
-                        {
-                            // look for CSS style common to class.token
-                            aId = rClassStr + aId;
-
-                            pNew = rDocument.findSvgStyleAttributesById(aId);
-                        }
-
-                        if(pNew)
-                        {
-                            maCssStyleVector.push_back(pNew);
-                        }
-                    }
-                }
-
-                // check for class-dependent references to CssStyles
-                if(rClassStr.getLength())
-                {
-                    // search for CSS style equal to class type
-                    const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(rClassStr);
-
-                    if(pNew)
-                    {
-                        maCssStyleVector.push_back(pNew);
-                    }
-                }
-            }
+            // check the hierarchy for concatenated patterns of Selectors
+            fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *this, rtl::OUString());
         }
 
         const SvgStyleAttributes* SvgNode::checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const

@@ -51,7 +51,11 @@ namespace svgio
             virtual bool supportsParentStyle() const;
 
             virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
-            void addCssStyleSheet(const rtl::OUString& aContent);
+
+            /// CssStyleSheet add helpers
+            void addCssStyleSheet(const rtl::OUString& aSelectors, const SvgStyleAttributes& rNewStyle);
+            void addCssStyleSheet(const rtl::OUString& aSelectors, const rtl::OUString& aContent);
+            void addCssStyleSheet(const rtl::OUString& aSelectorsAndContent);
 
             /// textCss access
             bool isTextCss() const { return mbTextCss; }

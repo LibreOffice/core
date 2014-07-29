@@ -71,8 +71,8 @@ namespace svgio
             void removeSvgStyleAttributesFromMapper(const rtl::OUString& rStr);
 
             /// find a style by it's Id
-            bool hasSvgStyleAttributesById() const { return !maIdStyleTokenMapperList.empty(); }
-            const SvgStyleAttributes* findSvgStyleAttributesById(const rtl::OUString& rStr) const;
+            bool hasGlobalCssStyleAttributes() const { return !maIdStyleTokenMapperList.empty(); }
+            const SvgStyleAttributes* findGlobalCssStyleAttributes(const rtl::OUString& rStr) const;
 
             /// data read access
             const SvgNodeVector& getSvgNodeVector() const { return maNodes; }

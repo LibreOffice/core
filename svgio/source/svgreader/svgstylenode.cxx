@@ -90,74 +90,140 @@ namespace svgio
             }
         }
 
-        void SvgStyleNode::addCssStyleSheet(const rtl::OUString& aContent)
+        void SvgStyleNode::addCssStyleSheet(const rtl::OUString& aSelectors, const SvgStyleAttributes& rNewStyle)
         {
-            const sal_Int32 nLen(aContent.getLength());
+            // aSelectors: CssStyle selectors, any combination, no comma separations, no spaces at start/end
+            // rNewStyle: the already preapared style to register on that name
+            if(aSelectors.getLength())
+            {
+                std::vector< rtl::OUString > aSelectorParts;
+                const sal_Int32 nLen(aSelectors.getLength());
+                sal_Int32 nPos(0);
+                rtl::OUStringBuffer aToken;
+
+                // split into single tokens (currently only space separator)
+                while(nPos < nLen)
+                {
+                    const sal_Int32 nInitPos(nPos);
+                    copyToLimiter(aSelectors, sal_Unicode(' '), nPos, aToken, nLen);
+                    skip_char(aSelectors, sal_Unicode(' '), nPos, nLen);
+                    const rtl::OUString aSelectorPart(aToken.makeStringAndClear().trim());
+
+                    if(aSelectorPart.getLength())
+                    {
+                        aSelectorParts.push_back(aSelectorPart);
+                    }
+
+                    if(nInitPos == nPos)
+                    {
+                        OSL_ENSURE(false, "Could not interpret on current position (!)");
+                        nPos++;
+                    }
+                }
+
+                if(aSelectorParts.size())
+                {
+                    rtl::OUString aConcatenatedSelector;
+
+                    // re-combine without spaces, create a unique name (for now)
+                    for(sal_uInt32 a(0); a < aSelectorParts.size(); a++)
+                    {
+                        aConcatenatedSelector += aSelectorParts[a];
+                    }
+
+                    // CssStyles in SVG are currently not completely supported; the current idea for
+                    // supporting the needed minimal set is to register CssStyles associated to a string
+                    // which is just the space-char cleaned, concatenated Selectors. The part to 'match'
+                    // these is in fillCssStyleVectorUsingHierarchyAndSelectors. There, the same string is
+                    // built up using the priorities of local CssStyle, Id, Class and other info combined
+                    // with the existing hierarchy. This creates a specificity- and priority-sorted local
+                    // list for each node which is then chained using get/setCssStyleParent.
+                    // The current solution is capable of solving space-separated selectors which can be
+                    // mixed between Id, Class and type specifiers.
+                    // When CssStyles need more specific solving, the start point is here; remember the
+                    // needed infos not in maIdStyleTokenMapperList at the document, but select evtl.
+                    // more specific infos there in a class capable of handling more complex matchings.
+                    // Additionally fillCssStyleVector (or the mechanism above that when a linked list of
+                    // SvgStyleAttributes will not do it) will have to be adapted to make use of it.
+
+                    // register new style at document for (evtl. concatenated) stylename
+                    const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aConcatenatedSelector, rNewStyle);
+                }
+            }
+        }
+
+        void SvgStyleNode::addCssStyleSheet(const rtl::OUString& aSelectors, const rtl::OUString& aContent)
+        {
+            // aSelectors: possible comma-separated list of CssStyle definitions, no spaces at start/end
+            // aContent: the svg style definitions as string
+            if(aSelectors.getLength() && aContent.getLength())
+            {
+                // create new style and add to local list (for ownership control)
+                SvgStyleAttributes* pNewStyle = new SvgStyleAttributes(*this);
+                maSvgStyleAttributes.push_back(pNewStyle);
+
+                // fill with content
+                pNewStyle->readStyle(aContent);
+
+                // comma-separated split (Css abbreviation for same style for multiple selectors)
+                const sal_Int32 nLen(aSelectors.getLength());
+                sal_Int32 nPos(0);
+                rtl::OUStringBuffer aToken;
+
+                while(nPos < nLen)
+                {
+                    const sal_Int32 nInitPos(nPos);
+                    copyToLimiter(aSelectors, sal_Unicode(','), nPos, aToken, nLen);
+                    skip_char(aSelectors, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+
+                    const rtl::OUString aSingleName(aToken.makeStringAndClear().trim());
+
+                    if(aSingleName.getLength())
+                    {
+                        addCssStyleSheet(aSingleName, *pNewStyle);
+                    }
+
+                    if(nInitPos == nPos)
+                    {
+                        OSL_ENSURE(false, "Could not interpret on current position (!)");
+                        nPos++;
+                    }
+                }
+            }
+        }
+
+        void SvgStyleNode::addCssStyleSheet(const rtl::OUString& aSelectorsAndContent)
+        {
+            const sal_Int32 nLen(aSelectorsAndContent.getLength());
 
             if(nLen)
             {
                 sal_Int32 nPos(0);
-                rtl::OUStringBuffer aTokenValue;
+                rtl::OUStringBuffer aToken;
 
                 while(nPos < nLen)
                 {
-                    // read the full style node names (may be multiple) and put to aStyleName
+                    // read the full selectors (may be multiple, comma-separated)
                     const sal_Int32 nInitPos(nPos);
-                    skip_char(aContent, sal_Unicode(' '), nPos, nLen);
-                    copyToLimiter(aContent, sal_Unicode('{'), nPos, aTokenValue, nLen);
-                    skip_char(aContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
+                    skip_char(aSelectorsAndContent, sal_Unicode(' '), nPos, nLen);
+                    copyToLimiter(aSelectorsAndContent, sal_Unicode('{'), nPos, aToken, nLen);
+                    skip_char(aSelectorsAndContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
 
-                    const rtl::OUString aStyleName(aTokenValue.makeStringAndClear().trim());
-                    const sal_Int32 nLen2(aStyleName.getLength());
-                    std::vector< rtl::OUString > aStyleNames;
+                    const rtl::OUString aSelectors(aToken.makeStringAndClear().trim());
+                    rtl::OUString aContent;
 
-                    if(nLen2)
+                    if(aSelectors.getLength() && nPos < nLen)
                     {
-                        // extract names
-                        sal_Int32 nPos2(0);
-                        rtl::OUStringBuffer aSingleName;
+                        // isolate content as text, embraced by '{' and '}'
+                        copyToLimiter(aSelectorsAndContent, sal_Unicode('}'), nPos, aToken, nLen);
+                        skip_char(aSelectorsAndContent, sal_Unicode(' '), sal_Unicode('}'), nPos, nLen);
 
-                        while(nPos2 < nLen2)
-                        {
-                            skip_char(aStyleName, sal_Unicode('#'), nPos2, nLen2);
-                            copyToLimiter(aStyleName, sal_Unicode(' '), nPos2, aSingleName, nLen2);
-                            skip_char(aStyleName, sal_Unicode(' '), nPos2, nLen2);
-
-                            const rtl::OUString aOUSingleName(aSingleName.makeStringAndClear().trim());
-
-                            if(aOUSingleName.getLength())
-                            {
-                                aStyleNames.push_back(aOUSingleName);
-                            }
-                        }
+                        aContent = aToken.makeStringAndClear().trim();
                     }
 
-                    if(aStyleNames.size() && nPos < nLen)
+                    if(aSelectors.getLength() && aContent.getLength())
                     {
-                        copyToLimiter(aContent, sal_Unicode('}'), nPos, aTokenValue, nLen);
-                        skip_char(aContent, sal_Unicode(' '), sal_Unicode('}'), nPos, nLen);
-                        const rtl::OUString aStyleContent(aTokenValue.makeStringAndClear().trim());
-
-                        if(aStyleContent.getLength())
-                        {
-                            // create new style
-                            SvgStyleAttributes* pNewStyle = new SvgStyleAttributes(*this);
-                            maSvgStyleAttributes.push_back(pNewStyle);
-
-                            // fill with content
-                            pNewStyle->readStyle(aStyleContent);
-
-                            // concatenate combined style name
-                            rtl::OUString aConcatenatedStyleName;
-
-                            for(sal_uInt32 a(0); a < aStyleNames.size(); a++)
-                            {
-                                aConcatenatedStyleName += aStyleNames[a];
-                            }
-
-                            // register new style at document for (evtl. concatenated) stylename
-                            const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aConcatenatedStyleName, *pNewStyle);
-                        }
+                        addCssStyleSheet(aSelectors, aContent);
                     }
 
                     if(nInitPos == nPos)
