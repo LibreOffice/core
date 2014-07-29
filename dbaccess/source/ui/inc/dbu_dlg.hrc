@@ -125,6 +125,18 @@
 #define STR_PAGETITLE_MYSQL_NATIVE          RID_STR_DLG_START + 81
 #define STR_PAGETITLE_FINAL                 RID_STR_DLG_START + 82
 
+#define STR_DBASE_HEADERTEXT                RID_STR_DLG_START + 484
+#define STR_DBASE_HELPTEXT                  RID_STR_DLG_START + 485
+
+#define STR_MSACCESS_HEADERTEXT             RID_STR_DLG_START + 486
+#define STR_MSACCESS_HELPTEXT               RID_STR_DLG_START + 487
+
+#define STR_ADO_HEADERTEXT                  RID_STR_DLG_START + 488
+#define STR_ADO_HELPTEXT                    RID_STR_DLG_START + 489
+
+#define STR_ODBC_HEADERTEXT                 RID_STR_DLG_START + 490
+#define STR_ODBC_HELPTEXT                   RID_STR_DLG_START + 491
+
 // please adjust checking before insert new strings
 
 #define LAST_STR_HERE                       RID_STR_DLG_START + 83
