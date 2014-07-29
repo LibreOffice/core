@@ -249,6 +249,7 @@ void RevisionHeadersFragment::finalizeImport()
 {
     ScDocument& rDoc = getScDocument();
     o3tl::heap_ptr<ScChangeTrack> pCT(new ScChangeTrack(&rDoc));
+    OUString aSelfUser = pCT->GetUser(); // owner of this document.
     pCT->SetUseFixDateTime(true);
 
     const oox::core::Relations& rRels = getRelations();
@@ -268,6 +269,7 @@ void RevisionHeadersFragment::finalizeImport()
         importOoxFragment(xFragment, *xParser);
     }
 
+    pCT->SetUser(aSelfUser); // set the default user to the document owner.
     rDoc.SetChangeTrack(pCT.release());
 
     // Turn on visibility of tracked changes.
