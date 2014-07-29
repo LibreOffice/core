@@ -76,7 +76,7 @@ struct _LibreOfficeKitDocumentClass
   LibreOfficeKitDocumentType (*getDocumentType) (LibreOfficeKitDocument* pThis);
 
   // Part refers to either indivual sheets in a Spreadsheet, or slides
-  // in a Slideshow, and has no relevance for wrtier documents.
+  // in a Slideshow, and has no relevance for writer documents.
   int (*getParts) (LibreOfficeKitDocument* pThis);
 
   int (*getPart)          (LibreOfficeKitDocument* pThis);
