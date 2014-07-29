@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkBox" id="ConnectionPage">
+  <object class="GtkBox" id="AuthentificationPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
@@ -16,6 +15,7 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="margin_bottom">12</property>
+        <property name="label" translatable="yes">Set up the user authentication</property>
         <attributes>
           <attribute name="weight" value="semibold"/>
         </attributes>
@@ -32,7 +32,7 @@
         <property name="can_focus">False</property>
         <property name="margin_bottom">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">label</property>
+        <property name="label" translatable="yes">Some databases require you to enter a user name.</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">60</property>
       </object>
@@ -46,14 +46,20 @@
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="row_spacing">2</property>
         <property name="column_spacing">6</property>
         <child>
-          <object class="GtkLabel" id="browseurllabel">
+          <placeholder/>
+        </child>
+        <child>
+          <object class="GtkLabel" id="generalUserNameLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Path to the dBASE files</property>
+            <property name="label" translatable="yes">_User name</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">generalUserNameEntry</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -63,29 +69,10 @@
           </packing>
         </child>
         <child>
-          <object class="dbulo-ConnectionURLEdit" id="browseurl">
+          <object class="GtkEntry" id="generalUserNameEntry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
-            <property name="invisible_char">•</property>
-            <property name="invisible_char_set">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="create">
-            <property name="label" translatable="yes">_Create New</property>
-            <property name="use_action_appearance">False</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
-            <property name="use_underline">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -95,14 +82,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="browse">
-            <property name="label" translatable="yes">_Browse</property>
+          <object class="GtkCheckButton" id="passRequiredCheckbutton">
+            <property name="label" translatable="yes">Password re_quired</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
+            <property name="receives_default">False</property>
             <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -116,6 +104,24 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="testConnectionButton">
+        <property name="label" translatable="yes">_Test Connection</property>
+        <property name="use_action_appearance">False</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="can_default">True</property>
+        <property name="has_default">True</property>
+        <property name="receives_default">True</property>
+        <property name="halign">end</property>
+        <property name="use_underline">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
       </packing>
     </child>
   </object>

@@ -13,6 +13,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/admindialog \
     dbaccess/uiconfig/ui/advancedsettingsdialog \
     dbaccess/uiconfig/ui/applycolpage \
+    dbaccess/uiconfig/ui/authentificationpage \
     dbaccess/uiconfig/ui/backuppage \
     dbaccess/uiconfig/ui/choosedatasourcedialog \
     dbaccess/uiconfig/ui/collectionviewdialog \
@@ -33,6 +34,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/indexdesigndialog \
     dbaccess/uiconfig/ui/jdbcconnectionpage \
     dbaccess/uiconfig/ui/joindialog \
+    dbaccess/uiconfig/ui/ldapconnectionpage \
     dbaccess/uiconfig/ui/migratepage \
     dbaccess/uiconfig/ui/password \
     dbaccess/uiconfig/ui/preparepage \

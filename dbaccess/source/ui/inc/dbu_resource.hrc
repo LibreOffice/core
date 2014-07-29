@@ -115,9 +115,6 @@
 #define PAGE_TABLESUBSCRIPTION          RID_PAGE_START + 28
 
     // FREE
-#define PAGE_DBWIZARD_LDAP                      RID_PAGE_START + 44
-    // FREE
-#define PAGE_DBWIZARD_AUTHENTIFICATION          RID_PAGE_START + 53
 #define PAGE_DBWIZARD_MYSQL_NATIVE              RID_PAGE_START + 57
 
 // error boxes
