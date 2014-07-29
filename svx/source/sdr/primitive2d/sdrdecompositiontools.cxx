@@ -309,13 +309,17 @@ namespace drawinglayer
                     // isotrophically scaled text in range
                     pNew = new SdrAutoFitTextPrimitive2D(&rText.getSdrText(), rText.getOutlinerParaObject(), aAnchorTransform, bWordWrap);
                 }
+                else if( rText.isToBeChained() ) // FIXME(matteocam)
+                {
+                    //bool b = true; // XXX: Chained Text by default!
+                    //if (b)
+                    pNew = new SdrChainedTextPrimitive2D(
+                                    &rText.getSdrText(),
+                                    rText.getOutlinerParaObject() );
+                    //else // end FIXME
+                }
                 else // text in range
                 {
-                    // FIXME(matteocam)
-                    bool b = true; // XXX: Chained Text by default!
-                    if (b)
-                        pNew = new SdrChainedTextPrimitive2D( &rText.getSdrText(), rText.getOutlinerParaObject() );
-                    else // end FIXME
                     // build new primitive
                     pNew = new SdrBlockTextPrimitive2D(
                         &rText.getSdrText(),
