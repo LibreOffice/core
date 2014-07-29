@@ -40,6 +40,16 @@ typedef enum
   LOK_DOCTYPE_OTHER
 }
 LibreOfficeKitDocumentType;
+
+typedef enum
+{
+    LOK_PARTMODE_DEFAULT,
+    LOK_PARTMODE_SLIDE,
+    LOK_PARTMODE_NOTES,
+    LOK_PARTMODE_SLIDENOTES,
+    LOK_PARTMODE_EMBEDDEDOBJ
+}
+LibreOfficeKitPartMode;
 #endif // LOK_USE_UNSTABLE_API
 
 struct _LibreOfficeKit
@@ -85,6 +95,9 @@ struct _LibreOfficeKitDocumentClass
 
   char* (*getPartName)    (LibreOfficeKitDocument* pThis,
                            int nPart);
+
+  void (*setPartMode)     (LibreOfficeKitDocument* pThis,
+                           LibreOfficeKitPartMode eMode);
 
   // Get a pointer to a raw array, of size 3*nCanvasWidth*nCanvasHeight
   // Basebmp's bitmap device seems to round the width up if needed

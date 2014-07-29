@@ -185,6 +185,7 @@ static int doc_getParts(LibreOfficeKitDocument* pThis);
 static int doc_getPart(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart);
+static void doc_setPartMode(LibreOfficeKitDocument* pThis, LibreOfficeKitPartMode ePartMode);
 void        doc_paintTile(LibreOfficeKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
@@ -216,6 +217,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
             m_pDocumentClass->getPart = doc_getPart;
             m_pDocumentClass->setPart = doc_setPart;
             m_pDocumentClass->getPartName = doc_getPartName;
+            m_pDocumentClass->setPartMode = doc_setPartMode;
             m_pDocumentClass->paintTile = doc_paintTile;
             m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
 
@@ -488,6 +490,21 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
     strcpy(pMemory, aString.getStr());
     return pMemory;
 
+}
+
+static void doc_setPartMode(LibreOfficeKitDocument* pThis,
+                            LibreOfficeKitPartMode ePartMode)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    ::vcl::ITiledRenderable* pDoc = dynamic_cast< ::vcl::ITiledRenderable* >( pDocument->mxComponent.get() );
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    pDoc->setPartMode(ePartMode);
 }
 
 void doc_paintTile (LibreOfficeKitDocument* pThis,

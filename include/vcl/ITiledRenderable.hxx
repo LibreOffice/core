@@ -11,6 +11,8 @@
 #ifndef INCLUDED_VCL_ITILEDRENDERABLE_HXX
 #define INCLUDED_VCL_ITILEDRENDERABLE_HXX
 
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKit.h>
 #include <tools/gen.hxx>
 #include <vcl/virdev.hxx>
 
@@ -66,6 +68,11 @@ public:
     {
         (void) nPart;
         return "";
+    }
+
+    virtual void setPartMode(LibreOfficeKitPartMode ePartMode)
+    {
+        (void) ePartMode;
     }
 };
 
