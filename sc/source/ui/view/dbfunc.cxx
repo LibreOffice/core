@@ -224,9 +224,9 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
 
     //  register target in SBA no longer necessary
 
-    pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
+    pDoc->PreprocessDBDataUpdate();
     pDoc->SetDBCollection( new ScDBCollection( rNewColl ) );
-    pDoc->CompileDBFormula( false );    // CompileFormulaString
+    pDoc->CompileHybridFormula();
     pOldColl = NULL;
     pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
     aModificator.SetDocumentModified();

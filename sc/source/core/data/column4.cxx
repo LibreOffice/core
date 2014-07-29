@@ -135,15 +135,19 @@ void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const Sc
 
 namespace {
 
-class PreRangeNameUpdateHandler
+class RecompileByOpcodeHandler
 {
     ScDocument* mpDoc;
+    const boost::unordered_set<OpCode>& mrOps;
     sc::EndListeningContext& mrEndListenCxt;
     sc::CompileFormulaContext& mrCompileFormulaCxt;
 
 public:
-    PreRangeNameUpdateHandler( ScDocument* pDoc, sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt ) :
+    RecompileByOpcodeHandler(
+        ScDocument* pDoc, const boost::unordered_set<OpCode>& rOps,
+        sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt ) :
         mpDoc(pDoc),
+        mrOps(rOps),
         mrEndListenCxt(rEndListenCxt),
         mrCompileFormulaCxt(rCompileCxt) {}
 
@@ -163,12 +167,7 @@ public:
             pTop = rEntry.mpCell;
 
         ScTokenArray* pCode = pTop->GetCode();
-
-        boost::unordered_set<OpCode> aOps;
-        aOps.insert(ocBad);
-        aOps.insert(ocColRowName);
-        aOps.insert(ocName);
-        bool bRecompile = pCode->HasOpCodes(aOps);
+        bool bRecompile = pCode->HasOpCodes(mrOps);
 
         if (bRecompile)
         {
@@ -204,14 +203,14 @@ public:
     }
 };
 
-class PostRangeNameUpdateHandler
+class CompileHybridFormulaHandler
 {
     ScDocument* mpDoc;
     sc::StartListeningContext& mrStartListenCxt;
     sc::CompileFormulaContext& mrCompileFormulaCxt;
 
 public:
-    PostRangeNameUpdateHandler( ScDocument* pDoc, sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt ) :
+    CompileHybridFormulaHandler( ScDocument* pDoc, sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt ) :
         mpDoc(pDoc),
         mrStartListenCxt(rStartListenCxt),
         mrCompileFormulaCxt(rCompileCxt) {}
@@ -277,17 +276,35 @@ void ScColumn::PreprocessRangeNameUpdate(
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    PreRangeNameUpdateHandler aFunc(pDocument, rEndListenCxt, rCompileCxt);
+    boost::unordered_set<OpCode> aOps;
+    aOps.insert(ocBad);
+    aOps.insert(ocColRowName);
+    aOps.insert(ocName);
+    RecompileByOpcodeHandler aFunc(pDocument, aOps, rEndListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 
-void ScColumn::PostprocessRangeNameUpdate(
+void ScColumn::PreprocessDBDataUpdate(
+    sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt )
+{
+    // Collect all formula groups.
+    std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
+
+    boost::unordered_set<OpCode> aOps;
+    aOps.insert(ocBad);
+    aOps.insert(ocColRowName);
+    aOps.insert(ocDBArea);
+    RecompileByOpcodeHandler aFunc(pDocument, aOps, rEndListenCxt, rCompileCxt);
+    std::for_each(aGroups.begin(), aGroups.end(), aFunc);
+}
+
+void ScColumn::CompileHybridFormula(
     sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    PostRangeNameUpdateHandler aFunc(pDocument, rStartListenCxt, rCompileCxt);
+    CompileHybridFormulaHandler aFunc(pDocument, rStartListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 
