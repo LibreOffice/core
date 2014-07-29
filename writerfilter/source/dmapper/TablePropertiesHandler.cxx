@@ -97,11 +97,14 @@ namespace dmapper {
 
                     DomainMapperTableManager* pManager = dynamic_cast<DomainMapperTableManager*>(m_pTableManager);
                     // In case any of the cells has the btLr cell direction, then an explicit minimal size will just hide the whole row, don't do that.
-                    if (pMeasureHandler->GetRowHeightSizeType() != text::SizeType::MIN || !pManager || !pManager->HasBtlrCell())
+                    const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
+                    if (!pManager || !pManager->HasBtlrCell() || pMeasureHandler->getMeasureValue() > ConversionHelper::convertTwipToMM100(MINLAY))
                     {
                         // In case a cell already wanted fixed size, we should not overwrite it here.
                         if (!pManager || !pManager->IsRowSizeTypeInserted())
                             pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
+                        else
+                            pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX), false);
 
                         pPropMap->Insert( PROP_HEIGHT, uno::makeAny(pMeasureHandler->getMeasureValue() ));
                     }
