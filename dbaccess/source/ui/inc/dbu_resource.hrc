@@ -45,28 +45,28 @@
 #define RID_STR_CONTROL_END             RID_STR_CONTROL_START   + 30    //  40 -  69
 
 #define RID_STR_DLG_START               RID_STR_CONTROL_END
-#define RID_STR_DLG_END                 RID_STR_DLG_START       + 95    //  70 - 164
+#define RID_STR_DLG_END                 RID_STR_DLG_START       + 103    //  70 - 172
 
 #define RID_STR_MISC_START              RID_STR_DLG_END
-#define RID_STR_MISC_END                RID_STR_MISC_START      + 20    // 165 - 184
+#define RID_STR_MISC_END                RID_STR_MISC_START      + 20    // 173 - 192
 
 #define RID_STR_QRY_START               RID_STR_MISC_END
-#define RID_STR_QRY_END                 RID_STR_QRY_START       + 80    // 185 - 264
+#define RID_STR_QRY_END                 RID_STR_QRY_START       + 80    // 193 - 272
 
 #define RID_STR_TBL_START               RID_STR_QRY_END
-#define RID_STR_TBL_END                 RID_STR_TBL_START       + 80    // 265 - 344
+#define RID_STR_TBL_END                 RID_STR_TBL_START       + 80    // 273 - 352
 
 #define RID_STR_REL_START               RID_STR_TBL_END
-#define RID_STR_REL_END                 RID_STR_REL_START       + 10    // 345 - 364
+#define RID_STR_REL_END                 RID_STR_REL_START       + 10    // 353 - 372
 
 #define RID_STR_UNO_START               RID_STR_REL_END
-#define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 365 - 384
+#define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 373 - 392
 
 #define RID_STR_GEN_START               RID_STR_UNO_END
-#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 385 - 439
+#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 393 - 447
 
 #define RID_STR_APP_START               RID_STR_GEN_END
-#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   440 - 479
+#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   448 - 487
 
 #if RID_STR_GEN_END > RID_DBACCESS_END
 #error Resource-Id Ueberlauf in #file, #line
@@ -114,20 +114,15 @@
 #define PAGE_ORACLE_JDBC                RID_PAGE_START + 27
 #define PAGE_TABLESUBSCRIPTION          RID_PAGE_START + 28
 
-#define PAGE_DBWIZARD_DBASE                     RID_PAGE_START + 41
     // FREE
-#define PAGE_DBWIZARD_MSACCESS                  RID_PAGE_START + 43
 #define PAGE_DBWIZARD_LDAP                      RID_PAGE_START + 44
     // FREE
 #define PAGE_DBWIZARD_MYSQL_INTRO               RID_PAGE_START + 46
 #define PAGE_DBWIZARD_ORACLE                    RID_PAGE_START + 48
 #define PAGE_DBWIZARD_JDBC                      RID_PAGE_START + 49
-#define PAGE_DBWIZARD_ADO                       RID_PAGE_START + 50
-#define PAGE_DBWIZARD_ODBC                      RID_PAGE_START + 51
 #define PAGE_DBWIZARD_SPREADSHEET               RID_PAGE_START + 52
 #define PAGE_DBWIZARD_AUTHENTIFICATION          RID_PAGE_START + 53
 #define PAGE_DBWIZARD_MYSQL_JDBC                RID_PAGE_START + 54
-#define PAGE_DBWIZARD_USERDEFINED               RID_PAGE_START + 56
 #define PAGE_DBWIZARD_MYSQL_NATIVE              RID_PAGE_START + 57
 
 // error boxes

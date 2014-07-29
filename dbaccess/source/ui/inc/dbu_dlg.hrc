@@ -125,9 +125,21 @@
 #define STR_PAGETITLE_MYSQL_NATIVE          RID_STR_DLG_START + 81
 #define STR_PAGETITLE_FINAL                 RID_STR_DLG_START + 82
 
+#define STR_DBASE_HEADERTEXT                RID_STR_DLG_START + 83
+#define STR_DBASE_HELPTEXT                  RID_STR_DLG_START + 84
+
+#define STR_MSACCESS_HEADERTEXT             RID_STR_DLG_START + 85
+#define STR_MSACCESS_HELPTEXT               RID_STR_DLG_START + 86
+
+#define STR_ADO_HEADERTEXT                  RID_STR_DLG_START + 87
+#define STR_ADO_HELPTEXT                    RID_STR_DLG_START + 88
+
+#define STR_ODBC_HEADERTEXT                 RID_STR_DLG_START + 89
+#define STR_ODBC_HELPTEXT                   RID_STR_DLG_START + 90
+
 // please adjust checking before insert new strings
 
-#define LAST_STR_HERE                       RID_STR_DLG_START + 83
+#define LAST_STR_HERE                       RID_STR_DLG_START + 91
 
 #if LAST_STR_HERE > RID_STR_DLG_END
 #error Resource-Id Overflow in #file, #line
