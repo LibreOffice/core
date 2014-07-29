@@ -34,6 +34,58 @@
       "revId": "1fdf5e4c78ee28b37c2b9319e5cc68550a3df724",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_0c5e87e9",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T10:44:56Z",
+      "side": 1,
+      "message": "So that pointer should be dereferenced before it is passed to FontSwitch ctor. There is no need to change FontSwitch.",
+      "parentUuid": "bab921fb_ac455b18",
+      "revId": "1fdf5e4c78ee28b37c2b9319e5cc68550a3df724",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_8c72977b",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T10:44:56Z",
+      "side": 1,
+      "message": "Please do not use C-style casts in new code. Use either static_cast\u003clong\u003e(foo) or long(foo).",
+      "revId": "1fdf5e4c78ee28b37c2b9319e5cc68550a3df724",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_ec6233ad",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T10:44:56Z",
+      "side": 1,
+      "message": "Please do not use C-style casts in new code. const_cast should be used here.",
+      "revId": "1fdf5e4c78ee28b37c2b9319e5cc68550a3df724",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
