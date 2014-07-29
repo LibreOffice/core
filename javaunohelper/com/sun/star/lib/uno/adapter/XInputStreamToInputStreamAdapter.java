@@ -111,7 +111,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         int count = 0;
         byte [][] tmp = new byte [1][b.length];
         try {
-        long bytesRead=0;
+        long bytesRead;
             int av = xin.available();
         if ( av != 0 && len > av) {
           bytesRead = xin.readBytes(tmp, av);

@@ -75,7 +75,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
     {
         int count = 0;
         try {
-        long bytesRead=0;
+        long bytesRead;
         if (len >iIn.available()) {
             bytesRead = iIn.read(b[0], 0, iIn.available());
         }
@@ -102,7 +102,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
     {
         int count = 0;
         try {
-        long bytesRead=0;
+        long bytesRead;
         if (len >iIn.available()) {
             bytesRead = iIn.read(b[0], 0, iIn.available());
         }

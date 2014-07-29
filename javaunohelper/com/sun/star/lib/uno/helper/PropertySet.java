@@ -494,7 +494,7 @@ XMultiPropertySet
         if ((prop.Attributes & PropertyAttribute.READONLY) == PropertyAttribute.READONLY)
             throw new com.sun.star.beans.PropertyVetoException();
         // The value may be null only if MAYBEVOID attribute is set
-        boolean bVoidValue= false;
+        boolean bVoidValue;
         if (value instanceof Any)
             bVoidValue= ((Any) value).getObject() == null;
         else
@@ -505,7 +505,7 @@ XMultiPropertySet
             throw new DisposedException("Component is already disposed");
 
         //Check if the argument is allowed
-        boolean bValueOk= false;
+        boolean bValueOk;
         if (value instanceof Any)
             bValueOk= checkType(((Any) value).getObject());
         else
@@ -898,7 +898,7 @@ XMultiPropertySet
             for (int i= 0; i < nAffectedProps; i++)
             {
                 // get the listener container for the property name
-                InterfaceContainer lc= null;
+                InterfaceContainer lc;
                 if (bVetoable)
                     lc= aVetoableLC.getContainer(arEvts[i].PropertyName);
                 else
