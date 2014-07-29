@@ -334,7 +334,6 @@
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <comphelper/anytostring.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
