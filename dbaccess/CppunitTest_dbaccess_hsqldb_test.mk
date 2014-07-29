@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_hsqldb_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_hsqldb_test, \
+    affine_uno_uno \
     comphelper \
     cppu \
     cppuhelper \
