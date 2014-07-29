@@ -49,7 +49,6 @@
 #include <EnhancedPDFExportHelper.hxx>
 
 #include <IDocumentStylePoolAccess.hxx>
-#include <IDocumentLineNumberAccess.hxx>
 
 #define REDLINE_DISTANCE 567/4
 #define REDLINE_MINDIST  567/10
@@ -288,7 +287,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
     const SwTxtNode& rTxtNode = *GetTxtNode();
     const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
-    const SwLineNumberInfo &rLineInf = rTxtNode.getIDocumentLineNumberAccess()->GetLineNumberInfo();
+    const SwLineNumberInfo &rLineInf = rTxtNode.GetDoc()->GetLineNumberInfo();
     const SwFmtLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();

@@ -2403,7 +2403,7 @@ void SwTxtFrm::ChgThisLines()
 {
     // not necessary to format here (GerFormatted etc.), because we have to come from there!
     sal_uLong nNew = 0;
-    const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();
+    const SwLineNumberInfo &rInf = GetNode()->GetDoc()->GetLineNumberInfo();
     if ( !GetTxt().isEmpty() && HasPara() )
     {
         SwTxtSizeInfo aInf( this );
@@ -2465,7 +2465,7 @@ void SwTxtFrm::RecalcAllLines()
         const sal_uLong nOld = GetAllLines();
         const SwFmtLineNumber &rLineNum = pAttrSet->GetLineNumber();
         sal_uLong nNewNum;
-        const bool bRestart = GetTxtNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo().IsRestartEachPage();
+        const bool bRestart = GetTxtNode()->GetDoc()->GetLineNumberInfo().IsRestartEachPage();
 
         if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )
             nNewNum = rLineNum.GetStartValue() - 1;

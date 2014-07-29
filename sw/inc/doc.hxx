@@ -23,7 +23,6 @@
 #include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <IDocumentLineNumberAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -251,7 +250,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentStylePoolAccess,
-    public IDocumentLineNumberAccess,
     public IDocumentStatistics,
     public IDocumentState,
     public IDocumentLayoutAccess,
@@ -563,9 +561,9 @@ public:
     virtual bool IsPoolFmtUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
     virtual bool IsPoolPageDescUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
 
-    // IDocumentLineNumberAccess
-    virtual const SwLineNumberInfo& GetLineNumberInfo() const SAL_OVERRIDE;
-    virtual void SetLineNumberInfo(const SwLineNumberInfo& rInfo) SAL_OVERRIDE;
+    // SwLineNumberInfo
+    virtual const SwLineNumberInfo& GetLineNumberInfo() const;
+    virtual void SetLineNumberInfo(const SwLineNumberInfo& rInfo);
 
     // IDocumentStatistics
     virtual void DocInfoChgd() SAL_OVERRIDE;

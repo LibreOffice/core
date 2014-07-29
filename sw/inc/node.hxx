@@ -67,7 +67,6 @@ class IDocumentDeviceAccess;
 class IDocumentMarkAccess;
 class IDocumentRedlineAccess;
 class IDocumentStylePoolAccess;
-class IDocumentLineNumberAccess;
 class IDocumentLinksAdministration;
 class IDocumentFieldsAccess;
 class IDocumentContentOperations;
@@ -223,10 +222,6 @@ public:
     /** Provides access to the document style pool interface
      */
     const IDocumentStylePoolAccess* getIDocumentStylePoolAccess() const;
-
-    /** Provides access to the document line number information interface
-     */
-    const IDocumentLineNumberAccess* getIDocumentLineNumberAccess() const;
 
     /** Provides access to the document draw model interface
      */
