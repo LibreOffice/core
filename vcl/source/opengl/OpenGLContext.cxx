@@ -393,7 +393,10 @@ bool OpenGLContext::ImplInit()
 
 #if defined( WNT )
     m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
-#elif defined( MACOSX )
+#elif defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1060 )
+
+    SAL_INFO("vcl.opengl", "OpenGLContext not implemented for OS X <10.6");
+    return false;
 
 #elif defined( IOS )
 
@@ -472,15 +475,13 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
-#elif defined( MACOSX )
+#elif defined( MACOSX ) && ( MACOSX_SDK_VERSION >= 1060 )
 
     CGLPixelFormatAttribute pixelFormatAttributes[] = {
 #ifdef kCGLPFAOpenGLProfile // Available in OS X 10.7 and later
         kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute) kCGLOGLPVersion_3_2_Core,
 #else
-        // Will we then get run-time error on OS X < 10.7? Why can't
-        // we just require building against the 10.9 SDK or later, and
-        // running on 10.7 at least.
+        // Will we then get run-time error on OS X < 10.7?
 #endif
         kCGLPFAColorSize, (CGLPixelFormatAttribute) 24,
         kCGLPFAAlphaSize, (CGLPixelFormatAttribute) 8,
@@ -503,7 +504,7 @@ bool OpenGLContext::ImplInit()
 
 #elif defined( ANDROID )
 
-#elif defined( UNX )
+#elif defined( UNX ) && !defined( MACOSX )
     if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
     {
         SAL_INFO("vcl.opengl", "unable to select current GLX context");
