@@ -54,6 +54,9 @@
 #include <vector>
 #include <osl/thread.hxx>
 #include <rtl/instance.hxx>
+#include <cstdio>
+#include <iostream>
+#include <fstream>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -431,7 +434,12 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                         Reference< XStorable > xStorable( xDoc, UNO_QUERY );
                         if ( xStorable.is() ) {
                             OUString aParam = aDispatchRequest.aPrinterName;
-                            sal_Int32 nPathIndex =  aParam.lastIndexOf( ';' );
+                            OString aparam = OUStringToOString ( aParam, RTL_TEXTENCODING_UTF8 );
+                            bool bTextCat = aParam.endsWith( OUString( ";true" ) );
+                            sal_Int32 idx = aParam.lastIndexOf( ';' ) - 1;
+                            OUString flagtc = (( bTextCat == true ) ? OUString( ";true" ) : OUString( ";false" ) );
+                            aParam = aParam.replaceFirst( flagtc, OUString( "" ), &idx);
+                            sal_Int32 nPathIndex = aParam.lastIndexOf( ';' );
                             sal_Int32 nFilterIndex = aParam.indexOf( ':' );
                             if( nPathIndex < nFilterIndex )
                                 nFilterIndex = -1;
@@ -457,6 +465,12 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             OUString aOutFile = aFilterOut+
                                                      "/" +
                                                      aOutFilename.getName();
+
+                            char *fileForCat = tmpnam(NULL);
+                            if( bTextCat == true )
+                            {
+                                aOutFile = OUString( "file://" ) + OUString::createFromAscii( fileForCat );
+                            }
 
                             if ( bGuess )
                             {
@@ -486,10 +500,12 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             OString aSource8 = OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
                             FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
                             OString aTargetURL8 = OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
-                            printf("convert %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
-                                   OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr());
+                            if( bTextCat == false )
+                                printf("convert %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
+                                       OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr());
                             if( FStatHelper::IsDocument(aOutFile) )
                                 printf("Overwriting: %s\n",OUStringToOString( aTempName, RTL_TEXTENCODING_UTF8 ).getStr() );
+
                             try
                             {
                                 xStorable->storeToURL( aOutFile, conversionProperties );
@@ -498,6 +514,22 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             {
                                 fprintf( stderr, "Error: Please reverify input parameters...\n" );
                             }
+
+                            if( bTextCat == true )
+                            {
+                                std::string fileLine;
+                                std::ifstream fin(fileForCat);
+                                if(fin.is_open())
+                                {
+                                    while ( std::getline(fin, fileLine) )
+                                    {
+                                        std::cout << fileLine << std::endl;
+                                    }
+                                    fin.close();
+                                }
+                                remove(fileForCat);
+                            }
+
                         }
                     } else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ) {
                         OUString aParam = aDispatchRequest.aPrinterName;

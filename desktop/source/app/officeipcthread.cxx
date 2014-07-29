@@ -975,7 +975,8 @@ static void AddConversionsToDispatchList(
     const OUString& rParam,
     const OUString& rPrinterName,
     const OUString& rFactory,
-    const OUString& rParamOut )
+    const OUString& rParamOut,
+    const bool rIsTextCat )
 {
     DispatchWatcher::RequestType nType;
     OUString aParam( rParam );
@@ -1009,6 +1010,11 @@ static void AddConversionsToDispatchList(
         aParam += ";" + aPWD;
     }
 
+    if ( nType == DispatchWatcher::REQUEST_CONVERSION )
+    {
+        aParam += (( rIsTextCat == true ) ? OUString( ";true" ) : OUString( ";false" ) );
+    }
+
     for (std::vector< OUString >::const_iterator i(rRequestList.begin());
          i != rRequestList.end(); ++i)
     {
@@ -1035,7 +1041,7 @@ bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty, aRequest.aModule );
-    AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut );
+    AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut, aRequest.bTextCat );
     bool bShutdown( false );
 
     if ( pGlobalOfficeIPCThread.is() )

@@ -46,7 +46,7 @@ oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSign
 struct ProcessDocumentsRequest
 {
     ProcessDocumentsRequest(boost::optional< OUString > const & cwdUrl):
-        aCwdUrl(cwdUrl), pcProcessed( NULL ) {}
+        aCwdUrl(cwdUrl), pcProcessed( NULL ), bTextCat(false) {}
 
     boost::optional< OUString > aCwdUrl;
     OUString aModule;
@@ -63,6 +63,7 @@ struct ProcessDocumentsRequest
     OUString aConversionOut;
     std::vector< OUString > aInFilter;
     ::osl::Condition *pcProcessed;  // pointer condition to be set when the request has been processed
+    bool bTextCat; // boolean flag indicating whether to dump text content to screen
 };
 
 class DispatchWatcher;
