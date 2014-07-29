@@ -977,7 +977,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             PrintMonitor aPrtMonDlg(&pSourceShell->GetView().GetEditWin(), PrintMonitor::MONITOR_TYPE_PRINT);
             aPrtMonDlg.m_pDocName->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
 
-            aPrtMonDlg.m_pCancel->SetClickHdl(LINK(this, SwDBManager, PrtCancelHdl));
+            aPrtMonDlg.SetCancelHdl(LINK(this, SwDBManager, PrtCancelHdl));
             if (!IsMergeSilent())
                 aPrtMonDlg.Show();
 
