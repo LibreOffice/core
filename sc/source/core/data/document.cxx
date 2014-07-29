@@ -1835,51 +1835,49 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
 void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo, bool bRowInfo )
 {
-    if (bIsUndo)
-    {
-        Clear();
-
-        // Undo document shares its pooled resources with the source document.
-        SharePooledResources(pSrcDoc);
-
-        if (pSrcDoc->pShell->GetMedium())
-            maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
-
-        OUString aString;
-        if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
-            maTabs.resize(nTab2 + 1, NULL);
-        for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
-        {
-            ScTable* pTable = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
-            maTabs[nTab] = pTable;
-        }
-    }
-    else
+    if (!bIsUndo)
     {
         OSL_FAIL("InitUndo");
+        return;
+    }
+
+    Clear();
+
+    // Undo document shares its pooled resources with the source document.
+    SharePooledResources(pSrcDoc);
+
+    if (pSrcDoc->pShell->GetMedium())
+        maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+
+    OUString aString;
+    if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
+        maTabs.resize(nTab2 + 1, NULL);
+    for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
+    {
+        ScTable* pTable = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+        maTabs[nTab] = pTable;
     }
 }
 
 void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, bool bColInfo, bool bRowInfo )
 {
-    if (bIsUndo)
+    if (!bIsUndo)
     {
-        OUString aString;
-        if (nTab2 >= static_cast<SCTAB>(maTabs.size()))
-        {
-            maTabs.resize(nTab2+1,NULL);
-        }
-        for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
-            if (!maTabs[nTab])
-            {
-                maTabs[nTab] = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
-            }
+        OSL_FAIL("AddUndoTab");
+        return;
+    }
 
-    }
-    else
+    OUString aString;
+    if (nTab2 >= static_cast<SCTAB>(maTabs.size()))
     {
-        OSL_FAIL("InitUndo");
+        maTabs.resize(nTab2+1,NULL);
     }
+
+    for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
+        if (!maTabs[nTab])
+        {
+            maTabs[nTab] = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+        }
 }
 
 void ScDocument::SetCutMode( bool bVal )
