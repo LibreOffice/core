@@ -227,20 +227,15 @@ using namespace ::com::sun::star;
 
 
     OMySQLIntroPageSetup::OMySQLIntroPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
-            :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_MYSQL_INTRO), _rCoreAttrs)
-            ,m_aRB_ODBCDatabase(this, ModuleRes(RB_CONNECTVIAODBC))
-            ,m_aRB_JDBCDatabase(this, ModuleRes(RB_CONNECTVIAJDBC))
-            ,m_aRB_NATIVEDatabase(this, ModuleRes(RB_CONNECTVIANATIVE))
-            ,m_aFT_ConnectionMode(this, ModuleRes(FT_MYSQLCONNECTIONMODE))
-            ,m_aFT_Helptext(this, ModuleRes(FT_MYSQL_HELPTEXT))
-            ,m_aFT_Headertext(this, ModuleRes(FT_MYSQL_HEADERTEXT))
+            :OGenericAdministrationPage(pParent, "DBWizMysqlIntroPage", "dbaccess/ui/dbwizmysqlintropage.ui", _rCoreAttrs)
     {
+        get(m_pODBCDatabase, "odbc");
+        get(m_pJDBCDatabase, "jdbc");
+        get(m_pNATIVEDatabase, "directly");
 
-        SetControlFontWeight(&m_aFT_Headertext);
-           m_aRB_ODBCDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
-           m_aRB_JDBCDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
-        m_aRB_NATIVEDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
-        FreeResource();
+        m_pODBCDatabase->SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
+        m_pJDBCDatabase->SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
+        m_pNATIVEDatabase->SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
     }
 
     IMPL_LINK(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton*, /*_pBox*/)
@@ -260,17 +255,17 @@ using namespace ::com::sun::star;
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
         bool bHasMySQLNative = ( pCollectionItem != NULL ) && pCollectionItem->getCollection()->hasDriver( "sdbc:mysqlc:" );
         if ( bHasMySQLNative )
-            m_aRB_NATIVEDatabase.Show();
+            m_pNATIVEDatabase->Show();
 
         // if any of the options is checked, then there's nothing to do
-        if ( m_aRB_ODBCDatabase.IsChecked() || m_aRB_JDBCDatabase.IsChecked() || m_aRB_NATIVEDatabase.IsChecked() )
+        if ( m_pODBCDatabase->IsChecked() || m_pJDBCDatabase->IsChecked() || m_pNATIVEDatabase->IsChecked() )
             return;
 
         // prefer "native" or "JDBC"
         if ( bHasMySQLNative )
-            m_aRB_NATIVEDatabase.Check();
+            m_pNATIVEDatabase->Check();
         else
-            m_aRB_JDBCDatabase.Check();
+            m_pJDBCDatabase->Check();
     }
 
     void OMySQLIntroPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
@@ -289,9 +284,9 @@ using namespace ::com::sun::star;
 
     OMySQLIntroPageSetup::ConnectionType OMySQLIntroPageSetup::getMySQLMode()
     {
-        if (m_aRB_JDBCDatabase.IsChecked())
+        if (m_pJDBCDatabase->IsChecked())
             return VIA_JDBC;
-        else if (m_aRB_NATIVEDatabase.IsChecked())
+        else if (m_pNATIVEDatabase->IsChecked())
             return VIA_NATIVE;
         else
             return VIA_ODBC;
@@ -641,12 +636,10 @@ using namespace ::com::sun::star;
 
 
     OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_SPREADSHEET, _rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
-            , m_aCBPasswordrequired(this, ModuleRes(CB_SPREADSHEETPASSWORDREQUIRED))
+        :OConnectionTabPageSetup(pParent, "DBWizSpreadsheetPage", "dbaccess/ui/dbwizspreadsheetpage.ui", _rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
     {
-
-           m_aCBPasswordrequired.SetToggleHdl(getControlModifiedLink());
-        FreeResource();
+        get(m_pPasswordrequired, "passwordrequired");
+        m_pPasswordrequired->SetToggleHdl(getControlModifiedLink());
     }
 
     OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()
@@ -661,7 +654,7 @@ using namespace ::com::sun::star;
     void OSpreadSheetConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OConnectionTabPageSetup::fillControls(_rControlList);
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aCBPasswordrequired));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pPasswordrequired));
 
     }
 
@@ -673,7 +666,7 @@ using namespace ::com::sun::star;
     bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
-        fillBool(*_rSet,&m_aCBPasswordrequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,m_pPasswordrequired,DSID_PASSWORDREQUIRED,bChangedSomething);
         return bChangedSomething;
     }
 

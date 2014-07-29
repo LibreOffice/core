@@ -19,6 +19,8 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/colwidthdialog \
     dbaccess/uiconfig/ui/copytablepage \
     dbaccess/uiconfig/ui/dbaseindexdialog \
+    dbaccess/uiconfig/ui/dbwizmysqlintropage \
+    dbaccess/uiconfig/ui/dbwizspreadsheetpage \
     dbaccess/uiconfig/ui/dbwiztextpage \
     dbaccess/uiconfig/ui/directsqldialog  \
     dbaccess/uiconfig/ui/emptypage \
