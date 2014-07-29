@@ -74,19 +74,23 @@ enum GrabBagType
 class PropValue
 {
     css::uno::Any m_aValue;
-    GrabBagType m_rGrabBagType;
+    GrabBagType m_GrabBagType;
 
 public:
-    PropValue(const css::uno::Any& rValue, GrabBagType rGrabBagType = NO_GRAB_BAG) :
-        m_aValue(rValue), m_rGrabBagType(rGrabBagType) {}
+    PropValue(const css::uno::Any& rValue, GrabBagType i_GrabBagType = NO_GRAB_BAG) :
+        m_aValue(rValue), m_GrabBagType(i_GrabBagType) {}
 
-    PropValue() : m_aValue(), m_rGrabBagType(NO_GRAB_BAG) {}
+    PropValue() : m_aValue(), m_GrabBagType(NO_GRAB_BAG) {}
 
-    PropValue& operator=(const PropValue& rProp) { m_aValue = rProp.m_aValue; m_rGrabBagType = rProp.m_rGrabBagType; return *this; }
+    PropValue& operator=(const PropValue& rProp) {
+        m_aValue = rProp.m_aValue;
+        m_GrabBagType = rProp.m_GrabBagType;
+        return *this;
+    }
 
     const css::uno::Any& getValue() const { return m_aValue; }
-    bool hasGrabBag() const { return m_rGrabBagType != NO_GRAB_BAG; }
-    GrabBagType getGrabBagType() const { return m_rGrabBagType; }
+    bool hasGrabBag() const { return m_GrabBagType != NO_GRAB_BAG; }
+    GrabBagType getGrabBagType() const { return m_GrabBagType; }
 };
 typedef std::map< PropertyIds, PropValue > _PropertyMap;
 
@@ -116,7 +120,7 @@ public:
     bool hasEmptyPropertyValues() const {return !m_aValues.getLength();}
     /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
      */
-    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, GrabBagType rGrabBagType = NO_GRAB_BAG );
+    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, GrabBagType i_GrabBagType = NO_GRAB_BAG );
     void Insert( PropertyIds eId, const PropValue& rValue, bool bOverwrite = true );
     void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const { return m_xFootnote;}

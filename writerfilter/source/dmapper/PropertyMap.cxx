@@ -184,7 +184,7 @@ static void lcl_AnyToTag(const uno::Any & rAny)
 }
 #endif
 
-void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite, GrabBagType rGrabBagType )
+void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite, GrabBagType i_GrabBagType )
 {
 #ifdef DEBUG_DOMAINMAPPER
     const OUString& rInsert = PropertyNameSupplier::
@@ -200,11 +200,11 @@ void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite
     if (aElement != end())
     {
         if (bOverwrite)
-            aElement->second = PropValue(rAny, rGrabBagType);
+            aElement->second = PropValue(rAny, i_GrabBagType);
 
         return;
     }
-    _PropertyMap::insert(_PropertyMap::value_type(eId, PropValue(rAny, rGrabBagType)));
+    _PropertyMap::insert(_PropertyMap::value_type(eId, PropValue(rAny, i_GrabBagType)));
 
     Invalidate();
 }
