@@ -54,8 +54,6 @@
 #include <boost/noncopyable.hpp>
 
 
-#define PIMPE       pImpEditView->pEditEngine
-
 #define DEL_LEFT    1
 #define DEL_RIGHT   2
 #define TRAVEL_X_DONTKNOW   0xFFFFFFFF
