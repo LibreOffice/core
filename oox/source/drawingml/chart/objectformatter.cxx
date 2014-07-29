@@ -1106,7 +1106,9 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
                 append( OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() ) ).append( '\'' ).getStr() );
         }
 
-        rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.mbSourceLinked));
+        // Format code is ignored if "LinkNumberFormatToSource" is set to "true" :-/
+        // See AxisHelper::getExplicitNumberFormatKeyForAxis()
+        rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.maFormatCode.isEmpty()));
     }
 }
 
