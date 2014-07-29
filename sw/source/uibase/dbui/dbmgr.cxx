@@ -896,8 +896,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         // Try saving the source document
         SfxDispatcher* pSfxDispatcher = pSourceShell->GetView().GetViewFrame()->GetDispatcher();
         SwDocShell* pSourceDocSh = pSourceShell->GetView().GetDocShell();
-        pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
-        if( !pSourceDocSh->IsModified() )
+        if( !bMergeOnly && pSourceDocSh->IsModified() )
+            pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
+        if( bMergeOnly || !pSourceDocSh->IsModified() )
         {
             const SfxFilter* pStoreToFilter = SwIoSystem::GetFileFilter(
                 pSourceDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), ::aEmptyOUStr );
