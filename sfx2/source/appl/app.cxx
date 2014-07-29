@@ -375,15 +375,6 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         pFrame->GetViewShell()->SetCurrentDocument();
 }
 
-
-
-ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
-{
-    return ResMgr::CreateResMgr(pPrefix);
-}
-
-
-
 ResMgr* SfxApplication::GetSfxResManager()
 {
     return SfxResId::GetResMgr();

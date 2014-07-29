@@ -20,7 +20,6 @@
 #include <tools/globname.hxx>
 #include <vcl/status.hxx>
 #include <sfx2/msg.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
@@ -164,7 +163,7 @@ void SmModule::InitInterface_Impl()
 }
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
-    SfxModule(SfxApplication::CreateResManager("sm"), false, pObjFact, NULL),
+    SfxModule(ResMgr::CreateResMgr("sm"), false, pObjFact, NULL),
     pColorConfig( 0 ),
     pConfig( 0 ),
     pLocSymbolData( 0 ),

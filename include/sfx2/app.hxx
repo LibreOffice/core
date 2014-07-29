@@ -153,7 +153,6 @@ public:
 
     // Resource Manager
     ResMgr*                     GetSfxResManager();
-    static ResMgr*              CreateResManager( const char *pPrefix );
 
     // DDE
 #if defined( WNT )

@@ -228,9 +228,9 @@ bool SfxApplication::Initialize_Impl()
         RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
 
 #ifndef DISABLE_SCRIPTING
-    pAppData_Impl->pBasicResMgr = CreateResManager("sb");
+    pAppData_Impl->pBasicResMgr = ResMgr::CreateResMgr("sb");
 #endif
-    pAppData_Impl->pSvtResMgr = CreateResManager("svt");
+    pAppData_Impl->pSvtResMgr = ResMgr::CreateResMgr("svt");
 
     pAppData_Impl->m_pSoErrorHdl = new SfxErrorHandler(
         RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END, pAppData_Impl->pSvtResMgr );

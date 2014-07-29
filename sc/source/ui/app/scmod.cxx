@@ -130,7 +130,7 @@ void ScModule::InitInterface_Impl()
 }
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
-    SfxModule( SfxApplication::CreateResManager( "sc" ), false, pFact, NULL ),
+    SfxModule( ResMgr::CreateResMgr( "sc" ), false, pFact, NULL ),
     mpDragData(new ScDragData),
     mpClipData(new ScClipData),
     pSelTransfer( NULL ),

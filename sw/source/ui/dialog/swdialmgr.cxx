@@ -18,7 +18,7 @@
  */
 
 #include "dialmgr.hxx"
-#include <sfx2/app.hxx>
+#include <tools/resmgr.hxx>
 
 #ifndef DISABLE_DYNLOADING
 ResMgr* pSwResMgr=0;
@@ -30,7 +30,7 @@ ResMgr* SwDialogsResMgr::GetResMgr()
 {
     if ( !pSwResMgr )
     {
-        pSwResMgr = SfxApplication::CreateResManager( "sw" );
+        pSwResMgr = ResMgr::CreateResMgr( "sw" );
     }
 
     return pSwResMgr;

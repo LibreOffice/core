@@ -22,7 +22,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
-#include <sfx2/app.hxx>
 #include <vcl/status.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/msg.hxx>
@@ -68,7 +67,7 @@ void SdModule::InitInterface_Impl()
 
 // Ctor
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
-:   SfxModule( SfxApplication::CreateResManager("sd"), false,
+:   SfxModule( ResMgr::CreateResMgr("sd"), false,
                   pFact1, pFact2, NULL ),
     pTransferClip(NULL),
     pTransferDrag(NULL),
