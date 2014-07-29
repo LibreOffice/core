@@ -523,10 +523,10 @@ namespace drawinglayer
             // FIXME(matteocam)
             bool bToBeChained = rTextObj.IsToBeChained();
             // for resetting status
-            // XXX
+            // XXX: may not work
             if ( rTextObj.IsToBeChained() )
-            {
-                    rTextObj.SetToBeChained( false );
+            {   // XXX: hack
+                const_cast<SdrTextObj*>(&rTextObj)->SetToBeChained( false );
             }
 
             if(rText.GetOutlinerParaObject() && rText.GetModel())

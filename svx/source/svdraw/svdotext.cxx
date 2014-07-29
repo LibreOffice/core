@@ -1966,16 +1966,12 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         }
         else if (/* TODO: IsChained() && */ pEditStatus->IsPageOverflow())
         {
+            // FIXME(matteocam): should include check that the TextBox has a next chain link
+
+            // set the need for chaining
+            SetToBeChained( true );
 
             //impDecomposeChainedTextPrimitive();
-            /*
-             * XXX: Do nothing for now, later here we'll set the need for chaining
-             * How do you do such a thing?
-             * TODO: Look at where text primitive creation methods are called.
-             * Then what?
-             * Store the state in SdrTextObj with something like needsChaingin?
-             *
-            */
         }
     }
 }
