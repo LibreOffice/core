@@ -3361,13 +3361,12 @@ void DocxAttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t p
     const SwFrmFmt * pLineFmt = pTabLine->GetFrmFmt();
 
     const SwFmtRowSplit& rSplittable = pLineFmt->GetRowSplit( );
-    const char* pCantSplit = ( !rSplittable.GetValue( ) ) ? "true" : "false";
     // if rSplittable is true then no need to write <w:cantSplit w:val="false"/>
     // as default row prop is allow row to break across page.
     if( !rSplittable.GetValue( ) )
-    m_pSerializer->singleElementNS( XML_w, XML_cantSplit,
-           FSNS( XML_w, XML_val ), pCantSplit,
-           FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_cantSplit,
+                FSNS( XML_w, XML_val ), "true",
+                FSEND );
 }
 
 void DocxAttributeOutput::TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -6651,7 +6650,7 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 void DocxAttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
 {
     m_pSerializer->singleElementNS( XML_w, XML_suppressAutoHyphens,
-            FSNS( XML_w, XML_val ), rHyphenZone.IsHyphen( ) ? "false" : "true" ,
+            FSNS( XML_w, XML_val ), OString::boolean( !rHyphenZone.IsHyphen() ),
             FSEND );
 }
 
@@ -6669,21 +6668,21 @@ void DocxAttributeOutput::ParaNumRule_Impl( const SwTxtNode* /*pTxtNd*/, sal_Int
 void DocxAttributeOutput::ParaScriptSpace( const SfxBoolItem& rScriptSpace )
 {
     m_pSerializer->singleElementNS( XML_w, XML_autoSpaceDE,
-           FSNS( XML_w, XML_val ), rScriptSpace.GetValue( ) ? "true": "false",
+           FSNS( XML_w, XML_val ), OString::boolean( rScriptSpace.GetValue() ),
            FSEND );
 }
 
 void DocxAttributeOutput::ParaHangingPunctuation( const SfxBoolItem& rItem )
 {
     m_pSerializer->singleElementNS( XML_w, XML_overflowPunct,
-           FSNS( XML_w, XML_val ), rItem.GetValue( ) ? "true": "false",
+           FSNS( XML_w, XML_val ), OString::boolean( rItem.GetValue() ),
            FSEND );
 }
 
 void DocxAttributeOutput::ParaForbiddenRules( const SfxBoolItem& rItem )
 {
     m_pSerializer->singleElementNS( XML_w, XML_kinsoku,
-           FSNS( XML_w, XML_val ), rItem.GetValue( ) ? "true": "false",
+           FSNS( XML_w, XML_val ), OString::boolean( rItem.GetValue() ),
            FSEND );
 }
 
@@ -6717,7 +6716,7 @@ void DocxAttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign 
 void DocxAttributeOutput::ParaSnapToGrid( const SvxParaGridItem& rGrid )
 {
     m_pSerializer->singleElementNS( XML_w, XML_snapToGrid,
-            FSNS( XML_w, XML_val ), rGrid.GetValue( ) ? "true": "false",
+            FSNS( XML_w, XML_val ), OString::boolean( rGrid.GetValue() ),
             FSEND );
 }
 
@@ -7442,7 +7441,7 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol& 
 
     bool bHasSep = (COLADJ_NONE != rCol.GetLineAdj());
 
-    pColsAttrList->add( FSNS( XML_w, XML_sep ), bHasSep ? "true" : "false" );
+    pColsAttrList->add( FSNS( XML_w, XML_sep ), OString::boolean( bHasSep ) );
 
     // Write the element
     m_pSerializer->startElementNS( XML_w, XML_cols, pColsAttrList );
