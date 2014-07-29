@@ -455,9 +455,9 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 //Reset the table infos after saving.
                 m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 
-            m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
-            m_pSerializer->endElementNS(XML_mc, XML_Choice);
-            SetAlternateContentChoiceOpen( false );
+                m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
+                m_pSerializer->endElementNS(XML_mc, XML_Choice);
+                SetAlternateContentChoiceOpen( false );
 
                 // Reset table infos, otherwise the depth of the cells will be incorrect,
                 // in case the text frame had table(s) and we try to export the
@@ -540,16 +540,16 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // Write framePr
     if(!aFramePrTextbox.empty())
     {
-            ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
-            for (std::vector< boost::shared_ptr<sw::Frame> > ::iterator it = aFramePrTextbox.begin() ; it != aFramePrTextbox.end(); ++it)
-            {
-                m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
-                m_pCurrentFrame = it->get();
-                m_rExport.SdrExporter().writeOnlyTextOfFrame(it->get());
-                m_pCurrentFrame = NULL;
-            }
-            m_rExport.mpTableInfo = pOldTableInfo;
-            aFramePrTextbox.clear();
+        ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
+        for (std::vector< boost::shared_ptr<sw::Frame> > ::iterator it = aFramePrTextbox.begin() ; it != aFramePrTextbox.end(); ++it)
+        {
+            m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+            m_pCurrentFrame = it->get();
+            m_rExport.SdrExporter().writeOnlyTextOfFrame(it->get());
+            m_pCurrentFrame = NULL;
+        }
+        m_rExport.mpTableInfo = pOldTableInfo;
+        aFramePrTextbox.clear();
     }
     // Check for end of cell, rows, tables here
     FinishTableRowCell( pTextNodeInfoInner );
@@ -1041,39 +1041,39 @@ void DocxAttributeOutput::EndRun()
     DoWriteAnnotationMarks( );
 
     if( m_closeHyperlinkInThisRun && m_startedHyperlink && m_hyperLinkAnchor != "" && m_hyperLinkAnchor.startsWith("_Toc"))
-        {
-            OUString sToken;
-            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-            m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
-            m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
-            m_pSerializer->endElementNS( XML_w, XML_rPr );
-            m_pSerializer->startElementNS( XML_w, XML_fldChar,
-                    FSNS( XML_w, XML_fldCharType ), "begin",
-                    FSEND );
-            m_pSerializer->endElementNS( XML_w, XML_fldChar );
-            m_pSerializer->endElementNS( XML_w, XML_r );
+    {
+        OUString sToken;
+        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_rPr );
+        m_pSerializer->startElementNS( XML_w, XML_fldChar,
+                FSNS( XML_w, XML_fldCharType ), "begin",
+                FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_fldChar );
+        m_pSerializer->endElementNS( XML_w, XML_r );
 
 
-            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-            m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
-            m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
-            m_pSerializer->endElementNS( XML_w, XML_rPr );
-            sToken = "PAGEREF " + m_hyperLinkAnchor + " \\h"; // '\h' Creates a hyperlink to the bookmarked paragraph.
-            DoWriteCmd( sToken );
-            m_pSerializer->endElementNS( XML_w, XML_r );
+        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_rPr );
+        sToken = "PAGEREF " + m_hyperLinkAnchor + " \\h"; // '\h' Creates a hyperlink to the bookmarked paragraph.
+        DoWriteCmd( sToken );
+        m_pSerializer->endElementNS( XML_w, XML_r );
 
-            // Write the Field separator
-            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-            m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
-            m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
-            m_pSerializer->endElementNS( XML_w, XML_rPr );
-            m_pSerializer->singleElementNS( XML_w, XML_fldChar,
-                    FSNS( XML_w, XML_fldCharType ), "separate",
-                    FSEND );
-            m_pSerializer->endElementNS( XML_w, XML_r );
-            // At start of every "PAGEREF" field m_endPageRef value should be true.
-            m_endPageRef = true;
-        }
+        // Write the Field separator
+        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_rPr );
+        m_pSerializer->singleElementNS( XML_w, XML_fldChar,
+                FSNS( XML_w, XML_fldCharType ), "separate",
+                FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_r );
+        // At start of every "PAGEREF" field m_endPageRef value should be true.
+        m_endPageRef = true;
+    }
 
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     if(GetExport().bTabInTOC && m_pHyperlinkAttrList)
@@ -1594,7 +1594,6 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         aSeqOrder[i] = aOrder[i];
 
     m_pSerializer->mark( aSeqOrder );
-
 }
 
 namespace
@@ -1692,7 +1691,6 @@ const NameToId constNameToIdMapping[] =
     { OUString("extrusionClr"), FSNS( XML_w14, XML_extrusionClr ) },
     { OUString("contourClr"),   FSNS( XML_w14, XML_contourClr ) },
     { OUString("styleSet"),     FSNS( XML_w14, XML_styleSet ) },
-
 };
 
 boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
