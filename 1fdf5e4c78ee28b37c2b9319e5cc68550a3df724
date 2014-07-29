@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_ec3b539b",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T08:41:39Z",
+      "side": 1,
+      "message": "I see no reason to change this from ref. to ptr.",
+      "revId": "1fdf5e4c78ee28b37c2b9319e5cc68550a3df724",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
