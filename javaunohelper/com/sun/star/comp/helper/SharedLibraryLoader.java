@@ -46,7 +46,7 @@ public class SharedLibraryLoader {
     public static final String DEFAULT_IMPLEMENTATION = "com.sun.star.comp.stoc.DLLComponentLoader";
 
     static {
-        if (System.getProperty("java.vendor") == "The Android Project") {
+        if ("The Android Project".equals(System.getProperty("java.vendor"))) {
             // See corresponding code in
             // javaunohelper/com/sun/star/comp/helper/Bootstrap.java for more
             // comments.
