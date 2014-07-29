@@ -522,13 +522,8 @@ namespace drawinglayer
 
             // FIXME(matteocam)
             bool bToBeChained = rTextObj.IsToBeChained();
-            // for resetting status
-            // XXX: may not work
-            // XXX: this should happen only whether the chaining has occurred though.
-            if ( rTextObj.IsToBeChained() )
-            {   // XXX: hack
-                //const_cast<SdrTextObj*>(&rTextObj)->SetToBeChained( false );
-            }
+
+
 
             if(rText.GetOutlinerParaObject() && rText.GetModel())
             {
@@ -542,6 +537,16 @@ namespace drawinglayer
                 else
                 {
                     bInEditMode = rTextObj.IsInEditMode();
+                }
+
+                // for resetting status
+                // FIXME(matteocam)
+                // XXX: may not work
+                // XXX: this should happen only whether the chaining has occurred though.
+                // XXX: violates SPOT rule (the following condition is also in sdrdecompositiontools.cxx)
+                if ( !bInEditMode && rTextObj.IsToBeChained() )
+                {   // XXX: hack
+                    const_cast<SdrTextObj*>(&rTextObj)->SetToBeChained( false );
                 }
 
                 OutlinerParaObject aOutlinerParaObject(*rText.GetOutlinerParaObject());
