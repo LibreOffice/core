@@ -64,6 +64,8 @@ void            lok_docview_set_part        (LOKDocView* pDocView,
                                              int nPart);
 char*           lok_docview_get_part_name   (LOKDocView* pDocView,
                                              int nPart);
+void            lok_docview_set_partmode    (LOKDocView* pDocView,
+                                             LibreOfficeKitPartMode ePartMode);
 #ifdef __cplusplus
 }
 #endif
