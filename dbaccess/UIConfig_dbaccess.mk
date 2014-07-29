@@ -29,6 +29,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/generalpagewizard \
     dbaccess/uiconfig/ui/generatedvaluespage \
     dbaccess/uiconfig/ui/indexdesigndialog \
+    dbaccess/uiconfig/ui/jdbcconnectionpage \
     dbaccess/uiconfig/ui/joindialog \
     dbaccess/uiconfig/ui/migratepage \
     dbaccess/uiconfig/ui/password \
@@ -38,6 +39,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/relationdialog \
     dbaccess/uiconfig/ui/rowheightdialog \
     dbaccess/uiconfig/ui/savedialog \
+    dbaccess/uiconfig/ui/specialjdbcconnectionpage \
     dbaccess/uiconfig/ui/specialsettingspage \
     dbaccess/uiconfig/ui/sortdialog \
     dbaccess/uiconfig/ui/sqlexception \
