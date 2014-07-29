@@ -2256,7 +2256,8 @@ int SdXImpressDocument::getPart()
     DrawViewShell* pViewSh = dynamic_cast< DrawViewShell* >( mpDoc->GetDocSh()->GetViewShell() );
     if (pViewSh)
     {
-        return pViewSh->GetCurPageId();
+        // curPageId seems to start at 1
+        return pViewSh->GetCurPageId() - 1;
     }
     return 0;
 }
