@@ -22,10 +22,6 @@ $(eval $(call gb_Executable_use_libraries,gtktiledviewer,\
     libreofficekitgtk \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,gtktiledviewer,\
-    libreofficekit \
-))
-
 $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     -lX11 \
     -lXext \
