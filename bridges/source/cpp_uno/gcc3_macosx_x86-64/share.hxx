@@ -128,8 +128,6 @@ struct __cxa_eh_globals
 
 }
 
-extern "C" void privateSnippetExecutor();
-
 extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () throw();
 
 namespace CPPU_CURRENT_NAMESPACE
