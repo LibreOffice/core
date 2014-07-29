@@ -93,7 +93,6 @@ namespace svx
         RubyPosition  m_ePosition;
 
     public:
-        PseudoRubyText( const OUString& _rPrimary, const OUString& _rSecondary, const RubyPosition _ePosition );
         PseudoRubyText();
         void init( const OUString& rPrimaryText, const OUString& rSecondaryText, const RubyPosition& rPosition );
         const OUString& getPrimaryText() const { return m_sPrimaryText; }
@@ -104,13 +103,6 @@ namespace svx
             Rectangle* _pPrimaryLocation = NULL, Rectangle* _pSecondaryLocation = NULL,
             ::vcl::ControlLayoutData* _pLayoutData = NULL );
     };
-
-    PseudoRubyText::PseudoRubyText( const OUString& _rPrimary, const OUString& _rSecondary, const RubyPosition _ePosition )
-        :m_sPrimaryText( _rPrimary )
-        ,m_sSecondaryText( _rSecondary )
-        ,m_ePosition( _ePosition )
-    {
-    }
 
     PseudoRubyText::PseudoRubyText()
     {
