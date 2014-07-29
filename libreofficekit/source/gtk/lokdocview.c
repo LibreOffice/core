@@ -194,4 +194,11 @@ SAL_DLLPUBLIC_EXPORT char* lok_docview_get_part_name( LOKDocView* pDocView, int 
 {
     return pDocView->pDocument->pClass->getPartName( pDocView->pDocument, nPart );
 }
+
+SAL_DLLPUBLIC_EXPORT void lok_docview_set_partmode( LOKDocView* pDocView,
+                                                    LibreOfficeKitPartMode ePartMode )
+{
+    pDocView->pDocument->pClass->setPartMode( pDocView->pDocument, ePartMode );
+    renderDocument( pDocView );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
