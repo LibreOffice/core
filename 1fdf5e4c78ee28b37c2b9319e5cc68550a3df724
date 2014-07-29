@@ -16,6 +16,24 @@
       "revId": "1fdf5e4c78ee28b37c2b9319e5cc68550a3df724",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_ac455b18",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000507
+      },
+      "writtenOn": "2014-07-29T08:55:13Z",
+      "side": 1,
+      "message": "This was done so that it can be type-casted when called from RubyRadioButton::GetOptimalSize(). And this change was suggested by quikee :-)",
+      "parentUuid": "bab921fb_ec3b539b",
+      "revId": "1fdf5e4c78ee28b37c2b9319e5cc68550a3df724",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
