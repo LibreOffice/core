@@ -865,9 +865,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
     //check if the doc is synchronized and contains at least one linked section
     bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFmtCount() > 1;
     sal_Bool bNoError = sal_True;
-    bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_MAILING;
+    const bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_MAILING;
     const bool bAsSingleFile = rMergeDescriptor.nMergeType == DBMGR_MERGE_SINGLE_FILE;
-    bool bMergeOnly = rMergeDescriptor.nMergeType == DBMGR_MERGE_ONLY;
+    const bool bMergeOnly = rMergeDescriptor.nMergeType == DBMGR_MERGE_ONLY;
 
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     OUString sBodyMimeType;
@@ -946,6 +946,24 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             sal_uInt16 nStartingPageNo = 0;
             bool bPageStylesWithHeaderFooter = false;
 
+            Window *pSourceWindow = 0;
+            CancelableModelessDialog *pProgressDlg = 0;
+
+            if (!IsMergeSilent()) {
+                pSourceWindow = &pSourceShell->GetView().GetEditWin();
+                if( bMergeOnly )
+                    pProgressDlg = new CreateMonitor( pSourceWindow );
+                else {
+                    pProgressDlg = new PrintMonitor( pSourceWindow, PrintMonitor::MONITOR_TYPE_PRINT );
+                    ((PrintMonitor*) pProgressDlg)->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
+                }
+                pProgressDlg->SetCancelHdl( LINK(this, SwNewDBMgr, PrtCancelHdl) );
+                pProgressDlg->Show();
+
+                for( sal_uInt16 i = 0; i < 25; i++)
+                    Application::Reschedule();
+            }
+
             if(bAsSingleFile || rMergeDescriptor.bCreateSingleFile)
             {
                 // create a target docshell to put the merged document into
@@ -955,6 +973,11 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
 #endif
                 SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
+                if (bMergeOnly) {
+                    //the created window has to be located at the same position as the source window
+                    Window& rTargetWindow = pTargetFrame->GetFrame().GetWindow();
+                    rTargetWindow.SetPosPixel(pSourceWindow->GetPosPixel());
+                }
 
                 pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
 
@@ -984,13 +1007,6 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
             }
 
-            PrintMonitor aPrtMonDlg(&pSourceShell->GetView().GetEditWin(), PrintMonitor::MONITOR_TYPE_PRINT);
-            aPrtMonDlg.aDocName.SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
-
-            aPrtMonDlg.SetCancelHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
-            if (!IsMergeSilent())
-                aPrtMonDlg.Show();
-
             // Progress, to prohibit KeyInputs
             SfxProgress aProgress(pSourceDocSh, ::aEmptyStr, 1);
 
@@ -1001,7 +1017,12 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 pViewFrm->GetDispatcher()->Lock(sal_True);
                 pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourceDocSh);
             }
+
             sal_uLong nDocNo = 1;
+            sal_Int32 nDocCount = 0;
+            if( !IsMergeSilent() && bMergeOnly &&
+                    lcl_getCountFromResultSet( nDocCount, pImpl->pMergeData->xResultSet ) )
+                ((CreateMonitor*) pProgressDlg)->SetTotalCount( nDocCount );
 
             long nStartRow, nEndRow;
             bool bFreezedLayouts = false;
@@ -1053,14 +1074,22 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     else
                     {
                         INetURLObject aTempFileURL(aTempFile->GetURL());
-                        aPrtMonDlg.aPrinter.SetText( aTempFileURL.GetBase() );
-                        String sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
-                        sStat += ' ';
-                        sStat += OUString::number( nDocNo );
-                        aPrtMonDlg.aPrintInfo.SetText(sStat);
+                        if (!IsMergeSilent()) {
+                            if( bMergeOnly )
+                                ((CreateMonitor*) pProgressDlg)->SetCurrentPosition( nDocNo );
+                            else {
+                                PrintMonitor *pPrintMonDlg = (PrintMonitor*) pProgressDlg;
+                                pPrintMonDlg->aPrinter.SetText( aTempFileURL.GetBase() );
+                                OUString sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
+                                sStat += " ";
+                                sStat += OUString::number( nDocNo );
+                                pPrintMonDlg->aPrintInfo.SetText( sStat );
+                            }
+                            pProgressDlg->Update();
+                        }
 
-                        // computation time for Save-Monitor:
-                        for (sal_uInt16 i = 0; i < 10; i++)
+                        // Computation time for the GUI
+                        for( sal_uInt16 i = 0; i < 25; i++ )
                             Application::Reschedule();
 
                         // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
@@ -1285,6 +1314,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
 
+            for( sal_uInt16 i = 0; i < 25; i++)
+                Application::Reschedule();
+
             // Unfreeze target document layouts and correct all PageDescs.
             if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
             {
@@ -1294,7 +1326,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
             }
 
-            aPrtMonDlg.Show( sal_False );
+            DELETEZ( pProgressDlg );
 
             // save the single output document
             if (bMergeOnly)
