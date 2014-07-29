@@ -99,11 +99,6 @@ struct _LibreOfficeKitDocumentClass
   void (*setPartMode)     (LibreOfficeKitDocument* pThis,
                            LibreOfficeKitPartMode eMode);
 
-  // Get a pointer to a raw array, of size 3*nCanvasWidth*nCanvasHeight
-  // Basebmp's bitmap device seems to round the width up if needed
-  // for its internal buffer, i.e. the rowstride for the buffer may be larger
-  // than the desired width, hence we need to be able to return the
-  // rowstride too.
   void (*paintTile)       (LibreOfficeKitDocument* pThis,
                            unsigned char* pBuffer,
                            const int nCanvasWidth,
