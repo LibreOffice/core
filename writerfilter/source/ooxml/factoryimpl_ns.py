@@ -636,19 +636,6 @@ def factoryAttributeAction(nsNode):
         print()
 
 
-# factoryGetName
-
-
-def factoryGetName(nsNode):
-    print("""#ifdef DEBUG_DOMAINMAPPER
-string OOXMLFactory_%s::getName() const
-{
-    return "%s";
-}
-#endif
-""" % (nsToLabel(nsNode), nsNode.getAttribute("name")))
-
-
 # createImpl
 
 
@@ -692,7 +679,6 @@ namespace ooxml {
         factoryGetDefineName(nsNode)
         factoryTokenToIdMap(nsNode)
         factoryAttributeAction(nsNode)
-        factoryGetName(nsNode)
 
     print("""/// @endcond
 }}""")

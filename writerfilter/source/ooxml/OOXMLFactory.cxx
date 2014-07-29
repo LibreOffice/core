@@ -279,13 +279,6 @@ void OOXMLFactory_ns::attributeAction(OOXMLFastContextHandler *, Token_t, OOXMLV
 {
 }
 
-#ifdef DEBUG_DOMAINMAPPER
-string OOXMLFactory_ns::getName() const
-{
-    return "noname";
-}
-#endif
-
 }
 }
 

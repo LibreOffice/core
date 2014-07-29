@@ -56,11 +56,6 @@ public:
     print("""virtual void charactersAction(OOXMLFastContextHandler* pHandler, const OUString & sText);
     virtual void attributeAction(OOXMLFastContextHandler* pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
 
-#ifdef DEBUG_DOMAINMAPPER
-    virtual string getName() const;
-#endif
-
-
     virtual ~OOXMLFactory_%s();
 
 protected:

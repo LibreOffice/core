@@ -103,7 +103,6 @@ public:
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
 #ifdef DEBUG_DOMAINMAPPER
     virtual string getDefineName(Id nId) const;
-    virtual string getName() const;
 #endif
 
     AttributeToResourceMapPointer getAttributeToResourceMap(Id nId);
