@@ -2771,7 +2771,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
 
     sal_Int32 left_wildcard = rChk.startsWith( ".*" ) ? 2 : 0; // ".*word" pattern?
     sal_Int32 nSttWdPos = nEndPos;
-    if( nEndPos >= rChk.getLength() - left_wildcard)
+    if ( nEndPos >= rChk.getLength() - (rChk.endsWith( ".*" ) ? 2 : left_wildcard))
     {
 
         bool bWasWordDelim = false;
