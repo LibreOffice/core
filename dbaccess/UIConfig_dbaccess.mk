@@ -17,6 +17,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/choosedatasourcedialog \
     dbaccess/uiconfig/ui/collectionviewdialog \
     dbaccess/uiconfig/ui/colwidthdialog \
+    dbaccess/uiconfig/ui/connectionpage \
     dbaccess/uiconfig/ui/copytablepage \
     dbaccess/uiconfig/ui/dbaseindexdialog \
     dbaccess/uiconfig/ui/dbwizmysqlintropage \
