@@ -78,7 +78,7 @@ void ScUndoAllRangeNames::DoChange(const boost::ptr_map<OUString, ScRangeName>& 
 
     rDoc.PreprocessRangeNameUpdate();
     rDoc.SetAllRangeNames(rNames);
-    rDoc.PostprocessRangeNameUpdate();
+    rDoc.CompileHybridFormula();
 
     SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }

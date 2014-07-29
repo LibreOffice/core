@@ -77,7 +77,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
     bool bCompile = !rDoc.IsImportingXML();
     bool bOk;
     if ( bCompile )
-        rDoc.CompileDBFormula( true );     // CreateFormulaString
+        rDoc.PreprocessDBDataUpdate();
     if ( rName == STR_DB_LOCAL_NONAME )
     {
         rDoc.SetAnonymousDBData(rRange.aStart.Tab() , pNew);
@@ -88,7 +88,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
         bOk = pDocColl->getNamedDBs().insert(pNew);
     }
     if ( bCompile )
-        rDoc.CompileDBFormula( false );    // CompileFormulaString
+        rDoc.CompileHybridFormula();
 
     if (!bOk)
     {
@@ -126,9 +126,9 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
         if (bUndo)
             pUndoColl = new ScDBCollection( *pDocColl );
 
-        rDoc.CompileDBFormula( true );     // CreateFormulaString
+        rDoc.PreprocessDBDataUpdate();
         rDBs.erase(*p);
-        rDoc.CompileDBFormula( false );    // CompileFormulaString
+        rDoc.CompileHybridFormula();
 
         if (bUndo)
         {
@@ -162,7 +162,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
 
         ScDBCollection* pUndoColl = new ScDBCollection( *pDocColl );
 
-        rDoc.CompileDBFormula(true);               // CreateFormulaString
+        rDoc.PreprocessDBDataUpdate();
         rDBs.erase(*pOld);
         bool bInserted = rDBs.insert(pNewData);
         if (!bInserted)                             // Fehler -> alten Zustand wiederherstellen
@@ -171,7 +171,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
             rDoc.SetDBCollection(pUndoColl);       // gehoert dann dem Dokument
         }
 
-        rDoc.CompileDBFormula( false );            // CompileFormulaString
+        rDoc.CompileHybridFormula();
 
         if (bInserted)                              // Einfuegen hat geklappt
         {
@@ -264,9 +264,9 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
 
     //  register target in SBA no longer necessary
 
-    rDoc.CompileDBFormula( true );     // CreateFormulaString
+    rDoc.PreprocessDBDataUpdate();
     rDoc.SetDBCollection( new ScDBCollection( rNewColl ) );
-    rDoc.CompileDBFormula( false );    // CompileFormulaString
+    rDoc.CompileHybridFormula();
     pOldColl = NULL;
     rDocShell.PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
     aModificator.SetDocumentModified();

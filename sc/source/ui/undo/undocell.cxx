@@ -1008,7 +1008,7 @@ void ScUndoRangeNames::DoChange( bool bUndo )
             rDoc.SetRangeName( new ScRangeName( *pNewRanges ) );
     }
 
-    rDoc.PostprocessRangeNameUpdate();
+    rDoc.CompileHybridFormula();
 
     SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 }

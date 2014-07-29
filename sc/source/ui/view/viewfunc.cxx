@@ -2783,7 +2783,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
             bOk = true;
         pNewEntry = NULL;   // never delete, insert took ownership
 
-        rDoc.PostprocessRangeNameUpdate();
+        rDoc.CompileHybridFormula();
 
         aModificator.SetDocumentModified();
         SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );

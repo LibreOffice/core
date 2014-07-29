@@ -254,7 +254,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             OUString aNewName;
             if (eMode==SC_DB_IMPORT)
             {
-                aDocument.CompileDBFormula( true );         // CreateFormulaString
+                aDocument.PreprocessDBDataUpdate();
                 pUndoColl = new ScDBCollection( *pColl );   // Undo fuer Import1-Bereich
 
                 OUString aImport = ScGlobal::GetRscString( STR_DBNAME_IMPORT );
@@ -286,7 +286,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
             if ( pUndoColl )
             {
-                aDocument.CompileDBFormula( false );        // CompileFormulaString
+                aDocument.CompileHybridFormula();
 
                 ScDBCollection* pRedoColl = new ScDBCollection( *pColl );
                 GetUndoManager()->AddUndoAction( new ScUndoDBData( this, pUndoColl, pRedoColl ) );

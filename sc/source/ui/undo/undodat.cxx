@@ -1013,9 +1013,9 @@ void ScUndoDBData::Undo()
 
     bool bOldAutoCalc = rDoc.GetAutoCalc();
     rDoc.SetAutoCalc( false );         // Avoid unnecessary calculations
-    rDoc.CompileDBFormula( true );     // CreateFormulaString
+    rDoc.PreprocessDBDataUpdate();
     rDoc.SetDBCollection( new ScDBCollection(*pUndoColl), true );
-    rDoc.CompileDBFormula( false );    // CompileFormulaString
+    rDoc.CompileHybridFormula();
     rDoc.SetAutoCalc( bOldAutoCalc );
 
     SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
@@ -1031,9 +1031,9 @@ void ScUndoDBData::Redo()
 
     bool bOldAutoCalc = rDoc.GetAutoCalc();
     rDoc.SetAutoCalc( false );         // Avoid unnecessary calculations
-    rDoc.CompileDBFormula( true );     // CreateFormulaString
+    rDoc.PreprocessDBDataUpdate();
     rDoc.SetDBCollection( new ScDBCollection(*pRedoColl), true );
-    rDoc.CompileDBFormula( false );    // CompileFormulaString
+    rDoc.CompileHybridFormula();
     rDoc.SetAutoCalc( bOldAutoCalc );
 
     SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
