@@ -841,11 +841,11 @@ static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
         aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
         STREAM_STD_READWRITE );
     xTargetDocShell->DoSaveAs( *pDstMed );
-    xTargetDocShell->DoSaveCompleted( pDstMed );
     if( xTargetDocShell->GetError() )
         SAL_WARN( "sw.mailmerge", "Error saving: " << aTempFile->GetURL() );
     else
         SAL_INFO( "sw.mailmerge", "Saved doc as: " << aTempFile->GetURL() );
+    delete pDstMed;
 }
 #endif
 
