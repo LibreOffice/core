@@ -976,7 +976,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             PrintMonitor aPrtMonDlg(&pSourceShell->GetView().GetEditWin(), PrintMonitor::MONITOR_TYPE_PRINT);
             aPrtMonDlg.aDocName.SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
 
-            aPrtMonDlg.aCancel.SetClickHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
+            aPrtMonDlg.SetCancelHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
             if (!IsMergeSilent())
                 aPrtMonDlg.Show();
 

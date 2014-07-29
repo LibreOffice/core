@@ -746,7 +746,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         SwView* pSourceView = rConfigItem.GetSourceView();
         PrintMonitor aSaveMonitor(this, PrintMonitor::MONITOR_TYPE_SAVE);
         aSaveMonitor.aDocName.SetText(pSourceView->GetDocShell()->GetTitle(22));
-        aSaveMonitor.aCancel.SetClickHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
+        aSaveMonitor.SetCancelHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
         aSaveMonitor.aPrinter.SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
         aSaveMonitor.ResizeControls();
 
