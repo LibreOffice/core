@@ -1093,9 +1093,9 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( !bEdit || aFName != aFixedFont.GetName() )
                 {
                     FontFamily eFamily = FAMILY_DONTKNOW;
-                    if( xPropSetInfo->hasPropertyByName( "FontName" ) )
+                    if( xPropSetInfo->hasPropertyByName( "FontFamily" ) )
                     {
-                        aTmp = xPropSet->getPropertyValue( "FontName" );
+                        aTmp = xPropSet->getPropertyValue( "FontFamily" );
                         if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get())
                             eFamily = (FontFamily)*(sal_Int16*) aTmp.getValue();
                     }
