@@ -16,6 +16,24 @@
       "revId": "8b788ca04f9ca6fc5d9cc1f240f5c60d928d50a6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_ac5c3bee",
+        "filename": "xmloff/source/text/txtparae.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-29T10:46:20Z",
+      "side": 1,
+      "message": "this is wrong, should be OUString::boolean(bValue)",
+      "parentUuid": "bab921fb_6cace3ed",
+      "revId": "8b788ca04f9ca6fc5d9cc1f240f5c60d928d50a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
