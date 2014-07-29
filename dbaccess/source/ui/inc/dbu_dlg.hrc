@@ -137,9 +137,22 @@
 #define STR_ODBC_HEADERTEXT                 RID_STR_DLG_START + 89
 #define STR_ODBC_HELPTEXT                   RID_STR_DLG_START + 90
 
+#define STR_JDBC_HEADERTEXT                 RID_STR_DLG_START + 91
+#define STR_JDBC_HELPTEXT                   RID_STR_DLG_START + 92
+
+#define STR_MYSQLJDBC_HEADERTEXT            RID_STR_DLG_START + 93
+#define STR_MYSQLJDBC_HELPTEXT              RID_STR_DLG_START + 94
+#define STR_MYSQL_DRIVERCLASSTEXT           RID_STR_DLG_START + 95
+#define STR_MYSQL_DEFAULT                   RID_STR_DLG_START + 96
+
+#define STR_ORACLE_HEADERTEXT               RID_STR_DLG_START + 97
+#define STR_ORACLE_DEFAULT                  RID_STR_DLG_START + 98
+#define STR_ORACLE_DRIVERCLASSTEXT          RID_STR_DLG_START + 99
+#define STR_ORACLE_HELPTEXT                 RID_STR_DLG_START + 100
+
 // please adjust checking before insert new strings
 
-#define LAST_STR_HERE                       RID_STR_DLG_START + 91
+#define LAST_STR_HERE                       RID_STR_DLG_START + 101
 
 #if LAST_STR_HERE > RID_STR_DLG_END
 #error Resource-Id Overflow in #file, #line

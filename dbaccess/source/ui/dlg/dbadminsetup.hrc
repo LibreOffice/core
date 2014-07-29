@@ -25,23 +25,6 @@
 #include "browserids.hxx"
 
     // FREE
-#define STR_JDBC_HELPTEXT                   33
-#define STR_MYSQLJDBC_HELPTEXT              35
-    // FREE
-#define STR_ORACLE_HELPTEXT                 40
-    // FREE
-#define STR_JDBC_HEADERTEXT                 46
-#define STR_MYSQLJDBC_HEADERTEXT            48
-    // FREE
-#define STR_ORACLE_HEADERTEXT               54
-
-    // FREE
-
-#define STR_ORACLE_DEFAULT              67
-    // FREE
-#define STR_MYSQL_DEFAULT               83
-#define STR_ORACLE_DRIVERCLASSTEXT      84
-#define STR_MYSQL_DRIVERCLASSTEXT       85
 #define STR_LDAP_DEFAULT                86
 
 #define FT_LDAP_HELPTEXT                2
