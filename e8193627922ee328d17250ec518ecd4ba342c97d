@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_6ca06391",
+        "filename": "svx/source/customshapes/EnhancedCustomShape2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-07-29T13:49:21Z",
+      "side": 0,
+      "message": "For performance it is better to revert my changes and move this const OUString block before the for-loop?",
+      "revId": "e8193627922ee328d17250ec518ecd4ba342c97d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
