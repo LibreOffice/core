@@ -510,7 +510,31 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
         return;
     }
 
-    pDoc->setPartMode(ePartMode);
+    Application::AcquireSolarMutex(1);
+    {
+        int nCurrentPart = pDoc->getPart();
+
+        pDoc->setPartMode(ePartMode);
+
+        // We need to make sure the internal state is updated, just changing the mode
+        // might not update the relevant shells (i.e. impress will keep rendering the
+        // previous mode unless we do this).
+        // TODO: we might want to do this within the relevant components rather than
+        // here, but that's also dependent on how we implement embedded object
+        // rendering I guess?
+        // TODO: we could be clever and e.g. set to 0 when we change to/from
+        // embedded object mode, and not when changing between slide/notes/combined
+        // modes?
+        if ( nCurrentPart < pDoc->getParts() )
+        {
+            pDoc->setPart( nCurrentPart );
+        }
+        else
+        {
+            pDoc->setPart( 0 );
+        }
+    }
+    Application::ReleaseSolarMutex();
 }
 
 void doc_paintTile (LibreOfficeKitDocument* pThis,
