@@ -483,14 +483,14 @@ DECLARE_WW8IMPORT_TEST(testFdp80333, "fdo80333.doc")
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
-#endif
-
 DECLARE_WW8IMPORT_TEST(testFloatingTableSectionColumns, "floating-table-section-columns.doc")
 {
     OUString tableWidth = parseDump("/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds", "width");
     // table width was restricted by a column
     CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
 }
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
