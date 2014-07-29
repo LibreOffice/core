@@ -26,6 +26,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/whiter.hxx>
 
 #include "imapwrap.hxx"
@@ -48,21 +49,14 @@ void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
     {
         case SID_GALLERY:
         {
-            SfxViewFrame* pThisFrame = GetViewFrame();
-            pThisFrame->ToggleChildWindow( GalleryChildWindow::GetChildWindowId() );
-            pThisFrame->GetBindings().Invalidate( SID_GALLERY );
-            rReq.Ignore();
+            // First make sure that the sidebar is visible
+            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                "GalleryPanel",
+                GetViewFrame()->GetFrame().GetFrameInterface());
         }
         break;
-    }
-}
-
-void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
-{
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GALLERY ) )
-    {
-        sal_uInt16 nId = GalleryChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
 
@@ -92,10 +86,6 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
         GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
     }
-}
-
-void ScTabViewShell::GetGalleryState( SfxItemSet& /* rSet */ )
-{
 }
 
 OUString ScTabViewShell::GetDescription() const

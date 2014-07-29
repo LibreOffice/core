@@ -75,7 +75,6 @@ void DrawViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(AnimationChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(Svx3DChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
-    GetStaticInterface()->RegisterChildWindow(GalleryChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxHlinkDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(::sd::SpellDialogChildWindow::GetChildWindowId());
@@ -101,7 +100,6 @@ void GraphicViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SvxColorChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(Svx3DChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
-    GetStaticInterface()->RegisterChildWindow(GalleryChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxHlinkDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(::sd::SpellDialogChildWindow::GetChildWindowId());

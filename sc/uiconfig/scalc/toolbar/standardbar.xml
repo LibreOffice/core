@@ -53,7 +53,6 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Navigator"/>
- <toolbar:toolbaritem xlink:href=".uno:Gallery"/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>

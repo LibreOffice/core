@@ -285,7 +285,6 @@ void SwView::GetState(SfxItemSet &rSet)
                     (m_pWrtShell->GetRedlineMode() & nMask) == nMask ));
             }
             break;
-            case SID_GALLERY :
             case SID_AVMEDIA_PLAYER :
             case FN_REDLINE_ACCEPT :
             {
