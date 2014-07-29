@@ -23,10 +23,9 @@
 #include "dbui.hxx"
 
 PrintMonitor::PrintMonitor(Window *pParent, PrintMonitorType eType )
-    : ModelessDialog(pParent, "PrintMonitorDialog",
+    : CancelableModelessDialog(pParent, "PrintMonitorDialog",
         "modules/swriter/ui/printmonitordialog.ui")
 {
-    get(m_pCancel, "cancel");
     get(m_pDocName, "docname");
     get(m_pPrinter, "printer");
     get(m_pPrintInfo, "printinfo");
@@ -45,7 +44,7 @@ PrintMonitor::PrintMonitor(Window *pParent, PrintMonitorType eType )
 
 // Progress Indicator for Creation of personalized Mail Merge documents:
 CreateMonitor::CreateMonitor( Window *pParent )
-    : ModelessDialog(pParent, "MMCreatingDialog",
+    : CancelableModelessDialog(pParent, "MMCreatingDialog",
         "modules/swriter/ui/mmcreatingdialog.ui")
     , m_sCountingPattern()
     , m_sVariable_Total("%Y")
@@ -53,7 +52,6 @@ CreateMonitor::CreateMonitor( Window *pParent )
     , m_nTotalCount(0)
     , m_nCurrentPosition(0)
 {
-    get(m_pCancelButton, "cancel");
     get(m_pCounting, "progress");
     m_sCountingPattern = m_pCounting->GetText();
     m_pCounting->SetText("...");
@@ -79,7 +77,14 @@ void CreateMonitor::SetCurrentPosition( sal_Int32 nCurrent )
     UpdateCountingText();
 }
 
-void CreateMonitor::SetCancelHdl( const Link& rLink )
+CancelableModelessDialog::CancelableModelessDialog( Window *pParent,
+        const OString& rID, const OUString& rUIXMLDescription )
+    : ModelessDialog( pParent , rID, rUIXMLDescription )
+{
+    get(m_pCancelButton, "cancel");
+}
+
+void CancelableModelessDialog::SetCancelHdl( const Link& rLink )
 {
     m_pCancelButton->SetClickHdl( rLink );
 }
