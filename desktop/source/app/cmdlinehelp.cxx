@@ -59,6 +59,7 @@ namespace desktop
         "--nolockcheck  \n"\
         "--nodefault    \n"\
         "--headless     \n"\
+        "--cat          \n"\
         "--help/-h/-?   \n"\
         "--version      \n"\
         "--writer       \n"\
@@ -80,6 +81,7 @@ namespace desktop
         "don't check for remote instances using the installation\n"\
         "don't start with an empty document\n"\
         "like invisible but no userinteraction at all.\n"\
+        "dump the text contents to the screen\n"\
         "show this message and exit.\n"\
         "display the version information.\n"\
         "create new text document.\n"\
