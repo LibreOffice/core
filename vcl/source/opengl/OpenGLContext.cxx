@@ -475,7 +475,13 @@ bool OpenGLContext::ImplInit()
 #elif defined( MACOSX )
 
     CGLPixelFormatAttribute pixelFormatAttributes[] = {
+#ifdef kCGLPFAOpenGLProfile // Available in OS X 10.7 and later
         kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute) kCGLOGLPVersion_3_2_Core,
+#else
+        // Will we then get run-time error on OS X < 10.7? Why can't
+        // we just require building against the 10.9 SDK or later, and
+        // running on 10.7 at least.
+#endif
         kCGLPFAColorSize, (CGLPixelFormatAttribute) 24,
         kCGLPFAAlphaSize, (CGLPixelFormatAttribute) 8,
         kCGLPFADoubleBuffer,
