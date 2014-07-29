@@ -3010,7 +3010,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 if (bSpellError)
                 {
                     // Check and see if a misspelled word is under the mouse pointer.
-                    bSpellError = IsSpellErrorAtPos(aPosPixel, nColSpellError, nCellY);
+                    bSpellError = IsSpellErrorAtPos(aPosPixel, nColSpellError, nCellX, nCellY);
                 }
             }
 
@@ -5334,7 +5334,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     return false;
 }
 
-bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow )
+bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCCOL nCol2, SCROW nRow )
 {
     if (!mpSpellCheckCxt)
         return false;
@@ -5358,6 +5358,10 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow
     Rectangle aEditRect = pViewData->GetEditArea(eWhich, nCol1, nRow, this, pPattern, false);
     if (rPos.Y() < aEditRect.Top())
         return false;
+
+    Rectangle aEditRect2 = pViewData->GetEditArea(eWhich, nCol2, nRow, this, pPattern, false);
+    long nWidth = aEditRect2.Right() - aEditRect.Left();
+    aEditRect.setWidth(nWidth);
 
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);
     Rectangle aLogicEdit = PixelToLogic(aEditRect, aEditMode);
