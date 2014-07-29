@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_0c2c4749",
+        "filename": "dbaccess/source/ui/inc/dbu_resource.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T11:11:44Z",
+      "side": 1,
+      "message": "You should update the range in the comment here too.",
+      "revId": "45b2b92abc88c2bc8561d5678644b1ba3406e375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
