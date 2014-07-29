@@ -53,7 +53,10 @@
 
 #include <vector>
 #include <osl/thread.hxx>
+#include <osl/file.hxx>
+#include <osl/file.h>
 #include <rtl/instance.hxx>
+#include <iostream>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -423,11 +426,12 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             else if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
                       aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
                       aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
-                      aDispatchRequest.aRequestType == REQUEST_CONVERSION )
+                      aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
+                      aDispatchRequest.aRequestType == REQUEST_CAT )
             {
                 if ( xDoc.is() )
                 {
-                    if ( aDispatchRequest.aRequestType == REQUEST_CONVERSION ) {
+                    if ( aDispatchRequest.aRequestType == REQUEST_CONVERSION || aDispatchRequest.aRequestType == REQUEST_CAT ) {
                         Reference< XStorable > xStorable( xDoc, UNO_QUERY );
                         if ( xStorable.is() ) {
                             OUString aParam = aDispatchRequest.aPrinterName;
@@ -458,6 +462,14 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                                                      "/" +
                                                      aOutFilename.getName();
 
+                            OUString fileForCat;
+                            if( aDispatchRequest.aRequestType == REQUEST_CAT )
+                            {
+                                if( ::osl::FileBase::createTempFile(0, 0, &fileForCat) != ::osl::FileBase::E_None )
+                                    fprintf( stderr, "Error: Cannot create temporary file...\n" );
+                                aOutFile = fileForCat;
+                            }
+
                             if ( bGuess )
                             {
                                 aFilter = impl_GuessFilter( aName, aOutFile );
@@ -486,10 +498,13 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             OString aSource8 = OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
                             FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
                             OString aTargetURL8 = OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
-                            printf("convert %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
-                                   OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr());
-                            if( FStatHelper::IsDocument(aOutFile) )
-                                printf("Overwriting: %s\n",OUStringToOString( aTempName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                            if( aDispatchRequest.aRequestType != REQUEST_CAT )
+                            {
+                                printf("convert %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
+                                       OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr());
+                                if( FStatHelper::IsDocument( aOutFile ) )
+                                    printf("Overwriting: %s\n",OUStringToOString( aTempName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                            }
                             try
                             {
                                 xStorable->storeToURL( aOutFile, conversionProperties );
@@ -497,6 +512,36 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             catch (const Exception&)
                             {
                                 fprintf( stderr, "Error: Please reverify input parameters...\n" );
+                            }
+
+                            if( aDispatchRequest.aRequestType == REQUEST_CAT )
+                            {
+                                osl::File aFile( fileForCat );
+                                osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
+                                if( aRC != osl::File::E_None )
+                                {
+                                    fprintf( stderr, "Error: Cannot read from temp file\n" );
+                                }
+                                else
+                                {
+                                    sal_Bool eof;
+                                    for( ;; )
+                                    {
+                                        aFile.isEndOfFile( &eof );
+                                        if( eof )
+                                            break;
+                                        rtl::ByteSequence bseq;
+                                        aFile.readLine( bseq );
+                                        unsigned const char * aStr = reinterpret_cast< unsigned char const * >( bseq.getConstArray() );
+                                        for( sal_Int32 i = 0; i < bseq.getLength(); i++ )
+                                        {
+                                            std::cout << aStr[i];
+                                        }
+                                        std::cout << "\n";
+                                    }
+                                    aFile.close();
+                                    osl::File::remove( fileForCat );
+                                }
                             }
                         }
                     } else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ) {

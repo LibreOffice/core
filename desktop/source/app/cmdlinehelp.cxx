@@ -124,7 +124,10 @@ namespace desktop
         "      Batch print files to file.\n"\
         "      If --outdir is not specified then current working dir is used as output_dir.\n"\
         "      Eg. --print-to-file *.doc\n"\
-        "          --print-to-file --printer-name nasty_lowres_printer --outdir /home/user *.doc\n"\
+        "          --print-to-file --printer-name nasty_lowres_printer --outdir /home/user *.doc\n" \
+        "--cat files\n"\
+        "      Dump text content of the files to console\n"\
+        "      Eg. --cat *.odt\n"\
         "--pidfile file\n"\
         "      Store soffice.bin pid to file.\n"\
         "-env:<VAR>[=<VALUE>]\n"\

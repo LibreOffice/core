@@ -190,6 +190,13 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 m_headless = true;
                 m_invisible = true;
             }
+            else if ( oArg == "cat" )
+            {
+                m_textcat = true;
+                m_conversionparams = "txt:Text";
+                bOpenEvent = false;
+                bConversionEvent = true;
+            }
             else if ( oArg == "quickstart" )
             {
 #if defined(ENABLE_QUICKSTART_APPLET)
@@ -608,6 +615,7 @@ void CommandLineArgs::InitParamValues()
     m_splashpipe = false;
     m_bEmpty = true;
     m_bDocumentArgs  = false;
+    m_textcat = false;
 }
 
 
