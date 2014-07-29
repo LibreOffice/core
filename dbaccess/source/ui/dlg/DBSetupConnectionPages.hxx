@@ -44,7 +44,7 @@ namespace dbaui
         OSpreadSheetConnectionPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
 
     protected:
-        CheckBox m_aCBPasswordrequired;
+        CheckBox *m_pPasswordrequired;
         virtual ~OSpreadSheetConnectionPageSetup();
 
     protected:
@@ -221,12 +221,9 @@ namespace dbaui
         virtual ~OMySQLIntroPageSetup();
 
     private:
-        RadioButton         m_aRB_ODBCDatabase;
-        RadioButton         m_aRB_JDBCDatabase;
-        RadioButton         m_aRB_NATIVEDatabase;
-        FixedText           m_aFT_ConnectionMode;
-        FixedText           m_aFT_Helptext;
-        FixedText           m_aFT_Headertext;
+        RadioButton         *m_pODBCDatabase;
+        RadioButton         *m_pJDBCDatabase;
+        RadioButton         *m_pNATIVEDatabase;
 
         DECL_LINK(OnSetupModeSelected, RadioButton*);
 
