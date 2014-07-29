@@ -1848,6 +1848,44 @@ void Test::testFormulaRefUpdateMoveUndo()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateDeleteContent()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Set value in B2.
+    m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
+    // Set formula in C2 to reference B2.
+    m_pDoc->SetString(ScAddress(2,1,0), "=B2");
+
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+
+    // Delete B2.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SetMarkArea(ScAddress(1,1,0));
+    rFunc.DeleteContents(aMark, IDF_CONTENTS, true, true);
+
+    CPPUNIT_ASSERT_MESSAGE("B2 should be empty.", m_pDoc->GetCellType(ScAddress(1,1,0)) == CELLTYPE_NONE);
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    // Undo and check the result of C2.
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0))); // B2
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,1,0))); // C2
+
+    // Redo and check.
+    pUndoMgr->Redo();
+    CPPUNIT_ASSERT_MESSAGE("B2 should be empty.", m_pDoc->GetCellType(ScAddress(1,1,0)) == CELLTYPE_NONE);
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateNamedExpression()
 {
     m_pDoc->InsertTab(0, "Formula");
