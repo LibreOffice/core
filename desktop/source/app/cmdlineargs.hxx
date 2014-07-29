@@ -85,6 +85,7 @@ class CommandLineArgs: private boost::noncopyable
         bool                IsVersion() const { return m_version;}
         bool                HasModuleParam() const;
         bool                WantsToLoadDocument() const { return m_bDocumentArgs;}
+        bool                IsTextCat() const { return m_textcat;}
 
         OUString            GetUnknown() const { return m_unknown;}
 
@@ -145,6 +146,7 @@ class CommandLineArgs: private boost::noncopyable
         bool m_helpbase;
         bool m_version;
         bool m_splashpipe;
+        bool m_textcat;
 
         OUString m_unknown;
 

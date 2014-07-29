@@ -2399,6 +2399,7 @@ void Desktop::OpenClients()
     aRequest.aConversionParams = rArgs.GetConversionParams();
     aRequest.aConversionOut = rArgs.GetConversionOut();
     aRequest.aInFilter = rArgs.GetInFilter();
+    aRequest.bTextCat = rArgs.IsTextCat();
 
     if ( !aRequest.aOpenList.empty() ||
          !aRequest.aViewList.empty() ||

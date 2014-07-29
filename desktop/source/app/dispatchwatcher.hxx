@@ -62,7 +62,8 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
             REQUEST_FORCENEW,
             REQUEST_CONVERSION,
             REQUEST_INFILTER,
-            REQUEST_BATCHPRINT
+            REQUEST_BATCHPRINT,
+            REQUEST_CAT
         };
 
         struct DispatchRequest
