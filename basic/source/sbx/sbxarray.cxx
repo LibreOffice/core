@@ -731,7 +731,9 @@ void SbxDimArray::Put32( SbxVariable* p, const sal_Int32* pIdx  )
 sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
 {
 #ifndef DISABLE_SCRIPTING
-    if( m_vDimensions.empty() || !pPar || ( ( m_vDimensions.size() != ( pPar->Count() - 1 ) ) && SbiRuntime::isVBAEnabled() ) )
+    if (m_vDimensions.empty() || !pPar ||
+        ((m_vDimensions.size() != sal::static_int_cast<size_t>(pPar->Count() - 1))
+            && SbiRuntime::isVBAEnabled()))
     {
         SetError( SbxERR_BOUNDS );
         return 0;
