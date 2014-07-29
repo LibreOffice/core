@@ -234,6 +234,7 @@ public:
     virtual int  getPart() SAL_OVERRIDE;
     virtual int  getParts() SAL_OVERRIDE;
     virtual OUString getPartName( int nPart ) SAL_OVERRIDE;
+    virtual void setPartMode( LibreOfficeKitPartMode ePartMode ) SAL_OVERRIDE;
 
     // XComponent
 
