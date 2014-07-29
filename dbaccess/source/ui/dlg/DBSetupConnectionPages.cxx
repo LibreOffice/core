@@ -351,35 +351,37 @@ using namespace ::com::sun::star;
     }
 
     // OMySQLJDBCConnectionPageSetup
-    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,sal_uInt16 _nResId, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, sal_uInt16 _nDefaultPortResId, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderTextResId, sal_uInt16 _nDriverClassId)
-        :OGenericAdministrationPage(pParent, ModuleRes(_nResId), _rCoreAttrs)
-        ,m_aFTHelpText          (this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
-        ,m_aFTDatabasename      (this, ModuleRes(FT_AUTODATABASENAME))
-        ,m_aETDatabasename      (this, ModuleRes(ET_AUTODATABASENAME))
-        ,m_aFTHostname          (this, ModuleRes(FT_AUTOHOSTNAME))
-        ,m_aETHostname          (this, ModuleRes(ET_AUTOHOSTNAME))
-        ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
-        ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
-        ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
-        ,m_aFTDriverClass       (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
-        ,m_aETDriverClass       (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
-        ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
+    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, sal_uInt16 _nDefaultPortResId, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderTextResId, sal_uInt16 _nDriverClassId)
+        :OGenericAdministrationPage(pParent, "SpecialJDBCConnectionPage", "dbaccess/ui/specialjdbcconnectionpage.ui", _rCoreAttrs)
         ,m_nPortId(_nPortId)
     {
-        m_aFTDriverClass.SetText(OUString(ModuleRes(_nDriverClassId)));
+        get(m_pHeaderText, "header");
+        get(m_pFTHelpText, "helpLabel");
+        get(m_pFTDatabasename, "dbNameLabel");
+        get(m_pETDatabasename, "dbNameEntry");
+        get(m_pFTHostname, "hostNameLabel");
+        get(m_pETHostname, "hostNameEntry");
+        get(m_pFTPortNumber, "portNumLabel");
+        get(m_pFTDefaultPortNumber, "portNumDefLabel");
+        get(m_pNFPortNumber, "portNumEntry");
+        get(m_pFTDriverClass, "jdbcDriverLabel");
+        get(m_pETDriverClass, "jdbcDriverEntry");
+        get(m_pPBTestJavaDriver, "testDriverButton");
 
-        m_aFTDefaultPortNumber.SetText(OUString(ModuleRes(_nDefaultPortResId)));
+        m_pFTDriverClass->SetText(OUString(ModuleRes(_nDriverClassId)));
+
+        m_pFTDefaultPortNumber->SetText(OUString(ModuleRes(_nDefaultPortResId)));
         OUString sHelpText = OUString(ModuleRes(_nHelpTextResId));
-        m_aFTHelpText.SetText(sHelpText);
+        m_pFTHelpText->SetText(sHelpText);
         //TODO this code snippet is redundant
-        SetHeaderText(FT_AUTOWIZARDHEADER, _nHeaderTextResId);
+        m_pHeaderText->SetText(ModuleRes(_nHeaderTextResId));
 
-        m_aETDatabasename.SetModifyHdl(getControlModifiedLink());
-        m_aETHostname.SetModifyHdl(getControlModifiedLink());
-        m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
+        m_pETDatabasename->SetModifyHdl(getControlModifiedLink());
+        m_pETHostname->SetModifyHdl(getControlModifiedLink());
+        m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
 
-        m_aETDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified));
-        m_aPBTestJavaDriver.SetClickHdl(LINK(this,OGeneralSpecialJDBCConnectionPageSetup,OnTestJavaClickHdl));
+        m_pETDriverClass->SetModifyHdl(LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified));
+        m_pPBTestJavaDriver->SetClickHdl(LINK(this,OGeneralSpecialJDBCConnectionPageSetup,OnTestJavaClickHdl));
 
         SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
         SFX_ITEMSET_GET(_rCoreAttrs, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, true);
@@ -390,13 +392,11 @@ using namespace ::com::sun::star;
         }
 
         SetRoadmapStateValue(false);
-        FreeResource();
     }
 
     OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
-                                                         PAGE_DBWIZARD_MYSQL_JDBC,
                                                          _rAttrSet,
                                                          DSID_MYSQL_PORTNUMBER ,
                                                          STR_MYSQL_DEFAULT,
@@ -408,7 +408,6 @@ using namespace ::com::sun::star;
     OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
-                                                          PAGE_DBWIZARD_ORACLE,
                                                           _rAttrSet,
                                                           DSID_ORACLE_PORTNUMBER,
                                                           STR_ORACLE_DEFAULT,
@@ -419,28 +418,28 @@ using namespace ::com::sun::star;
 
     void OGeneralSpecialJDBCConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETDatabasename));
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETDriverClass));
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETHostname));
-        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETDatabasename));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETDriverClass));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETHostname));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pNFPortNumber));
     }
     void OGeneralSpecialJDBCConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHelpText));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDatabasename));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTPortNumber));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDefaultPortNumber));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHelpText));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTDatabasename));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHostname));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTDefaultPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTDriverClass));
     }
 
     bool OGeneralSpecialJDBCConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
-        fillString(*_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
-        fillString(*_rSet,&m_aETHostname,DSID_CONN_HOSTNAME,bChangedSomething);
-        fillString(*_rSet,&m_aETDatabasename,DSID_DATABASENAME,bChangedSomething);
-        fillInt32(*_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
+        fillString(*_rSet,m_pETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
+        fillString(*_rSet,m_pETHostname,DSID_CONN_HOSTNAME,bChangedSomething);
+        fillString(*_rSet,m_pETDatabasename,DSID_DATABASENAME,bChangedSomething);
+        fillInt32(*_rSet,m_pNFPortNumber,m_nPortId,bChangedSomething );
         return bChangedSomething;
     }
 
@@ -457,29 +456,29 @@ using namespace ::com::sun::star;
 
         if ( bValid )
         {
-            m_aETDatabasename.SetText(pDatabaseName->GetValue());
-            m_aETDatabasename.ClearModifyFlag();
+            m_pETDatabasename->SetText(pDatabaseName->GetValue());
+            m_pETDatabasename->ClearModifyFlag();
 
-            m_aETDriverClass.SetText(pDrvItem->GetValue());
-            m_aETDriverClass.ClearModifyFlag();
+            m_pETDriverClass->SetText(pDrvItem->GetValue());
+            m_pETDriverClass->ClearModifyFlag();
 
-            m_aETHostname.SetText(pHostName->GetValue());
-            m_aETHostname.ClearModifyFlag();
+            m_pETHostname->SetText(pHostName->GetValue());
+            m_pETHostname->ClearModifyFlag();
 
-            m_aNFPortNumber.SetValue(pPortNumber->GetValue());
-            m_aNFPortNumber.ClearModifyFlag();
+            m_pNFPortNumber->SetValue(pPortNumber->GetValue());
+            m_pNFPortNumber->ClearModifyFlag();
         }
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correct value when saveValue was called by base class
-        if ( m_aETDriverClass.GetText().trim().isEmpty() )
+        if ( m_pETDriverClass->GetText().trim().isEmpty() )
         {
-            m_aETDriverClass.SetText(m_sDefaultJdbcDriverName);
-            m_aETDriverClass.SetModifyFlag();
+            m_pETDriverClass->SetText(m_sDefaultJdbcDriverName);
+            m_pETDriverClass->SetModifyFlag();
         }
         callModifiedHdl();
 
-        bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && (!m_aETHostname.GetText().isEmpty()) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().isEmpty() ));
+        bool bRoadmapState = ((!m_pETDatabasename->GetText().isEmpty() ) && (!m_pETHostname->GetText().isEmpty()) && (!m_pNFPortNumber->GetText().isEmpty() ) && ( !m_pETDriverClass->GetText().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
     }
 
@@ -491,12 +490,12 @@ using namespace ::com::sun::star;
 #if HAVE_FEATURE_JAVA
         try
         {
-            if ( !m_aETDriverClass.GetText().trim().isEmpty() )
+            if ( !m_pETDriverClass->GetText().trim().isEmpty() )
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
-                m_aETDriverClass.SetText(m_aETDriverClass.GetText().trim()); // fdo#68341
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aETDriverClass.GetText());
+                m_pETDriverClass->SetText(m_pETDriverClass->GetText().trim()); // fdo#68341
+                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_pETDriverClass->GetText());
             }
         }
         catch(::com::sun::star::uno::Exception&)
@@ -512,9 +511,9 @@ using namespace ::com::sun::star;
 
     IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
     {
-        if ( _pEdit == &m_aETDriverClass )
-            m_aPBTestJavaDriver.Enable( !m_aETDriverClass.GetText().trim().isEmpty() );
-        bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && ( !m_aETHostname.GetText().isEmpty() ) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().trim().isEmpty() ));
+        if ( _pEdit == m_pETDriverClass )
+            m_pPBTestJavaDriver->Enable( !m_pETDriverClass->GetText().trim().isEmpty() );
+        bool bRoadmapState = ((!m_pETDatabasename->GetText().isEmpty() ) && ( !m_pETHostname->GetText().isEmpty() ) && (!m_pNFPortNumber->GetText().isEmpty() ) && ( !m_pETDriverClass->GetText().trim().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
         callModifiedHdl();
         return 0L;
@@ -527,30 +526,30 @@ using namespace ::com::sun::star;
 
     // OMySQLJDBCConnectionPageSetup
     OJDBCConnectionPageSetup::OJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs)
-        :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_JDBC, _rCoreAttrs, STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
-        ,m_aFTDriverClass       (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
-        ,m_aETDriverClass       (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
-        ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
+        :OConnectionTabPageSetup(pParent, "JDBCConnectionPage", "dbaccess/ui/jdbcconnectionpage.ui", _rCoreAttrs,
+                                STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
     {
-        m_aETDriverClass.SetModifyHdl(LINK(this, OJDBCConnectionPageSetup, OnEditModified));
-        m_aPBTestJavaDriver.SetClickHdl(LINK(this,OJDBCConnectionPageSetup,OnTestJavaClickHdl));
-        FreeResource();
+        get(m_pFTDriverClass, "jdbcLabel");
+        get(m_pETDriverClass, "jdbcEntry");
+        get(m_pPBTestJavaDriver, "jdbcButton");
+        m_pETDriverClass->SetModifyHdl(LINK(this, OJDBCConnectionPageSetup, OnEditModified));
+        m_pPBTestJavaDriver->SetClickHdl(LINK(this,OJDBCConnectionPageSetup,OnTestJavaClickHdl));
     }
 
     void OJDBCConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETDriverClass));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETDriverClass));
     }
 
     void OJDBCConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTDriverClass));
     }
 
     bool OJDBCConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
-        fillString(*_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
+        fillString(*_rSet,m_pETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
         return bChangedSomething;
     }
 
@@ -569,18 +568,18 @@ using namespace ::com::sun::star;
                 OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
                 if ( !sDefaultJdbcDriverName.isEmpty() )
                 {
-                    m_aETDriverClass.SetText(sDefaultJdbcDriverName);
-                    m_aETDriverClass.SetModifyFlag();
+                    m_pETDriverClass->SetText(sDefaultJdbcDriverName);
+                    m_pETDriverClass->SetModifyFlag();
                 }
             }
             else
             {
-                m_aETDriverClass.SetText(pDrvItem->GetValue());
-                m_aETDriverClass.ClearModifyFlag();
+                m_pETDriverClass->SetText(pDrvItem->GetValue());
+                m_pETDriverClass->ClearModifyFlag();
             }
         }
         bool bEnable = pDrvItem->GetValue().getLength() != 0;
-        m_aPBTestJavaDriver.Enable(bEnable);
+        m_pPBTestJavaDriver->Enable(bEnable);
         OConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
 
         SetRoadmapStateValue(checkTestConnection());
@@ -590,7 +589,7 @@ using namespace ::com::sun::star;
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bEnableTestConnection = !m_pConnectionURL->IsVisible() || !m_pConnectionURL->GetTextNoPrefix().isEmpty();
-        bEnableTestConnection = bEnableTestConnection && (!m_aETDriverClass.GetText().isEmpty());
+        bEnableTestConnection = bEnableTestConnection && (!m_pETDriverClass->GetText().isEmpty());
         return bEnableTestConnection;
     }
 
@@ -601,12 +600,12 @@ using namespace ::com::sun::star;
 #if HAVE_FEATURE_JAVA
         try
         {
-            if ( !m_aETDriverClass.GetText().isEmpty() )
+            if ( !m_pETDriverClass->GetText().isEmpty() )
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
-                m_aETDriverClass.SetText(m_aETDriverClass.GetText().trim()); // fdo#68341
-                bSuccess = xJVM.is() && ::connectivity::existsJavaClassByName(xJVM,m_aETDriverClass.GetText());
+                m_pETDriverClass->SetText(m_pETDriverClass->GetText().trim()); // fdo#68341
+                bSuccess = xJVM.is() && ::connectivity::existsJavaClassByName(xJVM,m_pETDriverClass->GetText());
             }
         }
         catch(::com::sun::star::uno::Exception&)
@@ -621,8 +620,8 @@ using namespace ::com::sun::star;
 
     IMPL_LINK(OJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
     {
-        if ( _pEdit == &m_aETDriverClass )
-            m_aPBTestJavaDriver.Enable( !m_aETDriverClass.GetText().isEmpty() );
+        if ( _pEdit == m_pETDriverClass )
+            m_pPBTestJavaDriver->Enable( !m_pETDriverClass->GetText().isEmpty() );
         SetRoadmapStateValue(checkTestConnection());
         // tell the listener we were modified
         callModifiedHdl();

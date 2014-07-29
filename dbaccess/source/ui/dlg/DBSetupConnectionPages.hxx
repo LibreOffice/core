@@ -135,7 +135,6 @@ namespace dbaui
     {
     public:
         OGeneralSpecialJDBCConnectionPageSetup(   Window* pParent
-                                        , sal_uInt16 _nResId
                                         , const SfxItemSet& _rCoreAttrs
                                         , sal_uInt16 _nPortId
                                         , sal_uInt16 _nDefaultPortResId
@@ -154,18 +153,19 @@ namespace dbaui
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
-        FixedText           m_aFTHelpText;
-        FixedText           m_aFTDatabasename;
-        Edit                m_aETDatabasename;
-        FixedText           m_aFTHostname;
-        Edit                m_aETHostname;
-        FixedText           m_aFTPortNumber;
-        FixedText           m_aFTDefaultPortNumber;
-        NumericField        m_aNFPortNumber;
+        FixedText*          m_pHeaderText;
+        FixedText*          m_pFTHelpText;
+        FixedText*          m_pFTDatabasename;
+        Edit*               m_pETDatabasename;
+        FixedText*          m_pFTHostname;
+        Edit*               m_pETHostname;
+        FixedText*          m_pFTPortNumber;
+        FixedText*          m_pFTDefaultPortNumber;
+        NumericField*       m_pNFPortNumber;
 
-        FixedText           m_aFTDriverClass;
-        Edit                m_aETDriverClass;
-        PushButton          m_aPBTestJavaDriver;
+        FixedText*          m_pFTDriverClass;
+        Edit*               m_pETDriverClass;
+        PushButton*         m_pPBTestJavaDriver;
 
         OUString              m_sDefaultJdbcDriverName;
         sal_uInt16              m_nPortId;
@@ -188,9 +188,9 @@ namespace dbaui
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
-        FixedText           m_aFTDriverClass;
-        Edit                m_aETDriverClass;
-        PushButton          m_aPBTestJavaDriver;
+        FixedText*          m_pFTDriverClass;
+        Edit*               m_pETDriverClass;
+        PushButton*         m_pPBTestJavaDriver;
     };
 
     // OJDBCConnectionPageSetup
