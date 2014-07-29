@@ -189,6 +189,7 @@ static LibreOfficeKitDocumentType doc_getDocumentType(LibreOfficeKitDocument* pT
 static int doc_getParts(LibreOfficeKitDocument* pThis);
 static int doc_getPart(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
+static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart);
 void        doc_paintTile(LibreOfficeKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
@@ -219,6 +220,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
             m_pDocumentClass->getParts = doc_getParts;
             m_pDocumentClass->getPart = doc_getPart;
             m_pDocumentClass->setPart = doc_setPart;
+            m_pDocumentClass->getPartName = doc_getPartName;
             m_pDocumentClass->paintTile = doc_paintTile;
             m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
 
@@ -473,6 +475,25 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
         pDoc->setPart( nPart );
     }
     Application::ReleaseSolarMutex();
+}
+
+static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    ::vcl::ITiledRenderable* pDoc = dynamic_cast< ::vcl::ITiledRenderable* >( pDocument->mxComponent.get() );
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return 0;
+    }
+
+    OUString sName = pDoc->getPartName( nPart );
+    OString aString = OUStringToOString(sName, RTL_TEXTENCODING_UTF8);
+    char* pMemory = (char*) malloc(aString.getLength() + 1);
+    strcpy(pMemory, aString.getStr());
+    return pMemory;
+
 }
 
 void doc_paintTile (LibreOfficeKitDocument* pThis,

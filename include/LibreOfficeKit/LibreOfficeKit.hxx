@@ -64,6 +64,11 @@ public:
         mpDoc->pClass->setPart(mpDoc, nPart);
     }
 
+    inline char* getPartName(int nPart)
+    {
+        return mpDoc->pClass->getPartName(mpDoc, nPart);
+    }
+
     inline void paintTile(
                           unsigned char* pBuffer,
                           const int nCanvasWidth,

@@ -57,6 +57,16 @@ public:
      * details.
      */
     virtual int getPart() = 0;
+
+    /**
+     * Get the name of the currently displayed part, i.e. sheet in a spreadsheet
+     * or slide in a presentation.
+     */
+    virtual OUString getPartName(int nPart)
+    {
+        (void) nPart;
+        return "";
+    }
 };
 
 } // namespace vcl
