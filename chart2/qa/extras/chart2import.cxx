@@ -10,6 +10,7 @@
 #include "charttest.hxx"
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -40,6 +41,7 @@ public:
      * hidden columns for internal data table yet).
      */
     void testPPTXHiddenDataSeries();
+    void testPPTXPercentageNumberFormats();
     void testPPTXStackedNonStackedYAxis();
     void testPPTChartSeries();
     void testODPChartSeries();
@@ -71,6 +73,7 @@ public:
     CPPUNIT_TEST(testPPTChartSeries);
     CPPUNIT_TEST(testPPTXChartSeries);
     CPPUNIT_TEST(testPPTXHiddenDataSeries);
+    CPPUNIT_TEST(testPPTXPercentageNumberFormats);
     CPPUNIT_TEST(testPPTXStackedNonStackedYAxis);
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
@@ -365,6 +368,71 @@ void Chart2ImportTest::testPPTXHiddenDataSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Category 2"), aCategories[1][0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Category 3"), aCategories[2][0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Category 4"), aCategories[3][0]);
+}
+
+void Chart2ImportTest::testPPTXPercentageNumberFormats()
+{
+    load("/chart2/qa/extras/data/pptx/", "percentage-number-formats.pptx");
+
+    // 1st chart
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    chart2::DataPointLabel aLabel;
+    sal_Int32 nNumberFormat;
+    const sal_Int32 nPercentFormatSimple = getNumberFormat(xChartDoc, "0%");
+    const sal_Int32 nPercentFormatDecimal = getNumberFormat(xChartDoc, "0.00%");
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nPercentFormatSimple, nNumberFormat);
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimal, nNumberFormat);
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nPercentFormatSimple, nNumberFormat);
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimal, nNumberFormat);
+
+    // 2nd chart
+    xChartDoc.set(getChartDocFromDrawImpress(1, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XAxis> xYAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
+    CPPUNIT_ASSERT(xYAxis.is());
+
+    Reference<beans::XPropertySet> xPS(xYAxis, uno::UNO_QUERY_THROW);
+    bool bLinkNumberFormatToSource = true;
+    bool bSuccess = xPS->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", bSuccess && !bLinkNumberFormatToSource);
+
+    // FIXME: This should be in fact "0.00%".
+    // see TODO in oox/source/drawingml/chart/modelbase.cxx
+    const sal_Int32 nPercentFormatDecimalShort = getNumberFormat(xChartDoc, "0.0%");
+    nNumberFormat = getNumberFormatFromAxis(xYAxis);
+    CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimalShort, nNumberFormat);
+    sal_Int16 nType = getNumberFormatType(xChartDoc, nNumberFormat);
+    CPPUNIT_ASSERT_MESSAGE("Y axis should be a percent format.", (nType & util::NumberFormat::PERCENT));
 }
 
 void Chart2ImportTest::testPPTXStackedNonStackedYAxis()

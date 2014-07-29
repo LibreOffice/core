@@ -494,6 +494,15 @@ OUString getTitleString( const Reference<chart2::XTitled>& xTitled )
     return aText;
 }
 
+sal_Int32 getNumberFormat( const Reference<chart2::XChartDocument>& xChartDoc, const OUString& sFormat )
+{
+    Reference<util::XNumberFormatsSupplier> xNFS(xChartDoc, uno::UNO_QUERY_THROW);
+    Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
+    CPPUNIT_ASSERT(xNumberFormats.is());
+
+    return xNumberFormats->queryKey(sFormat, css::lang::Locale(), sal_False);
+}
+
 sal_Int32 getNumberFormatFromAxis( const Reference<chart2::XAxis>& xAxis )
 {
     Reference<beans::XPropertySet> xPS(xAxis, uno::UNO_QUERY);
