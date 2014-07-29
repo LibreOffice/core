@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_8cf977cb",
+        "filename": "cui/source/inc/hangulhanjadlg.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T11:04:39Z",
+      "side": 1,
+      "message": "Both PseudoRubyText and RubyRadioButton classes can be moved to cxx (where PseudoRubyText had already been before). HangulHanjaConversionDialog only uses RubyRadioButton*, which means that a forward declaration is sufficient.",
+      "revId": "acce5e8bcb01e5881622382f152992865b05cae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
