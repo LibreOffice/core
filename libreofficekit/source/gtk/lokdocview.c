@@ -204,5 +204,8 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_part( LOKDocView* pDocView, int nPart)
     renderDocument( pDocView );
 }
 
-
+SAL_DLLPUBLIC_EXPORT char* lok_docview_get_part_name( LOKDocView* pDocView, int nPart )
+{
+    return pDocView->pDocument->pClass->getPartName( pDocView->pDocument, nPart );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
