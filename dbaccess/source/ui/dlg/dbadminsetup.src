@@ -221,35 +221,24 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
     };
 };
 
-TabPage PAGE_DBWIZARD_MYSQL_JDBC
+String STR_MYSQLJDBC_HEADERTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_JDBC";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
+    Text[ en-US ] = "Set up connection to a MySQL database using JDBC" ;
+};
 
-    String STR_MYSQLJDBC_HEADERTEXT
-    {
-        Text[ en-US ] = "Set up connection to a MySQL database using JDBC" ;
-    };
+String STR_MYSQLJDBC_HELPTEXT
+{
+    Text[ en-US ] = "Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings.";
+};
 
-    String STR_MYSQLJDBC_HELPTEXT
-    {
-        Text[ en-US ] = "Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings.";
-    };
+String STR_MYSQL_DRIVERCLASSTEXT
+{
+    Text [  en-US  ] = "MySQL JDBC d~river class:";
+};
 
-    String STR_MYSQL_DRIVERCLASSTEXT
-    {
-        Text [  en-US  ] = "MySQL JDBC d~river class:";
-    };
-
-    String STR_MYSQL_DEFAULT
-    {
-        Text[ en-US ] = "Default: 3306";
-    };
-
-    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME,HID_PAGE_DBWIZARD_JDBC_ET_MYSQLHOSTSERVER,HID_PAGE_DBWIZARD_JDBC_ET_MYSQLPORT,HID_PAGE_DBWIZARD_JDBC_ET_MYSQLCLASS,HID_PAGE_DBWIZARD_JDBC_PB_TESTMYSQLCLASS)
+String STR_MYSQL_DEFAULT
+{
+    Text[ en-US ] = "Default: 3306";
 };
 
 TabPage PAGE_DBWIZARD_MYSQL_NATIVE
@@ -371,54 +360,32 @@ String STR_ODBC_HELPTEXT{
     Text[ en-US ] = "Enter the name of the ODBC database you want to connect to.\nClick 'Browse...' to select an ODBC database that is already registered in %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
 };
 
-TabPage PAGE_DBWIZARD_JDBC
+String STR_JDBC_HEADERTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_JDBC";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
-
-    String STR_JDBC_HEADERTEXT
-    {
-        Text[ en-US ] = "Set up a connection to a JDBC database" ;
-    };
-
-    String STR_JDBC_HELPTEXT{
-        Text[ en-US ] = "Please enter the required information to connect to a JDBC database.\nPlease contact your system administrator if you are unsure about the following settings." ;
-    };
-
-    AUTO_HELP_BROWSECONTROLGROUP(4, HID_PAGE_DBWIZARD_JDBC_ET_JDBCURL, HID_PAGE_DBWIZARD_JDBC_PB_JDBCURL)
-    AUTO_JDBCDRIVERCLASSGROUP(119, HID_PAGE_DBWIZARD_JDBC_ET_JDBCCLASS, HID_PAGE_DBWIZARD_JDBC_PB_TESTJDBCCLASS)
+    Text[ en-US ] = "Set up a connection to a JDBC database" ;
 };
 
-TabPage PAGE_DBWIZARD_ORACLE
+String STR_JDBC_HELPTEXT{
+    Text[ en-US ] = "Please enter the required information to connect to a JDBC database.\nPlease contact your system administrator if you are unsure about the following settings." ;
+};
+
+String STR_ORACLE_HEADERTEXT
 {
-    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ORACLE";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE ;
+    Text[ en-US ] = "Set up a connection to an Oracle database";
+};
 
-    String STR_ORACLE_HEADERTEXT
-    {
-        Text[ en-US ] = "Set up a connection to an Oracle database";
-    };
+String STR_ORACLE_DEFAULT
+{
+    Text[ en-US ] = "Default: 1521" ;
+};
 
-    String STR_ORACLE_DEFAULT
-    {
-        Text[ en-US ] = "Default: 1521" ;
-    };
+String STR_ORACLE_DRIVERCLASSTEXT
+{
+    Text [ en-US ] = "Oracle JDBC ~driver class";
+};
 
-    String STR_ORACLE_DRIVERCLASSTEXT{
-        Text [ en-US ] = "Oracle JDBC ~driver class";
-    };
-
-    String STR_ORACLE_HELPTEXT{
-        Text[ en-US ] = "Please enter the required information to connect to an Oracle database. Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
-    };
-
-    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEDBNAME,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEHOSTSERVER,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEPORT,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLECLASS,HID_PAGE_DBWIZARD_ORACLE_PB_TESTORACLECLASS)
+String STR_ORACLE_HELPTEXT{
+    Text[ en-US ] = "Please enter the required information to connect to an Oracle database. Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
 };
 
 TabPage PAGE_DBWIZARD_SPREADSHEET

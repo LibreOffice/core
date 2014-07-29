@@ -137,6 +137,19 @@
 #define STR_ODBC_HEADERTEXT                 RID_STR_DLG_START + 490
 #define STR_ODBC_HELPTEXT                   RID_STR_DLG_START + 491
 
+#define STR_JDBC_HEADERTEXT                 RID_STR_DLG_START + 492
+#define STR_JDBC_HELPTEXT                   RID_STR_DLG_START + 493
+
+#define STR_MYSQLJDBC_HEADERTEXT            RID_STR_DLG_START + 494
+#define STR_MYSQLJDBC_HELPTEXT              RID_STR_DLG_START + 495
+#define STR_MYSQL_DRIVERCLASSTEXT           RID_STR_DLG_START + 496
+#define STR_MYSQL_DEFAULT                   RID_STR_DLG_START + 497
+
+#define STR_ORACLE_HEADERTEXT               RID_STR_DLG_START + 498
+#define STR_ORACLE_DEFAULT                  RID_STR_DLG_START + 499
+#define STR_ORACLE_DRIVERCLASSTEXT          RID_STR_DLG_START + 500
+#define STR_ORACLE_HELPTEXT                 RID_STR_DLG_START + 501
+
 // please adjust checking before insert new strings
 
 #define LAST_STR_HERE                       RID_STR_DLG_START + 83
