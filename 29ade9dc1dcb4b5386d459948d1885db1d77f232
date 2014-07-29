@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_2c170bef",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T11:38:22Z",
+      "side": 1,
+      "message": "These 2 functions should return const OUString\u0026 to avoid unnecessary copying.",
+      "revId": "29ade9dc1dcb4b5386d459948d1885db1d77f232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_0cd3273a",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T11:38:22Z",
+      "side": 1,
+      "message": "Purely reformatting changes should not be mixed together with other changes. (It is fine to do that if the line would be changed anyway.) I am going to ignore that this time. Just please do not do it in the future. If you really feel the code must be reformatted, submit it as a separate commit.",
+      "revId": "29ade9dc1dcb4b5386d459948d1885db1d77f232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_8ce73712",
+        "filename": "cui/source/dialogs/hangulhanjadlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T11:38:22Z",
+      "side": 1,
+      "message": "Variables that do not have to be changed after init. should be declared const. That is not a requirement, but it is good to follow that practice.",
+      "revId": "29ade9dc1dcb4b5386d459948d1885db1d77f232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_6ce4e30c",
+        "filename": "cui/source/inc/hangulhanjadlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-29T11:38:22Z",
+      "side": 1,
+      "message": "In the simplified hungarian notation we use for variables, poiters have prefix \u0027p\u0027. It would be good to change prefixes of these variables from \u0027m_a\u0027 to \u0027m_p\u0027.",
+      "revId": "29ade9dc1dcb4b5386d459948d1885db1d77f232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
