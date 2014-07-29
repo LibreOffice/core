@@ -126,6 +126,10 @@ namespace svgio
 
             /// helper for filling the CssStyle vector once dependent on mbCssStyleVectorBuilt
             void fillCssStyleVector(const OUString& rClassStr);
+            void fillCssStyleVectorUsingHierarchyAndSelectors(
+                const OUString& rClassStr,
+                const SvgNode& rCurrent,
+                OUString aConcatenated);
 
         public:
             SvgNode(

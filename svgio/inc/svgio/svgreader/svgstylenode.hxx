@@ -45,8 +45,12 @@ namespace svgio
             /// #i125258# tell if this node is allowed to have a parent style (e.g. defs do not)
             virtual bool supportsParentStyle() const SAL_OVERRIDE;
 
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) SAL_OVERRIDE;
-            void addCssStyleSheet(const OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
+
+            /// CssStyleSheet add helpers
+            void addCssStyleSheet(const OUString& aSelectors, const SvgStyleAttributes& rNewStyle);
+            void addCssStyleSheet(const OUString& aSelectors, const OUString& aContent);
+            void addCssStyleSheet(const OUString& aSelectorsAndContent);
 
             /// textCss access
             bool isTextCss() const { return mbTextCss; }

@@ -65,10 +65,11 @@ namespace svgio
 
             /// add/remove styles to mapper
             void addSvgStyleAttributesToMapper(const OUString& rStr, const SvgStyleAttributes& rSvgStyleAttributes);
+            void removeSvgStyleAttributesFromMapper(const OUString& rStr);
 
             /// find a style by it's Id
-            bool hasSvgStyleAttributesById() const { return !maIdStyleTokenMapperList.empty(); }
-            const SvgStyleAttributes* findSvgStyleAttributesById(const OUString& rStr) const;
+            bool hasGlobalCssStyleAttributes() const { return !maIdStyleTokenMapperList.empty(); }
+            const SvgStyleAttributes* findGlobalCssStyleAttributes(const OUString& rStr) const;
 
             /// data read access
             const SvgNodeVector& getSvgNodeVector() const { return maNodes; }
