@@ -749,7 +749,7 @@ void ScNamedRangesObj::lock()
 /** called from the XActionLockable interface methods on final unlock */
 void ScNamedRangesObj::unlock()
 {
-    pDocShell->GetDocument()->PostprocessRangeNameUpdate();
+    pDocShell->GetDocument()->CompileHybridFormula();
 }
 
 // document::XActionLockable

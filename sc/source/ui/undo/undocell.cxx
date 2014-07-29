@@ -1009,7 +1009,7 @@ void ScUndoRangeNames::DoChange( bool bUndo )
             pDoc->SetRangeName( new ScRangeName( *pNewRanges ) );
     }
 
-    pDoc->PostprocessRangeNameUpdate();
+    pDoc->CompileHybridFormula();
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 }

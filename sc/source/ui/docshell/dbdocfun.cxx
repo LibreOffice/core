@@ -77,7 +77,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
     bool bCompile = !pDoc->IsImportingXML();
     bool bOk;
     if ( bCompile )
-        pDoc->CompileDBFormula( true );     // CreateFormulaString
+        pDoc->PreprocessDBDataUpdate();
     if ( rName == STR_DB_LOCAL_NONAME )
     {
         pDoc->SetAnonymousDBData(rRange.aStart.Tab() , pNew);
@@ -88,7 +88,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
         bOk = pDocColl->getNamedDBs().insert(pNew);
     }
     if ( bCompile )
-        pDoc->CompileDBFormula( false );    // CompileFormulaString
+        pDoc->CompileHybridFormula();
 
     if (!bOk)
     {
@@ -126,9 +126,9 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
         if (bUndo)
             pUndoColl = new ScDBCollection( *pDocColl );
 
-        pDoc->CompileDBFormula( true );     // CreateFormulaString
+        pDoc->PreprocessDBDataUpdate();
         rDBs.erase(*p);
-        pDoc->CompileDBFormula( false );    // CompileFormulaString
+        pDoc->CompileHybridFormula();
 
         if (bUndo)
         {
@@ -162,7 +162,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
 
         ScDBCollection* pUndoColl = new ScDBCollection( *pDocColl );
 
-        pDoc->CompileDBFormula(true);               // CreateFormulaString
+        pDoc->PreprocessDBDataUpdate();
         rDBs.erase(*pOld);
         bool bInserted = rDBs.insert(pNewData);
         if (!bInserted)                             // Fehler -> alten Zustand wiederherstellen
@@ -171,7 +171,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
             pDoc->SetDBCollection(pUndoColl);       // gehoert dann dem Dokument
         }
 
-        pDoc->CompileDBFormula( false );            // CompileFormulaString
+        pDoc->CompileHybridFormula();
 
         if (bInserted)                              // Einfuegen hat geklappt
         {

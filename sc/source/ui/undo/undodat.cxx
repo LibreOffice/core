@@ -1131,9 +1131,9 @@ void ScUndoDBData::Undo()
 
     bool bOldAutoCalc = pDoc->GetAutoCalc();
     pDoc->SetAutoCalc( false );         // Avoid unnecessary calculations
-    pDoc->CompileDBFormula( true );     // CreateFormulaString
+    pDoc->PreprocessDBDataUpdate();
     pDoc->SetDBCollection( new ScDBCollection(*pUndoColl), true );
-    pDoc->CompileDBFormula( false );    // CompileFormulaString
+    pDoc->CompileHybridFormula();
     pDoc->SetAutoCalc( bOldAutoCalc );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
@@ -1149,9 +1149,9 @@ void ScUndoDBData::Redo()
 
     bool bOldAutoCalc = pDoc->GetAutoCalc();
     pDoc->SetAutoCalc( false );         // Avoid unnecessary calculations
-    pDoc->CompileDBFormula( true );     // CreateFormulaString
+    pDoc->PreprocessDBDataUpdate();
     pDoc->SetDBCollection( new ScDBCollection(*pRedoColl), true );
-    pDoc->CompileDBFormula( false );    // CompileFormulaString
+    pDoc->CompileHybridFormula();
     pDoc->SetAutoCalc( bOldAutoCalc );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );

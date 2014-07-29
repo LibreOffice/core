@@ -521,11 +521,8 @@ public:
      * Call this immediately before updating all named ranges.
      */
     SC_DLLPUBLIC void PreprocessRangeNameUpdate();
-
-    /**
-     * Call this immediately after all named ranges have been updated.
-     */
-    SC_DLLPUBLIC void PostprocessRangeNameUpdate();
+    SC_DLLPUBLIC void PreprocessDBDataUpdate();
+    SC_DLLPUBLIC void CompileHybridFormula();
 
     /**
      * Insert a new named expression to the global scope.
@@ -1981,7 +1978,6 @@ public:
     void                StartTrackTimer();
 
     void            CompileDBFormula();
-    void            CompileDBFormula( bool bCreateFormulaString );
     void            CompileColRowNameFormula();
 
     /** Maximum string length of a column, e.g. for dBase export.
