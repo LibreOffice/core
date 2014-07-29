@@ -170,7 +170,7 @@ public:
         if (!bVal)
             return;
 
-        ScRange aRange(mnCurTab, mnCurCol, nRow1, mnCurTab, mnCurCol, nRow2);
+        ScRange aRange(mnCurCol, nRow1, mnCurTab, mnCurCol, nRow2, mnCurTab);
         mrDoc.BroadcastCells(aRange, SC_HINT_DATACHANGED);
     };
 };
