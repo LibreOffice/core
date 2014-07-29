@@ -1113,9 +1113,12 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
         sal_Int32 nPropId = bPercentFormat ? PROP_PercentageNumberFormat : PROP_NumberFormat;
         try
         {
-            sal_Int32 nIndex = rNumberFormat.maFormatCode.equalsIgnoreAsciiCase("general") ?
+            bool bGeneral = rNumberFormat.maFormatCode.equalsIgnoreAsciiCase("general");
+            sal_Int32 nIndex = bGeneral && !bPercentFormat ?
                 mxData->mxNumTypes->getStandardIndex( mxData->maFromLocale ) :
-                mxData->mxNumFmts->addNewConverted( rNumberFormat.maFormatCode, mxData->maEnUsLocale, mxData->maFromLocale );
+                mxData->mxNumFmts->addNewConverted(
+                        bGeneral ? OUString("0%") : rNumberFormat.maFormatCode,
+                        mxData->maEnUsLocale, mxData->maFromLocale );
             if( nIndex >= 0 )
                 rPropSet.setProperty( nPropId, nIndex );
         }
