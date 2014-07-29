@@ -373,8 +373,11 @@ public:
     void PreprocessRangeNameUpdate(
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
-    void PostprocessRangeNameUpdate(
+    void CompileHybridFormula(
         sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt );
+
+    void PreprocessDBDataUpdate(
+        sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
     const SfxPoolItem*      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
@@ -480,7 +483,6 @@ public:
     void CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 );
 
     void CompileDBFormula( sc::CompileFormulaContext& rCxt );
-    void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const;

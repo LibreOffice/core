@@ -57,7 +57,20 @@ void ScDocument::PreprocessRangeNameUpdate()
     }
 }
 
-void ScDocument::PostprocessRangeNameUpdate()
+void ScDocument::PreprocessDBDataUpdate()
+{
+    sc::EndListeningContext aEndListenCxt(*this);
+    sc::CompileFormulaContext aCompileCxt(this);
+
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* p = *it;
+        p->PreprocessDBDataUpdate(aEndListenCxt, aCompileCxt);
+    }
+}
+
+void ScDocument::CompileHybridFormula()
 {
     sc::StartListeningContext aStartListenCxt(*this);
     sc::CompileFormulaContext aCompileCxt(this);
@@ -65,7 +78,7 @@ void ScDocument::PostprocessRangeNameUpdate()
     for (; it != itEnd; ++it)
     {
         ScTable* p = *it;
-        p->PostprocessRangeNameUpdate(aStartListenCxt, aCompileCxt);
+        p->CompileHybridFormula(aStartListenCxt, aCompileCxt);
     }
 }
 

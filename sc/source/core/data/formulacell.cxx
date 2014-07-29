@@ -3496,57 +3496,6 @@ void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt )
     }
 }
 
-void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
-{
-    // Two phases must be called after each other
-    // 1. Formula String with old generated names
-    // 2. Formula String with new generated names
-    if ( bCreateFormulaString )
-    {
-        bool bRecompile = false;
-        pCode->Reset();
-        for ( FormulaToken* p = pCode->First(); p && !bRecompile; p = pCode->Next() )
-        {
-            switch ( p->GetOpCode() )
-            {
-                case ocBad:             // DB Area eventually goes bad
-                case ocColRowName:      // in case of the same names
-                case ocDBArea:          // DB Area
-                    bRecompile = true;
-                break;
-                case ocName:
-                    if ( p->GetIndex() >= SC_START_INDEX_DB_COLL )
-                        bRecompile = true;  // DB Area
-                break;
-                default:
-                    ; // nothing
-            }
-        }
-        if ( bRecompile )
-        {
-            OUString aFormula = GetFormula(rCxt);
-            if ( GetMatrixFlag() != MM_NONE && !aFormula.isEmpty() )
-            {
-                if ( aFormula[ aFormula.getLength()-1 ] == '}' )
-                    aFormula = aFormula.copy( 0, aFormula.getLength()-1 );
-                if ( aFormula[0] == '{' )
-                    aFormula = aFormula.copy( 1 );
-            }
-            EndListeningTo( pDocument );
-            pDocument->RemoveFromFormulaTree( this );
-            pCode->Clear();
-            SetHybridFormula(aFormula, rCxt.getGrammar());
-        }
-    }
-    else if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
-    {
-        rCxt.setGrammar(eTempGrammar);
-        Compile(rCxt, aResult.GetHybridFormula(), false);
-        aResult.SetToken( NULL);
-        SetDirty();
-    }
-}
-
 void ScFormulaCell::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )
 {
     pCode->Reset();

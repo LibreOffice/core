@@ -864,8 +864,11 @@ public:
     void PreprocessRangeNameUpdate(
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
-    void PostprocessRangeNameUpdate(
+    void CompileHybridFormula(
         sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt );
+
+    void PreprocessDBDataUpdate(
+        sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;
@@ -1029,7 +1032,6 @@ private:
     bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const;
     bool        TestTabRefAbs(SCTAB nTable) const;
     void CompileDBFormula( sc::CompileFormulaContext& rCxt );
-    void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
     void        RebuildFormulaGroups();
 
