@@ -31,7 +31,7 @@ $(eval $(call gb_Library_add_defs,gdipluscanvas,\
 	-UNOMINMAX \
 ))
 
-ifeq ($(WINDOWS_SDK_VERSION),80)
+ifneq ($(filter 80 81,$(WINDOWS_SDK_VERSION)),)
 $(eval $(call gb_Library_add_defs,gdipluscanvas,\
 	-DWIN8_SDK=1 \
 ))
