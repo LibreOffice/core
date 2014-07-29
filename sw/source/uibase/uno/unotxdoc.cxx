@@ -3139,21 +3139,6 @@ Size SwXTextDocument::getDocumentSize()
     return pViewShell->GetDocSize();
 }
 
-void SwXTextDocument::setPart( int /*nPart*/ )
-{
-}
-
-int SwXTextDocument::getPart()
-{
-    return 0;
-}
-
-int SwXTextDocument::getParts()
-{
-    // For now we treat the document as one large piece.
-    return 1;
-}
-
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);
