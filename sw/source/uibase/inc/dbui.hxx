@@ -53,6 +53,27 @@ public:
     PrintMonitor( vcl::Window *pParent, PrintMonitorType eType );
 };
 
+class CreateMonitor : public CancelableModelessDialog
+{
+public:
+    CreateMonitor( vcl::Window *pParent );
+
+    void SetTotalCount( sal_Int32 nTotal );
+    void SetCurrentPosition( sal_Int32 nCurrent );
+
+private:
+    void UpdateCountingText();
+
+private:
+    FixedText*      m_pCounting;
+
+    OUString        m_sCountingPattern;
+    OUString        m_sVariable_Total;
+    OUString        m_sVariable_Position;
+    sal_Int32       m_nTotalCount;
+    sal_Int32       m_nCurrentPosition;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
