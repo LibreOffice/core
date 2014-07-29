@@ -2261,6 +2261,13 @@ int SdXImpressDocument::getPart()
     return 0;
 }
 
+OUString SdXImpressDocument::getPartName( int nPart )
+{
+    SdPage* pPage = mpDoc->GetSdPage( nPart, PK_STANDARD );
+    assert( pPage );
+    return pPage->GetName();
+}
+
 Size SdXImpressDocument::getDocumentSize()
 {
     SdrPageView* pCurPageView = mpDoc->GetDocSh()->GetViewShell()->GetView()->GetSdrPageView();
