@@ -129,6 +129,9 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
     mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
 
+    // chaining
+    mbToBeChained = false;
+
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
 }
@@ -153,6 +156,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
     mbTextAnimationAllowed = true;
     mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
+
+    // chaining
+    mbToBeChained = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
@@ -180,6 +186,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
     mbTextAnimationAllowed = true;
     mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
+
+    // chaining
+    mbToBeChained = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
@@ -1533,6 +1542,17 @@ bool SdrTextObj::IsVerticalWriting() const
     }
 
     return false;
+}
+
+// chaining
+bool SdrTextObj::IsToBeChained() const
+{
+    return mbToBeChained;
+}
+
+void SdrTextObj::SetToBeChained(bool bToBeChained)
+{
+    mbToBeChained = bToBeChained;
 }
 
 void SdrTextObj::SetVerticalWriting(bool bVertical)

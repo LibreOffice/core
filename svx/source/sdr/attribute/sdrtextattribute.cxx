@@ -87,7 +87,8 @@ namespace drawinglayer
                 bool bScroll,
                 bool bInEditMode,
                 bool bFixedCellHeight,
-                bool bWrongSpell)
+                bool bWrongSpell,
+                bool bToBeChained)
             :   mpSdrText(pSdrText),
                 mxOutlinerParaObject(new OutlinerParaObject(rOutlinerParaObject)),
                 maSdrFormTextAttribute(),
@@ -229,7 +230,8 @@ namespace drawinglayer
                     && isScroll() == rCandidate.isScroll()
                     && isInEditMode() == rCandidate.isInEditMode()
                     && isFixedCellHeight() == rCandidate.isFixedCellHeight()
-                    && isWrongSpell() == rCandidate.isWrongSpell());
+                    && isWrongSpell() == rCandidate.isWrongSpell()
+                    && isToBeChained() == rCandidate.isToBeChained() );
             }
         };
 

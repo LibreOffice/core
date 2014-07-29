@@ -220,6 +220,9 @@ protected:
     // the successor in a chain
     SdrTextObj *mpNextInChain = NULL;
 
+    // indicating the for its text to be chained to another text box
+    bool mbToBeChained : 1;
+
     // Fuer beschriftete Zeichenobjekte ist bTextFrame=FALSE. Der Textblock
     // wird dann hoizontal und vertikal an aRect zentriert. Bei bTextFrame=
     // sal_True wird der Text in aRect hineinformatiert. Der eigentliche Textrahmen
@@ -349,6 +352,7 @@ public:
     bool IsAutoFit() const;
     /// returns true if the old feature for fitting shape content should into shape is enabled. implies IsAutoFit()==false!
     bool IsFitToSize() const;
+    bool IsToBeChained() const;
     SdrObjKind GetTextKind() const { return eTextKind; }
 
     // #i121917#
@@ -531,6 +535,8 @@ public:
     void ForceOutlinerParaObject();
     virtual bool IsVerticalWriting() const;
     virtual void SetVerticalWriting(bool bVertical);
+
+    void SetToBeChained(bool bToBeChained);
 
     /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
