@@ -1134,6 +1134,7 @@ void ScTable::FillFormulaVertical(
 
     SCCOLROW nRowStart = -1, nRowEnd = -1;
     std::vector<sc::RowSpan> aSpans;
+    PutInOrder(nRow1, nRow2);
     for (rInner = nRow1; rInner <= nRow2; ++rInner)
     {
         if (rInner > nHiddenLast)
