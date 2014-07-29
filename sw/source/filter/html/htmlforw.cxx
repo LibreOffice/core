@@ -1093,7 +1093,6 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( !bEdit || aFName != aFixedFont.GetName() )
                 {
                     FontFamily eFamily = FAMILY_DONTKNOW;
-                    sPropName = "FontFamily";
                     if( xPropSetInfo->hasPropertyByName( "FontName" ) )
                     {
                         aTmp = xPropSet->getPropertyValue( "FontName" );
