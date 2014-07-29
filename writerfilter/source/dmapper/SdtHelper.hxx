@@ -60,6 +60,8 @@ class SdtHelper
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> m_aGrabBag;
 
     bool m_bHasElements;
+    /// The last stored SDT element is outside paragraphs.
+    bool m_bOutsideAParagraph;
 
     /// Create and append the drawing::XControlShape, containing the various models.
     void createControlShape(css::awt::Size aSize, css::uno::Reference<css::awt::XControlModel> const&);
@@ -92,6 +94,16 @@ public:
     bool hasElements()
     {
         return m_bHasElements;
+    }
+
+    void setOutsideAParagraph(bool bOutsideAParagraph)
+    {
+        m_bOutsideAParagraph = bOutsideAParagraph;
+    }
+
+    bool isOutsideAParagraph()
+    {
+        return m_bOutsideAParagraph;
     }
 
     /// Create drop-down control from w:sdt's w:dropDownList.

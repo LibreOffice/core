@@ -518,15 +518,15 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
-    OUString aParagraphSdtPrAlias;
     if( !m_bAnchorLinkedToNode )
-        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, aParagraphSdtPrAlias, /*bPara=*/true );
+        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, m_aParagraphSdtPrAlias, /*bPara=*/true );
     else
     {
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
         m_nParagraphSdtPrToken = 0;
-        lcl_deleteAndResetTheLists( m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, aParagraphSdtPrAlias );
+        m_bParagraphSdtHasId = false;
+        lcl_deleteAndResetTheLists( m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, m_aParagraphSdtPrAlias );
     }
 
     //sdtcontent is written so Set m_bParagraphHasDrawing to false
@@ -588,13 +588,14 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
             m_pSerializer->endElement( nSdtPrToken );
         }
-        else if( nSdtPrToken == FSNS( XML_w, XML_id ) )
-            //Word won't open a document with an empty id tag, we fill it with a random number
-            m_pSerializer->singleElement( nSdtPrToken,
-                                          FSNS(XML_w, XML_val), OString::number( rand() ),
-                                          FSEND );
         else if( (nSdtPrToken > 0) && !(m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing()))
             m_pSerializer->singleElement( nSdtPrToken, FSEND );
+
+        if( nSdtPrToken == FSNS( XML_w, XML_id ) || ( bPara && m_bParagraphSdtHasId ) )
+            //Word won't open a document with an empty id tag, we fill it with a random number
+            m_pSerializer->singleElementNS(XML_w, XML_id,
+                                          FSNS(XML_w, XML_val), OString::number( rand() ),
+                                          FSEND );
 
         if(( pSdtPrDataBindingAttrs ) && !m_rExport.SdrExporter().IsParagraphHasDrawing())
         {
@@ -7663,6 +7664,60 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     m_nParagraphSdtPrToken = FSNS( XML_w, XML_citation );
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_group")
                     m_nParagraphSdtPrToken = FSNS( XML_w, XML_group );
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text")
+                    m_nParagraphSdtPrToken = FSNS(XML_w, XML_text);
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && !m_pParagraphSdtPrDataBindingAttrs)
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (sal_Int32 j = 0; j < aGrabBag.getLength(); ++j)
+                    {
+                        OUString sValue = aGrabBag[j].Value.get<OUString>();
+                        if (aGrabBag[j].Name == "ooxml:CT_DataBinding_prefixMappings")
+                            AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
+                                           FSNS( XML_w, XML_prefixMappings ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_xpath")
+                            AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
+                                           FSNS( XML_w, XML_xpath ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_storeItemID")
+                            AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
+                                           FSNS( XML_w, XML_storeItemID ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    }
+                }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_alias" && m_aParagraphSdtPrAlias.isEmpty())
+                {
+                    if (!(aPropertyValue.Value >>= m_aParagraphSdtPrAlias))
+                        SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unexpected sdt alias value");
+                }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
+                {
+                    m_nParagraphSdtPrToken = FSNS( XML_w14, XML_checkbox );
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    {
+                        OUString sValue = aGrabBag[j].Value.get<OUString>();
+                        if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
+                            AddToAttrList( m_pParagraphSdtPrTokenChildren,
+                                           FSNS( XML_w14, XML_checked ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
+                            AddToAttrList( m_pParagraphSdtPrTokenChildren,
+                                           FSNS( XML_w14, XML_checkedState ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
+                            AddToAttrList( m_pParagraphSdtPrTokenChildren,
+                                           FSNS( XML_w14, XML_uncheckedState ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    }
+                }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
+                    m_bParagraphSdtHasId = true;
+                else
+                    SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr grab bag property " << aPropertyValue.Name);
             }
         }
         else
@@ -7927,6 +7982,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     , m_nRunSdtPrToken(0)
     , m_pRunSdtPrTokenChildren(NULL)
     , m_pRunSdtPrDataBindingAttrs(NULL)
+    , m_bParagraphSdtHasId(false)
 {
 }
 

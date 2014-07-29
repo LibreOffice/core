@@ -2371,6 +2371,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         }
         else
             m_pImpl->m_pSdtHelper->appendToInteropGrabBag(getInteropGrabBag());
+        m_pImpl->m_pSdtHelper->setOutsideAParagraph(m_pImpl->IsOutsideAParagraph());
         m_pImpl->disableInteropGrabBag();
     }
     break;
@@ -2669,6 +2670,8 @@ void DomainMapper::lcl_endShape( )
 
         lcl_endParagraphGroup();
         m_pImpl->PopShapeContext( );
+        // A shape is always inside a shape (anchored or inline).
+        m_pImpl->SetIsOutsideAParagraph(false);
     }
 }
 
@@ -2833,12 +2836,12 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     {
         // there are unsupported SDT properties in the document
         // save them in the paragraph interop grab bag
-        if(m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_checkbox") ||
+        if((m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_checkbox") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_text") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_citation") ||
                 (m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_id") &&
-                        m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1))
+                        m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1)) && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
         {
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER);
 

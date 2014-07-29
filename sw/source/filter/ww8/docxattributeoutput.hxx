@@ -897,7 +897,11 @@ private:
     sal_Int32 m_nRunSdtPrToken;
     ::sax_fastparser::FastAttributeList *m_pRunSdtPrTokenChildren;
     ::sax_fastparser::FastAttributeList *m_pRunSdtPrDataBindingAttrs;
+    /// Value of the <w:alias> paragraph SDT element.
+    OUString m_aParagraphSdtPrAlias;
     OUString m_aRunSdtPrAlias;
+    /// Currently paragraph SDT has a <w:id> child element.
+    bool m_bParagraphSdtHasId;
 
     std::map<sal_uInt16, css::table::BorderLine2> m_aTableStyleConf;
 

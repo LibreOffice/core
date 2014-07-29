@@ -70,6 +70,7 @@ awt::Size lcl_getOptimalWidth(StyleSheetTablePtr pStyleSheet, OUString& rDefault
 SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl)
     : m_rDM_Impl(rDM_Impl)
     , m_bHasElements(false)
+    , m_bOutsideAParagraph(false)
 {
 }
 

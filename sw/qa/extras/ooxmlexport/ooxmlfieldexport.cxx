@@ -510,6 +510,16 @@ DECLARE_OOXMLEXPORT_TEST(testSdtCitationRun, "sdt-citation-run.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testParagraphSdt, "paragraph-sdt.docx")
+{
+    // The problem was that the SDT was around the run only, not the whole paragraph.
+    if (xmlDocPtr pXmlDoc = parseExport())
+    {
+        // The path to w:sdt contained a w:p.
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:sdt");
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
