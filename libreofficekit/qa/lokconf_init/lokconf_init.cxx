@@ -14,6 +14,7 @@
 #include <sal/main.h>
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitInit.h>
 
 using namespace std;
 
