@@ -10,14 +10,19 @@ tiled rendering API).
 Integrating LOK into other software
 -----------------------------------
 
-You will need to integrate shim.c into your program, e.g. as a static library,
-in order to be able to use LOK. You will then be able to access LOK via
-the functions in LibreOfficeKit.h[xx].
+LOK functionality can be accessed by including LibreOfficeKit.h[xx] in your
+program.
+
+LOK initialisation (lok_init) requires the inclusion of LibreOfficeKitInit.h
+in your program. Should you be using the C++ LibreOfficeKit.hxx header you
+must first include LibreOfficeKitInit.h followed by LibreOfficeKit.hxx in any
+files where you need to use lok_cpp_init.
 
 (LibreOfficeKit.hxx is a simple and fully inlined C++ wrapper for the same
 functionality as in LibreOfficeKit.h.)
 
-An example program can be seen on:
+An example program (currently using the older shim.c/static library
+integration) can be seen on:
 https://github.com/ojwb/lloconv	
 
 Tiled Rendering
@@ -25,6 +30,8 @@ Tiled Rendering
 
 To use LOK Tiled Rendering you will need the following before the LOK includes:
 #define LOK_USE_UNSTABLE_API
+
+(This must be define before ANY LOK header, i.e. including the Init header.)
 
 Currently only bitmap-buffer rendering is supported, with a 32-bit RGBA
 colourspace (further alternatives could feasibly be implemented as needed).
