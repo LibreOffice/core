@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_cc988f6d",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-29T13:29:38Z",
+      "side": 1,
+      "message": "this query is unnecessary, the paragraph is already an XTextRange.",
+      "revId": "5b7c411f3af2a8ea053796ce129d0d4085fd6379",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_ec93534e",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-29T13:29:38Z",
+      "side": 1,
+      "message": "perhaps it would be good to also check that there is actually a field here of the proper type (get field from XTextFieldSupplier, check with XServiceInfo::supportsService(\"com.sun.star...\"))?",
+      "revId": "5b7c411f3af2a8ea053796ce129d0d4085fd6379",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
