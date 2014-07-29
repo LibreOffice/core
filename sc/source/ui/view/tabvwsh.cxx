@@ -83,7 +83,6 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScSimpleRefDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SID_HYPERLINK_DIALOG);
-    GetStaticInterface()->RegisterChildWindow(GalleryChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScSpellDialogChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScValidityRefChildWin::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());

@@ -270,7 +270,6 @@ void ScDLL::Init()
     SvxHlinkDlgWrapper          ::RegisterChildWindow(false, pMod);
     SvxFontWorkChildWindow      ::RegisterChildWindow(false, pMod);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(false, pMod);
-    GalleryChildWindow          ::RegisterChildWindow(false, pMod);
     ScSpellDialogChildWindow    ::RegisterChildWindow(false, pMod);
 
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
