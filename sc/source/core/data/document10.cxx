@@ -17,6 +17,7 @@
 #include <listenercontext.hxx>
 #include <tokenstringcontext.hxx>
 #include <poolhelp.hxx>
+#include <bcaslot.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -322,6 +323,18 @@ void ScDocument::RegroupFormulaCells( SCTAB nTab, SCCOL nCol )
         return;
 
     pTab->RegroupFormulaCells(nCol);
+}
+
+void ScDocument::CollectAllAreaListeners(
+    std::vector<SvtListener*>& rListener, const ScRange& rRange, sc::AreaOverlapType eType )
+{
+    if (!pBASM)
+        return;
+
+    std::vector<sc::AreaListener> aAL = pBASM->GetAllListeners(rRange, eType);
+    std::vector<sc::AreaListener>::iterator it = aAL.begin(), itEnd = aAL.end();
+    for (; it != itEnd; ++it)
+        rListener.push_back(it->mpListener);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

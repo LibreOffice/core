@@ -446,7 +446,8 @@ void ScBroadcastAreaSlot::EraseArea( ScBroadcastAreas::iterator& rIter )
     }
 }
 
-void ScBroadcastAreaSlot::GetAllListeners( const ScRange& rRange, std::vector<sc::AreaListener>& rListeners )
+void ScBroadcastAreaSlot::GetAllListeners(
+    const ScRange& rRange, std::vector<sc::AreaListener>& rListeners, sc::AreaOverlapType eType )
 {
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
             aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
@@ -456,7 +457,14 @@ void ScBroadcastAreaSlot::GetAllListeners( const ScRange& rRange, std::vector<sc
 
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
-        if (!rRange.In(rAreaRange))
+
+        if (eType == sc::AreaInside && !rRange.In(rAreaRange))
+            // The range needs to be fully inside specified range.
+            continue;
+
+        if (eType == sc::AreaPartialOverlap &&
+            (!rRange.Intersects(rAreaRange) || rRange.In(rAreaRange)))
+            // The range needs to be only partially overlapping.
             continue;
 
         SvtBroadcaster::ListenersType& rLst = pArea->GetBroadcaster().GetAllListeners();
@@ -1000,7 +1008,8 @@ void ScBroadcastAreaSlotMachine::FinallyEraseAreas( ScBroadcastAreaSlot* pSlot )
     maAreasToBeErased.swap( aCopy);
 }
 
-std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners( const ScRange& rRange )
+std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners(
+    const ScRange& rRange, sc::AreaOverlapType eType )
 {
     std::vector<sc::AreaListener> aRet;
 
@@ -1017,7 +1026,7 @@ std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners( const
         while ( nOff <= nEnd )
         {
             ScBroadcastAreaSlot* p = *pp;
-            p->GetAllListeners(rRange, aRet);
+            p->GetAllListeners(rRange, aRet, eType);
             ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
         }
     }

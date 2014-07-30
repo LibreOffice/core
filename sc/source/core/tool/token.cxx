@@ -2890,9 +2890,13 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
     return aRes;
 }
 
-void ScTokenArray::MoveReference(
-    const ScAddress& rPos, const ScRange& rMovedRange, const ScAddress& rDelta )
+sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc::RefUpdateContext& rCxt )
 {
+    sc::RefUpdateResult aRes;
+
+    ScRange aOldRange = rCxt.maRange;
+    aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
+
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
     for (; p != pEnd; ++p)
@@ -2904,9 +2908,9 @@ void ScTokenArray::MoveReference(
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScSingleRefData& rRef = pToken->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rPos);
-                if (rMovedRange.In(aAbs))
+                if (aOldRange.In(aAbs))
                 {
-                    aAbs.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
+                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
                     rRef.SetAddress(aAbs, rPos);
                 }
             }
@@ -2916,17 +2920,25 @@ void ScTokenArray::MoveReference(
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rPos);
-                if (rMovedRange.In(aAbs))
+                if (aOldRange.In(aAbs))
                 {
-                    aAbs.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
+                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
                     rRef.SetRange(aAbs, rPos);
                 }
+            }
+            break;
+            case svIndex:
+            {
+                if (isNameModified(rCxt.maUpdatedNames, aOldRange.aStart.Tab(), **p))
+                    aRes.mbNameModified = true;
             }
             break;
             default:
                 ;
         }
     }
+
+    return aRes;
 }
 
 void ScTokenArray::MoveReferenceColReorder(
