@@ -1265,6 +1265,11 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         nModifyFlag = 0;
         const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
         rBindings.ExecuteSynchron( FID_SEARCH_NOW, ppArgs, 0L );
+
+        if ( pBtn == m_pSearchAllBtn )
+            Close();
+        else if ( pBtn == m_pReplaceAllBtn )
+            Close();
     }
     else if ( pBtn == m_pCloseBtn )
     {
