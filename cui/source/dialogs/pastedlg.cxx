@@ -35,6 +35,7 @@
 #include <vcl/settings.hxx>
 
 #include <dialmgr.hxx>
+#include <boost/scoped_ptr.hpp>
 
 SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     : ModalDialog(pParent, "PasteSpecialDialog", "cui/ui/pastespecial.ui")
@@ -175,11 +176,10 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
         if( aTypeName.isEmpty() && aSourceName.isEmpty() )
         {
-            ResMgr* pMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
+            boost::scoped_ptr<ResMgr> pMgr(ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() ));
             // global resource from svtools (former so3 resource)
             if( pMgr )
                 aSourceName = OUString( ResId( STR_UNKNOWN_SOURCE, *pMgr ) );
-            delete pMgr;
         }
     }
 

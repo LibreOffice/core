@@ -31,6 +31,7 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <svx/svxdlg.hxx>
 #include <helpid.hrc>
@@ -1157,8 +1158,8 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( pButton,
-                            sName, CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2) );
+        boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog( pButton,
+                            sName, CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2) ));
         DBG_ASSERT(aNameDlg, "Dialog creation failed!");
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
         aNameDlg->SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE1));
@@ -1173,7 +1174,6 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
             m_pColorSchemeLB->SelectEntry(sName);
             m_pColorSchemeLB->GetSelectHdl().Call(m_pColorSchemeLB);
         }
-        delete aNameDlg;
     }
     else
     {

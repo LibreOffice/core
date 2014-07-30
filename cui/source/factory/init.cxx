@@ -19,7 +19,7 @@
 
 #include <vcl/msgbox.hxx>
 #include "cuicharmap.hxx"
-
+#include <boost/scoped_ptr.hpp>
 
 // hook to call special character dialog for edits
 // caution: needs C-Linkage since dynamically loaded via symbol name
@@ -28,7 +28,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(Window* i_pParent, const Font& i_rFont, OUString& o_rResult)
 {
     bool bRet = false;
-    SvxCharacterMap* aDlg = new SvxCharacterMap( i_pParent );
+    boost::scoped_ptr<SvxCharacterMap> aDlg(new SvxCharacterMap( i_pParent ));
     aDlg->DisableFontSelection();
     aDlg->SetCharFont(i_rFont);
     if ( aDlg->Execute() == RET_OK )
@@ -36,7 +36,6 @@ SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(Window* i_pParent, const Font& 
         o_rResult = aDlg->GetCharacters();
         bRet = true;
     }
-    delete aDlg;
     return bRet;
 }
 }

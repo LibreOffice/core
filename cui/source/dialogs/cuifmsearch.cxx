@@ -37,6 +37,7 @@
 #include <comphelper/string.hxx>
 #include <svx/svxdlg.hxx>
 #include <sal/macros.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
@@ -326,12 +327,12 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
 {
     if (m_ppbApproxSettings == pButton)
     {
-        AbstractSvxSearchSimilarityDialog* pDlg = NULL;
+        boost::scoped_ptr<AbstractSvxSearchSimilarityDialog> pDlg;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if ( pFact )
-            pDlg = pFact->CreateSvxSearchSimilarityDialog( this, m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
-                        m_pSearchEngine->GetLevShorter(), m_pSearchEngine->GetLevLonger() );
+            pDlg.reset(pFact->CreateSvxSearchSimilarityDialog( this, m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
+                        m_pSearchEngine->GetLevShorter(), m_pSearchEngine->GetLevLonger() ));
         DBG_ASSERT( pDlg, "FmSearchDialog, OnClickedSpecialSettings: could not load the dialog!" );
 
         if ( pDlg && pDlg->Execute() == RET_OK )
@@ -341,7 +342,6 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
             m_pSearchEngine->SetLevShorter(pDlg->GetShorter() );
             m_pSearchEngine->SetLevLonger( pDlg->GetLonger() );
         }
-        delete pDlg;
     }
     else if (m_pSoundsLikeCJKSettings == pButton)
     {
@@ -349,7 +349,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() );
+            boost::scoped_ptr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             aDlg->Execute();
 
@@ -361,7 +361,6 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
             OnCheckBoxToggled( m_pcbCase );
             m_pHalfFullFormsCJK->Check( !m_pSearchEngine->GetIgnoreWidthCJK() );
             OnCheckBoxToggled( m_pHalfFullFormsCJK );
-            delete aDlg;
         }
     }
 

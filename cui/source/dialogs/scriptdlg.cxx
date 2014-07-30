@@ -70,9 +70,8 @@ using namespace ::com::sun::star::document;
 
 void ShowErrorDialog( const Any& aException )
 {
-    SvxScriptErrorDialog* pDlg = new SvxScriptErrorDialog( NULL, aException );
+    boost::scoped_ptr<SvxScriptErrorDialog> pDlg(new SvxScriptErrorDialog( NULL, aException ));
     pDlg->Execute();
-    delete pDlg;
 }
 
 SFTreeListBox::SFTreeListBox(Window* pParent)

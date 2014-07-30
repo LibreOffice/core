@@ -70,6 +70,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include "svx/flagsdef.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -3372,7 +3373,7 @@ void SvxCharTwoLinesPage::Initialize()
 void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 {
     bool bStart = pBox == m_pStartBracketLB;
-    SvxCharacterMap* aDlg = new SvxCharacterMap( this );
+    boost::scoped_ptr<SvxCharacterMap> aDlg(new SvxCharacterMap( this ));
     aDlg->DisableFontSelection();
 
     if ( aDlg->Execute() == RET_OK )
@@ -3384,7 +3385,6 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
     {
         pBox->SelectEntryPos( bStart ? m_nStartBracketPosition : m_nEndBracketPosition );
     }
-    delete aDlg;
 }
 
 

@@ -551,8 +551,8 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if ( pFact )
         {
-            AbstractSvxMultiPathDialog* pMultiDlg =
-                pFact->CreateSvxMultiPathDialog( this );
+            boost::scoped_ptr<AbstractSvxMultiPathDialog> pMultiDlg(
+                pFact->CreateSvxMultiPathDialog( this ));
             DBG_ASSERT( pMultiDlg, "Dialog creation failed!" );
 
             OUString sPath( sUser );
@@ -599,7 +599,6 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
                 pPathImpl->sUserPath = sUser;
                 pPathImpl->sWritablePath = sWritable;
             }
-            delete pMultiDlg;
         }
     }
     else if ( pEntry )

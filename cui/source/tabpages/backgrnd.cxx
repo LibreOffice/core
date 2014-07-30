@@ -55,6 +55,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/grfmgr.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
@@ -657,13 +658,13 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     const SvxBrushItem* pBgdAttr = NULL;
     sal_uInt16 nSlot = SID_VIEW_FLD_PIC;
     sal_uInt16 nWhich = GetWhich( nSlot );
-    SvxBrushItem* pTemp = 0;
+    boost::scoped_ptr<SvxBrushItem> pTemp;
 
     if ( rSet.GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
     {
         const CntWallpaperItem* pItem = (const CntWallpaperItem*)&rSet.Get( nWhich );
-        pTemp = new SvxBrushItem( *pItem, nWhich );
-        pBgdAttr = pTemp;
+        pTemp.reset(new SvxBrushItem( *pItem, nWhich ));
+        pBgdAttr = pTemp.get();
     }
 
     m_pBtnTile->Check();
@@ -694,8 +695,6 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     bLinkOnly = true;
     m_pBtnLink->Check( true );
     m_pBtnLink->Show( false );
-
-    delete pTemp;
 }
 
 
@@ -850,13 +849,13 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             }
             else
             {
-                SvxBrushItem* pTmpBrush = 0;
+                boost::scoped_ptr<SvxBrushItem> pTmpBrush;
                 if ( m_pBtnLink->IsChecked() )
                 {
-                    pTmpBrush = new SvxBrushItem( aBgdGraphicPath,
+                    pTmpBrush.reset(new SvxBrushItem( aBgdGraphicPath,
                                                 aBgdGraphicFilter,
                                                 GetGraphicPosition_Impl(),
-                                                nWhich );
+                                                nWhich ));
                 }
                 else
                 {
@@ -864,15 +863,14 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                         bIsGraphicValid = LoadLinkedGraphic_Impl();
 
                     if ( bIsGraphicValid )
-                        pTmpBrush = new SvxBrushItem( aBgdGraphic,
+                        pTmpBrush.reset(new SvxBrushItem( aBgdGraphic,
                                                     GetGraphicPosition_Impl(),
-                                                    nWhich );
+                                                    nWhich ));
                 }
                 if(pTmpBrush)
                 {
                     lcl_SetTransparency(*pTmpBrush, static_cast<long>(m_pGraphTransMF->GetValue()));
                     rCoreSet->Put(*pTmpBrush);
-                    delete pTmpBrush;
                 }
             }
             bModified = ( bIsBrush || m_pBtnLink->IsChecked() || bIsGraphicValid );

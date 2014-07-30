@@ -71,6 +71,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -2006,7 +2007,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)
 {
-    SvxCharacterMap* pMap = new SvxCharacterMap( this, true );
+    boost::scoped_ptr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
 
     sal_uInt16 nMask = 1;
     const Font* pFmtFont = 0;
@@ -2061,7 +2062,6 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)
 
         SetModified();
     }
-    delete pMap;
     return 0;
 }
 
@@ -2291,7 +2291,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
     const Color aBackColor = rStyleSettings.GetFieldColor();
     const Color aTextColor = rStyleSettings.GetFieldTextColor();
 
-    VirtualDevice* pVDev = new VirtualDevice(*this);
+    boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice(*this));
     pVDev->EnableRTL( IsRTLEnabled() );
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
@@ -2388,14 +2388,14 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 sal_uInt16 nBulletWidth = 0;
                 if( SVX_NUM_BITMAP == (rFmt.GetNumberingType() &(~LINK_TOKEN)))
                 {
-                    nBulletWidth = rFmt.IsShowSymbol() ? lcl_DrawGraphic(pVDev, rFmt,
+                    nBulletWidth = rFmt.IsShowSymbol() ? lcl_DrawGraphic(pVDev.get(), rFmt,
                                         nNumberXPos,
                                             nYStart, nWidthRelation) : 0;
                 }
                 else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
                     nBulletWidth =  rFmt.IsShowSymbol() ?
-                     lcl_DrawBullet(pVDev, rFmt, nNumberXPos, nYStart, aStdFont.GetSize()) : 0;
+                        lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos, nYStart, aStdFont.GetSize()) : 0;
                 }
                 else
                 {
@@ -2513,7 +2513,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 {
                     if(rFmt.IsShowSymbol())
                     {
-                        nTextOffset = lcl_DrawGraphic(pVDev, rFmt, nXStart, nYStart, nWidthRelation);
+                        nTextOffset = lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYStart, nWidthRelation);
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }
@@ -2521,7 +2521,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 {
                     if(rFmt.IsShowSymbol())
                     {
-                        nTextOffset =  lcl_DrawBullet(pVDev, rFmt, nXStart, nYStart, aStdFont.GetSize());
+                        nTextOffset =  lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetSize());
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }
@@ -2575,8 +2575,6 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
     DrawOutDev( Point(0,0), aSize,
                 Point(0,0), aSize,
                         *pVDev );
-    delete pVDev;
-
 }
 
 //See uiconfig/swriter/ui/outlinepositionpage.ui for effectively a duplicate

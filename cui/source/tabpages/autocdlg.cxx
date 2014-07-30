@@ -54,6 +54,7 @@
 #include <editeng/unolingu.hxx>
 #include <dialmgr.hxx>
 #include <svx/svxids.hrc>
+#include <boost/scoped_ptr.hpp>
 
 static LanguageType eLastDialogLanguage = LANGUAGE_SYSTEM;
 
@@ -693,7 +694,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
     if( nSelEntryPos == REPLACE_BULLETS ||
         nSelEntryPos == APPLY_NUMBERING)
     {
-        SvxCharacterMap *pMapDlg = new SvxCharacterMap(this);
+        boost::scoped_ptr<SvxCharacterMap> pMapDlg(new SvxCharacterMap(this));
         ImpUserData* pUserData = (ImpUserData*)m_pCheckLB->FirstSelected()->GetUserData();
         pMapDlg->SetCharFont(*pUserData->pFont);
         pMapDlg->SetChar( (*pUserData->pString)[0] );
@@ -706,7 +707,6 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
             OUString aOUStr( &aChar, 1 );
             *pUserData->pString = aOUStr;
         }
-        delete pMapDlg;
     }
     else if( MERGE_SINGLE_LINE_PARA == nSelEntryPos )
     {
@@ -1973,7 +1973,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     else if (pBtn == m_pDblEndQuotePB)
         nMode = DBL_END;
     // start character selection dialog
-    SvxCharacterMap* pMap = new SvxCharacterMap( this, true );
+    boost::scoped_ptr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
     pMap->SetText(nMode < SGL_END ? m_sStartQuoteDlg  : m_sEndQuoteDlg );
@@ -2033,7 +2033,6 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
             break;
         }
     }
-    delete pMap;
 
     return 0;
 }

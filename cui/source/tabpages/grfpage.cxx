@@ -34,6 +34,7 @@
 #include <svx/dialogs.hrc>
 #include <vcl/builder.hxx>
 #include <vcl/settings.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define CM_1_TO_TWIP        567
 #define TWIP_TO_INCH        1440
@@ -280,14 +281,13 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
-        SvxGrfCrop* pNew = (SvxGrfCrop*)rSet->Get( nW ).Clone();
+        boost::scoped_ptr<SvxGrfCrop> pNew((SvxGrfCrop*)rSet->Get( nW ).Clone());
 
         pNew->SetLeft( lcl_GetValue( *m_pLeftMF, eUnit ) );
         pNew->SetRight( lcl_GetValue( *m_pRightMF, eUnit ) );
         pNew->SetTop( lcl_GetValue( *m_pTopMF, eUnit ) );
         pNew->SetBottom( lcl_GetValue( *m_pBottomMF, eUnit ) );
         bModified |= 0 != rSet->Put( *pNew );
-        delete pNew;
     }
 
     if( m_pZoomConstRB->IsValueChangedFromSaved() )
