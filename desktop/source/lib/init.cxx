@@ -472,11 +472,8 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
         return;
     }
 
-    Application::AcquireSolarMutex(1);
-    {
-        pDoc->setPart( nPart );
-    }
-    Application::ReleaseSolarMutex();
+    SolarMutexGuard aGuard;
+    pDoc->setPart( nPart );
 }
 
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
@@ -510,31 +507,29 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
         return;
     }
 
-    Application::AcquireSolarMutex(1);
+    SolarMutexGuard aGuard;
+
+    int nCurrentPart = pDoc->getPart();
+
+    pDoc->setPartMode(ePartMode);
+
+    // We need to make sure the internal state is updated, just changing the mode
+    // might not update the relevant shells (i.e. impress will keep rendering the
+    // previous mode unless we do this).
+    // TODO: we might want to do this within the relevant components rather than
+    // here, but that's also dependent on how we implement embedded object
+    // rendering I guess?
+    // TODO: we could be clever and e.g. set to 0 when we change to/from
+    // embedded object mode, and not when changing between slide/notes/combined
+    // modes?
+    if ( nCurrentPart < pDoc->getParts() )
     {
-        int nCurrentPart = pDoc->getPart();
-
-        pDoc->setPartMode(ePartMode);
-
-        // We need to make sure the internal state is updated, just changing the mode
-        // might not update the relevant shells (i.e. impress will keep rendering the
-        // previous mode unless we do this).
-        // TODO: we might want to do this within the relevant components rather than
-        // here, but that's also dependent on how we implement embedded object
-        // rendering I guess?
-        // TODO: we could be clever and e.g. set to 0 when we change to/from
-        // embedded object mode, and not when changing between slide/notes/combined
-        // modes?
-        if ( nCurrentPart < pDoc->getParts() )
-        {
-            pDoc->setPart( nCurrentPart );
-        }
-        else
-        {
-            pDoc->setPart( 0 );
-        }
+        pDoc->setPart( nCurrentPart );
     }
-    Application::ReleaseSolarMutex();
+    else
+    {
+        pDoc->setPart( 0 );
+    }
 }
 
 void doc_paintTile (LibreOfficeKitDocument* pThis,
@@ -556,38 +551,36 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
         return;
     }
 
-    Application::AcquireSolarMutex(1);
-    {
+    SolarMutexGuard aGuard;
+
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
-        ImplSVData* pSVData = ImplGetSVData();
-        SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
-        pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
+    ImplSVData* pSVData = ImplGetSVData();
+    SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
+    pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
 
-        VirtualDevice aDevice(0, (sal_uInt16)32);
-        boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
-        aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
-                    Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                    aBuffer, true );
+    VirtualDevice aDevice(0, (sal_uInt16)32);
+    boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
+    aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
+                Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
+                aBuffer, true );
 
-        pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
-                        nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
+                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-        SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(aDevice.getSalVirtualDevice());
-        basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
+    SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(aDevice.getSalVirtualDevice());
+    basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
 
-        *pRowStride = pBmpDev->getScanlineStride();
+    *pRowStride = pBmpDev->getScanlineStride();
 #else
-        (void) pBuffer;
-        (void) nCanvasWidth;
-        (void) nCanvasHeight;
-        (void) pRowStride;
-        (void) nTilePosX;
-        (void) nTilePosY;
-        (void) nTileWidth;
-        (void) nTileHeight;
+    (void) pBuffer;
+    (void) nCanvasWidth;
+    (void) nCanvasHeight;
+    (void) pRowStride;
+    (void) nTilePosX;
+    (void) nTilePosY;
+    (void) nTileWidth;
+    (void) nTileHeight;
 #endif
-    }
-    Application::ReleaseSolarMutex();
 }
 
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
