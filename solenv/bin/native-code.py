@@ -139,7 +139,6 @@ draw_factory_list = [
     ("libsddlo.a", "sdd_component_getFactory"),
     ("libsdlo.a", "sd_component_getFactory"),
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
-    ("libwpftdrawlo.a", "wpftdraw_component_getFactory"),
     ]
 
 draw_constructor_list = [
