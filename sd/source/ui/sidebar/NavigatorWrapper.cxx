@@ -35,7 +35,6 @@ NavigatorWrapper::NavigatorWrapper (
       mrViewShellBase(rViewShellBase),
       maNavigator(
         this,
-        NULL,
         SdResId(FLT_NAVIGATOR),
         pBindings,
         ::boost::bind(&NavigatorWrapper::UpdateNavigator, this))

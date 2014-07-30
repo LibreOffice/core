@@ -23,6 +23,8 @@
 #include <sfx2/dllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
+class PanelDescriptor;
+
 namespace cssu = ::com::sun::star::uno;
 
 
@@ -40,6 +42,10 @@ public:
         this function probably returns before the requested panel is visible.
     */
     static void ShowPanel (
+        const ::rtl::OUString& rsPanelId,
+        const cssu::Reference<css::frame::XFrame>& rxFrame);
+
+    static PanelDescriptor* GetPanel (
         const ::rtl::OUString& rsPanelId,
         const cssu::Reference<css::frame::XFrame>& rxFrame);
 };

@@ -45,6 +45,15 @@ void Sidebar::ShowPanel (
     }
 }
 
+PanelDescriptor* Sidebar::GetPanel (
+    const ::rtl::OUString& rsPanelId,
+    const Reference<frame::XFrame>& rxFrame)
+{
+    SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
+    const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
+    return pPanelDescriptor;
+}
+
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
