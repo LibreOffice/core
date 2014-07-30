@@ -76,7 +76,7 @@ public:
     virtual OUString getPartName(int nPart)
     {
         (void) nPart;
-        return "";
+        return OUString("");
     }
 
     virtual void setPartMode(LibreOfficeKitPartMode ePartMode)
