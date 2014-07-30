@@ -2827,6 +2827,8 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
     ScRange aOldRange = rCxt.maRange;
     aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
 
+    bool b3DFlag = rOldPos.Tab() != rNewPos.Tab();
+
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
     for (; p != pEnd; ++p)
@@ -2845,6 +2847,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                 }
 
                 rRef.SetAddress(aAbs, rNewPos);
+                rRef.SetFlag3D(b3DFlag);
             }
             break;
             case svDoubleRef:
@@ -2859,6 +2862,8 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                 }
 
                 rRef.SetRange(aAbs, rNewPos);
+                if (b3DFlag)
+                    rRef.Ref1.SetFlag3D(true);
             }
             break;
             case svIndex:
