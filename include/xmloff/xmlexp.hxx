@@ -58,6 +58,7 @@
 #include <xmloff/XMLPageExport.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <cppuhelper/implbase6.hxx>
+#include <tools/fldunit.hxx>
 
 #include <list>
 
@@ -287,7 +288,7 @@ public:
         const OUString& rFileName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
-        sal_Int16 const eDefaultFieldUnit );
+        FieldUnit const eDefaultFieldUnit );
 
     virtual ~SvXMLExport();
 

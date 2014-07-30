@@ -1034,7 +1034,7 @@ bool SvxMapUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
     Returns false if conversion is not supported.
 */
 
-bool SvxMeasureUnitToFieldUnit( const short eApi, short& eVcl ) throw()
+bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& eVcl ) throw()
 {
     switch( eApi )
     {
@@ -1060,7 +1060,7 @@ bool SvxMeasureUnitToFieldUnit( const short eApi, short& eVcl ) throw()
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
-bool SvxFieldUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
+bool SvxFieldUnitToMeasureUnit( const FieldUnit eVcl, short& eApi ) throw()
 {
     switch( eVcl )
     {

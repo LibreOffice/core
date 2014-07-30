@@ -129,7 +129,7 @@ SvXMLUnitConverter::~SvXMLUnitConverter()
 {
 }
 
-sal_Int16 SvXMLUnitConverter::GetMeasureUnit(sal_Int16 const nFieldUnit)
+sal_Int16 SvXMLUnitConverter::GetMeasureUnit(FieldUnit const nFieldUnit)
 {
     sal_Int16 eUnit = util::MeasureUnit::INCH;
     switch( nFieldUnit )
@@ -151,6 +151,12 @@ sal_Int16 SvXMLUnitConverter::GetMeasureUnit(sal_Int16 const nFieldUnit)
         break;
     case FUNIT_100TH_MM:
         eUnit = util::MeasureUnit::MM_100TH;
+        break;
+    case FUNIT_INCH:
+        eUnit = util::MeasureUnit::INCH;
+        break;
+    default:
+        assert(false);
         break;
     }
     return eUnit;

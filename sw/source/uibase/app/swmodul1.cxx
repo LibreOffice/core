@@ -557,7 +557,7 @@ OUString SwModule::GetDocStatWordDelim() const
 }
 
 // Passing-through of the ModuleConfig's Metric (for HTML-Export)
-sal_uInt16 SwModule::GetMetric( bool bWeb ) const
+FieldUnit SwModule::GetMetric( bool bWeb ) const
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
@@ -572,7 +572,7 @@ sal_uInt16 SwModule::GetMetric( bool bWeb ) const
             GetUsrPref(false);
         pPref = pUsrPref;
     }
-    return static_cast< sal_uInt16 >(pPref->GetMetric());
+    return pPref->GetMetric();
 }
 
 // Pass-through Update-Status

@@ -27,6 +27,7 @@
 #include <svtools/grfmgr.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/fldunit.hxx>
 
 class SvxShape;
 class SdrObject;
@@ -68,13 +69,13 @@ SVX_DLLPUBLIC bool SvxMapUnitToMeasureUnit( const short nVcl, short& eApi ) thro
  * Maps the API constant MeasureUnit to a vcl MapUnit enum.
  * Returns false if conversion is not supported.
  */
-SVX_DLLPUBLIC bool SvxMeasureUnitToFieldUnit( const short eApi, short& nVcl ) throw();
+SVX_DLLPUBLIC bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& nVcl ) throw();
 
 /**
  * Maps the vcl MapUnit enum to a API constant MeasureUnit.
  * Returns false if conversion is not supported.
  */
-SVX_DLLPUBLIC bool SvxFieldUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
+SVX_DLLPUBLIC bool SvxFieldUnitToMeasureUnit( const FieldUnit nVcl, short& eApi ) throw();
 
 /**
  * If the given name is a predefined name for the current language it is replaced by

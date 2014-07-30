@@ -500,7 +500,7 @@ SvXMLExport::SvXMLExport(
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
-    sal_Int16 const eDefaultFieldUnit)
+    FieldUnit const eDefaultFieldUnit)
 :   mpImpl( new SvXMLExport_Impl ),
     m_xContext(xContext), m_implementationName(implementationName),
     mxModel( rModel ),

@@ -372,7 +372,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ESelection& rSel,
     const OUString& rFileName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler)
-:   SvXMLExport( xContext, "", rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), MAP_CM ),
+:   SvXMLExport( xContext, "", rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), FUNIT_CM ),
     maSelection( rSel )
 {
     SvxEditEngineSource aEditSource( pEditEngine );

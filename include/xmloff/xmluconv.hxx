@@ -38,6 +38,7 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <tools/fldunit.hxx>
 
 
 // predeclarations
@@ -96,7 +97,7 @@ public:
 
     virtual ~SvXMLUnitConverter();
 
-    static sal_Int16 GetMeasureUnit(sal_Int16 const nFieldUnit);
+    static sal_Int16 GetMeasureUnit(FieldUnit const nFieldUnit);
 
     /** sets the default unit for numerical measures */
     void SetCoreMeasureUnit( sal_Int16 const eCoreMeasureUnit );
