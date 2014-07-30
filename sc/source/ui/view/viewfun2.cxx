@@ -1563,7 +1563,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         aUndoStr, pUndoDoc.release(), pSearchItem ) );
             }
 
-            if (nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL)
+            if (nCommand == SVX_SEARCHCMD_FIND_ALL )
             {
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 if (pViewFrm)
