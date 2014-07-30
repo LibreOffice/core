@@ -26,7 +26,7 @@ public:
 bool DerefNullPtr::VisitUnaryDeref(UnaryOperator const * op) {
     if (!ignoreLocation(op)
         && (op->getSubExpr()->IgnoreParenCasts()->isNullPointerConstant(
-                compiler.getASTContext(), Expr::NPC_NeverValueDependent/*TODO*/)
+                compiler.getASTContext(), Expr::NPC_ValueDependentIsNotNull/*TODO*/)
             != Expr::NPCK_NotNull))
     {
         report(
