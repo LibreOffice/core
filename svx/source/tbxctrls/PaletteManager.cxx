@@ -41,20 +41,14 @@ PaletteManager::PaletteManager() :
 
 PaletteManager::~PaletteManager()
 {
-    for( std::vector<Palette*>::iterator it = maPalettes.begin();
-         it != maPalettes.end();
-         ++it)
-    {
-        delete *it;
-    }
 }
 
 void PaletteManager::LoadPalettes()
 {
+    maPalettes.clear();
     OUString aPalPath = SvtPathOptions().GetPalettePath();
 
     osl::Directory aDir(aPalPath);
-    maPalettes.clear();
     osl::DirectoryItem aDirItem;
     osl::FileStatus aFileStat( osl_FileStatus_Mask_FileName |
                                osl_FileStatus_Mask_FileURL  |
@@ -116,7 +110,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
     else
     {
-        maPalettes[mnCurrentPalette-1]->LoadColorSet( rColorSet );
+        maPalettes[mnCurrentPalette-1].LoadColorSet( rColorSet );
         mnColorCount = rColorSet.GetItemCount();
     }
 }
@@ -127,11 +121,11 @@ std::vector<OUString> PaletteManager::GetPaletteList()
 
     aPaletteNames.push_back( STR_DEFAULT_PAL );
 
-    for( std::vector<Palette*>::iterator it = maPalettes.begin();
+    for( boost::ptr_vector<Palette>::iterator it = maPalettes.begin();
          it != maPalettes.end();
          ++it)
     {
-        aPaletteNames.push_back( (*it)->GetName() );
+        aPaletteNames.push_back( (*it).GetName() );
     }
 
     aPaletteNames.push_back( STR_DOC_COLORS );
@@ -161,7 +155,7 @@ OUString PaletteManager::GetPaletteName()
     else if( mnCurrentPalette == mnNumOfPalettes - 1 )
         return OUString( STR_DOC_COLORS );
     else
-        return maPalettes[mnCurrentPalette - 1]->GetName();
+        return maPalettes[mnCurrentPalette - 1].GetName();
 }
 
 const Color& PaletteManager::GetLastColor()
