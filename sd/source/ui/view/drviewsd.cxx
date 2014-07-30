@@ -27,8 +27,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 
 #include "app.hrc"
 
@@ -37,7 +37,6 @@
 #include "DrawDocShell.hxx"
 #include "slideshow.hxx"
 #include "pgjump.hxx"
-#include "NavigatorChildWindow.hxx"
 #include "navigatr.hxx"
 #include "drawview.hxx"
 
@@ -56,14 +55,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
     {
         case SID_NAVIGATOR_INIT:
         {
-            sal_uInt16 nId = SID_NAVIGATOR;
-            SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
-            if( pWindow )
-            {
-                SdNavigatorWin* pNavWin = (SdNavigatorWin*)( pWindow->GetContextWindow( SD_MOD() ) );
-                if( pNavWin )
-                    pNavWin->InitTreeLB( GetDoc() );
-            }
+            // TODO Get navigator from sidebar and call NavigatorWrapper::UpdateNavigator
         }
         break;
 

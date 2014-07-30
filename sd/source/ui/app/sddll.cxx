@@ -46,7 +46,6 @@
 #include "PresentationViewShellBase.hxx"
 #include "LayerDialogChildWindow.hxx"
 #include "MediaObjectBar.hxx"
-#include "NavigatorChildWindow.hxx"
 #include "OutlineViewShell.hxx"
 #include "OutlineViewShellBase.hxx"
 #include "PaneChildWindows.hxx"
@@ -190,8 +189,6 @@ void SdDLL::RegisterControllers()
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
 
     ::sd::AnimationChildWindow::RegisterChildWindow(false, pMod);
-    ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::DrawViewShell::GetInterfaceId(), pMod );
-    ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::GraphicViewShell::GetInterfaceId(), pMod );
     ::sd::LayerDialogChildWindow::RegisterChildWindow(false, pMod);
 
     Svx3DChildWindow::RegisterChildWindow(false, pMod);
