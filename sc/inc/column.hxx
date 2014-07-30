@@ -484,7 +484,6 @@ public:
     void        StartNeededListeners(); // only for cells where NeedsListening()==true
     void        SetDirtyIfPostponed();
     void BroadcastRecalcOnRefMove();
-    void BroadcastRefMoved( const sc::RefMovedHint& rHint );
     void TransferListeners( ScColumn& rDestCol, SCROW nRow1, SCROW nRow2, SCROW nRowDelta );
     void CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 );
 

@@ -149,4 +149,14 @@ void ScTable::RegroupFormulaCells( SCCOL nCol )
     aCol[nCol].RegroupFormulaCells();
 }
 
+void ScTable::CollectListeners(
+    std::vector<SvtListener*>& rListeners, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    if (nCol2 < nCol1 || !ValidCol(nCol1) || !ValidCol(nCol2))
+        return;
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        aCol[nCol].CollectListeners(rListeners, nRow1, nRow2);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
