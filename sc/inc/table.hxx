@@ -923,10 +923,7 @@ public:
      */
     void BroadcastRecalcOnRefMove();
 
-    /**
-     * Broadcast all listeners of specified range that the range have moved.
-     */
-    void BroadcastRefMoved( const sc::RefMovedHint& rHint );
+    void CollectListeners( std::vector<SvtListener*>& rListeners, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void TransferListeners(
         ScTable& rDestTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

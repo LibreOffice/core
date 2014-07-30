@@ -126,6 +126,22 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
     BroadcastUno(SfxSimpleHint(SC_HINT_DATACHANGED));
 }
 
+namespace {
+
+class RefMovedNotifier : std::unary_function<SvtListener*, void>
+{
+    const sc::RefMovedHint& mrHint;
+public:
+    RefMovedNotifier( const sc::RefMovedHint& rHint ) : mrHint(rHint) {}
+
+    void operator() ( SvtListener* p )
+    {
+        p->Notify(mrHint);
+    }
+};
+
+}
+
 void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
 {
     if (!pBASM)
@@ -146,6 +162,28 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
         }
     }
 
+    // Collect all listeners listening into the range.
+    std::vector<SvtListener*> aListeners;
+    for (SCTAB nTab = rSrcRange.aStart.Tab(); nTab <= rSrcRange.aEnd.Tab(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        pTab->CollectListeners(
+            aListeners,
+            rSrcRange.aStart.Col(), rSrcRange.aStart.Row(),
+            rSrcRange.aEnd.Col(), rSrcRange.aEnd.Row());
+    }
+
+    // Remove any duplicate listener entries.  We must ensure that we notify
+    // each unique listener only once.
+    std::sort(aListeners.begin(), aListeners.end());
+    aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
+
+    // Notify the listeners.
+    std::for_each(aListeners.begin(), aListeners.end(), RefMovedNotifier(rHint));
+
     for (SCTAB nTab = rSrcRange.aStart.Tab(); nTab <= rSrcRange.aEnd.Tab(); ++nTab)
     {
         ScTable* pTab = FetchTable(nTab);
@@ -157,8 +195,6 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
         if (!pDestTab)
             continue;
 
-        // Adjust the references.
-        pTab->BroadcastRefMoved(rHint);
         // Move the listeners from the old location to the new.
         pTab->TransferListeners(
             *pDestTab, rSrcRange.aStart.Col(), rSrcRange.aStart.Row(),
