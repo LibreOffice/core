@@ -533,6 +533,9 @@ public:
 
 void ScColumn::CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 )
 {
+    if (nRow2 < nRow1 || !ValidRow(nRow1) || !ValidRow(nRow2))
+        return;
+
     ListenerCollector aFunc(rListeners);
     sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aFunc);
 }

@@ -1739,13 +1739,6 @@ void ScTable::BroadcastRecalcOnRefMove()
         aCol[i].BroadcastRecalcOnRefMove();
 }
 
-void ScTable::BroadcastRefMoved( const sc::RefMovedHint& rHint )
-{
-    const ScRange& rRange = rHint.getRange();
-    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
-        aCol[nCol].BroadcastRefMoved(rHint);
-}
-
 void ScTable::TransferListeners(
     ScTable& rDestTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCCOL nColDelta, SCROW nRowDelta )
