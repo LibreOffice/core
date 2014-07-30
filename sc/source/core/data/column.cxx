@@ -3119,33 +3119,6 @@ void ScColumn::BroadcastRecalcOnRefMove()
 
 namespace {
 
-class BroadcastRefMovedHandler
-{
-    const sc::RefMovedHint& mrHint;
-public:
-    BroadcastRefMovedHandler( const sc::RefMovedHint& rHint ) : mrHint(rHint) {}
-
-    void operator() ( size_t, SvtBroadcaster* p )
-    {
-        p->Broadcast(mrHint);
-    }
-};
-
-}
-
-void ScColumn::BroadcastRefMoved( const sc::RefMovedHint& rHint )
-{
-    const ScRange& rRange = rHint.getRange();
-    SCROW nRow1 = rRange.aStart.Row();
-    SCROW nRow2 = rRange.aEnd.Row();
-
-    // Notify all listeners within specified rows.
-    BroadcastRefMovedHandler aFunc(rHint);
-    sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aFunc);
-}
-
-namespace {
-
 class TransferListenersHandler
 {
 public:
