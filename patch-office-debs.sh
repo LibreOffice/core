@@ -493,10 +493,6 @@ SOURCE=$(basename $(ls "$DIR_IN"/main/libreoffice*-debian-menus_*.deb) | awk -F 
 DEBFILES=$(ls -1 "$DIR_IN"/main/libreoffice*-debian-menus_*.deb)
 patch_deb
 
-SOURCE=$(basename $(ls "$DIR_IN"/main/libreoffice*-ure-*.deb) | awk -F '_' '{ print $1; }')
-DEBFILES=$(ls -1 "$DIR_IN"/main/libreoffice*-ure-*.deb)
-patch_deb
-
 IFS=$OLDIFS
 
 rm -rf package-data
