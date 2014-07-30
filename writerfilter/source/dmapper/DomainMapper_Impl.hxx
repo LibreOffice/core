@@ -331,8 +331,10 @@ private:
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
-    /// If we want to set "sdt end" on the next character contet.
+    /// If we want to set "sdt end" on the next character context.
     bool                                                                            m_bSdtEndDeferred;
+    /// If we want to set "paragraph sdt end" on the next paragraph context.
+    bool                                                                            m_bParaSdtEndDeferred;
     bool                                                                            m_bStartTOC;
     bool                                                                            m_bStartTOCHeaderFooter;
     /// If we got any text that is the pre-rendered result of the TOC field.
@@ -505,6 +507,8 @@ public:
 
     void setSdtEndDeferred(bool bSdtEndDeferred);
     bool isSdtEndDeferred();
+    void setParaSdtEndDeferred(bool bParaSdtEndDeferred);
+    bool isParaSdtEndDeferred();
 
     void finishParagraph( PropertyMapPtr pPropertyMap );
     void appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap );

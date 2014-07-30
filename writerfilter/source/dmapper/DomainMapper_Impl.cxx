@@ -165,6 +165,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
         m_bSdtEndDeferred(false),
+        m_bParaSdtEndDeferred(false),
         m_bStartTOC(false),
         m_bStartTOCHeaderFooter(false),
         m_bStartedTOC(false),
@@ -719,6 +720,16 @@ void DomainMapper_Impl::setSdtEndDeferred(bool bSdtEndDeferred)
 bool DomainMapper_Impl::isSdtEndDeferred()
 {
     return m_bSdtEndDeferred;
+}
+
+void DomainMapper_Impl::setParaSdtEndDeferred(bool bParaSdtEndDeferred)
+{
+    m_bParaSdtEndDeferred = bParaSdtEndDeferred;
+}
+
+bool DomainMapper_Impl::isParaSdtEndDeferred()
+{
+    return m_bParaSdtEndDeferred;
 }
 
 void lcl_MoveBorderPropertiesToFrame(comphelper::SequenceAsHashMap& rFrameProperties,

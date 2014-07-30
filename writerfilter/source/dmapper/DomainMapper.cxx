@@ -932,7 +932,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
             // It's not possible to insert the relevant property to the character context here:
             // the previous, already sent character context may be still active, so the property would be lost.
-            m_pImpl->setSdtEndDeferred(true);
+            if (m_pImpl->m_pSdtHelper->isOutsideAParagraph())
+                m_pImpl->setParaSdtEndDeferred(true);
+            else
+                m_pImpl->setSdtEndDeferred(true);
 
             if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
                 m_pImpl->m_pSdtHelper->createDropDownControl();
@@ -2607,10 +2610,14 @@ void DomainMapper::lcl_startParagraphGroup()
                m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE) );
         else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
             m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE) );
+
+        if (m_pImpl->isParaSdtEndDeferred())
+            m_pImpl->GetTopContext()->Insert(PROP_PARA_SDT_END_BEFORE, uno::makeAny(true), true, PARA_GRAB_BAG);
     }
     m_pImpl->SetIsFirstRun(true);
     m_pImpl->SetIsOutsideAParagraph(false);
     m_pImpl->clearDeferredBreaks();
+    m_pImpl->setParaSdtEndDeferred(false);
 }
 
 void DomainMapper::lcl_endParagraphGroup()
