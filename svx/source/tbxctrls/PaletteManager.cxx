@@ -21,7 +21,7 @@
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/objsh.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svtools/colrdlg.hxx>
 
@@ -179,7 +179,7 @@ void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
     mpBtnUpdater = pBtnUpdater;
 }
 
-void PaletteManager::PopupColorPicker()
+void PaletteManager::PopupColorPicker(const OUString aCommand)
 {
     SvColorDialog aColorDlg( 0 );
     aColorDlg.SetColor ( mLastColor );
@@ -188,6 +188,36 @@ void PaletteManager::PopupColorPicker()
     {
         mpBtnUpdater->Update( aColorDlg.GetColor() );
         mLastColor = aColorDlg.GetColor();
+        DispatchColorCommand(aCommand, mLastColor);
+    }
+}
+
+void PaletteManager::DispatchColorCommand(const OUString aCommand, const Color aColor)
+{
+    using namespace css::uno;
+    using namespace css::frame;
+    using namespace css::beans;
+    using namespace css::util;
+
+    Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+    Reference<XDesktop2> xDesktop = Desktop::create(xContext);
+    Reference<XDispatchProvider> xDispatchProvider(xDesktop->getCurrentFrame(), UNO_QUERY );
+    if (xDispatchProvider.is())
+    {
+        INetURLObject aObj( aCommand );
+
+        Sequence<PropertyValue> aArgs(1);
+        aArgs[0].Name = aObj.GetURLPath();
+        aArgs[0].Value = makeAny(sal_Int32(aColor.GetColor()));
+
+        URL aTargetURL;
+        aTargetURL.Complete = aCommand;
+        Reference<XURLTransformer> xURLTransformer(URLTransformer::create(comphelper::getProcessComponentContext()));
+        xURLTransformer->parseStrict(aTargetURL);
+
+        Reference<XDispatch> xDispatch = xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0);
+        if (xDispatch.is())
+            xDispatch->dispatch(aTargetURL, aArgs);
     }
 }
 
