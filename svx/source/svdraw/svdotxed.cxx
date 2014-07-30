@@ -254,12 +254,29 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     if(rOutl.IsModified())
     {
         OutlinerParaObject* pNewText = NULL;
+        OutlinerParaObject* pOverflownText = NULL;
 
-        // to make the gray field background vanish again
+        // to make the gray field background vanish  again
         rOutl.UpdateFields();
 
-        sal_Int32 nParaAnz = rOutl.GetParagraphCount();
-        pNewText = rOutl.CreateParaObject( 0, nParaAnz );
+        // FIXME(matteocam)
+        if ( IsToBeChained() )
+        {
+            // set non overflow part of text to current box
+            pNewText = rOutl.GetNotOverflowingParaObject();
+            pNextText = rOutl.GetOverflowingParaObject();
+
+            // XXX: should this SdrTextObj know "how much text to ask" by CreateParaObject?
+            //      No, it must be the editengine (or outliner) to give it since it is
+            //      a special case: we want to have something that may be interrupted
+            //      within a paragraph itself.
+
+        }
+        else // standard case
+        {
+            sal_Int32 nParaAnz = rOutl.GetParagraphCount();
+            pNewText = rOutl.CreateParaObject( 0, nParaAnz );
+        }
 
         // need to end edit mode early since SetOutlinerParaObject already
         // uses GetCurrentBoundRect() which needs to take the text into account
@@ -273,6 +290,14 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     EEControlBits nStat = rOutl.GetControlWord();
     nStat &= ~EEControlBits::AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
+
+    // sets text to next box
+    if (pNextText != NULL) {
+        SdrTextObj *pNextTextObj = GetNextLinkInChain();
+        pNextTextObj->SetOutlinerParaObject( pOverflownText );
+        pNextTextObj->BegTextEdit( rOutl );
+        // XXX: Also, will all those calls currently in impCopyTextInTextObj be necessary too?
+    }
 
     mbInEditMode = false;
 }
