@@ -16,6 +16,24 @@
       "revId": "f265a16fdc366da3beb97145ef9c2846fc538a2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_ac3f9bd5",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3369,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-07-30T08:55:58Z",
+      "side": 1,
+      "message": "Because of the if-statement right above it, which checks exactly the same ( if (!rSplittable.GetValue() ). So if the GetValue() returns false, it will enter the if loop (due the inverse logic (!)). Exactly the same thing is checked in pCantSplit. So I just undouble it.\nAlso the comment do say we only need to write the w:val\u003d\"true\".",
+      "parentUuid": "bab921fb_aca31b4f",
+      "revId": "f265a16fdc366da3beb97145ef9c2846fc538a2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
