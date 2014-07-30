@@ -792,8 +792,8 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
     else
     {
         Point aStartPt = rSalLayout.GetDrawPosition();
-        int nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
-        ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), 0, nWidth,
+        ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), 0,
+                          rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel(),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );
     }
 }
