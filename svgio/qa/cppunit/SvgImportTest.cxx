@@ -13,8 +13,6 @@
 #include <comphelper/seqstream.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 
@@ -28,8 +26,7 @@ namespace
 using namespace css::uno;
 using namespace css::io;
 using namespace css::graphic;
-using namespace drawinglayer;
-using namespace drawinglayer::primitive2d;
+using drawinglayer::primitive2d::arePrimitive2DSequencesEqual;
 
 class Test : public test::BootstrapFixture
 {
