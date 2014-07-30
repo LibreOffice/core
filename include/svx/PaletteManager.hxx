@@ -25,12 +25,14 @@
 #include <svx/tbxcolorupdate.hxx>
 
 #include <tools/urlobj.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <comphelper/processfactory.hxx>
+
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class PaletteManager
 {
@@ -41,7 +43,7 @@ class PaletteManager
     svx::ToolboxButtonColorUpdater* mpBtnUpdater;
 
     Color       mLastColor;
-    std::vector<Palette*> maPalettes;
+    boost::ptr_vector<Palette> maPalettes;
 public:
     PaletteManager();
     ~PaletteManager();
