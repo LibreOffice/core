@@ -3942,6 +3942,48 @@ void Test::testCutPasteRefUndo()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testMoveRefBetweenSheets()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test1");
+    m_pDoc->InsertTab(1, "Test2");
+
+    m_pDoc->SetValue(ScAddress(0,0,0), 12.0);
+    m_pDoc->SetValue(ScAddress(1,0,0), 10.0);
+    m_pDoc->SetValue(ScAddress(2,0,0),  8.0);
+    m_pDoc->SetString(ScAddress(0,1,0), "=A1");
+    m_pDoc->SetString(ScAddress(0,2,0), "=SUM(A1:C1)");
+
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+
+    // These formulas should not display the sheet name.
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "A1"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM(A1:C1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Move Test1.A2:A3 to Test2.A2:A3.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    bool bMoved = rFunc.MoveBlock(ScRange(0,1,0,0,2,0), ScAddress(0,1,1), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+
+    CPPUNIT_ASSERT_MESSAGE("This cell should be empty after the move.", m_pDoc->GetCellType(ScAddress(0,1,0)) == CELLTYPE_NONE);
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,1,1)));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0,2,1)));
+
+    // The reference in the pasted formula should display sheet name after the move.
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,1), "Test1.A1"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,1), "SUM(Test1.A1:C1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testUndoCut()
 {
     m_pDoc->InsertTab(0, "Test");

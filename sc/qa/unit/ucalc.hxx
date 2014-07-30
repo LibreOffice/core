@@ -280,6 +280,7 @@ public:
     void testCopyPasteSkipEmpty2();
     void testCopyPasteSkipEmptyConditionalFormatting();
     void testCutPasteRefUndo();
+    void testMoveRefBetweenSheets();
     void testUndoCut();
     void testMoveBlock();
     void testCopyPasteRelativeFormula();
@@ -487,6 +488,7 @@ public:
     CPPUNIT_TEST(testCopyPasteSkipEmpty2);
     //CPPUNIT_TEST(testCopyPasteSkipEmptyConditionalFormatting);
     CPPUNIT_TEST(testCutPasteRefUndo);
+    CPPUNIT_TEST(testMoveRefBetweenSheets);
     CPPUNIT_TEST(testUndoCut);
     CPPUNIT_TEST(testMoveBlock);
     CPPUNIT_TEST(testCopyPasteRelativeFormula);
