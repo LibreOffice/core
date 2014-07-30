@@ -74,11 +74,14 @@ class JobSetup;
 class Size;
 class Point;
 
+// These values presumably must match exactly the corresponding
+// css::embed::Aspects ones (in offapi/com/sun/star/embed/Aspects.idl)
+// and the DVASPECT_* ones in the Win32 API.
+
 #define ASPECT_CONTENT      1
 #define ASPECT_THUMBNAIL    2 /* 120 * 120, 6 Colors DIB in MetaFile */
 #define ASPECT_ICON         4
 #define ASPECT_DOCPRINT     8
-#define ASPECT_ALL      (ASPECT_CONTENT | ASPECT_THUMBNAIL | ASPECT_ICON | ASPECT_DOCPRINT)
 
 // must be the same as in OLE2
 #define SVOBJ_MISCSTATUS_NOTRESIZEABLE          512
