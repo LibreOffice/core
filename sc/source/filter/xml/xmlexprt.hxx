@@ -242,7 +242,7 @@ public:
 
     virtual ~ScXMLExport();
 
-    static sal_Int16 GetFieldUnit();
+    static sal_Int16 GetMeasureUnit();
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
     bool IsMatrix (const ScAddress& aCell,

@@ -136,9 +136,9 @@ protected:
     const SwViewOption*         mpConstViewOption;
     bool                    bObjectValid:1, bWeb:1, mbApplyZoom;
 
-    sal_Int32   eHRulerUnit;
+    FieldUnit   eHRulerUnit;
     bool    mbApplyHRulerMetric;
-    sal_Int32   eVRulerUnit;
+    FieldUnit   eVRulerUnit;
     bool    mbApplyVRulerMetric;
 
     virtual void _preSetValues ()

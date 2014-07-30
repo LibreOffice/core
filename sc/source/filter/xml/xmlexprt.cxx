@@ -456,7 +456,7 @@ void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShap
     }
 }
 
-sal_Int16 ScXMLExport::GetFieldUnit()
+sal_Int16 ScXMLExport::GetMeasureUnit()
 {
     css::uno::Reference<css::sheet::XGlobalSheetSettings> xProperties =
                 css::sheet::GlobalSheetSettings::create( comphelper::getProcessComponentContext() );
@@ -467,7 +467,7 @@ sal_Int16 ScXMLExport::GetFieldUnit()
 ScXMLExport::ScXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     OUString const & implementationName, sal_uInt16 nExportFlag)
-:   SvXMLExport( SvXMLUnitConverter::GetMeasureUnit(GetFieldUnit()),
+:   SvXMLExport( GetMeasureUnit(),
         xContext, implementationName, XML_SPREADSHEET, nExportFlag ),
     pDoc(NULL),
     nSourceStreamPos(0),

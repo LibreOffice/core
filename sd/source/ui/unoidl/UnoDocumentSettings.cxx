@@ -658,10 +658,10 @@ throw (UnknownPropertyException, PropertyVetoException,
                     sal_Int16 nValue = 0;
                     if( *pValues >>= nValue )
                     {
-                        short nFieldUnit;
+                        FieldUnit nFieldUnit;
                         if( SvxMeasureUnitToFieldUnit( nValue, nFieldUnit ) )
                         {
-                            pDoc->SetUIUnit((FieldUnit)nFieldUnit );
+                            pDoc->SetUIUnit( nFieldUnit );
                             bOk = true;
                         }
                     }
@@ -1065,7 +1065,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
             case HANDLE_MEASUREUNIT:
                 {
                     short nMeasure;
-                    SvxFieldUnitToMeasureUnit( (const short)pDoc->GetUIUnit(), nMeasure );
+                    SvxFieldUnitToMeasureUnit( pDoc->GetUIUnit(), nMeasure );
                     *pValue <<= (sal_Int16)nMeasure;
                 }
                 break;

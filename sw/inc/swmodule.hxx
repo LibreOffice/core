@@ -210,7 +210,7 @@ public:
     OUString            GetDocStatWordDelim() const;
 
     // Pass metric of ModuleConfig (for HTML-export).
-    sal_uInt16 GetMetric( bool bWeb ) const;
+    FieldUnit GetMetric( bool bWeb ) const;
 
     // Pass update-statuses.
     sal_uInt16 GetLinkUpdMode( bool bWeb ) const;

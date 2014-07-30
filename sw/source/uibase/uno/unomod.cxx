@@ -760,29 +760,29 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case HANDLE_VIEWSET_HORI_RULER_METRIC:
         case HANDLE_VIEWSET_VERT_RULER_METRIC:
         {
-            sal_Int32 nUnit = -1;
+            sal_uInt16 nUnit;
             if( rValue >>= nUnit )
-            switch( nUnit )
-            {
+                switch( nUnit )
+                {
                 case FUNIT_MM:
                 case FUNIT_CM:
                 case FUNIT_POINT:
                 case FUNIT_PICA:
                 case FUNIT_INCH:
-                if( rInfo.mnHandle == HANDLE_VIEWSET_HORI_RULER_METRIC )
-                {
-                    eHRulerUnit = nUnit;
-                    mbApplyHRulerMetric = true;
-                }
-                else
-                {
-                    eVRulerUnit = nUnit;
-                    mbApplyVRulerMetric = true;
-                }
-                break;
+                    if( rInfo.mnHandle == HANDLE_VIEWSET_HORI_RULER_METRIC )
+                    {
+                        eHRulerUnit = static_cast<FieldUnit>(nUnit);
+                        mbApplyHRulerMetric = true;
+                    }
+                    else
+                    {
+                        eVRulerUnit = static_cast<FieldUnit>(nUnit);
+                        mbApplyVRulerMetric = true;
+                    }
+                    break;
                 default:
                     throw IllegalArgumentException();
-            }
+                }
         }
         break;
         default:

@@ -151,7 +151,7 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
     uno::Reference<document::XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLExport( xContext, "", rFileName, rHandler, NULL, MAP_100TH_MM),
+:   SvXMLExport( xContext, "", rFileName, rHandler, NULL, FUNIT_100TH_MM),
     mxTable( xTable )
 {
 
