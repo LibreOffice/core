@@ -17,36 +17,36 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <model xmlns:rng="http://relaxng.org/ns/structure/1.0">
-  <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml" id="xml"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="officeRel"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/relationships" alias="relationships" id="officeRel"/>
-  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="vmlOffice"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="officeRelTheme"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="dmlWordDr"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/wordprocessingDrawing" alias="wordprocessingDrawing" id="dmlWordDr"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="dml"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/main" alias="drawingml" id="dml"/>
-  <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="vml"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="dmlPicture"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/picture" alias="picture" id="dmlPicture"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram" id="dmlDiagram"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/diagram" alias="diagram" id="dmlDiagram"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" alias="lockedCanvas" id="dmlLockedCanvas"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/lockedCanvas" alias="lockedCanvas" id="dmlLockedCanvas"/>
-  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" alias="wps" id="wps"/>
-  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" alias="wpg" id="wpg"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/chart" alias="chart" id="dmlChart"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/chart" alias="chart" id="dmlChart"/>
-  <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="vmlWord"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/wordprocessingml/main" alias="wordprocessingml" id="doc"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/math" alias="math" id="officeMath"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="schema"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/markup-compatibility/2006" alias="mce" id="mce"/>
-  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" alias="wp14" id="wp14"/>
-  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordml" alias="w14" id="w14"/>
-  <namespace-alias name="http://schemas.microsoft.com/office/drawing/2010/main" alias="a14" id="a14"/>
+  <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/relationships" alias="relationships"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/wordprocessingDrawing" alias="wordprocessingDrawing"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/main" alias="drawingml"/>
+  <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/picture" alias="picture"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/diagram" alias="diagram"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" alias="lockedCanvas"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/lockedCanvas" alias="lockedCanvas"/>
+  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" alias="wps"/>
+  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" alias="wpg"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/chart" alias="chart"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/chart" alias="chart"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/wordprocessingml/main" alias="wordprocessingml"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/math" alias="math"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/markup-compatibility/2006" alias="mce"/>
+  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" alias="wp14"/>
+  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordml" alias="w14"/>
+  <namespace-alias name="http://schemas.microsoft.com/office/drawing/2010/main" alias="a14"/>
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
   <token tokenid="ooxml:inputstream"/>
