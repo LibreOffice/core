@@ -2065,4 +2065,13 @@ bool Outliner::HasParaFlag( const Paragraph* pPara, ParaFlag nFlag )
     return pPara && pPara->HasFlag( nFlag );
 }
 
+OutlinerParaObject *Outliner::GetNonOverflowingParaObject() const
+{
+    return NULL;
+}
+OutlinerParaObject *Outliner::GetOverflowingParaObject() const
+{
+    return NULL;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

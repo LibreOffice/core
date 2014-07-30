@@ -352,7 +352,22 @@ public:
     bool IsAutoFit() const;
     /// returns true if the old feature for fitting shape content should into shape is enabled. implies IsAutoFit()==false!
     bool IsFitToSize() const;
+
+    // Chaining
     bool IsToBeChained() const;
+    SdrTextObj *GetNextLinkInChain() const {
+        /* FIXME(matteocam) return mpNextInChain; */
+        if ( pPage && pPage->GetObjCount() > 1) {
+            pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj(1) );
+            if ( pNextTextObj == NULL)
+                return NULL;
+            return pNextTextObj;
+        } else {
+            fprintf(stderr, "Make New Object please\n");
+            return NULL;
+        }
+    }
+
     SdrObjKind GetTextKind() const { return eTextKind; }
 
     // #i121917#

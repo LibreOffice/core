@@ -260,10 +260,11 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         rOutl.UpdateFields();
 
         // FIXME(matteocam)
+        // TODO: move this to one level higher
         if ( IsToBeChained() )
         {
             // set non overflow part of text to current box
-            pNewText = rOutl.GetNotOverflowingParaObject();
+            pNewText = rOutl.GetNonOverflowingParaObject();
             pNextText = rOutl.GetOverflowingParaObject();
 
             // XXX: should this SdrTextObj know "how much text to ask" by CreateParaObject?
