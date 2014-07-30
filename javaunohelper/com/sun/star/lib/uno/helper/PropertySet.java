@@ -704,17 +704,15 @@ XMultiPropertySet
 
     private boolean checkType(Object obj)
     {
-        if (obj == null
-        || obj instanceof Boolean
-        || obj instanceof Character
-        || obj instanceof Number
-        || obj instanceof String
-        || obj instanceof XInterface
-        || obj instanceof Type
-        || obj instanceof com.sun.star.uno.Enum
-        || obj.getClass().isArray())
-            return true;
-        return false;
+        return obj == null
+                || obj instanceof Boolean
+                || obj instanceof Character
+                || obj instanceof Number
+                || obj instanceof String
+                || obj instanceof XInterface
+                || obj instanceof Type
+                || obj instanceof com.sun.star.uno.Enum
+                || obj.getClass().isArray();
     }
 
     // Param object can be an Any or other object. If obj is null then the return value is null
