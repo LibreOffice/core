@@ -176,9 +176,10 @@ public final class ConverterInfoMgr {
 
         boolean       rc = false;
 
-        for (ConverterInfo converterInfo : converterInfoList) {
+        for (Iterator<ConverterInfo> it = converterInfoList.iterator(); it.hasNext();) {
+            ConverterInfo converterInfo = it.next();
             if (name.equals(converterInfo.getDisplayName())) {
-                converterInfoList.remove(converterInfo);
+                it.remove();
                 rc = true;
             }
         }
