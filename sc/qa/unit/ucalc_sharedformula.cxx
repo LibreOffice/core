@@ -459,6 +459,74 @@ void Test::testSharedFormulasRefUpdateMove()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulasRefUpdateMove2()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false); // turn auto calc off this time.
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Set values in B2:B3, and E2:E3.
+    for (SCROW i = 1; i <= 2; ++i)
+    {
+        m_pDoc->SetValue(ScAddress(1,i,0), i);
+        m_pDoc->SetValue(ScAddress(4,i,0), i);
+    }
+
+    // Make sure the values are really there.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(4,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4,2,0)));
+
+    // Set formulas in C2:C3 that reference B2:B4 individually, and F2:F3 to E2:E3.
+    for (SCROW i = 1; i <= 2; ++i)
+    {
+        m_pDoc->SetString(ScAddress(2,i,0), "=RC[-1]");
+        m_pDoc->SetString(ScAddress(5,i,0), "=RC[-1]");
+    }
+
+    m_pDoc->CalcFormulaTree(); // calculate manually.
+
+    // Check the formula results.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(5,2,0)));
+
+    // Move B2:C3 to C3:D4.
+    bool bMoved = getDocShell().GetDocFunc().MoveBlock(
+        ScRange(1,1,0,2,2,0), ScAddress(2,2,0), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+
+    // Make sure the range has been moved.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,3,0)));
+
+    // The formula cells should retain their results even with auto calc off
+    // and without recalculation.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(3,2,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3,3,0)));
+
+    // And these formulas in F2:F3 are unaffected, therefore should not change.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(5,2,0)));
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    // Undo the move.
+    pUndoMgr->Undo();
+
+    // Check the formula results.  The results should still be intact.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(5,2,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSharedFormulasRefUpdateRange()
 {
     m_pDoc->InsertTab(0, "Test");

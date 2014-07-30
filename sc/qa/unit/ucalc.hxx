@@ -290,6 +290,7 @@ public:
     void testSharedFormulas();
     void testSharedFormulasRefUpdate();
     void testSharedFormulasRefUpdateMove();
+    void testSharedFormulasRefUpdateMove2();
     void testSharedFormulasRefUpdateRange();
     void testSharedFormulasRefUpdateExternal();
     void testSharedFormulasInsertRow();
@@ -499,6 +500,7 @@ public:
     CPPUNIT_TEST(testSharedFormulas);
     CPPUNIT_TEST(testSharedFormulasRefUpdate);
     CPPUNIT_TEST(testSharedFormulasRefUpdateMove);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateMove2);
     CPPUNIT_TEST(testSharedFormulasRefUpdateRange);
     CPPUNIT_TEST(testSharedFormulasRefUpdateExternal);
     CPPUNIT_TEST(testSharedFormulasInsertRow);
