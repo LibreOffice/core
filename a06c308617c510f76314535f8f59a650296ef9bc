@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_ecc0f3e2",
+        "filename": "dbaccess/source/ui/inc/dbu_dlg.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-30T08:07:58Z",
+      "side": 1,
+      "message": "Again, you must continue the original numbering and then update LAST_STR_HERE.",
+      "revId": "a06c308617c510f76314535f8f59a650296ef9bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
