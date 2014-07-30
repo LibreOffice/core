@@ -19,6 +19,7 @@
 package org.openoffice.xmerge.util.registry;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.io.*;
 
 /**
@@ -31,13 +32,13 @@ import java.io.*;
  */
 public final class ConverterInfoMgr {
 
-    private static ArrayList<ConverterInfo> converterInfoList;
+    private static final List<ConverterInfo> converterInfoList;
 
    /**
     *  Constructor
     */
     static {
-       converterInfoList = new ArrayList<ConverterInfo>();
+       converterInfoList = new CopyOnWriteArrayList<ConverterInfo>();
     }
 
    /**
@@ -137,7 +138,6 @@ public final class ConverterInfoMgr {
     */
    public static boolean removeByJar(String jar) {
 
-        ConverterInfo converterInfo;
         boolean       rc = false;
 
         // FIX (HJ): Has to use an iterator, since we are removing items
@@ -151,12 +151,9 @@ public final class ConverterInfoMgr {
             }
         }*/
 
-        Iterator<ConverterInfo> ciIter = converterInfoList.iterator();
-        while (ciIter.hasNext())
-        {
-            converterInfo = ciIter.next();
+        for (ConverterInfo converterInfo : converterInfoList) {
             if (jar.equals(converterInfo.getJarName())) {
-               ciIter.remove();
+               converterInfoList.remove(converterInfo);
                rc = true;
             }
         }
