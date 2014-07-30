@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_2c902bec",
+        "filename": "dbaccess/source/ui/inc/dbu_dlg.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-07-30T08:05:08Z",
+      "side": 1,
+      "message": "You must continue the numbering here and update the offset for LAST_STR_HERE. You must also change RID_STR_DLG_END in dbaccess/source/ui/inc/dbu_resource.hrc so the range is large enough.",
+      "revId": "239558b4be29b1392e78bbcc530a14324d97ac3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
