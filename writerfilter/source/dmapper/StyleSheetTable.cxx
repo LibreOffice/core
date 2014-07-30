@@ -427,7 +427,12 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         {
             SAL_WARN_IF( m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN,
                 "writerfilter", "Style type needs to be processed first" );
-            StyleType nType = ( StyleType ) nIntValue;
+            StyleType nType =
+                (nIntValue >= STYLE_TYPE_UNKNOWN
+                 && nIntValue <= STYLE_TYPE_LIST)
+                ? static_cast<StyleType>(nIntValue) : STYLE_TYPE_UNKNOWN;
+                //TODO: at least CppunitTest_sw_rtfimport gets here with
+                // nIntValue == -42
             if ( nType == STYLE_TYPE_TABLE )
             {
                 StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
@@ -435,7 +440,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
                 m_pImpl->m_pCurrentEntry = pTableEntry;
             }
             else
-                m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
+                m_pImpl->m_pCurrentEntry->nStyleTypeCode = nType;
         }
         break;
         case NS_ooxml::LN_CT_Style_default:
