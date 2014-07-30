@@ -113,9 +113,6 @@ void FontTable::lcl_sprm(Sprm& rSprm)
         return ;
     sal_uInt32 nSprmId = rSprm.getId();
 
-    Value::Pointer_t pValue = rSprm.getValue();
-    sal_Int32 nIntValue = pValue->getInt();
-    (void)nIntValue;
     switch(nSprmId)
     {
         case NS_ooxml::LN_CT_Font_charset:

@@ -411,7 +411,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
     if(!m_pImpl->m_pCurrentEntry)
         return ;
     int nIntValue = val.getInt();
-    (void)nIntValue;
     OUString sValue = val.getString();
 
     // The default type is paragraph, and it needs to be processed first,
@@ -512,7 +511,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
     sal_uInt32 nSprmId = rSprm.getId();
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
-    (void)nIntValue;
     OUString sStringValue = pValue.get() ? pValue->getString() : OUString();
 
     switch(nSprmId)
@@ -1190,9 +1188,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 #endif
                             SAL_WARN("writerfilter", aMessage.getStr());
                         }
-                        catch( const uno::Exception& rEx)
+                        catch( const uno::Exception& )
                         {
-                            (void) rEx;
                             OSL_FAIL( "Some style properties could not be set");
                         }
                     }
@@ -1600,9 +1597,8 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
             {
                 xStyleProps->setPropertyValue( aCharPropIter->Name, aCharPropIter->Value );
             }
-            catch( const uno::Exception& rEx )
+            catch( const uno::Exception& )
             {
-                (void)rEx;
                 OSL_FAIL( "Exception in StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
             }
             ++aCharPropIter;
@@ -1610,9 +1606,8 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
         xCharStyles->insertByName( sListLabel, uno::makeAny( xStyle) );
         m_pImpl->m_aListCharStylePropertyVector.push_back( ListCharStylePropertyMap_t( sListLabel, rCharProperties ));
     }
-    catch( const uno::Exception& rEx )
+    catch( const uno::Exception& )
     {
-        (void)rEx;
         OSL_FAIL( "Exception in StyleSheetTable::getOrCreateCharStyle");
     }
 
