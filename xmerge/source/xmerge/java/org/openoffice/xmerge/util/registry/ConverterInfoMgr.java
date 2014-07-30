@@ -137,27 +137,13 @@ public final class ConverterInfoMgr {
     */
    public static boolean removeByJar(String jar) {
 
-        ConverterInfo converterInfo;
         boolean       rc = false;
 
-        // FIX (HJ): Has to use an iterator, since we are removing items
-        /*Enumeration ciEnum = converterInfoList.elements();
-        while (ciEnum.hasMoreElements())
-        {
-            converterInfo = (ConverterInfo)ciEnum.nextElement();
+        for (Iterator<ConverterInfo> it = converterInfoList.iterator(); it.hasNext();) {
+            ConverterInfo converterInfo = it.next();
             if (jar.equals(converterInfo.getJarName())) {
-               converterInfoList.remove(converterInfo);
-               rc = true;
-            }
-        }*/
-
-        Iterator<ConverterInfo> ciIter = converterInfoList.iterator();
-        while (ciIter.hasNext())
-        {
-            converterInfo = ciIter.next();
-            if (jar.equals(converterInfo.getJarName())) {
-               ciIter.remove();
-               rc = true;
+                it.remove();
+                rc = true;
             }
         }
         return rc;
@@ -176,9 +162,10 @@ public final class ConverterInfoMgr {
 
         boolean       rc = false;
 
-        for (ConverterInfo converterInfo : converterInfoList) {
+        for (Iterator<ConverterInfo> it = converterInfoList.iterator(); it.hasNext();) {
+            ConverterInfo converterInfo = it.next();
             if (name.equals(converterInfo.getDisplayName())) {
-                converterInfoList.remove(converterInfo);
+                it.remove();
                 rc = true;
             }
         }
