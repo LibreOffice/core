@@ -119,6 +119,9 @@ int XMLReader::GetReaderType()
     return SW_STORAGE_READER;
 }
 
+namespace
+{
+
 /// read a component (file + filter version)
 sal_Int32 ReadThroughComponent(
     uno::Reference<io::XInputStream> xInputStream,
@@ -363,6 +366,8 @@ sal_Int32 ReadThroughComponent(
     }
 
     return ERR_SWG_READ_ERROR;
+}
+
 }
 
 // #i44177#

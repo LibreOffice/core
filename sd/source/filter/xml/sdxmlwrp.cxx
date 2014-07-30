@@ -174,6 +174,9 @@ SdXMLFilter::~SdXMLFilter(void)
 {
 }
 
+namespace
+{
+
 sal_Int32 ReadThroughComponent(
     Reference<io::XInputStream> xInputStream,
     Reference<XComponent> xModelComponent,
@@ -408,6 +411,8 @@ sal_Int32 ReadThroughComponent(
     {}
 
     return SD_XML_READERROR;
+}
+
 }
 
 bool SdXMLFilter::Import( ErrCode& nError )
