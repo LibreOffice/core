@@ -170,7 +170,8 @@ void FillStyleListBox( ScDocument* pDoc, ListBox& rLbStyle )
 
 }
 
-ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
+ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
+        const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbCondType( this, ScResId( LB_CELLIS_TYPE ) ),
     maEdVal1( this, NULL, NULL, ScResId( ED_VAL1 ) ),
@@ -184,7 +185,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
     FreeResource();
     maLbType.SelectEntryPos(1);
 
-    Init();
+    Init(pDialogParent);
 
     StartListening(*pDoc->GetStyleSheetPool(), true);
 
@@ -297,12 +298,12 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
     maLbType.SelectEntryPos(1);
 }
 
-void ScConditionFrmtEntry::Init()
+void ScConditionFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 {
-    maEdVal1.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
-    maEdVal2.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
-    maEdVal1.SetLoseFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeLoseFocusHdl ) );
-    maEdVal2.SetLoseFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeLoseFocusHdl ) );
+    maEdVal1.SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdVal2.SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdVal1.SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
+    maEdVal2.SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
     maEdVal1.SetStyle( maEdVal1.GetStyle() | WB_FORCECTRLBACKGROUND );
     maEdVal2.SetStyle( maEdVal2.GetStyle() | WB_FORCECTRLBACKGROUND );
@@ -553,14 +554,14 @@ IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
 
 // formula
 
-ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormat ):
+ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
     maWdPreview( this, ScResId( WD_PREVIEW ) ),
     maEdFormula( this, NULL, NULL, ScResId( ED_FORMULA ) )
 {
-    Init();
+    Init(pDialogParent);
 
     FreeResource();
     maLbType.SelectEntryPos(2);
@@ -578,10 +579,10 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const
     StyleSelectHdl(NULL);
 }
 
-void ScFormulaFrmtEntry::Init()
+void ScFormulaFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 {
-    maEdFormula.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
-    maEdFormula.SetLoseFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeLoseFocusHdl ) );
+    maEdFormula.SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdFormula.SetLoseFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
     FillStyleListBox( mpDoc, maLbStyle );
     maLbStyle.SetSelectHdl( LINK( this, ScFormulaFrmtEntry, StyleSelectHdl ) );
