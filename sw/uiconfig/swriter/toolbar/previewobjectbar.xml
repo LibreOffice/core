@@ -35,7 +35,7 @@
  <toolbar:toolbaritem xlink:href=".uno:ZoomMinus" toolbar:helpid="10098"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FullScreen" toolbar:helpid="5627"/>
- <toolbar:toolbaritem xlink:href=".uno:PrintPagePreview" toolbar:helpid="21253"/>
+ <toolbar:toolbaritem xlink:href=".uno:Print" toolbar:helpid="21253"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ClosePreview" toolbar:helpid="5325"/>
 </toolbar:toolbar>
