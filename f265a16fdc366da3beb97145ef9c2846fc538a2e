@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_aca31b4f",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3369,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-07-30T07:41:40Z",
+      "side": 1,
+      "message": "Why is this always true?",
+      "revId": "f265a16fdc366da3beb97145ef9c2846fc538a2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
