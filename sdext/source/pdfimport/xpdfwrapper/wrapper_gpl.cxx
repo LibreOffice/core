@@ -37,23 +37,23 @@ int main(int argc, char **argv)
         if (!strcmp(argv[k], "-f"))
         {
             outputFile = argv[k+1];
-            --argc;
+            argc -= 2;
             for (int j = k; j < argc; ++j)
-                argv[j] = argv[j+1];
+                argv[j] = argv[j+2];
         }
         else if (!strcmp(argv[k], "-opw"))
         {
             ownerPassword = argv[k+1];
-            --argc;
+            argc -= 2;
             for (int j = k; j < argc; ++j)
-                argv[j] = argv[j+1];
+                argv[j] = argv[j+2];
         }
         else if (!strcmp(argv[k], "-upw"))
         {
             userPassword = argv[k+1];
-            --argc;
+            argc -= 2;
             for (int j = k; j < argc; ++j)
-                argv[j] = argv[j+1];
+                argv[j] = argv[j+2];
         }
     ++k;
     }
