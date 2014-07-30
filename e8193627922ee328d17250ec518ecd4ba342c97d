@@ -16,6 +16,24 @@
       "revId": "e8193627922ee328d17250ec518ecd4ba342c97d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_6cad0331",
+        "filename": "svx/source/customshapes/EnhancedCustomShape2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-07-30T08:14:23Z",
+      "side": 0,
+      "message": "no",
+      "parentUuid": "bab921fb_6ca06391",
+      "revId": "e8193627922ee328d17250ec518ecd4ba342c97d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
