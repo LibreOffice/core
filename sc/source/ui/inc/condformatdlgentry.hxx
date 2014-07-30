@@ -17,6 +17,7 @@
 #include <svl/lstner.hxx>
 
 class ScIconSetFrmtDataEntry;
+class ScCondFormatDlg;
 
 namespace condformat {
 
@@ -95,12 +96,13 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     ScFormatEntry* createConditionEntry() const;
 
     virtual OUString GetExpressionString() SAL_OVERRIDE;
-    void Init();
+    void Init(ScCondFormatDlg* pDialogParent);
     DECL_LINK( StyleSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
 
 public:
-    ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
+    ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
+            const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
 
     virtual ScFormatEntry* GetEntry() const SAL_OVERRIDE;
     virtual void SetActive() SAL_OVERRIDE;
@@ -121,12 +123,12 @@ class ScFormulaFrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createFormulaEntry() const;
     virtual OUString GetExpressionString() SAL_OVERRIDE;
-    void Init();
+    void Init(ScCondFormatDlg* pDialogParent);
 
     DECL_LINK( StyleSelectHdl, void* );
 
 public:
-    ScFormulaFrmtEntry( Window* pParent, ScDocument* PDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
+    ScFormulaFrmtEntry( Window* pParent, ScDocument* PDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
 
     virtual ScFormatEntry* GetEntry() const SAL_OVERRIDE;
     virtual void SetActive() SAL_OVERRIDE;

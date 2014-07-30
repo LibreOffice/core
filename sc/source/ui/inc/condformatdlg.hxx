@@ -51,6 +51,8 @@ enum ScCondFormatDialogType
 
 }
 
+class ScCondFormatDlg;
+
 class ScCondFormatList : public Control
 {
 private:
@@ -63,13 +65,14 @@ private:
     ScDocument* mpDoc;
     ScAddress maPos;
     ScRangeList maRanges;
+    ScCondFormatDlg* mpDialogParent;
 
     void DoScroll(long nDiff);
 
 public:
     ScCondFormatList(Window* pParent, WinBits nStyle);
 
-    void init(ScDocument* pDoc, const ScConditionalFormat* pFormat,
+    void init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScConditionalFormat* pFormat,
         const ScRangeList& rRanges, const ScAddress& rPos,
         condformat::dialog::ScCondFormatDialogType eType);
 
