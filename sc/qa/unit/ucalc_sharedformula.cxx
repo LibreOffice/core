@@ -403,6 +403,62 @@ void Test::testSharedFormulasRefUpdate()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulasRefUpdateMove()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Set values in B2:B4.
+    for (SCROW i = 1; i <= 3; ++i)
+        m_pDoc->SetValue(ScAddress(1,i,0), i);
+
+    // Make sure the values are really there.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+
+    // Set formulas in C2:C4 that reference B2:B4 individually.
+    for (SCROW i = 1; i <= 3; ++i)
+        m_pDoc->SetString(ScAddress(2,i,0), "=RC[-1]");
+
+    // Check the formula results.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,3,0)));
+
+    // Move B2:B4 to B1:B3.
+    bool bMoved = getDocShell().GetDocFunc().MoveBlock(ScRange(1,1,0,1,3,0), ScAddress(1,0,0), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+
+    // Make sure the values have been moved for real.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    // The formulas should have been adjusted for the move.
+    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,1,0), "R[-1]C[-1]"));
+    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,2,0), "R[-1]C[-1]"));
+    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,3,0), "R[-1]C[-1]"));
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    // The values should have moved back.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+
+    // And the formulas should have been re-adjusted to their original references.
+    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,1,0), "RC[-1]"));
+    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,2,0), "RC[-1]"));
+    CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,3,0), "RC[-1]"));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSharedFormulasRefUpdateRange()
 {
     m_pDoc->InsertTab(0, "Test");
