@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/scoped_ptr.hpp>
+
 #include "pdfioutdev_gpl.hxx"
 #ifdef WNT
 # include <io.h>
@@ -142,7 +144,7 @@ int main(int argc, char **argv)
    }
    else
    {
-      pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aDoc) );
+      boost::scoped_ptr<pdfi::PDFOutDev> pOutDev( new pdfi::PDFOutDev(&aDoc) );
 
       // tell receiver early - needed for proper progress calculation
       pOutDev->setPageNum( aDoc.getNumPages() );
@@ -154,12 +156,12 @@ int main(int argc, char **argv)
       const int nPages = aDoc.getNumPages();
       for( int i=1; i<=nPages; ++i )
       {
-        aDoc.displayPage( pOutDev,
+        aDoc.displayPage( pOutDev.get(),
                           i,
                           PDFI_OUTDEV_RESOLUTION,
                           PDFI_OUTDEV_RESOLUTION,
                           0, gTrue, gTrue, gTrue );
-        aDoc.processLinks( pOutDev, i );
+        aDoc.processLinks( pOutDev.get(), i );
       }
    }
     return 0;
