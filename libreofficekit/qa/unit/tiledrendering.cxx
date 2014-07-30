@@ -36,6 +36,10 @@ using namespace ::std;
 class TiledRenderingTest : public ::CppUnit::TestFixture
 {
 public:
+    const string m_sSrcRoot = getenv( "SRC_ROOT" );
+    const string m_sInstDir = getenv( "INSTDIR" );
+    const string m_sLOPath = m_sInstDir + "/program";
+
     TiledRenderingTest() {}
 
     void testOverlay();
@@ -64,11 +68,8 @@ static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
 
 void TiledRenderingTest::testOverlay()
 {
-    const string sSrcRoot = getenv( "SRC_ROOT" );
-    const string sInstDir = getenv( "INSTDIR" );
-    const string sLOPath = sInstDir + "/program";
-    const string sDocPath = sSrcRoot + "/odk/examples/java/DocumentHandling/test/test1.odt";
-    const string sLockFile = sSrcRoot + "/odk/examples/java/DocumentHandling/test/.~lock.test1.odt#";
+    const string sDocPath = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/test1.odt";
+    const string sLockFile = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/.~lock.test1.odt#";
 
     // FIXME: this is a temporary hack: LOK will fail when trying to open a
     // locked file, and since we're reusing the file for a different unit
@@ -77,7 +78,7 @@ void TiledRenderingTest::testOverlay()
     remove( sLockFile.c_str() );
 
     scoped_ptr< Office > pOffice( lok_cpp_init(
-                                      sLOPath.c_str() ) );
+                                      m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice.get() );
 
     scoped_ptr< Document> pDocument( pOffice->documentLoad(
