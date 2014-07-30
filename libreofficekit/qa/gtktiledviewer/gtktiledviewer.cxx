@@ -27,6 +27,7 @@ static int help()
 static GtkWidget* pDocView;
 static GtkWidget* pDocViewQuad;
 static GtkWidget* pVBox;
+static GtkComboBoxText* pPartSelector;
 static LibreOfficeKit* pOffice;
 static char* pFileName;
 
@@ -121,20 +122,29 @@ void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
 
 // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
-void populatePartSelector( GtkComboBoxText* pSelector, LOKDocView* pView )
+void populatePartSelector()
 {
+    gtk_list_store_clear( GTK_LIST_STORE(
+                              gtk_combo_box_get_model(
+                                  GTK_COMBO_BOX(pPartSelector) )) );
+
+    if ( !pDocView )
+    {
+        return;
+    }
+
     const int nMaxLength = 50;
     char sText[nMaxLength];
 
-    int nParts = lok_docview_get_parts(pView);
+    int nParts = lok_docview_get_parts( LOK_DOCVIEW(pDocView) );
     for ( int i = 0; i < nParts; i++ )
     {
-        char* pName = lok_docview_get_part_name( pView, i );
+        char* pName = lok_docview_get_part_name( LOK_DOCVIEW(pDocView), i );
         assert( pName );
         snprintf( sText, nMaxLength, "%i (%s)", i+1, pName );
         free( pName );
 
-        gtk_combo_box_text_append_text( pSelector, sText );
+        gtk_combo_box_text_append_text( pPartSelector, sText );
     }
     gtk_combo_box_set_active( GTK_COMBO_BOX(pPartSelector),
                               lok_docview_get_part( LOK_DOCVIEW(pDocView) ) );
@@ -174,6 +184,10 @@ void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
     {
         lok_docview_set_partmode( LOK_DOCVIEW(pDocView), ePartMode );
     }
+
+    // The number of items could change e.g. if we change from slide
+    // to embeddede obj mode -- hence we should update the part list.
+    populatePartSelector();
 }
 #endif
 
@@ -232,6 +246,8 @@ int main( int argc, char* argv[] )
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartSelectorToolItem, -1 );
     g_signal_connect( G_OBJECT(pComboBox), "changed", G_CALLBACK(changePart), NULL );
 
+    pPartSelector = GTK_COMBO_BOX_TEXT(pComboBox);
+
     GtkToolItem* pSeparator2 = gtk_separator_tool_item_new();
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator2, -1);
 
@@ -265,7 +281,7 @@ int main( int argc, char* argv[] )
 
     // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
-    populatePartSelector( GTK_COMBO_BOX_TEXT(pComboBox), LOK_DOCVIEW(pDocView) );
+    populatePartSelector();
     populatePartModeSelector( GTK_COMBO_BOX_TEXT(pPartModeComboBox) );
 #endif
 
