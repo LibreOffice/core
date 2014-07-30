@@ -136,7 +136,8 @@ void populatePartSelector( GtkComboBoxText* pSelector, LOKDocView* pView )
 
         gtk_combo_box_text_append_text( pSelector, sText );
     }
-    gtk_combo_box_set_active( GTK_COMBO_BOX(pSelector), 0 );
+    gtk_combo_box_set_active( GTK_COMBO_BOX(pPartSelector),
+                              lok_docview_get_part( LOK_DOCVIEW(pDocView) ) );
 }
 
 void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
