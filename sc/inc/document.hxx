@@ -1876,6 +1876,8 @@ public:
     void EndListeningCell( sc::EndListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener );
 
     void EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells );
+    void CollectAllAreaListeners(
+        std::vector<SvtListener*>& rListeners, const ScRange& rRange, sc::AreaOverlapType eType );
 
     void                PutInFormulaTree( ScFormulaCell* pCell );
     void                RemoveFromFormulaTree( ScFormulaCell* pCell );

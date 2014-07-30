@@ -2679,8 +2679,8 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         {
             rDoc.CopyToDocument( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
                                     nUndoFlags, false, pUndoDoc );
-            pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, false, false );
+//          pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+//          pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, false, false );
         }
 
         if ( nDestTab != nStartTab )
@@ -2689,7 +2689,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                     nDestEndCol, nDestEndRow, nDestEndTab,
                                     nUndoFlags, false, pUndoDoc );
 
-        pUndoData = new ScRefUndoData( &rDoc );
+//      pUndoData = new ScRefUndoData( &rDoc );
 
         rDoc.BeginDrawUndo();
     }

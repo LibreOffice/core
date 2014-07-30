@@ -15,6 +15,8 @@
 
 namespace sc {
 
+struct RefUpdateContext;
+
 class RefHint : public SfxSimpleHint
 {
 public:
@@ -42,10 +44,11 @@ class RefMovedHint : public RefHint
 {
     ScRange maRange;
     ScAddress maMoveDelta;
+    const sc::RefUpdateContext& mrCxt;
 
 public:
 
-    RefMovedHint( const ScRange& rRange, const ScAddress& rMove );
+    RefMovedHint( const ScRange& rRange, const ScAddress& rMove, const sc::RefUpdateContext& rCxt );
     virtual ~RefMovedHint();
 
     /**
@@ -57,6 +60,8 @@ public:
      * Get the movement vector.
      */
     const ScAddress& getDelta() const;
+
+    const sc::RefUpdateContext& getContext() const;
 };
 
 class RefColReorderHint : public RefHint

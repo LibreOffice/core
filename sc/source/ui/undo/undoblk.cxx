@@ -52,6 +52,7 @@
 #include <refupdatecontext.hxx>
 #include <validat.hxx>
 #include <gridwin.hxx>
+#include <svl/listener.hxx>
 
 #include <set>
 #include <boost/scoped_ptr.hpp>
@@ -1249,6 +1250,22 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
     maPaintRanges.Join(aPaintRange);
 }
 
+namespace {
+
+class DataChangeNotifier : std::unary_function<SvtListener*, void>
+{
+    ScHint maHint;
+public:
+    DataChangeNotifier() : maHint(SC_HINT_DATACHANGED, ScAddress()) {}
+
+    void operator() ( SvtListener* p )
+    {
+        p->Notify(maHint);
+    }
+};
+
+}
+
 void ScUndoDragDrop::Undo()
 {
     mnPaintExtFlags = 0;
@@ -1258,31 +1275,63 @@ void ScUndoDragDrop::Undo()
 
     if (bCut)
     {
-        // Notify all listeners of the destination range, and have them update their references.
+        // During undo, we move cells from aDestRange to aSrcRange.
+
         ScDocument& rDoc = pDocShell->GetDocument();
+
         SCCOL nColDelta = aSrcRange.aStart.Col() - aDestRange.aStart.Col();
         SCROW nRowDelta = aSrcRange.aStart.Row() - aDestRange.aStart.Row();
         SCTAB nTabDelta = aSrcRange.aStart.Tab() - aDestRange.aStart.Tab();
-        sc::RefMovedHint aHint(aDestRange, ScAddress(nColDelta, nRowDelta, nTabDelta));
+
+        sc::RefUpdateContext aCxt(rDoc);
+        aCxt.meMode = URM_MOVE;
+        aCxt.maRange = aSrcRange;
+        aCxt.mnColDelta = nColDelta;
+        aCxt.mnRowDelta = nRowDelta;
+        aCxt.mnTabDelta = nTabDelta;
+
+        // Global range names.
+        ScRangeName* pName = rDoc.GetRangeName();
+        if (pName)
+            pName->UpdateReference(aCxt);
+
+        SCTAB nTabCount = rDoc.GetTableCount();
+        for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
+        {
+            // Sheet-local range names.
+            pName = rDoc.GetRangeName(nTab);
+            if (pName)
+                pName->UpdateReference(aCxt, nTab);
+        }
+
+        // Notify all listeners of the destination range, and have them update their references.
+        sc::RefMovedHint aHint(aDestRange, ScAddress(nColDelta, nRowDelta, nTabDelta), aCxt);
         rDoc.BroadcastRefMoved(aHint);
 
         ScValidationDataList* pValidList = rDoc.GetValidationList();
         if (pValidList)
         {
             // Update the references of validation entries.
-            sc::RefUpdateContext aCxt(rDoc);
-            aCxt.meMode = URM_MOVE;
-            aCxt.maRange = aSrcRange;
-            aCxt.mnColDelta = nColDelta;
-            aCxt.mnRowDelta = nRowDelta;
-            aCxt.mnTabDelta = nTabDelta;
             pValidList->UpdateReference(aCxt);
         }
-    }
 
-    DoUndo(aDestRange);
-    if (bCut)
+        DoUndo(aDestRange);
         DoUndo(aSrcRange);
+
+        // Notify all area listeners whose listened areas are partially moved, to
+        // recalculate.
+        std::vector<SvtListener*> aListeners;
+        rDoc.CollectAllAreaListeners(aListeners, aSrcRange, sc::AreaPartialOverlap);
+
+        // Remove any duplicate listener entries.  We must ensure that we notify
+        // each unique listener only once.
+        std::sort(aListeners.begin(), aListeners.end());
+        aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
+
+        std::for_each(aListeners.begin(), aListeners.end(), DataChangeNotifier());
+    }
+    else
+        DoUndo(aDestRange);
 
     for (size_t i = 0; i < maPaintRanges.size(); ++i)
     {

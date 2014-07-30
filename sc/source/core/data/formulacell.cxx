@@ -1932,7 +1932,16 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
 
                 const sc::RefMovedHint& rRefMoved = static_cast<const sc::RefMovedHint&>(rRefHint);
                 if (!IsShared() || IsSharedTop())
-                    pCode->MoveReference(aPos, rRefMoved.getRange(), rRefMoved.getDelta());
+                {
+                    sc::RefUpdateResult aRes = pCode->MoveReference(aPos, rRefMoved.getContext());
+                    if (aRes.mbNameModified)
+                    {
+                        // RPN token needs to be re-generated.
+                        bCompile = true;
+                        CompileTokenArray();
+                        SetDirtyVar();
+                    }
+                }
             }
             break;
             case sc::RefHint::ColumnReordered:
@@ -2883,6 +2892,9 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         sc::RefUpdateResult aRes = pCode->AdjustReferenceOnMove(rCxt, aOldPos, aPos);
         bRefModified = aRes.mbReferenceModified || aRes.mbNameModified;
         bValChanged = aRes.mbValueChanged;
+        if (aRes.mbNameModified)
+            // Re-compile to get the RPN token regenerated to reflect updated names.
+            bCompile = true;
     }
 
     if (bValChanged || bRefModified)
@@ -2933,7 +2945,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
 
     bValChanged = false;
 
-    bCompile = (bCompile || bValChanged || bRefModified || bColRowNameCompile);
+    bCompile = (bCompile || bValChanged || bColRowNameCompile);
     if ( bCompile )
     {
         CompileTokenArray( bNewListening ); // no Listening
