@@ -1118,7 +1118,6 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
     else
         aColor = mpColorSet->GetItemColor( nItemId );
 
-    SvxColorItem aColorItem( aColor, theSlotId );
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
@@ -1127,20 +1126,10 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    INetURLObject aObj( maCommand );
-
-    Any a;
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = aObj.GetURLPath();
-    aColorItem.QueryValue( a );
-    aArgs[0].Value = a;
-    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                 maCommand,
-                                 aArgs );
-
     if ( maSelectedLink.IsSet() )
         maSelectedLink.Call(&aColor);
 
+    PaletteManager::DispatchColorCommand(maCommand, aColor);
     return 0;
 }
 
@@ -1154,7 +1143,9 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, OpenPickerClickHdl)
 {
-    mrPaletteManager.PopupColorPicker();
+    if ( IsInPopupMode() )
+        EndPopupMode();
+    mrPaletteManager.PopupColorPicker(maCommand);
     return 0;
 }
 

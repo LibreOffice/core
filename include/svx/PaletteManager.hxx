@@ -24,6 +24,14 @@
 #include <rtl/ustring.hxx>
 #include <svx/tbxcolorupdate.hxx>
 
+#include <tools/urlobj.hxx>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <comphelper/processfactory.hxx>
+
 class PaletteManager
 {
     sal_uInt16  mnNumOfPalettes;
@@ -48,7 +56,8 @@ public:
     const Color& GetLastColor();
     void        SetLastColor(const Color& rLastColor);
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
-    void        PopupColorPicker();
+    void        PopupColorPicker(const OUString aCommand);
+    static void DispatchColorCommand(const OUString aCommand, const Color aColor);
 };
 
 #endif // INCLUDED_SVX_PALETTEMANAGER_HXX
