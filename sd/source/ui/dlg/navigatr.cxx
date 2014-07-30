@@ -63,7 +63,6 @@ static const sal_uInt16 nShowAllShapesFilter=2;
  */
 SdNavigatorWin::SdNavigatorWin(
     ::Window* pParent,
-    ::sd::NavigatorChildWindow* pChWinCtxt,
     const SdResId& rSdResId,
     SfxBindings* pInBindings,
     const UpdateRequestFunctor& rUpdateRequest)
@@ -71,7 +70,6 @@ SdNavigatorWin::SdNavigatorWin(
     , maToolbox ( this, SdResId( 1 ) )
     , maTlbObjects( this, SdResId( TLB_OBJECTS ) )
     , maLbDocs ( this, SdResId( LB_DOCS ) )
-    , mpChildWinContext( pChWinCtxt )
     , mbDocImported ( false )
       // On changes of the DragType: adjust SelectionMode of TLB!
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )

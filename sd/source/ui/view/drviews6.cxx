@@ -43,7 +43,6 @@
 #include "sdmod.hxx"
 #include "animobjs.hxx"
 #include "AnimationChildWindow.hxx"
-#include "NavigatorChildWindow.hxx"
 #include "LayerDialogChildWindow.hxx"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
@@ -233,11 +232,6 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
     {
         sal_uInt16 nId = AnimationChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_ANIMATION_OBJECTS, GetViewFrame()->HasChildWindow( nId ) ) );
-    }
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_NAVIGATOR ) )
-    {
-        sal_uInt16 nId = SID_NAVIGATOR;
-        rSet.Put( SfxBoolItem( SID_NAVIGATOR, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BMPMASK ) )
     {

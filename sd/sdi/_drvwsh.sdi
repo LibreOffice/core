@@ -187,7 +187,6 @@ interface DrawView
     SID_NAVIGATOR // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
     ]
     SID_3D_WIN // ole : no, status : ?
     [

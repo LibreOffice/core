@@ -45,7 +45,6 @@
 #include "GraphicDocShell.hxx"
 #include "GraphicViewShell.hxx"
 #include "AnimationChildWindow.hxx"
-#include "NavigatorChildWindow.hxx"
 #include "LayerDialogChildWindow.hxx"
 
 using namespace sd;
@@ -65,8 +64,6 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
 void DrawViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
-
-    GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
     GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
@@ -92,8 +89,6 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH
 void GraphicViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP));
-
-    GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
     GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());

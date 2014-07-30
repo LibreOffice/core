@@ -49,7 +49,6 @@
 // forward
 namespace sd {
 class DrawDocShell;
-class NavigatorChildWindow;
 }
 class Menu;
 class SdNavigatorControllerItem;
@@ -84,16 +83,9 @@ class SdNavigatorWin
 public:
     typedef ::boost::function<void(void)> UpdateRequestFunctor;
 
-    /** Create a new instance of the navigator.
-        @param bUseActiveUpdate
-            When <TRUE/>, the default, then the SdNavigatorWin object
-            will make a SID_NAVIGATOR_INIT call whenever it thinks an
-            update is necessary.  When <FALSE/> the navigator will
-            rely on others to trigger updates.
-    */
+    /** Create a new instance of the navigator. */
     SdNavigatorWin(
         ::Window* pParent,
-        ::sd::NavigatorChildWindow* pChildWinContext,
         const SdResId& rSdResId,
         SfxBindings* pBindings,
         const UpdateRequestFunctor& rUpdateRequest);
@@ -114,7 +106,6 @@ protected:
     virtual bool                Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 
 private:
-    friend class ::sd::NavigatorChildWindow;
     friend class SdNavigatorControllerItem;
     friend class SdPageNameControllerItem;
 
@@ -122,7 +113,6 @@ private:
     SdPageObjsTLB               maTlbObjects;
     ListBox                     maLbDocs;
 
-    ::sd::NavigatorChildWindow*     mpChildWinContext;
     Size                        maSize;
     Size                        maMinSize;
     bool                        mbDocImported;

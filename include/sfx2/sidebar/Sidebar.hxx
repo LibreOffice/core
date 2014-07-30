@@ -42,8 +42,8 @@ public:
     static void ShowPanel (
         const ::rtl::OUString& rsPanelId,
         const cssu::Reference<css::frame::XFrame>& rxFrame);
-};
 
+};
 } } // end of namespace sfx2::sidebar
 
 #endif
