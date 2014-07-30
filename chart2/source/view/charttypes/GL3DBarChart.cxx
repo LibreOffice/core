@@ -215,7 +215,7 @@ void RenderBenchMarkThread::MoveCamera()
     {
         mnStep = 0;
         mbExecuting = false;
-        mpChart->maRenderEvent = EVENT_NON;
+        mpChart->maRenderEvent = EVENT_NONE;
     }
 }
 
@@ -226,7 +226,7 @@ void RenderBenchMarkThread::MoveToDefault()
     {
         mnStep = 0;
         mbExecuting = false;
-        mpChart->maRenderEvent = EVENT_NON;
+        mpChart->maRenderEvent = EVENT_NONE;
         return;
     }
     if (!mbExecuting)
@@ -251,7 +251,7 @@ void RenderBenchMarkThread::MoveToBar()
         std::map<sal_uInt32, const GL3DBarChart::BarInformation>::const_iterator itr = mpChart->maBarMap.find(mpChart->mSelectBarId);
         if(itr == mpChart->maBarMap.end())
         {
-            mpChart->maRenderEvent = EVENT_NON;
+            mpChart->maRenderEvent = EVENT_NONE;
             mpChart->maClickCond.set();
             return;
         }
@@ -286,7 +286,7 @@ void RenderBenchMarkThread::MoveToCorner()
 void RenderBenchMarkThread::ProcessScroll()
 {
     //will add other process later
-    mpChart->maRenderEvent = EVENT_NON;
+    mpChart->maRenderEvent = EVENT_NONE;
 }
 
 
@@ -348,7 +348,7 @@ GL3DBarChart::GL3DBarChart(
     mbNeedsNewRender(true),
     mbCameraInit(false),
     mbRenderDie(false),
-    maRenderEvent(EVENT_NON)
+    maRenderEvent(EVENT_NONE)
 {
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -622,7 +622,7 @@ void GL3DBarChart::moveToDefault()
     if(BENCH_MARK_MODE)
     {
         // add correct handling here!!
-        if (maRenderEvent != EVENT_NON)
+        if (maRenderEvent != EVENT_NONE)
             return;
 
         {
@@ -663,7 +663,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     if (BENCH_MARK_MODE)
     {
         // add correct handling here !!
-        if (maRenderEvent != EVENT_NON)
+        if (maRenderEvent != EVENT_NONE)
             return;
 
         {
@@ -732,7 +732,7 @@ void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, s
 {
     long direction = rEndPos.X() - rStartPos.X();
     osl::MutexGuard aGuard(maMutex);
-    if (maRenderEvent == EVENT_NON)
+    if (maRenderEvent == EVENT_NONE)
         maRenderEvent = direction > 0 ? EVENT_DRAG_RIGHT : EVENT_DRAG_LEFT;
     if(direction < 0)
     {

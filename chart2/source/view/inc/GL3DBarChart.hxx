@@ -40,7 +40,7 @@ class Camera;
 
 enum RenderEventType
 {
-    EVENT_NON,
+    EVENT_NONE,
     EVENT_CLICK,
     EVENT_MOVE_TO_DEFAULT,
     EVENT_DRAG_LEFT,
