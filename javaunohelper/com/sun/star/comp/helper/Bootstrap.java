@@ -199,7 +199,7 @@ public class Bootstrap {
 
         if (! m_loaded_juh)
         {
-            if (System.getProperty("java.vendor") == "The Android Project")
+            if ("The Android Project".equals(System.getProperty("java.vendor")))
             {
                 // Find out if we are configured with DISABLE_DYNLOADING or
                 // not. Try to load the lo-bootstrap shared library which
