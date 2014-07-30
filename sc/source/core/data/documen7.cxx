@@ -140,7 +140,7 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
     const ScAddress& rDelta = rHint.getDelta();
 
     // Get all area listeners that listens on the old range, and end their listening.
-    std::vector<sc::AreaListener> aAreaListeners = pBASM->GetAllListeners(rSrcRange);
+    std::vector<sc::AreaListener> aAreaListeners = pBASM->GetAllListeners(rSrcRange, sc::AreaInside);
     {
         std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
         for (; it != itEnd; ++it)

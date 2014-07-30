@@ -151,11 +151,8 @@ public:
      * Move reference positions that are within specified moved range.
      *
      * @param rPos position of this formula cell
-     * @param rMovedRange range that has been moved.
-     * @param rDelta movement vector.
      */
-    void MoveReference(
-        const ScAddress& rPos, const ScRange& rMovedRange, const ScAddress& rDelta );
+    sc::RefUpdateResult MoveReference( const ScAddress& rPos, const sc::RefUpdateContext& rCxt );
 
     /**
      * Move reference positions in response to column reordering.  A range
