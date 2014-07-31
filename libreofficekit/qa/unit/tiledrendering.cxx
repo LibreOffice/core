@@ -48,6 +48,7 @@ public:
     // components on the one Office instance that we retrieve.
     void runAllTests();
 
+    void testDocumentLoadFail( Office* pOffice );
     void testDocumentTypes( Office* pOffice );
     void testImpressSlideNames( Office* pOffice );
     void testOverlay( Office* pOffice );
@@ -63,9 +64,21 @@ void TiledRenderingTest::runAllTests()
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice.get() );
 
+    testDocumentLoadFail( pOffice.get() );
     testDocumentTypes( pOffice.get() );
     testImpressSlideNames( pOffice.get() );
     testOverlay( pOffice.get() );
+}
+
+void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
+{
+    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/IDONOTEXIST.odt";
+    scoped_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+    CPPUNIT_ASSERT( !pDocument.get() );
+    // TODO: we probably want to have some way of returning what
+    // the cause of failure was. getError() will return
+    // something along the lines of:
+    // "Unsupported URL <file:///SRC_ROOT/libreofficekit/qa/data/IDONOTEXIST.odt>: "type detection failed""
 }
 
 // Our dumped .png files end up in
