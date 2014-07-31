@@ -366,6 +366,7 @@ public:
     virtual void setPart(   int nPart ) SAL_OVERRIDE;
     virtual int  getPart() SAL_OVERRIDE;
     virtual int  getParts() SAL_OVERRIDE;
+    virtual OUString getPartName( int nPart ) SAL_OVERRIDE;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper2<

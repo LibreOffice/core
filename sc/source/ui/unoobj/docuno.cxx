@@ -479,6 +479,14 @@ int ScModelObj::getPart()
     return pViewData->GetTabNo();
 }
 
+OUString ScModelObj::getPartName( int nPart )
+{
+    ScDocument& rDoc = pDocShell->GetDocument();
+    OUString sTableName;
+    rDoc.GetName( nPart, sTableName );
+    return sTableName;
+}
+
 Size ScModelObj::getDocumentSize()
 {
     // There seems to be no clear way of getting the grid window for this
