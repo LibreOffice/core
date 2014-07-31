@@ -2067,11 +2067,45 @@ bool Outliner::HasParaFlag( const Paragraph* pPara, ParaFlag nFlag )
 
 OutlinerParaObject *Outliner::GetNonOverflowingParaObject() const
 {
-    return NULL;
+    /* XXX:
+     * nCount should be the number of paragraphs of the non overflowing text
+     * nStart should be the starting paragraph of the non overflowing text (XXX: Always 0?)
+    */
+
+    if ( GetParagraphCount() < 1 )
+        return NULL;
+
+    // XXX: returns first paragraph
+    sal_Int32 nStartPara = 0;
+    sal_Int32 nCount = 1;
+
+    // code inspired from Outliner::CreateParaObject
+
+    // we need a paragraph data vector and the actual text
+    ParagraphDataVector aParagraphDataVector(nCount);
+    const sal_Int32 nLastPara(nStartPara + nCount - 1);
+
+    for(sal_Int32 nPara(nStartPara); nPara <= nLastPara; nPara++)
+    {
+        aParagraphDataVector[nPara-nStartPara] = *GetParagraph(nPara);
+    }
+
+    EditTextObject* pText = pEditEngine->CreateTextObject( nStartPara, nCount );
+    const bool bIsEditDoc(OUTLINERMODE_TEXTOBJECT == ImplGetOutlinerMode());
+
+    OutlinerParaObject* pPObj = new OutlinerParaObject(*pText, aParagraphDataVector, bIsEditDoc);
+    pPObj->SetOutlinerMode(GetMode());
+
+    delete pText;
+    return pPObj;
 }
 OutlinerParaObject *Outliner::GetOverflowingParaObject() const
 {
-    return NULL;
+    // XXX: returns second paragraph if there is one, first otherwise
+    if ( GetParagraphCount() >= 2 )
+        return CreateParaObject(1, 1);
+    else
+        return CreateParaObject(0, 1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

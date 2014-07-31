@@ -2023,6 +2023,23 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
     static_cast< sdr::properties::TextProperties& >(GetProperties()).SetObjectItemNoBroadcast(rItem);
 }
 
+SdrTextObj* SdrTextObj::GetNextLinkInChain() const
+{
+    /* FIXME(matteocam) return mpNextInChain; */
+    SdrTextObj *pNextTextObj = NULL;
+
+    if ( pPage && pPage->GetObjCount() > 1) {
+        pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj(1) );
+        if ( pNextTextObj == NULL)
+            return NULL;
+        return pNextTextObj;
+    } else {
+        fprintf(stderr, "Make New Object please\n");
+        return NULL;
+    }
+
+}
+
 
 
 // The concept of the text object:

@@ -251,11 +251,11 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
 
 void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 {
+    OutlinerParaObject* pNewText = NULL;
+    OutlinerParaObject* pNextText = NULL;
+
     if(rOutl.IsModified())
     {
-        OutlinerParaObject* pNewText = NULL;
-        OutlinerParaObject* pOverflownText = NULL;
-
         // to make the gray field background vanish  again
         rOutl.UpdateFields();
 
@@ -295,7 +295,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     // sets text to next box
     if (pNextText != NULL) {
         SdrTextObj *pNextTextObj = GetNextLinkInChain();
-        pNextTextObj->SetOutlinerParaObject( pOverflownText );
+        pNextTextObj->SetOutlinerParaObject( pNextText );
         pNextTextObj->BegTextEdit( rOutl );
         // XXX: Also, will all those calls currently in impCopyTextInTextObj be necessary too?
     }

@@ -355,18 +355,7 @@ public:
 
     // Chaining
     bool IsToBeChained() const;
-    SdrTextObj *GetNextLinkInChain() const {
-        /* FIXME(matteocam) return mpNextInChain; */
-        if ( pPage && pPage->GetObjCount() > 1) {
-            pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj(1) );
-            if ( pNextTextObj == NULL)
-                return NULL;
-            return pNextTextObj;
-        } else {
-            fprintf(stderr, "Make New Object please\n");
-            return NULL;
-        }
-    }
+    SdrTextObj *GetNextLinkInChain() const;
 
     SdrObjKind GetTextKind() const { return eTextKind; }
 
