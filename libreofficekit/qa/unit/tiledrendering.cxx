@@ -157,6 +157,7 @@ void TiledRenderingTest::testOverlay( Office* pOffice )
     // test it's entirely possible that an unwanted lock file will remain.
     // Hence forcefully remove it here.
     remove( sLockFile.c_str() );
+
     scoped_ptr< Office > pOffice( lok_cpp_init(
                                       m_sLOPath.c_str() ) );
     assert( pOffice.get() );
