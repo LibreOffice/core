@@ -48,6 +48,7 @@ public:
     // components on the one Office instance that we retrieve.
     void runAllTests();
 
+    void testImpressSlideNames( Office* pOffice );
     void testOverlay( Office* pOffice );
 
     CPPUNIT_TEST_SUITE(TiledRenderingTest);
@@ -61,6 +62,7 @@ void TiledRenderingTest::runAllTests()
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice.get() );
 
+    testImpressSlideNames( pOffice.get() );
     testOverlay( pOffice.get() );
 }
 
@@ -79,6 +81,27 @@ static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
     SvFileStream sOutput( rPath, STREAM_WRITE );
     aWriter.Write( sOutput );
     sOutput.Close();
+}
+
+void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
+{
+    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/impress_slidenames.odp";
+    const string sLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.impress_slidenames.odp#";
+
+    // FIXME: this is a temporary hack: LOK will fail when trying to open a
+    // locked file, and since we're reusing the file for a different unit
+    // test it's entirely possible that an unwanted lock file will remain.
+    // Hence forcefully remove it here.
+    remove( sLockFile.c_str() );
+
+    scoped_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+
+    CPPUNIT_ASSERT( pDocument->getParts() == 3 );
+    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 0 ), "TestText1" ) == 0 );
+    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 1 ), "TestText2" ) == 0 );
+    // The third slide hasn't had a name given to it (i.e. using the rename
+    // context menu in Impress), thus it should (as far as I can determine)
+    // have a localised version of "Slide 3".
 }
 
 void TiledRenderingTest::testOverlay( Office* pOffice )
