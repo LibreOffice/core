@@ -1588,6 +1588,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         sal_uInt16 nRep = ((const SfxUInt16Item*)pItem)->GetValue();
         m_pHeadLineCB->Check( nRep > 0 );
         m_pHeadLineCB->SaveValue();
+        if( nRep == 0) nRep = 1;
         m_pRepeatHeaderNF->SetValue( nRep );
         m_pRepeatHeaderNF->SaveValue();
     }
