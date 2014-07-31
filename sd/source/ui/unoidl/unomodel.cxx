@@ -2276,7 +2276,7 @@ void SdXImpressDocument::setPartMode( LibreOfficeKitPartMode ePartMode )
         return;
     }
 
-    PageKind aPageKind;
+    PageKind aPageKind( PK_STANDARD );
     switch ( ePartMode )
     {
     case LOK_PARTMODE_EMBEDDEDOBJ:
@@ -2289,7 +2289,6 @@ void SdXImpressDocument::setPartMode( LibreOfficeKitPartMode ePartMode )
         // And let's fall through in a normal build.
     case LOK_PARTMODE_DEFAULT:
     case LOK_PARTMODE_SLIDE:
-        aPageKind = PK_STANDARD;
         break;
     case LOK_PARTMODE_SLIDENOTES:
         aPageKind = PK_NOTES;
