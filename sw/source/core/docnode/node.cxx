@@ -289,9 +289,9 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
 #endif
     , pStartOfSection( 0 )
 {
-    SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
     if( rWhere.GetIndex() )
     {
+        SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
         SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
         rNodes.InsertNode( this, rWhere );
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
@@ -303,11 +303,6 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
                 pStartOfSection = pNd->pStartOfSection;
             }
         }
-    }
-    else
-    {
-        rNodes.InsertNode( this, rWhere );
-        pStartOfSection = (SwStartNode*)this;
     }
 }
 
@@ -340,11 +335,6 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
                 pStartOfSection = pNd->pStartOfSection;
             }
         }
-    }
-    else
-    {
-        rNodes.InsertNode( this, nPos );
-        pStartOfSection = (SwStartNode*)this;
     }
 }
 
@@ -851,6 +841,12 @@ SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
                             SwStartNodeType eSttNd )
     : SwNode( rWhere, nNdType ), eSttNdTyp( eSttNd )
 {
+    if( !rWhere.GetIndex() )
+    {
+        SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
+        rNodes.InsertNode( this, rWhere );
+        pStartOfSection = this;
+    }
     // Just do this temporarily until the EndNode is inserted
     pEndOfSection = (SwEndNode*)this;
 }
@@ -858,6 +854,11 @@ SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
 SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
     : SwNode( rNodes, nPos, ND_STARTNODE ), eSttNdTyp( SwNormalStartNode )
 {
+    if( !nPos )
+    {
+        rNodes.InsertNode( this, nPos );
+        pStartOfSection = this;
+    }
     // Just do this temporarily until the EndNode is inserted
     pEndOfSection = (SwEndNode*)this;
 }

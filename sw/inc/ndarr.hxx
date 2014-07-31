@@ -90,6 +90,7 @@ class SW_DLLPUBLIC SwNodes
     friend class SwDoc;
     friend class SwNode;
     friend class SwNodeIndex;
+    friend class SwStartNode;
     friend class ::sw::DocumentContentOperationsManager;
 
     SwNodeIndex* pRoot;                 ///< List of all indices on nodes.
