@@ -119,9 +119,8 @@ public abstract class NodeIterator implements Iterator {
 
     public boolean equivalent(Object obj1, Object obj2) {
         boolean equal = false;
-        String errMsg = null;
         if (!(obj1 instanceof Node && obj2 instanceof Node)) {
-            errMsg = Resources.getInstance().getString("NOT_NODE_ERROR");
+            String errMsg = Resources.getInstance().getString("NOT_NODE_ERROR");
             Debug.log(Debug.ERROR, errMsg);
         } else {
             Node node1 = (Node)obj1;
