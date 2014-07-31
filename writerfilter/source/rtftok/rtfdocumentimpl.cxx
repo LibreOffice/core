@@ -3647,7 +3647,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
         {
             m_nCurrentStyleIndex = nParam;
-            RTFValue::Pointer_t pValue(new RTFValue(-42)); // TODO no value in enum StyleType?
+            RTFValue::Pointer_t pValue(new RTFValue(0)); // TODO no value in enum StyleType?
             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // section style
         }
         break;
@@ -3655,7 +3655,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
         {
             m_nCurrentStyleIndex = nParam;
-            RTFValue::Pointer_t pValue(new RTFValue(-43)); // FIXME the correct value would be 3 but maybe table styles mess things up in dmapper, be cautious and disable them for now
+            RTFValue::Pointer_t pValue(new RTFValue(0)); // FIXME the correct value would be 3 but maybe table styles mess things up in dmapper, be cautious and disable them for now
             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // table style
         }
         break;
