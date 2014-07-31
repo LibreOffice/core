@@ -67,11 +67,7 @@ public class DocumentMerge implements MergeAlgorithm {
         for (Difference difference : differences) {
             if (difference.getOrgPosition() > currentPosition) {
                 currentPosition = difference.getOrgPosition();
-                if (difference.getOperation() == Difference.DELETE) {
-                    haveDeleteOperation = true;
-                } else  {
-                    haveDeleteOperation = false;
-                }
+                haveDeleteOperation = difference.getOperation() == Difference.DELETE;
             } else if (difference.getOrgPosition() == currentPosition) {
                 if (difference.getOperation() == Difference.DELETE) {
                     haveDeleteOperation = true;
