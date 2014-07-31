@@ -427,7 +427,28 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         {
             SAL_WARN_IF( m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN,
                 "writerfilter", "Style type needs to be processed first" );
-            StyleType nType = ( StyleType ) nIntValue;
+            StyleType nType(STYLE_TYPE_UNKNOWN);
+            switch (nIntValue)
+            {
+                case 1:
+                    nType = STYLE_TYPE_PARA;
+                    break;
+                case 2:
+                    nType = STYLE_TYPE_CHAR;
+                    break;
+                case 3:
+                    nType = STYLE_TYPE_TABLE;
+                    break;
+                case 4:
+                    nType = STYLE_TYPE_LIST;
+                    break;
+                default:
+                    SAL_WARN("writerfilter", "unknown LN_CT_Style_type " << nType);
+                    //fall-through
+                case 0: // explicit unknown set by tokenizer
+                    break;
+
+            }
             if ( nType == STYLE_TYPE_TABLE )
             {
                 StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
@@ -435,7 +456,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
                 m_pImpl->m_pCurrentEntry = pTableEntry;
             }
             else
-                m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
+                m_pImpl->m_pCurrentEntry->nStyleTypeCode = nType;
         }
         break;
         case NS_ooxml::LN_CT_Style_default:
