@@ -180,7 +180,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
     SetRoadmapInteractive( true );
     ActivatePage();
-    SetText(ModuleRes(STR_DBWIZARDTITLE));
+    setTitleBase(ModuleRes(STR_DBWIZARDTITLE));
 }
 
 void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths)

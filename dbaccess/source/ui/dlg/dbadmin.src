@@ -73,18 +73,8 @@
         Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
     };
 
-ModalDialog DLG_DATABASE_TYPE_CHANGE
+String STR_DATABASE_TYPE_CHANGE
 {
-    OutputSize = TRUE ;
-    Moveable = TRUE;
-    Closeable = TRUE ;
-    Hide = TRUE;
-    HelpId = HID_DSADMIN_TYPE_DIALOG;
-
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-    };
     Text [ en-US ] = "Database properties" ;
 };
 

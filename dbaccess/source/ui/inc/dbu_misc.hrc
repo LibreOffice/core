@@ -40,6 +40,10 @@
 #define STR_INVALID_TABLE_NAME              RID_STR_MISC_START + 16
 #define STR_INVALID_TABLE_NAME_LENGTH       RID_STR_MISC_START + 17
 
+#define STR_WIZ_PB_PREV                     RID_STR_MISC_START + 18
+#define STR_WIZ_PB_NEXT                     RID_STR_MISC_START + 19
+#define STR_WIZ_PB_OK                       RID_STR_MISC_START + 20
+
 // please adjust checking before insert new strings
 
 #if STR_INVALID_TABLE_NAME_LENGTH > RID_STR_MISC_END
