@@ -323,6 +323,8 @@ bool cleanExtensionCache() {
 bool shouldLaunchQuickstart()
 {
     bool bQuickstart = Desktop::GetCommandLineArgs().IsQuickstart();
+// fdo#80927 ignore quickstarter-setting on windows
+#if !defined WNT
     if (!bQuickstart)
     {
         const SfxPoolItem* pItem=0;
@@ -332,6 +334,7 @@ bool shouldLaunchQuickstart()
         if (SFX_ITEM_SET == eState)
             bQuickstart = ((SfxBoolItem*)pItem)->GetValue();
     }
+#endif
     return bQuickstart;
 }
 
