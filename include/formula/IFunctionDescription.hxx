@@ -60,7 +60,7 @@ namespace formula
         ~IFunctionManager() {}
     };
 
-    class SAL_NO_VTABLE IFunctionCategory
+    class IFunctionCategory
     {
     public:
         IFunctionCategory(){}
@@ -70,8 +70,7 @@ namespace formula
         virtual sal_uInt32                  getNumber() const = 0;
         virtual OUString             getName() const = 0;
 
-    protected:
-        ~IFunctionCategory() {}
+        virtual ~IFunctionCategory() {}
     };
 
     class SAL_NO_VTABLE IFunctionDescription
