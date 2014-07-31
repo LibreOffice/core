@@ -126,7 +126,7 @@ DECLARE_OOXMLEXPORT_TEST(testHyperlineIsEnd, "hyperlink.docx")
     // If  document.xml miss any ending tag then parseExport() returns NULL which fail the test case.
     CPPUNIT_ASSERT(pXmlDoc) ;
     // Check hyperlink is properly open.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink",1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:hyperlink",1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
@@ -136,7 +136,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[21]/w:hyperlink/w:r[5]/w:t", "15");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[21]/w:hyperlink/w:r[5]/w:t", "15");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFieldFlagO,"TOC_field_f.docx")
@@ -183,7 +183,7 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveWfieldTOC, "PreserveWfieldTOC.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\z \\w \\f \\o \"1-3\" \\h");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r[2]/w:instrText", " TOC \\z \\w \\f \\o \"1-3\" \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFieldFlagB,"TOC_field_b.docx")
@@ -204,7 +204,7 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveXfieldTOC, "PreserveXfieldTOC.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\x \\f \\o \"1-3\" \\h");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r[2]/w:instrText", " TOC \\x \\f \\o \"1-3\" \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO77715,"FDO77715.docx")
@@ -225,7 +225,7 @@ DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")
 
     // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
     // not to insert an empty paragraph before TOC.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\z \\o \"1-9\" \\u \\h");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r[2]/w:instrText", " TOC \\z \\o \"1-9\" \\u \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo73596_RunInStyle,"fdo73596_RunInStyle.docx")
@@ -337,7 +337,7 @@ DECLARE_OOXMLEXPORT_TEST(testPageref, "testPageref.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r[3]/w:instrText", "PAGEREF _Toc355095261 \\h");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:hyperlink/w:r[3]/w:instrText", "PAGEREF _Toc355095261 \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_AutoColumn,"alphabeticalIndex_AutoColumn.docx")
@@ -375,7 +375,7 @@ DECLARE_OOXMLEXPORT_TEST(testBibliography,"FDO75133.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " BIBLIOGRAPHY ");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r[2]/w:instrText", " BIBLIOGRAPHY ");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery", "val", "Bibliographies");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique", 1);
 }
@@ -453,7 +453,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78654 , "fdo78654.docx")
         return;
     // In case of two "Hyperlink" tags in one paragraph and one of them
     // contains "PAGEREF" field then field end tag was missing from hyperlink.
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink[3]/w:r[5]/w:fldChar", "fldCharType", "end" );
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:hyperlink[3]/w:r[5]/w:fldChar", "fldCharType", "end" );
 }
 
 
@@ -517,6 +517,18 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphSdt, "paragraph-sdt.docx")
     {
         // The path to w:sdt contained a w:p.
         assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:sdt");
+    }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-para.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+    {
+        // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r/w:t", "first");
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r/w:t", "second");
+        // Make sure the third paragraph is still outside <w:sdt>.
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r/w:t", "third");
     }
 }
 

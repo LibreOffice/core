@@ -274,6 +274,29 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
         }
     }
 
+    // Look up the "sdt end before this paragraph" property early, when it
+    // would normally arrive, it would be too late (would be after the
+    // paragraph start has been written).
+    bool bEndParaSdt = false;
+    SwTxtNode* pTxtNode = m_rExport.pCurPam->GetNode().GetTxtNode();
+    if (pTxtNode && pTxtNode->GetpSwAttrSet())
+    {
+        const SfxItemSet* pSet = pTxtNode->GetpSwAttrSet();
+        if (const SfxPoolItem* pItem = pSet->GetItem(RES_PARATR_GRABBAG))
+        {
+            const SfxGrabBagItem& rParaGrabBag = static_cast<const SfxGrabBagItem&>(*pItem);
+            const std::map<OUString, com::sun::star::uno::Any>& rMap = rParaGrabBag.GetGrabBag();
+            bEndParaSdt = m_bStartedParaSdt && rMap.find("ParaSdtEndBefore") != rMap.end();
+        }
+    }
+    if (bEndParaSdt)
+    {
+        // This is the common case: "close sdt before the current paragraph" was requrested by the next paragraph.
+        EndSdtBlock();
+        bEndParaSdt = false;
+        m_bStartedParaSdt = false;
+    }
+
     // this mark is used to be able to enclose the paragraph inside a sdr tag.
     // We will only know if we have to do that later.
     m_pSerializer->mark();
@@ -518,7 +541,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
-    if( !m_bAnchorLinkedToNode )
+    // on export sdt blocks are never nested ATM
+    if( !m_bAnchorLinkedToNode && !m_bStartedParaSdt )
         WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, m_aParagraphSdtPrAlias, /*bPara=*/true );
     else
     {
@@ -618,7 +642,13 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
         // write the ending tags after the paragraph
         if (bPara)
-            EndSdtBlock();
+        {
+            m_bStartedParaSdt = true;
+            if (m_tableReference->m_bTableCellOpen)
+                m_tableReference->m_bTableCellParaSdtOpen = true;
+            if (m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
+                m_rExport.SdrExporter().setParagraphSdtOpen(true);
+        }
         else
             // Support multiple runs inside a run-evel SDT: don't close the SDT block yet.
             m_bStartedCharSdt = true;
@@ -2902,10 +2932,14 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
 
 void DocxAttributeOutput::EndTableCell( )
 {
+    if (m_tableReference->m_bTableCellParaSdtOpen)
+        EndParaSdtBlock();
+
     m_pSerializer->endElementNS( XML_w, XML_tc );
 
     m_bBtLr = false;
     m_tableReference->m_bTableCellOpen = false;
+    m_tableReference->m_bTableCellParaSdtOpen = false;
 }
 
 void DocxAttributeOutput::TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
@@ -4583,6 +4617,7 @@ void DocxAttributeOutput::WritePostponedCustomShape()
     if(m_postponedCustomShape == NULL)
         return;
 
+    bool bStartedParaSdt = m_bStartedParaSdt;
     for( std::list< PostponedDrawing >::iterator it = m_postponedCustomShape->begin();
          it != m_postponedCustomShape->end();
          ++it )
@@ -4592,6 +4627,7 @@ void DocxAttributeOutput::WritePostponedCustomShape()
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
     }
+    m_bStartedParaSdt = bStartedParaSdt;
     delete m_postponedCustomShape;
     m_postponedCustomShape = NULL;
 }
@@ -4607,6 +4643,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     std::list<PostponedOLE>* postponedOLE = m_postponedOLE;
     m_postponedOLE = 0;
 
+    bool bStartedParaSdt = m_bStartedParaSdt;
     for( std::list< PostponedDrawing >::iterator it = postponedDMLDrawing->begin();
          it != postponedDMLDrawing->end();
          ++it )
@@ -4617,6 +4654,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
     }
+    m_bStartedParaSdt = bStartedParaSdt;
 
     delete postponedDMLDrawing;
     m_postponedOLE = postponedOLE;
@@ -4672,6 +4710,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                         OUString sShapeType = xShape->getShapeType();
                         if ( m_postponedDMLDrawing == NULL )
                         {
+                            bool bStartedParaSdt = m_bStartedParaSdt;
                             if ( IsAlternateContentChoiceOpen() )
                             {
                                 // Do not write w:drawing inside w:drawing. Instead Postpone the Inner Drawing.
@@ -4682,6 +4721,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                             }
                             else
                                 m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft, m_anchorId++);
+                            m_bStartedParaSdt = bStartedParaSdt;
 
                             m_bPostponedProcessingFly = false ;
                         }
@@ -5083,6 +5123,16 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
         default:
             OSL_TRACE( "Unknown section break to write: %d", nC );
             break;
+    }
+}
+
+void DocxAttributeOutput::EndParaSdtBlock()
+{
+    if (m_bStartedParaSdt)
+    {
+        // Paragraph-level SDT still open? Close it now.
+        EndSdtBlock();
+        m_bStartedParaSdt = false;
     }
 }
 
@@ -7921,6 +7971,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pHyperlinkAttrList( NULL ),
       m_bEndCharSdt(false),
       m_bStartedCharSdt(false),
+      m_bStartedParaSdt(false),
       m_pColorAttrList( NULL ),
       m_pBackgroundAttrList( NULL ),
       m_endPageRef( false ),

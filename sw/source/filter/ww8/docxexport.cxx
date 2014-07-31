@@ -86,6 +86,11 @@ AttributeOutputBase& DocxExport::AttrOutput() const
     return *m_pAttrOutput;
 }
 
+DocxAttributeOutput& DocxExport::DocxAttrOutput() const
+{
+    return *m_pAttrOutput;
+}
+
 MSWordSections& DocxExport::Sections() const
 {
     return *m_pSections;
@@ -711,6 +716,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     m_pAttrOutput->switchHeaderFooter(true, m_nHeadersFootersInSection++);
     // do the work
     WriteHeaderFooterText( rFmt, bHeader );
+    m_pAttrOutput->EndParaSdtBlock();
 
     //When the stream changes the cache which is maintained for the graphics in case of alternate content is not cleared.
     //So clearing the alternate content graphic cache.
@@ -1309,6 +1315,7 @@ void DocxExport::WriteMainText()
     WriteText();
 
     // the last section info
+    m_pAttrOutput->EndParaSdtBlock();
     const WW8_SepInfo *pSectionInfo = m_pSections? m_pSections->CurrentSectionInfo(): NULL;
     if ( pSectionInfo )
         SectionProperties( *pSectionInfo );
