@@ -44,6 +44,7 @@
 //UUUU
 #include "sfx2/opengrf.hxx"
 #include <vcl/msgbox.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -1245,11 +1246,11 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
               m_pTsbOriginal->IsEnabled() &&
               m_pTsbScale->GetSavedValue() != TRISTATE_TRUE ) )
         {
-            XFillBmpSizeLogItem* pItem = NULL;
+            boost::scoped_ptr<XFillBmpSizeLogItem> pItem;
             if( m_pTsbScale->IsEnabled() )
-                pItem = new XFillBmpSizeLogItem( eState == TRISTATE_FALSE );
+                pItem.reset(new XFillBmpSizeLogItem( eState == TRISTATE_FALSE ));
             else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == TRISTATE_TRUE )
-                pItem = new XFillBmpSizeLogItem( true );
+                pItem.reset(new XFillBmpSizeLogItem( true ));
 
             if( pItem )
             {
@@ -1259,14 +1260,13 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                     rAttrs->Put( *pItem );
                     bModified = true;
                 }
-                delete pItem;
             }
         }
 
         //aMtrFldXSize
         OUString aStr = m_pMtrFldXSize->GetText();
         {
-            XFillBmpSizeXItem* pItem = NULL;
+            boost::scoped_ptr<XFillBmpSizeXItem> pItem;
             TriState eScaleState = m_pTsbScale->GetState();
 
             if( m_pMtrFldXSize->IsEnabled() &&
@@ -1274,18 +1274,18 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                 aStr != m_pMtrFldXSize->GetSavedValue() )
             {
                 if( eScaleState == TRISTATE_FALSE )
-                    pItem = new XFillBmpSizeXItem( GetCoreValue( *m_pMtrFldXSize, ePoolUnit ) );
+                    pItem.reset(new XFillBmpSizeXItem( GetCoreValue( *m_pMtrFldXSize, ePoolUnit ) ));
                 else
                 {
                     // Percentage values are set negatively, so that
                     // they aren't scaled; this is considered in the item.
-                    pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(m_pMtrFldXSize->GetValue()) ) );
+                    pItem.reset(new XFillBmpSizeXItem( -labs( static_cast<long>(m_pMtrFldXSize->GetValue()) ) ));
                 }
             }
             else if( m_pTsbOriginal->IsEnabled() &&
                      m_pTsbOriginal->GetState() == TRISTATE_TRUE &&
                      !m_pMtrFldXSize->GetSavedValue().isEmpty() )
-                pItem = new XFillBmpSizeXItem( 0 );
+                pItem.reset(new XFillBmpSizeXItem( 0 ));
 
             if( pItem )
             {
@@ -1295,14 +1295,13 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                     rAttrs->Put( *pItem );
                     bModified = true;
                 }
-                delete pItem;
             }
         }
 
         //aMtrFldYSize
         aStr = m_pMtrFldYSize->GetText();
         {
-            XFillBmpSizeYItem* pItem = NULL;
+            boost::scoped_ptr<XFillBmpSizeYItem> pItem;
             TriState eScaleState = m_pTsbScale->GetState();
 
             if( m_pMtrFldYSize->IsEnabled() &&
@@ -1310,19 +1309,19 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                 aStr != m_pMtrFldYSize->GetSavedValue() )
             {
                 if( eScaleState == TRISTATE_FALSE )
-                    pItem = new XFillBmpSizeYItem( GetCoreValue( *m_pMtrFldYSize, ePoolUnit ) );
+                    pItem.reset(new XFillBmpSizeYItem( GetCoreValue( *m_pMtrFldYSize, ePoolUnit ) ));
                 else
                 {
                     // Percentage values are set negatively, so that
                     // they aren't scaled by the MetricItem;
                     // this is considered in the item.
-                    pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(m_pMtrFldYSize->GetValue()) ) );
+                    pItem.reset(new XFillBmpSizeYItem( -labs( static_cast<long>(m_pMtrFldYSize->GetValue()) ) ));
                 }
             }
             else if( m_pTsbOriginal->IsEnabled() &&
                      m_pTsbOriginal->GetState() == TRISTATE_TRUE &&
                      !m_pMtrFldYSize->GetSavedValue().isEmpty() )
-                pItem = new XFillBmpSizeYItem( 0 );
+                pItem.reset(new XFillBmpSizeYItem( 0 ));
 
             if( pItem )
             {
@@ -1332,7 +1331,6 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                     rAttrs->Put( *pItem );
                     bModified = true;
                 }
-                delete pItem;
             }
         }
 
@@ -2262,17 +2260,15 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
     if( m_pMtrFldXSize->IsEnabled() )
     {
-        XFillBmpSizeXItem* pItem = NULL;
+        boost::scoped_ptr<XFillBmpSizeXItem> pItem;
         TriState eScaleState = m_pTsbScale->GetState();
 
         if( eScaleState == TRISTATE_FALSE )
-            pItem = new XFillBmpSizeXItem( GetCoreValue( *m_pMtrFldXSize, ePoolUnit ) );
+            pItem.reset(new XFillBmpSizeXItem( GetCoreValue( *m_pMtrFldXSize, ePoolUnit ) ));
         else
-            pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(m_pMtrFldXSize->GetValue()) ) );
+            pItem.reset(new XFillBmpSizeXItem( -labs( static_cast<long>(m_pMtrFldXSize->GetValue()) ) ));
 
         rXFSet.Put( *pItem );
-
-        delete pItem;
     }
     else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == TRISTATE_TRUE )
     {
@@ -2283,17 +2279,15 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
     if( m_pMtrFldYSize->IsEnabled() )
     {
-        XFillBmpSizeYItem* pItem = NULL;
+        boost::scoped_ptr<XFillBmpSizeYItem> pItem;
         TriState eScaleState = m_pTsbScale->GetState();
 
         if( eScaleState == TRISTATE_FALSE )
-            pItem = new XFillBmpSizeYItem( GetCoreValue( *m_pMtrFldYSize, ePoolUnit ) );
+            pItem.reset(new XFillBmpSizeYItem( GetCoreValue( *m_pMtrFldYSize, ePoolUnit ) ));
         else
-            pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(m_pMtrFldYSize->GetValue()) ) );
+            pItem.reset(new XFillBmpSizeYItem( -labs( static_cast<long>(m_pMtrFldYSize->GetValue()) ) ));
 
         rXFSet.Put( *pItem );
-
-        delete pItem;
     }
     else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == TRISTATE_TRUE )
     {

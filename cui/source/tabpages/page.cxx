@@ -60,6 +60,7 @@
 #include <svx/unobrushitemhelper.hxx>
 
 #include <numpages.hxx>
+#include <boost/scoped_ptr.hpp>
 
 // static ----------------------------------------------------------------
 
@@ -874,7 +875,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
        (m_pRegisterCB->IsChecked() || m_pRegisterCB->IsValueChangedFromSaved()))
     {
         const SfxBoolItem& rRegItem = (const SfxBoolItem&)rOldSet.Get(SID_SWREGISTER_MODE);
-        SfxBoolItem* pRegItem = (SfxBoolItem*)rRegItem.Clone();
+        boost::scoped_ptr<SfxBoolItem> pRegItem((SfxBoolItem*)rRegItem.Clone());
         bool bCheck = m_pRegisterCB->IsChecked();
         pRegItem->SetValue(bCheck);
         rSet->Put(*pRegItem);
@@ -885,7 +886,6 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
             rSet->Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
                             m_pRegisterLB->GetSelectEntry()));
         }
-        delete pRegItem;
     }
 
     SvxFrameDirection eDirection = m_pTextFlowBox->GetSelectEntryValue();

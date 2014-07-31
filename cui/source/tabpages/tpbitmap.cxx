@@ -47,6 +47,7 @@
 #include <dialmgr.hxx>
 #include "sfx2/opengrf.hxx"
 #include "paragrph.hrc"
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -301,12 +302,12 @@ SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 {
-    GraphicObject* pGraphicObject = 0;
+    boost::scoped_ptr<GraphicObject> pGraphicObject;
     int nPos(m_pLbBitmaps->GetSelectEntryPos());
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
-        pGraphicObject = new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
+        pGraphicObject.reset(new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject()));
     }
     else
     {
@@ -318,7 +319,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 
             if((drawing::FillStyle_BITMAP == eXFS) && (SFX_ITEM_SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLBITMAP), true, &pPoolItem)))
             {
-                pGraphicObject = new GraphicObject(((const XFillBitmapItem*)pPoolItem)->GetGraphicObject());
+                pGraphicObject.reset(new GraphicObject(((const XFillBitmapItem*)pPoolItem)->GetGraphicObject()));
             }
         }
 
@@ -329,7 +330,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos)
             {
-                pGraphicObject = new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
+                pGraphicObject.reset(new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject()));
             }
         }
     }
@@ -411,7 +412,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
         m_pCtlPreview->Invalidate();
 
         bBmpChanged = false;
-        delete pGraphicObject;
     }
 
     return 0;
@@ -428,10 +428,10 @@ long SvxBitmapTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
+            boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                         SVX_RES( RID_SVXSTR_BITMAP ),
                                                         CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
-                                                        &aWarningBoxImage  );
+                                                        &aWarningBoxImage  ));
             DBG_ASSERT(aMessDlg, "Dialog creation failed!");
             aMessDlg->SetButtonText( MESS_BTN_1, ResId( RID_SVXSTR_CHANGE, rMgr ) );
             aMessDlg->SetButtonText( MESS_BTN_2, ResId( RID_SVXSTR_ADD, rMgr ) );
@@ -456,7 +456,6 @@ long SvxBitmapTabPage::CheckChanges_Impl()
                 case RET_CANCEL:
                 break;
             }
-            delete aMessDlg;
         }
     }
     nPos = m_pLbBitmaps->GetSelectEntryPos();
@@ -492,9 +491,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialog creation failed!");
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
-    MessageDialog*    pWarnBox = NULL;
+    boost::scoped_ptr<MessageDialog> pWarnBox;
     sal_uInt16         nError(1);
 
     while( pDlg->Execute() == RET_OK )
@@ -514,17 +513,17 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox = new MessageDialog( GetParentDialog()
+            pWarnBox.reset(new MessageDialog( GetParentDialog()
                                         ,"DuplicateNameDialog"
-                                        ,"cui/ui/queryduplicatedialog.ui");
+                                        ,"cui/ui/queryduplicatedialog.ui"));
         }
 
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
 
-    delete pDlg;
-    delete pWarnBox;
+    pDlg.reset();
+    pWarnBox.reset();
 
     if( !nError )
     {
@@ -594,14 +593,14 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
         if( !nError )
         {
             OUString aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, rMgr) );
-            MessageDialog*    pWarnBox = NULL;
+            boost::scoped_ptr<MessageDialog> pWarnBox;
 
             // convert file URL to UI name
             OUString        aName;
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialog creation failed!");
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aURL.GetName().getToken( 0, '.' ), aDesc );
+            boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aURL.GetName().getToken( 0, '.' ), aDesc ));
             DBG_ASSERT(pDlg, "Dialog creation failed!");
             nError = 1;
 
@@ -623,17 +622,17 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 
                 if( !pWarnBox )
                 {
-                    pWarnBox = new MessageDialog( GetParentDialog()
+                    pWarnBox.reset(new MessageDialog( GetParentDialog()
                                                  ,"DuplicateNameDialog"
-                                                 ,"cui/ui/queryduplicatedialog.ui");
+                                                 ,"cui/ui/queryduplicatedialog.ui"));
                 }
 
                 if( pWarnBox->Execute() != RET_OK )
                     break;
             }
 
-            delete pDlg;
-            delete pWarnBox;
+            pDlg.reset();
+            pWarnBox.reset();
 
             if( !nError )
             {
@@ -674,7 +673,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pBitmapList->Count();
@@ -719,7 +718,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
                 aBox.Execute();
             }
         }
-        delete pDlg;
     }
     return 0L;
 }
