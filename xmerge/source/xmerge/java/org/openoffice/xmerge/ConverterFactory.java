@@ -46,7 +46,7 @@ public class ConverterFactory {
     */
     public boolean canConvert(String mimeTypeIn, String mimeTypeOut) {
 
-        ConverterInfo foundInfo = null;
+        ConverterInfo foundInfo;
 
         // findConverterInfo expects the second paramenter to be the
         // destination MimeType
@@ -73,7 +73,7 @@ public class ConverterFactory {
     */
     public Convert getConverter(String mimeTypeIn, String mimeTypeOut) {
 
-        ConverterInfo foundInfo = null;
+        ConverterInfo foundInfo;
         boolean toOffice;
 
         toOffice = ConverterInfo.isValidOfficeType(mimeTypeOut);
