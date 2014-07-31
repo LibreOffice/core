@@ -898,8 +898,10 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
         {
             lcl_GetLocalDataWrapper( nLang, &pAppLocalData, &pLocalData );
             sal_Int32 dur = xDocProps->getEditingDuration();
+            // If Seconds > 0 then bSec should be TRUE otherwise Seconds
+            // information will be lost if file has EditTime in Seconds format.
             aStr = pLocalData->getTime( Time(dur/3600, (dur%3600)/60, dur%60),
-                                        false, false);
+                                        (dur%60 > 0 ? true : false), false);
         }
         else
         {

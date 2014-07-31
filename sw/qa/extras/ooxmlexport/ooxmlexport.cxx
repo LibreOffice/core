@@ -3433,6 +3433,24 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80997, "fdo80997.docx")
     uno::Reference< text::XTextRange > xText = getRun( xParagraph, 1, " text");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testEditTime, "fdo81341.docx")
+{
+    /* Issue was LO was not able to Import and Export EditTime in seconds format.
+     * It was supporting Time in "HH:MM" format. But if DOCX conatins Time in seconds,
+     * then LO was not able to display time in "HH:MM:SS" format.
+     * While exporting LO was writing plian text instead of field entry.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    //Ensure that EditTime is written inside w:fldChar in "HH:MM:SS" format.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:fldChar", "fldCharType", "begin");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:fldChar", "fldCharType", "separate");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", "00:00:05");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:fldChar", "fldCharType", "end");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo80902, "fdo80902.docx")
 {
     // The problem was that the docGrid type was set as default so fix it for other grid type
