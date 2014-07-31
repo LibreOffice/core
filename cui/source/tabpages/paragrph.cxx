@@ -1171,9 +1171,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         bool bEnable = m_pJustify->IsChecked();
         m_pLastLineFT->Enable(bEnable);
         m_pLastLineLB->Enable(bEnable);
-        m_pExpandCB->Enable(bEnable);
 
-        m_pExpandCB->Check(SVX_ADJUST_BLOCK == rAdj.GetOneWord());
         switch(rAdj.GetLastBlock())
         {
             case SVX_ADJUST_LEFT:  nLBSelect = 0; break;
@@ -1183,6 +1181,8 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
             case SVX_ADJUST_BLOCK: nLBSelect = 2;  break;
             default: ; //prevent warning
         }
+        m_pExpandCB->Enable(bEnable && nLBSelect == 2);
+        m_pExpandCB->Check(SVX_ADJUST_BLOCK == rAdj.GetOneWord());
     }
     else
     {
@@ -1249,13 +1249,17 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl)
     bool bJustify = m_pJustify->IsChecked();
     m_pLastLineFT->Enable(bJustify);
     m_pLastLineLB->Enable(bJustify);
-    m_pExpandCB->Enable(bJustify);
+    bool bLastLineIsBlock = m_pLastLineLB->GetSelectEntryPos() == 2;
+    m_pExpandCB->Enable(bJustify && bLastLineIsBlock);
     UpdateExample_Impl(false);
     return 0;
 }
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl)
 {
+    //fdo#41350 only enable 'Expand last word' if last line is also justified
+    bool bLastLineIsBlock = m_pLastLineLB->GetSelectEntryPos() == 2;
+    m_pExpandCB->Enable(bLastLineIsBlock);
     UpdateExample_Impl(false);
     return 0;
 }
