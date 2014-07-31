@@ -532,6 +532,15 @@ DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-para.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(test2Id, "2-id.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+    {
+        // This was 2, but only one w:id is allowed.
+        assertXPath(pXmlDoc, "//w:sdtPr/w:id", 1);
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
