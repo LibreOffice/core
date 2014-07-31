@@ -519,39 +519,32 @@ public:
 
 void ScChartListenerCollection::FreeUnused()
 {
-    std::vector<ScChartListener*> aUsed, aUnused;
+    ListenersType aUsed, aUnused;
 
     // First, filter each listener into 'used' and 'unused' categories.
     {
-        ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
-        for (; it != itEnd; ++it)
+        while(!maListeners.empty())
         {
-            ScChartListener* p = it->second;
+            ScChartListener* p = maListeners.begin()->second;
             if (p->IsUno())
             {
                 // We don't delete UNO charts; they are to be deleted separately via FreeUno().
-                aUsed.push_back(p);
+                aUsed.transfer(maListeners.begin(), maListeners);
                 continue;
             }
 
             if (p->IsUsed())
             {
                 p->SetUsed(false);
-                aUsed.push_back(p);
+                aUsed.transfer(maListeners.begin(), maListeners);
             }
             else
-                aUnused.push_back(p);
+                aUnused.transfer(maListeners.begin(), maListeners);
+
         }
     }
 
-    // Release all pointers currently managed by the ptr_map container.
-    maListeners.release().release();
-
-    // Re-insert the listeners we need to keep.
-    std::for_each(aUsed.begin(), aUsed.end(), InsertChartListener(maListeners));
-
-    // Now, delete the ones no longer needed.
-    std::for_each(aUnused.begin(), aUnused.end(), boost::checked_deleter<ScChartListener>());
+    std::swap(aUsed, maListeners);
 }
 
 void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
