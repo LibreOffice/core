@@ -363,7 +363,7 @@ void BackingWindow::setupButton( MenuButton* pButton )
     pMenu->SetMenuFlags(
              pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
 
-    pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
+    //pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
     pButton->SetSelectHdl( LINK( this, BackingWindow, MenuSelectHdl ) );
 }
 
@@ -590,21 +590,25 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
 {
     OString sId = pButton->GetCurItemIdent();
 
-    if( sId == "filter_writer" )
+    if( sId == "filter_none" )
+    {
+        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
+    }
+    else if( sId == "filter_writer" )
     {
         mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_WRITER));
     }
     else if( sId == "filter_calc" )
     {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_CALC));
+        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_CALC));
     }
     else if( sId == "filter_impress" )
     {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_IMPRESS));
+        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_IMPRESS));
     }
     else if( sId == "filter_draw" )
     {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_DRAW));
+        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_DRAW));
     }
     else if( sId == "edit" )
     {
