@@ -220,7 +220,6 @@ static bool IgnoreForCharStyle(const OUString& aStr)
 uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
 {
     PropertyValueVector_t rProperties;
-    PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
     uno::Sequence< beans::PropertyValue > vPropVals = PropertyMap::GetPropertyValues();
     beans::PropertyValue* aValIter = vPropVals.begin();

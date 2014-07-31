@@ -1182,7 +1182,6 @@ public:
 void SectionPropertyMap::_ApplyProperties(
         uno::Reference< beans::XPropertySet > const& xStyle)
 {
-    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     uno::Reference<beans::XMultiPropertySet> const xMultiSet(xStyle,
             uno::UNO_QUERY);
 

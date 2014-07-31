@@ -428,7 +428,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     // ooxml::CT_Spacing_line, then it should get the rule
                     // after lineRule as well.
                     TablePropertyMapPtr pTblCellWithDirectFormatting(new TablePropertyMap);
-                    pTblCellWithDirectFormatting->insert(std::pair< PropertyIds, PropValue >(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing )));
+                    pTblCellWithDirectFormatting->Insert(PROP_PARA_LINE_SPACING, uno::makeAny(aSpacing), false);
                     m_pImpl->getTableManager().cellProps(pTblCellWithDirectFormatting);
                 }
             }
