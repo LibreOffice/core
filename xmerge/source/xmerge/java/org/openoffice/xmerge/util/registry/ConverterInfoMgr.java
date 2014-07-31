@@ -31,14 +31,7 @@ import java.io.*;
  */
 public final class ConverterInfoMgr {
 
-    private static ArrayList<ConverterInfo> converterInfoList;
-
-   /**
-    *  Constructor
-    */
-    static {
-       converterInfoList = new ArrayList<ConverterInfo>();
-    }
+    private static final ArrayList<ConverterInfo> converterInfoList = new ArrayList<ConverterInfo>();
 
    /**
     *  Adds a converter plug-in to the registry.  The
@@ -137,24 +130,12 @@ public final class ConverterInfoMgr {
     */
    public static boolean removeByJar(String jar) {
 
-        ConverterInfo converterInfo;
         boolean       rc = false;
-
-        // FIX (HJ): Has to use an iterator, since we are removing items
-        /*Enumeration ciEnum = converterInfoList.elements();
-        while (ciEnum.hasMoreElements())
-        {
-            converterInfo = (ConverterInfo)ciEnum.nextElement();
-            if (jar.equals(converterInfo.getJarName())) {
-               converterInfoList.remove(converterInfo);
-               rc = true;
-            }
-        }*/
 
         Iterator<ConverterInfo> ciIter = converterInfoList.iterator();
         while (ciIter.hasNext())
         {
-            converterInfo = ciIter.next();
+            ConverterInfo converterInfo = ciIter.next();
             if (jar.equals(converterInfo.getJarName())) {
                ciIter.remove();
                rc = true;
@@ -215,7 +196,7 @@ public final class ConverterInfoMgr {
                 String fromDeviceInfo = fromEnum.next();
                 if (deviceMime.trim().equals(fromDeviceInfo) &&
                     officeMime.trim().equals(toDeviceInfo)) {
-                   return (converterInfo);
+                   return converterInfo;
                 }
             }
         }
@@ -279,8 +260,7 @@ public final class ConverterInfoMgr {
                                 fromOfficeInfo.equals(toOfficeInfo)) {
 
                                 // Found a match
-
-                                return (converterInfo);
+                                return converterInfo;
                             }
                         }
                     }
@@ -299,7 +279,7 @@ public final class ConverterInfoMgr {
     public static void main(String args[]) {
 
         ConverterInfoReader cir = null;
-    boolean validate = false;
+        boolean validate = false;
         InputStreamReader   isr = new InputStreamReader(System.in);
         BufferedReader      br  = new BufferedReader(isr);
         char                c   = ' ';
@@ -314,7 +294,7 @@ public final class ConverterInfoMgr {
             System.out.println("(F)ind ConverterInfo");
             System.out.println("(C)ind ConverterInfo chain");
             System.out.println("(V)iew plug-ins");
-        System.out.println("(T)oggle Validation");
+            System.out.println("(T)oggle Validation");
             System.out.println("(Q)uit\n");
 
             try {
@@ -360,14 +340,14 @@ public final class ConverterInfoMgr {
 
             // Unload by Display Name or Jarfile
 
-        } else if (c == 'T') {
-        if (validate== true){
-            System.out.println("Validation switched off");
-            validate=false;
-        }else{
-            System.out.println("Validation switched on");
-            validate=true;
-        }
+            } else if (c == 'T') {
+                if (validate== true){
+                    System.out.println("Validation switched off");
+                    validate=false;
+                } else {
+                    System.out.println("Validation switched on");
+                    validate=true;
+                }
             } else if (c == 'D' || c == 'J') {
 
                 if (c == 'D') {
@@ -483,8 +463,8 @@ public final class ConverterInfoMgr {
                     System.out.println("    Vendor       : " + converterInfo.getVendor());
                     System.out.println("    ClassImpl    : " + converterInfo.getClassImpl());
                     System.out.println("    XsltSerial   : " + converterInfo.getXsltSerial());
-            System.out.println("    XsltDeserial : " + converterInfo.getXsltDeserial());
-            System.out.println("    Serialize    : " + converterInfo.canSerialize());
+                    System.out.println("    XsltDeserial : " + converterInfo.getXsltDeserial());
+                    System.out.println("    Serialize    : " + converterInfo.canSerialize());
                     System.out.println("    Deserialize  : " + converterInfo.canDeserialize());
                     System.out.println("    Merge        : " + converterInfo.canMerge());
                     ciCnt++;
