@@ -48,6 +48,7 @@ public:
     // components on the one Office instance that we retrieve.
     void runAllTests();
 
+    void testDocumentTypes( Office* pOffice );
     void testImpressSlideNames( Office* pOffice );
     void testOverlay( Office* pOffice );
 
@@ -62,6 +63,7 @@ void TiledRenderingTest::runAllTests()
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice.get() );
 
+    testDocumentTypes( pOffice.get() );
     testImpressSlideNames( pOffice.get() );
     testOverlay( pOffice.get() );
 }
@@ -81,6 +83,34 @@ static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
     SvFileStream sOutput( rPath, STREAM_WRITE );
     aWriter.Write( sOutput );
     sOutput.Close();
+}
+
+LibreOfficeKitDocumentType getDocumentType( Office* pOffice, const string& rPath )
+{
+    scoped_ptr< Document> pDocument( pOffice->documentLoad( rPath.c_str() ) );
+    CPPUNIT_ASSERT( pDocument.get() );
+    return pDocument->getDocumentType();
+}
+
+void TiledRenderingTest::testDocumentTypes( Office* pOffice )
+{
+    const string sTextDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_text.odt";
+    const string sTextLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_text.odt#";
+
+    // FIXME: same comment as below wrt lockfile removal.
+    remove( sTextLockFile.c_str() );
+
+    CPPUNIT_ASSERT( getDocumentType( pOffice, sTextDocPath ) == LOK_DOCTYPE_TEXT );
+
+    const string sPresentationDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_presentation.odp";
+    const string sPresentationLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_presentation.odp#";
+
+    // FIXME: same comment as below wrt lockfile removal.
+    remove( sPresentationLockFile.c_str() );
+
+    CPPUNIT_ASSERT( getDocumentType( pOffice, sPresentationDocPath ) == LOK_DOCTYPE_PRESENTATION );
+
+    // TODO: do this for all supported document types
 }
 
 void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
