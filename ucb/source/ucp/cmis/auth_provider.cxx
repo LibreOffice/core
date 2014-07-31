@@ -13,6 +13,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <ucbhelper/simpleauthenticationrequest.hxx>
+#include <ucbhelper/authenticationfallback.hxx>
 
 #include "auth_provider.hxx"
 
@@ -21,6 +22,8 @@ using namespace std;
 
 namespace cmis
 {
+    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment> 
+        AuthProvider::sm_xEnv;
     bool AuthProvider::authenticationQuery( string& username, string& password )
     {
         if ( m_xEnv.is() )
@@ -61,6 +64,51 @@ namespace cmis
             }
         }
         return false;
+    }
+
+    char* AuthProvider::onedriveAuthCodeFallback( const char* url,
+            const char* /*username*/,
+            const char* /*password*/ )
+    {
+        OUString instructions = "Please open the following link in your browser and\n"
+            "paste the code from the URL you have been redirected to\n"
+            "in the box bellow. For example:\n"
+            "https://login.live.com/oauth20_desktop.srf?code=YOUR_CODE&lc=1033";
+        OUString url_oustr( url, strlen( url ), RTL_TEXTENCODING_UTF8 );
+        const com::sun::star::uno::Reference< 
+            com::sun::star::ucb::XCommandEnvironment> xEnv = getXEnv( );
+
+        if ( xEnv.is() )
+        {
+            uno::Reference< task::XInteractionHandler > xIH
+                = xEnv->getInteractionHandler();
+
+            if ( xIH.is() )
+            {
+                rtl::Reference< ucbhelper::AuthenticationFallbackRequest > xRequest
+                    = new ucbhelper::AuthenticationFallbackRequest (
+                            instructions, url_oustr );
+
+                xIH->handle( xRequest.get() );
+
+                rtl::Reference< ucbhelper::InteractionContinuation > xSelection
+                    = xRequest->getSelection();
+
+                if ( xSelection.is() )
+                {
+                    // Handler handled the request.
+                    const rtl::Reference< ucbhelper::InteractionAuthFallback >&
+                        xAuthFallback = xRequest->getAuthFallbackInter( );
+                    if ( xAuthFallback.is() )
+                    {
+                        OUString code = xAuthFallback->getCode( );
+                        return strdup( OUSTR_TO_STDSTR( code ).c_str( ) );
+                    }
+                }
+            }
+        }
+
+        return strdup( "" );
     }
 }
 

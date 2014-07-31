@@ -18,6 +18,7 @@ namespace cmis
     class AuthProvider : public libcmis::AuthProvider
     {
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment>& m_xEnv;
+        static com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment> sm_xEnv;
         OUString m_sUrl;
         OUString m_sBindingUrl;
 
@@ -29,6 +30,16 @@ namespace cmis
                 m_xEnv( xEnv ), m_sUrl( sUrl ), m_sBindingUrl( sBindingUrl ) { }
 
             bool authenticationQuery( std::string& username, std::string& password ) SAL_OVERRIDE;
+
+            static char* onedriveAuthCodeFallback( const char* url,
+                    const char* /*username*/,
+                    const char* /*password*/ );
+
+            static void setXEnv( const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment>& xEnv ) { sm_xEnv = xEnv; }
+
+            static com::sun::star::uno::Reference< 
+                com::sun::star::ucb::XCommandEnvironment> getXEnv( ) { return sm_xEnv; }
     };
 }
 
