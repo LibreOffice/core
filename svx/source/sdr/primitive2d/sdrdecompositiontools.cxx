@@ -311,12 +311,9 @@ namespace drawinglayer
                 }
                 else if( rText.isToBeChained() && !rText.isInEditMode() ) // FIXME(matteocam)
                 {
-                    //bool b = true; // XXX: Chained Text by default!
-                    //if (b)
                     pNew = new SdrChainedTextPrimitive2D(
                                     &rText.getSdrText(),
                                     rText.getOutlinerParaObject() );
-                    //else // end FIXME
                 }
                 else // text in range
                 {

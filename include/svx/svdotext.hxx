@@ -214,6 +214,9 @@ public:
     const Point& GetTextEditOffset() const { return maTextEditOffset; }
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
 
+    // FIXME(matteocam) // XXX: move as protected
+    OutlinerParaObject *mpOverflowingText = NULL;
+
 protected:
 
     //FIXME(matteocam)
