@@ -368,6 +368,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getCommandArg(
 
 /** Determine whether or not the command args have already been set.
     @return The command args are already set, and may not be set again.
+    @since LibreOffice 4.3
 */
 SAL_DLLPUBLIC int SAL_CALL osl_areCommandArgsSet (void);
 
