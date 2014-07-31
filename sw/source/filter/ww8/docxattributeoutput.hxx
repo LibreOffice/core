@@ -113,6 +113,9 @@ struct TableReference
     /// Remember if we are in an open cell, or not.
     bool m_bTableCellOpen;
 
+    /// If paragraph sdt got opened in this table cell.
+    bool m_bTableCellParaSdtOpen;
+
     /// Remember the current table depth.
     sal_uInt32 m_nTableDepth;
 
@@ -120,6 +123,7 @@ struct TableReference
 
     TableReference()
         : m_bTableCellOpen(false),
+        m_bTableCellParaSdtOpen(false),
         m_nTableDepth(0)
     {
     }
@@ -364,6 +368,8 @@ public:
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void ClearRelIdCache();
+    /// End possibly opened paragraph sdt block.
+    void EndParaSdtBlock();
 
 private:
     /// Initialize the structures where we are going to collect some of the paragraph properties.
@@ -717,6 +723,8 @@ private:
     bool m_bEndCharSdt;
     /// If an SDT around runs is currently open.
     bool m_bStartedCharSdt;
+    /// If an SDT around paragraphs is currently open.
+    bool m_bStartedParaSdt;
     /// Attributes of the run color
     ::sax_fastparser::FastAttributeList *m_pColorAttrList;
     /// Attributes of the paragraph background

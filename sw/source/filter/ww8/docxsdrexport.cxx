@@ -42,6 +42,7 @@
 #include <drawdoc.hxx>
 #include <docxsdrexport.hxx>
 #include <docxexport.hxx>
+#include <docxattributeoutput.hxx>
 #include <docxexportfilter.hxx>
 #include <writerhelper.hxx>
 #include <comphelper/seqstream.hxx>
@@ -153,6 +154,7 @@ struct DocxSdrExport::Impl
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
     bool m_bDrawingOpen;
+    bool m_bParagraphSdtOpen;
     bool m_bParagraphHasDrawing; ///Flag for checking drawing in a paragraph.
     bool m_bFlyFrameGraphic;
     sax_fastparser::FastAttributeList* m_pFlyFillAttrList;
@@ -179,6 +181,7 @@ struct DocxSdrExport::Impl
           m_pTextboxAttrList(0),
           m_bFrameBtLr(false),
           m_bDrawingOpen(false),
+          m_bParagraphSdtOpen(false),
           m_bParagraphHasDrawing(false),
           m_bFlyFrameGraphic(false),
           m_pFlyFillAttrList(0),
@@ -262,6 +265,16 @@ bool DocxSdrExport::getFrameBtLr()
 bool DocxSdrExport::IsDrawingOpen()
 {
     return m_pImpl->m_bDrawingOpen;
+}
+
+bool DocxSdrExport::isParagraphSdtOpen()
+{
+    return m_pImpl->m_bParagraphSdtOpen;
+}
+
+void DocxSdrExport::setParagraphSdtOpen(bool bParagraphSdtOpen)
+{
+    m_pImpl->m_bParagraphSdtOpen = bParagraphSdtOpen;
 }
 
 bool DocxSdrExport::IsDMLAndVMLDrawingOpen()
@@ -1402,6 +1415,11 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
         m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);
         m_pImpl->m_bFlyFrameGraphic = true;
         m_pImpl->m_rExport.WriteText();
+        if (m_pImpl->m_bParagraphSdtOpen)
+        {
+            m_pImpl->m_rExport.DocxAttrOutput().EndParaSdtBlock();
+            m_pImpl->m_bParagraphSdtOpen = false;
+        }
         m_pImpl->m_bFlyFrameGraphic = false;
         m_pImpl->m_bFrameBtLr = false;
 
@@ -1515,6 +1533,11 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
     m_pImpl->m_bFlyFrameGraphic = true;
     m_pImpl->m_rExport.WriteText();
+    if (m_pImpl->m_bParagraphSdtOpen)
+    {
+        m_pImpl->m_rExport.DocxAttrOutput().EndParaSdtBlock();
+        m_pImpl->m_bParagraphSdtOpen = false;
+    }
     m_pImpl->m_bFlyFrameGraphic = false;
     pFS->endElementNS(XML_w, XML_txbxContent);
     if (!bTextBoxOnly)

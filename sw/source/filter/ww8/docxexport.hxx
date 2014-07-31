@@ -110,6 +110,9 @@ public:
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const SAL_OVERRIDE;
 
+    /// Access to the derived attribute output class.
+    virtual DocxAttributeOutput& DocxAttrOutput() const;
+
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const SAL_OVERRIDE;
 
