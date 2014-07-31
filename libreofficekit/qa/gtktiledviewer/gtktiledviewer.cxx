@@ -27,7 +27,11 @@ static int help()
 static GtkWidget* pDocView;
 static GtkWidget* pDocViewQuad;
 static GtkWidget* pVBox;
+// GtkComboBox requires gtk 2.24 or later
+#if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
 static GtkComboBoxText* pPartSelector;
+#endif
+
 static LibreOfficeKit* pOffice;
 static char* pFileName;
 
