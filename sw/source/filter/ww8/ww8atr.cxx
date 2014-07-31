@@ -2822,6 +2822,8 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                     if( DI_SUB_AUTHOR != (nSubType & DI_SUB_MASK ) &&
                         GetExport().GetNumberFmt( *pFld, sStr ))
                         eFld = ww::eSAVEDATE;
+                    else
+                        eFld = ww::eEDITTIME;
                     break;
                 case DI_CUSTOM:
                     eFld = ww::eDOCPROPERTY;

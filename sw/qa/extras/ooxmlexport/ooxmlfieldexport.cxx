@@ -565,6 +565,23 @@ DECLARE_OOXMLEXPORT_TEST(testFdo81492, "fdo81492.docx")
         assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[5]/w:instrText", "ADDIN EN.CITE.DATA");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testEditTime, "fdo81341.docx")
+{
+    /* Issue was LO was not able to Import and Export EditTime in seconds format.
+     * It was supporting Time in "HH:MM" format. But if DOCX conatins Time in seconds,
+     * then LO was not able to display time in "HH:MM:SS" format.
+     * While exporting LO was writing plian text instead of field entry.
+     */
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        //Ensure that EditTime is written inside w:fldChar in "HH:MM:SS" format.
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:fldChar", "fldCharType", "begin");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:fldChar", "fldCharType", "separate");
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", "00:00:05");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:fldChar", "fldCharType", "end");
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
