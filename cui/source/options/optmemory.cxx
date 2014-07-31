@@ -121,12 +121,14 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
     get(m_pNfOLECache, "olecache");
     get(m_pQuickStarterFrame, "quickstarter");
 
+// fdo#80927 - quickstarter causing problem on windows - just hide/disable as a workaround
 #if defined(UNX)
     get(m_pQuickLaunchCB, "systray");
+    m_pQuickLaunchCB->Show();
 #else
     get(m_pQuickLaunchCB, "quicklaunch");
+    m_pQuickStarterFrame->Hide();
 #endif
-    m_pQuickLaunchCB->Show();
 
     //Only available in Win or if building the gtk systray
 #if !defined(WNT) && ! ENABLE_GTK
