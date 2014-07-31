@@ -376,7 +376,10 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
 
 int SAL_CALL osl_areCommandArgsSet(void)
 {
-    return (g_command_args.m_nCount > 0);
+    osl_acquireMutex (*osl_getGlobalMutex());
+    int nRet = (int) (g_command_args.m_nCount > 0);
+    osl_releaseMutex (*osl_getGlobalMutex());
+    return nRet;
 }
 
 
