@@ -612,7 +612,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
             m_pSerializer->endElement( nSdtPrToken );
         }
-        else if( (nSdtPrToken > 0) && !(m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing()))
+        else if( (nSdtPrToken > 0) && nSdtPrToken != FSNS( XML_w, XML_id ) && !(m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing()))
             m_pSerializer->singleElement( nSdtPrToken, FSEND );
 
         if( nSdtPrToken == FSNS( XML_w, XML_id ) || ( bPara && m_bParagraphSdtHasId ) )
