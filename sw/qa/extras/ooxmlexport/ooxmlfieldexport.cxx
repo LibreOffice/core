@@ -541,6 +541,15 @@ DECLARE_OOXMLEXPORT_TEST(test2Id, "2-id.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableStart2Sdt, "table-start-2-sdt.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+    {
+        // w:docPartGallery should be a child of <w:docPartObj>, make sure it's not a child of w:text.
+        assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:text/w:docPartGallery", 0);
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

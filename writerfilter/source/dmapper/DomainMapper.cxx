@@ -2451,6 +2451,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         }
     }
     break;
+    case NS_ooxml::LN_CT_SdtPr_rPr:
+    {
+        // Make sure properties from a pervious SDT are not merged with the current ones.
+        m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+    }
+    break;
     default:
         {
 #ifdef DEBUG_DOMAINMAPPER
