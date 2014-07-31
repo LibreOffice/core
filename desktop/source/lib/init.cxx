@@ -282,6 +282,8 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
 
     OUString aURL = getAbsoluteURL(pURL);
 
+    SolarMutexGuard aGuard;
+
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
 
     pLib->maLastExceptionMsg = "";
