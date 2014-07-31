@@ -48,25 +48,25 @@
 #define RID_STR_DLG_END                 RID_STR_DLG_START       + 144    //  70 - 183 + 30 free
 
 #define RID_STR_MISC_START              RID_STR_DLG_END
-#define RID_STR_MISC_END                RID_STR_MISC_START      + 20    // 184 - 203
+#define RID_STR_MISC_END                RID_STR_MISC_START      + 23    // 214 - 236
 
 #define RID_STR_QRY_START               RID_STR_MISC_END
-#define RID_STR_QRY_END                 RID_STR_QRY_START       + 80    // 204 - 283
+#define RID_STR_QRY_END                 RID_STR_QRY_START       + 80    // 267 - 316
 
 #define RID_STR_TBL_START               RID_STR_QRY_END
-#define RID_STR_TBL_END                 RID_STR_TBL_START       + 80    // 284 - 363
+#define RID_STR_TBL_END                 RID_STR_TBL_START       + 80    // 317 - 396
 
 #define RID_STR_REL_START               RID_STR_TBL_END
-#define RID_STR_REL_END                 RID_STR_REL_START       + 10    // 364 - 383
+#define RID_STR_REL_END                 RID_STR_REL_START       + 10    // 397 - 416
 
 #define RID_STR_UNO_START               RID_STR_REL_END
-#define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 384 - 403
+#define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 417 - 436
 
 #define RID_STR_GEN_START               RID_STR_UNO_END
-#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 404 - 458
+#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 437 - 491
 
 #define RID_STR_APP_START               RID_STR_GEN_END
-#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   459 - 498
+#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   492 - 531
 
 #if RID_STR_GEN_END > RID_DBACCESS_END
 #error Resource-Id Ueberlauf in #file, #line
@@ -77,7 +77,6 @@
 
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
     // FREE
-#define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
     // FREE
     // FREE
 #define DLG_INDEXDESIGN                 RID_DIALOG_START + 19

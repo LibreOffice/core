@@ -504,12 +504,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultN
         const ICopyTableSourceObject& _rSourceObject, const Reference< XConnection >& _xSourceConnection,
         const Reference< XConnection >& _xConnection, const Reference< XComponentContext >& _rxContext,
         const Reference< XInteractionHandler>&   _xInteractionHandler)
-    : WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
-    ,m_pbHelp( this , ModuleRes(PB_HELP))
-    ,m_pbCancel( this , ModuleRes(PB_CANCEL))
-    ,m_pbPrev( this , ModuleRes(PB_PREV))
-    ,m_pbNext( this , ModuleRes(PB_NEXT))
-    ,m_pbFinish( this , ModuleRes(PB_OK))
+    : WizardDialog( pParent, "RTFCopyTable", "dbaccess/ui/rtfcopytabledialog.ui")
     ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_xDestConnection( _xConnection )
     ,m_rSourceObject( _rSourceObject )
@@ -601,13 +596,8 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultNa
         const ODatabaseExport::TColumns& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
         const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
         TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XComponentContext >& _rxContext )
-    :WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
+    :WizardDialog( pParent, "RTFCopyTable", "dbaccess/ui/rtfcopytabledialog.ui")
     ,m_vSourceColumns(_rSourceColumns)
-    ,m_pbHelp( this , ModuleRes(PB_HELP))
-    ,m_pbCancel( this , ModuleRes(PB_CANCEL))
-    ,m_pbPrev( this , ModuleRes(PB_PREV))
-    ,m_pbNext( this , ModuleRes(PB_NEXT))
-    ,m_pbFinish( this , ModuleRes(PB_OK))
     ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_xDestConnection( _xConnection )
     ,m_rSourceObject( DummyCopySource::Instance() )
@@ -649,32 +639,44 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultNa
 
 void OCopyTableWizard::construct()
 {
-    AddButton( &m_pbHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X );
-    AddButton( &m_pbCancel, WIZARDDIALOG_BUTTON_STDOFFSET_X );
-    AddButton( &m_pbPrev );
-    AddButton( &m_pbNext, WIZARDDIALOG_BUTTON_STDOFFSET_X );
-    AddButton( &m_pbFinish );
+    AddButton( m_pbHelp = new HelpButton(this, WB_TABSTOP) );
+    AddButton( m_pbCancel = new CancelButton(this, WB_TABSTOP) );
+    AddButton( m_pbPrev = new PushButton(this, WB_TABSTOP));
+    AddButton( m_pbNext = new PushButton(this, WB_TABSTOP));
+    AddButton( m_pbFinish = new PushButton(this, WB_TABSTOP));
 
-    m_pbPrev.SetClickHdl( LINK( this, OCopyTableWizard, ImplPrevHdl ) );
-    m_pbNext.SetClickHdl( LINK( this, OCopyTableWizard, ImplNextHdl ) );
-    m_pbFinish.SetClickHdl( LINK( this, OCopyTableWizard, ImplOKHdl ) );
+    m_pbHelp->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
+    m_pbCancel->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
+    m_pbPrev->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
+    m_pbNext->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
+    m_pbFinish->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
+
+    m_pbPrev->SetText(ModuleRes(STR_WIZ_PB_PREV));
+    m_pbNext->SetText(ModuleRes(STR_WIZ_PB_NEXT));
+    m_pbFinish->SetText(ModuleRes(STR_WIZ_PB_OK));
+
+    m_pbHelp->Show();
+    m_pbCancel->Show();
+    m_pbPrev->Show();
+    m_pbNext->Show();
+    m_pbFinish->Show();
+
+    m_pbPrev->SetClickHdl( LINK( this, OCopyTableWizard, ImplPrevHdl ) );
+    m_pbNext->SetClickHdl( LINK( this, OCopyTableWizard, ImplNextHdl ) );
+    m_pbFinish->SetClickHdl( LINK( this, OCopyTableWizard, ImplOKHdl ) );
 
     SetActivatePageHdl( LINK( this, OCopyTableWizard, ImplActivateHdl ) );
 
-    SetPrevButton( &m_pbPrev );
-    SetNextButton( &m_pbNext );
+    SetPrevButton( m_pbPrev );
+    SetNextButton( m_pbNext );
 
-    ShowButtonFixedLine( true );
-
-    m_pbNext.GrabFocus();
+    m_pbNext->GrabFocus();
 
     if (m_vDestColumns.size())
         // source is a html or rtf table
-        m_pbNext.SetStyle(m_pbFinish.GetStyle() | WB_DEFBUTTON);
+        m_pbNext->SetStyle(m_pbFinish->GetStyle() | WB_DEFBUTTON);
     else
-        m_pbFinish.SetStyle(m_pbFinish.GetStyle() | WB_DEFBUTTON);
-
-    FreeResource();
+        m_pbFinish->SetStyle(m_pbFinish->GetStyle() | WB_DEFBUTTON);
 
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');
@@ -701,6 +703,12 @@ OCopyTableWizard::~OCopyTableWizard()
     m_aTypeInfoIndex.clear();
     m_aTypeInfo.clear();
     m_aDestTypeInfoIndex.clear();
+
+    delete m_pbHelp;
+    delete m_pbCancel;
+    delete m_pbPrev;
+    delete m_pbNext;
+    delete m_pbFinish;
 }
 
 IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl)
@@ -949,20 +957,20 @@ void OCopyTableWizard::CheckButtons()
     if(GetCurLevel() == 0) // the first page has no back button
     {
         if(m_nPageCount > 1)
-            m_pbNext.Enable(true);
+            m_pbNext->Enable(true);
         else
-            m_pbNext.Enable(false);
+            m_pbNext->Enable(false);
 
-        m_pbPrev.Enable(false);
+        m_pbPrev->Enable(false);
     }
     else if(GetCurLevel() == m_nPageCount-1) // the last page has no next button
     {
-        m_pbNext.Enable(false);
-        m_pbPrev.Enable(true);
+        m_pbNext->Enable(false);
+        m_pbPrev->Enable(true);
     }
     else
     {
-        m_pbPrev.Enable(true);
+        m_pbPrev->Enable(true);
         // next already has its state
     }
 }
@@ -971,11 +979,11 @@ void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle, bool bEnable)
 {
     Button* pButton;
     if(eStyle == WIZARD_NEXT)
-        pButton = &m_pbNext;
+        pButton = m_pbNext;
     else if(eStyle == WIZARD_PREV)
-        pButton = &m_pbPrev;
+        pButton = m_pbPrev;
     else
-        pButton = &m_pbFinish;
+        pButton = m_pbFinish;
     pButton->Enable(bEnable);
 
 }

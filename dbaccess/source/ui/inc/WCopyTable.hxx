@@ -238,11 +238,11 @@ namespace dbaui
         ODatabaseExport::TColumns       m_vSourceColumns;
         ODatabaseExport::TColumnVector  m_vSourceVec;
 
-        HelpButton              m_pbHelp;
-        CancelButton            m_pbCancel;
-        PushButton              m_pbPrev;
-        PushButton              m_pbNext;
-        OKButton                m_pbFinish;
+        HelpButton*             m_pbHelp;
+        CancelButton*           m_pbCancel;
+        PushButton*             m_pbPrev;
+        PushButton*             m_pbNext;
+        PushButton*             m_pbFinish;
 
         OTypeInfoMap                            m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator>   m_aTypeInfoIndex;
@@ -325,7 +325,7 @@ namespace dbaui
         virtual ~OCopyTableWizard();
 
         virtual long        DeactivatePage() SAL_OVERRIDE;
-        OKButton&           GetOKButton() { return m_pbFinish; }
+        OKButton&           GetOKButton() { return static_cast<OKButton&>(*m_pbFinish); }
         Wizard_Button_Style GetPressedButton() const { return m_ePressed; }
         void                EnableButton(Wizard_Button_Style eStyle, bool bEnable);
         void                AddWizardPage(OWizardPage* pPage); // delete page from OCopyTableWizard
