@@ -26,9 +26,9 @@ package org.openoffice.xmerge;
  */
 public final class Version {
 
-    private static Package pkg;
+    private static final Package pkg;
 
-    private static Version version;
+    private static final Version version;
 
     static {
 
