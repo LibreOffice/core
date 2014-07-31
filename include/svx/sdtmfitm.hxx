@@ -28,7 +28,6 @@
 class SdrTextMinFrameHeightItem: public SdrMetricItem {
 public:
     SdrTextMinFrameHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT,nHgt)  {}
-    SdrTextMinFrameHeightItem(SvStream& rIn): SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT,rIn) {}
 };
 
 
@@ -37,7 +36,6 @@ public:
 class SdrTextMaxFrameHeightItem: public SdrMetricItem {
 public:
     SdrTextMaxFrameHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT,nHgt)  {}
-    SdrTextMaxFrameHeightItem(SvStream& rIn): SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT,rIn) {}
 };
 
 
@@ -46,7 +44,6 @@ public:
 class SdrTextMinFrameWidthItem: public SdrMetricItem {
 public:
     SdrTextMinFrameWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH,nWdt)  {}
-    SdrTextMinFrameWidthItem(SvStream& rIn): SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH,rIn) {}
 };
 
 
@@ -55,7 +52,6 @@ public:
 class SdrTextMaxFrameWidthItem: public SdrMetricItem {
 public:
     SdrTextMaxFrameWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH,nWdt)  {}
-    SdrTextMaxFrameWidthItem(SvStream& rIn): SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH,rIn) {}
 };
 
 #endif
