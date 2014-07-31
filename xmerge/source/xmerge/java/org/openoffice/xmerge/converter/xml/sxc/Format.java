@@ -434,7 +434,7 @@ public class Format implements Cloneable {
                 return false;
         }
 
-        if (fontName!=rhs.fontName)
+        if (fontName == null ? rhs.fontName != null : !fontName.equals(rhs.fontName))
             return false;
 
         if (foreground!=rhs.foreground)
