@@ -53,9 +53,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-//FIXME:well find a better way for it.
-#include "../doc/doc.hrc"
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -296,32 +293,13 @@ void BackingWindow::initControls()
     //mpTemplateBar->SetDropdownClickHdl(LINK(this, BackingWindow,TBXDropdownHdl));
 
     //set handlers
-    //mpLocalView->setItemStateHdl(LINK(this, BackingWindow, TVItemStateHdl));
     mpLocalView->setOpenRegionHdl(LINK(this, BackingWindow, OpenRegionHdl));
     mpLocalView->setOpenTemplateHdl(LINK(this,BackingWindow,OpenTemplateHdl));
 
-    /*FIXME: Add other things for Local View
-     *Filter and the bars*/
+    /*FIXME: Add other things for Local View*/
 
     setupButton( mpOpenButton );
-    //setupButton( mpTemplateButton );
-    Font bFont(mpTemplateButton->GetControlFont());
-    bFont.SetHeight(nButtonsFontSize);
-    mpTemplateButton->SetControlFont(bFont);
-
-    // color that fits the theme
-    mpTemplateButton->SetControlForeground(aButtonsText);
-
-
-
-    //Menubutton implementation
-    PopupMenu* pMenu = mpTemplateButton->GetPopupMenu();
-    pMenu->SetMenuFlags(
-            pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
-
-    mpTemplateButton->SetSelectHdl(LINK(this,BackingWindow,MenuSelectHdl));
-    mpTemplateButton->SetClickHdl( LINK(this, BackingWindow, ClickHdl) );
-
+    setupButton( mpTemplateButton );
     setupButton( mpWriterAllButton );
     setupButton( mpDrawAllButton );
     setupButton( mpCalcAllButton );
@@ -376,6 +354,23 @@ void BackingWindow::setupButton( PushButton* pButton )
 
     pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
 }
+
+void BackingWindow::setupButton( MenuButton* pButton )
+{
+    Font aFont(pButton->GetControlFont());
+    aFont.SetHeight(nButtonsFontSize);
+    pButton->SetControlFont(aFont);
+    pButton->SetControlForeground(aButtonsText);
+
+    //Menubutton implementation
+    PopupMenu* pMenu = mpTemplateButton->GetPopupMenu();
+    pMenu->SetMenuFlags(
+             pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+
+    pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
+    pButton->SetSelectHdl( LINK( this, BackingWindow, MenuSelectHdl ) );
+}
+
 
 void BackingWindow::Paint( const Rectangle& )
 {
@@ -614,6 +609,18 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
     else if( sId == "filter_draw" )
     {
         mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_DRAW));
+    }
+    else if( sId == "edit" )
+    {
+        Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
+
+        Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
+        PropertyValue* pArg = aArgs.getArray();
+        pArg[0].Name = "Referer";
+        pArg[0].Value <<= OUString("private:user");
+
+        dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );
+
     }
 
 
