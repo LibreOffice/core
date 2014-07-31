@@ -83,7 +83,7 @@ class OfficeZip {
     void read(InputStream is) throws IOException {
 
         ZipInputStream zis = new ZipInputStream(is);
-        ZipEntry ze = null;
+        ZipEntry ze;
         int i = -1;
 
         while ((ze = zis.getNextEntry()) != null) {
@@ -94,7 +94,7 @@ class OfficeZip {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            int len = 0;
+            int len;
             byte buffer[] = new byte[BUFFERSIZE];
 
             while ((len = zis.read(buffer)) > 0) {
