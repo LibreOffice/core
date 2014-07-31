@@ -45,28 +45,28 @@
 #define RID_STR_CONTROL_END             RID_STR_CONTROL_START   + 30    //  40 -  69
 
 #define RID_STR_DLG_START               RID_STR_CONTROL_END
-#define RID_STR_DLG_END                 RID_STR_DLG_START       + 113    //  70 - 182
+#define RID_STR_DLG_END                 RID_STR_DLG_START       + 144    //  70 - 183 + 30 free
 
 #define RID_STR_MISC_START              RID_STR_DLG_END
-#define RID_STR_MISC_END                RID_STR_MISC_START      + 20    // 183 - 202
+#define RID_STR_MISC_END                RID_STR_MISC_START      + 20    // 214 - 233
 
 #define RID_STR_QRY_START               RID_STR_MISC_END
-#define RID_STR_QRY_END                 RID_STR_QRY_START       + 80    // 203 - 282
+#define RID_STR_QRY_END                 RID_STR_QRY_START       + 80    // 234 - 313
 
 #define RID_STR_TBL_START               RID_STR_QRY_END
-#define RID_STR_TBL_END                 RID_STR_TBL_START       + 80    // 283 - 362
+#define RID_STR_TBL_END                 RID_STR_TBL_START       + 80    // 314 - 393
 
 #define RID_STR_REL_START               RID_STR_TBL_END
-#define RID_STR_REL_END                 RID_STR_REL_START       + 10    // 363 - 382
+#define RID_STR_REL_END                 RID_STR_REL_START       + 10    // 394 - 413
 
 #define RID_STR_UNO_START               RID_STR_REL_END
-#define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 383 - 402
+#define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 414 - 433
 
 #define RID_STR_GEN_START               RID_STR_UNO_END
-#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 403 - 457
+#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 434 - 488
 
 #define RID_STR_APP_START               RID_STR_GEN_END
-#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   458 - 497
+#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   489 - 528
 
 #if RID_STR_GEN_END > RID_DBACCESS_END
 #error Resource-Id Ueberlauf in #file, #line
@@ -77,7 +77,6 @@
 
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
     // FREE
-#define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
     // FREE
     // FREE
 #define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
@@ -86,7 +85,6 @@
     // FREE
     // FREE
 #define DLG_COLLECTION_VIEW             RID_DIALOG_START + 27
-#define DLG_DATABASE_TYPE_CHANGE        RID_DIALOG_START + 28
 
 // tab pages
 

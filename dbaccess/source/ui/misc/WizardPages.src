@@ -51,51 +51,19 @@ String STR_WIZ_NAME_MATCHING_TITEL
     Text [ en-US ]  = "Assign columns" ;
 };
 
-ModalDialog WIZ_RTFCOPYTABLE
+String STR_WIZ_PB_PREV
 {
-    HelpID = "dbaccess:ModalDialog:WIZ_RTFCOPYTABLE";
+    Text [ en-US ] = "< ~Back";
+};
 
-    Text [ en-US ] = "Copy RTF Table" ;
+String STR_WIZ_PB_NEXT
+{
+    Text [ en-US ] = "~Next>";
+};
 
-    OutputSize      = TRUE ;
-    SVLook          = TRUE ;
-    Moveable        = TRUE ;
-    Closeable       = TRUE ;
-    Hide            = TRUE;
-
-    HelpButton PB_HELP
-    {
-        TabStop             = TRUE ;
-        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        Text [ en-US ] = "~Help";
-    };
-    CancelButton PB_CANCEL
-    {
-        TabStop             = TRUE ;
-        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        Text [ en-US ] = "~Cancel";
-    };
-    PushButton PB_PREV
-    {
-        HelpID = "dbaccess:PushButton:WIZ_RTFCOPYTABLE:PB_PREV";
-        TabStop             = TRUE ;
-        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        Text [ en-US ] = "< ~Back";
-    };
-    PushButton PB_NEXT
-    {
-        HelpID = "dbaccess:PushButton:WIZ_RTFCOPYTABLE:PB_NEXT";
-        TabStop             = TRUE ;
-        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        Text [ en-US ] = "~Next>";
-    };
-    OKButton PB_OK
-    {
-        TabStop             = TRUE ;
-        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        Text [ en-US ] = "C~reate";
-    };
-
+String STR_WIZ_PB_OK
+{
+    Text [ en-US ] = "C~reate";
 };
 
 TabPage TAB_WIZ_TYPE_SELECT
