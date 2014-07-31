@@ -104,7 +104,6 @@ namespace
         void impFlushLinePrimitivesToParagraphPrimitives();
         void impHandleDrawPortionInfo(const DrawPortionInfo& rInfo);
         void impHandleDrawBulletInfo(const DrawBulletInfo& rInfo);
-        void impHandleTruncatedPortion(const DrawPortionInfo& rInfo);
 
     public:
         explicit impTextBreakupHandler(SdrOutliner& rOutliner)
@@ -512,23 +511,7 @@ namespace
 
     void impTextBreakupHandler::impHandleDrawPortionInfo(const DrawPortionInfo& rInfo)
     {
-        // FIXME(matteocam)
-
-        /*
-         * We want to break the text at the 10th character if we are at
-         * the end of the paragraph.
-         * XXX: How to send it back to editengine?
-         *          [AutoFit uses SetGlobalStretch... from Outliner]
-         * XXX: how to pass on to the rest of the text "This should be
-         *      drawn somewhere else"?
-        */
-
-        bool bTruncateText = rInfo.mbEndOfParagraph; // arbitrary property
-
-        if ( bTruncateText ) // truncate text
-            impHandleTruncatedPortion(rInfo);
-        else // no chaining or truncating
-            impCreateTextPortionPrimitive(rInfo);
+        impCreateTextPortionPrimitive(rInfo);
 
         if(rInfo.mbEndOfLine || rInfo.mbEndOfParagraph)
         {
@@ -540,24 +523,6 @@ namespace
             impFlushLinePrimitivesToParagraphPrimitives();
         }
     }
-
-    void impTextBreakupHandler::impHandleTruncatedPortion(const DrawPortionInfo& rInfo)
-    {
-        // truncate portion at 4
-        int nTruncationPoint = 4;
-
-        // make truncated DrawPortionInfo
-        DrawPortionInfo rTruncatedPortionInfo = rInfo;
-        rTruncatedPortionInfo.mnTextLen =
-            std::min( rInfo.mnTextLen, nTruncationPoint );
-
-        // make text portion primitive with the first part of the portion
-        impCreateTextPortionPrimitive(rTruncatedPortionInfo);
-
-        // if text is left in original portion, send it back to editeng
-        // TODO(matteocam)
-    }
-
 
     void impTextBreakupHandler::impHandleDrawBulletInfo(const DrawBulletInfo& rInfo)
     {
@@ -1502,7 +1467,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     if (mpOverflowingText != NULL) {
         SdrTextObj *pNextTextObj = GetNextLinkInChain();
         assert (pNextTextObj);
-        impCopyTextInTextObj(pNextTextObj);
+        impCopyTextInTextObj(pNextTextObj); // XXX: it actually moves the overflowing text currently
 
         //pNextTextObj->SetOutlinerParaObject( mpOverflowingText );
         //SdrOutliner rOutl = pNextTextObj->ImpGetDrawOutliner();
