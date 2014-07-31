@@ -26,6 +26,7 @@
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
+#include <com/sun/star/ucb/XInteractionAuthFallback.hpp>
 #include <com/sun/star/ucb/XInteractionReplaceExistingData.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 #include <rtl/ref.hxx>
@@ -659,6 +660,39 @@ public:
     virtual void SAL_CALL select()
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
+
+class UCBHELPER_DLLPUBLIC InteractionAuthFallback:
+                  public InteractionContinuation,
+                  public com::sun::star::ucb::XInteractionAuthFallback
+{
+    OUString m_aCode;
+
+public:
+    InteractionAuthFallback( InteractionRequest * pRequest )
+    : InteractionContinuation( pRequest ) {}
+
+    // XInterface
+    virtual com::sun::star::uno::Any SAL_CALL
+    queryInterface( const com::sun::star::uno::Type & rType )
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire()
+        throw() SAL_OVERRIDE;
+    virtual void SAL_CALL release()
+        throw() SAL_OVERRIDE;
+
+    // XInteractionContinuation
+    virtual void SAL_CALL select()
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    // XAuthFallback
+    virtual void SAL_CALL setCode( const OUString& code )
+        throw (::css::uno::RuntimeException, ::std::exception);
+    virtual OUString SAL_CALL getCode()
+        throw (::css::uno::RuntimeException, ::std::exception);
+
+
+};
+
 
 } // namespace ucbhelper
 

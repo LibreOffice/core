@@ -33,6 +33,7 @@ $(eval $(call gb_Library_add_exception_objects,ucbhelper,\
     ucbhelper/source/client/fileidentifierconverter \
     ucbhelper/source/client/interceptedinteraction \
     ucbhelper/source/client/proxydecider \
+	ucbhelper/source/provider/authenticationfallback \
     ucbhelper/source/provider/cancelcommandexecution \
     ucbhelper/source/provider/contenthelper \
     ucbhelper/source/provider/contentidentifier \
