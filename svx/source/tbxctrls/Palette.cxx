@@ -173,11 +173,11 @@ OString lcl_getToken(const OString& rStr, sal_Int32& index)
 
 // PaletteSOC ------------------------------------------------------------------
 
-PaletteSOC::PaletteSOC( const OUString &rFPath, const OUString &rFName )
+PaletteSOC::PaletteSOC( const OUString &rFPath, const OUString &rFName ) :
+    mbLoadedPalette( false ),
+    maFPath( rFPath ),
+    maName( rFName )
 {
-    maName = rFName;
-    mpColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(XCOLOR_LIST, rFPath));
-    mpColorList->Load();
 }
 
 PaletteSOC::~PaletteSOC()
@@ -191,13 +191,20 @@ const OUString& PaletteSOC::GetName()
 
 void PaletteSOC::LoadColorSet( SvxColorValueSet& rColorSet )
 {
+    if( !mbLoadedPalette )
+    {
+        mbLoadedPalette = true;
+        mpColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(XCOLOR_LIST, maFPath));
+        mpColorList->Load();
+    }
     rColorSet.Clear();
-    rColorSet.addEntriesForXColorList( *mpColorList );
+    if( mpColorList.is() )
+        rColorSet.addEntriesForXColorList( *mpColorList );
 }
 
 bool PaletteSOC::IsValid()
 {
-    return mpColorList.is();
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

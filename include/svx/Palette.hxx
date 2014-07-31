@@ -65,7 +65,8 @@ public:
 
 class PaletteSOC : public Palette
 {
-    //TODO add lazy loading
+    bool            mbLoadedPalette;
+    OUString        maFPath;
     OUString        maName;
     XColorListRef   mpColorList;
 public:
