@@ -63,7 +63,7 @@ SvxNumBulletItem* SvxGetNumBulletItemByName( SfxItemPool* pPool, const OUString&
  * Maps the vcl MapUnit enum to a API constant MeasureUnit.
  * Returns false if conversion is not supported.
  */
-SVX_DLLPUBLIC bool SvxMapUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
+SVX_DLLPUBLIC bool SvxMapUnitToMeasureUnit( const MapUnit nVcl, short& eApi ) throw();
 
 /**
  * Maps the API constant MeasureUnit to a vcl MapUnit enum.

@@ -217,8 +217,8 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
 ,m_bAllreadyFilled(false)
 {
     setExportFlags( EXPORT_OASIS | nExportFlag);
-    GetMM100UnitConverter().SetCoreMeasureUnit(MAP_100TH_MM);
-    GetMM100UnitConverter().SetXMLMeasureUnit(MAP_CM);
+    GetMM100UnitConverter().SetCoreMeasureUnit(css::util::MeasureUnit::MM_100TH);
+    GetMM100UnitConverter().SetXMLMeasureUnit(css::util::MeasureUnit::CM);
 
     // (getExportFlags() & EXPORT_CONTENT) != 0 ? : XML_N_OOO
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE ), XML_NAMESPACE_OFFICE );

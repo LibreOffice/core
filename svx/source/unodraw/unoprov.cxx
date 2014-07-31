@@ -1008,7 +1008,7 @@ sal_Bool SvxMeasureUnitToMapUnit( const short eApi, int& eVcl ) throw()
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
-bool SvxMapUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
+bool SvxMapUnitToMeasureUnit( const MapUnit eVcl, short& eApi ) throw()
 {
     switch( eVcl )
     {

@@ -59,8 +59,8 @@ const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 
 struct SvXMLUnitConverter::Impl
 {
-    sal_Int16 m_eCoreMeasureUnit;
-    sal_Int16 m_eXMLMeasureUnit;
+    sal_Int16 m_eCoreMeasureUnit; /*css::util::MeasureUnit*/
+    sal_Int16 m_eXMLMeasureUnit; /*css::util::MeasureUnit*/
     util::Date m_aNullDate;
     mutable uno::Reference< text::XNumberingTypeInfo > m_xNumTypeInfo;
     mutable uno::Reference< i18n::XCharacterClassification > m_xCharClass;
@@ -97,12 +97,12 @@ SvXMLUnitConverter::getNumTypeInfo() const
     return m_pImpl->m_xNumTypeInfo;
 }
 
-void SvXMLUnitConverter::SetCoreMeasureUnit(sal_Int16 const eCoreMeasureUnit)
+void SvXMLUnitConverter::SetCoreMeasureUnit(sal_Int16 const eCoreMeasureUnit/*css::util::MeasureUnit*/)
 {
     m_pImpl->m_eCoreMeasureUnit = eCoreMeasureUnit;
 }
 
-void SvXMLUnitConverter::SetXMLMeasureUnit(sal_Int16 const eXMLMeasureUnit)
+void SvXMLUnitConverter::SetXMLMeasureUnit(sal_Int16 const eXMLMeasureUnit/*css::util::MeasureUnit*/)
 {
     m_pImpl->m_eXMLMeasureUnit = eXMLMeasureUnit;
 }

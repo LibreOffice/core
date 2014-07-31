@@ -39,6 +39,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/fldunit.hxx>
+#include <tools/mapunit.hxx>
 
 
 // predeclarations
@@ -92,18 +93,18 @@ public:
     SvXMLUnitConverter(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext >& xContext,
-        sal_Int16 eCoreMeasureUnit,
-        sal_Int16 eXMLMeasureUnit);
+        sal_Int16 eCoreMeasureUnit /*css::util::MeasureUnit*/,
+        sal_Int16 eXMLMeasureUnit /*css::util::MeasureUnit*/);
 
     virtual ~SvXMLUnitConverter();
 
     static sal_Int16 GetMeasureUnit(FieldUnit const nFieldUnit);
 
     /** sets the default unit for numerical measures */
-    void SetCoreMeasureUnit( sal_Int16 const eCoreMeasureUnit );
+    void SetCoreMeasureUnit( sal_Int16 const eCoreMeasureUnit /*css::util::MeasureUnit*/);
 
     /** sets the default unit for textual measures */
-    void SetXMLMeasureUnit( sal_Int16 const eXMLMeasureUnit );
+    void SetXMLMeasureUnit( sal_Int16 const eXMLMeasureUnit /*css::util::MeasureUnit*/);
 
     /** gets the default unit for textual measures */
     sal_Int16 GetXMLMeasureUnit() const;
