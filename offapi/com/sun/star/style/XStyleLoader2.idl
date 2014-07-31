@@ -20,6 +20,8 @@ module com {  module sun {  module star {  module style {
 /** extends XStyleLoader interface to import styles from an already opened calc or writer component.
 
     @see com::sun::star::style::XStyleLoader
+
+    @since LibreOffice 4.4
  */
 interface XStyleLoader2: com::sun::star::style::XStyleLoader
 {
