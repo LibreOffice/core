@@ -326,7 +326,7 @@ bool SdrTextObj::IsAutoGrowWidth() const
         return false; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
+    bool bRet = ((SdrTextAutoGrowWidthItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
 
     bool bInEditMOde = IsInEditMode();
 
