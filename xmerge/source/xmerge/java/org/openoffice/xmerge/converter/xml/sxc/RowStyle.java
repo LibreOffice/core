@@ -65,8 +65,8 @@ public class RowStyle extends Style implements Cloneable {
             int len = children.getLength();
             for (int i = 0; i < len; i++) {
                 Node child = children.item(i);
-                String name = child.getNodeName();
-                if (name.equals("style:properties")) {
+                String nodeName = child.getNodeName();
+                if (nodeName.equals("style:properties")) {
                     NamedNodeMap childAttrNodes = child.getAttributes();
                     if (childAttrNodes != null) {
                         int nChildAttrNodes = childAttrNodes.getLength();
