@@ -1457,8 +1457,8 @@ void SdrObjCustomShape::AdaptTextMinSize()
         {
             // always reset MinWidthHeight to zero to only rely on text size and frame size
             // to allow resizing being completely dependent on text size only
-            aSet.Put(SdrTextMinFrameWidthItem(0));
-            aSet.Put(SdrTextMinFrameHeightItem(0));
+            aSet.Put(makeSdrTextMinFrameWidthItem(0));
+            aSet.Put(makeSdrTextMinFrameHeightItem(0));
             bChanged = true;
         }
         else
@@ -1473,8 +1473,8 @@ void SdrObjCustomShape::AdaptTextMinSize()
                 const long nTWdt(std::max(long(0), (long)(aTextBound.GetWidth() - 1 - nHDist)));
                 const long nTHgt(std::max(long(0), (long)(aTextBound.GetHeight() - 1 - nVDist)));
 
-                aSet.Put(SdrTextMinFrameWidthItem(nTWdt));
-                aSet.Put(SdrTextMinFrameHeightItem(nTHgt));
+                aSet.Put(makeSdrTextMinFrameWidthItem(nTWdt));
+                aSet.Put(makeSdrTextMinFrameHeightItem(nTHgt));
                 bChanged = true;
             }
         }

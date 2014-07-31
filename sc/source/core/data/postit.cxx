@@ -646,8 +646,8 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                 if( rInitData.mbDefaultPosSize )
                 {
                     // set other items and fit caption size to text
-                    maNoteData.mpCaption->SetMergedItem( SdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
-                    maNoteData.mpCaption->SetMergedItem( SdrTextMaxFrameWidthItem( SC_NOTECAPTION_MAXWIDTH_TEMP ) );
+                    maNoteData.mpCaption->SetMergedItem( makeSdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
+                    maNoteData.mpCaption->SetMergedItem( makeSdrTextMaxFrameWidthItem( SC_NOTECAPTION_MAXWIDTH_TEMP ) );
                     maNoteData.mpCaption->AdjustTextFrameWidthAndHeight();
                     aCreator.AutoPlaceCaption();
                 }
@@ -795,8 +795,8 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         // adjust caption size to text size
         long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
         pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( true ) );
-        pCaption->SetMergedItem( SdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
-        pCaption->SetMergedItem( SdrTextMaxFrameWidthItem( nMaxWidth ) );
+        pCaption->SetMergedItem( makeSdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
+        pCaption->SetMergedItem( makeSdrTextMaxFrameWidthItem( nMaxWidth ) );
         pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( true ) );
         pCaption->AdjustTextFrameWidthAndHeight();
     }

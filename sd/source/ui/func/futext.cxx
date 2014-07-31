@@ -480,18 +480,18 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
                We get the correct height during the subsequent creation of the
                object, otherwise we draw to much */
             SfxItemSet aSet(mpViewShell->GetPool());
-            aSet.Put(SdrTextMinFrameHeightItem(0));
+            aSet.Put(makeSdrTextMinFrameHeightItem(0));
             aSet.Put(SdrTextAutoGrowWidthItem(false));
             aSet.Put(SdrTextAutoGrowHeightItem(true));
             pTxtObj->SetMergedItemSet(aSet);
             pTxtObj->AdjustTextFrameWidthAndHeight();
-            aSet.Put(SdrTextMaxFrameHeightItem(pTxtObj->GetLogicRect().GetSize().Height()));
+            aSet.Put(makeSdrTextMaxFrameHeightItem(pTxtObj->GetLogicRect().GetSize().Height()));
             pTxtObj->SetMergedItemSet(aSet);
         }
         else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
         {
             SfxItemSet aSet(mpViewShell->GetPool());
-            aSet.Put(SdrTextMinFrameWidthItem(0));
+            aSet.Put(makeSdrTextMinFrameWidthItem(0));
             aSet.Put(SdrTextAutoGrowWidthItem(true));
             aSet.Put(SdrTextAutoGrowHeightItem(false));
 
@@ -499,7 +499,7 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
             pTxtObj->SetMergedItemSet(aSet);
             pTxtObj->AdjustTextFrameWidthAndHeight();
-            aSet.Put(SdrTextMaxFrameWidthItem(pTxtObj->GetLogicRect().GetSize().Width()));
+            aSet.Put(makeSdrTextMaxFrameWidthItem(pTxtObj->GetLogicRect().GetSize().Width()));
             pTxtObj->SetMergedItemSet(aSet);
         }
     }
@@ -558,8 +558,8 @@ void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
         {
             // Impress text object (rescales to line height)
             SfxItemSet aSet(mpViewShell->GetPool());
-            aSet.Put(SdrTextMinFrameHeightItem(0));
-            aSet.Put(SdrTextMaxFrameHeightItem(0));
+            aSet.Put(makeSdrTextMinFrameHeightItem(0));
+            aSet.Put(makeSdrTextMaxFrameHeightItem(0));
             aSet.Put(SdrTextAutoGrowHeightItem(true));
             aSet.Put(SdrTextAutoGrowWidthItem(false));
             pTxtObj->SetMergedItemSet(aSet);
@@ -567,8 +567,8 @@ void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
         else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
         {
             SfxItemSet aSet(mpViewShell->GetPool());
-            aSet.Put(SdrTextMinFrameWidthItem(0));
-            aSet.Put(SdrTextMaxFrameWidthItem(0));
+            aSet.Put(makeSdrTextMinFrameWidthItem(0));
+            aSet.Put(makeSdrTextMaxFrameWidthItem(0));
             aSet.Put(SdrTextAutoGrowWidthItem(true));
             aSet.Put(SdrTextAutoGrowHeightItem(false));
             pTxtObj->SetMergedItemSet(aSet);
@@ -787,8 +787,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             if(mxTextObj.is())
             {
                 SfxItemSet aSet(mpViewShell->GetPool());
-                aSet.Put(SdrTextMinFrameHeightItem(0));
-                aSet.Put(SdrTextMinFrameWidthItem(0));
+                aSet.Put(makeSdrTextMinFrameHeightItem(0));
+                aSet.Put(makeSdrTextMinFrameWidthItem(0));
                 aSet.Put(SdrTextAutoGrowHeightItem(true));
                 aSet.Put(SdrTextAutoGrowWidthItem(true));
 

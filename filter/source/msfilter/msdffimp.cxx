@@ -5122,9 +5122,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
             {
                 aSet.Put( SdrTextAutoGrowHeightItem( true ) );
-                aSet.Put( SdrTextMinFrameHeightItem(
+                aSet.Put( makeSdrTextMinFrameHeightItem(
                     aNewRect.Bottom() - aNewRect.Top() ) );
-                aSet.Put( SdrTextMinFrameWidthItem(
+                aSet.Put( makeSdrTextMinFrameWidthItem(
                     aNewRect.Right() - aNewRect.Left() ) );
                 bFitText = true;
             }

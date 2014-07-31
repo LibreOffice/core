@@ -22,37 +22,21 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 
+inline SdrMetricItem makeSdrTextMinFrameHeightItem(long nHgt) {
+    return SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, nHgt);
+}
 
-// class SdrTextMinFrameHeighItem
+inline SdrMetricItem makeSdrTextMaxFrameHeightItem(long nHgt) {
+    return SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT, nHgt);
+}
 
-class SdrTextMinFrameHeightItem: public SdrMetricItem {
-public:
-    SdrTextMinFrameHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT,nHgt)  {}
+inline SdrMetricItem makeSdrTextMinFrameWidthItem(long nWdt) {
+    return SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, nWdt);
 };
 
-
-// class SdrTextMaxFrameHeightItem
-
-class SdrTextMaxFrameHeightItem: public SdrMetricItem {
-public:
-    SdrTextMaxFrameHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT,nHgt)  {}
-};
-
-
-// class SdrTextMinFrameWidthItem
-
-class SdrTextMinFrameWidthItem: public SdrMetricItem {
-public:
-    SdrTextMinFrameWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH,nWdt)  {}
-};
-
-
-// class SdrTextMaxFrameWidthItem
-
-class SdrTextMaxFrameWidthItem: public SdrMetricItem {
-public:
-    SdrTextMaxFrameWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH,nWdt)  {}
-};
+inline SdrMetricItem makeSdrTextMaxFrameWidthItem(long nWdt) {
+    return SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH, nWdt);
+}
 
 #endif
 

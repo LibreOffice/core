@@ -516,7 +516,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // Die Hoehe ist nur eine Mindest-Hoehe
     if( aTwipSz.Height() < MINFLY )
         aTwipSz.Height() = MINFLY;
-    aItemSet.Put( SdrTextMinFrameHeightItem( aTwipSz.Height() ) );
+    aItemSet.Put( makeSdrTextMinFrameHeightItem( aTwipSz.Height() ) );
 
     pMarquee->SetMergedItemSetAndBroadcast(aItemSet);
 

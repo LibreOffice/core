@@ -566,7 +566,7 @@ void SdrTextObj::AdaptTextMinSize()
                 const long nDist(GetTextLeftDistance() + GetTextRightDistance());
                 const long nW(std::max(long(0), (long)(aRect.GetWidth() - 1 - nDist)));
 
-                aSet.Put(SdrTextMinFrameWidthItem(nW));
+                aSet.Put(makeSdrTextMinFrameWidthItem(nW));
 
                 if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
                 {
@@ -580,7 +580,7 @@ void SdrTextObj::AdaptTextMinSize()
                 const long nDist(GetTextUpperDistance() + GetTextLowerDistance());
                 const long nH(std::max(long(0), (long)(aRect.GetHeight() - 1 - nDist)));
 
-                aSet.Put(SdrTextMinFrameHeightItem(nH));
+                aSet.Put(makeSdrTextMinFrameHeightItem(nH));
 
                 if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
                 {
@@ -1761,22 +1761,22 @@ long SdrTextObj::GetEckenradius() const
 
 long SdrTextObj::GetMinTextFrameHeight() const
 {
-    return ((SdrTextMinFrameHeightItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MINFRAMEHEIGHT))).GetValue();
+    return ((SdrMetricItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MINFRAMEHEIGHT))).GetValue();
 }
 
 long SdrTextObj::GetMaxTextFrameHeight() const
 {
-    return ((SdrTextMaxFrameHeightItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MAXFRAMEHEIGHT))).GetValue();
+    return ((SdrMetricItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MAXFRAMEHEIGHT))).GetValue();
 }
 
 long SdrTextObj::GetMinTextFrameWidth() const
 {
-    return ((SdrTextMinFrameWidthItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MINFRAMEWIDTH))).GetValue();
+    return ((SdrMetricItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MINFRAMEWIDTH))).GetValue();
 }
 
 long SdrTextObj::GetMaxTextFrameWidth() const
 {
-    return ((SdrTextMaxFrameWidthItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MAXFRAMEWIDTH))).GetValue();
+    return ((SdrMetricItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MAXFRAMEWIDTH))).GetValue();
 }
 
 bool SdrTextObj::IsFontwork() const

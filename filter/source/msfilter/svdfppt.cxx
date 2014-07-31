@@ -1088,12 +1088,12 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             if ( nMinFrameHeight < 0 )
                 nMinFrameHeight = 0;
             if ( !pTObj->ISA( SdrObjCustomShape ) )
-                pTObj->SetMergedItem( SdrTextMinFrameHeightItem( nMinFrameHeight ) );
+                pTObj->SetMergedItem( makeSdrTextMinFrameHeightItem( nMinFrameHeight ) );
 
             if ( nMinFrameWidth < 0 )
                 nMinFrameWidth = 0;
             if ( !pTObj->ISA( SdrObjCustomShape ) )
-                pTObj->SetMergedItem( SdrTextMinFrameWidthItem( nMinFrameWidth ) );
+                pTObj->SetMergedItem( makeSdrTextMinFrameWidthItem( nMinFrameWidth ) );
 
             // set margins at the borders of the textbox
             pTObj->SetMergedItem( SdrTextLeftDistItem( nTextLeft ) );

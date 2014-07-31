@@ -146,7 +146,7 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[SDRATTR_CAPTIONLINELEN   -SDRATTR_START]=new SdrCaptionLineLenItem   ;
     mppLocalPoolDefaults[SDRATTR_CAPTIONFITLINELEN-SDRATTR_START]=new SdrCaptionFitLineLenItem;
     mppLocalPoolDefaults[SDRATTR_ECKENRADIUS            -SDRATTR_START]=new SdrEckenradiusItem;
-    mppLocalPoolDefaults[SDRATTR_TEXT_MINFRAMEHEIGHT    -SDRATTR_START]=new SdrTextMinFrameHeightItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_MINFRAMEHEIGHT    -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, 0);
     mppLocalPoolDefaults[SDRATTR_TEXT_AUTOGROWHEIGHT    -SDRATTR_START]=new SdrTextAutoGrowHeightItem;
     mppLocalPoolDefaults[SDRATTR_TEXT_FITTOSIZE     -SDRATTR_START]=new SdrTextFitToSizeTypeItem;
     mppLocalPoolDefaults[SDRATTR_TEXT_LEFTDIST      -SDRATTR_START]=new SdrTextLeftDistItem;
@@ -154,9 +154,9 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[SDRATTR_TEXT_UPPERDIST     -SDRATTR_START]=new SdrTextUpperDistItem;
     mppLocalPoolDefaults[SDRATTR_TEXT_LOWERDIST     -SDRATTR_START]=new SdrTextLowerDistItem;
     mppLocalPoolDefaults[SDRATTR_TEXT_VERTADJUST        -SDRATTR_START]=new SdrTextVertAdjustItem;
-    mppLocalPoolDefaults[SDRATTR_TEXT_MAXFRAMEHEIGHT    -SDRATTR_START]=new SdrTextMaxFrameHeightItem;
-    mppLocalPoolDefaults[SDRATTR_TEXT_MINFRAMEWIDTH -SDRATTR_START]=new SdrTextMinFrameWidthItem;
-    mppLocalPoolDefaults[SDRATTR_TEXT_MAXFRAMEWIDTH -SDRATTR_START]=new SdrTextMaxFrameWidthItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_MAXFRAMEHEIGHT    -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT, 0);
+    mppLocalPoolDefaults[SDRATTR_TEXT_MINFRAMEWIDTH -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, 0);
+    mppLocalPoolDefaults[SDRATTR_TEXT_MAXFRAMEWIDTH -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH, 0);
     mppLocalPoolDefaults[SDRATTR_TEXT_AUTOGROWWIDTH -SDRATTR_START]=new SdrTextAutoGrowWidthItem;
     mppLocalPoolDefaults[SDRATTR_TEXT_HORZADJUST        -SDRATTR_START]=new SdrTextHorzAdjustItem;
     mppLocalPoolDefaults[SDRATTR_TEXT_ANIKIND           -SDRATTR_START]=new SdrTextAniKindItem;

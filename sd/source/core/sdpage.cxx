@@ -415,9 +415,9 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
 
             SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
             if( bVertical )
-                aTempAttr.Put( SdrTextMinFrameWidthItem( rRect.GetSize().Width() ) );
+                aTempAttr.Put( makeSdrTextMinFrameWidthItem( rRect.GetSize().Width() ) );
             else
-                aTempAttr.Put( SdrTextMinFrameHeightItem( rRect.GetSize().Height() ) );
+                aTempAttr.Put( makeSdrTextMinFrameHeightItem( rRect.GetSize().Height() ) );
 
             if (mbMaster)
             {
@@ -2238,7 +2238,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                 {
                     // switch off AutoGrowHeight, set new MinHeight
                     SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                    SdrTextMinFrameHeightItem aMinHeight( aRect.GetSize().Height() );
+                    SdrMetricItem aMinHeight( makeSdrTextMinFrameHeightItem(aRect.GetSize().Height()) );
                     aTempAttr.Put( aMinHeight );
                     aTempAttr.Put( SdrTextAutoGrowHeightItem(false) );
                     pTextObject->SetMergedItemSet(aTempAttr);
@@ -2255,7 +2255,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                 {
                     // switch off AutoGrowWidth , set new MinWidth
                     SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                    SdrTextMinFrameWidthItem aMinWidth( aRect.GetSize().Width() );
+                    SdrMetricItem aMinWidth( makeSdrTextMinFrameWidthItem(aRect.GetSize().Width()) );
                     aTempAttr.Put( aMinWidth );
                     aTempAttr.Put( SdrTextAutoGrowWidthItem(false) );
                     pTextObject->SetMergedItemSet(aTempAttr);

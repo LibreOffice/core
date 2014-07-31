@@ -470,8 +470,8 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
     {
         // legend object
         Size aSize(pObj->GetLogicRect().GetSize());
-        rAttr.Put( SdrTextMinFrameHeightItem( aSize.Height() ) );
-        rAttr.Put( SdrTextMinFrameWidthItem( aSize.Width() ) );
+        rAttr.Put( makeSdrTextMinFrameHeightItem( aSize.Height() ) );
+        rAttr.Put( makeSdrTextMinFrameWidthItem( aSize.Width() ) );
         rAttr.Put( SdrTextAutoGrowHeightItem( true ) );
         rAttr.Put( SdrTextAutoGrowWidthItem( true ) );
 

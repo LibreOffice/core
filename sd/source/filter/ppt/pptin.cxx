@@ -2274,7 +2274,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 }
 
                 SfxItemSet aTempAttr( mpDoc->GetPool() );
-                SdrTextMinFrameHeightItem aMinHeight( pText->GetLogicRect().GetSize().Height() );
+                SdrMetricItem aMinHeight( makeSdrTextMinFrameHeightItem(pText->GetLogicRect().GetSize().Height()) );
                 aTempAttr.Put( aMinHeight );
                 SdrTextAutoGrowHeightItem aAutoGrowHeight( false );
                 aTempAttr.Put( aAutoGrowHeight );
