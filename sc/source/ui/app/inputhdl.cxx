@@ -1122,7 +1122,9 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
         pActiveView->ShowCursor();
 }
 
-static void lcl_CompleteFunction( EditView* pView, const OUString& rInsert, bool& rParInserted )
+namespace {
+
+void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInserted )
 {
     if (pView)
     {
@@ -1169,6 +1171,8 @@ static void lcl_CompleteFunction( EditView* pView, const OUString& rInsert, bool
     }
 }
 
+}
+
 void ScInputHandler::PasteFunctionData()
 {
     if (pFormulaData && miAutoPosFormula != pFormulaData->end())
@@ -1180,8 +1184,8 @@ void ScInputHandler::PasteFunctionData()
         bool bParInserted = false;
 
         DataChanging(); // Cannot be new
-        lcl_CompleteFunction( pTopView, aInsert, bParInserted );
-        lcl_CompleteFunction( pTableView, aInsert, bParInserted );
+        completeFunction( pTopView, aInsert, bParInserted );
+        completeFunction( pTableView, aInsert, bParInserted );
         DataChanged();
         ShowTipCursor();
 
