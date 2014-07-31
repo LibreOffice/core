@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Wed Jul 23 16:41:24 2014 -->
+<!-- Generated with glade 3.16.0 on Sun Jul 27 15:03:37 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
@@ -462,13 +462,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Draw Templates</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="filter_math">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Math Templates</property>
       </object>
     </child>
     <child>

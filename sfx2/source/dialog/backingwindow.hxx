@@ -101,6 +101,7 @@ class BackingWindow
     svt::AcceleratorExecute*        mpAccExec;
 
     void setupButton( PushButton* pButton );
+    void setupButton( MenuButton* pButton );
     //Template Manager
     void OnTemplateOpen ();
 
