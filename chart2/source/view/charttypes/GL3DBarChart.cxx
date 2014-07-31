@@ -193,7 +193,6 @@ private:
 private:
     glm::vec3 maStartPos;
     glm::vec3 maEndPos;
-    sal_Int32 mnSteps;
     bool mbExecuting;
     glm::vec3 maStep;
     glm::vec3 maStepDirection;
