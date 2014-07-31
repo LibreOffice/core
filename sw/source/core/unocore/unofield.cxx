@@ -29,6 +29,7 @@
 #include <cmdid.h>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <hints.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -2888,7 +2889,7 @@ void SAL_CALL SwXTextFieldTypes::refresh() throw (uno::RuntimeException, std::ex
         if (!IsValid())
             throw uno::RuntimeException();
         UnoActionContext aContext(GetDoc());
-        GetDoc()->UpdateDocStat();
+        GetDoc()->getIDocumentStatistics().UpdateDocStat( false, true );
         GetDoc()->getIDocumentFieldsAccess().UpdateFlds(0, false);
     }
     // call refresh listeners (without SolarMutex locked)

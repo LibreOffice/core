@@ -78,6 +78,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
 #include <pview.hxx>
@@ -199,7 +200,7 @@ void SwDocShell::DoFlushDocInfo()
         mpWrtShell->StartAllAction();
     }
 
-    mpDoc->DocInfoChgd();
+    mpDoc->getIDocumentStatistics().DocInfoChgd();
 
     if ( mpWrtShell ) {
         mpWrtShell->EndAllAction();
@@ -286,7 +287,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 // #i41679#
                 const bool bIsDocModified = mpDoc->IsModified();
 
-                mpDoc->DocInfoChgd( );
+                mpDoc->getIDocumentStatistics().DocInfoChgd( );
 
                 // #i41679#
                 if ( !bIsDocModified )

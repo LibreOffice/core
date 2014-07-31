@@ -33,6 +33,7 @@
 #include <docstat.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/unolingu.hxx>
@@ -323,7 +324,7 @@ SwCalc::SwCalc( SwDoc& rD )
 #error Did you adjust all hash values?
 #endif
 
-    const SwDocStat& rDocStat = rDoc.GetDocStat();
+    const SwDocStat& rDocStat = rDoc.getIDocumentStatistics().GetDocStat();
 
     SwSbxValue nVal;
     OUString sTmpStr;

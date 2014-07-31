@@ -30,6 +30,7 @@
 #include "docstat.hxx"
 #include "docsh.hxx"
 #include <doc.hxx>
+#include <IDocumentStatistics.hxx>
 #include "xmlimp.hxx"
 #include "xmlexp.hxx"
 
@@ -113,7 +114,7 @@ void SwXMLImport::SetStatistics(
     SvXMLImport::SetStatistics(i_rStats);
 
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( *this );
-    SwDocStat aDocStat( pDoc->GetDocStat() );
+    SwDocStat aDocStat( pDoc->getIDocumentStatistics().GetDocStat() );
 
     sal_uInt32 nTokens = 0;
 
@@ -139,7 +140,7 @@ void SwXMLImport::SetStatistics(
     }
 
     if( nTokens )
-        pDoc->SetDocStat( aDocStat );
+        pDoc->getIDocumentStatistics().SetDocStat( aDocStat );
 
     // set progress bar reference to #paragraphs. If not available,
     // use #pages*10, or guesstimate 250 paragraphs. Additionally

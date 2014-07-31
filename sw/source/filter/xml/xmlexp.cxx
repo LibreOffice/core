@@ -62,6 +62,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentStatistics.hxx>
+
 
 #include <pausethreadstarting.hxx>
 #include <drawdoc.hxx>
@@ -197,7 +199,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     {
         // Update doc stat, so that correct values are exported and
         // the progress works correctly.
-        pDoc->UpdateDocStat();
+        pDoc->getIDocumentStatistics().UpdateDocStat( false, true );
     }
     if( bShowProgress )
     {
@@ -223,7 +225,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             nRef += pDoc->GetTxtFmtColls()->size() - 1;
             nRef *= 2; // for the above styles, xmloff will increment by 2!
             // #i93174#: count all paragraphs for the progress bar
-            nRef += pDoc->GetUpdatedDocStat().nAllPara; // 1: only content, no autostyle
+            nRef += pDoc->getIDocumentStatistics().GetUpdatedDocStat( false, true ).nAllPara; // 1: only content, no autostyle
             pProgress->SetReference( nRef );
             pProgress->SetValue( 0 );
         }

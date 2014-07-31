@@ -197,6 +197,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/DocumentContentOperationsManager \
     sw/source/core/doc/DocumentRedlineManager \
     sw/source/core/doc/DocumentFieldsManager \
+    sw/source/core/doc/DocumentStatisticsManager \
     sw/source/core/doc/extinput \
     sw/source/core/doc/fmtcol \
     sw/source/core/doc/ftnidx \

@@ -32,6 +32,7 @@
 #include "layouter.hxx"
 #include "docstat.hxx"
 #include "swevent.hxx"
+#include <IDocumentStatistics.hxx>
 
 #include <sfx2/event.hxx>
 

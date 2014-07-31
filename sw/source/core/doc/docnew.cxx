@@ -99,6 +99,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <DocumentRedlineManager.hxx>
 #include <DocumentFieldsManager.hxx>
+#include <DocumentStatisticsManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -213,6 +214,7 @@ SwDoc::SwDoc()
     m_pDocumentOutlineNodesManager( new ::sw::DocumentOutlineNodesManager( *this ) ),
     m_pDocumentContentOperationsManager( new ::sw::DocumentContentOperationsManager( *this ) ),
     m_pDocumentFieldsManager( new ::sw::DocumentFieldsManager( *this ) ),
+    m_pDocumentStatisticsManager( new ::sw::DocumentStatisticsManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -235,7 +237,6 @@ SwDoc::SwDoc()
     mpEndNoteInfo( new SwEndNoteInfo ),
     mpLineNumberInfo( new SwLineNumberInfo ),
     mpFtnIdxs( new SwFtnIdxs ),
-    mpDocStat( new SwDocStat ),
     mpDocShell( 0 ),
     mpACEWord( 0 ),
     mpURLStateChgd( 0 ),
@@ -339,9 +340,6 @@ SwDoc::SwDoc()
 
     maOLEModifiedTimer.SetTimeout( 1000 );
     maOLEModifiedTimer.SetTimeoutHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
-
-    maStatsUpdateTimer.SetTimeout( 100 );
-    maStatsUpdateTimer.SetTimeoutHdl( LINK( this, SwDoc, DoIdleStatsUpdate ) );
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DBManager
@@ -447,7 +445,6 @@ SwDoc::~SwDoc()
     SetDefault(aCharFmt);
 
     getIDocumentTimerAccess().StopIdling();   // stop idle timer
-    maStatsUpdateTimer.Stop();
 
     delete mpUnoCallBack, mpUnoCallBack = 0;
     delete mpURLStateChgd;
@@ -620,7 +617,6 @@ SwDoc::~SwDoc()
     delete mpLineNumberInfo;
     delete mpFtnIdxs;
     delete mpTOXTypes;
-    delete mpDocStat;
     delete mpEmptyPageFmt;
     delete mpColumnContFmt;
     delete mpDfltCharFmt;

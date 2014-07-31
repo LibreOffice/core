@@ -23,7 +23,6 @@
 #include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <IDocumentStatistics.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentExternalData.hxx>
@@ -191,6 +190,7 @@ class IDocumentListsAccess;
 class IDocumentOutlineNodes;
 class IDocumentContentOperations;
 class IDocumentRedlineAccess;
+class IDocumentStatistics;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -212,6 +212,7 @@ namespace sw {
     class DocumentContentOperationsManager;
     class DocumentRedlineManager;
     class DocumentFieldsManager;
+    class DocumentStatisticsManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -250,7 +251,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentStylePoolAccess,
-    public IDocumentStatistics,
     public IDocumentState,
     public IDocumentLayoutAccess,
     public IDocumentExternalData
@@ -269,7 +269,6 @@ class SW_DLLPUBLIC SwDoc :
        Timer should not be members of the model
     */
     Timer       maOLEModifiedTimer;      //< Timer for update modified OLE-Objecs
-    Timer       maStatsUpdateTimer;      //< Timer for asynchronous stats calculation
     SwDBData    maDBData;                //< database descriptor
     OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
     boost::ptr_vector< boost::nullable<OUString> > maPatternNms;          // Array for names of document-templates
@@ -292,6 +291,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentOutlineNodesManager > m_pDocumentOutlineNodesManager;
     const ::boost::scoped_ptr< ::sw::DocumentContentOperationsManager > m_pDocumentContentOperationsManager;
     const ::boost::scoped_ptr< ::sw::DocumentFieldsManager > m_pDocumentFieldsManager;
+    const ::boost::scoped_ptr< ::sw::DocumentStatisticsManager > m_pDocumentStatisticsManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -324,7 +324,6 @@ class SW_DLLPUBLIC SwDoc :
     SwEndNoteInfo   *mpEndNoteInfo;
     SwLineNumberInfo*mpLineNumberInfo;
     SwFtnIdxs       *mpFtnIdxs;
-    SwDocStat       *mpDocStat;          //< Statistics information.
 
     SwDocShell      *mpDocShell;         //< Ptr to SfxDocShell of Doc.
     SfxObjectShellLock mxTmpDocShell;    //< A temporary shell that is used to copy OLE-Nodes
@@ -566,11 +565,11 @@ public:
     virtual void SetLineNumberInfo(const SwLineNumberInfo& rInfo);
 
     // IDocumentStatistics
-    virtual void DocInfoChgd() SAL_OVERRIDE;
-    virtual const SwDocStat &GetDocStat() const SAL_OVERRIDE;
-    virtual const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync = false, bool bFields = true) SAL_OVERRIDE;
-    virtual void SetDocStat(const SwDocStat& rStat) SAL_OVERRIDE;
-    virtual void UpdateDocStat(bool bCompleteAsync = false, bool bFields = true) SAL_OVERRIDE;
+    IDocumentStatistics const & getIDocumentStatistics() const;
+    IDocumentStatistics & getIDocumentStatistics();
+
+    ::sw::DocumentStatisticsManager const & GetDocumentStatisticsManager() const;
+    ::sw::DocumentStatisticsManager & GetDocumentStatisticsManager();
 
     // IDocumentState
     virtual void SetModified() SAL_OVERRIDE;
@@ -1690,16 +1689,6 @@ private:
     // Copies master footer to left / first one, if necessary - used by ChgPageDesc().
     void CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc *pDesc, bool bLeft, bool bFirst);
 
-    /** continue computing a chunk of document statistics
-      * \param nChars  number of characters to count before exiting
-      * \param bFields if stat. fields should be updated
-      *
-      * returns false when there is no more to calculate
-      */
-    bool IncrementalDocStatCalculate(long nChars, bool bFields = true);
-
-    // Our own 'StatsUpdateTimer' calls the following method
-    DECL_LINK( DoIdleStatsUpdate, Timer * );
 };
 
 // This method is called in Dtor of SwDoc and deletes cache of ContourObjects.

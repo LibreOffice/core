@@ -1,0 +1,246 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include <DocumentStatisticsManager.hxx>
+#include <doc.hxx>
+#include <fldbas.hxx>
+#include <docsh.hxx>
+#include <IDocumentFieldsAccess.hxx>
+#include <view.hxx>
+#include <ndtxt.hxx>
+#include <switerator.hxx>
+#include <fmtfld.hxx>
+#include <rootfrm.hxx>
+#include <docufld.hxx>
+#include <docstat.hxx>
+#include <vector>
+#include <viewsh.hxx>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+using namespace ::com::sun::star;
+
+namespace
+{
+    class LockAllViews
+    {
+        std::vector<SwViewShell*> m_aViewWasUnLocked;
+        SwViewShell* m_pViewShell;
+    public:
+        LockAllViews(SwViewShell *pViewShell)
+            : m_pViewShell(pViewShell)
+        {
+            if (!m_pViewShell)
+                return;
+            SwViewShell *pSh = m_pViewShell;
+            do
+            {
+                if (!pSh->IsViewLocked())
+                {
+                    m_aViewWasUnLocked.push_back(pSh);
+                    pSh->LockView(true);
+                }
+                pSh = (SwViewShell*)pSh->GetNext();
+            } while (pSh != m_pViewShell);
+        }
+        ~LockAllViews()
+        {
+            for (std::vector<SwViewShell*>::iterator aI = m_aViewWasUnLocked.begin(); aI != m_aViewWasUnLocked.end(); ++aI)
+            {
+                SwViewShell *pSh = *aI;
+                pSh->LockView(false);
+            }
+        }
+    };
+}
+
+namespace sw
+{
+
+DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rSwdoc( i_rSwdoc ),
+                                                                          mpDocStat( new SwDocStat )
+{
+    maStatsUpdateTimer.SetTimeout( 100 );
+    maStatsUpdateTimer.SetTimeoutHdl( LINK( this, DocumentStatisticsManager, DoIdleStatsUpdate ) );
+}
+
+void DocumentStatisticsManager::DocInfoChgd( )
+{
+    m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
+    m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
+    m_rSwdoc.SetModified();
+}
+
+const SwDocStat& DocumentStatisticsManager::GetDocStat() const
+{
+    return *mpDocStat;
+}
+
+SwDocStat& DocumentStatisticsManager::GetDocStat()
+{
+    return *mpDocStat;
+}
+
+const SwDocStat& DocumentStatisticsManager::GetUpdatedDocStat( bool bCompleteAsync, bool bFields )
+{
+    if( mpDocStat->bModified )
+    {
+        UpdateDocStat( bCompleteAsync, bFields );
+    }
+    return *mpDocStat;
+}
+
+void DocumentStatisticsManager::SetDocStat( const SwDocStat& rStat )
+{
+    *mpDocStat = rStat;
+}
+
+void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields )
+{
+    if( mpDocStat->bModified )
+    {
+        if (!bCompleteAsync)
+        {
+            while (IncrementalDocStatCalculate(
+                        ::std::numeric_limits<long>::max(), bFields)) {}
+            maStatsUpdateTimer.Stop();
+        }
+        else if (IncrementalDocStatCalculate(5000, bFields))
+            maStatsUpdateTimer.Start();
+    }
+}
+
+// returns true while there is more to do
+bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bFields)
+{
+    mpDocStat->Reset();
+    mpDocStat->nPara = 0; // default is 1!
+    SwNode* pNd;
+
+    // This is the inner loop - at least while the paras are dirty.
+    for( sal_uLong i = m_rSwdoc.GetNodes().Count(); i > 0 && nChars > 0; )
+    {
+        switch( ( pNd = m_rSwdoc.GetNodes()[ --i ])->GetNodeType() )
+        {
+        case ND_TEXTNODE:
+        {
+            long const nOldChars(mpDocStat->nChar);
+            SwTxtNode *pTxt = static_cast< SwTxtNode * >( pNd );
+            if (pTxt->CountWords(*mpDocStat, 0, pTxt->GetTxt().getLength()))
+            {
+                nChars -= (mpDocStat->nChar - nOldChars);
+            }
+            break;
+        }
+        case ND_TABLENODE:      ++mpDocStat->nTbl;   break;
+        case ND_GRFNODE:        ++mpDocStat->nGrf;   break;
+        case ND_OLENODE:        ++mpDocStat->nOLE;   break;
+        case ND_SECTIONNODE:    break;
+        }
+    }
+
+    // #i93174#: notes contain paragraphs that are not nodes
+    {
+        SwFieldType * const pPostits( m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD) );
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
+        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
+        {
+            if (pFmtFld->IsFldInDoc())
+            {
+                SwPostItField const * const pField(
+                    static_cast<SwPostItField const*>(pFmtFld->GetField()));
+                mpDocStat->nAllPara += pField->GetNumberOfParagraphs();
+            }
+        }
+    }
+
+    mpDocStat->nPage     = m_rSwdoc.GetCurrentLayout() ? m_rSwdoc.GetCurrentLayout()->GetPageNum() : 0;
+    mpDocStat->bModified = false;
+
+    com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
+    sal_Int32 n=0;
+    aStat[n].Name = "TableCount";
+    aStat[n++].Value <<= (sal_Int32)mpDocStat->nTbl;
+    aStat[n].Name = "ImageCount";
+    aStat[n++].Value <<= (sal_Int32)mpDocStat->nGrf;
+    aStat[n].Name = "ObjectCount";
+    aStat[n++].Value <<= (sal_Int32)mpDocStat->nOLE;
+    if ( mpDocStat->nPage )
+    {
+        aStat[n].Name = "PageCount";
+        aStat[n++].Value <<= (sal_Int32)mpDocStat->nPage;
+    }
+    aStat[n].Name = "ParagraphCount";
+    aStat[n++].Value <<= (sal_Int32)mpDocStat->nPara;
+    aStat[n].Name = "WordCount";
+    aStat[n++].Value <<= (sal_Int32)mpDocStat->nWord;
+    aStat[n].Name = "CharacterCount";
+    aStat[n++].Value <<= (sal_Int32)mpDocStat->nChar;
+    aStat[n].Name = "NonWhitespaceCharacterCount";
+    aStat[n++].Value <<= (sal_Int32)mpDocStat->nCharExcludingSpaces;
+
+    // For e.g. autotext documents there is no pSwgInfo (#i79945)
+    SwDocShell* pObjShell(m_rSwdoc.GetDocShell());
+    if (pObjShell)
+    {
+        const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                pObjShell->GetModel(), uno::UNO_QUERY_THROW);
+        const uno::Reference<document::XDocumentProperties> xDocProps(
+                xDPS->getDocumentProperties());
+        // #i96786#: do not set modified flag when updating statistics
+        const bool bDocWasModified( m_rSwdoc.IsModified() );
+        const ModifyBlocker_Impl b(pObjShell);
+        // rhbz#1081176: don't jump to cursor pos because of (temporary)
+        // activation of modified flag triggering move to input position
+        LockAllViews aViewGuard((SwViewShell*)pObjShell->GetWrtShell());
+        xDocProps->setDocumentStatistics(aStat);
+        if (!bDocWasModified)
+        {
+            m_rSwdoc.ResetModified();
+        }
+    }
+
+    // optionally update stat. fields
+    if (bFields)
+    {
+        SwFieldType *pType = m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType(RES_DOCSTATFLD);
+        pType->UpdateFlds();
+    }
+
+    return nChars <= 0;
+}
+
+IMPL_LINK( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer )
+{
+    (void)pTimer;
+    if (IncrementalDocStatCalculate(32000))
+        maStatsUpdateTimer.Start();
+
+    SwView* pView = m_rSwdoc.GetDocShell() ? m_rSwdoc.GetDocShell()->GetView() : NULL;
+    if( pView )
+        pView->UpdateDocStats();
+    return 0;
+}
+
+DocumentStatisticsManager::~DocumentStatisticsManager()
+{
+    maStatsUpdateTimer.Stop();
+    delete mpDocStat;
+}
+
+}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

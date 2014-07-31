@@ -73,6 +73,7 @@
 #include <fmtpdsc.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -731,7 +732,7 @@ SwDocStatFieldType::SwDocStatFieldType(SwDoc* pDocument)
 OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
 {
     sal_uInt32 nVal = 0;
-    const SwDocStat& rDStat = pDoc->GetDocStat();
+    const SwDocStat& rDStat = pDoc->getIDocumentStatistics().GetDocStat();
     switch( nSubType )
     {
         case DS_TBL:  nVal = rDStat.nTbl;   break;

@@ -81,6 +81,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <basesh.hxx>
@@ -1345,7 +1346,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 SwDocStat documentStats;
                 {
                     rShell.CountWords(selectionStats);
-                    documentStats = rShell.GetDoc()->GetUpdatedDocStat( true /* complete-async */, false /* don't update fields */ );
+                    documentStats = rShell.GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( true /* complete-async */, false /* don't update fields */ );
                 }
 
                 OUString wordCount(SW_RES(selectionStats.nWord ?

@@ -34,6 +34,7 @@
 #include "doc.hxx"
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include "docsh.hxx"
 #include "docstat.hxx"
 #include "docufld.hxx"
@@ -183,7 +184,7 @@ void SwDocTest::testFileNameFields()
 //motivation
 void SwDocTest::testDocStat()
 {
-    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);
+    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->getIDocumentStatistics().GetDocStat().nChar == 0);
 
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
@@ -191,14 +192,14 @@ void SwDocTest::testDocStat()
     OUString sText("Hello World");
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sText);
 
-    CPPUNIT_ASSERT_MESSAGE("Should still be non-updated 0 count", m_pDoc->GetDocStat().nChar == 0);
+    CPPUNIT_ASSERT_MESSAGE("Should still be non-updated 0 count", m_pDoc->getIDocumentStatistics().GetDocStat().nChar == 0);
 
-    SwDocStat aDocStat = m_pDoc->GetUpdatedDocStat();
+    SwDocStat aDocStat = m_pDoc->getIDocumentStatistics().GetUpdatedDocStat( false, true );
     sal_uLong nLen = static_cast<sal_uLong>(sText.getLength());
 
     CPPUNIT_ASSERT_MESSAGE("Should now have updated count", aDocStat.nChar == nLen);
 
-    CPPUNIT_ASSERT_MESSAGE("And cache is updated too", m_pDoc->GetDocStat().nChar == nLen);
+    CPPUNIT_ASSERT_MESSAGE("And cache is updated too", m_pDoc->getIDocumentStatistics().GetDocStat().nChar == nLen);
 }
 
 //For UI character counts we should follow UAX#29 and display the user
@@ -789,7 +790,7 @@ void SwDocTest::testSwScanner()
 //See https://bugs.libreoffice.org/show_bug.cgi?id=40599
 void SwDocTest::testGraphicAnchorDeletion()
 {
-    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);
+    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->getIDocumentStatistics().GetDocStat().nChar == 0);
 
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);

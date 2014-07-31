@@ -82,6 +82,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
@@ -850,7 +851,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
 
         if( bUpdateDocStat )
         {
-            pDoc->UpdateDocStat();
+            pDoc->getIDocumentStatistics().UpdateDocStat( false, true );
         }
     }
 

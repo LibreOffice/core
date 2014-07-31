@@ -30,6 +30,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <DocumentRedlineManager.hxx>
 #include <DocumentFieldsManager.hxx>
+#include <DocumentStatisticsManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -406,6 +407,27 @@ IDocumentFieldsAccess & SwDoc::getIDocumentFieldsAccess()
     return *m_pDocumentFieldsManager;
 }
 
+//IDocumentStatistics
+IDocumentStatistics const & SwDoc::getIDocumentStatistics() const
+{
+    return *m_pDocumentStatisticsManager;
+}
+
+IDocumentStatistics & SwDoc::getIDocumentStatistics()
+{
+    return *m_pDocumentStatisticsManager;
+}
+
+::sw::DocumentStatisticsManager const & SwDoc::GetDocumentStatisticsManager() const
+{
+    return *m_pDocumentStatisticsManager;
+}
+
+::sw::DocumentStatisticsManager & SwDoc::GetDocumentStatisticsManager()
+{
+    return *m_pDocumentStatisticsManager;
+}
+
 /* Implementations the next Interface here */
 
 /*
@@ -420,27 +442,6 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
         SetModified();
     }
     getIDocumentFieldsAccess().GetSysFldType(RES_DBNAMEFLD)->UpdateFlds();
-}
-
-
-
-void SwDoc::SetDocStat( const SwDocStat& rStat )
-{
-    *mpDocStat = rStat;
-}
-
-const SwDocStat& SwDoc::GetDocStat() const
-{
-    return *mpDocStat;
-}
-
-const SwDocStat& SwDoc::GetUpdatedDocStat( bool bCompleteAsync, bool bFields )
-{
-    if( mpDocStat->bModified )
-    {
-        UpdateDocStat( bCompleteAsync, bFields );
-    }
-    return *mpDocStat;
 }
 
 struct _PostItFld : public _SetGetExpFld
@@ -955,174 +956,6 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // thus we are done here.
 }
 
-namespace
-{
-    class LockAllViews
-    {
-        std::vector<SwViewShell*> m_aViewWasUnLocked;
-        SwViewShell* m_pViewShell;
-    public:
-        LockAllViews(SwViewShell *pViewShell)
-            : m_pViewShell(pViewShell)
-        {
-            if (!m_pViewShell)
-                return;
-            SwViewShell *pSh = m_pViewShell;
-            do
-            {
-                if (!pSh->IsViewLocked())
-                {
-                    m_aViewWasUnLocked.push_back(pSh);
-                    pSh->LockView(true);
-                }
-                pSh = (SwViewShell*)pSh->GetNext();
-            } while (pSh != m_pViewShell);
-        }
-        ~LockAllViews()
-        {
-            for (std::vector<SwViewShell*>::iterator aI = m_aViewWasUnLocked.begin(); aI != m_aViewWasUnLocked.end(); ++aI)
-            {
-                SwViewShell *pSh = *aI;
-                pSh->LockView(false);
-            }
-        }
-    };
-}
-
-// returns true while there is more to do
-bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
-{
-    mpDocStat->Reset();
-    mpDocStat->nPara = 0; // default is 1!
-    SwNode* pNd;
-
-    // This is the inner loop - at least while the paras are dirty.
-    for( sal_uLong i = GetNodes().Count(); i > 0 && nChars > 0; )
-    {
-        switch( ( pNd = GetNodes()[ --i ])->GetNodeType() )
-        {
-        case ND_TEXTNODE:
-        {
-            long const nOldChars(mpDocStat->nChar);
-            SwTxtNode *pTxt = static_cast< SwTxtNode * >( pNd );
-            if (pTxt->CountWords(*mpDocStat, 0, pTxt->GetTxt().getLength()))
-            {
-                nChars -= (mpDocStat->nChar - nOldChars);
-            }
-            break;
-        }
-        case ND_TABLENODE:      ++mpDocStat->nTbl;   break;
-        case ND_GRFNODE:        ++mpDocStat->nGrf;   break;
-        case ND_OLENODE:        ++mpDocStat->nOLE;   break;
-        case ND_SECTIONNODE:    break;
-        }
-    }
-
-    // #i93174#: notes contain paragraphs that are not nodes
-    {
-        SwFieldType * const pPostits( getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD) );
-        SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
-        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
-        {
-            if (pFmtFld->IsFldInDoc())
-            {
-                SwPostItField const * const pField(
-                    static_cast<SwPostItField const*>(pFmtFld->GetField()));
-                mpDocStat->nAllPara += pField->GetNumberOfParagraphs();
-            }
-        }
-    }
-
-    mpDocStat->nPage     = GetCurrentLayout() ? GetCurrentLayout()->GetPageNum() : 0;
-    mpDocStat->bModified = false;
-
-    com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
-    sal_Int32 n=0;
-    aStat[n].Name = "TableCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nTbl;
-    aStat[n].Name = "ImageCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nGrf;
-    aStat[n].Name = "ObjectCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nOLE;
-    if ( mpDocStat->nPage )
-    {
-        aStat[n].Name = "PageCount";
-        aStat[n++].Value <<= (sal_Int32)mpDocStat->nPage;
-    }
-    aStat[n].Name = "ParagraphCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nPara;
-    aStat[n].Name = "WordCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nWord;
-    aStat[n].Name = "CharacterCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nChar;
-    aStat[n].Name = "NonWhitespaceCharacterCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nCharExcludingSpaces;
-
-    // For e.g. autotext documents there is no pSwgInfo (#i79945)
-    SwDocShell* pObjShell(GetDocShell());
-    if (pObjShell)
-    {
-        const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                pObjShell->GetModel(), uno::UNO_QUERY_THROW);
-        const uno::Reference<document::XDocumentProperties> xDocProps(
-                xDPS->getDocumentProperties());
-        // #i96786#: do not set modified flag when updating statistics
-        const bool bDocWasModified( IsModified() );
-        const ModifyBlocker_Impl b(pObjShell);
-        // rhbz#1081176: don't jump to cursor pos because of (temporary)
-        // activation of modified flag triggering move to input position
-        LockAllViews aViewGuard((SwViewShell*)pObjShell->GetWrtShell());
-        xDocProps->setDocumentStatistics(aStat);
-        if (!bDocWasModified)
-        {
-            ResetModified();
-        }
-    }
-
-    // optionally update stat. fields
-    if (bFields)
-    {
-        SwFieldType *pType = getIDocumentFieldsAccess().GetSysFldType(RES_DOCSTATFLD);
-        pType->UpdateFlds();
-    }
-
-    return nChars <= 0;
-}
-
-IMPL_LINK( SwDoc, DoIdleStatsUpdate, Timer *, pTimer )
-{
-    (void)pTimer;
-    if (IncrementalDocStatCalculate(32000))
-        maStatsUpdateTimer.Start();
-
-    SwView* pView = GetDocShell() ? GetDocShell()->GetView() : NULL;
-    if( pView )
-        pView->UpdateDocStats();
-    return 0;
-}
-
-void SwDoc::UpdateDocStat( bool bCompleteAsync, bool bFields )
-{
-    if( mpDocStat->bModified )
-    {
-        if (!bCompleteAsync)
-        {
-            while (IncrementalDocStatCalculate(
-                        ::std::numeric_limits<long>::max(), bFields)) {}
-            maStatsUpdateTimer.Stop();
-        }
-        else if (IncrementalDocStatCalculate(5000, bFields))
-            maStatsUpdateTimer.Start();
-    }
-}
-
-void SwDoc::DocInfoChgd( )
-{
-    getIDocumentFieldsAccess().GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
-    getIDocumentFieldsAccess().GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
-    SetModified();
-}
-
 /// @return the reference in the doc for the name
 const SwFmtRefMark* SwDoc::GetRefMark( const OUString& rName ) const
 {
@@ -1257,7 +1090,7 @@ void SwDoc::SetModified()
     //  Bit 1:  -> new state
     sal_IntPtr nCall = mbModified ? 3 : 2;
     mbModified = true;
-    mpDocStat->bModified = true;
+    GetDocumentStatisticsManager().GetDocStat().bModified = true;
     if( maOle2Link.IsSet() )
     {
         mbInCallModified = true;

@@ -58,6 +58,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <viewopt.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -339,7 +340,7 @@ static void WriteDop( WW8Export& rWrt )
     // DocStat-Felder benoetigt!)
     rDop.fWCFtnEdn = true; // because they are included in StarWriter
 
-    const SwDocStat& rDStat = rWrt.pDoc->GetDocStat();
+    const SwDocStat& rDStat = rWrt.pDoc->getIDocumentStatistics().GetDocStat();
     rDop.cWords = rDStat.nWord;
     rDop.cCh = rDStat.nChar;
     rDop.cPg = static_cast< sal_Int16 >(rDStat.nPage);

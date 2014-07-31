@@ -31,6 +31,7 @@
 #include <modcfg.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
+#include <IDocumentStatistics.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
@@ -117,7 +118,7 @@ void SwDocStatPage::Update()
 
     SwWait aWait( *pSh->GetDoc()->GetDocShell(), true );
     pSh->StartAction();
-    aDocStat = pSh->GetDoc()->GetUpdatedDocStat();
+    aDocStat = pSh->GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( false, true );
     pSh->EndAction();
 
     SetData(aDocStat);

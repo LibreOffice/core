@@ -34,6 +34,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>
@@ -430,14 +431,14 @@ OUString SwEditShell::GetCurWord()
 void SwEditShell::UpdateDocStat( )
 {
     StartAllAction();
-    GetDoc()->UpdateDocStat( );
+    GetDoc()->getIDocumentStatistics().UpdateDocStat( false, true );
     EndAllAction();
 }
 
 const SwDocStat& SwEditShell::GetUpdatedDocStat()
 {
     StartAllAction();
-    const SwDocStat &rRet = GetDoc()->GetUpdatedDocStat();
+    const SwDocStat &rRet = GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( false, true );
     EndAllAction();
     return rRet;
 }

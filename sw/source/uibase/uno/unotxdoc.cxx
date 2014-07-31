@@ -101,6 +101,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
@@ -2015,7 +2016,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case  WID_DOC_PARA_COUNT     :
         case  WID_DOC_WORD_COUNT     :
         {
-            const SwDocStat& rStat(pDocShell->GetDoc()->GetUpdatedDocStat());
+            const SwDocStat& rStat(pDocShell->GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( false, true ));
             sal_Int32 nValue;
             switch(pEntry->nWID)
             {

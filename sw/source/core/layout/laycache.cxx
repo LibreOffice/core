@@ -19,6 +19,7 @@
 
 #include <editeng/formatbreakitem.hxx>
 #include <doc.hxx>
+#include <IDocumentStatistics.hxx>
 #include <docstat.hxx>
 #include <docary.hxx>
 #include <fmtpdsc.hxx>
@@ -526,10 +527,10 @@ sal_uLong SwLayHelper::CalcPageCount()
     }
     else
     {
-        nPgCount = pDoc->GetDocStat().nPage;
+        nPgCount = pDoc->getIDocumentStatistics().GetDocStat().nPage;
         if ( nPgCount <= 10 ) // no page insertion for less than 10 pages
             nPgCount = 0;
-        sal_uLong nNdCount = pDoc->GetDocStat().nPara;
+        sal_uLong nNdCount = pDoc->getIDocumentStatistics().GetDocStat().nPara;
         if ( nNdCount <= 1 )
         {
             //Estimates the number of paragraphs.

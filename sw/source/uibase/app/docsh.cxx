@@ -74,6 +74,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentStatistics.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
 #include <pview.hxx>
@@ -606,7 +607,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     // #i76360# Update document statistics
-    mpDoc->UpdateDocStat();
+    mpDoc->getIDocumentStatistics().UpdateDocStat( false, true );
 
     CalcLayoutForOLEObjects();  // format for OLE objets
     // #i62875#
