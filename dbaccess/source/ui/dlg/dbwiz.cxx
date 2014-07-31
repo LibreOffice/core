@@ -68,7 +68,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
                                ,const Reference< XComponentContext >& _rxORB
                                ,const ::com::sun::star::uno::Any& _aDataSourceName
                                )
-    :OWizardMachine(_pParent, ModuleRes(DLG_DATABASE_TYPE_CHANGE), WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP )
+    :OWizardMachine(_pParent, WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP )
     ,m_pOutSet(NULL)
     ,m_bResetting(false)
     ,m_bApplied(false)
@@ -98,7 +98,6 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
     m_pCollection = pCollectionItem->getCollection();
 
-    FreeResource();
     ActivatePage();
 }
 
@@ -289,6 +288,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
         static_cast<OGenericAdministrationPage*>(pPage)->SetServiceFactory( m_pImpl->getORB() );
         static_cast<OGenericAdministrationPage*>(pPage)->SetAdminDialog(this,this);
         pPage->SetText(ModuleRes(nStringId));
+        setTitleBase(ModuleRes(STR_DATABASE_TYPE_CHANGE));
         defaultButton( _nState == START_PAGE ? WZB_NEXT : WZB_FINISH );
         enableButtons( WZB_FINISH, _nState == START_PAGE ? sal_False : sal_True);
         pPage->Show();
