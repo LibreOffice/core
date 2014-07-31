@@ -42,12 +42,27 @@ public:
 
     TiledRenderingTest() {}
 
-    void testOverlay();
+    // Currently it isn't possible to do multiple startup/shutdown
+    // cycle of LOK in a single process -- hence we run all our tests
+    // as one test, which simply carries out the individual test
+    // components on the one Office instance that we retrieve.
+    void runAllTests();
+
+    void testOverlay( Office* pOffice );
 
     CPPUNIT_TEST_SUITE(TiledRenderingTest);
-    CPPUNIT_TEST(testOverlay);
+    CPPUNIT_TEST(runAllTests);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void TiledRenderingTest::runAllTests()
+{
+    scoped_ptr< Office > pOffice( lok_cpp_init(
+                                      m_sLOPath.c_str() ) );
+    CPPUNIT_ASSERT( pOffice.get() );
+
+    testOverlay( pOffice.get() );
+}
 
 // Our dumped .png files end up in
 // workdir/CppunitTest/libreofficekit_tiledrendering.test.core
@@ -66,7 +81,7 @@ static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
     sOutput.Close();
 }
 
-void TiledRenderingTest::testOverlay()
+void TiledRenderingTest::testOverlay( Office* pOffice )
 {
     const string sDocPath = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/test1.odt";
     const string sLockFile = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/.~lock.test1.odt#";
@@ -76,10 +91,6 @@ void TiledRenderingTest::testOverlay()
     // test it's entirely possible that an unwanted lock file will remain.
     // Hence forcefully remove it here.
     remove( sLockFile.c_str() );
-
-    scoped_ptr< Office > pOffice( lok_cpp_init(
-                                      m_sLOPath.c_str() ) );
-    assert( pOffice.get() );
 
     scoped_ptr< Document> pDocument( pOffice->documentLoad(
                                          sDocPath.c_str() ) );
