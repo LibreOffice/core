@@ -2664,8 +2664,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     //  ausfuehren
 
     ScDocument* pUndoDoc = NULL;
-    ScDocument* pRefUndoDoc = NULL;
-    ScRefUndoData* pUndoData = NULL;
+
     if (bRecord)
     {
         bool bWholeCols = ( nStartRow == 0 && nEndRow == MAXROW );
@@ -2679,8 +2678,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         {
             rDoc.CopyToDocument( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
                                     nUndoFlags, false, pUndoDoc );
-//          pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-//          pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, false, false );
         }
 
         if ( nDestTab != nStartTab )
@@ -2688,9 +2685,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         rDoc.CopyToDocument( nDestCol, nDestRow, nDestTab,
                                     nDestEndCol, nDestEndRow, nDestEndTab,
                                     nUndoFlags, false, pUndoDoc );
-
-//      pUndoData = new ScRefUndoData( &rDoc );
-
         rDoc.BeginDrawUndo();
     }
 
@@ -2712,7 +2706,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                     nUndoEndCol,nUndoEndRow,nDestEndTab,
                                     HASATTR_MERGED | HASATTR_OVERLAPPED ))
             {
-                rDoc.CopyFromClip( rSource, aSourceMark, IDF_ALL, pRefUndoDoc, pClipDoc );
+                rDoc.CopyFromClip( rSource, aSourceMark, IDF_ALL, NULL, pClipDoc );
                 for (nTab=nStartTab; nTab<=nEndTab; nTab++)
                 {
                     SCCOL nTmpEndCol = nEndCol;
@@ -2725,8 +2719,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                     rDocShell.ErrorMessage(STR_MSSG_MOVEBLOCKTO_0);
 
                 delete pUndoDoc;
-                delete pRefUndoDoc;
-                delete pUndoData;
                 delete pClipDoc;
                 return false;
             }
@@ -2762,28 +2754,16 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         clipdoc does not contain a drawing layer.*/
     if ( pClipDoc->GetDrawLayer() )
         rDoc.CopyFromClip( aPasteDest, aDestMark, IDF_OBJECTS,
-                            pRefUndoDoc, pClipDoc, true, false, bIncludeFiltered );
+                           NULL, pClipDoc, true, false, bIncludeFiltered );
 
     if (bRecord)
     {
-        if (pRefUndoDoc)
-        {
-                //  alle Tabellen anlegen, damit Formeln kopiert werden koennen:
-            pUndoDoc->AddUndoTab( 0, nTabCount-1, false, false );
-
-            pRefUndoDoc->DeleteArea( nDestCol, nDestRow, nDestEndCol, nDestEndRow, aSourceMark, IDF_ALL );
-            //  kopieren mit bColRowFlags=sal_False (#54194#)
-            pRefUndoDoc->CopyToDocument( 0, 0, 0, MAXCOL, MAXROW, MAXTAB,
-                                            IDF_FORMULA, false, pUndoDoc, NULL, false );
-            delete pRefUndoDoc;
-        }
-
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoDragDrop( &rDocShell, ScRange(
                                     nStartCol, nStartRow, nStartTab,
                                     nOldEndCol, nOldEndRow, nEndTab ),
                                 ScAddress( nDestCol, nDestRow, nDestTab ),
-                                bCut, pUndoDoc, pUndoData, bScenariosAdded ) );
+                                bCut, pUndoDoc, NULL, bScenariosAdded ) );
     }
 
     SCCOL nDestPaintEndCol = nDestEndCol;
