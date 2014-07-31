@@ -42,6 +42,7 @@
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
+#include <com/sun/star/ucb/AuthenticationFallbackRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/InteractiveLockingLockedException.hpp>
 #include <com/sun/star/ucb/InteractiveLockingNotLockedException.hpp>
@@ -829,6 +830,14 @@ UUIInteractionHelper::handleRequest_impl(
 
         if (!bObtainErrorStringOnly)
         {
+            ucb::AuthenticationFallbackRequest anAuthFallbackRequest;
+            if ( aAnyRequest >>= anAuthFallbackRequest )
+            {
+                handleAuthFallbackRequest( anAuthFallbackRequest.instructions,
+                        anAuthFallbackRequest.url, rRequest->getContinuations() );
+                return true;
+            }
+
             if ( handleAuthenticationRequest( rRequest ) )
                 return true;
 
