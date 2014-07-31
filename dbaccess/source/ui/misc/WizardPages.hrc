@@ -22,11 +22,6 @@
 #define LB_NEW_COLUMN_NAMES     2
 
 #define PB_AUTO                 5
-#define PB_OK                   6
-#define PB_CANCEL               7
-#define PB_HELP                 8
-#define PB_NEXT                 9
-#define PB_PREV                 10
 #define IB_COLUMN_UP                    12
 #define IB_COLUMN_DOWN                  13
 #define IB_COLUMN_UP_RIGHT              14
