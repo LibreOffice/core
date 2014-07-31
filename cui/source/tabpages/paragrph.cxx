@@ -51,6 +51,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
+#include <boost/scoped_ptr.hpp>
 
 static const sal_uInt16 pStdRanges[] =
 {
@@ -383,7 +384,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                             *rOutSet, SID_ATTR_PARA_REGISTER);
         if (!pBoolItem)
             return bModified;
-        SfxBoolItem* pRegItem = (SfxBoolItem*)pBoolItem->Clone();
+        boost::scoped_ptr<SfxBoolItem> pRegItem((SfxBoolItem*)pBoolItem->Clone());
         sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_REGISTER );
         bool bSet = pRegItem->GetValue();
 
@@ -395,7 +396,6 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         }
         else if ( SFX_ITEM_DEFAULT == GetItemSet().GetItemState( _nWhich, false ) )
             rOutSet->ClearItem(_nWhich);
-        delete pRegItem;
     }
 
     return bModified;
@@ -2155,29 +2155,26 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
     SfxItemPool* pPool = rSet->GetPool();
     if (m_pScriptSpaceCB->IsEnabled() && m_pScriptSpaceCB->IsValueChangedFromSaved())
     {
-        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet->Get(
-            pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone();
+        boost::scoped_ptr<SfxBoolItem> pNewItem((SfxBoolItem*)rSet->Get(
+            pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone());
         pNewItem->SetValue(m_pScriptSpaceCB->IsChecked());
         rSet->Put(*pNewItem);
-        delete pNewItem;
         bRet = true;
     }
     if (m_pHangingPunctCB->IsEnabled() && m_pHangingPunctCB->IsValueChangedFromSaved())
     {
-        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet->Get(
-            pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone();
+        boost::scoped_ptr<SfxBoolItem> pNewItem((SfxBoolItem*)rSet->Get(
+            pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone());
         pNewItem->SetValue(m_pHangingPunctCB->IsChecked());
         rSet->Put(*pNewItem);
-        delete pNewItem;
         bRet = true;
     }
     if (m_pForbiddenRulesCB->IsEnabled() && m_pForbiddenRulesCB->IsValueChangedFromSaved())
     {
-        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet->Get(
-            pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone();
+        boost::scoped_ptr<SfxBoolItem> pNewItem((SfxBoolItem*)rSet->Get(
+            pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone());
         pNewItem->SetValue(m_pForbiddenRulesCB->IsChecked());
         rSet->Put(*pNewItem);
-        delete pNewItem;
         bRet = true;
     }
     return bRet;
