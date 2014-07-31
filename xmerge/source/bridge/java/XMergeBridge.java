@@ -116,7 +116,7 @@ public class XMergeBridge {
 
     String getFileName(String origName)
     {
-        String name=null;
+        String name;
         if (origName !=null)
         {
         if(origName.equalsIgnoreCase(""))
@@ -473,7 +473,7 @@ public class XMergeBridge {
                      URI uri=new URI(sURL);
                      String  newFileName= getPath(uri);
 
-                     File newFile=null;
+                     File newFile;
                      if (newFileName.lastIndexOf(".")!=-1){
                          newFile =new File(newFileName.substring(0,newFileName.lastIndexOf("."))+String.valueOf(i)+newFileName.substring(newFileName.lastIndexOf(".")));
                      }
