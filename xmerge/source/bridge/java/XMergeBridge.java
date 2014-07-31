@@ -301,20 +301,19 @@ public class XMergeBridge {
     }
 
     public String needsMask(String origString){
-        if (origString.indexOf("&")!=-1){
-        origString=replace(origString,"&","&amp;");
+        if (origString.contains("&")) {
+            origString = origString.replace((CharSequence) "&",(CharSequence) "&amp;");
         }
-         if (origString.indexOf("\"")!=-1){
-        origString=replace(origString,"\"","&quot;");
+        if (origString.contains("\"")) {
+            origString = origString.replace((CharSequence) "\"",(CharSequence) "&quot;");
         }
-        if (origString.indexOf("<")!=-1){
-        origString=replace(origString,"<","&lt;");
+        if (origString.contains("<")) {
+            origString = origString.replace((CharSequence) "<",(CharSequence) "&lt;");
         }
-        if (origString.indexOf(">")!=-1){
-        origString=replace(origString,">","&gt;");
+        if (origString.contains(">")) {
+            origString = origString.replace((CharSequence) ">",(CharSequence) "&gt;");
         }
         return origString;
-
     }
 
 
@@ -545,7 +544,7 @@ public class XMergeBridge {
         private String getPath(URI uri){
         String path = uri.getPath();
         String opSys=System.getProperty("os.name");
-        if(opSys.indexOf("Windows")!=-1){
+        if(opSys.contains("Windows")){
         path= path.replace('/','\\');
         path = path.substring(1);
         }
