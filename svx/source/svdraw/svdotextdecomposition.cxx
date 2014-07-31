@@ -764,35 +764,33 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
         return;
 
     // trying to copy text in obj 1
-    SdrText* pText = getActiveText();
+    //SdrText* pText = getActiveText();
 
-    if( pText!=NULL && pText->GetOutlinerParaObject() && pModel!=NULL)
-    {
-        Rectangle &aNextRect = pNextTextObj->aRect;
-        SdrOutliner& rOutliner = pNextTextObj->ImpGetDrawOutliner();
-        rOutliner.SetPaperSize(
-            Size(
-                aNextRect.Right()-aNextRect.Left(),
-                aNextRect.Bottom()-aNextRect.Top()
-                )
-         );
-        rOutliner.SetUpdateMode(true);
-        rOutliner.SetText(*pText->GetOutlinerParaObject());
-        Size aNewSize(rOutliner.CalcTextSize());
-        // create OutlinerParaObject for pNextTextObj
-        OutlinerParaObject* pNewParaObject=rOutliner.CreateParaObject();
-        rOutliner.Clear();
+    Rectangle &aNextRect = pNextTextObj->aRect;
+    SdrOutliner& rOutliner = pNextTextObj->ImpGetDrawOutliner();
+    rOutliner.SetPaperSize(
+        Size(
+            aNextRect.Right()-aNextRect.Left(),
+            aNextRect.Bottom()-aNextRect.Top()
+            )
+     );
+    rOutliner.SetUpdateMode(true);
+    rOutliner.SetText(*mpOverflowingText);  // XXX: copies overflown text
+    Size aNewSize(rOutliner.CalcTextSize());
+    // create OutlinerParaObject for pNextTextObj
+    OutlinerParaObject* pNewParaObject=rOutliner.CreateParaObject();
+    rOutliner.Clear();
 
-        aNewSize.Width()++; // because of possible rounding errors
-        aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
-        aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
+    aNewSize.Width()++; // because of possible rounding errors
+    aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
+    aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
 
-        Rectangle aNewRect(aNextRect);
-        aNewRect.SetSize(aNewSize);
-        pNextTextObj->ImpJustifyRect(aNewRect);
-        if (aNewRect!=aNextRect) {
-            pNextTextObj->SetLogicRect(aNewRect);
-        }
+    Rectangle aNewRect(aNextRect);
+    aNewRect.SetSize(aNewSize);
+    pNextTextObj->ImpJustifyRect(aNewRect);
+    if (aNewRect!=aNextRect) {
+        pNextTextObj->SetLogicRect(aNewRect);
+
 
         // Set text object's string
         pNextTextObj->SetOutlinerParaObject( pNewParaObject );
@@ -1503,8 +1501,10 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     // put overflowing text in next text box
     if (mpOverflowingText != NULL) {
         SdrTextObj *pNextTextObj = GetNextLinkInChain();
-        //pNextTextObj->SetOutlinerParaObject( mpOverflowingText );
+        assert (pNextTextObj);
+        impCopyTextInTextObj(pNextTextObj);
 
+        //pNextTextObj->SetOutlinerParaObject( mpOverflowingText );
         //SdrOutliner rOutl = pNextTextObj->ImpGetDrawOutliner();
         //pNextTextObj->BegTextEdit( rOutl );
         // XXX: Also, will all those calls currently in impCopyTextInTextObj be necessary too?
