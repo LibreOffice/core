@@ -149,6 +149,9 @@ public:
     void                        SetFootnoteFontName( const OUString& rSet ) { m_sFootnoteFontName = rSet;}
 
     virtual void insertTableProperties( const PropertyMap* );
+#ifdef DEBUG_DOMAINMAPPER
+    void printProperties();
+#endif
 
 #if OSL_DEBUG_LEVEL > 1
     virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;

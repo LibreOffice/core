@@ -46,43 +46,6 @@ using namespace ::std;
 
 #define DEF_BORDER_DIST 190  //0,19cm
 
-#ifdef DEBUG_DOMAINMAPPER
-static void  lcl_printProperties( PropertyMapPtr pProps )
-{
-    if( pProps.get() )
-    {
-        dmapper_logger->startElement("properties");
-
-        PropertyMap::const_iterator aMapIter = pProps->begin();
-        PropertyMap::const_iterator aEndIter = pProps->end();
-        PropertyNameSupplier& rPropSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        for( ; aMapIter != aEndIter; ++aMapIter )
-        {
-            SAL_INFO("writerfilter", rPropSupplier.GetName(aMapIter->first));
-
-            table::BorderLine2 aLine;
-            sal_Int32 nColor;
-            if ( aMapIter->second.getValue() >>= aLine )
-            {
-                dmapper_logger->startElement("borderline");
-                dmapper_logger->attribute("color", aLine.Color);
-                dmapper_logger->attribute("inner", aLine.InnerLineWidth);
-                dmapper_logger->attribute("outer", aLine.OuterLineWidth);
-                dmapper_logger->endElement();
-            }
-            else if ( aMapIter->second.getValue() >>= nColor )
-            {
-                dmapper_logger->startElement("color");
-                dmapper_logger->attribute("number", nColor);
-                dmapper_logger->endElement();
-            }
-        }
-
-        dmapper_logger->endElement();
-    }
-}
-#endif
-
 DomainMapperTableHandler::DomainMapperTableHandler(TextReference_t const& xText,
             DomainMapper_Impl& rDMapper_Impl)
     : m_xText(xText),
@@ -1104,7 +1067,8 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
     dmapper_logger->startElement("table.cell.start");
     dmapper_logger->chars(toString(start));
     dmapper_logger->endElement();
-    lcl_printProperties( pProps );
+    if (pProps.get())
+        pProps->printProperties();
 #endif
 
     //add a new 'row' of properties

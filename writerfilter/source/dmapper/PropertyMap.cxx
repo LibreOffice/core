@@ -232,8 +232,8 @@ void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
     pLogger->startElement("PropertyMap");
 
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-    PropertyMap::const_iterator aMapIter = begin();
-    while (aMapIter != end())
+    MapIterator aMapIter = m_vMap.begin();
+    while (aMapIter != m_vMap.end())
     {
         pLogger->startElement("property");
 
@@ -301,6 +301,39 @@ void PropertyMap::insertTableProperties( const PropertyMap* )
 #endif
 }
 
+#ifdef DEBUG_DOMAINMAPPER
+void PropertyMap::printProperties()
+{
+    dmapper_logger->startElement("properties");
+
+    MapIterator aMapIter = m_vMap.begin();
+    MapIterator aEndIter = m_vMap.end();
+    PropertyNameSupplier& rPropSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    for( ; aMapIter != aEndIter; ++aMapIter )
+    {
+        SAL_INFO("writerfilter", rPropSupplier.GetName(aMapIter->first));
+
+        table::BorderLine2 aLine;
+        sal_Int32 nColor;
+        if ( aMapIter->second.getValue() >>= aLine )
+        {
+            dmapper_logger->startElement("borderline");
+            dmapper_logger->attribute("color", aLine.Color);
+            dmapper_logger->attribute("inner", aLine.InnerLineWidth);
+            dmapper_logger->attribute("outer", aLine.OuterLineWidth);
+            dmapper_logger->endElement();
+        }
+        else if ( aMapIter->second.getValue() >>= nColor )
+        {
+            dmapper_logger->startElement("color");
+            dmapper_logger->attribute("number", nColor);
+            dmapper_logger->endElement();
+        }
+    }
+
+    dmapper_logger->endElement();
+}
+#endif
 
 SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     m_bIsFirstSection( bIsFirstSection )
