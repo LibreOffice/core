@@ -1794,6 +1794,12 @@ DECLARE_RTFIMPORT_TEST(testFdo80905, "fdo80905.rtf")
     CPPUNIT_ASSERT_EQUAL(true, static_cast<bool>(xFields->hasMoreElements()));
 }
 
+DECLARE_RTFIMPORT_TEST(testOleInline, "ole-inline.rtf")
+{
+    // Problem was that inline shape had at-page anchor.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
