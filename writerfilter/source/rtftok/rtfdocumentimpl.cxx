@@ -823,6 +823,9 @@ int RTFDocumentImpl::resolvePict(bool const bInline,
         aSize.Height = (m_aStates.top().aPicture.nGoalHeight ? m_aStates.top().aPicture.nGoalHeight : m_aStates.top().aPicture.nHeight);
         xShape->setSize(aSize);
 
+        // Replacement graphic is inline by default, see oox::vml::SimpleShape::implConvertAndInsert().
+        xPropertySet->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
+
         RTFValue::Pointer_t pShapeValue(new RTFValue(xShape));
         m_aObjectAttributes.set(NS_ooxml::LN_shape, pShapeValue);
         return 0;
