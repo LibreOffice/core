@@ -226,7 +226,7 @@ def contextResource(files, nsNode, refNode):
     for resourceNode in [i for i in getChildrenByName(nsNode, "resource") if i.getAttribute("name") == refName]:
         return resourceNode.getAttribute("resource")
 
-    for includeNode in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "include") if i.getAttribute("href") in files]:
+    for includeNode in getChildrenByName(getChildByName(nsNode, "grammar"), "include"):
         namespaceNode = files[includeNode.getAttribute("href")]
         for resourceNode in [i for i in getChildrenByName(namespaceNode, "resource") if i.getAttribute("name") == refName]:
             return resourceNode.getAttribute("resource")
