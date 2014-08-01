@@ -110,8 +110,6 @@ protected:
     AllSettings m_aSavedSettings;
 };
 
-#define DECLARE_RTFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
-
 #if !defined(WNT)
 
 DECLARE_RTFIMPORT_TEST(testFdo45553, "fdo45553.rtf")
@@ -1861,6 +1859,12 @@ DECLARE_RTFIMPORT_TEST(testUnbalancedColumnsCompat, "unbalanced-columns-compat.r
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // This was false, we ignored the relevant compat setting to make this non-last section unbalanced.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
+}
+
+DECLARE_RTFIMPORT_TEST(testOleInline, "ole-inline.rtf")
+{
+    // Problem was that inline shape had at-page anchor.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
