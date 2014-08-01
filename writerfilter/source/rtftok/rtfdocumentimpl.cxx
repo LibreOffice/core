@@ -1450,7 +1450,14 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
     setNeedSect();
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
-    switch (nKeyword)
+    // special case \upr: ignore everything except nested \ud
+    if (DESTINATION_UPR == m_aStates.top().nDestinationState
+        && RTF_UD != nKeyword)
+    {
+        m_aStates.top().nDestinationState = DESTINATION_SKIP;
+        aSkip.setParsed(false);
+    }
+    else switch (nKeyword)
     {
     case RTF_RTF:
         break;
@@ -1845,11 +1852,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE;
         break;
     case RTF_TITLE:
-        // \title inside \upr but outside \ud should be ignored.
-        if (m_aStates.top().nDestinationState != DESTINATION_UPR)
-            m_aStates.top().nDestinationState = DESTINATION_TITLE;
-        else
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+        m_aStates.top().nDestinationState = DESTINATION_TITLE;
         break;
     case RTF_SUBJECT:
         m_aStates.top().nDestinationState = DESTINATION_SUBJECT;
