@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_972aa42b",
+        "filename": "svx/source/unodraw/unopage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-08-01T09:01:30Z",
+      "side": 1,
+      "message": "This is bad, InteropGrabBag should be used by the filters only, but here you read it in core. That\u0027s a no-go.",
+      "revId": "2028fecf5041178f12c79b0af6db208adce85da2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_7720304a",
+        "filename": "svx/source/unodraw/unopage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-08-01T09:01:30Z",
+      "side": 1,
+      "message": "Can\u0027t you set these properties in the import filter instead?",
+      "revId": "2028fecf5041178f12c79b0af6db208adce85da2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
