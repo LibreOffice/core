@@ -549,7 +549,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
         }
     }
 
-    return (XFillBitmapItem*)this;
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

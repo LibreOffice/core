@@ -324,7 +324,10 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                 // that the correct entry is chosen in the list of UI-names
                 XLineDashItem* pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
-                rOutItemSet.Put( *pItemToPut );
+                if(pItemToPut)
+                    rOutItemSet.Put( *pItemToPut );
+                else
+                    rOutItemSet.Put(aItem);
             }
         break;
 
@@ -347,7 +350,10 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                 // that the correct entry is chosen in the list of UI-names
                 XFillGradientItem* pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
-                rOutItemSet.Put( *pItemToPut );
+                if(pItemToPut)
+                    rOutItemSet.Put( *pItemToPut );
+                else
+                    rOutItemSet.Put(aItem);
             }
         break;
 
@@ -370,7 +376,10 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                 // that the correct entry is chosen in the list of UI-names
                 XFillHatchItem* pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
-                rOutItemSet.Put( *pItemToPut );
+                if(pItemToPut)
+                    rOutItemSet.Put( *pItemToPut );
+                else
+                    rOutItemSet.Put(aItem);
             }
         break;
 
@@ -388,7 +397,10 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                 // that the correct entry is chosen in the list of UI-names
                 XFillBitmapItem* pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
-                rOutItemSet.Put( *pItemToPut );
+                if(pItemToPut)
+                    rOutItemSet.Put( *pItemToPut );
+                else
+                    rOutItemSet.Put(aItem);
             }
         break;
 

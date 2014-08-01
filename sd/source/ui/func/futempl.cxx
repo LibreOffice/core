@@ -441,7 +441,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLBITMAP );
                             SfxPoolItem* pNewItem = ((XFillBitmapItem*)pOldItem)->checkForUniqueItem( mpDoc );
-                            if( pOldItem != pNewItem )
+                            if( pNewItem )
                             {
                                 rAttr.Put( *pNewItem );
                                 delete pNewItem;
@@ -451,7 +451,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEDASH );
                             SfxPoolItem* pNewItem = ((XLineDashItem*)pOldItem)->checkForUniqueItem( mpDoc );
-                            if( pOldItem != pNewItem )
+                            if( pNewItem )
                             {
                                 rAttr.Put( *pNewItem );
                                 delete pNewItem;
@@ -461,7 +461,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINESTART );
                             SfxPoolItem* pNewItem = ((XLineStartItem*)pOldItem)->checkForUniqueItem( mpDoc );
-                            if( pOldItem != pNewItem )
+                            if( pNewItem )
                             {
                                 rAttr.Put( *pNewItem );
                                 delete pNewItem;
@@ -471,7 +471,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEEND );
                             SfxPoolItem* pNewItem = ((XLineEndItem*)pOldItem)->checkForUniqueItem( mpDoc );
-                            if( pOldItem != pNewItem )
+                            if( pNewItem )
                             {
                                 rAttr.Put( *pNewItem );
                                 delete pNewItem;
@@ -481,7 +481,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLGRADIENT );
                             SfxPoolItem* pNewItem = ((XFillGradientItem*)pOldItem)->checkForUniqueItem( mpDoc );
-                            if( pOldItem != pNewItem )
+                            if( pNewItem )
                             {
                                 rAttr.Put( *pNewItem );
                                 delete pNewItem;
@@ -491,7 +491,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLFLOATTRANSPARENCE );
                             SfxPoolItem* pNewItem = ((XFillFloatTransparenceItem*)pOldItem)->checkForUniqueItem( mpDoc );
-                            if( pOldItem != pNewItem )
+                            if( pNewItem )
                             {
                                 rAttr.Put( *pNewItem );
                                 delete pNewItem;
@@ -501,7 +501,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLHATCH );
                             SfxPoolItem* pNewItem = ((XFillHatchItem*)pOldItem)->checkForUniqueItem( mpDoc );
-                            if( pOldItem != pNewItem )
+                            if( pNewItem )
                             {
                                 rAttr.Put( *pNewItem );
                                 delete pNewItem;

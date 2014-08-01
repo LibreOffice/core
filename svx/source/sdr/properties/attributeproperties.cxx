@@ -165,62 +165,60 @@ namespace sdr
         {
             if(pNewItem)
             {
-                const SfxPoolItem* pItem = pNewItem;
+                const SfxPoolItem* pResultItem = NULL;
                 SdrModel* pModel = GetSdrObject().GetModel();
 
                 switch( nWhich )
                 {
                     case XATTR_FILLBITMAP:
                     {
-                        pItem = ((XFillBitmapItem*)pItem)->checkForUniqueItem( pModel );
+                        pResultItem = ((XFillBitmapItem*)pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_LINEDASH:
                     {
-                        pItem = ((XLineDashItem*)pItem)->checkForUniqueItem( pModel );
+                        pResultItem = ((XLineDashItem*)pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_LINESTART:
                     {
-                        pItem = ((XLineStartItem*)pItem)->checkForUniqueItem( pModel );
+                        pResultItem = ((XLineStartItem*)pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_LINEEND:
                     {
-                        pItem = ((XLineEndItem*)pItem)->checkForUniqueItem( pModel );
+                        pResultItem = ((XLineEndItem*)pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_FILLGRADIENT:
                     {
-                        pItem = ((XFillGradientItem*)pItem)->checkForUniqueItem( pModel );
+                        pResultItem = ((XFillGradientItem*)pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_FILLFLOATTRANSPARENCE:
                     {
                         // #85953# allow all kinds of XFillFloatTransparenceItem to be set
-                        pItem = ((XFillFloatTransparenceItem*)pItem)->checkForUniqueItem( pModel );
+                        pResultItem = ((XFillFloatTransparenceItem*)pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_FILLHATCH:
                     {
-                        pItem = ((XFillHatchItem*)pItem)->checkForUniqueItem( pModel );
+                        pResultItem = ((XFillHatchItem*)pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                 }
 
                 // set item
-                if(pItem)
+                GetObjectItemSet();
+                if(pResultItem)
                 {
                     // force ItemSet
-                    GetObjectItemSet();
-                    mpItemSet->Put(*pItem);
-
+                    mpItemSet->Put(*pResultItem);
                     // delete item if it was a generated one
-                    if(pItem != pNewItem)
-                    {
-                        delete (SfxPoolItem*)pItem;
-                    }
+                    delete (SfxPoolItem*)pResultItem;
                 }
+                else
+                    mpItemSet->Put(*pNewItem);
             }
             else
             {
