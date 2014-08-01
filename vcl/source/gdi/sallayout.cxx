@@ -1523,6 +1523,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     SalLayout::AdjustLayout( rArgs );
     ImplLayoutArgs aMultiArgs = rArgs;
+    boost::scoped_array<DeviceCoordinate> pJustificationArray;
 
     if( !rArgs.mpDXArray && rArgs.mnLayoutWidth )
     {
@@ -1537,8 +1538,8 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             mpLayouts[n]->SalLayout::AdjustLayout( aMultiArgs );
         // then we can measure the unmodified metrics
         int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-        DeviceCoordinate* pJustificationArray = (DeviceCoordinate*)alloca( nCharCount * sizeof(sal_Int32) );
-        FillDXArray( pJustificationArray );
+        pJustificationArray.reset(new DeviceCoordinate[nCharCount]);
+        FillDXArray( pJustificationArray.get() );
         // #i17359# multilayout is not simplified yet, so calculating the
         // unjustified width needs handholding; also count the number of
         // stretchable virtual char widths
@@ -1585,8 +1586,8 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 }
             }
 
-            // change the mpDXArray temporarilly (just for the justification)
-            aMultiArgs.mpDXArray = pJustificationArray;
+            // change the mpDXArray temporarily (just for the justification)
+            aMultiArgs.mpDXArray = pJustificationArray.get();
         }
     }
 
