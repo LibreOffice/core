@@ -282,7 +282,7 @@ namespace sdr
             {
                 // prepare OutputDevice (historical stuff, maybe soon removed)
                 rDisplayInfo.ClearGhostedDrawMode(); // reset, else the VCL-paint with the processor will not do the right thing
-                pOutDev->SetLayoutMode(0); // reset, default is no BiDi/RTL
+                pOutDev->SetLayoutMode(TEXT_LAYOUT_DEFAULT); // reset, default is no BiDi/RTL
 
                 // create renderer
                 boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(

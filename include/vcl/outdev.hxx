@@ -181,17 +181,6 @@ namespace vcl
 #define GRID_VERTLINES                  ((sal_uLong)0x00000004)
 #define GRID_LINES                      (GRID_HORZLINES | GRID_VERTLINES)
 
-// LayoutModes for Complex Text Layout
-#define TEXT_LAYOUT_DEFAULT             ((sal_uLong)0x00000000)
-#define TEXT_LAYOUT_BIDI_LTR            ((sal_uLong)0x00000000)
-#define TEXT_LAYOUT_BIDI_RTL            ((sal_uLong)0x00000001)
-#define TEXT_LAYOUT_BIDI_STRONG         ((sal_uLong)0x00000002)
-#define TEXT_LAYOUT_TEXTORIGIN_LEFT     ((sal_uLong)0x00000004)
-#define TEXT_LAYOUT_TEXTORIGIN_RIGHT    ((sal_uLong)0x00000008)
-#define TEXT_LAYOUT_COMPLEX_DISABLED    ((sal_uLong)0x00000100)
-#define TEXT_LAYOUT_ENABLE_LIGATURES    ((sal_uLong)0x00000200)
-#define TEXT_LAYOUT_SUBSTITUTE_DIGITS   ((sal_uLong)0x00000400)
-
 // DrawModes
 #define DRAWMODE_DEFAULT                ((sal_uLong)0x00000000)
 #define DRAWMODE_BLACKLINE              ((sal_uLong)0x00000001)
@@ -316,7 +305,7 @@ private:
     mutable long                    mnEmphasisAscent;
     mutable long                    mnEmphasisDescent;
     sal_uLong                       mnDrawMode;
-    sal_uLong                       mnTextLayoutMode;
+    ComplexTextLayoutMode           mnTextLayoutMode;
     ImplMapRes                      maMapRes;
     ImplThresholdRes                maThresRes;
     OutDevType                      meOutDevType;
@@ -565,8 +554,8 @@ public:
     void                        SetDrawMode( sal_uLong nDrawMode );
     sal_uLong                   GetDrawMode() const { return mnDrawMode; }
 
-    void                        SetLayoutMode( sal_uLong nTextLayoutMode );
-    sal_uLong                   GetLayoutMode() const { return mnTextLayoutMode; }
+    void                        SetLayoutMode( ComplexTextLayoutMode nTextLayoutMode );
+    ComplexTextLayoutMode       GetLayoutMode() const { return mnTextLayoutMode; }
 
     void                        SetDigitLanguage( LanguageType );
     LanguageType                GetDigitLanguage() const { return meTextLanguage; }
