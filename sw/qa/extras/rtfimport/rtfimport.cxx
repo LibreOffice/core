@@ -344,6 +344,10 @@ DECLARE_RTFIMPORT_TEST(testFdo81892, "fdo81892.rtf")
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xTable, "HoriOrient"));
+
+    // fdo#81893: paragraph with \page was not centered
+    uno::Reference<text::XTextRange> xPara(getParagraph(2, "Performance"));
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo45394, "fdo45394.rtf")
