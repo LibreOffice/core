@@ -307,10 +307,10 @@ if test -n "$with_android_ndk"; then
     ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_HOME/RELEASE.TXT`
 
     case $ANDROID_NDK_VERSION in
-    r8*|r9*)
+    r9*|r10)
         ;;
     *)
-        AC_MSG_ERROR([Unsupported NDK version $ANDROID_NDK_VERSION, only r8* and r9* versions are supported])
+        AC_MSG_ERROR([Unsupported NDK version $ANDROID_NDK_VERSION, only r9* and r10 versions are supported])
         ;;
     esac
 
