@@ -41,8 +41,7 @@ void main()
 
     vec3 totalAmbient = lightAmbient.rgb *
                         MaterialDiffuseColor *
-                        materialAmbient.rgb
-                        * 5.0;
+                        materialAmbient.rgb;
 
     if ((twoSidesLighting == 1) && (!gl_FrontFacing))
     {
