@@ -2293,7 +2293,6 @@ void formatPage(
 
         //format page
         tPropertyNameValueMap aNameValueMap;
-        aNameValueMap.insert( tPropertyNameValueMap::value_type( "LineStyle", uno::makeAny( drawing::LineStyle_NONE )));
         PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
         OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
