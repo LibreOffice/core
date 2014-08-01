@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_f78e8026",
+        "filename": "dbaccess/source/ui/inc/dbu_resource.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-01T15:06:12Z",
+      "side": 1,
+      "message": "Please reserve a larger range so there is some free space for the future.",
+      "revId": "6a4075ffafefcd111f975fcd0d98944092a7198b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
