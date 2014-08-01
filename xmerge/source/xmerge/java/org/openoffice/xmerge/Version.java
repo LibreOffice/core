@@ -26,15 +26,9 @@ package org.openoffice.xmerge;
  */
 public final class Version {
 
-    private static final Package pkg;
+    private static final Version version = new Version();
 
-    private static final Version version;
-
-    static {
-
-        version = new Version();
-        pkg = version.getClass().getPackage();
-    }
+    private static final Package pkg = version.getClass().getPackage();
 
     /**
      *  Private constructor to provide a singleton instance.

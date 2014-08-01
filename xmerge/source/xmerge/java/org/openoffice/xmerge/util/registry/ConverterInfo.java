@@ -37,18 +37,12 @@ public class ConverterInfo {
     /**
      *  Keep track of the valid Office mime types
      */
-    private static String[] validOfficeTypes;
-    public static String SxwType = "staroffice/sxw";
-    public static String SxcType = "staroffice/sxc";
+    private static final String[] validOfficeTypes = new String[] {
+        // This needs to be updated to reflect all valid office types.
+        "staroffice/sxw",
+        "staroffice/sxc"
+    };
 
-
-    static {
-       // This needs to be updated to reflect all valid office types.
-
-       validOfficeTypes = new String[2];
-       validOfficeTypes[0] = SxwType;
-       validOfficeTypes[1] = SxcType;
-    }
 
     private String           piJarName;
     private String           piOfficeMime;
