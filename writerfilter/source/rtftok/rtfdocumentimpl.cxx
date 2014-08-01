@@ -2693,6 +2693,27 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
+    switch (nKeyword)
+    {
+    case RTF_TRQL:
+        nParam = 0;
+        break;
+    case RTF_TRQC:
+        nParam = 1;
+        break;
+    case RTF_TRQR:
+        nParam = 2;
+        break;
+    default:
+        break;
+    }
+    if (nParam >= 0)
+    {
+        RTFValue::Pointer_t const pValue(new RTFValue(nParam));
+        m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TrPrBase_jc, pValue);
+        return 0;
+    }
+
     // Cell Text Flow
     switch (nKeyword)
     {
