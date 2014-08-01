@@ -469,7 +469,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUInt16( nLen );
             pWMF->ReadUInt16( nOptions );
 
-            sal_Int32 nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
+            ComplexTextLayoutMode nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
             if ( nOptions & ETO_RTLREADING )
                 nTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
             pOut->SetTextLayoutMode( nTextLayoutMode );
