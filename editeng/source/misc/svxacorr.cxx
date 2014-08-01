@@ -2770,13 +2770,15 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
     const OUString& rChk = pFnd->GetShort();
 
     sal_Int32 left_wildcard = rChk.startsWith( ".*" ) ? 2 : 0; // ".*word" pattern?
+    sal_Int32 right_wildcard = rChk.endsWith( ".*" ) ? 2 : 0; // "word.*" pattern?
     sal_Int32 nSttWdPos = nEndPos;
-    if ( nEndPos >= rChk.getLength() - (rChk.endsWith( ".*" ) ? 2 : left_wildcard))
+
+    if ( nEndPos >= rChk.getLength() - left_wildcard - right_wildcard )
     {
 
         bool bWasWordDelim = false;
         sal_Int32 nCalcStt = nEndPos - rChk.getLength() + left_wildcard;
-        if( ( !nCalcStt || nCalcStt == rStt || left_wildcard ||
+        if( !right_wildcard && ( !nCalcStt || nCalcStt == rStt || left_wildcard ||
               ( nCalcStt < rStt &&
                 IsWordDelim( rTxt[ nCalcStt - 1 ] ))) )
         {
@@ -2796,31 +2798,61 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                 SvxAutocorrWord* pNew = new SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), left_pattern);
                 if( Insert( pNew ) ) return pNew; else delete pNew;
             }
-        }
-        // match "word.*" patterns, eg. "i18n.*"
-        if ( rChk.endsWith( ".*" ) )
+        } else
+        // match "word.*" or ".*word.*" patterns, eg. "i18n.*", ".*---.*", TODO: add transliteration support
+        if ( right_wildcard )
         {
-            OUString sTmp( rChk.copy( 0, rChk.getLength() - 2 ) );
+
+            OUString sTmp( rChk.copy( left_wildcard, rChk.getLength() - left_wildcard - right_wildcard ) );
             // Get the last word delimiter position
             bool not_suffix;
+
             while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
                 ;
-            // search the first occurrence with a left word delimitation
+            // search the first occurrence (with a left word delimitation, if needed)
             sal_Int32 nFndPos = -1;
             do {
                 nFndPos = rTxt.indexOf( sTmp, nFndPos + 1);
                 not_suffix = (bWasWordDelim && (nSttWdPos >= nFndPos + sTmp.getLength()));
-            } while ( nFndPos != -1 && (!(!nFndPos || IsWordDelim( rTxt[ nFndPos - 1 ])) || not_suffix));
+            } while ( nFndPos != -1 && (!(left_wildcard || (!left_wildcard && (!nFndPos || IsWordDelim( rTxt[ nFndPos - 1 ])))) || not_suffix));
+
             if ( nFndPos != -1 )
             {
-                // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
-                OUString aShort = rTxt.copy(nFndPos, nEndPos - nFndPos + ((rTxt[nEndPos] != 0x20) ? 1: 0));
-                OUString aLong = pFnd->GetLong() + rTxt.copy(nFndPos + sTmp.getLength(), nEndPos - nFndPos - sTmp.getLength());
-                SvxAutocorrWord* pNew = new SvxAutocorrWord(aShort, aLong);
-                if( Insert( pNew ) )
+                sal_Int32 extra_repl = nFndPos + sTmp.getLength() > nEndPos ? 1: 0; // for patterns with terminating characters, eg. "a:"
+
+                if ( left_wildcard )
                 {
-                    rStt = nFndPos;
-                    return pNew;
+                    // get the first word delimiter position before the matching ".*word.*" pattern
+                    while( nFndPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nFndPos ])))
+                        ;
+                    if (bWasWordDelim) nFndPos++;
+                }
+                // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
+                OUString aShort = rTxt.copy(nFndPos, nEndPos - nFndPos + extra_repl);
+
+                OUString aLong;
+                rStt = nFndPos;
+                if ( !left_wildcard )
+                {
+                    sal_Int32 siz = nEndPos - nFndPos - sTmp.getLength();
+                    aLong = pFnd->GetLong() + (siz > 0 ? rTxt.copy(nFndPos + sTmp.getLength(), siz) : "");
+                } else {
+                    OUStringBuffer buf;
+                    do {
+                        nSttWdPos = rTxt.indexOf( sTmp, nFndPos);
+                        if (nSttWdPos != -1)
+                        {
+                            buf.append(rTxt.copy(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
+                            nFndPos = nSttWdPos + sTmp.getLength();
+                        }
+                    } while (nSttWdPos != -1);
+                    if (nEndPos - nFndPos > extra_repl) buf.append(rTxt.copy(nFndPos, nEndPos - nFndPos));
+                    aLong = buf.makeStringAndClear();
+                }
+                SvxAutocorrWord* pNew = new SvxAutocorrWord(aShort, aLong);
+                if ( Insert( pNew ) )
+                {
+                    if ( IsWordDelim(rTxt[nEndPos]) ) return pNew;
                 } else delete pNew;
             }
         }
