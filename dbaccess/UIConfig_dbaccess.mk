@@ -49,6 +49,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/textconnectionsettings \
     dbaccess/uiconfig/ui/textpage \
     dbaccess/uiconfig/ui/useradmindialog \
+    dbaccess/uiconfig/ui/useradminpage \
 ))
 
 # vim: set noet sw=4 ts=4:

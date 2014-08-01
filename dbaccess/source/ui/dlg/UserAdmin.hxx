@@ -41,13 +41,10 @@ namespace dbaui
 class OUserAdmin : public OGenericAdministrationPage
 {
 protected:
-    FixedLine           m_FL_USER;
-    FixedText           m_FT_USER;
-    ListBox             m_LB_USER;
-    PushButton          m_PB_NEWUSER;
-    PushButton          m_PB_CHANGEPWD;
-    PushButton          m_PB_DELETEUSER;
-    FixedLine           m_FL_TABLE_GRANTS;
+    ListBox             *m_pUSER;
+    PushButton          *m_pNEWUSER;
+    PushButton          *m_pCHANGEPWD;
+    PushButton          *m_pDELETEUSER;
     OTableGrantControl  m_TableCtrl; // show the grant rights of one user
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
