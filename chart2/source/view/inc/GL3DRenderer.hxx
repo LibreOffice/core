@@ -203,6 +203,7 @@ public:
 
     void ReleaseShapes();
     void ReleaseScreenTextShapes();
+    void ReleaseTextTexture();
 private:
     void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 
@@ -435,6 +436,7 @@ private:
     glm::vec4 m_LightColor[MAX_LIGHT_NUM];
     glm::vec4 m_PositionWorldspace[MAX_LIGHT_NUM];
     float m_fLightPower[MAX_LIGHT_NUM];
+    std::vector<GLuint> m_Texturelist;
 };
 
 }

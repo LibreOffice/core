@@ -99,6 +99,7 @@ void RenderThread::renderFrame()
     mpChart->mpRenderer->SetSize(aSize);
     if(mpChart->mbNeedsNewRender)
     {
+        mpChart->mpRenderer->ReleaseTextTexture();
         for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = mpChart->maShapes.begin(),
                 itrEnd = mpChart->maShapes.end(); itr != itrEnd; ++itr)
         {
