@@ -624,11 +624,15 @@ sal_Int32 Layouter::Implementation::GetRowAtPosition (
         // When inside the gap below then nYPosition is not over a page
         // object.
         if (nDistanceIntoGap > 0)
-            nRow = ResolvePositionInGap (
+        {
+            sal_Int32 nResolvedRow = ResolvePositionInGap(
                 nDistanceIntoGap,
                 eGapMembership,
                 nRow,
                 mnVerticalGap);
+            if (!bIncludeBordersAndGaps || nResolvedRow != -1)
+                nRow = nResolvedRow;
+        }
     }
     else if (bIncludeBordersAndGaps)
     {
@@ -667,11 +671,15 @@ sal_Int32 Layouter::Implementation::GetColumnAtPosition (
         // When inside the gap at the right then nXPosition is not over a
         // page object.
         if (nDistanceIntoGap > 0)
-            nColumn = ResolvePositionInGap (
+        {
+            sal_Int32 nResolvedColumn = ResolvePositionInGap(
                 nDistanceIntoGap,
                 eGapMembership,
                 nColumn,
                 mnHorizontalGap);
+            if (!bIncludeBordersAndGaps || nResolvedColumn != -1)
+                nColumn = nResolvedColumn;
+        }
     }
     else if (bIncludeBordersAndGaps)
     {
