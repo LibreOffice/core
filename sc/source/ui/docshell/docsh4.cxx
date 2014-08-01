@@ -1860,7 +1860,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
     if (!aDocument.HasTable(nVisTab))
         return;
 
-    sal_uLong nOldLayoutMode = pDev->GetLayoutMode();
+    ComplexTextLayoutMode nOldLayoutMode = pDev->GetLayoutMode();
     pDev->SetLayoutMode( TEXT_LAYOUT_DEFAULT );     // even if it's the same, to get the metafile action
 
     if ( nAspect == ASPECT_THUMBNAIL )

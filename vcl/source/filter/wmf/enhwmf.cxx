@@ -1418,7 +1418,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     pWMF->SeekRel( 0x10 );
                     pWMF->ReadUInt32( offDx );
 
-                    sal_Int32 nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
+                    ComplexTextLayoutMode nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
                     if ( nOptions & ETO_RTLREADING )
                         nTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
                     pOut->SetTextLayoutMode( nTextLayoutMode );
