@@ -73,6 +73,9 @@ protected:
 
     bool isAcceptedFile(const OUString &rURL) const;
 
+    /// Set (larger) font for the Welcome message.
+    void SetMessageFont();
+
     long    mnItemMaxSize;
     long    mnTextHeight;
     long    mnItemPadding;

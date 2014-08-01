@@ -117,6 +117,13 @@ bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
            (mnFileTypes & TYPE_OTHER    && typeMatchesExtension(TYPE_OTHER,   aExt));
 }
 
+void RecentDocsView::SetMessageFont()
+{
+    Font aFont(GetFont());
+    aFont.SetHeight(aFont.GetHeight()*1.3);
+    SetFont(aFont);
+}
+
 BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
 {
     BitmapEx aImg;
@@ -195,13 +202,11 @@ void RecentDocsView::Reload()
     Invalidate();
 
     // Set preferred width
-    if( mFilteredItemList.empty() )
+    if (mFilteredItemList.empty())
     {
         Font aOldFont(GetFont());
-        Font aNewFont(aOldFont);
-        aNewFont.SetHeight(20);
-        SetFont(aNewFont);
-        set_width_request(std::max(GetTextWidth(maWelcomeLine1),GetTextWidth(maWelcomeLine2)));
+        SetMessageFont();
+        set_width_request(std::max(GetTextWidth(maWelcomeLine1), GetTextWidth(maWelcomeLine2)));
         SetFont(aOldFont);
     }
     else
@@ -257,9 +262,7 @@ void RecentDocsView::Paint( const Rectangle &aRect )
     {
         // No recent files to be shown yet. Show a welcome screen.
         Font aOldFont(GetFont());
-        Font aNewFont(aOldFont);
-        aNewFont.SetHeight(20);
-        SetFont(aNewFont);
+        SetMessageFont();
 
         long nTextHeight = GetTextHeight();
 
@@ -301,10 +304,8 @@ long RecentDocsView::GetThumbnailSize() const
 void RecentDocsView::Clear()
 {
     Font aOldFont(GetFont());
-    Font aNewFont(aOldFont);
-    aNewFont.SetHeight(20);
-    SetFont(aNewFont);
-    set_width_request(std::max(GetTextWidth(maWelcomeLine1),GetTextWidth(maWelcomeLine2)));
+    SetMessageFont();
+    set_width_request(std::max(GetTextWidth(maWelcomeLine1), GetTextWidth(maWelcomeLine2)));
     SetFont(aOldFont);
 
     ThumbnailView::Clear();
