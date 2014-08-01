@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_1769f48b",
+        "filename": "dbaccess/source/ui/inc/dbu_resource.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-01T08:24:14Z",
+      "side": 1,
+      "message": "Why have you not added some padding there as a reserve? It does not make sense having to update the range 3 times...",
+      "revId": "eb051f4d4f2057586b27f9868a4c9af8d09feb30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
