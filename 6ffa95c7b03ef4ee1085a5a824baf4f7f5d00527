@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_d7d49c48",
+        "filename": "xmerge/source/bridge/java/XMergeBridge.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-08-01T06:30:09Z",
+      "side": 1,
+      "message": "the casting to CharSequence is unnecessary",
+      "revId": "6ffa95c7b03ef4ee1085a5a824baf4f7f5d00527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
