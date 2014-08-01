@@ -254,14 +254,14 @@
   <block-list:block block-list:abbreviated-name="intelectual" block-list:name="intel·lectual"/>
   <!-- Part 2  -->
   <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
-  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
-  <block-list:block block-list:abbreviated-name="-&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=".*--&gt;.*" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=".*-&gt;.*" block-list:name="→"/>
   <!--<block-list:block block-list:abbreviated-name="..." block-list:name="…"/> -->
-  <block-list:block block-list:abbreviated-name="(C)" block-list:name="©"/>
-  <block-list:block block-list:abbreviated-name="(R)" block-list:name="®"/>
-  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
-  <block-list:block block-list:abbreviated-name="&lt;-" block-list:name="←"/>
-  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=".*(C)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=".*(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=".*(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=".*&lt;-.*" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=".*&lt;--.*" block-list:name="←"/>
   <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name="qeu" block-list:name="que"/>

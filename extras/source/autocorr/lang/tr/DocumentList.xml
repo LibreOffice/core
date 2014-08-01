@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
-  <block-list:block block-list:abbreviated-name="(c)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=".*(c)" block-list:name="©"/>
   <block-list:block block-list:abbreviated-name="(e)" block-list:name="€"/>
-  <block-list:block block-list:abbreviated-name="(r)" block-list:name="®"/>
-  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=".*(r)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=".*(tm)" block-list:name="™"/>
   <block-list:block block-list:abbreviated-name="abondone" block-list:name="abandone"/>
   <block-list:block block-list:abbreviated-name="abonoz" block-list:name="abanoz"/>
   <block-list:block block-list:abbreviated-name="açıcak" block-list:name="açacak"/>
