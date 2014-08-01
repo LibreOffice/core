@@ -50,4 +50,11 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlexport))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sw_ooxmlexport))
 
+$(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport,\
+	oox_customshapes \
+	oox_generated \
+))
+
+$(call gb_CppunitTest_get_target,sw_ooxmlexport) : $(call gb_Library_get_target,iti)
+
 # vim: set noet sw=4 ts=4:
