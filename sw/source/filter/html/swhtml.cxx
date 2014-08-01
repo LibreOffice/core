@@ -83,6 +83,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentState.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
@@ -606,7 +607,7 @@ void SwHTMLParser::Continue( int nToken )
     Link aOLELink( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    bool bModified = pDoc->IsModified();
+    bool bModified = pDoc->getIDocumentState().IsModified();
     bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
@@ -882,7 +883,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
 
         pDoc->SetOle2Link( aOLELink );
         if( !bModified )
-            pDoc->ResetModified();
+            pDoc->getIDocumentState().ResetModified();
         if( bSetModEnabled && pDoc->GetDocShell() )
         {
             pDoc->GetDocShell()->EnableSetModified( true );

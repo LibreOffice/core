@@ -23,6 +23,7 @@
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentState.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
@@ -166,7 +167,7 @@ void DocumentDeviceManager::setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*
         m_rSwdoc.GetDocumentSettingManager().set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, bNewVirtual );
         m_rSwdoc.GetDocumentSettingManager().set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, bNewHiRes );
         PrtDataChanged();
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     }
 }
 

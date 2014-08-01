@@ -20,6 +20,7 @@
 #include <DocumentSettingManager.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentState.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
@@ -406,7 +407,7 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLan
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
         pTmpRoot->EndAllAction();
     }
-    m_rDoc.SetModified();
+    m_rDoc.getIDocumentState().SetModified();
 }
 
 rtl::Reference<SvxForbiddenCharactersTable>& sw::DocumentSettingManager::getForbiddenCharacterTable()
@@ -476,7 +477,7 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
             std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
             pTmpRoot->EndAllAction();
         }
-        m_rDoc.SetModified();
+        m_rDoc.getIDocumentState().SetModified();
     }
 }
 

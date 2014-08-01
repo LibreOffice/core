@@ -42,6 +42,7 @@
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <unoprnms.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
@@ -745,7 +746,7 @@ void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
 {
     if ( xDocSh.Is() )
     {
-        if ( xDocSh->GetDoc()->IsModified () )
+        if ( xDocSh->GetDoc()->getIDocumentState().IsModified () )
             xDocSh->Save();
 
         if ( _bCloseDoc )

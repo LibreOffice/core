@@ -42,6 +42,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <poolfmt.hxx>
@@ -467,7 +468,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             }
             bCallBase = true;
         }
-        SetModified();
+        getIDocumentState().SetModified();
 
         GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     }

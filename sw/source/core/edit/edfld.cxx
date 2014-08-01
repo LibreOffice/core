@@ -24,6 +24,7 @@
 #include <fldbas.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docary.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -332,7 +333,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
 
         FOREACHPAM_END()
     }
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
 

@@ -32,6 +32,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentState.hxx>
 #include <ndindex.hxx>
 #include <docary.hxx>
 #include <drawdoc.hxx>
@@ -525,7 +526,7 @@ bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
         }
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
 
     SwTextBoxHelper::syncFlyFrmAttr(rFlyFmt, rSet);
 
@@ -553,7 +554,7 @@ void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
 
     rFlyFrmFmt.SetObjTitle( sNewTitle, true );
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
@@ -576,7 +577,7 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
 
     rFlyFrmFmt.SetObjDescription( sNewDescription, true );
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
@@ -663,7 +664,7 @@ bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     if( pUndo )
         pUndo->DeRegisterFromFormat( rFmt );
 
-    SetModified();
+    getIDocumentState().SetModified();
 
     return bChgAnchor;
 }
@@ -917,7 +918,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
     }
 
     GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
-    SetModified();
+    getIDocumentState().SetModified();
 
     return bUnmark;
 }

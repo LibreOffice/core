@@ -21,6 +21,7 @@
 #include <fldbas.hxx>
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
 #include <switerator.hxx>
@@ -82,7 +83,7 @@ void DocumentStatisticsManager::DocInfoChgd( )
 {
     m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
     m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
 }
 
 const SwDocStat& DocumentStatisticsManager::GetDocStat() const
@@ -202,7 +203,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         const uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
         // #i96786#: do not set modified flag when updating statistics
-        const bool bDocWasModified( m_rSwdoc.IsModified() );
+        const bool bDocWasModified( m_rSwdoc.getIDocumentState().IsModified() );
         const ModifyBlocker_Impl b(pObjShell);
         // rhbz#1081176: don't jump to cursor pos because of (temporary)
         // activation of modified flag triggering move to input position
@@ -210,7 +211,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         xDocProps->setDocumentStatistics(aStat);
         if (!bDocWasModified)
         {
-            m_rSwdoc.ResetModified();
+            m_rSwdoc.getIDocumentState().ResetModified();
         }
     }
 

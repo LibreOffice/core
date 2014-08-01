@@ -67,6 +67,7 @@
 #include <viewfunc.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentState.hxx>
 #include <sfx2/msg.hxx>
 #include <shellio.hxx>
 
@@ -353,7 +354,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 aEditWin.Write( *pOutStream );
                 pMed->CloseOutStream();
                 pMed->Commit();
-                pDocShell->GetDoc()->ResetModified();
+                pDocShell->GetDoc()->getIDocumentState().ResetModified();
                 SourceSaved();
                 aEditWin.ClearModifyFlag();
             }
@@ -369,7 +370,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             SetSearchItem( (const SvxSearchItem&)rItem);
             StartSearchAndReplace( (const SvxSearchItem&)rItem, false, rReq.IsAPI() );
             if(aEditWin.IsModified())
-                GetDocShell()->GetDoc()->SetModified();
+                GetDocShell()->GetDoc()->getIDocumentState().SetModified();
         }
         break;
         case FN_REPEAT_SEARCH:
@@ -379,7 +380,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             {
                 StartSearchAndReplace( *pSrchItem, false, rReq.IsAPI() );
                 if(aEditWin.IsModified())
-                    GetDocShell()->GetDoc()->SetModified();
+                    GetDocShell()->GetDoc()->getIDocumentState().SetModified();
             }
         }
         break;

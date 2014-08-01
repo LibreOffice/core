@@ -30,6 +30,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <redline.hxx>
@@ -169,7 +170,7 @@ bool SwExtraRedlineTbl::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTab
     }
 
     if( bChg )
-        pDoc->SetModified();
+        pDoc->getIDocumentState().SetModified();
 
     return bChg;
 }
@@ -216,7 +217,7 @@ bool SwExtraRedlineTbl::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine& r
     }
 
     if( bChg )
-        pDoc->SetModified();
+        pDoc->getIDocumentState().SetModified();
 
     return bChg;
 }
@@ -263,7 +264,7 @@ bool SwExtraRedlineTbl::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& r
     }
 
     if( bChg )
-        pDoc->SetModified();
+        pDoc->getIDocumentState().SetModified();
 
     return bChg;
 }

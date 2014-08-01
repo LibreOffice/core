@@ -23,6 +23,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
@@ -181,7 +182,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
 
     // --> OD 2005-02-11 #i38810# - Do not reset modified state of document,
     // if it's already been modified.
-    const bool bIsDocModified( mpDoc->IsModified() );
+    const bool bIsDocModified( mpDoc->getIDocumentState().IsModified() );
     mpDoc->acquire();
     pOutput = mpOut;
     Init( pNewOpt );    // may change the Outdev (InitPrt())
@@ -206,7 +207,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
         && !bIsDocModified )
     // <--
     {
-        mpDoc->ResetModified();
+        mpDoc->getIDocumentState().ResetModified();
     }
 
     // extend format cache.
@@ -261,7 +262,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
     SET_CURR_SHELL( this );
 
     mpDoc->acquire();
-    bool bModified = mpDoc->IsModified();
+    bool bModified = mpDoc->getIDocumentState().IsModified();
 
     pOutput = mpOut;
     Init( rShell.GetViewOptions() ); // might change Outdev (InitPrt())
@@ -277,7 +278,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
     // In Init a standard FrmFmt is created.
     if( !bModified && !mpDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
     {
-        mpDoc->ResetModified();
+        mpDoc->getIDocumentState().ResetModified();
     }
 
     // extend format cache.

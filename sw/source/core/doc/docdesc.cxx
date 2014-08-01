@@ -36,6 +36,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentState.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
 #include <frmtool.hxx>
@@ -510,7 +511,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
             pDesc->GetFirstLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
         }
     }
-    SetModified();
+    getIDocumentState().SetModified();
 
     // #i46909# no undo if header or footer changed
     if( bHeaderFooterChanged )
@@ -624,7 +625,7 @@ void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
 
     maPageDescs.erase( maPageDescs.begin() + i );
     delete pDel;
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
@@ -668,7 +669,7 @@ SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
         GetIDocumentUndoRedo().AppendUndo(new SwUndoPageDescCreate(pNew, this));
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
     return pNew;
 }
 

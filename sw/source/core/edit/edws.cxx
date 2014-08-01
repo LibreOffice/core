@@ -22,6 +22,7 @@
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
 #include <acorrect.hxx>
@@ -48,22 +49,22 @@ SwEditShell::~SwEditShell() // USED
 
 bool SwEditShell::IsModified() const
 {
-    return GetDoc()->IsModified();
+    return GetDoc()->getIDocumentState().IsModified();
 }
 
 void SwEditShell::SetModified()
 {
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
 }
 
 void SwEditShell::ResetModified()
 {
-    GetDoc()->ResetModified();
+    GetDoc()->getIDocumentState().ResetModified();
 }
 
 void SwEditShell::SetUndoNoResetModified()
 {
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
 }
 
@@ -261,7 +262,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
 
 void SwEditShell::SetNewDoc(bool bNew)
 {
-    GetDoc()->SetNewDoc(bNew);
+    GetDoc()->getIDocumentState().SetNewDoc(bNew);
 }
 
 bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord )

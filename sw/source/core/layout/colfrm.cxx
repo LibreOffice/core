@@ -29,6 +29,7 @@
 #include "sectfrm.hxx"
 #include "switerator.hxx"
 #include "ftnfrm.hxx"
+#include <IDocumentState.hxx>
 
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwFtnBossFrm( pFmt, pSib )
@@ -94,7 +95,7 @@ static SwLayoutFrm * lcl_FindColumns( SwLayoutFrm *pLay, sal_uInt16 nCount )
 static bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
 {
     SwDoc *pDoc = pCont->GetFmt()->GetDoc();
-    const bool bMod = pDoc->IsModified();
+    const bool bMod = pDoc->getIDocumentState().IsModified();
 
     //Formats should be shared whenever possible. If a neighbour already has
     //the same column settings we can add them to the same format.
@@ -154,7 +155,7 @@ static bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
     }
 
     if ( !bMod )
-        pDoc->ResetModified();
+        pDoc->getIDocumentState().ResetModified();
     return bRet;
 }
 

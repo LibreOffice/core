@@ -35,6 +35,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentState.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>
@@ -341,7 +342,7 @@ void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
     SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
     const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
     pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
 
@@ -356,7 +357,7 @@ void SwEditShell::ClearAutomaticContour()
         SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
         const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
         pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
-        GetDoc()->SetModified();
+        GetDoc()->getIDocumentState().SetModified();
         EndAllAction();
     }
 }

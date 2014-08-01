@@ -50,6 +50,7 @@
 #include <unotools/saveopt.hxx>
 
 #include <IDocumentListsAccess.hxx>
+#include <IDocumentState.hxx>
 
 using namespace ::com::sun::star;
 
@@ -336,7 +337,7 @@ sal_Int16   SwNumFmt::GetVertOrient() const
 
 void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
 {
-    bool bDocIsModified = pDoc->IsModified();
+    bool bDocIsModified = pDoc->getIDocumentState().IsModified();
     bool bFnd = false;
     const SwNumRule* pRule;
     for( sal_uInt16 n = pDoc->GetNumRuleTbl().size(); !bFnd && n; )
@@ -358,7 +359,7 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
     }
 
     if( bFnd && !bDocIsModified )
-        pDoc->ResetModified();
+        pDoc->getIDocumentState().ResetModified();
 }
 
 const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const

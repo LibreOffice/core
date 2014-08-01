@@ -65,6 +65,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentListsAccess.hxx>
+#include <IDocumentState.hxx>
 #include "swstyle.h"
 #include "frmfmt.hxx"
 #include "charfmt.hxx"
@@ -610,7 +611,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
     if( m_bNew )
         m_xBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *m_xTmp.get() ) );
 
-    pDoc->SetModified();
+    pDoc->getIDocumentState().SetModified();
     if( !m_bModified )
     {
         pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
@@ -635,7 +636,7 @@ sal_uInt16 SwDocShell::Edit(
     SfxStyleSheetBase *pStyle = 0;
 
     sal_uInt16 nRet = nMask;
-    bool bModified = mpDoc->IsModified();
+    bool bModified = mpDoc->getIDocumentState().IsModified();
 
     if( bNew )
     {
@@ -802,7 +803,7 @@ sal_uInt16 SwDocShell::Edit(
             }
 
             if( !bModified )
-                mpDoc->ResetModified();
+                mpDoc->getIDocumentState().ResetModified();
         }
 
         nRet = aApplyStyleHelper.getRet();
@@ -836,7 +837,7 @@ sal_uInt16 SwDocShell::Edit(
         if( bNew )
             mxBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
 
-        mpDoc->SetModified();
+        mpDoc->getIDocumentState().SetModified();
         if( !bModified )        // Bug 57028
         {
             mpDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
@@ -1272,9 +1273,9 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
         }
         else
         {
-            bool bModified = mpDoc->IsModified();
+            bool bModified = mpDoc->getIDocumentState().IsModified();
             mpDoc->ReplaceStyles( *((SwDocShell&)rSource).mpDoc );
-            if( !bModified && mpDoc->IsModified() && !mpView )
+            if( !bModified && mpDoc->getIDocumentState().IsModified() && !mpView )
             {
                 // the View is created later, but overwrites the Modify-Flag.
                 // Undo doesn't work anymore anyways.

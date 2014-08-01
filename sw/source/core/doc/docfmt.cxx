@@ -39,6 +39,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <hints.hxx>
@@ -224,7 +225,7 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark )
     aPara.bInclRefToxMark = bInclRefToxMark;
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
                         sw::DocumentContentOperationsManager::lcl_RstTxtAttr, &aPara );
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::ResetAttrs( const SwPaM &rRg,
@@ -392,7 +393,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     if( pPam != &rRg )
         delete pPam;
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 /// Set the rsid of the next nLen symbols of rRg to the current session number
@@ -466,7 +467,7 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
     {
         rFmt.SetFmtAttr( rSet );
     }
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::ResetAttrAtFormat( const sal_uInt16 nWhichId,
@@ -485,7 +486,7 @@ void SwDoc::ResetAttrAtFormat( const sal_uInt16 nWhichId,
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
 
-        SetModified();
+        getIDocumentState().SetModified();
     }
     else
         delete pUndo;
@@ -640,7 +641,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     while( 0 != ( pDep = (SwClient*)aCallMod.GetDepends()) )
         aCallMod.Remove( pDep );
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 /// Get the default attribute in this document
@@ -669,7 +670,7 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
     delete (*mpCharFmtTbl)[nFmt];
     mpCharFmtTbl->erase(mpCharFmtTbl->begin() + nFmt);
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::DelCharFmt( SwCharFmt *pFmt, bool bBroadcast )
@@ -736,7 +737,7 @@ SwFlyFrmFmt *SwDoc::MakeFlyFrmFmt( const OUString &rFmtName,
 {
     SwFlyFrmFmt *pFmt = new SwFlyFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
     GetSpzFrmFmts()->push_back(pFmt);
-    SetModified();
+    getIDocumentState().SetModified();
     return pFmt;
 }
 
@@ -745,7 +746,7 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const OUString &rFmtName,
 {
     SwDrawFrmFmt *pFmt = new SwDrawFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom);
     GetSpzFrmFmts()->push_back(pFmt);
-    SetModified();
+    getIDocumentState().SetModified();
     return pFmt;
 }
 
@@ -786,7 +787,7 @@ SwTableFmt* SwDoc::MakeTblFrmFmt( const OUString &rFmtName,
 {
     SwTableFmt* pFmt = new SwTableFmt( GetAttrPool(), rFmtName, pDerivedFrom );
     mpTblFrmFmtTbl->push_back( pFmt );
-    SetModified();
+    getIDocumentState().SetModified();
 
     return pFmt;
 }
@@ -799,7 +800,7 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const OUString &rFmtName,
 
     pFmt->SetAuto(bAuto);
     mpFrmFmtTbl->push_back( pFmt );
-    SetModified();
+    getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -835,7 +836,7 @@ SwCharFmt *SwDoc::MakeCharFmt( const OUString &rFmtName,
     SwCharFmt *pFmt = new SwCharFmt( GetAttrPool(), rFmtName, pDerivedFrom );
     mpCharFmtTbl->push_back( pFmt );
     pFmt->SetAuto( false );
-    SetModified();
+    getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -872,7 +873,7 @@ SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const OUString &rFmtName,
                                                 pDerivedFrom );
     mpTxtFmtCollTbl->push_back(pFmtColl);
     pFmtColl->SetAuto( false );
-    SetModified();
+    getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -906,7 +907,7 @@ SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const OUString &rFmtName,
                                                     rFmtName, pDerivedFrom );
     mpTxtFmtCollTbl->push_back(pFmtColl);
     pFmtColl->SetAuto( false );
-    SetModified();
+    getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -931,7 +932,7 @@ SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const OUString &rFmtName,
                                                 pDerivedFrom );
     mpGrfFmtCollTbl->push_back( pFmtColl );
     pFmtColl->SetAuto( false );
-    SetModified();
+    getIDocumentState().SetModified();
     return pFmtColl;
 }
 
@@ -969,7 +970,7 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
     for( SwTxtFmtColls::const_iterator it = mpTxtFmtCollTbl->begin() + 1; it != mpTxtFmtCollTbl->end(); ++it )
         SetTxtFmtCollNext( *it, pDel );
     delete pDel;
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, bool bBroadcast )
@@ -1080,7 +1081,7 @@ bool SwDoc::SetTxtFmtColl(const SwPaM &rRg,
 
     if (bRet)
     {
-        SetModified();
+        getIDocumentState().SetModified();
     }
 
     return bRet;
@@ -1157,7 +1158,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
                                                 pParent);
         mpTxtFmtCollTbl->push_back( pNewColl );
         pNewColl->SetAuto( false );
-        SetModified();
+        getIDocumentState().SetModified();
 
         // copy the conditions
         ((SwConditionTxtFmtColl*)pNewColl)->SetConditions(
@@ -1591,7 +1592,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
         GetIDocumentUndoRedo().DelAllUndoObj();
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 SwFmt* SwDoc::FindFmtByName( const SwFmtsBase& rFmtArr,
@@ -1669,7 +1670,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
         }
         ++aIdx;
     }
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 bool SwDoc::DontExpandFmt( const SwPosition& rPos, bool bFlag )
@@ -1691,7 +1692,7 @@ SwTableBoxFmt* SwDoc::MakeTableBoxFmt()
 {
     SwTableBoxFmt* pFmt = new SwTableBoxFmt( GetAttrPool(), aEmptyOUStr,
                                                 mpDfltFrmFmt );
-    SetModified();
+    getIDocumentState().SetModified();
     return pFmt;
 }
 
@@ -1699,7 +1700,7 @@ SwTableLineFmt* SwDoc::MakeTableLineFmt()
 {
     SwTableLineFmt* pFmt = new SwTableLineFmt( GetAttrPool(), aEmptyOUStr,
                                                 mpDfltFrmFmt );
-    SetModified();
+    getIDocumentState().SetModified();
     return pFmt;
 }
 

@@ -75,6 +75,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentState.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
 #include <pview.hxx>
@@ -476,7 +477,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         // Remember and preserve Modified-Flag without calling the Link
         // (for OLE; after Statement from MM)
-        bool bIsModified = mpDoc->IsModified();
+        bool bIsModified = mpDoc->getIDocumentState().IsModified();
         mpDoc->GetIDocumentUndoRedo().LockUndoNoModifiedPosition();
         Link aOldOLELnk( mpDoc->GetOle2Link() );
         mpDoc->SetOle2Link( Link() );
@@ -503,7 +504,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         if( bIsModified )
         {
-            mpDoc->SetModified();
+            mpDoc->getIDocumentState().SetModified();
             mpDoc->GetIDocumentUndoRedo().UnLockUndoNoModifiedPosition();
         }
         mpDoc->SetOle2Link( aOldOLELnk );
@@ -767,9 +768,9 @@ bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor 
     {
         // Do not decide until here, whether Saving was successful or not
         if( IsModified() )
-            mpDoc->SetModified();
+            mpDoc->getIDocumentState().SetModified();
         else
-            mpDoc->ResetModified();
+            mpDoc->getIDocumentState().ResetModified();
     }
 
     if (mpOLEChildList)
@@ -1106,7 +1107,7 @@ void SwDocShell::LoadingFinished()
     // enables the document modification again.
     // Thus, manuell modify the document, if its modified and its links are updated
     // before <FinishedLoading(..)> is called.
-    const bool bHasDocToStayModified( mpDoc->IsModified() && mpDoc->getIDocumentLinksAdministration().LinksUpdated() );
+    const bool bHasDocToStayModified( mpDoc->getIDocumentState().IsModified() && mpDoc->getIDocumentLinksAdministration().LinksUpdated() );
 
     FinishedLoading( SFX_LOADED_ALL );
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
@@ -1118,9 +1119,9 @@ void SwDocShell::LoadingFinished()
     }
 
     // #i38810#
-    if ( bHasDocToStayModified && !mpDoc->IsModified() )
+    if ( bHasDocToStayModified && !mpDoc->getIDocumentState().IsModified() )
     {
-        mpDoc->SetModified();
+        mpDoc->getIDocumentState().SetModified();
     }
 }
 

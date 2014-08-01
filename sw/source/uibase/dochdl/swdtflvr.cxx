@@ -83,6 +83,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
@@ -3761,13 +3762,13 @@ void SwTrnsfrDdeLink::Disconnect( bool bRemoveDataAdvise )
         Link aSavedOle2Link( pDoc->GetOle2Link() );
         pDoc->SetOle2Link( Link() );
 
-        bool bIsModified = pDoc->IsModified();
+        bool bIsModified = pDoc->getIDocumentState().IsModified();
 
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         pMarkAccess->deleteMark(pMarkAccess->findMark(sName));
 
         if( !bIsModified )
-            pDoc->ResetModified();
+            pDoc->getIDocumentState().ResetModified();
         // #i58448#
         pDoc->SetOle2Link( aSavedOle2Link );
 

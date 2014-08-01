@@ -21,6 +21,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <DocumentRedlineManager.hxx>
+#include <IDocumentState.hxx>
 #include <UndoManager.hxx>
 #include <docary.hxx>
 #include <textboxhelper.hxx>
@@ -1691,7 +1692,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
             *pRedlineRange->GetMark() = *aPam.GetMark();
         }
 
-        pDoc->SetModified();
+        pDoc->getIDocumentState().SetModified();
         bRet = true;
     }
 
@@ -1869,7 +1870,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         m_rSwdoc.GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
     }
     rPam.DeleteMark();
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
 
     return true;
 }
@@ -2120,7 +2121,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         m_rSwdoc.GetFtnIdxs().UpdateAllFtn();
     }
 
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
     return true;
 }
 
@@ -2253,7 +2254,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
         m_rSwdoc.GetFtnIdxs().UpdateAllFtn();
     }
 
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
     return true;
 }
 
@@ -2384,7 +2385,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
         m_rSwdoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
     }
 
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
     return true;
 }
 
@@ -2480,7 +2481,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
         }
     }
 
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
     return true;
 }
 
@@ -2558,7 +2559,7 @@ void DocumentContentOperationsManager::TransliterateText(
         else
             delete pUndo;
     }
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
 }
 
 SwFlyFrmFmt* DocumentContentOperationsManager::Insert( const SwPaM &rRg,
@@ -2657,7 +2658,7 @@ void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrf
             pGrfNd->SetAttr( SwMirrorGrf() );
 
         pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj, true );
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     }
 }
 
@@ -2768,7 +2769,7 @@ SwDrawFrmFmt* DocumentContentOperationsManager::InsertDrawObj(
         m_rSwdoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoInsLayFmt(pFmt, 0, 0) );
     }
 
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
     return pFmt;
 }
 
@@ -2869,7 +2870,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
 
                     if( pUndo )
                         pUndo->SetTblFlag();
-                    m_rSwdoc.SetModified();
+                    m_rSwdoc.getIDocumentState().SetModified();
                     return true;
                 }
             }
@@ -2900,7 +2901,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
         }
     }
 
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
     return true;
 }
 
@@ -2938,7 +2939,7 @@ bool DocumentContentOperationsManager::AppendTxtNode( SwPosition& rPos )
             m_rSwdoc.getIDocumentRedlineAccess().SplitRedline( aPam );
     }
 
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
     return true;
 }
 
@@ -3044,7 +3045,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
 
     if( bRet )
     {
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     }
     return bRet;
 }
@@ -3068,7 +3069,7 @@ bool DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const S
     }
 
     if( bRet )
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     return bRet;
 }
 
@@ -3476,7 +3477,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
 
         if ( *rPam.GetPoint() != *rPam.GetMark() )
             m_rSwdoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true );
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
 
         if ( pUndo )
         {
@@ -3614,7 +3615,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
             m_rSwdoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoDelete( rPam ) );
         }
 
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
 
         return true;
     }
@@ -3724,7 +3725,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 
     if( !m_rSwdoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rSwdoc.getIDocumentRedlineAccess().GetRedlineTbl().empty() )
         m_rSwdoc.getIDocumentRedlineAccess().CompressRedlines();
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
 
     return true;
 }
@@ -3964,7 +3965,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
     if( bJoinTxt )
         ::sw_JoinText( rPam, bJoinPrev );
 
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
     return true;
 }
 
@@ -4450,7 +4451,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     }
 
     pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
-    pDoc->SetModified();
+    pDoc->getIDocumentState().SetModified();
 
     return true;
 }

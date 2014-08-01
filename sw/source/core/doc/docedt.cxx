@@ -23,6 +23,7 @@
 #include <acorrect.hxx>
 #include <UndoManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <doctxm.hxx>
@@ -273,7 +274,7 @@ void _SaveRedlEndPosForRestore::_Restore()
 void SwDoc::SetModified(SwPaM &rPaM)
 {
     SwDataChanged aTmp( rPaM );
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 /// Convert list of ranges of whichIds to a corresponding list of whichIds

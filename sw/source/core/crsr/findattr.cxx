@@ -35,6 +35,7 @@
 #include <charfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <swcrsr.hxx>
 #include <editsh.hxx>
 #include <ndtxt.hxx>
@@ -1240,7 +1241,7 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, bool bNoCollections,
     sal_uLong nRet = FindAll( aSwFindParaAttr, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
-        pDoc->SetModified();
+        pDoc->getIDocumentState().SetModified();
 
     if (bStartUndo)
     {

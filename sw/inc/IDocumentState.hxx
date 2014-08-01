@@ -37,6 +37,8 @@ public:
     */
     virtual bool IsModified() const = 0;
 
+    virtual bool IsInCallModified() const = 0;
+
     /** State of being loaded or not.
         Formerly DocInfo.
     */

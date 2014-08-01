@@ -45,6 +45,7 @@
 #include <viscrs.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <dview.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
@@ -1134,7 +1135,7 @@ bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
 
             bRet = true;
             EndAllActionAndCall();
-            GetDoc()->SetModified();
+            GetDoc()->getIDocumentState().SetModified();
         }
     }
     return bRet;

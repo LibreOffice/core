@@ -28,6 +28,7 @@
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <editsh.hxx>
 #include <dpage.hxx>
 #include <unofldmid.h>
@@ -269,8 +270,8 @@ void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFmt )
             }
         }
 
-        bool bModified = GetDoc()->IsModified();
-        GetDoc()->SetModified();
+        bool bModified = GetDoc()->getIDocumentState().IsModified();
+        GetDoc()->getIDocumentState().SetModified();
         if( !bModified )    // Bug 57028
         {
             GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();

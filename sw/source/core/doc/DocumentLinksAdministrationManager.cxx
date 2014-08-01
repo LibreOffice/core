@@ -22,6 +22,7 @@
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
@@ -416,7 +417,7 @@ bool DocumentLinksAdministrationManager::EmbedAllLinks()
         }
 
         m_rSwdoc.GetIDocumentUndoRedo().DelAllUndoObj();
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     }
     return bRet;
 }

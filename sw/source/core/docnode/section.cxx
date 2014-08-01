@@ -37,6 +37,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmtool.hxx>
@@ -1181,7 +1182,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
     //  #i38810# - Due to possible existing signatures, the
     // document has to be modified after updating a link.
-    pDoc->SetModified();
+    pDoc->getIDocumentState().SetModified();
     // set additional flag that links have been updated, in order to check this
     // during load.
     pDoc->getIDocumentLinksAdministration().SetLinksUpdated( true );

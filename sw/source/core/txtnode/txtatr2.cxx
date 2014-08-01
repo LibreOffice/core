@@ -32,6 +32,7 @@
 #include <doc.hxx>
 #include <fmtruby.hxx>
 #include <fmtmeta.hxx>
+#include <IDocumentState.hxx>
 
 TYPEINIT1(SwTxtINetFmt,SwClient);
 TYPEINIT1(SwTxtRuby,SwClient);
@@ -135,7 +136,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //      correct charstyle.
-        bool bResetMod = !pDoc->IsModified();
+        bool bResetMod = !pDoc->getIDocumentState().IsModified();
         Link aOle2Lnk;
         if ( bResetMod )
         {
@@ -149,7 +150,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 
         if ( bResetMod )
         {
-            ( (SwDoc*) pDoc )->ResetModified();
+            ( (SwDoc*) pDoc )->getIDocumentState().ResetModified();
             ( (SwDoc*) pDoc )->SetOle2Link( aOle2Lnk );
         }
     }
@@ -256,7 +257,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //              correct charstyle.
-        const bool bResetMod = !pDoc->IsModified();
+        const bool bResetMod = !pDoc->getIDocumentState().IsModified();
         Link aOle2Lnk;
         if( bResetMod )
         {
@@ -270,7 +271,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
 
         if( bResetMod )
         {
-            ((SwDoc*)pDoc)->ResetModified();
+            ((SwDoc*)pDoc)->getIDocumentState().ResetModified();
             ((SwDoc*)pDoc)->SetOle2Link( aOle2Lnk );
         }
     }

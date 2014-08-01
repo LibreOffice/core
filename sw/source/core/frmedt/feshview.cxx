@@ -38,6 +38,7 @@
 #include <svx/svdpagv.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentState.hxx>
 #include <cmdid.h>
 #include <drawdoc.hxx>
 #include <textboxhelper.hxx>
@@ -666,7 +667,7 @@ long SwFEShell::EndDrag( const Point *, bool )
                 ((SwCrsrShell*)pSh)->CallChgLnk();
         } while ( this != (pSh = (SwViewShell*)pSh->GetNext()) );
 
-        GetDoc()->SetModified();
+        GetDoc()->getIDocumentState().SetModified();
         ::FrameNotify( this, FLY_DRAG );
         return 1;
     }
@@ -809,7 +810,7 @@ void SwFEShell::SelectionToTop( bool bTop )
     else
         Imp()->GetDrawView()->MovMarkedToTop();
     ::lcl_NotifyNeighbours( &rMrkList );
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
 
@@ -829,7 +830,7 @@ void SwFEShell::SelectionToBottom( bool bBottom )
     else
         Imp()->GetDrawView()->MovMarkedToBtm();
     ::lcl_NotifyNeighbours( &rMrkList );
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
 
@@ -897,7 +898,7 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
                 }
             }
         }
-        GetDoc()->SetModified();
+        GetDoc()->getIDocumentState().SetModified();
     }
 }
 
@@ -1820,7 +1821,7 @@ bool SwFEShell::ImpEndCreate()
         }
     }
 
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
 
     KillPams();
     EndAllActionAndCall();
@@ -2372,7 +2373,7 @@ bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
 
     EndUndo( UNDO_INSATTR );
     EndAllActionAndCall();
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     return true;
 }
 

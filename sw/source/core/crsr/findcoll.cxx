@@ -21,6 +21,7 @@
 #include <swcrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <SwRewriter.hxx>
@@ -91,7 +92,7 @@ sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl, SwDocPositions nStart,
     pDoc->SetOle2Link( aLnk );
 
     if( nRet && pReplFmtColl )
-        pDoc->SetModified();
+        pDoc->getIDocumentState().SetModified();
 
     if (bStartUndo)
     {

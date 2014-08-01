@@ -28,6 +28,7 @@
 #include <IDocumentListsAccess.hxx>
 #include <DocumentRedlineManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <doctxm.hxx>
@@ -143,7 +144,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 
     getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::PropagateOutlineRule()
@@ -408,7 +409,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     }
 
     ChkCondColls();
-    SetModified();
+    getIDocumentState().SetModified();
 
     return true;
 }
@@ -943,7 +944,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         GetIDocumentUndoRedo().EndUndo( UNDO_INSNUM, NULL );
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 
@@ -976,7 +977,7 @@ void SwDoc::SetNumRuleStart( const SwPosition& rPos, bool bFlag )
 
             pTxtNd->SetListRestart(bFlag);
 
-            SetModified();
+            getIDocumentState().SetModified();
         }
     }
 }
@@ -997,7 +998,7 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
             }
             pTxtNd->SetAttrListRestartValue( nStt );
 
-            SetModified();
+            getIDocumentState().SetModified();
         }
     }
 }
@@ -1038,7 +1039,7 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
         mpNumRuleTbl->erase( mpNumRuleTbl->begin() + nPos );
         maNumRuleMap.erase(aTmpName);
 
-        SetModified();
+        getIDocumentState().SetModified();
         return true;
     }
     return false;
@@ -1061,7 +1062,7 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule )
         if( pUndo )
             pUndo->SetLRSpaceEndPos();
 
-        SetModified();
+        getIDocumentState().SetModified();
     }
 }
 
@@ -1171,7 +1172,7 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
                 }
             }
             GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
-            SetModified();
+            getIDocumentState().SetModified();
 
             bRet = true;
         }
@@ -1274,7 +1275,7 @@ bool SwDoc::NoNum( const SwPaM& rPam )
         {
             pNd->SetCountedInList(false);
 
-            SetModified();
+            getIDocumentState().SetModified();
         }
         else
             bRet = false;   // no Numbering or just always sal_True?
@@ -1680,7 +1681,7 @@ bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
             }
 
             ChkCondColls();
-            SetModified();
+            getIDocumentState().SetModified();
         }
     }
 
@@ -1978,7 +1979,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             // Still NEEDS to be optimized!
             getIDocumentRedlineAccess().SetRedlineMode( eOld );
             GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
-            SetModified();
+            getIDocumentState().SetModified();
 
             return true;
         }
@@ -2035,7 +2036,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         }
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
     return true;
 }
 
@@ -2053,7 +2054,7 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, bool bDel )
             bool bNewNum = !bDel;
             pTxtNd->SetCountedInList(bNewNum);
 
-            SetModified();
+            getIDocumentState().SetModified();
 
             bResult = true;
 

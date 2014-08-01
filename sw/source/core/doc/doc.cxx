@@ -31,6 +31,7 @@
 #include <DocumentRedlineManager.hxx>
 #include <DocumentFieldsManager.hxx>
 #include <DocumentStatisticsManager.hxx>
+#include <DocumentStateManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -428,6 +429,27 @@ IDocumentStatistics & SwDoc::getIDocumentStatistics()
     return *m_pDocumentStatisticsManager;
 }
 
+//IDocumentState
+IDocumentState const & SwDoc::getIDocumentState() const
+{
+    return *m_pDocumentStateManager;
+}
+
+IDocumentState & SwDoc::getIDocumentState()
+{
+    return *m_pDocumentStateManager;
+}
+
+::sw::DocumentStateManager const & SwDoc::GetDocumentStateManager() const
+{
+    return *m_pDocumentStateManager;
+}
+
+::sw::DocumentStateManager & SwDoc::GetDocumentStateManager()
+{
+    return *m_pDocumentStateManager;
+}
+
 /* Implementations the next Interface here */
 
 /*
@@ -439,7 +461,7 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
     if( rNewData != maDBData )
     {
         maDBData = rNewData;
-        SetModified();
+        getIDocumentState().SetModified();
     }
     getIDocumentFieldsAccess().GetSysFldType(RES_DBNAMEFLD)->UpdateFlds();
 }
@@ -1025,51 +1047,6 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
     return nCount;
 }
 
-bool SwDoc::IsLoaded() const
-{
-    return mbLoaded;
-}
-
-bool SwDoc::IsUpdateExpFld() const
-{
-    return mbUpdateExpFld;
-}
-
-bool SwDoc::IsNewDoc() const
-{
-    return mbNewDoc;
-}
-
-bool SwDoc::IsPageNums() const
-{
-  return mbPageNums;
-}
-
-void SwDoc::SetPageNums(bool b)
-{
-    mbPageNums = b;
-}
-
-void SwDoc::SetNewDoc(bool b)
-{
-    mbNewDoc = b;
-}
-
-void SwDoc::SetUpdateExpFldStat(bool b)
-{
-    mbUpdateExpFld = b;
-}
-
-void SwDoc::SetLoaded(bool b)
-{
-    mbLoaded = b;
-}
-
-bool SwDoc::IsModified() const
-{
-    return mbModified;
-}
-
 //Load document from fdo#42534 under valgrind, drag the scrollbar down so full
 //document layout is triggered. Close document before layout has completed, and
 //SwAnchoredObject objects deleted by the deletion of layout remain referenced
@@ -1080,42 +1057,6 @@ void SwDoc::ClearSwLayouterEntries()
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( *this );
     // #i65250#
     SwLayouter::ClearMoveBwdLayoutInfo( *this );
-}
-
-void SwDoc::SetModified()
-{
-    ClearSwLayouterEntries();
-    // give the old and new modified state to the link
-    //  Bit 0:  -> old state
-    //  Bit 1:  -> new state
-    sal_IntPtr nCall = mbModified ? 3 : 2;
-    mbModified = true;
-    GetDocumentStatisticsManager().GetDocStat().bModified = true;
-    if( maOle2Link.IsSet() )
-    {
-        mbInCallModified = true;
-        maOle2Link.Call( (void*)nCall );
-        mbInCallModified = false;
-    }
-
-    if( mpACEWord && !mpACEWord->IsDeleted() )
-        delete mpACEWord, mpACEWord = 0;
-}
-
-void SwDoc::ResetModified()
-{
-    // give the old and new modified state to the link
-    //  Bit 0:  -> old state
-    //  Bit 1:  -> new state
-    sal_IntPtr nCall = mbModified ? 1 : 0;
-    mbModified = false;
-    GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
-    if( nCall && maOle2Link.IsSet() )
-    {
-        mbInCallModified = true;
-        maOle2Link.Call( (void*)nCall );
-        mbInCallModified = false;
-    }
 }
 
 static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
@@ -1458,7 +1399,7 @@ bool SwDoc::RemoveInvisibleContent()
     }
 
     if( bRet )
-        SetModified();
+        getIDocumentState().SetModified();
     GetIDocumentUndoRedo().EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
     return bRet;
 }
@@ -1592,7 +1533,7 @@ bool SwDoc::ConvertFieldsToText()
     }
 
     if( bRet )
-        SetModified();
+        getIDocumentState().SetModified();
     GetIDocumentUndoRedo().EndUndo( UNDO_UI_REPLACE, NULL );
     getIDocumentFieldsAccess().UnlockExpFlds();
     return bRet;

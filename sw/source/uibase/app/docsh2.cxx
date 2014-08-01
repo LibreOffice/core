@@ -79,6 +79,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentState.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
 #include <pview.hxx>
@@ -285,13 +286,13 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if ( bResetModified )
                     EnableSetModified( false );
                 // #i41679#
-                const bool bIsDocModified = mpDoc->IsModified();
+                const bool bIsDocModified = mpDoc->getIDocumentState().IsModified();
 
                 mpDoc->getIDocumentStatistics().DocInfoChgd( );
 
                 // #i41679#
                 if ( !bIsDocModified )
-                    mpDoc->ResetModified();
+                    mpDoc->getIDocumentState().ResetModified();
                 if ( bResetModified )
                     EnableSetModified( true );
             }
@@ -661,7 +662,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if(nSlot)
                     pViewFrm->GetDispatcher()->Execute(nSlot, SFX_CALLMODE_SYNCHRON);
                 if(bSetModified)
-                    GetDoc()->SetModified();
+                    GetDoc()->getIDocumentState().SetModified();
                 if(pSavePrinter)
                 {
                     GetDoc()->getIDocumentDeviceAccess().setPrinter( pSavePrinter, true, true);
@@ -749,7 +750,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     xDocSh->SetTitle( aTmp );
                     pCurrView->GetWrtShell().SetNewDoc();
                     pFrame->Show();
-                    pSmryDoc->SetModified();
+                    pSmryDoc->getIDocumentState().SetModified();
                 }
 
             }
@@ -1224,20 +1225,20 @@ void SwDocShell::SetModified( bool bSet )
     SfxObjectShell::SetModified( bSet );
     if( IsEnableSetModified())
     {
-         if (!mpDoc->IsInCallModified() )
+         if (!mpDoc->getIDocumentState().IsInCallModified() )
          {
             EnableSetModified( false );
             if( bSet )
             {
-                bool bOld = mpDoc->IsModified();
-                mpDoc->SetModified();
+                bool bOld = mpDoc->getIDocumentState().IsModified();
+                mpDoc->getIDocumentState().SetModified();
                 if( !bOld )
                 {
                     mpDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
                 }
             }
             else
-                mpDoc->ResetModified();
+                mpDoc->getIDocumentState().ResetModified();
 
             EnableSetModified( true );
          }
@@ -1381,7 +1382,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     if(bModified && !IsReadOnly())
         SetModified();
     else
-        mpDoc->ResetModified();
+        mpDoc->getIDocumentState().ResetModified();
 }
 
 sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,

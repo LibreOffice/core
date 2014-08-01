@@ -12,6 +12,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <UndoManager.hxx>
 #include "ndtxt.hxx"
 #include "MarkManager.hxx"
@@ -197,7 +198,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     lcl_dumpSdrModel( writer, getIDocumentDrawModelAccess().GetDrawModel() );
 
     writer.startElement("mbModified");
-    writer.writeFormatAttribute("value", TMP_FORMAT, static_cast<int>(mbModified));
+    writer.writeFormatAttribute("value", TMP_FORMAT, static_cast<int>(getIDocumentState().IsModified()));
     writer.endElement();
 
     writer.endElement();

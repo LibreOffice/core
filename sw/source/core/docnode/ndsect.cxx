@@ -30,6 +30,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <rootfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -378,7 +379,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         GetFtnIdxs().UpdateFtn( SwNodeIndex( *pNewSectNode ));
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
     return &pNewSectNode->GetSection();
 }
 
@@ -539,7 +540,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
                 GetIDocumentUndoRedo().AppendUndo( new SwUndoDelete( aPaM ));
                 if( pFtnEndAtTxtEnd )
                     GetFtnIdxs().UpdateFtn( aUpdIdx );
-                SetModified();
+                getIDocumentState().SetModified();
                 //#126178# start/end undo have to be pairs!
                 GetIDocumentUndoRedo().EndUndo(UNDO_DELSECTION, NULL);
                 return ;
@@ -553,7 +554,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
             getIDocumentContentOperations().DeleteSection( (SwNode*)pSectNd );
             if( pFtnEndAtTxtEnd )
                 GetFtnIdxs().UpdateFtn( aUpdIdx );
-            SetModified();
+            getIDocumentState().SetModified();
             //#126178# start/end undo have to be pairs!
             GetIDocumentUndoRedo().EndUndo(UNDO_DELSECTION, NULL);
             return ;
@@ -600,7 +601,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
 
     GetIDocumentUndoRedo().EndUndo(UNDO_DELSECTION, NULL);
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
@@ -646,7 +647,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
             // We don't want them.
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
             pFmt->SetFmtAttr( *pAttr );
-            SetModified();
+            getIDocumentState().SetModified();
         }
         return;
     }
@@ -742,7 +743,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         getIDocumentLinksAdministration().GetLinkManager().Remove( &pSection->GetBaseLink() );
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void sw_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )

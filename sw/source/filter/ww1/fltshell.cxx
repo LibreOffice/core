@@ -47,6 +47,7 @@
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentState.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <fldbas.hxx>
@@ -1062,7 +1063,7 @@ SwFltShell::~SwFltShell()
     if( pOutDoc->IsInFly() )
         EndFly();
 
-    GetDoc().SetUpdateExpFldStat(true);
+    GetDoc().getIDocumentState().SetUpdateExpFldStat(true);
     GetDoc().SetInitDBFields(true);
     aStack.SetAttr(*pPaM->GetPoint(), 0, false);
     aStack.SetAttr(*pPaM->GetPoint(), 0, false);

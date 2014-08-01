@@ -22,6 +22,7 @@
 #include <edimp.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <swundo.hxx>
@@ -297,7 +298,7 @@ void SwEditShell::DelNumRules()
     // Cursor cannot be in front of a label anymore, because numbering/bullet is deleted.
     SetInFrontOfLabel( false );
 
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
 
@@ -319,7 +320,7 @@ bool SwEditShell::NumUpDown( bool bDown )
             bRet = bRet && GetDoc()->NumUpDown( aRangeArr.SetPam( n, aPam ), bDown );
         GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
 
     // #i54693# Update marked numbering levels
     if ( IsInFrontOfLabel() )
@@ -404,7 +405,7 @@ bool SwEditShell::MoveParagraph( long nOffset )
 
     bool bRet = GetDoc()->MoveParagraph( *pCrsr, nOffset );
 
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
     return bRet;
 }
@@ -518,7 +519,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
         }
     }
 
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
     return bRet;
 }
@@ -541,7 +542,7 @@ bool SwEditShell::OutlineUpDown( short nOffset )
                                     aRangeArr.SetPam( n, aPam ), nOffset );
         GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
     return bRet;
 }

@@ -42,6 +42,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentState.hxx>
 #include <cmdid.h>
 #include <swstyle.h>
 #include <app.hrc>
@@ -1016,7 +1017,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 rDoc.ChgPageDesc(aOldName, aPageDesc);
                 rDoc.GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 
-                rDoc.SetModified();
+                rDoc.getIDocumentState().SetModified();
                 bChg = true;
             }
             break;
@@ -1033,7 +1034,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                          rDoc.RenameNumRule(aOldName, rStr))
                     {
                         pNumRule = rDoc.FindNumRulePtr(rStr);
-                        rDoc.SetModified();
+                        rDoc.getIDocumentState().SetModified();
 
                         bChg = true;
                     }
@@ -1042,7 +1043,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 {
                     // #i91400#
                     ((SwNumRule*)pNumRule)->SetName( rStr, rDoc.getIDocumentListsAccess() );
-                    rDoc.SetModified();
+                    rDoc.getIDocumentState().SetModified();
 
                     bChg = true;
                 }

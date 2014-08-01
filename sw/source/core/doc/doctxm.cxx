@@ -39,6 +39,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <pagefrm.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -171,7 +172,7 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
         if( rTxtNd.GetpSwpHints() )
             rTxtNd.GetpSwpHints()->DeRegister();
     }
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 /// Travel between table of content Marks
@@ -675,7 +676,7 @@ bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName)
     {
         pTOX->SetTOXName(rName);
         pTOX->SetSectionName(rName);
-        SetModified();
+        getIDocumentState().SetModified();
     }
     return bRet;
 }
@@ -819,7 +820,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         }
     }
 
-    pDoc->SetModified();
+    pDoc->getIDocumentState().SetModified();
 
     // get current Language
     SwTOXInternational aIntl(  GetLanguage(),

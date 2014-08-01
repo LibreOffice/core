@@ -18,6 +18,7 @@
  */
 
 #include "doc.hxx"
+#include <IDocumentState.hxx>
 #include "lineinfo.hxx"
 #include "charfmt.hxx"
 #include "poolfmt.hxx"
@@ -41,7 +42,7 @@ void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
          pTmpRoot->EndAllAction();
     }
     *mpLineNumberInfo = rNew;
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 const SwLineNumberInfo& SwDoc::GetLineNumberInfo() const

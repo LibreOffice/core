@@ -31,6 +31,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -687,7 +688,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         if (bExpand)
             pTxtFld->ExpandTxtFld( true );
     }
-    SetModified();
+    getIDocumentState().SetModified();
 #endif
 }
 

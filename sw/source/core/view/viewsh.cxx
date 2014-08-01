@@ -36,6 +36,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -691,7 +692,7 @@ static void lcl_InvalidateAllCntnt( SwViewShell& rSh, sal_uInt8 nInv )
     else
         rSh.EndAction();
 
-    rSh.GetDoc()->SetModified();
+    rSh.GetDoc()->getIDocumentState().SetModified();
 }
 
 /** local method to invalidate/re-calculate positions of floating screen
@@ -713,7 +714,7 @@ static void lcl_InvalidateAllObjPos( SwViewShell &_rSh )
     else
         _rSh.EndAction();
 
-    _rSh.GetDoc()->SetModified();
+    _rSh.GetDoc()->getIDocumentState().SetModified();
 }
 
 void SwViewShell::SetParaSpaceMax( bool bNew )

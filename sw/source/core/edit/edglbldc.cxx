@@ -20,6 +20,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentState.hxx>
 #include <editsh.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -38,11 +39,11 @@ bool SwEditShell::IsGlobalDoc() const
 void SwEditShell::SetGlblDocSaveLinks( bool bFlag )
 {
     getIDocumentSettingAccess()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bFlag);
-    if( !GetDoc()->IsModified() )   // Bug 57028
+    if( !GetDoc()->getIDocumentState().IsModified() )   // Bug 57028
     {
         GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
     }
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
 }
 
 bool SwEditShell::IsGlblDocSaveLinks() const

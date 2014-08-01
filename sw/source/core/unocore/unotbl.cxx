@@ -36,6 +36,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <shellres.hxx>
 #include <docary.hxx>
 #include <ndole.hxx>
@@ -3631,7 +3632,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException, 
             }
             aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
         }
-        pFmt->GetDoc()->SetModified();
+        pFmt->GetDoc()->getIDocumentState().SetModified();
     }
     else
         m_sTableName = rName;

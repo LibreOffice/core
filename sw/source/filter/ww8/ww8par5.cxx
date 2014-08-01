@@ -48,6 +48,7 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <charatr.hxx>
 #include <flddat.hxx>
 #include <docufld.hxx>
@@ -455,7 +456,7 @@ short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
 // Am Ende des Einlesens entsprechende Felder updaten ( z.Zt. die Referenzen )
 void SwWW8ImplReader::UpdateFields()
 {
-    rDoc.SetUpdateExpFldStat(true);                 // JP: neu fuer alles wichtige
+    rDoc.getIDocumentState().SetUpdateExpFldStat(true);                 // JP: neu fuer alles wichtige
     rDoc.SetInitDBFields(true);             // Datenbank-Felder auch
 }
 

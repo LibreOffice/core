@@ -33,6 +33,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -598,7 +599,7 @@ bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     aSortList.clear();
     SwSortElement::Finit();
 
-    SetModified();
+    getIDocumentState().SetModified();
     return true;
 }
 

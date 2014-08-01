@@ -65,6 +65,7 @@
 #include <IDocumentTimerAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
@@ -875,7 +876,7 @@ SwCntntNotify::~SwCntntNotify()
                         // have a look at the occurrence of CalcLayout in
                         // uiview/view.cxx.
                         if ( !pNd->IsOLESizeInvalid() &&
-                             !pSh->GetDoc()->IsUpdateExpFld() )
+                             !pSh->GetDoc()->getIDocumentState().IsUpdateExpFld() )
                             pFESh->CalcAndSetScale( xObj,
                                                     &pFly->Prt(), &pFly->Frm(),
                                                     bNoTxtFrmPrtAreaChanged );
@@ -904,7 +905,7 @@ SwCntntNotify::~SwCntntNotify()
 
         SwDoc *pDoc = pCnt->GetNode()->GetDoc();
         if ( !pDoc->GetSpzFrmFmts()->empty() &&
-             pDoc->DoesContainAtPageObjWithContentAnchor() && !pDoc->IsNewDoc() )
+             pDoc->DoesContainAtPageObjWithContentAnchor() && !pDoc->getIDocumentState().IsNewDoc() )
         {
             // If certain import filters for foreign file format import
             // AT_PAGE anchored objects, the corresponding page number is

@@ -67,6 +67,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -119,7 +120,7 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
 SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
     SwFrmFmt *pFmt = 0;
-    const bool bMod = IsModified();
+    const bool bMod = getIDocumentState().IsModified();
     bool bHeader = false;
 
     switch ( eRequest )
@@ -164,7 +165,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
             // Why set it back?  Doc has changed, or not?
             // In any case, wrong for the FlyFrames!
             if ( !bMod )
-                ResetModified();
+                getIDocumentState().ResetModified();
         }
         break;
 
@@ -330,7 +331,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 
         DelFrmFmt( pFmt );
     }
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 /** Copies the stated format (pSrc) to pDest and returns pDest.
@@ -684,7 +685,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
             new SwUndoInsLayFmt( pFmt, nNodeIdx, nCntIdx ));
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
     return pFmt;
 }
 
@@ -857,7 +858,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
         } while( false );
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
 
     GetIDocumentUndoRedo().EndUndo( UNDO_INSLAYFMT, NULL );
 
@@ -1341,7 +1342,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                     pUndo->SetUndoKeep();
             }
         }
-        rDoc.SetModified();
+        rDoc.getIDocumentState().SetModified();
     }
 
     return pNewFmt;
@@ -1781,7 +1782,7 @@ void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const OUString& rName )
         sName = lcl_GetUniqueFlyName( this, nTyp );
     }
     rFmt.SetName( sName, true );
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::SetAllUniqueFlyNames()

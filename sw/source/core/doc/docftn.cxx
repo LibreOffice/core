@@ -30,6 +30,7 @@
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
@@ -311,7 +312,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
         {
             getIDocumentFieldsAccess().UpdateRefFlds(NULL);
         }
-        SetModified();
+        getIDocumentState().SetModified();
     }
 }
 
@@ -379,7 +380,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         {
             getIDocumentFieldsAccess().UpdateRefFlds(NULL);
         }
-        SetModified();
+        getIDocumentState().SetModified();
     }
 }
 
@@ -488,7 +489,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
             std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
         }
-        SetModified();
+        getIDocumentState().SetModified();
     }
     else
         delete pUndo;

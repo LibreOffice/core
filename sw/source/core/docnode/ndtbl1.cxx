@@ -36,6 +36,7 @@
 #include <svx/svxids.hrc>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include "pam.hxx"
 #include "swcrsr.hxx"
 #include "viscrs.hxx"
@@ -311,7 +312,7 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
                 ::lcl_ProcessRowAttr( aFmtCmp, aRowArr[i], rNew );
 
             SwTblFmtCmp::Delete( aFmtCmp );
-            SetModified();
+            getIDocumentState().SetModified();
         }
     }
 }
@@ -377,7 +378,7 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
                 ::lcl_ProcessRowSize( aFmtCmp, aRowArr[i], rNew );
             SwTblFmtCmp::Delete( aFmtCmp );
 
-            SetModified();
+            getIDocumentState().SetModified();
         }
     }
 }
@@ -447,7 +448,7 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly )
                     ::lcl_ProcessRowSize( aFmtCmp, (SwTableLine*)aRowArr[i], aNew );
                 SwTblFmtCmp::Delete( aFmtCmp );
 
-                SetModified();
+                getIDocumentState().SetModified();
             }
             bRet = true;
         }
@@ -477,7 +478,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
                 ::lcl_ProcessRowAttr( aFmtCmp, aRowArr[i], rNew );
 
             SwTblFmtCmp::Delete( aFmtCmp );
-            SetModified();
+            getIDocumentState().SetModified();
         }
     }
 }
@@ -801,7 +802,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
         }
         SwTblFmtCmp::Delete( aFmtCmp );
         ::ClearFEShellTabCols();
-        SetModified();
+        getIDocumentState().SetModified();
     }
 }
 
@@ -897,7 +898,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
                 pTableLayout->GetBrowseWidthByTabFrm( *pTabFrm ), true );
         }
         ::ClearFEShellTabCols();
-        SetModified();
+        getIDocumentState().SetModified();
     }
 }
 
@@ -1168,7 +1169,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
                 pTableLayout->GetBrowseWidthByTabFrm( *pTabFrm ), true );
         }
         SwTblFmtCmp::Delete( aFmtCmp );
-        SetModified();
+        getIDocumentState().SetModified();
     }
 }
 
@@ -1581,7 +1582,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
         }
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

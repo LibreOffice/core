@@ -22,6 +22,7 @@
 #include <vcl/window.hxx>
 #include <doc.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docary.hxx>
 #include <ndindex.hxx>
 #include <swtable.hxx>
@@ -187,7 +188,7 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
         }
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

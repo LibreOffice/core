@@ -47,6 +47,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentState.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
@@ -1174,7 +1175,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
     SwAttrSet aSet( GetAttrPool(), pWhichRange );
 
     {
-        bool bIsModified = IsModified();
+        bool bIsModified = getIDocumentState().IsModified();
 
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
@@ -1192,7 +1193,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
         }
 
         if( !bIsModified )
-            ResetModified();
+            getIDocumentState().ResetModified();
         pNewFmt->SetPoolFmtId( nId );
         pNewFmt->SetAuto( false );      // no AutoFormat
     }
@@ -1481,7 +1482,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     {
         const ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
         const OUString aNm( aResId );
-        const bool bIsModified = IsModified();
+        const bool bIsModified = getIDocumentState().IsModified();
 
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
@@ -1491,7 +1492,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         pNewPgDsc->SetPoolFmtId( nId );
         if ( !bIsModified )
         {
-            ResetModified();
+            getIDocumentState().ResetModified();
         }
     }
 
@@ -1660,7 +1661,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     const SvxNumberFormat::SvxNumPositionAndSpaceMode eNumberFormatPositionAndSpaceMode
                                   = numfunc::GetDefaultPositionAndSpaceMode(); //#i89178#
     {
-        bool bIsModified = IsModified();
+        bool bIsModified = getIDocumentState().IsModified();
 
         sal_uInt16 n = MakeNumRule( aNm, 0, false, eNumberFormatPositionAndSpaceMode );
 
@@ -1676,7 +1677,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             pBullCFmt = GetCharFmtFromPool( RES_POOLCHR_NUM_LEVEL );
 
         if( !bIsModified )
-            ResetModified();
+            getIDocumentState().ResetModified();
     }
 
     switch( nId )
@@ -2260,7 +2261,7 @@ sal_uInt16 SwDoc::SetDocPattern( const OUString& rPatternName )
         maPatternNms.erase(maPatternNms.begin() + nNewPos);   // Free space again
 
     maPatternNms.insert(maPatternNms.begin() + nNewPos, new OUString(rPatternName));
-    SetModified();
+    getIDocumentState().SetModified();
     return nNewPos;
 }
 

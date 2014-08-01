@@ -22,6 +22,7 @@
 #include <doc.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <fldbas.hxx>
 #include <switerator.hxx>
 #include <fmtfld.hxx>
@@ -75,7 +76,7 @@ namespace sw { namespace mark
         {
             io_pDoc->GetIDocumentUndoRedo().AppendUndo( new SwUndoInsBookmark(*this) );
         }
-        io_pDoc->SetModified();
+        io_pDoc->getIDocumentState().SetModified();
     }
 
     const SwFmtFld* AnnotationMark::GetAnnotationFmtFld() const

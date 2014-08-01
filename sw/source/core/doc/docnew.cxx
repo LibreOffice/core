@@ -100,6 +100,7 @@
 #include <DocumentRedlineManager.hxx>
 #include <DocumentFieldsManager.hxx>
 #include <DocumentStatisticsManager.hxx>
+#include <DocumentStateManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -202,8 +203,9 @@ SwDoc::SwDoc()
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
     m_pDocumentDrawModelManager( new ::sw::DocumentDrawModelManager( *this ) ),
     m_pDocumentRedlineManager( new ::sw::DocumentRedlineManager( *this ) ),
+    m_pDocumentStateManager( new ::sw::DocumentStateManager( *this ) ),
     m_pUndoManager(new ::sw::UndoManager(
-            boost::shared_ptr<SwNodes>(new SwNodes(this)), *m_pDocumentDrawModelManager, *m_pDocumentRedlineManager, *this)),
+            boost::shared_ptr<SwNodes>(new SwNodes(this)), *m_pDocumentDrawModelManager, *m_pDocumentRedlineManager, *m_pDocumentStateManager)),
     m_pDocumentSettingManager(new ::sw::DocumentSettingManager(*this)),
     m_pDocumentChartDataProviderManager( new sw::DocumentChartDataProviderManager( *this ) ),
     m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
@@ -253,18 +255,12 @@ SwDoc::SwDoc()
     m_pXmlIdRegistry(),
     mReferenceCount(0),
     mbGlossDoc(false),
-    mbModified(false),
     mbDtor(false),
-    mbPageNums(false),
-    mbLoaded(false),
-    mbUpdateExpFld(false),
-    mbNewDoc(false),
     mbCopyIsMove(false),
     mbInReading(false),
     mbInXMLImport(false),
     mbUpdateTOX(false),
     mbInLoadAsynchron(false),
-    mbInCallModified(false),
     mbIsAutoFmtRedline(false),
     mbOLEPrtNotifyPending(false),
     mbAllOLENotify(false),
@@ -373,7 +369,7 @@ SwDoc::SwDoc()
     }
     mnRsidRoot = mnRsid;
 
-    ResetModified();
+    getIDocumentState().ResetModified();
 }
 
 static void DeleteAndDestroy(SwFrmFmts& rFmts, int aStartIdx, int aEndIdx)
@@ -791,7 +787,7 @@ void SwDoc::SetPreviewPrtData( const SwPagePreviewPrtData* pNew )
     }
     else if( mpPgPViewPrtData )
         DELETEZ( mpPgPViewPrtData );
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 /** SwDoc: Reading and writing of the layout cache. */

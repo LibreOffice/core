@@ -34,6 +34,7 @@
 #include <docary.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
+#include <IDocumentState.hxx>
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
@@ -840,7 +841,7 @@ void SwFEShell::SetTabBackground( const SvxBrushItem &rNew )
     StartAllAction();
     GetDoc()->SetAttr( rNew, *pFrm->ImplFindTabFrm()->GetFmt() );
     EndAllAction(); // no call, nothing changes!
-    GetDoc()->SetModified();
+    GetDoc()->getIDocumentState().SetModified();
 }
 
 void SwFEShell::GetTabBackground( SvxBrushItem &rToFill ) const
@@ -2067,7 +2068,7 @@ void SwFEShell::SetTblAttr( const SfxItemSet &rNew )
         SwTabFrm *pTab = pFrm->FindTabFrm();
         pTab->GetTable()->SetHTMLTableLayout( 0 );
         GetDoc()->SetAttr( rNew, *pTab->GetFmt() );
-        GetDoc()->SetModified();
+        GetDoc()->getIDocumentState().SetModified();
         EndAllActionAndCall();
     }
 }

@@ -63,6 +63,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docfac.hxx>
 #include <docstyle.hxx>
 #include <shellio.hxx>
@@ -311,7 +312,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     // #i42080# - Due to the several calls of method <SetDefault(..)>
     // at the document instance, the document is modified. Thus, reset this
     // status here. Note: In method <SubInitNew()> this is also done.
-    mpDoc->ResetModified();
+    mpDoc->getIDocumentState().ResetModified();
 
     return bRet;
 }
@@ -608,7 +609,7 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     } while( false );
 
     SfxObjectShell::LoadFrom( rMedium );
-    mpDoc->ResetModified();
+    mpDoc->getIDocumentState().ResetModified();
     return bRet;
 }
 
@@ -675,7 +676,7 @@ void SwDocShell::SubInitNew()
         mpDoc->SetDefaultPageMode( bSquaredPageMode );
     }
 
-    mpDoc->ResetModified();
+    mpDoc->getIDocumentState().ResetModified();
 }
 
 /*

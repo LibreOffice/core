@@ -20,6 +20,7 @@
 #include <DocumentRedlineManager.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <redline.hxx>
 #include <UndoRedline.hxx>
 #include <docary.hxx>
@@ -635,7 +636,7 @@ void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
             m_rSwdoc.SetInXMLImport( bSaveInXMLImportFlag );
         }
         meRedlineMode = eMode;
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     }
 
     // #TODO - add 'SwExtraRedlineTbl' also ?
@@ -1980,7 +1981,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
     }
 
     if( bChg )
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
 
     return bChg;
 
@@ -2141,7 +2142,7 @@ bool DocumentRedlineManager::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
         if( bRet )
         {
             CompressRedlines();
-            m_rSwdoc.SetModified();
+            m_rSwdoc.getIDocumentState().SetModified();
         }
 
         if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
@@ -2178,7 +2179,7 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
     if( nRet > 0 )
     {
         CompressRedlines();
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     }
     if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
     {
@@ -2255,7 +2256,7 @@ bool DocumentRedlineManager::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
         if( bRet )
         {
             CompressRedlines();
-            m_rSwdoc.SetModified();
+            m_rSwdoc.getIDocumentState().SetModified();
         }
 
         if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
@@ -2292,7 +2293,7 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
     if( nRet > 0 )
     {
         CompressRedlines();
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     }
     if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
     {
@@ -2578,7 +2579,7 @@ bool DocumentRedlineManager::SetRedlineComment( const SwPaM& rPaM, const OUStrin
         }
     }
     if( bRet )
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
 
     return bRet;
 
@@ -2619,7 +2620,7 @@ void DocumentRedlineManager::SetRedlinePassword(
             /*[in]*/const uno::Sequence <sal_Int8>& rNewPassword)
 {
     maRedlinePasswd = rNewPassword;
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
 }
 
 /// Set comment text for the Redline, which is inserted later on via

@@ -20,6 +20,7 @@
 #include <config_features.h>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <dbmgr.hxx>
 #include <chpfld.hxx>
 #include <dbfld.hxx>
@@ -227,7 +228,7 @@ SwFieldType* DocumentFieldsManager::InsertFldType(const SwFieldType &rFldTyp)
     }
 
     mpFldTypes->insert( mpFldTypes->begin() + nSize, pNew );
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
 
     return (*mpFldTypes)[ nSize ];
 }
@@ -329,7 +330,7 @@ void DocumentFieldsManager::RemoveFldType(sal_uInt16 nFld)
             delete pTmp;
         }
         mpFldTypes->erase( mpFldTypes->begin() + nFld );
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     }
 }
 
@@ -390,7 +391,7 @@ void DocumentFieldsManager::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 #endif
     }
     // Only evaluate on full update
-    m_rSwdoc.SetModified();
+    m_rSwdoc.getIDocumentState().SetModified();
 }
 
 void DocumentFieldsManager::InsDeletedFldType( SwFieldType& rFldTyp )
@@ -1175,7 +1176,7 @@ void DocumentFieldsManager::UpdateUsrFlds()
     if( pCalc )
     {
         delete pCalc;
-        m_rSwdoc.SetModified();
+        m_rSwdoc.getIDocumentState().SetModified();
     }
 }
 
@@ -1267,7 +1268,7 @@ bool DocumentFieldsManager::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLon
 
 void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
 {
-    bool bIsModified = m_rSwdoc.IsModified();
+    bool bIsModified = m_rSwdoc.getIDocumentState().IsModified();
 
     sal_Int32 nDate;
     sal_Int64 nTime;
@@ -1369,7 +1370,7 @@ void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pN
     }
 
     if( !bIsModified )
-        m_rSwdoc.ResetModified();
+        m_rSwdoc.getIDocumentState().ResetModified();
 }
 
 void DocumentFieldsManager::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )

@@ -21,6 +21,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentState.hxx>
 #include <editsh.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
@@ -133,7 +134,7 @@ public:
                 pSh->EndAction();
 
             if( pSh )
-                pSh->GetDoc()->SetModified();
+                pSh->GetDoc()->getIDocumentState().SetModified();
         }
     }
 

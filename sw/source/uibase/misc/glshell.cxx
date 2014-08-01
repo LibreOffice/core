@@ -39,6 +39,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentState.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
 #include <initui.hxx>
@@ -84,7 +85,7 @@ static void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
                                         rSh.ExecuteSlot( rReq,
                                         rSh.SfxObjectShell::GetInterface() );
             if( pRes->GetValue() )
-                rSh.GetDoc()->ResetModified();
+                rSh.GetDoc()->getIDocumentState().ResetModified();
         }
     }
 }
@@ -93,7 +94,7 @@ static void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
 {
     if( SFX_ITEM_AVAILABLE >= rSet.GetItemState( SID_SAVEDOC, false ))
     {
-        if( !rSh.GetDoc()->IsModified() )
+        if( !rSh.GetDoc()->getIDocumentState().IsModified() )
             rSet.DisableItem( SID_SAVEDOC );
         else
             rSet.Put( SfxStringItem( SID_SAVEDOC, SW_RESSTR(STR_SAVE_GLOSSARY)));
@@ -265,7 +266,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         }
 
         xDocSh->GetDoc()->GetIDocumentUndoRedo().DoUndo( bDoesUndo );
-        xDocSh->GetDoc()->ResetModified();
+        xDocSh->GetDoc()->getIDocumentState().ResetModified();
         if ( bShow )
             pFrame->GetFrame().Appear();
 

@@ -31,6 +31,7 @@
 #include <swcrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentState.hxx>
 #include <pamtyp.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
@@ -630,7 +631,7 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes,
     sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
-        pDoc->SetModified();
+        pDoc->getIDocumentState().SetModified();
 
     if (bStartUndo)
     {

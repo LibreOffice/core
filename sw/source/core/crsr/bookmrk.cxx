@@ -21,6 +21,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentState.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -265,7 +266,7 @@ namespace sw { namespace mark
             io_pDoc->GetIDocumentUndoRedo().AppendUndo(
                     new SwUndoInsBookmark(*this));
         }
-        io_pDoc->SetModified();
+        io_pDoc->getIDocumentState().SetModified();
     }
 
     ::sfx2::IXmlIdRegistry& Bookmark::GetRegistry()
@@ -386,7 +387,7 @@ namespace sw { namespace mark
             // mark document as modified
             SwDoc *const pDoc( GetMarkPos().GetDoc() );
             if ( pDoc )
-                pDoc->SetModified();
+                pDoc->getIDocumentState().SetModified();
         }
     }
 

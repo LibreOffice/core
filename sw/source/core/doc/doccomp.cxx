@@ -29,6 +29,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -1548,7 +1549,7 @@ void SwCompareData::ShowDelete(
     SwNodeIndex aSavePos( aInsPos, -1 );
 
     ((SwCompareData&)rData).rDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aInsPos );
-    rDoc.SetModified();
+    rDoc.getIDocumentState().SetModified();
     ++aSavePos;
 
     // #i65201#: These SwPaMs are calculated when the (old) delete-redlines are hidden,
@@ -1802,9 +1803,9 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     }
 
     GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-    bool bDocWasModified = IsModified();
+    bool bDocWasModified = getIDocumentState().IsModified();
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
-    bool bSrcModified = rSrcDoc.IsModified();
+    bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
 
     RedlineMode_t eSrcRedlMode = rSrcDoc.getIDocumentRedlineAccess().GetRedlineMode();
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_INSERT );
@@ -1823,14 +1824,14 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
                        nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
         aD1.SetRedlinesToDoc( !bDocWasModified );
-        SetModified();
+        getIDocumentState().SetModified();
     }
 
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( eSrcRedlMode );
     getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
     if( !bSrcModified )
-        rSrcDoc.ResetModified();
+        rSrcDoc.getIDocumentState().ResetModified();
 
     GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
@@ -2022,7 +2023,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
-    bool bSrcModified = rSrcDoc.IsModified();
+    bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
 
     RedlineMode_t eSrcRedlMode = rSrcDoc.getIDocumentRedlineAccess().GetRedlineMode();
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_DELETE );
@@ -2086,7 +2087,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( eSrcRedlMode );
     if( !bSrcModified )
-        rSrcDoc.ResetModified();
+        rSrcDoc.getIDocumentState().ResetModified();
 
     getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 

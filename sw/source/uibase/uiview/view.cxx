@@ -74,6 +74,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <DocumentFieldsManager.hxx>
+#include <IDocumentState.hxx>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>
 #include <wview.hxx>
@@ -860,7 +861,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     // assure that modified state of document
     // isn't reset, if document is already modified.
-    const bool bIsDocModified = m_pWrtShell->GetDoc()->IsModified();
+    const bool bIsDocModified = m_pWrtShell->GetDoc()->getIDocumentState().IsModified();
 
     // Thus among other things, the HRuler is not displayed in the read-only case.
     aUsrPref.SetReadonly( m_pWrtShell->GetViewOptions()->IsReadonly() );
@@ -947,7 +948,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
     m_pWrtShell->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
-    if( m_pWrtShell->GetDoc()->IsUpdateExpFld() )
+    if( m_pWrtShell->GetDoc()->getIDocumentState().IsUpdateExpFld() )
     {
         if (m_pWrtShell->GetDoc()->GetDocumentFieldsManager().containsUpdatableFields())
         {
@@ -957,7 +958,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFlds(NULL, false);
             m_pWrtShell->EndAction();
         }
-        m_pWrtShell->GetDoc()->SetUpdateExpFldStat( false );
+        m_pWrtShell->GetDoc()->getIDocumentState().SetUpdateExpFldStat( false );
     }
 
     // Update all tables if necessary:

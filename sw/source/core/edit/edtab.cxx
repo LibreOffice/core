@@ -33,6 +33,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -281,11 +282,11 @@ void SwEditShell::SetTblChgMode( TblChgMode eMode )
     if( pTblNd )
     {
         ((SwTable&)pTblNd->GetTable()).SetTblChgMode( eMode );
-        if( !GetDoc()->IsModified() )   // Bug 57028
+        if( !GetDoc()->getIDocumentState().IsModified() )   // Bug 57028
         {
             GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
         }
-        GetDoc()->SetModified();
+        GetDoc()->getIDocumentState().SetModified();
     }
 }
 

@@ -30,6 +30,7 @@
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentState.hxx>
 #include <hints.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -2163,7 +2164,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         //#i100374# changing a document field should set the modify flag
         SwDoc* pDoc = m_pImpl->m_pDoc;
         if (pDoc)
-            pDoc->SetModified();
+            pDoc->getIDocumentState().SetModified();
 
     }
     else if (m_pImpl->m_pProps)

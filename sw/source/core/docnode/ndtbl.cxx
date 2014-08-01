@@ -44,6 +44,7 @@
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
@@ -548,7 +549,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
             getIDocumentRedlineAccess().SplitRedline( aPam );
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
     CHECK_TABLE( *pNdTbl );
     return pNdTbl;
 }
@@ -871,7 +872,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         GetIDocumentUndoRedo().EndUndo( UNDO_TEXTTOTABLE, NULL );
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
     getIDocumentFieldsAccess().SetFieldsDirty(true, NULL, 0);
     return pNdTbl;
 }
@@ -1225,7 +1226,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     sal_uLong nIdx = pTblNd->GetIndex();
     aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
 
-    SetModified();
+    getIDocumentState().SetModified();
     getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
     return pNdTbl;
 }
@@ -1447,7 +1448,7 @@ bool SwDoc::TableToText( const SwTableNode* pTblNd, sal_Unicode cCh )
     }
 
     if( bRet )
-        SetModified();
+        getIDocumentState().SetModified();
 
     return bRet;
 }
@@ -1708,7 +1709,7 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         bRet = rTbl.InsertCol( this, rBoxes, nCnt, bBehind );
         if (bRet)
         {
-            SetModified();
+            getIDocumentState().SetModified();
             ::ClearFEShellTabCols();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
         }
@@ -1770,7 +1771,7 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         bRet = rTbl.InsertRow( this, rBoxes, nCnt, bBehind );
         if (bRet)
         {
-            SetModified();
+            getIDocumentState().SetModified();
             ::ClearFEShellTabCols();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
         }
@@ -2076,7 +2077,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             pTblNd->DelFrms();
             getIDocumentContentOperations().DeleteSection( pTblNd );
         }
-        SetModified();
+        getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
         return true;
     }
@@ -2107,7 +2108,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         bRet = rTable.DeleteSel( this, aSelBoxes, 0, pUndo, true, true );
         if (bRet)
         {
-            SetModified();
+            getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
         }
     }
@@ -2175,7 +2176,7 @@ bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
 
         if (bRet)
         {
-            SetModified();
+            getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
         }
     }
@@ -2282,7 +2283,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
         if( pTblNd->GetTable().Merge( this, aBoxes, aMerged, pMergeBox, pUndo ))
         {
             nRet = TBLMERGE_OK;
-            SetModified();
+            getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
             if( pUndo )
             {
@@ -2883,7 +2884,7 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rO
     }
     rTab.SetTabCols( rNew, rOld, pStart, bCurRowOnly );
       ::ClearFEShellTabCols();
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
@@ -2900,7 +2901,7 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
     SwMsgPoolItem aChg( RES_TBLHEADLINECHG );
     rTable.SetRowsToRepeat( nSet );
     rTable.GetFrmFmt()->ModifyNotification( &aChg, &aChg );
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwCollectTblLineBoxes::AddToUndoHistory( const SwCntntNode& rNd )
@@ -3493,7 +3494,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     }
     if( bRet )
     {
-        SetModified();
+        getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
     }
     return bRet;
@@ -3766,7 +3767,7 @@ bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNe
         GetIDocumentUndoRedo().DoUndo(bUndo);
     }
 
-    SetModified();
+    getIDocumentState().SetModified();
     getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
 
     return true;
@@ -3956,7 +3957,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
     if( bRet )
     {
-        SetModified();
+        getIDocumentState().SetModified();
         if( nsTblChgWidthHeightType::WH_FLAG_INSDEL & eType )
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
     }
@@ -4101,7 +4102,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
             if (AUTOUPD_FIELD_AND_CHARTS == GetDocumentSettingManager().getFieldUpdateFlags(true))
                 pTblNd->GetTable().UpdateCharts();
         }
-        SetModified();
+        getIDocumentState().SetModified();
     }
 }
 
@@ -4126,7 +4127,7 @@ void SwDoc::SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
         pBoxFmt->UnlockModify();
     }
     pBoxFmt->SetFmtAttr( rSet );
-    SetModified();
+    getIDocumentState().SetModified();
 }
 
 void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
@@ -4205,7 +4206,7 @@ void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
                 pBoxFmt->SetFmtAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
 
             pBoxFmt->ResetFmtAttr( nWhich1, RES_BOXATR_VALUE );
-            SetModified();
+            getIDocumentState().SetModified();
         }
     }
 }
@@ -4365,7 +4366,7 @@ bool SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
     if( bRet )
     {
-        SetModified();
+        getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
     }
     return bRet;
@@ -4409,7 +4410,7 @@ bool SwDoc::UnProtectCells( const OUString& rName )
     {
         bChgd = _UnProtectTblCells( *SwTable::FindTable( pFmt ) );
         if( bChgd )
-            SetModified();
+            getIDocumentState().SetModified();
     }
 
     return bChgd;
@@ -4497,7 +4498,7 @@ bool SwDoc::UnProtectTbls( const SwPaM& rPam )
 
     GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     if( bChgd )
-        SetModified();
+        getIDocumentState().SetModified();
 
     return bChgd;
 }

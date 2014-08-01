@@ -42,6 +42,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
 #include <undobj.hxx>
@@ -340,7 +341,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     pDoc->UpdateNumRule();
     pDoc->ChkCondColls();
     pDoc->SetAllUniqueFlyNames();
-    pDoc->SetLoaded( true );
+    pDoc->getIDocumentState().SetLoaded( true );
 
     pDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
     if (!bReadPageDescs)
@@ -374,14 +375,14 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     pDoc->SetOle2Link( aOLELink );
 
     if( pCrsr )                 // das Doc ist jetzt modifiziert
-        pDoc->SetModified();
+        pDoc->getIDocumentState().SetModified();
     // #i38810# - If links have been updated, the document
     // have to be modified. During update of links the OLE link at the document
     // isn't set. Thus, the document's modified state has to be set again after
     // the OLE link is restored - see above <pDoc->SetOle2Link( aOLELink )>.
     if ( pDoc->getIDocumentLinksAdministration().LinksUpdated() )
     {
-        pDoc->SetModified();
+        pDoc->getIDocumentState().SetModified();
     }
 
     po->SetReadUTF8( false );
@@ -890,7 +891,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         // Everything was written successfully? Tell the document!
         if ( !IsError( nError ) && !pDoc )
         {
-            rDoc.ResetModified();
+            rDoc.getIDocumentState().ResetModified();
             // #i38810# - reset also flag, that indicates updated links
             rDoc.getIDocumentLinksAdministration().SetLinksUpdated( false );
         }

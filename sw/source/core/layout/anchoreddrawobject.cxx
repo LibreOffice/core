@@ -28,6 +28,7 @@
 #include <vector>
 #include <svx/svdogrp.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentState.hxx>
 #include <txtfly.hxx>
 
 using namespace ::com::sun::star;
@@ -657,12 +658,12 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
         if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )
         {
             SwDoc* pDoc = const_cast<SwDoc*>(GetPageFrm()->GetFmt()->GetDoc());
-            bool bModified = pDoc->IsModified();
+            bool bModified = pDoc->getIDocumentState().IsModified();
             const_cast< SdrObject* >( GetDrawObj() )->Resize( aCurrObjRect.TopLeft(),
                     Fraction( nTargetWidth, aCurrObjRect.GetWidth() ),
                     Fraction( nTargetHeight, aCurrObjRect.GetHeight() ), false );
             if (!bModified)
-                pDoc->ResetModified();
+                pDoc->getIDocumentState().ResetModified();
         }
     }
     return GetDrawObj()->GetCurrentBoundRect();

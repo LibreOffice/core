@@ -23,7 +23,6 @@
 #include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentExternalData.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -191,6 +190,7 @@ class IDocumentOutlineNodes;
 class IDocumentContentOperations;
 class IDocumentRedlineAccess;
 class IDocumentStatistics;
+class IDocumentState;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -213,6 +213,7 @@ namespace sw {
     class DocumentRedlineManager;
     class DocumentFieldsManager;
     class DocumentStatisticsManager;
+    class DocumentStateManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -251,7 +252,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentStylePoolAccess,
-    public IDocumentState,
     public IDocumentLayoutAccess,
     public IDocumentExternalData
 {
@@ -280,6 +280,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
     const ::boost::scoped_ptr< ::sw::DocumentDrawModelManager > m_pDocumentDrawModelManager;
     const ::boost::scoped_ptr< ::sw::DocumentRedlineManager > m_pDocumentRedlineManager;
+    const ::boost::scoped_ptr< ::sw::DocumentStateManager > m_pDocumentStateManager;
     const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
     const ::boost::scoped_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
     const ::boost::scoped_ptr< ::sw::DocumentChartDataProviderManager > m_pDocumentChartDataProviderManager;
@@ -371,21 +372,15 @@ private:
     sal_Int32   mReferenceCount;
 
     bool mbGlossDoc              : 1;    //< TRUE: glossary document.
-    bool mbModified              : 1;    //< TRUE: document has changed.
     bool mbDtor                  : 1;    /**< TRUE: is in SwDoc DTOR.
                                                and unfortunately temorarily also in
                                                SwSwgReader::InLayout() when flawed
                                                frames need deletion. */
-    bool mbPageNums              : 1;    //< TRUE: There are virtual page numbers.
-    bool mbLoaded                : 1;    //< TRUE: Doc loaded.
-    bool mbUpdateExpFld          : 1;    //< TRUE: Update expression fields.
-    bool mbNewDoc                : 1;    //< TRUE: new Doc.
     bool mbCopyIsMove            : 1;    //< TRUE: Copy is a hidden Move.
     bool mbInReading             : 1;    //< TRUE: Document is in the process of being read.
     bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
     bool mbUpdateTOX             : 1;    //< TRUE: After loading document, update TOX.
     bool mbInLoadAsynchron       : 1;    //< TRUE: Document is in the process of being loaded asynchronously.
-    bool mbInCallModified        : 1;    //< TRUE: in Set/Reset-Modified link.
     bool mbIsAutoFmtRedline      : 1;    //< TRUE: Redlines are recorded by Autoformat.
     bool mbOLEPrtNotifyPending   : 1;    /**< TRUE: Printer has changed. At creation of
                                                 View
@@ -572,17 +567,11 @@ public:
     ::sw::DocumentStatisticsManager & GetDocumentStatisticsManager();
 
     // IDocumentState
-    virtual void SetModified() SAL_OVERRIDE;
-    virtual void ResetModified() SAL_OVERRIDE;
-    virtual bool IsModified() const SAL_OVERRIDE;
-    virtual bool IsLoaded() const SAL_OVERRIDE;
-    virtual bool IsUpdateExpFld() const SAL_OVERRIDE;
-    virtual bool IsNewDoc() const SAL_OVERRIDE;
-    virtual bool IsPageNums() const SAL_OVERRIDE;
-    virtual void SetPageNums(bool b) SAL_OVERRIDE;
-    virtual void SetNewDoc(bool b) SAL_OVERRIDE;
-    virtual void SetUpdateExpFldStat(bool b) SAL_OVERRIDE;
-    virtual void SetLoaded(bool b) SAL_OVERRIDE;
+    IDocumentState const & getIDocumentState() const;
+    IDocumentState & getIDocumentState();
+
+    ::sw::DocumentStateManager const & GetDocumentStateManager() const;
+    ::sw::DocumentStateManager & GetDocumentStateManager();
 
     // IDocumentDrawModelAccess
     DECL_LINK( AddDrawUndo, SdrUndoAction * );
@@ -755,7 +744,6 @@ public:
 
     void ChangeAuthorityData(const SwAuthEntry* pNewData);
 
-    bool IsInCallModified() const      { return mbInCallModified; }
     bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
     short GetTextDirection( const SwPosition& rPos,
                             const Point* pPt = 0 ) const;
