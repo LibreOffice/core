@@ -271,7 +271,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt
 
     if( mnStyle & QUICKHELP_BIDI_RTL )
     {
-        sal_uLong nLayoutMode = GetLayoutMode();
+        ComplexTextLayoutMode nLayoutMode = GetLayoutMode();
         nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
         SetLayoutMode( nLayoutMode );
     }

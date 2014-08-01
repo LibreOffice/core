@@ -1201,9 +1201,9 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( nEndIndex < nMinIndex )
         nEndIndex = nMinIndex;
 
-    if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL )
+    if( (mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) != 0 )
         nLayoutFlags |= SAL_LAYOUT_BIDI_RTL;
-    if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_STRONG )
+    if( (mnTextLayoutMode & TEXT_LAYOUT_BIDI_STRONG) != 0 )
         nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
     else if( 0 == (mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
     {
@@ -1226,9 +1226,9 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( maFont.IsVertical() )
         nLayoutFlags |= SAL_LAYOUT_VERTICAL;
 
-    if( mnTextLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
+    if( (mnTextLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES) != 0 )
         nLayoutFlags |= SAL_LAYOUT_ENABLE_LIGATURES;
-    else if( mnTextLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED )
+    else if( (mnTextLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED) != 0 )
         nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
     else
     {
@@ -1274,9 +1274,9 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 
     // right align for RTL text, DRAWPOS_REVERSED, RTL window style
     bool bRightAlign = ((mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) != 0);
-    if( mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT )
+    if( (mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT) != 0 )
         bRightAlign = false;
-    else if ( mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_RIGHT )
+    else if ( (mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_RIGHT) != 0 )
         bRightAlign = true;
     // SSA: hack for western office, ie text get right aligned
     //      for debugging purposes of mirrored UI

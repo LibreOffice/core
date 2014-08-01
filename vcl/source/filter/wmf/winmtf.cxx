@@ -606,7 +606,7 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
 }
 
 
-void WinMtfOutput::SetTextLayoutMode( const sal_uInt32 nTextLayoutMode )
+void WinMtfOutput::SetTextLayoutMode( ComplexTextLayoutMode nTextLayoutMode )
 {
     mnTextLayoutMode = nTextLayoutMode;
 }

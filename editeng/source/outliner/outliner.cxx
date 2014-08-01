@@ -996,7 +996,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                 }
 
                 // VCL will take care of brackets and so on...
-                sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
+                ComplexTextLayoutMode nLayoutMode = pOutDev->GetLayoutMode();
                 nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG);
                 if ( bRightToLeftPara )
                     nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT | TEXT_LAYOUT_BIDI_STRONG;
