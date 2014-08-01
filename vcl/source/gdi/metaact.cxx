@@ -3698,13 +3698,13 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
 MetaLayoutModeAction::MetaLayoutModeAction() :
     MetaAction  ( META_LAYOUTMODE_ACTION ),
-    mnLayoutMode( 0 )
+    mnLayoutMode( TEXT_LAYOUT_DEFAULT )
 {}
 
 MetaLayoutModeAction::~MetaLayoutModeAction()
 {}
 
-MetaLayoutModeAction::MetaLayoutModeAction( sal_uInt32 nLayoutMode ) :
+MetaLayoutModeAction::MetaLayoutModeAction( ComplexTextLayoutMode nLayoutMode ) :
     MetaAction  ( META_LAYOUTMODE_ACTION ),
     mnLayoutMode( nLayoutMode )
 {}
@@ -3736,7 +3736,9 @@ void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, STREAM_READ);
-    rIStm.ReadUInt32( mnLayoutMode );
+    sal_uInt32 tmp;
+    rIStm.ReadUInt32( tmp );
+    mnLayoutMode = static_cast<ComplexTextLayoutMode>(tmp);
 }
 
 MetaTextLanguageAction::MetaTextLanguageAction() :

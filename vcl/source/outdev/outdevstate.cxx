@@ -289,7 +289,7 @@ void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
         mpAlphaVDev->SetDrawMode( nDrawMode );
 }
 
-void OutputDevice::SetLayoutMode( sal_uLong nTextLayoutMode )
+void OutputDevice::SetLayoutMode( ComplexTextLayoutMode nTextLayoutMode )
 {
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );

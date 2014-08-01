@@ -164,7 +164,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
             }
             else
             {
-                sal_uLong nOldLayout = rInf.GetOut()->GetLayoutMode();
+                ComplexTextLayoutMode nOldLayout = rInf.GetOut()->GetLayoutMode();
                 rInf.GetOut()->SetLayoutMode ( nOldLayout | TEXT_LAYOUT_BIDI_RTL );
                 nKashidasDropped = rInf.GetOut()->ValidateKashidas ( rInf.GetTxt(), nIdx, nNext - nIdx,
                                                nKashidasInAttr, pKashidaPos + nKashidaIdx,

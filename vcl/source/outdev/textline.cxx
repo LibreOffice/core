@@ -625,7 +625,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     nBaseY += nDistY;
 
     // strikeout text has to be left aligned
-    sal_uLong nOrigTLM = mnTextLayoutMode;
+    ComplexTextLayoutMode nOrigTLM = mnTextLayoutMode;
     mnTextLayoutMode = TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_COMPLEX_DISABLED;
     pLayout = ImplLayout( aStrikeoutText, 0, aStrikeoutText.getLength() );
     mnTextLayoutMode = nOrigTLM;

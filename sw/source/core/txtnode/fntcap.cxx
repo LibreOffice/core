@@ -282,7 +282,7 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     if ( bSwitchL2R )
        rInf.GetFrm()->SwitchLTRtoRTL( aPos );
 
-    const sal_uLong nMode = rInf.GetpOut()->GetLayoutMode();
+    const ComplexTextLayoutMode nMode = rInf.GetpOut()->GetLayoutMode();
     const bool bBidiPor = ( bSwitchL2R !=
                             ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
 

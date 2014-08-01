@@ -50,6 +50,44 @@
 #define PUSH_ALLFONT                    (PUSH_ALLTEXT | PUSH_FONT)
 #define PUSH_ALL                        ((sal_uInt16)0xFFFF)
 
+// LayoutModes for Complex Text Layout
+// These are flag values, i.e they can be combined
+enum ComplexTextLayoutMode
+{
+  TEXT_LAYOUT_DEFAULT =             ((sal_uLong)0x00000000),
+  TEXT_LAYOUT_BIDI_RTL =            ((sal_uLong)0x00000001),
+  TEXT_LAYOUT_BIDI_STRONG =         ((sal_uLong)0x00000002),
+  TEXT_LAYOUT_TEXTORIGIN_LEFT =     ((sal_uLong)0x00000004),
+  TEXT_LAYOUT_TEXTORIGIN_RIGHT =    ((sal_uLong)0x00000008),
+  TEXT_LAYOUT_COMPLEX_DISABLED =    ((sal_uLong)0x00000100),
+  TEXT_LAYOUT_ENABLE_LIGATURES =    ((sal_uLong)0x00000200),
+  TEXT_LAYOUT_SUBSTITUTE_DIGITS =   ((sal_uLong)0x00000400)
+};
+// make combining these type-safe
+inline ComplexTextLayoutMode operator| (ComplexTextLayoutMode lhs, ComplexTextLayoutMode rhs)
+{
+    return (ComplexTextLayoutMode)((sal_uLong)lhs | (sal_uLong)rhs);
+}
+inline ComplexTextLayoutMode operator& (ComplexTextLayoutMode lhs, ComplexTextLayoutMode rhs)
+{
+    return (ComplexTextLayoutMode)((sal_uLong)lhs & (sal_uLong)rhs);
+}
+inline ComplexTextLayoutMode operator~ (ComplexTextLayoutMode rhs)
+{
+    return (ComplexTextLayoutMode)(~(sal_uLong)rhs);
+}
+inline ComplexTextLayoutMode& operator|= (ComplexTextLayoutMode& lhs, ComplexTextLayoutMode rhs)
+{
+    lhs = (ComplexTextLayoutMode)((sal_uLong)lhs | (sal_uLong)rhs);
+    return lhs;
+}
+inline ComplexTextLayoutMode& operator&= (ComplexTextLayoutMode& lhs, ComplexTextLayoutMode rhs)
+{
+    lhs = (ComplexTextLayoutMode)((sal_uLong)lhs & (sal_uLong)rhs);
+    return lhs;
+}
+
+
 class OutDevState
 {
 public:
@@ -68,7 +106,7 @@ public:
     Point*          mpRefPoint;
     TextAlign       meTextAlign;
     RasterOp        meRasterOp;
-    sal_uLong       mnTextLayoutMode;
+    ComplexTextLayoutMode  mnTextLayoutMode;
     LanguageType    meTextLanguage;
     sal_uInt16      mnFlags;
 };

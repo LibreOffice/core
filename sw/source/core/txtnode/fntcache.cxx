@@ -858,7 +858,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     const bool bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
     const bool bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
                             ! rInf.IsIgnoreFrmRTL();
-    const sal_uLong nMode = rInf.GetOut().GetLayoutMode();
+    const ComplexTextLayoutMode nMode = rInf.GetOut().GetLayoutMode();
     const bool bBidiPor = ( bSwitchL2R !=
                             ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
 

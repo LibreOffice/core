@@ -274,9 +274,9 @@ void PDFWriter::IntersectClipRegion( const Rectangle& rRect )
     pImplementation->intersectClipRegion( rRect );
 }
 
-void PDFWriter::SetLayoutMode( sal_uLong nMode )
+void PDFWriter::SetLayoutMode( ComplexTextLayoutMode nMode )
 {
-    pImplementation->setLayoutMode( (sal_Int32)nMode );
+    pImplementation->setLayoutMode( nMode );
 }
 
 void PDFWriter::SetDigitLanguage( LanguageType eLang )

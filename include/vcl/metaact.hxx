@@ -35,6 +35,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaactiontypes.hxx>
+#include <vcl/outdevstate.hxx>
 
 class SvStream;
 
@@ -1562,7 +1563,7 @@ class VCL_DLLPUBLIC MetaLayoutModeAction : public MetaAction
 {
 private:
 
-    sal_uInt32          mnLayoutMode;
+    ComplexTextLayoutMode  mnLayoutMode;
     virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
@@ -1575,9 +1576,9 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-    explicit            MetaLayoutModeAction( sal_uInt32 nLayoutMode );
+    explicit            MetaLayoutModeAction( ComplexTextLayoutMode nLayoutMode );
 
-    sal_uInt32          GetLayoutMode() const { return mnLayoutMode; }
+    ComplexTextLayoutMode  GetLayoutMode() const { return mnLayoutMode; }
 };
 
 class VCL_DLLPUBLIC MetaTextLanguageAction : public MetaAction

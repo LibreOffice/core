@@ -89,7 +89,7 @@ namespace
         /// font, etc.
         Font                    maFont;
         RasterOp                maRasterOp;
-        sal_uInt32              mnLayoutMode;
+        ComplexTextLayoutMode   mnLayoutMode;
         LanguageType            maLanguageType;
         sal_uInt16              mnPushFlags;
 
@@ -116,7 +116,7 @@ namespace
             maClipPolyPoygon(),
             maFont(),
             maRasterOp(ROP_OVERPAINT),
-            mnLayoutMode(0),
+            mnLayoutMode(TEXT_LAYOUT_DEFAULT),
             maLanguageType(0),
             mnPushFlags(0),
             mbLineColor(false),
@@ -184,8 +184,8 @@ namespace
         bool isRasterOpForceBlack() const { return ROP_0 == maRasterOp; }
         bool isRasterOpActive() const { return isRasterOpInvert() || isRasterOpForceBlack(); }
 
-        sal_uInt32 getLayoutMode() const { return mnLayoutMode; }
-        void setLayoutMode(sal_uInt32 nNew) { if(nNew != mnLayoutMode) mnLayoutMode = nNew; }
+        ComplexTextLayoutMode getLayoutMode() const { return mnLayoutMode; }
+        void setLayoutMode(ComplexTextLayoutMode nNew) { if(nNew != mnLayoutMode) mnLayoutMode = nNew; }
 
         LanguageType getLanguageType() const { return maLanguageType; }
         void setLanguageType(LanguageType aNew) { if(aNew != maLanguageType) maLanguageType = aNew; }

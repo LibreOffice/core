@@ -2240,7 +2240,7 @@ void Edit::StateChanged( StateChangedType nType )
         else if( mbIsSubEdit && !GetParent()->IsRTLEnabled() )
         {
             if ( nType == STATE_CHANGE_MIRRORING )
-                SetLayoutMode( TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+                SetLayoutMode( TEXT_LAYOUT_TEXTORIGIN_LEFT );
         }
 
         if ( nStyle & WB_RIGHT )

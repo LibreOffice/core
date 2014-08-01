@@ -4326,7 +4326,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
         // it also works for issue 55927
     }
 
-    sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
+    ComplexTextLayoutMode nLayoutMode = pOutDev->GetLayoutMode();
 
     // We always use the left position for DrawText()
     nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);

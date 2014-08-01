@@ -298,7 +298,7 @@ void SwLayoutModeModifier::Modify( bool bChgToRTL )
 
 void SwLayoutModeModifier::SetAuto()
 {
-    const sal_uLong nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
+    const ComplexTextLayoutMode nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
     ((OutputDevice&)rOut).SetLayoutMode( nNewLayoutMode );
 }
 

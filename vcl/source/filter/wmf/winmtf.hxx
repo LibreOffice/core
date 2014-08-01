@@ -471,7 +471,8 @@ struct XForm
 
 struct SaveStruct
 {
-    sal_uInt32          nBkMode, nMapMode, nGfxMode, nTextLayoutMode;
+    sal_uInt32          nBkMode, nMapMode, nGfxMode;
+    ComplexTextLayoutMode nTextLayoutMode;
     sal_Int32           nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
     sal_Int32           nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
 
@@ -593,8 +594,8 @@ class WinMtfOutput
     Color               maTextColor;
     Color               maLatestBkColor;
     Color               maBkColor;
-    sal_uInt32          mnLatestTextLayoutMode;
-    sal_uInt32          mnTextLayoutMode;
+    ComplexTextLayoutMode  mnLatestTextLayoutMode;
+    ComplexTextLayoutMode  mnTextLayoutMode;
     sal_uInt32          mnLatestBkMode;
     sal_uInt32          mnBkMode;
     RasterOp            meLatestRasterOp;
@@ -690,7 +691,7 @@ public:
     rtl_TextEncoding    GetCharSet(){ return maFont.GetCharSet(); };
     WinMtfFillStyle&    GetFillStyle () { return maFillStyle; }
     const Font&         GetFont() const { return maFont;}
-    void                SetTextLayoutMode( const sal_uInt32 nLayoutMode );
+    void                SetTextLayoutMode( ComplexTextLayoutMode nLayoutMode );
 
     void                ClearPath(){ aPathObj.Init(); };
     void                ClosePath(){ aPathObj.ClosePath(); };

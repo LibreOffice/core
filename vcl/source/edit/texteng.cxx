@@ -3072,7 +3072,7 @@ long TextEngine::ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uIn
 
 void TextEngine::ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion )
 {
-    sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
+    ComplexTextLayoutMode nLayoutMode = pOutDev->GetLayoutMode();
 
     nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
     if ( bDrawingR2LPortion )

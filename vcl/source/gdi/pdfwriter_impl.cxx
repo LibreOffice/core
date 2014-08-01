@@ -7581,7 +7581,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 // TODO: a real solution would be to map the layout engine's
                 // glyphid (i.e. FreeType's synthetic glyphid for a Type1 font)
                 // back to unicode and then to embeddable font's encoding
-                if( getReferenceDevice()->GetLayoutMode() & TEXT_LAYOUT_BIDI_RTL )
+                if( (getReferenceDevice()->GetLayoutMode() & TEXT_LAYOUT_BIDI_RTL) != TEXT_LAYOUT_DEFAULT )
                 {
                     size_t nI = aUnicodes.size()-1;
                     for( int n = 0; n < nChars; n++, nI-- )
@@ -8386,7 +8386,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     }
 
     // strikeout string is left aligned non-CTL text
-    sal_uLong nOrigTLM = m_pReferenceDevice->GetLayoutMode();
+    ComplexTextLayoutMode nOrigTLM = m_pReferenceDevice->GetLayoutMode();
     m_pReferenceDevice->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_COMPLEX_DISABLED );
 
     push( PUSH_CLIPREGION );

@@ -28,6 +28,7 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/outdevstate.hxx>
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
@@ -737,7 +738,7 @@ The following structure describes the permissions used in PDF security
     void               IntersectClipRegion( const Rectangle& rRect );
     void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
-    void               SetLayoutMode( sal_uLong nMode );
+    void               SetLayoutMode( ComplexTextLayoutMode nMode );
     void               SetDigitLanguage( LanguageType eLang );
 
     void               SetLineColor( const Color& rColor );

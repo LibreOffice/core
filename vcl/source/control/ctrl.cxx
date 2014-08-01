@@ -74,7 +74,7 @@ void Control::EnableRTL( bool bEnable )
 {
     // convenience: for controls also switch layout mode
     SetLayoutMode( bEnable ? TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT :
-                                TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+                                TEXT_LAYOUT_TEXTORIGIN_LEFT );
     StateChanged( STATE_CHANGE_MIRRORING );
     OutputDevice::EnableRTL(bEnable);
 }

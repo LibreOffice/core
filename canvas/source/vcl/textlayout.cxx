@@ -48,23 +48,21 @@ namespace vclcanvas
                               sal_Int8      nTextDirection )
         {
             // TODO(P3): avoid if already correctly set
-            sal_uIntPtr nLayoutMode;
+            ComplexTextLayoutMode nLayoutMode = TEXT_LAYOUT_DEFAULT;
             switch( nTextDirection )
             {
-                default:
-                    nLayoutMode = 0;
-                    break;
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
-                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR;
                     break;
                 case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
-                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG;
+                    nLayoutMode = TEXT_LAYOUT_BIDI_STRONG;
                     break;
                 case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
                     nLayoutMode = TEXT_LAYOUT_BIDI_RTL;
                     break;
                 case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
                     nLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
+                    break;
+                default:
                     break;
             }
 

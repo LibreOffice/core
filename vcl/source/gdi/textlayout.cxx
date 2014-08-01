@@ -263,7 +263,7 @@ namespace vcl
             return Rectangle();
 
         // determine text layout mode from the RTL-ness of the control whose text we render
-        sal_uLong nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_BIDI_LTR;
+        ComplexTextLayoutMode nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_DEFAULT;
         m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
         m_rTargetDevice.SetLayoutMode( nTextLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
 
