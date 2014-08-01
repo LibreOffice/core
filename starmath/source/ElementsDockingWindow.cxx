@@ -222,7 +222,7 @@ SmElementsControl::SmElementsControl(Window *pParent, const ResId& rResId)
 {
     SetMapMode( MapMode(MAP_100TH_MM) );
     SetDrawMode( DRAWMODE_DEFAULT );
-    SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
+    SetLayoutMode( TEXT_LAYOUT_DEFAULT );
     SetDigitLanguage( LANGUAGE_ENGLISH );
 
     maFormat.SetBaseSize(PixelToLogic(Size(0, SmPtsTo100th_mm(12))));

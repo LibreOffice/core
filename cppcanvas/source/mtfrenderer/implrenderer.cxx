@@ -1515,26 +1515,18 @@ namespace cppcanvas
                     case META_LAYOUTMODE_ACTION:
                     {
                         // TODO(F2): A lot is missing here
-                        int nLayoutMode = static_cast<MetaLayoutModeAction*>(pCurrAct)->GetLayoutMode();
+                        ComplexTextLayoutMode nLayoutMode = static_cast<MetaLayoutModeAction*>(pCurrAct)->GetLayoutMode();
                         ::cppcanvas::internal::OutDevState& rState = rStates.getState();
-                        switch( nLayoutMode & (TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_BIDI_STRONG) )
-                        {
-                            case TEXT_LAYOUT_BIDI_LTR:
+
+                        ComplexTextLayoutMode nBidiLayoutMode = nLayoutMode & (TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_BIDI_STRONG);
+                        if( nBidiLayoutMode == 0)
                                 rState.textDirection = rendering::TextDirection::WEAK_LEFT_TO_RIGHT;
-                                break;
-
-                            case (TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG):
+                        else if( nBidiLayoutMode == TEXT_LAYOUT_BIDI_STRONG)
                                 rState.textDirection = rendering::TextDirection::STRONG_LEFT_TO_RIGHT;
-                                break;
-
-                            case TEXT_LAYOUT_BIDI_RTL:
+                        else if( nBidiLayoutMode == TEXT_LAYOUT_BIDI_RTL)
                                 rState.textDirection = rendering::TextDirection::WEAK_RIGHT_TO_LEFT;
-                                break;
-
-                            case (TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG):
+                        else if( nBidiLayoutMode == (TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG))
                                 rState.textDirection = rendering::TextDirection::STRONG_RIGHT_TO_LEFT;
-                                break;
-                        }
 
                         rState.textAlignment = 0; // TODO(F2): rendering::TextAlignment::LEFT_ALIGNED;
                         if( (nLayoutMode & (TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_RIGHT) )
