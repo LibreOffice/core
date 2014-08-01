@@ -18,7 +18,6 @@
  */
 
 #include "UserAdmin.hxx"
-#include "UserAdmin.hrc"
 #include "UITools.hxx"
 #include "dbu_dlg.hrc"
 #include <comphelper/types.hxx>
@@ -111,23 +110,20 @@ IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
 
 // OUserAdmin
 OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
-    : OGenericAdministrationPage( pParent, ModuleRes(TAB_PAGE_USERADMIN), _rAttrSet)
-    ,m_FL_USER(         this , ModuleRes(FL_USER))
-    ,m_FT_USER(         this , ModuleRes(FT_USER))
-    ,m_LB_USER(         this , ModuleRes(LB_USER))
-    ,m_PB_NEWUSER(      this , ModuleRes(PB_NEWUSER))
-    ,m_PB_CHANGEPWD(    this , ModuleRes(PB_CHANGEPWD))
-    ,m_PB_DELETEUSER(   this , ModuleRes(PB_DELETEUSER))
-    ,m_FL_TABLE_GRANTS( this , ModuleRes(FL_TABLE_GRANTS))
-    ,m_TableCtrl(       this , ModuleRes(CTRL_TABLE_GRANTS))
+    : OGenericAdministrationPage( pParent, "UserAdminPage", "dbaccess/ui/useradminpage.ui", _rAttrSet)
+    ,m_TableCtrl(get<VclAlignment>("table"), WB_TABSTOP)
 {
-    m_LB_USER.SetSelectHdl(LINK(this, OUserAdmin, ListDblClickHdl));
+    m_TableCtrl.Show();
+    get(m_pUSER, "user");
+    get(m_pNEWUSER, "add");
+    get(m_pCHANGEPWD, "changepass");
+    get(m_pDELETEUSER, "delete");
 
-    m_PB_NEWUSER.SetClickHdl(LINK(this, OUserAdmin, UserHdl));
-    m_PB_CHANGEPWD.SetClickHdl(LINK(this, OUserAdmin, UserHdl));
-    m_PB_DELETEUSER.SetClickHdl(LINK(this, OUserAdmin, UserHdl));
+    m_pUSER->SetSelectHdl(LINK(this, OUserAdmin, ListDblClickHdl));
 
-    FreeResource();
+    m_pNEWUSER->SetClickHdl(LINK(this, OUserAdmin, UserHdl));
+    m_pCHANGEPWD->SetClickHdl(LINK(this, OUserAdmin, UserHdl));
+    m_pDELETEUSER->SetClickHdl(LINK(this, OUserAdmin, UserHdl));
 }
 
 OUserAdmin::~OUserAdmin()
@@ -139,7 +135,7 @@ void OUserAdmin::FillUserNames()
 {
     if(m_xConnection.is())
     {
-        m_LB_USER.Clear();
+        m_pUSER->Clear();
 
         Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
@@ -150,15 +146,15 @@ void OUserAdmin::FillUserNames()
             // first we need the users
             if ( m_xUsers.is() )
             {
-                m_LB_USER.Clear();
+                m_pUSER->Clear();
 
                 m_aUserNames = m_xUsers->getElementNames();
                 const OUString* pBegin = m_aUserNames.getConstArray();
                 const OUString* pEnd   = pBegin + m_aUserNames.getLength();
                 for(;pBegin != pEnd;++pBegin)
-                    m_LB_USER.InsertEntry(*pBegin);
+                    m_pUSER->InsertEntry(*pBegin);
 
-                m_LB_USER.SelectEntryPos(0);
+                m_pUSER->SelectEntryPos(0);
                 if(m_xUsers->hasByName(m_UserName))
                 {
                     Reference<XAuthorizable> xAuth;
@@ -173,11 +169,11 @@ void OUserAdmin::FillUserNames()
     }
 
     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
-    m_PB_NEWUSER.Enable(xAppend.is());
+    m_pNEWUSER->Enable(xAppend.is());
     Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
-    m_PB_DELETEUSER.Enable(xDrop.is());
+    m_pDELETEUSER->Enable(xDrop.is());
 
-    m_PB_CHANGEPWD.Enable(m_xUsers.is());
+    m_pCHANGEPWD->Enable(m_xUsers.is());
     m_TableCtrl.Enable(m_xUsers.is());
 
 }
@@ -191,7 +187,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
 {
     try
     {
-        if(pButton == &m_PB_NEWUSER)
+        if(pButton == m_pNEWUSER)
         {
             SfxPasswordDialog aPwdDlg(this);
             aPwdDlg.ShowExtras(SHOWEXTRAS_ALL);
@@ -209,7 +205,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 }
             }
         }
-        else if(pButton == &m_PB_CHANGEPWD)
+        else if(pButton == m_pCHANGEPWD)
         {
             OUString sName = GetUser();
 
@@ -271,7 +267,7 @@ IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, /*pListBox*/ )
 
 OUString OUserAdmin::GetUser()
 {
-    return m_LB_USER.GetSelectEntry();
+    return m_pUSER->GetSelectEntry();
 }
 
 void OUserAdmin::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)

@@ -17,92 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "UserAdmin.hrc"
 #include "dbu_dlg.hrc"
 #include "dbaccess_helpid.hrc"
 
 #define WINDOW_SIZE_X 260
 #define WINDOW_SIZE_Y 185
-
-TabPage TAB_PAGE_USERADMIN
-{
-    SVLook      = TRUE ;
-    HelpId      = HID_TAB_PAGE_USERADMIN ;
-    Size        = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Hide = TRUE;
-
-    FixedLine FL_USER
-    {
-        Pos                 = MAP_APPFONT ( 6 , 3  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
-        Text [ en-US ]  = "User selection";
-    };
-
-    FixedText FT_USER
-    {
-        Pos                 = MAP_APPFONT ( 12 , 14 ) ;
-        Size                = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ en-US ]  = "Us~er:";
-    };
-
-    ListBox LB_USER
-    {
-        Border              = TRUE ;
-        Pos                 = MAP_APPFONT ( 108 , 13) ;
-        Size                = MAP_APPFONT ( 105 , 97 ) ;
-        TabStop             = TRUE ;
-        HScroll             = TRUE ;
-        Sort                = TRUE ;
-        DropDown            = TRUE ;
-        HelpId              = HID_TAB_PAGE_LBUSER ;
-    };
-
-    PushButton PB_NEWUSER
-    {
-        Pos                 = MAP_APPFONT ( 12 , 29 ) ;
-        Size                = MAP_APPFONT ( 70 , 14 ) ;
-        TabStop             = TRUE ;
-        DefButton           = TRUE ;
-        HelpId              = HID_TAB_PAGE_PBUSER ;
-        Text [ en-US ] = "~Add User...";
-    };
-
-    PushButton PB_CHANGEPWD
-    {
-        Pos                 = MAP_APPFONT ( 95 , 29 ) ;
-        Size                = MAP_APPFONT ( 70 , 14 ) ;
-        TabStop             = TRUE ;
-        DefButton           = TRUE ;
-        HelpId              = HID_TAB_PAGE_PBCHGPWD ;
-        Text [ en-US ] = "Change ~Password...";
-    };
-
-    PushButton PB_DELETEUSER
-    {
-        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 82 , 29 ) ;
-        Size                = MAP_APPFONT ( 70 , 14 ) ;
-        TabStop             = TRUE ;
-        DefButton           = TRUE ;
-        HelpId              = HID_TAB_PAGE_PBUSERDELETE ;
-        Text [ en-US ] = "~Delete User...";
-    };
-
-    FixedLine FL_TABLE_GRANTS
-    {
-        Pos                 = MAP_APPFONT ( 6 , 52  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
-        Text [ en-US ] = "Access rights for selected user";
-    };
-
-    Control CTRL_TABLE_GRANTS
-    {
-        Pos                 = MAP_APPFONT ( 12 , 63  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 22, WINDOW_SIZE_Y - 75 );
-        Border              = TRUE ;
-        TabStop             = TRUE ;
-        HelpId              = HID_TAB_PAGE_TBLGRANTS ;
-    };
-};
 
 QueryBox QUERY_USERADMIN_DELETE_USER
 {
