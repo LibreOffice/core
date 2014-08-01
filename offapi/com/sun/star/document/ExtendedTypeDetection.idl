@@ -48,7 +48,7 @@ module com { module sun { module star { module document {
         Example: "com.company.devision.DetectService"
         <br>
         Note that this really means the implementation name of the service.
-        Because it's not possible otherwise to distinguish between more then one
+        Because it's not possible otherwise to distinguish between more than one
         registered detect services in same office installation! But it's possible for
         the generic type detection to create an UNO service by his implementation name too.
         </li>

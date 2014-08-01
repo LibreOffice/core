@@ -158,7 +158,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
         {
             // Attention: Its not really a reason to throw an exception and kill the office, if the configuration contains
             // multiple registrations for the same key :-) Show a warning ... and ignore the second item.
-            // THROW_PARSEEXCEPTION("Command is registered for the same key more then once.")
+            // THROW_PARSEEXCEPTION("Command is registered for the same key more than once.")
             SAL_INFO("fwk",
                      "AcceleratorConfigurationReader::startElement(): Double registration detected. Command=\"" <<
                      sCommand <<

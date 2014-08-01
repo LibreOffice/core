@@ -199,7 +199,7 @@ private:
                             The whole detection must be interrupted then and the interface method queryTypeByDescriptor()
                             must return an empty type name value.
 
-                            That prevent us against multiple handling of the same error more then ones
+                            That prevent us against multiple handling of the same error more than ones
                             (e.g. if we ask all detect services as fallback ...).
                         </li>
                         <li>

@@ -35,7 +35,7 @@ published interface XJobListener : com::sun::star::lang::XEventListener
 
         @param Job
             identifies the asynchronous job so that theJobExecutor
-            can differ between more then ones.
+            can differ between more than ones.
 
         @param Result
             should be the same like for the synchronous mode on XJob::execute().

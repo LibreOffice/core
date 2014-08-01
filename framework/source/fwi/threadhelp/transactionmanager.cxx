@@ -104,7 +104,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
 /*-****************************************************************************************************
     @short      get current working mode
     @descr      If you stand in your close() or init() method ... but don't know
-                if you called more then ones(!) ... you can use this function to get
+                if you called more than ones(!) ... you can use this function to get
                 right information.
                 e.g:    You have a method init() which is used to change working mode from
                         E_INIT to E_WORK and should be used to initialize some member too ...

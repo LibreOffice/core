@@ -154,7 +154,7 @@ published service FilterFactory
                 <td>[string]</td>
                 <td>It means the UNO implementation name of the filter component.
                     Note: It really means the implementation instead of the UNO service name.
-                    Because it's not possible to distinguish between more then one filters; if all of them
+                    Because it's not possible to distinguish between more than one filters; if all of them
                     uses a generic identifier!</td>
             </tr>
             <tr>
@@ -171,7 +171,7 @@ published service FilterFactory
             <tr>
                 <td><em>FileFormatVersion</em></td>
                 <td>[integer]</td>
-                <td>It specifies the supported file format version if there exist more then ones.</td>
+                <td>It specifies the supported file format version if there exist more than ones.</td>
             </tr>
             <tr>
                 <td><em>TemplateName</em></td>

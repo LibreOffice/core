@@ -170,7 +170,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
         (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for frame dispatches - not for desktop
         (sTargetFrameName==SPECIALTARGET_PARENT   )   ||    // we have no parent by definition
         (sTargetFrameName==SPECIALTARGET_BEAMER   )         // beamer frames are allowed as child of tasks only -
-                                                            // and they exist more then ones. We have no idea which our sub tasks is the right one
+                                                            // and they exist more than ones. We have no idea which our sub tasks is the right one
        )
     {
         return NULL;

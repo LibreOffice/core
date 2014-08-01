@@ -104,7 +104,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          *          if a property with the same name already exists.
          *
          *  Note:   The consistence of the whole set of properties is not checked here.
-         *          Means e.g. ... a handle which exists more then once is not detected.
+         *          Means e.g. ... a handle which exists more than once is not detected.
          *          The owner of this class has to be sure, that every new property does
          *          not clash with any existing one.
          */

@@ -158,7 +158,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     }
     else
     {
-        if ( mnColorMapType != RAS_COLOR_NO_MAP )   // when graphic has more then 256 colors and a color map we skip
+        if ( mnColorMapType != RAS_COLOR_NO_MAP )   // when graphic has more than 256 colors and a color map we skip
         {                                           // the colormap
             sal_uLong nCurPos = m_rRAS.Tell();
             m_rRAS.Seek( nCurPos + mnColorMapSize );

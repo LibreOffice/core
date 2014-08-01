@@ -67,7 +67,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
             @short      constructor to initialize this instance
             @descr      A desktop will create an enumeration-access-object. An enumeration is a oneway-list and a
                         snapshot of the components of current tasks under the desktop.
-                        But we need a instance to create more then one enumerations at different times!
+                        But we need a instance to create more than one enumerations at different times!
 
             @seealso    class Desktop
             @seealso    class OComponentEnumeration
@@ -107,7 +107,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
         /*-****************************************************************************************************
             @short      get state of componentlist of enumeration.
             @seealso    interface XElementAccess
-            @return     sal_True  ,if more then 0 elements exist.
+            @return     sal_True  ,if more than 0 elements exist.
             @return     sal_False ,otherwise.
         *//*-*****************************************************************************************************/
 

@@ -53,7 +53,7 @@ class OnewayExecutor extends Thread
     /**
      * const
      * We define some request for some well known oneway interface
-     * calls here too. So they mustn't be declared more then ones.
+     * calls here too. So they mustn't be declared more than ones.
      * Of course it's not necessary to use it ... but why not :-)
      */
 

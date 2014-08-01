@@ -68,7 +68,7 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
 
 /**
     @short      set a new dispatch recorder on this supplier
-    @descr      Because there can exist more then one recorder implementations
+    @descr      Because there can exist more than one recorder implementations
                 (to generate java/basic/... scripts from recorded data) it must
                 be possible to set it on a supplier.
 

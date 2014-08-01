@@ -695,7 +695,7 @@ bool Outliner::SearchAndReplaceOnce (void)
         else if (pViewShell->ISA(OutlineViewShell))
         {
             mpDrawDocument->GetDocSh()->SetWaitCursor(false);
-            // The following loop is executed more then once only when a
+            // The following loop is executed more than once only when a
             // wrap around search is done.
             while (true)
             {

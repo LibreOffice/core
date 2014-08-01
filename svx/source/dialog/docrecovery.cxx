@@ -449,7 +449,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
        map the doc state to an UI state. */
     aNew.RecoveryState = E_NOT_RECOVERED_YET;
 
-    // patch DisplayName! Because the document title contain more then the file name ...
+    // patch DisplayName! Because the document title contain more than the file name ...
     sal_Int32 i = aNew.DisplayName.indexOf(" - ");
     if (i > 0)
         aNew.DisplayName = aNew.DisplayName.copy(0, i);

@@ -263,8 +263,8 @@ struct CliProxy: public uno_Interface
        first call. In all ensuing calls the MethodInfo object is immediately
        retrieved through the mapping table.
 
-       If the interface has more then one interface in its inheritance chain,
-       that is Type.GetInterfaces return more then one Type, then the mapping
+       If the interface has more than one interface in its inheritance chain,
+       that is Type.GetInterfaces return more than one Type, then the mapping
        table is partially initiallized. On the first call the mappings for the
        methods of the belonging interface are created.
 

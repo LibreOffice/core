@@ -90,7 +90,7 @@ static void CheckParentsOnDelete( SbxObject* pObj, SbxArray* p )
         {
             pObj->EndListening( rRef->GetBroadcaster(), true );
         }
-        // does the element have more then one reference and still a Listener?
+        // does the element have more than one reference and still a Listener?
         if( rRef->GetRefCount() > 1 )
         {
             rRef->SetParent( NULL );

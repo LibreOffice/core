@@ -201,7 +201,7 @@ void MergeNewStyleDicsAndOldStyleDics(
         sal_Int32 nOldStyleDics = aIt2->aLocaleNames.getLength();
 
         // old style dics should only have one language listed...
-        DBG_ASSERT( nOldStyleDics, "old style dictionary with more then one language found!");
+        DBG_ASSERT( nOldStyleDics, "old style dictionary with more than one language found!");
         if (nOldStyleDics > 0)
         {
             if (linguistic::LinguIsUnspecified( aIt2->aLocaleNames[0]))

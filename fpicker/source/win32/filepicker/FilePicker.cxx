@@ -172,7 +172,7 @@ void SAL_CALL CFilePicker::dialogSizeChanged()
 }
 
 
-// If there are more then one listener the return value of the last one wins
+// If there are more than one listener the return value of the last one wins
 
 
 OUString SAL_CALL CFilePicker::helpRequested(FilePickerEvent aEvent) const

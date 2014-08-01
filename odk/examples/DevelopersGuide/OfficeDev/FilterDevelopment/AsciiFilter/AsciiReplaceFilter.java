@@ -189,7 +189,7 @@ public class AsciiReplaceFilter
             */
 
             // analyze own configuration data for our own internal filter name!
-            // Important for generic filter services, which are registered more then once.
+            // Important for generic filter services, which are registered more than once.
             // They can use this information to find out, which specialization of it
             // is required.
             for (int i=0; i<lConfig.length; ++i)

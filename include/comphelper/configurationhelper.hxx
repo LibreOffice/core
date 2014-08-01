@@ -64,7 +64,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
 
     /** returns access to the specified configuration package.
      *
-     *  This method should be used, if e.g. more then one request to the same
+     *  This method should be used, if e.g. more than one request to the same
      *  configuration package is needed. The configuration access can be cached
      *  outside and used inbetween.
      *

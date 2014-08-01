@@ -706,7 +706,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, *rReq.GetArgs() );
 
                 // check for special interaction "NO MORE DOCUMENTS ALLOWED" and
-                // break loop then. Otherwise we risk showing the same interaction more then once.
+                // break loop then. Otherwise we risk showing the same interaction more than once.
                 if ( pHandler->getInteractionInfo(aInteraction, &aRule) )
                 {
                     if (aRule.m_nCallCount > 0)

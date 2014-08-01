@@ -54,7 +54,7 @@ QueryTokenizer::QueryTokenizer(const OUString& sQuery)
 
             if (find(sKey) != end())
                 m_bValid = false;
-            OSL_ENSURE(m_bValid, "QueryTokenizer::QueryTokenizer()\nQuery contains same param more then once. Last one wins :-)\n");
+            OSL_ENSURE(m_bValid, "QueryTokenizer::QueryTokenizer()\nQuery contains same param more than once. Last one wins :-)\n");
 
             (*this)[sKey] = sVal;
         }

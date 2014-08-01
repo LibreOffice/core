@@ -420,7 +420,7 @@ private:
                 bevor using).
 
                 And further it's not possible to use a simple boolean value here.
-                Because if more then one operation iterates over the same stl container ...
+                Because if more than one operation iterates over the same stl container ...
                 (only to modify it's elements but dont add new or removing existing ones!)
                 it should be possible doing so. But we must guarantee that the last operation reset
                 this lock ... not the first one ! So we use a "ref count" mechanism for that."
@@ -762,7 +762,7 @@ private:
                 - patch the configuration.
 
                 Note further: It paches the info struct
-                more then ones. E.g. the new temp URL is set
+                more than ones. E.g. the new temp URL is set
                 before the file is saved. And the old URL is removed
                 only if removing oft he old file was successfully.
                 If this method returns without an exception - everything
@@ -1130,7 +1130,7 @@ class CacheLockGuard
         // this variable knows the state of the "cache lock"
         sal_Int32& m_rCacheLock;
 
-        // to prevent increasing/decreasing of m_rCacheLock more then ones
+        // to prevent increasing/decreasing of m_rCacheLock more than ones
         // we must know if THIS guard has an actual lock set there !
         bool m_bLockedByThisGuard;
 
@@ -2454,7 +2454,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // Can happen if events came in asynchronous on recovery time.
     // Then our cache was filled from the configuration ... but now we get some
     // asynchronous events from the global event broadcaster. We must be sure that
-    // we dont add the same document more then once.
+    // we dont add the same document more than once.
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt != m_lDocCache.end())
     {
@@ -3228,7 +3228,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             // damaged on last saving time ...
             // Then our listener need this notification.
             // If it was damaged during last "try to open" ...
-            // it will be notified more then once. SH.. HAPPENS ...
+            // it will be notified more than once. SH.. HAPPENS ...
             // } /* SAFE */
             g.clear();
             implts_informListener(eJob,
@@ -3718,7 +3718,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     implts_persistAllActiveViewNames();
 
     // The called method for saving documents runs
-    // during normal AutoSave more then once. Because
+    // during normal AutoSave more than once. Because
     // it postpone active documents and save it later.
     // That is normaly done by recalling it from a timer.
     // Here we must do it immediately!
@@ -3786,7 +3786,7 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     implts_persistAllActiveViewNames();
 
     // The called method for saving documents runs
-    // during normal AutoSave more then once. Because
+    // during normal AutoSave more than once. Because
     // it postpone active documents and save it later.
     // That is normaly done by recalling it from a timer.
     // Here we must do it immediately!

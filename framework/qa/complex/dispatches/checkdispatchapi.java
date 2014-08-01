@@ -48,7 +48,7 @@ import static org.junit.Assert.*;
 
 /** @short  Check the interface XDispatchInformationProvider
 
-@descr  Because there exists more then one implementation of a dispatch
+@descr  Because there exists more than one implementation of a dispatch
 object, we have to test all these implementations ...
  */
 public class checkdispatchapi

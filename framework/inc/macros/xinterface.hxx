@@ -95,7 +95,7 @@ ________________________________________________________________________________
     }
 
 //  private
-//  implementation of XInterface::queryInterface() with more then 12 other interfaces!
+//  implementation of XInterface::queryInterface() with more than 12 other interfaces!
 
 #define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )                                             \
     ::com::sun::star::uno::Any SAL_CALL CLASS::queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException, std::exception )  \

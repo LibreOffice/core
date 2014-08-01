@@ -1481,7 +1481,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
 
     // OK this task seems to be usable for recycling
     // But we should mark it as such - means set an action lock.
-    // Otherwise it would be used more then ones or will be destroyed
+    // Otherwise it would be used more than ones or will be destroyed
     // by a close() or terminate() request.
     // But if such lock already exist ... it means this task is used for
     // any other operation already. Don't use it then.

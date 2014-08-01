@@ -499,7 +499,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::getCurrentCompone
 /*-************************************************************************************************************
     @interface  XDesktop
     @short      return the current active frame in hierarchy
-    @descr      There can be more then one different active paths in our frame hierarchy. But only one of them
+    @descr      There can be more than one different active paths in our frame hierarchy. But only one of them
                 could be the most active frame (normal he has the focus).
                 Don't mix it with getActiveFrame()! That will return our current active frame, which must be
                 a direct child of us and should be a part(!) of an active path.
@@ -902,7 +902,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for dispatches - not for findFrame()!
         (sTargetFrameName==SPECIALTARGET_PARENT   )   ||    // we have no parent by definition
         (sTargetFrameName==SPECIALTARGET_BEAMER   )         // beamer frames are allowed as child of tasks only -
-                                                            // and they exist more then ones. We have no idea which our sub tasks is the right one
+                                                            // and they exist more than ones. We have no idea which our sub tasks is the right one
        )
     {
         return NULL;

@@ -78,7 +78,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * @member m_aURL               and of course we must be registered for a special URL
      * @member m_bIsActionListener  indicates if we are currently registered as a listener for frame action events or not
      * @member m_bIsStatusListener  indicates if we are currently registered as a listener for status events or not
-     * @member m_bDead              there exist more then one way to finish an object of this class - we must know it sometimes
+     * @member m_bDead              there exist more than one way to finish an object of this class - we must know it sometimes
      */
     private Component                    m_rControl         ;
     private String                       m_sTrueText        ;

@@ -160,7 +160,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
     }
 
     // TODO think about return last storage as working storage ... but dont caching it inside this holder!
-    // => otherwise the same storage is may be commit more then once.
+    // => otherwise the same storage is may be commit more than once.
 
     return xChild;
 }

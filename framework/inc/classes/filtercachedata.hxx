@@ -437,7 +437,7 @@ class DataContainer
                 but must be executed on different places inside this configuration structures.
                 These enum values can be used ate some interface methods to specify, which
                 configuration set should be used.
-                Further it must be possible to start the same action for more then one cfg type.
+                Further it must be possible to start the same action for more than one cfg type.
                 That's why these values must be interpreted as flags. Means: its values must be
                 in range [2^n]!
       */

@@ -126,7 +126,7 @@ public class OpenOfficeDocFileSystem
     /**
      * Provides unique signature of an instance of the filesystem.
      * NOTE: The scope is not a part of the signature so it is impossible
-     *       to mount the same archive more then once.
+     *       to mount the same archive more than once.
      */
     public static String computeSystemName(File file)
     {

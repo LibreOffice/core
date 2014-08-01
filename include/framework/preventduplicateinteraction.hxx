@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace framework{
 
 /**
-    @short      Prevent us from showing the same interaction more then once during
+    @short      Prevent us from showing the same interaction more than once during
                 the same transaction.
 
     @descr      Every interaction provided to this helper will be safed ... handled by the internal

@@ -325,7 +325,7 @@ private:
 
     /*-****************************************************************************************************
         @short      helper methods
-        @descr      Follow methods are needed at different points of our code (more then ones!).
+        @descr      Follow methods are needed at different points of our code (more than ones!).
 
         @attention  Threadsafe methods are signed by "implts_..."!
     *//*-*****************************************************************************************************/
@@ -806,7 +806,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
-                "Frame::initialized() is called more then once, which isnt useful nor allowed.",
+                "Frame::initialized() is called more than once, which isnt useful nor allowed.",
                 static_cast< css::frame::XFrame* >(this));
 
     // Look for rejected calls first!
@@ -2207,7 +2207,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
 {
     const char UNO_PROTOCOL[] = ".uno:";
 
-    // Don't check incoming parameter here! Our helper do it for us and it isn't a good idea to do it more then ones!
+    // Don't check incoming parameter here! Our helper do it for us and it isn't a good idea to do it more than ones!
     // But look for rejected calls!
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -2229,7 +2229,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
 }
 
 /*-****************************************************************************************************
-    @short      handle more then ones dispatches at same call
+    @short      handle more than ones dispatches at same call
     @descr      Returns a sequence of dispatches. For details see the queryDispatch method.
                 For failed dispatches we return empty items in list!
 
@@ -2242,7 +2242,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
 *//*-*****************************************************************************************************/
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Frame::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception )
 {
-    // Don't check incoming parameter here! Our helper do it for us and it isn't a good idea to do it more then ones!
+    // Don't check incoming parameter here! Our helper do it for us and it isn't a good idea to do it more than ones!
     // But look for rejected calls!
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -2457,7 +2457,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
 
     /*ATTENTION!
         Don't try to suspend the controller here! Because it's done inside used dispatch().
-        Otherwhise the dialog "would you save your changes?" will be shown more then once ...
+        Otherwhise the dialog "would you save your changes?" will be shown more than once ...
      */
 
     /* SAFE */

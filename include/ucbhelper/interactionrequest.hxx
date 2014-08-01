@@ -130,7 +130,7 @@ public:
     /**
       * This method sets a continuation for the request. It also can be used
       * to reset the continuation set by a previous XInteractionHandler::handle
-      * call in order to use this request object more then once.
+      * call in order to use this request object more than once.
       *
       * @param rxSelection is the interaction continuation to activate for
       *        the request or an empty reference in order to reset the

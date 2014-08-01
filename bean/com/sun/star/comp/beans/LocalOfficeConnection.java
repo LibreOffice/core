@@ -572,12 +572,12 @@ public class LocalOfficeConnection
                         if (path == null)
                             path    = buffer.toString();
                         else
-                            state   = -3;   // error: more then one 'path'
+                            state   = -3;   // error: more than one 'path'
                     } else if (name.equals("pipe")) {
                         if (pipe == null)
                             pipe    = buffer.toString();
                         else
-                            state   = -4;   // error: more then one 'pipe'
+                            state   = -4;   // error: more than one 'pipe'
                     } else
                         state   = -2;       // error: unknown parameter
                     buffer.delete(0, buffer.length());

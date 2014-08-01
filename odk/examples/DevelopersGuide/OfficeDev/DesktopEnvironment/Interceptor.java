@@ -80,7 +80,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * @member m_xMaster     use this interceptor if he doesn't handle queried dispatch request
      * @member m_xSlave      we can forward all unhandled requests to this slave interceptor
      * @member m_xFrame      intercepted frame
-     * @member m_bDead       there exist more then one way to finish an object of this class - we must know it sometimes
+     * @member m_bDead       there exist more than one way to finish an object of this class - we must know it sometimes
      */
     private com.sun.star.frame.XDispatchProvider m_xMaster            ;
     private com.sun.star.frame.XDispatchProvider m_xSlave             ;

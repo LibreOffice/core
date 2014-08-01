@@ -341,7 +341,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
             // by the listener (m_nCurrentDropAction) is allowed by the source. Only a allowed action is set
             // in pdwEffect. The listener notification is asynchron, that is we cannot expext that the listener
             // has already reacted to the notification.
-            // If there is more then one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
+            // If there is more than one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
             // then getDropEffect returns DROPEFFECT_MOVE which is the default value if no other modifier is pressed.
             // On drop the target should present the user a dialog from which the user may change the action.
             sal_Int8 allowedActions= dndOleDropEffectsToActions( *pdwEffect);
@@ -389,7 +389,7 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
             // by the listener (m_nCurrentDropAction) is allowed by the source. Only a allowed action is set
             // in pdwEffect. The listener notification is asynchron, that is we cannot expext that the listener
             // has already reacted to the notification.
-            // If there is more then one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
+            // If there is more than one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
             // then getDropEffect returns DROPEFFECT_MOVE which is the default value if no other modifier is pressed.
             // On drop the target should present the user a dialog from which the user may change the action.
             sal_Int8 allowedActions= dndOleDropEffectsToActions( *pdwEffect);

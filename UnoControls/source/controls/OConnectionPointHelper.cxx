@@ -144,7 +144,7 @@ void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xLi
 
     // ListenerExistException is obsolete!?
     // Its the same container for XConnectionPointContainer and XConnectionPoint. But only here we must control, if a listener already exist!?
-    // You can add a listener more then one time at XConnectionPointContainer, but here only one ...
+    // You can add a listener more than one time at XConnectionPointContainer, but here only one ...
 
     // Operation is permitted only, if reference to container is valid!
     if ( !impl_LockContainer() )

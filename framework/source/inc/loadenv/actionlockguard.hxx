@@ -53,7 +53,7 @@ class ActionLockGuard
 
             @descr  That can be useful in cases, where no resource still exists,
                     but will be available next time. Then this guard can be used
-                    in a mode "use guard for more then one resources".
+                    in a mode "use guard for more than one resources".
          */
         ActionLockGuard()
             : m_bActionLocked(false)

@@ -1646,7 +1646,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
 // IUnknownWrapper_Impl. Additionally an object of type "aType" is created by help
 // of the INTERFACE_ADAPTER_FACTORY (see #define) service. The implementation of
 // "aType" calls on the COM wrapper's XInvocation::invoke. If the COM object supports
-// more then one UNO interfaces, as can be determined by the property
+// more than one UNO interfaces, as can be determined by the property
 // SUPPORTED_INTERFACES_PROP, then the INTERFACE_ADAPTER_FACTORY creates an object that
 // implements all these interfaces.
 // This is only done if "pUnknown" is not already a UNO wrapper,

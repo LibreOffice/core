@@ -99,7 +99,7 @@ public class WeakComponentBase : WeakBase, XComponent
     {
         // Determine in a thread-safe way if this is the first call to this
         // method.  Only then we proceed with the notification of event
-        // listeners.  It is an error to call this method more then once.
+        // listeners.  It is an error to call this method more than once.
         bool doDispose = false;
         t_disposing call = null;
         lock (this)

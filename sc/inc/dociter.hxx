@@ -382,7 +382,7 @@ public:
 };
 
 class ScAttrRectIterator            // all attribute areas, including areas stretching
-                                    // across more then one column
+                                    // across more than one column
 {
 private:
     ScDocument*     pDoc;

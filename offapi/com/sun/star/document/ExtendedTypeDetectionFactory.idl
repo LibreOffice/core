@@ -78,7 +78,7 @@ published service ExtendedTypeDetectionFactory
                 <td>[string]</td>
                 <td>It means the UNO implementation name of the detector component.
                     Note: It means the really the implementation instead of the UNO service name.
-                    Because it's not possible to distinguish between more then one components; if all of them
+                    Because it's not possible to distinguish between more than one components; if all of them
                     uses a generic service identifier!</td>
             </tr>
             <tr>

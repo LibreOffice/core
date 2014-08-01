@@ -178,7 +178,7 @@ public class Test05 implements StorageTest {
             if ( xSubStream1 == null || xSubStream2 == null )
                 return false;
 
-            // it should be possible to have more then one copy of stream for reading
+            // it should be possible to have more than one copy of stream for reading
             XStream xSubStream2clone = m_aTestHelper.OpenStream( xSubSubStorage,
                                                                 "SubStream2",
                                                                 ElementModes.READ | ElementModes.NOCREATE );

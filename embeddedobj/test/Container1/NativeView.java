@@ -63,7 +63,7 @@ public class NativeView extends java.awt.Canvas
      * Why here?
      * Because the handle seems to be available for already visible windows
      * only. So it's the best place to get it. Special helper method
-     * can be called more then ones - but call native code one times only
+     * can be called more than ones - but call native code one times only
      * and safe the handle and the system type on our members maHandle/maSystem!
      */
     public void setVisible( boolean bState )

@@ -509,7 +509,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
      * &lt;100% Take a look into the difference graphics, maybe the difference graphics shows
      *       text like outlined or the text is little bit move left, right up or down.
      *
-     * &gt;>100% Yes it's possible that there is a difference more then 100%, maybe a font problem
+     * &gt;>100% Yes it's possible that there is a difference more than 100%, maybe a font problem
      *       between old and new graphics. The font of the new graphics is little bit bigger,
      *       so the pixel count between old graphics and new graphics is twice the more.
      *

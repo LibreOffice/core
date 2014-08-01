@@ -229,7 +229,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 
                 if ( nRead > nRequestedBytes )
                     throw RuntimeException(
-                        "Should not be possible to read more then requested!" );
+                        "Should not be possible to read more than requested!" );
 
                 if ( maInflater.finished() || maInflater.getLastInflateError() )
                     throw ZipIOException("The stream seems to be broken!" );

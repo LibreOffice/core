@@ -88,7 +88,7 @@ ________________________________________________________________________________
     }
 
 //  private
-//  implementation of XTypeProvider::getTypes() with more then 12 interfaces!
+//  implementation of XTypeProvider::getTypes() with more than 12 interfaces!
 
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )                                                         \
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException, std::exception )  \

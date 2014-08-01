@@ -147,7 +147,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
           <info>
-            <desc>Indicates whether to show the outline of all moved objects when moving more then one object at the same time.</desc>
+            <desc>Indicates whether to show the outline of all moved objects when moving more than one object at the same time.</desc>
             <label>Contour of each individual object</label>
           </info>
           <value>true</value>

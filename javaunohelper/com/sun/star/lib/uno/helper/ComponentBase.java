@@ -61,7 +61,7 @@ public class ComponentBase extends WeakBase implements XComponent
     {
         // Determine in a thread-safe way if this is the first call to this method.
         // Only then we proceed with the notification of event listeners.
-        // It is an error to call this method more then once.
+        // It is an error to call this method more than once.
         boolean bDoDispose= false;
         synchronized (this)
         {
