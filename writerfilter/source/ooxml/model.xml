@@ -24448,7 +24448,7 @@
       <action name="end" action="fieldend"/>
     </resource>
     <resource name="CT_FLDData" resource="Stream">
-      <action name="characters" action="fldData"/>
+      <action name="characters" action="ignore"/>
     </resource>
     <resource name="CT_FFData" resource="Properties">
       <element name="name" tokenid="ooxml:CT_FFData_name"/>

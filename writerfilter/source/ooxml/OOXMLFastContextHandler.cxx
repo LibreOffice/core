@@ -745,12 +745,8 @@ void OOXMLFastContextHandler::positionOffset(const OUString & sText)
         ::writerfilter::dmapper::PositionHandler::setPositionOffset( sText, inPositionV );
 }
 
-void OOXMLFastContextHandler::fldData(const OUString & /* sText */)
+void OOXMLFastContextHandler::ignore()
 {
-    // ignore --- As per ECMA fldData has been removed.
-    // WordprocessingML Page# 5011  [ ISO/IEC 29500-1:2012 ]
-    // WordprocessingML Page# 5552 [ ECMA-376 Part 1 ]
-    // Hack, so that fldData is not interpreted as field Command
 }
 
 void OOXMLFastContextHandler::alignH(const OUString & sText)

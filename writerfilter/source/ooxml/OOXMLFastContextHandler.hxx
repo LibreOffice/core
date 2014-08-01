@@ -195,7 +195,7 @@ public:
     void endOfParagraph();
     void text(const OUString & sText);
     void positionOffset(const OUString & sText);
-    void fldData(const OUString & sText);
+    void ignore();
     void alignH(const OUString & sText);
     void alignV(const OUString & sText);
     void positivePercentage(const OUString& rText);

@@ -400,8 +400,6 @@ def factoryChooseAction(actionNode):
         ret.append("    pHandler->alignH(sText);")
     elif actionNode.getAttribute("action") == "alignV":
         ret.append("    pHandler->alignV(sText);")
-    elif actionNode.getAttribute("action") == "fldData":
-        ret.append("    pHandler->fldData(sText);")
     elif actionNode.getAttribute("action") == "tokenproperty":
         ret.append("    OOXMLFastHelper<OOXMLIntegerValue>::newProperty(pHandler, %s, pHandler->getToken());" % idToLabel("ooxml:token"))
     else:
