@@ -1818,43 +1818,42 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
         {
             if(SFX_ITEM_SET == pSourceSet->GetItemState(nWhich, false, &pPoolItem))
             {
-                const SfxPoolItem* pItem = pPoolItem;
+                const SfxPoolItem* pResultItem = NULL;
 
                 switch( nWhich )
                 {
                 case XATTR_FILLBITMAP:
-                    pItem = ((XFillBitmapItem*)pItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = ((XFillBitmapItem*)pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_LINEDASH:
-                    pItem = ((XLineDashItem*)pItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = ((XLineDashItem*)pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_LINESTART:
-                    pItem = ((XLineStartItem*)pItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = ((XLineStartItem*)pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_LINEEND:
-                    pItem = ((XLineEndItem*)pItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = ((XLineEndItem*)pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_FILLGRADIENT:
-                    pItem = ((XFillGradientItem*)pItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = ((XFillGradientItem*)pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_FILLFLOATTRANSPARENCE:
                     // allow all kinds of XFillFloatTransparenceItem to be set
-                    pItem = ((XFillFloatTransparenceItem*)pItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = ((XFillFloatTransparenceItem*)pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_FILLHATCH:
-                    pItem = ((XFillHatchItem*)pItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = ((XFillHatchItem*)pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 }
 
                 // set item
-                if( pItem )
+                if( pResultItem )
                 {
-                    pDestSet->Put(*pItem);
-
-                    // delete item if it was a generated one
-                    if( pItem != pPoolItem)
-                        delete (SfxPoolItem*)pItem;
+                    pDestSet->Put(*pResultItem);
+                    delete (SfxPoolItem*)pResultItem;
                 }
+                else
+                    pDestSet->Put(*pPoolItem);
             }
             nWhich = aWhichIter.NextWhich();
         }

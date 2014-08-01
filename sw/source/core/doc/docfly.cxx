@@ -453,7 +453,7 @@ void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
     {
         if (IsInvalidItem(pItem))
             continue;
-        const SfxPoolItem* pResult = pItem;
+        const SfxPoolItem* pResult = NULL;
 
         switch(pItem->Which())
         {
@@ -494,7 +494,7 @@ void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
             }
         }
 
-        if(pResult != pItem)
+        if(pResult)
         {
             rSet.Put(*pResult);
             delete pResult;

@@ -1011,7 +1011,7 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
             return new XLineDashItem( aUniqueName, aDash );
     }
 
-    return (XLineDashItem*)this;
+    return NULL;
 }
 
 // class XLineWidthItem
@@ -1365,7 +1365,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
         {
             // if the polygon is empty, check if the name is empty
             if( aUniqueName.isEmpty() )
-                return (XLineStartItem*)this;
+                return NULL;
 
             // force empty name for empty polygons
             return new XLineStartItem( "", maPolyPolygon );
@@ -1567,7 +1567,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
         }
     }
 
-    return (XLineStartItem*)this;
+    return NULL;
 }
 
 // class XLineEndItem
@@ -1650,7 +1650,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
         {
             // if the polygon is empty, check if the name is empty
             if( aUniqueName.isEmpty() )
-                return (XLineEndItem*)this;
+                return NULL;
 
             // force empty name for empty polygons
             return new XLineEndItem( "", maPolyPolygon );
@@ -1852,7 +1852,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
         }
     }
 
-    return (XLineEndItem*)this;
+    return NULL;
 }
 
 bool XLineEndItem::GetPresentation
@@ -2750,7 +2750,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
             return new XFillGradientItem( aUniqueName, aGradient, Which() );
     }
 
-    return (XFillGradientItem*)this;
+    return NULL;
 }
 
 // class XFillFloatTransparenceItem -
@@ -2858,7 +2858,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
         }
     }
 
-    return (XFillFloatTransparenceItem*)this;
+    return NULL;
 }
 
 // class XHatch
@@ -3163,7 +3163,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
             return new XFillHatchItem( aUniqueName, aHatch );
     }
 
-    return (XFillHatchItem*)this;
+    return NULL;
 }
 
 // --- form text attributes ---
