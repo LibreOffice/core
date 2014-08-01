@@ -336,6 +336,15 @@ DECLARE_RTFIMPORT_TEST(testFdo46955, "fdo46955.rtf")
     }
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo81892, "fdo81892.rtf")
+{
+    // table was not centered
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xTable, "HoriOrient"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo45394, "fdo45394.rtf")
 {
     uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
