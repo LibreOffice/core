@@ -114,6 +114,10 @@ $(eval $(call gb_CppunitTest_add_arguments,sd_import_tests,\
     "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \
 ))
 
+$(eval $(call gb_CppunitTest_use_packages,sd_import_tests,\
+	oox_customshapes \
+))
+
 $(call gb_CppunitTest_get_target,sd_import_tests) : $(call gb_AllLangResTarget_get_target,sd)
 
 # vim: set noet sw=4 ts=4:
