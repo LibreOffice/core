@@ -3939,6 +3939,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	XFetchProvider \
 	XFetchProviderForContentAccess \
 	XFileIdentifierConverter \
+	XInteractionAuthFallback \
 	XInteractionHandlerSupplier \
 	XInteractionReplaceExistingData \
 	XInteractionSupplyAuthentication \

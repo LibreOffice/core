@@ -937,4 +937,60 @@ void SAL_CALL InteractionReplaceExistingData::select()
     recordSelection();
 }
 
+// InteractionAuthFallback Implementation
+
+// XInterface methods.
+
+// virtual
+void SAL_CALL InteractionAuthFallback::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
+
+// virtual
+void SAL_CALL InteractionAuthFallback::release()
+    throw()
+{
+    OWeakObject::release();
+}
+
+// virtual
+uno::Any SAL_CALL
+InteractionAuthFallback::queryInterface( const uno::Type & rType )
+    throw ( uno::RuntimeException, std::exception )
+{
+    uno::Any aRet = cppu::queryInterface( rType,
+            static_cast< task::XInteractionContinuation * >( this ),
+            static_cast< ucb::XInteractionAuthFallback * >( this ));
+
+    return aRet.hasValue()
+            ? aRet : InteractionContinuation::queryInterface( rType );
+}
+
+// XInteractionContinuation methods.
+
+// virtual
+void SAL_CALL InteractionAuthFallback::select()
+    throw( uno::RuntimeException, std::exception )
+{
+    recordSelection();
+}
+
+// XInteractionAuthFallback methods
+
+// virtual
+void SAL_CALL InteractionAuthFallback::setCode( const OUString& code )
+    throw ( uno::RuntimeException, std::exception )
+{
+    m_aCode = code;
+}
+
+// virtual
+OUString SAL_CALL InteractionAuthFallback::getCode( )
+    throw ( uno::RuntimeException, std::exception )
+{
+    return m_aCode;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
