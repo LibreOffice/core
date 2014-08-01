@@ -171,6 +171,7 @@ void RenderAnimationThread::execute()
         */
         renderFrame();
     }
+    mpChart->mpRenderer->ReleaseScreenTextShapes();
 }
 
 class RenderBenchMarkThread : public RenderThread
@@ -178,8 +179,13 @@ class RenderBenchMarkThread : public RenderThread
 public:
     RenderBenchMarkThread(GL3DBarChart * pChart):
     RenderThread(pChart),
-    mbExecuting(false)
+    mbExecuting(false),
+    miFrameCount(0)
     {
+        osl_getSystemTime(&mafpsRenderStartTime);
+        osl_getSystemTime(&mafpsRenderEndTime);
+        osl_getSystemTime(&maScreenTextUpdateStartTime);
+        osl_getSystemTime(&maScreenTextUpdateEndTime);
     }
 protected:
     virtual void execute() SAL_OVERRIDE;
@@ -190,6 +196,9 @@ private:
     void MoveToDefault();
     void MoveToCorner();
     void ProcessScroll();
+    void UpdateScreenText();
+    void UpdateFPS();
+    int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
 private:
     glm::vec3 maStartPos;
     glm::vec3 maEndPos;
@@ -199,6 +208,12 @@ private:
     glm::vec3 maStepDirection;
     size_t mnStep;
     size_t mnStepsTotal;
+    TimeValue mafpsRenderStartTime;
+    TimeValue mafpsRenderEndTime;
+    TimeValue maScreenTextUpdateStartTime;
+    TimeValue maScreenTextUpdateEndTime;
+    int miFrameCount;
+    OUString maFPS;
 };
 
 void RenderBenchMarkThread::MoveCamera()
@@ -309,6 +324,53 @@ void RenderBenchMarkThread::ProcessMouseEvent()
     }
 }
 
+int RenderBenchMarkThread::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
+{
+    TimeValue aTime;
+    aTime.Seconds = endTime.Seconds - startTime.Seconds - 1;
+    aTime.Nanosec = 1000000000 + endTime.Nanosec - startTime.Nanosec;
+    aTime.Seconds += aTime.Nanosec / 1000000000;
+    aTime.Nanosec %= 1000000000;
+    return aTime.Seconds * 1000+aTime.Nanosec / 1000000;
+}
+
+void RenderBenchMarkThread::UpdateFPS()
+{
+    int aDeltaMs = calcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
+    if(aDeltaMs >= 500)
+    {
+        osl_getSystemTime(&mafpsRenderEndTime);
+        aDeltaMs = calcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
+        int iFPS = miFrameCount * 1000 / aDeltaMs;
+        maFPS = OUString("Render FPS: ") + OUString::number(iFPS);
+        miFrameCount = 0;
+        osl_getSystemTime(&mafpsRenderStartTime);
+    }
+    osl_getSystemTime(&mafpsRenderEndTime);
+#if 0
+    opengl3D::ScreenText tFPS(mpChart->mpRenderer.get(), *(mpChart->mpTextCache), mpChart->mTestString, 0);
+    opengl3D::TextCacheItem tmpTextCache = mpChart->mpTextCache->getText(mpChart->mTestString);
+#else
+    opengl3D::ScreenText tFPS(mpChart->mpRenderer.get(), *(mpChart->mpTextCache), maFPS, 0);
+    opengl3D::TextCacheItem tmpTextCache = mpChart->mpTextCache->getText(maFPS);
+#endif
+    float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.05;
+    tFPS.setPosition(glm::vec2(-0.99f, 0.99f), glm::vec2(-0.99f + rectWidth, 0.89f));
+    tFPS.render();
+}
+
+void RenderBenchMarkThread::UpdateScreenText()
+{
+    int aDeltaMs = calcTimeInterval(maScreenTextUpdateStartTime, maScreenTextUpdateEndTime);
+    if (aDeltaMs >= 20)
+    {
+        mpChart->mpRenderer->ReleaseScreenTextShapes();
+        UpdateFPS();
+        osl_getSystemTime(&maScreenTextUpdateStartTime);
+    }
+    osl_getSystemTime(&maScreenTextUpdateEndTime);
+}
+
 void RenderBenchMarkThread::execute()
 {
     while (true)
@@ -317,6 +379,7 @@ void RenderBenchMarkThread::execute()
             osl::MutexGuard aGuard(mpChart->maMutex);
             if (mpChart->mbRenderDie)
                 break;
+            UpdateScreenText();
             ProcessMouseEvent();
             renderFrame();
         }
@@ -328,6 +391,7 @@ void RenderBenchMarkThread::execute()
             nTV.Nanosec = 1000000;
             osl_waitThread(&nTV);
         #endif
+        miFrameCount++;
     }
 }
 
@@ -534,6 +598,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), *mpTextCache,
                     aCats[i], nId));
+        mTestString = aCats[i];
         nId += ID_STEP;
         p = static_cast<opengl3D::Text*>(&maShapes.back());
         aTopLeft.x = nXPos + TEXT_HEIGHT + 0.5 * BAR_SIZE_X;

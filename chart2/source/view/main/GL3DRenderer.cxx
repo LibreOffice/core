@@ -2115,7 +2115,7 @@ void OpenGL3DRenderer::ReleaseShapes()
     ReleasePolygonShapes();
     ReleaseExtrude3DShapes();
     ReleaseTextShapes();
-    ReleaseScreenTextShapes();
+    //ReleaseScreenTextShapes();
     ReleaseBatchBarInfo();
     ReleaseTextShapesBatch();
 }
