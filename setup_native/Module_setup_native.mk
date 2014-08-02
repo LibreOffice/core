@@ -33,7 +33,6 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 	Library_qslnkmsi \
 	Library_reg4allmsdoc \
 	$(if $(DISABLE_ACTIVEX),,Library_regactivex) \
-	Library_regpatchactivex \
 	Library_sdqsmsi \
 	Library_sellangmsi \
 	Library_shlxtmsi \

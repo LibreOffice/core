@@ -649,7 +649,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_SHLXTHDL, \
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	fop \
 	jfregca \
-	regpatchactivex \
 	thidxmsi \
 ))
 endif

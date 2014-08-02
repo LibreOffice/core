@@ -142,15 +142,6 @@ WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
 End
 
-WindowsCustomAction gid_Customaction_Patch_Regpatchactivex_Patchactivexcontrol
-	Name = "PatchActiveXControl";
-	Typ = "65";
-	Source = "regpatchactivex.dll";
-	Target = "PatchActiveXControl";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=3", "end");
-End
-
 WindowsCustomAction gid_Customaction_CheckPatchList
 	Name = "CheckPatchList";
 	Typ = "65";

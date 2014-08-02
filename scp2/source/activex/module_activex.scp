@@ -31,6 +31,5 @@ Module gid_Module_Optional_Activexcontrol
     ParentID = gid_Module_Optional;
     Files = (auto_activexbinarytable_ALL,
         auto_activex_ALL,
-        auto_activexwin64_ALL,
-        gid_File_Lib_Regpatchactivex_Msi);
+        auto_activexwin64_ALL);
 End
