@@ -38,9 +38,10 @@ endif
 $(eval $(call gb_CppunitTest_use_configuration,services))
 
 ifeq ($(ENABLE_JAVA),TRUE)
-$(call gb_CppunitTest_get_target,services): $(call gb_Jar_get_target,unoil)
-$(eval $(call gb_CppunitTest_add_arguments,services, \
-    -env:URE_MORE_JAVA_TYPES=$(call gb_Helper_make_url,$(call gb_Jar_get_target,unoil)) \
+$(eval $(call gb_CppunitTest_use_java_ure,services))
+
+$(eval $(call gb_CppunitTest_use_jars,services,\
+	smoketest \
 ))
 endif
 
