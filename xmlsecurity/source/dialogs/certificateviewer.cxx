@@ -224,44 +224,59 @@ inline Details_UserDatat::Details_UserDatat( const OUString& _rTxt, bool _bFixed
 
 void CertificateViewerDetailsTP::Clear( void )
 {
-    maElementML.SetText( OUString() );
+    m_pValueDetails->SetText( OUString() );
     sal_uLong           i = 0;
-    SvTreeListEntry*    pEntry = maElementsLB.GetEntry( i );
+    SvTreeListEntry*    pEntry = m_pElementsLB->GetEntry( i );
     while( pEntry )
     {
         delete ( Details_UserDatat* ) pEntry->GetUserData();
         ++i;
-        pEntry = maElementsLB.GetEntry( i );
+        pEntry = m_pElementsLB->GetEntry( i );
     }
 
-    maElementsLB.Clear();
+    m_pElementsLB->Clear();
 }
 
 void CertificateViewerDetailsTP::InsertElement( const OUString& _rField, const OUString& _rValue,
                                                 const OUString& _rDetails, bool _bFixedWidthFont )
 {
-    SvTreeListEntry*    pEntry = maElementsLB.InsertEntry( _rField );
-    maElementsLB.SetEntryText( _rValue, pEntry, 1 );
+    SvTreeListEntry*    pEntry = m_pElementsLB->InsertEntry( _rField );
+    m_pElementsLB->SetEntryText( _rValue, pEntry, 1 );
     pEntry->SetUserData( ( void* ) new Details_UserDatat( _rDetails, _bFixedWidthFont ) );
 }
 
 CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, CertificateViewer* _pDlg )
-    :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_DETAILS ), _pDlg  )
-    ,m_aElementsLBContainer(this, XMLSEC_RES(LB_ELEMENTS))
-    ,maElementsLB(m_aElementsLBContainer)
-    ,maElementML            ( this, XMLSEC_RES( ML_ELEMENT ) )
-    ,maStdFont              ( maElementML.GetControlFont() )
-    ,maFixedWidthFont       ( OutputDevice::GetDefaultFont( DEFAULTFONT_UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )
+    :CertificateViewerTP    ( _pParent, "CertDetails", "xmlsec/ui/certdetails.ui", _pDlg  )
+    ,m_aFixedWidthFont( OutputDevice::GetDefaultFont( DEFAULTFONT_UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )
+    ,m_sHeaderBar( "Field\tValue" )
+    ,m_sVersion( "Version" )
+    ,m_sSerialNumber( "Serial Number" )
+    ,m_sIssuer( "Issuer" )
+    ,m_sIssuerId( "Issuer Unique ID" )
+    ,m_sValidFrom( "Valid From" )
+    ,m_sValidTo( "Valid To" )
+    ,m_sSubject( "Subject" )
+    ,m_sSubjectId( "Subject Unique ID" )
+    ,m_sSubjectAlgo( "Subject Algorithm" )
+    ,m_sPublicKey( "Public Key" )
+    ,m_sSigatureAlgo( "Signature Algorithm" )
+    ,m_sThumbprintSHA1( "Thumbprint SHA1" )
+    ,m_sThumbprintMD5( "Thumbprint MD5" )
 {
-    WinBits nStyle = maElementsLB.GetStyle();
-    nStyle &= ~WB_HSCROLL;
-    maElementsLB.SetStyle( nStyle );
+    get( m_pValueDetails, "valuedetails" );
+    get( m_pElementsLBContainer, "tablecontainer" );
+    m_pElementsLB = new SvSimpleTable( *m_pElementsLBContainer );
 
-    maFixedWidthFont.SetHeight( maStdFont.GetHeight() );
+    m_aStdFont = m_pValueDetails->GetControlFont();
+    WinBits nStyle = m_pElementsLB->GetStyle();
+    nStyle &= ~WB_HSCROLL;
+    m_pElementsLB->SetStyle( nStyle );
+
+    m_aFixedWidthFont.SetHeight( m_aStdFont.GetHeight() );
 
     static long nTabs[] = { 2, 0, 30*CS_LB_WIDTH/100 };
-    maElementsLB.SetTabs( &nTabs[ 0 ] );
-    maElementsLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
+    m_pElementsLB->SetTabs( &nTabs[ 0 ] );
+    m_pElementsLB->InsertHeaderEntry( m_sHeaderBar );
 
     // fill list box
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
@@ -271,64 +286,63 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     OUString                aDetails;
     // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
     aLBEntry = "V" + OUString::number( xCert->getVersion() + 1 );
-    InsertElement( XMLSEC_RES( STR_VERSION ), aLBEntry, aLBEntry );
+    InsertElement( m_sVersion, aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( XMLSEC_RES( STR_SERIALNUM ), aLBEntry, aDetails, true );
+    InsertElement( m_sSerialNumber, aLBEntry, aDetails, true );
 
     std::pair< OUString, OUString> pairIssuer =
         XmlSec::GetDNForCertDetailsView(xCert->getIssuerName());
     aLBEntry = pairIssuer.first;
     aDetails = pairIssuer.second;
-    InsertElement( XMLSEC_RES( STR_ISSUER ), aLBEntry, aDetails );
+    InsertElement( m_sIssuer, aLBEntry, aDetails );
 
     DateTime aDateTime( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
     aLBEntry += " ";
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
-    InsertElement( XMLSEC_RES( STR_VALIDFROM ), aLBEntry, aLBEntry  );
+    InsertElement( m_sValidFrom, aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
     aLBEntry += " ";
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
-    InsertElement( XMLSEC_RES( STR_VALIDTO ), aLBEntry, aLBEntry );
+    InsertElement( m_sValidTo, aLBEntry, aLBEntry );
 
     std::pair< OUString, OUString > pairSubject =
         XmlSec::GetDNForCertDetailsView(xCert->getSubjectName());
     aLBEntry = pairSubject.first;
     aDetails = pairSubject.second;
-    InsertElement( XMLSEC_RES( STR_SUBJECT ), aLBEntry, aDetails );
+    InsertElement( m_sSubject, aLBEntry, aDetails );
 
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
-    InsertElement( XMLSEC_RES( STR_SUBJECT_PUBKEY_ALGO ), aLBEntry, aDetails );
+    InsertElement( m_sSubjectAlgo, aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( XMLSEC_RES( STR_SUBJECT_PUBKEY_VAL ), aLBEntry, aDetails, true );
+    InsertElement( m_sPublicKey, aLBEntry, aDetails, true );
 
     aLBEntry = aDetails = xCert->getSignatureAlgorithm();
-    InsertElement( XMLSEC_RES( STR_SIGNATURE_ALGO ), aLBEntry, aDetails );
+    InsertElement( m_sSigatureAlgo, aLBEntry, aDetails );
 
     aSeq = xCert->getSHA1Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( XMLSEC_RES( STR_THUMBPRINT_SHA1 ), aLBEntry, aDetails, true );
+    InsertElement( m_sThumbprintSHA1, aLBEntry, aDetails, true );
 
     aSeq = xCert->getMD5Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( XMLSEC_RES( STR_THUMBPRINT_MD5 ), aLBEntry, aDetails, true );
+    InsertElement( m_sThumbprintMD5, aLBEntry, aDetails, true );
 
-    FreeResource();
-
-    maElementsLB.SetSelectHdl( LINK( this, CertificateViewerDetailsTP, ElementSelectHdl ) );
+    m_pElementsLB->SetSelectHdl( LINK( this, CertificateViewerDetailsTP, ElementSelectHdl ) );
 }
 
 CertificateViewerDetailsTP::~CertificateViewerDetailsTP()
 {
     Clear();
+    delete m_pElementsLB;
 }
 
 void CertificateViewerDetailsTP::ActivatePage()
@@ -337,7 +351,7 @@ void CertificateViewerDetailsTP::ActivatePage()
 
 IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
 {
-    SvTreeListEntry*    pEntry = maElementsLB.FirstSelected();
+    SvTreeListEntry*    pEntry = m_pElementsLB->FirstSelected();
     OUString        aElementText;
     bool            bFixedWidthFont;
     if( pEntry )
@@ -349,9 +363,9 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
     else
         bFixedWidthFont = false;
 
-    maElementML.SetFont( bFixedWidthFont? maFixedWidthFont : maStdFont );
-    maElementML.SetControlFont( bFixedWidthFont? maFixedWidthFont : maStdFont );
-    maElementML.SetText( aElementText );
+    m_pValueDetails->SetFont( bFixedWidthFont? m_aFixedWidthFont : m_aStdFont );
+    m_pValueDetails->SetControlFont( bFixedWidthFont? m_aFixedWidthFont : m_aStdFont );
+    m_pValueDetails->SetText( aElementText );
 
     return 0;
 }
