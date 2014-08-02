@@ -632,18 +632,26 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinaryta
 	) \
 ))
 
-
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,winexplorerextbinarytable, \
 	shlxtmsi \
 ))
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_SHLXTHDL, \
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerext, \
 	ooofilt \
-	ooofilt_x64 \
-	propertyhdl \
-	propertyhdl_x64 \
 	shlxthdl \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerextnt6, \
+	propertyhdl \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerextwin64, \
+	ooofilt_x64 \
 	shlxthdl_x64 \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerextwin64nt6, \
+	propertyhdl_x64 \
 ))
 
 endif # WNT

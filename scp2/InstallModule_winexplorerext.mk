@@ -9,8 +9,12 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/winexplorerext))
 
-$(eval $(call gb_InstallModule_define_if_set,scp2/winexplorerext,\
-	BUILD_X64 \
+$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/winexplorerext,\
+	winexplorerextbinarytable \
+	winexplorerext \
+	winexplorerextnt6 \
+	winexplorerextwin64 \
+	winexplorerextwin64nt6 \
 ))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/winexplorerext,\

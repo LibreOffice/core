@@ -23,63 +23,6 @@ Directory gid_Dir_Shlxthdl
     DosName = "shlxthdl";
 End
 
-File gid_File_Lib_OOoFilt
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "ooofilt.dll";
-End
-
-#ifdef BUILD_X64
-
-File gid_File_Lib_OOoFilt64
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "ooofilt_x64.dll";
-    ComponentCondition = "VersionNT64";
-End
-
-#endif
-
-File gid_File_Lib_Shlxthdl
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "shlxthdl.dll";
-End
-
-#ifdef BUILD_X64
-    File gid_File_Lib_Shlxthdl64
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "shlxthdl_x64.dll";
-    ComponentCondition = "VersionNT64";
-End
-
-#endif
-
-File gid_File_Lib_PropertyHdl
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "propertyhdl.dll";
-    ComponentCondition = "VersionNT >= 600";
-
-End
-
-#ifdef BUILD_X64
-    File gid_File_Lib_PropertyHdl64
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Shlxthdl;
-    Name = "propertyhdl_x64.dll";
-    ComponentCondition = "VersionNT64 >= 600";
-End
-
-#endif
-
 #ifdef BUILD_X64
 
 #if defined(WITH_VC100_REDIST)

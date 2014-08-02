@@ -172,6 +172,23 @@ End
         ComponentCondition = cond; \
     End
 
+#define SHLXTHDL_LIB_FILE(id,name) \
+    File id \
+        Name = name; \
+        LIB_FILE_BODY; \
+        Styles = (PACKED); \
+        Dir    = gid_Dir_Shlxthdl; \
+    End
+
+#define SHLXTHDL_LIB_FILE_COMPONENTCONDITION(id,name,cond) \
+    File id \
+        Name = name; \
+        LIB_FILE_BODY; \
+        Styles = (PACKED); \
+        Dir    = gid_Dir_Shlxthdl; \
+        ComponentCondition = cond; \
+    End
+
 #ifdef MACOSX
 // links are craeted at configure time by odk/config/setsdkenv_unix.sh.in
 #define SDK_LIBRARY_LINK(id,name,target)

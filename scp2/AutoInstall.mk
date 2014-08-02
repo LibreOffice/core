@@ -33,6 +33,10 @@ $(eval $(call gb_AutoInstall_add_module,sdk,,SDK_EXECUTABLE))
 $(eval $(call gb_AutoInstall_add_module,tde,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,ure,URE_PRIVATE_LIB,URE_EXECUTABLE,URE_JAR_FILE))
 $(eval $(call gb_AutoInstall_add_module,winexplorerextbinarytable,LIBO_LIB_FILE_BINARYTABLE))
+$(eval $(call gb_AutoInstall_add_module,winexplorerext,SHLXTHDL_LIB_FILE))
+$(eval $(call gb_AutoInstall_add_module,winexplorerextnt6,SHLXTHDL_LIB_FILE_COMPONENTCONDITION,,,"VersionNT >= 600"))
+$(eval $(call gb_AutoInstall_add_module,winexplorerextwin64,SHLXTHDL_LIB_FILE_COMPONENTCONDITION,,,"VersionNT64"))
+$(eval $(call gb_AutoInstall_add_module,winexplorerextwin64nt6,SHLXTHDL_LIB_FILE_COMPONENTCONDITION,,,"VersionNT64 >= 600"))
 $(eval $(call gb_AutoInstall_add_module,writer,LIBO_LIB_FILE))
 
 # vim: set noet sw=4 ts=4:
