@@ -93,6 +93,7 @@ struct Extrude3DInfo
     bool twoSidesLighting;
     glm::vec4 extrudeColor;
     glm::vec4 id;
+    sal_uInt32 orgID;
     float xScale;
     float yScale;
     float zScale;
@@ -165,6 +166,8 @@ struct BatchBarInfo
     std::vector <glm::mat4> modelMatrixList;
     std::vector <glm::mat3> normalMatrixList;
     std::vector <glm::vec4> colorList;
+    std::map<sal_uInt32, unsigned int> mapId2Color;
+    glm::vec4 selectBarColor;
 };
 
 class OpenGL3DRenderer
@@ -204,6 +207,8 @@ public:
     void ReleaseShapes();
     void ReleaseScreenTextShapes();
     void ReleaseTextTexture();
+    void StartClick(sal_uInt32 &selectID);
+    void EndClick();
 private:
     void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 
@@ -263,6 +268,8 @@ private:
                        glm::vec3 vTopLeft,glm::vec3 vTopRight,
                        glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
                        sal_uInt32 nUniqueId);
+    void SetHighLightBar(BatchBarInfo &barInfo);
+    void DisableHighLightBar(BatchBarInfo &barInfo);
 private:
 
     struct ShaderResources
@@ -436,7 +443,10 @@ private:
     glm::vec4 m_LightColor[MAX_LIGHT_NUM];
     glm::vec4 m_PositionWorldspace[MAX_LIGHT_NUM];
     float m_fLightPower[MAX_LIGHT_NUM];
+    //for 3.0 end
     std::vector<GLuint> m_Texturelist;
+    bool m_bHighLighting;
+    sal_uInt32 m_uiSelectID;
 };
 
 }

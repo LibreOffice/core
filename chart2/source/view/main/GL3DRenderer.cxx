@@ -107,6 +107,8 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     , m_Batch3DUBOBuffer(0)
     , m_Batch3DActualSizeLight(0)
     , m_iLightNum(0)
+    , m_bHighLighting(false)
+    , m_uiSelectID(0)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -1140,6 +1142,7 @@ void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
 void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nColor, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId)
 {
     m_Extrude3DInfo.id = getColorAsVector(nUniqueId);
+    m_Extrude3DInfo.orgID = nUniqueId;
     glm::vec4 tranform = modelMatrix * glm::vec4(0.0, 0.0, 0.0, 1.0);
     glm::vec4 DirX = modelMatrix * glm::vec4(1.0, 0.0, 0.0, 0.0);
     glm::vec4 DirY = modelMatrix * glm::vec4(0.0, 1.0, 0.0, 0.0);
@@ -2107,6 +2110,7 @@ void OpenGL3DRenderer::ReleaseBatchBarInfo()
         m_BarSurface[i].modelMatrixList.clear();
         m_BarSurface[i].normalMatrixList.clear();
         m_BarSurface[i].colorList.clear();
+        m_BarSurface[i].mapId2Color.clear();
     }
 }
 
@@ -2145,6 +2149,7 @@ void OpenGL3DRenderer::GetBatchMiddleInfo(const Extrude3DInfo &extrude3D)
     m_BarSurface[MIDDLE_SURFACE].modelMatrixList.push_back(m_Model);
     m_BarSurface[MIDDLE_SURFACE].normalMatrixList.push_back(normalInverseTranspos);
     m_BarSurface[MIDDLE_SURFACE].colorList.push_back(extrude3D.material.materialColor);
+    m_BarSurface[MIDDLE_SURFACE].mapId2Color[extrude3D.orgID] = m_BarSurface[MIDDLE_SURFACE].colorList.size() - 1;
 }
 
 void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
@@ -2181,6 +2186,7 @@ void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
     m_BarSurface[TOP_SURFACE].modelMatrixList.push_back(m_Model);
     m_BarSurface[TOP_SURFACE].normalMatrixList.push_back(normalInverseTranspos);
     m_BarSurface[TOP_SURFACE].colorList.push_back(extrude3D.material.materialColor);
+    m_BarSurface[TOP_SURFACE].mapId2Color[extrude3D.orgID] = m_BarSurface[TOP_SURFACE].colorList.size() - 1;
 
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 flatScale = glm::scale(glm::vec3(xyScale, xyScale, xyScale));
@@ -2192,6 +2198,7 @@ void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
     m_BarSurface[FLAT_BOTTOM_SURFACE].modelMatrixList.push_back(m_Model);
     m_BarSurface[FLAT_BOTTOM_SURFACE].normalMatrixList.push_back(normalInverseTranspos);
     m_BarSurface[FLAT_BOTTOM_SURFACE].colorList.push_back(extrude3D.material.materialColor);
+    m_BarSurface[FLAT_BOTTOM_SURFACE].mapId2Color[extrude3D.orgID] = m_BarSurface[FLAT_BOTTOM_SURFACE].colorList.size() - 1;
 }
 
 void OpenGL3DRenderer::GetBatchBarsInfo()
@@ -2215,14 +2222,64 @@ void OpenGL3DRenderer::GetBatchBarsInfo()
             m_BarSurface[0].modelMatrixList.push_back(m_Model);
             m_BarSurface[0].normalMatrixList.push_back(normalInverseTranspos);
             m_BarSurface[0].colorList.push_back(extrude3DInfo.material.materialColor);
+            m_BarSurface[0].mapId2Color[extrude3DInfo.orgID] = m_BarSurface[0].colorList.size() - 1;
         }
+    }
+}
+
+void OpenGL3DRenderer::SetHighLightBar(BatchBarInfo &barInfo)
+{
+    std::map<sal_uInt32, unsigned int> ::iterator it = barInfo.mapId2Color.find(m_uiSelectID);
+    if (it != barInfo.mapId2Color.end())
+    {
+        unsigned int idx = it->second;
+        barInfo.selectBarColor = barInfo.colorList[idx];
+        barInfo.colorList[idx] = glm::vec4(1.0, 1.0, 1.0, 1.0);
+    }
+}
+
+void OpenGL3DRenderer::DisableHighLightBar(BatchBarInfo &barInfo)
+{
+    std::map<sal_uInt32, unsigned int> ::iterator it = barInfo.mapId2Color.find(m_uiSelectID);
+    if (it != barInfo.mapId2Color.end())
+    {
+        unsigned int idx = it->second;
+        barInfo.colorList[idx] = barInfo.selectBarColor;
+    }
+}
+
+void OpenGL3DRenderer::StartClick(sal_uInt32 &selectID)
+{
+    m_bHighLighting = true;
+    m_uiSelectID = selectID;
+    for (unsigned int i = 0; i < 3; i++)
+    {
+        SetHighLightBar(m_BarSurface[i]);
+    }
+}
+
+void OpenGL3DRenderer::EndClick()
+{
+    m_bHighLighting = false;
+    for (unsigned int i = 0; i < 3; i++)
+    {
+        DisableHighLightBar(m_BarSurface[i]);
     }
 }
 
 void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
 {
     if(bNewScene)
+    {
         GetBatchBarsInfo();
+        if (m_bHighLighting)
+        {
+            for (unsigned int i = 0; i < 3; i++)
+            {
+                SetHighLightBar(m_BarSurface[i]);
+            }
+        }
+    }
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);

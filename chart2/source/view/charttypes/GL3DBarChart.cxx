@@ -230,6 +230,8 @@ void RenderBenchMarkThread::MoveCamera()
     {
         mnStep = 0;
         mbExecuting = false;
+        if (mpChart->maRenderEvent == EVENT_CLICK)
+            mpChart->mpRenderer->EndClick();
         mpChart->maRenderEvent = EVENT_NONE;
     }
 }
@@ -282,6 +284,7 @@ void RenderBenchMarkThread::MoveToBar()
         maStepDirection = (maTargetDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
         mpChart->maClickCond.set();
         mbExecuting = true;
+        mpChart->mpRenderer->StartClick(mpChart->mSelectBarId);
     }
     MoveCamera();
 }
