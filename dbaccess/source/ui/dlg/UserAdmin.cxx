@@ -111,6 +111,10 @@ IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
 // OUserAdmin
 OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
     : OGenericAdministrationPage( pParent, "UserAdminPage", "dbaccess/ui/useradminpage.ui", _rAttrSet)
+    , m_pUSER(0)
+    , m_pNEWUSER(0)
+    , m_pCHANGEPWD(0)
+    , m_pDELETEUSER(0)
     ,m_TableCtrl(get<VclAlignment>("table"), WB_TABSTOP)
 {
     m_TableCtrl.Show();
