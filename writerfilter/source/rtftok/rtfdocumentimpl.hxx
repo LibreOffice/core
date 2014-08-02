@@ -369,8 +369,7 @@ namespace writerfilter {
             private:
                 SvStream& Strm();
                 sal_uInt32 getColorTable(sal_uInt32 nIndex);
-                RTFSprms mergeSprms();
-                RTFSprms mergeAttributes();
+    writerfilter::Reference<Properties>::Pointer_t createStyleProperties();
                 void resetSprms();
                 void resetAttributes();
                 void resolveSubstream(sal_uInt32 nPos, Id nId);
