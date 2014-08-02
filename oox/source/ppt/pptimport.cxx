@@ -190,6 +190,7 @@ class PptGraphicHelper : public GraphicHelper
 public:
     explicit            PptGraphicHelper( const PowerPointImport& rFilter );
     virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const SAL_OVERRIDE;
+    virtual drawing::FillStyle getDefaultChartAreaFillStyle() const;
 private:
     const PowerPointImport& mrFilter;
 };
@@ -203,6 +204,11 @@ PptGraphicHelper::PptGraphicHelper( const PowerPointImport& rFilter ) :
 sal_Int32 PptGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
 {
     return mrFilter.getSchemeColor( nToken );
+}
+
+drawing::FillStyle PptGraphicHelper::getDefaultChartAreaFillStyle() const
+{
+    return drawing::FillStyle_NONE;
 }
 
 } // namespace
