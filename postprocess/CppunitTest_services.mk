@@ -32,6 +32,8 @@ $(eval $(call gb_CppunitTest_use_vcl,services))
 
 $(eval $(call gb_CppunitTest_use_rdb,services,services))
 ifneq ($(DISABLE_PYTHON),TRUE)
+$(eval $(call gb_CppunitTest_use_python_ure,services))
+
 $(eval $(call gb_CppunitTest_use_rdb,services,pyuno))
 endif
 
@@ -44,5 +46,9 @@ $(eval $(call gb_CppunitTest_use_jars,services,\
 	smoketest \
 ))
 endif
+
+$(eval $(call gb_CppunitTest_use_packages,services,\
+	instsetoo_native_setup \
+))
 
 # vim: set noet sw=4 ts=4:

@@ -84,6 +84,8 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(if $(HEADLESS),,VCL_HIDE_WINDOWS=1) \
+		$(if $(strip $(PYTHON_URE)),\
+			PYTHONDONTWRITEBYTECODE=1) \
 		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$*)) \
 		$(call gb_CppunitTest__make_args) \
@@ -122,6 +124,7 @@ $(call gb_CppunitTest_CppunitTest_platform,$(1),$(2),$(gb_CppunitTest_DLLDIR)/$(
 $(call gb_CppunitTest_get_target,$(1)) : ARGS :=
 $(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS :=
 $(call gb_CppunitTest_get_target,$(1)) : JAVA_URE := $(false)
+$(call gb_CppunitTest_get_target,$(1)) : PYTHON_URE := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : VCL := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES :=
@@ -289,6 +292,24 @@ endef
 
 define gb_CppunitTest_use_jars
 $(foreach jar,$(2),$(call gb_CppunitTest_use_jar,$(1),$(jar)))
+
+endef
+
+define gb_CppunitTest_use_python_ure
+$(call gb_CppunitTest_get_target,$(1)) : PYTHON_URE := $(true)
+$(call gb_CppunitTest_get_target,$(1)) :\
+	$(call gb_Library_get_target,pythonloader) \
+	$(call gb_Library_get_target,pyuno) \
+	$(if $(filter-out WNT,$(OS)),\
+		$(call gb_Library_get_target,pyuno_wrapper) \
+	) \
+	$(if $(SYSTEM_PYTHON),, \
+		$(if $(filter MACOSX,$(OS)),\
+			$(call gb_GeneratedPackage_get_target,python3),\
+			$(call gb_Package_get_target,python3) \
+		) \
+	) \
+	$(call gb_Package_get_target,pyuno_python_scripts)
 
 endef
 
