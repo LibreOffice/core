@@ -200,6 +200,7 @@ OpenGL3DRenderer::ShaderResources::ShaderResources()
     , m_BatchTextVertexID(0)
     , m_BatchTextTexCoordID(0)
     , m_BatchTextTexID(0)
+    , m_bScrollFlag(false)
 {
 }
 
@@ -230,8 +231,16 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DNormalMatrixID = glGetUniformLocation(m_3DProID, "normalMatrix");
         m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
         m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
-
-        m_3DBatchProID = OpenGLHelper::LoadShaders("shape3DVertexShaderBatch", "shape3DFragmentShaderBatch");
+        if (m_bScrollFlag)
+        {
+            m_3DBatchProID = OpenGLHelper::LoadShaders("shape3DVertexShaderBatchScroll", "shape3DFragmentShaderBatchScroll");
+            m_3DBatchTransMatrixID = glGetUniformLocation(m_3DBatchProID, "transMatrix");
+            m_3DBatchMinCoordXID = glGetUniformLocation(m_3DBatchProID, "minCoordX");
+            m_3DBatchMaxCoordXID = glGetUniformLocation(m_3DBatchProID, "maxCoordX");
+            m_3DBatchUndrawID = glGetUniformLocation(m_3DBatchProID, "undraw");
+        }
+        else
+            m_3DBatchProID = OpenGLHelper::LoadShaders("shape3DVertexShaderBatch", "shape3DFragmentShaderBatch");
         m_3DBatchProjectionID = glGetUniformLocation(m_3DBatchProID, "P");
         m_3DBatchViewID = glGetUniformLocation(m_3DBatchProID, "V");
         m_3DBatchModelID = glGetAttribLocation(m_3DBatchProID, "M");
@@ -2265,6 +2274,11 @@ void OpenGL3DRenderer::EndClick()
     {
         DisableHighLightBar(m_BarSurface[i]);
     }
+}
+
+void OpenGL3DRenderer::SetScroll()
+{
+    maResources.m_bScrollFlag = true;
 }
 
 void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)

@@ -209,6 +209,7 @@ public:
     void ReleaseTextTexture();
     void StartClick(sal_uInt32 &selectID);
     void EndClick();
+    void SetScroll();
 private:
     void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 
@@ -275,6 +276,7 @@ private:
     struct ShaderResources
     {
         bool m_b330Support;
+        bool m_bScrollFlag;
         // 3DProID
         GLint m_3DProID;
         GLint m_3DProjectionID;
@@ -324,6 +326,10 @@ private:
         GLint m_3DBatchVertexID;
         GLint m_3DBatchNormalID;
         GLint m_3DBatchColorID;
+        GLint m_3DBatchTransMatrixID;
+        GLint m_3DBatchMinCoordXID;
+        GLint m_3DBatchMaxCoordXID;
+        GLint m_3DBatchUndrawID;
 
         //Batch render text
         bool mbTexBatchSupport;

@@ -350,7 +350,7 @@ void RenderBenchMarkThread::UpdateFPS()
         osl_getSystemTime(&mafpsRenderStartTime);
     }
     osl_getSystemTime(&mafpsRenderEndTime);
-#if 0
+#if 1
     opengl3D::ScreenText tFPS(mpChart->mpRenderer.get(), *(mpChart->mpTextCache), mpChart->mTestString, 0);
     opengl3D::TextCacheItem tmpTextCache = mpChart->mpTextCache->getText(mpChart->mTestString);
 #else
@@ -414,8 +414,23 @@ GL3DBarChart::GL3DBarChart(
     mbNeedsNewRender(true),
     mbCameraInit(false),
     mbRenderDie(false),
-    maRenderEvent(EVENT_NONE)
+    maRenderEvent(EVENT_NONE),
+    miScrollRate(0),
+    mbScrollFlg(false)
 {
+    if (BENCH_MARK_MODE)
+    {
+        char *scrollFrame = getenv("SCROLL_RATE");
+        if (scrollFrame)
+        {
+            miScrollRate = atoi(scrollFrame);
+            if (miScrollRate > 0)
+            {
+                mbScrollFlg = true;
+                mpRenderer->SetScroll();
+            }
+        }
+    }
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
     mrWindow.setRenderer(this);

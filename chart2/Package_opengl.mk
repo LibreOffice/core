@@ -34,6 +34,8 @@ $(eval $(call gb_Package_add_files,chart2_opengl_shader,$(LIBO_BIN_FOLDER)/openg
 	shape3DVertexShaderV300.glsl \
 	textFragmentShaderBatch.glsl \
 	textVertexShaderBatch.glsl \
+	shape3DFragmentShaderBatchScroll.glsl \
+	shape3DVertexShaderBatchScroll.glsl \
 ))
 
 # vim: set noet sw=4 ts=4:
