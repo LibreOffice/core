@@ -1151,9 +1151,7 @@ void RTFDocumentImpl::text(OUString& rString)
                     m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_styleId, pValue);
                     m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
 
-                    writerfilter::Reference<Properties>::Pointer_t const pProp(
-                       createStyleProperties()
-                    );
+                    writerfilter::Reference<Properties>::Pointer_t const pProp(createStyleProperties());
                     m_aStyleTableEntries.insert(make_pair(m_nCurrentStyleIndex, pProp));
                 }
                 else
@@ -1441,529 +1439,529 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
     // special case \upr: ignore everything except nested \ud
-    if (DESTINATION_UPR == m_aStates.top().nDestinationState
-        && RTF_UD != nKeyword)
+    if (DESTINATION_UPR == m_aStates.top().nDestinationState && RTF_UD != nKeyword)
     {
         m_aStates.top().nDestinationState = DESTINATION_SKIP;
         aSkip.setParsed(false);
     }
-    else switch (nKeyword)
-    {
-    case RTF_RTF:
-        break;
-    case RTF_FONTTBL:
-        m_aStates.top().nDestinationState = DESTINATION_FONTTABLE;
-        break;
-    case RTF_COLORTBL:
-        m_aStates.top().nDestinationState = DESTINATION_COLORTABLE;
-        break;
-    case RTF_STYLESHEET:
-        m_aStates.top().nDestinationState = DESTINATION_STYLESHEET;
-        break;
-    case RTF_FIELD:
-        m_aStates.top().nDestinationState = DESTINATION_FIELD;
-        break;
-    case RTF_FLDINST:
-    {
-        // Look for the field type
-        sal_Size nPos = Strm().Tell();
-        OStringBuffer aBuf;
-        char ch = 0;
-        bool bFoundCode = false;
-        bool bInKeyword = false;
-        while (!bFoundCode && ch != '}')
+    else
+        switch (nKeyword)
         {
-            Strm().ReadChar(ch);
-            if ('\\' == ch)
-                bInKeyword = true;
-            if (!bInKeyword  && isalnum(ch))
-                aBuf.append(ch);
-            else if (bInKeyword && isspace(ch))
-                bInKeyword = false;
-            if (!aBuf.isEmpty() && !isalnum(ch))
-                bFoundCode = true;
-        }
-        Strm().Seek(nPos);
-
-        // Form data should be handled only for form fields if any
-        if (aBuf.toString().indexOf(OString("FORM")) != -1)
-            m_bFormField = true;
-
-        singleChar(0x13);
-        m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
-    }
-    break;
-    case RTF_FLDRSLT:
-        m_aStates.top().nDestinationState = DESTINATION_FIELDRESULT;
-        break;
-    case RTF_LISTTABLE:
-        m_aStates.top().nDestinationState = DESTINATION_LISTTABLE;
-        break;
-    case RTF_LISTPICTURE:
-        m_aStates.top().nDestinationState = DESTINATION_LISTPICTURE;
-        m_aStates.top().bInListpicture = true;
-        break;
-    case RTF_LIST:
-        m_aStates.top().nDestinationState = DESTINATION_LISTENTRY;
-        break;
-    case RTF_LISTNAME:
-        m_aStates.top().nDestinationState = DESTINATION_LISTNAME;
-        break;
-    case RTF_LFOLEVEL:
-        m_aStates.top().nDestinationState = DESTINATION_LFOLEVEL;
-        m_aStates.top().aTableSprms.clear();
-        break;
-    case RTF_LISTOVERRIDETABLE:
-        m_aStates.top().nDestinationState = DESTINATION_LISTOVERRIDETABLE;
-        break;
-    case RTF_LISTOVERRIDE:
-        m_aStates.top().nDestinationState = DESTINATION_LISTOVERRIDEENTRY;
-        break;
-    case RTF_LISTLEVEL:
-        m_aStates.top().nDestinationState = DESTINATION_LISTLEVEL;
-        break;
-    case RTF_LEVELTEXT:
-        m_aStates.top().nDestinationState = DESTINATION_LEVELTEXT;
-        break;
-    case RTF_LEVELNUMBERS:
-        m_aStates.top().nDestinationState = DESTINATION_LEVELNUMBERS;
-        break;
-    case RTF_SHPPICT:
-        m_aStates.top().resetFrame();
-        m_aStates.top().nDestinationState = DESTINATION_SHPPICT;
-        break;
-    case RTF_PICT:
-        if (m_aStates.top().nDestinationState != DESTINATION_SHAPEPROPERTYVALUE)
-            m_aStates.top().nDestinationState = DESTINATION_PICT; // as character
-        else
-            m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYVALUEPICT; // anchored inside a shape
-        break;
-    case RTF_PICPROP:
-        m_aStates.top().nDestinationState = DESTINATION_PICPROP;
-        break;
-    case RTF_SP:
-        m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTY;
-        break;
-    case RTF_SN:
-        m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYNAME;
-        break;
-    case RTF_SV:
-        m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYVALUE;
-        break;
-    case RTF_SHP:
-        m_bNeedCrOrig = m_bNeedCr;
-        m_aStates.top().nDestinationState = DESTINATION_SHAPE;
-        m_aStates.top().bInShape = true;
-        break;
-    case RTF_SHPINST:
-        m_aStates.top().nDestinationState = DESTINATION_SHAPEINSTRUCTION;
-        break;
-    case RTF_NESTTABLEPROPS:
-        // do not set any properties of outer table at nested table!
-        m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
-        m_aStates.top().aTableCellAttributes =
-            m_aDefaultState.aTableCellAttributes;
-        m_aNestedTableCellsSprms.clear();
-        m_aNestedTableCellsAttributes.clear();
-        m_nNestedCells = 0;
-        m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
-        break;
-    case RTF_HEADER:
-    case RTF_FOOTER:
-    case RTF_HEADERL:
-    case RTF_HEADERR:
-    case RTF_HEADERF:
-    case RTF_FOOTERL:
-    case RTF_FOOTERR:
-    case RTF_FOOTERF:
-        if (!m_pSuperstream)
+        case RTF_RTF:
+            break;
+        case RTF_FONTTBL:
+            m_aStates.top().nDestinationState = DESTINATION_FONTTABLE;
+            break;
+        case RTF_COLORTBL:
+            m_aStates.top().nDestinationState = DESTINATION_COLORTABLE;
+            break;
+        case RTF_STYLESHEET:
+            m_aStates.top().nDestinationState = DESTINATION_STYLESHEET;
+            break;
+        case RTF_FIELD:
+            m_aStates.top().nDestinationState = DESTINATION_FIELD;
+            break;
+        case RTF_FLDINST:
         {
-            Id nId = 0;
-            sal_Size nPos = m_nGroupStartPos - 1;
-            switch (nKeyword)
-            {
-            case RTF_HEADER:
-                nId = NS_ooxml::LN_headerr;
-                break;
-            case RTF_FOOTER:
-                nId = NS_ooxml::LN_footerr;
-                break;
-            case RTF_HEADERL:
-                nId = NS_ooxml::LN_headerl;
-                break;
-            case RTF_HEADERR:
-                nId = NS_ooxml::LN_headerr;
-                break;
-            case RTF_HEADERF:
-                nId = NS_ooxml::LN_headerf;
-                break;
-            case RTF_FOOTERL:
-                nId = NS_ooxml::LN_footerl;
-                break;
-            case RTF_FOOTERR:
-                nId = NS_ooxml::LN_footerr;
-                break;
-            case RTF_FOOTERF:
-                nId = NS_ooxml::LN_footerf;
-                break;
-            default:
-                break;
-            }
-            m_nHeaderFooterPositions.push(make_pair(nId, nPos));
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        }
-        break;
-    case RTF_FOOTNOTE:
-        if (!m_pSuperstream)
-        {
-            Id nId = NS_ooxml::LN_footnote;
-
-            // Check if this is an endnote.
+            // Look for the field type
+            sal_Size nPos = Strm().Tell();
             OStringBuffer aBuf;
-            char ch;
-            for (int i = 0; i < 7; ++i)
+            char ch = 0;
+            bool bFoundCode = false;
+            bool bInKeyword = false;
+            while (!bFoundCode && ch != '}')
             {
                 Strm().ReadChar(ch);
-                aBuf.append(ch);
+                if ('\\' == ch)
+                    bInKeyword = true;
+                if (!bInKeyword  && isalnum(ch))
+                    aBuf.append(ch);
+                else if (bInKeyword && isspace(ch))
+                    bInKeyword = false;
+                if (!aBuf.isEmpty() && !isalnum(ch))
+                    bFoundCode = true;
             }
-            OString aKeyword = aBuf.makeStringAndClear();
-            if (aKeyword.equals("\\ftnalt"))
-                nId = NS_ooxml::LN_endnote;
+            Strm().Seek(nPos);
 
-            m_bHasFootnote = true;
-            if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
-                m_aStates.top().pCurrentBuffer = 0;
-            bool bCustomMark = false;
-            OUString aCustomMark;
-            while (m_aSuperBuffer.size())
-            {
-                Buf_t aTuple = m_aSuperBuffer.front();
-                m_aSuperBuffer.pop_front();
-                if (boost::get<0>(aTuple) == BUFFER_UTEXT)
-                {
-                    aCustomMark = boost::get<1>(aTuple)->getString();
-                    bCustomMark = true;
-                }
-            }
-            m_aStates.top().nDestinationState = DESTINATION_FOOTNOTE;
-            if (bCustomMark)
-                Mapper().startCharacterGroup();
-            resolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
-            if (bCustomMark)
-            {
-                m_aStates.top().aCharacterAttributes.clear();
-                m_aStates.top().aCharacterSprms.clear();
-                RTFValue::Pointer_t pValue(new RTFValue(1));
-                m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows, pValue);
-                text(aCustomMark);
-                Mapper().endCharacterGroup();
-            }
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        }
-        break;
-    case RTF_BKMKSTART:
-        m_aStates.top().nDestinationState = DESTINATION_BOOKMARKSTART;
-        break;
-    case RTF_BKMKEND:
-        m_aStates.top().nDestinationState = DESTINATION_BOOKMARKEND;
-        break;
-    case RTF_REVTBL:
-        m_aStates.top().nDestinationState = DESTINATION_REVISIONTABLE;
-        break;
-    case RTF_ANNOTATION:
-        if (!m_pSuperstream)
-        {
-            resolveSubstream(m_nGroupStartPos - 1, NS_ooxml::LN_annotation);
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        }
-        else
-        {
-            // If there is an author set, emit it now.
-            if (!m_aAuthor.isEmpty() || !m_aAuthorInitials.isEmpty())
-            {
-                RTFSprms aAttributes;
-                if (!m_aAuthor.isEmpty())
-                {
-                    RTFValue::Pointer_t pValue(new RTFValue(m_aAuthor));
-                    aAttributes.set(NS_ooxml::LN_CT_TrackChange_author, pValue);
-                }
-                if (!m_aAuthorInitials.isEmpty())
-                {
-                    RTFValue::Pointer_t pValue(new RTFValue(m_aAuthorInitials));
-                    aAttributes.set(NS_ooxml::LN_CT_Comment_initials, pValue);
-                }
-                writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
-                Mapper().props(pProperties);
-            }
-        }
-        break;
-    case RTF_SHPTXT:
-    case RTF_DPTXBXTEXT:
-    {
-        bool bPictureFrame = false;
-        for (size_t i = 0; i < m_aStates.top().aShape.aProperties.size(); ++i)
-        {
-            std::pair<OUString, OUString>& rProperty = m_aStates.top().aShape.aProperties[i];
-            if (rProperty.first == "shapeType" && rProperty.second == OUString::number(ESCHER_ShpInst_PictureFrame))
-            {
-                bPictureFrame = true;
-                break;
-            }
-        }
-        if (bPictureFrame)
-            // Skip text on picture frames.
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        else
-        {
-            m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
-            checkFirstRun();
-            dispatchFlag(RTF_PARD);
-            m_bNeedPap = true;
-            if (nKeyword == RTF_SHPTXT)
-            {
-                if (!m_aStates.top().pCurrentBuffer)
-                    m_pSdrImport->resolve(m_aStates.top().aShape, false, RTFSdrImport::SHAPE);
-                else
-                {
-                    RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aShape));
-                    m_aStates.top().pCurrentBuffer->push_back(
-                        Buf_t(BUFFER_STARTSHAPE, pValue));
-                }
-            }
-        }
-    }
-    break;
-    case RTF_FORMFIELD:
-        if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
-            m_aStates.top().nDestinationState = DESTINATION_FORMFIELD;
-        break;
-    case RTF_FFNAME:
-        m_aStates.top().nDestinationState = DESTINATION_FORMFIELDNAME;
-        break;
-    case RTF_FFL:
-        m_aStates.top().nDestinationState = DESTINATION_FORMFIELDLIST;
-        break;
-    case RTF_DATAFIELD:
-        m_aStates.top().nDestinationState = DESTINATION_DATAFIELD;
-        break;
-    case RTF_INFO:
-        m_aStates.top().nDestinationState = DESTINATION_INFO;
-        break;
-    case RTF_CREATIM:
-        m_aStates.top().nDestinationState = DESTINATION_CREATIONTIME;
-        break;
-    case RTF_REVTIM:
-        m_aStates.top().nDestinationState = DESTINATION_REVISIONTIME;
-        break;
-    case RTF_PRINTIM:
-        m_aStates.top().nDestinationState = DESTINATION_PRINTTIME;
-        break;
-    case RTF_AUTHOR:
-        m_aStates.top().nDestinationState = DESTINATION_AUTHOR;
-        break;
-    case RTF_KEYWORDS:
-        m_aStates.top().nDestinationState = DESTINATION_KEYWORDS;
-        break;
-    case RTF_OPERATOR:
-        m_aStates.top().nDestinationState = DESTINATION_OPERATOR;
-        break;
-    case RTF_COMPANY:
-        m_aStates.top().nDestinationState = DESTINATION_COMPANY;
-        break;
-    case RTF_COMMENT:
-        m_aStates.top().nDestinationState = DESTINATION_COMMENT;
-        break;
-    case RTF_OBJECT:
-    {
-        // beginning of an OLE Object
-        m_aStates.top().nDestinationState = DESTINATION_OBJECT;
+            // Form data should be handled only for form fields if any
+            if (aBuf.toString().indexOf(OString("FORM")) != -1)
+                m_bFormField = true;
 
-        // check if the object is in a special container (e.g. a table)
-        if (!m_aStates.top().pCurrentBuffer)
-        {
-            // the object is in a table or another container.
-            // Don't try to treate it as an OLE object (fdo#53594).
-            // Use the \result (RTF_RESULT) element of the object instead,
-            // the result element contain picture representing the OLE Object.
-            m_bObject = true;
-        }
-    }
-    break;
-    case RTF_OBJDATA:
-        // check if the object is in a special container (e.g. a table)
-        if (m_aStates.top().pCurrentBuffer)
-        {
-            // the object is in a table or another container.
-            // Use the \result (RTF_RESULT) element of the object instead,
-            // of the \objdata.
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        }
-        else
-        {
-            m_aStates.top().nDestinationState = DESTINATION_OBJDATA;
+            singleChar(0x13);
+            m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
         }
         break;
-    case RTF_RESULT:
-        m_aStates.top().nDestinationState = DESTINATION_RESULT;
-        break;
-    case RTF_ATNDATE:
-        m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONDATE;
-        break;
-    case RTF_ATNAUTHOR:
-        m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONAUTHOR;
-        break;
-    case RTF_ATNREF:
-        m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONREFERENCE;
-        break;
-    case RTF_FALT:
-        m_aStates.top().nDestinationState = DESTINATION_FALT;
-        break;
-    case RTF_FLYMAINCNT:
-        m_aStates.top().nDestinationState = DESTINATION_FLYMAINCONTENT;
-        break;
-    case RTF_LISTTEXT:
-        // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
-    case RTF_NONESTTABLES:
-        // This destination should be ignored by readers that support nested tables.
-        m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        break;
-    case RTF_DO:
-        m_aStates.top().nDestinationState = DESTINATION_DRAWINGOBJECT;
-        break;
-    case RTF_PN:
-        m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING;
-        break;
-    case RTF_PNTEXT:
-        // This destination should be ignored by readers that support paragraph numbering.
-        m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        break;
-    case RTF_PNTXTA:
-        m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING_TEXTAFTER;
-        break;
-    case RTF_PNTXTB:
-        m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE;
-        break;
-    case RTF_TITLE:
-        m_aStates.top().nDestinationState = DESTINATION_TITLE;
-        break;
-    case RTF_SUBJECT:
-        m_aStates.top().nDestinationState = DESTINATION_SUBJECT;
-        break;
-    case RTF_DOCCOMM:
-        m_aStates.top().nDestinationState = DESTINATION_DOCCOMM;
-        break;
-    case RTF_ATRFSTART:
-        m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONREFERENCESTART;
-        break;
-    case RTF_ATRFEND:
-        m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONREFERENCEEND;
-        break;
-    case RTF_ATNID:
-        m_aStates.top().nDestinationState = DESTINATION_ATNID;
-        break;
-    case RTF_MMATH:
-    case RTF_MOMATHPARA:
-        // Nothing to do here (just enter the destination) till RTF_MMATHPR is implemented.
-        break;
-    case RTF_MR:
-        m_aStates.top().nDestinationState = DESTINATION_MR;
-        break;
-    case RTF_MCHR:
-        m_aStates.top().nDestinationState = DESTINATION_MCHR;
-        break;
-    case RTF_MPOS:
-        m_aStates.top().nDestinationState = DESTINATION_MPOS;
-        break;
-    case RTF_MVERTJC:
-        m_aStates.top().nDestinationState = DESTINATION_MVERTJC;
-        break;
-    case RTF_MSTRIKEH:
-        m_aStates.top().nDestinationState = DESTINATION_MSTRIKEH;
-        break;
-    case RTF_MDEGHIDE:
-        m_aStates.top().nDestinationState = DESTINATION_MDEGHIDE;
-        break;
-    case RTF_MTYPE:
-        m_aStates.top().nDestinationState = DESTINATION_MTYPE;
-        break;
-    case RTF_MGROW:
-        m_aStates.top().nDestinationState = DESTINATION_MGROW;
-        break;
-    case RTF_MHIDETOP:
-    case RTF_MHIDEBOT:
-    case RTF_MHIDELEFT:
-    case RTF_MHIDERIGHT:
-        // SmOoxmlImport::handleBorderBox will ignore these anyway, so silently ignore for now.
-        m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        break;
-    case RTF_MSUBHIDE:
-        m_aStates.top().nDestinationState = DESTINATION_MSUBHIDE;
-        break;
-    case RTF_MSUPHIDE:
-        m_aStates.top().nDestinationState = DESTINATION_MSUPHIDE;
-        break;
-    case RTF_MBEGCHR:
-        m_aStates.top().nDestinationState = DESTINATION_MBEGCHR;
-        break;
-    case RTF_MSEPCHR:
-        m_aStates.top().nDestinationState = DESTINATION_MSEPCHR;
-        break;
-    case RTF_MENDCHR:
-        m_aStates.top().nDestinationState = DESTINATION_MENDCHR;
-        break;
-    case RTF_UPR:
-        m_aStates.top().nDestinationState = DESTINATION_UPR;
-        break;
-    case RTF_UD:
-        // Anything inside \ud is just normal Unicode content.
-        m_aStates.top().nDestinationState = DESTINATION_NORMAL;
-        break;
-    case RTF_BACKGROUND:
-        m_aStates.top().nDestinationState = DESTINATION_BACKGROUND;
-        m_aStates.top().bInBackground = true;
-        break;
-    case RTF_SHPGRP:
-    {
-        RTFLookahead aLookahead(Strm(), m_pTokenizer->getGroupStart());
-        if (!aLookahead.hasTable())
-        {
-            uno::Reference<drawing::XShapes> xGroupShape(m_xModelFactory->createInstance("com.sun.star.drawing.GroupShape"), uno::UNO_QUERY);
-            uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
-            if (xDrawSupplier.is())
+        case RTF_FLDRSLT:
+            m_aStates.top().nDestinationState = DESTINATION_FIELDRESULT;
+            break;
+        case RTF_LISTTABLE:
+            m_aStates.top().nDestinationState = DESTINATION_LISTTABLE;
+            break;
+        case RTF_LISTPICTURE:
+            m_aStates.top().nDestinationState = DESTINATION_LISTPICTURE;
+            m_aStates.top().bInListpicture = true;
+            break;
+        case RTF_LIST:
+            m_aStates.top().nDestinationState = DESTINATION_LISTENTRY;
+            break;
+        case RTF_LISTNAME:
+            m_aStates.top().nDestinationState = DESTINATION_LISTNAME;
+            break;
+        case RTF_LFOLEVEL:
+            m_aStates.top().nDestinationState = DESTINATION_LFOLEVEL;
+            m_aStates.top().aTableSprms.clear();
+            break;
+        case RTF_LISTOVERRIDETABLE:
+            m_aStates.top().nDestinationState = DESTINATION_LISTOVERRIDETABLE;
+            break;
+        case RTF_LISTOVERRIDE:
+            m_aStates.top().nDestinationState = DESTINATION_LISTOVERRIDEENTRY;
+            break;
+        case RTF_LISTLEVEL:
+            m_aStates.top().nDestinationState = DESTINATION_LISTLEVEL;
+            break;
+        case RTF_LEVELTEXT:
+            m_aStates.top().nDestinationState = DESTINATION_LEVELTEXT;
+            break;
+        case RTF_LEVELNUMBERS:
+            m_aStates.top().nDestinationState = DESTINATION_LEVELNUMBERS;
+            break;
+        case RTF_SHPPICT:
+            m_aStates.top().resetFrame();
+            m_aStates.top().nDestinationState = DESTINATION_SHPPICT;
+            break;
+        case RTF_PICT:
+            if (m_aStates.top().nDestinationState != DESTINATION_SHAPEPROPERTYVALUE)
+                m_aStates.top().nDestinationState = DESTINATION_PICT; // as character
+            else
+                m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYVALUEPICT; // anchored inside a shape
+            break;
+        case RTF_PICPROP:
+            m_aStates.top().nDestinationState = DESTINATION_PICPROP;
+            break;
+        case RTF_SP:
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTY;
+            break;
+        case RTF_SN:
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYNAME;
+            break;
+        case RTF_SV:
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYVALUE;
+            break;
+        case RTF_SHP:
+            m_bNeedCrOrig = m_bNeedCr;
+            m_aStates.top().nDestinationState = DESTINATION_SHAPE;
+            m_aStates.top().bInShape = true;
+            break;
+        case RTF_SHPINST:
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEINSTRUCTION;
+            break;
+        case RTF_NESTTABLEPROPS:
+            // do not set any properties of outer table at nested table!
+            m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
+            m_aStates.top().aTableCellAttributes =
+                m_aDefaultState.aTableCellAttributes;
+            m_aNestedTableCellsSprms.clear();
+            m_aNestedTableCellsAttributes.clear();
+            m_nNestedCells = 0;
+            m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
+            break;
+        case RTF_HEADER:
+        case RTF_FOOTER:
+        case RTF_HEADERL:
+        case RTF_HEADERR:
+        case RTF_HEADERF:
+        case RTF_FOOTERL:
+        case RTF_FOOTERR:
+        case RTF_FOOTERF:
+            if (!m_pSuperstream)
             {
-                uno::Reference<drawing::XShape> xShape(xGroupShape, uno::UNO_QUERY);
-                xDrawSupplier->getDrawPage()->add(xShape);
+                Id nId = 0;
+                sal_Size nPos = m_nGroupStartPos - 1;
+                switch (nKeyword)
+                {
+                case RTF_HEADER:
+                    nId = NS_ooxml::LN_headerr;
+                    break;
+                case RTF_FOOTER:
+                    nId = NS_ooxml::LN_footerr;
+                    break;
+                case RTF_HEADERL:
+                    nId = NS_ooxml::LN_headerl;
+                    break;
+                case RTF_HEADERR:
+                    nId = NS_ooxml::LN_headerr;
+                    break;
+                case RTF_HEADERF:
+                    nId = NS_ooxml::LN_headerf;
+                    break;
+                case RTF_FOOTERL:
+                    nId = NS_ooxml::LN_footerl;
+                    break;
+                case RTF_FOOTERR:
+                    nId = NS_ooxml::LN_footerr;
+                    break;
+                case RTF_FOOTERF:
+                    nId = NS_ooxml::LN_footerf;
+                    break;
+                default:
+                    break;
+                }
+                m_nHeaderFooterPositions.push(make_pair(nId, nPos));
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
-            m_pSdrImport->pushParent(xGroupShape);
-            m_aStates.top().bCreatedShapeGroup = true;
-        }
-        m_aStates.top().nDestinationState = DESTINATION_SHAPEGROUP;
-        m_aStates.top().bInShapeGroup = true;
-    }
-    break;
-    case RTF_FTNSEP:
-        m_aStates.top().nDestinationState = DESTINATION_FOOTNOTESEPARATOR;
-        m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdn_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)));
-        break;
-    default:
-    {
-        // Check if it's a math token.
-        RTFMathSymbol aSymbol;
-        aSymbol.eKeyword = nKeyword;
-        if (RTFTokenizer::lookupMathKeyword(aSymbol))
-        {
-            m_aMathBuffer.appendOpeningTag(aSymbol.nToken);
-            m_aStates.top().nDestinationState = aSymbol.eDestination;
-            return 0;
-        }
+            break;
+        case RTF_FOOTNOTE:
+            if (!m_pSuperstream)
+            {
+                Id nId = NS_ooxml::LN_footnote;
 
-        SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
-        // Make sure we skip destinations (even without \*) till we don't handle them
-        m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        aSkip.setParsed(false);
-    }
-    break;
-    }
+                // Check if this is an endnote.
+                OStringBuffer aBuf;
+                char ch;
+                for (int i = 0; i < 7; ++i)
+                {
+                    Strm().ReadChar(ch);
+                    aBuf.append(ch);
+                }
+                OString aKeyword = aBuf.makeStringAndClear();
+                if (aKeyword.equals("\\ftnalt"))
+                    nId = NS_ooxml::LN_endnote;
+
+                m_bHasFootnote = true;
+                if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
+                    m_aStates.top().pCurrentBuffer = 0;
+                bool bCustomMark = false;
+                OUString aCustomMark;
+                while (m_aSuperBuffer.size())
+                {
+                    Buf_t aTuple = m_aSuperBuffer.front();
+                    m_aSuperBuffer.pop_front();
+                    if (boost::get<0>(aTuple) == BUFFER_UTEXT)
+                    {
+                        aCustomMark = boost::get<1>(aTuple)->getString();
+                        bCustomMark = true;
+                    }
+                }
+                m_aStates.top().nDestinationState = DESTINATION_FOOTNOTE;
+                if (bCustomMark)
+                    Mapper().startCharacterGroup();
+                resolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
+                if (bCustomMark)
+                {
+                    m_aStates.top().aCharacterAttributes.clear();
+                    m_aStates.top().aCharacterSprms.clear();
+                    RTFValue::Pointer_t pValue(new RTFValue(1));
+                    m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows, pValue);
+                    text(aCustomMark);
+                    Mapper().endCharacterGroup();
+                }
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            }
+            break;
+        case RTF_BKMKSTART:
+            m_aStates.top().nDestinationState = DESTINATION_BOOKMARKSTART;
+            break;
+        case RTF_BKMKEND:
+            m_aStates.top().nDestinationState = DESTINATION_BOOKMARKEND;
+            break;
+        case RTF_REVTBL:
+            m_aStates.top().nDestinationState = DESTINATION_REVISIONTABLE;
+            break;
+        case RTF_ANNOTATION:
+            if (!m_pSuperstream)
+            {
+                resolveSubstream(m_nGroupStartPos - 1, NS_ooxml::LN_annotation);
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            }
+            else
+            {
+                // If there is an author set, emit it now.
+                if (!m_aAuthor.isEmpty() || !m_aAuthorInitials.isEmpty())
+                {
+                    RTFSprms aAttributes;
+                    if (!m_aAuthor.isEmpty())
+                    {
+                        RTFValue::Pointer_t pValue(new RTFValue(m_aAuthor));
+                        aAttributes.set(NS_ooxml::LN_CT_TrackChange_author, pValue);
+                    }
+                    if (!m_aAuthorInitials.isEmpty())
+                    {
+                        RTFValue::Pointer_t pValue(new RTFValue(m_aAuthorInitials));
+                        aAttributes.set(NS_ooxml::LN_CT_Comment_initials, pValue);
+                    }
+                    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
+                    Mapper().props(pProperties);
+                }
+            }
+            break;
+        case RTF_SHPTXT:
+        case RTF_DPTXBXTEXT:
+        {
+            bool bPictureFrame = false;
+            for (size_t i = 0; i < m_aStates.top().aShape.aProperties.size(); ++i)
+            {
+                std::pair<OUString, OUString>& rProperty = m_aStates.top().aShape.aProperties[i];
+                if (rProperty.first == "shapeType" && rProperty.second == OUString::number(ESCHER_ShpInst_PictureFrame))
+                {
+                    bPictureFrame = true;
+                    break;
+                }
+            }
+            if (bPictureFrame)
+                // Skip text on picture frames.
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            else
+            {
+                m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
+                checkFirstRun();
+                dispatchFlag(RTF_PARD);
+                m_bNeedPap = true;
+                if (nKeyword == RTF_SHPTXT)
+                {
+                    if (!m_aStates.top().pCurrentBuffer)
+                        m_pSdrImport->resolve(m_aStates.top().aShape, false, RTFSdrImport::SHAPE);
+                    else
+                    {
+                        RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aShape));
+                        m_aStates.top().pCurrentBuffer->push_back(
+                            Buf_t(BUFFER_STARTSHAPE, pValue));
+                    }
+                }
+            }
+        }
+        break;
+        case RTF_FORMFIELD:
+            if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
+                m_aStates.top().nDestinationState = DESTINATION_FORMFIELD;
+            break;
+        case RTF_FFNAME:
+            m_aStates.top().nDestinationState = DESTINATION_FORMFIELDNAME;
+            break;
+        case RTF_FFL:
+            m_aStates.top().nDestinationState = DESTINATION_FORMFIELDLIST;
+            break;
+        case RTF_DATAFIELD:
+            m_aStates.top().nDestinationState = DESTINATION_DATAFIELD;
+            break;
+        case RTF_INFO:
+            m_aStates.top().nDestinationState = DESTINATION_INFO;
+            break;
+        case RTF_CREATIM:
+            m_aStates.top().nDestinationState = DESTINATION_CREATIONTIME;
+            break;
+        case RTF_REVTIM:
+            m_aStates.top().nDestinationState = DESTINATION_REVISIONTIME;
+            break;
+        case RTF_PRINTIM:
+            m_aStates.top().nDestinationState = DESTINATION_PRINTTIME;
+            break;
+        case RTF_AUTHOR:
+            m_aStates.top().nDestinationState = DESTINATION_AUTHOR;
+            break;
+        case RTF_KEYWORDS:
+            m_aStates.top().nDestinationState = DESTINATION_KEYWORDS;
+            break;
+        case RTF_OPERATOR:
+            m_aStates.top().nDestinationState = DESTINATION_OPERATOR;
+            break;
+        case RTF_COMPANY:
+            m_aStates.top().nDestinationState = DESTINATION_COMPANY;
+            break;
+        case RTF_COMMENT:
+            m_aStates.top().nDestinationState = DESTINATION_COMMENT;
+            break;
+        case RTF_OBJECT:
+        {
+            // beginning of an OLE Object
+            m_aStates.top().nDestinationState = DESTINATION_OBJECT;
+
+            // check if the object is in a special container (e.g. a table)
+            if (!m_aStates.top().pCurrentBuffer)
+            {
+                // the object is in a table or another container.
+                // Don't try to treate it as an OLE object (fdo#53594).
+                // Use the \result (RTF_RESULT) element of the object instead,
+                // the result element contain picture representing the OLE Object.
+                m_bObject = true;
+            }
+        }
+        break;
+        case RTF_OBJDATA:
+            // check if the object is in a special container (e.g. a table)
+            if (m_aStates.top().pCurrentBuffer)
+            {
+                // the object is in a table or another container.
+                // Use the \result (RTF_RESULT) element of the object instead,
+                // of the \objdata.
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            }
+            else
+            {
+                m_aStates.top().nDestinationState = DESTINATION_OBJDATA;
+            }
+            break;
+        case RTF_RESULT:
+            m_aStates.top().nDestinationState = DESTINATION_RESULT;
+            break;
+        case RTF_ATNDATE:
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONDATE;
+            break;
+        case RTF_ATNAUTHOR:
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONAUTHOR;
+            break;
+        case RTF_ATNREF:
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONREFERENCE;
+            break;
+        case RTF_FALT:
+            m_aStates.top().nDestinationState = DESTINATION_FALT;
+            break;
+        case RTF_FLYMAINCNT:
+            m_aStates.top().nDestinationState = DESTINATION_FLYMAINCONTENT;
+            break;
+        case RTF_LISTTEXT:
+            // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
+        case RTF_NONESTTABLES:
+            // This destination should be ignored by readers that support nested tables.
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            break;
+        case RTF_DO:
+            m_aStates.top().nDestinationState = DESTINATION_DRAWINGOBJECT;
+            break;
+        case RTF_PN:
+            m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING;
+            break;
+        case RTF_PNTEXT:
+            // This destination should be ignored by readers that support paragraph numbering.
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            break;
+        case RTF_PNTXTA:
+            m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING_TEXTAFTER;
+            break;
+        case RTF_PNTXTB:
+            m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE;
+            break;
+        case RTF_TITLE:
+            m_aStates.top().nDestinationState = DESTINATION_TITLE;
+            break;
+        case RTF_SUBJECT:
+            m_aStates.top().nDestinationState = DESTINATION_SUBJECT;
+            break;
+        case RTF_DOCCOMM:
+            m_aStates.top().nDestinationState = DESTINATION_DOCCOMM;
+            break;
+        case RTF_ATRFSTART:
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONREFERENCESTART;
+            break;
+        case RTF_ATRFEND:
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONREFERENCEEND;
+            break;
+        case RTF_ATNID:
+            m_aStates.top().nDestinationState = DESTINATION_ATNID;
+            break;
+        case RTF_MMATH:
+        case RTF_MOMATHPARA:
+            // Nothing to do here (just enter the destination) till RTF_MMATHPR is implemented.
+            break;
+        case RTF_MR:
+            m_aStates.top().nDestinationState = DESTINATION_MR;
+            break;
+        case RTF_MCHR:
+            m_aStates.top().nDestinationState = DESTINATION_MCHR;
+            break;
+        case RTF_MPOS:
+            m_aStates.top().nDestinationState = DESTINATION_MPOS;
+            break;
+        case RTF_MVERTJC:
+            m_aStates.top().nDestinationState = DESTINATION_MVERTJC;
+            break;
+        case RTF_MSTRIKEH:
+            m_aStates.top().nDestinationState = DESTINATION_MSTRIKEH;
+            break;
+        case RTF_MDEGHIDE:
+            m_aStates.top().nDestinationState = DESTINATION_MDEGHIDE;
+            break;
+        case RTF_MTYPE:
+            m_aStates.top().nDestinationState = DESTINATION_MTYPE;
+            break;
+        case RTF_MGROW:
+            m_aStates.top().nDestinationState = DESTINATION_MGROW;
+            break;
+        case RTF_MHIDETOP:
+        case RTF_MHIDEBOT:
+        case RTF_MHIDELEFT:
+        case RTF_MHIDERIGHT:
+            // SmOoxmlImport::handleBorderBox will ignore these anyway, so silently ignore for now.
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            break;
+        case RTF_MSUBHIDE:
+            m_aStates.top().nDestinationState = DESTINATION_MSUBHIDE;
+            break;
+        case RTF_MSUPHIDE:
+            m_aStates.top().nDestinationState = DESTINATION_MSUPHIDE;
+            break;
+        case RTF_MBEGCHR:
+            m_aStates.top().nDestinationState = DESTINATION_MBEGCHR;
+            break;
+        case RTF_MSEPCHR:
+            m_aStates.top().nDestinationState = DESTINATION_MSEPCHR;
+            break;
+        case RTF_MENDCHR:
+            m_aStates.top().nDestinationState = DESTINATION_MENDCHR;
+            break;
+        case RTF_UPR:
+            m_aStates.top().nDestinationState = DESTINATION_UPR;
+            break;
+        case RTF_UD:
+            // Anything inside \ud is just normal Unicode content.
+            m_aStates.top().nDestinationState = DESTINATION_NORMAL;
+            break;
+        case RTF_BACKGROUND:
+            m_aStates.top().nDestinationState = DESTINATION_BACKGROUND;
+            m_aStates.top().bInBackground = true;
+            break;
+        case RTF_SHPGRP:
+        {
+            RTFLookahead aLookahead(Strm(), m_pTokenizer->getGroupStart());
+            if (!aLookahead.hasTable())
+            {
+                uno::Reference<drawing::XShapes> xGroupShape(m_xModelFactory->createInstance("com.sun.star.drawing.GroupShape"), uno::UNO_QUERY);
+                uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
+                if (xDrawSupplier.is())
+                {
+                    uno::Reference<drawing::XShape> xShape(xGroupShape, uno::UNO_QUERY);
+                    xDrawSupplier->getDrawPage()->add(xShape);
+                }
+                m_pSdrImport->pushParent(xGroupShape);
+                m_aStates.top().bCreatedShapeGroup = true;
+            }
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEGROUP;
+            m_aStates.top().bInShapeGroup = true;
+        }
+        break;
+        case RTF_FTNSEP:
+            m_aStates.top().nDestinationState = DESTINATION_FOOTNOTESEPARATOR;
+            m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdn_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)));
+            break;
+        default:
+        {
+            // Check if it's a math token.
+            RTFMathSymbol aSymbol;
+            aSymbol.eKeyword = nKeyword;
+            if (RTFTokenizer::lookupMathKeyword(aSymbol))
+            {
+                m_aMathBuffer.appendOpeningTag(aSymbol.nToken);
+                m_aStates.top().nDestinationState = aSymbol.eDestination;
+                return 0;
+            }
+
+            SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
+            // Make sure we skip destinations (even without \*) till we don't handle them
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            aSkip.setParsed(false);
+        }
+        break;
+        }
 
     // new destination => use new destination text
     m_aStates.top().pDestinationText = &m_aStates.top().aDestinationText;
