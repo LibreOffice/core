@@ -4550,6 +4550,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_RIN:
         lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_end, pIntValue);
         break;
+    case RTF_OUTLINELEVEL:
+        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_outlineLvl, pIntValue);
+        break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle value '" << lcl_RtfToString(nKeyword) << "'");

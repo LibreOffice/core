@@ -1813,6 +1813,13 @@ DECLARE_RTFIMPORT_TEST(testOleInline, "ole-inline.rtf")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo80742, "fdo80742.rtf")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Heading 2"), uno::UNO_QUERY);
+    // This was 0, outline level was body text.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xPropertySet, "OutlineLevel"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
