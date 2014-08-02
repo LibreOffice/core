@@ -211,18 +211,6 @@ End
     End
 #endif
 
-#define STD_LIB_FILE(id,name) \
-    File id \
-        Name   = LIBNAME(name); \
-        PACKED_LIB_FILE_BODY; \
-    End
-
-#define SPECIAL_LIB_FILE(id,name) \
-    File id \
-        Name    = SPECIAL_NAME(name); \
-        PACKED_LIB_FILE_BODY; \
-    End
-
 #define STD_RES_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \
@@ -274,12 +262,6 @@ End
         Name = name; \
         Dir = GID_DIR_URE_JAVA; \
         Styles = (PACKED); \
-    End
-
-#define SPECIAL_COMPONENT_LIB_FILE(id,name) \
-    File id \
-        Name     = SPECIAL_COMPONENT_LIB_NAME(name); \
-        PACKED_LIB_FILE_BODY; \
     End
 
 #define STD_PY_FILE(id,name) \
