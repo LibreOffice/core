@@ -101,11 +101,11 @@ public:
 class CertificateViewerDetailsTP : public CertificateViewerTP
 {
 private:
-    SvSimpleTableContainer m_aElementsLBContainer;
-    SvSimpleTable      maElementsLB;
-    MultiLineEdit       maElementML;
-    Font                maStdFont;
-    Font                maFixedWidthFont;
+    SvSimpleTableContainer* m_pElementsLBContainer;
+    SvSimpleTable*          m_pElementsLB;
+    MultiLineEdit*          m_pValueDetails;
+    Font                    m_aStdFont;
+    Font                    m_aFixedWidthFont;
 
     DECL_LINK(          ElementSelectHdl, void* );
     void                Clear( void );

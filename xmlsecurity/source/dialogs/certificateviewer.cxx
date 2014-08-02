@@ -224,44 +224,45 @@ inline Details_UserDatat::Details_UserDatat( const OUString& _rTxt, bool _bFixed
 
 void CertificateViewerDetailsTP::Clear( void )
 {
-    maElementML.SetText( OUString() );
+    m_pValueDetails->SetText( OUString() );
     sal_uLong           i = 0;
-    SvTreeListEntry*    pEntry = maElementsLB.GetEntry( i );
+    SvTreeListEntry*    pEntry = m_pElementsLB->GetEntry( i );
     while( pEntry )
     {
         delete ( Details_UserDatat* ) pEntry->GetUserData();
         ++i;
-        pEntry = maElementsLB.GetEntry( i );
+        pEntry = m_pElementsLB->GetEntry( i );
     }
 
-    maElementsLB.Clear();
+    m_pElementsLB->Clear();
 }
 
 void CertificateViewerDetailsTP::InsertElement( const OUString& _rField, const OUString& _rValue,
                                                 const OUString& _rDetails, bool _bFixedWidthFont )
 {
-    SvTreeListEntry*    pEntry = maElementsLB.InsertEntry( _rField );
-    maElementsLB.SetEntryText( _rValue, pEntry, 1 );
+    SvTreeListEntry*    pEntry = m_pElementsLB->InsertEntry( _rField );
+    m_pElementsLB->SetEntryText( _rValue, pEntry, 1 );
     pEntry->SetUserData( ( void* ) new Details_UserDatat( _rDetails, _bFixedWidthFont ) );
 }
 
 CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, CertificateViewer* _pDlg )
-    :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_DETAILS ), _pDlg  )
-    ,m_aElementsLBContainer(this, XMLSEC_RES(LB_ELEMENTS))
-    ,maElementsLB(m_aElementsLBContainer)
-    ,maElementML            ( this, XMLSEC_RES( ML_ELEMENT ) )
-    ,maStdFont              ( maElementML.GetControlFont() )
-    ,maFixedWidthFont       ( OutputDevice::GetDefaultFont( DEFAULTFONT_UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )
+    :CertificateViewerTP    ( _pParent, "CertDetails", "xmlsec/ui/certdetails.ui", _pDlg  )
+    ,m_aFixedWidthFont( OutputDevice::GetDefaultFont( DEFAULTFONT_UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )
 {
-    WinBits nStyle = maElementsLB.GetStyle();
-    nStyle &= ~WB_HSCROLL;
-    maElementsLB.SetStyle( nStyle );
+    get( m_pValueDetails, "valuedetails" );
+    get( m_pElementsLBContainer, "tablecontainer" );
+    m_pElementsLB = new SvSimpleTable( *m_pElementsLBContainer );
 
-    maFixedWidthFont.SetHeight( maStdFont.GetHeight() );
+    m_aStdFont = m_pValueDetails->GetControlFont();
+    WinBits nStyle = m_pElementsLB->GetStyle();
+    nStyle &= ~WB_HSCROLL;
+    m_pElementsLB->SetStyle( nStyle );
+
+    m_aFixedWidthFont.SetHeight( m_aStdFont.GetHeight() );
 
     static long nTabs[] = { 2, 0, 30*CS_LB_WIDTH/100 };
-    maElementsLB.SetTabs( &nTabs[ 0 ] );
-    maElementsLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
+    m_pElementsLB->SetTabs( &nTabs[ 0 ] );
+    m_pElementsLB->InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
 
     // fill list box
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
@@ -321,14 +322,13 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( XMLSEC_RES( STR_THUMBPRINT_MD5 ), aLBEntry, aDetails, true );
 
-    FreeResource();
-
-    maElementsLB.SetSelectHdl( LINK( this, CertificateViewerDetailsTP, ElementSelectHdl ) );
+    m_pElementsLB->SetSelectHdl( LINK( this, CertificateViewerDetailsTP, ElementSelectHdl ) );
 }
 
 CertificateViewerDetailsTP::~CertificateViewerDetailsTP()
 {
     Clear();
+    delete m_pElementsLB;
 }
 
 void CertificateViewerDetailsTP::ActivatePage()
@@ -337,7 +337,7 @@ void CertificateViewerDetailsTP::ActivatePage()
 
 IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
 {
-    SvTreeListEntry*    pEntry = maElementsLB.FirstSelected();
+    SvTreeListEntry*    pEntry = m_pElementsLB->FirstSelected();
     OUString        aElementText;
     bool            bFixedWidthFont;
     if( pEntry )
@@ -349,9 +349,9 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
     else
         bFixedWidthFont = false;
 
-    maElementML.SetFont( bFixedWidthFont? maFixedWidthFont : maStdFont );
-    maElementML.SetControlFont( bFixedWidthFont? maFixedWidthFont : maStdFont );
-    maElementML.SetText( aElementText );
+    m_pValueDetails->SetFont( bFixedWidthFont? m_aFixedWidthFont : m_aStdFont );
+    m_pValueDetails->SetControlFont( bFixedWidthFont? m_aFixedWidthFont : m_aStdFont );
+    m_pValueDetails->SetText( aElementText );
 
     return 0;
 }
