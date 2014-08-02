@@ -646,12 +646,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_SHLXTHDL, \
 	shlxthdl_x64 \
 ))
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	fop \
-	jfregca \
-	thidxmsi \
-))
-endif
+endif # WNT
 
 $(eval $(call gb_Helper_register_libraries_for_install,RTVERLIBS,ure, \
 	cppuhelper \
