@@ -355,10 +355,10 @@ public abstract class NodeIterator implements Iterator {
         // (can be optimized in future)
             String nodeName = node.getNodeName();
             if ( cc_ == null || cc_.canConvertTag(nodeName)) {
-                NodeList nodeList = node.getChildNodes();
-                int nodeListLength = nodeList.getLength();
+                NodeList auxNodeList = node.getChildNodes();
+                int nodeListLength = auxNodeList.getLength();
                 for (int i = 0; i < nodeListLength; i++) {
-                    markTree(nodeList.item(i));
+                    markTree(auxNodeList.item(i));
                 }
             }
             else {
