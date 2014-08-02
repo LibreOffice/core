@@ -500,6 +500,18 @@ Public Function getOptionValue(Optional pvObject As Variant) As String
 End Function		&apos;	getOptionValue
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function getOrderBy(Optional pvObject As Variant) As String
+	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getOrderBy&quot;)
+	getOrderBy = PropertiesGet._getProperty(pvObject, &quot;OrderBy&quot;)
+End Function		&apos;	getOrderBy
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function getOrderByOn(Optional pvObject As Variant) As Boolean
+	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getOrderByOn&quot;)
+	getOrderByOn = PropertiesGet._getProperty(pvObject, &quot;OrderByOn&quot;)
+End Function		&apos;	getOrderByOn
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getPage(Optional pvObject As Variant) As String
 	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getPage&quot;)
 	getPage = PropertiesGet._getProperty(pvObject, &quot;Page&quot;)
@@ -924,6 +936,12 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 		Case UCase(&quot;OptionValue&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			_getProperty = pvItem.OptionValue
+		Case UCase(&quot;OrderBy&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJSUBFORM)) Then Goto Exit_Function
+			_getProperty = pvItem.OrderBy
+		Case UCase(&quot;OrderByOn&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJSUBFORM)) Then Goto Exit_Function
+			_getProperty = pvItem.OrderByOn
 		Case UCase(&quot;Page&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJDIALOG, OBJCONTROL)) Then Goto Exit_Function
 			_getProperty = pvItem.Page
