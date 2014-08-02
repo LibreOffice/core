@@ -158,6 +158,11 @@ sal_Int32 GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
     return API_RGB_TRANSPARENT;
 }
 
+drawing::FillStyle GraphicHelper::getDefaultChartAreaFillStyle() const
+{
+    return drawing::FillStyle_SOLID;
+}
+
 // Device info and device dependent unit conversion ---------------------------
 
 const awt::DeviceInfo& GraphicHelper::getDeviceInfo() const
