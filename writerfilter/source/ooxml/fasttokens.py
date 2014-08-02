@@ -35,10 +35,10 @@ class ContentHandler(xml.sax.handler.ContentHandler):
             self.chars.append(characters)
 
 print("""
-/*      
+/*
 
     THIS FILE IS GENERATED AUTOMATICALLY! DO NOT EDIT!
-    
+
 */
 
 

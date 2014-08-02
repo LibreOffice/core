@@ -1,0 +1,13 @@
+= DOCX tokenizer
+
+== Coding style
+
+This directory uses the PEP 8 (see
+<http://legacy.python.org/dev/peps/pep-0008/>) coding style for Python files.
+Please run
+
+----
+pep8 *.py
+----
+
+before committing.
