@@ -1163,6 +1163,19 @@ DECLARE_RTFIMPORT_TEST(testPageBackground, "page-background.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo81944, "fdo81944.rtf")
+{
+    // font properties in style were not imported
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Segoe UI"), getProperty<OUString>(xStyle, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(9.0f, getProperty<float>(xStyle, "CharHeight"));
+    // not sure if this should be set on Asian or Complex or both?
+    CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xStyle, "CharFontNameComplex"));
+    CPPUNIT_ASSERT_EQUAL(11.0f, getProperty<float>(xStyle, "CharHeightComplex"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo62044, "fdo62044.rtf")
 {
     // The problem was that RTF import during copy&paste did not ignore existing paragraph styles.
