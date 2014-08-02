@@ -182,17 +182,11 @@ public class DOMDocument
      */
     public void read(InputStream is) throws IOException {
      Debug.log(Debug.INFO, "reading file");
-        DocumentBuilder builder = null;
         try {
-            builder = factory.newDocumentBuilder();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            contentDoc = builder.parse(is);
         } catch (ParserConfigurationException ex) {
         System.out.println("Error:"+ ex);
-        }
-    try {
-
-        contentDoc=  builder.parse(is);
-
-
         } catch (SAXException ex) {
         System.out.println("Error:"+ ex);
         }
@@ -371,19 +365,13 @@ public class DOMDocument
         Document doc = null;
 
         try {
-
             DocumentBuilder builder = factory.newDocumentBuilder();
             doc = builder.newDocument();
-
+            Element root = doc.createElement(rootName);
+            doc.appendChild(root);
         } catch (ParserConfigurationException ex) {
              System.out.println("Error:"+ ex);
-
-
         }
-
-        Element root = doc.createElement(rootName);
-        doc.appendChild(root);
-
 
         return doc;
     }
