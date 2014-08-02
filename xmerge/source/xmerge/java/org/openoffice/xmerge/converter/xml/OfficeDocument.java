@@ -766,9 +766,9 @@ public abstract class OfficeDocument
         rootElement.setAttribute("xmlns:script","http://openoffice.org/2000/script" );
         rootElement.setAttribute("xmlns:config","http://openoffice.org/2001/config" );
         // #i41033# OASIS format needs the "office:class" set.
-        if(getDocumentMimeType() == SXC_MIME_TYPE)
+        if(getDocumentMimeType().equals(SXC_MIME_TYPE))
             rootElement.setAttribute("office:class","spreadsheet" );
-        else if(getDocumentMimeType() == SXW_MIME_TYPE)
+        else if(getDocumentMimeType().equals(SXW_MIME_TYPE))
             rootElement.setAttribute("office:class","text" );
         rootElement.setAttribute("office:version","1.0");
 
