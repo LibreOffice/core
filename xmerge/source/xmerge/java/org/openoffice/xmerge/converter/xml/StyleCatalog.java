@@ -201,7 +201,7 @@ public class StyleCatalog {
 
 
     /**
-     *  Given a <code>Style</code> <code>s<code> return all
+     *  Given a <code>Style</code> <code>s</code> return all
      *  <code>Style</code> objects that match.
      *
      *  @param  s  <code>Style</code> to match.
