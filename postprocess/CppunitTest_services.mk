@@ -39,6 +39,8 @@ endif
 
 $(eval $(call gb_CppunitTest_use_configuration,services))
 
+$(eval $(call gb_CppunitTest_use_unittest_configuration,services))
+
 ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_CppunitTest_use_java_ure,services))
 
@@ -48,6 +50,7 @@ $(eval $(call gb_CppunitTest_use_jars,services,\
 endif
 
 $(eval $(call gb_CppunitTest_use_packages,services,\
+	autotextshare_en-US \
 	instsetoo_native_setup \
 ))
 
