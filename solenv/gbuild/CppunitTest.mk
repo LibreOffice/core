@@ -261,7 +261,7 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Executable_get_target,$(2))
 
 endef
 
-define gb_CppunitTest__use_java_ure
+define gb_CppunitTest_use_java_ure
 $(call gb_CppunitTest_get_target,$(1)) : \
     $(foreach jar,java_uno juh jurt unoil unoloader,$(call gb_Jar_get_target,$(jar))) \
     $(call gb_Library_get_target,affine_uno_uno) \
