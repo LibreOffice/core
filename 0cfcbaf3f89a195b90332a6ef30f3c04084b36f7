@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_d77dbce8",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/ActiveSyncDriver.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-02T11:36:14Z",
+      "side": 1,
+      "message": "Actually this is dead code. The pocet word and pocket excel filters (and some others as well) were removed in 4.0, see commit a5783fe922b2419b5b662eb5f544a1f401341dbf . It would be nice to clean this up (and look for other places that might need clean up.)",
+      "revId": "0cfcbaf3f89a195b90332a6ef30f3c04084b36f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
