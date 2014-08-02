@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_b7e7e8ab",
+        "filename": "xmlsecurity/source/dialogs/certificateviewer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-02T17:10:38Z",
+      "side": 1,
+      "message": "You cannot do this. It makes the strings untranslatable. Instead, you have to add defines for the strings to xmlsecurity/source/dialogs/dialogs.hrc (after #define STR_HEADERBAR, continuing the number sequence) and leave the definitions in the .src file.",
+      "revId": "7a2da3d81ce2260d4a1c23090d9fc35e949737f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
