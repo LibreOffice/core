@@ -22,6 +22,7 @@ Private _DocEntry				As Integer				&apos;	Doc- and DbContainer entries in Root s
 Private _DbEntry				As Integer
 Private	_IsLoaded				As Boolean
 Private	_OpenArgs				As Variant
+Private _OrderBy				As String
 Public	Component				As Object				&apos;	com.sun.star.text.TextDocument
 Public	ContainerWindow			As Object				&apos;	(No name)
 Public	DatabaseForm			As Object				&apos;	com.sun.star.form.component.DataForm and com.sun.star.sdb.ResultSet (a.o.)
@@ -38,6 +39,7 @@ Private Sub Class_Initialize()
 	_DbEntry = -1
 	_IsLoaded = False
 	_OpenArgs = &quot;&quot;
+	_OrderBy = &quot;&quot;
 	Set Component = Nothing
 	Set ContainerWindow = Nothing
 	Set DatabaseForm = Nothing
@@ -199,6 +201,24 @@ REM ----------------------------------------------------------------------------
 Property Get OpenArgs() As Variant
 	OpenArgs = _PropertyGet(&quot;OpenArgs&quot;)
 End Property	&apos;	OpenArgs (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OrderBy() As Variant
+	OrderBy = _PropertyGet(&quot;OrderBy&quot;)
+End Property	&apos;	OrderBy (get) V1.2.0
+
+Property Let OrderBy(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OrderBy&quot;, pvValue)
+End Property	&apos;	OrderBy (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OrderByOn() As Variant
+	OrderByOn = _PropertyGet(&quot;OrderByOn&quot;)
+End Property	&apos;	OrderByOn (get) V1.2.0
+
+Property Let OrderByOn(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OrderByOn&quot;, pvValue)
+End Property	&apos;	OrderByOn (set)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function OptionGroup(ByVal Optional pvGroupName As Variant) As Variant
@@ -599,6 +619,7 @@ Dim oDoc As Object, oFormsCollection As Object, oDatabase As Object
 					End If
 				End With
 		End Select
+		_OrderBy = DatabaseForm.Order
 	Else
 		Set Component = Nothing
 		Set ContainerWindow = Nothing
@@ -621,7 +642,7 @@ Private Function _PropertiesList() As Variant
 	If IsLoaded Then
 		_PropertiesList =  Array(&quot;AllowAdditions&quot;, &quot;AllowDeletions&quot;, &quot;AllowEdits&quot;, &quot;Bookmark&quot; _
 										, &quot;Caption&quot;, &quot;CurrentRecord&quot;, &quot;Filter&quot;, &quot;FilterOn&quot;, &quot;Height&quot;, &quot;IsLoaded&quot; _
-										, &quot;Name&quot;, &quot;ObjectType&quot;, &quot;OpenArgs&quot; _
+										, &quot;Name&quot;, &quot;ObjectType&quot;, &quot;OpenArgs&quot;, &quot;OrderBy&quot;, &quot;OrderByOn&quot; _
 										, &quot;RecordSource&quot;, &quot;Visible&quot;, &quot;Width&quot; _
 									)	&apos;	Recordset removed
 	Else
@@ -682,6 +703,10 @@ Dim oObject As Object
 			_PropertyGet = _Type
 		Case UCase(&quot;OpenArgs&quot;)
 			_PropertyGet = _OpenArgs
+		Case UCase(&quot;OrderBy&quot;)
+			_PropertyGet = _OrderBy
+		Case UCase(&quot;OrderByOn&quot;)
+			If DatabaseForm.Order = &quot;&quot; Then _PropertyGet = False Else _PropertyGet = True
 		Case UCase(&quot;Recordset&quot;)
 			If DatabaseForm.Command = &quot;&quot; Then Goto Trace_Error		&apos;	No underlying data ??
 			Set oObject = New Recordset
@@ -787,6 +812,13 @@ Dim oDatabase As Object
 				ContainerWindow.IsMinimized = False
 			End If
 			ContainerWindow.setPosSize(0, 0, 0, pvValue, com.sun.star.awt.PosSize.HEIGHT)
+		Case UCase(&quot;OrderBy&quot;)
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			_OrderBy = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
+		Case UCase(&quot;OrderByOn&quot;)
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
+			If pvValue Then DatabaseForm.Order = _OrderBy Else DatabaseForm.Order = &quot;&quot;
+			DatabaseForm.reload()
 		Case UCase(&quot;RecordSource&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
 			DatabaseForm.Command = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
@@ -868,6 +900,14 @@ End Property	&apos;	FilterOn (set)
 Property Set Height(ByVal pvValue As Variant)
 	Call _PropertySet(&quot;Height&quot;, pvValue)
 End Property	&apos;	Height (set)
+
+Property Set OrderBy(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OrderBy&quot;, pvValue)
+End Property	&apos;	OrderBy (set)
+
+Property Set OrderByOn(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OrderByOn&quot;, pvValue)
+End Property	&apos;	OrderByOn (set)
 
 Property Set RecordSource(ByVal pvValue As Variant)
 	Call _PropertySet(&quot;RecordSource&quot;, pvValue)

@@ -194,6 +194,19 @@ Public Function setOptionValue(Optional pvObject As Variant, ByVal Optional pvVa
 End Function		&apos;	setOptionValue
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setOrderBy(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
+	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setOrderBy&quot;)
+	setOrderBy = PropertiesSet._setProperty(pvObject, &quot;OrderBy&quot;, pvValue)
+End Function		&apos;	setOrderBy
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setOrderByOn(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
+&apos;	Only for open forms
+	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setOrderByOn&quot;)
+	setOrderByOn = PropertiesSet._setProperty(pvObject, &quot;OrderByOn&quot;, pvValue)
+End Function		&apos;	setOrderByOn
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setPage(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
 	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setPage&quot;)
 	setPage = PropertiesSet._setProperty(pvObject, &quot;Page&quot;, pvValue)
@@ -464,6 +477,12 @@ Dim ocButton As Variant, iRadioIndex As Integer
 		Case UCase(&quot;OptionValue&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			pvItem.OptionValue = pvValue
+		Case UCase(&quot;OrderBy&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJSUBFORM)) Then Goto Exit_Function
+			pvItem.OrderBy = pvValue
+		Case UCase(&quot;OrderByOn&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJSUBFORM)) Then Goto Exit_Function
+			pvItem.OrderByOn = pvValue
 		Case UCase(&quot;Page&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJDIALOG, OBJCONTROL)) Then Goto Exit_Function
 			pvItem.Page = pvValue

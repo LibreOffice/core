@@ -20,6 +20,7 @@ Private	_Shortcut				As String
 Private	_Name					As String
 Private _DocEntry				As Integer
 Private _DbEntry				As Integer
+Private _OrderBy				As String
 Public	ParentComponent			As Object				&apos;	com.sun.star.text.TextDocument
 Public	DatabaseForm			As Object				&apos;	com.sun.star.form.component.DataForm and com.sun.star.sdb.ResultSet (a.o.)
 
@@ -32,6 +33,7 @@ Private Sub Class_Initialize()
 	_Name = &quot;&quot;
 	_DocEntry = -1
 	_DbEntry = -1
+	_OrderBy = &quot;&quot;
 	Set ParentComponent = Nothing
 	Set DatabaseForm = Nothing
 End Sub		&apos;	Constructor
@@ -137,6 +139,24 @@ Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
 End Function		&apos;	OptionGroup	V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OrderBy() As Variant
+	OrderBy = _PropertyGet(&quot;OrderBy&quot;)
+End Property	&apos;	OrderBy (get) V1.2.0
+
+Property Let OrderBy(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OrderBy&quot;, pvValue)
+End Property	&apos;	OrderBy (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OrderByOn() As Variant
+	OrderByOn = _PropertyGet(&quot;OrderByOn&quot;)
+End Property	&apos;	OrderByOn (get) V1.2.0
+
+Property Let OrderByOn(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OrderByOn&quot;, pvValue)
+End Property	&apos;	OrderByOn (set)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Parent() As Object
@@ -349,7 +369,7 @@ Private Function _PropertiesList() As Variant
 
 	_PropertiesList =  Array(&quot;AllowAdditions&quot;, &quot;AllowDeletions&quot;, &quot;AllowEdits&quot;, &quot;CurrentRecord&quot; _
 								, &quot;Filter&quot;, &quot;FilterOn&quot;, &quot;LinkChildFields&quot;, &quot;LinkMasterFields&quot;, &quot;Name&quot; _
-								, &quot;ObjectType&quot;, &quot;Parent&quot;, &quot;RecordSource&quot; _
+								, &quot;ObjectType&quot;, &quot;OrderBy&quot;, &quot;OrderByOn&quot;, &quot;Parent&quot;, &quot;RecordSource&quot; _
 									)	&apos;	Recordset removed
 	
 End Function	&apos;	_PropertiesList
@@ -409,6 +429,10 @@ Dim oDatabase As Object, vBookmark As Variant, vEMPTY As Variant
 			_PropertyGet = _Name
 		Case UCase(&quot;ObjectType&quot;)
 			_PropertyGet = _Type
+		Case UCase(&quot;OrderBy&quot;)
+			_PropertyGet = _OrderBy
+		Case UCase(&quot;OrderByOn&quot;)
+			If DatabaseForm.Order = &quot;&quot; Then _PropertyGet = False Else _PropertyGet = True
 		Case UCase(&quot;Recordset&quot;)
 			If DatabaseForm.Command = &quot;&quot; Then Goto Trace_Error		&apos;	No underlying data ??
 			Set oObject = New Recordset
@@ -488,6 +512,13 @@ Dim iArgNr As Integer
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
 			DatabaseForm.ApplyFilter = pvValue
 			DatabaseForm.reload()
+		Case UCase(&quot;OrderBy&quot;)
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			_OrderBy = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
+		Case UCase(&quot;OrderByOn&quot;)
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
+			If pvValue Then DatabaseForm.Order = _OrderBy Else DatabaseForm.Order = &quot;&quot;
+			DatabaseForm.reload()
 		Case UCase(&quot;RecordSource&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
 			DatabaseForm.Command = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
@@ -543,6 +574,14 @@ End Property	&apos;	Filter (set)
 Property Set FilterOn(ByVal pvValue As Variant)
 	Call _PropertySet(&quot;FilterOn&quot;, pvValue)
 End Property	&apos;	FilterOn (set)
+
+Property Set OrderBy(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OrderBy&quot;, pvValue)
+End Property	&apos;	OrderBy (set)
+
+Property Set OrderByOn(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OrderByOn&quot;, pvValue)
+End Property	&apos;	OrderByOn (set)
 
 Property Set RecordSource(ByVal pvValue As Variant)
 	Call _PropertySet(&quot;RecordSource&quot;, pvValue)

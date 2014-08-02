@@ -1230,6 +1230,7 @@ Dim vSelection As Variant, sSelectedText As String
 				.ParentComponent = _FormComponent
 				._DocEntry = _DocEntry
 				._DbEntry = _DbEntry
+				._OrderBy = ControlModel.Order
 			End With
 			set _PropertyGet = ofSubForm
 		Case UCase(&quot;Format&quot;)
