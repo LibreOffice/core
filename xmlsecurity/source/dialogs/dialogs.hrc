@@ -29,9 +29,6 @@
 #define BTN_HELP                        53
 
 #define STR_HEADERBAR                   56
-#define STR_VALID_SIGNATURE             58
-#define STR_NO_INFO_TO_VERIFY           59
-#define STR_INVALID_SIGNATURE           60
 
 // --------- general metrics ---------
 #define DLGS_WIDTH                      287
