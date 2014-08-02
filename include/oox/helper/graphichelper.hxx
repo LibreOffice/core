@@ -24,6 +24,7 @@
 #include <map>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/storagebase.hxx>
@@ -74,6 +75,8 @@ public:
     virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
     /** Derived classes may implement to resolve a palette index to an RGB color. */
     virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
+
+    virtual css::drawing::FillStyle getDefaultChartAreaFillStyle() const;
 
     // Device info and device dependent unit conversion -----------------------
 
