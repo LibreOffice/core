@@ -135,6 +135,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &startinfo, &procinfo);
         if (ret != 0) {
             char * buf = NULL;
+            char * tmp;
             size_t n = 1000;
             size_t k = 0;
             DWORD exitcode;
@@ -143,13 +144,15 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             CloseHandle(procinfo.hThread);
             for (;;) {
                 DWORD m;
-                buf = realloc(buf, n);
-                if (buf == NULL) {
+                tmp = realloc(buf, n);
+                if (tmp == NULL) {
+                    free(buf);
                     writeError(
                         "Error: out of memory reading unoinfo output!\n");
                     closeErrorFile();
                     return 1;
                 }
+                buf = tmp;
                 if (!ReadFile(stdoutRead, buf + k, n - k, &m, NULL))
                 {
                     DWORD err = GetLastError();
