@@ -25,12 +25,14 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartdrawingfragment.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
+#include <oox/helper/graphichelper.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -90,8 +92,13 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     {
     }
 
-    // formatting of the chart background
+    // formatting of the chart background.  The default fill style varies with applications.
     PropertySet aBackPropSet( getChartDocument()->getPageBackground() );
+
+    aBackPropSet.setProperty(
+        PROP_FillStyle,
+        uno::makeAny(getFilter().getGraphicHelper().getDefaultChartAreaFillStyle()));
+
     getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
 
     // convert plot area (container of all chart type groups)
