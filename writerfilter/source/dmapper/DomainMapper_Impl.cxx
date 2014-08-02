@@ -4690,15 +4690,17 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
 
         // So we are in a paragraph style and it has numbering. Look up the relevant numbering rules.
         OUString aListName = ListDef::GetStyleName(nListId);
-        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY);
+        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY_THROW);
         uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
         uno::Reference<container::XNameAccess> xNumberingStyles;
         xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
         uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);
         xRet.set(xStyle->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception& e)
     {
+        SAL_WARN("writerfilter.dmapper",
+                "GetCurrentNumberingRules: exception caught: " << e.Message);
     }
     return xRet;
 }

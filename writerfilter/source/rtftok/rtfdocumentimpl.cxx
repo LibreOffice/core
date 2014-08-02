@@ -1152,7 +1152,7 @@ void RTFDocumentImpl::text(OUString& rString)
                     m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
 
                     writerfilter::Reference<Properties>::Pointer_t const pProp(
-                        new RTFReferenceProperties(mergeAttributes(), mergeSprms())
+                       createStyleProperties()
                     );
                     m_aStyleTableEntries.insert(make_pair(m_nCurrentStyleIndex, pProp));
                 }
@@ -3381,6 +3381,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_LEVELPICTURE:
         nSprm = NS_ooxml::LN_CT_Lvl_lvlPicBulletId;
         break;
+    case RTF_SBASEDON:
+        nSprm = NS_ooxml::LN_CT_Style_basedOn;
+        pIntValue.reset(new RTFValue(getStyleName(nParam)));
+        break;
     default:
         break;
     }
@@ -3456,10 +3460,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
     case RTF_ITAP:
         nSprm = NS_ooxml::LN_tblDepth;
-        break;
-    case RTF_SBASEDON:
-        nSprm = NS_ooxml::LN_CT_Style_basedOn;
-        pIntValue.reset(new RTFValue(getStyleName(nParam)));
         break;
     default:
         break;
@@ -4764,19 +4764,21 @@ int RTFDocumentImpl::pushState()
     return 0;
 }
 
-RTFSprms RTFDocumentImpl::mergeSprms()
+writerfilter::Reference<Properties>::Pointer_t
+RTFDocumentImpl::createStyleProperties()
 {
-    RTFSprms aSprms;
-    for (RTFSprms::Iterator_t i = m_aStates.top().aTableSprms.begin();
-            i != m_aStates.top().aTableSprms.end(); ++i)
-        aSprms.set(i->first, i->second);
-    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterSprms.begin();
-            i != m_aStates.top().aCharacterSprms.end(); ++i)
-        aSprms.set(i->first, i->second);
-    for (RTFSprms::Iterator_t i = m_aStates.top().aParagraphSprms.begin();
-            i != m_aStates.top().aParagraphSprms.end(); ++i)
-        aSprms.set(i->first, i->second);
-    return aSprms;
+    RTFValue::Pointer_t const pParaProps(
+        new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
+    RTFValue::Pointer_t const pCharProps(
+        new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
+
+    // resetSprms will clean up this modification
+    m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_pPr, pParaProps);
+    m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_rPr, pCharProps);
+
+    writerfilter::Reference<Properties>::Pointer_t const pProps(
+        new RTFReferenceProperties(m_aStates.top().aTableAttributes, m_aStates.top().aTableSprms));
+    return pProps;
 }
 
 void RTFDocumentImpl::resetSprms()
@@ -4784,21 +4786,6 @@ void RTFDocumentImpl::resetSprms()
     m_aStates.top().aTableSprms.clear();
     m_aStates.top().aCharacterSprms.clear();
     m_aStates.top().aParagraphSprms.clear();
-}
-
-RTFSprms RTFDocumentImpl::mergeAttributes()
-{
-    RTFSprms aAttributes;
-    for (RTFSprms::Iterator_t i = m_aStates.top().aTableAttributes.begin();
-            i != m_aStates.top().aTableAttributes.end(); ++i)
-        aAttributes.set(i->first, i->second);
-    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin();
-            i != m_aStates.top().aCharacterAttributes.end(); ++i)
-        aAttributes.set(i->first, i->second);
-    for (RTFSprms::Iterator_t i = m_aStates.top().aParagraphAttributes.begin();
-            i != m_aStates.top().aParagraphAttributes.end(); ++i)
-        aAttributes.set(i->first, i->second);
-    return aAttributes;
 }
 
 void RTFDocumentImpl::resetAttributes()
