@@ -256,7 +256,7 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label7">
+              <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Type</property>
@@ -335,7 +335,7 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label6">
+              <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Grouped by</property>
@@ -440,7 +440,7 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label5">
+              <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Parameters</property>
