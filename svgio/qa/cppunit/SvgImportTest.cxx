@@ -72,6 +72,9 @@ void Test::tearDown()
     BootstrapFixture::tearDown();
 }
 
+// Attributes for an object (like rect as in this case) can be defined
+// in different ways (directly with xml attributes, or with CSS styles),
+// however the end result should be the same.
 void Test::testStyles()
 {
     Primitive2DSequence maSequenceRect = parseSvg("/svgio/qa/cppunit/data/Rect.svg");
@@ -86,8 +89,9 @@ void Test::testStyles()
     Primitive2DSequence maSequenceRectWithStylesByGroup = parseSvg("/svgio/qa/cppunit/data/RectWithStylesByGroup.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRectWithStylesByGroup.getLength());
 
-    CPPUNIT_ASSERT_EQUAL(true, (bool) arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithStyle));
-    CPPUNIT_ASSERT_EQUAL(true, (bool) arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithParentStyle));
+    CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithStyle));
+    CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithParentStyle));
+    CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithStylesByGroup));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

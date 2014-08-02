@@ -1,18 +1,18 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
-  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-     width="10cm" height="5cm" viewBox="0 0 1000 500">
-  <defs>
-    <style type="text/css"><![CDATA[
-      g {
-        fill: red;
-        stroke: blue;
-        stroke-width: 3
-      }
-    ]]></style>
-  </defs>
-<g>
-  <rect x="200" y="100" width="600" height="300"/>
-</g>
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <style type="text/css">
+        <![CDATA[
+        g
+            {
+                stroke: #ff0000;
+                fill:   #00cc00;
+            }
+        ]]>
+        </style>
+    </defs>
+    <g>
+        <rect x="10" y="10" width="100" height="100" rx="10" ry="10" style="stroke-width: 3;" />
+    </g>
 </svg>
