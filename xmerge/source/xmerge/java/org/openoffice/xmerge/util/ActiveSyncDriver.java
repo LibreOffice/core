@@ -81,14 +81,15 @@ public class ActiveSyncDriver {
          * Because they can be installed separately, though, the MIME types need
          * to be check to see which one to load.
          */
-        File pluginJar = null;
-        if (srcMime.equals("staroffice/sxw") || srcMime.equals("application/x-pocket-word"))
-        {
+        File pluginJar;
+        if (srcMime.equals("staroffice/sxw") || srcMime.equals("application/x-pocket-word")) {
             pluginJar = new File(ooClassDir + "pocketWord.jar");
-        }
-        else if (srcMime.equals("staroffice/sxc") || srcMime.equals("application/x-pocket-excel"))
-        {
-            pluginJar = new File(ooClassDir + "pexcel.jar");
+        } else {
+            if (srcMime.equals("staroffice/sxc") || srcMime.equals("application/x-pocket-excel")) {
+                pluginJar = new File(ooClassDir + "pexcel.jar");
+            } else {
+                return false;
+            }
         }
 
         ConverterInfoReader cirPlugin = new ConverterInfoReader(pluginJar.toURI().toURL().toString(), false);
