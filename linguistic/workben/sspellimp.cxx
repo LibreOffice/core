@@ -92,7 +92,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         Locale *pLocale = aSuppLocales.getArray();
         pLocale[0] = Locale( "en", "US", OUString() );
         pLocale[1] = Locale( "de", "DE", OUString() );
-        pLocale[2] = Locale( "de", "CH"), OUString() );
+        pLocale[2] = Locale( "de", "CH", OUString() );
     }
 
     return aSuppLocales;
