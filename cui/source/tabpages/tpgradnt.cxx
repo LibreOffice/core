@@ -41,6 +41,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "paragrph.hrc"
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -263,10 +264,10 @@ long SvxGradientTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
+            boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                         SVX_RESSTR( RID_SVXSTR_GRADIENT ),
                                                         CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
-                                                        &aWarningBoxImage );
+                                                        &aWarningBoxImage ));
             DBG_ASSERT(aMessDlg, "Dialog creation failed!");
             aMessDlg->SetButtonText( MESS_BTN_1,
                                     OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
@@ -295,7 +296,6 @@ long SvxGradientTabPage::CheckChanges_Impl()
                 case RET_CANCEL:
                 break;
             }
-            delete aMessDlg;
         }
     }
     nPos = m_pLbGradients->GetSelectEntryPos();
@@ -314,19 +314,19 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
     {
         // CheckChanges(); <-- duplicate inquiry ?
 
-        XGradient*  pXGradient = NULL;
+        boost::scoped_ptr<XGradient> pXGradient;
         OUString      aString;
         sal_Int32      nPos = m_pLbGradients->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            pXGradient = new XGradient( pGradientList->GetGradient( nPos )->GetGradient() );
+            pXGradient.reset(new XGradient( pGradientList->GetGradient( nPos )->GetGradient() ));
             aString = m_pLbGradients->GetSelectEntry();
 
         }
         else
         // gradient was passed (unidentified)
         {
-            pXGradient = new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
+            pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
                         m_pLbColorTo->GetSelectEntryColor(),
                         (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
                         static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
@@ -334,13 +334,11 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
                         (sal_uInt16) m_pMtrCenterY->GetValue(),
                         (sal_uInt16) m_pMtrBorder->GetValue(),
                         (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                        (sal_uInt16) m_pMtrColorTo->GetValue() );
+                        (sal_uInt16) m_pMtrColorTo->GetValue() ));
         }
         DBG_ASSERT( pXGradient, "XGradient konnte nicht erzeugt werden" );
         rSet->Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
         rSet->Put( XFillGradientItem( aString, *pXGradient ) );
-
-        delete pXGradient;
     }
     return true;
 }
@@ -430,9 +428,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialog creation failed!");
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
-    MessageDialog*    pWarnBox = NULL;
+    boost::scoped_ptr<MessageDialog> pWarnBox;
     sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
@@ -453,16 +451,16 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox = new MessageDialog( GetParentDialog()
+            pWarnBox.reset(new MessageDialog( GetParentDialog()
                                         ,"DuplicateNameDialog"
-                                        ,"cui/ui/queryduplicatedialog.ui");
+                                        ,"cui/ui/queryduplicatedialog.ui"));
         }
 
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
-    delete pDlg;
-    delete pWarnBox;
+    pDlg.reset();
+    pWarnBox.reset();
 
     if( !nError )
     {
@@ -521,7 +519,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pGradientList->Count();
@@ -572,7 +570,6 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
             }
 
         }
-        delete pDlg;
     }
     return 0L;
 }
@@ -772,11 +769,11 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 {
-    XGradient* pGradient = NULL;
+    boost::scoped_ptr<XGradient> pGradient;
     int nPos = m_pLbGradients->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        pGradient = new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() );
+        pGradient.reset(new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() ));
     else
     {
         const SfxPoolItem* pPoolItem = NULL;
@@ -785,7 +782,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
             if( ( drawing::FillStyle_GRADIENT == (drawing::FillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
                 ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), true, &pPoolItem ) ) )
             {
-                pGradient = new XGradient( ( ( const XFillGradientItem* ) pPoolItem )->GetGradientValue() );
+                pGradient.reset(new XGradient( ( ( const XFillGradientItem* ) pPoolItem )->GetGradientValue() ));
             }
         }
         if( !pGradient )
@@ -793,7 +790,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
             m_pLbGradients->SelectEntryPos( 0 );
             nPos = m_pLbGradients->GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
-                pGradient = new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() );
+                pGradient.reset(new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() ));
         }
     }
 
@@ -838,7 +835,6 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
         m_pCtlPreview->Invalidate();
-        delete pGradient;
     }
     return 0L;
 }

@@ -46,6 +46,7 @@
 #include <cuitabline.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -511,10 +512,10 @@ long SvxColorTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
+            boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                         SVX_RESSTR( RID_SVXSTR_COLOR ),
                                                         ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ),
-                                                        &aWarningBoxImage );
+                                                        &aWarningBoxImage ));
             aMessDlg->SetButtonText( MESS_BTN_1,
                                     ResId( RID_SVXSTR_CHANGE, rMgr ) );
             aMessDlg->SetButtonText( MESS_BTN_2,
@@ -542,7 +543,6 @@ long SvxColorTabPage::CheckChanges_Impl()
                 case RET_CANCEL:
                 break;
             }
-            delete aMessDlg;
         }
     }
     if( nDlgType == 0 ) // area dialog
@@ -685,7 +685,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
         aWarningBox.Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         bool bLoop = true;
 
         while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -704,7 +704,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
             else
                 aWarningBox.Execute();
         }
-        delete( pDlg );
     }
 
     // if not existing the entry is entered
@@ -757,7 +756,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+            boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
             bool bLoop = true;
 
             while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -774,7 +773,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
                 else
                     aWarningBox.Execute();
             }
-            delete( pDlg );
         }
 
         // if not existing the entry is entered
@@ -803,7 +801,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
 {
-    SvColorDialog* pColorDlg = new SvColorDialog( GetParentDialog() );
+    boost::scoped_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParentDialog() ));
 
     pColorDlg->SetColor (aCurrentColor);
     pColorDlg->SetMode( svtools::ColorPickerMode_MODIFY );
@@ -836,7 +834,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
 
         m_pCtlPreviewNew->Invalidate();
     }
-    delete( pColorDlg );
 
     return 0;
 }

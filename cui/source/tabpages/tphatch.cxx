@@ -43,6 +43,7 @@
 #include <svx/dialmgr.hxx>
 #include "paragrph.hrc"
 #include <svx/dialogs.hrc>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -240,10 +241,10 @@ long SvxHatchTabPage::CheckChanges_Impl()
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
+        boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                         SVX_RESSTR( RID_SVXSTR_HATCH ),
                                                         CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
-                                                        &aWarningBoxImage );
+                                                        &aWarningBoxImage ));
         DBG_ASSERT(aMessDlg, "Dialog creation failed!");
         aMessDlg->SetButtonText( MESS_BTN_1,
                                 OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
@@ -269,7 +270,6 @@ long SvxHatchTabPage::CheckChanges_Impl()
             case RET_CANCEL:
             break;
         }
-        delete aMessDlg;
     }
 
     sal_Int32 nPos = m_pLbHatchings->GetSelectEntryPos();
@@ -288,27 +288,25 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
         {
             // CheckChanges(); <-- duplicate inquiry ?
 
-            XHatch* pXHatch = NULL;
+            boost::scoped_ptr<XHatch> pXHatch;
             OUString  aString;
             sal_Int32  nPos = m_pLbHatchings->GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                pXHatch = new XHatch( pHatchingList->GetHatch( nPos )->GetHatch() );
+                pXHatch.reset(new XHatch( pHatchingList->GetHatch( nPos )->GetHatch() ));
                 aString = m_pLbHatchings->GetSelectEntry();
             }
             // gradient has been (unidentifiedly) passed
             else
             {
-                pXHatch = new XHatch( m_pLbLineColor->GetSelectEntryColor(),
+                pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),
                                  (XHatchStyle) m_pLbLineType->GetSelectEntryPos(),
                                  GetCoreValue( *m_pMtrDistance, ePoolUnit ),
-                                 static_cast<long>(m_pMtrAngle->GetValue() * 10) );
+                                 static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
             }
             DBG_ASSERT( pXHatch, "XHatch konnte nicht erzeugt werden" );
             rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
             rSet->Put( XFillHatchItem( aString, *pXHatch ) );
-
-            delete pXHatch;
         }
     }
     return true;
@@ -385,11 +383,11 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
 {
-    XHatch* pHatch = NULL;
+    boost::scoped_ptr<XHatch> pHatch;
     int nPos = m_pLbHatchings->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        pHatch = new XHatch( ( (XHatchEntry*) pHatchingList->GetHatch( nPos ) )->GetHatch() );
+        pHatch.reset(new XHatch( ( (XHatchEntry*) pHatchingList->GetHatch( nPos ) )->GetHatch() ));
     else
     {
         const SfxPoolItem* pPoolItem = NULL;
@@ -398,7 +396,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
             if( ( drawing::FillStyle_HATCH == (drawing::FillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
                 ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), true, &pPoolItem ) ) )
             {
-                pHatch = new XHatch( ( ( const XFillHatchItem* ) pPoolItem )->GetHatchValue() );
+                pHatch.reset(new XHatch( ( ( const XFillHatchItem* ) pPoolItem )->GetHatchValue() ));
             }
         }
         if( !pHatch )
@@ -406,7 +404,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
             m_pLbHatchings->SelectEntryPos( 0 );
             nPos = m_pLbHatchings->GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
-                pHatch = new XHatch( ( (XHatchEntry*) pHatchingList->GetHatch( nPos ) )->GetHatch() );
+                pHatch.reset(new XHatch( ( (XHatchEntry*) pHatchingList->GetHatch( nPos ) )->GetHatch() ));
         }
     }
     if( pHatch )
@@ -443,7 +441,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
         m_pCtlPreview->Invalidate();
-        delete pHatch;
+        pHatch.reset();
     }
     m_pMtrDistance->SaveValue();
     m_pMtrAngle->SaveValue();
@@ -480,9 +478,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialog creation failed!");
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
-    MessageDialog*    pWarnBox = NULL;
+    boost::scoped_ptr<MessageDialog> pWarnBox;
     sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
@@ -502,16 +500,16 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox = new MessageDialog( GetParentDialog()
+            pWarnBox.reset(new MessageDialog( GetParentDialog()
                                          ,"DuplicateNameDialog"
-                                         ,"cui/ui/queryduplicatedialog.ui");
+                                         ,"cui/ui/queryduplicatedialog.ui"));
         }
 
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
-    delete pDlg;
-    delete pWarnBox;
+    pDlg.reset();
+    pWarnBox.reset();
 
     if( !nError )
     {
@@ -565,7 +563,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pHatchingList->Count();
@@ -616,7 +614,6 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
                 aBox.Execute();
             }
         }
-        delete( pDlg );
     }
     return 0L;
 }
