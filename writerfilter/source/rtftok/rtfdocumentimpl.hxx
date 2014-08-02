@@ -382,8 +382,7 @@ public:
 private:
     SvStream& Strm();
     sal_uInt32 getColorTable(sal_uInt32 nIndex);
-    RTFSprms mergeSprms();
-    RTFSprms mergeAttributes();
+    writerfilter::Reference<Properties>::Pointer_t createStyleProperties();
     void resetSprms();
     void resetAttributes();
     void resolveSubstream(sal_Size nPos, Id nId);
