@@ -1305,6 +1305,21 @@ public:
     /// Replace all compatability options with those from rSource.
     void ReplaceCompatabilityOptions(const SwDoc& rSource);
 
+    /** Replace all user defined document properties with xSourceDocProps.
+
+        Convenince function used by ReplaceDocumentProperties to skip some UNO calls.
+     */
+    void ReplaceUserDefinedDocumentProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xSourceDocProps );
+
+    // Replace all user defined document properties with those from rSource.
+    void ReplaceUserDefinedDocumentProperties( const SwDoc& rSource );
+
+    /** Replace document properties with those from rSource.
+
+        This includes the user defined document properties!
+     */
+    void ReplaceDocumentProperties(const SwDoc& rSource);
+
     /// Query if style (paragraph- / character- / frame- / page-) is used.
     bool IsUsed( const SwModify& ) const;
     bool IsUsed( const SwNumRule& ) const;

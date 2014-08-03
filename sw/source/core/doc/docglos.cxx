@@ -36,44 +36,26 @@
 
 using namespace ::com::sun::star;
 
+void SwDoc::ReplaceUserDefinedDocumentProperties(
+        uno::Reference<document::XDocumentProperties> xSourceDocProps)
+{
+    OSL_ENSURE(xSourceDocProps.is(), "null reference");
 
-/// copy document properties via public interface
-static void lcl_copyDocumentProperties(
-        uno::Reference<document::XDocumentProperties> i_xSource,
-        uno::Reference<document::XDocumentProperties> i_xTarget) {
-    OSL_ENSURE(i_xSource.is(), "null reference");
-    OSL_ENSURE(i_xTarget.is(), "null reference");
-
-    i_xTarget->setAuthor(i_xSource->getAuthor());
-    i_xTarget->setGenerator(i_xSource->getGenerator());
-    i_xTarget->setCreationDate(i_xSource->getCreationDate());
-    i_xTarget->setTitle(i_xSource->getTitle());
-    i_xTarget->setSubject(i_xSource->getSubject());
-    i_xTarget->setDescription(i_xSource->getDescription());
-    i_xTarget->setKeywords(i_xSource->getKeywords());
-    i_xTarget->setLanguage(i_xSource->getLanguage());
-    i_xTarget->setModifiedBy(i_xSource->getModifiedBy());
-    i_xTarget->setModificationDate(i_xSource->getModificationDate());
-    i_xTarget->setPrintedBy(i_xSource->getPrintedBy());
-    i_xTarget->setPrintDate(i_xSource->getPrintDate());
-    i_xTarget->setTemplateName(i_xSource->getTemplateName());
-    i_xTarget->setTemplateURL(i_xSource->getTemplateURL());
-    i_xTarget->setTemplateDate(i_xSource->getTemplateDate());
-    i_xTarget->setAutoloadURL(i_xSource->getAutoloadURL());
-    i_xTarget->setAutoloadSecs(i_xSource->getAutoloadSecs());
-    i_xTarget->setDefaultTarget(i_xSource->getDefaultTarget());
-    i_xTarget->setDocumentStatistics(i_xSource->getDocumentStatistics());
-    i_xTarget->setEditingCycles(i_xSource->getEditingCycles());
-    i_xTarget->setEditingDuration(i_xSource->getEditingDuration());
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xDPS->getDocumentProperties() );
+    OSL_ENSURE(xDocProps.is(), "null reference");
 
     uno::Reference<beans::XPropertySet> xSourceUDSet(
-        i_xSource->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+        xSourceDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertyContainer> xTargetUD(
-        i_xTarget->getUserDefinedProperties());
+        xDocProps->getUserDefinedProperties());
     uno::Reference<beans::XPropertySet> xTargetUDSet(xTargetUD,
         uno::UNO_QUERY_THROW);
     uno::Sequence<beans::Property> tgtprops
         = xTargetUDSet->getPropertySetInfo()->getProperties();
+
     for (sal_Int32 i = 0; i < tgtprops.getLength(); ++i) {
         try {
             xTargetUD->removeProperty(tgtprops [i].Name);
@@ -81,18 +63,69 @@ static void lcl_copyDocumentProperties(
             // ignore
         }
     }
-    try {
-        uno::Reference<beans::XPropertySetInfo> xSetInfo
-            = xSourceUDSet->getPropertySetInfo();
-        uno::Sequence<beans::Property> srcprops = xSetInfo->getProperties();
-        for (sal_Int32 i = 0; i < srcprops.getLength(); ++i) {
+
+    uno::Reference<beans::XPropertySetInfo> xSetInfo
+        = xSourceUDSet->getPropertySetInfo();
+    uno::Sequence<beans::Property> srcprops = xSetInfo->getProperties();
+
+    for (sal_Int32 i = 0; i < srcprops.getLength(); ++i) {
+        try {
             OUString name = srcprops[i].Name;
             xTargetUD->addProperty(name, srcprops[i].Attributes,
                 xSourceUDSet->getPropertyValue(name));
+        } catch (uno::Exception &) {
+            // ignore
         }
-    } catch (uno::Exception &) {
-        // ignore
     }
+}
+
+void SwDoc::ReplaceUserDefinedDocumentProperties(const SwDoc& rSource)
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xSourceDPS(
+        rSource.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xSourceDocProps(
+        xSourceDPS->getDocumentProperties() );
+
+    ReplaceUserDefinedDocumentProperties( xSourceDocProps );
+}
+
+void SwDoc::ReplaceDocumentProperties(const SwDoc& rSource)
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xSourceDPS(
+        rSource.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xSourceDocProps(
+        xSourceDPS->getDocumentProperties() );
+    OSL_ENSURE(xSourceDocProps.is(), "null reference");
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xDPS->getDocumentProperties() );
+    OSL_ENSURE(xDocProps.is(), "null reference");
+
+    xDocProps->setAuthor(xSourceDocProps->getAuthor());
+    xDocProps->setGenerator(xSourceDocProps->getGenerator());
+    xDocProps->setCreationDate(xSourceDocProps->getCreationDate());
+    xDocProps->setTitle(xSourceDocProps->getTitle());
+    xDocProps->setSubject(xSourceDocProps->getSubject());
+    xDocProps->setDescription(xSourceDocProps->getDescription());
+    xDocProps->setKeywords(xSourceDocProps->getKeywords());
+    xDocProps->setLanguage(xSourceDocProps->getLanguage());
+    xDocProps->setModifiedBy(xSourceDocProps->getModifiedBy());
+    xDocProps->setModificationDate(xSourceDocProps->getModificationDate());
+    xDocProps->setPrintedBy(xSourceDocProps->getPrintedBy());
+    xDocProps->setPrintDate(xSourceDocProps->getPrintDate());
+    xDocProps->setTemplateName(xSourceDocProps->getTemplateName());
+    xDocProps->setTemplateURL(xSourceDocProps->getTemplateURL());
+    xDocProps->setTemplateDate(xSourceDocProps->getTemplateDate());
+    xDocProps->setAutoloadURL(xSourceDocProps->getAutoloadURL());
+    xDocProps->setAutoloadSecs(xSourceDocProps->getAutoloadSecs());
+    xDocProps->setDefaultTarget(xSourceDocProps->getDefaultTarget());
+    xDocProps->setDocumentStatistics(xSourceDocProps->getDocumentStatistics());
+    xDocProps->setEditingCycles(xSourceDocProps->getEditingCycles());
+    xDocProps->setEditingDuration(xSourceDocProps->getEditingDuration());
+
+    ReplaceUserDefinedDocumentProperties( xSourceDocProps );
 }
 
 /// inserts an AutoText block
@@ -118,17 +151,8 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             // target document to the glossary document
             // OSL_ENSURE(GetDocShell(), "no SwDocShell"); // may be clipboard!
             OSL_ENSURE(pGDoc->GetDocShell(), "no SwDocShell at glossary");
-            if (GetDocShell() && pGDoc->GetDocShell()) {
-                uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                    GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
-                uno::Reference<document::XDocumentProperties> xDocProps(
-                    xDPS->getDocumentProperties() );
-                uno::Reference<document::XDocumentPropertiesSupplier> xGlosDPS(
-                    pGDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
-                uno::Reference<document::XDocumentProperties> xGlosDocProps(
-                    xGlosDPS->getDocumentProperties() );
-                lcl_copyDocumentProperties(xDocProps, xGlosDocProps);
-        }
+            if (GetDocShell() && pGDoc->GetDocShell())
+                pGDoc->ReplaceDocumentProperties( *this );
             pGDoc->SetFixFields(false, NULL);
 
             // StartAllAction();
