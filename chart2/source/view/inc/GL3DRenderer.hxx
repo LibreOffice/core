@@ -289,6 +289,9 @@ private:
         GLint m_3DNormalMatrixID;
         GLint m_3DVertexID;
         GLint m_3DNormalID;
+        GLint m_3DMinCoordXID;
+        GLint m_3DMaxCoordXID;
+        GLint m_3DUndrawID;
         //300 verson;
         GLint m_3DMaterialAmbientID;
         GLint m_3DMaterialDiffuseID;

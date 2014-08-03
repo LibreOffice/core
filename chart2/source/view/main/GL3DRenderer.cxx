@@ -286,6 +286,9 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DLightPowerID = glGetUniformLocation(m_3DProID, "lightPower");
         m_3DLightNumID = glGetUniformLocation(m_3DProID, "lightNum");
         m_3DLightAmbientID = glGetUniformLocation(m_3DProID, "lightAmbient");
+        m_3DMinCoordXID = glGetUniformLocation(m_3DProID, "minCoordX");
+        m_3DMaxCoordXID = glGetUniformLocation(m_3DProID, "maxCoordX");
+        m_3DUndrawID = glGetUniformLocation(m_3DProID, "undraw");
         m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
         m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
     }
@@ -911,6 +914,11 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
         }
         else
         {
+            float minCoordX = 0.0f;
+            float maxCoordX = m_fMinCoordX + m_fMaxCoordX;
+            glUniform1fv(maResources.m_3DMinCoordXID, 1, &minCoordX);
+            glUniform1fv(maResources.m_3DMaxCoordXID, 1, &maxCoordX);
+            glUniform1i(maResources.m_3DUndrawID, m_bUndrawFlag);
             //update light information
             glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, (GLfloat*)m_LightColor);
             glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, (GLfloat*)m_PositionWorldspace);
@@ -1568,6 +1576,9 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         }
         else
         {
+            glUniform1fv(maResources.m_3DMinCoordXID, 1, &m_fMinCoordX);
+            glUniform1fv(maResources.m_3DMaxCoordXID, 1, &m_fMaxCoordX);
+            glUniform1i(maResources.m_3DUndrawID, m_bUndrawFlag);
             //update light information
             glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, (GLfloat*)m_LightColor);
             glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, (GLfloat*)m_PositionWorldspace);

@@ -16,12 +16,16 @@ uniform mat4 P;
 uniform mat4 M;
 uniform mat4 V;
 uniform mat3 normalMatrix;
+uniform float minCoordX;
+uniform float maxCoordX;
 
 void main()
 {
-    gl_Position =  P * V * M * vec4(vertexPositionModelspace,1);
+	  positionWorldspace = (M * vec4(vertexPositionModelspace,1)).xyz;
 
-    positionWorldspace = (M * vec4(vertexPositionModelspace,1)).xyz;
+	  positionWorldspace.x = clamp(positionWorldspace.x, minCoordX, maxCoordX);
+
+	  gl_Position =  P * V * vec4(positionWorldspace,1);
 
     normalCameraspace = normalize(mat3(V) * normalMatrix * vertexNormalModelspace);
 }

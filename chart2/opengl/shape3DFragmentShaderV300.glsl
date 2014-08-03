@@ -23,9 +23,13 @@ uniform vec4 lightPosWorldspace[MAX_LIGHT_NUM];
 uniform float lightPower[MAX_LIGHT_NUM];
 uniform int lightNum;
 uniform vec4 lightAmbient;
+uniform int undraw;
+uniform float minCoordX;
 
 void main()
 {
+    if ((positionWorldspace.x <= minCoordX) && (undraw == 1))
+        discard;
     vec3 colorTotal = vec3(0.0f, 0.0f, 0.0f);
 
     vec3 vertexPositionCameraspace = (V * vec4(positionWorldspace,1)).xyz;
