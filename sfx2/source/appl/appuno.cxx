@@ -1021,7 +1021,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
         {
             // check every formal argument of the method
-            const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
+            const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArg] : pSlot->GetFormalArgument( nArg );
 
             sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
             if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
