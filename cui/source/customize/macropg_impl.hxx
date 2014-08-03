@@ -40,11 +40,8 @@ public:
 class AssignComponentDialog : public ModalDialog
 {
 private:
-    FixedText       maMethodLabel;
-    Edit            maMethodEdit;
-    OKButton        maOKButton;
-    CancelButton    maCancelButton;
-    HelpButton      maHelpButton;
+    Edit*           mpMethodEdit;
+    OKButton*       mpOKButton;
 
     OUString maURL;
 

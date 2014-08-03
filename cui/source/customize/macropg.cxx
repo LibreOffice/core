@@ -35,7 +35,6 @@
 #include <dialmgr.hxx>
 #include "selector.hxx"
 #include "cfg.hxx"
-#include "macropg.hrc"
 #include "helpid.hrc"
 #include <cuires.hrc>
 #include "headertablistbox.hxx"
@@ -847,7 +846,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, const Reference< frame::X
 
 IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
 {
-    OUString aMethodName = maMethodEdit.GetText();
+    OUString aMethodName = mpMethodEdit->GetText();
     maURL = "";
     if( !aMethodName.isEmpty() )
     {
@@ -859,16 +858,12 @@ IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
 }
 
 AssignComponentDialog::AssignComponentDialog( Window * pParent, const OUString& rURL )
-    : ModalDialog( pParent, CUI_RES( RID_SVXDLG_ASSIGNCOMPONENT ) )
-    , maMethodLabel( this, CUI_RES( FT_METHOD ) )
-    , maMethodEdit( this, CUI_RES( EDIT_METHOD ) )
-    , maOKButton( this, CUI_RES( RID_PB_OK ) )
-    , maCancelButton( this, CUI_RES( RID_PB_CANCEL ) )
-    , maHelpButton( this, CUI_RES( RID_PB_HELP ) )
+    : ModalDialog( pParent, "AssignComponent", "cui/ui/assigncomponentdialog.ui" )
     , maURL( rURL )
 {
-    FreeResource();
-    maOKButton.SetClickHdl(LINK(this, AssignComponentDialog, ButtonHandler));
+    get(mpMethodEdit, "methodEntry");
+    get(mpOKButton, "ok");
+    mpOKButton->SetClickHdl(LINK(this, AssignComponentDialog, ButtonHandler));
 
     OUString aMethodName;
     if( maURL.startsWith( aVndSunStarUNO ) )
@@ -876,7 +871,7 @@ AssignComponentDialog::AssignComponentDialog( Window * pParent, const OUString& 
         sal_Int32 nBegin = aVndSunStarUNO.getLength();
         aMethodName = maURL.copy( nBegin );
     }
-    maMethodEdit.SetText( aMethodName, Selection( 0, SELECTION_MAX ) );
+    mpMethodEdit->SetText( aMethodName, Selection( 0, SELECTION_MAX ) );
 }
 
 AssignComponentDialog::~AssignComponentDialog()

@@ -23,6 +23,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/areadialog \
 	cui/uiconfig/ui/areatabpage \
 	cui/uiconfig/ui/asiantypography \
+	cui/uiconfig/ui/assigncomponentdialog \
 	cui/uiconfig/ui/autocorrectdialog \
 	cui/uiconfig/ui/backgroundpage \
 	cui/uiconfig/ui/baselinksdialog \

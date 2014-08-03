@@ -18,56 +18,9 @@
  */
 
 #include <sfx2/sfx.hrc>
-#include "macropg.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include <svx/dialogs.hrc>
-
-#define MASKCOLOR  MaskColor = \
-    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-
-ModalDialog RID_SVXDLG_ASSIGNCOMPONENT
-{
-    HelpID = "cui:ModalDialog:RID_SVXDLG_ASSIGNCOMPONENT";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( COMP_WIDTH , COMP_HEIGHT ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Text [ en-US ] = "Assign Component";
-    OKButton RID_PB_OK
-    {
-        Pos = MAP_APPFONT ( COMP_COL1 , COMP_ROW0 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton RID_PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( COMP_COL1 , COMP_ROW1 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton RID_PB_HELP
-    {
-        Pos = MAP_APPFONT ( COMP_COL1 , COMP_ROW2 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-    };
-    FixedText FT_METHOD
-    {
-        Pos = MAP_APPFONT ( COMP_COL0 , COMP_ROW0 ) ;
-        Size = MAP_APPFONT ( COMP_EDIT_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "Component method name" ;
-    };
-    Edit EDIT_METHOD
-    {
-        HelpID = "cui:Edit:RID_SVXDLG_ASSIGNCOMPONENT:EDIT_METHOD";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( COMP_COL0 , COMP_ROWEDIT ) ;
-        Size = MAP_APPFONT ( COMP_EDIT_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-};
 
 //DF
 String RID_SVXSTR_EVENT_STARTAPP
