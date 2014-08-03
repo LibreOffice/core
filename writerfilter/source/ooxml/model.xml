@@ -306,7 +306,6 @@
   <namespace name="dml-shape3DLighting" file="dml-shape3DLighting.rng">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <define name="ST_LightRigDirection">
-        <list>
           <choice>
             <!-- Top Left -->
             <value>tl</value>
@@ -325,10 +324,8 @@
             <!-- Bottom Right -->
             <value>br</value>
           </choice>
-        </list>
       </define>
       <define name="ST_LightRigType">
-        <list>
           <choice>
             <!-- Legacy Flat 1 -->
             <value>legacyFlat1</value>
@@ -385,7 +382,6 @@
             <!-- Bright Room -->
             <value>brightRoom</value>
           </choice>
-        </list>
       </define>
       <define name="CT_LightRig">
         <optional>
@@ -471,7 +467,6 @@
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeGeometry.rng"/>
       <define name="ST_BevelPresetType">
-        <list>
           <choice>
             <!-- Relaxed Inset -->
             <value>relaxedInset</value>
@@ -498,7 +493,6 @@
             <!-- Art Deco -->
             <value>artDeco</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Bevel">
         <optional>
@@ -518,7 +512,6 @@
         </optional>
       </define>
       <define name="ST_PresetMaterialType">
-        <list>
           <choice>
             <!-- Legacy Matte -->
             <value>legacyMatte</value>
@@ -551,7 +544,6 @@
             <!-- Soft Metal -->
             <value>softmetal</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Shape3D">
         <group>
@@ -655,7 +647,6 @@
   <namespace name="dml-shape3DCamera" file="dml-shape3DCamera.rng">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <define name="ST_PresetCameraType">
-        <list>
           <choice>
             <!-- Legacy Oblique Top Left -->
             <value>legacyObliqueTopLeft</value>
@@ -782,7 +773,6 @@
             <!-- Perspective Relaxed Moderately -->
             <value>perspectiveRelaxedModerately</value>
           </choice>
-        </list>
       </define>
       <define name="ST_FOVAngle">
         <empty/>
@@ -881,7 +871,6 @@
         </data>
       </define>
       <define name="ST_FontCollectionIndex">
-        <list>
           <choice>
             <!-- Major Font -->
             <value>major</value>
@@ -890,10 +879,8 @@
             <!-- None -->
             <value>none</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ColorSchemeIndex">
-        <list>
           <choice>
             <!-- Dark 1 -->
             <value>dk1</value>
@@ -920,7 +907,6 @@
             <!-- Followed Hyperlink -->
             <value>folHlink</value>
           </choice>
-        </list>
       </define>
       <define name="CT_ColorScheme">
         <group>
@@ -1242,7 +1228,6 @@
         <data type="string"/>
       </define>
       <define name="ST_TextUnderlineType">
-        <list>
           <choice>
             <!-- Text Underline Enum ( None ) -->
             <value>none</value>
@@ -1281,7 +1266,6 @@
             <!-- Text Underline Enum ( Double Wavy ) -->
             <value>wavyDbl</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TextUnderlineLineFollowText">
         <empty/>
@@ -1315,7 +1299,6 @@
         </choice>
       </define>
       <define name="ST_TextStrikeType">
-        <list>
           <choice>
             <!-- Text Strike Enum ( No Strike ) -->
             <value>noStrike</value>
@@ -1324,10 +1307,8 @@
             <!-- Text Strike Enum ( Double Strike ) -->
             <value>dblStrike</value>
           </choice>
-        </list>
       </define>
       <define name="ST_TextCapsType">
-        <list>
           <choice>
             <!-- Text Caps Enum ( None ) -->
             <value>none</value>
@@ -1336,7 +1317,6 @@
             <!-- Text Caps Enum ( All ) -->
             <value>all</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TextCharacterProperties">
         <group>
@@ -1723,7 +1703,6 @@
         </optional>
       </define>
       <define name="ST_PresetShadowVal">
-        <list>
           <choice>
             <!-- Top Left Drop Shadow -->
             <value>shdw1</value>
@@ -1766,7 +1745,6 @@
             <!-- Front Bottom Shadow -->
             <value>shdw20</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PresetShadowEffect">
         <ref name="EG_ColorChoice"/>
@@ -1938,7 +1916,6 @@
         </optional>
       </define>
       <define name="ST_PathShadeType">
-        <list>
           <choice>
             <!-- Shape -->
             <value>shape</value>
@@ -1947,7 +1924,6 @@
             <!-- Rectangle -->
             <value>rect</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PathShadeProperties">
         <optional>
@@ -1972,7 +1948,6 @@
         </choice>
       </define>
       <define name="ST_TileFlipMode">
-        <list>
           <choice>
             <!-- None -->
             <value>none</value>
@@ -1983,7 +1958,6 @@
             <!-- Horizontal and Vertical -->
             <value>xy</value>
           </choice>
-        </list>
       </define>
       <define name="CT_GradientStop">
         <ref name="EG_ColorChoice"/>
@@ -2075,7 +2049,6 @@
         </choice>
       </define>
       <define name="ST_BlipCompression">
-        <list>
           <choice>
             <!-- Email Compression -->
             <value>email</value>
@@ -2088,7 +2061,6 @@
             <!-- No Compression -->
             <value>none</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Blip">
         <group>
@@ -2188,7 +2160,6 @@
         </optional>
       </define>
       <define name="ST_PresetPatternVal">
-        <list>
           <choice>
             <!-- 5% -->
             <value>pct5</value>
@@ -2299,7 +2270,6 @@
             <!-- Zig Zag -->
             <value>zigZag</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PatternFillProperties">
         <group>
@@ -2352,7 +2322,6 @@
         <ref name="EG_FillProperties"/>
       </define>
       <define name="ST_BlendMode">
-        <list>
           <choice>
             <!-- Overlay -->
             <value>over</value>
@@ -2365,7 +2334,6 @@
             <!-- Lighten -->
             <value>lighten</value>
           </choice>
-        </list>
       </define>
       <define name="CT_FillOverlayEffect">
         <ref name="EG_FillProperties"/>
@@ -2473,14 +2441,12 @@
         </choice>
       </define>
       <define name="ST_EffectContainerType">
-        <list>
           <choice>
             <!-- Sibling -->
             <value>sib</value>
             <!-- Tree -->
             <value>tree</value>
           </choice>
-        </list>
       </define>
       <define name="CT_EffectContainer">
         <zeroOrMore>
@@ -2766,7 +2732,6 @@
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeEffects.rng"/>
       <define name="ST_LineEndType">
-        <list>
           <choice>
             <!-- None -->
             <value>none</value>
@@ -2781,10 +2746,8 @@
             <!-- Arrow Head -->
             <value>arrow</value>
           </choice>
-        </list>
       </define>
       <define name="ST_LineEndWidth">
-        <list>
           <choice>
             <!-- Small -->
             <value>sm</value>
@@ -2793,10 +2756,8 @@
             <!-- Large -->
             <value>lg</value>
           </choice>
-        </list>
       </define>
       <define name="ST_LineEndLength">
-        <list>
           <choice>
             <!-- Small -->
             <value>sm</value>
@@ -2805,7 +2766,6 @@
             <!-- Large -->
             <value>lg</value>
           </choice>
-        </list>
       </define>
       <define name="CT_LineEndProperties">
         <optional>
@@ -2867,7 +2827,6 @@
         </choice>
       </define>
       <define name="ST_PresetLineDashVal">
-        <list>
           <choice>
             <!-- Solid -->
             <value>solid</value>
@@ -2892,7 +2851,6 @@
             <!-- System Dash Dot Dot -->
             <value>sysDashDotDot</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PresetLineDashProperties">
         <optional>
@@ -2927,7 +2885,6 @@
         </choice>
       </define>
       <define name="ST_LineCap">
-        <list>
           <choice>
             <!-- Round Line Cap -->
             <value>rnd</value>
@@ -2936,23 +2893,19 @@
             <!-- Flat Line Cap -->
             <value>flat</value>
           </choice>
-        </list>
       </define>
       <define name="ST_LineWidth">
         <empty/>
       </define>
       <define name="ST_PenAlignment">
-        <list>
           <choice>
             <!-- Center Alignment -->
             <value>ctr</value>
             <!-- Inset Alignment -->
             <value>in</value>
           </choice>
-        </list>
       </define>
       <define name="ST_CompoundLine">
-        <list>
           <choice>
             <!-- Single Line -->
             <value>sng</value>
@@ -2965,7 +2918,6 @@
             <!-- Thin Thick Thin Triple Lines -->
             <value>tri</value>
           </choice>
-        </list>
       </define>
       <define name="CT_LineProperties">
         <group>
@@ -3426,7 +3378,6 @@
         </attribute>
       </define>
       <define name="ST_SystemColorVal">
-        <list>
           <choice>
             <!-- Scroll Bar System Color -->
             <value>scrollBar</value>
@@ -3489,7 +3440,6 @@
             <!-- Menu Bar System Color -->
             <value>menuBar</value>
           </choice>
-        </list>
       </define>
       <define name="CT_SystemColor">
         <zeroOrMore>
@@ -3505,7 +3455,6 @@
         </optional>
       </define>
       <define name="ST_SchemeColorVal">
-        <list>
           <choice>
             <!-- Background Color 1 -->
             <value>bg1</value>
@@ -3542,7 +3491,6 @@
             <!-- Light Color 2 -->
             <value>lt2</value>
           </choice>
-        </list>
       </define>
       <define name="CT_SchemeColor">
         <zeroOrMore>
@@ -3553,7 +3501,6 @@
         </attribute>
       </define>
       <define name="ST_PresetColorVal">
-        <list>
           <choice>
             <!-- Alice Blue Preset Color -->
             <value>aliceBlue</value>
@@ -3836,7 +3783,6 @@
             <!-- Yellow Green Preset Color -->
             <value>yellowGreen</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PresetColor">
         <zeroOrMore>
@@ -3988,7 +3934,6 @@
         </optional>
       </define>
       <define name="ST_RectAlignment">
-        <list>
           <choice>
             <!-- Rectangle Alignment Enum ( Top Left ) -->
             <value>tl</value>
@@ -4009,7 +3954,6 @@
             <!-- Rectangle Alignment Enum ( Bottom Right ) -->
             <value>br</value>
           </choice>
-        </list>
       </define>
       <define name="ST_Guid">
         <data type="token">
@@ -4047,7 +3991,6 @@
         </zeroOrMore>
       </define>
       <define name="ST_BlackWhiteMode">
-        <list>
           <choice>
             <!-- Color -->
             <value>clr</value>
@@ -4072,7 +4015,6 @@
             <!-- Hidden -->
             <value>hidden</value>
           </choice>
-        </list>
       </define>
       <define name="AG_Blob">
         <optional>
@@ -5012,7 +4954,6 @@
         </choice>
       </define>
       <define name="ST_PresetCameraType">
-        <list>
           <choice>
             <value>legacyObliqueTopLeft</value>
             <value>legacyObliqueTop</value>
@@ -5077,10 +5018,8 @@
             <value>perspectiveRelaxed</value>
             <value>perspectiveRelaxedModerately</value>
           </choice>
-        </list>
       </define>
       <define name="ST_LightRigType">
-        <list>
           <choice>
             <value>legacyFlat1</value>
             <value>legacyFlat2</value>
@@ -5110,10 +5049,8 @@
             <value>glow</value>
             <value>brightRoom</value>
           </choice>
-        </list>
       </define>
        <define name="ST_LightRigDirection">
-        <list>
           <choice>
             <value>tl</value>
             <value>t</value>
@@ -5124,10 +5061,8 @@
             <value>b</value>
             <value>br</value>
           </choice>
-        </list>
       </define>
       <define name="ST_BevelPresetType">
-        <list>
           <choice>
             <value>relaxedInset</value>
             <value>circle</value>
@@ -5142,10 +5077,8 @@
             <value>hardEdge</value>
             <value>artDeco</value>
           </choice>
-        </list>
       </define>
       <define name="ST_PresetMaterialType">
-        <list>
           <choice>
             <value>legacyMatte</value>
             <value>legacyPlastic</value>
@@ -5164,10 +5097,8 @@
             <value>softmetal</value>
             <value>none</value>
           </choice>
-        </list>
       </define>
       <define name="ST_Ligatures">
-        <list>
           <choice>
             <value>none</value>
             <value>standard</value>
@@ -5186,25 +5117,20 @@
             <value>contextualHistoricalDiscretional</value>
             <value>all</value>
           </choice>
-        </list>
       </define>
       <define name="ST_NumForm">
-        <list>
           <choice>
             <value>default</value>
             <value>lining</value>
             <value>oldStyle</value>
           </choice>
-        </list>
       </define>
       <define name="ST_NumSpacing">
-        <list>
           <choice>
             <value>default</value>
             <value>proportional</value>
             <value>tabular</value>
           </choice>
-        </list>
       </define>
 
       <define name="ST_PositiveCoordinate">
@@ -6746,7 +6672,6 @@
   <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng" todo="ignore">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <define name="ST_ShapeType">
-        <list>
           <choice>
             <!-- Line Shape -->
             <value>line</value>
@@ -7123,10 +7048,8 @@
             <!-- Chart Plus Shape -->
             <value>chartPlus</value>
           </choice>
-        </list>
       </define>
       <define name="ST_TextShapeType">
-        <list>
           <choice>
             <!-- No Text Shape -->
             <value>textNoShape</value>
@@ -7211,7 +7134,6 @@
             <!-- Downward Cascade Text Shape -->
             <value>textCascadeDown</value>
           </choice>
-        </list>
       </define>
       <define name="ST_GeomGuideName">
         <data type="token"/>
@@ -7417,7 +7339,6 @@
         <empty/>
       </define>
       <define name="ST_PathFillMode">
-        <list>
           <choice>
             <!-- No Path Fill -->
             <value>none</value>
@@ -7432,7 +7353,6 @@
             <!-- Darken Path Fill Less -->
             <value>darkenLess</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Path2D">
         <zeroOrMore>
@@ -7912,7 +7832,6 @@
         </optional>
       </define>
       <define name="ST_WrapText">
-        <list>
           <choice>
             <!-- Both Sides -->
             <value>bothSides</value>
@@ -7923,7 +7842,6 @@
             <!-- Largest Side Only -->
             <value>largest</value>
           </choice>
-        </list>
       </define>
       <define name="CT_WrapPath">
         <group>
@@ -8051,7 +7969,6 @@
         <data type="int"/>
       </define>
       <define name="ST_AlignH">
-        <list>
           <choice>
             <!-- Left Alignment -->
             <value>left</value>
@@ -8064,10 +7981,8 @@
             <!-- Outside -->
             <value>outside</value>
           </choice>
-        </list>
       </define>
       <define name="ST_RelFromH">
-        <list>
           <choice>
             <!-- Page Margin -->
             <value>margin</value>
@@ -8086,7 +8001,6 @@
             <!-- Outside Margin -->
             <value>outsideMargin</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PosH">
         <choice>
@@ -8102,7 +8016,6 @@
         </attribute>
       </define>
       <define name="ST_AlignV">
-        <list>
           <choice>
             <!-- Top -->
             <value>top</value>
@@ -8115,10 +8028,8 @@
             <!-- Outside -->
             <value>outside</value>
           </choice>
-        </list>
       </define>
       <define name="ST_RelFromV">
-        <list>
           <choice>
             <!-- Page Margin -->
             <value>margin</value>
@@ -8137,7 +8048,6 @@
             <!-- Outside Margin -->
             <value>outsideMargin</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PosV">
         <choice>
@@ -8479,14 +8389,12 @@
         </attribute>
       </define>
       <define name="ST_OnOff">
-        <list>
           <choice>
             <!-- On -->
             <value>on</value>
             <!-- Off -->
             <value>off</value>
           </choice>
-        </list>
       </define>
       <define name="CT_OnOff">
         <attribute name="val">
@@ -8502,7 +8410,6 @@
         </attribute>
       </define>
       <define name="ST_XAlign">
-        <list>
           <choice>
             <!-- Left Justification -->
             <value>left</value>
@@ -8511,7 +8418,6 @@
             <!-- Right -->
             <value>right</value>
           </choice>
-        </list>
       </define>
       <define name="CT_XAlign">
         <attribute name="val">
@@ -8519,7 +8425,6 @@
         </attribute>
       </define>
       <define name="ST_YAlign">
-        <list>
           <choice>
             <!-- Top -->
             <value>top</value>
@@ -8528,7 +8433,6 @@
             <!-- Bottom Alignment -->
             <value>bot</value>
           </choice>
-        </list>
       </define>
       <define name="CT_YAlign">
         <attribute name="val">
@@ -8536,14 +8440,12 @@
         </attribute>
       </define>
       <define name="ST_Shp">
-        <list>
           <choice>
             <!-- Centered (Delimiters) -->
             <value>centered</value>
             <!-- Match -->
             <value>match</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Shp">
         <attribute name="val">
@@ -8551,7 +8453,6 @@
         </attribute>
       </define>
       <define name="ST_FType">
-        <list>
           <choice>
             <!-- Bar Fraction -->
             <value>bar</value>
@@ -8562,7 +8463,6 @@
             <!-- No-Bar Fraction (Stack) -->
             <value>noBar</value>
           </choice>
-        </list>
       </define>
       <define name="CT_FType">
         <attribute name="val">
@@ -8570,14 +8470,12 @@
         </attribute>
       </define>
       <define name="ST_LimLoc">
-        <list>
           <choice>
             <!-- Under-Over location -->
             <value>undOvr</value>
             <!-- Subscript-Superscript location -->
             <value>subSup</value>
           </choice>
-        </list>
       </define>
       <define name="CT_LimLoc">
         <attribute name="val">
@@ -8585,14 +8483,12 @@
         </attribute>
       </define>
       <define name="ST_TopBot">
-        <list>
           <choice>
             <!-- Top -->
             <value>top</value>
             <!-- Bottom Alignment -->
             <value>bot</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TopBot">
         <attribute name="val">
@@ -8600,7 +8496,6 @@
         </attribute>
       </define>
       <define name="ST_Script">
-        <list>
           <choice>
             <!-- Roman -->
             <value>roman</value>
@@ -8615,7 +8510,6 @@
             <!-- Monospace -->
             <value>monospace</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Script">
         <attribute name="val">
@@ -8623,7 +8517,6 @@
         </attribute>
       </define>
       <define name="ST_Style">
-        <list>
           <choice>
             <!-- Plain -->
             <value>p</value>
@@ -8634,7 +8527,6 @@
             <!-- Bold-Italic -->
             <value>bi</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Style">
         <attribute name="val">
@@ -9455,7 +9347,6 @@
         </optional>
       </define>
       <define name="ST_Jc">
-        <list>
           <choice>
             <!-- Align To Leading Edge -->
             <value>start</value>
@@ -9470,7 +9361,6 @@
             <!-- Centered as Group (Equations) -->
             <value>centerGroup</value>
           </choice>
-        </list>
       </define>
       <define name="CT_OMathJc">
         <attribute name="val">
@@ -9493,7 +9383,6 @@
         </attribute>
       </define>
       <define name="ST_BreakBin">
-        <list>
           <choice>
             <!-- Before -->
             <value>before</value>
@@ -9502,7 +9391,6 @@
             <!-- Repeat -->
             <value>repeat</value>
           </choice>
-        </list>
       </define>
       <define name="CT_BreakBin">
         <attribute name="val">
@@ -9510,7 +9398,6 @@
         </attribute>
       </define>
       <define name="ST_BreakBinSub">
-        <list>
           <choice>
             <!-- Minus Minus -->
             <value>--</value>
@@ -9519,7 +9406,6 @@
             <!-- Plus Minus -->
             <value>+-</value>
           </choice>
-        </list>
       </define>
       <define name="CT_BreakBinSub">
         <attribute name="val">
@@ -11103,7 +10989,6 @@
         </optional>
       </define>
       <define name="ST_Ext">
-        <list>
           <choice>
             <!-- Not renderable -->
             <value>view</value>
@@ -11112,10 +10997,8 @@
             <!-- Renderable -->
             <value>backwardCompatible</value>
           </choice>
-        </list>
       </define>
       <define name="ST_TrueFalse">
-        <list>
           <choice>
             <!-- True -->
             <value>t</value>
@@ -11126,13 +11009,11 @@
             <!-- False -->
             <value>false</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ColorType">
         <data type="string"/>
       </define>
       <define name="ST_FillType">
-        <list>
           <choice>
             <!-- Solid Fill -->
             <value>solid</value>
@@ -11147,10 +11028,8 @@
             <!-- Stretch Image to Fit -->
             <value>frame</value>
           </choice>
-        </list>
       </define>
       <define name="ST_FillMethod">
-        <list>
           <choice>
             <!-- No Gradient Fill -->
             <value>none</value>
@@ -11163,10 +11042,8 @@
             <!-- Linear Sigma Fill -->
             <value>linear sigma</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ShadowType">
-        <list>
           <choice>
             <!-- Single Shadow -->
             <value>single</value>
@@ -11177,10 +11054,8 @@
             <!-- Perspective Shadow -->
             <value>perspective</value>
           </choice>
-        </list>
       </define>
       <define name="ST_StrokeLineStyle">
-        <list>
           <choice>
             <!-- Single Line -->
             <value>single</value>
@@ -11193,10 +11068,8 @@
             <!-- Thck Line Between Thin Lines -->
             <value>thickBetweenThin</value>
           </choice>
-        </list>
       </define>
       <define name="ST_StrokeJoinStyle">
-        <list>
           <choice>
             <!-- Round Joint -->
             <value>round</value>
@@ -11205,10 +11078,8 @@
             <!-- Miter Joint -->
             <value>miter</value>
           </choice>
-        </list>
       </define>
       <define name="ST_StrokeEndCap">
-        <list>
           <choice>
             <!-- Flat End -->
             <value>flat</value>
@@ -11217,10 +11088,8 @@
             <!-- Round End -->
             <value>round</value>
           </choice>
-        </list>
       </define>
       <define name="ST_StrokeArrowLength">
-        <list>
           <choice>
             <!-- Short Arrowhead -->
             <value>short</value>
@@ -11229,10 +11098,8 @@
             <!-- Long Arrowhead -->
             <value>long</value>
           </choice>
-        </list>
       </define>
       <define name="ST_StrokeArrowWidth">
-        <list>
           <choice>
             <!-- Narrow Arrowhead -->
             <value>narrow</value>
@@ -11241,10 +11108,8 @@
             <!-- Wide Arrowhead -->
             <value>wide</value>
           </choice>
-        </list>
       </define>
       <define name="ST_StrokeArrowType">
-        <list>
           <choice>
             <!-- No Arrowhead -->
             <value>none</value>
@@ -11259,10 +11124,8 @@
             <!-- Open Arrowhead -->
             <value>open</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ImageAspect">
-        <list>
           <choice>
             <!-- Ignore Aspect Ratio -->
             <value>ignore</value>
@@ -11271,10 +11134,8 @@
             <!-- At Least -->
             <value>atLeast</value>
           </choice>
-        </list>
       </define>
       <define name="ST_TrueFalseBlank">
-        <list>
           <choice>
             <!-- Logical True -->
             <value>t</value>
@@ -11287,10 +11148,8 @@
             <!-- Blank - Logical False -->
             <value/>
           </choice>
-        </list>
       </define>
       <define name="ST_EditAs">
-        <list>
           <choice>
             <!-- Shape Canvas -->
             <value>canvas</value>
@@ -11307,7 +11166,6 @@
             <!-- Bullseye Diagram -->
             <value>bullseye</value>
           </choice>
-        </list>
       </define>
       <define name="BUILT_IN_ANY_TYPE">
         <zeroOrMore>
@@ -12575,7 +12433,6 @@
         </attribute>
       </define>
       <define name="ST_RType">
-        <list>
           <choice>
             <!-- Arc Rule -->
             <value>arc</value>
@@ -12586,10 +12443,8 @@
             <!-- Alignment Rule -->
             <value>align</value>
           </choice>
-        </list>
       </define>
       <define name="ST_How">
-        <list>
           <choice>
             <!-- Top Alignment -->
             <value>top</value>
@@ -12604,10 +12459,8 @@
             <!-- Right Alignment -->
             <value>right</value>
           </choice>
-        </list>
       </define>
       <define name="ST_BWMode">
-        <list>
           <choice>
             <!-- Color -->
             <value>color</value>
@@ -12634,10 +12487,8 @@
             <!-- Black Text And Lines -->
             <value>blackTextAndLines</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ScreenSize">
-        <list>
           <choice>
             <!-- 544x376 pixels -->
             <value>544,376</value>
@@ -12652,43 +12503,35 @@
             <!-- 1152x862 pixels -->
             <value>1152,862</value>
           </choice>
-        </list>
       </define>
       <define name="ST_InsetMode">
-        <list>
           <choice>
             <!-- Automatic Margins -->
             <value>auto</value>
             <!-- Custom Margins -->
             <value>custom</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ColorMode">
-        <list>
           <choice>
             <!-- Use Shape Fill Color -->
             <value>auto</value>
             <!-- Use Custom Color -->
             <value>custom</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ColorType">
         <data type="string"/>
       </define>
       <define name="ST_ExtrusionType">
-        <list>
           <choice>
             <!-- Perspective Projection -->
             <value>perspective</value>
             <!-- Parallel Projection -->
             <value>parallel</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ExtrusionRender">
-        <list>
           <choice>
             <!-- Solid -->
             <value>solid</value>
@@ -12697,10 +12540,8 @@
             <!-- Bounding Cube -->
             <value>boundingCube</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ExtrusionPlane">
-        <list>
           <choice>
             <!-- XY Plane -->
             <value>XY</value>
@@ -12709,10 +12550,8 @@
             <!-- YZ Plane -->
             <value>YZ</value>
           </choice>
-        </list>
       </define>
       <define name="ST_Angle">
-        <list>
           <choice>
             <!-- Any Angle -->
             <value>any</value>
@@ -12727,13 +12566,11 @@
             <!-- Automatic Angle -->
             <value>auto</value>
           </choice>
-        </list>
       </define>
       <define name="ST_CalloutDrop">
         <data type="string"/>
       </define>
       <define name="ST_CalloutPlacement">
-        <list>
           <choice>
             <!-- Top placement -->
             <value>top</value>
@@ -12744,10 +12581,8 @@
             <!-- User-defined placement -->
             <value>user</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ConnectorType">
-        <list>
           <choice>
             <!-- No Connector -->
             <value>none</value>
@@ -12758,10 +12593,8 @@
             <!-- Curved Connector -->
             <value>curved</value>
           </choice>
-        </list>
       </define>
       <define name="ST_HrAlign">
-        <list>
           <choice>
             <!-- Left Alignment -->
             <value>left</value>
@@ -12770,10 +12603,8 @@
             <!-- Center Alignment -->
             <value>center</value>
           </choice>
-        </list>
       </define>
       <define name="ST_ConnectType">
-        <list>
           <choice>
             <!-- No -->
             <value>none</value>
@@ -12784,10 +12615,8 @@
             <!-- Custom Connections -->
             <value>custom</value>
           </choice>
-        </list>
       </define>
       <define name="ST_OLELinkType">
-        <list>
           <choice>
             <!-- Other Image -->
             <value>Picture</value>
@@ -12796,37 +12625,30 @@
             <!-- Enhanced Metafile Image -->
             <value>EnhancedMetaFile</value>
           </choice>
-        </list>
       </define>
       <define name="ST_OLEType">
-        <list>
           <choice>
             <!-- Embedded Object -->
             <value>Embed</value>
             <!-- Linked Object -->
             <value>Link</value>
           </choice>
-        </list>
       </define>
       <define name="ST_OLEDrawAspect">
-        <list>
           <choice>
             <!-- Snapshot -->
             <value>Content</value>
             <!-- Icon -->
             <value>Icon</value>
           </choice>
-        </list>
       </define>
       <define name="ST_OLEUpdateMode">
-        <list>
           <choice>
             <!-- Server Application Update -->
             <value>Always</value>
             <!-- User Update -->
             <value>OnCall</value>
           </choice>
-        </list>
       </define>
       <define name="ST_Guid">
         <data type="token">
@@ -12837,7 +12659,6 @@
         <data type="string"/>
       </define>
       <define name="ST_TrueFalse">
-        <list>
           <choice>
             <!-- True -->
             <value>t</value>
@@ -12848,10 +12669,8 @@
             <!-- False -->
             <value>false</value>
           </choice>
-        </list>
       </define>
       <define name="ST_TrueFalseBlank">
-        <list>
           <choice>
             <!-- Blank - Logical False -->
             <value/>
@@ -12864,10 +12683,8 @@
             <!-- Logical False -->
             <value>false</value>
           </choice>
-        </list>
       </define>
       <define name="ST_FillType">
-        <list>
           <choice>
             <!-- Centered Radial Gradient -->
             <value>gradientCenter</value>
@@ -12888,7 +12705,6 @@
             <!-- Use Background Fill -->
             <value>background</value>
           </choice>
-        </list>
       </define>
       <define name="BUILT_IN_ANY_TYPE">
         <zeroOrMore>
@@ -13178,7 +12994,6 @@
         <empty/>
       </define>
       <define name="ST_BorderType">
-        <list>
           <choice>
             <!-- No Border -->
             <value>none</value>
@@ -13235,10 +13050,8 @@
             <!-- Inset Border -->
             <value>HTMLInset</value>
           </choice>
-        </list>
       </define>
       <define name="ST_BorderShadow">
-        <list>
           <choice>
             <!-- True -->
             <value>t</value>
@@ -13249,10 +13062,8 @@
             <!-- False -->
             <value>false</value>
           </choice>
-        </list>
       </define>
       <define name="ST_WrapType">
-        <list>
           <choice>
             <!-- Top and bottom wrapping -->
             <value>topAndBottom</value>
@@ -13265,10 +13076,8 @@
             <!-- Through wrapping -->
             <value>through</value>
           </choice>
-        </list>
       </define>
       <define name="ST_WrapSide">
-        <list>
           <choice>
             <!-- Both sides -->
             <value>both</value>
@@ -13279,10 +13088,8 @@
             <!-- Largest side -->
             <value>largest</value>
           </choice>
-        </list>
       </define>
       <define name="ST_HorizontalAnchor">
-        <list>
           <choice>
             <!-- Margin -->
             <value>margin</value>
@@ -13293,10 +13100,8 @@
             <!-- Character -->
             <value>char</value>
           </choice>
-        </list>
       </define>
       <define name="ST_VerticalAnchor">
-        <list>
           <choice>
             <!-- Margin -->
             <value>margin</value>
@@ -13307,7 +13112,6 @@
             <!-- Line -->
             <value>line</value>
           </choice>
-        </list>
       </define>
     </grammar>
     <resource name="wrap" resource="Properties">
@@ -13404,7 +13208,6 @@
         <empty/>
       </define>
       <define name="ST_OnOff">
-        <list>
           <choice>
             <!-- True -->
             <value>true</value>
@@ -13419,7 +13222,6 @@
             <!-- True -->
             <value>1</value>
           </choice>
-        </list>
       </define>
       <define name="CT_OnOff">
         <attribute name="val">
@@ -13546,7 +13348,6 @@
         </attribute>
       </define>
       <define name="ST_HighlightColor">
-        <list>
           <choice>
             <!-- Black Highlighting Color -->
             <value>black</value>
@@ -13583,7 +13384,6 @@
             <!-- No Text Highlighting -->
             <value>none</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Highlight">
         <attribute name="val">
@@ -13656,7 +13456,6 @@
         </attribute>
       </define>
       <define name="ST_Underline">
-        <list>
           <choice>
             <!-- Single Underline -->
             <value>single</value>
@@ -13695,7 +13494,6 @@
             <!-- No Underline -->
             <value>none</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Underline">
         <optional>
@@ -13725,7 +13523,6 @@
         </optional>
       </define>
       <define name="ST_TextEffect">
-        <list>
           <choice>
             <!-- Blinking Background Animation -->
             <value>blinkBackground</value>
@@ -13742,7 +13539,6 @@
             <!-- No Animation -->
             <value>none</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TextEffect">
         <attribute name="val">
@@ -13750,7 +13546,6 @@
         </attribute>
       </define>
       <define name="ST_Border">
-        <list>
           <choice>
             <!-- No Border -->
             <value>nil</value>
@@ -14135,7 +13930,6 @@
             <!-- Zigzag stitch -->
             <value>zigZagStitch</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Border">
         <attribute name="val">
@@ -14183,7 +13977,6 @@
         </optional>
       </define>
       <define name="ST_Shd">
-        <list>
           <choice>
             <!-- No Pattern -->
             <value>nil</value>
@@ -14262,7 +14055,6 @@
             <!-- 95% Fill Pattern -->
             <value>pct95</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Shd">
         <attribute name="val">
@@ -14310,7 +14102,6 @@
         </optional>
       </define>
       <define name="ST_VerticalAlignRun">
-        <list>
           <choice>
             <!-- Regular Vertical Positioning -->
             <value>baseline</value>
@@ -14319,7 +14110,6 @@
             <!-- Subscript -->
             <value>subscript</value>
           </choice>
-        </list>
       </define>
       <define name="CT_VerticalAlignRun">
         <attribute name="val">
@@ -14337,7 +14127,6 @@
         </optional>
       </define>
       <define name="ST_Em">
-        <list>
           <choice>
             <!-- No Emphasis Mark -->
             <value>none</value>
@@ -14350,7 +14139,6 @@
             <!-- Dot Emphasis Mark Below Characters -->
             <value>underDot</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Em">
         <attribute name="val">
@@ -14375,7 +14163,6 @@
         </optional>
       </define>
       <define name="ST_CombineBrackets">
-        <list>
           <choice>
             <!-- No Enclosing Brackets -->
             <value>none</value>
@@ -14388,7 +14175,6 @@
             <!-- Curly Brackets -->
             <value>curly</value>
           </choice>
-        </list>
       </define>
       <define name="CT_EastAsianLayout">
         <optional>
@@ -14418,7 +14204,6 @@
         </optional>
       </define>
       <define name="ST_XAlign">
-        <list>
           <choice>
             <!-- Left Aligned Horizontally -->
             <value>left</value>
@@ -14431,10 +14216,8 @@
             <!-- Outside -->
             <value>outside</value>
           </choice>
-        </list>
       </define>
       <define name="ST_YAlign">
-        <list>
           <choice>
             <!-- In line With Text -->
             <value>inline</value>
@@ -14449,10 +14232,8 @@
             <!-- Outside Anchor Extents -->
             <value>outside</value>
           </choice>
-        </list>
       </define>
       <define name="ST_HeightRule">
-        <list>
           <choice>
             <!-- Determine Height Based On Contents -->
             <value>auto</value>
@@ -14461,10 +14242,8 @@
             <!-- Minimum Height -->
             <value>atLeast</value>
           </choice>
-        </list>
       </define>
       <define name="ST_Wrap">
-        <list>
           <choice>
             <!-- Default Text Wrapping Around Frame -->
             <value>auto</value>
@@ -14479,10 +14258,8 @@
             <!-- No Text Wrapping Around Frame -->
             <value>none</value>
           </choice>
-        </list>
       </define>
       <define name="ST_VAnchor">
-        <list>
           <choice>
             <!-- Relative To Vertical Text Extents -->
             <value>text</value>
@@ -14491,10 +14268,8 @@
             <!-- Relative To Page -->
             <value>page</value>
           </choice>
-        </list>
       </define>
       <define name="ST_HAnchor">
-        <list>
           <choice>
             <!-- Relative to Text Extents -->
             <value>text</value>
@@ -14503,10 +14278,8 @@
             <!-- Relative to Page -->
             <value>page</value>
           </choice>
-        </list>
       </define>
       <define name="ST_DropCap">
-        <list>
           <choice>
             <!-- Not Drop Cap -->
             <value>none</value>
@@ -14515,7 +14288,6 @@
             <!-- Drop Cap Outside Margin -->
             <value>margin</value>
           </choice>
-        </list>
       </define>
       <define name="CT_FramePr">
         <optional>
@@ -14595,7 +14367,6 @@
         </optional>
       </define>
       <define name="ST_TabJc">
-        <list>
           <choice>
             <!-- No Tab Stop -->
             <value>clear</value>
@@ -14616,10 +14387,8 @@
             <!-- List Tab -->
             <value>num</value>
           </choice>
-        </list>
       </define>
       <define name="ST_TabTlc">
-        <list>
           <choice>
             <!-- No tab stop leader -->
             <value>none</value>
@@ -14634,7 +14403,6 @@
             <!-- Middle dot leader line -->
             <value>middleDot</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TabStop">
         <attribute name="val">
@@ -14650,7 +14418,6 @@
         </attribute>
       </define>
       <define name="ST_LineSpacingRule">
-        <list>
           <choice>
             <!-- Automatically Determined Line Height -->
             <value>auto</value>
@@ -14659,7 +14426,6 @@
             <!-- Minimum Line Height -->
             <value>atLeast</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Spacing">
         <optional>
@@ -14766,7 +14532,6 @@
         </optional>
       </define>
       <define name="ST_Jc">
-        <list>
           <choice>
             <!-- Align To Leading Edge -->
             <value>start</value>
@@ -14793,7 +14558,6 @@
             <!-- Thai Language Justification -->
             <value>thaiDistribute</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Jc">
         <attribute name="val">
@@ -14801,7 +14565,6 @@
         </attribute>
       </define>
       <define name="ST_View">
-        <list>
           <choice>
             <!-- Default View -->
             <value>none</value>
@@ -14816,7 +14579,6 @@
             <!-- Web Page View -->
             <value>web</value>
           </choice>
-        </list>
       </define>
       <define name="CT_View">
         <attribute name="val">
@@ -14824,7 +14586,6 @@
         </attribute>
       </define>
       <define name="ST_Zoom">
-        <list>
           <choice>
             <!-- No Preset Magnification -->
             <value>none</value>
@@ -14835,7 +14596,6 @@
             <!-- Display Text Width -->
             <value>textFit</value>
           </choice>
-        </list>
       </define>
       <define name="ST_Percentage">
         <data type="int"/>
@@ -14873,14 +14633,12 @@
         </attribute>
       </define>
       <define name="ST_Proof">
-        <list>
           <choice>
             <!-- Check Completed -->
             <value>clean</value>
             <!-- Check Not Completed -->
             <value>dirty</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Proof">
         <optional>
@@ -14895,7 +14653,6 @@
         </optional>
       </define>
       <define name="ST_DocType">
-        <list>
           <choice>
             <!-- Default Document -->
             <value>notSpecified</value>
@@ -14904,7 +14661,6 @@
             <!-- E-Mail Message -->
             <value>eMail</value>
           </choice>
-        </list>
       </define>
       <define name="CT_DocType">
         <attribute name="val">
@@ -14912,7 +14668,6 @@
         </attribute>
       </define>
       <define name="ST_DocProtect">
-        <list>
           <choice>
             <!-- No Editing Restrictions -->
             <value>none</value>
@@ -14925,17 +14680,14 @@
             <!-- Allow Editing of Form Fields -->
             <value>forms</value>
           </choice>
-        </list>
       </define>
       <define name="ST_CryptProv">
-        <list>
           <choice>
             <!-- AES Provider -->
             <value>rsaAES</value>
             <!-- Any Provider -->
             <value>rsaFull</value>
           </choice>
-        </list>
       </define>
       <define name="ST_AlgClass">
         <list>
@@ -15004,7 +14756,6 @@
         <ref name="AG_Password"/>
       </define>
       <define name="ST_MailMergeDocType">
-        <list>
           <choice>
             <!-- Catalog Source Document -->
             <value>catalog</value>
@@ -15019,7 +14770,6 @@
             <!-- Fax Source Document -->
             <value>fax</value>
           </choice>
-        </list>
       </define>
       <define name="CT_MailMergeDocType">
         <attribute name="val">
@@ -15027,7 +14777,6 @@
         </attribute>
       </define>
       <define name="ST_MailMergeDataType">
-        <list>
           <choice>
             <!-- Text File Data Source -->
             <value>textFile</value>
@@ -15042,7 +14791,6 @@
             <!-- Office Data Source Object Data Source -->
             <value>native</value>
           </choice>
-        </list>
       </define>
       <define name="CT_MailMergeDataType">
         <attribute name="val">
@@ -15050,7 +14798,6 @@
         </attribute>
       </define>
       <define name="ST_MailMergeDest">
-        <list>
           <choice>
             <!-- Send Merged Documents to New Documents -->
             <value>newDocument</value>
@@ -15061,7 +14808,6 @@
             <!-- Send Merged Documents as Faxes -->
             <value>fax</value>
           </choice>
-        </list>
       </define>
       <define name="CT_MailMergeDest">
         <attribute name="val">
@@ -15069,14 +14815,12 @@
         </attribute>
       </define>
       <define name="ST_MailMergeOdsoFMDFieldType">
-        <list>
           <choice>
             <!-- Field Not Mapped -->
             <value>null</value>
             <!-- Field Mapping to Data Source Column -->
             <value>dbColumn</value>
           </choice>
-        </list>
       </define>
       <define name="CT_MailMergeOdsoFMDFieldType">
         <attribute name="val">
@@ -15119,7 +14863,6 @@
         </attribute>
       </define>
       <define name="ST_TextDirection">
-        <list>
           <choice>
             <!-- Left to Right, Top to Bottom -->
             <value>lrTb</value>
@@ -15134,7 +14877,6 @@
             <!-- Top to Bottom, Left to Right Rotated -->
             <value>tbLrV</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TextDirection">
         <attribute name="val">
@@ -15142,7 +14884,6 @@
         </attribute>
       </define>
       <define name="ST_TextAlignment">
-        <list>
           <choice>
             <!-- Align Text at Top -->
             <value>top</value>
@@ -15155,7 +14896,6 @@
             <!-- Automatically Determine Alignment -->
             <value>auto</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TextAlignment">
         <attribute name="val">
@@ -15163,24 +14903,20 @@
         </attribute>
       </define>
       <define name="ST_DisplacedByCustomXml">
-        <list>
           <choice>
             <!-- Displaced by Next Custom XML Markup Tag -->
             <value>next</value>
             <!-- Displaced by Previous Custom XML Markup Tag -->
             <value>prev</value>
           </choice>
-        </list>
       </define>
       <define name="ST_AnnotationVMerge">
-        <list>
           <choice>
             <!-- Vertically Merged Cell -->
             <value>cont</value>
             <!-- Vertically Split Cell -->
             <value>rest</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Markup">
         <attribute name="id">
@@ -15487,7 +15223,6 @@
         </oneOrMore>
       </define>
       <define name="ST_TextboxTightWrap">
-        <list>
           <choice>
             <!-- Do Not Tight Wrap -->
             <value>none</value>
@@ -15500,7 +15235,6 @@
             <!-- Tight Wrap Last Line -->
             <value>lastLineOnly</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TextboxTightWrap">
         <attribute name="val">
@@ -15821,7 +15555,6 @@
         </attribute>
       </define>
       <define name="ST_FldCharType">
-        <list>
           <choice>
             <!-- Start Character -->
             <value>begin</value>
@@ -15830,17 +15563,14 @@
             <!-- End Character -->
             <value>end</value>
           </choice>
-        </list>
       </define>
       <define name="ST_InfoTextType">
-        <list>
           <choice>
             <!-- Literal Text -->
             <value>text</value>
             <!-- Glossary Document Entry -->
             <value>autoText</value>
           </choice>
-        </list>
       </define>
       <define name="ST_FFHelpTextVal">
         <data type="string">
@@ -15858,7 +15588,6 @@
         </data>
       </define>
       <define name="ST_FFTextType">
-        <list>
           <choice>
             <!-- Text Box -->
             <value>regular</value>
@@ -15873,7 +15602,6 @@
             <!-- Field Calculation -->
             <value>calculated</value>
           </choice>
-        </list>
       </define>
       <define name="CT_FFTextType">
         <attribute name="val">
@@ -16071,7 +15799,6 @@
         </optional>
       </define>
       <define name="ST_SectionMark">
-        <list>
           <choice>
             <!-- Next Page Section Break -->
             <value>nextPage</value>
@@ -16084,7 +15811,6 @@
             <!-- Odd Page Section Break -->
             <value>oddPage</value>
           </choice>
-        </list>
       </define>
       <define name="CT_SectType">
         <attribute name="val">
@@ -16100,7 +15826,6 @@
         </attribute>
       </define>
       <define name="ST_NumberFormat">
-        <list>
           <choice>
             <!-- Decimal Numbers -->
             <value>decimal</value>
@@ -16223,17 +15948,14 @@
             <!-- Thai Counting System -->
             <value>thaiCounting</value>
           </choice>
-        </list>
       </define>
       <define name="ST_PageOrientation">
-        <list>
           <choice>
             <!-- Portrait Mode -->
             <value>portrait</value>
             <!-- Landscape Mode -->
             <value>landscape</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PageSz">
         <optional>
@@ -16279,17 +16001,14 @@
         </attribute>
       </define>
       <define name="ST_PageBorderZOrder">
-        <list>
           <choice>
             <!-- Page Border Ahead of Text -->
             <value>front</value>
             <!-- Page Border Behind Text -->
             <value>back</value>
           </choice>
-        </list>
       </define>
       <define name="ST_PageBorderDisplay">
-        <list>
           <choice>
             <!-- Display Page Border on All Pages -->
             <value>allPages</value>
@@ -16298,17 +16017,14 @@
             <!-- Display Page Border on All Pages Except First -->
             <value>notFirstPage</value>
           </choice>
-        </list>
       </define>
       <define name="ST_PageBorderOffset">
-        <list>
           <choice>
             <!-- Page Border Is Positioned Relative to Page Edges -->
             <value>page</value>
             <!-- Page Border Is Positioned Relative to Text Extents -->
             <value>text</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PageBorders">
         <group>
@@ -16350,7 +16066,6 @@
         </optional>
       </define>
       <define name="ST_ChapterSep">
-        <list>
           <choice>
             <!-- Hyphen Chapter Separator -->
             <value>hyphen</value>
@@ -16363,10 +16078,8 @@
             <!-- En Dash Chapter Separator -->
             <value>enDash</value>
           </choice>
-        </list>
       </define>
       <define name="ST_LineNumberRestart">
-        <list>
           <choice>
             <!-- Restart Line Numbering on Each Page -->
             <value>newPage</value>
@@ -16375,7 +16088,6 @@
             <!-- Continue Line Numbering From Previous Section -->
             <value>continuous</value>
           </choice>
-        </list>
       </define>
       <define name="CT_LineNumber">
         <optional>
@@ -16461,7 +16173,6 @@
         </optional>
       </define>
       <define name="ST_VerticalJc">
-        <list>
           <choice>
             <!-- Align Top -->
             <value>top</value>
@@ -16472,7 +16183,6 @@
             <!-- Align Bottom -->
             <value>bottom</value>
           </choice>
-        </list>
       </define>
       <define name="CT_VerticalJc">
         <attribute name="val">
@@ -16480,7 +16190,6 @@
         </attribute>
       </define>
       <define name="ST_DocGrid">
-        <list>
           <choice>
             <!-- No Document Grid -->
             <value>default</value>
@@ -16491,7 +16200,6 @@
             <!-- Character Grid Only -->
             <value>snapToChars</value>
           </choice>
-        </list>
       </define>
       <define name="CT_DocGrid">
         <attribute name="type">
@@ -16505,7 +16213,6 @@
         </attribute>
       </define>
       <define name="ST_HdrFtr">
-        <list>
           <choice>
             <!-- Even Numbered Pages Only -->
             <value>even</value>
@@ -16514,10 +16221,8 @@
             <!-- First Page Only -->
             <value>first</value>
           </choice>
-        </list>
       </define>
       <define name="ST_FtnEdn">
-        <list>
           <choice>
             <!-- Normal Footnote/Endnote -->
             <value>normal</value>
@@ -16528,7 +16233,6 @@
             <!-- Continuation Notice Separator -->
             <value>continuationNotice</value>
           </choice>
-        </list>
       </define>
       <define name="CT_HdrFtrRef">
         <attribute name="type">
@@ -16693,7 +16397,6 @@
         <ref name="AG_SectPrAttributes"/>
       </define>
       <define name="ST_BrType">
-        <list>
           <choice>
             <!-- Page Break -->
             <value>page</value>
@@ -16702,10 +16405,8 @@
             <!-- Line Break -->
             <value>textWrapping</value>
           </choice>
-        </list>
       </define>
       <define name="ST_BrClear">
-        <list>
           <choice>
             <!-- Restart On Next Line -->
             <value>none</value>
@@ -16716,7 +16417,6 @@
             <!-- Restart On Next Full Line -->
             <value>all</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Br">
         <optional>
@@ -16731,7 +16431,6 @@
         </optional>
       </define>
       <define name="ST_PTabAlignment">
-        <list>
           <choice>
             <!-- Left -->
             <value>left</value>
@@ -16740,20 +16439,16 @@
             <!-- Right -->
             <value>right</value>
           </choice>
-        </list>
       </define>
       <define name="ST_PTabRelativeTo">
-        <list>
           <choice>
             <!-- Relative To Text Margins -->
             <value>margin</value>
             <!-- Relative To Indents -->
             <value>indent</value>
           </choice>
-        </list>
       </define>
       <define name="ST_PTabLeader">
-        <list>
           <choice>
             <!-- No Leader Character -->
             <value>none</value>
@@ -16766,7 +16461,6 @@
             <!-- Centered Dot Leader Character -->
             <value>middleDot</value>
           </choice>
-        </list>
       </define>
       <define name="CT_PTab">
         <attribute name="alignment">
@@ -16788,7 +16482,6 @@
         </attribute>
       </define>
       <define name="ST_ProofErr">
-        <list>
           <choice>
             <!-- Start of Region Marked as Spelling Error -->
             <value>spellStart</value>
@@ -16799,7 +16492,6 @@
             <!-- End of Region Marked as Grammatical Error -->
             <value>gramEnd</value>
           </choice>
-        </list>
       </define>
       <define name="CT_ProofErr">
         <attribute name="type">
@@ -16807,7 +16499,6 @@
         </attribute>
       </define>
       <define name="ST_EdGrp">
-        <list>
           <choice>
             <!-- No Users Have Editing Permissions -->
             <value>none</value>
@@ -16824,7 +16515,6 @@
             <!-- Current Group -->
             <value>current</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Perm">
         <attribute name="id">
@@ -17041,7 +16731,6 @@
         </attribute>
       </define>
       <define name="ST_Hint">
-        <list>
           <choice>
             <!-- High ANSI Font -->
             <value>default</value>
@@ -17050,10 +16739,8 @@
             <!-- Complex Script Font -->
             <value>cs</value>
           </choice>
-        </list>
       </define>
       <define name="ST_Theme">
-        <list>
           <choice>
             <!-- Major East Asian Theme Font -->
             <value>majorEastAsia</value>
@@ -17072,7 +16759,6 @@
             <!-- Minor High ANSI Theme Font -->
             <value>minorHAnsi</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Fonts">
         <attribute name="hint">
@@ -17464,7 +17150,6 @@
         </optional>
       </define>
       <define name="ST_RubyAlign">
-        <list>
           <choice>
             <!-- Center -->
             <value>center</value>
@@ -17479,7 +17164,6 @@
             <!-- Vertically Aligned to Right of Base Text -->
             <value>rightVertical</value>
           </choice>
-        </list>
       </define>
       <define name="CT_RubyAlign">
         <attribute name="val">
@@ -17535,7 +17219,6 @@
         </element>
       </define>
       <define name="ST_Lock">
-        <list>
           <choice>
             <!-- SDT Cannot Be Deleted -->
             <value>sdtLocked</value>
@@ -17546,7 +17229,6 @@
             <!-- Contents Cannot Be Edited At Runtime And SDT Cannot Be Deleted -->
             <value>sdtContentLocked</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Lock">
         <attribute name="val">
@@ -17562,7 +17244,6 @@
         </attribute>
       </define>
       <define name="ST_SdtDateMappingType">
-        <list>
           <choice>
             <!-- Same As Display -->
             <value>text</value>
@@ -17571,7 +17252,6 @@
             <!-- XML Schema DateTime Format -->
             <value>dateTime</value>
           </choice>
-        </list>
       </define>
       <define name="CT_SdtDateMappingType">
         <attribute name="val">
@@ -17579,7 +17259,6 @@
         </attribute>
       </define>
       <define name="ST_CalendarType">
-        <list>
           <choice>
             <!-- Gregorian -->
             <value>gregorian</value>
@@ -17602,7 +17281,6 @@
             <!-- Gregorian transliterated French -->
             <value>gregorianXlitFrench</value>
           </choice>
-        </list>
       </define>
       <define name="CT_CalendarType">
         <attribute name="val">
@@ -18123,7 +17801,6 @@
         </attribute>
       </define>
       <define name="ST_TblWidth">
-        <list>
           <choice>
             <!-- No Width -->
             <value>nil</value>
@@ -18134,7 +17811,6 @@
             <!-- Automatically Determined Width -->
             <value>auto</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Height">
         <attribute name="val">
@@ -18257,14 +17933,12 @@
         </optional>
       </define>
       <define name="ST_Merge">
-        <list>
           <choice>
             <!-- Continue Merged Region -->
             <value>continue</value>
             <!-- Start/Restart Merged Region -->
             <value>restart</value>
           </choice>
-        </list>
       </define>
       <define name="CT_VMerge">
         <attribute name="val">
@@ -18499,14 +18173,12 @@
         </attribute>
       </define>
       <define name="ST_TblLayout">
-        <list>
           <choice>
             <!-- Fixed Width Table Layout -->
             <value>fixed</value>
             <!-- AutoFit Table Layout -->
             <value>autofit</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TblLayoutType">
         <attribute name="type">
@@ -18514,14 +18186,12 @@
         </attribute>
       </define>
       <define name="ST_TblOverlap">
-        <list>
           <choice>
             <!-- Floating Table Cannot Overlap -->
             <value>never</value>
             <!-- Floating Table Can Overlap -->
             <value>overlap</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TblOverlap">
         <attribute name="val">
@@ -18789,7 +18459,6 @@
         </zeroOrMore>
       </define>
       <define name="ST_FtnPos">
-        <list>
           <choice>
             <!-- Footnotes Positioned at Page Bottom -->
             <value>pageBottom</value>
@@ -18800,7 +18469,6 @@
             <!-- Footnotes Positioned At End of Document -->
             <value>docEnd</value>
           </choice>
-        </list>
       </define>
       <define name="CT_FtnPos">
         <attribute name="val">
@@ -18808,14 +18476,12 @@
         </attribute>
       </define>
       <define name="ST_EdnPos">
-        <list>
           <choice>
             <!-- Endnotes Positioned at End of Section -->
             <value>sectEnd</value>
             <!-- Endnotes Positioned at End of Document -->
             <value>docEnd</value>
           </choice>
-        </list>
       </define>
       <define name="CT_EdnPos">
         <attribute name="val">
@@ -18828,7 +18494,6 @@
         </attribute>
       </define>
       <define name="ST_RestartNumber">
-        <list>
           <choice>
             <!-- Continue Numbering From Previous Section -->
             <value>continuous</value>
@@ -18837,7 +18502,6 @@
             <!-- Restart Numbering On Each Page -->
             <value>eachPage</value>
           </choice>
-        </list>
       </define>
       <define name="CT_NumRestart">
         <attribute name="val">
@@ -18991,7 +18655,6 @@
         </optional>
       </define>
       <define name="ST_MailMergeSourceType">
-        <list>
           <choice>
             <!-- Database Data Source -->
             <value>database</value>
@@ -19012,7 +18675,6 @@
             <!-- Aggregate Data Source -->
             <value>master</value>
           </choice>
-        </list>
       </define>
       <define name="CT_MailMergeSourceType">
         <attribute name="val">
@@ -19140,7 +18802,6 @@
         </optional>
       </define>
       <define name="ST_TargetScreenSz">
-        <list>
           <choice>
             <!-- Optimize for 544x376 -->
             <value>544x376</value>
@@ -19165,7 +18826,6 @@
             <!-- Optimize for 1920x1200 -->
             <value>1920x1200</value>
           </choice>
-        </list>
       </define>
       <define name="CT_TargetScreenSz">
         <attribute name="val">
@@ -19543,7 +19203,6 @@
         </zeroOrMore>
       </define>
       <define name="ST_CharacterSpacing">
-        <list>
           <choice>
             <!-- Do Not Compress Whitespace -->
             <value>doNotCompress</value>
@@ -19552,7 +19211,6 @@
             <!-- Compress Whitespace From Both Japanese Kana And Punctuation Characters -->
             <value>compressPunctuationAndJapaneseKana</value>
           </choice>
-        </list>
       </define>
       <define name="CT_CharacterSpacing">
         <attribute name="val">
@@ -19598,7 +19256,6 @@
         </optional>
       </define>
       <define name="ST_ColorSchemeIndex">
-        <list>
           <choice>
             <!-- Dark 1 Theme Color Reference -->
             <value>dark1</value>
@@ -19625,7 +19282,6 @@
             <!-- Followed Hyperlink Theme Color Reference -->
             <value>followedHyperlink</value>
           </choice>
-        </list>
       </define>
       <define name="CT_ColorSchemeMapping">
         <attribute name="bg1">
@@ -20253,7 +19909,6 @@
         </optional>
       </define>
       <define name="ST_FrameScrollbar">
-        <list>
           <choice>
             <!-- Always Show Scrollbar -->
             <value>on</value>
@@ -20262,7 +19917,6 @@
             <!-- Automatically Show Scrollbar As Needed -->
             <value>auto</value>
           </choice>
-        </list>
       </define>
       <define name="CT_FrameScrollbar">
         <attribute name="val">
@@ -20312,7 +19966,6 @@
         </optional>
       </define>
       <define name="ST_FrameLayout">
-        <list>
           <choice>
             <!-- Stack Frames Vertically -->
             <value>rows</value>
@@ -20321,7 +19974,6 @@
             <!-- Do Not Stack Frames -->
             <value>none</value>
           </choice>
-        </list>
       </define>
       <define name="CT_FrameLayout">
         <attribute name="val">
@@ -20390,7 +20042,6 @@
         </attribute>
       </define>
       <define name="ST_LevelSuffix">
-        <list>
           <choice>
             <!-- Tab Between Numbering and Text -->
             <value>tab</value>
@@ -20399,7 +20050,6 @@
             <!-- Nothing Between Numbering and Text -->
             <value>nothing</value>
           </choice>
-        </list>
       </define>
       <define name="CT_LevelSuffix">
         <attribute name="val">
@@ -20513,7 +20163,6 @@
         </optional>
       </define>
       <define name="ST_MultiLevelType">
-        <list>
           <choice>
             <!-- Single Level Numbering Definition -->
             <value>singleLevel</value>
@@ -20522,7 +20171,6 @@
             <!-- Hybrid Multilevel Numbering Definition -->
             <value>hybridMultilevel</value>
           </choice>
-        </list>
       </define>
       <define name="CT_MultiLevelType">
         <attribute name="val">
@@ -20626,7 +20274,6 @@
         </optional>
       </define>
       <define name="ST_TblStyleOverrideType">
-        <list>
           <choice>
             <!-- Whole table formatting -->
             <value>wholeTable</value>
@@ -20655,7 +20302,6 @@
             <!-- Bottom left table cell formatting -->
             <value>swCell</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Style_tblStylePr">
         <group>
@@ -20699,7 +20345,6 @@
         <ref name="CT_TcPrBase"/>
       </define>
       <define name="ST_StyleType">
-        <list>
           <choice>
             <!-- Paragraph Style -->
             <value>paragraph</value>
@@ -20710,7 +20355,6 @@
             <!-- Numbering Style -->
             <value>numbering</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Style">
         <group>
@@ -20919,7 +20563,6 @@
         </attribute>
       </define>
       <define name="ST_FontFamily">
-        <list>
           <choice>
             <!-- Novelty Font -->
             <value>decorative</value>
@@ -20934,7 +20577,6 @@
             <!-- No Font Family -->
             <value>auto</value>
           </choice>
-        </list>
       </define>
       <define name="CT_FontFamily">
         <attribute name="val">
@@ -20942,7 +20584,6 @@
         </attribute>
       </define>
       <define name="ST_Pitch">
-        <list>
           <choice>
             <!-- Fixed Width -->
             <value>fixed</value>
@@ -20951,7 +20592,6 @@
             <!-- Default -->
             <value>default</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Pitch">
         <attribute name="val">
@@ -21293,7 +20933,6 @@
         </attribute>
       </define>
       <define name="ST_ThemeColor">
-        <list>
           <choice>
             <!-- Dark 1 Theme Color -->
             <value>dark1</value>
@@ -21330,10 +20969,8 @@
             <!-- Text 2 Theme Color -->
             <value>text2</value>
           </choice>
-        </list>
       </define>
       <define name="ST_DocPartBehavior">
-        <list>
           <choice>
             <!-- Insert Content At Specified Location -->
             <value>content</value>
@@ -21342,7 +20979,6 @@
             <!-- Ensure Entry Is On New Page -->
             <value>pg</value>
           </choice>
-        </list>
       </define>
       <define name="CT_DocPartBehavior">
         <attribute name="val">
@@ -21357,7 +20993,6 @@
         </oneOrMore>
       </define>
       <define name="ST_DocPartType">
-        <list>
           <choice>
             <!-- No Type -->
             <value>none</value>
@@ -21374,7 +21009,6 @@
             <!-- Structured Document Tag Placeholder Text -->
             <value>bbPlcHdr</value>
           </choice>
-        </list>
       </define>
       <define name="CT_DocPartType">
         <attribute name="val">
@@ -21394,7 +21028,6 @@
         </optional>
       </define>
       <define name="ST_DocPartGallery">
-        <list>
           <choice>
             <!-- Structured Document Tag Placeholder Text Gallery -->
             <value>placeholder</value>
@@ -21473,7 +21106,6 @@
             <!-- Custom 5 Gallery -->
             <value>custom5</value>
           </choice>
-        </list>
       </define>
       <define name="CT_DocPartGallery">
         <attribute name="val">
@@ -21570,7 +21202,6 @@
         </element>
       </define>
       <define name="ST_CaptionPos">
-        <list>
           <choice>
             <!-- Position Caption Above Object -->
             <value>above</value>
@@ -21581,7 +21212,6 @@
             <!-- Position Caption Right Of Object -->
             <value>right</value>
           </choice>
-        </list>
       </define>
       <define name="CT_Caption">
         <attribute name="name">
