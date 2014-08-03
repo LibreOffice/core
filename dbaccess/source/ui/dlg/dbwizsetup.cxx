@@ -20,7 +20,6 @@
 #include "dbwizsetup.hxx"
 #include "dsmeta.hxx"
 #include "DBSetupConnectionPages.hxx"
-#include "dbadminsetup.hrc"
 #include "dbu_dlg.hrc"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"

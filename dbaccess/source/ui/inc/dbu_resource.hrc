@@ -113,7 +113,6 @@
 #define PAGE_TABLESUBSCRIPTION          RID_PAGE_START + 28
 
     // FREE
-#define PAGE_DBWIZARD_MYSQL_NATIVE              RID_PAGE_START + 57
 
 // error boxes
 
@@ -188,7 +187,6 @@
 // controls
 
 #define RID_DB_TAB_EDITOR               RID_CONTROL_START +  0
-#define RID_MYSQL_NATIVE_SETTINGS       RID_CONTROL_START +  1
 
 // strings
 #define STR_TBL_TITLE                       RID_STR_GEN_START

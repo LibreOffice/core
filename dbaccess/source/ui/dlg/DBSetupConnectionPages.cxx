@@ -23,7 +23,6 @@
 #include "sqlmessage.hxx"
 #include "dbu_resource.hrc"
 #include "AutoControls.hrc"
-#include "dbadminsetup.hrc"
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -291,18 +290,13 @@ using namespace ::com::sun::star;
 
     // MySQLNativeSetupPage
     MySQLNativeSetupPage::MySQLNativeSetupPage( Window* _pParent, const SfxItemSet& _rCoreAttrs )
-        :OGenericAdministrationPage( _pParent, ModuleRes( PAGE_DBWIZARD_MYSQL_NATIVE ), _rCoreAttrs )
-        ,m_aHeader              ( this, ModuleRes( FT_SETUP_WIZARD_HEADER ) )
-        ,m_aHelpText            ( this, ModuleRes( FT_SETUP_WIZARD_HELP ) )
-        ,m_aMySQLSettings       ( *this, getControlModifiedLink() )
+        :OGenericAdministrationPage( _pParent, "DBWizMysqlNativePage", "dbaccess/ui/dbwizmysqlnativepage.ui", _rCoreAttrs )
+        ,m_aMySQLSettings       ( *get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink() )
     {
-        SetControlFontWeight( &m_aHeader );
-
-        LayoutHelper::positionBelow( m_aHelpText, m_aMySQLSettings, UnrelatedControls, 0 );
+        get(m_pHelpText, "helptext");
         m_aMySQLSettings.Show();
 
         SetRoadmapStateValue(false);
-        FreeResource();
     }
 
     OGenericAdministrationPage* MySQLNativeSetupPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
@@ -317,7 +311,7 @@ using namespace ::com::sun::star;
 
     void MySQLNativeSetupPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
-        _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aHelpText ) );
+        _rControlList.push_back( new ODisableWrapper< FixedText >( m_pHelpText ) );
         m_aMySQLSettings.fillWindows( _rControlList );
     }
 

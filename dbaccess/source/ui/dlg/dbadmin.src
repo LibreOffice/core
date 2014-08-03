@@ -22,7 +22,6 @@
 #include "dbu_dlg.hrc"
 #include "dbadmin.hrc"
 #include "browserids.hxx"
-#include "admincontrols.hrc"
 
 #define AUTO_USECATALOG(AUTO_Y)                                 \
     CheckBox CB_USECATALOG                                      \
@@ -216,47 +215,6 @@ TabPage PAGE_MYSQL_JDBC
     };
 
     AUTO_CHARSET( 5*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT+ EDIT_HEIGHT, PAGE_X )
-};
-
-TabPage PAGE_MYSQL_NATIVE
-{
-    HelpID = "dbaccess:TabPage:PAGE_MYSQL_NATIVE";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    Hide = TRUE;
-
-    AUTO_FIXEDLINE_CONNSETTINGS( UNRELATED_CONTROLS )
-
-    FixedLine FL_SEPARATOR2
-    {
-        Pos = MAP_APPFONT ( 3 , 4*UNRELATED_CONTROLS + 3*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + 3*EDIT_HEIGHT ) ;
-        Size = MAP_APPFONT ( PAGE_X - 6, FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "User authentication";
-    };
-    FixedText FT_USERNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 3*EDIT_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 6 - RELATED_CONTROLS, FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "~User name" ;
-    };
-    Edit ET_USERNAME
-    {
-        HelpID = "dbaccess:Edit:PAGE_MYSQL_NATIVE:ET_USERNAME";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( EDIT_X, 4*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 3*EDIT_HEIGHT - 1 ) ;
-        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    CheckBox CB_PASSWORD_REQUIRED
-    {
-        HelpID = "dbaccess:CheckBox:PAGE_MYSQL_NATIVE:CB_PASSWORD_REQUIRED";
-        Pos = MAP_APPFONT ( EDIT_X, 4*UNRELATED_CONTROLS + 5*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 4*EDIT_HEIGHT ) ;
-        Size = MAP_APPFONT ( 105, CHECKBOX_HEIGHT ) ;
-        Text [ en-US ] = "Password required";
-    };
-
-    AUTO_CHARSET( 5*UNRELATED_CONTROLS + 5*RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + 4*EDIT_HEIGHT, PAGE_X )
 };
 
 TabPage PAGE_ORACLE_JDBC

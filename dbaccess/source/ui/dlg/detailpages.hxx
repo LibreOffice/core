@@ -67,6 +67,8 @@ namespace dbaui
 
         sal_uInt32          m_nControlFlags;
 
+        bool                m_bDelete;
+
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 
@@ -213,13 +215,13 @@ namespace dbaui
                             const SfxItemSet& _rCoreAttrs );
 
     private:
-        FixedLine           m_aSeparator1;
+        FixedText           *m_pSeparator1;
         MySQLNativeSettings m_aMySQLSettings;
 
-        FixedLine           m_aSeparator2;
-        FixedText           m_aUserNameLabel;
-        Edit                m_aUserName;
-        CheckBox            m_aPasswordRequired;
+        FixedText           *m_pSeparator2;
+        FixedText           *m_pUserNameLabel;
+        Edit                *m_pUserName;
+        CheckBox            *m_pPasswordRequired;
 
     protected:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
