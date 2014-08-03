@@ -52,11 +52,14 @@
 using namespace sfx2;
 using namespace ::com::sun::star;
 
-class SvBaseLinkMemberList : private std::vector<SvBaseLink*> {
+class SvBaseLinkMemberList {
+private:
+    std::vector<SvBaseLink*> mLinks;
+
 public:
     ~SvBaseLinkMemberList()
     {
-        for( const_iterator it = begin(); it != end(); ++it )
+        for( std::vector<SvBaseLink*>::const_iterator it = mLinks.begin(); it != mLinks.end(); ++it )
         {
             SvBaseLink* p = *it;
             if( p )
@@ -64,10 +67,15 @@ public:
         }
     }
 
-    using std::vector<SvBaseLink*>::size;
-    using std::vector<SvBaseLink*>::operator[];
+    size_t size() const { return mLinks.size(); }
 
-    void push_back(SvBaseLink* p) { std::vector<SvBaseLink*>::push_back(p); p->AddRef(); }
+    SvBaseLink *operator[](size_t i) const { return mLinks[i]; }
+
+    void push_back(SvBaseLink* p)
+    {
+        mLinks.push_back(p);
+        p->AddRef();
+    }
 };
 
 // attention, this array is indexed directly (0, 1, ...) in the code
