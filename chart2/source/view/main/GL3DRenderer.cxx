@@ -111,6 +111,8 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     , m_uiSelectID(0)
     , m_fScrollSpeed(0.0f)
     , m_fScrollDistance(0.0f)
+    , m_fMinCoordX(0.0f)
+    , m_fMaxCoordX(0.0f)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -2290,6 +2292,12 @@ void OpenGL3DRenderer::SetScrollSpeed(float scrollSpeed)
 void OpenGL3DRenderer::SetScrollDistance(float scrollDistance)
 {
     m_fScrollDistance = scrollDistance;
+}
+
+void OpenGL3DRenderer::SetSceneEdge(float minCoordX, float maxCoordX)
+{
+    m_fMinCoordX = minCoordX * 0.01;
+    m_fMaxCoordX = maxCoordX * 0.01;
 }
 
 void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)

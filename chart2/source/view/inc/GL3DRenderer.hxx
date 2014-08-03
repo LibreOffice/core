@@ -212,6 +212,7 @@ public:
     void SetScroll();
     void SetScrollSpeed(float scrollSpeed);
     void SetScrollDistance(float scrollDistance);
+    void SetSceneEdge(float minCoordX, float maxCoordX);
 private:
     void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 
@@ -457,6 +458,8 @@ private:
     sal_uInt32 m_uiSelectID;
     float m_fScrollSpeed;
     float m_fScrollDistance;
+    float m_fMinCoordX;
+    float m_fMaxCoordX;
 };
 
 }

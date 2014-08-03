@@ -589,7 +589,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     pRect->setPosition(aTopLeft, aTopRight, aBottomRight);
     pRect->setFillColor(COL_BLACK);
     pRect->setLineColor(COL_BLUE);
-
+    if (mbScrollFlg)
+        mpRenderer->SetSceneEdge(BAR_DISTANCE_X - 0.001f, aTopRight.x - BAR_DISTANCE_X);
+    else
+        mpRenderer->SetSceneEdge(-0.001f, aTopRight.x);
     // Create category texts along X-axis at the bottom.
     uno::Sequence<OUString> aCats = rCatProvider.getSimpleCategories();
     for (sal_Int32 i = 0; i < aCats.getLength(); ++i)
