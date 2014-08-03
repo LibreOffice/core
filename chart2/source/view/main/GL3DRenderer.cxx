@@ -115,6 +115,7 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     , m_fMaxCoordX(0.0f)
     , m_fCurDistance(0.0f)
     , m_bUndrawFlag(false)
+    , m_ScrollMoveMatrix(glm::mat4(1.0))
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -315,6 +316,9 @@ OpenGL3DRenderer::PickingShaderResources::PickingShaderResources()
     , m_2DVertexID(0)
     , m_2DColorID(0)
     , m_MatrixID(0)
+    , m_ModelID(0)
+    , m_MinCoordXID(0)
+    , m_MaxCoordXID(0)
 {
 }
 
@@ -329,6 +333,9 @@ void OpenGL3DRenderer::PickingShaderResources::LoadShaders()
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
+    m_ModelID = glGetUniformLocation(m_CommonProID, "M");
+    m_MinCoordXID = glGetUniformLocation(m_CommonProID, "minCoordX");
+    m_MaxCoordXID = glGetUniformLocation(m_CommonProID, "maxCoordX");
 }
 
 void OpenGL3DRenderer::SetCameraInfo(const glm::vec3& pos, const glm::vec3& direction, const glm::vec3& up)
@@ -884,6 +891,10 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
     if(mbPickingMode)
     {
         glUseProgram(maPickingResources.m_CommonProID);
+        float minCoordX = 0.0f;
+        float maxCoordX = m_fMinCoordX + m_fMaxCoordX;
+        glUniform1fv(maPickingResources.m_MinCoordXID, 1, &minCoordX);
+        glUniform1fv(maPickingResources.m_MaxCoordXID, 1, &maxCoordX);
     }
     else
     {
@@ -1327,7 +1338,7 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
                       extrude3D.zTransform};
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 flatScale = glm::scale(glm::vec3(xyScale, xyScale, xyScale));
-    m_Model = m_GlobalScaleMatrix * aTranslationMatrix * extrude3D.rotation * flatScale;
+    m_Model = m_ScrollMoveMatrix * m_GlobalScaleMatrix * aTranslationMatrix * extrude3D.rotation * flatScale;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1338,6 +1349,7 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
     else
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_ModelID, 1, GL_FALSE, &m_Model[0][0]);
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
         glUniform4fv(maPickingResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
@@ -1371,7 +1383,7 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale;
     }
-    m_Model = m_GlobalScaleMatrix * m_Model;
+    m_Model = m_ScrollMoveMatrix * m_GlobalScaleMatrix * m_Model;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1382,6 +1394,7 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     else
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_ModelID, 1, GL_FALSE, &m_Model[0][0]);
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
         glUniform4fv(maPickingResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
@@ -1416,7 +1429,7 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
         glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, 0.0, -1.0));
         m_Model = m_Model * reverseMatrix;
     }
-    m_Model = m_GlobalScaleMatrix * m_Model;
+    m_Model = m_ScrollMoveMatrix * m_GlobalScaleMatrix * m_Model;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1427,6 +1440,7 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
     else
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_ModelID, 1, GL_FALSE, &m_Model[0][0]);
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
         glUniform4fv(maPickingResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
@@ -1461,7 +1475,7 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
     }
-    m_Model = m_GlobalScaleMatrix * m_Model;
+    m_Model = m_ScrollMoveMatrix * m_GlobalScaleMatrix * m_Model;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1472,6 +1486,7 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     else
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_ModelID, 1, GL_FALSE, &m_Model[0][0]);
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
         glUniform4fv(maPickingResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
@@ -1491,7 +1506,7 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
         glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, 0.0, -1.0));
         m_Model = m_Model * reverseMatrix;
     }
-    m_Model = m_GlobalScaleMatrix * m_Model;
+    m_Model = m_ScrollMoveMatrix * m_GlobalScaleMatrix * m_Model;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1502,6 +1517,7 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
     else
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_ModelID, 1, GL_FALSE, &m_Model[0][0]);
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
         glUniform4fv(maPickingResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
@@ -1536,6 +1552,8 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     if(mbPickingMode)
     {
         glUseProgram(maPickingResources.m_CommonProID);
+        glUniform1fv(maPickingResources.m_MinCoordXID, 1, &m_fMinCoordX);
+        glUniform1fv(maPickingResources.m_MaxCoordXID, 1, &m_fMaxCoordX);
     }
     else
     {

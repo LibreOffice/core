@@ -9,11 +9,16 @@
 
 attribute vec3 vPosition;
 uniform mat4 MVP;
+uniform mat4 M;
 uniform vec4 vColor;
+uniform float minCoordX;
+uniform float maxCoordX;
 varying vec4 fragmentColor;
-
+varying vec3 positionWorldspace;
 void main()
 {
+    positionWorldspace = (M * vec4(vPosition,1)).xyz;
+	  positionWorldspace.x = clamp(positionWorldspace.x, minCoordX, maxCoordX);
     gl_Position =  MVP * vec4(vPosition, 1);
     fragmentColor = vColor;
 }

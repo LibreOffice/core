@@ -6,11 +6,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
+uniform float minCoordX;
+varying vec3 positionWorldspace;
 varying vec4 fragmentColor;
 
 void main()
 {
+    if (positionWorldspace.x <= minCoordX)
+        discard;
     gl_FragColor = fragmentColor;
 }
 

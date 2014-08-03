@@ -356,7 +356,9 @@ private:
         GLint m_2DVertexID;
         GLint m_2DColorID;
         GLint m_MatrixID;
-
+        GLint m_ModelID;
+        GLint m_MinCoordXID;
+        GLint m_MaxCoordXID;
         PickingShaderResources();
         ~PickingShaderResources();
 
