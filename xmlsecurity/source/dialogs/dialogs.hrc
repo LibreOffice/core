@@ -25,29 +25,15 @@
 
 #define STD_MASKCOLOR                   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
 
-#define FL_BOTTOM_SEP                   50
-#define BTN_HELP                        53
-
 #define STR_HEADERBAR                   56
-#define STR_VALID_SIGNATURE             58
-#define STR_NO_INFO_TO_VERIFY           59
-#define STR_INVALID_SIGNATURE           60
 
 // --------- general metrics ---------
 #define DLGS_WIDTH                      287
-#define DLGS_HEIGHT                     195
+
 // --------- ... for tab dialogs -----
 #define TP_WIDTH                        260
 #define TP_HEIGHT                       185
 #define TD_SP_INNERBORDER_LEFT          3
-
-#define SEP_FL_SPACE_Y                  6
-#define DLGS_BOTTOM_BTN_L(dlgh)         (dlgh-RSC_SP_DLG_INNERBORDER_BOTTOM)
-#define DLGS_BOTTOM_BTN_Y(dlgh)         (DLGS_BOTTOM_BTN_L(dlgh)-RSC_CD_PUSHBUTTON_HEIGHT)
-#define DLGS_BOTTOM_FL_Y(dlgh)          (DLGS_BOTTOM_BTN_Y(dlgh)-SEP_FL_SPACE_Y-5)
-#define DLGS_BOTTOM_HELP_X(dlgw)        (dlgw-RSC_SP_DLG_INNERBORDER_RIGHT-RSC_CD_PUSHBUTTON_WIDTH)
-#define DLGS_BOTTOM_CANCEL_X(dlgw)      (DLGS_BOTTOM_HELP_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
-#define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_DESC_X-RSC_CD_PUSHBUTTON_WIDTH)
 
 // --------- tab dialog Certificate viewer ---------
 
@@ -125,42 +111,6 @@
 #define STR_SIGNATURE_ALGO              12
 #define STR_THUMBPRINT_SHA1             13
 #define STR_THUMBPRINT_MD5              14
-
-// --------- tab page Certificate viewer - Certification Path ---------
-
-#define STR_PATH_CERT_OK                8
-#define STR_PATH_CERT_NOT_VALIDATED     9
-
-// --------- signed macro warning ---------
-
-#define FI_DOCNAME                      1
-#define FI_DESCR1A                      2
-#define FI_SIGNS                        3
-#define PB_VIEWSIGNS                    4
-#define FI_DESCR2                       5
-#define CB_ALWAYSTRUST                  6
-#define PB_ENABLE                       7
-#define PB_DISABLE                      8
-#define FI_DESCR1B                      9
-
-#define MW_WIDTH                        DLGS_WIDTH
-#define MW_HEIGHT                       DLGS_HEIGHT
-
-#define MW_SYMBOL_WIDTH                 (20)
-
-#define MW_COL_0                        (RSC_SP_DLG_INNERBORDER_LEFT)
-#define MW_COL_1                        (MW_COL_0+MW_SYMBOL_WIDTH)
-#define MW_COL_4                        (MW_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define MW_COL_3                        (MW_COL_4-RSC_CD_PUSHBUTTON_WIDTH)
-#define MW_COL_2                        (MW_COL_3-RSC_SP_CTRL_DESC_X)
-
-#define MW_ROW_0                        (RSC_SP_DLG_INNERBORDER_TOP)
-#define MW_ROW_1                        (MW_ROW_0+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
-#define MW_ROW_2                        (MW_ROW_1+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
-
-#define MW_ROW_5                        (DLGS_BOTTOM_FL_Y(MW_HEIGHT))
-#define MW_ROW_4                        (MW_ROW_5-RSC_CD_CHECKBOX_HEIGHT-RSC_SP_CTRL_Y)
-#define MW_ROW_3                        (MW_ROW_4-4*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
 
 #endif
 
