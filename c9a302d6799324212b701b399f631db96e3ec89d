@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_1755741c",
+        "filename": "sc/uiconfig/scalc/ui/covariancedialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-08-03T15:20:14Z",
+      "side": 1,
+      "message": "Not sure, but it looks like this doesn\u0027t add something?",
+      "revId": "c9a302d6799324212b701b399f631db96e3ec89d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
