@@ -210,6 +210,8 @@ public:
     void StartClick(sal_uInt32 &selectID);
     void EndClick();
     void SetScroll();
+    void SetScrollSpeed(float scrollSpeed);
+    void SetScrollDistance(float scrollDistance);
 private:
     void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 
@@ -453,6 +455,8 @@ private:
     std::vector<GLuint> m_Texturelist;
     bool m_bHighLighting;
     sal_uInt32 m_uiSelectID;
+    float m_fScrollSpeed;
+    float m_fScrollDistance;
 };
 
 }

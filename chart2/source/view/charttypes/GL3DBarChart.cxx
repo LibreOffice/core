@@ -654,6 +654,12 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     }
     if (BENCH_MARK_MODE && (!mpRenderThread.is()))
     {
+        //if scroll the bars, set the speed and distance first
+        if (mbScrollFlg)
+        {
+            mpRenderer->SetScrollSpeed((float)(BAR_SIZE_X + BAR_DISTANCE_X) / (float)miScrollRate);
+            mpRenderer->SetScrollDistance((float)(BAR_SIZE_X + BAR_DISTANCE_X));
+        }
         Size aSize = mrWindow.GetSizePixel();
         mrWindow.getContext().setWinSize(aSize);
         mpRenderThread = rtl::Reference<RenderThread>(new RenderBenchMarkThread(this));
