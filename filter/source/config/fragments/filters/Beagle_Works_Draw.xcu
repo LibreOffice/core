@@ -15,7 +15,7 @@
         <value>com.sun.star.comp.Draw.MWAWDrawImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">BeagleWorks/WordPerfect Works v1 Document</value>
+        <value xml:lang="en-US">BeagleWorks/WordPerfect Works v1 Drawing</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>

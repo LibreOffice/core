@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Calc.MWAWCalcImportFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Microsoft Works for Mac Document (v1 - v4)</value>
+            <value xml:lang="en-US">Microsoft Works for Mac Spreadsheet (v1 - v4)</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>calc_Mac_Works</value></prop>
