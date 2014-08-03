@@ -26,6 +26,20 @@ public class LOKitThread extends Thread {
         mInputFile = inputFile;
     }
 
+    RectF normlizeRect(ViewportMetrics metrics) {
+        RectF rect = metrics.getViewport();
+        float zoomFactor = metrics.getZoomFactor();
+        return new RectF(rect.left / zoomFactor, rect.top / zoomFactor, rect.right / zoomFactor, rect.bottom / zoomFactor);
+    }
+
+    Rect roundToTileSize(RectF input, int tileSize) {
+        int minX = (Math.round(input.left)    / tileSize) * tileSize;
+        int minY = (Math.round(input.top)     / tileSize) * tileSize;
+        int maxX = ((Math.round(input.right)  / tileSize) + 1) * tileSize;
+        int maxY = ((Math.round(input.bottom) / tileSize) + 1) * tileSize;
+        return new Rect(minX, minY, maxX, maxY);
+    }
+
     private boolean draw() throws InterruptedException {
         int pageWidth = mTileProvider.getPageWidth();
         int pageHeight = mTileProvider.getPageHeight();
@@ -34,27 +48,15 @@ public class LOKitThread extends Thread {
         mViewportMetrics.setPageSize(new FloatSize(pageWidth, pageHeight));
 
         GeckoLayerClient layerClient = mApplication.getLayerClient();
-        ViewportMetrics metrics = mApplication.getLayerController().getViewportMetrics();
-
-        RectF viewport = metrics.getClampedViewport();
-        float zoomFactor = metrics.getZoomFactor();
-
         boolean shouldContinue = layerClient.beginDrawing(mViewportMetrics);
 
         if (!shouldContinue) {
             return false;
         }
 
-        int minX = ((int) viewport.left / TILE_SIZE) * TILE_SIZE;
-        int minY = ((int) viewport.top / TILE_SIZE) * TILE_SIZE;
-        int maxX = (((int) viewport.right / TILE_SIZE) + 1) * TILE_SIZE;
-        int maxY = (((int) viewport.bottom / TILE_SIZE) + 1) * TILE_SIZE;
-
-        Rect rect = new Rect(
-                Math.round(minX / zoomFactor),
-                Math.round(minY / zoomFactor),
-                Math.round(maxX / zoomFactor),
-                Math.round(maxY / zoomFactor));
+        ViewportMetrics metrics = mApplication.getLayerController().getViewportMetrics();
+        RectF viewport = normlizeRect(metrics);
+        Rect rect = roundToTileSize(viewport, TILE_SIZE);
 
         ArrayList<SubTile> removeTiles = new ArrayList<SubTile>();
         for (SubTile tile : layerClient.getTiles()) {
@@ -64,8 +66,8 @@ public class LOKitThread extends Thread {
         }
         layerClient.getTiles().removeAll(removeTiles);
 
-        for (int y = minY; y <= maxY; y+=TILE_SIZE) {
-            for (int x = minX; x <= maxX; x+=TILE_SIZE) {
+        for (int y = rect.top; y <= rect.bottom; y += TILE_SIZE) {
+            for (int x = rect.left; x <= rect.right; x += TILE_SIZE) {
                 if (x > pageWidth) {
                     continue;
                 }
