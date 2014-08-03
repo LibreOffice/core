@@ -130,6 +130,10 @@ calc_factory_list = [
     ("libscfiltlo.a", "scfilt_component_getFactory"),
     ("libsclo.a", "sc_component_getFactory"),
     ("libavmedialo.a", "avmedia_component_getFactory"),
+    ("libanalysislo.a", "analysis_component_getFactory"),
+    ("libdatelo.a", "date_component_getFactory"),
+    ("libpricinglo.a", "pricing_component_getFactory"),
+    ("libsvllo.a", "svl_component_getFactory"),
     ]
 
 calc_constructor_list = [
@@ -139,6 +143,8 @@ draw_factory_list = [
     ("libsddlo.a", "sdd_component_getFactory"),
     ("libsdlo.a", "sd_component_getFactory"),
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
+    ("libdeployment.a", "deployment_component_getFactory"),
+    ("libemboleobj.a", "emboleobj_component_getFactory"),
     ]
 
 draw_constructor_list = [
