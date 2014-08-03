@@ -822,6 +822,32 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
     rWorkShell.SetLabelDoc( false );
 }
 
+// based on SwDoc::ReplaceDocumentProperties
+static void lcl_CopyDocumentPorperties(
+    const uno::Reference<document::XDocumentProperties> &xSourceDocProps,
+    const SfxObjectShell *xTargetDocShell, SwDoc *pTargetDoc)
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        xTargetDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xTargetDocProps(
+        xDPS->getDocumentProperties());
+    OSL_ENSURE(xTargetDocProps.is(), "DocumentProperties is null");
+
+    xTargetDocProps->setTitle( xSourceDocProps->getTitle() );
+    xTargetDocProps->setSubject( xSourceDocProps->getSubject() );
+    xTargetDocProps->setDescription( xSourceDocProps->getDescription() );
+    xTargetDocProps->setKeywords( xSourceDocProps->getKeywords() );
+    xTargetDocProps->setAuthor( xSourceDocProps->getAuthor() );
+    xTargetDocProps->setGenerator( xSourceDocProps->getGenerator() );
+    xTargetDocProps->setLanguage( xSourceDocProps->getLanguage() );
+
+    // Manually set the creation date, otherwise author field isn't filled
+    // during MM, as it's set when saving the document the first time.
+    xTargetDocProps->setCreationDate( xSourceDocProps->getModificationDate() );
+
+    pTargetDoc->ReplaceUserDefinedDocumentProperties( xSourceDocProps );
+}
+
 #ifdef DBG_UTIL
 
 #define MAX_DOC_DUMP 3
@@ -895,6 +921,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         // Try saving the source document
         SfxDispatcher* pSfxDispatcher = pSourceShell->GetView().GetViewFrame()->GetDispatcher();
         SwDocShell* pSourceDocSh = pSourceShell->GetView().GetDocShell();
+
+        uno::Reference<document::XDocumentProperties> xSourceDocProps;
+        {
+            uno::Reference<document::XDocumentPropertiesSupplier>
+                xDPS(pSourceDocSh->GetModel(), uno::UNO_QUERY);
+            xSourceDocProps.set(xDPS->getDocumentProperties());
+            OSL_ENSURE(xSourceDocProps.is(), "DocumentProperties is null");
+        }
+
         if( !bMergeOnly && pSourceDocSh->IsModified() )
             pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
         if( bMergeOnly || !pSourceDocSh->IsModified() )
@@ -995,6 +1030,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
                 // #72821# copy dynamic defaults
                 lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
+
+                lcl_CopyDocumentPorperties( xSourceDocProps, xTargetDocShell, pTargetDoc );
             }
 
             // Progress, to prohibit KeyInputs
@@ -1085,10 +1122,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
                         // copy the source document
                         SfxObjectShellLock xWorkDocSh = pSourceDocSh->GetDoc()->CreateCopy( true );
-#ifdef DBG_UTIL
-                        if ( nDocNo <= MAX_DOC_DUMP )
-                            lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
-#endif
 
                         //create a view frame for the document
                         SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
@@ -1097,6 +1130,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
 
                         SwDoc* pWorkDoc = rWorkShell.GetDoc();
+                        lcl_CopyDocumentPorperties( xSourceDocProps, xWorkDocSh, pWorkDoc );
+#ifdef DBG_UTIL
+                        if ( nDocNo <= MAX_DOC_DUMP )
+                            lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
+#endif
                         SwDBManager* pOldDBManager = pWorkDoc->GetDBManager();
                         pWorkDoc->SetDBManager( this );
                         pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
