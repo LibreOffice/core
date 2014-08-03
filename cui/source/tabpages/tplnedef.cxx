@@ -43,6 +43,7 @@
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <boost/scoped_ptr.hpp>
 
 #define XOUT_WIDTH    150
 
@@ -216,10 +217,10 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
+        boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                     SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
                                                     OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
-                                                    &aWarningBoxImage );
+                                                    &aWarningBoxImage ));
         DBG_ASSERT(aMessDlg, "Dialog creation failed!");
         aMessDlg->SetButtonText( MESS_BTN_1, OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
         aMessDlg->SetButtonText( MESS_BTN_2, OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
@@ -243,7 +244,6 @@ void SvxLineDefTabPage::CheckChanges_Impl()
             case RET_CANCEL:
             break;
         }
-        delete aMessDlg;
     }
 
 
@@ -545,7 +545,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialog creation failed!");
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
     bool bLoop = true;
 
@@ -596,7 +596,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
             aBox.Execute();
         }
     }
-    delete( pDlg );
+    pDlg.reset();
 
     // determine button state
     if ( pDashList->Count() )
@@ -623,7 +623,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
+        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pDashList->Count();
@@ -675,7 +675,6 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
                 aBox.Execute();
             }
         }
-        delete( pDlg );
     }
     return( 0L );
 }

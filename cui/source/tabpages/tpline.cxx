@@ -52,6 +52,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/settings.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16
@@ -316,14 +317,15 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
     {
         VirtualDevice aVDev;
         aVDev.SetMapMode(MapMode(MAP_100TH_MM));
-        SdrModel* pModel = new SdrModel;
+        boost::scoped_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
         // Page
         SdrPage* pPage = new SdrPage( *pModel, false );
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage, 0 );
+        {
         // 3D View
-        SdrView* pView = new SdrView( pModel, &aVDev );
+        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), &aVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
 
@@ -393,8 +395,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         if(aGrfNames.empty())
             m_pSymbolMB->GetPopupMenu()->EnableItem(MN_SYMBOLS, false);
 
-        delete pView;
-        delete pModel;
+        }
     }
 }
 
@@ -681,15 +682,15 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
             m_pLbLineStyle->IsValueChangedFromSaved() )
         {
-            XLineStyleItem* pStyleItem = NULL;
+            boost::scoped_ptr<XLineStyleItem> pStyleItem;
 
             if( nPos == 0 )
-                pStyleItem = new XLineStyleItem( XLINE_NONE );
+                pStyleItem.reset(new XLineStyleItem( XLINE_NONE ));
             else if( nPos == 1 )
-                pStyleItem = new XLineStyleItem( XLINE_SOLID );
+                pStyleItem.reset(new XLineStyleItem( XLINE_SOLID ));
             else
             {
-                pStyleItem = new XLineStyleItem( XLINE_DASH );
+                pStyleItem.reset(new XLineStyleItem( XLINE_DASH ));
 
                 // For added security
                 if( pDashList->Count() > (long) ( nPos - 2 ) )
@@ -710,7 +711,6 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
                 rAttrs->Put( *pStyleItem );
                 bModified = true;
             }
-            delete pStyleItem;
         }
     }
     // Line width
@@ -766,28 +766,27 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         nPos = m_pLbStartStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND && m_pLbStartStyle->IsValueChangedFromSaved() )
         {
-            XLineStartItem* pItem = NULL;
+            boost::scoped_ptr<XLineStartItem> pItem;
             if( nPos == 0 )
-                pItem = new XLineStartItem();
+                pItem.reset(new XLineStartItem());
             else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
-                pItem = new XLineStartItem( m_pLbStartStyle->GetSelectEntry(), pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
+                pItem.reset(new XLineStartItem( m_pLbStartStyle->GetSelectEntry(), pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
             pOld = GetOldItem( *rAttrs, XATTR_LINESTART );
             if( pItem && ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
             {
                 rAttrs->Put( *pItem );
                 bModified = true;
             }
-            delete pItem;
         }
         // Line end
         nPos = m_pLbEndStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND && m_pLbEndStyle->IsValueChangedFromSaved() )
         {
-            XLineEndItem* pItem = NULL;
+            boost::scoped_ptr<XLineEndItem> pItem;
             if( nPos == 0 )
-                pItem = new XLineEndItem();
+                pItem.reset(new XLineEndItem());
             else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
-                pItem = new XLineEndItem( m_pLbEndStyle->GetSelectEntry(), pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
+                pItem.reset(new XLineEndItem( m_pLbEndStyle->GetSelectEntry(), pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
             pOld = GetOldItem( *rAttrs, XATTR_LINEEND );
             if( pItem &&
                 ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
@@ -795,7 +794,6 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
                 rAttrs->Put( *pItem );
                 bModified = true;
             }
-            delete pItem;
         }
     }
 
@@ -840,28 +838,28 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     nPos = m_pLBEdgeStyle->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nPos && m_pLBEdgeStyle->IsValueChangedFromSaved() )
     {
-        XLineJointItem* pNew = 0L;
+        boost::scoped_ptr<XLineJointItem> pNew;
 
         switch(nPos)
         {
             case 0: // Rounded, default
             {
-                pNew = new XLineJointItem(com::sun::star::drawing::LineJoint_ROUND);
+                pNew.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_ROUND));
                 break;
             }
             case 1: // - none -
             {
-                pNew = new XLineJointItem(com::sun::star::drawing::LineJoint_NONE);
+                pNew.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_NONE));
                 break;
             }
             case 2: // Miter
             {
-                pNew = new XLineJointItem(com::sun::star::drawing::LineJoint_MITER);
+                pNew.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_MITER));
                 break;
             }
             case 3: // Bevel
             {
-                pNew = new XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL);
+                pNew.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL));
                 break;
             }
         }
@@ -875,8 +873,6 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
                 rAttrs->Put( *pNew );
                 bModified = true;
             }
-
-            delete pNew;
         }
     }
 
@@ -884,23 +880,23 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     nPos = m_pLBCapStyle->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nPos && m_pLBCapStyle->IsValueChangedFromSaved() )
     {
-        XLineCapItem* pNew = 0L;
+        boost::scoped_ptr<XLineCapItem> pNew;
 
         switch(nPos)
         {
             case 0: // Butt (=Flat), default
             {
-                pNew = new XLineCapItem(com::sun::star::drawing::LineCap_BUTT);
+                pNew.reset(new XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
                 break;
             }
             case 1: // Round
             {
-                pNew = new XLineCapItem(com::sun::star::drawing::LineCap_ROUND);
+                pNew.reset(new XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
                 break;
             }
             case 2: // Square
             {
-                pNew = new XLineCapItem(com::sun::star::drawing::LineCap_SQUARE);
+                pNew.reset(new XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
                 break;
             }
         }
@@ -914,8 +910,6 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
                 rAttrs->Put( *pNew );
                 bModified = true;
             }
-
-            delete pNew;
         }
     }
 
@@ -1119,12 +1113,13 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         VirtualDevice aVDev;
         aVDev.SetMapMode(MapMode(MAP_100TH_MM));
 
-        SdrModel* pModel = new SdrModel;
+        boost::scoped_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
         SdrPage* pPage = new SdrPage( *pModel, false );
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage, 0 );
-        SdrView* pView = new SdrView( pModel, &aVDev );
+        {
+        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), &aVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
         SdrObject *pObj=NULL;
@@ -1176,8 +1171,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                 }
             }
         }
-        delete pView;
-        delete pModel;
+        }
     }
     if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH),true,&pPoolItem) == SFX_ITEM_SET)
     {
