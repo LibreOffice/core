@@ -178,7 +178,7 @@ def factoryAttributeToResourceMap(nsNode):
     print()
 
 
-# factoryGetListValue
+# factoryListValueMap
 
 
 def idToLabel(idName):
@@ -193,33 +193,28 @@ def valueToLabel(value):
     return value.replace('-', 'm').replace('+', 'p').replace(' ', '_').replace(',', '_')
 
 
-def factoryGetListValue(nsNode):
-    print("""bool OOXMLFactory_%s::getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue)
+def factoryListValueMap(nsNode):
+    print("""ListValueMapPointer OOXMLFactory_%s::createListValueMap(Id nId)
 {
-    (void) rValue;
-    (void) rOutValue;
+    ListValueMapPointer pMap(new ListValueMap());
 
     switch (nId)
     {""" % nsToLabel(nsNode))
 
     for resourceNode in [i for i in getChildrenByName(nsNode, "resource") if i.getAttribute("resource") == "List"]:
         print("    case %s:" % idForDefine(nsNode, resourceNode))
-        output_else = ""
         for valueNode in getChildrenByName(resourceNode, "value"):
             valueData = ""
             if len(valueNode.childNodes):
                 valueData = valueNode.childNodes[0].data
-            print("        %sif (rValue == \"%s\") { rOutValue = %s; }" % (output_else, valueData, idToLabel(valueNode.getAttribute("tokenid"))))
-            output_else = "else "
-        print("        %s{ return false; }" % (output_else))
-        print("        return true;")
+            print("        (*pMap)[OOXMLValueString_%s] = %s;" % (valueToLabel(valueData), idToLabel(valueNode.getAttribute("tokenid"))))
         print("        break;")
 
     print("""    default:
         break;
     }
 
-    return false;
+    return pMap;
 }""")
 
 
@@ -348,6 +343,13 @@ def charactersActionForValues(nsNode, refNode):
             if dataNode.getAttribute("type") == "int":
                 ret.append("    OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(sText));")
                 ret.append("    pValueHandler->setValue(pValue);")
+            elif dataNode.getAttribute("type") == "list":
+                ret.append("    ListValueMapPointer pListValueMap = getListValueMap(nDefine);")
+                ret.append("    if (pListValueMap.get() != NULL)")
+                ret.append("    {")
+                ret.append("        OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue((*pListValueMap)[sText]));")
+                ret.append("        pValueHandler->setValue(pValue);")
+                ret.append("    }")
         ret.append("    }")
 
     return ret
@@ -644,6 +646,7 @@ def getChildrenByName(parentNode, childName):
 def createImpl(modelNode, nsName):
     print("""
 #include "ooxml/resourceids.hxx"
+#include "OOXMLFactory_values.hxx"
 #include "OOXMLFactory_%s.hxx"
 #include "ooxml/OOXMLFastHelper.hxx"
 
@@ -670,7 +673,7 @@ namespace ooxml {
         factoryDestructor(nsLabel)
         factoryGetInstance(nsLabel)
         factoryAttributeToResourceMap(nsNode)
-        factoryGetListValue(nsNode)
+        factoryListValueMap(nsNode)
         factoryCreateElementMap(files, nsNode)
         factoryActions(nsNode)
         factoryGetDefineName(nsNode)

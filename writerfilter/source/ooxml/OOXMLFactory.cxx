@@ -62,6 +62,14 @@ AttributeToResourceMapPointer OOXMLFactory_ns::getAttributeToResourceMap(Id nId)
     return m_AttributesMap[nId];
 }
 
+ListValueMapPointer OOXMLFactory_ns::getListValueMap(Id nId)
+{
+    if (m_ListValuesMap.find(nId) == m_ListValuesMap.end())
+        m_ListValuesMap[nId] = createListValueMap(nId);
+
+    return m_ListValuesMap[nId];
+}
+
 CreateElementMapPointer OOXMLFactory_ns::getCreateElementMap(Id nId)
 {
     if (m_CreateElementsMap.find(nId) == m_CreateElementsMap.end())
@@ -183,9 +191,13 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     break;
                 case RT_List:
                     {
-                        sal_uInt32 nValue;
-                        if (pFactory->getListValue(aIt->second.m_nRef, Attribs->getValue(nToken), nValue))
+                        ListValueMapPointer pListValueMap =
+                            pFactory->getListValueMap(aIt->second.m_nRef);
+
+                        if (pListValueMap.get() != NULL)
                         {
+                            OUString aValue(Attribs->getValue(nToken));
+                            sal_uInt32 nValue = (*pListValueMap)[aValue];
                             OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
                             pHandler->newProperty(nId, xValue);
                             pFactory->attributeAction(pHandler, nToken, xValue);
