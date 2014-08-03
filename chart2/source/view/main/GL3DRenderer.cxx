@@ -113,6 +113,8 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     , m_fScrollDistance(0.0f)
     , m_fMinCoordX(0.0f)
     , m_fMaxCoordX(0.0f)
+    , m_fCurDistance(0.0f)
+    , m_bUndrawFlag(false)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -2049,6 +2051,7 @@ void OpenGL3DRenderer::ProcessUnrenderedShape(bool bNewScene)
     glViewport(0, 0, m_iWidth, m_iHeight);
     ClearBuffer();
     CreateSceneBoxView();
+    CalcScrollMoveMatrix(bNewScene);
     //Polygon
     RenderPolygon3DObject();
     //Shape3DExtrudeObject
@@ -2300,6 +2303,17 @@ void OpenGL3DRenderer::SetSceneEdge(float minCoordX, float maxCoordX)
     m_fMaxCoordX = maxCoordX * 0.01;
 }
 
+void OpenGL3DRenderer::CalcScrollMoveMatrix(bool bNewScene)
+{
+    if (!maResources.m_bScrollFlag)
+        return;
+    if (bNewScene)
+        m_fCurDistance = -m_fScrollSpeed;
+    m_fCurDistance += m_fCurDistance >= m_fScrollDistance ? 0.0f : m_fScrollSpeed;
+    m_ScrollMoveMatrix = glm::translate(glm::vec3(-m_fCurDistance * 0.01, 0.0f, 0.0f));
+    m_bUndrawFlag = m_fCurDistance >= m_fScrollDistance ? true : false;
+}
+
 void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
 {
     if(bNewScene)
@@ -2323,6 +2337,13 @@ void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
     glBufferSubData(GL_UNIFORM_BUFFER, m_Batch3DActualSizeLight, sizeof(MaterialParameters), &m_Batchmaterial);
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    if (maResources.m_bScrollFlag)
+    {
+        glUniform1fv(maResources.m_3DBatchMinCoordXID, 1, &m_fMinCoordX);
+        glUniform1fv(maResources.m_3DBatchMaxCoordXID, 1, &m_fMaxCoordX);
+        glUniform1i(maResources.m_3DBatchUndrawID, m_bUndrawFlag);
+        glUniformMatrix4fv(maResources.m_3DBatchTransMatrixID, 1, GL_FALSE, &m_ScrollMoveMatrix[0][0]);
+    }
     glUniformMatrix4fv(maResources.m_3DBatchViewID, 1, GL_FALSE, &m_3DView[0][0]);
     glUniformMatrix4fv(maResources.m_3DBatchProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
     CHECK_GL_ERROR();
