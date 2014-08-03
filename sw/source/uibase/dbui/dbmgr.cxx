@@ -822,6 +822,58 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
     rWorkShell.SetLabelDoc( false );
 }
 
+// based on lcl_copyDocumentProperties from docglos.cxx
+static void lcl_CopyDocumentPorperties(
+    const uno::Reference<document::XDocumentProperties> &xSourceDocProps,
+    const SfxObjectShell *xTargetDocShell )
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        xTargetDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xTargetDocProps(
+        xDPS->getDocumentProperties());
+    OSL_ENSURE(xTargetDocProps.is(), "DocumentProperties is null");
+
+    xTargetDocProps->setTitle( xSourceDocProps->getTitle() );
+    xTargetDocProps->setSubject( xSourceDocProps->getSubject() );
+    xTargetDocProps->setDescription( xSourceDocProps->getDescription() );
+    xTargetDocProps->setKeywords( xSourceDocProps->getKeywords() );
+    xTargetDocProps->setAuthor( xSourceDocProps->getAuthor() );
+    xTargetDocProps->setGenerator( xSourceDocProps->getGenerator() );
+    xTargetDocProps->setLanguage( xSourceDocProps->getLanguage() );
+
+    // Manually set the creation date, otherwise author field isn't filled
+    // during MM, as it's set when saving the document the first time.
+    xTargetDocProps->setCreationDate( xSourceDocProps->getModificationDate() );
+
+    uno::Reference<beans::XPropertySet> xSourceUDSet(
+        xSourceDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertyContainer> xTargetUD(
+        xTargetDocProps->getUserDefinedProperties());
+    uno::Reference<beans::XPropertySet> xTargetUDSet(xTargetUD,
+        uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::Property> tgtprops
+        = xTargetUDSet->getPropertySetInfo()->getProperties();
+    for (sal_Int32 i = 0; i < tgtprops.getLength(); ++i) {
+        try {
+            xTargetUD->removeProperty(tgtprops [i].Name);
+        } catch (uno::Exception &) {
+            // ignore
+        }
+    }
+    try {
+        uno::Reference<beans::XPropertySetInfo> xSetInfo
+            = xSourceUDSet->getPropertySetInfo();
+        uno::Sequence<beans::Property> srcprops = xSetInfo->getProperties();
+        for (sal_Int32 i = 0; i < srcprops.getLength(); ++i) {
+            OUString name = srcprops[i].Name;
+            xTargetUD->addProperty(name, srcprops[i].Attributes,
+                xSourceUDSet->getPropertyValue(name));
+        }
+    } catch (uno::Exception &) {
+        // ignore
+    }
+}
+
 #ifdef DBG_UTIL
 
 #define MAX_DOC_DUMP 3
@@ -896,6 +948,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         // Try saving the source document
         SfxDispatcher* pSfxDispatcher = pSourceShell->GetView().GetViewFrame()->GetDispatcher();
         SwDocShell* pSourceDocSh = pSourceShell->GetView().GetDocShell();
+
+        uno::Reference<document::XDocumentProperties> xSourceDocProps;
+        {
+            uno::Reference<document::XDocumentPropertiesSupplier>
+                xDPS(pSourceDocSh->GetModel(), uno::UNO_QUERY);
+            xSourceDocProps.set(xDPS->getDocumentProperties());
+            OSL_ENSURE(xSourceDocProps.is(), "DocumentProperties is null");
+        }
+
         if( !bMergeOnly && pSourceDocSh->IsModified() )
             pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
         if( bMergeOnly || !pSourceDocSh->IsModified() )
@@ -996,6 +1057,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
                 // #72821# copy dynamic defaults
                 lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
+
+                lcl_CopyDocumentPorperties( xSourceDocProps, xTargetDocShell );
             }
 
             // Progress, to prohibit KeyInputs
@@ -1086,6 +1149,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
                         // copy the source document
                         SfxObjectShellLock xWorkDocSh = pSourceDocSh->GetDoc()->CreateCopy( true );
+                        lcl_CopyDocumentPorperties( xSourceDocProps, xWorkDocSh );
 #ifdef DBG_UTIL
                         if ( nDocNo <= MAX_DOC_DUMP )
                             lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
