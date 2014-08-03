@@ -131,37 +131,6 @@
 #define STR_PATH_CERT_OK                8
 #define STR_PATH_CERT_NOT_VALIDATED     9
 
-// --------- signed macro warning ---------
-
-#define FI_DOCNAME                      1
-#define FI_DESCR1A                      2
-#define FI_SIGNS                        3
-#define PB_VIEWSIGNS                    4
-#define FI_DESCR2                       5
-#define CB_ALWAYSTRUST                  6
-#define PB_ENABLE                       7
-#define PB_DISABLE                      8
-#define FI_DESCR1B                      9
-
-#define MW_WIDTH                        DLGS_WIDTH
-#define MW_HEIGHT                       DLGS_HEIGHT
-
-#define MW_SYMBOL_WIDTH                 (20)
-
-#define MW_COL_0                        (RSC_SP_DLG_INNERBORDER_LEFT)
-#define MW_COL_1                        (MW_COL_0+MW_SYMBOL_WIDTH)
-#define MW_COL_4                        (MW_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define MW_COL_3                        (MW_COL_4-RSC_CD_PUSHBUTTON_WIDTH)
-#define MW_COL_2                        (MW_COL_3-RSC_SP_CTRL_DESC_X)
-
-#define MW_ROW_0                        (RSC_SP_DLG_INNERBORDER_TOP)
-#define MW_ROW_1                        (MW_ROW_0+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
-#define MW_ROW_2                        (MW_ROW_1+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
-
-#define MW_ROW_5                        (DLGS_BOTTOM_FL_Y(MW_HEIGHT))
-#define MW_ROW_4                        (MW_ROW_5-RSC_CD_CHECKBOX_HEIGHT-RSC_SP_CTRL_Y)
-#define MW_ROW_3                        (MW_ROW_4-4*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
