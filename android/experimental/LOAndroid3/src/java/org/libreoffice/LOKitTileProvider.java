@@ -54,8 +54,9 @@ public class LOKitTileProvider implements TileProvider {
         } else {
             Log.i(LOGTAG, "Document parts: " + mDocument.getParts());
             if (mDocument.getParts() >= 1) {
-                mDocument.setPart(1);
+                mDocument.setPart(0);
             }
+            Log.i(LOGTAG, "Document size: " + mDocument.getDocumentWidth() + " x " + mDocument.getDocumentHeight());
         }
     }
 
