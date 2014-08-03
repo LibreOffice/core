@@ -112,7 +112,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     if( !mpPipeline )
         return xRet;
 
-    gint64 gst_position = llround( fMediaTime * 1E9 );
+    gint64 gst_position = llround( fMediaTime * GST_SECOND );
     gst_element_seek_simple(
         mpPipeline, GST_FORMAT_TIME,
         (GstSeekFlags)(GST_SEEK_FLAG_KEY_UNIT | GST_SEEK_FLAG_FLUSH),

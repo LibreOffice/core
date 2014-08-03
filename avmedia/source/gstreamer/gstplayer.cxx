@@ -455,7 +455,7 @@ double SAL_CALL Player::getDuration()
     double duration = 0.01;
 
     if( mpPlaybin && mnDuration > 0 ) {
-        duration = mnDuration / 1E9;
+        duration = mnDuration / GST_SECOND;
     }
 
     return duration;
@@ -469,7 +469,7 @@ void SAL_CALL Player::setMediaTime( double fTime )
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if( mpPlaybin ) {
-        gint64 gst_position = llround (fTime * 1E9);
+        gint64 gst_position = llround (fTime * GST_SECOND);
 
         gst_element_seek( mpPlaybin, 1.0,
                           GST_FORMAT_TIME,
@@ -496,7 +496,7 @@ double SAL_CALL Player::getMediaTime()
         // get current position in the stream
         gint64 gst_position;
         if( wrap_element_query_position( mpPlaybin, GST_FORMAT_TIME, &gst_position ) )
-            position = gst_position / 1E9;
+            position = gst_position / GST_SECOND;
     }
 
     return position;
