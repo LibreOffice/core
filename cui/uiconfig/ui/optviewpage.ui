@@ -140,7 +140,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes">75</property>
+                        <property name="text" translatable="no">75</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="value">75</property>
                       </object>
