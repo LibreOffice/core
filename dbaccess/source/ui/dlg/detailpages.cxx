@@ -75,6 +75,7 @@ namespace dbaui
         ,m_pAutoRetrievingLabel(NULL)
         ,m_pAutoRetrieving(NULL)
         ,m_nControlFlags(nControlFlags)
+        ,m_bDelete(true)
     {
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
@@ -131,6 +132,7 @@ namespace dbaui
         ,m_pAutoRetrievingLabel(NULL)
         ,m_pAutoRetrieving(NULL)
         ,m_nControlFlags(nControlFlags)
+        ,m_bDelete(false)
     {
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
@@ -156,20 +158,23 @@ namespace dbaui
 
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     {
-        DELETEZ(m_pOptionsLabel);
-        DELETEZ(m_pOptions);
+        if(m_bDelete)
+        {
+            DELETEZ(m_pOptionsLabel);
+            DELETEZ(m_pOptions);
 
-        DELETEZ(m_pDataConvertFixedLine);
-        DELETEZ(m_pCharsetLabel);
-        DELETEZ(m_pCharset);
+            DELETEZ(m_pDataConvertFixedLine);
+            DELETEZ(m_pCharsetLabel);
+            DELETEZ(m_pCharset);
 
-        DELETEZ(m_pAutoFixedLine);
-        DELETEZ(m_pAutoIncrementLabel);
-        DELETEZ(m_pAutoIncrement);
+            DELETEZ(m_pAutoFixedLine);
+            DELETEZ(m_pAutoIncrementLabel);
+            DELETEZ(m_pAutoIncrement);
 
-        DELETEZ(m_pAutoRetrievingEnabled);
-        DELETEZ(m_pAutoRetrievingLabel);
-        DELETEZ(m_pAutoRetrieving);
+            DELETEZ(m_pAutoRetrievingEnabled);
+            DELETEZ(m_pAutoRetrievingLabel);
+            DELETEZ(m_pAutoRetrieving);
+        }
 
     }
 
@@ -638,26 +643,18 @@ namespace dbaui
 
     // MySQLNativePage
     MySQLNativePage::MySQLNativePage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_MYSQL_NATIVE, _rCoreAttrs, CBTP_USE_CHARSET, false )
-        ,m_aSeparator1          ( this, ModuleRes( FL_SEPARATOR1) )
-        ,m_aMySQLSettings       ( *this, getControlModifiedLink() )
-        ,m_aSeparator2          ( this, ModuleRes(FL_SEPARATOR2))
-        ,m_aUserNameLabel       ( this, ModuleRes(FT_USERNAME))
-        ,m_aUserName            ( this, ModuleRes(ET_USERNAME))
-        ,m_aPasswordRequired    ( this, ModuleRes(CB_PASSWORD_REQUIRED))
+        :OCommonBehaviourTabPage(pParent, "MysqlNativePage", "dbaccess/ui/mysqlnativepage.ui", _rCoreAttrs, CBTP_USE_CHARSET )
+        ,m_aMySQLSettings       ( *get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink() )
     {
-        m_aUserName.SetModifyHdl(getControlModifiedLink());
+        get(m_pSeparator1, "connectionheader");
+        get(m_pSeparator2, "userheader");
+        get(m_pUserNameLabel, "usernamelabel");
+        get(m_pUserName, "username");
+        get(m_pPasswordRequired, "passwordrequired");
 
-        Window* pWindows[] = {  &m_aMySQLSettings, &m_aSeparator2, &m_aUserNameLabel, &m_aUserName,
-                                &m_aPasswordRequired, m_pCharsetLabel, m_pCharset};
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
-        for (sal_Int32 i=1; i < nCount; ++i)
-            pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
+        m_pUserName->SetModifyHdl(getControlModifiedLink());
 
-        LayoutHelper::positionBelow( m_aSeparator1, m_aMySQLSettings, RelatedControls, 3 );
         m_aMySQLSettings.Show();
-
-        FreeResource();
     }
 
     void MySQLNativePage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -665,17 +662,17 @@ namespace dbaui
         OCommonBehaviourTabPage::fillControls( _rControlList );
         m_aMySQLSettings.fillControls( _rControlList );
 
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aUserName));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aPasswordRequired));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pUserName));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pPasswordRequired));
     }
     void MySQLNativePage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows( _rControlList );
         m_aMySQLSettings.fillWindows( _rControlList);
 
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aSeparator1));
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aSeparator2));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aUserNameLabel));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pSeparator1));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pSeparator2));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pUserNameLabel));
     }
 
     bool MySQLNativePage::FillItemSet( SfxItemSet* _rSet )
@@ -684,13 +681,13 @@ namespace dbaui
 
         bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
 
-        if ( m_aUserName.IsValueChangedFromSaved() )
+        if ( m_pUserName->IsValueChangedFromSaved() )
         {
-            _rSet->Put( SfxStringItem( DSID_USER, m_aUserName.GetText() ) );
+            _rSet->Put( SfxStringItem( DSID_USER, m_pUserName->GetText() ) );
             _rSet->Put( SfxStringItem( DSID_PASSWORD, OUString()));
             bChangedSomething = true;
         }
-        fillBool(*_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,m_pPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
 
         return bChangedSomething;
     }
@@ -707,9 +704,9 @@ namespace dbaui
 
         if ( bValid )
         {
-            m_aUserName.SetText(pUidItem->GetValue());
-            m_aUserName.ClearModifyFlag();
-            m_aPasswordRequired.Check(pAllowEmptyPwd->GetValue());
+            m_pUserName->SetText(pUidItem->GetValue());
+            m_pUserName->ClearModifyFlag();
+            m_pPasswordRequired->Check(pAllowEmptyPwd->GetValue());
         }
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);

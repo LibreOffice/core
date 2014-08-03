@@ -107,8 +107,7 @@ namespace dbaui
     class MySQLNativeSetupPage : public OGenericAdministrationPage
     {
     private:
-        FixedText           m_aHeader;
-        FixedText           m_aHelpText;
+        FixedText           *m_pHelpText;
         MySQLNativeSettings m_aMySQLSettings;
 
     public:

@@ -18,7 +18,6 @@
  */
 
 #include "admincontrols.hxx"
-#include "admincontrols.hrc"
 #include "dbu_dlg.hrc"
 #include "dsitems.hxx"
 #include "moduledbu.hxx"
@@ -127,45 +126,44 @@ namespace dbaui
 
     // MySQLNativeSettings
     MySQLNativeSettings::MySQLNativeSettings( Window& _rParent, const Link& _rControlModificationLink )
-        :Control( &_rParent, ModuleRes( RID_MYSQL_NATIVE_SETTINGS ).SetAutoRelease( false ) )
-        ,m_aDatabaseNameLabel   ( this, ModuleRes( FT_MYSQL_DATABASE_NAME ) )
-        ,m_aDatabaseName        ( this, ModuleRes( ED_MYSQL_DATABASE_NAME ) )
-        ,m_aHostPortRadio       ( this, ModuleRes( RB_MYSQL_HOST_PORT ) )
-        ,m_aSocketRadio         ( this, ModuleRes( RB_MYSQL_SOCKET ) )
-        ,m_aNamedPipeRadio      ( this, ModuleRes( RB_MYSQL_NAMED_PIPE ) )
-        ,m_aHostNameLabel       ( this, ModuleRes( FT_COMMON_HOST_NAME ) )
-        ,m_aHostName            ( this, ModuleRes( ED_COMMON_HOST_NAME ) )
-        ,m_aPortLabel           ( this, ModuleRes( FT_COMMON_PORT ) )
-        ,m_aPort                ( this, ModuleRes( NF_COMMON_PORT ) )
-        ,m_aDefaultPort         ( this, ModuleRes( FT_COMMON_PORT_DEFAULT ) )
-        ,m_aSocket              ( this, ModuleRes( ED_MYSQL_SOCKET ) )
-        ,m_aNamedPipe           ( this, ModuleRes( ED_MYSQL_NAMED_PIPE ) )
+        :TabPage( &_rParent, "MysqlNativeSettings", "dbaccess/ui/mysqlnativesettings.ui" )
     {
-        FreeResource();
+        get(m_pDatabaseNameLabel, "dbnamelabel");
+        get(m_pDatabaseName, "dbname");
+        get(m_pHostPortRadio, "hostport");
+        get(m_pSocketRadio, "socketlabel");
+        get(m_pNamedPipeRadio, "namedpipelabel");
+        get(m_pHostNameLabel, "serverlabel");
+        get(m_pHostName, "server");
+        get(m_pPortLabel, "portlabel");
+        get(m_pPort, "port");
+        get(m_pDefaultPort, "defaultport");
+        get(m_pSocket, "socket");
+        get(m_pNamedPipe, "namedpipe");
 
-        m_aDatabaseName.SetModifyHdl( _rControlModificationLink );
-        m_aHostName.SetModifyHdl( _rControlModificationLink );
-        m_aPort.SetModifyHdl( _rControlModificationLink );
-        m_aSocket.SetModifyHdl( _rControlModificationLink );
-        m_aNamedPipe.SetModifyHdl( _rControlModificationLink );
-        m_aSocketRadio.SetToggleHdl( _rControlModificationLink );
-        m_aNamedPipeRadio.SetToggleHdl( _rControlModificationLink );
+        m_pDatabaseName->SetModifyHdl( _rControlModificationLink );
+        m_pHostName->SetModifyHdl( _rControlModificationLink );
+        m_pPort->SetModifyHdl( _rControlModificationLink );
+        m_pSocket->SetModifyHdl( _rControlModificationLink );
+        m_pNamedPipe->SetModifyHdl( _rControlModificationLink );
+        m_pSocketRadio->SetToggleHdl( _rControlModificationLink );
+        m_pNamedPipeRadio->SetToggleHdl( _rControlModificationLink );
 
-        m_aControlDependencies.enableOnRadioCheck( m_aHostPortRadio, m_aHostNameLabel, m_aHostName, m_aPortLabel, m_aPort, m_aDefaultPort );
-        m_aControlDependencies.enableOnRadioCheck( m_aSocketRadio, m_aSocket );
-        m_aControlDependencies.enableOnRadioCheck( m_aNamedPipeRadio, m_aNamedPipe );
+        m_aControlDependencies.enableOnRadioCheck( *m_pHostPortRadio, *m_pHostNameLabel, *m_pHostName, *m_pPortLabel, *m_pPort, *m_pDefaultPort );
+        m_aControlDependencies.enableOnRadioCheck( *m_pSocketRadio, *m_pSocket );
+        m_aControlDependencies.enableOnRadioCheck( *m_pNamedPipeRadio, *m_pNamedPipe );
 
         m_aControlDependencies.addController( ::svt::PDialogController(
-            new TextResetOperatorController( m_aHostName, OUString("localhost") )
+            new TextResetOperatorController( *m_pHostName, OUString("localhost") )
         ) );
 
         // sockets are available on Unix systems only, named pipes only on Windows
 #ifdef UNX
-        m_aNamedPipeRadio.Hide();
-        m_aNamedPipe.Hide();
+        m_pNamedPipeRadio->Hide();
+        m_pNamedPipe->Hide();
 #else
-        m_aSocketRadio.Hide();
-        m_aSocket.Hide();
+        m_pSocketRadio->Hide();
+        m_pSocket->Hide();
 #endif
     }
 
@@ -175,34 +173,34 @@ namespace dbaui
 
     void MySQLNativeSettings::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aDatabaseName ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aHostName ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aPort ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aSocket ) );
-        _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aNamedPipe ) );
+        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pDatabaseName ) );
+        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pHostName ) );
+        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pPort ) );
+        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pSocket ) );
+        _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pNamedPipe ) );
     }
 
     void MySQLNativeSettings::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
-        _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aDatabaseNameLabel ) );
-        _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aHostNameLabel ) );
-        _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aPortLabel ) );
-        _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aDefaultPort ) );
-        _rControlList.push_back( new ODisableWrapper< RadioButton >( &m_aSocketRadio ) );
-        _rControlList.push_back( new ODisableWrapper< RadioButton >( &m_aNamedPipeRadio ) );
+        _rControlList.push_back( new ODisableWrapper< FixedText >( m_pDatabaseNameLabel ) );
+        _rControlList.push_back( new ODisableWrapper< FixedText >( m_pHostNameLabel ) );
+        _rControlList.push_back( new ODisableWrapper< FixedText >( m_pPortLabel ) );
+        _rControlList.push_back( new ODisableWrapper< FixedText >( m_pDefaultPort ) );
+        _rControlList.push_back( new ODisableWrapper< RadioButton >( m_pSocketRadio ) );
+        _rControlList.push_back( new ODisableWrapper< RadioButton >( m_pNamedPipeRadio ) );
     }
 
     bool MySQLNativeSettings::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
 
-        OGenericAdministrationPage::fillString( *_rSet, &m_aHostName,     DSID_CONN_HOSTNAME,    bChangedSomething );
-        OGenericAdministrationPage::fillString( *_rSet, &m_aDatabaseName, DSID_DATABASENAME,     bChangedSomething );
-        OGenericAdministrationPage::fillInt32 ( *_rSet, &m_aPort,         DSID_MYSQL_PORTNUMBER, bChangedSomething );
+        OGenericAdministrationPage::fillString( *_rSet, m_pHostName,     DSID_CONN_HOSTNAME,    bChangedSomething );
+        OGenericAdministrationPage::fillString( *_rSet, m_pDatabaseName, DSID_DATABASENAME,     bChangedSomething );
+        OGenericAdministrationPage::fillInt32 ( *_rSet, m_pPort,         DSID_MYSQL_PORTNUMBER, bChangedSomething );
 #ifdef UNX
-        OGenericAdministrationPage::fillString( *_rSet, &m_aSocket,       DSID_CONN_SOCKET,      bChangedSomething );
+        OGenericAdministrationPage::fillString( *_rSet, m_pSocket,       DSID_CONN_SOCKET,      bChangedSomething );
 #else
-        OGenericAdministrationPage::fillString( *_rSet, &m_aNamedPipe,    DSID_NAMED_PIPE,       bChangedSomething );
+        OGenericAdministrationPage::fillString( *_rSet, m_pNamedPipe,    DSID_NAMED_PIPE,       bChangedSomething );
 #endif
 
         return bChangedSomething;
@@ -221,56 +219,56 @@ namespace dbaui
         SFX_ITEMSET_GET( _rSet, pSocket,        SfxStringItem,  DSID_CONN_SOCKET,       true );
         SFX_ITEMSET_GET( _rSet, pNamedPipe,     SfxStringItem,  DSID_NAMED_PIPE,       true );
 
-        m_aDatabaseName.SetText( pDatabaseName->GetValue() );
-        m_aDatabaseName.ClearModifyFlag();
+        m_pDatabaseName->SetText( pDatabaseName->GetValue() );
+        m_pDatabaseName->ClearModifyFlag();
 
-        m_aHostName.SetText( pHostName->GetValue() );
-        m_aHostName.ClearModifyFlag();
+        m_pHostName->SetText( pHostName->GetValue() );
+        m_pHostName->ClearModifyFlag();
 
-        m_aPort.SetValue( pPortNumber->GetValue() );
-        m_aPort.ClearModifyFlag();
+        m_pPort->SetValue( pPortNumber->GetValue() );
+        m_pPort->ClearModifyFlag();
 
-        m_aSocket.SetText( pSocket->GetValue() );
-        m_aSocket.ClearModifyFlag();
+        m_pSocket->SetText( pSocket->GetValue() );
+        m_pSocket->ClearModifyFlag();
 
-        m_aNamedPipe.SetText( pNamedPipe->GetValue() );
-        m_aNamedPipe.ClearModifyFlag();
+        m_pNamedPipe->SetText( pNamedPipe->GetValue() );
+        m_pNamedPipe->ClearModifyFlag();
 
         // if a socket (on Unix) or a pipe name (on Windows) is given, this is preferred over
         // the port
 #ifdef UNX
-        RadioButton& rSocketPipeRadio = m_aSocketRadio;
+        RadioButton& rSocketPipeRadio = *m_pSocketRadio;
         const SfxStringItem* pSocketPipeItem = pSocket;
 #else
-        RadioButton& rSocketPipeRadio = m_aNamedPipeRadio;
+        RadioButton& rSocketPipeRadio = *m_pNamedPipeRadio;
         const SfxStringItem* pSocketPipeItem = pNamedPipe;
 #endif
         OUString sSocketPipe( pSocketPipeItem->GetValue() );
         if ( !sSocketPipe.isEmpty() )
             rSocketPipeRadio.Check();
         else
-            m_aHostPortRadio.Check();
+            m_pHostPortRadio->Check();
     }
 
     bool MySQLNativeSettings::canAdvance() const
     {
-        if ( m_aDatabaseName.GetText().isEmpty() )
+        if ( m_pDatabaseName->GetText().isEmpty() )
             return false;
 
-        if  (   m_aHostPortRadio.IsChecked()
-            &&  (   ( m_aHostName.GetText().isEmpty() )
-                ||  ( m_aPort.GetText().isEmpty() )
+        if  (   m_pHostPortRadio->IsChecked()
+            &&  (   ( m_pHostName->GetText().isEmpty() )
+                ||  ( m_pPort->GetText().isEmpty() )
                 )
             )
             return false;
 
 #ifdef UNX
-        if  (   ( m_aSocketRadio.IsChecked() )
-            &&  ( m_aSocket.GetText().isEmpty() )
+        if  (   ( m_pSocketRadio->IsChecked() )
+            &&  ( m_pSocket->GetText().isEmpty() )
             )
 #else
-        if  (   ( m_aNamedPipeRadio.IsChecked() )
-            &&  ( m_aNamedPipe.GetText().isEmpty() )
+        if  (   ( m_pNamedPipeRadio->IsChecked() )
+            &&  ( m_pNamedPipe->GetText().isEmpty() )
             )
 #endif
             return false;

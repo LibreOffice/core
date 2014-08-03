@@ -19,7 +19,6 @@
 
 #include "ConnectionPageSetup.hxx"
 #include "AutoControls.hrc"
-#include "dbadminsetup.hrc"
 #include "dbu_dlg.hrc"
 #include <svl/itemset.hxx>
 #include <unotools/pathoptions.hxx>

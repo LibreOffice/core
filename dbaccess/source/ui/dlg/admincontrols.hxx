@@ -32,21 +32,21 @@ namespace dbaui
 {
 
     // MySQLNativeSettings
-    class MySQLNativeSettings : public Control
+    class MySQLNativeSettings : public TabPage
     {
     private:
-        FixedText           m_aDatabaseNameLabel;
-        Edit                m_aDatabaseName;
-        RadioButton         m_aHostPortRadio;
-        RadioButton         m_aSocketRadio;
-        RadioButton         m_aNamedPipeRadio;
-        FixedText           m_aHostNameLabel;
-        Edit                m_aHostName;
-        FixedText           m_aPortLabel;
-        NumericField        m_aPort;
-        FixedText           m_aDefaultPort;
-        Edit                m_aSocket;
-        Edit                m_aNamedPipe;
+        FixedText           *m_pDatabaseNameLabel;
+        Edit                *m_pDatabaseName;
+        RadioButton         *m_pHostPortRadio;
+        RadioButton         *m_pSocketRadio;
+        RadioButton         *m_pNamedPipeRadio;
+        FixedText           *m_pHostNameLabel;
+        Edit                *m_pHostName;
+        FixedText           *m_pPortLabel;
+        NumericField        *m_pPort;
+        FixedText           *m_pDefaultPort;
+        Edit                *m_pSocket;
+        Edit                *m_pNamedPipe;
 
         ::svt::ControlDependencyManager
                             m_aControlDependencies;

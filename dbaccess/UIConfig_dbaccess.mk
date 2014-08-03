@@ -22,6 +22,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/copytablepage \
     dbaccess/uiconfig/ui/dbaseindexdialog \
     dbaccess/uiconfig/ui/dbwizmysqlintropage \
+    dbaccess/uiconfig/ui/dbwizmysqlnativepage \
     dbaccess/uiconfig/ui/dbwizspreadsheetpage \
     dbaccess/uiconfig/ui/dbwiztextpage \
     dbaccess/uiconfig/ui/directsqldialog  \
@@ -36,6 +37,8 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/joindialog \
     dbaccess/uiconfig/ui/ldapconnectionpage \
     dbaccess/uiconfig/ui/migratepage \
+    dbaccess/uiconfig/ui/mysqlnativepage \
+    dbaccess/uiconfig/ui/mysqlnativesettings \
     dbaccess/uiconfig/ui/password \
     dbaccess/uiconfig/ui/preparepage \
     dbaccess/uiconfig/ui/queryfilterdialog \
