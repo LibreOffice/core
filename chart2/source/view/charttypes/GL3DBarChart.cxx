@@ -563,7 +563,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     glm::vec3 aBegin;
     aBegin.y = nYPos;
     glm::vec3 aEnd = aBegin;
-    aEnd.x = nXEnd;
+    aEnd.x = BENCH_MARK_MODE ? (mbScrollFlg ? nXEnd - BAR_SIZE_X : nXEnd) : nXEnd;
     pAxis->setPosition(aBegin, aEnd);
     pAxis->setLineColor(COL_BLUE);
 
@@ -583,7 +583,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(&maShapes.back());
     glm::vec3 aTopLeft;
     glm::vec3 aTopRight = aTopLeft;
-    aTopRight.x = nXEnd + 2 * BAR_DISTANCE_X;
+    aTopRight.x = BENCH_MARK_MODE ? (mbScrollFlg ? nXEnd - BAR_SIZE_X : nXEnd + 2 * BAR_DISTANCE_X) : (nXEnd + 2 * BAR_DISTANCE_X);
     glm::vec3 aBottomRight = aTopRight;
     aBottomRight.y = nYPos;
     pRect->setPosition(aTopLeft, aTopRight, aBottomRight);
@@ -597,6 +597,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     uno::Sequence<OUString> aCats = rCatProvider.getSimpleCategories();
     for (sal_Int32 i = 0; i < aCats.getLength(); ++i)
     {
+        if (BENCH_MARK_MODE && mbScrollFlg && (i + 1 == aCats.getLength()))
+            break;
         maCategories.push_back(aCats[i]);
         if(aCats[i].isEmpty())
             continue;
