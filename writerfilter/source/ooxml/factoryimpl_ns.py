@@ -188,10 +188,38 @@ def idToLabel(idName):
     else:
         return idName
 
+def appendValueData(values, name, value):
+    first = name[0:1]
 
-def valueToLabel(value):
-    return value.replace('-', 'm').replace('+', 'p').replace(' ', '_').replace(',', '_')
+    if not (first in values):
+        values[first] = []
 
+    values[first].append([name, value])
+
+def printValueData(values):
+    if "" in values:
+        output_else = ""
+        for i in values[""]:
+            print("        %sif (rValue == \"%s\") { rOutValue = %s; return true; }" % (output_else, i[0], i[1]))
+            output_else = "else "
+        print("        else switch (rValue[0])")
+    else:
+        print("        if (rValue.isEmpty())")
+        print("            return false;")
+        print("        switch (rValue[0])")
+
+    print("        {")
+    for k in sorted(values.keys()):
+        if k != "":
+            print("        case '%s':" % k)
+            output_else = ""
+            for i in values[k]:
+                print("            %sif (rValue == \"%s\") { rOutValue = %s; }" % (output_else, i[0], i[1]))
+                output_else = "else "
+            print("            else { return false; }")
+            print("            return true;")
+            print("            break;")
+    print("        }")
 
 def factoryGetListValue(nsNode):
     print("""bool OOXMLFactory_%s::getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue)
@@ -204,15 +232,14 @@ def factoryGetListValue(nsNode):
 
     for resourceNode in [i for i in getChildrenByName(nsNode, "resource") if i.getAttribute("resource") == "List"]:
         print("    case %s:" % idForDefine(nsNode, resourceNode))
-        output_else = ""
+        values = {}
         for valueNode in getChildrenByName(resourceNode, "value"):
             valueData = ""
             if len(valueNode.childNodes):
                 valueData = valueNode.childNodes[0].data
-            print("        %sif (rValue == \"%s\") { rOutValue = %s; }" % (output_else, valueData, idToLabel(valueNode.getAttribute("tokenid"))))
-            output_else = "else "
-        print("        %s{ return false; }" % (output_else))
-        print("        return true;")
+            appendValueData(values, valueData, idToLabel(valueNode.getAttribute("tokenid")))
+        printValueData(values)
+        print("        return false;")
         print("        break;")
 
     print("""    default:
