@@ -15,7 +15,7 @@
         <value>com.sun.star.comp.Calc.MWAWCalcImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">BeagleWorks/WordPerfect Works v1 Document</value>
+        <value xml:lang="en-US">BeagleWorks/WordPerfect Works v1 Document (Calc)</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>

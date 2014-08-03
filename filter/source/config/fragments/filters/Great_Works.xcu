@@ -15,7 +15,7 @@
         <value>com.sun.star.comp.Writer.MWAWImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">GreatWorks Document</value>
+        <value xml:lang="en-US">GreatWorks Document (Writer)</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>
