@@ -37,38 +37,19 @@ using dp_gui::DependencyDialog;
 
 DependencyDialog::DependencyDialog(
     Window * parent, std::vector< OUString > const & dependencies):
-    ModalDialog(parent, DpGuiResId(RID_DLG_DEPENDENCIES) ),
-    m_text(this, DpGuiResId(RID_DLG_DEPENDENCIES_TEXT)),
-    m_list(this, DpGuiResId(RID_DLG_DEPENDENCIES_LIST)),
-    m_ok(this, DpGuiResId(RID_DLG_DEPENDENCIES_OK)),
-    m_listDelta(
-        GetOutputSizePixel().Width() - m_list.GetSizePixel().Width(),
-        GetOutputSizePixel().Height() - m_list.GetSizePixel().Height())
+    ModalDialog(parent, "Dependencies", "desktop/ui/dependenciesdialog.ui")
 {
-    FreeResource();
+    get(m_list, "depListTreeview");
+    set_height_request(200);
     SetMinOutputSizePixel(GetOutputSizePixel());
-    m_list.SetReadOnly();
+    m_list->SetReadOnly();
     for (std::vector< OUString >::const_iterator i(dependencies.begin());
          i != dependencies.end(); ++i)
     {
-        m_list.InsertEntry(*i);
+        m_list->InsertEntry(*i);
     }
 }
 
 DependencyDialog::~DependencyDialog() {}
-
-void DependencyDialog::Resize() {
-    long n = m_ok.GetPosPixel().Y() -
-        (m_list.GetPosPixel().Y() + m_list.GetSizePixel().Height());
-    m_list.SetSizePixel(
-        Size(
-            GetOutputSizePixel().Width() - m_listDelta.Width(),
-            GetOutputSizePixel().Height() - m_listDelta.Height()));
-    m_ok.SetPosPixel(
-        Point(
-            (m_list.GetPosPixel().X() +
-             (m_list.GetSizePixel().Width() - m_ok.GetSizePixel().Width()) / 2),
-            m_list.GetPosPixel().Y() + m_list.GetSizePixel().Height() + n));
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
