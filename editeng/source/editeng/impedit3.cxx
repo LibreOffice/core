@@ -359,6 +359,8 @@ bool ImpEditEngine::IsPageOverflow( const Size aCurPaperSize, const Size aPrevPa
     const bool bPageExpansionY = ( aPrevPaperSize.Height() != 0 ) && // XXX
                             ( aCurPaperSize.Height() > aPrevPaperSize.Height() );
 
+    // Has text size changed (in the right vertical direction) AND
+    //      is this change an expansion?
     return ( bTextGrowY && !IsVertical() && bPageExpansionY ) ||
            ( bTextGrowX && IsVertical() &&  bPageExpansionX );
 
@@ -410,6 +412,10 @@ void ImpEditEngine::FormatDoc()
                 if ( IsCallParaInsertedOrDeleted() )
                     GetEditEnginePtr()->ParagraphHeightChanged( nPara );
                 pParaPortion->SetMustRepaint( false );
+
+                // FIXME(matteocam)
+                // set possible point for chainging
+                mnOverflowingPara = nPara;
             }
 
             // InvalidRect set only once...

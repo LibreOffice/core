@@ -197,7 +197,6 @@ private:
 
 protected:
 
-
 public:
                     EditEngine( SfxItemPool* pItemPool );
     virtual         ~EditEngine();
@@ -598,6 +597,8 @@ public:
 
     bool Undo(EditView* pView);
     bool Redo(EditView* pView);
+
+    sal_Int32 GetOverflowingParaNum() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX
