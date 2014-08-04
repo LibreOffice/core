@@ -190,7 +190,7 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
             throw new StatusException("Could not select Biblio-Database", ex);
         }
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 

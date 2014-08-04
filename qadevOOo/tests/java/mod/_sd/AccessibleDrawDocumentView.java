@@ -98,7 +98,7 @@ public class AccessibleDrawDocumentView extends TestCase {
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (
                             Param.getMSF(),aModel);

@@ -74,7 +74,7 @@ public class AccessibleDropDownComboBox extends TestCase {
                                                     PrintWriter log) {
         XInterface oObj = null;
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(
                                   Param.getMSF(),

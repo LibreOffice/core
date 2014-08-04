@@ -167,7 +167,7 @@ public class _XRangeSelection extends MultiMethodTest {
      */
     protected Point getSheetCenter() {
         log.println("Trying to get AccessibleSpreadsheet");
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
         XComponent xSheetDoc = (XComponent) tEnv.getObjRelation("DOCUMENT");
 
         XModel xModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);

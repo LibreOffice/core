@@ -96,7 +96,7 @@ public class AccessibleMenuItem extends TestCase {
 
         shortWait();
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         Object atw = tk.getActiveTopWindow();
 

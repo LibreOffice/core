@@ -61,7 +61,7 @@ public class AccLegend extends TestCase {
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xChartDoc);
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

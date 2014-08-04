@@ -104,7 +104,7 @@ public class AccessiblePresentationGraphicShape extends TestCase {
 
         //DrawTools.getShapes(DrawTools.getDrawPage(xDoc,0)).add(oShape);
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (tParam.getMSF(),aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

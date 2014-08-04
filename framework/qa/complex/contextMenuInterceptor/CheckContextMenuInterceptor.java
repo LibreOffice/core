@@ -240,7 +240,7 @@ public class CheckContextMenuInterceptor
 
         XAccessible xRoot = null;
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         try
         {
@@ -305,7 +305,7 @@ public class CheckContextMenuInterceptor
     {
 
         System.out.println("try to open contex menu...");
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         xWindow = AccessibilityTools.getCurrentWindow(xMSF, aModel);
 

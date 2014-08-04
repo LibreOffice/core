@@ -138,7 +138,7 @@ public class AccessibleListBox extends TestCase {
 
         shortWait();
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());

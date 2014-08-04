@@ -99,7 +99,7 @@ public class AccessibleComboBox extends TestCase {
 
         util.utils.shortWait(Param.getInt("ShortWait"));
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         util.utils.shortWait(Param.getInt("ShortWait"));
 

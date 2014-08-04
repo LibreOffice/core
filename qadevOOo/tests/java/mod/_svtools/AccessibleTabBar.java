@@ -99,7 +99,7 @@ public class AccessibleTabBar extends TestCase {
 
         XInterface oObj = null;
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         shortWait();
 

@@ -64,7 +64,7 @@ public class AccessibleSlideView extends TestCase {
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, aModel);
         XDrawPages oDPn = oDPS.getDrawPages();

@@ -97,7 +97,7 @@ public void run()
         XExtendedToolkit tk =
                 UnoRuntime.queryInterface(
                                 XExtendedToolkit.class,x);
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
         XWindow xWindow = UnoRuntime.queryInterface(
                                 XWindow.class,tk.getActiveTopWindow());
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

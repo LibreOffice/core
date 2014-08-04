@@ -142,7 +142,7 @@ public class AccessibleStatusBarItem extends TestCase {
         XInterface oObj = null;
         XInterface secondItem = null;
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(
                                   tParam.getMSF(),

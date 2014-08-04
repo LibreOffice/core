@@ -136,7 +136,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
             Thread.sleep(500);
         } catch (InterruptedException ex) {}
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow( Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

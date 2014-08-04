@@ -149,7 +149,7 @@ public class AccessibleToolBoxItem extends TestCase {
 
         XInterface oObj = null;
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(
                                   tParam.getMSF(),

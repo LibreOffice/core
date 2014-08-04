@@ -75,7 +75,7 @@ public class AccessibleDropDownListBox extends TestCase {
 
         shortWait();
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                   Param.getMSF(),

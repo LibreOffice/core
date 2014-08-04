@@ -106,7 +106,7 @@ public class AccessibleOLEShape extends TestCase {
             throw new StatusException("Couldn't change property", e);
         }
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (tParam.getMSF(),aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

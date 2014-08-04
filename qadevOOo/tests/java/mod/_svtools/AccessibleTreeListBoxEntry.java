@@ -223,7 +223,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
 
         shortWait();
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 

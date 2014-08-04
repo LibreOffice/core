@@ -216,7 +216,7 @@ public class AccessibleTabPage extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         shortWait();
 

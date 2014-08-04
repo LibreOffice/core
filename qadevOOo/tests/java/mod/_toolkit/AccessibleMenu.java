@@ -96,7 +96,7 @@ public class AccessibleMenu extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

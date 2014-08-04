@@ -104,7 +104,7 @@ public class AccessibleShape extends TestCase {
             throw new StatusException("Couldn't get toolkit", e );
         }
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         final XWindow basicIDE = xFrame.getContainerWindow();
 

@@ -99,7 +99,7 @@ public class AccessiblePresentationShape extends TestCase {
                                 "IsEmptyPresentationObject", new Boolean(false));
         } catch (Exception e) {}
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (tParam.getMSF(),aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

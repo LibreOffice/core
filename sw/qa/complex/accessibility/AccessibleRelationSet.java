@@ -169,7 +169,7 @@ public class AccessibleRelationSet {
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
-        AccessibilityTools at = new AccessibilityTools();
+        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(factory, aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
