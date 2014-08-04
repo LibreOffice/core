@@ -41,6 +41,10 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
 			$(MAKE)) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(EXTERNAL_WORKDIR)/src/lib/.libs/libmwaw-0.3.3.dylib \
+		) \
 	)
 
 # vim: set noet sw=4 ts=4:

@@ -39,6 +39,10 @@ $(call gb_ExternalProject_get_state_target,librevenge,build) :
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(EXTERNAL_WORKDIR)/src/lib/.libs/librevenge-0.0.0.dylib \
+		) \
 	)
 
 # vim: set noet sw=4 ts=4:
