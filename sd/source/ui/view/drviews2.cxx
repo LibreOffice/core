@@ -1969,7 +1969,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
 
                 SdrRectObj* pRectObj = new SdrRectObj( OBJ_TEXT );
-                pRectObj->SetMergedItem(SdrTextAutoGrowWidthItem(true));
+                pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
 
                 pOutl->UpdateFields();
                 pOutl->SetUpdateMode( true );

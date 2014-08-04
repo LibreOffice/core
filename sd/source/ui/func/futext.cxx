@@ -481,8 +481,8 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
                object, otherwise we draw to much */
             SfxItemSet aSet(mpViewShell->GetPool());
             aSet.Put(makeSdrTextMinFrameHeightItem(0));
-            aSet.Put(SdrTextAutoGrowWidthItem(false));
-            aSet.Put(SdrTextAutoGrowHeightItem(true));
+            aSet.Put(makeSdrTextAutoGrowWidthItem(false));
+            aSet.Put(makeSdrTextAutoGrowHeightItem(true));
             pTxtObj->SetMergedItemSet(aSet);
             pTxtObj->AdjustTextFrameWidthAndHeight();
             aSet.Put(makeSdrTextMaxFrameHeightItem(pTxtObj->GetLogicRect().GetSize().Height()));
@@ -492,8 +492,8 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
         {
             SfxItemSet aSet(mpViewShell->GetPool());
             aSet.Put(makeSdrTextMinFrameWidthItem(0));
-            aSet.Put(SdrTextAutoGrowWidthItem(true));
-            aSet.Put(SdrTextAutoGrowHeightItem(false));
+            aSet.Put(makeSdrTextAutoGrowWidthItem(true));
+            aSet.Put(makeSdrTextAutoGrowHeightItem(false));
 
             // Needs to be set since default is SDRTEXTHORZADJUST_BLOCK
             aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
@@ -510,8 +510,8 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             // draw text object, needs to be initialized when vertical text is used
             SfxItemSet aSet(mpViewShell->GetPool());
 
-            aSet.Put(SdrTextAutoGrowWidthItem(true));
-            aSet.Put(SdrTextAutoGrowHeightItem(false));
+            aSet.Put(makeSdrTextAutoGrowWidthItem(true));
+            aSet.Put(makeSdrTextAutoGrowHeightItem(false));
 
             // Set defaults for vertical klick-n'drag text object, pool defaults are:
             // SdrTextVertAdjustItem: SDRTEXTVERTADJUST_TOP
@@ -531,8 +531,8 @@ void FuText::ImpSetAttributesFitToSize(SdrTextObj* pTxtObj)
     SfxItemSet aSet(mpViewShell->GetPool(), SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
     SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
     aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
-    aSet.Put(SdrTextAutoGrowHeightItem(false));
-    aSet.Put(SdrTextAutoGrowWidthItem(false));
+    aSet.Put(makeSdrTextAutoGrowHeightItem(false));
+    aSet.Put(makeSdrTextAutoGrowWidthItem(false));
     pTxtObj->SetMergedItemSet(aSet);
     pTxtObj->AdjustTextFrameWidthAndHeight();
 }
@@ -543,8 +543,8 @@ void FuText::ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj)
         SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
     SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
     aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
-    aSet.Put(SdrTextAutoGrowHeightItem(false));
-    aSet.Put(SdrTextAutoGrowWidthItem(false));
+    aSet.Put(makeSdrTextAutoGrowHeightItem(false));
+    aSet.Put(makeSdrTextAutoGrowWidthItem(false));
     pTxtObj->SetMergedItemSet(aSet);
     pTxtObj->AdjustTextFrameWidthAndHeight();
 }
@@ -560,8 +560,8 @@ void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
             SfxItemSet aSet(mpViewShell->GetPool());
             aSet.Put(makeSdrTextMinFrameHeightItem(0));
             aSet.Put(makeSdrTextMaxFrameHeightItem(0));
-            aSet.Put(SdrTextAutoGrowHeightItem(true));
-            aSet.Put(SdrTextAutoGrowWidthItem(false));
+            aSet.Put(makeSdrTextAutoGrowHeightItem(true));
+            aSet.Put(makeSdrTextAutoGrowWidthItem(false));
             pTxtObj->SetMergedItemSet(aSet);
         }
         else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
@@ -569,8 +569,8 @@ void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
             SfxItemSet aSet(mpViewShell->GetPool());
             aSet.Put(makeSdrTextMinFrameWidthItem(0));
             aSet.Put(makeSdrTextMaxFrameWidthItem(0));
-            aSet.Put(SdrTextAutoGrowWidthItem(true));
-            aSet.Put(SdrTextAutoGrowHeightItem(false));
+            aSet.Put(makeSdrTextAutoGrowWidthItem(true));
+            aSet.Put(makeSdrTextAutoGrowHeightItem(false));
             pTxtObj->SetMergedItemSet(aSet);
         }
 
@@ -789,8 +789,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 SfxItemSet aSet(mpViewShell->GetPool());
                 aSet.Put(makeSdrTextMinFrameHeightItem(0));
                 aSet.Put(makeSdrTextMinFrameWidthItem(0));
-                aSet.Put(SdrTextAutoGrowHeightItem(true));
-                aSet.Put(SdrTextAutoGrowWidthItem(true));
+                aSet.Put(makeSdrTextAutoGrowHeightItem(true));
+                aSet.Put(makeSdrTextAutoGrowWidthItem(true));
 
                 if(nSlotId == SID_ATTR_CHAR_VERTICAL)
                 {

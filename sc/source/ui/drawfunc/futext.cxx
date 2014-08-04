@@ -464,8 +464,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     SfxItemSet aItemSet( pDrDoc->GetItemPool(),
                                             SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
-                    aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
-                    aItemSet.Put( SdrTextAutoGrowHeightItem( false ) );
+                    aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
+                    aItemSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                     aItemSet.Put( SdrTextAniKindItem( SDRTEXTANI_SLIDE ) );
                     aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                     aItemSet.Put( SdrTextAniCountItem( 1 ) );
@@ -491,8 +491,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
                         pText->SetVerticalWriting(true);
 
-                        aSet.Put(SdrTextAutoGrowWidthItem(true));
-                        aSet.Put(SdrTextAutoGrowHeightItem(false));
+                        aSet.Put(makeSdrTextAutoGrowWidthItem(true));
+                        aSet.Put(makeSdrTextAutoGrowHeightItem(false));
                         aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                         aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
@@ -802,8 +802,8 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             {
                 SfxItemSet aSet(pDrDoc->GetItemPool());
 
-                aSet.Put(SdrTextAutoGrowWidthItem(true));
-                aSet.Put(SdrTextAutoGrowHeightItem(false));
+                aSet.Put(makeSdrTextAutoGrowWidthItem(true));
+                aSet.Put(makeSdrTextAutoGrowHeightItem(false));
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
@@ -814,8 +814,8 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             {
                 SfxItemSet aSet(pDrDoc->GetItemPool(), SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
-                aSet.Put( SdrTextAutoGrowWidthItem( false ) );
-                aSet.Put( SdrTextAutoGrowHeightItem( false ) );
+                aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
+                aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                 aSet.Put( SdrTextAniKindItem( SDRTEXTANI_SLIDE ) );
                 aSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                 aSet.Put( SdrTextAniCountItem( 1 ) );

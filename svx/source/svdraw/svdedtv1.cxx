@@ -1370,7 +1370,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
 
         SfxItemState eState=aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWWIDTH);
-        bool bAutoGrow=((SdrTextAutoGrowWidthItem&)(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
+        bool bAutoGrow=((SdrOnOffItem&)(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
         if (eState==SFX_ITEM_DONTCARE) {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_AUTOWIDTH);
         } else if (eState==SFX_ITEM_SET) {
@@ -1378,7 +1378,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
 
         eState=aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWHEIGHT);
-        bAutoGrow=((SdrTextAutoGrowHeightItem&)(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+        bAutoGrow=((SdrOnOffItem&)(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
         if (eState==SFX_ITEM_DONTCARE) {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_AUTOHEIGHT);
         } else if (eState==SFX_ITEM_SET) {
@@ -1581,13 +1581,13 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     // AutoGrow
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOWIDTH,true,&pPoolItem)) {
         bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
-        aSetAttr.Put(SdrTextAutoGrowWidthItem(bAutoGrow));
+        aSetAttr.Put(makeSdrTextAutoGrowWidthItem(bAutoGrow));
         bSetAttr=true;
     }
 
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOHEIGHT,true,&pPoolItem)) {
         bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
-        aSetAttr.Put(SdrTextAutoGrowHeightItem(bAutoGrow));
+        aSetAttr.Put(makeSdrTextAutoGrowHeightItem(bAutoGrow));
         bSetAttr=true;
     }
 

@@ -835,7 +835,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
             if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
             {
-                aSet.Put( SdrTextAutoGrowHeightItem( true ) );
+                aSet.Put( makeSdrTextAutoGrowHeightItem( true ) );
                 aSet.Put( makeSdrTextMinFrameHeightItem(
                     aNewRect.Bottom() - aNewRect.Top() ) );
                 aSet.Put( makeSdrTextMinFrameWidthItem(
@@ -843,15 +843,15 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             }
             else
             {
-                aSet.Put( SdrTextAutoGrowHeightItem( false ) );
-                aSet.Put( SdrTextAutoGrowWidthItem( false ) );
+                aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
+                aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
             }
 
             switch ( (MSO_WrapMode)
                 GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
             {
                 case mso_wrapNone :
-                    aSet.Put( SdrTextAutoGrowWidthItem( true ) );
+                    aSet.Put( makeSdrTextAutoGrowWidthItem( true ) );
                     pImpRec->bAutoWidth = true;
                 break;
                 case mso_wrapByPoints :

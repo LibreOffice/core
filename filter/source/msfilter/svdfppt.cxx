@@ -1073,13 +1073,13 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
             if ( !pTObj->ISA( SdrObjCustomShape ) )
             {
-                 pTObj->SetMergedItem( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
-                pTObj->SetMergedItem( SdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
+                 pTObj->SetMergedItem( makeSdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
+                pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
             }
             else
             {
                 pTObj->SetMergedItem( SdrTextWordWrapItem( bWordWrap ) );
-                pTObj->SetMergedItem( SdrTextAutoGrowHeightItem( bFitShapeToText ) );
+                pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bFitShapeToText ) );
             }
 
             pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );

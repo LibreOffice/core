@@ -382,8 +382,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                               EE_CHAR_START,      EE_CHAR_END,
                               0 };
     SfxItemSet aItemSet( pModel->GetItemPool(), aWhichMap );
-    aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
-    aItemSet.Put( SdrTextAutoGrowHeightItem( true ) );
+    aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
+    aItemSet.Put( makeSdrTextAutoGrowHeightItem( true ) );
     aItemSet.Put( SdrTextAniKindItem( eAniKind ) );
     aItemSet.Put( SdrTextAniDirectionItem( eAniDir ) );
     aItemSet.Put( SdrTextAniCountItem( nCount ) );

@@ -132,8 +132,8 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( makeSdrTextRightDistItem( 100 ) );
     aItemSet.Put( makeSdrTextUpperDistItem( 100 ) );
     aItemSet.Put( makeSdrTextLowerDistItem( 100 ) );
-    aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
-    aItemSet.Put( SdrTextAutoGrowHeightItem( true ) );
+    aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
+    aItemSet.Put( makeSdrTextAutoGrowHeightItem( true ) );
     // use the default cell style to be able to modify the caption font
     const ScPatternAttr& rDefPattern = static_cast< const ScPatternAttr& >( rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN ) );
     rDefPattern.FillEditItemSet( &aItemSet );
@@ -794,10 +794,10 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc );
         // adjust caption size to text size
         long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
-        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( true ) );
+        pCaption->SetMergedItem( makeSdrTextAutoGrowWidthItem( true ) );
         pCaption->SetMergedItem( makeSdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
         pCaption->SetMergedItem( makeSdrTextMaxFrameWidthItem( nMaxWidth ) );
-        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( true ) );
+        pCaption->SetMergedItem( makeSdrTextAutoGrowHeightItem( true ) );
         pCaption->AdjustTextFrameWidthAndHeight();
     }
 

@@ -175,7 +175,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                 pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, 0 ) );
                 pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
                 pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-                pObj->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+                pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
 
                 SdrObjCustomShape* pShape(dynamic_cast< SdrObjCustomShape* >( pObj ));
                 assert(pShape);
@@ -515,8 +515,8 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                     if ( bVertical )
                                     {
                                         SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
-                                        aSet.Put( SdrTextAutoGrowWidthItem( true ) );
-                                        aSet.Put( SdrTextAutoGrowHeightItem( false ) );
+                                        aSet.Put( makeSdrTextAutoGrowWidthItem( true ) );
+                                        aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                                         aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_TOP ) );
                                         aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
                                         pTextObj->SetMergedItemSet( aSet );

@@ -546,8 +546,8 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         //for the fallback geometry.
         if(aShapeType.startsWith("fontwork"))
         {
-            pShape->SetMergedItem(SdrTextAutoGrowHeightItem(false));
-            pShape->SetMergedItem(SdrTextAutoGrowWidthItem(false));
+            pShape->SetMergedItem(makeSdrTextAutoGrowHeightItem(false));
+            pShape->SetMergedItem(makeSdrTextAutoGrowWidthItem(false));
         }
     }
     convertShapeProperties( xShape );

@@ -224,8 +224,8 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
     aCaptionSet.Put( makeSdrTextUpperDistItem( 100 ) );
     aCaptionSet.Put( makeSdrTextLowerDistItem( 100 ) );
 
-    aCaptionSet.Put( SdrTextAutoGrowWidthItem( false ) );
-    aCaptionSet.Put( SdrTextAutoGrowHeightItem( true ) );
+    aCaptionSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
+    aCaptionSet.Put( makeSdrTextAutoGrowHeightItem( true ) );
 
     //  do use the default cell style, so the user has a chance to
     //  modify the font for the annotations

@@ -427,9 +427,9 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
                 // potential problem: This action was still NOT
                 // adapted for vertical text. This sure needs to be done.
                 if(bVertical)
-                    aTempAttr.Put(SdrTextAutoGrowWidthItem(false));
+                    aTempAttr.Put(makeSdrTextAutoGrowWidthItem(false));
                 else
-                    aTempAttr.Put(SdrTextAutoGrowHeightItem(false));
+                    aTempAttr.Put(makeSdrTextAutoGrowHeightItem(false));
             }
 
             // check if we need another vertical adjustment than the default
@@ -2240,13 +2240,13 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                     SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     SdrMetricItem aMinHeight( makeSdrTextMinFrameHeightItem(aRect.GetSize().Height()) );
                     aTempAttr.Put( aMinHeight );
-                    aTempAttr.Put( SdrTextAutoGrowHeightItem(false) );
+                    aTempAttr.Put( makeSdrTextAutoGrowHeightItem(false) );
                     pTextObject->SetMergedItemSet(aTempAttr);
                     pTextObject->SetLogicRect(aRect);
 
                     // switch on AutoGrowHeight
                     SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                    aAttr.Put( SdrTextAutoGrowHeightItem(true) );
+                    aAttr.Put( makeSdrTextAutoGrowHeightItem(true) );
 
                     pTextObject->SetMergedItemSet(aAttr);
                 }
@@ -2257,13 +2257,13 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                     SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     SdrMetricItem aMinWidth( makeSdrTextMinFrameWidthItem(aRect.GetSize().Width()) );
                     aTempAttr.Put( aMinWidth );
-                    aTempAttr.Put( SdrTextAutoGrowWidthItem(false) );
+                    aTempAttr.Put( makeSdrTextAutoGrowWidthItem(false) );
                     pTextObject->SetMergedItemSet(aTempAttr);
                     pTextObject->SetLogicRect(aRect);
 
                     // switch on AutoGrowWidth
                     SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                    aAttr.Put( SdrTextAutoGrowWidthItem(true) );
+                    aAttr.Put( makeSdrTextAutoGrowWidthItem(true) );
                     pTextObject->SetMergedItemSet(aAttr);
                 }
             }
@@ -2284,8 +2284,8 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         if( bVertical && (( eObjKind == PRESOBJ_TITLE) || (eObjKind == PRESOBJ_OUTLINE)))
         {
             SfxItemSet aNewSet(pObj->GetMergedItemSet());
-            aNewSet.Put( SdrTextAutoGrowWidthItem(true) );
-            aNewSet.Put( SdrTextAutoGrowHeightItem(false) );
+            aNewSet.Put( makeSdrTextAutoGrowWidthItem(true) );
+            aNewSet.Put( makeSdrTextAutoGrowHeightItem(false) );
             if( eObjKind == PRESOBJ_OUTLINE )
             {
                 aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );

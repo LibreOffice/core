@@ -170,7 +170,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     // adjust to height
     if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbAutoGrowHeight->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
+        m_pTsbAutoGrowHeight->SetState( ( ( const SdrOnOffItem& )rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbAutoGrowHeight->EnableTriState( false );
     }
@@ -181,7 +181,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     // adjust to width
     if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWWIDTH ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbAutoGrowWidth->SetState( ( ( const SdrTextAutoGrowWidthItem& )rAttrs->Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
+        m_pTsbAutoGrowWidth->SetState( ( ( const SdrOnOffItem& )rAttrs->Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbAutoGrowWidth->EnableTriState( false );
     }
@@ -192,7 +192,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     // autogrowsize
     if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbAutoGrowSize->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
+        m_pTsbAutoGrowSize->SetState( ( ( const SdrOnOffItem& )rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbAutoGrowSize->EnableTriState( false );
     }
@@ -358,19 +358,19 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     eState = m_pTsbAutoGrowHeight->GetState();
     if( m_pTsbAutoGrowHeight->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( makeSdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbAutoGrowWidth->GetState();
     if( m_pTsbAutoGrowWidth->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( SdrTextAutoGrowWidthItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( makeSdrTextAutoGrowWidthItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbAutoGrowSize->GetState();
     if( m_pTsbAutoGrowSize->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( makeSdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbWordWrapText->GetState();

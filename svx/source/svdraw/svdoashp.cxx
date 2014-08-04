@@ -1445,7 +1445,7 @@ void SdrObjCustomShape::AdaptTextMinSize()
 {
     if(!pModel || !pModel->IsPasteResize())
     {
-        const bool bResizeShapeToFitText(static_cast< const SdrTextAutoGrowHeightItem& >(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue());
+        const bool bResizeShapeToFitText(static_cast< const SdrOnOffItem& >(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue());
         SfxItemSet aSet(
             *GetObjectItemSet().GetPool(),
             SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
@@ -2239,7 +2239,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*r
 bool SdrObjCustomShape::IsAutoGrowHeight() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    bool bIsAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+    bool bIsAutoGrowHeight = ((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
     if ( bIsAutoGrowHeight && IsVerticalWriting() )
         bIsAutoGrowHeight = !((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue();
     return bIsAutoGrowHeight;
@@ -2247,7 +2247,7 @@ bool SdrObjCustomShape::IsAutoGrowHeight() const
 bool SdrObjCustomShape::IsAutoGrowWidth() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    bool bIsAutoGrowWidth = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+    bool bIsAutoGrowWidth = ((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
     if ( bIsAutoGrowWidth && !IsVerticalWriting() )
         bIsAutoGrowWidth = !((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue();
     return bIsAutoGrowWidth;

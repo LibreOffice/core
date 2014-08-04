@@ -1028,13 +1028,13 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     if ( aFnt.GetWidth() || ( rAct.GetType() == META_STRETCHTEXT_ACTION ) )
     {
         pText->ClearMergedItem( SDRATTR_TEXT_AUTOGROWWIDTH );
-        pText->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+        pText->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
         // don't let the margins eat the space needed for the text
         pText->SetMergedItem( SdrTextFitToSizeTypeItem( SDRTEXTFIT_ALLLINES ) );
     }
     else
     {
-        pText->SetMergedItem( SdrTextAutoGrowWidthItem( true ) );
+        pText->SetMergedItem( makeSdrTextAutoGrowWidthItem( true ) );
     }
 
     pText->SetModel(mpModel);

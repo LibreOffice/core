@@ -1199,8 +1199,8 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     SetFill( rSet, aTxtB.aFill );
 
     rSet.Put( SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ) );
-    rSet.Put( SdrTextAutoGrowWidthItem(false));
-    rSet.Put( SdrTextAutoGrowHeightItem(false));
+    rSet.Put( makeSdrTextAutoGrowWidthItem(false));
+    rSet.Put( makeSdrTextAutoGrowHeightItem(false));
     rSet.Put( makeSdrTextLeftDistItem(  MIN_BORDER_DIST*2 ) );
     rSet.Put( makeSdrTextRightDistItem( MIN_BORDER_DIST*2 ) );
     rSet.Put( makeSdrTextUpperDistItem( MIN_BORDER_DIST ) );
@@ -1652,7 +1652,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         aBox.SetDistance( (sal_uInt16)rInnerDist.Bottom(), BOX_LINE_BOTTOM );
 
     bool bFixSize = !(WW8ITEMVALUE(rOldSet, SDRATTR_TEXT_AUTOGROWHEIGHT,
-        SdrTextAutoGrowHeightItem));
+        SdrOnOffItem));
 
     // Size: SwFmtFrmSize
     if( SFX_ITEM_SET != rFlySet.GetItemState(RES_FRM_SIZE, false) )
@@ -2727,8 +2727,8 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         aSet.Put(XLineStyleItem(XLINE_NONE));
         aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
-        aSet.Put(SdrTextAutoGrowHeightItem(false));
-        aSet.Put(SdrTextAutoGrowWidthItem(false));
+        aSet.Put(makeSdrTextAutoGrowHeightItem(false));
+        aSet.Put(makeSdrTextAutoGrowWidthItem(false));
         pSdrTextObj->SetMergedItemSet(aSet);
 
         long nAngle = pRecord->nTextRotationAngle;

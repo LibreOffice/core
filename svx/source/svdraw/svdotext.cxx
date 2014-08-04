@@ -301,7 +301,7 @@ bool SdrTextObj::IsAutoGrowHeight() const
         return false; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+    bool bRet = ((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
 
     if(bRet)
     {
@@ -326,7 +326,7 @@ bool SdrTextObj::IsAutoGrowWidth() const
         return false; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    bool bRet = ((SdrTextAutoGrowWidthItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
+    bool bRet = ((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
 
     bool bInEditMOde = IsInEditMode();
 
@@ -571,7 +571,7 @@ void SdrTextObj::AdaptTextMinSize()
                 if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
                 {
                     bDisableAutoWidthOnDragging = true;
-                    aSet.Put(SdrTextAutoGrowWidthItem(false));
+                    aSet.Put(makeSdrTextAutoGrowWidthItem(false));
                 }
             }
 
@@ -585,7 +585,7 @@ void SdrTextObj::AdaptTextMinSize()
                 if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
                 {
                     bDisableAutoWidthOnDragging = false;
-                    aSet.Put(SdrTextAutoGrowHeightItem(false));
+                    aSet.Put(makeSdrTextAutoGrowHeightItem(false));
                 }
             }
 
@@ -1531,8 +1531,8 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
     {
         // get item settings
         const SfxItemSet& rSet = GetObjectItemSet();
-        bool bAutoGrowWidth = ((SdrTextAutoGrowWidthItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
-        bool bAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+        bool bAutoGrowWidth = ((SdrOnOffItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
+        bool bAutoGrowHeight = ((SdrOnOffItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
 
         // Also exchange hor/ver adjust items
         SdrTextHorzAdjust eHorz = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
@@ -1550,8 +1550,8 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
             0, 0);
 
         aNewSet.Put(rSet);
-        aNewSet.Put(SdrTextAutoGrowWidthItem(bAutoGrowHeight));
-        aNewSet.Put(SdrTextAutoGrowHeightItem(bAutoGrowWidth));
+        aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
+        aNewSet.Put(makeSdrTextAutoGrowHeightItem(bAutoGrowWidth));
 
         // Exchange horz and vert adjusts
         switch(eVert)

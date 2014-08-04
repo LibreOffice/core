@@ -85,8 +85,8 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     SfxItemSet aItemSet( pSdrView->GetModel()->GetItemPool(),
                                         SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
-                    aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
-                    aItemSet.Put( SdrTextAutoGrowHeightItem( false ) );
+                    aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
+                    aItemSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                     aItemSet.Put( SdrTextAniKindItem( SDRTEXTANI_SCROLL ) );
                     aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                     aItemSet.Put( SdrTextAniCountItem( 0 ) );
@@ -103,8 +103,8 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
                 pText->SetVerticalWriting(true);
 
-                aSet.Put(SdrTextAutoGrowWidthItem(true));
-                aSet.Put(SdrTextAutoGrowHeightItem(false));
+                aSet.Put(makeSdrTextAutoGrowWidthItem(true));
+                aSet.Put(makeSdrTextAutoGrowHeightItem(false));
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 

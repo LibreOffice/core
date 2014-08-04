@@ -789,7 +789,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         case SDRATTR_TEXT_MAXFRAMEHEIGHT: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_AUTOGROWHEIGHT,pItem)) {
-                bool bAutoGrow=((const SdrTextAutoGrowHeightItem*)pItem)->GetValue();
+                bool bAutoGrow=((const SdrOnOffItem*)pItem)->GetValue();
                 if (!bAutoGrow) return true;
             }
         } break;
@@ -797,7 +797,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         case SDRATTR_TEXT_MAXFRAMEWIDTH: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_AUTOGROWWIDTH,pItem)) {
-                bool bAutoGrow=((const SdrTextAutoGrowWidthItem*)pItem)->GetValue();
+                bool bAutoGrow=((const SdrOnOffItem*)pItem)->GetValue();
                 if (!bAutoGrow) return true;
             }
         } break;

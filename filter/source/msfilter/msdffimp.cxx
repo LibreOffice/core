@@ -1502,7 +1502,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     rSet.Put( makeSdrTextLowerDistItem( nTextBottom ) );
 
     rSet.Put( SdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_True : sal_False ) );
-    rSet.Put( SdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
+    rSet.Put( makeSdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
 }
 
 void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const
@@ -4330,8 +4330,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             aSet.Put( SvxKerningItem( 1, EE_CHAR_KERNING ) );
 
                         // #i119496# the resize autoshape to fit text attr of word art in MS PPT is always false
-                        aSet.Put(SdrTextAutoGrowHeightItem(false));
-                        aSet.Put(SdrTextAutoGrowWidthItem(false));
+                        aSet.Put(makeSdrTextAutoGrowHeightItem(false));
+                        aSet.Put(makeSdrTextAutoGrowWidthItem(false));
                     }
                     pRet->SetMergedItemSet( aSet );
 
@@ -5121,7 +5121,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             bool bFitText = false;
             if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
             {
-                aSet.Put( SdrTextAutoGrowHeightItem( true ) );
+                aSet.Put( makeSdrTextAutoGrowHeightItem( true ) );
                 aSet.Put( makeSdrTextMinFrameHeightItem(
                     aNewRect.Bottom() - aNewRect.Top() ) );
                 aSet.Put( makeSdrTextMinFrameWidthItem(
@@ -5130,15 +5130,15 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
             else
             {
-                aSet.Put( SdrTextAutoGrowHeightItem( false ) );
-                aSet.Put( SdrTextAutoGrowWidthItem( false ) );
+                aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
+                aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
             }
 
             switch ( (MSO_WrapMode)
                 GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
             {
                 case mso_wrapNone :
-                    aSet.Put( SdrTextAutoGrowWidthItem( true ) );
+                    aSet.Put( makeSdrTextAutoGrowWidthItem( true ) );
                     if (bFitText)
                     {
                         //can't do autowidth in flys #i107184#

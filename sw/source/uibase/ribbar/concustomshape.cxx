@@ -168,7 +168,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+        pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
         ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }
