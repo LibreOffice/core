@@ -130,10 +130,6 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
     -Wl$(COMMA)-Bstatic -lXinerama -Wl$(COMMA)-Bdynamic \
 ))
 endif
-else # Solaris/Xsun
-$(eval $(call gb_Library_add_defs,vclplug_gen,\
-    -DUSE_XINERAMA_XSUN \
-))
 endif
 endif # USE_XINERAMA
 
