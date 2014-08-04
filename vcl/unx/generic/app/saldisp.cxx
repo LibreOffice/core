@@ -44,14 +44,6 @@
 
 #ifdef USE_XINERAMA_XORG
 #include <X11/extensions/Xinerama.h>
-#elif defined USE_XINERAMA_XSUN
-#if defined(SOLARIS) && defined(INTEL) // missing extension header in standard installation
-#define MAXFRAMEBUFFERS       16
-Bool XineramaGetState(Display*, int);
-Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
-#else
-#include <X11/extensions/xinerama.h>
-#endif
 #endif
 
 #include <postx.h>
@@ -2228,30 +2220,7 @@ void SalDisplay::InitXinerama()
         m_bXinerama = false;
         return; // multiple screens mean no xinerama
     }
-#if defined(USE_XINERAMA_XSUN)
-    int nFramebuffers = 1;
-    if( XineramaGetState( pDisp_, m_nDefaultScreen ) )
-    {
-        XRectangle pFramebuffers[MAXFRAMEBUFFERS];
-        unsigned char hints[MAXFRAMEBUFFERS];
-        int result = XineramaGetInfo( pDisp_,
-                                      m_nDefaultScreen,
-                                      pFramebuffers,
-                                      hints,
-                                      &nFramebuffers );
-        if( result > 0 && nFramebuffers > 1 )
-        {
-            m_bXinerama = true;
-            m_aXineramaScreens = std::vector<Rectangle>();
-            m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
-            for( int i = 0; i < nFramebuffers; i++ )
-                addXineramaScreenUnique( i, pFramebuffers[i].x,
-                                         pFramebuffers[i].y,
-                                         pFramebuffers[i].width,
-                                         pFramebuffers[i].height );
-        }
-    }
-#elif defined(USE_XINERAMA_XORG)
+#if defined(USE_XINERAMA_XORG)
     if( XineramaIsActive( pDisp_ ) )
     {
         int nFramebuffers = 1;

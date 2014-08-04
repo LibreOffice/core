@@ -116,8 +116,6 @@ endif
 
 ## handle Xinerama
 ifneq ($(USE_XINERAMA),)
-ifneq ($(OS)$(USE_XINERAMA_VERSION),SOLARISXsun)
-# not Solaris/Xsun
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_XINERAMA_XORG \
 ))
@@ -128,11 +126,6 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
 else
 $(eval $(call gb_Library_add_libs,vclplug_gen,\
     -Wl$(COMMA)-Bstatic -lXinerama -Wl$(COMMA)-Bdynamic \
-))
-endif
-else # Solaris/Xsun
-$(eval $(call gb_Library_add_defs,vclplug_gen,\
-    -DUSE_XINERAMA_XSUN \
 ))
 endif
 endif # USE_XINERAMA
