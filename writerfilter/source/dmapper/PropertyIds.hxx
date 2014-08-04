@@ -367,6 +367,7 @@ enum PropertyIds
         ,PROP_CELL_DIRECTION
         ,PROP_SDT_END_BEFORE
         ,PROP_PARA_SDT_END_BEFORE
+        ,META_PROP_TABLE_LOOK
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

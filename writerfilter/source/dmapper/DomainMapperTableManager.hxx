@@ -27,6 +27,7 @@
 #include "StyleSheetTable.hxx"
 #include <com/sun/star/text/XTextRange.hpp>
 #include <vector>
+#include <comphelper/sequenceashashmap.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -45,6 +46,8 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
     OUString m_sTableStyleName;
+    /// Grab-bag of table look attributes for preserving.
+    comphelper::SequenceAsHashMap m_aTableLook;
     std::vector< TablePositionHandlerPtr > m_aTablePositions;
     std::vector< TablePositionHandlerPtr > m_aTmpPosition; ///< Temporarily stores the position to compare it later
     std::vector< TablePropertyMapPtr > m_aTmpTableProperties; ///< Temporarily stores the table properties until end of row
@@ -94,6 +97,8 @@ public:
     IntVectorPtr getCurrentCellWidths( );
 
     const OUString& getTableStyleName() const { return m_sTableStyleName; }
+    /// Turn the attributes collected so far in m_aTableLook into a property and clear the container.
+    void finishTableLook();
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getCurrentTablePosition();
     TablePositionHandler* getCurrentTableRealPosition();
 

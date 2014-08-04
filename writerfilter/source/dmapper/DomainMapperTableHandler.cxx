@@ -313,8 +313,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         sal_Int32 nTableWidth = 0;
         sal_Int32 nTableWidthType = text::SizeType::FIX;
 
-        uno::Sequence< beans::PropertyValue > aGrabBag( 6 );
-        sal_Int32 nGrabBagSize = 0;
+        comphelper::SequenceAsHashMap aGrabBag;
 
         if (0 != m_rDMapper_Impl.getTableManager().getCurrentTableRealPosition())
         {
@@ -352,9 +351,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             aGrabBagTS[9].Name = "vertAnchor";
             aGrabBagTS[9].Value = uno::makeAny( pTablePositions->getVertAnchor() );
 
-            aGrabBag[nGrabBagSize].Name = "TablePosition";
-            aGrabBag[nGrabBagSize].Value = uno::makeAny( aGrabBagTS );
-            nGrabBagSize++;
+            aGrabBag["TablePosition"] = uno::makeAny( aGrabBagTS );
         }
 
         boost::optional<PropertyMap::Property> aTableStyleVal = m_aTableProperties->getProperty(META_PROP_TABLE_STYLE_NAME);
@@ -368,9 +365,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             pTableStyle = dynamic_cast<TableStyleSheetEntry*>( pStyleSheet.get( ) );
             m_aTableProperties->Erase( aTableStyleVal->first );
 
-            aGrabBag[nGrabBagSize].Name = "TableStyleName";
-            aGrabBag[nGrabBagSize].Value = uno::makeAny( sTableStyleName );
-            nGrabBagSize++;
+            aGrabBag["TableStyleName"] = uno::makeAny( sTableStyleName );
 
             if( pStyleSheet )
             {
@@ -386,27 +381,19 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 TableInfo rStyleInfo;
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_TOP_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag[nGrabBagSize].Name = "TableStyleTopBorder";
-                    aGrabBag[nGrabBagSize].Value = uno::makeAny( aBorderLine );
-                    nGrabBagSize++;
+                    aGrabBag["TableStyleTopBorder"] = uno::makeAny( aBorderLine );
                 }
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_BOTTOM_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag[nGrabBagSize].Name = "TableStyleBottomBorder";
-                    aGrabBag[nGrabBagSize].Value = uno::makeAny( aBorderLine );
-                    nGrabBagSize++;
+                    aGrabBag["TableStyleBottomBorder"] = uno::makeAny( aBorderLine );
                 }
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_LEFT_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag[nGrabBagSize].Name = "TableStyleLeftBorder";
-                    aGrabBag[nGrabBagSize].Value = uno::makeAny( aBorderLine );
-                    nGrabBagSize++;
+                    aGrabBag["TableStyleLeftBorder"] = uno::makeAny( aBorderLine );
                 }
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_RIGHT_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag[nGrabBagSize].Name = "TableStyleRightBorder";
-                    aGrabBag[nGrabBagSize].Value = uno::makeAny( aBorderLine );
-                    nGrabBagSize++;
+                    aGrabBag["TableStyleRightBorder"] = uno::makeAny( aBorderLine );
                 }
 
 #ifdef DEBUG_DOMAINMAPPER
@@ -426,6 +413,15 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             }
         }
 
+        // This is the one preserving just all the table look attributes.
+        boost::optional<PropertyMap::Property> oTableLook = m_aTableProperties->getProperty(META_PROP_TABLE_LOOK);
+        if (oTableLook)
+        {
+            aGrabBag["TableStyleLook"] = oTableLook->second;
+            m_aTableProperties->Erase(oTableLook->first);
+        }
+
+        // This is just the "val" attribute's numeric value.
         const boost::optional<PropertyMap::Property> aTblLook = m_aTableProperties->getProperty(PROP_TBL_LOOK);
         if(aTblLook)
         {
@@ -442,10 +438,9 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         dmapper_logger->endElement();
 #endif
 
-        if( nGrabBagSize > 0 )
+        if (!aGrabBag.empty())
         {
-            aGrabBag.realloc( nGrabBagSize );
-            m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, uno::makeAny( aGrabBag ) );
+            m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, uno::makeAny( aGrabBag.getAsConstPropertyValueList() ) );
         }
 
         m_aTableProperties->getValue( TablePropertyMap::GAP_HALF, nGapHalf );

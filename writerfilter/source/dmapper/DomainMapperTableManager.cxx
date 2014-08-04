@@ -85,13 +85,40 @@ bool DomainMapperTableManager::attribute(Id nName, Value& rValue)
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
         pPropMap->Insert(PROP_TBL_LOOK, uno::makeAny(rValue.getInt()));
         insertTableProps(pPropMap);
+        m_aTableLook["val"] = uno::makeAny(rValue.getInt());
     }
+    break;
+    case NS_ooxml::LN_CT_TblLook_noVBand:
+        m_aTableLook["noVBand"] = uno::makeAny(rValue.getInt());
+    break;
+    case NS_ooxml::LN_CT_TblLook_noHBand:
+        m_aTableLook["noHBand"] = uno::makeAny(rValue.getInt());
+    break;
+    case NS_ooxml::LN_CT_TblLook_lastColumn:
+        m_aTableLook["lastColumn"] = uno::makeAny(rValue.getInt());
+    break;
+    case NS_ooxml::LN_CT_TblLook_lastRow:
+        m_aTableLook["lastRow"] = uno::makeAny(rValue.getInt());
+    break;
+    case NS_ooxml::LN_CT_TblLook_firstColumn:
+        m_aTableLook["firstColumn"] = uno::makeAny(rValue.getInt());
+    break;
+    case NS_ooxml::LN_CT_TblLook_firstRow:
+        m_aTableLook["firstRow"] = uno::makeAny(rValue.getInt());
     break;
     default:
         bRet = false;
     }
 
     return bRet;
+}
+
+void DomainMapperTableManager::finishTableLook()
+{
+    TablePropertyMapPtr pPropMap(new TablePropertyMap());
+    pPropMap->Insert(META_PROP_TABLE_LOOK, uno::makeAny(m_aTableLook.getAsConstPropertyValueList()));
+    m_aTableLook.clear();
+    insertTableProps(pPropMap);
 }
 
 bool DomainMapperTableManager::sprm(Sprm & rSprm)

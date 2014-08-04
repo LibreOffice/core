@@ -395,6 +395,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CELL_DIRECTION: sName = "CellDirection"; break;
             case PROP_SDT_END_BEFORE: sName = "SdtEndBefore"; break;
             case PROP_PARA_SDT_END_BEFORE: sName = "ParaSdtEndBefore"; break;
+            case META_PROP_TABLE_LOOK: sName = "TableStyleLook"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

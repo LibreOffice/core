@@ -2458,7 +2458,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if (pProperties.get())
+        {
             pProperties->resolve(*this);
+            m_pImpl->getTableManager().finishTableLook();
+        }
     }
     break;
     default:
