@@ -202,8 +202,6 @@ public class StyleCreation {
 
         com.sun.star.lang.XComponent xComponent = null;
         com.sun.star.frame.XComponentLoader xComponentLoader = null;
-        com.sun.star.beans.PropertyValue xValues[] =
-            new com.sun.star.beans.PropertyValue[1];
         com.sun.star.beans.PropertyValue xEmptyArgs[] =
             new com.sun.star.beans.PropertyValue[0];
 
