@@ -27,7 +27,8 @@
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 class SvI18NMap;
-class SvxXMLListStyle_Impl;
+class SvxXMLListLevelStyleContext_Impl;
+typedef std::vector<SvxXMLListLevelStyleContext_Impl *> SvxXMLListStyle_Impl;
 
 class SvxXMLListStyleContext : public SvXMLStyleContext
 {

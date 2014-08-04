@@ -1006,8 +1006,6 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::~SvxXMLListLevelStyleLabelAl
 {
 }
 
-class SvxXMLListStyle_Impl : public std::vector<SvxXMLListLevelStyleContext_Impl *> {};
-
 void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                            const OUString& rLocalName,
                                            const OUString& rValue )
