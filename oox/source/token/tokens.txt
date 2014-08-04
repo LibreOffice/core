@@ -3519,6 +3519,7 @@ noEndnote
 noExtraLineSpacing
 noFill
 noGrp
+noHBand
 noIndicator
 noLabel
 noLeading
@@ -3538,6 +3539,7 @@ noStrike
 noTabHangInd
 noTextEdit
 noUngrp
+noVBand
 noWrap
 node
 nodeHorzAlign
