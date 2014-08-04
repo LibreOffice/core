@@ -253,7 +253,7 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
         else
         {
             ouAttrName = OUString(C2U( (sal_Char*)pAttrNs->prefix))
-                +OUString(C2U( (sal_Char*)":" ))
+                +OUString(":")
                 +OUString(C2U( (sal_Char*)pAttrName ));
         }
 
