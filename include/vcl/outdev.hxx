@@ -661,7 +661,7 @@ public:
     ///@}
 
 
-    /** @name Rectangle functionsf
+    /** @name Rectangle functions
      */
     ///@{
 
