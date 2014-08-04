@@ -4415,6 +4415,21 @@ linux-gnu*)
         LIB64="lib64"
         PLATFORMID=linux_x86_64
         OUTPATH=unxlngx6
+
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+            #ifndef __x86_64__
+             error: Not x86-64
+            #endif
+        ],[])], [mixed32=no], [mixed32=yes])
+        if test $mixed32 = yes; then
+            CPUNAME=INTEL
+            RTL_ARCH=x86
+            PLATFORMID=linux_x86
+            OUTPATH=unxlngi6
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_RESULT([no])
+        fi
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
