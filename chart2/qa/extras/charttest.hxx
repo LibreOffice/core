@@ -30,7 +30,6 @@
 
 #include <unotools/tempfile.hxx>
 
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -46,6 +45,8 @@
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

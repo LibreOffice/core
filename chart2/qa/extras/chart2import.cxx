@@ -52,6 +52,7 @@ public:
     void testFlatODSStackedColumnChart();
     void testFdo78080();
     void testFdo54361();
+    void testAutoBackgroundXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testFlatODSStackedColumnChart);
     CPPUNIT_TEST(testFdo78080);
     CPPUNIT_TEST(testFdo54361);
+    CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -344,6 +346,13 @@ void Chart2ImportTest::testPPTXHiddenDataSeries()
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
+    // "Automatic" chart background fill in pptx should be loaded as no fill.
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
+    CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in pptx should be loaded as no fill (transparent).",
+        eStyle == drawing::FillStyle_NONE);
+
     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
     CPPUNIT_ASSERT(xCT.is());
 
@@ -598,6 +607,23 @@ void Chart2ImportTest::testFdo54361()
     xPropSet -> getPropertyValue("FillStyle") >>= aStyle;
 
     CPPUNIT_ASSERT_MESSAGE("Background needs to be with solid fill style", aStyle == 1);
+}
+
+void Chart2ImportTest::testAutoBackgroundXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart-auto-background.xlsx");
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    // "Automatic" chart background fill in xlsx should be loaded as solid white.
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
+    sal_Int32 nColor = xPropSet->getPropertyValue("FillColor").get<sal_Int32>();
+    CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid fill.",
+        eStyle == drawing::FillStyle_SOLID);
+    CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
+        (nColor & 0x00FFFFFF) == 0x00FFFFFF); // highest 2 bytes are transparency which we ignore here.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);

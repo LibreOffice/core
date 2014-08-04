@@ -779,6 +779,17 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
     load("/chart2/qa/extras/data/docx/", "data-label-borders.docx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+
+    // "Automatic" chart background fill in docx should be loaded as solid white.
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
+    sal_Int32 nColor = xPropSet->getPropertyValue("FillColor").get<sal_Int32>();
+    CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid fill.",
+        eStyle == drawing::FillStyle_SOLID);
+    CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid white.",
+        (nColor & 0x00FFFFFF) == 0x00FFFFFF); // highest 2 bytes are transparency which we ignore here.
+
     aTest.checkObject1(xChartDoc);
     xChartDoc.set(getChartDocFromWriter(1), uno::UNO_QUERY);
     aTest.checkObject2(xChartDoc);
