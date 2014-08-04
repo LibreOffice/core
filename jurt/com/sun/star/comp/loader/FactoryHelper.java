@@ -55,17 +55,6 @@ public class FactoryHelper {
     static protected class Factory
         implements XSingleServiceFactory, XSingleComponentFactory, XServiceInfo,
         XTypeProvider {
-        protected static Class<?> __objectArray;
-
-        static {
-            try {
-                __objectArray = Class.forName("[Ljava.lang.Object;");
-            }
-            catch(ClassNotFoundException classNotFoundException) {
-                System.err.println(FactoryHelper.class.getName() + " exception occurred - " + classNotFoundException);
-            }
-        }
-
 //        private static final boolean DEBUG = false;
 
         protected XMultiServiceFactory _xMultiServiceFactory;
@@ -92,7 +81,7 @@ public class FactoryHelper {
                 if(parameters.length == 3
                    && parameters[0].equals(XComponentContext.class)
                      && parameters[1].equals(XRegistryKey.class)
-                     && parameters[2].equals(__objectArray)) {
+                     && parameters[2].equals(Object[].class)) {
                     _nCode = 0;
                     _constructor = constructors[i];
                 }
@@ -104,7 +93,7 @@ public class FactoryHelper {
                 }
                 else if(parameters.length == 2
                      && parameters[0].equals(XComponentContext.class)
-                     && parameters[1].equals(__objectArray)) {
+                     && parameters[1].equals(Object[].class)) {
                     _nCode = 2;
                     _constructor = constructors[i];
                 }
@@ -117,7 +106,7 @@ public class FactoryHelper {
                 else if(parameters.length == 3
                      && parameters[0].equals(XMultiServiceFactory.class)
                      && parameters[1].equals(XRegistryKey.class)
-                     && parameters[2].equals(__objectArray)) {
+                     && parameters[2].equals(Object[].class)) {
                     _nCode = 4;
                     _constructor = constructors[i];
                 }
@@ -129,7 +118,7 @@ public class FactoryHelper {
                 }
                 else if(parameters.length == 2
                      && parameters[0].equals(XMultiServiceFactory.class)
-                     && parameters[1].equals(__objectArray)) {
+                     && parameters[1].equals(Object[].class)) {
                     _nCode = 6;
                     _constructor = constructors[i];
                 }
@@ -139,7 +128,7 @@ public class FactoryHelper {
                     _constructor = constructors[i];
                 }
                 else if(parameters.length == 1
-                     && parameters[0].equals(__objectArray)) {
+                     && parameters[0].equals(Object[].class)) {
                     _nCode = 8;
                     _constructor = constructors[i];
                 }

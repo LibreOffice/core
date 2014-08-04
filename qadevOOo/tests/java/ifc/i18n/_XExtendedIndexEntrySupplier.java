@@ -220,12 +220,10 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
      */
     public static class UnicodeStringPair {
         final static int valCount = 78;
-        static String[] sStringEquivalence = null;
-        static char[] iUnicodeEquivalence = null;
+        static final String[] sStringEquivalence = new String[valCount];
+        static final char[] iUnicodeEquivalence = new char[valCount];
 
         static {
-            sStringEquivalence = new String[valCount];
-            iUnicodeEquivalence = new char[valCount];
             fillValues();
         }
 
