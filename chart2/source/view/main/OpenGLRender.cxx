@@ -697,7 +697,9 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
     }
 #endif
 
-    boost::shared_array<sal_uInt8> bitmapBuf(OpenGLHelper::ConvertBitmapExToRGBABuffer(rBitmapEx));
+    boost::shared_array<sal_uInt8> bitmapBuf(new sal_uInt8[4 * rBitmapEx.GetSizePixel().Width() * rBitmapEx.GetSizePixel().Height()]);
+
+    OpenGLHelper::ConvertBitmapExToRGBABuffer(rBitmapEx, bitmapBuf.get());
 
     return CreateTextTexture(bitmapBuf, rBitmapEx.GetSizePixel(),
                              awt::Point(), aSize, rotation, rTrans);

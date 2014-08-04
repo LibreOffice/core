@@ -146,14 +146,13 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
     return ProgramID;
 }
 
-sal_uInt8* OpenGLHelper::ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx)
+void OpenGLHelper::ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer)
 {
     long nBmpWidth = rBitmapEx.GetSizePixel().Width();
     long nBmpHeight = rBitmapEx.GetSizePixel().Height();
 
     Bitmap aBitmap (rBitmapEx.GetBitmap());
     AlphaMask aAlpha (rBitmapEx.GetAlpha());
-    sal_uInt8* pBitmapBuf(new sal_uInt8[4* nBmpWidth * nBmpHeight ]);
     Bitmap::ScopedReadAccess pReadAccces( aBitmap );
     AlphaMask::ScopedReadAccess pAlphaReadAccess( aAlpha );
     size_t i = 0;
@@ -163,13 +162,12 @@ sal_uInt8* OpenGLHelper::ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx)
         for(long nx = 0; nx < nBmpWidth; nx++)
         {
             BitmapColor aCol = pReadAccces->GetColor( ny, nx );
-            pBitmapBuf[i++] = aCol.GetRed();
-            pBitmapBuf[i++] = aCol.GetGreen();
-            pBitmapBuf[i++] = aCol.GetBlue();
-            pBitmapBuf[i++] = pAScan ? 255 - *pAScan++ : 255;
+            o_pRGBABuffer[i++] = aCol.GetRed();
+            o_pRGBABuffer[i++] = aCol.GetGreen();
+            o_pRGBABuffer[i++] = aCol.GetBlue();
+            o_pRGBABuffer[i++] = pAScan ? 255 - *pAScan++ : 255;
         }
     }
-    return pBitmapBuf;
 }
 
 void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFileName)

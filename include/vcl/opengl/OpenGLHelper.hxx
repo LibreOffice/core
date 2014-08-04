@@ -21,7 +21,11 @@ class VCLOPENGL_DLLPUBLIC OpenGLHelper
 public:
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
 
-    static sal_uInt8* ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx);
+    /**
+     * Note: The caller is responsible for allocate the memory for the RGBA buffer, before call
+     * this method. RGBA buffer size is assumed to be 4*width*height
+    **/
+    static void ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer);
     static BitmapEx ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight);
     static void renderToFile(long nWidth, long nHeight, const OUString& rFileName);
 

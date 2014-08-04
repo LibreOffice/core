@@ -103,7 +103,8 @@ bool OGLPlayer::create( const OUString& rURL )
                 }
                 BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
                 aBitmapEx.Mirror(BMP_MIRROR_VERT);
-                rFile.buffer = (char*)OpenGLHelper::ConvertBitmapExToRGBABuffer(aBitmapEx);
+                rFile.buffer = new char[4 * aBitmapEx.GetSizePixel().Width() * aBitmapEx.GetSizePixel().Height()];
+                OpenGLHelper::ConvertBitmapExToRGBABuffer(aBitmapEx, reinterpret_cast<sal_uInt8*>(rFile.buffer));
                 rFile.imagewidth = aBitmapEx.GetSizePixel().Width();
                 rFile.imageheight = aBitmapEx.GetSizePixel().Height();
             }
