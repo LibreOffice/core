@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_daede126",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-04T11:47:45Z",
+      "side": 1,
+      "message": "this should better be grouped with the --convert-to and --print-to-file cases further down (and make it clear that --cat needs to be followed by a list of files)",
+      "revId": "bbf86fad06810cc48830e9f84c3bc8e179135a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_7addb56f",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-04T11:47:45Z",
+      "side": 1,
+      "message": "why \"- 1\"?",
+      "revId": "bbf86fad06810cc48830e9f84c3bc8e179135a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_9af769f5",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-04T11:47:45Z",
+      "side": 1,
+      "message": "please avoid overly verbose redundant b \u003d\u003d true and b \u003d\u003d false instead of !b",
+      "revId": "bbf86fad06810cc48830e9f84c3bc8e179135a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_baf22d05",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-04T11:47:45Z",
+      "side": 1,
+      "message": "see osl::FileBase::createTempFile (osl/file.hxx) for creating a temp file and obtaining its file URL",
+      "revId": "bbf86fad06810cc48830e9f84c3bc8e179135a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_dad4c148",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-04T11:47:45Z",
+      "side": 1,
+      "message": "better pass by value,\n\n  bool bIsTextCat\n\n(or just \"bool isTextCat\" to avoid the ugly \"misunderstood Hungarian\" prefix)",
+      "revId": "bbf86fad06810cc48830e9f84c3bc8e179135a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_9ace49b3",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-04T11:47:45Z",
+      "side": 1,
+      "message": "it might make more sense to replace that with something more meaningful than \";true\" and \";false\", like \";cat\"; or even avoid piling upon that fragile encoding of multiple arguments in a single aParam string and instead introduce a dedicated DispatchWatcher::REQUEST_CAT?",
+      "revId": "bbf86fad06810cc48830e9f84c3bc8e179135a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
