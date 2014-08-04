@@ -18,38 +18,21 @@
 package com.sun.star.lib.util;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 /**
  * Maps Java URL representations to File representations, on any Java version.
  *
+ * This used to be used to do URL to File mapping in pre-Java1.4 days, but since
+ * we now require Java 1.5, it is largely unnecessary.
+ *
  * @since UDK 3.2.8
  */
 public final class UrlToFileMapper {
-
-    // java.net.URLEncoder.encode(String, String) and java.net.URI are only
-    // available since Java 1.4:
-    private static Method urlEncoderEncode;
-    private static Constructor<?> uriConstructor;
-    private static Constructor<File> fileConstructor;
-    static {
-        try {
-            urlEncoderEncode = URLEncoder.class.getMethod(
-                "encode", new Class[] { String.class, String.class });
-            Class<?> uriClass = Class.forName("java.net.URI");
-            uriConstructor = uriClass.getConstructor(
-                new Class[] { String.class });
-            fileConstructor = File.class.getConstructor(
-                new Class[] { uriClass });
-        } catch (ClassNotFoundException e) {
-        } catch (NoSuchMethodException e) {
-        }
-    }
 
     /**
      * Maps Java URL representations to File representations.
@@ -60,64 +43,27 @@ public final class UrlToFileMapper {
     public static File mapUrlToFile(URL url) {
         if (url == null) {
             return null;
-        } else if (fileConstructor == null) {
-            // If java.net.URI is not available, hope that the following works
-            // well:  First, check that the given URL has a certain form.
-            // Second, use the URLDecoder to decode the URL path (taking care
-            // not to change any plus signs to spaces), hoping that the used
-            // default encoding is the proper one for file URLs.  Third, create
-            // a File from the decoded path.
-            return url.getProtocol().equalsIgnoreCase("file")
-                && url.getAuthority() == null && url.getQuery() == null
-                && url.getRef() == null
-                ? new File(URLDecoder.decode(
-                               StringHelper.replace(url.getPath(), '+', "%2B")))
-                : null;
         } else {
-            // If java.net.URI is available, do
-            //   URI uri = new URI(encodedUrl);
-            //   try {
-            //       return new File(uri);
-            //   } catch (IllegalArgumentException e) {
-            //       return null;
-            //   }
-            // where encodedUrl is url.toString(), but since that may contain
-            // unsafe characters (e.g., space, " "), it is encoded, as otherwise
-            // the URI constructor might throw java.net.URISyntaxException (in
-            // Java 1.5, URL.toURI might be used instead).
-            String encodedUrl = encode(url.toString());
             try {
-                Object uri = uriConstructor.newInstance(
-                    new Object[] { encodedUrl });
+                // where encodedUrl is url.toString(), but since that may contain
+                // unsafe characters (e.g., space, " "), it is encoded, as otherwise
+                // the URI constructor might throw java.net.URISyntaxException (in
+                // Java 1.5, URL.toURI might be used instead).
+                String encodedUrl = encode(url.toString());
+                URI uri = new URI(encodedUrl);
                 try {
-                    return fileConstructor.newInstance(
-                        new Object[] { uri });
-                } catch (InvocationTargetException e) {
-                    if (e.getTargetException() instanceof
-                        IllegalArgumentException) {
-                        return null;
-                    } else {
-                        throw e;
-                    }
+                    return new File(uri);
+                } catch (IllegalArgumentException e) {
+                    return null;
                 }
-            } catch (InstantiationException e) {
-                throw new RuntimeException("This cannot happen: " + e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("This cannot happen: " + e);
-            } catch (InvocationTargetException e) {
-                if (e.getTargetException() instanceof Error) {
-                    throw (Error) e.getTargetException();
-                } else if (e.getTargetException() instanceof RuntimeException) {
-                    throw (RuntimeException) e.getTargetException();
-                } else {
-                    throw new RuntimeException("This cannot happen: " + e);
-                }
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex); // should never happend
             }
         }
     }
 
     private static String encode(String url) {
-        StringBuffer buf = new StringBuffer();
+        StringBuffer buf = new StringBuffer(url.length());
         for (int i = 0; i < url.length(); ++i) {
             char c = url.charAt(i);
             // The RFC 2732 <uric> characters: !$&'()*+,-./:;=?@[]_~ plus digits
@@ -130,21 +76,16 @@ public final class UrlToFileMapper {
             } else if (c == ' ') {
                 buf.append("%20");
             } else {
-                String enc;
                 try {
-                    enc = (String) urlEncoderEncode.invoke(
-                        null,
-                        new Object[] {Character.toString(c), "UTF-8" });
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException("This cannot happen: " + e);
-                } catch (InvocationTargetException e) {
-                    throw new RuntimeException("This cannot happen: " + e);
+                    String enc = URLEncoder.encode(Character.toString(c), "UTF-8");
+                    buf.append(enc);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e); // should never happen
                 }
-                buf.append(enc);
-            }
-        }
+             }
+         }
         return buf.toString();
-    }
+     }
 
-    private UrlToFileMapper() {}
+     private UrlToFileMapper() {}
 }
