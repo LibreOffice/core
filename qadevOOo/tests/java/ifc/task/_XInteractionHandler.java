@@ -70,7 +70,7 @@ public class _XInteractionHandler extends MultiMethodTest {
     }
 
     /**
-    * Sinse this test is interactive (dialog window can't be
+    * Since this test is interactive (dialog window can't be
     * disposed using API) it is skipped. <p>
     * Always has <b>SKIPPED.OK</b> status .
     */
