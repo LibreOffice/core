@@ -6938,11 +6938,13 @@ if test "$ENABLE_JAVA" != ""; then
         # at least 2 reasons to check: officebean needs to link -ljawt,
         # and libjpipe.so needs to be loaded by java to run JunitTests.
         case $CPUNAME in
-            AXP|X86_64|HPPA|IA64|POWERPC64|S390X|SPARC64)
+            AXP|HPPA|IA64|POWERPC64|S390X|SPARC64)
                 if test -f "$JAVAINTERPRETER" -a "`$JAVAINTERPRETER -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
                     AC_MSG_WARN([You are building 64-bit binaries but the JDK $JAVAINTERPRETER is 32-bit])
                     AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a 64-bit JDK])
                 fi
+                ;;
+            X86_64) # we cannot assume anything as cpuname may not reflect userspace bitness
                 ;;
             *) # assumption: everything else 32-bit
                 if test -f "$JAVAINTERPRETER" -a "`$JAVAINTERPRETER -version 2>&1 | $GREP -i 64-bit`" != ""  >/dev/null; then
