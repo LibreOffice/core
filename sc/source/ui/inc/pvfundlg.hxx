@@ -202,11 +202,8 @@ private:
     DECL_LINK( DblClickHdl, ListBox* );
 
 private:
-    FixedText           maFtDims;
-    ListBox             maLbDims;
-    OKButton            maBtnOk;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
+    ListBox*            mpLbDims;
+    OKButton*           mpBtnOk;
 
     typedef ::boost::unordered_map<OUString, long, OUStringHash> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;

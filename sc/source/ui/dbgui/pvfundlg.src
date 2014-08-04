@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pvfundlg.hrc"
+#include "sc.hrc"
 
 StringArray SCSTR_DPFUNCLISTBOX
 {
@@ -35,52 +35,6 @@ StringArray SCSTR_DPFUNCLISTBOX
         < "Var (Sample)" ; Default ; > ;
         < "VarP (Population)" ; Default ; > ;
     };
-};
-
-ModalDialog RID_SCDLG_DPSHOWDETAIL
-{
-    OutputSize = TRUE;
-    HelpId = HID_SC_DPSHOWDETAIL;
-    SVLook = TRUE;
-    Size = MAP_APPFONT( 200, 116 );
-    Moveable = TRUE;
-    Closeable = FALSE;
-    FixedText FT_DIMS
-    {
-        Pos = MAP_APPFONT( 6, 3 );
-        Size = MAP_APPFONT( 132, 24 );
-        WordBreak = TRUE;
-        Text [ en-US ] = "~Choose the field containing the detail you want to show";
-    };
-    ListBox LB_DIMS
-    {
-        HelpID = "sc:ListBox:RID_SCDLG_DPSHOWDETAIL:LB_DIMS";
-        Pos = MAP_APPFONT( 6, 30 );
-        Size = MAP_APPFONT( 132, 80 );
-        TabStop = TRUE;
-        Border = TRUE;
-        DropDown = FALSE;
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT( 144, 6 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop = TRUE;
-        DefButton = TRUE;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT( 144, 23 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop = TRUE;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT( 144, 43 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop = TRUE;
-    };
-    Text [ en-US ] = "Show Detail";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
