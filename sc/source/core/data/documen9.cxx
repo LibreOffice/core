@@ -147,6 +147,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             {
                 OSL_ENSURE(!pLocalPool->GetSecondaryPool(), "OOps, already a secondary pool set where the DrawingLayer ItemPool is to be placed (!)");
 #if 0
+            // FIXME apparently this is disabled because it breaks tests
                 pLocalPool->SetSecondaryPool(&pDrawLayer->GetItemPool());
 #endif
             }
@@ -251,8 +252,8 @@ void ScDocument::DeleteDrawLayer()
 
         if(pLocalPool && pLocalPool->GetSecondaryPool())
         {
-            fprintf(stderr, "RET is %p\n", pLocalPool->GetSecondaryPool());
 #if 0
+            // FIXME apparently this is disabled because it breaks tests
             pLocalPool->SetSecondaryPool(0);
 #endif
         }
