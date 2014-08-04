@@ -12869,10 +12869,10 @@
       <define name="AlternateContent">
         <element name="AlternateContent">
           <oneOrMore>
-            <ref name="choice"/>
+            <ref name="Choice"/>
           </oneOrMore>
           <optional>
-            <ref name="fallback"/>
+            <ref name="Fallback"/>
           </optional>
         </element>
       </define>
