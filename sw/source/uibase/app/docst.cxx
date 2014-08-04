@@ -591,7 +591,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
     }
 
     //UUUU
-    if(m_bNew && SFX_STYLE_FAMILY_FRAME == m_nFamily)
+    if(m_bNew)
     {
         if(SFX_STYLE_FAMILY_FRAME == m_nFamily || SFX_STYLE_FAMILY_PARA == m_nFamily)
         {
