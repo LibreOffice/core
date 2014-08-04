@@ -2448,9 +2448,7 @@ AC_SUBST(DISABLE_EXPORT)
 # Whether to build "avmedia" functionality or not.
 
 if test -z "$enable_avmedia"; then
-    if test $_os != iOS; then
-        enable_avmedia=yes
-    fi
+    enable_avmedia=yes
 fi
 
 if test "$enable_avmedia" = yes; then
