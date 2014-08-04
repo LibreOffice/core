@@ -39,9 +39,6 @@ public class FieldDescription
     private ArrayList<PropertyValue> aPropertyValues;
 //  PropertyValue[] aPropertyValues;
     private Integer Type;
-    private Integer Scale;
-    private Integer Precision;
-    private Boolean DefaultValue;
     private String Name;
     private XMultiServiceFactory xMSF;
     private Locale aLocale;

@@ -49,7 +49,6 @@ public final class LocalOfficeImpl
     private transient String                    mOfficePath;
     private transient XMultiComponentFactory    mComponentFactory;
     private transient XComponentContext         mComponentContext;
-    private transient XMultiServiceFactory      mServiceFactory;
     /**
      * Constructor.
      */

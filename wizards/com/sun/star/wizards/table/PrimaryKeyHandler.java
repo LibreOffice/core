@@ -40,12 +40,9 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
     private TableWizard CurUnoDialog;
     private short curtabindex;
     private final static String SPRIMEKEYMODE = "togglePrimeKeyFields";
-    private final static String SSINGLEKEYMODE = "toggleSinglePrimeKeyFields";
-    private final static String SSEVERALKEYMODE = "toggleSeveralPrimeKeyFields";
     private XRadioButton optAddAutomatically;
     private XRadioButton optUseExisting;
     private XRadioButton optUseSeveral;
-    private XCheckBox chkUsePrimaryKey;
     private XCheckBox chkcreatePrimaryKey;
     private XCheckBox chkApplyAutoValueExisting;
     private XCheckBox chkApplyAutoValueAutomatic;
@@ -54,7 +51,6 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
     private FieldSelection curPrimaryKeySelection;
     private String[] fieldnames;
     private TableDescriptor curTableDescriptor;
-    private int nAutoPrimeKeyDataType;
     private boolean bAutoPrimaryKeysupportsAutoIncrmentation;
     private final static String SAUTOMATICKEYFIELDNAME = "ID";
 

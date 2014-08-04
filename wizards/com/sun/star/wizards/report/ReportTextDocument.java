@@ -56,8 +56,6 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     // private XMultiServiceFactory xMSFDoc;
     private Object ReportPageStyle;
     private Object FirstPageStyle;
-    private int PageWidth;
-    private Rectangle PosSize;
     // private String ReportFolderName;
     public ArrayList<DBColumn> DBColumnsVector;
     private RecordTable CurRecordTable;

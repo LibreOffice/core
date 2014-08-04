@@ -72,17 +72,12 @@ public class CheckXComponentLoader
     // some const
 
     /** used to classify the result of a loadComponentFromURL() request. */
-    private static final int RESULT_UNKNOWN                  = 0;
     private static final int RESULT_VALID_DOC                = 1;
     private static final int RESULT_EMPTY_DOC                = 2;
     private static final int RESULT_ILLEGALARGUMENTEXCEPTION = 3;
     private static final int RESULT_IOEXCEPTION              = 4;
     private static final int RESULT_RUNTIMEEXCEPTION         = 5;
     private static final int RESULT_EXCEPTION                = 6;
-
-    /** File/URL separators. */
-    private static final String fs_url = "/";
-    // private static final String fs_sys = System.getProperty("file.separator");
 
     /** used for testing password protected files. */
     private static final String SUFFIX_PASSWORD_TEMPFILE = "password_";

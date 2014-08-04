@@ -29,7 +29,6 @@ public class EditorScriptContext implements XScriptContext
 {
     private XDesktop m_xDeskTop;
     private XComponentContext  m_xComponentContext;
-    private XDesktop m_xCtx;
     public EditorScriptContext( XComponentContext xmComponentContext,
         XDesktop xDesktop )
     {

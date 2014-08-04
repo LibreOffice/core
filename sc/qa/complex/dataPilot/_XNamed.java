@@ -48,11 +48,6 @@ public class _XNamed {
     public XNamed oObj = null;
 
     /**
-     * The test parameters
-     */
-    private TestParameters param = null;
-
-    /**
      * The log writer
      */
     // private LogWriter log = null;
@@ -66,7 +61,6 @@ public class _XNamed {
     public _XNamed(XNamed xObj/*, LogWriter log*/, TestParameters param) {
         oObj = xObj;
         // this.log = log;
-        this.param = param;
     }
 
     /**

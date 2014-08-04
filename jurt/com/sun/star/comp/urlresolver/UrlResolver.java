@@ -47,9 +47,6 @@ import com.sun.star.uno.UnoRuntime;
  * @since       UDK1.0
  */
 public class UrlResolver {
-    static private final boolean DEBUG = false;
-
-
     static public class _UrlResolver implements XUnoUrlResolver {
         static private final String __serviceName = "com.sun.star.bridge.UnoUrlResolver";
 

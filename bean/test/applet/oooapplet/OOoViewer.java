@@ -22,14 +22,11 @@ import java.lang.reflect.Array;
 import java.net.*;
 import java.io.*;
 import java.awt.*;
-import com.sun.star.comp.beans.*;
 import java.applet.Applet;
 import java.awt.Graphics;
 import java.util.*;
 
 public class OOoViewer extends Applet {
-
-    private OOoBean oBean;
 
     static private CustomURLClassLoader m_loader;
 

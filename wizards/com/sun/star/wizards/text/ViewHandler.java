@@ -40,16 +40,12 @@ public class ViewHandler
 {
 
     private XTextViewCursorSupplier xTextViewCursorSupplier;
-    private XMultiServiceFactory xMSFDoc;
-    private XTextDocument xTextDocument;
     private XStyleFamiliesSupplier xStyleFamiliesSupplier;
     private XViewSettingsSupplier xViewSettingsSupplier;
 
     /** Creates a new instance of View */
     public ViewHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
     {
-        this.xMSFDoc = xMSF;
-        this.xTextDocument = xTextDocument;
         xTextViewCursorSupplier = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
         xViewSettingsSupplier = UnoRuntime.queryInterface(XViewSettingsSupplier.class, xTextDocument.getCurrentController());
         xStyleFamiliesSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);

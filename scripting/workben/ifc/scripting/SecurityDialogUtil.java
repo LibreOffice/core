@@ -35,7 +35,6 @@ public class SecurityDialogUtil extends Thread {
 
 private XMultiServiceFactory xMSF = null;
 private String errorMsg;
-private boolean errorHappened;
 private String btnName;
 private boolean checkBox;
 
@@ -49,8 +48,7 @@ public SecurityDialogUtil(XMultiServiceFactory xMSF, String btnName, boolean che
     this.xMSF = xMSF;
     this.btnName = btnName;
     this.checkBox = checkBox;
-    errorMsg = "";
-    errorHappened=false;
+    this.errorMsg = "";
 }
 
 /**

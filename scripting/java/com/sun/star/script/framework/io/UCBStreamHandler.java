@@ -38,8 +38,6 @@ public class UCBStreamHandler extends URLStreamHandler {
 
     public final static String separator = "/ucb/";
 
-    private XComponentContext m_xContext = null;
-    private XMultiComponentFactory m_xMultiComponentFactory = null;
     private XSimpleFileAccess m_xSimpleFileAccess = null;
     private HashMap<String,InputStream> m_jarStreamMap = new HashMap<String,InputStream>(12);
     public static String m_ucbscheme;
@@ -47,7 +45,6 @@ public class UCBStreamHandler extends URLStreamHandler {
     public UCBStreamHandler( XComponentContext ctxt, String scheme, XSimpleFileAccess xSFA )
     {
         LogUtils.DEBUG( "UCBStreamHandler ctor, scheme = " + scheme );
-        this.m_xContext = ctxt;
         UCBStreamHandler.m_ucbscheme = scheme;
         this.m_xSimpleFileAccess = xSFA;
     }

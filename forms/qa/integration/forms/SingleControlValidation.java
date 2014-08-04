@@ -19,7 +19,6 @@
 package integration.forms;
 
 import com.sun.star.uno.*;
-import com.sun.star.lang.*;
 import com.sun.star.beans.*;
 import com.sun.star.form.validation.*;
 
@@ -29,7 +28,6 @@ public class SingleControlValidation implements XFormComponentValidityListener
 {
     private DocumentHelper          m_document;         /// our current test document
     private FormLayer               m_formLayer;        /// quick access to the form layer
-    private XMultiServiceFactory    m_orb;              /// our service factory
 
     private XPropertySet            m_inputField;
     private XPropertySet            m_inputLabel;

@@ -324,7 +324,6 @@ class CanvasShape
     private Point
         maPosition;
     private Dimension
-        maTransformedSize,
         maSize;
     private Color
         maFgColor,

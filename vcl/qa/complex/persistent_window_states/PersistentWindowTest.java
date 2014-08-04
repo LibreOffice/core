@@ -50,7 +50,6 @@ public class PersistentWindowTest
 
     // private XMultiServiceFactory xMSF;
 //    private OfficeProvider oProvider;
-    private int iOfficeCloseTime = 0;
 
     /**
      * A frunction to tell the framework, which test functions are available.

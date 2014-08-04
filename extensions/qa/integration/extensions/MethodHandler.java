@@ -29,7 +29,6 @@ public class MethodHandler implements XPropertyHandler
     private XComponentContext       m_context;
     private XIntrospection          m_introspection;
     private XIntrospectionAccess    m_introspectionAccess;
-    private XIdlClass               m_idlClass;
     private XIdlMethod[]            m_methods;
     private java.util.HashMap<String,XIdlMethod>       m_methodsHash;
 

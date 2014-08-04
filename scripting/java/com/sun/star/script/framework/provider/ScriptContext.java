@@ -37,7 +37,6 @@ public class ScriptContext extends PropertySet implements XScriptContext
     public final static String HM_DESKTOP = "Desktop";
     public final static String HM_COMPONENT_CONTEXT = "ComponentContext";
 
-    private final static String DOC_REF = "SCRIPTING_DOC_REF";
     private final static String DOC_URI = "SCRIPTING_DOC_URI";
 
 

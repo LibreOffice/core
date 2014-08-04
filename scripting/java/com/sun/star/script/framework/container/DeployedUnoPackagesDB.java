@@ -34,10 +34,6 @@ import org.w3c.dom.*;
 
 public class DeployedUnoPackagesDB {
 
-    // File name to be used for parcel descriptor files
-    private static final String
-        PARCEL_DESCRIPTOR_NAME = "unopkg-desc.xml";
-
     // This is the default contents of a parcel descriptor to be used when
     // creating empty descriptors
     private static final byte[] EMPTY_DOCUMENT =
@@ -45,7 +41,6 @@ public class DeployedUnoPackagesDB {
          "<unopackages xmlns:unopackages=\"unopackages.dtd\">\n" +
          "</unopackages>").getBytes();
 
-    private File file = null;
     private Document document = null;
 
     public DeployedUnoPackagesDB() throws IOException {

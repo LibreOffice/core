@@ -452,10 +452,6 @@ public class EventTest {
     private class EventTrigger extends Thread{
 
         /**
-         * represents a <CODE>AccessibilityTools</CODE>
-         */
-        private final AccessibilityTools at = new AccessibilityTools();
-        /**
          * represents an <CODE>EventType</CODE>
          * @see EventTest.EventTriggerType
          */

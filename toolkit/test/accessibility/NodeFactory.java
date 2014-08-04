@@ -34,8 +34,6 @@ class NodeFactory
 
     private NodeFactory ()
     {
-        mbVerbose = false;
-
         maContextHandler = new AccessibleContextHandler();
         maTextHandler = new AccessibleTextHandler();
         maEditableTextHandler = new AccessibleEditableTextHandler();
@@ -139,8 +137,6 @@ class NodeFactory
     }
 
     private static NodeFactory maInstance = null;
-
-    private boolean mbVerbose;
 
     // default handlers
     private NodeHandler maContextHandler = new AccessibleContextHandler();

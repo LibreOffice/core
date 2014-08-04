@@ -31,7 +31,6 @@ import com.sun.star.uno.XReference;
  */
 public class WeakReference
 {
-    private final boolean DEBUG= false;
     private OWeakRefListener m_listener;
     // There is no default constructor. Every instance must register itself with the
     // XAdapter interface, which is done in the constructors. Assume we have this code
@@ -103,7 +102,6 @@ public class WeakReference
  */
 class OWeakRefListener implements XReference
 {
-    private final boolean DEBUG= false;
     private XAdapter m_adapter;
 
     /**

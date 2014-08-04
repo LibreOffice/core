@@ -230,7 +230,6 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField jTextField2;
     private InstallWizard wizard;
     private MyTableModel tableModel;
     private NavPanel nav;

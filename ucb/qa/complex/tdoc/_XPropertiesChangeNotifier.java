@@ -43,15 +43,11 @@ public class _XPropertiesChangeNotifier {
     }
 
     private class PropertiesChangeListener implements XPropertiesChangeListener {
-        public boolean disposed = false;
-        public boolean propChanged = false;
 
         public void disposing(com.sun.star.lang.EventObject eventObject) {
-            disposed = true;
         }
 
         public void propertiesChange(com.sun.star.beans.PropertyChangeEvent[] propertyChangeEvent) {
-            propChanged = true;
         }
 
     }

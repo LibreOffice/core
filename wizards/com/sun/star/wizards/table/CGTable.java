@@ -31,8 +31,6 @@ public class CGTable
     XNameAccess xNameAccessTableNode;
     public String Index;
     public String Name;
-    private Object oconfigView;
-    private final String CGROOTPATH = "/org.openoffice.Office.TableWizard/TableWizard/";
 
     public CGTable(XMultiServiceFactory _xMSF)
     {

@@ -39,8 +39,6 @@ import share.LogWriter;
 public class _XComponent {
 
     public static XComponent oObj = null;
-    private XNameContainer xContainer = null;
-    private XComponent altDispose = null;
     public LogWriter log = null;
 
     boolean listenerDisposed[] = new boolean[2];

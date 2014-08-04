@@ -43,10 +43,6 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
         = "testcase-do-not-remove.sxw";
     static private final String httpSourceDir
         = "http://so-berlin/~webdav/";
-    static private final String httpTargetDir
-        = "http://so-berlin/~webdav/";
-    static private final String fileSourceDir
-        = "file:///d:/temp/source/";
     static private final String fileTargetDir
         = "file:///d:/temp/";
 

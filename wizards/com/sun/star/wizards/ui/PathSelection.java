@@ -37,8 +37,6 @@ public class PathSelection
     public boolean usedPathPicker = false;
     public XPathSelectionListener xAction;
     public XTextComponent xSaveTextBox;
-    private final int CMDSELECTPATH = 1;
-    private final int TXTSAVEPATH = 1;
 
     public static class DialogTypes
     {

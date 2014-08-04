@@ -40,15 +40,11 @@ public class _XCommandInfoChangeNotifier {
     }
 
     private class CommandInfoChangeListener implements XCommandInfoChangeListener {
-        boolean disposing = false;
-        boolean infoChanged = false;
 
         public void commandInfoChange(com.sun.star.ucb.CommandInfoChangeEvent commandInfoChangeEvent) {
-            infoChanged = true;
         }
 
         public void disposing(com.sun.star.lang.EventObject eventObject) {
-            disposing = true;
         }
 
     }

@@ -32,8 +32,6 @@ import java.util.HashMap;
  */
 public class WeakBase implements XWeak, XTypeProvider
 {
-    private final boolean DEBUG= false;
-
     // Contains all WeakAdapter which have been created in this class
     // They have to be notified when this object dies
     private WeakAdapter m_adapter;

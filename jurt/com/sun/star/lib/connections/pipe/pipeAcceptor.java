@@ -120,6 +120,4 @@ public final class pipeAcceptor implements XAcceptor {
      */
     public void stopAccepting() {
     }
-
-    private static final boolean DEBUG = false;
 }

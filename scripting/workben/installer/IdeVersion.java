@@ -257,7 +257,6 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField jTextField2;
     private InstallWizard wizard;
     private MyTableModelIDE  tableModel;
     private NavPanel nav;

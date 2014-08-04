@@ -447,10 +447,6 @@ class Canvas
         }
     }
 
-    private int
-        mnXAnchor,
-        mnYAnchor,
-        maResizeFlag;
     private double
         mnHOffset,
         mnVOffset,

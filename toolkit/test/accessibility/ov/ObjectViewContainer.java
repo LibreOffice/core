@@ -167,9 +167,6 @@ public class ObjectViewContainer
         }
     }
 
-    /// Observe this tree for selection changes and notify them to all
-    /// children.
-    private JTree maTree;
     private Border maViewBorder;
     /// List of view templates which are instantiated when new object is set.
     private ArrayList<Class> maViewTemplates;

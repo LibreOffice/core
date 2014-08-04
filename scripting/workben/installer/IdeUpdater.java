@@ -30,8 +30,6 @@ import javax.swing.*;
  */
 public class IdeUpdater extends Thread {
 
-    private String classesPath = null;
-    private String jarfilename;
     private String installPath;
 
     private JLabel statusLabel;

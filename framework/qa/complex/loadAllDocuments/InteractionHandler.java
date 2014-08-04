@@ -39,8 +39,8 @@ public class InteractionHandler implements XInteractionHandler
 
 
     /**
-     * @member  m_aRequest      the origianl interaction request
-     * safed for later analyzing
+     * @member  m_aRequest      the original interaction request
+     *                          saved for later analyzing
      * @member  m_bWasUsed      true if the interaction handler was used
      * @member  m_nTry          count using of RETRY continuations
      */

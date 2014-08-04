@@ -33,14 +33,10 @@ public class TextStyleHandler
 {
 
     public XStyleFamiliesSupplier xStyleFamiliesSupplier;
-    private XMultiServiceFactory xMSFDoc;
-    private XTextDocument xTextDocument;
 
     /** Creates a new instance of TextStyleHandler */
     public TextStyleHandler(com.sun.star.lang.XMultiServiceFactory xMSF, XTextDocument xTextDocument)
     {
-        this.xMSFDoc = xMSF;
-        this.xTextDocument = xTextDocument;
         xStyleFamiliesSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
     }
 

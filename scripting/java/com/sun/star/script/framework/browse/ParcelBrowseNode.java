@@ -56,7 +56,6 @@ public class ParcelBrowseNode extends PropertySet
     private ScriptProvider provider;
     //private RootBrowseNode parent;
     private Collection<XBrowseNode> browsenodes;
-    private String name;
     private ParcelContainer container;
     private Parcel parcel;
     public boolean deletable = true;
@@ -66,7 +65,6 @@ public class ParcelBrowseNode extends PropertySet
 
     public ParcelBrowseNode( ScriptProvider provider, ParcelContainer container, String parcelName ) {
         this.provider = provider;
-        this.name = parcelName;
         this.container = container;
 
         // TODO decide whether exception is propagated out or not

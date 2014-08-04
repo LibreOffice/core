@@ -396,10 +396,6 @@ public class _XUserInputInterception extends MultiMethodTest {
     private class EventTrigger extends Thread{
 
         /**
-         * represents a <CODE>AccessibilityTools</CODE>
-         */
-        private final AccessibilityTools at = new AccessibilityTools();
-        /**
          * represents an <CODE>EventType</CODE>
          * @see EventTest.EventTriggerType
          */

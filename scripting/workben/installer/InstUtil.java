@@ -449,7 +449,6 @@ public class InstUtil {
     }
 
     public static final String [] versions = {"NetBeans 3.4", "jEdit 4.0.3", "jEdit 4.1pre5" };
-    private static File tmpDir = null;
 }
 
 

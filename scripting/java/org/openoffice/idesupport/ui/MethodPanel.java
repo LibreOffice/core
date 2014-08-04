@@ -37,8 +37,6 @@ public class MethodPanel extends JPanel {
 
     private File basedir;
     private ArrayList<String> classpath;
-    private final static String FIRST_PARAM =
-        "drafts.com.sun.star.script.framework.runtime.XScriptContext";
 
     // private JTable table;
     // private MethodTableModel model;

@@ -206,7 +206,6 @@ public class Number_Formats
 
 
     // __________ private members and methods __________
-    private final String  msDataSheetName  = "Data";
 
     private XComponentContext      maOfficeContext;
     private XMultiComponentFactory maServiceManager;

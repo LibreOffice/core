@@ -29,7 +29,6 @@ public final class ImageComparison implements com.sun.star.awt.XImageConsumer
 
     private byte[] m_referenceBytes;
     private int m_referencePosition;
-    private java.io.FileOutputStream m_stream;
     private Object m_notifyDone;
 
     public boolean imagesEqual( )

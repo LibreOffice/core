@@ -574,10 +574,7 @@ public class AccessibilityWorkBench
     protected InformationWriter
         info;
 
-    private XModel
-        mxModel;
     private JPanel
-        maMainPanel,
         maButtonBar;
     private Canvas
         maCanvas;
@@ -585,8 +582,6 @@ public class AccessibilityWorkBench
         maAccessibilityTree;
     private ObjectViewContainer
         maObjectViewContainer;
-    private JScrollPane
-        maScrollPane;
     private MessageArea
         maMessageArea;
     private JButton
@@ -597,8 +592,6 @@ public class AccessibilityWorkBench
         aShapesButton;
     private JMenuBar
         maMenuBar;
-    private String
-        msMessage;
     private boolean
         mbInitialized;
     private TopWindowListener

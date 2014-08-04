@@ -146,7 +146,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
     }
     private String tableBackgroundColor; // null means transparent ...
-    private static final ColumnBoundary[] EMPTY_COLBOUNDS = new ColumnBoundary[0];
     private boolean elementBoundaryCollectionPass;
     private boolean oleHandled;
     private final List<ColumnBoundary> columnBoundaryList;

@@ -32,7 +32,6 @@ import java.util.LinkedList;
  */
 public class WeakAdapter implements XAdapter
 {
-    private final boolean DEBUG= false;
     // references the XWeak implementation
     private WeakReference<Object> m_weakRef;
     // contains XReference objects registered by addReference

@@ -47,7 +47,6 @@ import com.sun.star.uno.XInterface;
  */
 public class UITools {
 
-    private static final AccessibilityTools mAT = new AccessibilityTools();
     private final XAccessible mXRoot;
     private final XMultiServiceFactory mMSF;
 

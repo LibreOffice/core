@@ -26,7 +26,6 @@ public class OfficeInstallation implements java.io.Serializable {
     private String path;
     private String url;
     private boolean hasFW = false;
-    private boolean supportsFW = false;
 
     public static final String FILE_URL_PREFIX = SVersionRCFile.FILE_URL_PREFIX;
 

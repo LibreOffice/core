@@ -32,7 +32,6 @@ public class CGCategory
 
     public String Name;
     public int Index;
-    private String[] Tables;
     private final String CGROOTPATH = "/org.openoffice.Office.TableWizard/TableWizard/";
     XMultiServiceFactory xMSF;
     XNameAccess xNameAccessTablesNode;

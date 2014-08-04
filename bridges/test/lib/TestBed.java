@@ -207,10 +207,6 @@ public final class TestBed {
         private int state = INITIAL;
     }
 
-    private static final int TEST_SUCCEEDED = 0;
-    private static final int TEST_FAILED = 1;
-    private static final int TEST_ERROR = 2;
-
     private static final int CLIENT_FAILED = 0;
     private static final int CLIENT_DONE = 123;
 

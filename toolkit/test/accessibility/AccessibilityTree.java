@@ -392,8 +392,6 @@ public class AccessibilityTree
         maTree;
     private Canvas
         maCanvas;
-    private boolean
-        mbFirstShapeSeen;
     private int
         mnExpandLevel;
 }

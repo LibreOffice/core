@@ -33,7 +33,6 @@ public class GroupFieldHandler extends FieldSelection
     private IReportDocument CurReportDocument;
     private ArrayList<String> GroupFieldVector = new ArrayList<String>();
     private QueryMetaData CurDBMetaData;
-    private WizardDialog oWizardDialog;
     private static final short MAXSELFIELDS = 4;
 
     public GroupFieldHandler(IReportDocument _CurReportDocument, WizardDialog _CurUnoDialog)
@@ -44,7 +43,6 @@ public class GroupFieldHandler extends FieldSelection
 
         try
         {
-            this.oWizardDialog = _CurUnoDialog;
             this.CurReportDocument = _CurReportDocument;
             this.CurDBMetaData = CurReportDocument.getRecordParser();
             CurUnoDialog.setControlProperty("lstFields_2", "MultiSelection", Boolean.FALSE);
