@@ -35,7 +35,7 @@ static AvahiThreadedPoll *threaded_poll = NULL;
 static AvahiEntryGroup *group = NULL;
 static AvahiNetworkService *avahiService = NULL;
 
-static void create_services(AvahiClient *c);
+static bool create_services(AvahiClient *c);
 
 static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state, AVAHI_GCC_UNUSED void *userdata) {
     assert(g == group || group == NULL);
@@ -78,16 +78,19 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
     }
 }
 
-static void create_services(AvahiClient *c) {
+static bool create_services(AvahiClient *c) {
     assert(c);
 
     /* If this is the first time we're called, let's create a new
      * entry group if necessary */
+    if(!client)
+        return false;
 
     if (!group)
         if (!(group = avahi_entry_group_new(c, entry_group_callback, NULL))) {
             SAL_WARN("sdremote.wifi", "avahi_entry_group_new() failed: " << avahi_strerror(avahi_client_errno(c)));
             avahiService->clear();
+            return false;
         }
 
     /* If the group is empty (either because it was just created, or
@@ -113,22 +116,23 @@ static void create_services(AvahiClient *c) {
 
                 avahi_entry_group_reset(group);
 
-                create_services(c);
-                return;
+                return create_services(c);
             }
 
             SAL_WARN("sdremote.wifi", "Failed to add _impressremote._tcp service: " << avahi_strerror(ret));
             avahiService->clear();
+            return false;
         }
 
         /* Tell the server to register the service */
         if ((ret = avahi_entry_group_commit(group)) < 0) {
             SAL_WARN("sdremote.wifi", "Failed to commit entry group: " << avahi_strerror(ret));
             avahiService->clear();
+            return false;
         }
     }
 
-    return;
+    return true; //Services we're already created
 }
 
 static void client_callback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UNUSED void * userdata) {
@@ -174,7 +178,8 @@ void AvahiNetworkService::setup() {
        return;
    }
 
-   create_services(client);
+   if(!create_services(client))
+        return;
 
    /* Finally, start the event loop thread */
    if (avahi_threaded_poll_start(threaded_poll) < 0) {
@@ -185,7 +190,10 @@ void AvahiNetworkService::setup() {
 
 void AvahiNetworkService::clear() {
     /* Call this when the app shuts down */
-    avahi_threaded_poll_stop(threaded_poll);
-    avahi_client_free(client);
-    avahi_threaded_poll_free(threaded_poll);
+        if(threaded_poll)
+            avahi_threaded_poll_stop(threaded_poll);
+        if(client)
+            avahi_client_free(client);
+        if(threaded_poll)
+            avahi_threaded_poll_free(threaded_poll);
 }
