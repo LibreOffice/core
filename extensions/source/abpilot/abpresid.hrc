@@ -98,24 +98,9 @@
     #error "please adjust the resource id ranges!!"
 #endif
 
-// local resource ids
-#define FL_SEPARATOR            1
-
-#define FT_NAME_EXPL             4
-
 // some defines
 #define WINDOW_SIZE_X   240
 #define WINDOW_SIZE_Y   185
-
-#define WINDOW_BORDER_X  12
-#define WINDOW_BORDER_Y  14
-
-#define BUTTON_SIZE_X    50
-#define BUTTON_SIZE_Y    14
-
-#define HEADER_SIZE_Y   30
-
-#define BORDER_X        12
 
 #endif // EXTENSIONS_ABPRESID_HRC
 

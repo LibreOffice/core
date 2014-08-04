@@ -25,7 +25,6 @@
 #define WINDOW_SIZE_X   276
 #define WINDOW_SIZE_Y   185
 
-#define WINDOW_BORDER_X  12
 #define WINDOW_BORDER_Y  14
 
 #define BUTTON_SIZE_X    50

@@ -112,12 +112,6 @@
 #define WINDOW_SIZE_Y       185
 #define WINDOW_HALF_SIZE_X  ( WINDOW_SIZE_X / 2 )
 
-#define BUTTON_SIZE_X       50
-#define BUTTON_SIZE_Y       14
-
-#define ITEM_BUTTON_SIZE_X  20
-#define ITEM_BUTTON_SIZE_Y  12
-
 #endif // _EXTENSIONS_DBP_DBPRESID_HRC_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
