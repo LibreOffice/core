@@ -262,17 +262,6 @@
         <element name="spPr">
           <ref name="CT_ShapeProperties"/>
         </element>
-        <element name="bodyPr">
-          <ref name="CT_TextBodyProperties"/>
-        </element>
-        <element name="lstStyle">
-          <ref name="CT_TextListStyle"/>
-        </element>
-        <optional>
-          <element name="style">
-            <ref name="CT_ShapeStyle"/>
-          </element>
-        </optional>
         <optional>
           <element name="extLst">
             <ref name="CT_OfficeArtExtensionList"/>
@@ -449,11 +438,6 @@
         <element name="lightRig">
           <ref name="CT_LightRig"/>
         </element>
-        <optional>
-          <element name="backdrop">
-            <ref name="CT_Backdrop"/>
-          </element>
-        </optional>
         <optional>
           <element name="extLst">
             <ref name="CT_OfficeArtExtensionList"/>
