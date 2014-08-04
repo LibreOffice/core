@@ -23,7 +23,6 @@
 // global resource ids
 
 #define RID_XMLSECTP_GENERAL                1003
-#define RID_XMLSECTP_DETAILS                1004
 
 #define RID_XMLSECWB_NO_MOZILLA_PROFILE     1013
 
