@@ -100,6 +100,12 @@ if __name__ == "__main__":
             uifile = "sd/simpress" + uifile[16:]
         elif uifile.startswith("modules/BasicIDE"):
             uifile = "basctl/basicide" + uifile[16:]
+        elif uifile.startswith("modules/sabpilot"):
+            uifile = "extensions/sabpilot" + uifile[16:]
+        elif uifile.startswith("modules/sbibliography"):
+            uifile = "extensions/sbibliography" + uifile[21:]
+        elif uifile.startswith("modules/scanner"):
+            uifile = "extensions/scanner" + uifile[15:]
         elif uifile.startswith("modules/spropctrlr"):
             uifile = "extensions/spropctrlr" + uifile[18:]
         elif uifile.startswith("sfx"):
