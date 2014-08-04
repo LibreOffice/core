@@ -1118,23 +1118,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_PROP_HEIGHT        ));
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_PROP_HEIGHT_ASIAN  ));
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_PROP_HEIGHT_COMPLEX));
-                        }
-                        else if (sConvertedStyleName == "Title" || sConvertedStyleName == "Subtitle")
-                        {
-                            //set the default adjust for ParaStyle Title and Subtitle to left
-                            try
-                            {
-                                uno::Reference< beans::XPropertySet > xProp( xStyle, uno::UNO_QUERY );
-                                if( xProp.is() )
-                                {
-                                    uno::Any aMSDefaultVal = uno::makeAny( (sal_Int16)style::ParagraphAdjust_LEFT );
-                                    xProp->setPropertyValue( rPropNameSupplier.GetName( PROP_PARA_ADJUST), aMSDefaultVal );
-                                }
-                            }
-                            catch(...)
-                            {
-                                OSL_ENSURE( false, "Default ParaAdjust style property could not be set");
-                            }
+
                         }
                     }
 
