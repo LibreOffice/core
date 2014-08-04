@@ -67,7 +67,6 @@ public class BasicBound {
   public static BasicBound getBound(double[] data) {
     BasicBound bound = new BasicBound();
     if(data!=null) {
-      double minV, maxV;
       if(data.length>0) {
         bound.minValue = data[0];
         bound.maxValue = data[0];
