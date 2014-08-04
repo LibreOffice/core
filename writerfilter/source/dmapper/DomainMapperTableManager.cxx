@@ -83,7 +83,7 @@ bool DomainMapperTableManager::attribute(Id nName, Value& rValue)
     case NS_ooxml::LN_CT_TblLook_val:
     {
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
-        pPropMap->Insert(PROP_TBL_LOOK, uno::makeAny(rValue.getInt()));
+        pPropMap->Insert(PROP_TBL_LOOK, uno::makeAny<sal_Int32>(rValue.getInt()));
         insertTableProps(pPropMap);
         m_aTableLook["val"] = uno::makeAny(rValue.getInt());
     }
