@@ -172,6 +172,9 @@ public:
     static LanguageType getReplacementForObsoleteLanguage( LanguageType nLang,
             bool bUserInterfaceSelection = false );
 
+    /** Whether locale is legacy, i.e. country ot confederation doesn't exist anymore. */
+    static bool isLegacy( LanguageType nLang );
+
 
     /** @ATTENTION: these are _ONLY_ to be called by the application's
         configuration! */

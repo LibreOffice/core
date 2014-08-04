@@ -473,6 +473,22 @@ bool MsLangId::isNonLatinWestern( LanguageType nLang )
 
 
 // static
+bool MsLangId::isLegacy( LanguageType nLang )
+{
+    switch (nLang)
+    {
+        case LANGUAGE_SERBIAN_CYRILLIC_SAM:
+        case LANGUAGE_SERBIAN_LATIN_SAM:
+            /* TODO: activate once dictionary was renamed from pap-AN to
+             * pap-CW, or the pap-CW one supports also pap-AN, see fdo#44112 */
+        //case LANGUAGE_PAPIAMENTU:
+            return true;
+    }
+    return false;
+}
+
+
+// static
 LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bool /*bUserInterfaceSelection*/ )
 {
     switch (nLang)

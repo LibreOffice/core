@@ -25,6 +25,7 @@
 #include <vcl/settings.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
+#include <i18nlangtag/mslangid.hxx>
 #include <svx/dialogs.hrc>
 #include <svtools/colorcfg.hxx>
 
@@ -319,6 +320,8 @@ void SvxNumberFormatTabPage::Init_Impl()
     // initialize language ListBox
 
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
+    /* TODO: any reason we're doing a manual init here instead of using
+     * SvxLanguageBoxBase::SetLanguageList( LANG_LIST_ONLY_KNOWN, ...)? */
     // Don't list ambiguous locales where we won't be able to convert the
     // LanguageType back to an identical Language_Country name and therefore
     // couldn't load the i18n LocaleData. Show DebugMsg in non-PRODUCT version.
@@ -327,7 +330,8 @@ void SvxNumberFormatTabPage::Init_Impl()
     sal_Int32 nCount = xLang.getLength();
     for ( sal_Int32 i=0; i<nCount; i++ )
     {
-        m_pLbLanguage->InsertLanguage( xLang[i] );
+        if (!MsLangId::isLegacy( xLang[i]))
+            m_pLbLanguage->InsertLanguage( xLang[i] );
     }
 }
 

@@ -267,6 +267,7 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
             if ( nLangType != LANGUAGE_DONTKNOW &&
                  nLangType != LANGUAGE_SYSTEM &&
                  nLangType != LANGUAGE_NONE &&
+                 !MsLangId::isLegacy( nLangType) &&
                  (MsLangId::getSubLanguage( nLangType) != 0 ||
                   (nLangList & LANG_LIST_ALSO_PRIMARY_ONLY)) &&
                  ((nLangList & LANG_LIST_ALL) != 0 ||
