@@ -22,32 +22,21 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 
+inline SdrMetricItem makeSdrTextLeftDistItem(long nHgt) {
+    return SdrMetricItem(SDRATTR_TEXT_LEFTDIST, nHgt);
+}
 
-// class SdrTextLeft/Right/Upper/LowerDistItem
+inline SdrMetricItem makeSdrTextRightDistItem(long nHgt) {
+    return SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, nHgt);
+}
 
-class SdrTextLeftDistItem: public SdrMetricItem {
-public:
-    SdrTextLeftDistItem(long nHgt=0): SdrMetricItem(SDRATTR_TEXT_LEFTDIST,nHgt)  {}
-    SdrTextLeftDistItem(SvStream& rIn): SdrMetricItem(SDRATTR_TEXT_LEFTDIST,rIn) {}
-};
+inline SdrMetricItem makeSdrTextUpperDistItem(long nHgt) {
+    return SdrMetricItem(SDRATTR_TEXT_UPPERDIST, nHgt);
+}
 
-class SdrTextRightDistItem: public SdrMetricItem {
-public:
-    SdrTextRightDistItem(long nHgt=0): SdrMetricItem(SDRATTR_TEXT_RIGHTDIST,nHgt)  {}
-    SdrTextRightDistItem(SvStream& rIn): SdrMetricItem(SDRATTR_TEXT_RIGHTDIST,rIn) {}
-};
-
-class SdrTextUpperDistItem: public SdrMetricItem {
-public:
-    SdrTextUpperDistItem(long nHgt=0): SdrMetricItem(SDRATTR_TEXT_UPPERDIST,nHgt)  {}
-    SdrTextUpperDistItem(SvStream& rIn): SdrMetricItem(SDRATTR_TEXT_UPPERDIST,rIn) {}
-};
-
-class SdrTextLowerDistItem: public SdrMetricItem {
-public:
-    SdrTextLowerDistItem(long nHgt=0): SdrMetricItem(SDRATTR_TEXT_LOWERDIST,nHgt)  {}
-    SdrTextLowerDistItem(SvStream& rIn): SdrMetricItem(SDRATTR_TEXT_LOWERDIST,rIn) {}
-};
+inline SdrMetricItem makeSdrTextLowerDistItem(long nHgt) {
+    return SdrMetricItem(SDRATTR_TEXT_LOWERDIST, nHgt);
+}
 
 #endif
 

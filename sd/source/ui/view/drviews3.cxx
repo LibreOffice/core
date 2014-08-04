@@ -934,7 +934,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SFX_ITEM_ON )
                     {
-                        const SdrTextLeftDistItem& rTLDItem = (const SdrTextLeftDistItem&)
+                        const SdrMetricItem& rTLDItem = (const SdrMetricItem&)
                                                               aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
                         long nLD = rTLDItem.GetValue();
                         aPos.X() += nLD;
@@ -946,7 +946,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SFX_ITEM_ON )
                     {
-                        const SdrTextLeftDistItem& rTLDItem = (const SdrTextLeftDistItem&)
+                        const SdrMetricItem& rTLDItem = (const SdrMetricItem&)
                                                               aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
                         long nLD = rTLDItem.GetValue();
                         aLRSpace.SetLeft( aLRSpace.GetLeft() + nLD );

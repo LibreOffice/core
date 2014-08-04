@@ -1020,10 +1020,10 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     Rectangle aTextRect( aPos, aSize );
     SdrRectObj* pText =new SdrRectObj( OBJ_TEXT, aTextRect );
 
-    pText->SetMergedItem ( SdrTextUpperDistItem (0));
-    pText->SetMergedItem ( SdrTextLowerDistItem (0));
-    pText->SetMergedItem ( SdrTextRightDistItem (0));
-    pText->SetMergedItem ( SdrTextLeftDistItem (0));
+    pText->SetMergedItem ( makeSdrTextUpperDistItem (0));
+    pText->SetMergedItem ( makeSdrTextLowerDistItem (0));
+    pText->SetMergedItem ( makeSdrTextRightDistItem (0));
+    pText->SetMergedItem ( makeSdrTextLeftDistItem (0));
 
     if ( aFnt.GetWidth() || ( rAct.GetType() == META_STRETCHTEXT_ACTION ) )
     {

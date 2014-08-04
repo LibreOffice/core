@@ -862,10 +862,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             }
 
             // Set distances on Textbox's margins
-            aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
-            aSet.Put( SdrTextRightDistItem( nTextRight ) );
-            aSet.Put( SdrTextUpperDistItem( nTextTop ) );
-            aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
+            aSet.Put( makeSdrTextLeftDistItem( nTextLeft ) );
+            aSet.Put( makeSdrTextRightDistItem( nTextRight ) );
+            aSet.Put( makeSdrTextUpperDistItem( nTextTop ) );
+            aSet.Put( makeSdrTextLowerDistItem( nTextBottom ) );
             pImpRec->nDxTextLeft    = nTextLeft;
             pImpRec->nDyTextTop     = nTextTop;
             pImpRec->nDxTextRight   = nTextRight;

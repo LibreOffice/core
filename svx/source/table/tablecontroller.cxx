@@ -730,10 +730,10 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
 
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
         SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER ) ) );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextLeftDistItem&)(aNewAttr.Get(SDRATTR_TEXT_LEFTDIST))).GetValue()), BOX_LINE_LEFT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextRightDistItem&)(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST))).GetValue()), BOX_LINE_RIGHT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextUpperDistItem&)(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST))).GetValue()), BOX_LINE_TOP );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextLowerDistItem&)(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST))).GetValue()), BOX_LINE_BOTTOM );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_LEFTDIST))).GetValue()), BOX_LINE_LEFT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST))).GetValue()), BOX_LINE_RIGHT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST))).GetValue()), BOX_LINE_TOP );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST))).GetValue()), BOX_LINE_BOTTOM );
 
         SvxBoxInfoItem aBoxInfoItem( static_cast< const SvxBoxInfoItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) ) );
 
@@ -753,16 +753,16 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
             SvxBoxItem aNewBoxItem( static_cast< const SvxBoxItem& >( aNewSet.Get( SDRATTR_TABLE_BORDER ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) != aBoxItem.GetDistance( BOX_LINE_LEFT ) )
-                aNewSet.Put(SdrTextLeftDistItem( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) ) );
+                aNewSet.Put(SdrMetricItem( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) != aBoxItem.GetDistance( BOX_LINE_RIGHT ) )
-                aNewSet.Put(SdrTextRightDistItem( aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) ) );
+                aNewSet.Put(makeSdrTextRightDistItem( aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_TOP ) != aBoxItem.GetDistance( BOX_LINE_TOP ) )
-                aNewSet.Put(SdrTextUpperDistItem( aNewBoxItem.GetDistance( BOX_LINE_TOP ) ) );
+                aNewSet.Put(makeSdrTextUpperDistItem( aNewBoxItem.GetDistance( BOX_LINE_TOP ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) != aBoxItem.GetDistance( BOX_LINE_BOTTOM ) )
-                aNewSet.Put(SdrTextLowerDistItem( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) ) );
+                aNewSet.Put(makeSdrTextLowerDistItem( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) ) );
 
             SetAttrToSelectedCells(aNewSet, false);
         }

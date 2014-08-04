@@ -124,7 +124,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_LEFTDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrTextLeftDistItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldLeft, nValue, eUnit );
     }
     else
@@ -136,7 +136,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_RIGHTDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrTextRightDistItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldRight, nValue, eUnit );
     }
     else
@@ -148,7 +148,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_UPPERDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrTextUpperDistItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldTop, nValue, eUnit );
     }
     else
@@ -160,7 +160,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_LOWERDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrTextLowerDistItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldBottom, nValue, eUnit );
     }
     else
@@ -334,25 +334,25 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     if( m_pMtrFldLeft->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLeft, eUnit );
-        rAttrs->Put( SdrTextLeftDistItem( nValue ) );
+        rAttrs->Put( makeSdrTextLeftDistItem( nValue ) );
     }
 
     if( m_pMtrFldRight->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldRight, eUnit );
-        rAttrs->Put( SdrTextRightDistItem( nValue ) );
+        rAttrs->Put( makeSdrTextRightDistItem( nValue ) );
     }
 
     if( m_pMtrFldTop->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldTop, eUnit );
-        rAttrs->Put( SdrTextUpperDistItem( nValue ) );
+        rAttrs->Put( makeSdrTextUpperDistItem( nValue ) );
     }
 
     if( m_pMtrFldBottom->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldBottom, eUnit );
-        rAttrs->Put( SdrTextLowerDistItem( nValue ) );
+        rAttrs->Put( makeSdrTextLowerDistItem( nValue ) );
     }
 
     eState = m_pTsbAutoGrowHeight->GetState();

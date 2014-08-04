@@ -1496,10 +1496,10 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     rSet.Put( SdrTextVertAdjustItem( eTVA ) );
     rSet.Put( SdrTextHorzAdjustItem( eTHA ) );
 
-    rSet.Put( SdrTextLeftDistItem( nTextLeft ) );
-    rSet.Put( SdrTextRightDistItem( nTextRight ) );
-    rSet.Put( SdrTextUpperDistItem( nTextTop ) );
-    rSet.Put( SdrTextLowerDistItem( nTextBottom ) );
+    rSet.Put( makeSdrTextLeftDistItem( nTextLeft ) );
+    rSet.Put( makeSdrTextRightDistItem( nTextRight ) );
+    rSet.Put( makeSdrTextUpperDistItem( nTextTop ) );
+    rSet.Put( makeSdrTextLowerDistItem( nTextBottom ) );
 
     rSet.Put( SdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_True : sal_False ) );
     rSet.Put( SdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
@@ -5152,10 +5152,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
 
             // set margins at the border of the textbox
-            aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
-            aSet.Put( SdrTextRightDistItem( nTextRight ) );
-            aSet.Put( SdrTextUpperDistItem( nTextTop ) );
-            aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
+            aSet.Put( makeSdrTextLeftDistItem( nTextLeft ) );
+            aSet.Put( makeSdrTextRightDistItem( nTextRight ) );
+            aSet.Put( makeSdrTextUpperDistItem( nTextTop ) );
+            aSet.Put( makeSdrTextLowerDistItem( nTextBottom ) );
             pTextImpRec->nDxTextLeft    = nTextLeft;
             pTextImpRec->nDyTextTop     = nTextTop;
             pTextImpRec->nDxTextRight   = nTextRight;

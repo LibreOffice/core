@@ -1096,10 +1096,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 pTObj->SetMergedItem( makeSdrTextMinFrameWidthItem( nMinFrameWidth ) );
 
             // set margins at the borders of the textbox
-            pTObj->SetMergedItem( SdrTextLeftDistItem( nTextLeft ) );
-            pTObj->SetMergedItem( SdrTextRightDistItem( nTextRight ) );
-            pTObj->SetMergedItem( SdrTextUpperDistItem( nTextTop ) );
-            pTObj->SetMergedItem( SdrTextLowerDistItem( nTextBottom ) );
+            pTObj->SetMergedItem( makeSdrTextLeftDistItem( nTextLeft ) );
+            pTObj->SetMergedItem( makeSdrTextRightDistItem( nTextRight ) );
+            pTObj->SetMergedItem( makeSdrTextUpperDistItem( nTextTop ) );
+            pTObj->SetMergedItem( makeSdrTextLowerDistItem( nTextBottom ) );
             pTObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
 
             if ( !pTObj->ISA( SdrObjCustomShape ) )
@@ -7234,10 +7234,10 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
     {
         Reference< XPropertySet > xPropSet( xCell, UNO_QUERY_THROW );
 
-        const sal_Int32 nLeftDist(((const SdrTextLeftDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
-        const sal_Int32 nRightDist(((const SdrTextRightDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
-        const sal_Int32 nUpperDist(((const SdrTextUpperDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
-        const sal_Int32 nLowerDist(((const SdrTextLowerDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+        const sal_Int32 nLeftDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
+        const sal_Int32 nRightDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
+        const sal_Int32 nUpperDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
+        const sal_Int32 nLowerDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
         static const OUString  sTopBorder( "TextUpperDistance" );
         static const OUString  sBottomBorder( "TextLowerDistance" );
         static const OUString  sLeftBorder( "TextLeftDistance" );
@@ -7257,7 +7257,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         xPropSet->setPropertyValue( sTextVerticalAdjust, Any( eVA ) );
 
         //set textHorizontalAdjust and TextWritingMode attr
-        const sal_Int32 eHA(((const SdrTextLeftDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
+        const sal_Int32 eHA(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
         const SvxFrameDirection eDirection = (const SvxFrameDirection)((( const SvxFrameDirectionItem&)pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
         static const OUString  sHorizontalAdjust( "TextHorizontalAdjust" );
         static const OUString  sWritingMode( "TextWritingMode" );

@@ -149,10 +149,10 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[SDRATTR_TEXT_MINFRAMEHEIGHT    -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, 0);
     mppLocalPoolDefaults[SDRATTR_TEXT_AUTOGROWHEIGHT    -SDRATTR_START]=new SdrTextAutoGrowHeightItem;
     mppLocalPoolDefaults[SDRATTR_TEXT_FITTOSIZE     -SDRATTR_START]=new SdrTextFitToSizeTypeItem;
-    mppLocalPoolDefaults[SDRATTR_TEXT_LEFTDIST      -SDRATTR_START]=new SdrTextLeftDistItem;
-    mppLocalPoolDefaults[SDRATTR_TEXT_RIGHTDIST     -SDRATTR_START]=new SdrTextRightDistItem;
-    mppLocalPoolDefaults[SDRATTR_TEXT_UPPERDIST     -SDRATTR_START]=new SdrTextUpperDistItem;
-    mppLocalPoolDefaults[SDRATTR_TEXT_LOWERDIST     -SDRATTR_START]=new SdrTextLowerDistItem;
+    mppLocalPoolDefaults[SDRATTR_TEXT_LEFTDIST      -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_LEFTDIST, 0);
+    mppLocalPoolDefaults[SDRATTR_TEXT_RIGHTDIST     -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, 0);
+    mppLocalPoolDefaults[SDRATTR_TEXT_UPPERDIST     -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_UPPERDIST, 0);
+    mppLocalPoolDefaults[SDRATTR_TEXT_LOWERDIST     -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_LOWERDIST, 0);
     mppLocalPoolDefaults[SDRATTR_TEXT_VERTADJUST        -SDRATTR_START]=new SdrTextVertAdjustItem;
     mppLocalPoolDefaults[SDRATTR_TEXT_MAXFRAMEHEIGHT    -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT, 0);
     mppLocalPoolDefaults[SDRATTR_TEXT_MINFRAMEWIDTH -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, 0);

@@ -482,10 +482,10 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
             rAttr.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_BLOCK ) );
 
         rAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
-        rAttr.Put( SdrTextLeftDistItem( 100 ) );
-        rAttr.Put( SdrTextRightDistItem( 100 ) );
-        rAttr.Put( SdrTextUpperDistItem( 100 ) );
-        rAttr.Put( SdrTextLowerDistItem( 100 ) );
+        rAttr.Put( makeSdrTextLeftDistItem( 100 ) );
+        rAttr.Put( makeSdrTextRightDistItem( 100 ) );
+        rAttr.Put( makeSdrTextUpperDistItem( 100 ) );
+        rAttr.Put( makeSdrTextLowerDistItem( 100 ) );
     }
     else if (nSlotId == SID_DRAW_MEASURELINE)
     {

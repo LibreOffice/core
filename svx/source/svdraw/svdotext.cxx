@@ -1799,22 +1799,22 @@ bool SdrTextObj::IsContourTextFrame() const
 
 long SdrTextObj::GetTextLeftDistance() const
 {
-    return ((SdrTextLeftDistItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_LEFTDIST))).GetValue();
+    return ((SdrMetricItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_LEFTDIST))).GetValue();
 }
 
 long SdrTextObj::GetTextRightDistance() const
 {
-    return ((SdrTextRightDistItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_RIGHTDIST))).GetValue();
+    return ((SdrMetricItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_RIGHTDIST))).GetValue();
 }
 
 long SdrTextObj::GetTextUpperDistance() const
 {
-    return ((SdrTextUpperDistItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_UPPERDIST))).GetValue();
+    return ((SdrMetricItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_UPPERDIST))).GetValue();
 }
 
 long SdrTextObj::GetTextLowerDistance() const
 {
-    return ((SdrTextLowerDistItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_LOWERDIST))).GetValue();
+    return ((SdrMetricItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_LOWERDIST))).GetValue();
 }
 
 SdrTextAniKind SdrTextObj::GetTextAniKind() const

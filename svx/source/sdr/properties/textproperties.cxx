@@ -211,15 +211,15 @@ namespace sdr
 
                     if(bLineVisible)
                     {
-                        const sal_Int32 nLeftDist(((const SdrTextLeftDistItem&)GetItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
-                        const sal_Int32 nRightDist(((const SdrTextRightDistItem&)GetItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
-                        const sal_Int32 nUpperDist(((const SdrTextUpperDistItem&)GetItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
-                        const sal_Int32 nLowerDist(((const SdrTextLowerDistItem&)GetItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+                        const sal_Int32 nLeftDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
+                        const sal_Int32 nRightDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
+                        const sal_Int32 nUpperDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
+                        const sal_Int32 nLowerDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
 
-                        SetObjectItemDirect(SdrTextLeftDistItem(nLeftDist + nDifference));
-                        SetObjectItemDirect(SdrTextRightDistItem(nRightDist + nDifference));
-                        SetObjectItemDirect(SdrTextUpperDistItem(nUpperDist + nDifference));
-                        SetObjectItemDirect(SdrTextLowerDistItem(nLowerDist + nDifference));
+                        SetObjectItemDirect(makeSdrTextLeftDistItem(nLeftDist + nDifference));
+                        SetObjectItemDirect(makeSdrTextRightDistItem(nRightDist + nDifference));
+                        SetObjectItemDirect(makeSdrTextUpperDistItem(nUpperDist + nDifference));
+                        SetObjectItemDirect(makeSdrTextLowerDistItem(nLowerDist + nDifference));
                     }
                 }
             }

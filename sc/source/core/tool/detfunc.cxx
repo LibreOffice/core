@@ -219,10 +219,10 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
     aCaptionSet.Put( SdrShadowYDistItem( 100 ) );
 
     //  text attributes
-    aCaptionSet.Put( SdrTextLeftDistItem( 100 ) );
-    aCaptionSet.Put( SdrTextRightDistItem( 100 ) );
-    aCaptionSet.Put( SdrTextUpperDistItem( 100 ) );
-    aCaptionSet.Put( SdrTextLowerDistItem( 100 ) );
+    aCaptionSet.Put( makeSdrTextLeftDistItem( 100 ) );
+    aCaptionSet.Put( makeSdrTextRightDistItem( 100 ) );
+    aCaptionSet.Put( makeSdrTextUpperDistItem( 100 ) );
+    aCaptionSet.Put( makeSdrTextLowerDistItem( 100 ) );
 
     aCaptionSet.Put( SdrTextAutoGrowWidthItem( false ) );
     aCaptionSet.Put( SdrTextAutoGrowHeightItem( true ) );

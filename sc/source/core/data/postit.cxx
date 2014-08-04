@@ -128,10 +128,10 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( SdrShadowYDistItem( 100 ) );
 
     // text attributes
-    aItemSet.Put( SdrTextLeftDistItem( 100 ) );
-    aItemSet.Put( SdrTextRightDistItem( 100 ) );
-    aItemSet.Put( SdrTextUpperDistItem( 100 ) );
-    aItemSet.Put( SdrTextLowerDistItem( 100 ) );
+    aItemSet.Put( makeSdrTextLeftDistItem( 100 ) );
+    aItemSet.Put( makeSdrTextRightDistItem( 100 ) );
+    aItemSet.Put( makeSdrTextUpperDistItem( 100 ) );
+    aItemSet.Put( makeSdrTextLowerDistItem( 100 ) );
     aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
     aItemSet.Put( SdrTextAutoGrowHeightItem( true ) );
     // use the default cell style to be able to modify the caption font

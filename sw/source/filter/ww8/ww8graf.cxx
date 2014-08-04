@@ -1201,10 +1201,10 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     rSet.Put( SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ) );
     rSet.Put( SdrTextAutoGrowWidthItem(false));
     rSet.Put( SdrTextAutoGrowHeightItem(false));
-    rSet.Put( SdrTextLeftDistItem(  MIN_BORDER_DIST*2 ) );
-    rSet.Put( SdrTextRightDistItem( MIN_BORDER_DIST*2 ) );
-    rSet.Put( SdrTextUpperDistItem( MIN_BORDER_DIST ) );
-    rSet.Put( SdrTextLowerDistItem( MIN_BORDER_DIST ) );
+    rSet.Put( makeSdrTextLeftDistItem(  MIN_BORDER_DIST*2 ) );
+    rSet.Put( makeSdrTextRightDistItem( MIN_BORDER_DIST*2 ) );
+    rSet.Put( makeSdrTextUpperDistItem( MIN_BORDER_DIST ) );
+    rSet.Put( makeSdrTextLowerDistItem( MIN_BORDER_DIST ) );
 
     return pObj;
 }
@@ -2800,10 +2800,10 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
             // ww8-default Randabstand einsetzen
             SfxItemSet aItemSet(pDrawModel->GetItemPool(),
                 SDRATTR_TEXT_LEFTDIST, SDRATTR_TEXT_LOWERDIST);
-            aItemSet.Put( SdrTextLeftDistItem( pRecord->nDxTextLeft ) );
-            aItemSet.Put( SdrTextRightDistItem( pRecord->nDxTextRight  ) );
-            aItemSet.Put( SdrTextUpperDistItem( pRecord->nDyTextTop    ) );
-            aItemSet.Put( SdrTextLowerDistItem( pRecord->nDyTextBottom ) );
+            aItemSet.Put( makeSdrTextLeftDistItem( pRecord->nDxTextLeft ) );
+            aItemSet.Put( makeSdrTextRightDistItem( pRecord->nDxTextRight  ) );
+            aItemSet.Put( makeSdrTextUpperDistItem( pRecord->nDyTextTop    ) );
+            aItemSet.Put( makeSdrTextLowerDistItem( pRecord->nDyTextBottom ) );
             pSdrTextObj->SetMergedItemSetAndBroadcast(aItemSet);
         }
     }

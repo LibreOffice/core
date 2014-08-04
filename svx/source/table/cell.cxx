@@ -718,28 +718,28 @@ sal_Int32 Cell::getMinimumHeight()
 
 long Cell::GetTextLeftDistance() const
 {
-    return ((SdrTextLeftDistItem&)(GetItemSet().Get(SDRATTR_TEXT_LEFTDIST))).GetValue();
+    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_LEFTDIST))).GetValue();
 }
 
 
 
 long Cell::GetTextRightDistance() const
 {
-    return ((SdrTextRightDistItem&)(GetItemSet().Get(SDRATTR_TEXT_RIGHTDIST))).GetValue();
+    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_RIGHTDIST))).GetValue();
 }
 
 
 
 long Cell::GetTextUpperDistance() const
 {
-    return ((SdrTextUpperDistItem&)(GetItemSet().Get(SDRATTR_TEXT_UPPERDIST))).GetValue();
+    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_UPPERDIST))).GetValue();
 }
 
 
 
 long Cell::GetTextLowerDistance() const
 {
-    return ((SdrTextLowerDistItem&)(GetItemSet().Get(SDRATTR_TEXT_LOWERDIST))).GetValue();
+    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_LOWERDIST))).GetValue();
 }
 
 

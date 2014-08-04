@@ -549,10 +549,10 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
     if( mbAutoMargin )
     {
         sal_Int32 nMargin = rDffConv.GetDefaultTextMargin();
-        rSdrObj.SetMergedItem( SdrTextLeftDistItem( nMargin ) );
-        rSdrObj.SetMergedItem( SdrTextRightDistItem( nMargin ) );
-        rSdrObj.SetMergedItem( SdrTextUpperDistItem( nMargin ) );
-        rSdrObj.SetMergedItem( SdrTextLowerDistItem( nMargin ) );
+        rSdrObj.SetMergedItem( makeSdrTextLeftDistItem( nMargin ) );
+        rSdrObj.SetMergedItem( makeSdrTextRightDistItem( nMargin ) );
+        rSdrObj.SetMergedItem( makeSdrTextUpperDistItem( nMargin ) );
+        rSdrObj.SetMergedItem( makeSdrTextLowerDistItem( nMargin ) );
     }
 
     // macro and hyperlink

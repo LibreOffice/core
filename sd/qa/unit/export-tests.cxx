@@ -412,10 +412,10 @@ void SdFiltersTest::testBnc862510_5()
     // Same as testBnc870237, but here we check the horizontal spacing
     const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj( 1 ) );
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextUpperDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextLowerDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(7510), (static_cast< const SdrTextRightDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextLeftDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(7510), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
 
     xDocShRef->DoClose();
 }

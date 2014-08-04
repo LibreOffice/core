@@ -223,10 +223,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
-    rISet.Put( SdrTextLeftDistItem( 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
-    rISet.Put( SdrTextRightDistItem( 250 ) );
-    rISet.Put( SdrTextUpperDistItem( 125 ) );
-    rISet.Put( SdrTextLowerDistItem( 125 ) );
+    rISet.Put( makeSdrTextLeftDistItem( 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
+    rISet.Put( makeSdrTextRightDistItem( 250 ) );
+    rISet.Put( makeSdrTextUpperDistItem( 125 ) );
+    rISet.Put( makeSdrTextLowerDistItem( 125 ) );
 
     rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
 
@@ -587,10 +587,10 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
-    rISet.Put( SdrTextLeftDistItem( 250 ) );
-    rISet.Put( SdrTextRightDistItem( 250 ) );
-    rISet.Put( SdrTextUpperDistItem( 130 ) );
-    rISet.Put( SdrTextLowerDistItem( 130 ) );
+    rISet.Put( makeSdrTextLeftDistItem( 250 ) );
+    rISet.Put( makeSdrTextRightDistItem( 250 ) );
+    rISet.Put( makeSdrTextUpperDistItem( 130 ) );
+    rISet.Put( makeSdrTextLowerDistItem( 130 ) );
 
     rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
     rISet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
