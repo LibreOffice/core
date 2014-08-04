@@ -21,7 +21,6 @@ package org.libreoffice.report.pentaho.layoutprocessor;
 import org.libreoffice.report.OfficeToken;
 import org.libreoffice.report.pentaho.OfficeNamespaces;
 import org.libreoffice.report.pentaho.model.FormattedTextElement;
-import org.libreoffice.report.pentaho.model.OfficeGroupSection;
 import org.libreoffice.report.pentaho.model.ReportElement;
 import java.math.BigDecimal;
 
@@ -48,7 +47,6 @@ import org.jfree.report.structure.DetailSection;
 
 import org.pentaho.reporting.libraries.formula.lvalues.ContextLookup;
 import org.pentaho.reporting.libraries.formula.lvalues.LValue;
-import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
 
 /**
  * Creation-Date: 06.06.2007, 17:03:30

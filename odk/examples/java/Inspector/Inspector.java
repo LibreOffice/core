@@ -39,7 +39,6 @@ import java.util.Set;
 
 import org.openoffice.XInstanceInspector;
 
-import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XMessageBoxFactory;
 import com.sun.star.awt.XWindowPeer;

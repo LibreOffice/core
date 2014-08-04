@@ -53,7 +53,6 @@ import com.sun.star.table.XCellRange;
 import com.sun.star.sheet.XCellRangeAddressable;
 
 import com.sun.star.awt.Point;
-import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XMessageBoxFactory;
 import com.sun.star.awt.MessageBoxType;

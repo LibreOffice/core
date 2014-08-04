@@ -19,7 +19,6 @@
 package ifc.awt;
 
 import com.sun.star.awt.AsyncCallback;
-import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XCallback;
 import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XMessageBoxFactory;

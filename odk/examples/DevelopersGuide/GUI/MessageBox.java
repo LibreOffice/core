@@ -32,7 +32,6 @@
  *
  *************************************************************************/
 
-import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.MessageBoxType;
 import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XMessageBoxFactory;
