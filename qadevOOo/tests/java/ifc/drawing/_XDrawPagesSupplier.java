@@ -29,7 +29,7 @@ import com.sun.star.drawing.XDrawPagesSupplier;
 * <ul>
 *  <li><code> getDrawPages()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XDrawPagesSupplier
 */
 public class _XDrawPagesSupplier extends MultiMethodTest {

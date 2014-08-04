@@ -35,7 +35,7 @@ import com.sun.star.table.XTableChart;
 *  <li><code> getRanges()</code></li>
 *  <li><code> setRanges()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.table.XTableChart
 */
 public class _XTableChart extends MultiMethodTest {

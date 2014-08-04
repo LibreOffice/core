@@ -38,7 +38,7 @@ import com.sun.star.text.XTextRangeMover;
  *   <li> <code>'XTextRange'</code> (of type <code>XTextRange</code>):
  *   the range that includes moving range. </li>
  * <ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextRangeMover
  */
 public class _XTextRangeMover extends MultiMethodTest {

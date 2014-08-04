@@ -29,7 +29,7 @@ import lib.MultiMethodTest;
  * <ul>
  *  <li><code> getTextFrames()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextFramesSupplier
  */
 public class _XTextFramesSupplier extends MultiMethodTest {

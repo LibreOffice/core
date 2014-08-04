@@ -47,7 +47,7 @@ import com.sun.star.ui.dialogs.XFilePickerControlAccess;
 *    since the control has emtpy initial value):
 *    the value which can set for the control . </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ui.XFilePickerControlAccess
 */
 public class _XFilePickerControlAccess extends MultiMethodTest {

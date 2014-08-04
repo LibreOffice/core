@@ -33,7 +33,7 @@ import com.sun.star.text.XTextColumns;
  *  <li><code> getColumns()</code></li>
  *  <li><code> setColumns()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextColumns
  */
 public class _XTextColumns extends MultiMethodTest {

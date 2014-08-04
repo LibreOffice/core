@@ -37,7 +37,7 @@ import com.sun.star.lang.EventObject;
 *  <li><code> last()</code></li>
 *  <li><code> enableRepeat()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XSpinField
 */
 public class _XSpinField extends MultiMethodTest {

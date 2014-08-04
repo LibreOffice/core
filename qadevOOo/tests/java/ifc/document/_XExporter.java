@@ -37,7 +37,7 @@ import com.sun.star.lang.XComponent;
 *  <li> <code>'SourceDocument'</code> (of type <code>XComponent</code>):
 *   the source document to be passed to the method. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.document.XExporter
 */
 public class _XExporter extends MultiMethodTest {

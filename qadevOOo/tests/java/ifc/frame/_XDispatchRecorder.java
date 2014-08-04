@@ -42,7 +42,7 @@ import com.sun.star.util.URL;
 *  <li><code> endRecording() </code></li>
 *  <li><code> getRecordedMacro() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XDispatchRecorder
 */
 public class _XDispatchRecorder extends MultiMethodTest {

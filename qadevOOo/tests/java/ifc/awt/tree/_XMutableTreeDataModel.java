@@ -29,7 +29,7 @@ import lib.MultiMethodTest;
 *  <li><code> createNode()</code></li>
 *  <li><code> setRoot()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 
 * @see com.sun.star.awt.tree.XMutableTreeDataModel
 */

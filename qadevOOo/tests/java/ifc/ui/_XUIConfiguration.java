@@ -29,7 +29,7 @@ import lib.MultiMethodTest;
 *  <li><code> addConfigurationListener()</code></li>
 *  <li><code> removeConfigurationListener()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated.
 * @see com.sun.star.ui.XUIConfiguration
 */

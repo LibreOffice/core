@@ -54,7 +54,7 @@ import com.sun.star.uno.UnoRuntime;
 *    The file is needed if no other file name specified by relation.
 *    </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.document.XDocumentInsertable
 */
 public class _XDocumentInsertable extends MultiMethodTest {

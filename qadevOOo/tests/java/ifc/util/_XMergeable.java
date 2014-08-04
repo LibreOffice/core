@@ -30,7 +30,7 @@ import com.sun.star.util.XMergeable;
  *  <li><code> merge()</code></li>
  *  <li><code> getIsMerged()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.util.XMergeable
  */
 public class _XMergeable extends MultiMethodTest {

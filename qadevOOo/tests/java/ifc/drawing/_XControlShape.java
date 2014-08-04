@@ -41,7 +41,7 @@ import com.sun.star.uno.XInterface;
 *   must also implement <code>XMultiServiceFactory</code> interface
 *   to create some control model. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XControlShape
 */
 public class _XControlShape extends MultiMethodTest {

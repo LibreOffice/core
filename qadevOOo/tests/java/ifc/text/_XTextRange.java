@@ -37,7 +37,7 @@ import com.sun.star.text.XTextRange;
 * start range is retrieved and its content is set to 'Start'
 * and end range is set to 'End'. Finally the whole TextRange
 * is checked and it must be 'StartMiddleEnd'. <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.text.XTextRange
 */
 public class _XTextRange extends MultiMethodTest {

@@ -37,7 +37,7 @@ import com.sun.star.drawing.XMasterPageTarget;
 *   (of type <code>XDrawPages</code>):
 *    the relation is used to create a new draw page. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XMasterPageTarget
 */
 public class _XMasterPageTarget extends MultiMethodTest{

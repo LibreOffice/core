@@ -29,7 +29,7 @@ import com.sun.star.datatransfer.XMimeContentTypeFactory;
 * <ul>
 *  <li><code> createMimeContentType()</code></li>
 * </ul> <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.datatransfer.XMimeContentTypeFactory
 */
 public class _XMimeContentTypeFactory extends MultiMethodTest {

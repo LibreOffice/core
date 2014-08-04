@@ -36,7 +36,7 @@ import com.sun.star.drawing.XDrawPages;
 *  <li> <code>'DrawPage'</code> (of type <code>XDrawPage</code>):
 *   draw page to be expanded. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XDrawPageExpander
 */
 public class _XDrawPageExpander extends MultiMethodTest {

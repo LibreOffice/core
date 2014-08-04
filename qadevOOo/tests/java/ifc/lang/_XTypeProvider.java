@@ -30,7 +30,7 @@ import com.sun.star.uno.Type;
 *  <li><code> getTypes()</code></li>
 *  <li><code> getImplementationId()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.lang.XTypeProvider
 */
 public class _XTypeProvider extends MultiMethodTest {

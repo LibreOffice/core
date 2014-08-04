@@ -28,7 +28,7 @@ import com.sun.star.datatransfer.clipboard.XFlushableClipboard;
 * <ul>
 *  <li><code> flushClipboard()</code></li>
 * </ul> <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.datatransfer.clipboard.XFlushableClipboard
 */
 public class _XFlushableClipboard extends MultiMethodTest {

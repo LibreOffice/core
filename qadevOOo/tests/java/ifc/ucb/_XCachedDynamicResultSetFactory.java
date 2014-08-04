@@ -39,7 +39,7 @@ import com.sun.star.ucb.XDynamicResultSet;
 *   this must be an imlementation of <code>
 *   com.sun.star.ucb.CachedDynamicResultSetStub</code> service.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XCachedDynamicResultSetFactory
 */
 public class _XCachedDynamicResultSetFactory extends MultiMethodTest {

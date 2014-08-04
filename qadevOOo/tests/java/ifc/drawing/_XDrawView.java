@@ -38,7 +38,7 @@ import com.sun.star.uno.Type;
 *  <li> <code>'Pages'</code> (of type <code>XDrawPages</code>):
 *   needed to have the access to pages collection.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XDrawView
 */
 public class _XDrawView extends MultiMethodTest {

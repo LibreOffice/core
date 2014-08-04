@@ -32,7 +32,7 @@ import com.sun.star.uno.XInterface;
 *  <li><code> createInstanceWithArgumentsAndContext()</code></li>
 *  <li><code> getAvailableServiceNames()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.lang.XMultiComponentFactory
 */
 public class _XMultiComponentFactory extends MultiMethodTest {

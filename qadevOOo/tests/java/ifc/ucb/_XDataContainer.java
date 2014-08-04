@@ -34,7 +34,7 @@ import com.sun.star.ucb.XDataContainer;
 *  <li><code> getDataURL()</code></li>
 *  <li><code> setDataURL()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XDataContainer
 */
 public class _XDataContainer extends MultiMethodTest {

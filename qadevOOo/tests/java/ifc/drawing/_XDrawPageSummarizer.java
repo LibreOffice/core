@@ -35,7 +35,7 @@ import com.sun.star.drawing.XDrawPages;
 *  <li> <code>'DrawPages'</code> (of type <code>XDrawPages</code>):
 *   a collection of pages to be summarized. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XDrawPageSummarizer
 */
 public class _XDrawPageSummarizer extends MultiMethodTest {

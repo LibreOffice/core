@@ -29,7 +29,7 @@ import com.sun.star.form.XGrid;
 *  <li><code> getCurrentColumnPosition()</code></li>
 *  <li><code> setCurrentColumnPosition(short nPos)</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.form.XGrid
 */
 public class _XGrid extends MultiMethodTest {

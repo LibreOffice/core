@@ -59,7 +59,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 * don't insert the Object several times. The first insertByIndex() inserts
 * the Object to the Container but all other insertByIndex() changes
 * the Index in the Continer because it's the same Object. <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.container.XIndexContainer
 */
 

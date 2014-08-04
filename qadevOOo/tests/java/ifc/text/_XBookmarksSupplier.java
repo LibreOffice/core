@@ -29,7 +29,7 @@ import lib.MultiMethodTest;
  * <ul>
  *  <li><code> getBookmarks()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XBookmarksSupplier
  */
 public class _XBookmarksSupplier extends MultiMethodTest {

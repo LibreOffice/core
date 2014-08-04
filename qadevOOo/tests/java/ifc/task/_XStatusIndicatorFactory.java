@@ -29,7 +29,7 @@ import com.sun.star.task.XStatusIndicatorFactory;
 * <ul>
 *  <li><code> createStatusIndicator()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.task.XStatusIndicatorFactory
 */
 public class _XStatusIndicatorFactory extends MultiMethodTest {

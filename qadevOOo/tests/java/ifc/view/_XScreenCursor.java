@@ -36,7 +36,7 @@ import com.sun.star.view.XScreenCursor;
  * thereby their calls have no effect when document is opened
  * in hidden mode. <p>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.view.XScreenCursor
  */
 public class _XScreenCursor extends MultiMethodTest {

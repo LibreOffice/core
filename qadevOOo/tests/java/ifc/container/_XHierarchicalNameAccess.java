@@ -35,7 +35,7 @@ import com.sun.star.container.XHierarchicalNameAccess;
 *  <li> <code>'ElementName'</code> (of type <code>String</code>):
 *   name of the element which exists in the container. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.container.XHierarchicalNameAccess
 */
 public class _XHierarchicalNameAccess extends MultiMethodTest{

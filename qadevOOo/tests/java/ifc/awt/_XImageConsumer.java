@@ -33,7 +33,7 @@ import com.sun.star.awt.XImageConsumer;
 *  <li><code> setPixelsByLongs()</code></li>
 *  <li><code> complete()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XImageConsumer
 */
 

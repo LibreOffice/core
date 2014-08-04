@@ -32,7 +32,7 @@ import com.sun.star.ucb.XPropertyMatcherFactory;
 * <ul>
 *  <li><code> createPropertyMatcher()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XPropertyMatcherFactory
 */
 public class _XPropertyMatcherFactory extends MultiMethodTest {

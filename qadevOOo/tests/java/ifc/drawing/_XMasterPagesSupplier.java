@@ -29,7 +29,7 @@ import com.sun.star.drawing.XMasterPagesSupplier;
 * <ul>
 *  <li><code> getMasterPages()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XMasterPagesSupplier
 */
 public class _XMasterPagesSupplier extends MultiMethodTest{

@@ -39,7 +39,7 @@ import com.sun.star.uno.XInterface;
 * </ul> <p>
 * The component tested <b>must implement</b> interface
 * <code>com.sun.star.table.XCellRange</code>. <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.table.XAutoFormattable
 */
 public class _XAutoFormattable extends MultiMethodTest {

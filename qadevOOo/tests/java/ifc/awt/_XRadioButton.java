@@ -34,7 +34,7 @@ import com.sun.star.awt.XRadioButton;
 *  <li><code> setState()</code></li>
 *  <li><code> setLabel()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XRadioButton
 */
 public class _XRadioButton extends MultiMethodTest {

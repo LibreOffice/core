@@ -42,7 +42,7 @@ import com.sun.star.uno.UnoRuntime;
 *   The another window is used to activate it, causing deactivating
 *   of the component tested. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.form.XFormController
 */
 public class _XFormController extends MultiMethodTest {

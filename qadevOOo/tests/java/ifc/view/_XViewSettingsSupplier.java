@@ -30,7 +30,7 @@ import com.sun.star.view.XViewSettingsSupplier;
  * <ul>
  *  <li><code> getViewSettings()</code></li>
  * </ul> <p>
- * Test is multithread compilant. <p>
+ * Test is multithread compliant. <p>
  * @see com.sun.star.view.XViewSettingsSupplier
  */
 public class _XViewSettingsSupplier extends MultiMethodTest {

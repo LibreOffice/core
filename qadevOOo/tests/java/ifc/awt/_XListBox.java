@@ -51,7 +51,7 @@ import com.sun.star.awt.XListBox;
 *  <li><code> setDropDownLineCount()</code></li>
 *  <li><code> makeVisible()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XListBox
 */
 public class _XListBox extends MultiMethodTest {

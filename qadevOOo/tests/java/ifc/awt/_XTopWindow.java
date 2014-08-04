@@ -40,7 +40,7 @@ import com.sun.star.uno.UnoRuntime;
 *  <li><code> toBack()</code></li>
 *  <li><code> setMenuBar()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XTopWindow
 */
 public class _XTopWindow extends MultiMethodTest {

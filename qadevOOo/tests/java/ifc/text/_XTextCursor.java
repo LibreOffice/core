@@ -41,7 +41,7 @@ import com.sun.star.text.XTextCursor;
  * that's why it must be stored before methods' tests,
  * and restored after. <p>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextCursor
  */
 public class _XTextCursor extends MultiMethodTest {

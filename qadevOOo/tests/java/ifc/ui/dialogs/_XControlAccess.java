@@ -38,7 +38,7 @@ import com.sun.star.uno.UnoRuntime;
 * <code>com.sun.star.ui.dialogs.XControlInformation</code>
 * interface. <p>
 *
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ui.XFolderPicker
 */
 public class _XControlAccess extends MultiMethodTest {

@@ -29,7 +29,7 @@ import com.sun.star.beans.XIntrospectionAccess;
 * <ul>
 *  <li><code> inspect() </code></li>
 * </ul> <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.beans.XIntrospection
 */
 public class _XIntrospection extends MultiMethodTest {

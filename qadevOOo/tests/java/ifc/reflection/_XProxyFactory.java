@@ -32,7 +32,7 @@ import com.sun.star.uno.XAggregation;
 * <ul>
 *  <li><code> createProxy()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.reflection.XProxyFactory
 */
 public class _XProxyFactory extends MultiMethodTest {

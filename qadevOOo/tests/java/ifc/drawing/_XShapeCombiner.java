@@ -38,7 +38,7 @@ import com.sun.star.uno.UnoRuntime;
 *  <li> <code>'DrawPage'</code> (must implement <code>XShapes</code>):
 *   the collection of shapes in a document which used to create a group.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XShapeCombiner
 */
 public class _XShapeCombiner extends MultiMethodTest {

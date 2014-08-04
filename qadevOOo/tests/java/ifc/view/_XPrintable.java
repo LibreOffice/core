@@ -38,7 +38,7 @@ import com.sun.star.view.XPrintable;
  *  <li><code> setPrinter()</code></li>
  *  <li><code> print()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.view.XPrintable
  */
 public class _XPrintable extends MultiMethodTest {

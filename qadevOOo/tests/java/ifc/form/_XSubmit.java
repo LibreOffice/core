@@ -54,7 +54,7 @@ import com.sun.star.uno.UnoRuntime;
 * were called. Then one listener is removed and after
 * <code> submit </code> method call it must not be called. <p>
 *
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.form.XSubmit
 */
 public class _XSubmit extends MultiMethodTest {

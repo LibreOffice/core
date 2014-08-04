@@ -36,7 +36,7 @@ import com.sun.star.uno.XInterface;
 * <ul>
 *  <li><code> createAdapter()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.script.XInvocationAdapterFactory
 */
 public class _XInvocationAdapterFactory extends MultiMethodTest {

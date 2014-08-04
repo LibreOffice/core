@@ -43,7 +43,7 @@ import com.sun.star.uno.XInterface;
 *   <b>optional</b> <code>String</code> relation which is used
 *   for new value of DataFiled proeprty.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated.
 * @see com.sun.star.form.DataAwareControlModel
 */

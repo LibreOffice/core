@@ -41,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 *  <li><code> setPropertyToDefault()</code></li>
 *  <li><code> getPropertyDefault()</code></li>
 * </ul>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated. <p>
 * <b>Note:</b> object tested must also implement
 * <code>com.sun.star.beans.XPropertySet</code> interface.

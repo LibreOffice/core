@@ -31,7 +31,7 @@ import lib.MultiMethodTest;
 *  <li><code> parseSmart() </code></li>
 *  <li><code> getPresentation() </code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.util.XURLTransformer
 */
 public class _XURLTransformer extends MultiMethodTest {

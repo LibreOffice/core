@@ -38,7 +38,7 @@ import com.sun.star.ucb.XCachedContentResultSetStubFactory;
 *   this must be an imlementation of <code>
 *   com.sun.star.ucb.ContentResultSet</code> service.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XCachedContentResultSetStubFactory
 */
 public class _XCachedContentResultSetStubFactory extends MultiMethodTest {

@@ -37,7 +37,7 @@ import lib.StatusException;
  *  <li><code> setCollapsedGraphicURL()</code></li>
  *  <li><code> DataValue()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  *
  * @see com.sun.star.awt.tree.XTreeDataModel
  */

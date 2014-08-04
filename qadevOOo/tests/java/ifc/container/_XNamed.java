@@ -38,7 +38,7 @@ import util.utils;
 *    isn't to be tested and result of this test will be
 *    equal to relation value.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.container.XNamed
 */
 public class _XNamed extends MultiMethodTest {

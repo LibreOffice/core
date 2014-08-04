@@ -29,7 +29,7 @@ import com.sun.star.text.XChapterNumberingSupplier;
  * <ul>
  *  <li><code> getChapterNumberingRules()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XChapterNumberingSupplier
  */
 public class _XChapterNumberingSupplier extends MultiMethodTest {

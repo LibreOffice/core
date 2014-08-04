@@ -41,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 * </ul> <p>
 * The object <b>must also implement</b> <code>XClipboard</code>
 * interface. <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.datatransfer.clipboard.XClipboardNotifier
 * @see com.sun.star.datatransfer.clipboard.XClipboard
 */

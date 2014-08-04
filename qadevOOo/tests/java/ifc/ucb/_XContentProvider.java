@@ -46,7 +46,7 @@ import com.sun.star.ucb.XContentProvider;
 *   another name of the suitable content for provider tested. If relation
 *   is not specified the 'vnd.sun.star.writer://' name will be used.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XContentProvider
 */
 public class _XContentProvider extends MultiMethodTest {

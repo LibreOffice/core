@@ -27,7 +27,7 @@ import com.sun.star.container.XEnumerationAccess;
 /**
 * Testing <code>com.sun.star.container.XEnumerationAccess</code>
 * interface methods. <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 */
 public class _XEnumerationAccess extends MultiMethodTest{
     public XEnumerationAccess oObj = null;

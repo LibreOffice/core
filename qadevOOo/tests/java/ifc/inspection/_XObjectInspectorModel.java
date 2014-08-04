@@ -32,7 +32,7 @@ import lib.MultiMethodTest;
  *  <li><code> getHandlerFactories()</code></li>
  *  <li><code> getPropertyOrderIndex()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  *
  */
 public class _XObjectInspectorModel extends MultiMethodTest {

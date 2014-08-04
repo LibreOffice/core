@@ -29,7 +29,7 @@ package ifc.task;
 *    this interface implementation is handler specific and is
 *    passed as argument to method <code>handle</code>. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.task.XInteractionHandler
 */
 import lib.MultiMethodTest;
@@ -47,7 +47,7 @@ import com.sun.star.task.XInteractionRequest;
 *    this interface implementation is handler specific and is
 *    passed as argument to method <code>handle</code>. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.task.XInteractionHandler
 */
 public class _XInteractionHandler extends MultiMethodTest {

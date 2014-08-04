@@ -42,7 +42,7 @@ import com.sun.star.util.XCancellable;
  * </ul> <p>
  * The object must implement <code>XFilePicker</code>
  * interface to check if a listener was called. <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.ui.XFilePickerNotifier
  */
 public class _XFilePickerNotifier extends MultiMethodTest {

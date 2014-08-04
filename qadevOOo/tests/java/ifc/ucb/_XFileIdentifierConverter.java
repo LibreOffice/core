@@ -31,7 +31,7 @@ import com.sun.star.ucb.XFileIdentifierConverter;
 *  <li><code> getFileURLFromSystemPath()</code></li>
 *  <li><code> getSystemPathFromFileURL()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XFileIdentifierConverter
 */
 public class _XFileIdentifierConverter extends MultiMethodTest {

@@ -37,7 +37,7 @@ import com.sun.star.util.XNumberFormatter;
  *  <li><code> queryColorForNumber()        </code></li>
  *  <li><code> queryColorForString()        </code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.util.XNumberFormatter
  */
 public class _XNumberFormatter extends MultiMethodTest {

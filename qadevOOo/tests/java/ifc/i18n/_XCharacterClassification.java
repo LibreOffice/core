@@ -41,7 +41,7 @@ import com.sun.star.lang.Locale;
  *  <li><code> parseAnyToken() </code></li>
  *  <li><code> parsePredefinedToken() </code></li>
  * </ul><p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.i18n.XCharacterClassification
  */
 public class _XCharacterClassification extends MultiMethodTest {

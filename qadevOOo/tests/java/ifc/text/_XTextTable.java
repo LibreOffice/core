@@ -42,7 +42,7 @@ import com.sun.star.text.XTextTable;
  *  <li> <code>'NCOL'</code> : the number of columns in table
  *  </li>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextTable
  */
 public class _XTextTable extends MultiMethodTest {

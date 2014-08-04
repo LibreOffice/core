@@ -29,7 +29,7 @@ import com.sun.star.ucb.XPropertySetRegistryFactory;
 * <ul>
 *  <li><code> createPropertySetRegistry()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XPropertySetRegistryFactory
 */
 public class _XPropertySetRegistryFactory extends MultiMethodTest {

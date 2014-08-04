@@ -38,7 +38,7 @@ import com.sun.star.style.XStyle;
 *  <li> <code>'PoolStyle'</code> (of type <code>XStyle</code>):
 *   some style from the SOffice collection (not user defined) </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.style.XStyle
 */
 public class _XStyle extends MultiMethodTest {

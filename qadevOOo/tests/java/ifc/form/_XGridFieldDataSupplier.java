@@ -30,7 +30,7 @@ import com.sun.star.uno.Type;
 *  <li><code>queryFieldDataType()</code></li>
 *  <li><code>queryFieldData()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.form.XGridFieldDataSupplier
 */
 public class _XGridFieldDataSupplier extends MultiMethodTest {

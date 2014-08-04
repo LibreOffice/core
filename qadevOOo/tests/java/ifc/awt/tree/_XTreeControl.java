@@ -53,7 +53,7 @@ import lib.StatusException;
  *  <li><code> removeTreeEditListener()</code></li>
  *  <li><code> DefaultExpandedGraphicURL()</code></li>
  *  <li><code> DefaultCollapsedGraphicURL()</code></li>* </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  *
  * @see com.sun.star.awt.tree.XTreeControl
  */

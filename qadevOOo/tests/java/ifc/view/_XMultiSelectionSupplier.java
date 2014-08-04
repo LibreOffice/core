@@ -45,7 +45,7 @@ import lib.StatusException;
  *  <li> <code>'Comparer'</code> of type <code>Comparator</code> :
  *   the interface for comparing of selected instances</li>
  * <ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.view.XSelectionSupplier
  */
 public class _XMultiSelectionSupplier extends MultiMethodTest {

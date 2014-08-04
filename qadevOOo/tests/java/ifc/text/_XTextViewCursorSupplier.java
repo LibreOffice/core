@@ -29,7 +29,7 @@ import com.sun.star.text.XTextViewCursorSupplier;
  * <ul>
  *  <li><code> getViewCursor()</code></li>
  * </ul> <p>
- * Test is multithread compilant. <p>
+ * Test is multithread compliant. <p>
  * @see com.sun.star.text.XTextViewCursorSupplier
  */
 public class _XTextViewCursorSupplier extends MultiMethodTest {

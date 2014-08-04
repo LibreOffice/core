@@ -30,7 +30,7 @@ import lib.MultiMethodTest;
 *  <li><code> moveByName()</code></li>
 *  <li><code> copyByName()</code></li>
 * </ul> <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.sheet.XSpreadsheets
 */
 public class _XSpreadsheets extends MultiMethodTest {

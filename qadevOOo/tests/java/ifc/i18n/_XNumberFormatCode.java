@@ -36,7 +36,7 @@ import com.sun.star.lang.Locale;
 *  <li><code> getAllFormatCode() </code></li>
 *  <li><code> getAllFormatCodes() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.i18n.XNumberFormatCode
 */
 public class _XNumberFormatCode extends MultiMethodTest {

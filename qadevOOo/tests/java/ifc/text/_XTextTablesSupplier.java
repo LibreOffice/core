@@ -32,7 +32,7 @@ import com.sun.star.text.XTextTablesSupplier;
  * </ul> <p>
  * The table collection tested <b>must</b> have a table
  * with name 'SwXTextDocument'. <p>
- * Test is multithread compilant. <p>
+ * Test is multithread compliant. <p>
  * @see com.sun.star.text.XTextTablesSupplier
  */
 public class _XTextTablesSupplier extends MultiMethodTest {

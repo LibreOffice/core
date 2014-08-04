@@ -42,7 +42,7 @@ import com.sun.star.util.XURLTransformer;
 *  <li> <code>'XDispatchProvider.URL'</code> (of type <code>String</code>):
 *  used to obtain unparsed url of DispatchProvider </li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XDispatchProvider
 */
 public class _XDispatchProvider extends MultiMethodTest {

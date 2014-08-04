@@ -29,7 +29,7 @@ import com.sun.star.drawing.XShapeGroup;
 *  <li><code> enterGroup()</code></li>
 *  <li><code> leaveGroup()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XShapeGroup
 */
 public class _XShapeGroup extends MultiMethodTest {

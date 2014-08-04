@@ -62,7 +62,7 @@ import share.LogWriter;
 *   is not specified. This file is used by 'GlobalTransfer'
 *   command as a source file for copying.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XCommandProcessor
 */
 public class _XCommandProcessor {

@@ -46,7 +46,7 @@ import com.sun.star.uno.UnoRuntime;
 *   interface and are used for being connected by
 *   connector shape.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XConnectorShape
 */
 public class _XConnectorShape extends MultiMethodTest {

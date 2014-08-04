@@ -29,7 +29,7 @@ import com.sun.star.util.XSearchDescriptor;
  *  <li><code> getSearchString()</code></li>
  *  <li><code> setSearchString()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.util.XSearchDescriptor
  */
 public class _XSearchDescriptor extends MultiMethodTest {

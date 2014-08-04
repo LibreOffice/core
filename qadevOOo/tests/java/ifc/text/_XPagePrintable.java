@@ -33,7 +33,7 @@ import com.sun.star.text.XPagePrintable;
  *  <li><code> setPagePrintSettings()</code></li>
  *  <li><code> printPages()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XPagePrintable
  */
 public class _XPagePrintable extends MultiMethodTest {

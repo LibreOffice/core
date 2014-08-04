@@ -37,7 +37,7 @@ import com.sun.star.table.XCellRange;
 *   cell range that can be defined by the object test instead of
 *   definition at this test ("<code>A1:A1</code>")</li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.table.XCellRange
 */
 public class _XCellRange extends MultiMethodTest {

@@ -29,7 +29,7 @@ import com.sun.star.sdbc.XResultSetMetaDataSupplier;
 * <ul>
 *  <li><code> getMetaData()</code></li>
 * </ul> <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.sdbc.XResultSetMetaDataSupplier
 */
 public class _XResultSetMetaDataSupplier extends MultiMethodTest {

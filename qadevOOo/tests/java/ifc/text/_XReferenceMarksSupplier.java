@@ -33,7 +33,7 @@ import com.sun.star.text.XReferenceMarksSupplier;
  * <b>Prerequisites: </b> the reference mark collection
  * must contain an element named 'SwXTextDocument' <p>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XReferenceMarksSupplier
  */
 public class _XReferenceMarksSupplier extends MultiMethodTest {

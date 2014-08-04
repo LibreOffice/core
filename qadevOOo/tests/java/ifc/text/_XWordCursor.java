@@ -33,7 +33,7 @@ import com.sun.star.text.XWordCursor;
  *  <li><code> gotoEndOfWord()</code></li>
  *  <li><code> gotoStartOfWord()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XWordCursor
  */
 public class _XWordCursor extends MultiMethodTest {

@@ -34,7 +34,7 @@ import com.sun.star.datatransfer.clipboard.XClipboardOwner;
 *  <li><code> setContents()</code></li>
 *  <li><code> getName()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.datatransfer.clipboard.XClipboard
 */
 public class _XClipboard extends MultiMethodTest {

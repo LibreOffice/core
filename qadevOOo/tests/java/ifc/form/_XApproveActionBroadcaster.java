@@ -33,7 +33,7 @@ import com.sun.star.lang.EventObject;
 *  <li><code> addApproveActionListener() </code></li>
 *  <li><code> removeApproveActionListener() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.form.XApproveActionBroadcaster
 */
 public class _XApproveActionBroadcaster extends MultiMethodTest {

@@ -46,7 +46,7 @@ import com.sun.star.uno.XInterface;
 *   The collection of shapes in the document. Is used
 *   to add new created shapes.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XLayerManager
 */
 public class _XLayerManager extends MultiMethodTest {

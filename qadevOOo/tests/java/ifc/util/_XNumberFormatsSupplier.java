@@ -31,7 +31,7 @@ import com.sun.star.util.XNumberFormatsSupplier;
  *  <li><code> getNumberFormatSettings()</code></li>
  *  <li><code> getNumberFormats()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.util.XNumberFormatsSupplier
  */
 public class _XNumberFormatsSupplier extends MultiMethodTest {

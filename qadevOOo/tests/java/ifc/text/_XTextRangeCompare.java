@@ -51,7 +51,7 @@ import com.sun.star.uno.XInterface;
  *   If the relation does not exist, the relation <code>TEXTDOC</code>
  *   must be specified. </li>
  * <ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextRangeCompare
  */
 public class _XTextRangeCompare extends MultiMethodTest {

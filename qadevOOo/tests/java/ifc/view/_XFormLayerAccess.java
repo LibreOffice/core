@@ -36,7 +36,7 @@ import lib.StatusException;
  *  <li><code> setFormDesignMode()</code></li>
  * </ul> <p>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.view.XFormLayerAccess
  */
 public class _XFormLayerAccess extends MultiMethodTest {

@@ -32,7 +32,7 @@ import com.sun.star.uno.XInterface;
  *  <li><code> getLabel()</code></li>
  *  <li><code> setLabel()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XFootnote
  */
 public class _XFootnote extends MultiMethodTest {

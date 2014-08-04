@@ -38,7 +38,7 @@ import lib.MultiMethodTest;
 *  <li> <code>'TABCONTROL2'</code> (of type <code>XTabController</code>)</li>
  *</ul>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  */
 
 public class _XUnoControlContainer extends MultiMethodTest {

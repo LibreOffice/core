@@ -38,7 +38,7 @@ import util.UITools;
  * <ul>
  *  <li><code> </code>createMessageBox()</li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.awt.XMessageBoxFactory
  */
 public class _XMessageBoxFactory extends MultiMethodTest {

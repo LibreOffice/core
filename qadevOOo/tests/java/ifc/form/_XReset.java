@@ -32,7 +32,7 @@ import com.sun.star.lang.EventObject;
 *  <li><code> addResetListener()</code></li>
 *  <li><code> removeResetListener()</code></li>
 * </ul>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.form.XReset
 */
 public class _XReset extends MultiMethodTest {

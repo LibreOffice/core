@@ -43,7 +43,7 @@ import util.utils;
 *  <li><code> getDispatchRecorder() </code></li>
 *  <li><code> dispatchAndRecord() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XDispatchRecorderSupplier
 */
 public class _XDispatchRecorderSupplier extends MultiMethodTest {

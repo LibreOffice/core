@@ -28,7 +28,7 @@ import com.sun.star.datatransfer.clipboard.XClipboardEx;
 * <ul>
 *  <li><code> getRenderingCapabilities()</code></li>
 * </ul> <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.datatransfer.clipboard.XClipboardEx
 */
 public class _XClipboardEx extends MultiMethodTest {

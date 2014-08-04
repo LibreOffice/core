@@ -34,7 +34,7 @@ import com.sun.star.lang.XComponent;
 *  <li> <code>'TargetDocument'</code> (of type <code>XComponent</code>):
 *   the target document to be passed to the method. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.document.XImporter
 */
 public class _XImporter extends MultiMethodTest {

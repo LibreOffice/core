@@ -36,7 +36,7 @@ import com.sun.star.text.XTextDocument;
  *  <li> <code>'TEXTDOC'</code> (of type <code>XTextDocument</code>):
  *   the text document for creating a text range.</li>
  * <ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XAutoTextEntry
  */
 public class _XAutoTextEntry extends MultiMethodTest {

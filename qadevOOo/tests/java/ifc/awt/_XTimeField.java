@@ -43,7 +43,7 @@ import com.sun.star.util.Time;
 *  <li><code> setStrictFormat()</code></li>
 *  <li><code> isStrictFormat()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XTimeField
 */
 public class _XTimeField extends MultiMethodTest {

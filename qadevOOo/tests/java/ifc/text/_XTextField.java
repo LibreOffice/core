@@ -28,7 +28,7 @@ import com.sun.star.text.XTextField;
  * <ul>
  *  <li><code> getPresentation()</code></li>
  * </ul> <p>
- * Test is multithread compilant. <p>
+ * Test is multithread compliant. <p>
  * @see com.sun.star.text.XTextField
  */
 public class _XTextField extends MultiMethodTest{

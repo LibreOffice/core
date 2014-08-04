@@ -33,7 +33,7 @@ import com.sun.star.text.XSentenceCursor;
  *  <li><code> gotoStartOfSentence()</code></li>
  *  <li><code> gotoEndOfSentence()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XSentenceCursor
  */
 public class _XSentenceCursor extends MultiMethodTest {

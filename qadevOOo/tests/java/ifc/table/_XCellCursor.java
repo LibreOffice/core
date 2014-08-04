@@ -48,7 +48,7 @@ import com.sun.star.uno.UnoRuntime;
 * The component tested <b>must implement</b>
 * <code>XCellRangeAddressable</code> interface. <p>
 *
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated.
 * @see com.sun.star.table.XCellCursor
 */

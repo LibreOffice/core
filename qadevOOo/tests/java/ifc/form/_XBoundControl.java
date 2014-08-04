@@ -29,7 +29,7 @@ import com.sun.star.form.XBoundControl;
 *  <li><code> getLock() </code></li>
 *  <li><code> setLock() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.form.XBoundControl
 */
 public class _XBoundControl extends MultiMethodTest {

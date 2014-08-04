@@ -49,7 +49,7 @@ import com.sun.star.lang.EventObject;
 *  <li> <code>'XTextComponent.onlyNumbers'</code> (of type <code>Object</code>):
 *  needed for checking if component can contain only numeric values </li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XTextComponent
 */
 public class _XTextComponent extends MultiMethodTest {

@@ -47,7 +47,7 @@ import com.sun.star.frame.UnknownModuleException;
 *  PropertyValue[n].Value : a XFrame
 *  PropertyValue[n].Name : the expected return value of <code>idendify()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XModuleManager
 */
 public class _XModuleManager extends MultiMethodTest {

@@ -32,7 +32,7 @@ import com.sun.star.lang.XComponent;
 * <ul>
 *  <li><code> loadComponentFromURL() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XComponentLoader
 */
 public class _XComponentLoader extends MultiMethodTest {

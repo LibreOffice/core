@@ -28,7 +28,7 @@ import lib.MultiMethodTest;
 *  <li><code> setStorage()</code></li>
 *  <li><code> hasStorage()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ui.XUIConfigurationStorage
 */
 

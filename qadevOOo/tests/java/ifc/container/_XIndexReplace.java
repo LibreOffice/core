@@ -61,7 +61,7 @@ import com.sun.star.uno.UnoRuntime;
 * don't insert the Object several times. The first replaceByIndex() inserts
 * the Object to the Container but all other replaceByIndex() changes
 * the Index in the Continer because it's the same Object. <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.container.XIndexReplace
 */
 

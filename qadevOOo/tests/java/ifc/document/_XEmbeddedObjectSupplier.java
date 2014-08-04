@@ -28,7 +28,7 @@ import com.sun.star.document.XEmbeddedObjectSupplier;
 * <ul>
 *  <li><code> getEmbeddedObject()</code></li>
 * </ul> <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.document.XEmbeddedObjectSupplier
 */
 public class _XEmbeddedObjectSupplier extends MultiMethodTest {

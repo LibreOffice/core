@@ -29,7 +29,7 @@ import com.sun.star.text.XFootnotesSettingsSupplier;
  * <ul>
  *  <li><code> getFootnoteSettings()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XFootnotesSettingsSupplier
  */
 public class _XFootnotesSettingsSupplier extends MultiMethodTest {

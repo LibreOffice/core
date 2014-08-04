@@ -58,7 +58,7 @@ import com.sun.star.uno.XNamingService;
 * Object <b>must implement</b>
 * <code>com.sun.star.container.XNameContainer</code>.
 * <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.container.XContainer
 */
 public class _XContainer extends MultiMethodTest {

@@ -45,7 +45,7 @@ import com.sun.star.uno.UnoRuntime;
 * The test registers two ContentProviders, calls
 * queryXXX methods to verify results, and deregisters them. <p>
 *
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XContentProviderManager
 */
 public class _XContentProviderManager extends MultiMethodTest {

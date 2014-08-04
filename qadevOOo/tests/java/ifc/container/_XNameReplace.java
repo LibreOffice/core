@@ -61,7 +61,7 @@ import com.sun.star.uno.UnoRuntime;
 * Some Object-Container can't replace the first that comes belong. So in
 * NAMEREPLACE you can determine a containerobject, which is replaceable. <p>
 *
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated.
 * @see com.sun.star.container.XNameReplace
 */

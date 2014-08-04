@@ -42,7 +42,7 @@ import com.sun.star.lang.Locale;
 *  <li><code> equals()</code></li>
 *  <li><code> transliterateRange()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.i18n.XTransliteration
 */
 public class _XTransliteration extends MultiMethodTest {

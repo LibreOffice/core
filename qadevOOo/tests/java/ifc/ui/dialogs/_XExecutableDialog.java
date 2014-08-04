@@ -36,7 +36,7 @@ import com.sun.star.util.XCancellable;
  * are just called. <code>execute</code> method is not called
  * at all as the dialog shown cann't be disposed. <p>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.ui.dialogs.XExecutableDialog
  */
 public class _XExecutableDialog extends MultiMethodTest {

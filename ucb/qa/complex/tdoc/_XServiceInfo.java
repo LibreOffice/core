@@ -29,7 +29,7 @@ import share.LogWriter;
 *  <li><code> supportsService()</code></li>
 *  <li><code> getSupportedServiceNames()</code></li>
 * </ul> <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * @see com.sun.star.lang.XServiceInfo
 */
 public class _XServiceInfo {

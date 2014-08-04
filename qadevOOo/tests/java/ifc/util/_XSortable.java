@@ -41,7 +41,7 @@ import com.sun.star.util.XSortable;
 *    _XSortable.XSortChecker</code> interface implementation
  *  </li>
  * <ul><p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.util.XSortable
  */
 public class _XSortable extends MultiMethodTest {

@@ -30,7 +30,7 @@ import com.sun.star.lang.Locale;
 *  <li><code> getIndexCharacter() </code></li>
 *  <li><code> getIndexFollowPageWord() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.i18n.XIndexEntrySupplier
 */
 public class _XIndexEntrySupplier extends MultiMethodTest {

@@ -30,7 +30,7 @@ import com.sun.star.awt.XTextLayoutConstrains;
 *  <li><code> getMinimumSize() </code></li>
 *  <li><code> getColumnsAndLines() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XTextLayoutConstrains
 */
 public class _XTextLayoutConstrains extends MultiMethodTest {

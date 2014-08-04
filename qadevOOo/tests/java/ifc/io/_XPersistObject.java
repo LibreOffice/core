@@ -50,7 +50,7 @@ import com.sun.star.uno.UnoRuntime;
 *  <li> <code>'OBJNAME'</code> : <code>String</code> value that
 *   contains service name which object represents.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated.
 * @see com.sun.star.io.XPersistObject
 * @see com.sun.star.io.XObjectInputStream

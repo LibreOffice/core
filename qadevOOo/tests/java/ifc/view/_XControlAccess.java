@@ -48,7 +48,7 @@ import com.sun.star.view.XControlAccess;
  *   for adding a component (such as CommandButton) and obtaining
  *   its control via tested interface. </li>
  * <ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.view.XControlAccess
  */
 public class _XControlAccess extends MultiMethodTest {

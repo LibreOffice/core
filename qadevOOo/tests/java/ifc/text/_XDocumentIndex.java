@@ -42,7 +42,7 @@ import com.sun.star.uno.UnoRuntime;
  *   the text document for creating and inserting index mark.</li>
  * <ul> <p>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XDocumentIndex
  */
 public class _XDocumentIndex extends MultiMethodTest {

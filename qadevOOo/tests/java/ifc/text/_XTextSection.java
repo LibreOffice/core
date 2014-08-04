@@ -29,7 +29,7 @@ import com.sun.star.text.XTextSection;
  *  <li><code> getParentSection()</code></li>
  *  <li><code> getChildSections()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextSection
  */
 public class _XTextSection extends MultiMethodTest {

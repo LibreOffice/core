@@ -54,7 +54,7 @@ import com.sun.star.uno.UnoRuntime;
 *  <li><code> getDays()</code></li>
 *  <li><code> getDisplayName()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.i18n.XCalendar
 */
 public class _XCalendar extends MultiMethodTest {

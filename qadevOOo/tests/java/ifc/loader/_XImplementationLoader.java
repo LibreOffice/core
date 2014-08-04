@@ -48,7 +48,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>'ImplementationName'</code> : Name of the implementation.</li>
  * </ul> <p>
  * Object has to be recreated after this test. <p>
- * Test is <b> Not </b> multithread compilant.
+ * Test is <b> Not </b> multithread compliant.
  */
 public class _XImplementationLoader extends MultiMethodTest {
 

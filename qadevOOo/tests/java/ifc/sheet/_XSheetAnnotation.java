@@ -44,7 +44,7 @@ import com.sun.star.uno.UnoRuntime;
 *   <code>com.sun.star.table.CellAddress</code>):
 *   The position of cell with annotation. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.sheet.XSheetAnnotation
 */
 public class _XSheetAnnotation extends MultiMethodTest {

@@ -40,7 +40,7 @@ import com.sun.star.table.XTableCharts;
 *  (of type <code>com.sun.star.awt.Rectangle</code>):
 *   the position of chart </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.table.XTableCharts
 */
 public class _XTableCharts extends MultiMethodTest {

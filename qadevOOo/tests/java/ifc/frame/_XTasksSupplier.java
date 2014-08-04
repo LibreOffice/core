@@ -30,7 +30,7 @@ import com.sun.star.frame.XTasksSupplier;
 *  <li><code> getActiveTask() </code></li>
 *  <li><code> getTasks() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XTasksSupplier
 */
 public class _XTasksSupplier extends MultiMethodTest {

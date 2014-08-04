@@ -38,7 +38,7 @@ import com.sun.star.ucb.XRemoteContentProviderActivator;
  *   this acceptor is used to add a provider first before
  *   its activation. </li>
  * <ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.ucb.XRemoteContentProviderActivator
  */
 public class _XRemoteContentProviderActivator extends MultiMethodTest {

@@ -30,7 +30,7 @@ import com.sun.star.ucb.XParameterizedContentProvider;
 *  <li><code> registerInstance()</code></li>
 *  <li><code> deregisterInstance()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XParameterizedContentProvider
 */
 public class _XParameterizedContentProvider extends MultiMethodTest {

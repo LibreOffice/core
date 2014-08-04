@@ -29,7 +29,7 @@ import com.sun.star.sdb.XQueryDefinitionsSupplier;
  * <ul>
  *  <li><code> getQueryDefinitions()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.sdb.XQueryDefinitionsSupplier
  */
 public class _XQueryDefinitionsSupplier extends MultiMethodTest {

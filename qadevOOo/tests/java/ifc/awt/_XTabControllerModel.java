@@ -47,7 +47,7 @@ import com.sun.star.awt.XTabControllerModel;
 *  <li> <code>'Model2'</code> : <code>XControlModel</code> relation
 *    , any control model belonging to the object tested.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XTabControllerModel
 */
 public class _XTabControllerModel extends MultiMethodTest {

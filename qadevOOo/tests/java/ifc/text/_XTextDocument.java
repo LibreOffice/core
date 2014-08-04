@@ -30,7 +30,7 @@ import com.sun.star.text.XTextDocument;
  *  <li><code> getText()</code></li>
  *  <li><code> reformat()</code></li>
  * </ul> <p>
- * Test is multithread compilant. <p>
+ * Test is multithread compliant. <p>
  * @see com.sun.star.text.XTextDocument
  */
 public class _XTextDocument extends MultiMethodTest {

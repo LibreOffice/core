@@ -40,7 +40,7 @@ import com.sun.star.uno.XInterface;
 *  <li><code> getCurrentComponent() </code></li>
 *  <li><code> getCurrentFrame() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XDesktop
 */
 public class _XDesktop extends MultiMethodTest {

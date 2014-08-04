@@ -33,7 +33,7 @@ import com.sun.star.uno.XNamingService;
 *  <li> <code>'XNamingService.RegisterObject'</code> :
 *     object to be registered.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated.
 */
 public class _XNamingService extends MultiMethodTest {

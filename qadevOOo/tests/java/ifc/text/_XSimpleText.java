@@ -34,7 +34,7 @@ import com.sun.star.text.XTextCursor;
 *  <li><code> insertString()</code></li>
 *  <li><code> insertControlCharacter()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.text.XSimpleText
 */
 public class _XSimpleText extends MultiMethodTest {

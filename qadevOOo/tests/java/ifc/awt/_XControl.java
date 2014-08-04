@@ -53,7 +53,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>'MODEL'</code> (of type <code>XControlModel</code>):
 *  used as a parameter to setModel() and for testing getModel()</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XControl
 */
 public class _XControl extends MultiMethodTest {

@@ -34,7 +34,7 @@ import util.utils;
 *  <li> <code>XImpReg.dll</code> : DLL which will be loaded in
 *    <code>XImplementationLoader</code> interface test. </li>
 * <ul>
-* Multithread testing compilant.
+* Multithread testing compliant.
 * @see com.sun.star.loader.XImplementationLoader
 * @see com.sun.star.lang.XServiceInfo
 * @see ifc.loader._XImplementationLoader

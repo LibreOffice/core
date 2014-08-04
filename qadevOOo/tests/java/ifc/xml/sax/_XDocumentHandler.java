@@ -70,7 +70,7 @@ import com.sun.star.xml.sax.XLocator;
 *    ant it must check if the XML data was successfully imported to
 *    the document. </li>
 *  </li>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.xml.sax.XDocumentHandler
 */
 public class _XDocumentHandler extends MultiMethodTest {

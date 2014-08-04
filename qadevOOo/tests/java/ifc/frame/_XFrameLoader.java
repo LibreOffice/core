@@ -55,7 +55,7 @@ import com.sun.star.uno.UnoRuntime;
 *   necessary arguuments for loading  a component. If omitted
 *   then zero length array is passed as parameter</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XFrameLoader
 */
 public class _XFrameLoader extends MultiMethodTest {

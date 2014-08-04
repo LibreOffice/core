@@ -37,7 +37,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 *  <li><code> storeToURL() </code></li>
 *  <li><code> store() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XStorable
 */
 public class _XStorable extends MultiMethodTest {

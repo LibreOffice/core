@@ -30,7 +30,7 @@ import com.sun.star.view.XPrintSettingsSupplier;
  * <ul>
  *  <li><code> getPrintSettings()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.view.XPrintSettingsSupplier
  */
 public class _XPrintSettingsSupplier extends MultiMethodTest {

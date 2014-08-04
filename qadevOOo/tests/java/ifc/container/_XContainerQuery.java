@@ -47,7 +47,7 @@ import com.sun.star.container.XEnumeration;
 *    marked as <code>optional</code></li>
 * <ul> <p>
 * <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.container.XContainerQuery
 */
 public class _XContainerQuery extends MultiMethodTest {

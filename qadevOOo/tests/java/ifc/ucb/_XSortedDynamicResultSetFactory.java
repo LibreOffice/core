@@ -49,7 +49,7 @@ import com.sun.star.uno.Type;
 *  <li> <code>solibrary.jar</code> : is used to retrieve
 *   content of its root directory.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ucb.XSortedDynamicResultSetFactory
 */
 public class _XSortedDynamicResultSetFactory extends MultiMethodTest {

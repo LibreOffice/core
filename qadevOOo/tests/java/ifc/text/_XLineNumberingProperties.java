@@ -29,7 +29,7 @@ import com.sun.star.text.XLineNumberingProperties;
  * <ul>
  *  <li><code> getLineNumberingProperties()</code></li>
  * </ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XLineNumberingProperties
  */
 public class _XLineNumberingProperties extends MultiMethodTest {

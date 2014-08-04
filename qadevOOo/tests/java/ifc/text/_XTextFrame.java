@@ -34,7 +34,7 @@ import com.sun.star.text.XTextFrame;
  * The frame <b>must contain</b> the text 'The FrameText'
  * for proper interface testing. <p>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextFrame
  */
 public class _XTextFrame extends MultiMethodTest {

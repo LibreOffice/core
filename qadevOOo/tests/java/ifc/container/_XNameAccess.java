@@ -25,7 +25,7 @@ import com.sun.star.container.XNameAccess;
 
 /**
 * Testing <code>com.sun.star.container.XNameAccess</code> interface methods. <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 */
 public class _XNameAccess extends MultiMethodTest {
     public XNameAccess oObj = null;

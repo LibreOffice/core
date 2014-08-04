@@ -38,7 +38,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>'Shape'</code> (of type <code>XShape</code>):
 *   a shape which can be inserted into shape collection. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XShapes
 */
 public class _XShapes extends MultiMethodTest {

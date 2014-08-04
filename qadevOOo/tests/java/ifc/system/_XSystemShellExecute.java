@@ -33,7 +33,7 @@ import com.sun.star.uno.UnoRuntime;
 * <ul>
 *  <li><code> execute()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.system.XSystemShellExecute
 */
 public class _XSystemShellExecute extends MultiMethodTest {

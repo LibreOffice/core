@@ -34,7 +34,7 @@ import com.sun.star.uno.Type;
 *  <li><code> getFrames() </code></li>
 *  <li><code> setActiveFrame() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XFramesSupplier
 */
 public class _XFramesSupplier extends MultiMethodTest {

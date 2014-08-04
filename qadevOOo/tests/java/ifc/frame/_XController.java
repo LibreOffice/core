@@ -51,7 +51,7 @@ import com.sun.star.util.XModifiable;
 *  <li> <code>'SecondController'</code> (of type <code>XController</code>):
 *   other controller, used for tests </li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XController
 */
 public class _XController extends MultiMethodTest {

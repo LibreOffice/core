@@ -42,7 +42,7 @@ import lib.StatusException;
  *   creator which can create instances of <code>XTextContent</code>
  *   implementations. </li>
  * <ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XText
  */
 public class _XText extends MultiMethodTest {

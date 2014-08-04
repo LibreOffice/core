@@ -47,7 +47,7 @@ import com.sun.star.lang.Locale;
 *  <li><code> getReservedWord() </code></li>
 *  <li><code> getAllInstalledLocaleNames() </code></li>
 * </ul><p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.i18n.XLocaleData
 */
 public class _XLocaleData extends MultiMethodTest {

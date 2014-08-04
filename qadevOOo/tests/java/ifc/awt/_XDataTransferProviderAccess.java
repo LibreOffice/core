@@ -45,7 +45,7 @@ import com.sun.star.datatransfer.dnd.XDropTarget;
 *  (of type <code>com.sun.star.awt.XWindow</code>):
 *   this window must created by the Toolkit tested. </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XDataTransferProviderAccess
 */
 public class _XDataTransferProviderAccess extends MultiMethodTest {

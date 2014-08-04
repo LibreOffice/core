@@ -40,7 +40,7 @@ import com.sun.star.drawing.XShape;
 *   if this relation exists then position setting is
 *   not supported by the object.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XShape
 */
 public class _XShape extends MultiMethodTest {

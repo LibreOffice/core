@@ -34,7 +34,7 @@ import com.sun.star.form.XLoadable;
 *  <li><code> addLoadListener()</code></li>
 *  <li><code> removeLoadListener()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.form.XLoadable
 */
 public class _XLoadable extends MultiMethodTest {

@@ -34,7 +34,7 @@ import com.sun.star.awt.XImageProducer;
 *  <li><code> removeConsumer()</code></li>
 *  <li><code> startProduction()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XImageProducer
 */
 public class _XImageProducer extends MultiMethodTest {

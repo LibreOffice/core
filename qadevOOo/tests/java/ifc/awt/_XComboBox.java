@@ -40,7 +40,7 @@ import com.sun.star.awt.XComboBox;
 *  <li><code> getDropDownLineCount()</code></li>
 *  <li><code> setDropDownLineCount()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XComboBox
 */
 public class _XComboBox extends MultiMethodTest {

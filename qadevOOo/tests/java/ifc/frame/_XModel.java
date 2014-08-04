@@ -50,7 +50,7 @@ import lib.MultiMethodTest;
 *  <li> <code>'SELSUPP'</code> (of type <code>XSelectionSupplier</code>):
 *   supplier, we use to select something in a document </li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XModel
 */
 public class _XModel extends MultiMethodTest {

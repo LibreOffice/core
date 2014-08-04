@@ -33,7 +33,7 @@ import com.sun.star.text.XTextGraphicObjectsSupplier;
  * The component <b>must have</b> the graphic object with
  * name  'SwXTextDocument'. <p>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextGraphicObjectsSupplier
  */
 public class _XTextGraphicObjectsSupplier extends MultiMethodTest {

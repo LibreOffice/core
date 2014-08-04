@@ -30,7 +30,7 @@ import com.sun.star.ui.dialogs.XFolderPicker;
 *  <li><code> setDisplayDirectory()</code></li>
 *  <li><code> getDisplayDirectory()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.ui.XFolderPicker
 */
 public class _XFolderPicker extends MultiMethodTest {

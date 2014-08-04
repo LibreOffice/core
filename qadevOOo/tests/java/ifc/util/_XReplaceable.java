@@ -37,7 +37,7 @@ import com.sun.star.util.XSearchDescriptor;
  * <b>must containt</b> string 'xTextDoc'. Only
  * in that case this interface is tested correctly. <p>
  *
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.util.XReplaceable
  */
 public class _XReplaceable extends MultiMethodTest {

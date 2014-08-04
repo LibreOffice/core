@@ -59,7 +59,7 @@ import com.sun.star.uno.UnoRuntime;
 * <ul> <p>
 * Test places DB cursor to different positions and then checks
 * its current position. <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.sdbc.XResultSet
 */
 public class _XResultSet extends MultiMethodTest {

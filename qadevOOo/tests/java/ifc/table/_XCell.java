@@ -35,7 +35,7 @@ import com.sun.star.table.XCell;
 *  <li><code> getType()</code></li>
 *  <li><code> getError()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.table.XCell
 */
 public class _XCell extends MultiMethodTest {

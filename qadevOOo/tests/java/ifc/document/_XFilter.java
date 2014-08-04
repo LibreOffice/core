@@ -49,7 +49,7 @@ import com.sun.star.uno.UnoRuntime;
 *   assumed.
 *  </li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.document.XFilter
 */
 public class _XFilter extends MultiMethodTest {

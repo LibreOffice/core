@@ -33,7 +33,7 @@ import com.sun.star.table.CellRangeAddress;
 *  <li><code> addRangeAddresses() </code></li>
 *  <li><code> removeRangeAddresses() </code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.sheet.XSheetCellRangeContainer
 */
 public class _XSheetCellRangeContainer extends MultiMethodTest {

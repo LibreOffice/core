@@ -42,7 +42,7 @@ import com.sun.star.text.XTextRange;
  *   relation exists. From this relation an anchor
  *   for <code>attach()</code> method is obtained.</li>
  * <ul> <p>
- * Test is <b> NOT </b> multithread compilant. <p>
+ * Test is <b> NOT </b> multithread compliant. <p>
  * @see com.sun.star.text.XTextContent
  */
 public class _XTextContent extends MultiMethodTest {

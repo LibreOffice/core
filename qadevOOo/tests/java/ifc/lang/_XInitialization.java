@@ -31,7 +31,7 @@ import com.sun.star.lang.XInitialization;
 *   (<b>Optional</b>) : argument for <code>initialize</code>
 *   method. If ommitet zero length array is used. </li>
 * <ul> <p>
-* Test is multithread compilant. <p>
+* Test is multithread compliant. <p>
 * Till the present time there was no need to recreate environment
 * after this test completion.
 */

@@ -39,7 +39,7 @@ import com.sun.star.awt.XView;
 *  <li> <code>'GRAPHICS'</code> (of type <code>XGraphics</code>):
 *   used as a parameter to setGraphics() </li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.awt.XView
 */
 public class _XView extends MultiMethodTest {

@@ -30,7 +30,7 @@ import com.sun.star.drawing.XDrawPages;
 *  <li><code> insertNewByIndex()</code></li>
 *  <li><code> remove()</code></li>
 * </ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.drawing.XDrawPages
 */
 public class _XDrawPages extends MultiMethodTest {

@@ -39,7 +39,7 @@ import com.sun.star.lang.EventObject;
 *    which can update, commit data and check if the data was successfully
 *    committed.</li>
 * <ul> <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.form.XUpdateBroadcaster
 */
 public class _XUpdateBroadcaster extends MultiMethodTest {

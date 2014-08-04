@@ -39,7 +39,7 @@ import com.sun.star.uno.XInterface;
 * The object tested <b> must implement </b>
 * <code>XDrawPagesSupplier</code> interface to have access to draw
 * pages collection. <p>
-* Test is <b> NOT </b> multithread compilant. <p>
+* Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated.
 * @see com.sun.star.drawing.XDrawPageDuplicator
 */
