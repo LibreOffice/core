@@ -3690,6 +3690,7 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(ENABLE_HEADLESS),, \
 		$(call gb_Library_get_target,vclplug_svp) \
 	)) \
+	$(call gb_Package_get_target_for_build,postprocess_images) \
 	$(call gb_Package_get_target_for_build,postprocess_registry) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
