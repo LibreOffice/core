@@ -382,8 +382,11 @@ public class UnoRuntime {
      * previously set context will be removed
     */
     public static void setCurrentContext(XCurrentContext context) {
-        // optimize this by using Java 1.5 ThreadLocal.remove if context == null
-        currentContext.set(context);
+        if (context == null) {
+            currentContext.remove();
+        } else {
+            currentContext.set(context);
+        }
     }
 
     /**
