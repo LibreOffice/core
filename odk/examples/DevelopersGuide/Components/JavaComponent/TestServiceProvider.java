@@ -54,20 +54,6 @@ public class TestServiceProvider
                 multiFactory, regKey);
         return xSingleServiceFactory;
     }
-
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey){
-//         boolean bregA= FactoryHelper.writeRegistryServiceInfo(
-//             TestComponentA.class.getName(),
-//             TestComponentA.__serviceName, regKey);
-//         boolean bregB= FactoryHelper.writeRegistryServiceInfo(
-//             TestComponentB.class.getName(),
-//             TestComponentB.__serviceName, regKey);
-//         return bregA && bregB;
-//     }
 }
 
 

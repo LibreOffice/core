@@ -135,23 +135,6 @@ public class LicenseTest {
         return xFactory;
     }
 
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey the registryKey
-     * @see     com.sun.star.comp.loader.JavaLoader
-     */
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-//         return Factory.writeRegistryServiceInfo(_LicenseTest.class.getName(),
-//                                                 _LicenseTest.getServiceNames(),
-//                                                 regKey);
-//     }
         /** This method is a member of the interface for initializing an object
          * directly after its creation.
          * @param object This array of arbitrary objects will be passed to the

@@ -299,19 +299,5 @@ public class ExampleAddIn
                     multiFactory, regKey);
         return xSingleServiceFactory;
     }
-
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo(
-//         com.sun.star.registry.XRegistryKey regKey)
-//     {
-//         //  register for both the base AddIn and the own service
-//         return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-//                     _ExampleAddIn.aImplName, _ExampleAddIn.aExampleService, regKey)
-//             && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-//                     _ExampleAddIn.aImplName, _ExampleAddIn.aAddInService, regKey);
-//     }
 }
 

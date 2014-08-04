@@ -150,22 +150,4 @@ public class MinimalComponent {
 
         return xFactory;
     }
-
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey the registryKey
-     * @see     com.sun.star.comp.loader.JavaLoader
-     */
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-//         return Factory.writeRegistryServiceInfo(_MinimalComponent.class.getName(),
-//                                                 _MinimalComponent.getServiceNames(),
-//                                                 regKey);
-//     }
 }

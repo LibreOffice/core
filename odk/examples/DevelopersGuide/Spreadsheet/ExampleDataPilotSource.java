@@ -983,17 +983,5 @@ public class ExampleDataPilotSource
 
         return xSingleServiceFactory;
     }
-
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo(
-//         com.sun.star.registry.XRegistryKey regKey)
-//     {
-//         return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-//                     _ExampleDataPilotSource.aImplName,
-//                     _ExampleDataPilotSource.aServiceName, regKey);
-//     }
 }
 

@@ -255,25 +255,4 @@ public class ProtocolHandlerAddon {
 
         return xFactory;
     }
-
-    /** Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>.
-     * @return returns true if the operation succeeded
-     * @see com.sun.star.comp.loader.JavaLoader#
-     * @see com.sun.star.lib.uno.helper.Factory#
-     * @param xregistrykey Makes structural information (except regarding tree
-     * structures) of a single
-     * registry key accessible.
-     */
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo(
-//         XRegistryKey xRegistryKey ) {
-//         return Factory.writeRegistryServiceInfo(
-//             ProtocolHandlerAddonImpl.class.getName(),
-//             ProtocolHandlerAddonImpl.getServiceNames(),
-//             xRegistryKey );
-//   }
 }

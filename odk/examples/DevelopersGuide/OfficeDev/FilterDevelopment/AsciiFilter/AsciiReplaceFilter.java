@@ -697,29 +697,4 @@ public class AsciiReplaceFilter
                                              _AsciiReplaceFilter.m_serviceNames);
         return xFactory;
     }
-
-
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>.
-     *
-     * @param xRegistryKey
-     *  Makes structural information (except regarding tree
-     *  structures) of a single registry key accessible.
-     *
-     * @return returns true if the operation succeeded
-     *
-     * @see com.sun.star.comp.loader.JavaLoader
-     */
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo( com.sun.star.registry.XRegistryKey xRegistryKey )
-//     {
-//         return Factory.writeRegistryServiceInfo(
-//             _AsciiReplaceFilter.class.getName(),
-//             _AsciiReplaceFilter.m_serviceNames,
-//             xRegistryKey );
-//     }
 }
