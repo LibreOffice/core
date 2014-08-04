@@ -54,19 +54,19 @@ namespace dbaui
     OParameterDialog::OParameterDialog(
             Window* pParent, const Reference< XIndexAccess > & rParamContainer,
             const Reference< XConnection > & _rxConnection, const Reference< XComponentContext >& rxContext)
-        :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))
-        ,m_aNamesFrame  (this, ModuleRes(FL_PARAMS))
-        ,m_aAllParams   (this, ModuleRes(LB_ALLPARAMS))
-        ,m_aValueFrame  (this, ModuleRes(FT_VALUE))
-        ,m_aParam       (this, ModuleRes(ET_PARAM))
-        ,m_aTravelNext  (this, ModuleRes(BT_TRAVELNEXT))
-        ,m_aOKBtn       (this, ModuleRes(BT_OK))
-        ,m_aCancelBtn   (this, ModuleRes(BT_CANCEL))
+        :ModalDialog( pParent, "Parameters", "dbaccess/ui/parametersdialog.ui")
         ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)
         ,m_xConnection(_rxConnection)
         ,m_aPredicateInput( rxContext, _rxConnection, getParseContext() )
         ,m_bNeedErrorOnCurrent(true)
     {
+        get(m_pAllParams, "allParamTreeview");
+        get(m_pParam, "paramEntry");
+        get(m_pTravelNext, "next");
+        get(m_pOKBtn, "ok");
+        get(m_pCancelBtn, "cancel");
+
+        set_height_request(200);
 
         if (rxContext.is())
             m_xFormatter = Reference< XNumberFormatter>( NumberFormatter::create( rxContext ), UNO_QUERY_THROW);
@@ -94,7 +94,7 @@ namespace dbaui
                 if(!xParamAsSet.is())
                     continue;
                 pValues->Name = ::comphelper::getString(xParamAsSet->getPropertyValue(PROPERTY_NAME));
-                m_aAllParams.InsertEntry(pValues->Name);
+                m_pAllParams->InsertEntry(pValues->Name);
 
                 if (!pValues->Value.hasValue())
                     // it won't have a value, 'cause it's default constructed. But may be later we support
@@ -116,8 +116,6 @@ namespace dbaui
         Construct();
 
         m_aResetVisitFlag.SetTimeoutHdl(LINK(this, OParameterDialog, OnVisitedTimeout));
-
-        FreeResource();
     }
 
     OParameterDialog::~OParameterDialog()
@@ -129,31 +127,31 @@ namespace dbaui
 
     void OParameterDialog::Construct()
     {
-        m_aAllParams.SetSelectHdl(LINK(this, OParameterDialog, OnEntrySelected));
-        m_aParam.SetLoseFocusHdl(LINK(this, OParameterDialog, OnValueLoseFocus));
-        m_aParam.SetModifyHdl(LINK(this, OParameterDialog, OnValueModified));
-        m_aTravelNext.SetClickHdl(LINK(this, OParameterDialog, OnButtonClicked));
-        m_aOKBtn.SetClickHdl(LINK(this, OParameterDialog, OnButtonClicked));
-        m_aCancelBtn.SetClickHdl(LINK(this, OParameterDialog, OnButtonClicked));
+        m_pAllParams->SetSelectHdl(LINK(this, OParameterDialog, OnEntrySelected));
+        m_pParam->SetLoseFocusHdl(LINK(this, OParameterDialog, OnValueLoseFocus));
+        m_pParam->SetModifyHdl(LINK(this, OParameterDialog, OnValueModified));
+        m_pTravelNext->SetClickHdl(LINK(this, OParameterDialog, OnButtonClicked));
+        m_pOKBtn->SetClickHdl(LINK(this, OParameterDialog, OnButtonClicked));
+        m_pCancelBtn->SetClickHdl(LINK(this, OParameterDialog, OnButtonClicked));
 
-        if (m_aAllParams.GetEntryCount())
+        if (m_pAllParams->GetEntryCount())
         {
-            m_aAllParams.SelectEntryPos(0);
-            LINK(this, OParameterDialog, OnEntrySelected).Call(&m_aAllParams);
+            m_pAllParams->SelectEntryPos(0);
+            LINK(this, OParameterDialog, OnEntrySelected).Call(m_pAllParams);
 
-            if (m_aAllParams.GetEntryCount() == 1)
+            if (m_pAllParams->GetEntryCount() == 1)
             {
-                m_aTravelNext.Enable(false);
+                m_pTravelNext->Enable(false);
             }
 
-            if (m_aAllParams.GetEntryCount() > 1)
+            if (m_pAllParams->GetEntryCount() > 1)
             {
-                m_aOKBtn.SetStyle(m_aOKBtn.GetStyle() & ~WB_DEFBUTTON);
-                m_aTravelNext.SetStyle(m_aTravelNext.GetStyle() | WB_DEFBUTTON);
+                m_pOKBtn->SetStyle(m_pOKBtn->GetStyle() & ~WB_DEFBUTTON);
+                m_pTravelNext->SetStyle(m_pTravelNext->GetStyle() | WB_DEFBUTTON);
             }
         }
 
-        m_aParam.GrabFocus();
+        m_pParam->GrabFocus();
     }
 
     IMPL_LINK(OParameterDialog, OnValueLoseFocus, Control*, /*pSource*/)
@@ -171,9 +169,9 @@ namespace dbaui
         {
             if (m_xConnection.is() && m_xFormatter.is())
             {
-                OUString sParamValue( m_aParam.GetText() );
+                OUString sParamValue( m_pParam->GetText() );
                 bool bValid = m_aPredicateInput.normalizePredicateString( sParamValue, xParamAsSet );
-                m_aParam.SetText( sParamValue );
+                m_pParam->SetText( sParamValue );
                 if ( bValid )
                 {
                     // with this the value isn't dirty anymore
@@ -204,7 +202,7 @@ namespace dbaui
                     }
                     sMessage = sMessage.replaceAll( "$name$", sName );
                     ErrorBox(NULL, WB_OK, sMessage).Execute();
-                    m_aParam.GrabFocus();
+                    m_pParam->GrabFocus();
                     return 1L;
                 }
             }
@@ -215,18 +213,18 @@ namespace dbaui
 
     IMPL_LINK(OParameterDialog, OnButtonClicked, PushButton*, pButton)
     {
-        if (&m_aCancelBtn == pButton)
+        if (m_pCancelBtn == pButton)
         {
             // no interpreting of the given values anymore ....
-            m_aParam.SetLoseFocusHdl(Link());   // no direct call from the control anymore ...
+            m_pParam->SetLoseFocusHdl(Link());   // no direct call from the control anymore ...
             m_bNeedErrorOnCurrent = false;      // in case of any indirect calls -> no error message
-            m_aCancelBtn.SetClickHdl(Link());
-            m_aCancelBtn.Click();
+            m_pCancelBtn->SetClickHdl(Link());
+            m_pCancelBtn->Click();
         }
-        else if (&m_aOKBtn == pButton)
+        else if (m_pOKBtn == pButton)
         {
             // transfer the current values into the Any
-            if (LINK(this, OParameterDialog, OnEntrySelected).Call(&m_aAllParams) != 0L)
+            if (LINK(this, OParameterDialog, OnEntrySelected).Call(m_pAllParams) != 0L)
             {   // there was an error interpreting the current text
                 m_bNeedErrorOnCurrent = true;
                     // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
@@ -258,13 +256,13 @@ namespace dbaui
 
             }
             // to close the dialog (which is more code than a simple EndDialog)
-            m_aOKBtn.SetClickHdl(Link());
-            m_aOKBtn.Click();
+            m_pOKBtn->SetClickHdl(Link());
+            m_pOKBtn->Click();
         }
-        else if (&m_aTravelNext == pButton)
+        else if (m_pTravelNext == pButton)
         {
-            sal_Int32 nCurrent = m_aAllParams.GetSelectEntryPos();
-            sal_Int32 nCount = m_aAllParams.GetEntryCount();
+            sal_Int32 nCurrent = m_pAllParams->GetSelectEntryPos();
+            sal_Int32 nCount = m_pAllParams->GetEntryCount();
             OSL_ENSURE(static_cast<size_t>(nCount) == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
 
             // search the next entry in list we haven't visited yet
@@ -276,8 +274,8 @@ namespace dbaui
                 // there is no such "not visited yet" entry -> simpy take the next one
                 nNext = (nCurrent + 1) % nCount;
 
-            m_aAllParams.SelectEntryPos(nNext);
-            LINK(this, OParameterDialog, OnEntrySelected).Call(&m_aAllParams);
+            m_pAllParams->SelectEntryPos(nNext);
+            LINK(this, OParameterDialog, OnEntrySelected).Call(m_pAllParams);
             m_bNeedErrorOnCurrent = true;
                 // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
                 // so the next time it is called we need an error message, again ....
@@ -298,20 +296,20 @@ namespace dbaui
         if (m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND)
         {
             // do the transformation of the current text
-            if (LINK(this, OParameterDialog, OnValueLoseFocus).Call(&m_aParam) != 0L)
+            if (LINK(this, OParameterDialog, OnValueLoseFocus).Call(m_pParam) != 0L)
             {   // there was an error interpreting the text
-                m_aAllParams.SelectEntryPos(m_nCurrentlySelected);
+                m_pAllParams->SelectEntryPos(m_nCurrentlySelected);
                 return 1L;
             }
 
-            m_aFinalValues[m_nCurrentlySelected].Value <<= OUString(m_aParam.GetText());
+            m_aFinalValues[m_nCurrentlySelected].Value <<= OUString(m_pParam->GetText());
         }
 
         // initialize the controls with the new values
-        sal_Int32 nSelected = m_aAllParams.GetSelectEntryPos();
+        sal_Int32 nSelected = m_pAllParams->GetSelectEntryPos();
         OSL_ENSURE(nSelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnEntrySelected : no current entry !");
 
-        m_aParam.SetText(::comphelper::getString(m_aFinalValues[nSelected].Value));
+        m_pParam->SetText(::comphelper::getString(m_aFinalValues[nSelected].Value));
         m_nCurrentlySelected = nSelected;
 
         // with this the value isn't dirty
@@ -344,28 +342,28 @@ namespace dbaui
         }
         if (aIter == m_aVisitedParams.end())
         {   // yes, there isn't another one -> change the "default button"
-            m_aTravelNext.SetStyle(m_aTravelNext.GetStyle() & ~WB_DEFBUTTON);
-            m_aOKBtn.SetStyle(m_aOKBtn.GetStyle() | WB_DEFBUTTON);
+            m_pTravelNext->SetStyle(m_pTravelNext->GetStyle() & ~WB_DEFBUTTON);
+            m_pOKBtn->SetStyle(m_pOKBtn->GetStyle() | WB_DEFBUTTON);
 
             // set to focus to one of the buttons temporary (with this their "default"-state is really updated)
             Window* pOldFocus = Application::GetFocusWindow();
 
             // if the old focus window is the value edit do some preparations ...
             Selection aSel;
-            if (pOldFocus == &m_aParam)
+            if (pOldFocus == m_pParam)
             {
-                m_aParam.SetLoseFocusHdl(Link());
-                aSel = m_aParam.GetSelection();
+                m_pParam->SetLoseFocusHdl(Link());
+                aSel = m_pParam->GetSelection();
             }
-            m_aTravelNext.GrabFocus();
+            m_pTravelNext->GrabFocus();
             if (pOldFocus)
                 pOldFocus->GrabFocus();
 
             // restore the settings for the value edit
-            if (pOldFocus == &m_aParam)
+            if (pOldFocus == m_pParam)
             {
-                m_aParam.SetLoseFocusHdl(LINK(this, OParameterDialog, OnValueLoseFocus));
-                m_aParam.SetSelection(aSel);
+                m_pParam->SetLoseFocusHdl(LINK(this, OParameterDialog, OnValueLoseFocus));
+                m_pParam->SetSelection(aSel);
             }
         }
 
