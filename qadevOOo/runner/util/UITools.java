@@ -500,9 +500,9 @@ public class UITools {
             currencyVal = currencyVal.substring(0, currencyVal.length()-3) +
                           "#" + currencyVal.substring(currencyVal.length()-2);
 
-            currencyVal = utils.replaceAll13(currencyVal, ",", "");
-            currencyVal = utils.replaceAll13(currencyVal, "\\.", "");
-            currencyVal = utils.replaceAll13(currencyVal, "#", ".");
+            currencyVal = currencyVal.replace(",", "");
+            currencyVal = currencyVal.replace("\\.", "");
+            currencyVal = currencyVal.replace("#", ".");
 
             return currencyVal;
          } catch (Exception e) {

@@ -344,7 +344,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
             }
             else
             {
-                String sResultFilenamePDF = util.utils.replaceAll13(sResultFilename, ".ps_", ".pdf_");
+                String sResultFilenamePDF = sResultFilename.replace(".ps_", ".pdf_");
                 File aResultPDFFile = new File(sResultFilenamePDF);
                 if (aResultPDFFile.exists())
                 {

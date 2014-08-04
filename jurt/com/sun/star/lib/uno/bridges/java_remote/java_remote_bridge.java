@@ -502,25 +502,6 @@ public class java_remote_bridge
             if (Thread.currentThread() != _messageDispatcher
                 && _messageDispatcher.isAlive())
             {
-                // This is a workaround for a Linux Sun JDK1.3 problem:  The
-                // message dispatcher stays in the socket read method, even if
-                // the socket has been closed.  Suspending and resuming the
-                // message dispatcher lets it notice the closed socket.  Only
-                // use this workaround for Linux JRE 1.3.0 and 1.3.1 from Sun
-                // and Blackdown.  This workaround is dangerouse and may
-                // hardlock the VM.
-                if (System.getProperty("os.name", "").toLowerCase().equals(
-                        "linux")
-                    && System.getProperty("java.version", "").startsWith("1.3.")
-                    && (System.getProperty("java.vendor", "").toLowerCase().
-                            indexOf("sun") != -1
-                        || System.getProperty("java.vendor", "").toLowerCase().
-                            indexOf("blackdown") != -1))
-                {
-                    _messageDispatcher.suspend();
-                    _messageDispatcher.resume();
-                }
-
                 _messageDispatcher.join(1000);
                 if (_messageDispatcher.isAlive()) {
                     _messageDispatcher.interrupt();

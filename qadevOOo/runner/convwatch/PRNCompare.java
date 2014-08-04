@@ -257,7 +257,7 @@ public class PRNCompare
             ArrayList<String> m_aFileList = new ArrayList<String>();
             for (int i=1;i<9999;i++)
             {
-                String sNewJPEGFilename = utils.replaceAll13(sJPGFilename, sGS_PageOutput, StringHelper.createValueString(i, 4));
+                String sNewJPEGFilename = sJPGFilename.replace(sGS_PageOutput, StringHelper.createValueString(i, 4));
                 if (FileHelper.exists(sNewJPEGFilename))
                 {
                     m_aFileList.add(sNewJPEGFilename); // as long as the files exist, fill the array

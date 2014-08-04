@@ -530,32 +530,14 @@ public class LocalOfficeConnection
             mPipe = pipe;
     }
 
-    /* replaces each substring aSearch in aString by aReplace.
-
-        StringBuffer.replaceAll() is not available in Java 1.3.x.
-     */
-    private static String replaceAll(String aString, String aSearch, String aReplace )
-    {
-        StringBuffer aBuffer = new StringBuffer(aString);
-
-        int nPos = aString.length();
-        int nOfs = aSearch.length();
-
-        while ( ( nPos = aString.lastIndexOf( aSearch, nPos - 1 ) ) > -1 )
-            aBuffer.replace( nPos, nPos+nOfs, aReplace );
-
-        return aBuffer.toString();
-    }
-
-
     /** creates a unique pipe name.
     */
     static String getPipeName()
     {
         // turn user name into a URL and file system safe name (% chars will not work)
         String aPipeName = System.getProperty("user.name") + OFFICE_ID_SUFFIX;
-        aPipeName = replaceAll( aPipeName, "_", "%B7" );
-        return replaceAll( replaceAll( java.net.URLEncoder.encode(aPipeName), "\\+", "%20" ), "%", "_" );
+        aPipeName = aPipeName.replace( "_", "%B7" );
+        return java.net.URLEncoder.encode(aPipeName).replace( "\\+", "%20" ).replace( "%", "_" );
     }
 
     /**

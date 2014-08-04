@@ -76,7 +76,7 @@ public class ClParser
                             pValue = pValue + " " + args[i].trim();
 
                         }
-                        pValue = utils.replaceAll13(pValue, "'", "");
+                        pValue = pValue.replace("'", "");
                         i++;
                     }
                     else

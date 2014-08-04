@@ -131,7 +131,7 @@ public static void convertToNearSameFileWithWidth340(String _sJPEGFilename)
     }
     String sJPEGFilename = _sJPEGFilename.replaceAll("\\\\", "/");
     String sNewJPEGFilename;
-    sNewJPEGFilename = util.utils.replaceAll13(sJPEGFilename, ".jpg", "_w340.jpg");
+    sNewJPEGFilename = sJPEGFilename.replace(".jpg", "_w340.jpg");
     convertToWidth340(sJPEGFilename, sNewJPEGFilename);
 }
 
@@ -333,7 +333,7 @@ private static void convertToWidth340(String _sFrom, String _To)
             {
                 return "";
             }
-            final String sFilename = util.utils.replaceAll13(_sJPEGSchema, m_sGS_PageOutput, StringHelper.createValueString(_nPage, 4));
+            final String sFilename = _sJPEGSchema.replace(m_sGS_PageOutput, StringHelper.createValueString(_nPage, 4));
             return sFilename;
         }
 

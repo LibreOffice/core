@@ -629,15 +629,6 @@ public class utils {
     }
 
     /**
-     *
-     * This method replaces a substring with another
-     *
-     */
-    public static String replacePart(String all, String toReplace, String replacement) {
-        return replaceAll13(all, toReplace, replacement);
-    }
-
-    /**
      * Scan localhost for the next free port-number from a starting port
      * on. If the starting port is smaller than 1024, port number starts with
      * 10000 as default, because numbers < 1024 are never free on unix machines.
@@ -767,8 +758,8 @@ public class utils {
      */
     public static String validateAppExecutionCommand(String appExecCommand, String os) {
         String errorMessage = "OK";
-        appExecCommand = replaceAll13(appExecCommand, "\"", "");
-        appExecCommand = replaceAll13(appExecCommand, "'", "");
+        appExecCommand = appExecCommand.replace("\"", "");
+        appExecCommand = appExecCommand.replace("'", "");
         StringTokenizer commandTokens = new StringTokenizer(appExecCommand, " \t");
         String officeExecutable = "";
         String officeExecCommand = "soffice";
@@ -859,27 +850,6 @@ public class utils {
             }
         }
         return errorMessage;
-    }
-
-    /**
-     * String.replaceAll() is available since Java 1.4 but the runner must be buldabale with Java 1.3
-     * @param originalString
-     * @param searchString
-     * @param replaceString
-     * @return modified string
-     */
-    public static String replaceAll13(String originalString, String searchString, String replaceString) {
-
-        StringBuffer changeStringBuffer = new StringBuffer(originalString);
-        int searchLength = searchString.length();
-        int replaceLength = replaceString.length();
-        int index = originalString.indexOf(searchString);
-        while (index != -1) {
-            changeStringBuffer = changeStringBuffer.replace(index, index + searchLength, replaceString);
-            originalString = changeStringBuffer.toString();
-            index = originalString.indexOf(searchString, index + replaceLength);
-        }
-        return originalString;
     }
 
     /**

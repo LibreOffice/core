@@ -667,7 +667,7 @@ public class OfficeProvider implements AppProvider
             sysDir = dir.substring("file://".length());
         }
 
-        sysDir = utils.replaceAll13(sysDir, "%20", " ");
+        sysDir = sysDir.replace("%20", " ");
 
         // append '/' if not there (e.g. linux)
         if (sysDir.charAt(sysDir.length() - 1) != '/')

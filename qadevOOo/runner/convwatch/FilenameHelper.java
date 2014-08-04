@@ -78,7 +78,7 @@ abstract class FilenameHelper_impl implements Filenamer
             {
                 _sFilename = FileHelper.getSystemPathFromFileURL(_sFilename);
             }
-            _sFilename = utils.replaceAll13(_sFilename, "\\\\", "/");
+            _sFilename = _sFilename.replace("\\\\", "/");
 
             String sPath = checkPath(FileHelper.getPath(_sFilename));
             String sFilenameWithSuffix = checkFilename(FileHelper.getBasename(_sFilename));
@@ -95,7 +95,7 @@ abstract class FilenameHelper_impl implements Filenamer
     public FilenameHelper_impl(String _sPath, String _sName, String _sSuffix)
         {
             initMember();
-            _sPath = utils.replaceAll13(_sPath, "\\\\", "/");
+            _sPath = _sPath.replace("\\\\", "/");
 
             String sPath = checkPath(_sPath);
             String sFilename = checkFilename(_sName);
@@ -123,7 +123,7 @@ abstract class FilenameHelper_impl implements Filenamer
     public String getAbsoluteSystemFilename()
         {
             String sSystemFilename = createAbsoluteFilename();
-            sSystemFilename = utils.replaceAll13(sSystemFilename, "/", fs);
+            sSystemFilename = sSystemFilename.replace("/", fs);
             return sSystemFilename;
         }
 
@@ -168,7 +168,7 @@ abstract class FilenameHelper_impl implements Filenamer
     public String getSystemPath()
     {
         String sSystemPath = m_sPath;
-        sSystemPath = utils.replaceAll13(sSystemPath, "/", fs);
+        sSystemPath = sSystemPath.replace("/", fs);
         return sSystemPath;
     }
     /**
