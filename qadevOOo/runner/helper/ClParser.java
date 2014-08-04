@@ -22,7 +22,6 @@ import java.util.Properties;
 
 import lib.TestParameters;
 import util.PropertyName;
-import util.utils;
 
 /**
  * This class parses commandline Argument and stores <br>
