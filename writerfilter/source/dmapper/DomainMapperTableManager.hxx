@@ -81,6 +81,7 @@ public:
     inline void SetStyleProperties( PropertyMapPtr pProperties ) { m_pStyleProps = pProperties; };
 
     virtual bool sprm(Sprm & rSprm) SAL_OVERRIDE;
+    bool attribute(Id nName, Value & val);
 
     virtual void startLevel( ) SAL_OVERRIDE;
     virtual void endLevel( ) SAL_OVERRIDE;

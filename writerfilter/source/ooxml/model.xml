@@ -18377,7 +18377,7 @@
         </optional>
         <optional>
           <element name="tblLook">
-            <ref name="CT_ShortHexNumber"/>
+            <ref name="CT_TblLook"/>
           </element>
         </optional>
       </define>
@@ -18457,6 +18457,29 @@
         <zeroOrMore>
           <ref name="EG_ContentRowContent"/>
         </zeroOrMore>
+      </define>
+      <define name="CT_TblLook">
+        <attribute name="firstRow">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="lastRow">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="firstColumn">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="lastColumn">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="noHBand">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="noVBand">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="val">
+          <ref name="ST_ShortHexNumber"/>
+        </attribute>
       </define>
       <define name="ST_FtnPos">
           <choice>
@@ -23171,6 +23194,15 @@
       <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_Tbl" resource="TextTable"/>
+    <resource name="CT_TblLook" resource="Properties">
+      <attribute name="firstRow" tokenid="ooxml:CT_TblLook_firstRow"/>
+      <attribute name="lastRow" tokenid="ooxml:CT_TblLook_lastRow"/>
+      <attribute name="firstColumn" tokenid="ooxml:CT_TblLook_firstColumn"/>
+      <attribute name="lastColumn" tokenid="ooxml:CT_TblLook_lastColumn"/>
+      <attribute name="noHBand" tokenid="ooxml:CT_TblLook_noHBand"/>
+      <attribute name="noVBand" tokenid="ooxml:CT_TblLook_noVBand"/>
+      <attribute name="val" tokenid="ooxml:CT_TblLook_val"/>
+    </resource>
     <resource name="ST_FtnPos" resource="List">
       <value tokenid="ooxml:Value_ST_FtnPos_pageBottom">pageBottom</value>
       <value tokenid="ooxml:Value_ST_FtnPos_beneathText">beneathText</value>

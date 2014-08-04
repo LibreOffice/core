@@ -179,6 +179,9 @@ DomainMapper::~DomainMapper()
 
 void DomainMapper::lcl_attribute(Id nName, Value & val)
 {
+    if (m_pImpl->getTableManager().attribute(nName, val))
+        return;
+
     static OUString sLocalBookmarkName;
     sal_Int32 nIntValue = val.getInt();
     OUString sStringValue = val.getString();
@@ -2449,6 +2452,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     {
         // Make sure properties from a pervious SDT are not merged with the current ones.
         m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+    }
+    break;
+    case NS_ooxml::LN_CT_TblPrBase_tblLook:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get())
+            pProperties->resolve(*this);
     }
     break;
     default:

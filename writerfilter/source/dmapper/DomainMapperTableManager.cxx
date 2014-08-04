@@ -74,6 +74,25 @@ DomainMapperTableManager::~DomainMapperTableManager()
         delete m_pTablePropsHandler, m_pTablePropsHandler = NULL;
 }
 
+bool DomainMapperTableManager::attribute(Id nName, Value& rValue)
+{
+    bool bRet = true;
+
+    switch (nName)
+    {
+    case NS_ooxml::LN_CT_TblLook_val:
+    {
+        TablePropertyMapPtr pPropMap(new TablePropertyMap());
+        pPropMap->Insert(PROP_TBL_LOOK, uno::makeAny(rValue.getInt()));
+        insertTableProps(pPropMap);
+    }
+    break;
+    default:
+        bRet = false;
+    }
+
+    return bRet;
+}
 
 bool DomainMapperTableManager::sprm(Sprm & rSprm)
 {
@@ -316,13 +335,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 dmapper_logger->endElement();
 #endif
                 m_nGridSpan = nIntValue;
-            }
-            break;
-            case NS_ooxml::LN_CT_TblPrBase_tblLook:
-            {
-                TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->Insert( PROP_TBL_LOOK, uno::makeAny( nIntValue ));
-                insertTableProps(pPropMap);
             }
             break;
             case NS_ooxml::LN_CT_TcPrBase_textDirection:
