@@ -40,7 +40,6 @@ public class TestApplet extends java.applet.Applet {
 
         // Security tests.
         File f= new File("d:\\temp\\javasecurity.txt");
-        SecurityManager mgr= System.getSecurityManager();
         try {
             f.createNewFile();
 

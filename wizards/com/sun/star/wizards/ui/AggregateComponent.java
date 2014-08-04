@@ -370,7 +370,6 @@ public class AggregateComponent extends ControlScroller
                 ArrayList<String[]> aggregatevector = new ArrayList<String[]>();
                 PropertyValue[][] aggregatelist = this.getScrollFieldValues();
                 PropertyValue[] currowproperties;
-                PropertyValue curaggregateproperty;
                 if (CurDBMetaData.AggregateFieldNames != null)
                 {
                     for (int i = 0; i < aggregatelist.length; i++)

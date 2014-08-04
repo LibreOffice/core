@@ -481,7 +481,6 @@ public class OOoBeanTest
 
                 for (; i < 1; i++)
                 {
-                EventQueue q = Toolkit.getDefaultToolkit().getSystemEventQueue();
                 EventQueue.invokeAndWait( new Runnable() {
                         public void run() {
                             try {

@@ -83,7 +83,6 @@ public class _XNamed {
         boolean result = true;
         boolean loc_result = true;
         String name = null;
-        String NewName = null;
 
         loc_result = ((name = oObj.getName()) != null);
         System.out.println("getting the name \"" + name + "\"");

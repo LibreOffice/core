@@ -391,7 +391,6 @@ public abstract class Configuration
 
     public static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname)
     {
-        String[] snames = null;
         return getChildNodebyDisplayName(_xNameAccessNode, _displayname, PropertyNames.PROPERTY_NAME);
     }
 
@@ -401,7 +400,6 @@ public abstract class Configuration
         try
         {
             snames = _xNameAccessNode.getElementNames();
-            String[] sdisplaynames = new String[snames.length];
             for (int i = 0; i < snames.length; i++)
             {
                 String curdisplayname = (String) Helper.getUnoPropertyValue(_xNameAccessNode.getByName(snames[i]), _nodename);
@@ -424,7 +422,6 @@ public abstract class Configuration
         try
         {
             snames = _xNameAccessNode.getElementNames();
-            String[] sdisplaynames = new String[snames.length];
             for (int i = 0; i < snames.length; i++)
             {
                 String curdisplayname = (String) Helper.getUnoPropertyValue(_xNameAccessNode.getByName(snames[i]), _nodename);

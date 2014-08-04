@@ -181,7 +181,6 @@ public class InstUtil {
         return null;
     }*/
 
-    File theFile = null;
     Properties results = new Properties();
 
     StringBuffer str = new StringBuffer();
@@ -197,7 +196,6 @@ public class InstUtil {
     if( jeditLogFile.exists() ) {
         String[] jeditDetails = getJeditInstallation( jeditLogFile );
         System.out.println( "getJeditLocation ) " + jeditDetails[0] );
-        File f = new File(jeditDetails[0]);
         results.put("jEdit "+jeditDetails[1], jeditDetails[0]);
         System.out.println( "jeditDetails[0] is " + jeditDetails[0]);
     }
@@ -439,7 +437,7 @@ public class InstUtil {
             System.err.println("Problem with sversion.ini");
         }
         try {
-            Properties vers = InstUtil.getOfficeVersions(f);
+            InstUtil.getOfficeVersions(f);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println(e);

@@ -523,7 +523,6 @@ public class TypeDetection extends ComplexTestCase {
 
                 PropertyValue[] out = inOut[0];
 
-                boolean bStream = false;
                 log.println("out-Parameter");
                 boolean bReadOnly = false;
                 for (int i=0; i < out.length; i++){

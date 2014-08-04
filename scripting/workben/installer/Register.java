@@ -73,7 +73,6 @@ public class Register{
         String[] packages = {"ooscriptframe.zip", "bshruntime.zip", "jsruntime.zip"};
 
     try {
-        String s=null;
         boolean goodResult = false;
         String env[] = new String[1];
             ExecCmd command = new ExecCmd();

@@ -208,8 +208,6 @@ public class AccessibilityTreeModel
         AccessibleTreeNode aChildNode = null;
         try
         {
-            boolean bRet = false;
-
             // First make sure that the accessible object does not already have
             // a representation.
             aChildNode = maNodeMap.GetNode(xNewChild);

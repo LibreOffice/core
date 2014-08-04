@@ -118,7 +118,6 @@ class CanvasShape
         try{
             // Transform the object's position and size according to the
             // specified offset and scale.
-            Point aLocation = new Point();
             maShape = new Rectangle2D.Double (
                 maPosition.x * nScaleFactor + nXOffset,
                 maPosition.y * nScaleFactor + nYOffset,

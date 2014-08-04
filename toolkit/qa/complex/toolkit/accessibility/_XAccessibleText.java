@@ -653,7 +653,7 @@ public class _XAccessibleText {
 
         try {
             System.out.println("getTextRange(-1, chCount - 1): ");
-            String txtRange = oObj.getTextRange(-1, chCount - 1);
+            oObj.getTextRange(-1, chCount - 1);
             System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -663,7 +663,7 @@ public class _XAccessibleText {
 
         try {
             System.out.println("getTextRange(0, chCount + 1): ");
-            String txtRange = oObj.getTextRange(0, chCount + 1);
+            oObj.getTextRange(0, chCount + 1);
             System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -673,7 +673,7 @@ public class _XAccessibleText {
 
         try {
             System.out.println("getTextRange(chCount+1, -1): ");
-            String txtRange = oObj.getTextRange(chCount+1, -1);
+            oObj.getTextRange(chCount+1, -1);
             System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -701,8 +701,7 @@ public class _XAccessibleText {
 
         try {
             System.out.println("getTextAtIndex(-1, AccessibleTextType.PARAGRAPH):");
-            TextSegment txt =
-                oObj.getTextAtIndex(-1, AccessibleTextType.PARAGRAPH);
+            oObj.getTextAtIndex(-1, AccessibleTextType.PARAGRAPH);
             System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -716,8 +715,7 @@ public class _XAccessibleText {
         try {
             System.out.println("getTextAtIndex(chCount+1," +
                 " AccessibleTextType.PARAGRAPH):");
-            TextSegment txt = oObj.getTextAtIndex(chCount + 1,
-                 AccessibleTextType.PARAGRAPH);
+            oObj.getTextAtIndex(chCount + 1, AccessibleTextType.PARAGRAPH);
             System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -775,8 +773,7 @@ public class _XAccessibleText {
 
         try {
             System.out.println("getTextBeforeIndex(-1, AccessibleTextType.PARAGRAPH):");
-            TextSegment txt = oObj.getTextBeforeIndex(-1,
-                AccessibleTextType.PARAGRAPH);
+            oObj.getTextBeforeIndex(-1, AccessibleTextType.PARAGRAPH);
             System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -791,8 +788,7 @@ public class _XAccessibleText {
         try {
             System.out.println("getTextBeforeIndex(chCount+1, " +
                 "AccessibleTextType.PARAGRAPH):");
-            TextSegment txt = oObj.getTextBeforeIndex(chCount + 1,
-                AccessibleTextType.PARAGRAPH);
+            oObj.getTextBeforeIndex(chCount + 1, AccessibleTextType.PARAGRAPH);
             System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -865,8 +861,7 @@ public class _XAccessibleText {
 
         try {
             System.out.println("getTextBehindIndex(-1, AccessibleTextType.PARAGRAPH):");
-            TextSegment txt = oObj.getTextBehindIndex(-1,
-                AccessibleTextType.PARAGRAPH);
+            oObj.getTextBehindIndex(-1, AccessibleTextType.PARAGRAPH);
             System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -881,8 +876,7 @@ public class _XAccessibleText {
         try {
             System.out.println("getTextBehindIndex(chCount+1, " +
                 "AccessibleTextType.PARAGRAPH):");
-            TextSegment txt = oObj.getTextBehindIndex(chCount + 1,
-                AccessibleTextType.PARAGRAPH);
+            oObj.getTextBehindIndex(chCount + 1, AccessibleTextType.PARAGRAPH);
             System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {

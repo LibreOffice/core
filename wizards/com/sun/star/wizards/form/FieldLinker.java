@@ -62,7 +62,6 @@ public class FieldLinker extends DBLimitedFieldSelection
                 int SOSECLINKLST = 1;
                 int SOTHIRDLINKLST = 2;
                 int SOFOURTHLINKLST = 3;
-                Integer IListBoxPosX = new Integer(iCompPosX + 6);
                 sSlaveListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 20, 4); //new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
                 sMasterListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 24, 4);// new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
                 SOLINKLST = new int[]

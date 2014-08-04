@@ -73,7 +73,6 @@ public class DeployedUnoPackagesDB {
         ArrayList<String> packageUrls = new ArrayList<String>(4);
         Element main = document.getDocumentElement();
         Element root = null;
-        Element item;
         int len = 0;
         NodeList langNodes = null;
 

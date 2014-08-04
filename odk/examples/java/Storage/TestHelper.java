@@ -516,7 +516,7 @@ public class TestHelper  {
         pWrongPass[0] += pPass[0];
         try
         {
-            Object oSubStream = xParentStorage.openEncryptedStreamElement( sName, ElementModes.READ, new String(pWrongPass) );
+            xParentStorage.openEncryptedStreamElement( sName, ElementModes.READ, new String(pWrongPass) );
             Error( "Encrypted stream '" + sName + "' was opened with wrong password!" );
             return false;
         }

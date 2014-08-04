@@ -61,7 +61,7 @@ public class UnoUrlTest  {
 
     public void testStart2() {
         try {
-            UnoUrl url = UnoUrl.parseUnoUrl("uno1:x;y;z");
+            UnoUrl.parseUnoUrl("uno1:x;y;z");
             fail("Should throw an exception");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
@@ -69,7 +69,7 @@ public class UnoUrlTest  {
 
     public void testStart3() {
         try {
-            UnoUrl url = UnoUrl.parseUnoUrl("un:x;y;z");
+            UnoUrl.parseUnoUrl("un:x;y;z");
             fail("Should throw an exception");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
@@ -87,7 +87,7 @@ public class UnoUrlTest  {
 
     public void testParam1() {
         try {
-            UnoUrl url = UnoUrl.parseUnoUrl("uno:");
+            UnoUrl.parseUnoUrl("uno:");
             fail("Should throw an exception");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
@@ -95,7 +95,7 @@ public class UnoUrlTest  {
 
     public void testParam2() {
         try {
-            UnoUrl url = UnoUrl.parseUnoUrl("uno:a;");
+            UnoUrl.parseUnoUrl("uno:a;");
             fail("Should throw an exception");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
@@ -103,7 +103,7 @@ public class UnoUrlTest  {
 
     public void testPartName1() {
         try {
-            UnoUrl url = UnoUrl.parseUnoUrl("uno:abc!abc;b;c");
+            UnoUrl.parseUnoUrl("uno:abc!abc;b;c");
             fail("Should throw an exception");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
@@ -111,7 +111,7 @@ public class UnoUrlTest  {
 
     public void testOID1() {
         try {
-            UnoUrl url = UnoUrl.parseUnoUrl("uno:x;y;ABC<ABC");
+            UnoUrl.parseUnoUrl("uno:x;y;ABC<ABC");
             fail("Should throw an exception");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
@@ -143,7 +143,7 @@ public class UnoUrlTest  {
 
     public void testParams1() {
         try {
-            UnoUrl url = UnoUrl.parseUnoUrl("uno:x,abc!abc=val;y;ABC");
+            UnoUrl.parseUnoUrl("uno:x,abc!abc=val;y;ABC");
             fail("Should throw an exception");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
@@ -151,7 +151,7 @@ public class UnoUrlTest  {
 
     public void testParams2() {
         try {
-            UnoUrl url = UnoUrl.parseUnoUrl("uno:x,abc=val<val;y;ABC");
+            UnoUrl.parseUnoUrl("uno:x,abc=val<val;y;ABC");
             fail("Should throw an exception");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
@@ -199,7 +199,7 @@ public class UnoUrlTest  {
 
     public void testUTF1() {
         try {
-            UnoUrl url = UnoUrl.parseUnoUrl("uno:x,abc=val%4t;y;ABC");
+            UnoUrl.parseUnoUrl("uno:x,abc=val%4t;y;ABC");
             fail("Should throw an exception");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }

@@ -1055,7 +1055,6 @@ public class ViewForwarder {
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-        XAccessible parent = null;
 
         try {
             XAccessibleContext con = AccessibilityTools.getAccessibleObjectForRole

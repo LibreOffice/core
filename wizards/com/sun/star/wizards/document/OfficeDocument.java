@@ -129,7 +129,6 @@ public class OfficeDocument
 
         Object oDocument = null;
         com.sun.star.frame.XComponentLoader xComponentLoader = null;
-        XInterface xInterface = null;
         String sURL = "private:factory/" + sDocumentType;
 
         try

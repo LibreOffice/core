@@ -132,7 +132,6 @@ public abstract class ControlScroller
     {
         try
         {
-            boolean bisVisible;
             ntotfieldcount = _ntotfieldcount;
             setCurFieldCount();
             nscrollvalue = 0;
@@ -167,9 +166,7 @@ public abstract class ControlScroller
 
     protected void fillupControls(boolean binitialize)
     {
-        int newindex;
         PropertyValue[] oldproperties;
-        PropertyValue[] newproperties;
         for (int a = 0; a < this.nblockincrement; a++)
         {
             if (a < ncurfieldcount)

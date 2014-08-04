@@ -258,7 +258,6 @@ public class InformationWriter
                     + xContext.getAccessibleDescription());
                 MessageArea.println (sIndent + "Role         : "
                     + xContext.getAccessibleRole());
-                String sHasParent;
                 if (xContext.getAccessibleParent() != null)
                 {
                     MessageArea.println (sIndent + "Has parent   : yes");

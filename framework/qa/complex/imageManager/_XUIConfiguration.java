@@ -48,7 +48,6 @@ public class _XUIConfiguration {
     public void before() {
         xListener = (XUIConfigurationListenerImpl)tEnv.get(
                         "XUIConfiguration.XUIConfigurationListenerImpl");
-        XUIConfigurationListener l;
     }
 
     public boolean _addConfigurationListener() {

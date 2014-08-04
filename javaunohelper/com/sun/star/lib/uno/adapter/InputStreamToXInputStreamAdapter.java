@@ -73,7 +73,6 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
     public int readBytes(byte[][] b, int len) throws
             com.sun.star.io.IOException
     {
-        int count = 0;
         try {
         long bytesRead;
         if (len >iIn.available()) {
@@ -100,7 +99,6 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
     public int readSomeBytes(byte[][] b, int len) throws
             com.sun.star.io.IOException
     {
-        int count = 0;
         try {
         long bytesRead;
         if (len >iIn.available()) {

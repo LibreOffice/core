@@ -184,8 +184,7 @@ public class XStorageHelper implements XEventListener
         if ( model != null )
         {
             LogUtils.DEBUG(" Disposing doc " + model.getURL() );
-            Object result = modelMap.remove( model );
-            result = null;
+            modelMap.remove( model );
         }
     }
     public XStorage getStorage()

@@ -183,7 +183,6 @@ public class UnoPkgContainer extends ParcelContainer
     {
         ScriptMetaData scriptData = null;
 
-        String language = psu.language;
         String functionName = psu.function;
         String parcelName = psu.parcel;
         String location = psu.location;

@@ -365,7 +365,6 @@ public class CalcRTL /* extends ComplexTestCase */
         newValue = getRealValue(newValue);
         resValue = getRealValue(resValue);
 
-        short attr = prop.Attributes;
         boolean readOnly = (prop.Attributes & PropertyAttribute.READONLY) != 0;
         boolean maybeVoid = (prop.Attributes & PropertyAttribute.MAYBEVOID) != 0;
 

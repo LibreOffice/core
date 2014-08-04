@@ -120,9 +120,6 @@ public class AccessibilityWorkBench
     {
         setSize (new Dimension (8000,600));
 
-        JScrollPane aScrollPane;
-        GridBagConstraints constraints;
-
         // Create new layout.
         GridBagLayout aLayout = new GridBagLayout ();
         getContentPane().setLayout (aLayout);
@@ -186,7 +183,6 @@ public class AccessibilityWorkBench
 
         // Button bar.
         maButtonBar = new JPanel();
-        GridBagLayout aButtonLayout = new GridBagLayout ();
         maButtonBar.setLayout (new FlowLayout());
         addGridElement (maButtonBar, 0,3, 2,1, 1,0,
             GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);

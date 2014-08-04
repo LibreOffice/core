@@ -2560,7 +2560,7 @@ public class DOMTest
         }
 
         try {
-            XNode xResult = xXPathAPI.selectSingleNode(xDoc, "//pre:foo");
+            xXPathAPI.selectSingleNode(xDoc, "//pre:foo");
             fail("XXPathAPI.selectSingleNode");
         } catch (XPathException e) { /* expected */ }
         xXPathAPI.registerNS("pre", ns);
@@ -2572,7 +2572,7 @@ public class DOMTest
 
         xXPathAPI.unregisterNS("pre", ns);
         try {
-            XNode xResult = xXPathAPI.selectSingleNode(xDoc, "//pre:foo");
+            xXPathAPI.selectSingleNode(xDoc, "//pre:foo");
             fail("XXPathAPI.unregisterNS");
         } catch (XPathException e) { /* expected */ }
 

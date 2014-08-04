@@ -106,7 +106,6 @@ public class SharedLibraryLoader_Test {
     static public boolean test_loadNativeSimpleRegistry()
             throws java.lang.Exception
     {
-        boolean result = false;
         System.out.println("*******************************************************************");
         System.out.println("Test: <<< load native SimpleRegistry >>>");
         if ( sharedLibraryLoader == null )

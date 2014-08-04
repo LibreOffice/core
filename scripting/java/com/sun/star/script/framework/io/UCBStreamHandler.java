@@ -192,7 +192,6 @@ public class UCBStreamHandler extends URLStreamHandler {
     {
         ZipInputStream zis = null;
         ZipEntry entry = null;
-        boolean found = false;
 
         zis = new ZipInputStream(is);
 

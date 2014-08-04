@@ -1453,11 +1453,10 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 dbgPrint( "EventListener(" + aTag + ").running() #" + ++n );
 
                 // still alive?
-                com.sun.star.lang.XMultiComponentFactory xServiceManager = null;
                 try
                 {
                     // an arbitrary (but cheap) call into OOo
-                    xServiceManager = iConnection.getComponentContext().getServiceManager();
+                    iConnection.getComponentContext().getServiceManager();
 
                     // call successfully performed, restart watch for next loop
                     try

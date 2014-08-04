@@ -127,7 +127,6 @@ public class RecordParser extends QueryMetaData
 
     public Object getColumnValue(int ColIndex, int iType)
     {
-        boolean bResult;
         Object oAny = Any.VOID;
         switch (iType)
         {

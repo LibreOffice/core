@@ -147,7 +147,6 @@ public class NumericalHelper
     {
 
         char retValue = 0;
-        boolean hasConversionWarning = false;
         TypeObject aTypeObject = getTypeObject(aValue);
         switch (aTypeObject.iType)
         {

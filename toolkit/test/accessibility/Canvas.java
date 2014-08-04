@@ -392,7 +392,6 @@ class Canvas
 
     protected CanvasShape FindCanvasShapeUnderMouse (MouseEvent e)
     {
-        int nObjects = maObjects.size();
         CanvasShape aObjectUnderMouse = null;
         int nCount = maObjectList.size();
         for (int i=nCount-1; i>=0; --i)

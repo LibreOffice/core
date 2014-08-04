@@ -316,7 +316,7 @@ public class TextDocument
         xComponent = UnoRuntime.queryInterface(XComponent.class, xTextDocument);
         XWindow xWindow = xFrame.getComponentWindow();
 
-        xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
+        xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xWindow);
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
         xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
 

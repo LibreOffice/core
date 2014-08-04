@@ -108,7 +108,6 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
-        int count = 0;
         byte [][] tmp = new byte [1][b.length];
         try {
         long bytesRead;

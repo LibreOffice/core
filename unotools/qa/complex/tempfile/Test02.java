@@ -42,7 +42,6 @@ public class Test02 implements TempFileTest {
         XTempFile xTempFile = null;
         XTruncate xTruncate = null;
         String sFileURL = null;
-        String sFileName = null;
         //create a temporary file.
         try {
             oTempFile = m_xMSF.createInstance( "com.sun.star.io.TempFile" );

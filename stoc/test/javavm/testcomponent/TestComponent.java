@@ -64,7 +64,6 @@ public class TestComponent implements XServiceInfo, XTypeProvider
     public String getImplementationName(  )
     {
         String a= "the functions are for debugging";
-        int abc= 34;
         String prop= System.getProperty("ftp.proxyHost");
         prop= System.getProperty("ftp.proxyPort");
         prop= System.getProperty("http.proxyHost");

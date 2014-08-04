@@ -72,7 +72,6 @@ public class SortingComponent
             xMSF = CurUnoDialog.xMSF;
             Integer IStep = new Integer(iStep);
             Integer ICompPosX = new Integer(iCompPosX);
-            Integer ICompPosY = new Integer(iCompPosY);
             Integer ICompWidth = new Integer(iCompWidth);
 
             Integer IListBoxPosX = new Integer(iCompPosX + 6);
@@ -81,7 +80,6 @@ public class SortingComponent
             Integer IListBoxWidth = new Integer(iCompWidth - iOptButtonWidth - 12);
             Integer IOptButtonPosX = new Integer(IListBoxPosX.intValue() + IListBoxWidth.intValue() + 6);
             getResources();
-            com.sun.star.awt.XWindow[] xListBoxWindow = new com.sun.star.awt.XWindow[4];
             boolean bDoEnable;
             String HIDString;
             int iCurPosY = iCompPosY;

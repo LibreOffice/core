@@ -131,7 +131,6 @@ public class QueryMetaData extends CommandMetaData
     public void removeSeveralFieldColumnsByDisplayFieldName(String[] _DisplayFieldNames)
     {
         ArrayList<FieldColumn> oRemainingFieldColumns = new ArrayList<FieldColumn>();
-        int a = 0;
         for (int n = 0; n < FieldColumns.length; n++)
         {
             String sDisplayFieldName = FieldColumns[n].getDisplayFieldName();

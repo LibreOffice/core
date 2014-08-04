@@ -270,7 +270,6 @@ public class LocalOfficeWindow
                 void cancel()
                         throws java.lang.InterruptedException
                 {
-                        Thread aThread = aWatchedThread;
                         aWatchedThread = null;
                         stop();
 

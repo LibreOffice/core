@@ -553,7 +553,6 @@ public class UnoDialog implements EventNames
         {
             int iCurControlStep = AnyConverter.toInt(getControlProperty(controlname, PropertyNames.PROPERTY_STEP));
             int iCurDialogStep = AnyConverter.toInt(Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_STEP));
-            int iNewStep;
             if (bIsVisible)
             {
                 setControlProperty(controlname, PropertyNames.PROPERTY_STEP, new Integer(iCurDialogStep));
@@ -757,7 +756,7 @@ public class UnoDialog implements EventNames
         Object oControl = xDlgContainer.getControl(ControlName);
         xControl = UnoRuntime.queryInterface(XControl.class, oControl);
         XWindowPeer xWindowPeer = xControl.getPeer();
-        XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, xControl.getPeer());
+        XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
         xVclWindowPeer.setProperty("AutoMnemonics", Boolean.valueOf(bValue));
     }
 
@@ -1041,16 +1040,11 @@ public class UnoDialog implements EventNames
     public static int getRedColorShare(int _nColor)
     {
         int nRed = _nColor / 65536;
-        int nRedModulo = _nColor % 65536;
-        int nGreen = nRedModulo / 256;
-        int nGreenModulo = (nRedModulo % 256);
-        int nBlue = nGreenModulo;
         return nRed;
     }
 
     public static int getGreenColorShare(int _nColor)
     {
-        int nRed = _nColor / 65536;
         int nRedModulo = _nColor % 65536;
         int nGreen = nRedModulo / 256;
         return nGreen;
@@ -1058,9 +1052,7 @@ public class UnoDialog implements EventNames
 
     public static int getBlueColorShare(int _nColor)
     {
-        int nRed = _nColor / 65536;
         int nRedModulo = _nColor % 65536;
-        int nGreen = nRedModulo / 256;
         int nGreenModulo = (nRedModulo % 256);
         int nBlue = nGreenModulo;
         return nBlue;

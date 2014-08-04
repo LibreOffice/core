@@ -20,13 +20,11 @@ package installer;
 
 import java.io.*;
 import java.util.*;
-import java.net.URL;
 import javax.swing.*;
 
 public class XmlUpdater extends Thread {
 
     private String classesPath = null;
-    private String jarfilename;
     private String installPath;
     private boolean netInstall;
     private boolean bindingsInstall;
@@ -154,19 +152,14 @@ public class XmlUpdater extends Thread {
 
     public void run() {
 
-        InputStream            istream;
         //InputSource            isource;
         //DocumentBuilderFactory builderFactory;
         //DocumentBuilder        builder = null;
-        URL                    url;
-        String                 fileName = null;
 
         internalThread = Thread.currentThread();
 
         //System.out.println("\n\n\n\nFileName: "+installPath);
         classesPath= installPath.concat(File.separator+"program"+File.separator+"classes"+File.separator);
-        String opSys =System.getProperty("os.name");
-        //System.out.println("\n System "+opSys);
 
         String progpath=installPath;
         progpath= progpath.concat(File.separator+"program"+File.separator);

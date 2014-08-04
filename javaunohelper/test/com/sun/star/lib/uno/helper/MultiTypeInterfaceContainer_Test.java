@@ -271,7 +271,6 @@ public class MultiTypeInterfaceContainer_Test
         boolean r[]= new boolean[50];
         int i= 0;
 
-        int count= 0;
         cont.clear();
         Type[] types= cont.getContainedTypes();
         r[i++]= types.length == 0;

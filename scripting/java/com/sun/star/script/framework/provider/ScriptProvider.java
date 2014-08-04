@@ -549,7 +549,6 @@ public abstract class ScriptProvider
     public String[] getElementNames()
     {
         // TODO needs implementing?
-        String[] result = new String[0];
         throw new com.sun.star.uno.RuntimeException(
             "getElementNames not implemented" );
 

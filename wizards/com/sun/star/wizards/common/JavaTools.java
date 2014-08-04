@@ -335,7 +335,6 @@ public class JavaTools
         if (!MainString.equals(PropertyNames.EMPTY_STRING))
         {
             ArrayList<String> StringVector = new ArrayList<String>();
-            String LocString = null;
             int iIndex;
             do
             {

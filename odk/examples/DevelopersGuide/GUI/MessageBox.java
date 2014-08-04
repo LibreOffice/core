@@ -176,7 +176,7 @@ public class MessageBox  {
             XMessageBox xMessageBox = xMessageBoxFactory.createMessageBox(_xParentWindowPeer, MessageBoxType.ERRORBOX, com.sun.star.awt.MessageBoxButtons.BUTTONS_OK, _sTitle, _sMessage);
             xComponent = UnoRuntime.queryInterface(XComponent.class, xMessageBox);
             if (xMessageBox != null){
-                short nResult = xMessageBox.execute();
+                xMessageBox.execute();
             }
         } catch (com.sun.star.uno.Exception ex) {
             ex.printStackTrace(System.err);
@@ -216,23 +216,17 @@ public class MessageBox  {
     public static int getRedColorShare(int _nColor) {
         int nRed = _nColor/65536;
         int nRedModulo = _nColor % 65536;
-        int nGreen = nRedModulo / 256;
-        int nGreenModulo = (nRedModulo % 256);
-        int nBlue = nGreenModulo;
         return nRed;
     }
 
     public static int getGreenColorShare(int _nColor) {
-        int nRed = _nColor/65536;
         int nRedModulo = _nColor % 65536;
         int nGreen = nRedModulo / 256;
         return nGreen;
     }
 
     public static int getBlueColorShare(int _nColor) {
-        int nRed = _nColor/65536;
         int nRedModulo = _nColor % 65536;
-        int nGreen = nRedModulo / 256;
         int nGreenModulo = (nRedModulo % 256);
         int nBlue = nGreenModulo;
         return nBlue;

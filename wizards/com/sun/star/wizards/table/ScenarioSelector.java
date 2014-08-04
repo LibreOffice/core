@@ -222,7 +222,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
 
     public void addColumnsToDescriptor()
     {
-        XNameAccess xNameAccessFieldNode;
         String[] fieldnames = getSelectedFieldNames();
         for (int i = 0; i < fieldnames.length; i++)
         {
@@ -331,7 +330,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     iduplicate = JavaTools.getDuplicateFieldIndex(NewItems, NewItems[i]);
                     if (iduplicate != -1)
                     {
-                        XNameAccess xNameAccessFieldNode;
                         String sdisplayname = Desktop.getUniqueName(NewItems, NewItems[iduplicate], PropertyNames.EMPTY_STRING);
                         FieldDescription curfielddescription = new FieldDescription(xMSF, aLocale, this, sdisplayname, NewItems[iduplicate], imaxcolumnchars);
                         CurTableWizardUnoDialog.fielditems.put(sdisplayname, curfielddescription);

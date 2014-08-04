@@ -251,7 +251,6 @@ class MyTableModel extends AbstractTableModel {
         data = new ArrayList<ArrayList<Object>>();
         boolean isWindows =
             (System.getProperty("os.name").indexOf("Windows") != -1);
-        int len = validVersions.length;
         for (Enumeration e = properties.propertyNames(); e.hasMoreElements() ;) {
             String key = (String)e.nextElement();
             String path = null;

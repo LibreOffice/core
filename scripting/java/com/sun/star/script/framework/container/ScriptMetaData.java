@@ -341,10 +341,8 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         }
     protected boolean writeSourceFile()
     {
-        String parcelLocation = parent.getPathToParcel();
         String sourceFilePath = parent.getPathToParcel() + "/" + getLanguageName();
         boolean result = false;
-        OutputStream os = null;
         try
         {
             XSimpleFileAccess2 xSFA2 = UnoRuntime.queryInterface( XSimpleFileAccess2.class,

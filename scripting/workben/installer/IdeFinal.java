@@ -76,9 +76,7 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
             ArrayList<?> locations = InstallWizard.getLocations();
             //System.out.println("here "+locations.size());
             // Returned 1
-            String progpath=null;
             String path=null;
-            String classespath=null;
             for (int i =0;i<locations.size();i++){
                 path= (String)locations.get(i);
 

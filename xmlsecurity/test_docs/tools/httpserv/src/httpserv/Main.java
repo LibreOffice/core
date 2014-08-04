@@ -126,7 +126,6 @@ class MyHandler implements HttpHandler {
     public void handle(HttpExchange xchange) throws IOException {
         try {
             //First get the path to the file
-            File fileCurrent = new File(".");
             String sRequestPath = xchange.getRequestURI().getPath();
             System.out.println("requested: " + sRequestPath);
             File fileRequest = new File(new File(".").getCanonicalPath(), sRequestPath);

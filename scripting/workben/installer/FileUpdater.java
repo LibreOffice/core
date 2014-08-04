@@ -25,7 +25,6 @@ public class FileUpdater {
 
     public static boolean updateProtocolHandler( String installPath, JLabel statusLabel ) {
             File in_file = null;
-            FileInputStream in = null;
             File out_file = null;
             FileWriter out = null;
             int count = 0;
@@ -95,7 +94,6 @@ public class FileUpdater {
         public static boolean updateScriptXLC( String installPath, JLabel statusLabel ) {
 
             File in_file = null;
-            FileInputStream in = null;
             File out_file = null;
             FileWriter out = null;
             int count = 0;
@@ -167,7 +165,6 @@ public class FileUpdater {
 
         public static boolean updateDialogXLC( String installPath, JLabel statusLabel ) {
             File in_file = null;
-            FileInputStream in = null;
             File out_file = null;
             FileWriter out = null;
             int count = 0;
@@ -175,7 +172,6 @@ public class FileUpdater {
             //System.out.println( "updateDialogXLC" );
             try {
                 in_file = new File( installPath+File.separator+"user"+File.separator+"basic"+File.separator+"dialog.xlc" );
-                String xmlLine = "";
 
         String[] xmlArray = new String[50];
         try {

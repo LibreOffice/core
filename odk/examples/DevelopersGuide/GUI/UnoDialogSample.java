@@ -859,7 +859,6 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     public static String createUniqueName(XNameAccess _xElementContainer, String _sElementName) {
         boolean bElementexists = true;
         int i = 1;
-        String sIncSuffix = "";
         String BaseName = _sElementName;
         while (bElementexists) {
             bElementexists = _xElementContainer.hasByName(_sElementName);
@@ -1473,9 +1472,6 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
     public void keyReleased(KeyEvent keyEvent) {
-        int i = keyEvent.KeyChar;
-        int n = keyEvent.KeyCode;
-        int m = keyEvent.KeyFunc;
     }
 
     public void keyPressed(KeyEvent keyEvent) {

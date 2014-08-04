@@ -175,14 +175,12 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
     }
 
     public void itemHighlighted(MenuEvent menuEvent) {
-        int i = 0;
     }
 
     public void itemDeactivated(MenuEvent menuEvent) {
-        int i = 0;    }
+    }
 
     public void itemActivated(MenuEvent menuEvent) {
-        int i = 0;
     }
 
 }

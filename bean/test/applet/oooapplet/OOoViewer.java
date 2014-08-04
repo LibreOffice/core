@@ -73,7 +73,6 @@ public class OOoViewer extends Applet {
 //        Class arPropValClass = m_loader.loadClass("[Lcom.sun.star.beans.PropertyValue;");
         Object arProp = Array.newInstance(
             m_loader.loadClass("com.sun.star.beans.PropertyValue"), 1);
-        Class<? extends Object> clazz = arProp.getClass();
 
         Method methLoad = beanClass.getMethod(
             "loadFromURL", new Class[] {
@@ -175,7 +174,6 @@ final class CustomURLClassLoader extends URLClassLoader {
             return result;
         }
 
-        URI uri = null;
         for (URL u : resourcePaths) {
             if (u.getProtocol().startsWith("file")){
                 try {
