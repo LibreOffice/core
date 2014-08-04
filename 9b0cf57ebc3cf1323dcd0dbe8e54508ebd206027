@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_1ac5995a",
+        "filename": "sd/source/ui/remotecontrol/AvahiNetworkService.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-08-04T18:56:50Z",
+      "side": 1,
+      "message": "this one should need a check that threaded_poll !\u003d 0 too? looking at http://avahi.sourcearchive.com/documentation/0.6.23-3/thread-watch_8c-source.html",
+      "revId": "9b0cf57ebc3cf1323dcd0dbe8e54508ebd206027",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
