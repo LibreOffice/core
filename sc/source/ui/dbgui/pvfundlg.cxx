@@ -34,7 +34,7 @@
 #include "scresid.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
-#include "pvfundlg.hrc"
+#include "sc.hrc"
 #include "globstr.hrc"
 #include "dputil.hxx"
 
@@ -758,16 +758,11 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )
 }
 
 ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DPSHOWDETAIL ) ),
-    maFtDims        ( this, ScResId( FT_DIMS ) ),
-    maLbDims        ( this, ScResId( LB_DIMS ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
-
+    ModalDialog     ( pParent, "ShowDetail", "modules/scalc/ui/showdetaildialog.ui" ),
     mrDPObj(rDPObj)
 {
-    FreeResource();
+    get(mpLbDims, "dimsTreeview");
+    get(mpBtnOk, "ok");
 
     ScDPSaveData* pSaveData = rDPObj.GetSaveData();
     long nDimCount = rDPObj.GetDimCount();
@@ -787,27 +782,27 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_u
                     if (pLayoutName)
                         aName = *pLayoutName;
                 }
-                maLbDims.InsertEntry( aName );
+                mpLbDims->InsertEntry( aName );
                 maNameIndexMap.insert(DimNameIndexMap::value_type(aName, nDim));
             }
         }
     }
-    if( maLbDims.GetEntryCount() )
-        maLbDims.SelectEntryPos( 0 );
+    if( mpLbDims->GetEntryCount() )
+        mpLbDims->SelectEntryPos( 0 );
 
-    maLbDims.SetDoubleClickHdl( LINK( this, ScDPShowDetailDlg, DblClickHdl ) );
+    mpLbDims->SetDoubleClickHdl( LINK( this, ScDPShowDetailDlg, DblClickHdl ) );
 }
 
 short ScDPShowDetailDlg::Execute()
 {
-    return maLbDims.GetEntryCount() ? ModalDialog::Execute() : static_cast<short>(RET_CANCEL);
+    return mpLbDims->GetEntryCount() ? ModalDialog::Execute() : static_cast<short>(RET_CANCEL);
 }
 
 OUString ScDPShowDetailDlg::GetDimensionName() const
 {
     // Look up the internal dimension name which may be different from the
     // displayed field name.
-    OUString aSelectedName = maLbDims.GetSelectEntry();
+    OUString aSelectedName = mpLbDims->GetSelectEntry();
     DimNameIndexMap::const_iterator itr = maNameIndexMap.find(aSelectedName);
     if (itr == maNameIndexMap.end())
         // This should never happen!
@@ -820,8 +815,8 @@ OUString ScDPShowDetailDlg::GetDimensionName() const
 
 IMPL_LINK( ScDPShowDetailDlg, DblClickHdl, ListBox*, pLBox )
 {
-    if( pLBox == &maLbDims )
-        maBtnOk.Click();
+    if( pLBox == mpLbDims )
+        mpBtnOk->Click();
     return 0;
 }
 
