@@ -1870,7 +1870,6 @@ AC_ARG_WITH(system-liblangtag,
 AC_ARG_WITH(system-npapi-headers,
     AS_HELP_STRING([--with-system-npapi-headers],
         [Use NPAPI headers provided by system instead of bundled ones. Used in
-         extensions/source/nsplugin (ENABLE_NPAPI_INTO_BROWSER=TRUE) and
          extensions/source/plugin (ENABLE_NPAPI_FROM_BROWSER=TRUE)]),,
     [with_system_npapi_headers="$with_system_headers"]
 )
@@ -9017,8 +9016,7 @@ if test "$with_system_npapi_headers" = "yes"; then
     NPAPI_HEADERS_CFLAGS=$(printf '%s' "$NPAPI_HEADERS_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([internal])
-        dnl ...but will not be built/used unless ENABLE_NPAPI_FROM_BROWSER or
-        dnl ENABLE_NPAPI_INTO_BROWSER is TRUE
+        dnl ...but will not be built/used unless ENABLE_NPAPI_FROM_BROWSER
     SYSTEM_NPAPI_HEADERS=
 fi
 AC_SUBST(NPAPI_HEADERS_CFLAGS)
@@ -9257,21 +9255,6 @@ else
     ENABLE_NPAPI_FROM_BROWSER=
 fi
 AC_SUBST(ENABLE_NPAPI_FROM_BROWSER)
-
-dnl ===================================================================
-dnl Check for NPAPI interface to plug LibreOffice into browser windows
-dnl ===================================================================
-AC_MSG_CHECKING([whether to plug LibreOffice into browser windows])
-if test "$enable_mpl_subset" != yes -a \( "$_os" = WINNT -o "$_os" != Android -a "$_os" != Darwin -a "$_os" != iOS -a \
-        "$enable_headless" != yes -a "$enable_gtk" != no \)
-then
-    AC_MSG_RESULT([yes])
-    ENABLE_NPAPI_INTO_BROWSER=TRUE
-else
-    AC_MSG_RESULT([no])
-    ENABLE_NPAPI_INTO_BROWSER=
-fi
-AC_SUBST(ENABLE_NPAPI_INTO_BROWSER)
 
 AC_MSG_CHECKING([whether to use X11])
 dnl ***************************************

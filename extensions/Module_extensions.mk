@@ -110,22 +110,6 @@ endif
 
 endif # ENABLE_NPAPI_FROM_BROWSER=TRUE
 
-ifeq ($(ENABLE_NPAPI_INTO_BROWSER),TRUE)
-
-$(eval $(call gb_Module_add_targets,extensions,\
-	Executable_nsplugin \
-	Library_npsoplugin \
-	StaticLibrary_npsoenv \
-))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,extensions,\
-	WinResTarget_npsoplugin \
-))
-endif
-
-endif # ENABLE_NPAPI_INTO_BROWSER=TRUE
-
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_OOoSpotlightImporter \
