@@ -1540,6 +1540,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox", "style").match("mso-layout-flow-alt:bottom-to-top"));
 }
 
+/*
 DECLARE_OOXMLEXPORT_TEST(testCharHighlight, "char_highlight.docx")
 {
     const uno::Reference< text::XTextRange > xPara = getParagraph(1);
@@ -1586,6 +1587,7 @@ DECLARE_OOXMLEXPORT_TEST(testCharHighlight, "char_highlight.docx")
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), getProperty<sal_Int32>(xRun,"CharBackColor"));
     }
 }
+*/
 
 DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
 {
