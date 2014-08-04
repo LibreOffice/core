@@ -64,8 +64,6 @@
 using namespace std;
 using namespace ::com::sun::star;
 
-extern int ImplSVMain();
-
 static int* gpnInit = 0;
 static NSMenu* pDockMenu = nil;
 static bool bNoSVMain = true;
