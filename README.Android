@@ -9,7 +9,7 @@ For instructions on how to build for Android, see README.cross.
 
 	Create an AVD in the android UI, don't even try to get
 the data partition size right in the GUI, that is doomed to producing
-and AVD that doesn't work. Instead start it from the console:
+an AVD that doesn't work. Instead start it from the console:
 
 	LD_LIBRARY_PATH=$(pwd)/lib emulator-arm -avd <Name> -partition-size 500
 
