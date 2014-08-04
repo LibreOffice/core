@@ -77,7 +77,6 @@ public class ProtocolHandlerAddon {
         /** The frame where the addon depends on.
          */
         private XFrame m_xFrame;
-        private XStatusListener m_xStatusListener;
 
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.

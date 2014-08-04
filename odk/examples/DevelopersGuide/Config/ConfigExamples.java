@@ -518,7 +518,6 @@ public class ConfigExamples
     public void printRegisteredFilters()
         throws com.sun.star.uno.Exception
     {
-        final String sProviderService = "com.sun.star.configuration.ConfigurationProvider";
         final String sFilterKey = "/org.openoffice.TypeDetection.Filter/Filters";
 
        // browse the configuration, dumping filter information

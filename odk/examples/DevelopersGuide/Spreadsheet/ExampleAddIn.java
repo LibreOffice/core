@@ -118,8 +118,6 @@ public class ExampleAddIn
         static private final String aImplName = _ExampleAddIn.class.getName();
 
         private static final short FUNCTION_INVALID   = -1;
-        private static final short FUNCTION_INCREMENT = 0;
-        private static final short FUNCTION_COUNTER   = 1;
 
         private static final String[] aFunctionNames =
         {

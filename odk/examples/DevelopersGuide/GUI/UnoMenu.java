@@ -44,15 +44,14 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
 
     public static void main(String args[]){
         UnoMenu oUnoMenu = null;
-        XComponent xComponent = null;
         try {
-        XComponentContext xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
-        if(xContext != null )
-            System.out.println("Connected to a running office ...");
-        XMultiComponentFactory xMCF = xContext.getServiceManager();
-        oUnoMenu = new UnoMenu(xContext, xMCF);
-        oUnoMenu.mxTopWindow = oUnoMenu.showTopWindow( new Rectangle(100, 100, 500, 500));   //oUnoDialogSample.m_xWindowPeer,
-        oUnoMenu.addMenuBar(oUnoMenu.mxTopWindow, oUnoMenu);
+            XComponentContext xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            if(xContext != null )
+                System.out.println("Connected to a running office ...");
+            XMultiComponentFactory xMCF = xContext.getServiceManager();
+            oUnoMenu = new UnoMenu(xContext, xMCF);
+            oUnoMenu.mxTopWindow = oUnoMenu.showTopWindow( new Rectangle(100, 100, 500, 500));   //oUnoDialogSample.m_xWindowPeer,
+            oUnoMenu.addMenuBar(oUnoMenu.mxTopWindow, oUnoMenu);
         }catch( Exception ex ) {
             ex.printStackTrace(System.err);
         }

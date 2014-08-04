@@ -248,7 +248,6 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             com.sun.star.container.XEnumeration xPortionEnum = xPortionEA.createEnumeration();
             aText = "";
             // Go through all text portions of a paragraph and construct string.
-            Object nextElement;
             while( xPortionEnum.hasMoreElements() )
             {
                 com.sun.star.text.XTextRange xRange = UnoRuntime.queryInterface(com.sun.star.text.XTextRange.class,
@@ -302,7 +301,6 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         com.sun.star.table.XCellRange xCellRange = null;
         com.sun.star.beans.XPropertySet xPropSet = null;
         com.sun.star.table.CellRangeAddress aRangeAddress = null;
-        String aText;
 
         // Preparation
         setFormula( xSheet, "B5", "First cell" );
@@ -1336,7 +1334,6 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         com.sun.star.beans.XPropertySet xPropSet =
             UnoRuntime.queryInterface(
             com.sun.star.beans.XPropertySet.class, aSettings );
-        AnyConverter aAnyConv = new AnyConverter();
         String[] aEntries = (String[])
                 AnyConverter.toObject(String[].class,
                               xPropSet.getPropertyValue( "UserLists" ));

@@ -63,7 +63,6 @@ public class TextReplace {
 
         try {
             com.sun.star.util.XReplaceDescriptor xReplaceDescr = null;
-            com.sun.star.util.XSearchDescriptor xSearchDescriptor = null;
             com.sun.star.util.XReplaceable xReplaceable = null;
 
             xReplaceable = UnoRuntime.queryInterface(

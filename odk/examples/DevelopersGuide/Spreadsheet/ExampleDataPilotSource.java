@@ -95,14 +95,10 @@ class ExamplePropertySetInfo implements com.sun.star.beans.XPropertySetInfo
 class ExampleMember implements com.sun.star.container.XNamed,
       com.sun.star.beans.XPropertySet
 {
-    private ExampleSettings aSettings;
-    private int nDimension;
     private int nMember;
 
-    public ExampleMember( ExampleSettings aSet, int nDim, int nMbr )
+    public ExampleMember( int nMbr )
     {
-        aSettings = aSet;
-        nDimension = nDim;
         nMember = nMbr;
     }
 
@@ -176,13 +172,11 @@ class ExampleMember implements com.sun.star.container.XNamed,
 class ExampleMembers implements com.sun.star.container.XNameAccess
 {
     private ExampleSettings aSettings;
-    private int nDimension;
     private ExampleMember[] aMembers;
 
-    public ExampleMembers( ExampleSettings aSet, int nDim )
+    public ExampleMembers( ExampleSettings aSet )
     {
         aSettings = aSet;
-        nDimension = nDim;
         aMembers = new ExampleMember[ aSettings.nMemberCount ];
     }
 
@@ -206,7 +200,7 @@ class ExampleMembers implements com.sun.star.container.XNameAccess
             if ( aName.equals( ExampleSettings.getMemberName( i ) ) )
             {
                 if ( aMembers[i] == null )
-                    aMembers[i] = new ExampleMember( aSettings, nDimension, i );
+                    aMembers[i] = new ExampleMember( i );
                 return aMembers[i];
             }
         throw new com.sun.star.container.NoSuchElementException();
@@ -266,7 +260,7 @@ class ExampleLevel implements
     public com.sun.star.container.XNameAccess getMembers()
     {
         if ( aMembers == null )
-            aMembers = new ExampleMembers( aSettings, nDimension );
+            aMembers = new ExampleMembers( aSettings );
         return aMembers;
     }
 

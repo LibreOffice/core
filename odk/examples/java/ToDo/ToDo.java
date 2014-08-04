@@ -94,7 +94,6 @@ public class ToDo {
 
         // Implementation helper variables
         static private final int INT_COLUMN_FEATURE = 0;
-        static private final int INT_COLUMN_COMMENT = 1;
         static private final int INT_COLUMN_NEEDEDDAYS = 2;
         static private final int INT_COLUMN_STARTDATE = 3;
         static private final int INT_COLUMN_START_DAY_OF_WEEK = 4;

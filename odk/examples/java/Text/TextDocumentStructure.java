@@ -86,7 +86,6 @@ public class TextDocumentStructure {
 
             com.sun.star.container.XEnumeration xParagraphEnumeration = null;
             com.sun.star.container.XEnumerationAccess xParaEnumerationAccess = null;
-            com.sun.star.container.XEnumeration xPortionEnumeration = null;
             com.sun.star.container.XEnumeration xTextPortionEnum;
             com.sun.star.text.XTextContent xTextElement = null;
 

@@ -82,7 +82,6 @@ public class GlobalString {
   public static String getMeaningfulLine(BufferedReader outReader, String neglectFirstChars) throws Exception {
     String str;
     boolean isNeglect = true;
-    int i = 0;
     do {
       str = outReader.readLine();
       if (str==null) {

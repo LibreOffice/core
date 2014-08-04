@@ -201,7 +201,6 @@ public class StyleInitialization {
                 xPropertySet = UnoRuntime.queryInterface(
                     com.sun.star.beans.XPropertySet.class, xStyle );
 
-                AnyConverter aAnyConv = new AnyConverter();
                 String sFontname = AnyConverter.toString(xPropertySet.getPropertyValue("CharFontName"));
                 sFontname = sFontname.toLowerCase();
 

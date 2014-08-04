@@ -135,11 +135,7 @@ public class Helper
 
     // __________ private members and methods __________
 
-    private final String  msDataSheetName  = "Data";
-    private final String  msChartSheetName = "Chart";
-    private final String  msChartName      = "SampleChart";
 
     private XComponentContext      maContext;
     private XMultiComponentFactory maMCFactory;
-    private XSpreadsheetDocument   maSpreadSheetDoc;
 }

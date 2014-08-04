@@ -43,11 +43,9 @@ import com.sun.star.uno.Type;
 public class TestComponentB implements XTypeProvider, XServiceInfo, XSomethingB {
     static final String __serviceName= "com.sun.star.test.SomethingB";
 
-    private XComponentContext context;
     private Object[] args;
 
     public TestComponentB(XComponentContext context, Object[] args) {
-        this.context= context;
         this.args= args;
     }
 

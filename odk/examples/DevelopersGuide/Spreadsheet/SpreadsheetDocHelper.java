@@ -49,8 +49,6 @@ public class SpreadsheetDocHelper
 
 // __  private members  ___________________________________________
 
-    private final String  msDataSheetName  = "Data";
-
     private com.sun.star.uno.XComponentContext  mxRemoteContext;
     private com.sun.star.lang.XMultiComponentFactory  mxRemoteServiceManager;
 //    private com.sun.star.lang.XMultiServiceFactory  mxMSFactory;

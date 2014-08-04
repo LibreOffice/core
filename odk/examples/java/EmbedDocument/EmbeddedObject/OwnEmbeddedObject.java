@@ -458,8 +458,6 @@ public final class OwnEmbeddedObject extends WeakBase
                 xStorage.openStorageElement( aEntryName,
                             com.sun.star.embed.ElementModes.READWRITE | com.sun.star.embed.ElementModes.TRUNCATE );
 
-            String aContents = m_aEditorFrame.getText();
-
             SaveDataToStorage( xSubStorage, m_aEditorFrame.getText(), UpdateSizeAndGetFromActive() );
         }
     }

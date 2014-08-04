@@ -83,8 +83,6 @@ public class CalcAddins {
             "getMySecondValue"
         };
 
-        private static final short shortINVALID = -1;
-
 /** TO DO:
  * For each of your methods you should make up a new constant with a different value.
  */

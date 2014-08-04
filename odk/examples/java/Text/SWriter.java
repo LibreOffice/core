@@ -203,8 +203,6 @@ public class SWriter  {
         com.sun.star.beans.XPropertySet xTCPS = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
                                   xTCursor);
 
-        Object oldValue = null;
-
         // Change the CharColor and add a Shadow
         try {
             xTCPS.setPropertyValue("CharColor",new Integer(255));

@@ -124,7 +124,6 @@ public class SDraw  {
         com.sun.star.uno.XComponentContext xContext)
     {
         com.sun.star.frame.XComponentLoader xCLoader;
-        com.sun.star.text.XTextDocument xDoc = null;
         com.sun.star.lang.XComponent xComp = null;
 
         try {
