@@ -102,13 +102,13 @@ public class JoinViewAccessibility extends TestCase {
 
         try
         {
-            ((XMultiServiceFactory) Param.getMSF ())
+            Param.getMSF ()
             .createInstance ("com.sun.star.sdb.DatabaseContext");
-            oDBSource = ((XMultiServiceFactory) Param.getMSF ())
+            oDBSource = Param.getMSF ()
             .createInstance ("com.sun.star.sdb.DataSource");
-            newQuery = ((XMultiServiceFactory) Param.getMSF ())
+            newQuery = Param.getMSF ()
             .createInstance ("com.sun.star.sdb.QueryDefinition");
-            ((XMultiServiceFactory) Param.getMSF ())
+            Param.getMSF ()
             .createInstance ("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e)
         {
@@ -176,7 +176,7 @@ public class JoinViewAccessibility extends TestCase {
             XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, oDBSource);
             store = UnoRuntime.queryInterface(XStorable.class,
                     xDDS.getDatabaseDocument());
-            aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"JoinView.odb";
+            aFile = utils.getOfficeTemp (Param.getMSF ())+"JoinView.odb";
             log.println ("... filename will be "+aFile);
             store.storeAsURL (aFile,new PropertyValue[]
             {});
@@ -312,7 +312,7 @@ public class JoinViewAccessibility extends TestCase {
         loadProps[2].Name = "DataSource";
         loadProps[2].Value = oDBSource;
 
-        QueryComponent = DesktopTools.loadDoc ((XMultiServiceFactory) Param.getMSF (),".component:DB/QueryDesign",loadProps);
+        QueryComponent = DesktopTools.loadDoc (Param.getMSF (),".component:DB/QueryDesign",loadProps);
 
         xWindow = UnoRuntime.queryInterface(XModel.class, QueryComponent).
             getCurrentController().getFrame().getContainerWindow();
@@ -354,7 +354,7 @@ public class JoinViewAccessibility extends TestCase {
             log.println ("closing QueryComponent ...");
             DesktopTools.closeDoc (QueryComponent);
             log.println ("... done");
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF ();
+            XMultiServiceFactory xMSF = Param.getMSF ();
             Object sfa = xMSF.createInstance ("com.sun.star.comp.ucb.SimpleFileAccess");
             XSimpleFileAccess xSFA = UnoRuntime.queryInterface (XSimpleFileAccess.class, sfa);
             log.println ("deleting database file");

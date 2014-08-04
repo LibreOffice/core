@@ -94,7 +94,7 @@ public class AccessibleRadioButton extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
-                                                                (XMultiServiceFactory) Param.getMSF()));
+                                                                Param.getMSF()));
     }
 
     /**
@@ -155,7 +155,7 @@ public class AccessibleRadioButton extends TestCase {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) tParam.getMSF());
+                                     tParam.getMSF());
 
         try {
             log.println("creating a text document");
@@ -180,7 +180,7 @@ public class AccessibleRadioButton extends TestCase {
         XURLTransformer urlTransf = null;
 
         try {
-            XInterface transf = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+            XInterface transf = (XInterface) tParam.getMSF().createInstance(
                                         "com.sun.star.util.URLTransformer");
             urlTransf = UnoRuntime.queryInterface(
                                 XURLTransformer.class, transf);
@@ -206,7 +206,7 @@ public class AccessibleRadioButton extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+            oObj = (XInterface) tParam.getMSF().createInstance(
                            "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");

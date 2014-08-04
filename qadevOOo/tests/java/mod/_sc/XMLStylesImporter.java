@@ -69,7 +69,7 @@ public class XMLStylesImporter extends TestCase {
     * New spreadsheet document created.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -122,7 +122,7 @@ public class XMLStylesImporter extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
+        XMultiServiceFactory xMSF = tParam.getMSF() ;
 
         try {
             oInt = xMSF.createInstance

@@ -49,7 +49,7 @@ public class UnoControlNumericField extends TestCase {
     private static XTextDocument xTextDoc;
 
     protected void initialize(TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         try {
             log.println("creating a textdocument");

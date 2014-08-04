@@ -70,7 +70,7 @@ public class Pump extends TestCase {
         TestParameters Param, PrintWriter log) throws StatusException {
 
         Object oInterface = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oPipe;
 
         // creating an instance of stm.Pump

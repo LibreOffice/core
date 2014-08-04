@@ -89,7 +89,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         try
         {
             XSimpleFileAccess xHelper = UnoRuntime.queryInterface(XSimpleFileAccess.class,
-                ((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.ucb.SimpleFileAccess"));
+                param.getMSF().createInstance("com.sun.star.ucb.SimpleFileAccess"));
 /*            com.sun.star.ucb.XSimpleFileAccess xHelper = (com.sun.star.ucb.XSimpleFileAccess)OfficeConnect.createRemoteInstance(
                 com.sun.star.ucb.XSimpleFileAccess.class,
                 "com.sun.star.ucb.SimpleFileAccess");*/

@@ -105,7 +105,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         props[0].Name = "AutoRefreshArrows";
         props[0].Value = Boolean.FALSE;
         XModel xModel = UnoRuntime.queryInterface(XModel.class, oObj);
-        dispatch(xModel.getCurrentController().getFrame(), (XMultiServiceFactory)tParam.getMSF(), ".uno:AutoRefreshArrows", props);
+        dispatch(xModel.getCurrentController().getFrame(), tParam.getMSF(), ".uno:AutoRefreshArrows", props);
 
         // prepare the sheets
         try {
@@ -133,7 +133,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         props[0].Name = "AutoRefreshArrows";
         props[0].Value = Boolean.TRUE;
         XModel xModel = UnoRuntime.queryInterface(XModel.class, oObj);
-        dispatch(xModel.getCurrentController().getFrame(), (XMultiServiceFactory)tParam.getMSF(), ".uno:AutoRefreshArrows", props);
+        dispatch(xModel.getCurrentController().getFrame(), tParam.getMSF(), ".uno:AutoRefreshArrows", props);
     }
 
     private static boolean maxDelta(int x, int y, int max) {

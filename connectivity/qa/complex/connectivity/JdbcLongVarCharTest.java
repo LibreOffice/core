@@ -64,7 +64,7 @@ public class JdbcLongVarCharTest extends ComplexTestCase
             //prop[0] = new PropertyValue("JavaDriverClass", 0, "com.ingres.jdbc.IngresDriver", PropertyState.DIRECT_VALUE);
 
             // get the remote office component context
-            XMultiServiceFactory xServiceManager = (XMultiServiceFactory) param.getMSF();
+            XMultiServiceFactory xServiceManager = param.getMSF();
             Object x = xServiceManager.createInstance("com.sun.star.sdbc.DriverManager");
             com.sun.star.sdbc.XDriverAccess xDriverAccess = UnoRuntime.queryInterface(XDriverAccess.class, x);
             com.sun.star.sdbc.XDriver xDriver = xDriverAccess.getDriverByURL(url);

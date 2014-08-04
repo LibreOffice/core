@@ -63,7 +63,7 @@ public class ODriver extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).
+            oObj = (XInterface)Param.getMSF().
                 createInstance("com.sun.star.comp.sdbc.ado.ODriver");
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

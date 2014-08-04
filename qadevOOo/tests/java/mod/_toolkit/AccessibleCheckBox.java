@@ -90,7 +90,7 @@ public class AccessibleCheckBox extends TestCase {
      */
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
-        XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory msf = Param.getMSF();
         log.println("Creating text document");
 
         if (xTextDoc == null) {

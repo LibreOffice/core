@@ -69,7 +69,7 @@ public class BridgeFactory extends TestCase {
 
         try {
             oObj = (XInterface)
-                    ((XMultiServiceFactory)Param.getMSF()).createInstance
+                    Param.getMSF().createInstance
                     ("com.sun.star.bridge.BridgeFactory") ;
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;

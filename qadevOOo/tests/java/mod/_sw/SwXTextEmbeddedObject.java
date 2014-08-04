@@ -96,7 +96,7 @@ public class SwXTextEmbeddedObject extends TestCase {
         XInterface oObj = null;
 
         // create testobject here
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
         try {
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {

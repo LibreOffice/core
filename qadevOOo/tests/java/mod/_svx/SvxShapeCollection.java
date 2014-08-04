@@ -55,7 +55,7 @@ public class SvxShapeCollection extends TestCase {
 
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occurs.FAILED
             e.printStackTrace( log );
@@ -103,8 +103,8 @@ public class SvxShapeCollection extends TestCase {
 
         try {
             // adding some shapes for testing.
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
-            Object col = ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+            Object col = tParam.getMSF().createInstance
                 ("com.sun.star.drawing.ShapeCollection");
             XShapes shapes = UnoRuntime.queryInterface
                 (XShapes.class,col);

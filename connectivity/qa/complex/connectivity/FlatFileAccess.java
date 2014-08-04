@@ -57,7 +57,7 @@ public class FlatFileAccess extends ComplexTestCase
 
     public void before() throws Exception
     {
-        m_database = new CsvDatabase( (XMultiServiceFactory)param.getMSF() );
+        m_database = new CsvDatabase( param.getMSF() );
 
         // proper settings
         final XPropertySet dataSourceSettings = m_database.getDataSource().geSettings();

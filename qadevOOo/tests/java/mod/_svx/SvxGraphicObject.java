@@ -105,7 +105,7 @@ public class SvxGraphicObject extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a drawdoc" );
-        xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
+        xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
     }
 
     /**
@@ -157,7 +157,7 @@ public class SvxGraphicObject extends TestCase {
         log.println( "creating a test environment" );
 
         // create testobject here
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
         oShape = SOF.createShape(xDrawDoc,5000,5000,1500,1000,"GraphicObject");
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
         oObj = oShape;

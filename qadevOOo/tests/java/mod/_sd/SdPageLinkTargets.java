@@ -60,7 +60,7 @@ public class SdPageLinkTargets extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
        // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                    (XMultiServiceFactory)Param.getMSF());
+                                    Param.getMSF());
 
         try {
             log.println( "creating a draw document" );
@@ -103,7 +103,7 @@ public class SdPageLinkTargets extends TestCase {
         XInterface oObj = oLTS.getLinks();
 
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                    (XMultiServiceFactory)Param.getMSF());
+                                    Param.getMSF());
         log.println( "inserting some Shapes" );
         XShapes oShapes = UnoRuntime.queryInterface(XShapes.class,the_page);
         XShape oShape =

@@ -19,8 +19,11 @@
 package lib;
 
 import java.util.HashMap;
+
 import util.PropertyName;
+
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XComponentContext;
 
 //import com.sun.star.lang.XMultiServiceFactory;
@@ -279,10 +282,10 @@ public class TestParameters extends HashMap<String,Object> {
     /**
      * @return a XMultiServiceFactory to be used by a test (tests).
      */
-    public Object getMSF() {
+    public XMultiServiceFactory getMSF() {
         Object ret = null;
         ret = get("ServiceFactory");
-        return ret;
+        return (XMultiServiceFactory) ret;
     }
 
     public XComponentContext getComponentContext() {

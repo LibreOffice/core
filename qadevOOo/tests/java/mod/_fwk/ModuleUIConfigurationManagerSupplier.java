@@ -35,7 +35,7 @@ public class ModuleUIConfigurationManagerSupplier extends TestCase{
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+            XMultiServiceFactory xMSF = tParam.getMSF();
             oObj = (XInterface)xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
             tEnv = new TestEnvironment(oObj);
             tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigurationManager",

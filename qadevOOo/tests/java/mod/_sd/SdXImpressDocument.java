@@ -113,7 +113,7 @@ public class SdXImpressDocument extends TestCase {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-            (XMultiServiceFactory) Param.getMSF());
+            Param.getMSF());
 
         try {
             log.println("creating two impress documents");
@@ -175,7 +175,7 @@ public class SdXImpressDocument extends TestCase {
         tEnv.addObjRelation("TOSELECT", aShape);
 
         // create object relation for XPrintJobBroadcaster
-        String fileName = utils.getOfficeTempDirSys((XMultiServiceFactory) Param.getMSF())+"printfile.prt" ;
+        String fileName = utils.getOfficeTempDirSys(Param.getMSF())+"printfile.prt" ;
         File f = new File(fileName);
         if (f.exists()) {
             f.delete();

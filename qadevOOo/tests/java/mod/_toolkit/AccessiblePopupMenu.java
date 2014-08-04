@@ -57,7 +57,7 @@ public class AccessiblePopupMenu extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
-                                                                (XMultiServiceFactory) Param.getMSF()));
+                                                                Param.getMSF()));
     }
 
     /**
@@ -118,14 +118,14 @@ public class AccessiblePopupMenu extends TestCase {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) tParam.getMSF());
+                                     tParam.getMSF());
 
         XInterface toolkit = null;
 
         try {
             log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
-            toolkit = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+            toolkit = (XInterface) tParam.getMSF().createInstance(
                               "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occurs.FAILED
@@ -143,7 +143,7 @@ public class AccessiblePopupMenu extends TestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(
-                                  (XMultiServiceFactory) tParam.getMSF(),
+                                  tParam.getMSF(),
                                   aModel);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

@@ -97,7 +97,7 @@ public class _XTopWindow extends MultiMethodTest {
 
 
     protected void before() {
-        aTextDoc = util.WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
+        aTextDoc = util.WriterTools.createTextDoc(tParam.getMSF());
     }
 
     /**
@@ -164,7 +164,7 @@ public class _XTopWindow extends MultiMethodTest {
 
         try {
             menu = UnoRuntime.queryInterface(XMenuBar.class,
-                ((XMultiServiceFactory)tParam.getMSF()).
+                tParam.getMSF().
                 createInstance("com.sun.star.awt.MenuBar")) ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Can't instanciate MenuBar service") ;

@@ -122,7 +122,7 @@ public class ScModelObj extends TestCase {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) Param.getMSF());
+                                     Param.getMSF());
 
         if (xSpreadsheetDoc != null) {
             XComponent oComp = UnoRuntime.queryInterface(
@@ -211,7 +211,7 @@ public class ScModelObj extends TestCase {
         tEnv.addObjRelation("CONT2", cont2);
 
         // create object relation for XPrintJobBroadcaster
-        String fileName = utils.getOfficeTempDirSys((XMultiServiceFactory) Param.getMSF())+"printfile.prt" ;
+        String fileName = utils.getOfficeTempDirSys(Param.getMSF())+"printfile.prt" ;
         File f = new File(fileName);
         if (f.exists()) {
             f.delete();

@@ -148,7 +148,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
      * Opens new writer document.
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        msf = (XMultiServiceFactory) Param.getMSF();
+        msf = Param.getMSF();
 
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(msf);

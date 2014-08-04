@@ -82,11 +82,11 @@ public class _XImplementationLoader extends MultiMethodTest {
         XRegistryKey key ;
         XSimpleRegistry xReg = null ;
 
-        String tmpDir = util.utils.getOfficeTempDir((XMultiServiceFactory)tParam.getMSF());
+        String tmpDir = util.utils.getOfficeTempDir(tParam.getMSF());
 
         try {
             xReg = RegistryTools.createRegistryService
-                ((XMultiServiceFactory)tParam.getMSF()) ;
+                (tParam.getMSF()) ;
 
             xReg.open(tmpDir + "XImpLoader_tmp.rdb", false, true) ;
 

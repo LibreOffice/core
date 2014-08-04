@@ -135,7 +135,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
         try {
             XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-         ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+         Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -156,7 +156,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
@@ -168,7 +168,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         XDesktop desk = UnoRuntime.queryInterface(
-                XDesktop.class,util.DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
+                XDesktop.class,util.DesktopTools.createDesktop(Param.getMSF()));
         final XWindow win = desk.getCurrentFrame().getComponentWindow();
 
         tEnv.addObjRelation("EventProducer",
@@ -208,7 +208,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");

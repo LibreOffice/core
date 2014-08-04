@@ -62,7 +62,7 @@ public class SvxShapeGroup extends TestCase {
        protected void initialize(TestParameters Param, PrintWriter log) {
 
        // get a soffice factory object
-    SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+    SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
     try {
         log.println( "creating a draw document" );
@@ -99,7 +99,7 @@ public class SvxShapeGroup extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         // get the drawpage of drawing here
         try {

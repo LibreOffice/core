@@ -65,7 +65,7 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
     protected void initialize (TestParameters tParam, PrintWriter log)
     {
         SOfficeFactory SOF = SOfficeFactory.getFactory (
-            (XMultiServiceFactory) tParam.getMSF ());
+            tParam.getMSF ());
 
         try
         {

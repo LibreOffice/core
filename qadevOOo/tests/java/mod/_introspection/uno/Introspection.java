@@ -49,7 +49,7 @@ public class Introspection extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.comp.stoc.Introspection" );
         } catch( com.sun.star.uno.Exception e ) {

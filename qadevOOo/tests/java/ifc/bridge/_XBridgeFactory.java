@@ -146,13 +146,13 @@ public class _XBridgeFactory extends MultiMethodTest {
         // first creating a connection
         try {
             XInterface x = (XInterface)
-                ((XMultiServiceFactory)tParam.getMSF()).createInstance
+                tParam.getMSF().createInstance
                 ("com.sun.star.connection.Connector") ;
 
             XConnector xCntr = UnoRuntime.queryInterface
                 (XConnector.class, x) ;
 
-            x = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            x = (XInterface) tParam.getMSF().createInstance
                 ("com.sun.star.connection.Acceptor") ;
 
             XAcceptor xAccptr = UnoRuntime.queryInterface(

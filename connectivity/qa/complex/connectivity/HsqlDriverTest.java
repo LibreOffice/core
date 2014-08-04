@@ -56,7 +56,7 @@ public class HsqlDriverTest extends ComplexTestCase {
         XDataSource ds = null;
         System.gc();
         try {
-            HsqlDatabase database = new HsqlDatabase( (XMultiServiceFactory)param.getMSF() );
+            HsqlDatabase database = new HsqlDatabase( param.getMSF() );
             ds = database.getDataSource().getXDataSource();
         } catch(Exception ex) {
             throw new RuntimeException("factory: unable to construct data source" );
@@ -98,10 +98,10 @@ public class HsqlDriverTest extends ComplexTestCase {
                 new com.sun.star.beans.PropertyValue("Storage",0,stor,PropertyState.DIRECT_VALUE)
                 ,new com.sun.star.beans.PropertyValue("URL",0,mod.getURL(),PropertyState.DIRECT_VALUE)
             };
-            drv = UnoRuntime.queryInterface(XDriver.class,((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.sdbcx.comp.hsqldb.Driver"));
+            drv = UnoRuntime.queryInterface(XDriver.class,param.getMSF().createInstance("com.sun.star.sdbcx.comp.hsqldb.Driver"));
 
 
-            TestCacheSize test = new TestCacheSize(((XMultiServiceFactory)param.getMSF()),info,drv);
+            TestCacheSize test = new TestCacheSize((param.getMSF()),info,drv);
 
             StopWatch     sw   = new StopWatch();
 
@@ -129,8 +129,8 @@ public class HsqlDriverTest extends ComplexTestCase {
                 new com.sun.star.beans.PropertyValue("JavaDriverClass",0,"org.hsqldb.jdbcDriver",PropertyState.DIRECT_VALUE)
                 ,new com.sun.star.beans.PropertyValue("ParameterNameSubstitution",0, false,PropertyState.DIRECT_VALUE)
             };
-            drv = UnoRuntime.queryInterface(XDriver.class,((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.comp.sdbc.JDBCDriver"));
-            TestCacheSize test = new TestCacheSize(((XMultiServiceFactory)param.getMSF()),info,drv);
+            drv = UnoRuntime.queryInterface(XDriver.class,param.getMSF().createInstance("com.sun.star.comp.sdbc.JDBCDriver"));
+            TestCacheSize test = new TestCacheSize((param.getMSF()),info,drv);
             test.setURL("jdbc:hsqldb:g:\\hsql\\db");
 
 

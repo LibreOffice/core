@@ -104,7 +104,7 @@ public class JobExecutor extends TestCase {
         boolean configured = false;
 
         try {
-            Object obj = ((XMultiServiceFactory)Param.getMSF()).createInstance("test.Job");
+            Object obj = Param.getMSF().createInstance("test.Job");
             serviceRegistered = obj != null;
         } catch(com.sun.star.uno.Exception e) {}
 
@@ -120,7 +120,7 @@ public class JobExecutor extends TestCase {
         XNameAccess jobs = null;
         XNameAccess events = null;
         try {
-            Object obj = ((XMultiServiceFactory)Param.getMSF()).createInstance
+            Object obj = Param.getMSF().createInstance
                 ("com.sun.star.configuration.ConfigurationProvider");
             XMultiServiceFactory xConfigMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, obj);
             PropertyValue[] args = new PropertyValue[1];
@@ -203,9 +203,9 @@ public class JobExecutor extends TestCase {
 
         Object job = null;
         try {
-            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
+            oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.framework.JobExecutor");
-            job = ((XMultiServiceFactory)Param.getMSF()).createInstance("test.Job");
+            job = Param.getMSF().createInstance("test.Job");
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException(

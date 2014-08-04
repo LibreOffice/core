@@ -70,7 +70,7 @@ public class DBContentLoader extends TestCase {
 
         //now get the OButtonControl
         try {
-            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oInterface = Param.getMSF().createInstance
                 ("com.sun.star.sdb.ContentLoader") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");

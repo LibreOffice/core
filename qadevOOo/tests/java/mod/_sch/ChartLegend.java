@@ -81,7 +81,7 @@ public class ChartLegend extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a chartdocument" );

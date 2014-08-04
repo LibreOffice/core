@@ -61,7 +61,7 @@ public class ControlValidation extends complexlib.ComplexTestCase implements com
     /* ------------------------------------------------------------------ */
     public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        m_orb = (XMultiServiceFactory)param.getMSF();
+        m_orb = param.getMSF();
     }
 
     /* ------------------------------------------------------------------ */

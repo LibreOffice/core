@@ -54,7 +54,7 @@ public class SvxUnoTextCursor extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occurs.FAILED
             e.printStackTrace( log );
@@ -98,7 +98,7 @@ public class SvxUnoTextCursor extends TestCase {
         // create testobject here
 
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF()) ;
+            SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF()) ;
             XShape oShape = SOF.createShape
                 (xDrawDoc,5000,3500,7500,5000,"Text");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;

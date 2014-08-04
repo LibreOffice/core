@@ -93,19 +93,19 @@ public class _XLayerHandler extends MultiMethodTest {
             oObj.endNode();
             oObj.endLayer();
 
-            Object LayerParser = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+            Object LayerParser = tParam.getMSF().createInstance(
                                          "com.sun.star.comp.configuration.backend.xml.LayerParser");
 
             XActiveDataSink xSink = UnoRuntime.queryInterface(
                                             XActiveDataSink.class, LayerParser);
-            Object fileacc = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+            Object fileacc = tParam.getMSF().createInstance(
                                      "com.sun.star.comp.ucb.SimpleFileAccess");
             XSimpleFileAccess simpleAccess = UnoRuntime.queryInterface(
                                                      XSimpleFileAccess.class,
                                                      fileacc);
 
             String filename = util.utils.getOfficeTemp(
-                                      (XMultiServiceFactory) tParam.getMSF()) +
+                                      tParam.getMSF()) +
                               "LayerWriter.xcu";
             log.println("Going to parse: " + filename);
 

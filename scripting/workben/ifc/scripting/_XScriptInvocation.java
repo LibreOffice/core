@@ -181,7 +181,7 @@ public class _XScriptInvocation extends MultiMethodTest {
         XSimpleFileAccess access = null;
 
         try {
-            Object fa = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+            Object fa = tParam.getMSF().createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
             access = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
@@ -194,7 +194,7 @@ public class _XScriptInvocation extends MultiMethodTest {
 
     private XModel loadDocument(String name) {
         XModel model = null;
-        SOfficeFactory factory = SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory factory = SOfficeFactory.getFactory(tParam.getMSF());
 
         String fullname = util.utils.getFullTestURL(name);
 

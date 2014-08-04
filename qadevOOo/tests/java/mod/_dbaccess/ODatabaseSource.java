@@ -120,7 +120,7 @@ public class ODatabaseSource extends TestCase {
         Object oInterface = null;
         XMultiServiceFactory xMSF = null ;
 
-        xMSF = (XMultiServiceFactory)Param.getMSF();
+        xMSF = Param.getMSF();
         try{
             oInterface = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
 
@@ -136,7 +136,7 @@ public class ODatabaseSource extends TestCase {
         xDBContextNameServ = UnoRuntime.queryInterface(XNamingService.class, oInterface) ;
 
         // retrieving temp directory for database
-        String tmpDatabaseUrl = utils.getOfficeTempDir((XMultiServiceFactory)Param.getMSF());
+        String tmpDatabaseUrl = utils.getOfficeTempDir(Param.getMSF());
 
         tmpDatabaseUrl = "sdbc:dbase:file:///" + tmpDatabaseUrl ;
 
@@ -187,7 +187,7 @@ public class ODatabaseSource extends TestCase {
 
         // registering source in DatabaseContext
         XStorable store = UnoRuntime.queryInterface(XStorable.class, xDBDoc);
-        String aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"DataSource.odb";
+        String aFile = utils.getOfficeTemp (Param.getMSF ())+"DataSource.odb";
         try{
             store.storeAsURL(aFile,new PropertyValue[]{});
         } catch (IOException e){
@@ -210,7 +210,7 @@ public class ODatabaseSource extends TestCase {
         // adding obj relation for interface XCompletedConnection
         Object handler = null ;
         try {
-            handler = ((XMultiServiceFactory)Param.getMSF()).createInstance
+            handler = Param.getMSF().createInstance
                 ("com.sun.star.sdb.InteractionHandler") ;
         } catch (Exception e) {
             log.println("Relation for XCompletedConnection wasn't created") ;

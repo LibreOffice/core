@@ -126,7 +126,7 @@ public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
         XCachedDynamicResultSetFactory setFac = null ;
 
         try {
-            Object fac = ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            Object fac = tParam.getMSF().createInstance
                 ("com.sun.star.ucb.CachedDynamicResultSetFactory") ;
 
             setFac = UnoRuntime.queryInterface

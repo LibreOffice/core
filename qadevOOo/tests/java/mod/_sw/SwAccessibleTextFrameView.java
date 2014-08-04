@@ -79,7 +79,7 @@ public class SwAccessibleTextFrameView extends TestCase {
         XTextCursor oCursor = null;
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         // creating Frames
         log.println( "creating Frames" );
         try {
@@ -103,7 +103,7 @@ public class SwAccessibleTextFrameView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT_FRAME);
@@ -166,7 +166,7 @@ public class SwAccessibleTextFrameView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
     }
 }
 

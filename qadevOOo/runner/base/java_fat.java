@@ -133,7 +133,7 @@ public class java_fat implements TestBase
                 }
                 firstRun = false;
 
-                XMultiServiceFactory msf = (XMultiServiceFactory) m_aParams.getMSF();
+                XMultiServiceFactory msf = m_aParams.getMSF();
 
                 if (msf == null)
                 {

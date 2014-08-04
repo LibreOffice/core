@@ -72,7 +72,7 @@ public class SwXAutoTextEntry extends TestCase {
      * Creates text document.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        XMultiServiceFactory msf = (XMultiServiceFactory) tParam.getMSF();
+        XMultiServiceFactory msf = tParam.getMSF();
         SOfficeFactory SOF = SOfficeFactory.getFactory( msf );
         try {
             log.println( "creating a textdocument" );
@@ -124,7 +124,7 @@ public class SwXAutoTextEntry extends TestCase {
         XInterface oObj = null;
         log.println( "creating a test environment" );
         try {
-            XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory myMSF = Param.getMSF();
             Object oInst = myMSF.createInstance
                     ("com.sun.star.text.AutoTextContainer");
             oContainer = UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);

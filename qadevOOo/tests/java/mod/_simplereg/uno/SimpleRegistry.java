@@ -110,14 +110,14 @@ public class SimpleRegistry extends TestCase {
         XInterface oObj = null;
         Object oInterface = null;
         final String tmpDir = utils.getOfficeTempDirSys(
-                                (XMultiServiceFactory)Param.getMSF()) ;
+                                Param.getMSF()) ;
         final String openF = "XSimpleRegistry_open.rdb" ;
         final String destroyF = "XSimpleRegistry_destroy.rdb" ;
         final String mergeF = "XSimpleRegistry_merge.rdb" ;
 
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.registry.SimpleRegistry" );
         } catch( com.sun.star.uno.Exception e ) {

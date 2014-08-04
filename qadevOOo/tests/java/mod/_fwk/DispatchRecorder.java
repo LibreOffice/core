@@ -74,7 +74,7 @@ public class DispatchRecorder extends TestCase {
         XDispatchRecorder xDR = null;
 
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
             oDoc = SOF.createTextDoc(null);
             try {
                 Thread.sleep(1000);
@@ -93,7 +93,7 @@ public class DispatchRecorder extends TestCase {
                           xFramePS.getPropertyValue("DispatchRecorderSupplier"));
             if (xDRS == null) {
 
-                Object oDRS = ((XMultiServiceFactory)Param.getMSF()).createInstance(
+                Object oDRS = Param.getMSF().createInstance(
                     "com.sun.star.comp.framework.DispatchRecorderSupplier");
                 xFramePS.setPropertyValue("DispatchRecorderSupplier", oDRS);
                 xDRS = UnoRuntime.queryInterface(XDispatchRecorderSupplier.class,oDRS);
@@ -103,7 +103,7 @@ public class DispatchRecorder extends TestCase {
             if (xDR != null) {
                 oObj = xDR;
             } else {
-                oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
+                oObj = (XInterface)Param.getMSF().createInstance(
                     "com.sun.star.comp.framework.DispatchRecorder");
                 xDR = UnoRuntime.queryInterface
                     (XDispatchRecorder.class, oObj);
@@ -115,7 +115,7 @@ public class DispatchRecorder extends TestCase {
 
 
         // fill recorder with content. It's needed for XIndexReplace
-        URL dispURL = utils.parseURL((XMultiServiceFactory) Param.getMSF(), ".uno:InsertDateField");
+        URL dispURL = utils.parseURL(Param.getMSF(), ".uno:InsertDateField");
         PropertyValue prop = new PropertyValue();
         prop.Name = "Text";
         prop.Value = "XDispatchRecorder.recordDispatch()";
@@ -140,7 +140,7 @@ public class DispatchRecorder extends TestCase {
         for (int n = 1; n < (THRCNT + 1); n++) {
             log.println("adding INSTANCE" + n +
                         " as obj relation to environment");
-            instanceURL = utils.parseURL((XMultiServiceFactory) Param.getMSF(), ".uno:InsertText");
+            instanceURL = utils.parseURL(Param.getMSF(), ".uno:InsertText");
             dispProp.Name = "Text";
             dispProp.Value = "Instance " + n;
             dispArgs = new PropertyValue[] {dispProp};

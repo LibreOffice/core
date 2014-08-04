@@ -50,7 +50,7 @@ public class ScDrawPageObj extends TestCase {
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a sheetdocument" );
@@ -110,7 +110,7 @@ public class ScDrawPageObj extends TestCase {
             oObj = (XDrawPage) AnyConverter.toObject(
                     new Type(XDrawPage.class),oDP.getByIndex(0));
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
             oShape = SOF.createShape(xComp,5000,3500,7500,5000,"Rectangle");
             DrawTools.getShapes((XDrawPage) oObj).add(oShape);

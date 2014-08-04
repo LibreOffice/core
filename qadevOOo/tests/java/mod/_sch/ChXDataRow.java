@@ -79,7 +79,7 @@ public class ChXDataRow extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a chartdocument" );
@@ -140,7 +140,7 @@ public class ChXDataRow extends TestCase {
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         Object line = SOF.createDiagram(xChartDoc,"XYDiagram");
         tEnv.addObjRelation("LINE",line);

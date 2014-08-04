@@ -56,7 +56,7 @@ public class SmModel extends TestCase {
             ( TestParameters Param, PrintWriter log )
             throws StatusException {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         try {
             xMathDoc = SOF.openDoc("smath","_blank");
         } catch (com.sun.star.lang.IllegalArgumentException ex) {

@@ -79,7 +79,7 @@ public class AccessibleTabBar extends TestCase {
             closeDoc(xDoc);
         }
 
-        XMultiServiceFactory msf = (XMultiServiceFactory) tParam.getMSF();
+        XMultiServiceFactory msf = tParam.getMSF();
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(msf);

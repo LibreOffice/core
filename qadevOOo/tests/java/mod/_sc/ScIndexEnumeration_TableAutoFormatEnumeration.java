@@ -41,7 +41,7 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -70,7 +70,7 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
         try {
             // creation of testobject here
             // get AutoFormats
-            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance
+            oObj = (XInterface)Param.getMSF().createInstance
                 ("com.sun.star.sheet.TableAutoFormats");
 
             XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);

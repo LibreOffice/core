@@ -84,7 +84,7 @@ public class SdUnoOutlineView extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(
             XDesktop.class, DesktopTools.createDesktop(
-                                (XMultiServiceFactory)Param.getMSF()) );
+                                Param.getMSF()) );
     }
 
     /**
@@ -130,7 +130,7 @@ public class SdUnoOutlineView extends TestCase {
         log.println( "creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         try {
             log.println( "creating a impress document" );
@@ -154,7 +154,7 @@ public class SdUnoOutlineView extends TestCase {
             String aSlotID = "slot:27010";
             XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, oObj );
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-      ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+      Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();

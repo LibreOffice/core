@@ -40,7 +40,7 @@ public class UnoControlGroupBoxModel extends TestCase {
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a textdocument");
         xTextDoc = WriterTools.createTextDoc(
-                           (XMultiServiceFactory) tParam.getMSF());
+                           tParam.getMSF());
     }
 
     /**
@@ -57,7 +57,7 @@ public class UnoControlGroupBoxModel extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+            oObj = (XInterface) Param.getMSF().createInstance(
                            "com.sun.star.awt.UnoControlGroupBoxModel");
         } catch (Exception e) {
         }

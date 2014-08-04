@@ -71,7 +71,7 @@ public class AccessibleBrowseBoxTable extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(XDesktop.class,
             DesktopTools.createDesktop(
-            (XMultiServiceFactory)Param.getMSF()));
+            Param.getMSF()));
     }
 
     /**
@@ -119,7 +119,7 @@ public class AccessibleBrowseBoxTable extends TestCase {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-            (XMultiServiceFactory)tParam.getMSF());
+            tParam.getMSF());
 
         try {
             log.println("creating a text document");

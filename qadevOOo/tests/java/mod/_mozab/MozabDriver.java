@@ -63,7 +63,7 @@ public class MozabDriver extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).
+            oObj = (XInterface)Param.getMSF().
                 createInstance("com.sun.star.comp.sdbc.MozabDriver");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException(Status.failed("Couldn't create object"));

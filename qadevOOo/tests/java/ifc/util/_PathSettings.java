@@ -71,7 +71,7 @@ public class _PathSettings extends MultiPropertyTest {
                 if (path.length() > 0 && !path.endsWith(";")) {
                     path += ";";
                 }
-                path += utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+                path += utils.getOfficeTemp(tParam.getMSF());
                 return path;
             }
         });

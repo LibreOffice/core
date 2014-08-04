@@ -65,7 +65,7 @@ public class SfxMacroLoader extends TestCase {
 
         //now get the OButtonControl
         try {
-            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oInterface = Param.getMSF().createInstance
                                 ("com.sun.star.comp.sfx2.SfxMacroLoader");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
@@ -88,7 +88,7 @@ public class SfxMacroLoader extends TestCase {
         // adding relation for XFrameLoader
         tEnv.addObjRelation("XDispatchProvider.URL",
             "macro:tools.UCB.CreateFolder(\"" +
-            utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF()) + "/SfxMacroLoader\")") ;
+            utils.getOfficeTemp(Param.getMSF()) + "/SfxMacroLoader\")") ;
 
 
         return tEnv;

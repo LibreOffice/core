@@ -34,7 +34,7 @@ public class InetTools {
      * <code>lib.TestParameters</code>
      */
     public static boolean setHTTPProxy(TestParameters param){
-        XMultiServiceFactory xMSF = (XMultiServiceFactory) param.getMSF();
+        XMultiServiceFactory xMSF = param.getMSF();
         PropertyValue[] ProvArgs = new PropertyValue[1];
         PropertyValue Arg = new PropertyValue();
         Arg.Name = "nodepath";

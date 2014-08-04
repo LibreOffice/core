@@ -50,7 +50,7 @@ public class DispatchRecorderSupplier extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
+            oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.framework.DispatchRecorderSupplier");
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

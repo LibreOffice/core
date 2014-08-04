@@ -55,7 +55,7 @@ public class SortedDynamicResultSetFactory extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+            XMultiServiceFactory xMSF = tParam.getMSF();
             oInterface = xMSF.createInstance(
                     "com.sun.star.ucb.SortedDynamicResultSetFactory");
         }

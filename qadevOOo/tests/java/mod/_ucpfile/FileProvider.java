@@ -39,7 +39,7 @@ public class FileProvider extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.comp.ucb.FileProvider" );
         } catch( com.sun.star.uno.Exception e ) {
@@ -58,7 +58,7 @@ public class FileProvider extends TestCase {
         //Adding ObjRelation for XContentProvider
         tEnv.addObjRelation("FACTORY",CIF);
         tEnv.addObjRelation("CONTENT1",
-            util.utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF()));
+            util.utils.getOfficeTemp(Param.getMSF()));
         tEnv.addObjRelation("CONTENT2",
             util.utils.getFullTestURL("SwXTextEmbeddedObject.sdw"));
 

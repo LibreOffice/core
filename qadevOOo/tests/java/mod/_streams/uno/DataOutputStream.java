@@ -82,7 +82,7 @@ public class DataOutputStream extends TestCase {
         XMultiServiceFactory xMSF = null ;
 
         try {
-            xMSF = (XMultiServiceFactory)Param.getMSF();
+            xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
                 ("com.sun.star.io.DataOutputStream");
             oPipe = (XInterface)xMSF.createInstance("com.sun.star.io.Pipe");

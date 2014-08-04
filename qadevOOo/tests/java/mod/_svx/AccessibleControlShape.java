@@ -47,7 +47,7 @@ public class AccessibleControlShape extends TestCase {
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a drawdoc" );
@@ -81,7 +81,7 @@ public class AccessibleControlShape extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
         utils.shortWait(5000);
-        XWindow xWindow = AccessibilityTools.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow (tParam.getMSF(),aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);

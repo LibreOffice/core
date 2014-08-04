@@ -59,7 +59,7 @@ public class ScSpreadsheetSettings extends TestCase {
 
         // create testobject here
         try {
-            oObj = (XInterface)((XMultiServiceFactory)tParam.getMSF()).
+            oObj = (XInterface)tParam.getMSF().
                 createInstance("com.sun.star.sheet.GlobalSheetSettings");
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

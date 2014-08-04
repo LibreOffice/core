@@ -70,7 +70,7 @@ public class Frame extends TestCase {
         log.println( "creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         try {
             log.println( "creating a text document" );

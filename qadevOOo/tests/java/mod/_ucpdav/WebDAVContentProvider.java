@@ -42,7 +42,7 @@ public class WebDAVContentProvider extends TestCase {
      */
     public TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
         XInterface xInt;
 
         log.println("creating WebDAVContentProvider instance");

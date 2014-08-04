@@ -80,7 +80,7 @@ public class UnoControlDialogModel extends TestCase {
         XMultiServiceFactory xMultiServiceFactory = null;
 
         try {
-            dialogModel = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+            dialogModel = (XInterface) Param.getMSF().createInstance(
                                   "com.sun.star.awt.UnoControlDialogModel");
 
             // create the dialog model and set the properties
@@ -133,7 +133,7 @@ public class UnoControlDialogModel extends TestCase {
             // create the dialog control and set the model
             XControl dialog = UnoRuntime.queryInterface(
                                       XControl.class,
-                                      ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                                      Param.getMSF().createInstance(
                                               "com.sun.star.awt.UnoControlDialog"));
             XControl xControl = UnoRuntime.queryInterface(
                                         XControl.class, dialog);

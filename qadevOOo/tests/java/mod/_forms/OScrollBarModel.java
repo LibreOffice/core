@@ -42,7 +42,7 @@ public class OScrollBarModel extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
+        xTextDoc = WriterTools.createTextDoc((tParam.getMSF()));
     }
 
     /**

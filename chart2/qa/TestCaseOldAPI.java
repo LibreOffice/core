@@ -947,7 +947,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         {
             XComponentLoader aLoader = UnoRuntime.queryInterface(
                 XComponentLoader.class,
-                ((XMultiServiceFactory)param.getMSF()).createInstance( "com.sun.star.frame.Desktop" ) );
+                param.getMSF().createInstance( "com.sun.star.frame.Desktop" ) );
 
             aResult = UnoRuntime.queryInterface(
                 XModel.class,
@@ -974,7 +974,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         {
             aResult = UnoRuntime.queryInterface(
                 XModel.class,
-                ((XMultiServiceFactory)param.getMSF()).createInstance( "com.sun.star.comp.chart2.ChartModel" ) );
+                param.getMSF().createInstance( "com.sun.star.comp.chart2.ChartModel" ) );
         }
         catch( Exception ex )
         {

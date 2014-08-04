@@ -52,7 +52,7 @@ public class SwXTextGraphicObjects extends TestCase {
      *
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
             log.println( "creating a textdoc" );
             xTextDoc = SOF.createTextDoc( null );
@@ -97,7 +97,7 @@ public class SwXTextGraphicObjects extends TestCase {
 
         XInterface oObj = null;
         Object oGObject = null;
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             oGObject = SOF.createInstance

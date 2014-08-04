@@ -77,7 +77,7 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
         log.println("try to open contex menu...");
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)tParam.getMSF(), docModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(tParam.getMSF(), docModel);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

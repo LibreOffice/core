@@ -47,7 +47,7 @@ public class AccessibleGraphicShape extends TestCase {
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a drawdoc" );
@@ -78,7 +78,7 @@ public class AccessibleGraphicShape extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
         final XShape oShape = SOF.createShape(xDrawDoc,
             5000,5000,1500,1000,"GraphicObject");
 
@@ -87,7 +87,7 @@ public class AccessibleGraphicShape extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow (tParam.getMSF(),aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
 

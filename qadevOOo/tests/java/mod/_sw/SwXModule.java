@@ -56,7 +56,7 @@ public class SwXModule extends TestCase {
         Object oInterface = null;
 
         try {
-            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance(
+            oInterface = Param.getMSF().createInstance(
                 "com.sun.star.text.GlobalSettings" );
         } catch ( com.sun.star.uno.Exception e ) {
             log.println("Service not available" );

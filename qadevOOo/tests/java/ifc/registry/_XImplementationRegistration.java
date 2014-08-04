@@ -71,10 +71,10 @@ public class _XImplementationRegistration extends MultiMethodTest {
         String name = null;
 
         try {
-            name = utils.getOfficeTempDir((XMultiServiceFactory)tParam.getMSF()) +
+            name = utils.getOfficeTempDir(tParam.getMSF()) +
                 "XImplementationRegistration_tmp.rdb";
             reg = RegistryTools.openRegistry
-                (name, (XMultiServiceFactory)tParam.getMSF()) ;
+                (name, tParam.getMSF()) ;
 
             oObj.registerImplementation(loader, url, reg) ;
 

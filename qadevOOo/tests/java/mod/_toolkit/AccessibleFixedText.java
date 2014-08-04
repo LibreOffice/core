@@ -76,7 +76,7 @@ public class AccessibleFixedText extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         XControlModel dlgModel = null;
 
         XControl txtControl = null;
@@ -128,7 +128,7 @@ public class AccessibleFixedText extends TestCase {
         }
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+            oObj = (XInterface) Param.getMSF().createInstance(
                            "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");

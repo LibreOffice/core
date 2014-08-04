@@ -130,7 +130,7 @@ public class _XStorable extends MultiMethodTest {
     public void _storeAsURL() {
         // getting an url to store
         String url = utils.getOfficeTemp(
-                                (XMultiServiceFactory)tParam.getMSF());
+                                tParam.getMSF());
 
         if (url != null) {
             url += "xstorable.store.as.test";
@@ -158,7 +158,7 @@ public class _XStorable extends MultiMethodTest {
     public void _storeToURL() {
         // getting an url to store
         String url = utils.getOfficeTemp(
-                                (XMultiServiceFactory)tParam.getMSF());
+                                tParam.getMSF());
 
         if (url != null) {
             url += "xstorable.store.as.test";

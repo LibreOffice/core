@@ -82,7 +82,7 @@ public class AccessibleMenu extends TestCase {
      */
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
-        XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory msf = Param.getMSF();
 
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(msf);

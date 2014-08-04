@@ -80,7 +80,7 @@ public class ScIndexEnumeration_DataPilotItemsEnumeration
     */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) tParam.getMSF());
+                                     tParam.getMSF());
 
         try {
             log.println("creating a Spreadsheet document");

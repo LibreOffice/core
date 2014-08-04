@@ -93,7 +93,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        m_orb = (XMultiServiceFactory)param.getMSF();
+        m_orb = param.getMSF();
         m_document = new SpreadsheetDocument( m_orb );
         m_formLayer = new FormLayer( m_document );
     }

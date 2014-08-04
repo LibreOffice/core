@@ -40,7 +40,7 @@ public class HierarchyContentProvider extends TestCase {
         Object ucb = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.comp.ucb.HierarchyContentProvider" );
             ucb = xMSF.createInstance

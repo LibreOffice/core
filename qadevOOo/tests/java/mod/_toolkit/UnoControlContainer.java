@@ -59,9 +59,9 @@ public class UnoControlContainer extends TestCase {
         try {
             log.println("creating a textdocument");
             xTD2 = WriterTools.createTextDoc(
-                           (XMultiServiceFactory) param.getMSF());
+                           param.getMSF());
             xTextDoc = WriterTools.createTextDoc(
-                               (XMultiServiceFactory) param.getMSF());
+                               param.getMSF());
         } catch (Exception e) {
             // Some exception occurs.FAILED
             e.printStackTrace(log);
@@ -184,7 +184,7 @@ public class UnoControlContainer extends TestCase {
         // finished create Object Relations -----------------------------------
         // create the UnoControlContainer
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) param.getMSF()).createInstance(
+            oObj = (XInterface) param.getMSF().createInstance(
                            "com.sun.star.awt.UnoControlContainer");
 
             XControl xCtrl = UnoRuntime.queryInterface(

@@ -91,7 +91,7 @@ public class DrawController_HandoutView extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(
             XDesktop.class, DesktopTools.createDesktop(
-                                (XMultiServiceFactory)Param.getMSF()) );
+                                Param.getMSF()) );
     }
 
     /**
@@ -147,7 +147,7 @@ public class DrawController_HandoutView extends TestCase {
             (TestParameters Param, PrintWriter log) {
 
         log.println( "creating a test environment" );
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(xMSF);
 

@@ -54,7 +54,7 @@ public class ChartLine extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a chartdocument" );
@@ -92,7 +92,7 @@ public class ChartLine extends TestCase {
         SOfficeFactory SOF = null;
 
         //get LineDiagram
-        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOF = SOfficeFactory.getFactory( Param.getMSF());
         oDiagram = SOF.createDiagram(xChartDoc, "LineDiagram");
 
         log.println( "getting Line-Diagram" );

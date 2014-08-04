@@ -42,7 +42,7 @@ public class DocumentSettings extends TestCase
     {
         log.println("    opening xTextDoc ");
         xTextDoc =
-            WriterTools.createTextDoc((XMultiServiceFactory) tParam.getMSF());
+            WriterTools.createTextDoc(tParam.getMSF());
     }
 
     /**
@@ -59,7 +59,7 @@ public class DocumentSettings extends TestCase
     )
     {
         SOfficeFactory SOF =
-            SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
+            SOfficeFactory.getFactory(tParam.getMSF());
         XInterface oObj = null;
 
         log.println("creating a test environment");

@@ -59,7 +59,7 @@ public class SwXPropertySet extends TestCase {
             TestParameters Param, PrintWriter log ) throws StatusException {
 
         log.println( "creating a test environment" );
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         try {
             log.println( "creating a text document" );
             xTextDoc = SOF.createTextDoc( null );

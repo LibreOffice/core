@@ -69,7 +69,7 @@ public class UnoControlProgressBarModel extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+            oObj = (XInterface) Param.getMSF().createInstance(
                            "com.sun.star.awt.UnoControlProgressBarModel");
         } catch (Exception e) {
         }

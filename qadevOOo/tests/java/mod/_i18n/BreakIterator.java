@@ -56,7 +56,7 @@ public class BreakIterator extends TestCase {
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a drawdoc" );
@@ -80,7 +80,7 @@ public class BreakIterator extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance( "com.sun.star.i18n.BreakIterator" );
         }
         catch( com.sun.star.uno.Exception e ) {

@@ -105,7 +105,7 @@ public class ScCellCursorObj extends TestCase {
     */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) tParam.getMSF());
+                                     tParam.getMSF());
 
         try {
             log.println("creating a Spreadsheet document");

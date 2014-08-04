@@ -63,7 +63,7 @@ public class NamingService extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.uno.NamingService" );
         }
@@ -79,7 +79,7 @@ public class NamingService extends TestCase {
         // objRelation for XNamingService as object to be registered
         try {
             tEnv.addObjRelation("XNamingService.RegisterObject",
-                ((XMultiServiceFactory)Param.getMSF()).createInstance
+                Param.getMSF().createInstance
                 ("com.sun.star.lang.ServiceManager")) ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Can't create object relation") ;

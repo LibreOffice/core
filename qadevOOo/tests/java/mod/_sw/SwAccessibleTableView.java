@@ -71,7 +71,7 @@ public class SwAccessibleTableView extends TestCase {
         XInterface oObj = null;
         XTextTable oTable = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
         try {
             oTable = SOfficeFactory.createTextTable( xTextDoc );
         } catch ( com.sun.star.uno.Exception e ) {
@@ -92,7 +92,7 @@ public class SwAccessibleTableView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
@@ -154,7 +154,7 @@ public class SwAccessibleTableView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
     }
 }
 

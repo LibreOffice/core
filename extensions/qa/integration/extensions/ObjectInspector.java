@@ -58,7 +58,7 @@ public class ObjectInspector extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        m_orb = (XMultiServiceFactory)param.getMSF();
+        m_orb = param.getMSF();
         m_context = UnoRuntime.queryInterface( XComponentContext.class,
                 UnoRuntime.queryInterface( XPropertySet.class, m_orb ).getPropertyValue( "DefaultContext" ) );
         m_desktop = new Frame( m_orb.createInstance( "com.sun.star.frame.Desktop" ) );

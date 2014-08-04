@@ -97,7 +97,7 @@ public class ScHeaderFooterTextCursor extends TestCase {
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );

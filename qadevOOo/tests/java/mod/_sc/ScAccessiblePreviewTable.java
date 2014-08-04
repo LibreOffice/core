@@ -84,7 +84,7 @@ public class ScAccessiblePreviewTable extends TestCase {
      * Creates a spreadsheet document.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
             log.println( "creating a Spreadsheet document" );
             xSheetDoc = SOF.createCalcDoc(null);
@@ -147,7 +147,7 @@ public class ScAccessiblePreviewTable extends TestCase {
         try {
             XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-         ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+         Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
             aParseURL[0].Complete = ".uno:PrintPreview";
@@ -172,7 +172,7 @@ public class ScAccessiblePreviewTable extends TestCase {
             try {
                 xRoot = AccessibilityTools.getAccessibleObject(
                     AccessibilityTools.getCurrentContainerWindow(
-                        (XMultiServiceFactory)Param.getMSF(), xModel));
+                        Param.getMSF(), xModel));
                 if (xRoot != null) {
                     oObj = AccessibilityTools.getAccessibleObjectForRole(
                         xRoot, AccessibleRole.TABLE);

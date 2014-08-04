@@ -65,7 +65,7 @@ public class XMLImporter extends TestCase {
     * New text document created.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -106,7 +106,7 @@ public class XMLImporter extends TestCase {
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters tParam, PrintWriter log) {
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
+        XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
 
         try {

@@ -82,7 +82,7 @@ public class SvxShapeConnector extends TestCase {
 
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occurs.FAILED
             e.printStackTrace( log );
@@ -145,7 +145,7 @@ public class SvxShapeConnector extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
         oShape = SOF.createShape(xDrawDoc,3000,4500,15000,1000,"Ellipse");
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 

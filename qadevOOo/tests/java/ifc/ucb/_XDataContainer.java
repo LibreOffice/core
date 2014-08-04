@@ -103,7 +103,7 @@ public class _XDataContainer extends MultiMethodTest {
     * Has <b>OK</b> status if no runtime exseptions occurred.
     */
     public void _setDataURL() {
-        dataURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
+        dataURL = util.utils.getOfficeTemp(tParam.getMSF()) ;
         oObj.setDataURL(dataURL) ;
         tRes.tested("setDataURL()", true) ;
     }

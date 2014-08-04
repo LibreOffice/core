@@ -77,7 +77,7 @@ public class ObjectInputStream extends TestCase {
     * @see com.sun.star.cmp.PersistObject
     */
     public void initialize(TestParameters tParam, PrintWriter log) {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
         Object oPersObj = null;
         // test first if object is already registered
         try {
@@ -170,7 +170,7 @@ public class ObjectInputStream extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         System.out.println("create TestEnvironment started.");
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         Object ostream = null;
         Object aPipe = null;
         Object mostream = null;

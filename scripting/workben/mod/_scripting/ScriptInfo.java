@@ -69,7 +69,7 @@ public class ScriptInfo extends TestCase {
         XInterface oObj = null;
         XSimpleFileAccess access = null;
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory) tParam.getMSF();
+            XMultiServiceFactory xMSF = tParam.getMSF();
             Object xInterface =
                 xMSF.createInstance( "com.sun.star.ucb.SimpleFileAccess" );
             access = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );

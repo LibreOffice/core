@@ -47,7 +47,7 @@ public class SwXTextFrame extends TestCase {
     XTextDocument xTextDoc;
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println("creating a textdocument");
@@ -82,7 +82,7 @@ public class SwXTextFrame extends TestCase {
         log.println("creating a test environment");
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
 
         // creating Frames

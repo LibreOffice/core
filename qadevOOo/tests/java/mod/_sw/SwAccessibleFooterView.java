@@ -129,7 +129,7 @@ public class SwAccessibleFooterView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.FOOTER);
@@ -178,7 +178,7 @@ public class SwAccessibleFooterView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
     }
 
 }

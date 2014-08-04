@@ -204,7 +204,7 @@ public class TypeDetection extends ComplexTestCase {
     public void before() throws Exception {
 
         // create TypeDetection
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
+        XMultiServiceFactory xMSF = param.getMSF();
         assure("Could not get XMultiServiceFactory", xMSF != null);
 
         Object oInterface = xMSF.createInstance(

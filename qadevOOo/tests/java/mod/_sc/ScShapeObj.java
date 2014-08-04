@@ -39,7 +39,7 @@ public class ScShapeObj extends TestCase {
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a sheetdoc" );
@@ -85,7 +85,7 @@ public class ScShapeObj extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
         oShape = SOF.createShape(xSheetDoc,5000, 3500, 7500, 5000,"Rectangle");
         DrawTools.getShapes(DrawTools.getDrawPage(xSheetDoc,0)).add(oShape);
         oObj = oShape ;

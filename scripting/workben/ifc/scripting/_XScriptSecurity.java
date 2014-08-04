@@ -145,7 +145,7 @@ public class _XScriptSecurity extends MultiMethodTest {
             {
                 checkBox = true;
             }
-            new SecurityDialogUtil( (XMultiServiceFactory) tParam.getMSF(), buttonName, checkBox ).start();
+            new SecurityDialogUtil( tParam.getMSF(), buttonName, checkBox ).start();
         }
         // need to set up dialog utils thread first
         int storageId = getStorageId(location);
@@ -200,7 +200,7 @@ public class _XScriptSecurity extends MultiMethodTest {
     {
         String result = "";
         try {
-        Object oProv = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+        Object oProv = tParam.getMSF().createInstance(
             "com.sun.star.configuration.ConfigurationProvider" );
 
         XMultiServiceFactory xProv = UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
@@ -241,7 +241,7 @@ public class _XScriptSecurity extends MultiMethodTest {
     {
         boolean success=false;
         try {
-        Object oProv = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+        Object oProv = tParam.getMSF().createInstance(
             "com.sun.star.configuration.ConfigurationProvider" );
 
         XMultiServiceFactory xProv = UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
@@ -351,7 +351,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         XSimpleFileAccess access = null;
 
         try {
-            Object fa = ((XMultiServiceFactory)tParam.getMSF()).createInstance(
+            Object fa = tParam.getMSF().createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
             access = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
@@ -364,7 +364,7 @@ public class _XScriptSecurity extends MultiMethodTest {
 
     private XModel loadDocument(String name) {
         XModel model = null;
-        SOfficeFactory factory = SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory factory = SOfficeFactory.getFactory(tParam.getMSF());
 
         String fullname = util.utils.getFullTestURL(name);
 

@@ -63,7 +63,7 @@ public class _XInvocationAdapterFactory2 extends MultiMethodTest {
         XInvocation xInv = null ;
         XMultiServiceFactory xMSF = null;
         try {
-            xMSF = (XMultiServiceFactory)tParam.getMSF();
+            xMSF = tParam.getMSF();
             Object[] args = {xMSF.createInstance
                 ("com.sun.star.io.Pipe")};
 

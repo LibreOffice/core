@@ -95,7 +95,7 @@ public class OFileControlModel extends TestCase {
      * Creates Draw document where controls are placed.
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory((tParam.getMSF()));
 
         try {
             log.println("creating a draw document");

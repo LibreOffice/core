@@ -73,7 +73,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
 
         XController xController = aModel.getCurrentController();
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
         final XShape oShape = SOF.createShape(xDrawDoc,
             5000,5000,1500,1000,"GraphicObject");
 
@@ -104,7 +104,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
             String aSlotID = "slot:10371";
             XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, xController );
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-         ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+         Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -121,7 +121,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
 
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oObj = (XInterface) Param.getMSF().createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
@@ -180,7 +180,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
             String aSlotID = "slot:10371";
             XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, xController );
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-         ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+         Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -209,7 +209,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         try {
             log.println("creating a draw document");

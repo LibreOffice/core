@@ -44,7 +44,7 @@ public class _XFolderPicker extends MultiMethodTest {
     */
     public void _setDisplayDirectory() {
         boolean result = true ;
-        dir = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
+        dir = util.utils.getOfficeTemp(tParam.getMSF()) ;
 
         log.println("Trying to set dir '" + dir + "'") ;
         try {

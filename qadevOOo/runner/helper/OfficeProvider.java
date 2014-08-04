@@ -109,7 +109,7 @@ public class OfficeProvider implements AppProvider
     public boolean disposeManager(lib.TestParameters param)
     {
 
-        XMultiServiceFactory msf = (XMultiServiceFactory) param.getMSF();
+        XMultiServiceFactory msf = param.getMSF();
 
         if (msf == null)
         {
@@ -364,7 +364,7 @@ public class OfficeProvider implements AppProvider
     public boolean closeExistingOffice(lib.TestParameters param, boolean closeIfPossible)
     {
 
-        XMultiServiceFactory msf = (XMultiServiceFactory) param.getMSF();
+        XMultiServiceFactory msf = param.getMSF();
         final boolean alreadyConnected = (msf != null);
         debug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
 

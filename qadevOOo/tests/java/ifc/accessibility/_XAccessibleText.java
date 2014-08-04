@@ -1134,7 +1134,7 @@ public class _XAccessibleText extends MultiMethodTest {
             String cbText = null;
 
             try {
-                cbText = util.SysUtils.getSysClipboardText((XMultiServiceFactory)tParam.getMSF());
+                cbText = util.SysUtils.getSysClipboardText(tParam.getMSF());
             } catch (com.sun.star.uno.Exception e) {
                 log.println("Couldn't access system clipboard :");
                 e.printStackTrace(log);
@@ -1150,7 +1150,7 @@ public class _XAccessibleText extends MultiMethodTest {
                 res &= locRes;
 
                 try {
-                    cbText = util.SysUtils.getSysClipboardText((XMultiServiceFactory)tParam.getMSF());
+                    cbText = util.SysUtils.getSysClipboardText(tParam.getMSF());
                 } catch (com.sun.star.uno.Exception e) {
                     log.println("Couldn't access system clipboard :");
                     e.printStackTrace(log);

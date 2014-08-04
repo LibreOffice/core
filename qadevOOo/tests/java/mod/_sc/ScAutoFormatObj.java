@@ -74,7 +74,7 @@ public class ScAutoFormatObj extends TestCase {
             PrintWriter log) {
 
         XInterface oObj = null;
-        XMultiServiceFactory oMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory oMSF = tParam.getMSF();
         try {
             XInterface formats = (XInterface)oMSF.createInstance
                     ("com.sun.star.sheet.TableAutoFormats");

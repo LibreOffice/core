@@ -232,11 +232,11 @@ public class ODatabaseForm extends TestCase {
     protected void initialize(TestParameters tParam, PrintWriter log) {
         //log.println( "creating a draw document" );
         //xTextDoc = WriterTools.createTextDoc(t((XMultiServiceFactory) Param.getMSF));
-        tmpDir = utils.getOfficeTemp(((XMultiServiceFactory) tParam.getMSF()));
+        tmpDir = utils.getOfficeTemp((tParam.getMSF()));
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
-        dbTools = new DBTools( (XMultiServiceFactory)tParam.getMSF(), log );
+        dbTools = new DBTools( tParam.getMSF(), log );
 
         // creating DataSource and registering it in DatabaseContext
         String dbURL = (String) tParam.get("test.db.url");
@@ -298,9 +298,9 @@ public class ODatabaseForm extends TestCase {
             do {
                 tableName = "ODatabaseForm_tmp" + uniqueSuffix;
                 oldF = utils.getFullURL(origDB);
-                newF = utils.getOfficeTemp((XMultiServiceFactory) tParam.getMSF()) + tableName +
+                newF = utils.getOfficeTemp(tParam.getMSF()) + tableName +
                        ".dbf";
-            } while (!utils.tryOverwriteFile(((XMultiServiceFactory) tParam.getMSF()), oldF, newF) &&
+            } while (!utils.tryOverwriteFile((tParam.getMSF()), oldF, newF) &&
                      (uniqueSuffix++ < 50));
         }
     }
@@ -325,7 +325,7 @@ public class ODatabaseForm extends TestCase {
         }
 
         log.println("creating a text document");
-        xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) Param.getMSF()));
+        xTextDoc = WriterTools.createTextDoc((Param.getMSF()));
 
         //initialize test table
         if (isMySQLDB) {

@@ -64,7 +64,7 @@ public class SvxUnoTextField extends TestCase {
 
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc( (XMultiServiceFactory) tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc( tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occurs.FAILED
             e.printStackTrace( log );
@@ -108,7 +108,7 @@ public class SvxUnoTextField extends TestCase {
         log.println( "creating a test environment" );
         try {
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)  tParam.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
               oShape = SOF.createShape(xDrawDoc,5000,3500,7500,5000,"Rectangle");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
         }

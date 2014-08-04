@@ -78,7 +78,7 @@ public class SwXMailMerge extends TestCase {
 
         log.println(" instantiate MailMerge service");
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF()).createInstance
+            oObj = (XInterface) Param.getMSF().createInstance
                 ("com.sun.star.text.MailMerge");
         } catch (Exception e) {
             throw new StatusException("Can't create object environment", e) ;
@@ -87,7 +87,7 @@ public class SwXMailMerge extends TestCase {
         // <set some variables>
         String cTestDoc = utils.getFullTestURL("MailMerge.sxw");
         //cMailMerge_DocumentURL = cTestDoc
-        String cOutputURL = utils.getOfficeTemp( (XMultiServiceFactory) Param.getMSF());
+        String cOutputURL = utils.getOfficeTemp( Param.getMSF());
         String cDataSourceName  = "Bibliography";
         String cDataCommand = "biblio";
         Object[] sel = new Object[2];
@@ -99,7 +99,7 @@ public class SwXMailMerge extends TestCase {
         // <create XResultSet>
         log.println("create a XResultSet");
         try {
-            oRowSet = (XInterface) ( (XMultiServiceFactory) Param.getMSF()).createInstance
+            oRowSet = (XInterface) Param.getMSF().createInstance
                 ("com.sun.star.sdb.RowSet");
         } catch (Exception e) {
             throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
@@ -233,7 +233,7 @@ public class SwXMailMerge extends TestCase {
         log.println("create XResultSet");
 
         try {
-            oRowSet = (XInterface) ( (XMultiServiceFactory) Param.getMSF()).createInstance
+            oRowSet = (XInterface) Param.getMSF().createInstance
                 ("com.sun.star.sdb.RowSet");
         } catch (Exception e) {
             throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
@@ -266,8 +266,7 @@ public class SwXMailMerge extends TestCase {
         XResultSet oMMXResultSet = null;
         try {
             oMMXResultSet = UnoRuntime.queryInterface(XResultSet.class,
-                   ( (XMultiServiceFactory)
-                Param.getMSF()).createInstance("com.sun.star.sdb.RowSet"));
+                   Param.getMSF().createInstance("com.sun.star.sdb.RowSet"));
 
         } catch (Exception e) {
             throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
@@ -307,17 +306,17 @@ public class SwXMailMerge extends TestCase {
         int uniqueSuffix = Param.getInt("uniqueSuffix");
 
         try {
-            xMSF = (XMultiServiceFactory)Param.getMSF();
+            xMSF = Param.getMSF();
             xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
 
             // retrieving temp directory for database
-            String tmpDatabaseUrl = utils.getOfficeTempDir((XMultiServiceFactory)Param.getMSF());
+            String tmpDatabaseUrl = utils.getOfficeTempDir(Param.getMSF());
 
             databaseName = "NewDatabaseSource" + uniqueSuffix ;
 
             String tmpDatabaseFile = tmpDatabaseUrl + databaseName + ".odb";
             System.out.println("try to delete '"+tmpDatabaseFile+"'");
-            utils.deleteFile(((XMultiServiceFactory) Param.getMSF()), tmpDatabaseFile);
+            utils.deleteFile((Param.getMSF()), tmpDatabaseFile);
 
 
             tmpDatabaseUrl = "sdbc:dbase:file:///" + tmpDatabaseUrl ;
@@ -330,7 +329,7 @@ public class SwXMailMerge extends TestCase {
 
             xSrcProp.setPropertyValue("URL", tmpDatabaseUrl) ;
 
-            DBTools dbt = new DBTools( (XMultiServiceFactory)Param.getMSF(), log );
+            DBTools dbt = new DBTools( Param.getMSF(), log );
             // registering source in DatabaseContext
             log.println("register database '"+tmpDatabaseUrl+"' as '"+databaseName+"'" );
             dbt.reRegisterDB(databaseName, newSource) ;
@@ -355,7 +354,7 @@ public class SwXMailMerge extends TestCase {
 
         XInterface oDataCont = null;
         try {
-            oDataCont = (XInterface)( (XMultiServiceFactory) Param.getMSF()).createInstance
+            oDataCont = (XInterface)Param.getMSF().createInstance
                                    ("com.sun.star.sdb.DatabaseContext");
         } catch(Exception e) {
             throw new StatusException("Couldn't create instance of 'com.sun.star.sdb.DatabaseContext'", e);
@@ -388,7 +387,7 @@ public class SwXMailMerge extends TestCase {
 
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("closing connections...");
-        XMultiServiceFactory xMsf = (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory xMsf = Param.getMSF();
         DBTools dbt = new DBTools( xMsf, log );
 
         if (Param.containsKey("uniqueSuffix")){

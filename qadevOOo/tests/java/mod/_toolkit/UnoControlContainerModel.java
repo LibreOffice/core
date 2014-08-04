@@ -36,7 +36,7 @@ public class UnoControlContainerModel extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) param.getMSF()).createInstance(
+            oObj = (XInterface) param.getMSF().createInstance(
                            "com.sun.star.awt.UnoControlContainerModel");
         } catch (Exception e) {
             e.printStackTrace(log);

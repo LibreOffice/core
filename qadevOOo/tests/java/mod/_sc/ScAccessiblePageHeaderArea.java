@@ -117,7 +117,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         try {
             XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-         ( (XMultiServiceFactory) Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+         Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -138,7 +138,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow( Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         try {
@@ -203,7 +203,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");

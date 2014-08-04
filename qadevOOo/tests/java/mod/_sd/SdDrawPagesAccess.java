@@ -65,7 +65,7 @@ public class SdDrawPagesAccess extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                    (XMultiServiceFactory)Param.getMSF());
+                                    Param.getMSF());
 
         try {
             log.println( "creating a draw document" );

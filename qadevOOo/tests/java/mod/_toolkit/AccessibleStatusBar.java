@@ -116,14 +116,14 @@ public class AccessibleStatusBar extends TestCase {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) tParam.getMSF());
+                                     tParam.getMSF());
 
         XInterface toolkit = null;
 
         try {
             log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
-            toolkit = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+            toolkit = (XInterface) tParam.getMSF().createInstance(
                               "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occurs.FAILED

@@ -74,7 +74,7 @@ public class AccessibleSlideView extends TestCase {
         shortWait();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (
-                                (XMultiServiceFactory)Param.getMSF(),aModel);
+                                Param.getMSF(),aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
@@ -125,7 +125,7 @@ public class AccessibleSlideView extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                    (XMultiServiceFactory)Param.getMSF());
+                                    Param.getMSF());
 
         try {
             log.println( "creating a impress document" );
@@ -145,7 +145,7 @@ public class AccessibleSlideView extends TestCase {
             XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class,
                                     aModel.getCurrentController() );
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-            ((XMultiServiceFactory)Param.getMSF()).
+            Param.getMSF().
             createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];

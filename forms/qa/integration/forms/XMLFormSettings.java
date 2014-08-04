@@ -69,7 +69,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     public void before() throws java.lang.Exception
     {
         // create the document and assign related members
-        m_orb = (XMultiServiceFactory)param.getMSF();
+        m_orb = param.getMSF();
         m_document = new XMLDocument( m_orb );
         m_formLayer = new FormLayer( m_document );
 

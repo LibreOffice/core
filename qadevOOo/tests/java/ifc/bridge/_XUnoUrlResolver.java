@@ -148,7 +148,7 @@ public class _XUnoUrlResolver extends MultiMethodTest {
         connectStr += curPort;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+            XMultiServiceFactory xMSF = tParam.getMSF();
 
             // get the bridge factory
             XBridgeFactory xBrdgFctr = UnoRuntime.queryInterface(XBridgeFactory.class,

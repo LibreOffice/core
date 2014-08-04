@@ -68,7 +68,7 @@ public class DicList extends TestCase {
     public synchronized TestEnvironment createTestEnvironment( TestParameters Param, PrintWriter log )
            throws StatusException {
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oObj = null;
 
         try {

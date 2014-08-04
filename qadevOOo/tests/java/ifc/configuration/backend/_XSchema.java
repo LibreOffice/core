@@ -240,7 +240,7 @@ public class _XSchema extends MultiMethodTest {
         XSimpleFileAccess simpleAccess = null;
         XInputStream xStream = null;
         try {
-            Object fileacc = ((XMultiServiceFactory)tParam.getMSF()).createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
+            Object fileacc = tParam.getMSF().createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
             simpleAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
             log.println("Going to parse: "+filename);
             xStream = simpleAccess.openFileRead(filename);

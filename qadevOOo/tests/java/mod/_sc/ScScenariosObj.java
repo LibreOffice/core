@@ -66,7 +66,7 @@ public class ScScenariosObj extends TestCase {
     */
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");

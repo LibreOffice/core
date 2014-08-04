@@ -69,7 +69,7 @@ public class SmEditAccessible extends TestCase {
      */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         try {
             xMathDoc = SOF.openDoc("smath","_blank");
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
@@ -110,7 +110,7 @@ public class SmEditAccessible extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole

@@ -65,7 +65,7 @@ public class ContentHandlerFactory extends TestCase {
 
         //now get the OButtonControl
         try {
-            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oInterface = Param.getMSF().createInstance
                 ("com.sun.star.frame.ContentHandlerFactory") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");

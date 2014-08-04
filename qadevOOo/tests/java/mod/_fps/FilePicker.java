@@ -90,7 +90,7 @@ public class FilePicker extends TestCase {
                                                     throws StatusException {
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
 
         Object[] iniArgs = new Object[] { new Short
             (com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_READONLY_VERSION)};

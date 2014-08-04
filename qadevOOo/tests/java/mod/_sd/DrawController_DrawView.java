@@ -133,7 +133,7 @@ public class DrawController_DrawView extends TestCase {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                    (XMultiServiceFactory)Param.getMSF());
+                                    Param.getMSF());
 
         try {
             log.println( "creating two impress documents" );
@@ -201,9 +201,9 @@ public class DrawController_DrawView extends TestCase {
         Object oShapeCol1 = null;
         Object oShapeCol2 = null;
         try {
-            oShapeCol1 = ((XMultiServiceFactory)Param.getMSF()).
+            oShapeCol1 = Param.getMSF().
                 createInstance("com.sun.star.drawing.ShapeCollection");
-            oShapeCol2 = ((XMultiServiceFactory)Param.getMSF()).
+            oShapeCol2 = Param.getMSF().
                 createInstance("com.sun.star.drawing.ShapeCollection");
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

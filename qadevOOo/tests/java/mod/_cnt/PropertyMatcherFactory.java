@@ -53,7 +53,7 @@ public class PropertyMatcherFactory extends TestCase {
                                                     throws StatusException {
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
 
 
         try {

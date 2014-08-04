@@ -107,7 +107,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
         XExecutableDialog exD = UnoRuntime.queryInterface(
                 XExecutableDialog.class, tEnv.getTestObject());
 
-        dir1 = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+        dir1 = util.utils.getOfficeTemp(tParam.getMSF());
         dir2 = util.utils.getFullTestURL("");
         eThread = new ExecThread(exD);
     }
@@ -270,7 +270,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
         XExecutableDialog exD = UnoRuntime.queryInterface(
                 XExecutableDialog.class, tEnv.getTestObject());
 
-        dir1 = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+        dir1 = util.utils.getOfficeTemp(tParam.getMSF());
         dir2 = util.utils.getFullTestURL("");
         eThread = new ExecThread(exD);
 

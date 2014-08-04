@@ -74,13 +74,13 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
      * service created for obtaining document's frame.
      */
     protected void before() {
-        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
             xTextDoc = SOF.createTextDoc(null);
 
-            Object inst = ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            Object inst = tParam.getMSF().createInstance
                 ("com.sun.star.frame.Desktop");
             desktop = UnoRuntime.queryInterface
                 (XDesktop.class, inst);
@@ -163,7 +163,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
         boolean res = true;
         if (recorder == null) {
             try {
-                Object inst = ((XMultiServiceFactory) tParam.getMSF()).createInstance
+                Object inst = tParam.getMSF().createInstance
                     ("com.sun.star.comp.framework.DispatchRecorder");
                 recorder = UnoRuntime.queryInterface
                     (XDispatchRecorder.class, inst);
@@ -182,7 +182,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
 
         XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, fr);
 
-        URL dispURL = utils.parseURL((XMultiServiceFactory) tParam.getMSF(), ".uno:InsertText");
+        URL dispURL = utils.parseURL(tParam.getMSF(), ".uno:InsertText");
 
         XDispatch xDisp = xDispProv.queryDispatch(dispURL,"",0);
 

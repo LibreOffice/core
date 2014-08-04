@@ -74,7 +74,7 @@ public class SwXTextDocument extends TestCase {
         try {
             log.println("creating a textdocument");
             xTextDoc = WriterTools.createTextDoc(
-                               (XMultiServiceFactory) Param.getMSF());
+                               Param.getMSF());
 
             XText oText = xTextDoc.getText();
             XTextCursor oCursor = oText.createTextCursor();
@@ -208,7 +208,7 @@ public class SwXTextDocument extends TestCase {
 
             log.println("creating a second textdocument");
             xSecondTextDoc = WriterTools.createTextDoc(
-                                     (XMultiServiceFactory) Param.getMSF());
+                                     Param.getMSF());
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occurs.FAILED
             e.printStackTrace(log);

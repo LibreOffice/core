@@ -64,7 +64,7 @@ public class ScAccessibleCsvRuler extends TestCase {
 
         shortWait();
 
-        XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory msf = Param.getMSF();
 
         try {
             oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
@@ -162,7 +162,7 @@ public class ScAccessibleCsvRuler extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         log.println("opening dialog");
 
@@ -170,7 +170,7 @@ public class ScAccessibleCsvRuler extends TestCase {
         try {
             args[0] = new PropertyValue();
             args[0].Name = "InteractionHandler";
-            args[0].Value = ((XMultiServiceFactory)Param.getMSF()).createInstance(
+            args[0].Value = Param.getMSF().createInstance(
                 "com.sun.star.comp.uui.UUIInteractionHandler");
         } catch(com.sun.star.uno.Exception e) {
         }

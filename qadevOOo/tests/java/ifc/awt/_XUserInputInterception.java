@@ -464,7 +464,7 @@ public class _XUserInputInterception extends MultiMethodTest {
                 util.DesktopTools.bringWindowToFront(xModel);
 
                 XWindow xWindow = AccessibilityTools.getCurrentWindow(
-                                          (XMultiServiceFactory) tParam.getMSF(),
+                                          tParam.getMSF(),
                                           xModel);
 
                 XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

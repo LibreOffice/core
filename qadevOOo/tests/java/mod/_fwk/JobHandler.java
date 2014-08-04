@@ -50,7 +50,7 @@ public class JobHandler extends TestCase {
         boolean serviceRegistered = false;
 
         try {
-            Object obj = ((XMultiServiceFactory)Param.getMSF()).createInstance("test.Job");
+            Object obj = Param.getMSF().createInstance("test.Job");
             serviceRegistered = obj != null;
         } catch(com.sun.star.uno.Exception e) {}
 
@@ -65,7 +65,7 @@ public class JobHandler extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
+            oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.framework.jobs.JobDispatch");
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

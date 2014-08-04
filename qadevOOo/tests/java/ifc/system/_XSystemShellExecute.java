@@ -47,8 +47,8 @@ public class _XSystemShellExecute extends MultiMethodTest {
     */
     public void _execute() {
         String cClassPath = System.getProperty("DOCPTH");
-        String cResFile = utils.getOfficeTempDirSys((XMultiServiceFactory)tParam.getMSF())+"SystemShellExecute.txt";
-        String cResURL = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF())+"SystemShellExecute.txt";
+        String cResFile = utils.getOfficeTempDirSys(tParam.getMSF())+"SystemShellExecute.txt";
+        String cResURL = utils.getOfficeTemp(tParam.getMSF())+"SystemShellExecute.txt";
         String cArgs = "-classpath " + cClassPath +
                        " SystemShellExecute " + cResFile;
 
@@ -72,7 +72,7 @@ public class _XSystemShellExecute extends MultiMethodTest {
 
         XSimpleFileAccess xFileAccess = null;
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+            XMultiServiceFactory xMSF = tParam.getMSF();
             Object fa = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             xFileAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
         } catch (com.sun.star.uno.Exception e) {

@@ -75,7 +75,7 @@ public class ContentProvider extends TestCase {
     public TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log ) {
         XInterface oObj = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         XContentIdentifierFactory cntIDFac = null ;
 
         try {

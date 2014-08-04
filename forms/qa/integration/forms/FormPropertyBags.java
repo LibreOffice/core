@@ -66,7 +66,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
     /* ------------------------------------------------------------------ */
     public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        m_orb = (XMultiServiceFactory)param.getMSF();
+        m_orb = param.getMSF();
         m_document = DocumentHelper.blankTextDocument( m_orb );
         m_formLayer = new FormLayer( m_document );
     }

@@ -536,7 +536,7 @@ public class _XRowUpdate extends MultiMethodTest {
         }
 
         try {
-            Object oStream = ((XMultiServiceFactory)tParam.getMSF()).
+            Object oStream = tParam.getMSF().
                 createInstance("com.sun.star.io.DataInputStream") ;
             XInputStream newVal = UnoRuntime.queryInterface
                 (XInputStream.class, oStream);
@@ -573,7 +573,7 @@ public class _XRowUpdate extends MultiMethodTest {
         }
 
         try {
-            Object oStream = ((XMultiServiceFactory)tParam.getMSF()).
+            Object oStream = tParam.getMSF().
                 createInstance("com.sun.star.io.TextInputStream") ;
             XInputStream newVal = UnoRuntime.queryInterface
                 (XInputStream.class, oStream);
@@ -610,7 +610,7 @@ public class _XRowUpdate extends MultiMethodTest {
         }
 
         try {
-            Object newVal = ((XMultiServiceFactory)tParam.getMSF()).
+            Object newVal = tParam.getMSF().
                 createInstance("com.sun.star.io.Pipe") ;
 
             oObj.updateObject(idx, newVal) ;
@@ -645,7 +645,7 @@ public class _XRowUpdate extends MultiMethodTest {
         }
 
         try {
-            Object newVal = ((XMultiServiceFactory)tParam.getMSF()).
+            Object newVal = tParam.getMSF().
                                 createInstance("com.sun.star.io.Pipe") ;
 
             oObj.updateNumericObject(idx, newVal, 0) ;

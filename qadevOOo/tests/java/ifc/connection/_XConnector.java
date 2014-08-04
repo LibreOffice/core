@@ -114,8 +114,7 @@ public class _XConnector extends MultiMethodTest {
 
         // create the acceptor
         try {
-            x = (XInterface) (
-                (XMultiServiceFactory)tParam.getMSF()).createInstance
+            x = (XInterface) tParam.getMSF().createInstance
                 ("com.sun.star.connection.Acceptor") ;
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;

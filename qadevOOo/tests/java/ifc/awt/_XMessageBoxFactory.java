@@ -49,7 +49,7 @@ public class _XMessageBoxFactory extends MultiMethodTest {
             com.sun.star.awt.MessageBoxType.ERRORBOX, 1, "The Title",
             "The Message");
         final UITools tools = new UITools(
-            (XMultiServiceFactory) tParam.getMSF(),
+            tParam.getMSF(),
             UnoRuntime.queryInterface(XWindow.class, mb));
         final boolean[] done = new boolean[] { false };
         final boolean[] good = new boolean[] { false };

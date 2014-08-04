@@ -178,7 +178,7 @@ public class various extends TestCase {
     */
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
 
         try {
             XInterface xInt = (XInterface)xMSF.createInstance(

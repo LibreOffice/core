@@ -128,7 +128,7 @@ public class AccessibleMenuSeparator extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            msf = (XMultiServiceFactory) Param.getMSF();
+            msf = Param.getMSF();
 
             SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
             xTextDoc = SOF.createTextDoc(null);

@@ -72,7 +72,7 @@ public class ScAutoFormatFieldObj extends TestCase {
 
                   log.println ("create Object ...") ;
             // creation of testobject here
-            XInterface formats = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance
+            XInterface formats = (XInterface)Param.getMSF().createInstance
                 ("com.sun.star.sheet.TableAutoFormats");
             XIndexAccess formatsIndex = UnoRuntime.queryInterface
                 (XIndexAccess.class, formats);

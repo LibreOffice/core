@@ -68,7 +68,7 @@ public class XMLContentExporter extends TestCase {
      * New text document created.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
           log.println( "creating a textdocument" );
@@ -113,7 +113,7 @@ public class XMLContentExporter extends TestCase {
             ( TestParameters tParam, PrintWriter log ) throws StatusException {
 
         final String CONTENT = "XMLContentExporter";
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
+        XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
 
         Filter = new ContentFilterChecker(log);

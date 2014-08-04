@@ -47,7 +47,7 @@ public class MutableTreeNode extends TestCase {
      * Creates StarOffice Writer document.
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        mxMSF = (XMultiServiceFactory) tParam.getMSF();
+        mxMSF = tParam.getMSF();
 //        log.println("creating a textdocument");
 //        xTextDoc = WriterTools.createTextDoc(mxMSF);
     }

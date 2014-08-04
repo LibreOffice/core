@@ -37,7 +37,7 @@ public class _XSpinValue extends MultiMethodTest {
     com.sun.star.awt.XAdjustmentListener listener = new AdjustmentListener();
 
     public void _addAdjustmentListener() {
-        util.FormTools.switchDesignOf((XMultiServiceFactory) tParam.getMSF(),
+        util.FormTools.switchDesignOf(tParam.getMSF(),
                                  (XTextDocument) tEnv.getObjRelation("Document"));
         shortWait();
         oObj.addAdjustmentListener(listener);

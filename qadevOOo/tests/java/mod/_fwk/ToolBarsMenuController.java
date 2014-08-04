@@ -34,7 +34,7 @@ public class ToolBarsMenuController extends TestCase {
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
         try {
             oObj = (XInterface)xMSF.createInstance("com.sun.star.comp.framework.ToolBarsMenuController");
         }

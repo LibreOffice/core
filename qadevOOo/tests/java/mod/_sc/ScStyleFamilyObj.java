@@ -68,7 +68,7 @@ public class ScStyleFamilyObj extends TestCase {
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -144,7 +144,7 @@ public class ScStyleFamilyObj extends TestCase {
                 "Exception occurred while getting StyleFamily", e);
         }
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
         XComponent xComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
 
         XInterface oInstance = (XInterface)

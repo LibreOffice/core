@@ -72,7 +72,7 @@ public class LayoutManager extends TestCase {
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
 
         log.println("Creating instance...");
 

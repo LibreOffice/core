@@ -91,7 +91,7 @@ public class AccessibleEdit extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+            oObj = (XInterface) Param.getMSF().createInstance(
                            "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
@@ -114,7 +114,7 @@ public class AccessibleEdit extends TestCase {
         XURLTransformer urlTransf = null;
 
         try {
-            XInterface transf = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+            XInterface transf = (XInterface) Param.getMSF().createInstance(
                                         "com.sun.star.util.URLTransformer");
             urlTransf = UnoRuntime.queryInterface(
                                 XURLTransformer.class, transf);
@@ -204,7 +204,7 @@ public class AccessibleEdit extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                         (XMultiServiceFactory) Param.getMSF());
+                                         Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);

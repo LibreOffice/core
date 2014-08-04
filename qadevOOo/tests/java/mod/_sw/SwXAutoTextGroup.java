@@ -70,7 +70,7 @@ public class SwXAutoTextGroup extends TestCase {
      * Creates text document.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
@@ -106,7 +106,7 @@ public class SwXAutoTextGroup extends TestCase {
 
         log.println( "creating a test environment" );
         try {
-            XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory myMSF = Param.getMSF();
             Object oInst = myMSF.createInstance("com.sun.star.text.AutoTextContainer");
             oContainer = UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
         } catch (com.sun.star.uno.Exception e) {

@@ -54,7 +54,7 @@ public class _XAutoFormattable extends MultiMethodTest {
     */
     public void _autoFormat() {
         boolean bResult = true;
-        XMultiServiceFactory oMSF = (XMultiServiceFactory) tParam.getMSF();
+        XMultiServiceFactory oMSF = tParam.getMSF();
         String name = "Default";
 
         try {

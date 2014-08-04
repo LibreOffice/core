@@ -71,7 +71,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()) );
+                    XDesktop.class, DesktopTools.createDesktop(Param.getMSF()) );
     }
 
     /**
@@ -116,7 +116,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
         if (xTextDoc != null) xTextDoc.dispose();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a text document" );

@@ -96,7 +96,7 @@ public class _XBackend extends MultiMethodTest {
 
         try {
             XStringSubstitution sts = createStringSubstitution(
-                                              (XMultiServiceFactory) tParam.getMSF());
+                                              tParam.getMSF());
             String ent = sts.getSubstituteVariableValue("$(inst)") +
                          "/share/registry";
             XUpdateHandler aHandler = oObj.getUpdateHandler(
@@ -128,7 +128,7 @@ public class _XBackend extends MultiMethodTest {
 
         try {
             XStringSubstitution sts = createStringSubstitution(
-                                              (XMultiServiceFactory) tParam.getMSF());
+                                              tParam.getMSF());
             String ent = sts.getSubstituteVariableValue("$(inst)") +
                          "/share/registry";
             XLayer[] Layers = oObj.listLayers(

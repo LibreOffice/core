@@ -133,7 +133,7 @@ public class NestedRegistry extends TestCase {
         XInterface oObj = null;
         Object oInterface = null;
 
-        final String tmpDir = utils.getOfficeTempDirSys((XMultiServiceFactory)Param.getMSF()) ;
+        final String tmpDir = utils.getOfficeTempDirSys(Param.getMSF()) ;
         final String openF = tmpDir + "XSimpleRegistry_open" + uniq + ".rdb" ;
         final String destroyF = tmpDir
             + "XSimpleRegistry_destroy" + uniq + ".rdb" ;
@@ -152,7 +152,7 @@ public class NestedRegistry extends TestCase {
         }
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             reg1 = RegistryTools.
                     createRegistryService(xMSF) ;
             reg1.open(mergeF, false, true) ;

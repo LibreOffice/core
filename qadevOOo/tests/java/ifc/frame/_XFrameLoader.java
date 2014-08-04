@@ -94,13 +94,13 @@ public class _XFrameLoader extends MultiMethodTest {
         frame = (XFrame) tEnv.getObjRelation("FrameLoader.Frame") ;
 
         if (frame == null) {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
             try {
                 log.println( "creating a textdocument" );
                 frameSup = SOF.createTextDoc( null );
 
-                Object oDsk = ((XMultiServiceFactory)tParam.getMSF())
+                Object oDsk = tParam.getMSF()
                         .createInstance("com.sun.star.frame.Desktop") ;
                 XDesktop dsk = UnoRuntime.queryInterface(XDesktop.class, oDsk) ;
 

@@ -60,7 +60,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
         xCI = UnoRuntime.queryInterface(
                 XContextMenuInterceptor.class, new ContextMenuInterceptor());
 
-        xMSF = (XMultiServiceFactory)tParam.getMSF();
+        xMSF = tParam.getMSF();
 
         //ensure that the first model is focused
 

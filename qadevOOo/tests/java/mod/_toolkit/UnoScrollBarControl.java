@@ -54,7 +54,7 @@ public class UnoScrollBarControl extends TestCase {
 
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) Param.getMSF());
+                                     Param.getMSF());
 
         try {
             log.println("creating a textdocument");

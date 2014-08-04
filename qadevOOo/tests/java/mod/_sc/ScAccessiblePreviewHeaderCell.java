@@ -124,7 +124,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
             util.DesktopTools.closeDoc(oComp);
         }
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         try {
             log.println("creating a Spreadsheet document");
@@ -221,7 +221,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
                                                   xController);
             XURLTransformer xParser = UnoRuntime.queryInterface(
                                               XURLTransformer.class,
-                                              ( (XMultiServiceFactory) Param.getMSF())
+                                              Param.getMSF()
                                                    .createInstance("com.sun.star.util.URLTransformer"));
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -249,7 +249,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
             try {
                 XAccessible xRoot = AccessibilityTools.getAccessibleObject(
                     AccessibilityTools.getCurrentWindow(
-                        (XMultiServiceFactory) Param.getMSF(), xModel));
+                        Param.getMSF(), xModel));
                 if (xRoot != null) {
                     oObj = AccessibilityTools.getAccessibleObjectForRole(
                         xRoot, AccessibleRole.TABLE, "A");

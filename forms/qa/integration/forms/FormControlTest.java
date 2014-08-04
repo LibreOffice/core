@@ -463,7 +463,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /* ------------------------------------------------------------------ */
     private boolean ensureDataSource() throws Exception
     {
-        m_orb = (XMultiServiceFactory)param.getMSF();
+        m_orb = param.getMSF();
 
         XNameAccess databaseContext = UnoRuntime.queryInterface( XNameAccess.class,
             m_orb.createInstance( "com.sun.star.sdb.DatabaseContext" ) );

@@ -234,7 +234,7 @@ public class _XSimpleRegistry extends MultiMethodTest {
         XSimpleRegistry reg = null;
 
         try {
-            reg = RegistryTools.createRegistryService((XMultiServiceFactory) tParam.getMSF());
+            reg = RegistryTools.createRegistryService(tParam.getMSF());
         } catch (com.sun.star.uno.Exception e) {
             log.print("Can't create registry service: ");
             e.printStackTrace(log);

@@ -125,7 +125,7 @@ public class SbaXGridControl extends TestCase {
     * Creates Writer document.
     */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
 
         try {
             log.println("creating a textdocument");
@@ -145,7 +145,7 @@ public class SbaXGridControl extends TestCase {
         XInterface toolkit = null;
 
         try {
-            toolkit = (XInterface) ((XMultiServiceFactory)tParam.getMSF())
+            toolkit = (XInterface) tParam.getMSF()
                                          .createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
@@ -386,7 +386,7 @@ public class SbaXGridControl extends TestCase {
 
         log.println("ImplName: " + utils.getImplName(oObj));
 
-        FormTools.switchDesignOf((XMultiServiceFactory)Param.getMSF(), xTextDoc);
+        FormTools.switchDesignOf(Param.getMSF(), xTextDoc);
 
         // adding relation for XUpdateBroadcaster
         final XInterface ctrl = oObj;

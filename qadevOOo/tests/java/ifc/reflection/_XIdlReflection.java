@@ -72,7 +72,7 @@ public class _XIdlReflection extends MultiMethodTest{
         Object obj = null;
 
         try {
-            obj = ((XMultiServiceFactory)tParam.getMSF()).
+            obj = tParam.getMSF().
                                     createInstance("com.sun.star.io.Pipe") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Can't create object");

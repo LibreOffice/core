@@ -50,7 +50,7 @@ public class SwXTextTable extends TestCase {
     XTextDocument xTextDoc;
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+        SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println("creating a textdocument");

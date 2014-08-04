@@ -71,7 +71,7 @@ public class ModuleManager extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
+            oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.framework.ModuleManager");
         } catch(Exception e) {
             e.printStackTrace(log);
@@ -80,7 +80,7 @@ public class ModuleManager extends TestCase {
         }
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) Param.getMSF());
+                                     Param.getMSF());
 
         // get text document interfaces
         try {

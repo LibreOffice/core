@@ -99,7 +99,7 @@ public class ODatasourceBrowser extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
-                                                                (XMultiServiceFactory)Param.getMSF()));
+                                                                Param.getMSF()));
         System.setProperty("hideMe", "false");
     }
 
@@ -191,7 +191,7 @@ public class ODatasourceBrowser extends TestCase {
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) Param.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory((Param.getMSF()));
 
         try {
             log.println("creating a text document");

@@ -49,7 +49,7 @@ public class _XContentIdentifierFactory extends MultiMethodTest {
      */
     public void _createContentIdentifier() {
         // creating a content identifier string - tmp url
-        String tmpDir = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+        String tmpDir = utils.getOfficeTemp(tParam.getMSF());
 
         String contentId = utils.getFullURL(tmpDir);
 

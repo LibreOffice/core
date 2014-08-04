@@ -69,7 +69,7 @@ public class XMLContentExporter extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a chartdocument" );
@@ -115,7 +115,7 @@ public class XMLContentExporter extends TestCase {
     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
+        XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
         final String exportStr = "XMLContentExporter" ;
 

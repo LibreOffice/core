@@ -60,7 +60,7 @@ public class LngSvcMgr extends TestCase {
             ( TestParameters Param, PrintWriter log )
             throws StatusException {
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oObj = null;
 
         try {

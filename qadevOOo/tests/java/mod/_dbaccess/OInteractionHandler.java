@@ -80,7 +80,7 @@ public class OInteractionHandler extends TestCase {
         Object oInterface = null;
 
         try {
-            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance(
+            oInterface = Param.getMSF().createInstance(
                             "com.sun.star.sdb.InteractionHandler" );
 
         }

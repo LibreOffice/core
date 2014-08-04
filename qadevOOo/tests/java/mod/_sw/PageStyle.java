@@ -54,7 +54,7 @@ public class PageStyle extends TestCase {
     * Creates text document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );

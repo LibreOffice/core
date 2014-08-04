@@ -40,7 +40,7 @@ public class SvxUnoNumberingRules extends TestCase {
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a drawdoc");
         xDrawDoc = DrawTools.createDrawDoc(
-                           (XMultiServiceFactory) tParam.getMSF());
+                           tParam.getMSF());
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam,

@@ -85,7 +85,7 @@ public class SwXDrawPage extends TestCase {
     * Creates text document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
@@ -125,7 +125,7 @@ public class SwXDrawPage extends TestCase {
         XShapes oShapes = null;
 
         log.println( "creating a test environment" );
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         XDPSupp = UnoRuntime.queryInterface
             (XDrawPageSupplier.class, xTextDoc);
         xDP = XDPSupp.getDrawPage();

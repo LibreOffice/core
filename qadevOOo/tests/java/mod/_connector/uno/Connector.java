@@ -75,7 +75,7 @@ public class Connector extends TestCase {
 
         try {
             XInterface connector = (XInterface)
-                ((XMultiServiceFactory)Param.getMSF()).createInstance
+                Param.getMSF().createInstance
                                     ("com.sun.star.connection.Connector") ;
 
             oObj = connector ;

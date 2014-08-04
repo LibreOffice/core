@@ -72,7 +72,7 @@ public class ScViewPaneObj extends TestCase {
      */
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
-        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");

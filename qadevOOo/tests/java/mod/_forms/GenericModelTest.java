@@ -216,7 +216,7 @@ public class GenericModelTest extends TestCase {
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a textdocument");
-        m_xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
+        m_xTextDoc = WriterTools.createTextDoc((tParam.getMSF()));
         m_ConnectionColsed = false;
         debug = tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
         m_propertiesToSet.clear();
@@ -370,7 +370,7 @@ public class GenericModelTest extends TestCase {
                                                                  PrintWriter log) {
         XInterface oObj = null;
         XControlShape aShape = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
 
         try{
             log.println("adding contol shape '" + m_kindOfControl + "'");

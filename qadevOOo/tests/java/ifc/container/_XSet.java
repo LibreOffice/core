@@ -54,7 +54,7 @@ public class _XSet extends MultiMethodTest {
     public void _insert() {
         boolean res = true ;
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+            XMultiServiceFactory xMSF = tParam.getMSF();
             element = xMSF.createInstance(
                             "com.sun.star.reflection.TypeDescriptionProvider");
 

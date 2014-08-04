@@ -52,7 +52,7 @@ public class _XTypeConverter extends MultiMethodTest {
     * @see com.sun.star.container.XSet
     */
     public void _convertTo() {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
+        XMultiServiceFactory xMSF = tParam.getMSF() ;
         Object value = null ;
 
         try {

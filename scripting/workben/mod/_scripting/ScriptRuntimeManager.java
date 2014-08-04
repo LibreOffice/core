@@ -39,7 +39,7 @@ public class ScriptRuntimeManager extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oObj = (XInterface) Param.getMSF().createInstance
                 ("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;

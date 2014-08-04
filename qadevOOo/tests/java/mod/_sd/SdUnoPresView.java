@@ -88,7 +88,7 @@ public class SdUnoPresView extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(
             XDesktop.class, DesktopTools.createDesktop(
-                                (XMultiServiceFactory)Param.getMSF()) );
+                                Param.getMSF()) );
     }
 
     /**
@@ -144,7 +144,7 @@ public class SdUnoPresView extends TestCase {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                        (XMultiServiceFactory)Param.getMSF());
+                                        Param.getMSF());
 
         try {
             log.println( "creating two impress documents" );

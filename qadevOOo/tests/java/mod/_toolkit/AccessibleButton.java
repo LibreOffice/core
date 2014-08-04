@@ -86,7 +86,7 @@ public class AccessibleButton extends lib.TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
-        XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory msf = Param.getMSF();
 
         try {
             oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
@@ -178,7 +178,7 @@ public class AccessibleButton extends lib.TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                         (XMultiServiceFactory) Param.getMSF());
+                                         Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);

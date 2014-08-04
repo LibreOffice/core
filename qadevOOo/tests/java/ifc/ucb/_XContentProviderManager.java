@@ -93,7 +93,7 @@ public class _XContentProviderManager extends MultiMethodTest {
      * @see #contentProvider
      */
     public void before() {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
 
         log.println("creating testing content providers");
         try {

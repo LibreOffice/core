@@ -110,7 +110,7 @@ public class ChXChartDocument extends TestCase {
                                                                  PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) tParam.getMSF());
+                                     tParam.getMSF());
 
         try {
             log.println("creating a chartdocument");

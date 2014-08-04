@@ -123,13 +123,13 @@ public class _XPrintable extends MultiMethodTest {
         boolean result = true ;
 
         final String file = "XPrintable.prt" ;
-        final String fileName = utils.getOfficeTempDirSys((XMultiServiceFactory)tParam.getMSF())+file ;
-        final String fileURL = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) + file ;
+        final String fileName = utils.getOfficeTempDirSys(tParam.getMSF())+file ;
+        final String fileURL = utils.getOfficeTemp(tParam.getMSF()) + file ;
 
         XSimpleFileAccess fAcc = null ;
         try {
             Object oFAcc =
-                ((XMultiServiceFactory)tParam.getMSF()).createInstance
+                tParam.getMSF().createInstance
                 ("com.sun.star.ucb.SimpleFileAccess") ;
             fAcc = UnoRuntime.queryInterface
                 (XSimpleFileAccess.class, oFAcc) ;

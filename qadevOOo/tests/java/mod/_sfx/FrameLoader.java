@@ -62,7 +62,7 @@ public class FrameLoader extends TestCase {
 
         //now get the OButtonControl
         try {
-            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oInterface = Param.getMSF().createInstance
                 ("com.sun.star.comp.office.FrameLoader") ;
 
         } catch (com.sun.star.uno.Exception e) {

@@ -92,7 +92,7 @@ public class OHiddenModel extends TestCase {
      * Creates Drawing document.
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory((tParam.getMSF()));
 
         try {
             log.println("creating a draw document");
@@ -141,7 +141,7 @@ public class OHiddenModel extends TestCase {
         log.println("creating a test environment");
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) Param.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory((Param.getMSF()));
         String objName = "HiddenControl";
         XInterface ctrl = SOF.createControl(xDrawDoc, objName);
 

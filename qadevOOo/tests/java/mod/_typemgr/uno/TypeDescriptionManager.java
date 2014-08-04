@@ -42,7 +42,7 @@ public class TypeDescriptionManager extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             XPropertySet xProp = UnoRuntime.queryInterface(
                                                 XPropertySet.class, xMSF);
             // get context

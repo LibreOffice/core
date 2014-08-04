@@ -69,7 +69,7 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
     public void _createSortedDynamicResultSet() {
         boolean result = true ;
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
         XDynamicResultSet dynResSet = null ;
         try {
             Object oUCB = xMSF.createInstanceWithArguments

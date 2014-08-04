@@ -50,7 +50,7 @@ public class TabController extends TestCase {
         try {
             log.println("creating a textdocument");
             xTextDoc = WriterTools.createTextDoc(
-                               (XMultiServiceFactory) param.getMSF());
+                               param.getMSF());
         } catch (Exception e) {
             // Some exception occurs.FAILED
             e.printStackTrace(log);
@@ -114,7 +114,7 @@ public class TabController extends TestCase {
 
         // create object
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) param.getMSF()).createInstance(
+            oObj = (XInterface) param.getMSF().createInstance(
                            "com.sun.star.awt.TabController");
         } catch (Exception e) {
         }

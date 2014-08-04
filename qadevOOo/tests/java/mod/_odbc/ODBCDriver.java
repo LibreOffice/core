@@ -59,7 +59,7 @@ public class ODBCDriver extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
+            oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.sdbc.ODBCDriver");
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

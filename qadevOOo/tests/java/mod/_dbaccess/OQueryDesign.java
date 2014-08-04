@@ -64,7 +64,7 @@ public class OQueryDesign extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         xDesk = UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()) );
+                    XDesktop.class, DesktopTools.createDesktop(Param.getMSF()) );
     }
 
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
@@ -76,7 +76,7 @@ public class OQueryDesign extends TestCase {
         XDispatchProvider aProv = UnoRuntime.queryInterface(XDispatchProvider.class,xDesk);
 
         XDispatch getting = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
 
               XNameAccess xNameAccess = null;
 
@@ -236,7 +236,7 @@ public class OQueryDesign extends TestCase {
         XMultiServiceFactory xMSF;
 
         try {
-            xMSF = (XMultiServiceFactory)Param.getMSF();
+            xMSF = Param.getMSF();
             oDBC = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
         }
         catch( com.sun.star.uno.Exception e ) {

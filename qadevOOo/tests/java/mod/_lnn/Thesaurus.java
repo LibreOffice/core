@@ -67,7 +67,7 @@ public class Thesaurus extends TestCase {
     */
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
         XInterface oObj = null;
 
         try {

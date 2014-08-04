@@ -69,7 +69,7 @@ public class XMLMetaExporter extends TestCase {
      * New text document created.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
@@ -114,7 +114,7 @@ public class XMLMetaExporter extends TestCase {
             ( TestParameters tParam, PrintWriter log ) throws StatusException {
         final String TITLE = "Title for testing of XMLMetaExporter";
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
+        XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
 
         Filter = new MetaFilterChecker(log);

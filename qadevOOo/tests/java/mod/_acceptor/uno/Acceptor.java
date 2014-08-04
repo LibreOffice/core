@@ -77,7 +77,7 @@ public class Acceptor extends TestCase {
 
         try {
             acceptor = (XInterface)
-                ((XMultiServiceFactory)Param.getMSF()).createInstance
+                Param.getMSF().createInstance
                 ("com.sun.star.connection.Acceptor");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;

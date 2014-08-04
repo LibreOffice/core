@@ -77,7 +77,7 @@ public class AccessibleDropDownComboBox extends TestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(
-                                  (XMultiServiceFactory) Param.getMSF(),
+                                  Param.getMSF(),
                                   xTextDoc);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -113,7 +113,7 @@ public class AccessibleDropDownComboBox extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                         (XMultiServiceFactory) Param.getMSF());
+                                         Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);

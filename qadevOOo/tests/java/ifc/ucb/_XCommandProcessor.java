@@ -184,7 +184,7 @@ public class _XCommandProcessor extends MultiMethodTest {
             String commandName = "globalTransfer";
 
             String srcURL = util.utils.getFullTestURL("SwXTextEmbeddedObject.sdw") ;
-            String tmpURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
+            String tmpURL = util.utils.getOfficeTemp(tParam.getMSF()) ;
             log.println("Copying '" + srcURL + "' to '" + tmpURL) ;
 
             GlobalTransferCommandArgument arg = new

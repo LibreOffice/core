@@ -80,7 +80,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
         }
 
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                             (XMultiServiceFactory)tParam.getMSF() );
+                             tParam.getMSF() );
 
         XURLTransformer xURLTrans = null;
 
@@ -90,15 +90,13 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
                 log.println( "creating a textdocument" );
                 frameSup = SOF.createTextDoc( null );
 
-                Object oDsk = (
-                    (XMultiServiceFactory)tParam.getMSF()).createInstance
+                Object oDsk = tParam.getMSF().createInstance
                     ("com.sun.star.frame.Desktop") ;
                 XDesktop dsk = UnoRuntime.queryInterface
                     (XDesktop.class, oDsk) ;
                 frame = dsk.getCurrentFrame() ;
 
-                Object o = (
-                    (XMultiServiceFactory)tParam.getMSF()).createInstance
+                Object o = tParam.getMSF().createInstance
                     ("com.sun.star.util.URLTransformer") ;
                 xURLTrans = UnoRuntime.queryInterface
                     (XURLTransformer.class, o) ;

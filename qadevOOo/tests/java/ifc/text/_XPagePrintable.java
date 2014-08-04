@@ -112,7 +112,7 @@ public class _XPagePrintable extends MultiMethodTest {
         boolean res = true;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+            XMultiServiceFactory xMSF = tParam.getMSF();
 
             String printFile = utils.getOfficeTemp(xMSF) + "XPagePrintable.prt";
             log.println("Printing to : "+ printFile);

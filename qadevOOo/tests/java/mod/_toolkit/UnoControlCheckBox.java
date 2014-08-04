@@ -52,13 +52,13 @@ public class UnoControlCheckBox extends TestCase {
 
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) Param.getMSF());
+                                     Param.getMSF());
 
         try {
             log.println("creating a textdocument");
             xTextDoc = SOF.createTextDoc(null);
             xTD2 = WriterTools.createTextDoc(
-                           (XMultiServiceFactory) Param.getMSF());
+                           Param.getMSF());
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occurs.FAILED
             e.printStackTrace(log);

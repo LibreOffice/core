@@ -88,7 +88,7 @@ public class MarkableOutputStream extends TestCase {
 
         XInterface oObj = null;
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         Object aPipe = null;
         Object mostream = null;
         Object mistream = null;

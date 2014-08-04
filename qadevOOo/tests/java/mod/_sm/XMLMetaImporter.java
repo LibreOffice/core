@@ -69,7 +69,7 @@ public class XMLMetaImporter extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
             xMathDoc = SOF.openDoc("smath","_blank");
         } catch (com.sun.star.uno.Exception ex) {
@@ -110,7 +110,7 @@ public class XMLMetaImporter extends TestCase {
             ( TestParameters Param, PrintWriter log )
             throws StatusException {
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oObj = null;
         final String impName = "XMLMetaImporter" ;
         final String impValue = "XMLMetaImporter_Value" ;

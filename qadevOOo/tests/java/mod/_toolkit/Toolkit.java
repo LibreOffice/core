@@ -50,7 +50,7 @@ public class Toolkit extends TestCase {
 
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) Param.getMSF());
+                                     Param.getMSF());
 
         try {
             log.println("creating a textdocument");
@@ -102,7 +102,7 @@ public class Toolkit extends TestCase {
 
             //win = (XWindow) UnoRuntime.queryInterface(XWindow.class, ctrl) ;
             the_win = the_access.getControl(the_Model).getPeer();
-            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+            oObj = (XInterface) Param.getMSF().createInstance(
                            "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");

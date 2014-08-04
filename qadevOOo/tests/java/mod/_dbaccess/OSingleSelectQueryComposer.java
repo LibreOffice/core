@@ -168,7 +168,7 @@ public class OSingleSelectQueryComposer extends TestCase {
         Object oInterface = null;
         XMultiServiceFactory xMSF = null ;
         try {
-            xMSF = (XMultiServiceFactory)Param.getMSF();
+            xMSF = Param.getMSF();
 
               XNameAccess xNameAccess = UnoRuntime.queryInterface(
                         XNameAccess.class,

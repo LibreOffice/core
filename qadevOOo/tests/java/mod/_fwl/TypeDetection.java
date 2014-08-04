@@ -91,7 +91,7 @@ public class TypeDetection extends TestCase {
         Object oInterface = null ;
 
         try {
-            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oInterface = Param.getMSF().createInstance
                 ("com.sun.star.document.TypeDetection") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
@@ -139,14 +139,14 @@ public class TypeDetection extends TestCase {
 
 
         log.println("create text document with bookmarks");
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         String fileURL = null;
         try {
             xTextDoc = SOF.createTextDoc( null );
             XInterface xBookMark = SOfficeFactory.createBookmark( xTextDoc );
             SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) xBookMark );
 
-            fileURL = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF() );
+            fileURL = utils.getOfficeTemp(Param.getMSF() );
             fileURL = fileURL + "bookmarks.oot";
 
             XStorable store = UnoRuntime.queryInterface(XStorable.class, xTextDoc);

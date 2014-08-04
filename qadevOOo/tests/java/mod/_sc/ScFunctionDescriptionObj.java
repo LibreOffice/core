@@ -38,7 +38,7 @@ public class ScFunctionDescriptionObj extends TestCase {
     private XSpreadsheetDocument xSheetDoc = null;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -75,7 +75,7 @@ public class ScFunctionDescriptionObj extends TestCase {
         try {
             log.println("Getting test object ") ;
 
-            XMultiServiceFactory oDocMSF =  (XMultiServiceFactory) Param.getMSF();
+            XMultiServiceFactory oDocMSF =  Param.getMSF();
 
             XInterface FDs = (XInterface)oDocMSF.
                     createInstance("com.sun.star.sheet.FunctionDescriptions");

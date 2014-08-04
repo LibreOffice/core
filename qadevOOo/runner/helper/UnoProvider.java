@@ -87,7 +87,7 @@ public class UnoProvider implements AppProvider {
      * @return A created MultiServiceFactory.
      */
     public Object getManager(TestParameters param) {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
+        XMultiServiceFactory xMSF = param.getMSF();
         if (xMSF == null) {
             // bootstrap UNO.
             String unorcName = getUnorcName(param);

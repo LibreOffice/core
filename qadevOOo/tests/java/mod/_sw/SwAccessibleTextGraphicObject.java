@@ -72,7 +72,7 @@ public class SwAccessibleTextGraphicObject extends TestCase {
 
         XInterface oObj = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
         Object oGraphObj = SOF.createInstance(
             xTextDoc, "com.sun.star.text.GraphicObject");
 
@@ -92,7 +92,7 @@ public class SwAccessibleTextGraphicObject extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.GRAPHIC);
@@ -156,7 +156,7 @@ public class SwAccessibleTextGraphicObject extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
     }
 }
 

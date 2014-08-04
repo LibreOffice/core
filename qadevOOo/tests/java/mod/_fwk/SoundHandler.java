@@ -52,7 +52,7 @@ public class SoundHandler extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
+            oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.frame.ContentHandler");
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -61,7 +61,7 @@ public class SoundHandler extends TestCase {
         }
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
-        URL dispURL = utils.parseURL((XMultiServiceFactory)Param.getMSF(),
+        URL dispURL = utils.parseURL(Param.getMSF(),
                                             utils.getFullTestURL("ok.wav"));
         System.out.println("DISPATCHURL: "+ dispURL.Complete);
 

@@ -66,7 +66,7 @@ public class ScAutoFormatsObj extends TestCase{
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -114,7 +114,7 @@ public class ScAutoFormatsObj extends TestCase{
             XComponent xComp = UnoRuntime.queryInterface
                 (XComponent.class, xSheetDoc);
             oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),((XMultiServiceFactory)Param.getMSF()).createInstance
+                new Type(XInterface.class),Param.getMSF().createInstance
                                     ("com.sun.star.sheet.TableAutoFormats"));
             Object secondInstance = SOF.createInstance
                 (xComp, "com.sun.star.sheet.TableAutoFormat");

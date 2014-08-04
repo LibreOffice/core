@@ -145,7 +145,7 @@ public class SwXParagraph extends TestCase {
                 log.println("couldn't close document");
             }
         }
-        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );

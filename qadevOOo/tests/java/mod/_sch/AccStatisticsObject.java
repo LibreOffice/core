@@ -48,7 +48,7 @@ public class AccStatisticsObject extends TestCase {
 
         if (xChartDoc != null) cleanup(Param, log);
         log.println( "creating a chart document" );
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
         try {
             log.println( "creating a chartdocument" );
             xChartDoc = SOF.createChartDoc(null);
@@ -67,7 +67,7 @@ public class AccStatisticsObject extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         XAccessibleContext cont = AccessibilityTools.getAccessibleObjectForRole(

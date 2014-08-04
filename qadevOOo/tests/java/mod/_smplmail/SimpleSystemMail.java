@@ -80,7 +80,7 @@ public class SimpleSystemMail extends TestCase {
         isSystemMailExist = "true".equalsIgnoreCase
             ((String) Param.get("test.system.mail.isExist")) ;
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         try {
             if (isWinOS) {
                 log.println("The OS is Win : trying to create service");

@@ -65,7 +65,7 @@ public class SwXPropertySetInfo extends TestCase {
         XInterface oObj = null;
 
         log.println( "creating a test environment" );
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );

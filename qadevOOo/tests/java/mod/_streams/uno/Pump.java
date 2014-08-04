@@ -67,7 +67,7 @@ public class Pump extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         Object oInterface = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oPipe;
 
         // creating an instance of stm.Pump

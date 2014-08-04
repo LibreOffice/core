@@ -53,7 +53,7 @@ public class AccessibleShape extends TestCase {
         log.println("Cleaning up");
         DesktopTools.closeDoc(xTextDoc);
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             Object o = xMSF.createInstance("com.sun.star.frame.Desktop");
             XDesktop xDesk = UnoRuntime.queryInterface(XDesktop.class, o);
             DesktopTools.closeDoc(xDesk.getCurrentFrame());
@@ -63,7 +63,7 @@ public class AccessibleShape extends TestCase {
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
         log.println( "creating a test environment" );
         String aURL=utils.getFullTestURL("basDialog.odt");
         xTextDoc = WriterTools.loadTextDoc(xMSF,aURL);
@@ -96,7 +96,7 @@ public class AccessibleShape extends TestCase {
         utils.shortWait(3000);
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            oObj = (XInterface) tParam.getMSF().createInstance
                     ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");

@@ -77,7 +77,7 @@ public class OFormsCollection extends TestCase {
     */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a draw document");
-        xDrawDoc = DrawTools.createDrawDoc(((XMultiServiceFactory) tParam.getMSF()));
+        xDrawDoc = DrawTools.createDrawDoc((tParam.getMSF()));
     }
 
     /**

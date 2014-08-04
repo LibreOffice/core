@@ -75,7 +75,7 @@ public class ObjectInspector extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println("create a desktop...");
-        StarDesktop = DesktopTools.createDesktop((XMultiServiceFactory) Param.getMSF());
+        StarDesktop = DesktopTools.createDesktop(Param.getMSF());
         if (StarDesktop == null){
             throw new StatusException("Could not get a Desktop: null", null);
         }
@@ -99,7 +99,7 @@ public class ObjectInspector extends TestCase {
 
         this.cleanup(tParam, log);
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
 
         try {
             XInterface oInspector = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspector");

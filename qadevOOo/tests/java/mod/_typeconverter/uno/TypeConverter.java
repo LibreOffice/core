@@ -39,7 +39,7 @@ public class TypeConverter extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance( "com.sun.star.script.Converter" );
         }
         catch( Exception e ) {

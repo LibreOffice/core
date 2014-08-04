@@ -400,7 +400,7 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Object oStream = ((XMultiServiceFactory)tParam.getMSF()).
+                Object oStream = tParam.getMSF().
                         createInstance("com.sun.star.io.DataInputStream") ;
                 XInputStream xStream = UnoRuntime.queryInterface
                     (XInputStream.class, oStream);
@@ -430,7 +430,7 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Object oStream = ((XMultiServiceFactory)tParam.getMSF())
+                Object oStream = tParam.getMSF()
                         .createInstance("com.sun.star.io.TextInputStream") ;
                 XInputStream xStream = UnoRuntime.queryInterface
                     (XInputStream.class, oStream);
@@ -460,7 +460,7 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Object obj = ((XMultiServiceFactory)tParam.getMSF()).
+                Object obj = tParam.getMSF().
                                 createInstance("com.sun.star.io.Pipe") ;
 
                 oObj.setObject(idx, obj) ;
@@ -488,7 +488,7 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Object obj = ((XMultiServiceFactory)tParam.getMSF()).
+                Object obj = tParam.getMSF().
                     createInstance("com.sun.star.io.Pipe") ;
 
                 oObj.setObjectWithInfo(idx, obj, DataType.OBJECT, 0) ;

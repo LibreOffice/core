@@ -42,7 +42,7 @@ public class _XSimpleFileAccess2 extends MultiMethodTest {
     public void _writeFile() {
         boolean result = true;
         try {
-            String dirnameTo = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
+            String dirnameTo = util.utils.getOfficeTemp(tParam.getMSF()) ;
             String fileURL = dirnameTo + "XSimpleFileAccess_new.txt";
             String dirname = util.utils.getFullTestURL("XSimpleFileAccess");
             String filename = dirname+"XSimpleFileAccess.txt";

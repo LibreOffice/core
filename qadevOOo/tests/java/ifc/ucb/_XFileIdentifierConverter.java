@@ -48,7 +48,7 @@ public class _XFileIdentifierConverter extends MultiMethodTest {
      * same location). <p>
      */
     public void _getFileProviderLocality() {
-        String baseURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+        String baseURL = util.utils.getOfficeTemp(tParam.getMSF());
         log.println("Using: "+baseURL);
         int loc = oObj.getFileProviderLocality(baseURL);
         log.println("Getting: "+loc);
@@ -62,9 +62,9 @@ public class _XFileIdentifierConverter extends MultiMethodTest {
      * representation of the URL passed. <p>
      */
     public void _getSystemPathFromFileURL() {
-        String baseURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+        String baseURL = util.utils.getOfficeTemp(tParam.getMSF());
         log.println("Using (Base): "+baseURL);
-        String sysURL = util.utils.getOfficeTempDirSys((XMultiServiceFactory)tParam.getMSF());
+        String sysURL = util.utils.getOfficeTempDirSys(tParam.getMSF());
         log.println("Using (System): "+sysURL);
         String get = oObj.getSystemPathFromFileURL(baseURL);
         log.println("Getting: "+get);
@@ -79,9 +79,9 @@ public class _XFileIdentifierConverter extends MultiMethodTest {
      * of the system dependent path passed. <p>
      */
     public void _getFileURLFromSystemPath() {
-        String baseURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+        String baseURL = util.utils.getOfficeTemp(tParam.getMSF());
         log.println("Using (Base): "+baseURL);
-        String sysURL = util.utils.getOfficeTempDirSys((XMultiServiceFactory)tParam.getMSF());
+        String sysURL = util.utils.getOfficeTempDirSys(tParam.getMSF());
         log.println("Using (System): "+sysURL);
         String get = oObj.getFileURLFromSystemPath(sysURL,sysURL);
         log.println("Getting: "+get);

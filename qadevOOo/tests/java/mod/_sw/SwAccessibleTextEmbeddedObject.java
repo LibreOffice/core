@@ -70,7 +70,7 @@ public class SwAccessibleTextEmbeddedObject extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.EMBEDDED_OBJECT);
@@ -136,7 +136,7 @@ public class SwAccessibleTextEmbeddedObject extends TestCase {
         log.println( "open a text document" );
         String testdoc = utils.getFullTestURL("SwXTextEmbeddedObject.sxw");
         log.println(testdoc);
-        xTextDoc = WriterTools.loadTextDoc((XMultiServiceFactory)Param.getMSF(),testdoc);
+        xTextDoc = WriterTools.loadTextDoc(Param.getMSF(),testdoc);
     }
 }
 

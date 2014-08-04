@@ -49,7 +49,7 @@ public class UnoSpinButtonControl extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println("creating a textdocument");
         xTextDoc = WriterTools.createTextDoc(
-                           (XMultiServiceFactory) Param.getMSF());
+                           Param.getMSF());
     }
 
     protected void cleanup(TestParameters tParam, PrintWriter log) {

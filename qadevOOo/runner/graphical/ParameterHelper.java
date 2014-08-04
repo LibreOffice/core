@@ -248,7 +248,7 @@ public class ParameterHelper
     // get methods
     public XMultiServiceFactory getMultiServiceFactory()
         {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)m_aCurrentParams.getMSF();
+            XMultiServiceFactory xMSF = m_aCurrentParams.getMSF();
 
             // check if MultiServiceFactory is given
             if (getReferenceType().toLowerCase().equals("pdf") ||

@@ -41,7 +41,7 @@ public class TabControllerModel extends TestCase {
         try {
             log.println("creating a textdocument");
             xTextDoc = WriterTools.createTextDoc(
-                               (XMultiServiceFactory) param.getMSF());
+                               param.getMSF());
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document", e);
@@ -67,7 +67,7 @@ public class TabControllerModel extends TestCase {
                                                             "TextField");
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) param.getMSF()).createInstance(
+            oObj = (XInterface) param.getMSF().createInstance(
                            "com.sun.star.awt.TabControllerModel");
         } catch (Exception e) {
             e.printStackTrace(log);

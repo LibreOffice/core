@@ -73,7 +73,7 @@ public class ChXDataPoint extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a chartdocument" );
@@ -120,7 +120,7 @@ public class ChXDataPoint extends TestCase {
         XPropertySet  oObj = null;
         XDiagram oDiagram = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         // get the DataRowPoint_Point
         try {

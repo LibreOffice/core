@@ -49,7 +49,7 @@ public class InvocationAdapterFactory extends TestCase {
     * <code>com.sun.star.script.InvocationAdapterFactory</code>.
     */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
 
         try {
             XInterface xInt = (XInterface)xMSF.createInstance(

@@ -71,7 +71,7 @@ public class AccessibleToolBox extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         UnoRuntime.queryInterface(XDesktop.class,
                 DesktopTools.createDesktop(
-                (XMultiServiceFactory) Param.getMSF()));
+                Param.getMSF()));
     }
 
     /**
@@ -114,7 +114,7 @@ public class AccessibleToolBox extends TestCase {
             util.DesktopTools.closeDoc(xTextDoc);
         }
 
-        XMultiServiceFactory msf = (XMultiServiceFactory) tParam.getMSF();
+        XMultiServiceFactory msf = tParam.getMSF();
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(msf);

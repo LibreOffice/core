@@ -74,7 +74,7 @@ public class OSQLMessageDialog extends TestCase {
         Object err2 = null;
 
         try {
-            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance(
+            oInterface = Param.getMSF().createInstance(
                             "com.sun.star.sdb.ErrorMessageDialog" );
 
             err1 = new com.sun.star.sdbc.SQLException("err1");
@@ -98,7 +98,7 @@ public class OSQLMessageDialog extends TestCase {
         try{
             xToolkit = UnoRuntime.queryInterface(
                         com.sun.star.awt.XToolkit.class,
-            ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.awt.Toolkit") );
+            Param.getMSF().createInstance("com.sun.star.awt.Toolkit") );
         } catch (com.sun.star.uno.Exception e){
             log.println("could not create instacne of 'com.sun.star.awt.Toolkit'" );
             throw new StatusException("could not create instacne of 'com.sun.star.awt.Toolkit'", e) ;

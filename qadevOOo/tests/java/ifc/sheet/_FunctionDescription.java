@@ -59,7 +59,7 @@ public class _FunctionDescription extends MultiMethodTest {
         }
 
         try {
-            XMultiServiceFactory oDocMSF = (XMultiServiceFactory)tParam.getMSF();
+            XMultiServiceFactory oDocMSF = tParam.getMSF();
 
             XInterface FA = (XInterface)oDocMSF.
                 createInstance("com.sun.star.sheet.FunctionArgument");

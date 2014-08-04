@@ -124,14 +124,13 @@ public class _XAcceptor extends MultiMethodTest {
 
         // creating services requierd
         try {
-            Object oConnector = ((XMultiServiceFactory)tParam.getMSF()).
+            Object oConnector = (tParam.getMSF()).
                 createInstance("com.sun.star.connection.Connector") ;
 
             xConnector = UnoRuntime.queryInterface
                 (XConnector.class, oConnector) ;
 
-            XInterface acceptor = (XInterface) ((XMultiServiceFactory)
-                tParam.getMSF()).createInstance
+            XInterface acceptor = (XInterface) tParam.getMSF().createInstance
                 ("com.sun.star.connection.Acceptor") ;
 
             dupAcceptor = UnoRuntime.queryInterface

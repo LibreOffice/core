@@ -81,7 +81,7 @@ public class CntUnoDataContainer extends TestCase {
                                     TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         Object relationContainer = null ;
         Object xIn = null;
 

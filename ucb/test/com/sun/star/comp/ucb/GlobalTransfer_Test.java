@@ -61,7 +61,7 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
     public void testNameClashASK() throws Exception {
         Object oObj = null;
         try {
-           XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
+           XMultiServiceFactory xMSF = param.getMSF();
            oObj
             = xMSF.createInstance( "com.sun.star.ucb.UniversalContentBroker" );
                // unconfigured instance

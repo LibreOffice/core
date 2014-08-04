@@ -159,7 +159,7 @@ public class ORowSet extends TestCase {
     protected void initialize ( TestParameters Param, PrintWriter _log)
         throws StatusException
     {
-        m_orb = (XMultiServiceFactory)Param.getMSF();
+        m_orb = Param.getMSF();
 
         String tmpDir = utils.getOfficeTemp( m_orb );
 
@@ -243,7 +243,7 @@ public class ORowSet extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param,
             PrintWriter log)
     {
-        XMultiServiceFactory orb = (XMultiServiceFactory)Param.getMSF();
+        XMultiServiceFactory orb = Param.getMSF();
         uniqueSuffix++;
         boolean envCreatedOK = false ;
 

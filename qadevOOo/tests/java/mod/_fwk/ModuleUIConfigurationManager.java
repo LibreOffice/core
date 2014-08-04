@@ -76,7 +76,7 @@ public class ModuleUIConfigurationManager extends TestCase {
         TestEnvironment tEnv = null;
 
         try {
-            xMSF = (XMultiServiceFactory)tParam.getMSF();
+            xMSF = tParam.getMSF();
 
             log.println("Creating instance...");
             xTextDoc = WriterTools.createTextDoc(xMSF);

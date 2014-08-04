@@ -173,7 +173,7 @@ public class _XRangeSelection extends MultiMethodTest {
         XModel xModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
         System.out.println("Name: " + xModel.getCurrentController().getFrame().getName());
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)tParam.getMSF(), xModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(tParam.getMSF(), xModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         XAccessibleContext ctx = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE  );
@@ -185,7 +185,7 @@ public class _XRangeSelection extends MultiMethodTest {
         Object toolkit = null;
 
         try {
-            toolkit = ((XMultiServiceFactory)tParam.getMSF()).createInstance("com.sun.star.awt.Toolkit");
+            toolkit = tParam.getMSF().createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
@@ -231,7 +231,7 @@ public class _XRangeSelection extends MultiMethodTest {
      * @return A point representing the closer button.
      */
     private Point getCloser(Point center) {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = tParam.getMSF();
         Object aToolkit = null;
         try {
             aToolkit = xMSF.createInstance("com.sun.star.awt.Toolkit");

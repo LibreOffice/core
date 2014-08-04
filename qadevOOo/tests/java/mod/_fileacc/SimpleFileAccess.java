@@ -55,7 +55,7 @@ public class SimpleFileAccess extends TestCase {
         Object oIH = null;
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
                 ("com.sun.star.comp.ucb.SimpleFileAccess");
             oIH = xMSF.createInstance("com.sun.star.sdb.InteractionHandler");

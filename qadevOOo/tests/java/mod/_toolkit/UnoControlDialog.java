@@ -85,7 +85,7 @@ public class UnoControlDialog extends TestCase {
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log) {
         XInterface oObj = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory xMSF = Param.getMSF();
         XControlModel dlgModel = null;
 
         XWindowPeer the_win = null;
@@ -231,7 +231,7 @@ public class UnoControlDialog extends TestCase {
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) tParam.getMSF());
+                                     tParam.getMSF());
 
         try {
             log.println("creating a textdocument");

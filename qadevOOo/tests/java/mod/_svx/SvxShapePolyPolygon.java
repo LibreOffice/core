@@ -127,7 +127,7 @@ public class SvxShapePolyPolygon extends TestCase {
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a chartdocument" );
@@ -212,7 +212,7 @@ public class SvxShapePolyPolygon extends TestCase {
 
             oObj = oShape ;
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF()) ;
+            SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF()) ;
             oShape = SOF.createShape(xDrawDoc,5000,3500,7500,5000,"Line");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
         }

@@ -116,7 +116,7 @@ public class _XPersistObject extends MultiMethodTest {
                 XPropertySetInfo objpsi = objps.getPropertySetInfo();
                 Property[] objprops = objpsi.getProperties();
 
-                Object oCopy = ((XMultiServiceFactory)tParam.getMSF()).createInstance(sname);
+                Object oCopy = tParam.getMSF().createInstance(sname);
 
                 XPersistObject persCopy = UnoRuntime.queryInterface(XPersistObject.class, oCopy);
 
@@ -156,7 +156,7 @@ public class _XPersistObject extends MultiMethodTest {
                     bResult &= locRes;
                 }
             } else {
-                Object oCopy = ((XMultiServiceFactory)tParam.getMSF()).createInstance(sname);
+                Object oCopy = tParam.getMSF().createInstance(sname);
                 XPersistObject persCopy = UnoRuntime.queryInterface(XPersistObject.class, oCopy);
 
                 persCopy.read(iStream);
@@ -199,17 +199,17 @@ public class _XPersistObject extends MultiMethodTest {
     */
     protected void initPipe() {
         try {
-            Object aPipe = ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            Object aPipe = tParam.getMSF().createInstance
                 ("com.sun.star.io.Pipe");
-            Object istream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            Object istream = tParam.getMSF().createInstance
                 ("com.sun.star.io.ObjectInputStream");
-            Object ostream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            Object ostream = tParam.getMSF().createInstance
                 ("com.sun.star.io.ObjectOutputStream");
 
             // Now the objects that aren't described anywhere
-            Object mistream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            Object mistream = tParam.getMSF().createInstance
                 ("com.sun.star.io.MarkableInputStream");
-            Object mostream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            Object mostream = tParam.getMSF().createInstance
                 ("com.sun.star.io.MarkableOutputStream");
 
             XActiveDataSink xdSi = UnoRuntime.queryInterface(XActiveDataSink.class, istream);

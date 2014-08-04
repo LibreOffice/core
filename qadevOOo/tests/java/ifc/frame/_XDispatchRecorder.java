@@ -74,7 +74,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
         oObj.startRecording(xFrame);
 
         log.println("dispatch calles via API must be recorded");
-        dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
+        dispURL = utils.parseURL(tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
         prop.Name = "Text";
@@ -124,7 +124,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
         oObj.startRecording(xFrame);
 
         // positve test
-        dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
+        dispURL = utils.parseURL(tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
         prop.Name = "Text";
@@ -155,7 +155,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
 
         oObj.startRecording(xFrame);
 
-        dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
+        dispURL = utils.parseURL(tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
         prop.Name = "Text";

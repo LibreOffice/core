@@ -97,7 +97,7 @@ public class SvxDrawPage extends TestCase {
     protected void initialize(TestParameters tParam, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) tParam.getMSF());
+                                     tParam.getMSF());
 
         try {
             log.println("creating a sheetdocument");
@@ -161,7 +161,7 @@ public class SvxDrawPage extends TestCase {
                                                      oDP.getByIndex(0));
 
             SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                         (XMultiServiceFactory) tParam.getMSF());
+                                         tParam.getMSF());
 
             oShape = SOF.createShape(xComp, 5000, 3500, 7500, 5000,
                                      "Rectangle");

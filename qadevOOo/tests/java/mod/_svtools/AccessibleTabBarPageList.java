@@ -108,7 +108,7 @@ public class AccessibleTabBarPageList extends TestCase {
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println("creating a draw document");
@@ -124,7 +124,7 @@ public class AccessibleTabBarPageList extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) tParam.getMSF())
+            oObj = (XInterface) tParam.getMSF()
                                       .createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");

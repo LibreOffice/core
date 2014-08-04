@@ -181,7 +181,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
 
         try {
             String ent = util.utils.getOfficeURL(
-                                 (XMultiServiceFactory) tParam.getMSF()) +
+                                 tParam.getMSF()) +
                          "/../share/registry";
             String UpdateLayerID = oObj.getUpdateLayerId(
                                            "org.openoffice.Office.Linguistic", ent);
@@ -224,7 +224,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
 
         try {
             String ent = util.utils.getOfficeURL(
-                                 (XMultiServiceFactory) tParam.getMSF()) +
+                                 tParam.getMSF()) +
                          "/../share/registry";
             String[] LayerIDs = oObj.listLayerIds("org.openoffice.Office.Jobs",
                                                   ent);

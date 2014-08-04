@@ -58,7 +58,7 @@ public class _XRemoteContentProviderActivator extends MultiMethodTest {
         XRemoteContentProviderAcceptor xRCPA = (XRemoteContentProviderAcceptor)
                                                     tEnv.getObjRelation("RCPA");
         String[] template = new String[]{"file"};
-        xRCPA.addRemoteContentProvider("ContentID",(XMultiServiceFactory)tParam.getMSF(),template,null);
+        xRCPA.addRemoteContentProvider("ContentID",tParam.getMSF(),template,null);
         XContentProviderManager CPM = oObj.activateRemoteContentProviders();
         res = (CPM != null);
         xRCPA.removeRemoteContentProvider("ContentID");

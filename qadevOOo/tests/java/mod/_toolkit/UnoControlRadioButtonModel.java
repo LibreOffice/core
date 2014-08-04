@@ -35,7 +35,7 @@ public class UnoControlRadioButtonModel extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+            oObj = (XInterface) Param.getMSF().createInstance(
                            "com.sun.star.awt.UnoControlRadioButtonModel");
         } catch (Exception e) {
         }

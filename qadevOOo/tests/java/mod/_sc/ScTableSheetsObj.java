@@ -69,7 +69,7 @@ public class ScTableSheetsObj extends TestCase {
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
         try {
             log.println("creating a spreadsheetdocument");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
@@ -109,7 +109,7 @@ public class ScTableSheetsObj extends TestCase {
     */
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
 
         log.println("getting sheets");
         XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();

@@ -167,7 +167,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
             protected Object getNewValue(String p, Object v) {
                 Object newValue = null;
                 try {
-                    newValue = ((XMultiServiceFactory)tParam.getMSF()).createInstance(
+                    newValue = tParam.getMSF().createInstance(
                                     "com.sun.star.util.NumberFormatsSupplier");
                 } catch (com.sun.star.uno.Exception e) {}
                 return newValue;

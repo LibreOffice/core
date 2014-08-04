@@ -99,7 +99,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
         try {
             XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
-         ( (XMultiServiceFactory) Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+         Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -118,7 +118,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow( Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT );
@@ -180,6 +180,6 @@ public class SwAccessibleDocumentPageView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory) Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc( Param.getMSF());
     }
 }

@@ -68,7 +68,7 @@ public class DLLComponentLoader extends TestCase {
         XMultiServiceFactory xMSF = null;
 
         try {
-            xMSF = (XMultiServiceFactory)Param.getMSF();
+            xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.comp.stoc.DLLComponentLoader" );
         }

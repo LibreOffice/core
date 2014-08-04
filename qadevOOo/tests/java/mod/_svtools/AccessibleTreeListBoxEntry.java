@@ -87,7 +87,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
-        (XMultiServiceFactory) Param.getMSF()));
+        Param.getMSF()));
     }
 
     /**
@@ -143,7 +143,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println("creating a text document");

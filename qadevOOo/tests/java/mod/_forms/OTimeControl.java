@@ -96,7 +96,7 @@ public class OTimeControl extends TestCase {
      * Creates a new text document.
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) Param.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory((Param.getMSF()));
 
         try {
             log.println("creating a textdocument");
@@ -228,7 +228,7 @@ public class OTimeControl extends TestCase {
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);
 
-        FormTools.switchDesignOf(((XMultiServiceFactory) Param.getMSF()), xTextDoc);
+        FormTools.switchDesignOf((Param.getMSF()), xTextDoc);
         shortWait();
 
         return tEnv;

@@ -262,7 +262,7 @@ class OGridControlModelold extends TestCase {
     * Creates Drawing document.
     */
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory((tParam.getMSF()));
 
         log.println("creating a draw document");
 

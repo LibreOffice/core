@@ -272,7 +272,7 @@ public class _XEventAttacherManager extends MultiMethodTest {
         requiredMethod("insertEntry()");
 
         try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+            XMultiServiceFactory xMSF = tParam.getMSF();
             attachedObject = xMSF.createInstance
                 ( "com.sun.star.uno.NamingService" );
         } catch( com.sun.star.uno.Exception e ) {

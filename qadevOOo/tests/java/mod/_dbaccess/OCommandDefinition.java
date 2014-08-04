@@ -58,7 +58,7 @@ public class OCommandDefinition extends TestCase {
         XMultiServiceFactory xMSF = null ;
 
         try {
-            xMSF = (XMultiServiceFactory)Param.getMSF();
+            xMSF = Param.getMSF();
             oInterface = xMSF.createInstance( "com.sun.star.sdb.QueryDefinition" );
         }
         catch( com.sun.star.uno.Exception e ) {

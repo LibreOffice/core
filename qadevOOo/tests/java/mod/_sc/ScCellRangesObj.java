@@ -91,7 +91,7 @@ public class ScCellRangesObj extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a sheetdocument" );
@@ -141,7 +141,7 @@ public class ScCellRangesObj extends TestCase {
         log.println( "Creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
 
         log.println("Getting test object ");
 

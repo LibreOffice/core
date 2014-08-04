@@ -39,7 +39,7 @@ public class ProviderAcceptor extends TestCase {
         Object oInterface = null;
 
         try {
-            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
+            oInterface = Param.getMSF().createInstance
                 ("com.sun.star.ucb.RemoteContentProviderAcceptor");
         } catch( com.sun.star.uno.Exception e ) {
             log.println("Can't create an object." );

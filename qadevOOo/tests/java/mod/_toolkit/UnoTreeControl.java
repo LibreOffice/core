@@ -53,7 +53,7 @@ public class UnoTreeControl extends TestCase {
 
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-            (XMultiServiceFactory) Param.getMSF());
+            Param.getMSF());
 
         try {
             log.println("creating a textdocument");
@@ -74,7 +74,7 @@ public class UnoTreeControl extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log) {
         String sTreeControlName = "UnoTreeControl-Test";
-        mxMSF = (XMultiServiceFactory) Param.getMSF();
+        mxMSF = Param.getMSF();
         XInterface oObj = null;
         XMutableTreeNode xNode = null;
 

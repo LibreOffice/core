@@ -76,7 +76,7 @@ public class ScAnnotationShapeObj extends TestCase {
     */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF =
-            SOfficeFactory.getFactory((XMultiServiceFactory) tParam
+            SOfficeFactory.getFactory(tParam
                 .getMSF());
 
         try {

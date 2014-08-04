@@ -61,7 +61,7 @@ public class _XRemoteContentProviderAcceptor extends MultiMethodTest {
         boolean res = false;
 
         String[] template = new String[]{"file"};
-        res = oObj.addRemoteContentProvider("ContentID",(XMultiServiceFactory)tParam.getMSF(),
+        res = oObj.addRemoteContentProvider("ContentID",tParam.getMSF(),
             template,aDoneListener);
 
         tRes.tested("addRemoteContentProvider()",res);

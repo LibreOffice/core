@@ -33,9 +33,9 @@ public class _MailMerge extends MultiPropertyTest {
      */
     protected PropertyTester URLTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
-            if (oldValue.equals(util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF())))
+            if (oldValue.equals(util.utils.getOfficeTemp(tParam.getMSF())))
                 return util.utils.getFullTestURL(""); else
-                return util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+                return util.utils.getOfficeTemp(tParam.getMSF());
         }
     } ;
 

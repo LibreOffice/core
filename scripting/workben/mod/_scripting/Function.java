@@ -48,7 +48,7 @@ public class Function extends TestCase {
         log.println("creating test environment");
         try {
 
-            XMultiServiceFactory xMSF = (XMultiServiceFactory) tParam.getMSF();
+            XMultiServiceFactory xMSF = tParam.getMSF();
             SOfficeFactory SOF = null;
             SOF = SOfficeFactory.getFactory( xMSF );
             String docPath = util.utils.getFullTestURL(doc);
