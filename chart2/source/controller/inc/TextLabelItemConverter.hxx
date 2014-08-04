@@ -33,6 +33,7 @@ namespace chart { namespace wrapper {
 class TextLabelItemConverter : public ::comphelper::ItemConverter
 {
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     TextLabelItemConverter(
         const css::uno::Reference<css::frame::XModel>& xChartModel,
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
@@ -42,6 +43,7 @@ public:
         bool bDataSeries = false,
         sal_Int32 nNumberFormat = 0,
         sal_Int32 nPercentNumberFormat = 0 );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     virtual ~TextLabelItemConverter();
 
