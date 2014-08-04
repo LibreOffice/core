@@ -34,17 +34,13 @@
 #include <Carbon/Carbon.h>
 #include "postmac.h"
 
+#include <cuidraw.hxx>
+
 #ifndef NSAppKitVersionNumber10_7
 #define NSAppKitVersionNumber10_7 1138
 #endif
 
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-
-extern "C"
-{
-    typedef CFTypeRef CUIRendererRef;
-    void CUIDraw(CUIRendererRef r, CGRect rect, CGContextRef ctx, CFDictionaryRef options, CFDictionaryRef* result);
-}
 
 @interface NSWindow(CoreUIRendererPrivate)
 + (CUIRendererRef)coreUIRenderer;
