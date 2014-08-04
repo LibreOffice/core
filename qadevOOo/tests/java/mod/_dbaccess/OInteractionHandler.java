@@ -26,7 +26,6 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.task.XInteractionContinuation;
 import com.sun.star.task.XInteractionRequest;

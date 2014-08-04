@@ -33,7 +33,6 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleValue;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;

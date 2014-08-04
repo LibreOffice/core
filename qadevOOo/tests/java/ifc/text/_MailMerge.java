@@ -20,7 +20,6 @@ package ifc.text;
 
 import lib.MultiPropertyTest;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.uno.UnoRuntime;

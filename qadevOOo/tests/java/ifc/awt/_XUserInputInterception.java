@@ -32,7 +32,6 @@ import com.sun.star.awt.XUserInputInterception;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import java.awt.Robot;
 import java.awt.event.InputEvent;

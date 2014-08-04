@@ -30,7 +30,6 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;

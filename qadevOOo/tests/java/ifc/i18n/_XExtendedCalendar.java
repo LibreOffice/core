@@ -22,7 +22,6 @@ import com.sun.star.i18n.NativeNumberMode;
 import com.sun.star.i18n.XExtendedCalendar;
 import com.sun.star.i18n.XLocaleData;
 import com.sun.star.lang.Locale;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -29,7 +29,6 @@ import util.ParagraphDsc;
 import util.SOfficeFactory;
 import util.TextSectionDsc;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.table.XCell;
 import com.sun.star.text.XSimpleText;
 import com.sun.star.text.XTextDocument;

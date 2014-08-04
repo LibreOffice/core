@@ -20,8 +20,6 @@ package ifc.configuration.backend;
 import com.sun.star.configuration.backend.XLayer;
 import com.sun.star.configuration.backend.XMultiLayerStratum;
 import com.sun.star.configuration.backend.XUpdatableLayer;
-import com.sun.star.lang.XMultiServiceFactory;
-
 import lib.MultiMethodTest;
 
 import util.XLayerHandlerImpl;

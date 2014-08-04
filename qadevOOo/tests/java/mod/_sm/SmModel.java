@@ -27,7 +27,6 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 
 /**
  * Test for object which is represented by

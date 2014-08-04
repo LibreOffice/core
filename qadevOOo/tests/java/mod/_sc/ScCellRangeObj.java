@@ -28,7 +28,6 @@ import util.ValueComparer;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;

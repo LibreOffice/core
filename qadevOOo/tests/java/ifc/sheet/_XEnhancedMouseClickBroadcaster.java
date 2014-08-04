@@ -25,7 +25,6 @@ import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XEnhancedMouseClickHandler;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XEnhancedMouseClickBroadcaster;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;

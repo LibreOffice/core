@@ -21,7 +21,6 @@ package ifc.configuration.backend;
 import com.sun.star.configuration.backend.XSchema;
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 

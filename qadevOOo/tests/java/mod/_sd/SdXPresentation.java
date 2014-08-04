@@ -28,7 +28,6 @@ import util.SOfficeFactory;
 
 import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.presentation.XCustomPresentationSupplier;
 import com.sun.star.presentation.XPresentationSupplier;

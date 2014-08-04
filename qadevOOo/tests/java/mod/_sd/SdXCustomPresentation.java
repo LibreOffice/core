@@ -33,7 +33,6 @@ import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.presentation.XCustomPresentationSupplier;
 import com.sun.star.uno.AnyConverter;

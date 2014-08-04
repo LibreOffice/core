@@ -26,7 +26,6 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XDocumentIndexesSupplier;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;

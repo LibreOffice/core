@@ -20,7 +20,6 @@ package ifc.ucb;
 
 import lib.MultiMethodTest;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XDataContainer;
 
 /**

@@ -30,7 +30,6 @@ import com.sun.star.frame.XFrameLoader;
 import com.sun.star.frame.XLoadEventListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 

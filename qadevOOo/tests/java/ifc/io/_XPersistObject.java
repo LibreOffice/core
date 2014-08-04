@@ -33,7 +33,6 @@ import com.sun.star.io.XObjectInputStream;
 import com.sun.star.io.XObjectOutputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XPersistObject;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 

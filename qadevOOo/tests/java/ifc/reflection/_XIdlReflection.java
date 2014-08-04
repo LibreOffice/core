@@ -18,7 +18,6 @@
 
 package ifc.reflection;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.reflection.XIdlClass;
 import com.sun.star.reflection.XIdlReflection;
 import com.sun.star.uno.TypeClass;

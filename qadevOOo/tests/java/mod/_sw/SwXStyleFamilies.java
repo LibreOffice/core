@@ -27,7 +27,6 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;

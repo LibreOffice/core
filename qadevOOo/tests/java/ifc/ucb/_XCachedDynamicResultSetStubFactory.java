@@ -22,7 +22,6 @@ import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.ucb.XCachedDynamicResultSetFactory;
 import com.sun.star.ucb.XCachedDynamicResultSetStubFactory;

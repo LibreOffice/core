@@ -21,8 +21,6 @@ package ifc.util;
 import lib.MultiPropertyTest;
 import util.utils;
 
-import com.sun.star.lang.XMultiServiceFactory;
-
 /**
  * Testing <code>com.sun.star.util.PathSettings</code>
  * service properties :

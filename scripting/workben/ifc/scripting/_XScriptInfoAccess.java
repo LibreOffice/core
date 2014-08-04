@@ -22,7 +22,6 @@ import drafts.com.sun.star.script.framework.storage.XScriptInfoAccess;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XMultiServiceFactory;
 import lib.MultiMethodTest;
 import lib.StatusException;
 import lib.Parameters;

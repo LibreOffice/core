@@ -31,7 +31,6 @@ import com.sun.star.chart.XChartDocument;
 import com.sun.star.drawing.XShapeDescriptor;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 /**

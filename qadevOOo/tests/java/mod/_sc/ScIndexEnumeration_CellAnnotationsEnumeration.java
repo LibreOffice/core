@@ -29,7 +29,6 @@ import util.SOfficeFactory;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSheetAnnotations;
 import com.sun.star.sheet.XSheetAnnotationsSupplier;
 import com.sun.star.sheet.XSpreadsheet;

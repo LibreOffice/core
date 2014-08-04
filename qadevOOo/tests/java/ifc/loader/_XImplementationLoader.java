@@ -22,7 +22,6 @@ import lib.MultiMethodTest;
 import lib.StatusException;
 import util.RegistryTools;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.loader.CannotActivateFactoryException;
 import com.sun.star.loader.XImplementationLoader;

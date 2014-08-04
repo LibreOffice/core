@@ -27,7 +27,6 @@ import util.SOfficeFactory;
 
 import com.sun.star.chart.XChartData;
 import com.sun.star.chart.XChartDocument;
-import com.sun.star.lang.XMultiServiceFactory;
 
 /**
 * Test for object which is represented by service

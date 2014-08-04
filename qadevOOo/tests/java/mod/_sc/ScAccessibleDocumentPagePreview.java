@@ -40,7 +40,6 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;

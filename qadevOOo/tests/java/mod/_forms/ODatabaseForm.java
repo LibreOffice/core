@@ -46,7 +46,6 @@ import com.sun.star.form.DatabaseParameterEvent;
 import com.sun.star.form.XForm;
 import com.sun.star.form.XLoadable;
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.ParametersRequest;
 import com.sun.star.sdb.RowChangeEvent;

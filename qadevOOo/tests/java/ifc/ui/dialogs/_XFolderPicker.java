@@ -20,7 +20,6 @@ package ifc.ui.dialogs;
 
 import lib.MultiMethodTest;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.dialogs.XFolderPicker;
 
 /**

@@ -27,7 +27,6 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XChapterNumberingSupplier;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;

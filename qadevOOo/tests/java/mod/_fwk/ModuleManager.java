@@ -23,7 +23,6 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import lib.*;
 import util.DesktopTools;
 import util.SOfficeFactory;

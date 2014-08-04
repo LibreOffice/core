@@ -24,7 +24,6 @@ import util.utils;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
-import com.sun.star.lang.XMultiServiceFactory;
 
 /**
 * Testing <code>com.sun.star.frame.XStorable</code>

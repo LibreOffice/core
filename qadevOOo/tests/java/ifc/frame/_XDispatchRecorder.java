@@ -28,7 +28,6 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XDispatchRecorder;
 import com.sun.star.frame.XFrame;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
 

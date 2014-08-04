@@ -26,7 +26,6 @@ import lib.Status;
 import com.sun.star.io.XDataInputStream;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTextInputStream;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XParameters;

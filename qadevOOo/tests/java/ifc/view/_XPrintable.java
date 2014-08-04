@@ -24,7 +24,6 @@ import lib.StatusException;
 import util.utils;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.PaperOrientation;

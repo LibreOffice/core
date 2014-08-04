@@ -29,7 +29,6 @@ import util.SOfficeFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;

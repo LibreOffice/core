@@ -35,7 +35,6 @@ import util.SOfficeFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.form.XForm;
 import com.sun.star.frame.XController;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;

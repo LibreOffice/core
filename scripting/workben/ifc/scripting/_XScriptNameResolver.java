@@ -26,7 +26,6 @@ import drafts.com.sun.star.script.framework.runtime.XScriptNameResolver;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.XComponentContext;

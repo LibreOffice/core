@@ -34,7 +34,6 @@ import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;

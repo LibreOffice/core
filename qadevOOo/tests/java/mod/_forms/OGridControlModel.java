@@ -33,7 +33,6 @@ import com.sun.star.container.XNamed;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.form.XGridColumnFactory;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;

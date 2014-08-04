@@ -27,7 +27,6 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 import util.utils;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;

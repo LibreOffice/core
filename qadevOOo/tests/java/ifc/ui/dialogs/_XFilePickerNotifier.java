@@ -23,7 +23,6 @@ import lib.Status;
 import lib.StatusException;
 
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.dialogs.FilePickerEvent;
 import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.ui.dialogs.XFilePicker;

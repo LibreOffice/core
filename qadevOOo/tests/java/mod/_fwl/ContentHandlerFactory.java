@@ -29,7 +29,6 @@ import lib.TestParameters;
 import util.utils;
 
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 

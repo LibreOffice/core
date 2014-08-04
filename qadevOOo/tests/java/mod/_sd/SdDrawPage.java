@@ -37,7 +37,6 @@ import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XMasterPagesSupplier;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;

@@ -29,7 +29,6 @@ import util.SOfficeFactory;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.GeneralFunction;
 import com.sun.star.sheet.SubTotalColumn;
 import com.sun.star.sheet.XSpreadsheet;

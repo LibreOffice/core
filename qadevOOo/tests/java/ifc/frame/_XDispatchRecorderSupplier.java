@@ -24,7 +24,6 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XDispatchRecorder;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XDispatchRecorderSupplier;
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XComponent;

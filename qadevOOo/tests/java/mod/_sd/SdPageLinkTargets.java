@@ -33,7 +33,6 @@ import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 

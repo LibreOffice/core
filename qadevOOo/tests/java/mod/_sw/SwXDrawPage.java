@@ -31,7 +31,6 @@ import util.ShapeDsc;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XShapes;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;

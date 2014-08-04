@@ -30,7 +30,6 @@ import complexlib.ComplexTestCase;
 import org.hsqldb.lib.StopWatch;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.PropertyState;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.embed.XStorage;
 import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XDriver;

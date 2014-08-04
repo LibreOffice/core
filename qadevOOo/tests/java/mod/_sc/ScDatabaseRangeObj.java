@@ -22,7 +22,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XCellRangeAddressable;
 import com.sun.star.sheet.XCellRangeReferrer;
 import com.sun.star.sheet.XDatabaseRanges;

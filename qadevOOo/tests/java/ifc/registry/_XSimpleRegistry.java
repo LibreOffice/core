@@ -22,7 +22,6 @@ import lib.Status;
 import lib.StatusException;
 import util.RegistryTools;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.InvalidRegistryException;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.registry.XSimpleRegistry;

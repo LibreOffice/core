@@ -21,8 +21,6 @@ package ifc.awt;
 import lib.MultiPropertyTest;
 import util.utils;
 
-import com.sun.star.lang.XMultiServiceFactory;
-
 /**
 * Testing <code>com.sun.star.awt.UnoControlFormattedFieldModel</code>
 * service properties :

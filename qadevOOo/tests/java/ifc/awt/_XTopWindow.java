@@ -26,7 +26,6 @@ import com.sun.star.awt.XMenuBar;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XTopWindowListener;
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 

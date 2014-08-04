@@ -28,7 +28,6 @@ import util.SOfficeFactory;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XLabelRange;
 import com.sun.star.sheet.XLabelRanges;
 import com.sun.star.sheet.XSpreadsheetDocument;

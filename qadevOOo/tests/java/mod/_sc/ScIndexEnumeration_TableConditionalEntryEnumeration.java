@@ -32,7 +32,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.ConditionOperator;
 import com.sun.star.sheet.XSheetConditionalEntries;
 import com.sun.star.sheet.XSpreadsheet;

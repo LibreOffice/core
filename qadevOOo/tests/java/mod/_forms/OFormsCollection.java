@@ -28,7 +28,6 @@ import util.FormTools;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;

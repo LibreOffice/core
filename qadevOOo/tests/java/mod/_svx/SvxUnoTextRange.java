@@ -30,7 +30,6 @@ import util.SOfficeFactory;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XSimpleText;
 import com.sun.star.text.XTextCursor;

@@ -40,7 +40,6 @@ import util.ValueComparer;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XCellRangeAddressable;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;

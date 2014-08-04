@@ -23,7 +23,6 @@ import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.ScrollBarOrientation;
 import com.sun.star.awt.XSpinValue;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import java.awt.Robot;

@@ -28,7 +28,6 @@ import util.SOfficeFactory;
 
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSheetAnnotation;
 import com.sun.star.sheet.XSheetAnnotationAnchor;
 import com.sun.star.sheet.XSheetAnnotationsSupplier;

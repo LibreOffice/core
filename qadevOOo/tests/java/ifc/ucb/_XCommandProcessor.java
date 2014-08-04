@@ -18,7 +18,6 @@
 
 package ifc.ucb;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.Command;
 import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.CommandInfo;

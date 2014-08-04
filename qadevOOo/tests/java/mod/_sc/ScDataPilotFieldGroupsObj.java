@@ -21,7 +21,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.DataPilotFieldGroupInfo;
 import com.sun.star.sheet.XDataPilotDescriptor;
 import com.sun.star.sheet.XDataPilotFieldGrouping;

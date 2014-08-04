@@ -27,7 +27,6 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;

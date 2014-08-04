@@ -18,7 +18,6 @@
 
 package ifc.registry;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.CannotRegisterImplementationException;
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;

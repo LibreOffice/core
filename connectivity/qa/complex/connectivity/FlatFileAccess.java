@@ -19,7 +19,6 @@
 package complex.connectivity;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.util.Date;

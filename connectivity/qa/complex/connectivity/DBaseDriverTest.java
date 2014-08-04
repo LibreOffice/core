@@ -22,7 +22,6 @@ import complex.connectivity.dbase.DBaseDateFunctions;
 import complex.connectivity.dbase.DBaseStringFunctions;
 import complex.connectivity.dbase.DBaseSqlTests;
 import complex.connectivity.dbase.DBaseNumericFunctions;
-import com.sun.star.lang.XMultiServiceFactory;
 import complexlib.ComplexTestCase;
 import share.LogWriter;
 

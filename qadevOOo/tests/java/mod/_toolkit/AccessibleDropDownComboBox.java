@@ -21,7 +21,6 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;

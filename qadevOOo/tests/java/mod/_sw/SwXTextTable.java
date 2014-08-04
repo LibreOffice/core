@@ -27,7 +27,6 @@ import util.SOfficeFactory;
 import util.ValueComparer;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.table.XCell;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextDocument;

@@ -30,7 +30,6 @@ import util.SOfficeFactory;
 import util.TableDsc;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;

@@ -34,7 +34,6 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextTable;
 import com.sun.star.uno.UnoRuntime;

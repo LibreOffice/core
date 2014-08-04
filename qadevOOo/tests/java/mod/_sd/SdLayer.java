@@ -32,7 +32,6 @@ import com.sun.star.drawing.XLayer;
 import com.sun.star.drawing.XLayerManager;
 import com.sun.star.drawing.XLayerSupplier;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;

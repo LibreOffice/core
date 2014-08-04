@@ -25,7 +25,6 @@ import com.sun.star.frame.DispatchDescriptor;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;

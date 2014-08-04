@@ -21,7 +21,6 @@ package ifc.ucb;
 import lib.MultiMethodTest;
 import util.utils;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
 

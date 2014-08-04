@@ -28,7 +28,6 @@ import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 

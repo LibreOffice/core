@@ -26,7 +26,6 @@ import com.sun.star.i18n.CalendarItem;
 import com.sun.star.i18n.XCalendar;
 import com.sun.star.i18n.XLocaleData;
 import com.sun.star.lang.Locale;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 /**

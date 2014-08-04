@@ -21,7 +21,6 @@ import com.sun.star.configuration.backend.XLayer;
 import com.sun.star.configuration.backend.XLayerHandler;
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;

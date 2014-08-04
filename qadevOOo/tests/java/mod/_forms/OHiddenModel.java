@@ -31,7 +31,6 @@ import util.SOfficeFactory;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;

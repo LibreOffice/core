@@ -28,7 +28,6 @@ import util.SOfficeFactory;
 import util.dbg;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XLineNumberingProperties;
 import com.sun.star.text.XText;

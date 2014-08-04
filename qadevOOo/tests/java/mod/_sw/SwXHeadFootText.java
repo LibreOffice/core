@@ -31,7 +31,6 @@ import util.TableDsc;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XText;

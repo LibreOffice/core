@@ -21,7 +21,6 @@ package helper;
 import com.sun.star.uno.UnoRuntime;
 
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
 
 /**
