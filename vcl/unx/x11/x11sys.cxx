@@ -40,19 +40,17 @@ X11SalSystem::~X11SalSystem()
 {
 }
 
-// for the moment only handle xinerama case
 unsigned int X11SalSystem::GetDisplayScreenCount()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
-    return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() :
-           pSalDisp->GetXScreenCount();
+    return pSalDisp->GetXScreenCount();
 }
 
 bool X11SalSystem::IsUnifiedDisplay()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     unsigned int nScreenCount = pSalDisp->GetXScreenCount();
-    return pSalDisp->IsXinerama() || (nScreenCount == 1);
+    return nScreenCount == 1;
 }
 
 unsigned int X11SalSystem::GetDisplayBuiltInScreen()
@@ -65,22 +63,9 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     Rectangle aRet;
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
-    if( pSalDisp->IsXinerama() )
-    {
-        const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
-
-        // we shouldn't be able to pick a screen > number of screens available
-        assert(nScreen < rScreens.size() );
-
-        if( nScreen < rScreens.size() )
-            aRet = rScreens[nScreen];
-    }
-    else
-    {
-        const SalDisplay::ScreenData& rScreen =
-            pSalDisp->getDataForScreen( SalX11Screen( nScreen ) );
-        aRet = Rectangle( Point( 0, 0 ), rScreen.m_aSize );
-    }
+    const SalDisplay::ScreenData& rScreen =
+        pSalDisp->getDataForScreen( SalX11Screen( nScreen ) );
+    aRet = Rectangle( Point( 0, 0 ), rScreen.m_aSize );
 
     return aRet;
 }
@@ -89,40 +74,25 @@ OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
     OUString aScreenName;
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
-    if( pSalDisp->IsXinerama() )
-    {
-        const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
-        if( nScreen >= rScreens.size() )
-            nScreen = 0;
-        OUStringBuffer aBuf( 256 );
-        aBuf.append( OStringToOUString( OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
-        aBuf.appendAscii( " [" );
-        aBuf.append( static_cast<sal_Int32>(nScreen) );
-        aBuf.append( ']' );
-        aScreenName = aBuf.makeStringAndClear();
-    }
+    if( nScreen >= static_cast<unsigned int>(pSalDisp->GetXScreenCount()) )
+        nScreen = 0;
+    OUStringBuffer aBuf( 256 );
+    aBuf.append( OStringToOUString( OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
+    // search backwards for ':'
+    int nPos = aBuf.getLength();
+    if( nPos > 0 )
+        nPos--;
+    while( nPos > 0 && aBuf[nPos] != ':' )
+        nPos--;
+    // search forward to '.'
+    while( nPos < aBuf.getLength() && aBuf[nPos] != '.' )
+        nPos++;
+    if( nPos < aBuf.getLength() )
+        aBuf.setLength( nPos+1 );
     else
-    {
-        if( nScreen >= static_cast<unsigned int>(pSalDisp->GetXScreenCount()) )
-            nScreen = 0;
-        OUStringBuffer aBuf( 256 );
-        aBuf.append( OStringToOUString( OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
-        // search backwards for ':'
-        int nPos = aBuf.getLength();
-        if( nPos > 0 )
-            nPos--;
-        while( nPos > 0 && aBuf[nPos] != ':' )
-            nPos--;
-        // search forward to '.'
-        while( nPos < aBuf.getLength() && aBuf[nPos] != '.' )
-            nPos++;
-        if( nPos < aBuf.getLength() )
-            aBuf.setLength( nPos+1 );
-        else
-            aBuf.append( '.' );
-        aBuf.append( static_cast<sal_Int32>(nScreen) );
-        aScreenName = aBuf.makeStringAndClear();
-    }
+        aBuf.append( '.' );
+    aBuf.append( static_cast<sal_Int32>(nScreen) );
+    aScreenName = aBuf.makeStringAndClear();
     return aScreenName;
 }
 

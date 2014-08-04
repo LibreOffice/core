@@ -1507,18 +1507,6 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
     {
         Size aScreenSize( m_pSalDisplay->GetScreenSize( pFrame->GetScreenNumber() ) );
         Point aTL( rGeom.nLeftDecoration, rGeom.nTopDecoration );
-        if( m_pSalDisplay->IsXinerama() )
-        {
-            Point aMed( aTL.X() + rGeom.nWidth/2, aTL.Y() + rGeom.nHeight/2 );
-            const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
-            for( unsigned int i = 0; i < rScreens.size(); i++ )
-                if( rScreens[i].IsInside( aMed ) )
-                {
-                    aTL += rScreens[i].TopLeft();
-                    aScreenSize = rScreens[i].GetSize();
-                    break;
-                }
-        }
         Rectangle aTarget( aTL,
                            Size( aScreenSize.Width() - rGeom.nLeftDecoration - rGeom.nTopDecoration,
                                  aScreenSize.Height() - rGeom.nTopDecoration - rGeom.nBottomDecoration )
@@ -2100,37 +2088,11 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
         // #i42750# guess size before resize event shows up
         if( bFullScreen )
         {
-            if( m_pSalDisplay->IsXinerama() )
-            {
-                XLIB_Window aRoot, aChild;
-                int root_x = 0, root_y = 0, lx, ly;
-                unsigned int mask;
-                XQueryPointer( m_pDisplay,
-                m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
-                &aRoot, &aChild,
-                &root_x, &root_y, &lx, &ly, &mask );
-                const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
-                Point aMousePoint( root_x, root_y );
-                for( unsigned int i = 0; i < rScreens.size(); i++ )
-                {
-                    if( rScreens[i].IsInside( aMousePoint ) )
-                    {
-                        pFrame->maGeometry.nX       = rScreens[i].Left();
-                        pFrame->maGeometry.nY       = rScreens[i].Top();
-                        pFrame->maGeometry.nWidth   = rScreens[i].GetWidth();
-                        pFrame->maGeometry.nHeight  = rScreens[i].GetHeight();
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                Size aSize = m_pSalDisplay->GetScreenSize( pFrame->GetScreenNumber() );
-                pFrame->maGeometry.nX       = 0;
-                pFrame->maGeometry.nY       = 0;
-                pFrame->maGeometry.nWidth   = aSize.Width();
-                pFrame->maGeometry.nHeight  = aSize.Height();
-            }
+            Size aSize = m_pSalDisplay->GetScreenSize( pFrame->GetScreenNumber() );
+            pFrame->maGeometry.nX       = 0;
+            pFrame->maGeometry.nY       = 0;
+            pFrame->maGeometry.nWidth   = aSize.Width();
+            pFrame->maGeometry.nHeight  = aSize.Height();
             pFrame->CallCallback( SALEVENT_MOVERESIZE, NULL );
         }
     }

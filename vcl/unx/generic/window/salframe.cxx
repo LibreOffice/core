@@ -498,25 +498,6 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
                         y = 20;
                     }
                 }
-                else if( GetDisplay()->IsXinerama() )
-                {
-                    // place frame on same screen as mouse pointer
-                    XLIB_Window aRoot, aChild;
-                    int root_x = 0, root_y = 0, lx, ly;
-                    unsigned int mask;
-                    XQueryPointer( GetXDisplay(),
-                                   GetDisplay()->GetRootWindow( m_nXScreen ),
-                                   &aRoot, &aChild,
-                                   &root_x, &root_y, &lx, &ly, &mask );
-                    const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
-                    for( unsigned int i = 0; i < rScreens.size(); i++ )
-                        if( rScreens[i].IsInside( Point( root_x, root_y ) ) )
-                        {
-                            x = rScreens[i].Left();
-                            y = rScreens[i].Top();
-                            break;
-                        }
-                }
             }
         }
         Attributes.win_gravity = pDisplay_->getWMAdaptor()->getInitWinGravity();
@@ -1443,38 +1424,6 @@ void X11SalFrame::Center( )
     nRealScreenWidth    = nScreenWidth;
     nRealScreenHeight   = nScreenHeight;
 
-    if( GetDisplay()->IsXinerama() )
-    {
-        // get xinerama screen we are on
-        // if there is a parent, use its center for screen determination
-        // else use the pointer
-        XLIB_Window aRoot, aChild;
-        int root_x, root_y, x, y;
-        unsigned int mask;
-        if( mpParent )
-        {
-            root_x = mpParent->maGeometry.nX + mpParent->maGeometry.nWidth/2;
-            root_y = mpParent->maGeometry.nY + mpParent->maGeometry.nHeight/2;
-        }
-        else
-            XQueryPointer( GetXDisplay(),
-                           GetShellWindow(),
-                           &aRoot, &aChild,
-                           &root_x, &root_y,
-                           &x, &y,
-                           &mask );
-        const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
-        for( unsigned int i = 0; i < rScreens.size(); i++ )
-            if( rScreens[i].IsInside( Point( root_x, root_y ) ) )
-            {
-                nScreenX            = rScreens[i].Left();
-                nScreenY            = rScreens[i].Top();
-                nRealScreenWidth    = rScreens[i].GetWidth();
-                nRealScreenHeight   = rScreens[i].GetHeight();
-                break;
-            }
-    }
-
     if( mpParent )
     {
         X11SalFrame* pFrame = mpParent;
@@ -1548,22 +1497,7 @@ void X11SalFrame::Center( )
 
 void X11SalFrame::updateScreenNumber()
 {
-    if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
-    {
-        Point aPoint( maGeometry.nX, maGeometry.nY );
-        const std::vector<Rectangle>& rScreenRects( GetDisplay()->GetXineramaScreens() );
-        size_t nScreens = rScreenRects.size();
-        for( size_t i = 0; i < nScreens; i++ )
-        {
-            if( rScreenRects[i].IsInside( aPoint ) )
-            {
-                maGeometry.nDisplayScreenNumber = static_cast<unsigned int>(i);
-                break;
-            }
-        }
-    }
-    else
-        maGeometry.nDisplayScreenNumber = m_nXScreen.getXScreen();
+    maGeometry.nDisplayScreenNumber = m_nXScreen.getXScreen();
 }
 
 void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
@@ -2065,24 +1999,7 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
     if( nNewScreen == maGeometry.nDisplayScreenNumber )
         return;
 
-    if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
-    {
-        if( nNewScreen >= GetDisplay()->GetXineramaScreens().size() )
-            return;
-
-        Rectangle aOldScreenRect( GetDisplay()->GetXineramaScreens()[maGeometry.nDisplayScreenNumber] );
-        Rectangle aNewScreenRect( GetDisplay()->GetXineramaScreens()[nNewScreen] );
-        bool bVisible = bMapped_;
-        if( bVisible )
-            Show( false );
-        maGeometry.nX = aNewScreenRect.Left() + (maGeometry.nX - aOldScreenRect.Left());
-        maGeometry.nY = aNewScreenRect.Top() + (maGeometry.nY - aOldScreenRect.Top());
-        createNewWindow( None, m_nXScreen );
-        if( bVisible )
-            Show( true );
-        maGeometry.nDisplayScreenNumber = nNewScreen;
-    }
-    else if( nNewScreen < GetDisplay()->GetXScreenCount() )
+    if( nNewScreen < GetDisplay()->GetXScreenCount() )
     {
         bool bVisible = bMapped_;
         if( bVisible )
@@ -2123,83 +2040,30 @@ void X11SalFrame::updateWMClass()
 
 void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
 {
-    if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
+    if( nScreen < 0 || nScreen >= (int)GetDisplay()->GetXScreenCount() )
+        nScreen = m_nXScreen.getXScreen();
+    if( nScreen != (int)m_nXScreen.getXScreen() )
     {
-        if( mbFullScreen == (bool)bFullScreen )
-            return;
-        if( bFullScreen )
-        {
-            maRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
-                                          Size( maGeometry.nWidth, maGeometry.nHeight ) );
-            Rectangle aRect;
-            if( nScreen < 0 || nScreen >= static_cast<int>(GetDisplay()->GetXineramaScreens().size()) )
-                aRect = Rectangle( Point(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
-            else
-                aRect = GetDisplay()->GetXineramaScreens()[nScreen];
-            nStyle_ |= SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
-            bool bVisible = bMapped_;
-            if( bVisible )
-                Show( false );
-            maGeometry.nX = aRect.Left();
-            maGeometry.nY = aRect.Top();
-            maGeometry.nWidth = aRect.GetWidth();
-            maGeometry.nHeight = aRect.GetHeight();
-            mbMaximizedHorz = mbMaximizedVert = false;
-            mbFullScreen = true;
-            createNewWindow( None, m_nXScreen );
-            if( GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
-                GetDisplay()->getWMAdaptor()->enableAlwaysOnTop( this, true );
-            else
-                GetDisplay()->getWMAdaptor()->showFullScreen( this, true );
-            if( bVisible )
-                Show(true);
-
-        }
-        else
-        {
-            mbFullScreen = false;
-            nStyle_ &= ~SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
-            bool bVisible = bMapped_;
-            Rectangle aRect = maRestorePosSize;
-            maRestorePosSize = Rectangle();
-            if( bVisible )
-                Show( false );
-            createNewWindow( None, m_nXScreen );
-            if( !aRect.IsEmpty() )
-                SetPosSize( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                            SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y |
-                            SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
-            if( bVisible )
-                Show( true );
-        }
+        bool bVisible = bMapped_;
+        if( mbFullScreen )
+            pDisplay_->getWMAdaptor()->showFullScreen( this, false );
+        if( bVisible )
+            Show( false );
+        createNewWindow( None, SalX11Screen( nScreen ) );
+        if( mbFullScreen )
+            pDisplay_->getWMAdaptor()->showFullScreen( this, true );
+        if( bVisible )
+            Show( true );
     }
-    else
-    {
-        if( nScreen < 0 || nScreen >= (int)GetDisplay()->GetXScreenCount() )
-            nScreen = m_nXScreen.getXScreen();
-        if( nScreen != (int)m_nXScreen.getXScreen() )
-        {
-            bool bVisible = bMapped_;
-            if( mbFullScreen )
-                pDisplay_->getWMAdaptor()->showFullScreen( this, false );
-            if( bVisible )
-                Show( false );
-            createNewWindow( None, SalX11Screen( nScreen ) );
-            if( mbFullScreen )
-                pDisplay_->getWMAdaptor()->showFullScreen( this, true );
-            if( bVisible )
-                Show( true );
-        }
-        if( mbFullScreen == (bool)bFullScreen )
-            return;
+    if( mbFullScreen == (bool)bFullScreen )
+        return;
 
-        pDisplay_->getWMAdaptor()->showFullScreen( this, bFullScreen );
-        if( IsOverrideRedirect()
-            && WMSupportsFWS( GetXDisplay(), GetDisplay()->GetRootWindow( m_nXScreen ) ) )
-        {
-            AddFwsProtocols( GetXDisplay(), GetShellWindow() );
-            RegisterFwsWindow( GetXDisplay(), GetShellWindow() );
-        }
+    pDisplay_->getWMAdaptor()->showFullScreen( this, bFullScreen );
+    if( IsOverrideRedirect()
+        && WMSupportsFWS( GetXDisplay(), GetDisplay()->GetRootWindow( m_nXScreen ) ) )
+    {
+        AddFwsProtocols( GetXDisplay(), GetShellWindow() );
+        RegisterFwsWindow( GetXDisplay(), GetShellWindow() );
     }
 }
 

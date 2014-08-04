@@ -13,10 +13,6 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 
-#ifdef USE_XINERAMA
-#include <X11/extensions/Xinerama.h>
-#endif
-
 #include <osl/endian.h>
 #include <fcntl.h>
 #include <stdint.h>
@@ -444,10 +440,6 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
     const char* name = "LibreOffice";
     const char* icon = "icon"; // FIXME
     XSizeHints size_hints;
-#ifdef USE_XINERAMA
-    int n_xinerama_screens = 1;
-    XineramaScreenInfo* p_screens = NULL;
-#endif
 
     for ( i = 0; i < argc; i++ )
     {
@@ -478,25 +470,6 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
     root_win = RootWindow( splash->display, splash->screen );
     display_width = DisplayWidth( splash->display, splash->screen );
     display_height = DisplayHeight( splash->display, splash->screen );
-
-#ifdef USE_XINERAMA
-    p_screens = XineramaQueryScreens( splash->display, &n_xinerama_screens );
-    if( p_screens )
-    {
-        for( i=0; i < n_xinerama_screens; i++ )
-        {
-            if ( p_screens[i].screen_number == splash->screen )
-            {
-                display_width = p_screens[i].width;
-                display_height = p_screens[i].height;
-                display_x_pos = p_screens[i].x_org;
-                display_y_pos = p_screens[i].y_org;
-                break;
-            }
-        }
-        XFree( p_screens );
-    }
-#endif
 
     splash->win = XCreateSimpleWindow( splash->display, root_win,
             (display_x_pos + (display_width - splash->width)/2),

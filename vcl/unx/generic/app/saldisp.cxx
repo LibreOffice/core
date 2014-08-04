@@ -42,18 +42,6 @@
 #include <X11/XKBlib.h>
 #include <X11/Xatom.h>
 
-#ifdef USE_XINERAMA_XORG
-#include <X11/extensions/Xinerama.h>
-#elif defined USE_XINERAMA_XSUN
-#if defined(SOLARIS) && defined(INTEL) // missing extension header in standard installation
-#define MAXFRAMEBUFFERS       16
-Bool XineramaGetState(Display*, int);
-Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
-#else
-#include <X11/extensions/xinerama.h>
-#endif
-#endif
-
 #include <postx.h>
 
 #include <vcl/svapp.hxx>
@@ -255,7 +243,6 @@ SalDisplay::SalDisplay( Display *display ) :
         nCtrlKeySym_( 0 ),
         nMod1KeySym_( 0 ),
         m_pWMAdaptor( NULL ),
-        m_bXinerama( false ),
         m_bUseRandRWrapper( true ),
         m_nLastUserEventTime( CurrentTime )
 {
@@ -547,7 +534,6 @@ void SalDisplay::Init()
         aPointerCache_[i] = None;
 
     mpFactory           = (AttributeProvider*)NULL;
-    m_bXinerama         = false;
 
     int nDisplayScreens = ScreenCount( pDisp_ );
     m_aScreens = std::vector<ScreenData>(nDisplayScreens);
@@ -590,8 +576,6 @@ void SalDisplay::Init()
 
     // - - - - - - - - - - Window Manager  - - - - - - - - - - -
     m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
-
-    InitXinerama();
 
 #ifdef DBG_UTIL
     PrintInfo();
@@ -2196,93 +2180,6 @@ void SalDisplay::PrintInfo() const
             << " 0x" << GetVisual(m_nXDefaultScreen).blue_mask);
 }
 #endif
-
-void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight )
-{
-    // see if any frame buffers are at the same coordinates
-    // this can happen with weird configuration e.g. on
-    // XFree86 and Clone displays
-    const size_t nScreens = m_aXineramaScreens.size();
-    for( size_t n = 0; n < nScreens; n++ )
-    {
-        if( m_aXineramaScreens[n].Left() == i_nX &&
-            m_aXineramaScreens[n].Top() == i_nY )
-        {
-            if( m_aXineramaScreens[n].GetWidth() < i_nWidth ||
-                m_aXineramaScreens[n].GetHeight() < i_nHeight )
-            {
-                m_aXineramaScreenIndexMap[i] = n;
-                m_aXineramaScreens[n].SetSize( Size( i_nWidth, i_nHeight ) );
-            }
-            return;
-        }
-    }
-    m_aXineramaScreenIndexMap[i] = m_aXineramaScreens.size();
-    m_aXineramaScreens.push_back( Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
-}
-
-void SalDisplay::InitXinerama()
-{
-    if( m_aScreens.size() > 1 )
-    {
-        m_bXinerama = false;
-        return; // multiple screens mean no xinerama
-    }
-#if defined(USE_XINERAMA_XSUN)
-    int nFramebuffers = 1;
-    if( XineramaGetState( pDisp_, m_nDefaultScreen ) )
-    {
-        XRectangle pFramebuffers[MAXFRAMEBUFFERS];
-        unsigned char hints[MAXFRAMEBUFFERS];
-        int result = XineramaGetInfo( pDisp_,
-                                      m_nDefaultScreen,
-                                      pFramebuffers,
-                                      hints,
-                                      &nFramebuffers );
-        if( result > 0 && nFramebuffers > 1 )
-        {
-            m_bXinerama = true;
-            m_aXineramaScreens = std::vector<Rectangle>();
-            m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
-            for( int i = 0; i < nFramebuffers; i++ )
-                addXineramaScreenUnique( i, pFramebuffers[i].x,
-                                         pFramebuffers[i].y,
-                                         pFramebuffers[i].width,
-                                         pFramebuffers[i].height );
-        }
-    }
-#elif defined(USE_XINERAMA_XORG)
-    if( XineramaIsActive( pDisp_ ) )
-    {
-        int nFramebuffers = 1;
-        XineramaScreenInfo* pScreens = XineramaQueryScreens( pDisp_, &nFramebuffers );
-        if( pScreens )
-        {
-            if( nFramebuffers > 1 )
-            {
-                m_aXineramaScreens = std::vector<Rectangle>();
-                m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
-                for( int i = 0; i < nFramebuffers; i++ )
-                {
-                    addXineramaScreenUnique( i, pScreens[i].x_org,
-                                             pScreens[i].y_org,
-                                             pScreens[i].width,
-                                             pScreens[i].height );
-                }
-                m_bXinerama = m_aXineramaScreens.size() > 1;
-            }
-            XFree( pScreens );
-        }
-    }
-#endif
-#if OSL_DEBUG_LEVEL > 1
-    if( m_bXinerama )
-    {
-        for( std::vector< Rectangle >::const_iterator it = m_aXineramaScreens.begin(); it != m_aXineramaScreens.end(); ++it )
-            fprintf( stderr, "Xinerama screen: %ldx%ld+%ld+%ld\n", it->GetWidth(), it->GetHeight(), it->Left(), it->Top() );
-    }
-#endif
-}
 
 extern "C"
 {

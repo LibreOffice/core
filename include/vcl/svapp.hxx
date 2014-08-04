@@ -1099,7 +1099,7 @@ public:
      form one large display area.
 
      @returns true when screens form up one large display area windows can be
-        moved between single screens (e.g. Xserver with Xinerama, Windows)
+        moved between single screens (e.g. Windows)
         and false when different screens are separate and windows cannot be moved
         between them (e.g. Xserver with multiple screens)
 

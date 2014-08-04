@@ -23,18 +23,6 @@ $(eval $(call gb_Executable_add_cobjects,oosplash,\
     desktop/unx/source/start \
 ))
 
-ifneq ($(USE_XINERAMA),)
-
-$(eval $(call gb_Executable_add_defs,oosplash,\
-    -DUSE_XINERAMA \
-))
-
-$(eval $(call gb_Executable_add_libs,oosplash,\
-    -lXinerama \
-))
-
-endif
-
 ifneq ($(ENABLE_HEADLESS),TRUE)
 
 ifneq ($(OS),WNT)

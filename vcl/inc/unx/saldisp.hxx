@@ -269,9 +269,6 @@ protected:
 
     vcl_sal::WMAdaptor* m_pWMAdaptor;
 
-    bool            m_bXinerama;
-    std::vector< Rectangle > m_aXineramaScreens;
-    std::vector< int > m_aXineramaScreenIndexMap;
     std::list<SalObject*> m_aSalObjects;
 
     bool            m_bUseRandRWrapper; // don't use randr on gtk, use gdk signals there
@@ -279,13 +276,11 @@ protected:
     mutable XLIB_Time  m_nLastUserEventTime; // mutable because changed on first access
 
     virtual bool    Dispatch( XEvent *pEvent ) = 0;
-    void            InitXinerama();
     void            InitRandR( XLIB_Window aRoot ) const;
     void            DeInitRandR();
     int             processRandREvent( XEvent* );
 
     void            doDestruct();
-    void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
 public:
     static SalDisplay *GetSalDisplay( Display* display );
     static bool BestVisual( Display     *pDisp,
@@ -365,8 +360,6 @@ public:
     void            SetKbdExtension(SalI18N_KeyboardExtension *pKbdExtension)
     { mpKbdExtension = pKbdExtension; }
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
-    bool            IsXinerama() const { return m_bXinerama; }
-    const std::vector< Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
     XLIB_Window     GetRootWindow( SalX11Screen nXScreen ) const
             { return getDataForScreen( nXScreen ).m_aRoot; }
     const std::vector< ScreenData >& GetScreenData() { return m_aScreens; }
