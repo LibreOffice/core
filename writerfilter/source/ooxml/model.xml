@@ -6323,7 +6323,7 @@
       <define name="CT_PictureEffectCement">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="crackSpacing">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6333,7 +6333,7 @@
       <define name="CT_PictureEffectChalkSketch">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="pressure">
             <ref name="ST_ArtisticEffectParam4"/>
@@ -6343,7 +6343,7 @@
       <define name="CT_PictureEffectCrisscrossEtching">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="pressure">
             <ref name="ST_ArtisticEffectParam4"/>
@@ -6353,7 +6353,7 @@
       <define name="CT_PictureEffectCutout">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="numberOfShades">
             <ref name="ST_ArtisticEffectParam6"/>
@@ -6363,7 +6363,7 @@
       <define name="CT_PictureEffectFilmGrain">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="grainSize">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6373,7 +6373,7 @@
       <define name="CT_PictureEffectGlass">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="scaling">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6383,7 +6383,7 @@
       <define name="CT_PictureEffectGlowDiffused">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="intensity">
             <ref name="ST_ArtisticEffectParam10"/>
@@ -6393,7 +6393,7 @@
       <define name="CT_PictureEffectGlowEdges">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="smoothness">
             <ref name="ST_ArtisticEffectParam10"/>
@@ -6403,7 +6403,7 @@
       <define name="CT_PictureEffectLightScreen">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="gridSize">
             <ref name="ST_ArtisticEffectParam10"/>
@@ -6413,7 +6413,7 @@
       <define name="CT_PictureEffectLineDrawing">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="pencilSize">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6423,7 +6423,7 @@
       <define name="CT_PictureEffectMarker">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="size">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6433,7 +6433,7 @@
       <define name="CT_PictureEffectMosiaicBubbles">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="pressure">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6443,7 +6443,7 @@
       <define name="CT_PictureEffectPaintStrokes">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="intensity">
             <ref name="ST_ArtisticEffectParam10"/>
@@ -6453,7 +6453,7 @@
       <define name="CT_PictureEffectPaintBrush">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="brushSize">
             <ref name="ST_ArtisticEffectParam10"/>
@@ -6463,7 +6463,7 @@
       <define name="CT_PictureEffectPastelsSmooth">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="scaling">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6473,7 +6473,7 @@
       <define name="CT_PictureEffectPencilGrayscale">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="pencilSize">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6483,7 +6483,7 @@
       <define name="CT_PictureEffectPencilSketch">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="pressure">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6493,7 +6493,7 @@
       <define name="CT_PictureEffectPhotocopy">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="detail">
             <ref name="ST_ArtisticEffectParam10"/>
@@ -6503,7 +6503,7 @@
       <define name="CT_PictureEffectPlasticWrap">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="smoothness">
             <ref name="ST_ArtisticEffectParam10"/>
@@ -6513,7 +6513,7 @@
       <define name="CT_PictureEffectTexturizer">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="scaling">
             <ref name="ST_ArtisticEffectParam100"/>
@@ -6523,7 +6523,7 @@
       <define name="CT_PictureEffectWatercolorSponge">
         <optional>
           <attribute name="trans">
-            <ref name="a:ST_PositiveFixedPercentage"/>
+            <ref name="ST_PositiveFixedPercentage"/>
           </attribute>
           <attribute name="brushSize">
             <ref name="ST_ArtisticEffectParam10"/>
@@ -6533,10 +6533,10 @@
       <define name="CT_PictureEffectBrightnessContrast">
         <optional>
           <attribute name="bright">
-            <ref name="a:ST_FixedPercentage"/>
+            <ref name="ST_FixedPercentage"/>
           </attribute>
           <attribute name="contrast">
-            <ref name="a:ST_FixedPercentage"/>
+            <ref name="ST_FixedPercentage"/>
           </attribute>
         </optional>
       </define>
