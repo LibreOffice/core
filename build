@@ -64,23 +64,23 @@ do_configure()
     fi
 
     ./autogen.sh \
-      --with-build-version=${BUILD_NUMBER} \
-      --with-vendor="IT@m Landeshauptstadt München" \
-      --with-lang="en-US de fr es it pt " \
-      --with-jdk-home=${JDK_HOME} \
-      --with-java \
-      --with-lang="en-US de fr es it pt" \
-      --enable-release-build \
       --disable-online-update \
       --enable-extension-integration \
-      --enable-ext-wiki-publisher \
-      --enable-ext-presenter-minimizer \
       --enable-ext-nlpsolver \
+      --enable-ext-presenter-minimizer \
+      --enable-ext-wiki-publisher \
+      --enable-release-build \
       --with-ant-home=/cygdrive/c/ant \
+      --with-build-version=${BUILD_NUMBER} \
+      --with-help \
+      --with-java \
+      --with-jdk-home=${JDK_HOME} \
+      --with-lang="en-US de fr es it pt " \
+      --with-lang="en-US de fr es it pt" \
+      --with-myspell-dicts \
       --without-junit \
       --with-system-dicts \
-      --with-myspell-dicts \
-      --with-help \
+      --with-vendor="IT@m Landeshauptstadt München" \
       || echo autogen.sh ist fehlgeschlagen
   else
     if [ -f /usr/lib/j2sdk1.5-sun/bin/javac  ]; then
@@ -90,43 +90,43 @@ do_configure()
     fi
 
     ./autogen.sh \
-      --with-system-zlib \
-      --with-system-jpeg \
-      --with-system-expat \
-      --with-system-libxml \
-      --with-system-sane \
-      --with-system-curl \
-      --without-fonts \
-      --without-afms \
-      --without-ppds \
-      --enable-extension-integration \
-      --enable-odk \
-      --enable-lockdown \
-      --enable-${enable_kde}\
-      --enable-evolution2 \
+      --disable-dbus \
+      --disable-${disable_kde} \
+      --disable-gconf \
       --disable-gnome-vfs \
-      --enable-ext-wiki-publisher \
-      --enable-ext-presenter-minimizer \
-      --enable-ext-nlpsolver \
-      --enable-epm \
-      --enable-python=internal \
       --disable-online-update \
       --disable-randr-link \
-      --disable-${disable_kde} \
-      --disable-dbus \
-      --without-junit \
-      --with-package-format=deb \
-      --with-lang="en-US de fr es it pt" \
-      --without-doxygen \
-      --disable-gconf \
+      --enable-${enable_kde}\
+      --enable-epm \
+      --enable-evolution2 \
+      --enable-extension-integration \
+      --enable-ext-nlpsolver \
+      --enable-ext-presenter-minimizer \
+      --enable-ext-wiki-publisher \
+      --enable-lockdown \
+      --enable-odk \
+      --enable-python=internal \
       --enable-release-build \
       --with-build-version="${BUILD_NUMBER}" \
-      --with-vendor="IT@M Landeshauptstadt München" \
-      --with-java \
-      --with-system-dicts \
-      --with-myspell-dicts \
       --with-help \
+      --with-java \
       --with-jdk-home=$JDK_HOME \
+      --with-lang="en-US de fr es it pt" \
+      --with-myspell-dicts \
+      --without-afms \
+      --without-doxygen \
+      --without-fonts \
+      --without-junit \
+      --without-ppds \
+      --with-package-format=deb \
+      --with-system-curl \
+      --with-system-dicts \
+      --with-system-expat \
+      --with-system-jpeg \
+      --with-system-libxml \
+      --with-system-sane \
+      --with-system-zlib \
+      --with-vendor="IT@M Landeshauptstadt München" \
       || error "autogen.sh fehlgeschlagen."
   fi
 
