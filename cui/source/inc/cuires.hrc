@@ -442,6 +442,14 @@
 
 #define RID_SVXSTR_EDITHINT                                 (RID_SVX_START + 1266)
 
+// Search Persona Dialog
+#define RID_SVXSTR_SEARCHTERM                               (RID_SVX_START + 1277)
+#define RID_SVXSTR_SELECTEDPERSONA                          (RID_SVX_START + 1278)
+#define RID_SVXSTR_SEARCHING                                (RID_SVX_START + 1279)
+#define RID_SVXSTR_SEARCHERROR                              (RID_SVX_START + 1280)
+#define RID_SVXSTR_NORESULTS                                (RID_SVX_START + 1281)
+#define RID_SVXSTR_APPLYPERSONA                             (RID_SVX_START + 1282)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
