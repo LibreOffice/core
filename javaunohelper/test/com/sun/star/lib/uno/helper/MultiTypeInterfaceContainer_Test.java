@@ -167,14 +167,13 @@ public class MultiTypeInterfaceContainer_Test
         boolean r[]= new boolean[50];
         int i= 0;
 
-        int ci= 0;
-        ci= cont.addInterface(new Type(XInterface.class), obj1);
-        ci= cont.addInterface(new Type(XInterface.class), obj2);
-        ci= cont.addInterface(new Type(XInterface.class), obj3);
-        ci= cont.addInterface(new Type(XWeak.class), obj1);
-        ci= cont.addInterface(new Type(XWeak.class), obj2);
-        ci= cont.addInterface(null, obj1);
-        ci= cont.addInterface(new Type(XTypeProvider.class), null);
+        cont.addInterface(new Type(XInterface.class), obj1);
+        cont.addInterface(new Type(XInterface.class), obj2);
+        cont.addInterface(new Type(XInterface.class), obj3);
+        cont.addInterface(new Type(XWeak.class), obj1);
+        cont.addInterface(new Type(XWeak.class), obj2);
+        cont.addInterface(null, obj1);
+        cont.addInterface(new Type(XTypeProvider.class), null);
 
         InterfaceContainer icont= null;
         icont= cont.getContainer( new Type(XTypeProvider.class));
@@ -239,14 +238,13 @@ public class MultiTypeInterfaceContainer_Test
         cont.clear();
         Type[] types= cont.getContainedTypes();
         r[i++]= types.length == 0;
-        int ci;
-        ci= cont.addInterface(new Type(XInterface.class), obj1);
-        ci= cont.addInterface(new Type(XInterface.class), obj2);
-        ci= cont.addInterface(new Type(XInterface.class), obj3);
-        ci= cont.addInterface(new Type(XWeak.class), obj1);
-        ci= cont.addInterface(new Type(XWeak.class), obj2);
-        ci= cont.addInterface(null, obj1);
-        ci= cont.addInterface(new Type(XTypeProvider.class), null);
+        cont.addInterface(new Type(XInterface.class), obj1);
+        cont.addInterface(new Type(XInterface.class), obj2);
+        cont.addInterface(new Type(XInterface.class), obj3);
+        cont.addInterface(new Type(XWeak.class), obj1);
+        cont.addInterface(new Type(XWeak.class), obj2);
+        cont.addInterface(null, obj1);
+        cont.addInterface(new Type(XTypeProvider.class), null);
         types= cont.getContainedTypes();
         r[i++]= types.length == 3;
         cont.clear();

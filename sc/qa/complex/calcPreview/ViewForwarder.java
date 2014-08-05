@@ -877,8 +877,6 @@ public class ViewForwarder {
         }
 
 
-        XAccessible parent = null;
-
         try {
             System.out.println("Count: " +AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.TABLE, "").getAccessibleChildCount());

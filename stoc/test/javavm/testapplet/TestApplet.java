@@ -45,10 +45,10 @@ public class TestApplet extends java.applet.Applet {
 
         // local connection
         URL url= new URL("http://localhost:8080/index.html");
-        InputStream is= url.openStream();
+        url.openStream();
         // remote connection
         url= new URL("http://www.w3.org/index.html");
-        is= url.openStream();
+        url.openStream();
         }catch( MalformedURLException mue) {
         }catch( IOException e) {
             String s= e.getMessage();

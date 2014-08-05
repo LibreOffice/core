@@ -47,13 +47,11 @@ public class CLITest extends ComplexTestCase
             String[] cmdarray = new String[] {testProgram, arg1};
 
             Process proc = null;
-            Reader outReader;
-            Reader errReader;
             try{
 
                 proc = Runtime.getRuntime().exec(cmdarray);
-                outReader = new Reader(proc.getInputStream());
-                errReader = new Reader(proc.getErrorStream());
+                new Reader(proc.getInputStream());
+                new Reader(proc.getErrorStream());
 
 
             }

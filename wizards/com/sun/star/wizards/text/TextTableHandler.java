@@ -209,7 +209,6 @@ public class TextTableHandler
 
     public static BreakType resetBreakTypeofTextTable(Object oTextTable)
     {
-        BreakType CorrBreakValue = null;
         BreakType BreakValue = (BreakType) com.sun.star.wizards.common.Helper.getUnoStructValue(oTextTable, "BreakType");
         Helper.setUnoPropertyValue(oTextTable, "BreakType", BreakType.NONE);
         return BreakType.NONE;

@@ -132,8 +132,6 @@ public class ReportDesignerTest
     @Before public void before()
     {
         System.out.println("before");
-
-        int dummy = 0;
     }
 
     @After public void after()
@@ -292,14 +290,13 @@ public class ReportDesignerTest
             String sDBConnection = ""; // (String)param.get( convwatch.PropertyName.DB_CONNECTION_STRING );
             System.out.println("DBConnection: " + sDBConnection);
             DB.init(sDBConnection);
-            String sDestinationVersion = m_sUPDMinor;
-            String sDestinationName = "";
-            String sDestinationCreatorType = "";
-            String sDocumentPoolDir = getOutputPath(_nType);
-            String sDocumentPoolName = getDocumentPoolName(_nType);
-            String sSpecial = "";
-
-            String sFixRefSubDirectory = "ReportDesign_qa_complex_" + getFileFormat(_nType);
+//            String sDestinationVersion = m_sUPDMinor;
+//            String sDestinationName = "";
+//            String sDestinationCreatorType = "";
+//            String sDocumentPoolDir = getOutputPath(_nType);
+//            String sDocumentPoolName = getDocumentPoolName(_nType);
+//            String sSpecial = "";
+//            String sFixRefSubDirectory = "ReportDesign_qa_complex_" + getFileFormat(_nType);
 //            DB.insertinto_documentcompare(sFixRefSubDirectory, "", "fixref",
 //                                          sDestinationVersion, sDestinationName, sDestinationCreatorType,
 //                                          sDocumentPoolDir, sDocumentPoolName, m_sMailAddress,

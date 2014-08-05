@@ -71,7 +71,6 @@ public class TestComponentMain
 
         String conDcp = null;
         String protDcp = null;
-        String rootOid = null;
 
         String dcp = args[0];
         boolean singleaccept = args[1].equals("singleaccept");
@@ -87,8 +86,6 @@ public class TestComponentMain
         index = dcp.indexOf(';');
         protDcp = dcp.substring(0, index).trim();
         dcp = dcp.substring(index + 1).trim();
-
-        rootOid = dcp.trim().trim();
 
         XComponentContext ctx = com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
         XMultiComponentFactory smgr = ctx.getServiceManager();

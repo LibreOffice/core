@@ -78,9 +78,7 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
             nav.enableCancel(false);
             ArrayList<?> locations = InstallWizard.getLocations();
             // Returned 1
-            String progpath=null;
             String path=null;
-            String classespath=null;
             for (int i =0;i<locations.size();i++){
                 path= (String)locations.get(i);
             xud = new XmlUpdater(path, statusLine,progressBar,InstallWizard.bNetworkInstall,InstallWizard.bBindingsInstall);

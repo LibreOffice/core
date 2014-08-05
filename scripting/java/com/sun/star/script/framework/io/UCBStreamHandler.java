@@ -99,8 +99,6 @@ public class UCBStreamHandler extends URLStreamHandler {
                 String sUrl = url.toString();
                 if ( !( sUrl.lastIndexOf(separator) == -1) ) {
                     String path = sUrl.substring(0, sUrl.lastIndexOf(separator));
-                    String file = sUrl.substring(
-                        sUrl.lastIndexOf(separator) + separator.length());
 
                     if ( m_xSimpleFileAccess.isReadOnly( path ) )
                     {

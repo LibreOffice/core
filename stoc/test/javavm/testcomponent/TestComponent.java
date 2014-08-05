@@ -62,18 +62,7 @@ public class TestComponent implements XServiceInfo, XTypeProvider
     // XServiceName
     public String getImplementationName(  )
     {
-        String a= "the functions are for debugging";
-        String prop= System.getProperty("ftp.proxyHost");
-        prop= System.getProperty("ftp.proxyPort");
-        prop= System.getProperty("http.proxyHost");
-        prop= System.getProperty("http.proxyPort");
-        prop= System.getProperty("ftp.nonProxyHosts");
-        prop= System.getProperty("http.nonProxyHosts");
-        prop= System.getProperty("socksProxyHost");
-        prop= System.getProperty("socksProxyPort");
-
-        prop= System.getProperty("stardiv.security.disableSecurity");
-        prop= System.getProperty("appletviewer.security.mode");
+        // the functions are for debugging
 
         // Test security settings
         File f= new File("c:/temp/javasecurity.txt");
@@ -82,10 +71,10 @@ public class TestComponent implements XServiceInfo, XTypeProvider
 
                // local connection
         URL url= new URL("http://localhost:8080/index.html");
-        InputStream is= url.openStream();
+        url.openStream();
         // remote connection
         url= new URL("http://www.w3.org/index.html");
-        is= url.openStream();
+        url.openStream();
         }catch( MalformedURLException mue) {
         }catch( IOException e) {
             String s= e.getMessage();

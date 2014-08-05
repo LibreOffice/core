@@ -201,7 +201,6 @@ class GlyphGutter extends JComponent {
         for (int i = startLine; i < endLine; i++) {
             String text;
             text = Integer.toString(i + 1) + " ";
-            int w = metrics.stringWidth(text);
             int y = i * h;
             g.setColor(Color.blue);
             g.drawString(text, 0, y + ascent);

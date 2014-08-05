@@ -88,8 +88,7 @@ public class InstUtil {
             for ( int index = 0; index < supportedVersions.length; index++ )
             {
                 String key = supportedVersions[ index ];
-                String path = null;
-                if ( ( path = installs.getProperty(key) ) != null )
+                if ( installs.getProperty(key) != null )
                 {
                     // at least one supported version for netbeans present, so return;
                     return true;
@@ -123,7 +122,6 @@ public class InstUtil {
 
 
     public static Properties getNetbeansLocation() throws IOException {
-    File theFile = null;
     Properties results = new Properties();
 
     StringBuffer str = new StringBuffer();
@@ -134,15 +132,11 @@ public class InstUtil {
         String os = System.getProperty("os.name");
 
     if (os.indexOf("Windows") != -1) {
-        //theFile = findVersionFile(new File(str.toString()));
         thePath.append(".netbeans");
-        //theFile = new File(thePath.toString());
         } else if (os.indexOf("SunOS") != -1) {
         thePath.append(".netbeans");
-        //theFile = new File(thePath.toString());
         } else if (os.indexOf("Linux") != -1) {
         thePath.append(".netbeans");
-        //theFile = new File(thePath.toString());
     }
 
     if ( thePath.toString().indexOf( ".netbeans" ) == -1 )
@@ -183,7 +177,6 @@ public class InstUtil {
         str.append(File.separator);
     StringBuffer thePath = new StringBuffer(str.toString());
 
-        String os = System.getProperty("os.name");
         thePath.append(".jedit");
 
     File jeditLogFile = new File( thePath.toString() + File.separator + "activity.log" );

@@ -125,12 +125,11 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
     public void skipBytes(int n) throws
             com.sun.star.io.IOException
     {
-        int avail;
         int tmpLongVal = n;
         int  tmpIntVal;
 
         try {
-            avail = iIn.available();
+            iIn.available();
         } catch (IOException e) {
             throw new com.sun.star.io.IOException(e.toString());
         }

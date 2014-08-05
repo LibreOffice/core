@@ -500,7 +500,7 @@ public class TestHelper  {
 
         try
         {
-            Object oSubStream = xParentStorage.openStreamElement( sName, ElementModes.READ );
+            xParentStorage.openStreamElement( sName, ElementModes.READ );
             Error( "Encrypted stream '" + sName + "' was opened without password!" );
             return false;
         }

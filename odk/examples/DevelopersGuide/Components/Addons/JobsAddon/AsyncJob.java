@@ -154,14 +154,13 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         }
 
         // Analyze the set of shared config data.
-        java.lang.String sAlias = null;
         if (lGenericConfig!=null)
         {
             c = lGenericConfig.length;
             for (int i=0; i<c; ++i)
             {
                 if (lGenericConfig[i].Name.equals("Alias"))
-                    sAlias = com.sun.star.uno.AnyConverter.toString(lGenericConfig[i].Value);
+                    com.sun.star.uno.AnyConverter.toString(lGenericConfig[i].Value);
             }
         }
 

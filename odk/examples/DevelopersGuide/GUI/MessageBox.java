@@ -215,7 +215,6 @@ public class MessageBox  {
 
     public static int getRedColorShare(int _nColor) {
         int nRed = _nColor/65536;
-        int nRedModulo = _nColor % 65536;
         return nRed;
     }
 

@@ -281,7 +281,6 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
 
     private boolean isAutoIncrementatable(String _fieldname)
     {
-        boolean bisAutoIncrementable = false;
         try
         {
             XPropertySet xColPropertySet = curTableDescriptor.getByName(_fieldname);

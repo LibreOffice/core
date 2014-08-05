@@ -282,7 +282,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                 setVisible(m_aButtons[i], false);
             }
         }
-        boolean focusable = true;
         for (int i = 0; i < m_aButtons.length; i++)
         {
             Object[] oResources = renderer.getImageUrls(getObjectFor(i));
@@ -302,7 +301,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                 {
                     setVisible(m_aButtons[i], true);
                 }
-                focusable = false;
             }
         }
     }

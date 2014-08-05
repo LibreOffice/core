@@ -409,7 +409,6 @@ public class QueryWizard extends DatabaseObjectWizard
                 {
                     String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
                     ID = Integer.parseInt(sID);
-                    int a = 0;
                 }
             }
         }

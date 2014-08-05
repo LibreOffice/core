@@ -178,7 +178,6 @@ public class DesignTemplate
                         m_aDetailTextField = SectionTextField.create(aFormattedField);
                     }
                 }
-                int dummy = 0;
             }
             catch (com.sun.star.lang.IndexOutOfBoundsException ex)
             {

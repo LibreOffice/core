@@ -211,7 +211,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             boolean bgetConnection;
             if (oDBForm != null)
             {
-                String sMsg = sMsgHiddenControlMissing + (char) 13 + sMsgEndAutopilot;
                 XNameAccess xNamedForm = UnoRuntime.queryInterface( XNameAccess.class, oDBForm );
                 getRecordParser().Command = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, PropertyNames.COMMAND);
                 String sCommandType = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, PropertyNames.COMMAND_TYPE);

@@ -163,7 +163,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         }
         catch (com.sun.star.uno.Exception e)
         {
-            int dummy = 0;
         }
     }
 
@@ -175,7 +174,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         }
         catch (com.sun.star.uno.Exception e)
         {
-            int dummy = 0;
         }
     }
 
@@ -201,7 +199,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         }
         catch (com.sun.star.uno.Exception e)
         {
-            int dummy = 0;
         }
     }
 

@@ -205,7 +205,6 @@ public abstract class Configuration
         String sLocale = PropertyNames.EMPTY_STRING;
         try
         {
-            Locale aLocLocale = new Locale();
             Object oMasterKey = getConfigurationRoot(xMSF, root, false);
             sLocale = (String) Helper.getUnoObjectbyName(oMasterKey, key);
         }
@@ -326,7 +325,6 @@ public abstract class Configuration
 
     public static String[] getNodeDisplayNames(XNameAccess _xNameAccessNode)
     {
-        String[] snames = null;
         return getNodeChildNames(_xNameAccessNode, PropertyNames.PROPERTY_NAME);
     }
 

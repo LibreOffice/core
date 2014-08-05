@@ -235,7 +235,6 @@ public class ChartInCalc
         try
         {
             // determine the maximum value of the first series
-            int nMaxIndex = 0;
 
             XChartDataArray aDataArray = UnoRuntime.queryInterface(
                 XChartDataArray.class, maChartDocument.getData());
@@ -248,7 +247,6 @@ public class ChartInCalc
                 if( aData[ i ][ 1 ] > fMax )
                 {
                     fMax = aData[ i ][ 1 ];
-                    nMaxIndex = i;
                 }
             }
 

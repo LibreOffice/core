@@ -161,7 +161,6 @@ public class _XScriptInfo extends MultiMethodTest {
     }
 
     public void _getLanguageProperties() {
-        boolean result = true;
 
         Collection c =
             (Collection) tEnv.getObjRelation("_getLanguageProperties");
@@ -191,11 +190,7 @@ public class _XScriptInfo extends MultiMethodTest {
                 }
 
                 log.println("expected: " + expected + ", output: " + output);
-                result &= output.equals(expected);
             }
-        }
-        else {
-            result = false;
         }
         tRes.tested("getLanguageProperties()", true);
     }

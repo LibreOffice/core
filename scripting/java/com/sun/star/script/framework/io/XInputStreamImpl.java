@@ -70,10 +70,9 @@ public class XInputStreamImpl implements XInputStream
 
     public void skipBytes( /*IN*/int nBytesToSkip ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException
     {
-        long bytesSkipped = 0;
         try
         {
-            bytesSkipped = is.skip( nBytesToSkip );
+            is.skip( nBytesToSkip );
         }
         catch ( IOException e )
         {

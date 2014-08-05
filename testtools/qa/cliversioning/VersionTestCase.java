@@ -55,8 +55,8 @@ public class VersionTestCase extends ComplexTestCase
             Process proc = null;
 
             proc = Runtime.getRuntime().exec(testProgram, arEnv);
-            Reader outReader = new Reader(proc.getInputStream());
-            Reader errReader = new Reader(proc.getErrorStream());
+            new Reader(proc.getInputStream());
+            new Reader(proc.getErrorStream());
             proc.waitFor();
             retVal = proc.exitValue();
         } catch(Exception e)

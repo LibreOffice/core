@@ -573,8 +573,6 @@ public class FieldSelection
             {
                 iFieldSelected = xFieldsListBox.getSelectedItemPos();
                 iSelFieldSelected = xSelectedFieldsListBox.getSelectedItemPos();
-                short[] SourceSelList = new short[xFieldsListBox.getSelectedItemsPos().length];
-                SourceSelList = xFieldsListBox.getSelectedItemsPos();
                 xSelectedFieldsListBox.addItems(SelFieldItems, xSelectedFieldsListBox.getItemCount());
                 CurUnoDialog.removeSelectedItems(xFieldsListBox);
                 xSelectedFieldsListBox.selectItemPos((short) 0, xSelectedFieldsListBox.getSelectedItems().length > 0);

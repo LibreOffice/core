@@ -166,7 +166,6 @@ public abstract class ControlScroller
 
     protected void fillupControls(boolean binitialize)
     {
-        PropertyValue[] oldproperties;
         for (int a = 0; a < this.nblockincrement; a++)
         {
             if (a < ncurfieldcount)

@@ -114,7 +114,6 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
         XSpreadsheet xSheet = getSheet(xDoc);
         boolean done = false;
         int counter = 0;
-        int numberOfWords = 0;
         String wordToCheck = "";
         String expectedConversion = "";
 
@@ -124,8 +123,6 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
             counter++;
 
             if (!done) {
-                numberOfWords++;
-
                 try {
                     xDict.addEntry(HangulHanja[0], HangulHanja[1]);
                     wordToCheck += HangulHanja[0];

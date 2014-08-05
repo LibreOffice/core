@@ -140,7 +140,7 @@ class MyHandler implements HttpHandler {
             //Read the file into a byte array
             byte[] data = new byte[(int) fileRequest.length()];
             FileInputStream fr = new FileInputStream(fileRequest);
-            int count = fr.read(data);
+            fr.read(data);
             fr.close();
 
             //set the Content-type header

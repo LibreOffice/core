@@ -43,8 +43,8 @@ public class ClimakerTestCase extends ComplexTestCase
             try{
 
              proc = Runtime.getRuntime().exec(testProgram);
-             Reader outReader = new Reader(proc.getInputStream());
-             Reader errReader = new Reader(proc.getErrorStream());
+             new Reader(proc.getInputStream());
+             new Reader(proc.getErrorStream());
 
             } catch(Exception e)
             {

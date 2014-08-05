@@ -153,7 +153,6 @@ public class FormConfiguration
 
     public void toggleSteps()
     {
-        boolean bDoEnableFollowingSteps;
         if (chkcreateSubForm.getState() == 1)
         {
             if (optOnExistingRelation.getState())
