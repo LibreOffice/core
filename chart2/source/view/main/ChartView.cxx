@@ -2217,37 +2217,7 @@ boost::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
                 break;
         }
     }
-    else
-    {
-        // #i109336# Improve auto positioning in chart
-        switch ( eAlignment )
-        {
-            case ALIGN_TOP:
-                {
-                    rRemainingSpace.Y += nYDistance;
-                    rRemainingSpace.Height -= nYDistance;
-                }
-                break;
-            case ALIGN_BOTTOM:
-                {
-                    rRemainingSpace.Height -= nYDistance;
-                }
-                break;
-            case ALIGN_LEFT:
-                {
-                    rRemainingSpace.X += nXDistance;
-                    rRemainingSpace.Width -= nXDistance;
-                }
-                break;
-            case ALIGN_RIGHT:
-                {
-                    rRemainingSpace.Width -= nXDistance;
-                }
-                break;
-            default:
-                break;
-        }
-    }
+
     return apVTitle;
 }
 
