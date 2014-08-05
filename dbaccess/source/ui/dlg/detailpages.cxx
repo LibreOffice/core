@@ -247,20 +247,15 @@ namespace dbaui
 
     // ODbaseDetailsPage
     ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET ,false)
-        ,m_aShowDeleted     (this, ModuleRes(CB_SHOWDELETEDROWS))
-        ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
-        ,m_aFT_Message      (this, ModuleRes( FT_SPECIAL_MESSAGE) )
-        ,m_aIndexes         (this, ModuleRes(PB_INDICIES))
+        :OCommonBehaviourTabPage(pParent, "DbasePage", "dbaccess/ui/dbasepage.ui", _rCoreAttrs, CBTP_USE_CHARSET)
     {
+        get(m_pShowDeleted, "showDelRowsCheckbutton");
+        get(m_pFT_Message, "specMessageLabel");
+        get(m_pIndexes, "indiciesButton");
+        set_height_request(300);
 
-        m_aIndexes.SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
-        m_aShowDeleted.SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
-
-        // correct the z-order which is mixed-up because the base class constructed some controls before we did
-        m_pCharset->SetZOrder(&m_aShowDeleted, WINDOW_ZORDER_BEFOR);
-
-        FreeResource();
+        m_pIndexes->SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
+        m_pShowDeleted->SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
     }
 
     ODbaseDetailsPage::~ODbaseDetailsPage()
@@ -273,18 +268,6 @@ namespace dbaui
         return ( new ODbaseDetailsPage( pParent, *_rAttrSet ) );
     }
 
-    void ODbaseDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
-    {
-        OCommonBehaviourTabPage::fillControls(_rControlList);
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aShowDeleted));
-    }
-    void ODbaseDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
-    {
-        OCommonBehaviourTabPage::fillWindows(_rControlList);
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFT_Message));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aIndexes));
-    }
     void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -303,8 +286,8 @@ namespace dbaui
 
         if ( bValid )
         {
-            m_aShowDeleted.Check( pDeletedItem->GetValue() );
-            m_aFT_Message.Show(m_aShowDeleted.IsChecked());
+            m_pShowDeleted->Check( pDeletedItem->GetValue() );
+            m_pFT_Message->Show(m_pShowDeleted->IsChecked());
         }
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
@@ -314,20 +297,20 @@ namespace dbaui
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        fillBool(*_rSet,&m_aShowDeleted,DSID_SHOWDELETEDROWS,bChangedSomething);
+        fillBool(*_rSet,m_pShowDeleted,DSID_SHOWDELETEDROWS,bChangedSomething);
         return bChangedSomething;
     }
 
     IMPL_LINK( ODbaseDetailsPage, OnButtonClicked, Button*, pButton )
     {
-        if (&m_aIndexes == pButton)
+        if (m_pIndexes == pButton)
         {
             ODbaseIndexDialog aIndexDialog(this, m_sDsn);
             aIndexDialog.Execute();
         }
         else
         {
-            m_aFT_Message.Show(m_aShowDeleted.IsChecked());
+            m_pFT_Message->Show(m_pShowDeleted->IsChecked());
             // it was one of the checkboxes -> we count as modified from now on
             callModifiedHdl();
         }

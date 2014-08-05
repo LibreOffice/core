@@ -77,51 +77,6 @@ String STR_DATABASE_TYPE_CHANGE
     Text [ en-US ] = "Database properties" ;
 };
 
-TabPage PAGE_DBASE
-{
-    SVLook = TRUE ;
-    Hide = TRUE;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    HelpId = HID_DSADMIN_PAGE_DBASE;
-
-    AUTO_CHARSET(UNRELATED_CONTROLS,PAGE_X)
-
-    FixedLine FL_SEPARATOR1
-    {
-        Pos = MAP_APPFONT ( 4 , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT) ;
-        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Optional settings";
-    };
-
-    CheckBox CB_SHOWDELETEDROWS
-    {
-        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT) ;
-        Size = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_SHOWDELETED;
-        Text [ en-US ] = "Display deleted records as well" ;
-    };
-
-    FixedText FT_SPECIAL_MESSAGE
-    {
-        Hide = TRUE;
-        WordBreak = TRUE;
-        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;
-        Size = MAP_APPFONT ( PAGE_X - 12 , 2*FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "Note: When deleted, and thus inactive, records are displayed, you will not be able to delete records from the data source." ;
-    };
-
-    PushButton PB_INDICIES
-    {
-        Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_DBASE_INDICIES;
-        Text [ en-US ] = "Indexes...";
-    };
-};
-
 TabPage PAGE_ADO
 {
     SVLook = TRUE ;
