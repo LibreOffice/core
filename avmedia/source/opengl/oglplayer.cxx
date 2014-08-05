@@ -21,6 +21,7 @@
 #include <cassert>
 
 using namespace com::sun::star;
+using namespace libgltf;
 
 namespace avmedia { namespace ogl {
 
@@ -37,16 +38,10 @@ OGLPlayer::~OGLPlayer()
     osl::MutexGuard aGuard(m_aMutex);
     if( m_pHandle )
     {
-        for (size_t i = 0; i < m_pHandle->size && m_pHandle->files[i].buffer; ++i)
-        {
-            if (m_pHandle->files[i].type != GLTF_JSON)
-            {
-                delete [] m_pHandle->files[i].buffer;
-            }
-        }
         m_aContext.makeCurrent();
         gltf_renderer_release(m_pHandle);
     }
+    releaseInputFiles();
 }
 
 static bool lcl_LoadFile( glTFFile* io_pFile, const OUString& rURL)
@@ -72,35 +67,27 @@ bool OGLPlayer::create( const OUString& rURL )
 
     m_sURL = rURL;
 
+    // Convert URL to a system path
+    const INetURLObject aURLObj(m_sURL);
+    const std::string sFilePath = OUStringToOString( aURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
+
     // Load *.json file and init renderer
-    glTFFile aJsonFile;
-    aJsonFile.type = GLTF_JSON;
-    OString sFileName = OUStringToOString(INetURLObject(m_sURL).GetLastName(),RTL_TEXTENCODING_UTF8);
-    aJsonFile.filename = (char*)sFileName.getStr();
-    if( !lcl_LoadFile(&aJsonFile, m_sURL) )
-    {
-        SAL_WARN("avmedia.opengl", "Can't load *.json file: " + sFileName);
-        return false;
-    }
+    m_pHandle = gltf_renderer_init(sFilePath, m_vInputFiles);
 
-    m_pHandle = gltf_renderer_init(&aJsonFile);
-
-    delete [] aJsonFile.buffer;
-
-    if( !m_pHandle || !m_pHandle->files )
+    if( !m_pHandle )
     {
         SAL_WARN("avmedia.opengl", "gltf_renderer_init returned an invalid glTFHandle");
         return false;
     }
 
     // Load external resources
-    for( size_t i = 0; i < m_pHandle->size; ++i )
+    for( size_t i = 0; i < m_vInputFiles.size(); ++i )
     {
-        glTFFile& rFile = m_pHandle->files[i];
-        if( rFile.filename )
+        glTFFile& rFile = m_vInputFiles[i];
+        if( !rFile.filename.empty() )
         {
             const OUString sFilesURL =
-                INetURLObject::GetAbsURL(m_sURL,OStringToOUString(OString(rFile.filename),RTL_TEXTENCODING_UTF8));
+                INetURLObject::GetAbsURL(m_sURL,OStringToOUString(OString(rFile.filename.c_str()),RTL_TEXTENCODING_UTF8));
             if( rFile.type == GLTF_IMAGE )
             {
                 // Load images as bitmaps
@@ -139,6 +126,16 @@ bool OGLPlayer::create( const OUString& rURL )
     return true;
 }
 
+void OGLPlayer::releaseInputFiles()
+{
+    for (size_t i = 0; i < m_vInputFiles.size() && m_vInputFiles[i].buffer; ++i)
+    {
+        delete [] m_vInputFiles[i].buffer;
+        m_vInputFiles[i].buffer = 0;
+    }
+    m_vInputFiles.clear();
+}
+
 void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -147,11 +144,7 @@ void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
     if(!m_pOGLWindow)
         return;
 
-    // gltf_animation_start play animation from the time 0.0,
-    // but OGLPlayer::start used as play from that time where it was stopped before
-    double fTime = gltf_animation_get_time(m_pHandle);
-    gltf_animation_start(m_pHandle);
-    gltf_animation_set_time(m_pHandle, fTime);
+    gltf_animation_resume(m_pHandle);
     m_aTimer.Start();
     m_bIsRendering = true;
 }
@@ -202,14 +195,14 @@ void SAL_CALL OGLPlayer::setPlaybackLoop( sal_Bool bSet ) throw ( uno::RuntimeEx
 {
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
-    gltf_animation_set_looping(m_pHandle, (int)bSet);
+    gltf_animation_set_looping(m_pHandle, bSet);
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaybackLoop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
-    return gltf_animation_get_looping(m_pHandle) != 0;
+    return gltf_animation_get_looping(m_pHandle);
 }
 
 void SAL_CALL OGLPlayer::setVolumeDB( sal_Int16 /*nVolumDB*/ ) throw ( uno::RuntimeException, std::exception )
@@ -242,17 +235,14 @@ awt::Size SAL_CALL OGLPlayer::getPreferredPlayerWindowSize() throw ( uno::Runtim
 static bool lcl_CheckOpenGLRequirements()
 {
     float fVersion = OpenGLHelper::getGLVersion();
-    if( fVersion >= 3.3 )
+
+    if( fVersion >= 3.0 )
     {
         return true;
     }
-    else if( fVersion >= 3.0 )
-    {
-        return glewIsSupported("GL_ARB_sampler_objects");
-    }
     else if( fVersion >= 2.1 )
     {
-        return glewIsSupported("GL_ARB_sampler_objects GL_ARB_framebuffer_object GL_ARB_vertex_array_object");
+        return glewIsSupported("GL_ARB_framebuffer_object GL_ARB_vertex_array_object");
     }
 
     return false;
@@ -296,9 +286,9 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     m_pHandle->viewport.width = aSize.Width();
     m_pHandle->viewport.height = aSize.Height();
 
-    // TODO: In libgltf different return values are defined (for different errors)
-    // but these error codes are not part of the library interface
-    int nRet = gltf_renderer_set_content(m_pHandle);
+    // TODO: Use the error codes to print a readable error message
+    int nRet = gltf_renderer_set_content(m_pHandle, m_vInputFiles);
+    releaseInputFiles();
     if( nRet != 0 )
     {
         SAL_WARN("avmedia.opengl", "Error occured while parsing *.json file! Error code: " << nRet);
@@ -334,7 +324,8 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
     m_pHandle->viewport.width = getPreferredPlayerWindowSize().Width;
     m_pHandle->viewport.height = getPreferredPlayerWindowSize().Height;
 
-    int nRet = gltf_renderer_set_content(m_pHandle);
+    int nRet = gltf_renderer_set_content(m_pHandle, m_vInputFiles);
+    releaseInputFiles();
     if( nRet != 0 )
     {
         SAL_WARN("avmedia.opengl", "Error occured while parsing *.json file! Error code: " << nRet);

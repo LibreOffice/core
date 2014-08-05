@@ -11,6 +11,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
+using namespace libgltf;
 
 namespace avmedia { namespace ogl {
 
@@ -312,7 +313,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
             {
                 if(m_bIsOrbitMode)
                 {
-                    gltf_orbit_view_stop(&m_rHandle);
+                    gltf_orbit_mode_stop(&m_rHandle);
                     m_bIsOrbitMode = false;
                 }
                 else
@@ -381,7 +382,6 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
         if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
         {
             m_aLastMousePos = Point(0,0);
-            gltf_renderer_stop_rotate_model(&m_rHandle);
         }
     }
     return 0;

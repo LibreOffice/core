@@ -236,7 +236,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_RUNTIME)) \
 	,$(call fetch_Download_item_unchecked,http://dev-www.libreoffice.org/mozilla,$(item)))
 	$(if $(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
-	, $(call fetch_Download_item,http://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
+	, $(call fetch_Download_item,http://people.collabora.com/~ztamas/,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
 	@mkdir -p $(dir $@) && touch $@
 
 # vim: set noet sw=4 ts=4:
