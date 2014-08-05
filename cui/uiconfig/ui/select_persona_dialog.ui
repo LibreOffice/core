@@ -262,6 +262,7 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="result1">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
@@ -276,6 +277,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="result2">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
@@ -290,6 +292,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="result3">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
@@ -304,6 +307,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="result4">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
@@ -318,6 +322,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="result5">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
@@ -332,6 +337,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="result6">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
@@ -346,6 +352,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="result7">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
@@ -360,6 +367,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="result8">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
@@ -374,6 +382,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="result9">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>

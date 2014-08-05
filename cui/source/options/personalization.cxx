@@ -74,31 +74,20 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     m_pCancelButton->SetClickHdl( LINK( this, SelectPersonaDialog, ActionCancel ) );
 
     get( m_vResultList[0], "result1" );
-    m_vResultList[0]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-
     get( m_vResultList[1], "result2" );
-    m_vResultList[1]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-
     get( m_vResultList[2], "result3" );
-    m_vResultList[2]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-
     get( m_vResultList[3], "result4" );
-    m_vResultList[3]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-
     get( m_vResultList[4], "result5" );
-    m_vResultList[4]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-
     get( m_vResultList[5], "result6" );
-    m_vResultList[5]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-
     get( m_vResultList[6], "result7" );
-    m_vResultList[6]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-
     get( m_vResultList[7], "result8" );
-    m_vResultList[7]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
-
     get( m_vResultList[8], "result9" );
-    m_vResultList[8]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+
+    for (sal_Int32 nIndex = 0; nIndex < 9; ++nIndex)
+    {
+        m_vResultList[nIndex]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+        m_vResultList[nIndex]->Disable();
+    }
 }
 
 OUString SelectPersonaDialog::GetSelectedPersona() const
@@ -216,7 +205,7 @@ void SelectPersonaDialog::SetProgress( OUString& rProgress )
 
 void SelectPersonaDialog::SetImages( Image aImage, sal_Int32 nIndex )
 {
-    m_vResultList[nIndex]->Show();
+    m_vResultList[nIndex]->Enable();
     m_vResultList[nIndex]->SetModeImage( aImage );
 }
 
@@ -230,7 +219,10 @@ void SelectPersonaDialog::ClearSearchResults()
     m_vPersonaSettings.clear();
     m_aSelectedPersona = "";
     for( sal_Int32 nIndex = 0; nIndex < 9; nIndex++ )
-        m_vResultList[nIndex]->Hide();
+    {
+        m_vResultList[nIndex]->Disable();
+        m_vResultList[nIndex]->SetModeImage(Image());
+    }
 }
 
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
