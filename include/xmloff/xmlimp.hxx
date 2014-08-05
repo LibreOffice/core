@@ -62,7 +62,6 @@ namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
 class SvXMLNamespaceMap;
 class SvXMLImportContext;
-class SvXMLImportContexts_Impl;
 class SvXMLImport_Impl;
 class SvXMLUnitConverter;
 class SvXMLNumFmtHelper;
@@ -70,6 +69,8 @@ class XMLFontStylesContext;
 class XMLEventImportHelper;
 class XMLErrors;
 class StyleMap;
+
+typedef std::vector<SvXMLImportContext *> SvXMLImportContexts_Impl;
 
 namespace xmloff {
     class RDFaImportHelper;

@@ -22,9 +22,10 @@
 
 #include "XMLElementPropertyContext.hxx"
 
-class SvxXMLTabStopArray_Impl;
 class SvXMLImport;
+class SvxXMLTabStopContext_Impl;
 
+typedef std::vector<SvxXMLTabStopContext_Impl *> SvxXMLTabStopArray_Impl;
 
 class SvxXMLTabStopImportContext : public XMLElementPropertyContext
 {
