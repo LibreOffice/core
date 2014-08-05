@@ -181,7 +181,7 @@ public class java_fat implements TestBase
                     aSubEntry.UserDefinedParams = m_aParams;
                     aSubEntry.Logger = ifclog;
 
-                    if ((tEnv == null) || tEnv.isDisposed())
+                    if (tEnv.isDisposed())
                     {
                         closeExistingOffice();
                         tEnv = getEnv(entry, m_aParams);

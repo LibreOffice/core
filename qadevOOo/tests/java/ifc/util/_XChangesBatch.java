@@ -66,11 +66,11 @@ public class _XChangesBatch extends MultiMethodTest {
 
         if (changeElement == null || originalElement == null || elementName == null || (xProp == null && xNameReplace == null)) {
             log.println(
-                changeElement == null?"Missing property 'XChangesBatch.ChangeElement'\n":"" +
-                originalElement == null?"Missing property 'XChangesBatch.OriginalElement'\n":"" +
-                elementName == null?"Missing property 'XChangesBatch.PropertyName'\n":"" +
-                xProp == null?"Missing property 'XChangesBatch.PropertySet'":"" +
-                xNameReplace == null?"Missing property 'XChangesBatch.NameReplace'":""
+                (changeElement == null?"Missing property 'XChangesBatch.ChangeElement'\n":"") +
+                (originalElement == null?"Missing property 'XChangesBatch.OriginalElement'\n":"") +
+                (elementName == null?"Missing property 'XChangesBatch.PropertyName'\n":"") +
+                (xProp == null?"Missing property 'XChangesBatch.PropertySet'":"") +
+                (xNameReplace == null?"Missing property 'XChangesBatch.NameReplace'":"")
             );
             throw new StatusException("Some needed object relations are missing.", new Exception());
         }

@@ -209,26 +209,21 @@ public class _XCommandProcessor {
      * </ul>
      */
     public boolean _abort() {
-        //executeMethod("createCommandIdentifier()");
 
-//        Command command = null;//(Command)tEnv.getObjRelation(
-                //"XCommandProcessor.AbortCommand");
         Command command = new Command("getCommandInfo", -1, null);
 
-        if (command == null) {
-            String commandName = "globalTransfer";
+        String commandName = "globalTransfer";
 
-            String srcURL = util.utils.getFullTestURL("solibrary.jar") ;
-            String tmpURL = util.utils.getOfficeTemp(xMSF) ;
-            log.println("Copying '" + srcURL + "' to '" + tmpURL) ;
+        String srcURL = util.utils.getFullTestURL("solibrary.jar") ;
+        String tmpURL = util.utils.getOfficeTemp(xMSF) ;
+        log.println("Copying '" + srcURL + "' to '" + tmpURL) ;
 
-            GlobalTransferCommandArgument arg = new
-                GlobalTransferCommandArgument(
-                    TransferCommandOperation.COPY, srcURL,
-                        tmpURL, "", NameClash.OVERWRITE);
+        GlobalTransferCommandArgument arg = new
+            GlobalTransferCommandArgument(
+                TransferCommandOperation.COPY, srcURL,
+                    tmpURL, "", NameClash.OVERWRITE);
 
-            command = new Command(commandName, -1, arg);
-        }
+        command = new Command(commandName, -1, arg);
 
         Thread aborter = new Thread() {
             public void run() {

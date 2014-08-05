@@ -948,11 +948,6 @@ public class ViewForwarder {
             System.out.println("While waiting :" + e) ;
         }
 
-        if (xComp == null) {
-            fail("loading document failed.");
-            return;
-        }
-
         xSpreadsheetDoc = UnoRuntime.queryInterface(
                                             XSpreadsheetDocument.class, xComp);
         XModel aModel =

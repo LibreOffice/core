@@ -131,9 +131,6 @@ public class ScIndexEnumeration_DataPilotTablesEnumeration extends TestCase {
 
         oObj = DPT;
 
-        log.println("Creating object - " +
-                                    ((oObj == null) ? "FAILED" : "OK"));
-
         XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
 
         oObj = ea.createEnumeration();

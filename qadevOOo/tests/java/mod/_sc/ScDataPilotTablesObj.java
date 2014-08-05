@@ -166,9 +166,6 @@ public class ScDataPilotTablesObj extends TestCase {
 
         oObj = DPT;
 
-        log.println("Creating object - " +
-                                    ((oObj == null) ? "FAILED" : "OK"));
-
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // Other parameters required for interface tests

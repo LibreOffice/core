@@ -242,8 +242,6 @@ public class SQLExecution {
                 }
             }
         }
-        if (!update && sqlOutput == null)
-            return false;
         return true;
     }
 

@@ -155,7 +155,6 @@ public class ScDataPilotTableObj extends TestCase {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }
-        log.println("Getting sheet - " + (oSheet == null ? "FAILED" : "OK"));
         try {
             log.println("Filing a table");
             for (int i = 1; i < 6; i++) {

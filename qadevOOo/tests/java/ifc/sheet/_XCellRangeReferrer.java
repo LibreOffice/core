@@ -60,13 +60,13 @@ public class _XCellRangeReferrer extends MultiMethodTest {
             ("Relation 'DATAAREA' not found"));
 
         XCellRange cr = oObj.getReferredCells();
-        log.println(cr.toString());
 
         if (cr == null) {
             log.println("getReferredCells returned NULL.");
             tRes.tested("getReferredCells()", false);
             return;
         }
+        log.println(cr.toString());
 
         XCellRangeAddressable xCRA = UnoRuntime.queryInterface(XCellRangeAddressable.class, cr);
 

@@ -112,12 +112,12 @@ public class _XChangesNotifier extends MultiMethodTest {
 
         if (changeElement == null || originalElement == null || elementName == null || (xProp == null && xNameReplace == null) || xBatch == null) {
             log.println(
-                changeElement == null?"Missing property 'XChangesNotifier.ChangeElement'\n":"" +
-                originalElement == null?"Missing property 'XChangesNotifier.OriginalElement'\n":"" +
-                elementName == null?"Missing property 'XChangesNotifier.PropertyName'\n":"" +
-                xProp == null?"Missing property 'XChangesNotifier.PropertySet'":"" +
-                xNameReplace == null?"Missing property 'XChangesNotifier.NameReplace'":"" +
-                xBatch == null?"Missing property 'XChangesNotifier.ChangesBatch'":""
+                (changeElement == null?"Missing property 'XChangesNotifier.ChangeElement'\n":"") +
+                (originalElement == null?"Missing property 'XChangesNotifier.OriginalElement'\n":"") +
+                (elementName == null?"Missing property 'XChangesNotifier.PropertyName'\n":"") +
+                (xProp == null?"Missing property 'XChangesNotifier.PropertySet'":"") +
+                (xNameReplace == null?"Missing property 'XChangesNotifier.NameReplace'":"") +
+                (xBatch == null?"Missing property 'XChangesNotifier.ChangesBatch'":"")
             );
             throw new StatusException("Some needed object relations are missing.", new Exception());
         }
