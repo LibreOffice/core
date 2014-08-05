@@ -1399,13 +1399,13 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             try {
                 iConnection.removeEventListener( this );
             }
-            catch ( Throwable aExc ) {};
+            catch ( Throwable aExc ) {}
 
             // do not listen on a terminating OOo anymore
             try {
                 getOOoDesktop().removeTerminateListener( this );
             }
-            catch ( Throwable aExc ) {};
+            catch ( Throwable aExc ) {}
 
             // stop thread
             this.interrupt();

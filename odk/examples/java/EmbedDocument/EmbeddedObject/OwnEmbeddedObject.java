@@ -299,7 +299,7 @@ public final class OwnEmbeddedObject extends WeakBase
     {
         m_xContext = context;
         m_aClassID = aClassID;
-    };
+    }
 
 
     public void CloseFrameRequest()

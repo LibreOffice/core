@@ -86,4 +86,4 @@ public class XPossibleHyphens_impl implements
     {
         return aOrigHyphenPos;
     }
-};
+}

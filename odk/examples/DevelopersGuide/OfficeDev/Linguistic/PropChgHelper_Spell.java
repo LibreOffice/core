@@ -98,5 +98,5 @@ public class PropChgHelper_Spell extends PropChgHelper
             }
         }
     }
-};
+}
 

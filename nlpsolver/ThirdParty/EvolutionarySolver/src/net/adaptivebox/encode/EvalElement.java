@@ -42,7 +42,7 @@ public class EvalElement {
    */
   public BasicBound targetBound = new BasicBound();
 
-  public EvalElement() {};
+  public EvalElement() {}
 
   public boolean isOptType() {
     return ((targetBound.minValue==BasicBound.MINDOUBLE&&targetBound.maxValue==BasicBound.MINDOUBLE)||

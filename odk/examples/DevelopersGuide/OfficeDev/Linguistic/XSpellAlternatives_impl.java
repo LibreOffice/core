@@ -88,5 +88,5 @@ public class XSpellAlternatives_impl implements
     {
         return aAlt;
     }
-};
+}
 

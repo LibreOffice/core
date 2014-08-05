@@ -94,4 +94,4 @@ public class XHyphenatedWord_impl implements
     {
         return bIsAltSpelling;
     }
-};
+}

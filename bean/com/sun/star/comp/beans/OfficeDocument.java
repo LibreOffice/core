@@ -208,7 +208,7 @@ public class OfficeDocument extends Wrapper
         xStorable.storeToURL( aURL, aArguments );
     }
 
-};
+}
 
 
 

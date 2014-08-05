@@ -70,4 +70,4 @@ class dbfTools
         XChild xAsChild = UnoRuntime.queryInterface( XChild.class, aComponent );
         return UnoRuntime.queryInterface( aInterfaceClass, xAsChild.getParent() );
     }
-};
+}

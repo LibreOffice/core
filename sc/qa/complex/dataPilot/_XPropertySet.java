@@ -80,7 +80,7 @@ public class _XPropertySet {
             propertyChanged = true;
          }
          public void disposing (EventObject obj) {}
-    };
+    }
 
 
     /**
@@ -104,7 +104,7 @@ public class _XPropertySet {
             vetoableChanged = true;
          }
          public void disposing (EventObject obj) {}
-    };
+    }
 
 
     /**

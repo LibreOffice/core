@@ -52,7 +52,7 @@ public class _XComponent {
             Loutput[0] = Thread.currentThread() + " is DISPOSING EV1" + this;
             listenerDisposed[0] = true;
         }
-    };
+    }
 
     /**
     * Listener which added and then removed, and its method must <b>not</b>
@@ -63,7 +63,7 @@ public class _XComponent {
             Loutput[0] = Thread.currentThread() + " is DISPOSING EV2" + this;
             listenerDisposed[1] = true;
         }
-    };
+    }
 
     XEventListener listener1 = new MyEventListener();
     XEventListener listener2 = new MyEventListener2();

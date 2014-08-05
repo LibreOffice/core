@@ -275,7 +275,7 @@ public final class OfficeConnection {
         PostprocessFailedException(IOException cause) {
             super("postprocessing failed with IOException " + cause, cause);
         }
-    };
+    }
 
     private String description;
     private Process process = null;

@@ -92,6 +92,6 @@ class Wrapper
     {
         xComponent.removeEventListener( xListener );
     }
-};
+}
 
 

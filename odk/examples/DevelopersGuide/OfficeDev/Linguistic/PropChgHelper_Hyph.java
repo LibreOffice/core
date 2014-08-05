@@ -74,5 +74,5 @@ public class PropChgHelper_Hyph extends PropChgHelper
             }
         }
     }
-};
+}
 

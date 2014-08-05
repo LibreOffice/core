@@ -190,5 +190,5 @@ public class PropChgHelper implements
         }
         return bRes;
     }
-};
+}
 

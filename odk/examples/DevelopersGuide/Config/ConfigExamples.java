@@ -371,7 +371,7 @@ public class ConfigExamples
             aBuffer.append(" ]");
             return aBuffer.toString();
         }
-    };
+    }
 
     /// This method reads information about grid settings
     protected GridOptions readGridConfiguration()
@@ -440,7 +440,7 @@ public class ConfigExamples
        public abstract void processValueElement( String sPath_, Object aValue_ );
         /// process a structural item
        public abstract void processStructuralElement( String sPath_, XInterface xElement_);
-    };
+    }
 
     /// Internal method to recursively browse a structural element in preorder
     public void browseElementRecursively( XInterface xElement, IConfigurationProcessor aProcessor )

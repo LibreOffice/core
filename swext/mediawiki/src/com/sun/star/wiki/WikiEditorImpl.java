@@ -71,7 +71,7 @@ public final class WikiEditorImpl extends WeakBase
         // Helper.trustAllSSL();
         m_xContext = xContext;
         m_aSettings = Settings.getSettings( m_xContext );
-    };
+    }
 
     public static XSingleComponentFactory __getComponentFactory( String sImplementationName )
     {

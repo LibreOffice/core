@@ -130,7 +130,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         {
             return new byte[0];
         }
-    };
+    }
 
 
     private static String getCallbackComponentServiceName()
@@ -198,7 +198,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         {
             m_eventListeners.remove(_listener);
         }
-    };
+    }
 
 
     private class MacroExecutionApprove implements XInteractionHandler
@@ -242,7 +242,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 }
             }
         }
-    };
+    }
 
 
 

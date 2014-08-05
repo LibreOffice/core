@@ -315,5 +315,5 @@ public class OfficeDocument
 
     private XMultiServiceFactory    m_orb;
     private XComponent              m_documentComponent;
-};
+}
 

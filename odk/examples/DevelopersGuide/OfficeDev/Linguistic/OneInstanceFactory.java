@@ -149,5 +149,5 @@ public class OneInstanceFactory implements
     {
         return aSupportedSvcNames;
     }
-};
+}
 

@@ -282,5 +282,5 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     {
         return new String[] { sExternalEvent, sAdd, sEdit, sRemove };
     }
-};
+}
 

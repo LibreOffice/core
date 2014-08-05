@@ -35,7 +35,7 @@ public final class OwnEmbeddedObjectFactory extends WeakBase
     public OwnEmbeddedObjectFactory( XComponentContext context )
     {
         m_xContext = context;
-    };
+    }
 
     public static XSingleComponentFactory __getComponentFactory( String sImplementationName ) {
         XSingleComponentFactory xFactory = null;

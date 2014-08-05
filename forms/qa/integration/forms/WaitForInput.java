@@ -53,5 +53,5 @@ class WaitForInput extends java.lang.Thread
             System.err.println( e );
         }
     }
-};
+}
 

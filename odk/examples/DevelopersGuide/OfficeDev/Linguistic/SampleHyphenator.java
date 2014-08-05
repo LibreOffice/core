@@ -84,7 +84,7 @@ public class SampleHyphenator extends ComponentBase implements
                 "HyphMinWordLength"
             };
         aPropChgHelper  = new PropChgHelper_Hyph( this, aProps );
-        aEvtListeners   = new ArrayList<Object>();;
+        aEvtListeners   = new ArrayList<Object>();
         bDisposing      = false;
     }
 

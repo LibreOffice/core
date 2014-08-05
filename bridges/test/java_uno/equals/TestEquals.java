@@ -1253,7 +1253,7 @@ public final class TestEquals {
                                 } catch (Exception e) {
                                     e.printStackTrace(System.err);
                                 }
-                            };
+                            }
 
                             private /*static*/ boolean test(
                                 String message, boolean condition)

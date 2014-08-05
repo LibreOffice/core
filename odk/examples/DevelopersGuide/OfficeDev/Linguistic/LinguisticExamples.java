@@ -355,7 +355,7 @@ public class LinguisticExamples
 
             System.out.println("Listener called");
         }
-    };
+    }
 
 }
 

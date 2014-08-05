@@ -64,7 +64,7 @@ public class ConsoleWait implements com.sun.star.lang.XEventListener
                 System.err.println( e );
             }
         }
-    };
+    }
 
     /** creates a ConsoleWait instance
      *  @param _disposable

@@ -294,6 +294,6 @@ public class LocalOfficeWindow
                                 }
                         }
                 }
-        };
+        }
 
 }

@@ -415,7 +415,7 @@ public class EventTest {
         public void disposing( EventObject oEvent ){
             System.out.println("XMouseClickHandler: disposing-Event");
         }
-    };
+    }
 
     /**
      * To check the events this class is a thread which click a mouse button and

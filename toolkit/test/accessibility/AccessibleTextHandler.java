@@ -301,7 +301,7 @@ class AccessibleTextHandler extends NodeHandler
             }
         }
         catch( IndexOutOfBoundsException e )
-            { ; } // ignore errors
+            {  } // ignore errors
 
         return aBuffer.toString();
     }

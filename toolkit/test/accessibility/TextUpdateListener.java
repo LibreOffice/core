@@ -60,9 +60,9 @@ class TextUpdateListener implements TreeModelListener
     }
 
     // don't care:
-    public void treeNodesInserted(TreeModelEvent e) { ; }
-    public void treeNodesRemoved(TreeModelEvent e) { ; }
-    public void treeStructureChanged(TreeModelEvent e) { ; }
+    public void treeNodesInserted(TreeModelEvent e) { }
+    public void treeNodesRemoved(TreeModelEvent e) {  }
+    public void treeStructureChanged(TreeModelEvent e) { }
 
     /** update the text */
     boolean updateText( XAccessibleText xText, String sNew )

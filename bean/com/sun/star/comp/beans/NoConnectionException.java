@@ -26,6 +26,6 @@ package com.sun.star.comp.beans;
  */
 public class NoConnectionException extends Exception
 {
-};
+}
 
 

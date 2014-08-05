@@ -59,7 +59,7 @@ public class _XComponent {
             Loutput[number] = Thread.currentThread() + " is DISPOSING " + message + this;
             listenerDisposed[number] = true;
         }
-    };
+    }
 
     XEventListener listener1 = new MyEventListener(0, "EV1");
     XEventListener listener2 = new MyEventListener(1, "EV2");

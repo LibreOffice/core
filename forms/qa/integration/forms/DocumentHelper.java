@@ -391,5 +391,5 @@ public class DocumentHelper
             m_documentComponent );
         return (XInterface) xORB.createInstanceWithArguments( serviceSpecifier, arguments );
     }
-};
+}
 

@@ -183,7 +183,7 @@ public class CheckOGroupBoxModel
         {
             propertiesChanged = false;
         }
-    };
+    }
 
     private XMultiServiceFactory getMSF()
     {
