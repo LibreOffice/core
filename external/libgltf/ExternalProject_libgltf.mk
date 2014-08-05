@@ -54,8 +54,14 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 
 else
 
+libgltf_CPPFLAGS :=
+ifneq (,$(gb_ENABLE_DBGUTIL))
+	libgltf_CPPFLAGS += -D_GLIBCXX_DEBUG
+endif
+
 $(call gb_ExternalProject_get_state_target,libgltf,build) :
 	$(call gb_ExternalProject_run,build,\
+		CPPFLAGS='$(libgltf_CPPFLAGS)' \
 		export PKG_CONFIG="" \
 		&& ./configure \
 			--disable-shared \
