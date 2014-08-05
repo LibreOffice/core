@@ -169,14 +169,6 @@ SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
-
-
-
-class SvxXMLTabStopArray_Impl : public std::vector<SvxXMLTabStopContext_Impl *> {};
-
-
-
-
 TYPEINIT1( SvxXMLTabStopImportContext, XMLElementPropertyContext );
 
 SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(

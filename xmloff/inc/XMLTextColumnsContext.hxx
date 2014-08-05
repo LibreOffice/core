@@ -22,10 +22,11 @@
 
 #include "XMLElementPropertyContext.hxx"
 
-
-class XMLTextColumnsArray_Impl;
+class XMLTextColumnContext_Impl;
 class XMLTextColumnSepContext_Impl;
 class SvXMLTokenMap;
+
+typedef std::vector<XMLTextColumnContext_Impl *> XMLTextColumnsArray_Impl;
 
 class XMLTextColumnsContext :public XMLElementPropertyContext
 {

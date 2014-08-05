@@ -263,8 +263,6 @@ XMLTextColumnSepContext_Impl::~XMLTextColumnSepContext_Impl()
 {
 }
 
-class XMLTextColumnsArray_Impl : public std::vector<XMLTextColumnContext_Impl *> {};
-
 TYPEINIT1( XMLTextColumnsContext, XMLElementPropertyContext );
 
 XMLTextColumnsContext::XMLTextColumnsContext(

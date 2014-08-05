@@ -340,8 +340,6 @@ public:
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper maInterfaceToIdentifierMapper;
 };
 
-class SvXMLImportContexts_Impl : public std::vector<SvXMLImportContext *> {};
-
 SvXMLImportContext *SvXMLImport::CreateContext( sal_uInt16 nPrefix,
                                          const OUString& rLocalName,
                                          const uno::Reference< xml::sax::XAttributeList >& )
