@@ -110,8 +110,6 @@ using namespace ::com::sun::star::lang;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxColorToolBoxControl, SvxColorItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxLineColorToolBoxControl, XLineColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
@@ -2345,73 +2343,18 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
     Dispatch( aCommand, aArgs );
 }
 
-// class SvxLineColorToolBoxControl ----------------------------------------
-
-SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
-    sal_uInt16 nSlotId,
-    sal_uInt16 nId,
-    ToolBox& rTbx ) :
-
-    SfxToolBoxControl( nSlotId, nId, rTbx )
+SfxToolBoxControl* SvxColorToolBoxControl::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
-    addStatusListener( OUString( ".uno:XLineColor" ) );
-    pBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
-    mPaletteManager.SetLastColor( COL_BLACK );
-    mPaletteManager.SetBtnUpdater( pBtnUpdater.get() );
+    return new SvxColorToolBoxControl( nSlotId, nId, rTbx );
 }
 
-SvxLineColorToolBoxControl::~SvxLineColorToolBoxControl()
+void SvxColorToolBoxControl::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod)
 {
+    SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(SvxColorItem), nSlotId ) );
+    SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(XLineColorItem), nSlotId ) );
 }
 
-SfxPopupWindowType SvxLineColorToolBoxControl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONTIMEOUT;
-}
-
-SfxPopupWindow* SvxLineColorToolBoxControl::CreatePopupWindow()
-{
-    SvxColorWindow_Impl* pColorWin =
-        new SvxColorWindow_Impl(
-                            m_aCommandURL,
-                            mPaletteManager,
-                            GetSlotId(),
-                            m_xFrame,
-                            SVX_RESSTR( RID_SVXSTR_LINECOLOR ),
-                            &GetToolBox() );
-
-    pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
-    pColorWin->StartSelection();
-    SetPopupWindow( pColorWin );
-    pColorWin->SetSelectedHdl( LINK( this, SvxLineColorToolBoxControl, SelectedHdl ) );
-    return pColorWin;
-}
-
-IMPL_LINK(SvxLineColorToolBoxControl, SelectedHdl, Color*, pColor)
-{
-    pBtnUpdater->Update( *pColor );
-    mPaletteManager.SetLastColor( *pColor );
-    return 0;
-}
-
-void SvxLineColorToolBoxControl::StateChanged(
-    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* /*pState*/ )
-{
-    ToolBox& rTbx = GetToolBox();
-    sal_uInt16 nId = GetId();
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
-}
-
-void SvxLineColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
-{
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name  = "XLineColor";
-    aArgs[0].Value = makeAny( (sal_uInt32)( mPaletteManager.GetLastColor().GetColor() ));
-    Dispatch( OUString( ".uno:XLineColor" ), aArgs );
-}
+// class SvxFrameToolBoxControl --------------------------------------------
 
 SvxFrameToolBoxControl::SvxFrameToolBoxControl(
     sal_uInt16      nSlotId,

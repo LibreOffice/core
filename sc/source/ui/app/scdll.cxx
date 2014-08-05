@@ -172,7 +172,7 @@ void ScDLL::Init()
     SvxFillToolBoxControl           ::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl      ::RegisterControl(0, pMod);
     SvxLineWidthToolBoxControl      ::RegisterControl(0, pMod);
-    SvxLineColorToolBoxControl      ::RegisterControl(0, pMod);
+    SvxColorToolBoxControl          ::RegisterControl(0, pMod);
     SvxLineEndToolBoxControl        ::RegisterControl(SID_ATTR_LINEEND_STYLE,   pMod);
     SvxStyleToolBoxControl          ::RegisterControl(SID_STYLE_APPLY,          pMod);
     SvxFontNameToolBoxControl       ::RegisterControl(SID_ATTR_CHAR_FONT,       pMod);

@@ -42,7 +42,8 @@
         SvxColorToolBoxControl
         ----------------------
         Item type:      SvxColorItem
-                    and SfxBoolItem
+                        SfxBoolItem
+                    and XLineColorItem
 
         for font color (writer, ...)
         Execute-Id      SID_ATTR_CHAR_COLOR2
@@ -66,9 +67,7 @@
         for 3D extrusion
         Execute-Id      SID_EXTRUSION_3D_COLOR
 
-        SvxLineColorToolBoxControl
-        --------------------------
-        Item type:      XLineColorItem
+        for line color
         Execute-Id      SID_ATTR_LINE_COLOR
 
         SvxPatternToolBoxControl
@@ -227,26 +226,6 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxColorToolBoxControl();
-
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
-    virtual void                Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
-};
-
-
-// class SvxLineColorToolBoxControl --------------------------------------
-
-class SVX_DLLPUBLIC SvxLineColorToolBoxControl : public SfxToolBoxControl
-{
-    ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > pBtnUpdater;
-    PaletteManager                      mPaletteManager;
-    DECL_LINK( SelectedHdl, Color* );
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxLineColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxLineColorToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
