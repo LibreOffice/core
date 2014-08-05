@@ -18,6 +18,8 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/timer.hxx>
 
+#include <vector>
+
 namespace avmedia { namespace ogl {
 
 class OGLWindow;
@@ -34,6 +36,7 @@ public:
     virtual ~OGLPlayer();
 
     bool create( const OUString& rURL );
+    void releaseInputFiles();
 
     // XPlayer
     virtual void SAL_CALL start() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -61,7 +64,10 @@ private:
     DECL_LINK( TimerHandler, Timer* );
 
     OUString m_sURL;
-    glTFHandle* m_pHandle;
+
+    libgltf::glTFHandle* m_pHandle;
+    std::vector<libgltf::glTFFile> m_vInputFiles;
+
     OpenGLContext m_aContext;
     AutoTimer m_aTimer;
     OGLWindow* m_pOGLWindow;
