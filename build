@@ -131,63 +131,6 @@ do_configure()
 	fi
 			
 }
-#		--disable-vba \
-#		--with-jvm-path \	Use a specific JVM search path at runtime.
-#		--enable-gstreamer \	gstreamer 1.0
-#		--enable-kde \		KDE 3
-#                --with-system-libs \
-#                --without-system-clucene \
-#                --without-system-libcdr \
-#                --without-system-libmspub \
-#                --without-system-libvisio \
-#                --without-system-libcmis \
-#                --without-system-libwpd \
-#                --without-system-lcms2 \
-#                --without-system-cppunit \
-#                --without-system-libwps \
-#                --without-system-libwpg \
-#                --without-system-postgresql \
-#                --without-system-boost \
-#                --without-system-mdds \
-#                --without-system-graphite \
-#                --without-system-lpsolve \
-#                --without-system-libexttextcat \
-#                --without-system-poppler \
-#                --without-system-jfreereport \
-#                --without-system-icu \
-#
-#                       --with-lang="en-US de" \
-#                        --enable-epm \
-#                        --enable-ext-wiki-publisher \
-#                        --enable-graphite \
-#                        --disable-gnome-vfs \
-#                        --disable-kdeab \
-#                        --enable-$kde \
- #                       --without-fonts \
-#                        --without-ppds \
-#                        --without-afms \
-#                        --with-jdk-home=$JDK_HOME \
-#                        --with-java \
-#                        --with-java-target-version=1.5 \
-#                        --enable-ext-scripting-beanshell \
-#                        --disable-ccache \
-#                        --with-system-openldap \
-#                                        --with-system-zlib \
-#                                        --with-system-openssl \
-#                                        --with-system-jpeg \
-#                                        --with-system-expat \
- #                                       --with-system-libxml \
-#                                        --with-system-sane \
-#                                        --with-system-curl \
-#                        --with-system-db \
-#                        --with-system-neon \
- #                       --enable-librsvg="internal" \
-#                        --enable-python="system" \
-#                        --without-doxygen \
-#                        --disable-lockdown \
-#                        --disable-gconf \
-#                        --enable-release-build \
-
 
 do_build() {
 	"$MAKE" $devinst || error "$MAKE fehlgeschlagen."
@@ -230,4 +173,3 @@ hours=$(($minutes / 60))
 minutes=$(($minutes - $hours * 60))
 
 echo "Gesamtzeit für den Build: $hours Std. $minutes Min." | tee -a build.log
-
