@@ -56,9 +56,6 @@ print("""
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 
-using namespace ::std;
-using namespace ::com::sun::star;
-
 typedef sal_Int32 Token_t;
     """)
 

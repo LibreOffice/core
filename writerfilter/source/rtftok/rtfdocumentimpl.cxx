@@ -60,6 +60,8 @@
 
 #define MM100_TO_EMU(MM100)     (MM100 * 360)
 
+using namespace com::sun::star;
+
 namespace writerfilter
 {
 namespace rtftok
@@ -394,7 +396,7 @@ void RTFDocumentImpl::checkFirstRun()
         // output settings table
         writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(m_aSettingsTableAttributes, m_aSettingsTableSprms));
         RTFReferenceTable::Entries_t aSettingsTableEntries;
-        aSettingsTableEntries.insert(make_pair(0, pProp));
+        aSettingsTableEntries.insert(std::make_pair(0, pProp));
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aSettingsTableEntries));
         Mapper().table(NS_ooxml::LN_settings_settings, pTable);
         // start initial paragraph
@@ -1140,7 +1142,7 @@ void RTFDocumentImpl::text(OUString& rString)
                 if (lb != m_aFontTableEntries.end() && !(m_aFontTableEntries.key_comp()(m_nCurrentFontIndex, lb->first)))
                     lb->second = pProp;
                 else
-                    m_aFontTableEntries.insert(lb, make_pair(m_nCurrentFontIndex, pProp));
+                    m_aFontTableEntries.insert(lb, std::make_pair(m_nCurrentFontIndex, pProp));
             }
             break;
             case DESTINATION_STYLEENTRY:
@@ -1152,7 +1154,7 @@ void RTFDocumentImpl::text(OUString& rString)
                     m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
 
                     writerfilter::Reference<Properties>::Pointer_t const pProp(createStyleProperties());
-                    m_aStyleTableEntries.insert(make_pair(m_nCurrentStyleIndex, pProp));
+                    m_aStyleTableEntries.insert(std::make_pair(m_nCurrentStyleIndex, pProp));
                 }
                 else
                     SAL_INFO("writerfilter", "no RTF style type defined, ignoring");
@@ -1607,7 +1609,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 default:
                     break;
                 }
-                m_nHeaderFooterPositions.push(make_pair(nId, nPos));
+                m_nHeaderFooterPositions.push(std::make_pair(nId, nPos));
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
             break;
@@ -4829,7 +4831,7 @@ int RTFDocumentImpl::popState()
         RTFSprms aListTableAttributes;
         writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aListTableAttributes, m_aListTableSprms));
         RTFReferenceTable::Entries_t aListTableEntries;
-        aListTableEntries.insert(make_pair(0, pProp));
+        aListTableEntries.insert(std::make_pair(0, pProp));
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
         Mapper().table(NS_ooxml::LN_NUMBERING, pTable);
     }
@@ -4899,7 +4901,7 @@ int RTFDocumentImpl::popState()
     case DESTINATION_SHAPEPROPERTYNAME:
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
             break; // not for nested group
-        aState.aShape.aProperties.push_back(make_pair(m_aStates.top().pDestinationText->makeStringAndClear(), OUString()));
+        aState.aShape.aProperties.push_back(std::make_pair(m_aStates.top().pDestinationText->makeStringAndClear(), OUString()));
         break;
     case DESTINATION_SHAPEPROPERTYVALUE:
         if (aState.aShape.aProperties.size())
@@ -5620,7 +5622,7 @@ int RTFDocumentImpl::popState()
             writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aListTableAttributes, aListTableSprms));
 
             RTFReferenceTable::Entries_t aListTableEntries;
-            aListTableEntries.insert(make_pair(0, pProp));
+            aListTableEntries.insert(std::make_pair(0, pProp));
             writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
             Mapper().table(NS_ooxml::LN_NUMBERING, pTable);
 

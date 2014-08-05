@@ -29,6 +29,7 @@ namespace writerfilter {
 namespace ooxml
 {
 using namespace ::std;
+using namespace com::sun::star;
 
 OOXMLProperty::~OOXMLProperty()
 {

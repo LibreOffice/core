@@ -2980,7 +2980,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
 void DomainMapper::lcl_props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
-    string sType = ref->getType();
+    std::string sType = ref->getType();
     if( sType == "PICF" )
     {
         m_pImpl->ImportGraphic(ref, IMPORT_AS_GRAPHIC);
@@ -3122,7 +3122,7 @@ void DomainMapper_Impl::substream(Id rName,
     }
 }
 
-void DomainMapper::lcl_info(const string & /*info_*/)
+void DomainMapper::lcl_info(const std::string & /*info_*/)
 {
 }
 

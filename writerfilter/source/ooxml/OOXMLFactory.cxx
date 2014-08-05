@@ -28,6 +28,8 @@
 namespace writerfilter {
 namespace ooxml {
 
+using namespace com::sun::star;
+
 AttributeInfo::AttributeInfo()
 :m_nResource(RT_NoResource), m_nRef(0)
 {

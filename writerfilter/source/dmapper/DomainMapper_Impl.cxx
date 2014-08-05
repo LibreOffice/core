@@ -1636,8 +1636,8 @@ void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange
 
 void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& xRange )
 {
-    vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.top().begin( );
-    vector< RedlineParamsPtr > aCleaned;
+    std::vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.top().begin( );
+    std::vector< RedlineParamsPtr > aCleaned;
     for (; pIt != m_aRedlines.top().end( ); ++pIt )
     {
         CreateRedline( xRange, *pIt );
@@ -2175,12 +2175,12 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
 }
 
 SAL_DLLPUBLIC_EXPORT // export just for test
-boost::tuple<OUString, vector<OUString>, vector<OUString> >
+boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
 lcl_SplitFieldCommand(const OUString& rCommand)
 {
     OUString sType;
-    vector<OUString> arguments;
-    vector<OUString> switches;
+    std::vector<OUString> arguments;
+    std::vector<OUString> switches;
     sal_Int32 nStartIndex(0);
 
     do
@@ -3306,7 +3306,7 @@ void DomainMapper_Impl::CloseFieldCommand()
         {
             uno::Reference< uno::XInterface > xFieldInterface;
 
-            boost::tuple<OUString, vector<OUString>, vector<OUString> > const
+            boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> > const
                 field(lcl_SplitFieldCommand(pContext->GetCommand()));
             OUString const sFirstParam(boost::get<1>(field).empty()
                     ? OUString() : boost::get<1>(field).front());

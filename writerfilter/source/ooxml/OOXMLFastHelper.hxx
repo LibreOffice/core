@@ -48,9 +48,7 @@ public:
 };
 
 template <class T>
-uno::Reference<css::xml::sax::XFastContextHandler>
-OOXMLFastHelper<T>::createAndSetParentAndDefine
-(OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine)
+css::uno::Reference<css::xml::sax::XFastContextHandler> OOXMLFastHelper<T>::createAndSetParentAndDefine (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine)
 {
     OOXMLFastContextHandler * pTmp = new T(pHandler);
 

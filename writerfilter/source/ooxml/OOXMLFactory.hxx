@@ -82,7 +82,7 @@ struct CreateElement
 typedef boost::unordered_map<Token_t, CreateElement> CreateElementMap;
 typedef boost::shared_ptr<CreateElementMap> CreateElementMapPointer;
 typedef boost::unordered_map<Id, CreateElementMapPointer> CreateElementsMap;
-typedef boost::unordered_map<Id, string> IdToStringMap;
+typedef boost::unordered_map<Id, std::string> IdToStringMap;
 typedef boost::shared_ptr<IdToStringMap> IdToStringMapPointer;
 
 typedef boost::unordered_map<Id, Token_t> TokenToIdMap;
@@ -127,17 +127,13 @@ public:
 
     static Pointer_t getInstance();
 
-    uno::Reference< xml::sax::XFastContextHandler> createFastChildContext
-    (OOXMLFastContextHandler * pHandler, Token_t Element);
+    css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContext(OOXMLFastContextHandler * pHandler, Token_t Element);
 
-    uno::Reference< xml::sax::XFastContextHandler> createFastChildContextFromStart
-    (OOXMLFastContextHandler * pHandler, Token_t Element);
+    css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromStart(OOXMLFastContextHandler * pHandler, Token_t Element);
 
-    void attributes(OOXMLFastContextHandler * pHandler,
-                    const uno::Reference< xml::sax::XFastAttributeList > & Attribs);
+    void attributes(OOXMLFastContextHandler * pHandler, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
 
-    void characters(OOXMLFastContextHandler * pHandler,
-                    const OUString & rString);
+    void characters(OOXMLFastContextHandler * pHandler, const OUString & rString);
 
     void startAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
     void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
@@ -151,10 +147,7 @@ private:
     OOXMLFactory();
     OOXMLFactory_ns::Pointer_t getFactoryForNamespace(Id id);
 
-    uno::Reference< xml::sax::XFastContextHandler>
-    createFastChildContextFromFactory(OOXMLFastContextHandler * pHandler,
-                                      OOXMLFactory_ns::Pointer_t pFactory,
-                                      Token_t Element);
+    css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromFactory(OOXMLFastContextHandler * pHandler, OOXMLFactory_ns::Pointer_t pFactory, Token_t Element);
 };
 
   inline void intrusive_ptr_add_ref(OOXMLFactory* p)

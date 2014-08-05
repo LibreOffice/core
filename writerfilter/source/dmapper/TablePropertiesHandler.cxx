@@ -34,6 +34,7 @@
 #include <dmapperLoggers.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
 
+using namespace com::sun::star;
 
 namespace writerfilter {
 namespace dmapper {
