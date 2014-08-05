@@ -2038,16 +2038,13 @@ Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
     {
         return makeAny( Reference< drawing::XMasterPageTarget >( this ) );
     }
-    else
+    else if( mbIsImpressDocument
+             && rType == cppu::UnoType<presentation::XPresentationPage>::get() )
     {
-        if( mbIsImpressDocument )
+        SdPage * p = dynamic_cast<SdPage *>(SvxDrawPage::mpPage);
+        if( p == 0 || p->GetPageKind() != PK_HANDOUT )
         {
-            const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
-
-            if( ePageKind != PK_HANDOUT && rType == cppu::UnoType<presentation::XPresentationPage>::get() )
-            {
-                return makeAny( Reference< presentation::XPresentationPage >( this ) );
-            }
+            return makeAny( Reference< presentation::XPresentationPage >( this ) );
         }
     }
 
