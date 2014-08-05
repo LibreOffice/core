@@ -14,7 +14,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XFrameGrabber.hpp>
 
+#ifdef SYSTEM_LIBGLTF
+#include <libgltf/libgltf.h>
+#else
 #include <libgltf.h>
+#endif
 
 namespace avmedia { namespace ogl {
 

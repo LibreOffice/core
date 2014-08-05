@@ -1552,6 +1552,11 @@ AC_ARG_WITH(system-jpeg,
         [Use jpeg already on system.]),,
     [with_system_jpeg=auto])
 
+AC_ARG_WITH(system-libgltf,
+    AS_HELP_STRING([--with-system-libgltf],
+        [Use libgltf already on system.]),,
+    [with_system_libgltf=auto])
+
 AC_ARG_WITH(system-clucene,
     AS_HELP_STRING([--with-system-clucene],
         [Use clucene already on system.]),,
@@ -10561,7 +10566,12 @@ if test "x$enable_gltf" != "xno" -a $_os != Darwin -a $_os != iOS -a $_os != And
     ENABLE_GLTF=TRUE
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_FEATURE_GLTF,1)
-    BUILD_TYPE="$BUILD_TYPE LIBGLTF"
+    if test "$with_system_libgltf" = "yes"; then
+	SYSTEM_LIBGLTF=TRUE
+	PKG_CHECK_MODULES( LIBGLTF, libgltf-0.0 )
+    else
+    	BUILD_TYPE="$BUILD_TYPE LIBGLTF"
+    fi
     # otherwise build fails in collada2gltf external because of std::shared_ptr
     if test "$have_std_shared_ptr" = "yes"; then
         BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
@@ -10570,6 +10580,9 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_GLTF)
+AC_SUBST(SYSTEM_LIBGLTF)
+AC_SUBST(LIBGLTF_CFLAGS)
+AC_SUBST(LIBGLTF_LIBS)
 
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
