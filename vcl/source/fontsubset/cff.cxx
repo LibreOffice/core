@@ -369,7 +369,7 @@ public:
     explicit CffSubsetterContext( const U8* pBasePtr, int nBaseLen);
     virtual ~CffSubsetterContext( void);
 
-    void    initialCffRead( void);
+    bool    initialCffRead();
     bool    emitAsType1( class Type1Emitter&,
                 const long* pGlyphIDs, const U8* pEncoding,
                 GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
@@ -1569,9 +1569,7 @@ CffGlobal::CffGlobal( void)
     // TODO; maFontMatrix.clear();
 }
 
-// --------------------------------------------------------------------
-
-void CffSubsetterContext::initialCffRead( void)
+bool CffSubsetterContext::initialCffRead()
 {
     // get the CFFHeader
     mpReadPtr = mpBasePtr;
@@ -1629,7 +1627,11 @@ void CffSubsetterContext::initialCffRead( void)
 //      assert( mnFontDictBase == tellRel());
         mpReadPtr = mpBasePtr + mnFontDictBase;
         mnFDAryCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
-        assert( mnFDAryCount < (int)(sizeof(maCffLocal)/sizeof(*maCffLocal)));
+        if (static_cast<size_t>(mnFDAryCount) >= SAL_N_ELEMENTS(maCffLocal))
+        {
+            SAL_INFO("vcl.fonts", "CffSubsetterContext: too many CFF in font");
+            return false;
+        }
 
         // read FDArray details to get access to the PRIVDICTs
         for( int i = 0; i < mnFDAryCount; ++i) {
@@ -1670,6 +1672,8 @@ void CffSubsetterContext::initialCffRead( void)
     }
 
     // ignore the Notices info
+
+    return true;
 }
 
 // --------------------------------------------------------------------
@@ -2340,14 +2344,16 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
 bool FontSubsetInfo::CreateFontSubsetFromCff( GlyphWidth* pOutGlyphWidths )
 {
     CffSubsetterContext aCff( mpInFontBytes, mnInByteLength);
-    aCff.initialCffRead();
+    bool bRC = aCff.initialCffRead();
+    if (!bRC)
+        return bRC;
 
     // emit Type1 subset from the CFF input
     // TODO: also support CFF->CFF subsetting (when PDF-export and PS-printing need it)
     const bool bPfbSubset = (0 != (mnReqFontTypeMask & FontSubsetInfo::TYPE1_PFB));
     Type1Emitter aType1Emitter( mpOutFile, bPfbSubset);
     aType1Emitter.setSubsetName( mpReqFontName);
-    bool bRC = aCff.emitAsType1( aType1Emitter,
+    bRC = aCff.emitAsType1( aType1Emitter,
         mpReqGlyphIds, mpReqEncodedIds,
         pOutGlyphWidths, mnReqGlyphCount, *this);
     return bRC;
