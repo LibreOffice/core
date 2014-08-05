@@ -57,6 +57,13 @@ def defaultNamespaceAliases():
     }
 
 
+def check(model):
+    defines = [i.getAttribute("name") for i in model.getElementsByTagName("define")]
+    for reference in [i.getAttribute("name") for i in model.getElementsByTagName("ref")]:
+        if not reference in defines:
+            raise Exception("Unknown define with name '%s'" % reference)
+
+
 def preprocess(model):
     for i in model.getElementsByTagName("namespace-alias"):
         name = i.getAttribute("name")
@@ -163,6 +170,7 @@ parseNamespaces(namespacesPath)
 # URL -> alias
 namespaceAliases = {}
 model = minidom.parse(modelPath)
+check(model)
 preprocess(model)
 model.writexml(sys.stdout)
 
