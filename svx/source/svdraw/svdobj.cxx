@@ -614,10 +614,10 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
     return *mpGlobalItemPool;
 }
 
-SdrItemPool* SdrObject::GetObjectItemPool() const
+SfxItemPool* SdrObject::GetObjectItemPool() const
 {
     if(pModel)
-        return (SdrItemPool*)(&pModel->GetItemPool());
+        return &pModel->GetItemPool();
 
     // use a static global default pool
     return &SdrObject::GetGlobalDrawObjectItemPool();
@@ -2094,7 +2094,7 @@ const SfxPoolItem& SdrObject::GetObjectItem(const sal_uInt16 nWhich) const
 SfxMapUnit SdrObject::GetObjectMapUnit() const
 {
     SfxMapUnit aRetval(SFX_MAPUNIT_100TH_MM);
-    SdrItemPool* pPool = GetObjectItemPool();
+    SfxItemPool* pPool = GetObjectItemPool();
 
     if(pPool)
     {
