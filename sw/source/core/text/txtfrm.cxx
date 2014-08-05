@@ -74,6 +74,7 @@
 #include <fldupde.hxx>
 #include <IGrammarContact.hxx>
 #include <switerator.hxx>
+#include <ftnidx.hxx>
 
 TYPEINIT1( SwTxtFrm, SwCntntFrm );
 
@@ -368,6 +369,33 @@ SwTxtFrm::~SwTxtFrm()
 {
     // Remove associated SwParaPortion from pTxtCache
     ClearPara();
+
+    SwCntntNode* pCNd;
+    if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
+        !pCNd->GetDoc()->IsInDtor() && HasFtn() )
+    {
+        SwTxtNode *pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
+        const SwFtnIdxs &rFtnIdxs = pCNd->GetDoc()->GetFtnIdxs();
+        sal_uInt16 nPos;
+        sal_uLong nIndex = pCNd->GetIndex();
+        rFtnIdxs.SeekEntry( *pTxtNd, &nPos );
+        SwTxtFtn* pTxtFtn;
+        if( nPos < rFtnIdxs.size() )
+        {
+            while( nPos && pTxtNd == &(rFtnIdxs[ nPos ]->GetTxtNode()) )
+                --nPos;
+            if( nPos || pTxtNd != &(rFtnIdxs[ nPos ]->GetTxtNode()) )
+                ++nPos;
+        }
+        while( nPos < rFtnIdxs.size() )
+        {
+            pTxtFtn = rFtnIdxs[ nPos ];
+            if( pTxtFtn->GetTxtNode().GetIndex() > nIndex )
+                break;
+            pTxtFtn->DelFrms( this );
+            ++nPos;
+        }
+    }
 }
 
 const OUString& SwTxtFrm::GetTxt() const

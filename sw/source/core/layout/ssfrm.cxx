@@ -432,30 +432,6 @@ SwCntntFrm::~SwCntntFrm()
             pRoot->DisallowTurbo();
             pRoot->ResetTurbo();
         }
-        if( IsTxtFrm() && ((SwTxtFrm*)this)->HasFtn() )
-        {
-            SwTxtNode *pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
-            const SwFtnIdxs &rFtnIdxs = pCNd->GetDoc()->GetFtnIdxs();
-            sal_uInt16 nPos;
-            sal_uLong nIndex = pCNd->GetIndex();
-            rFtnIdxs.SeekEntry( *pTxtNd, &nPos );
-            SwTxtFtn* pTxtFtn;
-            if( nPos < rFtnIdxs.size() )
-            {
-                while( nPos && pTxtNd == &(rFtnIdxs[ nPos ]->GetTxtNode()) )
-                    --nPos;
-                if( nPos || pTxtNd != &(rFtnIdxs[ nPos ]->GetTxtNode()) )
-                    ++nPos;
-            }
-            while( nPos < rFtnIdxs.size() )
-            {
-                pTxtFtn = rFtnIdxs[ nPos ];
-                if( pTxtFtn->GetTxtNode().GetIndex() > nIndex )
-                    break;
-                pTxtFtn->DelFrms( this );
-                ++nPos;
-            }
-        }
     }
 }
 
