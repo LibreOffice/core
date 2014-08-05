@@ -2203,6 +2203,12 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         {
             rDstDesc.GetLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
         }
+        {
+            rDstDesc.GetFirstMaster().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
+        }
+        {
+            rDstDesc.GetFirstLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
+        }
     }
 }
 
