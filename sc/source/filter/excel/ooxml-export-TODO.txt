@@ -30,8 +30,6 @@ Elements:
     - Workbook (§3.2):
         - customWorkbookViews (§3.2.3)
         - ext (§3.2.7)
-        - externalReference (§3.2.8)
-        - externalReferences (§3.2.9)
         - extLst (§3.2.10)
         - fileRecoveryPr (§3.2.11)      [ CRASHRECERR? 865h ]
         - fileSharing (§3.2.12)         [ FILESHARING 5Bh ]

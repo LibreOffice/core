@@ -444,7 +444,7 @@ XclExpHyperlink::~XclExpHyperlink()
 }
 
 OUString XclExpHyperlink::BuildFileName(
-        sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot ) const
+        sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot )
 {
     OUString aDosName( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
     rnLevel = 0;

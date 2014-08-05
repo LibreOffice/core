@@ -256,15 +256,16 @@ public:
                 const ::com::sun::star::uno::Sequence<
                     com::sun::star::sheet::ExternalLinkInfo>* pExternalLinks ) const = 0;
 
-        virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const = 0;
+        virtual OUString makeExternalNameStr( sal_uInt16 nFileId, const OUString& rFile,
+                const OUString& rName ) const = 0;
 
         virtual void makeExternalRefStr(
-            OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+            OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 nFileId, const OUString& rFileName,
             const OUString& rTabName, const ScSingleRefData& rRef ) const = 0;
 
         virtual void makeExternalRefStr(
             OUStringBuffer& rBuffer, const ScAddress& rPos,
-            const OUString& rFileName, const std::vector<OUString>& rTabNames,
+            sal_uInt16 nFileId, const OUString& rFileName, const std::vector<OUString>& rTabNames,
             const OUString& rTabName, const ScComplexRefData& rRef ) const = 0;
 
         enum SpecialSymbolType
