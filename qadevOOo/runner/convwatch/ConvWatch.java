@@ -124,12 +124,9 @@ public class ConvWatch
 
             FileHelper.makeDirectories("", _sOutputPath);
 
-            // runner.convwatch.compare();
-
             String sAbsoluteInputFileURL = URLHelper.getFileURLFromSystemPath(_sAbsoluteInputFile);
 
             String sInputFile = FileHelper.getBasename(_sAbsoluteInputFile);
-            // System.out.println("InputFile: " + sInputFile);
 
             FileHelper.getNameNoSuffix(sInputFile);
 
@@ -140,19 +137,12 @@ public class ConvWatch
             String sReferenceFile = FileHelper.getBasename(_sAbsoluteReferenceFile);
             String sReferenceFileNoSuffix = FileHelper.getNameNoSuffix(sReferenceFile);
             String sPostScriptFile = sReferenceFileNoSuffix + ".ps";
-            // System.out.println("PostscriptFile: " + sPostScriptFile);
 
             String sAbsolutePrintFile = _sOutputPath + fs + sPostScriptFile;
             String sAbsolutePrintFileURL = URLHelper.getFileURLFromSystemPath(sAbsolutePrintFile);
 
-            // System.out.println("AbsoluteInputFileURL: " + sAbsoluteInputFileURL);
-            // System.out.println("AbsoluteOutputFileURL: " + sAbsoluteOutputFileURL);
-            // System.out.println("AbsolutePrintFileURL: " + sAbsolutePrintFileURL);
-
             // store and print the sAbsoluteInputFileURL file with StarOffice / OpenOffice.org
             OfficePrint.printToFile(_aGTA, sAbsoluteInputFileURL, sAbsoluteOutputFileURL, sAbsolutePrintFileURL);
-
-            // wait(2);
 
             if (! FileHelper.exists(sAbsolutePrintFile))
             {
@@ -175,16 +165,10 @@ public class ConvWatch
             PRNCompare a = new PRNCompare();
             String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
             String sReferencePath = FileHelper.getPath(_sAbsoluteReferenceFile);
-            // String sReferenceFile = FileHelper.getBasename(sAbsoluteReferenceFile);
-
-            // System.out.println("InputPath: " + sInputPath);
-            // System.out.println("sReferencePath: " + sReferencePath);
-            // System.out.println("sReferenceFile: " + sReferenceFile);
 
             a.setInputPath(     sInputPath );
             a.setReferencePath( sReferencePath );
             a.setOutputPath(    _sOutputPath );
-            // a.setDocFile(       "1_Gov.ppt");
             a.setReferenceFile( sReferenceFile );
             a.setPostScriptFile(sPostScriptFile );
             if (_aGTA.printAllPages() == true)
@@ -221,9 +205,6 @@ public class ConvWatch
             System.getProperty("file.separator");
             String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
             String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
-//            String sHTMLFile = _sFilenamePrefix + sNameNoSuffix + ".html";
-//            HTMLOutputter HTMLoutput = HTMLOutputter.create(_sOutputPath, sHTMLFile, "", "");
-//            HTMLoutput.header(sNameNoSuffix);
 //  TODO: version info was fine
 //            HTMLoutput.checkSection(sBasename);
             // Status end
@@ -274,12 +255,10 @@ public class ConvWatch
                 }
 
                 // Status
-//                HTMLoutput.checkLine(aList[i], bCurrentResult);
                 INIoutput.checkLine(aList[i], bCurrentResult);
                 bResultIsOk &= bCurrentResult;
             }
             // Status
-//            HTMLoutput.close();
             INIoutput.close();
             return bResultIsOk;
         }
@@ -292,10 +271,6 @@ public class ConvWatch
             String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
             String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
             String sINIFile = _sFilenamePrefix + sNameNoSuffix + ".ini";
-
-//            HTMLOutputter HTMLoutput = HTMLOutputter.create(_sOutputPath, sHTMLFile, _sFilenamePrefix, "");
-//            HTMLoutput.header(sNameNoSuffix);
-//            HTMLoutput.checkDiffDiffSection(sBasename);
 
             INIOutputter INIoutput = INIOutputter.create(_sOutputPath, sINIFile, _sFilenamePrefix, "");
             INIoutput.createHeader();
@@ -311,11 +286,9 @@ public class ConvWatch
                 INIoutput.writeSection("page" + String.valueOf(i + 1));   // list start at point 0, but this is page 1 and so on... current_page = (i + 1)
                 boolean bCurrentResult = (aDiffDiffList[i].nDiffStatus == StatusHelper.DIFF_NO_DIFFERENCES); // logic: nDiff==0 = true if there is no difference
 
-//                HTMLoutput.checkDiffDiffLine(aDiffDiffList[i], bCurrentResult);
                 INIoutput.checkDiffDiffLine(aDiffDiffList[i], bCurrentResult);
             }
             // Status
-//            HTMLoutput.close();
             INIoutput.close();
         }
 
@@ -376,7 +349,6 @@ public class ConvWatch
                     GlobalLogWriter.get().println("checkDiffDiff: Old diff file: '" + sNewDiffName + "' does not exist." );
                     continue;
                 }
-                // String sNewDiffName = _sAbsoluteDiffPath + fs + sDiffBasename;
 
                 // make a simple difference between these both diff files.
                 String sSourcePath1 = FileHelper.getPath(sOrigDiffName);
@@ -405,15 +377,4 @@ public class ConvWatch
             return bDiffIsOk;
         }
 
-    // public static void main( String[] argv )
-    //     {
-    //         PRNCompare a = new PRNCompare();
-    //         a.setInputPath(     "/cws/so-cwsserv06/qadev18/SRC680/src.m47/convwatch.keep/input/msoffice/xp/PowerPoint");
-    //         a.setDocFile(       "1_Gov.ppt");
-    //         a.setReferencePath( "/cws/so-cwsserv06/qadev18/SRC680/src.m47/convwatch.keep/input/msoffice/xp/PowerPoint");
-    //         a.setReferenceFile( "1_Gov.prn" );
-
-    //         a.setOutputPath(    "/tmp/convwatch_java");
-    //         a.setPostScriptFile("1_Gov.ps" );
-    //     }
 }

@@ -21,7 +21,6 @@ package util;
 import com.sun.star.awt.Point;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.PolygonFlags;
-//import util.BitmapLoader;
 import com.sun.star.uno.Enum ;
 import java.lang.reflect.Field ;
 import java.lang.reflect.Method ;
@@ -675,14 +674,6 @@ public class ValueChanger {
         if (oldValue.equals(DIM4)) newValue = DIM1;
 
    } else
-
-//   if (oldValue instanceof com.sun.star.text.TableColumnSeparator[]){
-//        com.sun.star.text.TableColumnSeparator[] _newValue = (com.sun.star.text.TableColumnSeparator[]) oldValue;
-//        com.sun.star.text.TableColumnSeparator sep = new com.sun.star.text.TableColumnSeparator();
-//        sep.IsVisible = ! _newValue[0].IsVisible;
-//        _newValue[0] = sep;
-//        newValue = _newValue;
-//   } else
 
    if (oldValue instanceof com.sun.star.style.BreakType){
         com.sun.star.style.BreakType BT1 = com.sun.star.style.BreakType.COLUMN_AFTER;

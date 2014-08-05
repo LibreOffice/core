@@ -33,7 +33,6 @@ public class AWeakBase extends WeakBase implements XEventListener
 
     public void disposing(com.sun.star.lang.EventObject eventObject)
     {
-//        System.out.println(getClass().getName() + " .disposing called");
         nDisposingCalled++;
     }
 

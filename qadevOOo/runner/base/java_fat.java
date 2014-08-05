@@ -77,13 +77,9 @@ public class java_fat implements TestBase
             {
                 exclusions = getExclusionList(ExclusionFile, m_isDebug);
             }
-            //get Job-Descriptions
-            // System.out.println("Getting Descriptions for Job: " + job);
 
             String sDescriptionPath = (String) m_aParams.get("DescriptionPath");
             DescEntry[] entries = dg.getDescriptionFor(job, sDescriptionPath, m_isDebug);
-
-            // System.out.println();
 
             if (entries == null)
             {
@@ -91,15 +87,6 @@ public class java_fat implements TestBase
 
                 return false;
             }
-
-//        String officeProviderName = (String) m_aParams.get("OfficeProvider");
-//        AppProvider office = (AppProvider) m_aDynamicClassLoader.getInstance(officeProviderName);
-
-//        if (office == null) {
-//            System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
-//                               " it cannot be instantiated.");
-//            System.exit(-1);
-//        }
 
             m_aOffice = startOffice(m_aParams);
 
@@ -149,10 +136,6 @@ public class java_fat implements TestBase
                     continue;
                 }
 
-//                if (m_isDebug)
-//                {
-//                    System.out.println("sleeping 2 seconds..");
-//                }
                 util.utils.shortWait(2000);
 
                 System.out.println("Creating: " + entry.entryName);
@@ -182,7 +165,6 @@ public class java_fat implements TestBase
                         continue;
                     }
 
-                    // final String sEntryName = aSubEntry.entryName;
                     final String sLongEntryName = aSubEntry.longName;
 
                     if ((exclusions != null) && (exclusions.contains(sLongEntryName)))
@@ -191,7 +173,6 @@ public class java_fat implements TestBase
                         continue;
                     }
 
-                    // System.out.println("running: '" + sLongEntryName + "' testcode: [" + sEntryName + "]");
                     // this will shown in test itself
 
                     LogWriter ifclog = (LogWriter) m_aDynamicClassLoader.getInstance( (String) m_aParams.get("LogWriter"));
@@ -207,7 +188,6 @@ public class java_fat implements TestBase
                         tCase = tEnv.getTestCase();
                     }
 
-                    // MultiMethodTest ifc = null;
                     lib.TestResult res = null;
 
                     // run the interface test twice if it failed.
@@ -398,28 +378,6 @@ public class java_fat implements TestBase
 
     private TestEnvironment getEnv(DescEntry entry, TestParameters param)
         {
-//        if (m_aDynamicClassLoader == null)
-//            m_aDynamicClassLoader = new DynamicClassLoader();
-//        String officeProviderName = (String) m_aParams.get("OfficeProvider");
-//        AppProvider office = (AppProvider) m_aDynamicClassLoader.getInstance(officeProviderName);
-
-//        if (office == null) {
-//            System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
-//                               " it cannot be instantiated.");
-//            System.exit(-1);
-//        }
-
-//        XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
-//                                           m_aParams);
-
-//        if (msf == null) {
-//            return null;
-//        }
-
-//        m_aParams.put("ServiceFactory", msf);
-
-            // AppProvider office = startOffice(m_aParams);
-
             TestCase tCase = null;
 
             try
@@ -479,17 +437,6 @@ public class java_fat implements TestBase
             }
 
         }
-
-//    private void shortWait(int millis)
-//        {
-//            try
-//            {
-//                Thread.sleep(millis);
-//            }
-//            catch (java.lang.InterruptedException ie)
-//            {
-//            }
-//        }
 
     private ArrayList<String> getExclusionList(String url, boolean debug)
         {

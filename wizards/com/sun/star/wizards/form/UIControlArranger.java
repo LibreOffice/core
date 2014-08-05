@@ -28,7 +28,6 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.document.Control;
-// import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.ui.ButtonList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
@@ -48,8 +47,6 @@ public class UIControlArranger
     private XRadioButton optAlignRight;
     private XControl flnLabelPlacement;
     private String[] HelpTexts = new String[4];
-    // private String[] sArrangementHeader = new String[2];
-    // private ArrangeImageList[] m_aArrangeList = new ArrangeImageList[2];
     private ArrangeButtonList[] m_aArrangeList = new ArrangeButtonList[2];
     private Integer IControlStep;
     private final int SOBASEIMAGEYPOSITION = 66;
@@ -131,8 +128,6 @@ public class UIControlArranger
                     {
                         new Integer(ResId), new Integer(ResId + 1)
                     };
-//          String s = CurUnoDialog.getWizardImageUrl(ResId, ResId + 1); //((Integer)listitem).intValue(), )sBitmapPath + "/Arrange_" + (((Integer)listitem).intValue() + 1) + ".gif";
-//          return s;
         }
 
         public String render(Object listItem)
@@ -187,127 +182,6 @@ public class UIControlArranger
         Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bEnableAlignControlGroup));
         Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignRight), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bEnableAlignControlGroup));
     }
-
-//    private class ArrangeImageList implements XItemListener
-//    {
-
-//        private int formindex;
-//        private ImageList m_aButtonList = null; // new ImageList();
-
-//        public ArrangeImageList(int _formindex, ListModel model, String _sArrangementHeader)
-//        {
-//            formindex = _formindex;
-//            Integer YPos = new Integer(SOBASEIMAGEYPOSITION + _formindex * SOIMAGELISTHEIGHT);
-//            // Label ArrangementHeader ----------------------
-//            CurUnoDialog.insertFixedLine("lnLabelPlacment_" + (_formindex + 1),
-//                    new String[]
-//                    {
-//                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
-//                    },
-//                    new Object[]
-//                    {
-//                        UIConsts.INTEGERS[8], _sArrangementHeader, 97, YPos, IControlStep, new Short(curtabindex++), 207
-//                    });
-
-//            int nypos = SOBASEIMAGEYPOSITION + 12 + _formindex * SOIMAGELISTHEIGHT;
-//            m_aButtonList = new ImageList();
-//            m_aButtonList.setPos(new Size(107, nypos));
-//            m_aButtonList.setImageSize(new Size(26, 26));
-//            m_aButtonList.setCols(4);
-//            m_aButtonList.setRows(1);
-//            m_aButtonList.m_aControlName = "ImageList_" + formindex;
-//            m_aButtonList.setStep(new Short((short) FormWizard.SOCONTROL_PAGE));
-//            m_aButtonList.setShowButtons(false);
-//            m_aButtonList.setRenderer(new LayoutRenderer());
-//            m_aButtonList.setSelectionGap(new Size(2, 2));
-//            m_aButtonList.setGap(new Size(3, 3));
-//            m_aButtonList.scaleImages = Boolean.FALSE;
-//            m_aButtonList.tabIndex = (int) curtabindex++;
-//            m_aButtonList.helpURL = 34453 + (formindex * 4);
-
-//            m_aButtonList.setListModel(model);
-//            m_aButtonList.create(CurUnoDialog);
-//            m_aButtonList.setSelected(FormWizard.SOGRID - 1);
-//            m_aButtonList.addItemListener(this);
-//        }
-
-//        public void setToLeftAlign()
-//        {
-//            Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), PropertyNames.PROPERTY_STATE, new Short((short) 1));
-//        }
-
-//        /* (non-Javadoc)
-//         * @see javax.swing.ListModel#addListDataListener(javax.swing.event.ListDataListener)
-//         */
-//        public void addListDataListener(ListDataListener arg0)
-//        {
-//            // TODO Auto-generated method stub
-//        }
-
-//        public void itemStateChanged(ItemEvent arg0)
-//        {
-//            try
-//            {
-//                if (m_aArrangeList[formindex].m_aButtonList.isenabled())
-//                {
-//                    boolean bEnableAlignControlGroup;
-//                    if (curFormDocument.oControlForms.size() == 2)
-//                    {
-//                        final int nSelected0 = (m_aArrangeList[0].m_aButtonList.getSelected() + 1);
-//                        final int nSelected1 = (m_aArrangeList[1].m_aButtonList.getSelected() + 1);
-
-//                        bEnableAlignControlGroup = ((nSelected0 == FormWizard.SOCOLUMNARLEFT) ||
-//                                                    (nSelected1 == FormWizard.SOCOLUMNARLEFT));
-//                    }
-//                    else
-//                    {
-//                        final int nSelected0 = (m_aArrangeList[0].m_aButtonList.getSelected() + 1);
-//                        bEnableAlignControlGroup = (nSelected0 == FormWizard.SOCOLUMNARLEFT);
-//                    }
-//                    enableAlignControlGroup(bEnableAlignControlGroup);
-//                    final Short nBorderType = CurUnoDialog.getBorderType();
-//                    final int nSelected = m_aButtonList.getSelected() + 1;
-//                    ((FormDocument.ControlForm) curFormDocument.oControlForms.get(formindex)).initialize(nSelected, nBorderType);
-//                }
-//            }
-//            catch (RuntimeException e)
-//            {
-//                e.printStackTrace();
-//            }
-//        }
-
-//        /* (non-Javadoc)
-//         * @see javax.swing.event.ListDataListener#contentsChanged(javax.swing.event.ListDataEvent)
-//         */
-//        public void contentsChanged(ListDataEvent arg0)
-//        {
-//            // TODO Auto-generated method stub
-//        }
-
-//        /* (non-Javadoc)
-//         * @see javax.swing.event.ListDataListener#intervalAdded(javax.swing.event.ListDataEvent)
-//         */
-//        public void intervalAdded(ListDataEvent arg0)
-//        {
-//            // TODO Auto-generated method stub
-//        }
-
-//        /* (non-Javadoc)
-//         * @see javax.swing.event.ListDataListener#intervalRemoved(javax.swing.event.ListDataEvent)
-//         */
-//        public void intervalRemoved(ListDataEvent arg0)
-//        {
-//            // TODO Auto-generated method stub
-//        }
-
-//        /* (non-Javadoc)
-//         * @see com.sun.star.lang.XEventListener#disposing(com.sun.star.lang.EventObject)
-//         */
-//        public void disposing(EventObject arg0)
-//        {
-//            // TODO Auto-generated method stub
-//        }
-//    }
 
     private class ArrangeButtonList implements XItemListener
     {

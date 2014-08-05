@@ -22,7 +22,6 @@ import com.sun.star.text.XRelativeTextContentRemove;
 import com.sun.star.text.XTextContent;
 import java.util.ArrayList;
 import java.util.Comparator;
-import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -33,7 +32,6 @@ import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.sdb.CommandType;
-// import com.sun.star.table.XCell;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.text.TextTableHandler;
@@ -52,18 +50,14 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     private static final String ISVISIBLE = "IsVisible";
     private static final String QUERYNAME = "QueryName";
     private static final String SIZE = "Size";
-    // private XMultiServiceFactory xMSF;
-    // private XMultiServiceFactory xMSFDoc;
     private Object ReportPageStyle;
     private Object FirstPageStyle;
-    // private String ReportFolderName;
     public ArrayList<DBColumn> DBColumnsVector;
     private RecordTable CurRecordTable;
     private String sMsgTableNotExisting;
     private String sMsgCommonReportError;
     private String ContentTemplatePath;
     private String LayoutTemplatePath;
-    // private String sMsgInvalidTextField;
     private String sMsgEndAutopilot;
     public boolean bIsCurLandscape;
     public TextTableHandler oTextTableHandler;
@@ -152,35 +146,25 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
 
     public void swapContentTemplate(String ContentTemplatePath)
     {
-//  unlockallControllers();
-        //xProgressBar.start("", 10);
         this.ContentTemplatePath = ContentTemplatePath;
         loadSectionsfromTemplate(ContentTemplatePath);
-        // xProgressBar.setValue(40);
         oTextStyleHandler.loadStyleTemplates(ContentTemplatePath, "LoadTextStyles");
-        // xProgressBar.setValue(70);
         if (CurRecordTable != null)
         {
             CurRecordTable.adjustOptimalTableWidths(xMSF, oViewHandler);
         }
-        // xProgressBar.setValue(100);
         oViewHandler.selectFirstPage(oTextTableHandler);
-        // xProgressBar.end();
     }
 
     public void swapLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/)
     {
         try
         {
-            // xProgressBar.start("", 10);
             this.LayoutTemplatePath = LayoutTemplatePath;
             boolean bOldIsCurLandscape = AnyConverter.toBoolean(Helper.getUnoPropertyValue(ReportPageStyle, ISLANDSCAPE));
             oTextStyleHandler.loadStyleTemplates(LayoutTemplatePath, "LoadPageStyles");
-            // xProgressBar.setValue(60);
             changePageOrientation(bOldIsCurLandscape);
-            // xProgressBar.setValue(100);
             oViewHandler.selectFirstPage(oTextTableHandler);
-            // xProgressBar.end();
         }
         catch (IllegalArgumentException e)
         {
@@ -353,10 +337,6 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             }
         }
     }
-    //public boolean isGroupField(String _FieldName)
-    //    {
-    //        return (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, _FieldName) != -1);
-    //    }
 
     public void replaceFieldValueInRecordSection(int RecordCount)
     {
@@ -714,7 +694,6 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                     {
                         try
                         {
-//                                xRelativeTextContentRemove.removeTextContentBefore(xTextContent);
                             xRelativeTextContentRemove.removeTextContentAfter(xTextContent);
                             // IllegalArgumentException may be thrown when no paragraphbreak is there
                         }

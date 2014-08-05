@@ -89,10 +89,6 @@ public class CommandMetaData extends DBMetaData
         for (int i = 0; i < _FieldNames.length; i++)
         {
             FieldColumns[i] = new FieldColumn(this, _FieldNames[i], this.getCommandName(), false);
-//                if (_bgetDefaultValue)
-//                {
-//                    FieldColumns[i].getDefaultValue();
-//                }
         }
     }
 
@@ -279,7 +275,6 @@ public class CommandMetaData extends DBMetaData
     {
         try
         {
-            // Object oField;
             java.util.ArrayList<String> ResultFieldNames = new java.util.ArrayList<String>(10);
             String[] FieldNames;
             CommandObject oCommand = this.getCommandByName(_commandname, _commandtype);
@@ -294,9 +289,6 @@ public class CommandMetaData extends DBMetaData
                     // BinaryFieldTypes are not included in the WidthList
                     if (JavaTools.FieldInIntTable(WidthList, iType) >= 0)
                     {
-//                        if (_bAppendMode)
-//                            ResultFieldNames.addElement(_commandname + "." + FieldNames[n]);
-//                        else
                         ResultFieldNames.add(sFieldName);
                     }
                     else if (JavaTools.FieldInIntTable(BinaryTypes, iType) >= 0)
@@ -304,8 +296,6 @@ public class CommandMetaData extends DBMetaData
                         ResultFieldNames.add(sFieldName);
                     }
                 }
-                // FieldNames = new String[FieldNames.length];
-                // FieldTypes = new int[FieldNames.length];
                 m_aAllFieldNames = new String[ResultFieldNames.size()];
                 m_aAllFieldNames = ResultFieldNames.toArray(m_aAllFieldNames);
                 return true;
@@ -550,7 +540,6 @@ public class CommandMetaData extends DBMetaData
         String CurFieldName;
         int GroupFieldCount;
         int TotFieldCount = FieldColumns.length;
-        //    int SortFieldCount = SortFieldNames[0].length;
         GroupFieldCount = JavaTools.getArraylength(GroupFieldNames);
         RecordFieldNames = new String[TotFieldCount - GroupFieldCount];
 
@@ -561,7 +550,6 @@ public class CommandMetaData extends DBMetaData
             if (JavaTools.FieldInList(GroupFieldNames, CurFieldName) < 0)
             {
                 RecordFieldNames[a] = CurFieldName;
-                // a += 1;
                 ++a;
             }
         }
@@ -607,7 +595,6 @@ public class CommandMetaData extends DBMetaData
                     int curtype = AnyConverter.toInt(xPropertySet.getPropertyValue("Type"));
                     if (curtype == KeyType.FOREIGN)
                     {
-                        // getImportedKeys (RelationController.cxx /source/ui/relationdesign) /Zeile 475
                         String sreftablename = AnyConverter.toString(xPropertySet.getPropertyValue("ReferencedTable"));
                         if (getTableNamesAsNameAccess().hasByName(sreftablename))
                         {

@@ -48,8 +48,6 @@ public class MutableTreeNode extends TestCase {
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         mxMSF = tParam.getMSF();
-//        log.println("creating a textdocument");
-//        xTextDoc = WriterTools.createTextDoc(mxMSF);
     }
 
     /**

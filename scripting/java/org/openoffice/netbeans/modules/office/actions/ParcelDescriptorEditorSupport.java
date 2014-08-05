@@ -90,8 +90,6 @@ public class ParcelDescriptorEditorSupport extends DataEditorSupport implements 
      */
     private static class ParcelDescriptorEnv extends DataEditorSupport.Env {
 
-        //private static final long serialVersionUID = ...L;
-
         /** Create a new environment based on the data object.
          * @param obj the data object to edit
          */

@@ -270,8 +270,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
 
     public void fillupTables()
     {
-//      if (optBusiness.getState())
-//      else
     }
 
     public void fillupFieldsListbox()

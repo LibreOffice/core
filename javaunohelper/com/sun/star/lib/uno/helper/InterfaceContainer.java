@@ -100,7 +100,6 @@ public class InterfaceContainer implements Cloneable
     private int size;
 
 
-    //private ArrayList data= new ArrayList();
     /** Creates a new instance of InterfaceContainer */
     public InterfaceContainer()
     {

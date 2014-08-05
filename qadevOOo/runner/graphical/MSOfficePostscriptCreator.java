@@ -60,15 +60,6 @@ public class MSOfficePostscriptCreator implements IOffice
     {
         m_aParameterHelper = _aParam;
         m_sResult = _sResult;
-//        String sKillCommand = (String)_aParam.getTestParameters().get(util.PropertyName.APP_KILL_COMMAND);
-//        if (sKillCommand == null)
-//        {
-//            sKillCommand = "";
-//        }
-//        if (sKillCommand.length() > 0)
-//        {
-//            sKillCommand += ";";
-//        }
         String sKillCommand = "C:/bin/kill.exe -9 winword;C:/bin/kill.exe -9 excel";
         _aParam.getTestParameters().put(util.PropertyName.APP_KILL_COMMAND, sKillCommand);
     }
@@ -144,11 +135,6 @@ public class MSOfficePostscriptCreator implements IOffice
             {
                 return true;
             }
-            /* temporal insertion by SUS
-            if (_sSuffix.endsWith(".xml"))
-            {
-                return true;
-            }*/
             return false;
         }
 
@@ -198,7 +184,6 @@ public class MSOfficePostscriptCreator implements IOffice
             {
                 // special case, if xml we prefer word, but with DEFAULT_XML_FORMAT_APP=excel it's changeable.
                 String sDocFormat = getXMLDocumentFormat(_sInputFile);
-                // if (_aGTA.getDefaultXMLFormatApp().toLowerCase().equals("excel"))
                 if (sDocFormat.equals("excel"))
                 {
                     aStartCommand = createExcelStoreHelper();
@@ -207,9 +192,6 @@ public class MSOfficePostscriptCreator implements IOffice
                 {
                     aStartCommand = createWordStoreHelper();
                 }
-                // else
-                // {
-                // }
             }
             else
             {
@@ -224,11 +206,6 @@ public class MSOfficePostscriptCreator implements IOffice
 // TODO: hardcoded FilterName in perl script
                     sFilterName = ""; // xlXMLSpreadsheet";
                 }
-
-                // String sCommand = sStartCommand + " " +
-                //     _sInputFile + " " +
-                //     StringHelper.doubleQuote(sFilterName) + " " +
-                //     _sOutputFile;
 
                 aStartCommand.add(_sInputFile);
                 aStartCommand.add(sFilterName);
@@ -273,7 +250,6 @@ public class MSOfficePostscriptCreator implements IOffice
                 String sOfficeType = getOfficeType(_sInputFile);
 
                 // special case, if xml we prefer word, but with DEFAULT_XML_FORMAT_APP=excel it's changeable.
-                // if (_aGTA.getDefaultXMLFormatApp().toLowerCase().equals("excel"))
                 if (sOfficeType.equals("excel"))
                 {
                     aStartCommand = createExcelPrintHelper();
@@ -302,10 +278,6 @@ public class MSOfficePostscriptCreator implements IOffice
                     sPrinterName = "";
                 }
 
-                // String sCommand = sStartCommand + " " +
-                //     _sInputFile + " " +
-                //     StringHelper.doubleQuote(m_sPrinterName) + " " +
-                //     _sPrintFilename;
                 aStartCommand.add(_sInputFile);
                 aStartCommand.add(m_sPrinterName);
                 aStartCommand.add(_sPrintFilename);
@@ -359,8 +331,6 @@ public class MSOfficePostscriptCreator implements IOffice
             {
                 throw new WrongEnvironmentException("Given list is too short.");
             }
-
-            // return aHandler.getExitCode();
         }
 
 
@@ -494,8 +464,6 @@ public class MSOfficePostscriptCreator implements IOffice
                 }
 
                 String sName = aPerlScript.getAbsolutePath();
-                // String sCommand = "perl " + sName;
-                // System.out.println(sCommand);
                 aList.add("perl");
                 aList.add(sName);
                 return aList;
@@ -955,16 +923,12 @@ public class MSOfficePostscriptCreator implements IOffice
         {
             // ---- Parse XML file ----
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            // factory.setNamespaceAware( true );
-            // factory.setValidating( true );
             DocumentBuilder builder  = factory.newDocumentBuilder();
             Document        document = builder.parse( new File (_sInputFile) );
             Node            rootNode = document.getDocumentElement();
 
             // ---- Get list of nodes to given tag ----
             // document.
-            // NodeList ndList = document.getElementsByTagName( sToSearch /* argv[2] */ );
-            // System.out.println( "\nNode list at the beginning:" );
             String sRootNodeName = rootNode.getNodeName();
             if (sRootNodeName.equals("w:wordDocument"))
             {
@@ -988,8 +952,4 @@ public class MSOfficePostscriptCreator implements IOffice
         return sType;
     }
 
-//    public static void main(String [] _args)
-//    {
-//        String sTest = getXMLDocumentFormat("c:/cws/temp/input/Blah Fasel.xml");
-//    }
 }

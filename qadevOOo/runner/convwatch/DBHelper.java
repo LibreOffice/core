@@ -70,10 +70,8 @@ class ShareConnection
                     return;
                 }
 
-                // Connection oCon = null;
                 try
                 {
-                    // oCon = getMySQLConnection();
                     oStmt = m_aCon.createStatement();
 
                     GlobalLogWriter.get().println("DB: " + m_sSQL);
@@ -104,10 +102,6 @@ public class DBHelper
                 return;
             }
 
-            // String aInsertStr = "";
-
-            // aInsertStr = "INSERT INTO " + _sTableName + " (" + value_names + " ) VALUES (" + values + ")";
-            // ExecSQL(_aCon, aInsertStr);
             StringBuffer aInsertStr = new StringBuffer();
 
             aInsertStr.append( "INSERT INTO " ) . append( _sTableName );
@@ -124,10 +118,6 @@ public class DBHelper
                 return;
             }
 
-            // String aUpdateStr = "";
-
-            // aUpdateStr = "UPDATE " + _sTableName + " SET " + _sSet + " WHERE " + _sWhere;
-            // ExecSQL( _aCon, aUpdateStr );
             StringBuffer aUpdateStr = new StringBuffer();
 
             aUpdateStr.append( "UPDATE " ).append( _sTableName )
@@ -204,7 +194,6 @@ public class DBHelper
             int nValue = 0;
             try
             {
-                // oCon = getMySQLConnection();
                 oStmt = _aCon.createStatement();
 
                 ResultSet oResult = oStmt.executeQuery(_sSQL);
@@ -221,7 +210,6 @@ public class DBHelper
                     {
                         nValue = oResult.getInt(_sColumnName);
                     }
-                    // System.out.println("value: " + String.valueOf(nValue));
                 }
                 catch (SQLException e)
                 {

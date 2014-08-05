@@ -123,12 +123,6 @@ public class _XValidatableFormComponent extends MultiMethodTest
 
             Object newValue = ValueChanger.changePValue(oldValue);
             gValues[i] = newValue;
-
-            //            System.out.println("#############################################");
-            //            System.out.println("Name: "+testPropsNames[i]);
-            //            System.out.println("OldValue: "+oldValue);
-            //            System.out.println("NewValue: "+newValue);
-            //            System.out.println("#############################################");
         }
 
         try

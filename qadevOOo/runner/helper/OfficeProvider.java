@@ -17,7 +17,6 @@
  */
 package helper;
 
-//import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.beans.XFastPropertySet;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.container.XEnumeration;

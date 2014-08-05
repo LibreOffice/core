@@ -18,8 +18,6 @@
 
 package complex.dbaccess;
 
-// import complexlib.ComplexTestCase;
-
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;

@@ -97,9 +97,6 @@ public abstract class DescGetter
                             }
                         }
                     }
-//                    DescEntry aEntry = getDescriptionForSingleJob(
-//                                          line.substring(3).trim(), descPath,
-//                                          debug);
                     if (aEntry != null)
                     {
                         entryList.add(aEntry);

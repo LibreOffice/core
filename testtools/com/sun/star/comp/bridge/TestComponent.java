@@ -717,8 +717,6 @@ public class TestComponent {
         }
 
         public void call(int nCallId , int nWaitMUSEC) throws com.sun.star.uno.RuntimeException {
-//              TimeValue value = { nWaitMUSEC / 1000000 , nWaitMUSEC * 1000 };
-//              osl_waitThread( &value );
             try {
                 Thread.sleep(nWaitMUSEC / 10000);
             }
@@ -736,8 +734,6 @@ public class TestComponent {
         }
 
         public void callOneway( int nCallId , int nWaitMUSEC )  throws com.sun.star.uno.RuntimeException {
-//              TimeValue value = { nWaitMUSEC / 1000000 , nWaitMUSEC * 1000 };
-//              osl_waitThread( &value );
             try {
                 Thread.sleep(nWaitMUSEC / 10000);
             }

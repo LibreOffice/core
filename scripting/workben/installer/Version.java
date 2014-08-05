@@ -215,8 +215,6 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
             if (((Boolean)list.get(0)).booleanValue() == true)
                 InstallWizard.storeLocation((String)list.get(2));
         }
-
-        //System.out.println(wizard.getLocations());
     }
 
 
@@ -233,9 +231,6 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
     private InstallWizard wizard;
     private MyTableModel tableModel;
     private NavPanel nav;
-    //private static final String [] versions = {"StarOffice 6.0", "OpenOffice.org 1.0","OpenOffice.org 1.0.1","OpenOffice.org 642","OpenOffice.org 643","StarOffice 6.1"};
-    //private static final String [] versions = {"OpenOffice.org 643"};
-    //private static final String [] versions = {"OpenOffice.org 643", "StarOffice 6.1"};
     private static final String [] versions = {"StarOffice 6.1", "OpenOffice.org 1.1Beta", "OpenOffice.org 644", "OpenOffice.org 1.1"};
     // End of variables declaration//GEN-END:variables
 

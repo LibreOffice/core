@@ -26,9 +26,7 @@ import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleRelationSet;
 import com.sun.star.accessibility.XAccessibleStateSet;
-// import com.sun.star.accessibility.AccessibleRelationType;
 import util.AccessibilityTools;
-// import share.LogWriter;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleContext</code>
@@ -50,8 +48,6 @@ import util.AccessibilityTools;
  */
 public class _XAccessibleContext {
 
-    // private LogWriter log;
-
     public XAccessibleContext oObj = null;
 
     private int childCount = 0;
@@ -59,7 +55,6 @@ public class _XAccessibleContext {
 
     public _XAccessibleContext(XInterface object) {
         oObj = UnoRuntime.queryInterface(XAccessibleContext.class, object);
-        // this.log = log;
     }
 
     /**

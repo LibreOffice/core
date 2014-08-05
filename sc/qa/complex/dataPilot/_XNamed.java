@@ -20,8 +20,6 @@ package complex.dataPilot;
 
 import com.sun.star.container.XNamed;
 import lib.TestParameters;
-// import share.LogWriter;
-// import util.utils;
 
 /**
 * Testing <code>com.sun.star.container.XNamed</code>
@@ -48,11 +46,6 @@ public class _XNamed {
     public XNamed oObj = null;
 
     /**
-     * The log writer
-     */
-    // private LogWriter log = null;
-
-    /**
      * Constructor: gets the object to test, a logger and the test parameters
      * @param xObj The test object
      * @param log A log writer
@@ -60,7 +53,6 @@ public class _XNamed {
      */
     public _XNamed(XNamed xObj/*, LogWriter log*/, TestParameters param) {
         oObj = xObj;
-        // this.log = log;
     }
 
     /**
@@ -110,7 +102,6 @@ public class _XNamed {
     * </ul>
     */
     public boolean _setName(){
-//        requiredMethod("getName()");
         System.out.println("testing setName() ... ");
 
         String oldName = oObj.getName();

@@ -62,9 +62,7 @@ public class CLITest extends ComplexTestCase
                 System.out.println("\n ###" +  e.getMessage() + "\n");
 
             }
-//           System.out.println("### waiting for " + testProgram);
             proc.waitFor();
-//            System.out.println("### " + testProgram + " finished");
             int retVal = proc.exitValue();
             if (retVal != 0)
                 failed("CLI test failed.");

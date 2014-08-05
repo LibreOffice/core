@@ -256,10 +256,8 @@ public class OfficeDocument
 
     public static Object load(XInterface xInterface, String sURL, String sFrame, PropertyValue[] xValues)
     {
-        //        XComponent xComponent = null;
         Object oDocument = null;
         com.sun.star.frame.XComponentLoader xComponentLoader = null;
-        //XInterface xInterface = null;
         try
         {
             xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, xInterface);
@@ -422,9 +420,6 @@ public class OfficeDocument
 
     public static int showMessageBox(XMultiServiceFactory xMSF, String windowServiceName, int windowAttribute, String MessageText)
     {
-//      if (getWindowPeer() != null)
-        //      return SystemDialog.showMessageBox(xMSF, xWindowPeer, windowServiceName, windowAttribute, MessageText);
-//      else
         return SystemDialog.showMessageBox(xMSF, windowServiceName, windowAttribute, MessageText);
     }
 

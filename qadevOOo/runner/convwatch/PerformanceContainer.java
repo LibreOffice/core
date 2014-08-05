@@ -220,18 +220,4 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
         }
 
-//    public static void main(String[] args) {
-
-// BorderRemover a = new BorderRemover();
-//        try
-//        {
-//            a.createNewImageWithoutBorder(args[0], args[1]);
-//        }
-//        catch(java.io.IOException e)
-//        {
-//            System.out.println("Exception caught.");
-//        }
-// */
-//    }
-
 }

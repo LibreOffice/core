@@ -19,7 +19,6 @@ package com.sun.star.wizards.db;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-// import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;

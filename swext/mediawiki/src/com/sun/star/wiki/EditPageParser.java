@@ -71,7 +71,6 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
 
     public void handleError( String errorMsg,int pos )
     {
-        //System.out.println( errorMsg );
     }
 
     public void handleSimpleTag( HTML.Tag t, MutableAttributeSet a,int pos )

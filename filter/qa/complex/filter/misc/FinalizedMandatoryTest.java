@@ -29,8 +29,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XFlushable;
-// import complexlib.ComplexTestCase;
-// import util.utils;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -75,14 +73,6 @@ public class FinalizedMandatoryTest
 
     static XMultiServiceFactory xMSF;
 
-    /**
-     * A function to tell the framework, which test functions are available.
-     * @return All test methods.
-     */
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkReadonlySupportFilterFactory",
-//                            "checkReadonlySupportTypeDetection"};
-//    }
     /** Create the environment for following tests.
      * Use either a component loader from desktop or
      * from frame
@@ -109,10 +99,6 @@ public class FinalizedMandatoryTest
         Object oInterface = xMSF.createInstance(serviceName);
 
         assertNotNull("Service wan't created", oInterface);
-//        if (oInterface == null) {
-//            failed("Service wasn't created") ;
-//            throw new Exception("could not create service '"+serviceName+"'");
-//        }
         return (XInterface) oInterface;
     }
 

@@ -60,7 +60,6 @@ public class Manifest {
             el = document.createElement("manifest:file-entry");
             el.setAttribute("manifest:media-type", type);
             el.setAttribute("manifest:full-path", entry);
-            // System.out.println("added: " + el.toString());
             root.appendChild(el);
         }
         catch (Exception e) {
@@ -91,7 +90,6 @@ public class Manifest {
             for (int i = 0; i < len; i++) {
                 el = (Element)nl.item(i);
                 if (el.getAttribute("manifest:full-path").startsWith(entry)) {
-                    // System.out.println("found: " + el.toString());
                     list.add(el);
                 }
             }
@@ -99,8 +97,6 @@ public class Manifest {
             Iterator iter = list.iterator();
             while (iter.hasNext())
                 root.removeChild((Element)iter.next());
-
-            // System.out.println("and after root is: " + root.toString());
         }
         catch (Exception e) {
             System.err.println("Error removing entry: " + e.getMessage());
@@ -115,7 +111,6 @@ public class Manifest {
             out = new ByteArrayOutputStream();
             write(out);
             result = new ByteArrayInputStream(out.toByteArray());
-            // result = replaceNewlines(out.toByteArray());
         }
         finally {
             if (out != null)

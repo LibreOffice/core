@@ -41,11 +41,6 @@ public class _XTasksSupplier extends MultiMethodTest {
     * Has <b> OK </b> status .
     */
     public void _getActiveTask() {
-//        XTask active = oObj.getActiveTask() ;
-//        if (active == null)
-//            log.println("There is no active task");
-//        else
-//            log.println("Active task: " + active.getName());
         log.println("DEPRECATED");
 
         tRes.tested("getActiveTask()", true) ;
@@ -54,33 +49,10 @@ public class _XTasksSupplier extends MultiMethodTest {
     /**
     * DEPRECATED. <p>
     * Has <b> OK </b> status.
+    * @deprecated
     */
+    @Deprecated
     public void _getTasks() {
-//        int cnt = 0 ;
-//        boolean result = true ;
-//        XTask task = null ;
-
-//        XEnumerationAccess enumAcc = oObj.getTasks() ;
-//        XEnumeration enum = enumAcc.createEnumeration() ;
-//        while (enum.hasMoreElements()) {
-//            cnt ++ ;
-//            try {
-//                task = (XTask) enum.nextElement() ;
-//            } catch (com.sun.star.container.NoSuchElementException e) {
-//                e.printStackTrace(log);
-//            } catch (com.sun.star.lang.WrappedTargetException e) {
-//                e.printStackTrace(log);
-//            }
-//            if (task == null)
-//                log.println("" + cnt + " task: null !!!") ;
-//            else
-//                log.println("" + cnt + " task: " + task.getName()) ;
-//            result &= (task != null) ;
-//        }
-//        log.println("Totaly tasks: " + cnt) ;
-
-//        if (cnt > 0 && result) tRes.tested("getTasks()", true) ;
-
         log.println("DEPRECATED");
 
         tRes.tested("getTasks()", true);

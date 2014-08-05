@@ -229,8 +229,6 @@ public class ODatabaseForm extends TestCase {
     private Object dbSrc = null;
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        //log.println( "creating a draw document" );
-        //xTextDoc = WriterTools.createTextDoc(t((XMultiServiceFactory) Param.getMSF));
         tmpDir = utils.getOfficeTemp((tParam.getMSF()));
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
@@ -262,7 +260,6 @@ public class ODatabaseForm extends TestCase {
                 PropertyValue[] propInfo = new PropertyValue[1];
                 propInfo[0] = new PropertyValue();
                 propInfo[0].Name = "JavaDriverClass";
-//                propInfo[0].Value = "org.gjt.mm.mysql.Driver";
                 propInfo[0].Value = "util.dddriver.Driver";
                 srcInf.Info = propInfo;
 

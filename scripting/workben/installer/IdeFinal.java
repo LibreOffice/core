@@ -74,19 +74,14 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
             nav.enableBack(false);
             nav.enableCancel(false);
             ArrayList<?> locations = InstallWizard.getLocations();
-            //System.out.println("here "+locations.size());
             // Returned 1
             String path=null;
             for (int i =0;i<locations.size();i++){
                 path= (String)locations.get(i);
 
-            //InstallWizard.currentPath = path;
             ideupdater = new IdeUpdater( path, statusLine, progressBar );
         ideupdater.addInstallListener(this);
         InstallWizard.setInstallStarted(true);
-        //InstallWizard.setPatchedTypes(false);
-        //InstallWizard.setPatchedJava(false);
-        //InstallWizard.setPatchedRDB(false);
         ideupdater.start();
             }
         }
@@ -107,9 +102,6 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
 
 
     public void installationComplete(InstallationEvent ev) {
-        //System.out.println("Detected installation complete");
-    //if( InstUtil.hasNetbeansInstallation() || InstUtil.hasJeditInstallation() ) {
-        //System.out.println("Detected installation complete (IDE(s) detected)");
         nav.removeCancelListener(this);
         nav.setCancelListener(nav);
         nav.navCancel.setText("Finish");
@@ -122,7 +114,6 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
     private javax.swing.JLabel statusLine;
     private InstallWizard wizard;
     private NavPanel nav;
-    //private XmlUpdater xud;
     private IdeUpdater ideupdater;
     // End of variables declaration//GEN-END:variables
 

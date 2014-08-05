@@ -227,13 +227,7 @@ public class _XContentProviderManager extends MultiMethodTest {
             }
         }
 
-//        boolean gotTheRightOne = util.ValueComparer.equalValue
-//            (result,contentProvider);
-
         tRes.tested("queryContentProvider()", found);
-
-//        gotTheRightOne = result.equals(contentProvider);
-
     }
 
     /**

@@ -126,17 +126,11 @@ public class ParcelFolder extends DataFolder {
                 sheet.put(props);
             }
 
-            // prop = createLocationProperty();
-            // props.put(prop);
-
             prop = createFilterProperty();
             props.put(prop);
 
             prop = createFilterProperty();
             props.put(prop);
-
-            // prop = createLanguageProperty();
-            // props.put(prop);
 
             prop = createClasspathProperty();
             props.put(prop);

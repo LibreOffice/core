@@ -1038,18 +1038,6 @@ public class NumericalHelper
     }
 
     /**
-     * Get the roman equivalent to an arabic number, e.g. 17 -> XVII.
-     * The allowed range for numbers goes from 1 to 3999. These can be
-     * converted using ASCII letters (3999 -> MMMCMXCIX).
-     * @param n the arabic number
-     * @return the roman equivalent as string
-     * @throws BasicErrorException if the number cannot be converted.
-     */
-//    public static String getRomanEquivalent(int n)
-//            throws com.sun.star.script.BasicErrorException {
-//        return RomanNumbering.getRomanEquivalent(n);
-//    }
-    /**
      * get the type object from the given object
      * @param aValue an object representing a (numerical) value; can also be an 'any'
      * @return a type object: the object together with the its type information

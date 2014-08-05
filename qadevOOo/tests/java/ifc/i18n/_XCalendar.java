@@ -110,7 +110,6 @@ public class _XCalendar extends MultiMethodTest {
                           ", Variant: "+ installed_locales[i].Country;
             oObj.loadDefaultCalendar(installed_locales[i]);
             if (oObj.getLoadedCalendar().Default) {
-                //log.println(lang + " ... OK");
             } else {
                 log.println(lang + " ... FAILED");
             }
@@ -135,7 +134,6 @@ public class _XCalendar extends MultiMethodTest {
             calendars[i] = oObj.getAllCalendars(installed_locales[i]);
             count[i] = calendars[i].length-1;
             if (calendars[i].length > 0) {
-                //log.println(lang + " ... OK");
             } else {
                 log.println(lang + " ... FAILED");
             }
@@ -164,7 +162,6 @@ public class _XCalendar extends MultiMethodTest {
                           ", Variant: "+ installed_locales[i].Country;
             oObj.loadCalendar(calendars[i][0], installed_locales[i]);
             if (calendars[i][0].equals(oObj.getLoadedCalendar().Name)) {
-                //log.println(lang + " ... OK");
             } else {
                 log.println(lang + " ... FAILED");
             }
@@ -194,7 +191,6 @@ public class _XCalendar extends MultiMethodTest {
                           ", Variant: "+ installed_locales[i].Country;
             oObj.loadCalendar(calendars[i][0], installed_locales[i]);
             if (calendars[i][0].equals(oObj.getLoadedCalendar().Name)) {
-                //log.println(lang + " ... OK");
             } else {
                 log.println(lang + " ... FAILED");
             }
@@ -222,7 +218,6 @@ public class _XCalendar extends MultiMethodTest {
             oObj.loadCalendar(calendars[i][0], installed_locales[i]);
             String uID = oObj.getUniqueID();
             if (uID.equals(calendars[i][0])) {
-                //log.println(lang + " ... OK");
             } else {
                 log.println(lang + " ... FAILED");
             }
@@ -248,7 +243,6 @@ public class _XCalendar extends MultiMethodTest {
             oObj.setDateTime(newDTime);
             double aDTime = oObj.getDateTime();
             if (aDTime == newDTime) {
-                //log.println(lang + " ... OK");
             } else {
                 log.println(lang + " ... FAILED");
             }
@@ -274,7 +268,6 @@ public class _XCalendar extends MultiMethodTest {
             oObj.setDateTime(newDTime);
             double aDTime = oObj.getDateTime();
             if (aDTime == newDTime) {
-                //log.println(lang + " ... OK");
             } else {
                 log.println(lang + " ... FAILED");
             }

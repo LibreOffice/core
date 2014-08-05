@@ -22,7 +22,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertyState;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
-// import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.style.ParagraphAdjust;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
@@ -464,8 +463,6 @@ public class DBColumn
         // Todo: Insert a  resource; Exception should be thrown to the calling routine
         catch (Exception exception)
         {
-//      sMsgInvalidTextField = oResource.getResText(UIConsts.RID_REPORT + 73);
-//      SystemDialog.showMessageBox(oTextTableHandler.xMSFDoc, "ErrorBox", VclWindowPeerAttribute.OK, sMsgInvalidTextField);
             exception.printStackTrace(System.err);
             return true;    //most probably this is really the Namecell!!!!
         }

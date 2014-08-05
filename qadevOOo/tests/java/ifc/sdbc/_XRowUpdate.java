@@ -140,7 +140,6 @@ public class _XRowUpdate extends MultiMethodTest {
                     row.getBinaryStream(i + 1) ;
                 if (rowData.get(i) instanceof XTextInputStream)
                     row.getCharacterStream(i + 1) ;
-                //if (rowData.get(i) instanceof Object[]) row.getObject(i) ;
 
                 if (!row.wasNull()) {
                     log.println("FAILED") ;
@@ -613,8 +612,6 @@ public class _XRowUpdate extends MultiMethodTest {
                 createInstance("com.sun.star.io.Pipe") ;
 
             oObj.updateObject(idx, newVal) ;
-            //Object getVal = row.getObject(idx) ;
-            //result = UnoRuntime.areSame(newVal, getVal) ;
         } catch (SQLException e) {
             e.printStackTrace(log) ;
             result = false ;
@@ -648,8 +645,6 @@ public class _XRowUpdate extends MultiMethodTest {
                                 createInstance("com.sun.star.io.Pipe") ;
 
             oObj.updateNumericObject(idx, newVal, 0) ;
-            //Object getVal = row.getObject(idx) ;
-            //result = UnoRuntime.areSame(newVal, getVal) ;
         } catch (SQLException e) {
             e.printStackTrace(log) ;
             result = false ;

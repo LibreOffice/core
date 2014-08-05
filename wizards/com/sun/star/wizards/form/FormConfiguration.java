@@ -45,7 +45,6 @@ public class FormConfiguration
     XFixedText lblRelations;
     XListBox lstRelations;
     String[] sreferencedTables;
-    // Integer ISubFormStep;
     CommandFieldSelection CurSubFormFieldSelection;
     String SSUBFORMMODE = "toggleSubFormMode";
     String STOGGLESTEPS = "toggleSteps";

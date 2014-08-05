@@ -22,13 +22,11 @@ import com.sun.star.uno.XWeak;
 import com.sun.star.lang.XTypeProvider;
 import java.util.ArrayList;
 import com.sun.star.uno.Type;
-//import com.sun.star.lib.uno.environments.java.Proxy;
 import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XSingleComponentFactory;
 
 public class MultiTypeInterfaceContainer_Test
 {
-//    java_environment env= new java_environment(null);
     /** Creates a new instance of InterfaceContainerTest */
     AWeakBase obj1,obj2,obj3,obj4;
     Object proxyObj1Weak1;
@@ -71,39 +69,6 @@ public class MultiTypeInterfaceContainer_Test
         list3.add(proxyObj2TypeProv);
         list3.add(proxyObj3Weak1);
     }
-    /** returns Holder proxy objects for the specified interface. If the method is called
-     *  several times with the same arguments then each time a new HolderProxy is returned.
-     *  Then all HolderProxy s refer to the same Proxy object.
-     *  The proxy can be queried for XEventListener. On the returned proxy disposing can be called
-     *
-     */
-//    public Object getHolderProxy(Object obj, Class iface)
-//    {
-//        Object retVal= null;
-//        if (obj == null || iface == null || iface.isInstance(obj) == false )
-//            return retVal;
-//
-//        Type type= new Type(TypeDescription.getTypeDescription(iface));
-//        Type evtType= new Type(TypeDescription.getTypeDescription(com.sun.star.lang.XEventListener.class));
-//        // find the object identifier
-//        String sOid= UnoRuntime.generateOid(obj);
-//        retVal= env.getRegisteredInterface(sOid, type);
-//        // if retVal == null then probably not registered
-//        if (retVal == null)
-//        {
-//            // create the XEventListener proxy
-//            Requester eventRequester = new Requester(false, false, null);
-//            Object aProxyEvt = Proxy.create(eventRequester, sOid, evtType, false, false);
-//            String[] arOid= new String[]{sOid};
-//            retVal= env.registerInterface(aProxyEvt, arOid, evtType);
-//
-//            Requester requester = new Requester(false, false, aProxyEvt);
-//            Object aProxy = Proxy.create(requester, sOid, type, false, false);
-//            arOid= new String[] {sOid};
-//            retVal= env.registerInterface(aProxy, arOid, type);
-//        }
-//        return retVal;
-//    }
 
     public boolean addInterface()
     {

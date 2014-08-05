@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 package com.sun.star.wizards.report;
-//import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -26,13 +25,8 @@ import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextComponent;
-//import com.sun.star.container.XHierarchicalNameAccess;
-//import com.sun.star.container.XNameAccess;
-//import com.sun.star.lang.EventObject;
-//import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.db.RecordParser;
-//import com.sun.star.wizards.document.OfficeDocument;
 public class ReportFinalizer
 {
 
@@ -42,23 +36,16 @@ public class ReportFinalizer
     Object chkTemplate;
     String CHANGEREPORTTITLE_FUNCNAME = "changeReportTitle";
     String TOGGLESUBTEMPLATECONTROLS_FUNCNAME = "toggleSubTemplateControls";
-//    String slblHowProceed;
-//    String slblChooseReportKind;
     String TemplatePath;
     String StoreName;
     boolean bfinalaskbeforeOverwrite;
     String DefaultName;
     String OldDefaultName;
-    // ReportTextDocument CurReportDocument;
     IReportDocument CurReportDocument;
-    // Desktop.OfficePathRetriever curofficepath;
-//    short curtabindex;
-//    String sMsgReportDocumentNameDuplicate;
     public static final int SOCREATEDOCUMENT = 1;
     public static final int SOCREATETEMPLATE = 2;
     public static final int SOUSETEMPLATE = 3;
     private XMultiServiceFactory m_xMSF;
-    // public Finalizer(ReportTextDocument _CurReportDocument, WizardDialog _CurUnoDialog) {
     public ReportFinalizer(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, WizardDialog _CurUnoDialog)
     {
         m_xMSF = _xMSF;
@@ -67,13 +54,11 @@ public class ReportFinalizer
         this.CurReportDocument = _CurReportDocument;
         short curtabindex = (short) (ReportWizard.SOSTOREPAGE * 100);
         Desktop odesktop = new Desktop();
-        // curofficepath = odesktop.new OfficePathRetriever(m_xMSF);
 
         String sSaveAsTemplate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 40);
         String sUseTemplate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 41);
         String sEditTemplate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 42);
         String sSaveAsDocument = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 43);
-// String            sSaveAs = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 44);
         String sReportTitle = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 33);
         String slblHowProceed = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 78);
         String slblChooseReportKind = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 79);
@@ -178,15 +163,6 @@ public class ReportFinalizer
         boolean bDoEnable = sTitle.equals(PropertyNames.EMPTY_STRING);
         CurUnoDialog.enableFinishButton(!bDoEnable);
     }
-//  private boolean fileexists(XMultiServiceFactory _xMSF, String _spath){
-//  try {
-//      XInterface xUcbInterface = (XInterface) _xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-//      XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
-//      return xSimpleFileAccess.exists(_spath);
-//  } catch (Exception exception) {
-//      exception.printStackTrace(System.err);
-//      return false;
-//  }}
     public void initialize(RecordParser _CurDBMetaData)
     {
         String FirstCommandName = (_CurDBMetaData.getIncludedCommandNames())[0];

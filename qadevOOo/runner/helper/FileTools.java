@@ -102,33 +102,9 @@ public class FileTools {
      */
     public static boolean deleteDir(File dir) {
 
-        // if (! cleanDir(dir)) return false;
-
         // The directory is now empty so delete it
-        // return dir.delete();
         return cleanDir(dir);
     }
-
-    /**
-     * Deletes all files and subdirectories under dir.
-     * Returns true if all deletions were successful.
-     * If a deletion fails, the method continues to delete rest of the files.
-     * @return Returns true if all deletions were successful, else false.
-     * @param dir the directory to clean from content
-     */
-    // public static boolean cleanDir(File dir){
-
-    //     boolean success = true;
-    //     if (dir.isDirectory()){
-    //         File [] theFiles = dir.listFiles();
-
-    //         if (theFiles.length != 0 )
-    //             for (int i = 0; i < theFiles.length; i++){
-    //                 success &= theFiles[i].delete();
-    //             }
-    //     }
-    //     return success;
-    // }
 
    public static boolean cleanDir(File dir)
         {

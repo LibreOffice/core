@@ -48,17 +48,12 @@ public class ParcelDescriptorDataLoader extends UniFileLoader {
     protected void initialize() {
         super.initialize();
 
-        // ExtensionList extensions = new ExtensionList();
-        // extensions.addMimeType("text/x-parcel+xml");
-        // extensions.addExtension("pml");
         getExtensions().addMimeType("text/x-parcel+xml");
-        // setExtensions(extensions);
     }
 
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
             SystemAction.get(OpenAction.class),
-            // SystemAction.get(GenerateParcelAction.class),
             null,
             SystemAction.get(CutAction.class),
             SystemAction.get(CopyAction.class),
@@ -67,9 +62,6 @@ public class ParcelDescriptorDataLoader extends UniFileLoader {
             SystemAction.get(DeleteAction.class),
             SystemAction.get(RenameAction.class),
             null,
-            // SystemAction.get(SaveAsTemplateAction.class),
-            // null,
-            // SystemAction.get(ToolsAction.class),
             SystemAction.get(PropertiesAction.class),
         };
     }

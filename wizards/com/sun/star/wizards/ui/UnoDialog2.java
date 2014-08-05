@@ -323,15 +323,12 @@ public class UnoDialog2 extends UnoDialog
     {
         try
         {
-            //System.out.println("Inserting : " + componentName);
             XInterface xControlModel = insertControlModel(serviceName, componentName, new String[]
                     {
                     }, new Object[]
                     {
                     });
             Helper.setUnoPropertyValues(xControlModel, sPropNames, oPropValues);
-            //setControlPropertiesDebug(xControlModel, sPropNames, oPropValues);
-            //System.out.println("  Setting props successful !");
             Helper.setUnoPropertyValue(xControlModel, PropertyNames.PROPERTY_NAME, componentName);
         }
         catch (Exception ex)

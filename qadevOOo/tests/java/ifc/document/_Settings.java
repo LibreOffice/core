@@ -23,10 +23,6 @@ import com.sun.star.i18n.XForbiddenCharacters;
 import com.sun.star.uno.UnoRuntime;
 import java.lang.reflect.Method;
 
-//import java.awt.print.PrinterJob;
-
-//import javax.print.PrintService;
-
 import lib.MultiPropertyTest;
 import lib.Status;
 import lib.StatusException;
@@ -86,7 +82,6 @@ public class _Settings extends MultiPropertyTest {
                 "Cannot execute test with current Java version (Java 1.4 required) " +
                 javaVersion + ": " + ex.getMessage()));
         }
-//        PrintService[] services = PrinterJob.lookupPrintServices();
 
         if (oServices.length > 1) {
             testProperty("PrinterName", getPrinterNameWithReflection(oServices[0]),

@@ -102,7 +102,6 @@ public class DocumentProperties
             mimetype.Name = "MediaType";
             mimetype.Value = "application/vnd.oasis.opendocument.text";
             PropertyValue[] mimeArgs = { mimetype };
-//                new Any("application/vnd.oasis.opendocument.text")) };
             PropertyValue cfile = new PropertyValue();
             cfile.Name = "URL";
             cfile.Value = temp + "EMPTY.odt";
@@ -111,8 +110,6 @@ public class DocumentProperties
             System.out.println("Creating service DocumentProperties...");
 
             Object oDP =
-//                xMSF.createInstanceWithContext(
-//                    "com.sun.star.document.DocumentProperties", xContext);
                 xMSF.createInstance("com.sun.star.document.DocumentProperties");
             XDocumentProperties xDP = UnoRuntime.queryInterface(XDocumentProperties.class, oDP);
 
@@ -129,14 +126,12 @@ public class DocumentProperties
 
             System.out.println("Checking storing default-initialized meta data ...");
 
-//            xDP2.storeToMedium(temp + "EMPTY.odt", mimeArgs);
             xDP2.storeToMedium("", mimeEmptyArgs);
 
             System.out.println("...done");
 
             System.out.println("Checking loading default-initialized meta data ...");
 
-//            xDP2.loadFromMedium(temp + "EMPTY.odt", noArgs);
             xDP2.loadFromMedium("", mimeEmptyArgs);
             assertEquals("Author", "", xDP2.getAuthor());
 
@@ -296,7 +291,6 @@ public class DocumentProperties
             assertEquals("setAutoloadURL", str, xDP.getAutoloadURL());
             i = 3661; // this might not work (due to conversion via double...)
             xDP.setAutoloadSecs(i);
-//            System.out.println("set: " + i + " get: " + xDP.getAutoloadSecs());
             assertEquals("setAutoloadSecs", i, xDP.getAutoloadSecs());
             str = "_blank";
             xDP.setDefaultTarget(str);

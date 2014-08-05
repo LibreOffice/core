@@ -94,13 +94,6 @@ class InteractionImpl implements com.sun.star.task.XInteractionHandler
 
         boolean approve = true;
         boolean abort = false;
-//             Object install_Exception =
-//                 AnyConverter.toObject(
-//                     com.sun.star.deployment.InstallException.class, request);
-//             if (install_Exception != null)
-//             {
-//                 approve = true;
-//             }
 
         com.sun.star.task.XInteractionContinuation[] conts = xRequest.getContinuations();
         for (int i = 0; i < conts.length; i++)

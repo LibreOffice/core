@@ -43,8 +43,6 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
      * Can be set with parameter 'ThreadTimeOut'
      **/
     protected int m_nThreadTimeOut = 0;
-    /** Continue a test even if it did fail **/
-    // public static final boolean CONTINUE = true;
 
     /** End a test if it did fail **/
     public static final boolean BREAK = true;
@@ -61,7 +59,6 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
             Method before = this.getClass().getMethod("before", new Class[] {} );
             before.invoke(this, new Object[] {} );
 
-            // beforeWorked = false;
             m_bBeforeCalled = true;
         }
         catch (java.lang.NoSuchMethodException e)
@@ -90,7 +87,6 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
     }
 
     /** Description entry **/
-    // protected DescEntry subEntry = null;
 
     private void test_method(DescEntry _entry)
     {
@@ -149,7 +145,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                     // is a useful way to detect that a office respective a test
                     // is running and not death.
                     // But way ThreadTimeOut?
-                    // There exeitsts a complex test which uses no office. Therefore
+                    // There exists a complex test which uses no office. Therefore
                     // a logging mechanisim to detect a stalled test.
                     int lastPing = -1;
                     int newPing = 0;
@@ -168,7 +164,6 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                         {
                             lastPing = newPing;
                             newPing = ow.getPing();
-                            //System.out.println("lastPing: '" + lastPing + "' newPing '" + newPing + "'");
                             factor = 0;
                         }
                     }

@@ -63,7 +63,6 @@ public class FrameworkJarChecker {
         }
 
         if(result == null) {
-            // warnBeforeMount();
             JarFileSystem newjfs = new JarFileSystem();
             try {
                 newjfs.setJarFile(unoilFile);

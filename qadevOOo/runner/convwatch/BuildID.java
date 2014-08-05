@@ -61,7 +61,6 @@ public class BuildID
             {
                 int nIdx = sOfficePath.lastIndexOf(fs);
                 sOfficePath = sOfficePath.substring(0, nIdx);
-                // ok. System.out.println("directory: " + sOfficePath);
                 sBuildID = getBuildIDFromBootstrap(sOfficePath);
                 if (sBuildID.length() == 0)
                 {
@@ -125,28 +124,5 @@ public class BuildID
             }
             return sBuildID;
         }
-//    public static void main(String[] args)
-//        {
-//            String sApp;
-//            sApp = "/opt/staroffice8_m116/program/soffice --headless --accept=socket,host=localhost,port=8100;urp;";
-//            String sBuildID;
-//            sBuildID = getBuildID(sApp);
-//            System.out.println("BuildID is: " + sBuildID);
-
-//            Date aDate = new Date();
-//            long nStart = aDate.getTime();
-//            System.out.println("Time:" + nStart);
-//            // LLA: Just some more tests for getBuildID
-//            // sApp = "/opt/staroffice8_net/program/soffice";
-//            // sBuildID = getBuildID(sApp);
-//            // System.out.println("BuildID is: " + sBuildID);
-
-//            // sApp = "\"/opt/staroffice8_net/program/soffice\" test blah";
-//            // sBuildID = getBuildID(sApp);
-
-//            // System.out.println("BuildID is: " + sBuildID);
-//            System.exit(1);
-//        }
-
 }
 

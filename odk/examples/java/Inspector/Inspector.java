@@ -81,8 +81,6 @@ public class Inspector{
         private HashMap<String, String> aApplicationHashMap = new HashMap<String, String>();
         private String sTitle = "Object Inspector";
         private ArrayList<XComponent> aHiddenDocuments = new ArrayList<XComponent>();
-//        private String[] sApplicationDocUrls = new String[]{"private:factory/swriter", "private:factory/scalc", "private:factory/simpress", "private:factory/sdraw", "private:factory/sbase"};
-//        private String[] sApplicationDocNames = new String[]{"Text Document", "Spreadsheet", "Presentation", "Drawing", "Database"};
         private XComponentContext m_xComponentContext;
         private HashMap<String, InspectorPane> aInspectorPanes = new HashMap<String, InspectorPane>();
         private XDialogProvider m_oSwingDialogProvider;
@@ -100,7 +98,6 @@ public class Inspector{
             aApplicationHashMap.put("private:factory/sdraw", "Drawing");
             aApplicationHashMap.put("private:factory/smath", "Formula");
             m_oSwingDialogProvider = new SwingDialogProvider(this, sTitle);
-//            aApplicationHashMap.put("private:factory/sbase", "Database");
         }
 
 

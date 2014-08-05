@@ -38,11 +38,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 
-// import complexlib.ComplexTestCase;
-// import util.utils;
 import helper.OfficeProvider;
 import helper.URLHelper;
-// import helper.OfficeWatcher;
 
 import convwatch.DB;
 
@@ -132,51 +129,17 @@ public class ReportDesignerTest
 
     String mTestDocumentPath;
 
-//    public String[] getTestMethodNames()
-//        {
-//            return new String[] {"firsttest"};
-//        }
-
     @Before public void before()
     {
         System.out.println("before");
-        // String tempdir = System.getProperty("java.io.tmpdir");
 
         int dummy = 0;
-        // m_xXMultiServiceFactory = getMSF();
     }
 
     @After public void after()
     {
         System.out.println("after");
     }
-
-//    private void checkIfOfficeExists(String _sOfficePathWithTrash)
-//        {
-//            String sOfficePath = "";
-//            int nIndex = _sOfficePathWithTrash.indexOf("soffice.exe");
-//            if (nIndex > 0)
-//            {
-//                sOfficePath = _sOfficePathWithTrash.substring(0, nIndex + 11);
-//            }
-//            else
-//            {
-//                nIndex = _sOfficePathWithTrash.indexOf("soffice");
-//                if (nIndex > 0)
-//                {
-//                    sOfficePath = _sOfficePathWithTrash.substring(0, nIndex + 7);
-//                }
-//            }
-
-//            System.out.println(sOfficePath);
-//            File sOffice = new File(sOfficePath);
-//            if (! sOffice.exists())
-//            {
-//                System.out.println("ERROR: There exists no office installation at given path: '" + sOfficePath + "'");
-//                System.exit(0);
-//            }
-//        }
-
 
     private XDesktop m_xDesktop = null;
     public XDesktop getXDesktop()
@@ -217,27 +180,6 @@ public class ReportDesignerTest
 
 
     private OfficeProvider m_aProvider = null;
-//    private void startOffice()
-//        {
-//            // int tempTime = param.getInt("SingleTimeOut");
-//            param.put("TimeOut", new Integer(300000));
-//            System.out.println("TimeOut: " + param.getInt("TimeOut"));
-//            System.out.println("ThreadTimeOut: " + param.getInt("ThreadTimeOut"));
-
-//            // OfficeProvider aProvider = null;
-//            m_aProvider = new OfficeProvider();
-//            m_xXMultiServiceFactory = (XMultiServiceFactory) m_aProvider.getManager(param);
-//            param.put("ServiceFactory", m_xXMultiServiceFactory);
-//        }
-
-//    private void stopOffice()
-//        {
-//            if (m_aProvider != null)
-//            {
-//                m_aProvider.closeExistingOffice(param, true);
-//                m_aProvider = null;
-//            }
-//        }
 
     private String m_sMailAddress = null;
     private String m_sUPDMinor;
@@ -251,8 +193,6 @@ public class ReportDesignerTest
 
             // -------------------- preconditions, try to find an office --------------------
 
-//                String sAppExecutionCommand = (String) param.get("AppExecutionCommand");
-
             String sUser = System.getProperty("user.name");
             System.out.println("user.name='" + sUser + "'");
 
@@ -264,34 +204,17 @@ public class ReportDesignerTest
             m_sUPDMinor = System.getProperty("UPDMINOR");
             System.out.println("Current MWS: " + m_sUPDMinor);
 
-//                sAppExecutionCommand = sAppExecutionCommand.replaceAll( "\\$\\{USERNAME\\}", sUser);
-//                System.out.println("sAppExecutionCommand='" + sAppExecutionCommand + "'");
-
-//                checkIfOfficeExists(sAppExecutionCommand);
-//                param.put("AppExecutionCommand", new String(sAppExecutionCommand));
-
             // --------------------------- Start the given Office ---------------------------
 
-//                startOffice();
-
             // ------------------------------ Start a test run ------------------------------
-
-//            String sCurrentDirectory = System.getProperty("user.dir");
-//            System.out.println("Current Dir: " + sCurrentDirectory);
 
             String sWriterDocument =  TestDocument.getUrl("RPTWriterTests.odb");
             startTestForFile(sWriterDocument, WRITER);
 
             String sCalcDocument =  TestDocument.getUrl("RPTCalcTests.odb");
             startTestForFile(sCalcDocument, CALC);
-//            catch (AssureException e)
-//            {
-//                stopOffice();
-//                throw new AssureException(e.getMessage());
-//            }
 
             // ------------------------------ Office shutdown ------------------------------
-//            stopOffice();
         }
 
 

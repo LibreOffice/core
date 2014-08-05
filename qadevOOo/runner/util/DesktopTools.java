@@ -305,22 +305,18 @@ public class DesktopTools
         }
         catch (com.sun.star.util.CloseVetoException e)
         {
-            // e.printStackTrace();
             System.out.println("Couldn't close document");
         }
         catch (com.sun.star.lang.DisposedException e)
         {
-            // e.printStackTrace();
             System.out.println("Couldn't close document");
         }
         catch (java.lang.NullPointerException e)
         {
-            // e.printStackTrace();
             System.out.println("Couldn't close document");
         }
         catch (com.sun.star.beans.PropertyVetoException e)
         {
-            // e.printStackTrace();
             System.out.println("Couldn't close document");
         }
     }
@@ -483,8 +479,6 @@ public class DesktopTools
      */
     public static void bringWindowToFront(XModel xModel)
     {
-        // System.out.println("DEBUG: bring to front xModel");
-
         XTopWindow xTopWindow =
                 UnoRuntime.queryInterface(
         XTopWindow.class,
@@ -495,7 +489,6 @@ public class DesktopTools
 
     public static void bringWindowToFront(XComponent xComponent)
     {
-        // System.out.println("DEBUG: bring to front xComponent");
         XModel xModel = UnoRuntime.queryInterface(XModel.class, xComponent);
         if (xModel != null)
         {

@@ -213,15 +213,12 @@ public class TextTableHandler
     {
         BreakType CorrBreakValue = null;
         BreakType BreakValue = (BreakType) com.sun.star.wizards.common.Helper.getUnoStructValue(oTextTable, "BreakType");
-        //  if (BreakValue.equals(BreakType.NONE) == false){
-        //      CorrBreakValue = BreakValue;
         Helper.setUnoPropertyValue(oTextTable, "BreakType", BreakType.NONE);
-        //  }
         return BreakType.NONE;
     }
 
     public void adjustOptimalTableWidths(XMultiServiceFactory _xMSF, XTextTable xTextTable)
-    {        // setTableColumnSeparators(){
+    {
         try
         {
             XFrame xFrame = this.xTextDocument.getCurrentController().getFrame();

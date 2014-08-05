@@ -57,8 +57,6 @@ public class ComplexDataBaseOutProducer extends DataBaseOutProducer {
         testBase = testBase.substring(sep+1);
 
         // 2do fallback?
-//        if (os == null || os.equals(""))
-//            os = System.getProperty("os.name");
         String descriptionString = testLanguage+":"+ os +":"+testBase+":"+apiVersion;
         if (apiVersion != null)
             apiVersion = apiVersion.substring(0, 6);

@@ -17,7 +17,6 @@
  */
 package graphical;
 
-// import java.io.BufferedReader;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -49,10 +48,6 @@ public class IniFile implements Enumeration<String>
             m_sFilename = _sFilename;
             m_aList = loadLines();
             m_aEnumerationPos = findNextSection(0);
-//            if (_sFilename.endsWith(".odb.ps.ini"))
-//            {
-//                int dummy = 0;
-//            }
         }
 
     public void insertFirstComment(String[] _aList)
@@ -73,13 +68,9 @@ public class IniFile implements Enumeration<String>
             ArrayList<String> aLines = new ArrayList<String>();
             if (!aFile.exists())
             {
-                // GlobalLogWriter.println("couldn't find file '" + m_sFilename + "', will be created.");
-                // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
-                // m_bListContainUnsavedChanges = false;
                 return aLines;
             }
             RandomAccessFile aReader = null;
-            // BufferedReader aReader;
             try
             {
                 aReader = new RandomAccessFile(aFile, "r");
@@ -97,13 +88,11 @@ public class IniFile implements Enumeration<String>
             {
                 GlobalLogWriter.println("couldn't open file " + m_sFilename);
                 GlobalLogWriter.println("Message: " + fne.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
             }
             catch (java.io.IOException ie)
             {
                 GlobalLogWriter.println("Exception occurs while reading from file " + m_sFilename);
                 GlobalLogWriter.println("Message: " + ie.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, ie.getMessage());
             }
             try
             {
@@ -113,7 +102,6 @@ public class IniFile implements Enumeration<String>
             {
                 GlobalLogWriter.println("Couldn't close file " + m_sFilename);
                 GlobalLogWriter.println("Message: " + ie.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, ie.getMessage());
             }
             return aLines;
         }
@@ -323,8 +311,6 @@ public class IniFile implements Enumeration<String>
        @param _sKey string
        @return the value found in the inifile which is given by the section and key parameter
     */
-    // private int m_nCurrentPosition;
-    // private String m_sOldKey;
     public String getValue(String _sSection, String _sKey)
         {
             String sValue = "";
@@ -341,16 +327,6 @@ public class IniFile implements Enumeration<String>
             return sValue;
         }
 
-//    private String getNextValue()
-//    {
-//        if (m_nCurrentPosition >= 0)
-//        {
-//            ++m_nCurrentPosition;
-//            String sValue = getValue(m_nCurrentPosition);
-//            return sValue;
-//        }
-//        return "";
-//    }
     /**
      * Returns the value at Section, Key converted to an integer
      * Check with hasValue(Section, Key) to check before you get into trouble.
@@ -399,21 +375,14 @@ public class IniFile implements Enumeration<String>
             File aFile = new File(m_sFilename);
             if (aFile.exists())
             {
-                // System.out.println("couldn't find file " + m_sFilename);
                 // TODO: little bit unsafe here, first rename, after write is complete, delete the old.
                 aFile.delete();
                 if (aFile.exists())
                 {
                     GlobalLogWriter.println("Couldn't delete the file " + m_sFilename);
                     return;
-                    // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, "Couldn't delete the file " + m_sFilename);
                 }
             }
-            // if (! aFile.canWrite())
-            // {
-            //    System.out.println("Couldn't write to file " + m_sFilename);
-            //    DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, "");
-            // }
             try
             {
                 RandomAccessFile aWriter = new RandomAccessFile(aFile, "rw");
@@ -434,13 +403,11 @@ public class IniFile implements Enumeration<String>
             {
                 GlobalLogWriter.println("couldn't open file for writing " + m_sFilename);
                 GlobalLogWriter.println("Message: " + fne.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
             }
             catch (java.io.IOException ie)
             {
                 GlobalLogWriter.println("Exception occurs while writing to file " + m_sFilename);
                 GlobalLogWriter.println("Message: " + ie.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, ie.getMessage());
             }
         }
 
@@ -504,58 +471,6 @@ public class IniFile implements Enumeration<String>
             }
         }
 
-    // String replaceEvaluatedValue(String _sSection, String _sValue)
-    //     {
-    //         String sValue = _sValue;
-    //         int nIndex = 0;
-    //         while (( nIndex = sValue.indexOf("$(", nIndex)) >= 0)
-    //         {
-    //             int nNextIndex = sValue.indexOf(")", nIndex);
-    //             if (nNextIndex >= 0)
-    //             {
-    //                 String sKey = sValue.substring(nIndex + 2, nNextIndex);
-    //                 String sNewValue = getValue(_sSection, sKey);
-    //                 if (sNewValue != null && sNewValue.length() > 0)
-    //                 {
-    //                     String sRegexpKey = "\\$\\(" + sKey + "\\)";
-    //                     sValue = sValue.replaceAll(sRegexpKey, sNewValue);
-    //                 }
-    //                 nIndex = nNextIndex;
-    //             }
-    //             else
-    //             {
-    //                 nIndex += 2;
-    //             }
-    //         }
-    //         return sValue;
-    //     }
-
-
-    // public String getLocalEvaluatedValue(String _sSection, String _sKey)
-    //     {
-    //         String sValue = getValue(_sSection, _sKey);
-    //         sValue = replaceEvaluatedValue(_sSection, sValue);
-    //         return sValue;
-    //     }
-
-
-
-    // this is a special behaviour.
-    // public String getGlobalLocalEvaluatedValue(String _sSection, String _sKey)
-    //     {
-    //         String sGlobalValue = getKey("global", _sKey);
-    //         String sLocalValue = getKey(_sSection, _sKey);
-    //         if (sLocalValue.length() == 0)
-    //         {
-    //             sGlobalValue = replaceEvaluatedKey(_sSection, sGlobalValue);
-    //             sGlobalValue = replaceEvaluatedKey("global", sGlobalValue);
-    //             return sGlobalValue;
-    //         }
-    //         sLocalValue = replaceEvaluatedKey(_sSection, sLocalValue);
-    //         sLocalValue = replaceEvaluatedKey("global", sLocalValue);
-
-    //         return sLocalValue;
-    //     }
     public void removeSection(String _sSectionToRemove)
         {
             // first, search for the name
@@ -584,29 +499,7 @@ public class IniFile implements Enumeration<String>
     /**
      * some tests for this class
      */
-//    public static void main(String[] args)
-//        {
-//            String sTempFile = System.getProperty("java.io.tmpdir");
-//            sTempFile += "inifile";
 
-
-//            IniFile aIniFile = new IniFile(sTempFile);
-//            String sValue = aIniFile.getValue("Section", "Key");
-//            // insert a new value to a already exist section
-//            aIniFile.insertValue("Section", "Key2", "a new value in a existing section");
-//            // replace a value
-//            aIniFile.insertValue("Section", "Key", "replaced value");
-//            // create a new value
-//            aIniFile.insertValue("New Section", "Key", "a new key value pair");
-//            aIniFile.insertValue("New Section", "Key2", "a new second key value pair");
-
-//            String sValue2 = aIniFile.getValue("Section2", "Key");
-
-//            aIniFile.removeSection("Section");
-//            aIniFile.removeSection("New Section");
-
-//            aIniFile.close();
-//        }
 
     /**
      * Enumeration Interface

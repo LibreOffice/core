@@ -115,26 +115,6 @@ public class CheckXComponentLoader
     // test environment
 
 
-    /** @short  A function to tell the framework,
-                which test functions are available.
-
-        @return All test methods.
-        @todo   Think about selection of tests from outside ...
-     */
-//    public String[] getTestMethodNames()
-//    {
-//        // TODO think about trigger of sub-tests from outside
-//        return new String[]
-//        {
-//            "checkURLEncoding"           ,
-//            "checkURLHandling"           ,
-//            "checkUsingOfMediaDescriptor",
-//            "checkStreamLoading"         ,
-//            "checkLoadingWithPassword"
-//        };
-//    }
-
-
     /** @short  Create the environment for following tests.
 
         @descr  Use either a component loader from desktop or
@@ -206,12 +186,6 @@ public class CheckXComponentLoader
 
                 String sCompletePath = aFile.getAbsolutePath();
                 String sSubPath      = sCompletePath.substring(nBasePathLength);
-
-                // Some test files are checked into CVS. ignore CVS  helper files!
-//                if (sSubPath.indexOf("CVS") > -1)
-//                {
-//                    continue;
-//                }
 
                 m_lTestFiles.add(sSubPath);
             }
@@ -295,10 +269,6 @@ public class CheckXComponentLoader
     {
         File aDir = new File(sTempPath);
         aDir.mkdirs();
-//        if (!aDir.exists())
-//        {
-//            fail("Could not access temp directory \"" + sTempPath + "\".");
-//        }
 
     // TODO: create a temp file which not exist!
         for (int i=0; i<999999; ++i)
@@ -467,112 +437,6 @@ public class CheckXComponentLoader
         }
     }
 
-    /**
-     * Check url handling with a load of URLs.
-     * 1. unsupported URLs.
-     * 2. "stupid" URLs
-     * 3. case sensitive URLs
-     * 4. FTP URLs
-     * 5. HTTP URLs
-     */
-//    public void checkURLHandling() {
-//        PropertyValue[] lProps = new PropertyValue[1];
-//
-//        lProps[0] = new PropertyValue();
-//        lProps[0].Name = "Hidden";
-//        lProps[0].Value = Boolean.TRUE;
-//
-//        System.out.println("check possible but unsupported URLs");
-//
-//        String[] sIllegalArgs = new String[] {
-//            "slot:5000", "slot:10909", ".uno:SaveAs", ".uno:Open",
-//        };
-//        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
-//                "_blank", 0, lProps);
-//
-//        System.out.println("check stupid URLs");
-//
-//        sIllegalArgs = new String[] {
-//            "slot:xxx", "slot:111111111", ".uno:save_as", ".uno:open_this",
-//            ".UnO:*",
-//        };
-//        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
-//                "_blank", 0, lProps);
-//
-//        String[] sEmptyDocs = new String[] {
-//            "mailo:hansi.meier@germany.sun.com", "file:/c:\\test/file.cxx",
-//            "file:///c|:\\test/file.cxx", "http_server://staroffice-doc\\",
-//            "c:\\\\test///\\test.sxw", "news_:staroffice-doc",
-//            "newsletter@blubber", "private_factory/swriter",
-//            "private:factory//swriter", "private:factory/swriter/___",
-//            "c:\\test\\test.sxw", "macro:///ImportWizard.Main.Main",
-//            "macro:///Euro.AutoPilotRun.StartAutoPilot",
-//            "service:com.sun.star.frame.Frame",
-//            "mailto:steffen.grund@germany.sun.com", "news:staroffice-doc",
-//            "macro:/ExportWizard", "macro://Euro.AutoPilotRun.StartAutoPilot",
-//            "service:com.sun.star.frame."
-//        };
-//
-//        //with cws_loadenv01 changed to IllegalArgumentException
-//        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
-//                lProps);
-//
-//        System.out.println("check case sensitive URLs");
-//
-//        sIllegalArgs = new String[] {
-//            "sLot:5000", "sloT:10909", ".unO:SaveAs", ".uno:OPEN",
-//        };
-//        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
-//                "_blank", 0, lProps);
-//
-//        sEmptyDocs = new String[] {
-//            "private:factory/SWRITER", "private:factory/SWRITER/WEB",
-//            "macro:///importwizard.main.main",
-//            "Macro:///euro.autopilotrun.startautopilot",
-//            "Service:Com.Sun.Star.Frame.Frame",
-//            "Mailto:andreas.schluens@germany.sun.com", "neWs:staroffice-doc",
-//            "News:Staroffice-doc"
-//        };
-//
-//        //with cws_loadenv01 changed to IllegalArgumentException
-//        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
-//                lProps);
-//
-//        System.out.println("check FTP URLs");
-//
-//        String sFTPURL = (String) param.get("FtpAccess");
-//        Enumeration aSnapshot = m_lTestFiles.elements();
-//
-//        while (aSnapshot.hasMoreElements()) {
-//            String doc = (String) aSnapshot.nextElement();
-//
-//
-//            // if os is windows
-//            doc = doc.replace('\\', '/');
-//      if (doc.indexOf("CVS")<0) {
-//          loadURL(m_xLoader, RESULT_VALID_DOC, sFTPURL + "/" + doc,
-//                    "_blank", 0, lProps);
-//      }
-//        }
-//
-//        System.out.println("check HTTP URLs");
-//
-//        String sHTTPURL = (String) param.get("HttpAccess");
-//        aSnapshot = m_lTestFiles.elements();
-//
-//        while (aSnapshot.hasMoreElements()) {
-//            String doc = (String) aSnapshot.nextElement();
-//
-//
-//            // if os is windows
-//            doc = doc.replace('\\', '/');
-//      if (doc.indexOf("CVS")<0) {
-//          loadURL(m_xLoader, RESULT_VALID_DOC, sHTTPURL + "/" + doc,
-//                    "_blank", 0, lProps);
-//      }
-//        }
-//    }
-
     /** TODo document me
      */
     @Test public void checkStreamLoading()
@@ -592,11 +456,6 @@ public class CheckXComponentLoader
             File   aFile = new File(m_sTestDocPath, aSnapshot.next());
             String sURL  = URLHelper.getFileURLFromSystemPath(aFile);
 
-//            if (sURL.indexOf("CVS") > -1)
-//            {
-//                continue;
-//            }
-
             try
             {
                 XInputStream xStream = m_xStreamProvider.openFileRead(sURL);
@@ -609,8 +468,6 @@ public class CheckXComponentLoader
 
             // check different version of "private:stream" URL!
             loadURL(m_xLoader, RESULT_VALID_DOC, "private:stream" , "_blank", 0, lProps);
-            // loadURL(m_xLoader, RESULT_VALID_DOC, "private:stream" , "_blank", 0, lProps);
-            // loadURL(m_xLoader, RESULT_VALID_DOC, "private:stream/", "_blank", 0, lProps);
     }
     }
 

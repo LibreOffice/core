@@ -68,25 +68,16 @@ public class ParcelFolderDataLoader extends UniFileLoader {
 
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
-            // SystemAction.get(OpenLocalExplorerAction.class),
-            // SystemAction.get(FindAction.class),
-            // null,
-            // SystemAction.get(FileSystemAction.class),
-            // null,
             SystemAction.get(CompileParcelAction.class),
             SystemAction.get(BuildParcelAction.class),
             SystemAction.get(ConfigureParcelAction.class),
             null,
             SystemAction.get(CutAction.class),
             SystemAction.get(CopyAction.class),
-            // SystemAction.get(PasteAction.class),
             null,
             SystemAction.get(DeleteAction.class),
             SystemAction.get(RenameAction.class),
             null,
-            // SystemAction.get(SaveAsTemplateAction.class),
-            // null,
-            // SystemAction.get(ToolsAction.class),
             SystemAction.get(PropertiesAction.class),
         };
     }

@@ -160,12 +160,10 @@ public class LoadSaveTest
         boolean IsLayoutFinished() { return m_isLayoutFinished; }
         public void documentEventOccured(DocumentEvent Event)
         {
-//            System.out.println("event: " + Event.EventName);
             if ("OnLayoutFinished".equals(Event.EventName))
             {
                 // we only have one doc at any time, so no need to check
                 m_isLayoutFinished = true;
-//                System.out.println("received OnLayoutFinished");
             }
         }
         public void disposing(EventObject Event) { }

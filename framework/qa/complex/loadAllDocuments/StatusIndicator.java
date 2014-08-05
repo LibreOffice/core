@@ -158,17 +158,6 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
      */
     private void impl_show()
     {
-/*        synchronized(this)
-        {
-            if ((m_nOut & SHOWSTATUS_LOG) == SHOWSTATUS_LOG)
-                //m_aProtocol.log("\t["+m_nValue+"/"+m_nRange+"] "+m_sText+"\n");
-
-            //if ((m_nOut & SHOWSTATUS_DIALOG) == SHOWSTATUS_DIALOG)
-                // not supported yet!
-
-            //if ((m_nOut & SHOWSTATUS_LINK) == SHOWSTATUS_LINK)
-                // not supported yet!
-        } */
     }
 
     public boolean wasUsed() {

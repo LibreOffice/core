@@ -36,9 +36,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XChangesBatch;
 
-// import complex.accelerators.KeyMapping;
-
-
 // ---------- junit imports -----------------
 import org.junit.After;
 import org.junit.AfterClass;
@@ -68,18 +65,6 @@ public class AcceleratorsConfigurationTest
 
 
     // test environment
-
-    /** @short todo document me
-     */
-//  public String[] getTestMethodNames()
-//  {
-//      return new String[]
-//          {
-//              "checkGlobalAccelCfg",
-//              "checkModuleAccelCfg",
-//                "checkDocumentAccelCfg"
-//          };
-//  }
 
     /** @short Create the environment for following tests.
      */
@@ -355,10 +340,8 @@ public class AcceleratorsConfigurationTest
 
         String tempDirURL = util.utils.getOfficeTemp/*Dir*/(getMSF());
         sDocCfgName = FileHelper.appendPath(tempDirURL, "test.cfg");
-        // sDocCfgName = "file:///c:/test.cfg";
         SaveDocumentAcceleratorConfiguration(sDocCfgName);
 
-        // sDocCfgName = "file:///c:/test.cfg";
         LoadDocumentAcceleratorConfiguration(sDocCfgName);
     }
 

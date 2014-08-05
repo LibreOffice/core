@@ -17,8 +17,6 @@
  */
 package mod._dbaccess;
 
-//import com.sun.star.awt.XControl;
-//import com.sun.star.awt.XControlModel;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.SQLException;
@@ -199,9 +197,6 @@ public class OQueryDesign extends TestCase {
         //Adding ObjRelations for XInitialization
         tEnv.addObjRelation("XInitialization.args", params);
 
-        //Object[] ExceptionParams = new Object[3];
-        //ExceptionParams = params;
-        //((PropertyValue) ExceptionParams[1]).Value = Frame;
         Object[] ExceptionParams = new Object[3];
         PropertyValue ExceptionParam1 = new PropertyValue();
         ExceptionParam1.Name = "DataSourceName";

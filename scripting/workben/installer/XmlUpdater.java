@@ -152,30 +152,18 @@ public class XmlUpdater extends Thread {
 
     public void run() {
 
-        //InputSource            isource;
-        //DocumentBuilderFactory builderFactory;
-        //DocumentBuilder        builder = null;
-
         internalThread = Thread.currentThread();
 
-        //System.out.println("\n\n\n\nFileName: "+installPath);
         classesPath= installPath.concat(File.separator+"program"+File.separator+"classes"+File.separator);
 
         String progpath=installPath;
         progpath= progpath.concat(File.separator+"program"+File.separator);
-        //System.out.println("Office progpath" + progpath );
-        //System.out.println("\nModifying Installation "+installPath);
 
         String starBasicPath=installPath;
         starBasicPath= starBasicPath.concat(File.separator+"share"+File.separator+"basic"+File.separator+"ScriptBindingLibrary"+File.separator);
-        //System.out.println( "Office StarBasic path: " + starBasicPath );
 
         String regSchemaOfficePath=installPath;
         regSchemaOfficePath= regSchemaOfficePath.concat(File.separator+"share"+File.separator+"registry"+File.separator+"schema"+File.separator+"org"+File.separator+"openoffice"+File.separator+"Office"+File.separator);
-        //System.out.println( "Office schema path: " + regSchemaOfficePath );
-
-        // Get the NetBeans installation
-        //String netbeansPath=
 
         progressBar.setString("Unzipping Required Files");
         ZipData zd = new ZipData("SFrameworkInstall.jar");
@@ -184,7 +172,6 @@ public class XmlUpdater extends Thread {
         if( (!netInstall) || bindingsInstall) {
             String configPath=installPath;
             configPath= configPath.concat(File.separator+"user"+File.separator+"config"+File.separator+"soffice.cfg"+File.separator);
-            //System.out.println( "Office configuration path: " + configPath );
             String manifestPath=configPath + "META-INF" + File.separator;
 
             //Adding <Office>/user/config/soffice.cfg/

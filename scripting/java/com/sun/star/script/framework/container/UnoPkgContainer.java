@@ -211,7 +211,6 @@ public class UnoPkgContainer extends ParcelContainer
         DeployedUnoPackagesDB dp = null;
         try
         {
-//            String path = containerUrl.substring( 0, containerUrl.lastIndexOf("/") );
             String packagesUrl = PathUtils.make_url( extensionDb, "/Scripts/" + extensionRepository + "-extension-desc.xml" );
             LogUtils.DEBUG("getUnoPackagesDB() looking for existing db in " + packagesUrl );
             if ( m_xSFA.exists( packagesUrl ) )
@@ -270,7 +269,6 @@ public class UnoPkgContainer extends ParcelContainer
         OutputStream os = null;
         try
         {
-//            String path = containerUrl.substring( 0, containerUrl.lastIndexOf("/") );
             String packagesUrl = PathUtils.make_url( extensionDb, "/Scripts/" + extensionRepository + "-extension-desc.xml" );
             xos =  m_xSFA.openFileWrite( packagesUrl );
             XTruncate xTrc = UnoRuntime.queryInterface( XTruncate.class, xos );

@@ -33,7 +33,6 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
-//  import com.sun.star.comp.bootstrap.Bootstrap;
 
 
 
@@ -57,7 +56,6 @@ public class TestPGP {
                 System.err.println(" couldn't get XSet from ServiceFactory");
                 return;
             }
-//              try{
             SimplePGPMailerFactoryReg mailerReg= new SimplePGPMailerFactoryReg();
             XSingleServiceFactory factory= mailerReg.getServiceFactory(
                 "com.sun.star.pgp.SimplePGPMailerImpl", rSmgr, null, null);
@@ -68,10 +66,6 @@ public class TestPGP {
             }
             set.insert(factory );
             System.err.println("PGP factory inserted into service manager");
-
-//              }catch(Exception e ){
-//                  System.err.println( "exception caught in TestPGP");
-//              }
 
         }
     }
@@ -84,7 +78,6 @@ public class TestPGP {
             System.exit(-1);
         }
 
-//          try {
               XUnoUrlResolver resolver = UnoUrlResolver.create(Bootstrap.createInitialComponentContext(null));
 
               XConnector  xConnector  = UnoRuntime.queryInterface(XConnector.class, resolver.resolve("com.sun.star.connection.Connector"));
@@ -94,16 +87,11 @@ public class TestPGP {
               IBridge iBridge = UnoRuntime.getBridgeByName("java", null, "remote", null, new Object[]{"iiop", xConnection, null});
 
             Object rInitialObject = iBridge.mapInterfaceFrom(rootOid, new Type(XInterface.class));
-//              Object rInitialObject = xBridge.getInstance("NamingService");
 
             if(rInitialObject != null) {
                 System.err.println("got the remote object");
                 doSomething(rInitialObject);
             }
-//          }
-//          catch (Exception exception) {
-//              System.err.println("Exception thrown:" + exception);
-//          }
     }
 }
 

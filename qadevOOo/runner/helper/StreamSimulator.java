@@ -51,7 +51,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     private com.sun.star.io.XOutputStream   m_xOutStream    ;
     private com.sun.star.io.XSeekable       m_xSeek         ;
 
-    //public  ComplexTestEnvironment          //m_aProtocol     ;
     public  boolean                         m_bInWasUsed    ;
     public  boolean                         m_bOutWasUsed   ;
 
@@ -118,12 +117,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
     }
 
-/*    public void finalize()
-    {
-        ////m_aProtocol.log("finalize was called. Please check if it was right or not.\n");
-    } */
-
-
     /**
      * following methods simulates the XInputStream.
      * The notice all actions inside the internal protocol
@@ -135,12 +128,10 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                                                  com.sun.star.io.BufferSizeExceededException,
                                                                  com.sun.star.io.IOException
     {
-        //m_aProtocol.log("readBytes(lData["+lData.length+"]["+lData[0]+"],"+nBytesToRead+")\n{\n");
         m_bInWasUsed = true;
 
         if (m_xInStream == null)
         {
-            //m_aProtocol.log("\tstream not open. throw NotConnectedException\n\n\tfailed\n}\n");
             throw new com.sun.star.io.NotConnectedException("stream not open");
         }
 
@@ -157,11 +148,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
         }
-
-        //m_aProtocol.log("\treads "+nRead+" bytes\n\tOK\n}\n");
-
-        //if (nRead != nBytesToRead)
-            //m_aProtocol.log("there are some missing bytes for reading!\n");
 
         return nRead;
     }

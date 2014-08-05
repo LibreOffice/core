@@ -29,9 +29,6 @@ public class FileHelper
 {
     public FileHelper()
         {
-            // fs = System.getProperty("file.separator");
-
-
             String sOSName = System.getProperty("os.name");
             String sOSArch = System.getProperty("os.arch");
             String sOSVersion = System.getProperty("os.version");
@@ -58,22 +55,6 @@ public class FileHelper
             {
                 return true;
             }
-            // This is just nice for DEBUG behaviour
-            // due to the fact this is absolutely context dependency no one should use it.
-            // else
-            // {
-            //     System.out.println("FileHelper:exists() tell this path doesn't exists. Check it. path is:" );
-            //     System.out.println( _sFile );
-            //     System.out.println( aFile.getAbsolutePath() );
-            //     MessageBox("Der JavaProzess wartet auf eine interaktion ihrerseits.");
-
-            //     File aFile2 = new File(_sFile);
-            //     if (aFile2.exists())
-            //     {
-            //         System.out.println("Thanks, file exists." );
-            //         return true;
-            //     }
-            // }
             return false;
         }
 
@@ -206,7 +187,6 @@ public class FileHelper
                 String part = path_tokenizer.nextToken();
                 File new_dir = new File(already_done + File.separatorChar + part);
                 already_done = new_dir.toString();
-                // System.out.println(already_done);
                 //create the directory
                 new_dir.mkdirs();
                 if (OSHelper.isUnix() &&

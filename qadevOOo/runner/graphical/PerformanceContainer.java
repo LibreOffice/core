@@ -19,13 +19,8 @@
 package graphical;
 
 import java.io.File;
-// import java.io.FileWriter;
-// import java.io.OutputStream;
-// import java.io.PrintStream;
 import java.io.PrintStream;
 import java.io.RandomAccessFile;
-// import java.io.StringWriter;
-// import java.lang.Double;
 
 
 public class PerformanceContainer /* extends *//* implements */ {
@@ -115,8 +110,6 @@ public class PerformanceContainer /* extends *//* implements */ {
 
     public void print(PrintStream out)
         {
-            // String ls = System.getProperty("line.separator");
-            // out.
             out.println("loadtime="        + String.valueOf(m_nTime[ Load ]));
             out.println("storetime="       + String.valueOf(m_nTime[ Store ]));
             out.println("printtime="       + String.valueOf(m_nTime[ Print ]));
@@ -128,8 +121,6 @@ public class PerformanceContainer /* extends *//* implements */ {
 
     public void print(IniFile _aIniFile, String _sSection)
         {
-            // String ls = System.getProperty("line.separator");
-            // out.
             _aIniFile.insertValue(_sSection, "loadtime"        , String.valueOf(m_nTime[ Load ]));
             _aIniFile.insertValue(_sSection, "storetime"       , String.valueOf(m_nTime[ Store ]));
             _aIniFile.insertValue(_sSection, "printtime"       , String.valueOf(m_nTime[ Print ]));
@@ -243,17 +234,4 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
         }
 
-//    public static void main(String[] args)
-//    {
-//        BorderRemover a = new BorderRemover();
-//        try
-//        {
-//            a.createNewImageWithoutBorder(args[0], args[1]);
-//        }
-//        catch(java.io.IOException e)
-//        {
-//            System.out.println("Exception caught.");
-//        }
-
-//    }
 }

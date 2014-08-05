@@ -552,7 +552,6 @@ class FuzzyTester
                 }
                 m_BufferActual.set(j, null);
             } else {
-//System.out.println("testBuffer:");
                 printMissing(node);
                 m_DiffMissing++;
             }
@@ -562,7 +561,6 @@ class FuzzyTester
             TreeNode node = m_BufferActual.get(j);
             if (node != null)
             {
-//System.out.println("testBuffer:");
                 printUnexpected(node);
                 if ((node instanceof TextNode) &&
                         ((TextNode) node).getContent().length() == 0) {

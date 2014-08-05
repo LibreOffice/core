@@ -198,7 +198,6 @@ public class AccessibilityTools {
             (utils.getImplName(ac).indexOf(implName) > -1)) {
             SearchedAccessible = xacc;
 
-            //System.out.println("FOUND the desired component -- "+ ac.getAccessibleName() +isShowing);
             return ac;
         } else {
             int k = ac.getAccessibleChildCount();
@@ -240,7 +239,6 @@ public class AccessibilityTools {
             (utils.getImplName(ac).indexOf(implName) > -1) &&
             isShowing) {
             SearchedAccessible = xacc;
-            //System.out.println("FOUND the desired component -- "+ ac.getAccessibleName() +isShowing);
             return ac;
         } else {
             int k = ac.getAccessibleChildCount();
@@ -299,8 +297,6 @@ public class AccessibilityTools {
             }
 
         }
-
-        //System.out.println("cellName:  " + cellName + " cellIndex: " + cellIndex);
 
         try {
             XAccessibleContext ac = xSheetAcc.getAccessibleChild(cellIndex).getAccessibleContext();

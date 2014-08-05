@@ -72,7 +72,6 @@ public class LengthCalculator
         {
             pixel += value.getValue();
         }
-        // LOGGER.debug ("Adding " + value  + " [mm: " + millimeter + "] [pt: " + point + "] px: [" + pixel + "]");
     }
 
     public CSSNumericValue getResult()

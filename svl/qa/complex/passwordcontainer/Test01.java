@@ -25,7 +25,6 @@ import com.sun.star.task.UrlRecord;
 import com.sun.star.task.UserRecord;
 import com.sun.star.uno.UnoRuntime;
 
-// import share.LogWriter;
 
 public class Test01 implements PasswordContainerTest {
     XMultiServiceFactory m_xMSF = null;

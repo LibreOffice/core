@@ -115,7 +115,6 @@ public final class WikiEditorImpl extends WeakBase
     {
         if ( m_bInitialized )
         {
-            //logger.log( Level.SEVERE, "Extension instance was initialized again" );
         }
         if ( args.length > 0 )
         {
@@ -133,17 +132,8 @@ public final class WikiEditorImpl extends WeakBase
         com.sun.star.beans.PropertyValue[] propertyValue )
     {
         final com.sun.star.util.URL myURL = aURL;
-        //logger.log( Level.INFO, "received dispatch request for: "+aURL.Complete );
         if ( aURL.Protocol.equals(protocolName) )
         {
-            /*
-            synchronized( this )
-            {
-                if( m_bClosing ) return;
-                else m_bActive = true;
-            }
-             **/
-
             try
             {
                 if ( myURL.Path.equals("send") )
@@ -152,31 +142,7 @@ public final class WikiEditorImpl extends WeakBase
                 }
             } catch( java.lang.Throwable t )
             {
-                //logger.log( Level.WARNING, "exception while handeling dispatch", t );
             }
-
-            /*
-            synchronized( this )
-            {
-                m_bActive = false;
-                // if we became owner while we were active
-                // we are responsible for closing the m_xFrame now
-                if ( m_bOwner && m_xFrame != null )
-                {
-                    try
-                    {
-                        XCloseable xclose = ( XCloseable )UnoRuntime.queryInterface(
-                            XCloseable.class, m_xFrame );
-                        xclose.close( true );
-                    } catch ( CloseVetoException cve )
-                    {
-                        logger.log( Level.SEVERE, "cannot close owned frame" );
-                    }
-                    // relase reference to the m_xFrame;
-                    m_xFrame = null;
-                }
-            }
-             */
         }
     }
 

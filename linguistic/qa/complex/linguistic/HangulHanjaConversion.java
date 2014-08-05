@@ -41,7 +41,6 @@ import com.sun.star.uno.UnoRuntime;
 
 import util.DesktopTools;
 
-// import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -54,10 +53,6 @@ public class HangulHanjaConversion {
     boolean disposed = false;
     Locale aLocale = new Locale("ko", "KR", "");
     short dictType = ConversionDictionaryType.HANGUL_HANJA;
-
-//    public String[] getTestMethodNames() {
-//        return new String[] { "ConversionDictionaryList" };
-//    }
 
     @Before public void before() {
         xMSF = getMSF();
@@ -113,7 +108,6 @@ public class HangulHanjaConversion {
         assertTrue("getDictionaryContainer didn't work as expected", localRes);
 
         String FileToLoad = TestDocument.getUrl("hangulhanja.sxc");
-        // String FileToLoad = util.utils.getFullTestURL();
 
 XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
                                                new PropertyValue[] {  });

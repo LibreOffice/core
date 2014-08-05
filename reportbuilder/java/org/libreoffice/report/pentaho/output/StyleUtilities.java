@@ -381,19 +381,6 @@ public class StyleUtilities
                 return derivedStyle;
             }
 
-//      final OfficeStyle commonAuto =
-//          commonCollection.getAutomaticStyles().getStyle(styleFamily,
-//              styleName);
-//      if (commonAuto != null)
-//      {
-//        // handle an automatic style ..
-//        final OfficeStyle derivedStyle =
-//            deriveAutomaticStyle(commonAuto, styleFamily, styleName,
-//                generator, commonCollection, predefCollection);
-//        stylesCollection.getAutomaticStyles().addStyle(derivedStyle);
-//        return derivedStyle;
-//      }
-
             final OfficeStyle commonCommon =
                     commonCollection.getCommonStyles().getStyle(styleFamily, styleName);
             if (commonCommon != null)

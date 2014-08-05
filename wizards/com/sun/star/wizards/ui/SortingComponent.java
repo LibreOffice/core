@@ -242,7 +242,6 @@ public class SortingComponent
             short iCurState;
             String CurFieldName;
             setMaxSortIndex();
-            // String[][] SortFieldNames = new String[MaxSortIndex + 1][2];
             ArrayList<String[]> SortFieldNames = new ArrayList<String[]>();
             ArrayList<String> SortDescriptions = new ArrayList<String>();
             for (int i = 0; i <= MaxSortIndex; i++)

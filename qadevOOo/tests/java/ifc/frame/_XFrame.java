@@ -19,7 +19,6 @@
 package ifc.frame;
 
 import com.sun.star.awt.XWindow;
-//import com.sun.star.awt.XWindow;
 import com.sun.star.frame.FrameAction;
 import com.sun.star.frame.FrameActionEvent;
 import com.sun.star.frame.XController;

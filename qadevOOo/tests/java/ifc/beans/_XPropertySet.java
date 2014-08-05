@@ -591,9 +591,6 @@ public class _XPropertySet extends MultiMethodTest {
             if (name.startsWith("Line")) isWritable = false;
             if (name.startsWith("TextWriting")) isWritable = false;
 
-            //if (name.equals("xinterfaceA") || name.equals("xtypeproviderA")
-            //|| name.equals("arAnyA")) isWritable=false;
-
             if ( isWritable && isNotNull ) canChange = isChangeable(name);
 
             if ( isWritable && isNotNull && isBound && canChange) {

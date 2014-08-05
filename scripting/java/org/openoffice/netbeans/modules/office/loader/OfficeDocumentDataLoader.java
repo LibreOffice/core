@@ -69,7 +69,6 @@ public class OfficeDocumentDataLoader extends UniFileLoader {
             jarFs.setJarFile(document);
         }
         catch (IOException e) {
-            // TopManager.getDefault().notify(new NotifyDescriptor.Exception(e, "asdf"));
             return null;
         }
         catch (Exception e) {
@@ -81,7 +80,6 @@ public class OfficeDocumentDataLoader extends UniFileLoader {
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
             SystemAction.get(OpenAction.class),
-            // SystemAction.get(MountDocumentAction.class),
             null,
             SystemAction.get(CutAction.class),
             SystemAction.get(CopyAction.class),
@@ -90,7 +88,6 @@ public class OfficeDocumentDataLoader extends UniFileLoader {
             SystemAction.get(DeleteAction.class),
             SystemAction.get(RenameAction.class),
             null,
-            // SystemAction.get(ToolsAction.class),
             SystemAction.get(PropertiesAction.class),
         };
     }

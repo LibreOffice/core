@@ -323,7 +323,6 @@ class ScriptImpl implements XScript
 
             raiseEditor( lineNum );
 
-            //String stackTrace = te.getScriptStackTrace();  // never seems to have any info??
             if ( usefulInfoIndex > -1 )
             {
                 message = message.substring( usefulInfoIndex + 2 );

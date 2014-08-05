@@ -17,7 +17,6 @@
  */
 package complex.comphelper;
 
-// import complexlib.ComplexTestCase;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
@@ -38,7 +37,6 @@ import static org.junit.Assert.*;
 
 class TestHelper
 {
-    // LogWriter m_aLogWriter;
     String m_sTestPrefix;
 
     /** Creates a new instance of TestHelper
@@ -61,19 +59,6 @@ public class SequenceOutputStreamUnitTest /* extends ComplexTestCase*/ {
 
     TestHelper m_aTestHelper = null;
 
-//    public String[] getTestMethodNames() {
-//        return new String[] {
-//            "ExecuteTest01"};
-//    }
-
-//    public String getTestObjectName () {
-//        return "SequenceOutputStreamUnitTest";
-//    }
-
-//    public static String getShortTestDescription() {
-//        return "tests the SequenceOutput/InputStream implementations";
-//    }
-
     @Before public void before() {
         try {
             m_xMSF = getMSF();
@@ -89,11 +74,6 @@ public class SequenceOutputStreamUnitTest /* extends ComplexTestCase*/ {
     @After public void after() {
         m_xMSF = null;
     }
-
-//    @Test public void ExecuteTest01() {
-//        Test01 aTest = new Test01 (m_xMSF);
-//        assertTrue( "Test01 failed!", aTest.test() );
-//    }
 
     @Test public void test () {
         try {

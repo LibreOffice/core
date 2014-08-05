@@ -25,11 +25,7 @@ import com.sun.star.sheet.DataPilotFieldOrientation;
 import com.sun.star.sheet.XDataPilotDescriptor;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.uno.UnoRuntime;
-// import lib.MultiMethodTest;
-// import lib.Status;
-//import lib.StatusException;
 import lib.TestParameters;
-// import share.LogWriter;
 
 /**
 * Testing <code>com.sun.star.sheet.XDataPilotDescriptor</code>
@@ -70,11 +66,6 @@ public class _XDataPilotDescriptor {
     private TestParameters param = null;
 
     /**
-     * The log writer
-     */
-//    private LogWriter log = null;
-
-    /**
      * Constructor: gets the object to test, a logger and the test parameters
      * @param xObj The test object
      * @param param The test parameters
@@ -82,7 +73,6 @@ public class _XDataPilotDescriptor {
     public _XDataPilotDescriptor(XDataPilotDescriptor xObj/*,
                                     LogWriter log*/, TestParameters param) {
         oObj = xObj;
-        // this.log = log;
         this.param = param;
     }
 
@@ -163,7 +153,6 @@ public class _XDataPilotDescriptor {
      * @return
      */
     public boolean _getTag(){
-//        requiredMethod("setTag()");
         boolean bResult = true;
 
         String objTag = oObj.getTag();
@@ -302,7 +291,6 @@ public class _XDataPilotDescriptor {
      * @return
      */
     public boolean _getColumnFields(){
-//        requiredMethod("getDataPilotFields()");
         System.out.println("getColumnFields") ;
         XIndexAccess IA = oObj.getColumnFields();
         return CheckNames(IA, 0);
@@ -320,7 +308,6 @@ public class _XDataPilotDescriptor {
      * @return
      */
     public boolean _getDataFields(){
-//        requiredMethod("getDataPilotFields()");
         System.out.println("getDataFields") ;
         XIndexAccess IA = oObj.getDataFields();
         return CheckNames(IA, 2);
@@ -338,7 +325,6 @@ public class _XDataPilotDescriptor {
      * @return
      */
     public boolean _getHiddenFields(){
-//        requiredMethod("getDataPilotFields()");
         System.out.println("getHiddenFields") ;
         XIndexAccess IA = oObj.getHiddenFields();
         return CheckNames(IA, 3);
@@ -356,7 +342,6 @@ public class _XDataPilotDescriptor {
      * @return
      */
     public boolean _getRowFields(){
-//        requiredMethod("getDataPilotFields()");
         System.out.println("getRowFields") ;
         XIndexAccess IA = oObj.getRowFields();
         boolean bResult = CheckNames(IA, 1);
@@ -374,7 +359,6 @@ public class _XDataPilotDescriptor {
      * @return
      */
     public boolean _getPageFields(){
-//        requiredMethod("getDataPilotFields()");
         System.out.println("getPageFields") ;
         XIndexAccess IA = oObj.getPageFields();
         boolean bResult = CheckNames(IA, 4);

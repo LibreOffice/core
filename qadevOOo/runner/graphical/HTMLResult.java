@@ -20,14 +20,10 @@ package graphical;
 
 import java.io.File;
 import java.io.FileWriter;
-// import util.utils;
-// import helper.OSHelper;
 
 public class HTMLResult
 {
     private FileWriter m_aOut;
-    // private String m_sFilename;
-    // private String m_sNamePrefix;              // the HTML files used a suffix to build it's right name
 
     /**
      * ls is the current line separator (carridge return)
@@ -37,7 +33,6 @@ public class HTMLResult
     public HTMLResult( String _sOutputPath, String _sHTMLFilename )
         {
             FileHelper.makeDirectories("", _sOutputPath);
-            // HTMLResult a = new HTMLResult();
             String sFilename = FileHelper.appendPath(_sOutputPath, _sHTMLFilename);
 
             try
@@ -50,14 +45,8 @@ public class HTMLResult
             {
                 e.printStackTrace();
                 GlobalLogWriter.println("ERROR: Can't create HTML Outputter");
-                // return null;
             }
-            // m_sFilename = sFilename;
-            // a.m_sNamePrefix = _sNamePrefix;
-            // return a;
         }
-
-    // public String getFilename() {return m_sFilename;}
 
     private void writeln(String _sStr)
     {

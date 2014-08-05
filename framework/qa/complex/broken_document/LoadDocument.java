@@ -18,7 +18,6 @@
 package complex.broken_document;
 
 import com.sun.star.beans.PropertyValue;
-// import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -38,16 +37,6 @@ import static org.junit.Assert.*;
  */
 public class LoadDocument {
 
-    /** defect file to load **/
-    // private final String mFileName = "dbf.dbf.emf";
-
-    /**
-     * Get all test methods.
-     * @return The test methods.
-     */
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkHeadlessState"};
-//    }
 
     /**
      * Start Office with "--headless" parameter, then
@@ -70,8 +59,6 @@ public class LoadDocument {
         System.out.println("xDektopLoader is null: " + (xDesktopLoader == null));
         PropertyValue[] val = new PropertyValue[0];
 
-        // String workingDir = (String)param.get("WorkingDir") + System.getProperty("file.separator") + mFileName;
-        // System.out.println("Working dir: " + workingDir);
         String fileUrl = complex.broken_document.TestDocument.getUrl("dbf.dbf.emf");
         System.out.println("File Url: " + fileUrl);
 

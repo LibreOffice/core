@@ -74,10 +74,6 @@ public class OfficeStyle extends Section
         setAttribute(OfficeNamespaces.STYLE_NS, "family", family);
     }
 
-//  public String getMasterPageName()
-//  {
-//    return (String) getAttribute(OfficeNamespaces.STYLE_NS, "master-page-name");
-//  }
     public Element getParagraphProperties()
     {
         return findFirstChild(OfficeNamespaces.STYLE_NS, "paragraph-properties");

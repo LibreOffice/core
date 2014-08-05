@@ -32,7 +32,6 @@ class CanvasShape
     public final Color maSelectionColor = Color.green;
     public final Color maFocusColor = Color.blue;
 
-    //    public AccessibleObject (XAccessibleContext xContext, TreePath aPath)
     public CanvasShape (AccTreeNode aNode)
     {
         maNode = aNode;

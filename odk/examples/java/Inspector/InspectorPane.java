@@ -613,14 +613,11 @@ import com.sun.star.uno.XComponentContext;
         public void showPopUpMenu(Object _invoker, int x, int y) throws ClassCastException{
             XUnoNode oUnoNode = getSelectedNode();
             boolean bdoEnableInvoke = oUnoNode instanceof XUnoMethodNode;
-//            boolean bdoEnableSourceCodeGeneration = true;
             if (bdoEnableInvoke){
                 XUnoMethodNode oUnoMethodNode = (XUnoMethodNode) oUnoNode;
                 bdoEnableInvoke = oUnoMethodNode.isInvokable();
-//                bdoEnableSourceCodeGeneration = bdoEnableInvoke;
             }
             m_xDialogProvider.enablePopupMenuItem(XDialogProvider.SINVOKE, bdoEnableInvoke);
-//            m_xDialogProvider.enablePopupMenuItem(XDialogProvider.SADDTOSOURCECODE, bdoEnableSourceCodeGeneration);
             m_xDialogProvider.showPopUpMenu(_invoker, x, y);
         }
 }

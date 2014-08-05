@@ -25,7 +25,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 
-//import java.io.PrintWriter;
 public class LogStream extends PrintStream
 {
     static final private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z: ");

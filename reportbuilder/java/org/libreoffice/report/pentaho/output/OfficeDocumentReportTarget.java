@@ -724,11 +724,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             LOGGER.error("ReportProcessing failed", ioe);
             throw new ReportProcessingException("Failed to write content", ioe);
         }
-//    finally
-//    {
-//      LOGGER.debug ("Started " + getNamespaceFromAttribute(attrs) + ":" +
-//                 getElemenTypeFromAttribute(attrs) + " -> " + getCurrentState());
-//    }
     }
 
     protected GroupContext getGroupContext()
@@ -929,7 +924,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             throws DataSourceException, ReportProcessingException
     {
         final AttributeMap attrs = new LazyAttributeMap(roAttrs);
-        // final int oldState = getCurrentState();
         try
         {
 
@@ -1153,8 +1147,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     new MemoryByteArrayOutputStream(INITIAL_BUFFER_SIZE, 256 * INITIAL_BUFFER_SIZE);
             final DeflaterOutputStream deflateOut = new DeflaterOutputStream(out);
             final OutputStreamWriter xmlBuffer = new OutputStreamWriter(deflateOut, "UTF-16");
-            //    final StringWriter xmlBuffer = new StringWriter
-            //        (OfficeDocumentReportTarget.INITIAL_BUFFER_SIZE);
             final XmlWriter contentXmlWriter = new XmlWriter(xmlBuffer, createTagDescription());
             contentXmlWriter.copyNamespaces(currentWriter);
             if (indent)

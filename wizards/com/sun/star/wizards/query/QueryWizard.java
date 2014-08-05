@@ -209,7 +209,6 @@ public class QueryWizard extends DatabaseObjectWizard
                 i = insertRoadmapItem(i, false, SOGROUPSELECTION_PAGE - 1, SOGROUPSELECTION_PAGE);
                 i = insertRoadmapItem(i, false, SOGROUPFILTER_PAGE - 1, SOGROUPFILTER_PAGE);
             }
-            //      if (CurDBMetaData.xDBMetaData.supportsColumnAliasing()) don't use -> too dangerous!!!
             i = insertRoadmapItem(i, false, SOTITLES_PAGE - 1, SOTITLES_PAGE);
             i = insertRoadmapItem(i, false, SOSUMMARY_PAGE - 1, SOSUMMARY_PAGE);
             setRoadmapInteractive(true);

@@ -170,7 +170,6 @@ public class TitlesComponent extends ControlScroller
         initializeScrollFields();
         super.initialize(fieldnames.length);
         adjustPosSizes();
-//      setComponentMouseTransparent();
     }
 
     private void setFieldTitles()

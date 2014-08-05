@@ -83,15 +83,6 @@ public class QueryMetaData extends CommandMetaData
     {
         return this.GroupByFilterConditions;
     }
-//	public void addFieldColumn(String _FieldName, String _sCommandName){
-//		FieldColumn oFieldColumn = getFieldColumn(_FieldName, _sCommandName);
-//		if (oFieldColumn == null){
-//			FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length + 1];
-//			System.arraycopy(FieldColumns, 0, LocFieldColumns, 0, FieldColumns.length);
-//			LocFieldColumns[FieldColumns.length] = new FieldColumn(this, _FieldName, _sCommandName);
-//			FieldColumns = LocFieldColumns;
-//		}
-//    }
 
     public void addSeveralFieldColumns(String[] _FieldNames, String _sCommandName)
     {
@@ -164,9 +155,7 @@ public class QueryMetaData extends CommandMetaData
 
     public String[] getIncludedCommandNames()
     {
-        // FieldColumn CurQueryField;
         ArrayList<String> CommandNamesV = new ArrayList<String>(1);
-        // String CurCommandName;
         for (int i = 0; i < FieldColumns.length; i++)
         {
             final FieldColumn CurQueryField = FieldColumns[i];
@@ -215,7 +204,6 @@ public class QueryMetaData extends CommandMetaData
     {
         try
         {
-            // this.getIncludedCommandNames(); // fills the var CommandNamesV indirectly :-(
             if (FieldTitleSet == null)
             {
                 FieldTitleSet = new HashMap<String, String>();

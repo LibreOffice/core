@@ -250,8 +250,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
             xSSFRoadmap = UnoRuntime.queryInterface(XSingleServiceFactory.class, oRoadmap);
             xIndexContRoadmap = UnoRuntime.queryInterface(XIndexContainer.class, oRoadmap);
-            //    XPropertySet xPropRoadmapModel = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRoadmap);
-            //    xPropRoadmapModel.addPropertyChangeListener("CurrentItemID", new WizardDialog.RoadmapItemListener(this.xDialogModel));
 
             MethodInvocation mi = new MethodInvocation("itemStateChanged", this, com.sun.star.awt.ItemEvent.class);
             getGuiEventListener().add("rdmNavi", EventNames.EVENT_ITEM_CHANGED, mi);
@@ -259,8 +257,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             xRoadmapBroadcaster = UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
             xRoadmapBroadcaster.addItemListener((XItemListener) getGuiEventListener());
 
-            //     xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
-            //     xRoadmapBroadcaster.addItemListener(new RoadmapItemListener());
             Helper.setUnoPropertyValue(oRoadmap, "Text", oWizardResource.getResText(UIConsts.RID_COMMON + 16));
         }
         catch (NoSuchMethodException ex)

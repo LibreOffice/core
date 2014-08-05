@@ -20,9 +20,6 @@ package ifc.qadevooo;
 
 import lib.MultiMethodTest;
 
-// import com.sun.star.uno.UnoRuntime;
-// import com.sun.star.uno.XInterface;
-
 /**
 * Testing <code>ifc.qadevooo._SelfTest</code>
 * interface methods:

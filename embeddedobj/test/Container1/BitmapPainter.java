@@ -61,9 +61,6 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
 
     private PaintThread m_aPaintThread;
 
-    // private XJob m_xMainThreadExecutor;
-    // private NamedValue[] m_pValuesForExecutor;
-
     private boolean m_bFree = true;
 
     private boolean m_bProceedWithPainting = true;
@@ -83,10 +80,6 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
             System.out.println( "No window is provided to BimapPainter on init!" );
             throw new com.sun.star.uno.RuntimeException();
         }
-
-        // m_xMainThreadExecutor = xJob;
-        // m_pValuesForExecutor = new NamedValue[1];
-        // m_pValuesForExecutor[0] = new NamedValue( "JobToExecute", (Object)this );
 
         m_xWindow = xWindow;
         m_xBitmap = xBitmap;
@@ -171,29 +164,14 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
 
         XBitmap xBitmap = null;
         com.sun.star.awt.Rectangle aRect = null;
-        // boolean bFree = false;
 
         synchronized( m_oImageLock )
         {
             xBitmap = m_xBitmap;
             aRect = m_aDrawRect;
-            // if ( m_bFree )
-            // {
-                // bFree = true;
-                // m_bFree = false;
-            // }
         }
 
         m_aPaintThread.setPaintRequest( xBitmap, aRect, e.UpdateRect );
-        // if ( bFree )
-        // {
-            // try {
-                // m_xMainThreadExecutor.execute( m_pValuesForExecutor );
-            // } catch( Exception ex )
-            // {
-                // m_bFree = true;
-            // }
-        // }
 
         System.out.println( "VCL window paint event!" );
     }

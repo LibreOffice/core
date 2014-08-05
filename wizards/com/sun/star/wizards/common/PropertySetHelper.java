@@ -24,7 +24,6 @@ import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.lang.XServiceInfo;
 
-// import com.sun.star.container.XNameAccess;
 import java.util.HashMap;
 
 public class PropertySetHelper
@@ -101,7 +100,6 @@ public class PropertySetHelper
         }
         else
         {
-            // DebugHelper.writeInfo("PropertySetHelper.setProperty() can't get XPropertySet");
             getHashMap().put(_sName, _aValue);
         }
     }

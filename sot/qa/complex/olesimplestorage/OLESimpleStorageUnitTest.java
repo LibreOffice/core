@@ -36,15 +36,6 @@ public class OLESimpleStorageUnitTest /* extends ComplexTestCase */
 {
     private XMultiServiceFactory m_xMSF = null;
 
-//    public String[] getTestMethodNames() {
-//        return new String[] {
-//            "ExecuteTest01"};
-//    }
-
-//    public String getTestObjectName() {
-//        return "OLESimpleStorageUnitTest";
-//    }
-
     @Before public void before () {
         System.out.println("before()");
         try {
@@ -85,13 +76,6 @@ public class OLESimpleStorageUnitTest /* extends ComplexTestCase */
     @AfterClass public static void tearDownConnection()
         throws InterruptedException, com.sun.star.uno.Exception
     {
-//        try
-//        {
-//            Thread.sleep(5000);
-//        }
-//        catch (java.lang.InterruptedException e)
-//        {
-//        }
         System.out.println("tearDownConnection()");
         connection.tearDown();
     }

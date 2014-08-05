@@ -863,8 +863,6 @@ public class ConfigExamples
         String sSampleDataSourceName = "SampleTextDatabase";
 
         String sSampleDataSourceURL = "sdbc:flat:$(userurl)/database/SampleTextDatabase";
-        // String sSampleDataSourceURL = "sdbc:flat:file:///usr/local/database/SampleTextDatabase";
-        // String sSampleDataSourceURL = "sdbc:flat:file:///C:/data/database/SampleTextDatabase";
 
         com.sun.star.beans.NamedValue [] aSettings = new com.sun.star.beans.NamedValue [2];
         aSettings[0] = new com.sun.star.beans.NamedValue("HeaderLine",new Boolean(true));

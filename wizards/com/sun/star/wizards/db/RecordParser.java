@@ -199,7 +199,6 @@ public class RecordParser extends QueryMetaData
         }
 
         // Is the index OK; increment?
-        //  String sValue =  xResultSetRow.getString(ColIndex);
         return oAny;
     }
 

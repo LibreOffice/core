@@ -114,7 +114,6 @@ public class _XFramesSupplier extends MultiMethodTest {
         frames = oObj.getFrames() ;
         if (frames != null) {
             cnt = frames.getCount() ;
-//            if (cnt == 0) result = false ;
             log.println("There are " + cnt + " frames.") ;
         } else {
             log.println("getFrames() returned null !!!") ;

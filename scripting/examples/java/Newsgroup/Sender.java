@@ -91,7 +91,6 @@ public class Sender
             File attachs[] = attachments.getAttachments();
             for(int i=0; i < attachs.length; i++ )
             {
-                //System.out.println( "Adding file: " + attachs[i].getName() );
                 messageBodyPart = new MimeBodyPart();
                 DataSource filesource = new FileDataSource( attachs[i] );
                 messageBodyPart.setDataHandler( new DataHandler( filesource ));

@@ -255,10 +255,6 @@ public class SwXTextView extends TestCase {
                     log.println("ERROR: could not get 'Standard' from drawpage!");
             if (debug){
                 log.println("the draw page contains following elements:");
-//                String[] elements = FormTools.getForms(WriterTools.getDrawPage(xTextDoc)).getElementNames();
-//                for (int i = 0; i< elements.length; i++){
-//                    log.println("Element[" + i + "] :" + elements[i]);
-//                }
             }
             }
             else

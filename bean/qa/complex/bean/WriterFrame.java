@@ -18,7 +18,6 @@
 package complex.bean;
 
 
-// import com.sun.star.comp.beans.LocalOfficeConnection;
 import com.sun.star.uno.XComponentContext;
 import java.awt.Rectangle;
 import java.awt.Insets;

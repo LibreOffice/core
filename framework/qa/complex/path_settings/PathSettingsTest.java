@@ -91,17 +91,6 @@ public class PathSettingsTest
     ArrayList<Property> aListOfWorkingProperty;
 
     /**
-     * A function to tell the framework, which test functions are available.
-     * Right now, it's only 'checkComplexTemplateState'.
-     * @return All test methods.
-     */
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkXFastPropertySet",
-//                            "checkXMultiPropertySet",
-//                            "checkXPropertySet"
-//                        };
-//    }
-    /**
      * Initialize before the tests start: this has to be done only once.
      * This methods sets the 'aPathSettings' and 'xPropertyInfoOfPathSettings' variables.
      */
@@ -112,8 +101,6 @@ public class PathSettingsTest
         {
             aPathSettings = thePathSettings.get(connection.getComponentContext());
             assertNotNull("Can't instantiate com.sun.star.util.thePathSettings.", aPathSettings);
-//            System.out.println("Implementation: " + util.utils.getImplName(aPathSettings));
-//            System.out.println("Service:        ");
             util.dbg.getSuppServices(aPathSettings);
             final XPropertySet xPropSet_of_PathSettings = UnoRuntime.queryInterface(XPropertySet.class, aPathSettings);
 
@@ -127,7 +114,6 @@ public class PathSettingsTest
             for (int i = 0; i < xPropertyInfoOfPathSettings.length; i++)
             {
                 final String sName = xPropertyInfoOfPathSettings[i].Name;
-                // System.out.println(sName);
                 aPathSettingNames[i] = sName;
                 Object o = xPropSet_of_PathSettings.getPropertyValue(sName);
 
@@ -251,29 +237,18 @@ public class PathSettingsTest
         System.out.println("\n---- All properties ----");
         final XPropertySet xPropSet_of_PathSettings = UnoRuntime.queryInterface(XPropertySet.class, aPathSettings);
 
-//        for (int i = 0; i < xPropertyInfoOfPathSettings.length; i++)
         for (int i = 0; i < aListOfWorkingProperty.size(); i++)
         {
             final String sName = aListOfWorkingProperty.get(i).Name;
-            // aPathSettingWorkingNames[i] = sName;
-//            System.out.print("PathSettings: Name:=");
             System.out.print(sName);
             Object o = xPropSet_of_PathSettings.getPropertyValue(sName);
 
-            // System.out.println("#### Object: '" + o.getClass().getName() + "'  -  '" + o.toString() + "'");
             try
             {
                 final String sValue = AnyConverter.toString(o);
-                // aPathSettingValues[i] = sValue;
-                // System.out.println("#### String " + sValue);
-                // System.out.println("Property Name: " + sName);
-                // System.out.println("Property Value: " + sValue);
-//                System.out.print(" ==> ");
-//                System.out.print(sValue);
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-//                System.out.print(" FAILED ");
             }
             System.out.println();
         }
@@ -653,221 +628,10 @@ public class PathSettingsTest
     }
 
 
-    /**
-     * This tests the XMultiPropertySet interface implementation.
-     */
-
-    // The test checkXMultiPropertySet() has been marked as outdated!
-
-//    @Test
-//    public void checkXMultiPropertySet()
-//    {
-//        System.out.println("---- Testing the XMultiPropertySet interface ----");
-//        XMultiPropertySet xMPS = UnoRuntime.queryInterface(XMultiPropertySet.class, aPathSettings);
-//
-//        // xPropertyInfoOfPathSettings.length
-//        String[] propertiesToTest = new String[1];
-//        propertiesToTest[0] = availablePropNames[0];
-//
-//        String[] correctVals = new String[propertiesToTest.length];
-//        String[] incorrectVals = new String[propertiesToTest.length];
-//
-//        String[] aPathSettingWorkingNames = null;
-//        aPathSettingWorkingNames = new String[propertiesToTest.length];
-//
-//        // get intitial values and create new ones
-//        for (int i = 0; i < propertiesToTest.length; i++)
-//        {
-//            // Property aProp = aListOfWorkingProperty.get(i);
-//            final String sName = propertiesToTest[i];
-//            final String sValue = getPropertyValueAsString(sName);
-//            aPathSettingWorkingNames[i] = sName;
-//            correctVals[i] = changeToCorrectValue(sValue);
-//            incorrectVals[i] = changeToIncorrectValue(sValue);
-//        }
-//
-//        try
-//        {
-//            // add a change listener
-//            MyChangeListener mListener = new MyChangeListener();
-//            xMPS.addPropertiesChangeListener(aPathSettingWorkingNames, mListener);
-//
-//            // first change xPropertyInfoOfPathSettings to correct values
-//            System.out.println("Change to correct values.");
-//            xMPS.setPropertyValues(aPathSettingWorkingNames, correctVals);
-//            assertTrue("Could not change to correct values with XMultiPropertySet.",
-//                    verifyPropertySet(xMPS, aPathSettingWorkingNames, correctVals) > 0);
-//
-//            // second, change to incorrect values: expect an exception
-//            System.out.println("Try to change to incorrect values.");
-//            try
-//            {
-//                xMPS.setPropertyValues(aPathSettingWorkingNames, incorrectVals);
-//            }
-//            catch (com.sun.star.lang.IllegalArgumentException r)
-//            {
-//                System.out.println("Correctly thrown Exception caught.");
-//            }
-//            assertTrue("Did change to incorrect values with XMultiPropertySet,"
-//                    + " but should not have.",
-//                    verifyPropertySet(xMPS, aPathSettingWorkingNames, correctVals) > 0);
-//
-//            // third, change back to initial values
-//            System.out.println("Change back to initial values.");
-//            xMPS.setPropertyValues(aPathSettingWorkingNames, aPathSettingValues);
-//            assertTrue("Could not change back to initial values with"
-//                    + " XMultiPropertySet.",
-//                    verifyPropertySet(xMPS, aPathSettingWorkingNames, aPathSettingValues) > 0);
-//
-//            // fire the event for the listener
-//            System.out.println("Fire event.");
-//            xMPS.firePropertiesChangeEvent(aPathSettingWorkingNames, mListener);
-//            assertTrue("Event was not fired on XMultiPropertySet.",
-//                    mListener.changePropertiesEventFired());
-//        }
-//        catch (com.sun.star.uno.Exception e)
-//        {
-////            e.printStackTrace();
-//            System.out.println(e.getClass().getName());
-//            System.out.println("Message: " + e.getMessage());
-//            fail("Unexpected exception on XMultiPropertySet.");
-//        }
-//
-//        // test finished
-//        System.out.println("---- Test of XMultiPropertySet finished ----\n");
-//    }
-
-    /**
-     * Verify if the values of xPropSet_of_PathSettings are the same as vals.
-     * @param xPropSet_of_PathSettings A XMultiPropertySet.
-     * @param aPathSettingWorkingNames An array with property names.
-     * @param vals An array with values of the properties
-     * @return -1 if none are equal, 1 if all are equal, 0 if some were equal
-     * and some not.
-     * @throws com.sun.star.lang.IllegalArgumentException
-     */
-//    private int verifyPropertySet(XMultiPropertySet xProp,
-//            String[] propNames, String[] vals)
-//    {
-//        int ret = 0;
-//        if (vals.length != propNames.length)
-//        {
-//            System.out.println("Length of array parameters must be equal.");
-//            return ret;
-//        }
-//        for (int i = 0; i < vals.length; i++)
-//        {
-//            Object[] objs = xProp.getPropertyValues(new String[]
-//                    {
-//                        propNames[i]
-//                    });
-//            String retVal = (String) objs[0];
-//            boolean nCheck = retVal.equals(vals[i]);
-//            if (!nCheck)
-//            {
-//                System.out.println("Property '" + propNames[i]
-//                        + "' was supposed to have value:");
-//                System.out.println(vals[i]);
-//                System.out.println("but has value:");
-//                System.out.println(retVal);
-//            }
-//            // initialize
-//            if (i == 0)
-//            {
-//                ret = nCheck ? 1 : -1;
-//                continue;
-//            }
-//            // return 0 if equal state changes compared to initial value
-//            if ((nCheck && ret < 0) || (!nCheck && ret > 0))
-//            {
-//                ret = 0;
-//            }
-//        }
-//        return ret;
-//    }
-
     // ____________________
     /**
      * This tests the XPropertySet interface implementation.
      */
-
-// The test checkXPropertySet() has been marked as outdated!
-
-
-//    @Test
-//    public void checkXPropertySet()
-//    {
-//        System.out.println("---- Testing the XPropertySet interface ----");
-//
-//        XPropertySet xPS = UnoRuntime.queryInterface(XPropertySet.class, aPathSettings);
-//
-//        MyChangeListener mListener1 = new MyChangeListener();
-//        MyChangeListener mListener2 = new MyChangeListener();
-//
-//        for (int i = 0; i < xPropertyInfoOfPathSettings.length; i++)
-//        {
-//            // adding listeners
-//            String name = aPathSettingNames[i];
-//            System.out.println("Testing property '" + name + "'");
-//            try
-//            {
-//                System.out.println("Add 2 Listeners.");
-//                xPS.addPropertyChangeListener(name, mListener1);
-//                xPS.addVetoableChangeListener(name, mListener1);
-//                xPS.addPropertyChangeListener(name, mListener2);
-//                xPS.addVetoableChangeListener(name, mListener2);
-//
-//                // change the property
-//                System.out.println("Change value.");
-//                String changeVal = changeToCorrectValue(aPathSettingValues[i]);
-//                xPS.setPropertyValue(name, changeVal);
-//                String newVal = (String) xPS.getPropertyValue(name);
-//
-//                assertTrue("Value did not change on property " + name + ".",
-//                        newVal.equals(changeVal));
-//
-//                assertTrue("Listener 1 was not called.", checkListener(mListener1));
-//                assertTrue("Listener 2 was not called.", checkListener(mListener2));
-//
-//                mListener1.resetListener();
-//                mListener2.resetListener();
-//
-//                System.out.println("Remove Listener 1.");
-//
-//                xPS.removePropertyChangeListener(name, mListener1);
-//                xPS.removeVetoableChangeListener(name, mListener1);
-//
-//                // change the property
-//                System.out.println("Change value back.");
-//                xPS.setPropertyValue(name, aPathSettingValues[i]);
-//                newVal = (String) xPS.getPropertyValue(name);
-//                assertTrue("Value did not change on property " + name,
-//                        newVal.equals(aPathSettingValues[i]));
-//
-//                assertTrue("Listener was called, although it was removed on"
-//                        + " property " + name + ".", !checkListener(mListener1));
-//                assertTrue("Listener 2 was not called on property " + name + ".",
-//                        checkListener(mListener2));
-//            }
-//            catch (com.sun.star.uno.Exception e)
-//            {
-//                System.out.println(e.getClass().getName());
-//                System.out.println("Message: " + e.getMessage());
-//                fail("Unexpcted exception on property " + name);
-//            }
-//            System.out.println("Finish testing property '" + aPathSettingNames[i] + "'\n");
-//        }
-//        System.out.println("---- Test of XPropertySet finished ----\n");
-//
-//    }
-
-//    private boolean checkListener(MyChangeListener ml)
-//    {
-//        return ml.changePropertyEventFired()
-//                || ml.changePropertiesEventFired()
-//                || ml.vetoableChangeEventFired();
-//    }
-
 
     /**
      * Change the given String to a correct path URL.

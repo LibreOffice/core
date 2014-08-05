@@ -423,7 +423,6 @@ public class SwingDialogProvider implements XDialogProvider{
         else{
             m_jInspectorDialog.pack();
         }
-//            m_jInspectorDialog.paint(m_jInspectorDialog.getGraphics());
         m_jInspectorDialog.setVisible(true);
     }
 

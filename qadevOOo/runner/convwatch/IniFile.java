@@ -54,8 +54,6 @@ class IniFile
             if (! aFile.exists())
             {
                 GlobalLogWriter.get().println("couldn't find file " + m_sFilename);
-                // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
-                // m_bListContainUnsavedChanges = false;
                 return aLines;
             }
             RandomAccessFile aReader = null;
@@ -76,13 +74,11 @@ class IniFile
             {
                 GlobalLogWriter.get().println("couldn't open file " + m_sFilename);
                 GlobalLogWriter.get().println("Message: " + fne.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
             }
             catch (java.io.IOException ie)
             {
                 GlobalLogWriter.get().println("Exception occurs while reading from file " + m_sFilename);
                 GlobalLogWriter.get().println("Message: " + ie.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, ie.getMessage());
             }
             try
             {
@@ -92,7 +88,6 @@ class IniFile
             {
                 GlobalLogWriter.get().println("Couldn't close file " + m_sFilename);
                 GlobalLogWriter.get().println("Message: " + ie.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, ie.getMessage());
             }
             return aLines;
         }
@@ -287,20 +282,13 @@ class IniFile
             File aFile = new File(m_sFilename);
             if (aFile.exists())
             {
-                // System.out.println("couldn't find file " + m_sFilename);
                 aFile.delete();
                 if (aFile.exists())
                 {
                     GlobalLogWriter.get().println("Couldn't delete the file " + m_sFilename);
                     return;
-                    // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, "Couldn't delete the file " + m_sFilename);
                 }
             }
-            // if (! aFile.canWrite())
-            // {
-            //    System.out.println("Couldn't write to file " + m_sFilename);
-            //    DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, "");
-            // }
             try
             {
                 RandomAccessFile aWriter = new RandomAccessFile(aFile, "rw");
@@ -317,13 +305,11 @@ class IniFile
             {
                 GlobalLogWriter.get().println("couldn't open file for writing " + m_sFilename);
                 GlobalLogWriter.get().println("Message: " + fne.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
             }
             catch(java.io.IOException ie)
             {
                 GlobalLogWriter.get().println("Exception occurs while writing to file " + m_sFilename);
                 GlobalLogWriter.get().println("Message: " + ie.getMessage());
-                // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, ie.getMessage());
             }
         }
 
@@ -369,75 +355,4 @@ class IniFile
             }
         }
 
-    // String replaceEvaluatedValue(String _sSection, String _sValue)
-    //     {
-    //         String sValue = _sValue;
-    //         int nIndex = 0;
-    //         while (( nIndex = sValue.indexOf("$(", nIndex)) >= 0)
-    //         {
-    //             int nNextIndex = sValue.indexOf(")", nIndex);
-    //             if (nNextIndex >= 0)
-    //             {
-    //                 String sKey = sValue.substring(nIndex + 2, nNextIndex);
-    //                 String sNewValue = getValue(_sSection, sKey);
-    //                 if (sNewValue != null && sNewValue.length() > 0)
-    //                 {
-    //                     String sRegexpKey = "\\$\\(" + sKey + "\\)";
-    //                     sValue = sValue.replaceAll(sRegexpKey, sNewValue);
-    //                 }
-    //                 nIndex = nNextIndex;
-    //             }
-    //             else
-    //             {
-    //                 nIndex += 2;
-    //             }
-    //         }
-    //         return sValue;
-    //     }
-
-
-    // public String getLocalEvaluatedValue(String _sSection, String _sKey)
-    //     {
-    //         String sValue = getValue(_sSection, _sKey);
-    //         sValue = replaceEvaluatedValue(_sSection, sValue);
-    //         return sValue;
-    //     }
-
-
-
-    // this is a special behaviour.
-    // public String getGlobalLocalEvaluatedValue(String _sSection, String _sKey)
-    //     {
-    //         String sGlobalValue = getKey("global", _sKey);
-    //         String sLocalValue = getKey(_sSection, _sKey);
-    //         if (sLocalValue.length() == 0)
-    //         {
-    //             sGlobalValue = replaceEvaluatedKey(_sSection, sGlobalValue);
-    //             sGlobalValue = replaceEvaluatedKey("global", sGlobalValue);
-    //             return sGlobalValue;
-    //         }
-    //         sLocalValue = replaceEvaluatedKey(_sSection, sLocalValue);
-    //         sLocalValue = replaceEvaluatedKey("global", sLocalValue);
-
-    //         return sLocalValue;
-    //     }
-
-
-    /**
-     * some tests for this class
-     */
-//    public static void main(String[] args)
-//        {
-//            IniFile aIniFile = new IniFile("/tmp/inifile");
-//            String sValue = aIniFile.getValue("Section","Key");
-//            // insert a new value to a already exist section
-//            aIniFile.insertValue("Section","Key2","a new value in a existing section");
-//            // replace a value
-//            aIniFile.insertValue("Section","Key","replaced value");
-//            // create a new value
-//            aIniFile.insertValue("New Section", "Key", "a new key value pair");
-
-//            String sValue2 = aIniFile.getValue("Section2","Key");
-//            aIniFile.store();
-//        }
 }

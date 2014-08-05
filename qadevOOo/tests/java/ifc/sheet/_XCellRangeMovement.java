@@ -120,7 +120,6 @@ public class _XCellRangeMovement extends MultiMethodTest {
 
             // catch some sleight of hand threads
             if (oSheet.getCellByPosition(1,21).getValue() == 200){
-                //log.println("Rows closed.");
             }
             else{
                 log.println("Cells were already inserted. "+

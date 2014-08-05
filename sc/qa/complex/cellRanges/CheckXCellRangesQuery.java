@@ -19,23 +19,17 @@
 package complex.cellRanges;
 
 import com.sun.star.container.XIndexAccess;
-// import complexlib.ComplexTestCase;
 import com.sun.star.lang.XMultiServiceFactory;
-// import com.sun.star.sheet.CellFlags;
 import com.sun.star.sheet.XCellRangesQuery;
 import com.sun.star.sheet.XSheetCellRanges;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.table.CellAddress;
-// import com.sun.star.table.XColumnRowRange;
-// import com.sun.star.table.XTableColumns;
-// import com.sun.star.table.XTableRows;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-// import java.io.PrintWriter;
 import com.sun.star.util.XCloseable;
 import util.SOfficeFactory;
 
@@ -60,20 +54,11 @@ public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
     String sSheetName = "";
 
     /**
-     * Get all test methods.
-     * @return The test methods.
-     */
-//     public String[] getTestMethodNames() {
-//         return new String[] {"checkEmptyCell", "checkFilledCell"};
-//     }
-
-    /**
     * Creates Spreadsheet document and the test object,
     * before the actual test starts.
     */
     @Before public void before() {
         // create a calc document
-        // SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)param.getMSF() );
         final XMultiServiceFactory xMsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
         SOfficeFactory SOF = SOfficeFactory.getFactory(xMsf);
 
@@ -120,9 +105,6 @@ public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
             m_xSpreadSheet.getCellByPosition(1, 1).setValue(15);
             m_xSpreadSheet.getCellByPosition(1, 3).setValue(5);
             m_xSpreadSheet.getCellByPosition(2, 1).setFormula("=B2+B4");
-/*            m_xSpreadSheet.getCellByPosition(2, 1).setFormula("=B2+B3");
-            m_xSpreadSheet.getCellByPosition(3, 2).setFormula("");
-            m_xSpreadSheet.getCellByPosition(3, 3).setFormula("");            */
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace();
             fail("Could not fill cell (1, 1) with a value.");
@@ -177,8 +159,6 @@ public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
         assertTrue("\tQuery column differences did not return the correct value.", _queryColumnDifferences(sSheetName+".C4"));
         // compare an empty cell with a cell with a value
         assertTrue("\tQuery column differences did not return the correct value.", _queryRowDifferences(sSheetName+".C4"));
-        // try to get this cell
-//         assertTrue("\tQuery empty cells did not return the correct value.", _queryEmptyCells("Sheet1.C4"));
         System.out.println("...done");
     }
 

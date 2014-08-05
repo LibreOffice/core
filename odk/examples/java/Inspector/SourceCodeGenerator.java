@@ -768,7 +768,6 @@ class UnoObjectDefinition{
                     }
                     else{
                         bleaveloop = true;
-        //                throw new NullPointerException("SourceCode Variable " + _sStemVariableName + " not defined");
                     }
                 }
             }
@@ -965,7 +964,6 @@ class UnoObjectDefinition{
                     bIsPropertyUnoObjectDefined = true;
                 }
                 sReturn += _sReturnVariableName + " = (" + sShortTypeName + ") AnyConverter.toObject(" + sShortTypeName + ".class, oUnoObject);";
-//                this.bAddTypeImport = true;
                 break;
         }
         if (!bAddAnyConverter){
@@ -1008,7 +1006,6 @@ class UnoObjectDefinition{
             sReturn += ";";
             sReturn = "\t" + sReturn;
             return sReturn;
-//           return "\t" + _sReturnVariableName + " =  " + _sIncomingObjectName + ".getPropertyValue(\"" + _sPropertyName + "\");";
         }
 
 
@@ -1461,7 +1458,7 @@ class UnoObjectDefinition{
 
 
         private String getHeaderOfClass(String _sClassName){
-            return "#include \"" + _sClassName.replace('.', '/') + ".hpp\"\n";     // #include <com/sun/star/uno/XComponentContext.hpp>
+            return "#include \"" + _sClassName.replace('.', '/') + ".hpp\"\n";
         }
 
 
@@ -1682,7 +1679,6 @@ class UnoObjectDefinition{
         public String getVariableDeclaration(String _sTypeString, String _sVariableName, boolean bIsArray, TypeClass _aTypeClass, boolean _bInitialize){
             boolean bIsPrimitive = Introspector.isPrimitive(_aTypeClass);
 
-            // uno::Reference< frame::XDispatch >    m_xDispatch
             String sReturn = "";
             if (bIsArray){
                 bIncludeSequenceHeader = true;

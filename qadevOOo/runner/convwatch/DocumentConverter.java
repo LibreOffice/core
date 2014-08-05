@@ -69,12 +69,10 @@ public class DocumentConverter extends EnhancedComplexTestCase
 
     public void before()
         {
-            // System.out.println("before()");
         }
 
     public void after()
         {
-            // System.out.println("after()");
         }
 
     // The test method itself.
@@ -112,7 +110,6 @@ public class DocumentConverter extends EnhancedComplexTestCase
 
             if (bQuit == true)
             {
-                // log.println("must quit.");
                 assure("Must quit, Parameter problems.", false);
             }
 
@@ -194,8 +191,6 @@ public class DocumentConverter extends EnhancedComplexTestCase
             // first do a check if the reference not already exist, this is a big speedup, due to the fact,
             // we don't need to start a new office.
             GraphicalTestArguments aGTA_local = getGraphicalTestArguments();
-            // if (GraphicalDifferenceCheck.isReferenceExists(_sInputFile, _sReferencePath, aGTA_local) == false)
-            // {
             // start a fresh Office
             OfficeProvider aProvider = null;
             if (aGTA_local.restartOffice())
@@ -254,7 +249,6 @@ public class DocumentConverter extends EnhancedComplexTestCase
                 // Office shutdown
                 aProvider.closeExistingOffice(param, true);
             }
-            // }
         }
 }
 

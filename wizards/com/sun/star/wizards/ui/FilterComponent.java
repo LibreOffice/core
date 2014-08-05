@@ -17,7 +17,6 @@
  */
 package com.sun.star.wizards.ui;
 
-// import java.util.Vector;
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControl;
@@ -200,7 +199,6 @@ public class FilterComponent
      */
     private void togglefollowingControlRow(String _scurName)
     {
-        // String sNameSuffix = sIncSuffix + "_" + _scurName.substring(_scurName.length() - 1, _scurName.length());
         int Index = Integer.valueOf(getIndexNumber(_scurName)).intValue();
         if (Index < oControlRows.length)
         {
@@ -226,8 +224,6 @@ public class FilterComponent
 
     public PropertyValue[][] getFilterConditions()
     {
-        // ControlRow CurControlRow;
-        // getfilterstate();
         int nFilterCount = getFilterCount();
         if (nFilterCount > 0)
         {

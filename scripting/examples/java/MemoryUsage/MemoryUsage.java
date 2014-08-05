@@ -41,7 +41,6 @@ import com.sun.star.script.provider.XScriptContext;
 
 public class MemoryUsage
 {
-    // public void updateMemoryUsage(XScriptContext ctxt, ActionEvent evt)
     public void updateMemoryUsage(XScriptContext ctxt)
         throws Exception
     {

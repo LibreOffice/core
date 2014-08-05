@@ -23,7 +23,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
-// import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import helper.FileTools;

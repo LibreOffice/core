@@ -85,9 +85,6 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
         // and uncomment the complicated stuff below.
     }
 
-    // public final void addChangeListener(ChangeListener l) {}
-    // public final void removeChangeListener(ChangeListener l) {}
-
     private final Set listeners = new HashSet(1); // Set<ChangeListener>
     public final void addChangeListener(ChangeListener l) {
         synchronized (listeners) {

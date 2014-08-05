@@ -52,28 +52,6 @@ class TextUpdateListener implements TreeModelListener
                     // first child! Then we call updateText
                     updateText( xText, aNode.toString() );
                 }
-                else
-                {
-                    // JDK 1.4:
-                    //                        // check for pattern "Selection:"
-                    //                         Matcher m = Pattern.compile(
-                    //                             "selection: \\[(-?[0-9]+),(-?[0-9]+)\\] \".*" ).
-                    //                             matcher( aNode.toString() );
-                    //                         if( m.matches() )
-                    //                         {
-                    //                             try
-                    //                             {
-                    //                                 // aha! Selection:
-                    //                                 setSelection( xText,
-                    //                                               Integer.parseInt(m.group(1)),
-                    //                                               Integer.parseInt(m.group(2)) );
-                    //                             }
-                    //                             catch( NumberFormatException f )
-                    //                             {
-                    //                                 // ignore
-                    //                             }
-                    //                         }
-                }
             }
         }
         }
@@ -165,22 +143,4 @@ class TextUpdateListener implements TreeModelListener
         }
     }
 
-    //         /** replace the given node with a new xText node */
-    //         void updateNode( XAccessibleText xText,
-    //                          DefaultMutableTreeNode aNode )
-    //         {
-    //             // create a new node
-    //             DefaultMutableTreeNode aNew = newTextTreeNode( xText );
-
-    //             // get parent (must be DefaultMutableTreeNode)
-    //             DefaultMutableTreeNode aParent =
-    //                 (DefaultMutableTreeNode)aNode.getParent();
-    //             if( aParent != null )
-    //             {
-    //                 // remove old sub-tree, and insert new one
-    //                 int nIndex = aParent.getIndex( aNode );
-    //                 aParent.remove( nIndex );
-    //                 aParent.insert( aNew, nIndex );
-    //             }
-    //         }
 }

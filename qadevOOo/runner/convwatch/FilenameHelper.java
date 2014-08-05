@@ -149,9 +149,6 @@ abstract class FilenameHelper_impl implements Filenamer
      * @return a created name
      */
     abstract public String buildName();
-        // {
-        //    return getName();
-        // }
 
     /**
      * @return the complete filename with it's suffix
@@ -378,11 +375,5 @@ public class FilenameHelper
             new OriginalReferenceFilename("/dir1/dir2","/name",".ext");
             new OriginalReferenceFilename("/dir1/dir2","name","ext");
 
-
-            // OriginalReferenceFilename b = new OriginalReferenceFilename("c:/dir1/dir2/name.ext");
-            // OriginalReferenceFilename c = new OriginalReferenceFilename("file:///dir1/dir2/name.ext");
-            // OriginalReferenceFilename e = new OriginalReferenceFilename("c:\\dir1\\dir2\\name");
-            // OriginalReferenceFilename f = new OriginalReferenceFilename("c:\\dir1\\dir2");
-            // OriginalReferenceFilename g = new OriginalReferenceFilename("c:\\dir1\\dir2\\");
         }
 }

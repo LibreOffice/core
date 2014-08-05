@@ -390,10 +390,6 @@ public class ProcessHandler
         int hangcheck = 10;
         while (!this.isFinished() && changedText)
         {
-            // dbg("runCommand: waiting " + mTimeOut / 1000 + " seconds while command execution is ongoing... " + count);
-            // shortWait(mTimeOut);
-            // shortWait(2000); // wait 2 seconds.
-            //waitFor(mTimeOut);
             waitFor(2000, false); // wait but don't kill
 
             if (ow != null)
@@ -513,8 +509,6 @@ public class ProcessHandler
      */
     public static long getSystemTime()
     {
-        // Calendar cal = new GregorianCalendar();
-        // final long nTime = cal.getTimeInMillis();
         final long nTime = System.currentTimeMillis();
         return nTime;
     }
@@ -561,7 +555,6 @@ public class ProcessHandler
                 for (int i = 0; i < cmdLineArray.length; i++)
                 {
                     log.println(cmdLineArray[i]);
-                    // log.print(" ");
                 }
                 showEnvVars();
                 log.println("");
@@ -604,9 +597,6 @@ public class ProcessHandler
         stdout = new Pump(m_aProcess.getInputStream(), log, "out > ", bUseOutput);
         stderr = new Pump(m_aProcess.getErrorStream(), log, "err > ", bUseOutput);
         stdIn = new PrintStream(m_aProcess.getOutputStream());
-
-        // int nExitValue = m_aProcess.exitValue();
-        // int dummy = 0;
 
         dbg("execute: flush io-streams");
 
@@ -828,7 +818,6 @@ public class ProcessHandler
         }
         catch (Exception e)
         {
-            //System.out.println("No ExitValue available");
         }
 
         return exitValue;

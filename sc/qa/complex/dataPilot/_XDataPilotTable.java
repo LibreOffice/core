@@ -22,10 +22,7 @@ import com.sun.star.sheet.XDataPilotTable;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.table.XCell;
-// import lib.Status;
-//import lib.StatusException;
 import lib.TestParameters;
-// import share.LogWriter;
 
 /**
 * Testing <code>com.sun.star.sheet.XDataPilotTable</code>
@@ -60,11 +57,6 @@ public class _XDataPilotTable {
     private TestParameters param = null;
 
     /**
-     * The log writer
-     */
-    // private LogWriter log = null;
-
-    /**
      * Constructor: gets the object to test, a logger and the test parameters
      * @param xObj The test object
 
@@ -73,7 +65,6 @@ public class _XDataPilotTable {
     public _XDataPilotTable(XDataPilotTable xObj/*,
                                     LogWriter log*/, TestParameters param) {
         oObj = xObj;
-        // this.log = log;
         this.param = param;
     }
 

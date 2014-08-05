@@ -52,22 +52,14 @@ class TestWorkAt implements TestIWorkAt {
         if(_sync_thread == null)
             _sync_thread = Thread.currentThread();
 
-//          if(_sync_thread != Thread.currentThread())
-//              _passedAync = false;
-
         if(DEBUG) System.err.println("syncCall:" + _sync_counter + " " + _passedAync + " " + Thread.currentThread());
     }
 
     public synchronized void asyncCall() throws Throwable {
-//          Thread.sleep(50);
-
         ++ _async_counter;
 
         if(_async_thread == null)
             _async_thread = Thread.currentThread();
-
-//          if(_async_thread != Thread.currentThread())
-//              _passedAync = false;
 
         if(DEBUG) System.err.println("asyncCall:" + _async_counter + " " + Thread.currentThread());
     }

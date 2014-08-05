@@ -111,20 +111,15 @@ public void run()
     XInterface oObj = null;
     try
     {
-        /* System.err.println("Name of the AccessibleContext:\n\t"+
-                                        xCon.getAccessibleName()); */
         int count = xCon.getAccessibleChildCount();
-        // System.err.println("Number of children: "+count);
         for (int i=0; i<count; i++) {
             XAccessible xAcc = xCon.getAccessibleChild(i);
             String name =
                     xAcc.getAccessibleContext().getAccessibleName();
-            // System.out.println("Child "+i+": "+ name);
             // check for button
             if ( name.equals( btnName ) && ( UnoRuntime.queryInterface(
                                     XButton.class, xAcc ) != null ) )
             {
-                // System.out.println("Child "+i+": "+ name);
                 oObj = xAcc.getAccessibleContext();
             }
             // check for checkbox

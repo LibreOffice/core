@@ -112,7 +112,6 @@ public class GraphicalTestArguments
             }
             else
             {
-                // log.println("found REFERENCE_TYPE " + sReferenceType );
                 setReferenceType(sReferenceType);
             }
 
@@ -123,7 +122,6 @@ public class GraphicalTestArguments
             }
             else
             {
-                // log.println("found PRINTER_NAME " + sPrinterName );
                 setPrinterName(sPrinterName);
             }
             // DEFAULT_XML_FORMAT_APP ------
@@ -166,7 +164,6 @@ public class GraphicalTestArguments
             String sImportFilterName = (String)param.get(PropertyName.DOC_CONVERTER_IMPORT_FILTER_NAME);
             if (sImportFilterName != null && sImportFilterName.length() > 0)
             {
-                // System.out.println("found " + PropertyName.DOC_CONVERTER_IMPORT_FILTER_NAME + " " + sImportFilterName );
                 m_sImportFilterName = sImportFilterName;
 
                 if (sImportFilterName.toLowerCase().equals("help"))
@@ -179,7 +176,6 @@ public class GraphicalTestArguments
             String sExportFilterName = (String)param.get(PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME);
             if (sExportFilterName != null && sExportFilterName.length() > 0)
             {
-                // System.out.println("found " + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + " " + sExportFilterName );
                 m_sExportFilterName = sExportFilterName;
                 if (sExportFilterName.toLowerCase().equals("help"))
                 {
@@ -318,7 +314,6 @@ public class GraphicalTestArguments
         {
             if (_sFilterName.length() == 0)
             {
-                // System.out.println("No FilterName set.");
                 return;
             }
 
@@ -327,7 +322,6 @@ public class GraphicalTestArguments
                 GlobalLogWriter.get().println("MultiServiceFactory not set.");
                 return;
             }
-            // XFilterFactory aFilterFactory = null;
             Object aObj = null;
             try
             {
@@ -356,14 +350,6 @@ public class GraphicalTestArguments
                 }
             }
         }
-
-    /*
-    public GraphicalTestArguments(TestParameters param, Log xxx)
-    {
-        // collect interesting information from the ComplexTestCase
-
-    }
-    */
 
     // set methods
     public void setReferenceType(String _sType)
@@ -622,10 +608,6 @@ public class GraphicalTestArguments
         }
 
     TriState m_tWithBorderMove = TriState.UNSET;
-    // public TriState isBorderMove()
-    //     {
-    //         return m_tWithBorderMove;
-    //     }
     public TriState getBorderMove()
         {
             return m_tWithBorderMove;

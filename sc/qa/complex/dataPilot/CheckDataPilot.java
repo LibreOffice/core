@@ -22,12 +22,10 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
-// import com.sun.star.sheet.TableFilterField;
 import com.sun.star.sheet.XDataPilotDescriptor;
 import com.sun.star.sheet.XDataPilotTable;
 import com.sun.star.sheet.XDataPilotTables;
 import com.sun.star.sheet.XDataPilotTablesSupplier;
-// import com.sun.star.sheet.XSheetFilterDescriptor;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
@@ -42,7 +40,6 @@ import complex.dataPilot._XPropertySet;
 import complex.dataPilot._XNamed;
 import complex.dataPilot._XDataPilotDescriptor;
 import complex.dataPilot._XDataPilotTable;
-// import complexlib.ComplexTestCase;
 import lib.StatusException;
 import lib.TestParameters;
 import util.SOfficeFactory;
@@ -163,9 +160,7 @@ public class CheckDataPilot {
      * create an environment for the test
      */
     @Before public void before() {
-//        Object oInterface = null;
 
-        // SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)param.getMSF() );
         final XMultiServiceFactory xMsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
         SOfficeFactory SOF = SOfficeFactory.getFactory(xMsf);
 

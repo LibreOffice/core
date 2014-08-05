@@ -252,7 +252,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             collectBoundaryForElement(attrs);
         }
         else
-        // if (!isElementBoundaryCollectionPass())
         {
             try
             {
@@ -425,7 +424,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                         if (TRANSPARENT.equals(raw))
                         {
                             props.setAttribute(OfficeNamespaces.FO_NS, OfficeToken.BACKGROUND_COLOR, null);
-                            // cellStyle.removeNode(props);
                         }
                     }
                 }
@@ -446,19 +444,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 columnCounter += initialColumnSpan - 1;
             }
 
-            // if (span < initialColumnSpan)
-            // {
-            // // ColumnBoundary cbs[] = getBoundariesForTable(tableCounter);
-            // // for (int i = 0; i < cbs.length; i++)
-            // // {
-            // // System.out.print(cbs[i].getBoundary() + " ");
-            // // }
-            // // System.out.println();
-
-            // LOGGER.error("A cell cannot span less than the declared columns: Declared=" + initialColumnSpan + " Computed="
-            // + span);
-            // }
-
             // there's no point to create number-columns-spanned attributes if we only span 1 column
             if (span > 1)
             {
@@ -474,7 +459,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 
         final AttributeList attrList = buildAttributeList(attrs);
         xmlWriter.writeTag(namespace, elementType, attrList, XmlWriter.OPEN);
-        // System.out.println("elementType = " + elementType);
     }
 
     private void collectBoundaryForElement(final AttributeMap attrs)
@@ -941,8 +925,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         {
             return 1;
         }
-        // System.out.println("table = " + table + " col = " + col + " rowBoundaries.length = " + tableBoundaries.length + "
-        // cellWidth = " + cellWidth + " span = " + span);
         return span;
     }
 

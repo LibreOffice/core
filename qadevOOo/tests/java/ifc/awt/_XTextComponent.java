@@ -241,9 +241,6 @@ public class _XTextComponent extends MultiMethodTest {
     */
     public void _setMaxTextLen() {
         oObj.setMaxTextLen((short)10);
-        //oObj.setText("0123456789ABCDE");
-        //String get = oObj.getText();
-        //tRes.tested("setMaxTextLen()",get.length() == 10);
         tRes.tested("setMaxTextLen()",oObj.getMaxTextLen()==10);
     }
 

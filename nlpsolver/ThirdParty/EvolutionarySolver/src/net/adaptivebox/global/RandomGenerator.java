@@ -31,7 +31,6 @@ public class RandomGenerator {
  * Example: for find [0,1,2]
 */
 public static int intRangeRandom(int lowLimit,int upLimit){
-//  int num = (int)Math.rint(doubleRangeRandom(lowLimit,upLimit));
   int num = (int)Math.floor(doubleRangeRandom(lowLimit,upLimit+1)-1E-10);
   return(num);
 }
@@ -74,29 +73,6 @@ public static double doubleRangeRandom(double lowLimit,double upLimit){
     }
     return randomSelection(totalIndices, times);
   }
-
-//  public static int[] randomSelection(boolean[] types, int times) {
-//    int realTimes = times;
-//    if(realTimes>types.length) realTimes = types.length;
-//    boolean[] internalTypes = (boolean[])types.clone();
-//    int upper = types.length-1;
-//    int[] indices = new int[realTimes];
-//    if(realTimes==types.length) {
-//      for(int i=0; i<indices.length; i++) {
-//        indices[i] = i;
-//      }
-//      return indices;
-//    }
-//    int i = 0;
-//    while(i<realTimes) {
-//      indices[i] = intRangeRandom(0, upper);
-//      if(!internalTypes[indices[i]]) {
-//        internalTypes[indices[i]] = true;
-//        i++;
-//      }
-//    }
-//    return indices;
-//  }
 
   public static int[] randomSelection(int low, int up, int times){
     int[] totalIndices = new int[up-low];

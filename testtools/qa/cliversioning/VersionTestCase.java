@@ -46,7 +46,6 @@ public class VersionTestCase extends ComplexTestCase
             if (sSystemRoot == null || sSystemRoot.length() == 0)
                 failed("Check the make file. Java  must be called with -DSystemRoot=%SystemRoot%.");
 
-//            System.out.println("UNO_PATH="+unoPath);
             //We need to set the PATH because otherwise it appears that runtests inherits the PATH
             //from build environment. Then the bootstrapping fails because the libraries
             //are not used from the office.

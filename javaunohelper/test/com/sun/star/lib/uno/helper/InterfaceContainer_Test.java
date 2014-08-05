@@ -23,7 +23,6 @@ import java.util.ListIterator;
 import com.sun.star.uno.XWeak;
 import com.sun.star.lang.XTypeProvider;
 import java.util.ArrayList;
-//import com.sun.star.lib.uno.environments.java.Proxy;
 import com.sun.star.lib.uno.environments.java.java_environment;
 import java.util.List;
 

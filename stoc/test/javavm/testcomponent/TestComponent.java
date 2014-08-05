@@ -22,7 +22,6 @@ import com.sun.star.uno.*;
 import com.sun.star.registry.XRegistryKey;
 import java.io.*;
 import java.net.*;
-//import com.sun.star.lib.sandbox.*;
 
 
 /** This component implements XTypeProvider for use with StarBasic.

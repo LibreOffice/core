@@ -62,24 +62,6 @@ public class CheckXModuleManager
     // test environment
 
 
-    /** @short  A function to tell the framework,
-                which test functions are available.
-
-        @return All test methods.
-        @todo   Think about selection of tests from outside ...
-     */
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//        {
-//            "checkModuleIdentification"        ,
-//            "checkModuleConfigurationReadable" ,
-//            "checkModuleConfigurationWriteable",
-//            "checkModuleConfigurationQueries"
-//        };
-//    }
-
-
     /** @short  Create the environment for following tests.
 
         @descr  Use either a component loader from desktop or

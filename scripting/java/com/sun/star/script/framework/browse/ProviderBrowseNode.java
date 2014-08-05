@@ -245,9 +245,6 @@ public class ProviderBrowseNode extends PropertySet
         LogUtils.DEBUG("ProviderBrowseNode[create] failed with: " + e );
                 LogUtils.DEBUG( LogUtils.getTrace( e ) );
                 result = new Any(new Type(Boolean.class), Boolean.FALSE);
-
-                // throw new com.sun.star.reflection.InvocationTargetException(
-                //     "Error creating script: " + e.getMessage());
             }
         }
         else {

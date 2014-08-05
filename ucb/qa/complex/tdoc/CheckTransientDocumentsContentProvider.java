@@ -32,7 +32,6 @@ import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.UnoRuntime;
-// import complexlib.ComplexTestCase;
 import util.WriterTools;
 
 import org.junit.After;

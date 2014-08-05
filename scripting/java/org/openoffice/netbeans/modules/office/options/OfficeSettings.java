@@ -34,8 +34,6 @@ import org.openoffice.idesupport.OfficeInstallation;
  */
 public class OfficeSettings extends SystemOption {
 
-    // private static final long serialVersionUID = ...;
-
     public static final String OFFICE_DIRECTORY = "OfficeDirectory";
     public static final String WARN_BEFORE_DOC_DEPLOY = "WarnBeforeDocDeploy";
     public static final String WARN_BEFORE_PARCEL_DELETE = "WarnBeforeParcelDelete";

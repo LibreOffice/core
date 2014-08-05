@@ -117,7 +117,6 @@ public class BuildID
 
     private static String getBuildIDFromVersion(String _sOfficePath, String _sIniSection)
         {
-            // String fs = System.getProperty("file.separator");
             String sBuildID = "";
             String sOfficePath;
             if (OSHelper.isWindows())
@@ -140,29 +139,6 @@ public class BuildID
             return sBuildID;
         }
 
-//    public static void main(String[] args)
-//        {
-//            String sApp;
-//            sApp = "/opt/staroffice8_m116/program/soffice --headless --accept=socket,host=localhost,port=8100;urp;";
-//            String sBuildID;
-//            sBuildID = getBuildID(sApp);
-//            System.out.println("BuildID is: " + sBuildID);
-
-//            Date aDate = new Date();
-//            long nStart = aDate.getTime();
-//            System.out.println("Time:" + nStart);
-//            // LLA: Just some more tests for getBuildID
-//            // sApp = "/opt/staroffice8_net/program/soffice";
-//            // sBuildID = getBuildID(sApp);
-//            // System.out.println("BuildID is: " + sBuildID);
-
-//            // sApp = "\"/opt/staroffice8_net/program/soffice\" test blah";
-//            // sBuildID = getBuildID(sApp);
-
-//            // System.out.println("BuildID is: " + sBuildID);
-//            System.exit(1);
-//        }
-
             public static String getMinor(String _sOfficePath)
             {
                 final String sOfficePath = getOfficePath(_sOfficePath);
@@ -183,24 +159,5 @@ public class BuildID
                 }
                 return sCWSName;
             }
-
-//    public static void main(String[] args)
-//        {
-//            String sApp;
-//            sApp = "D:/staroffice9_m63/Sun/StarOffice 9/program/soffice.exe";
-//            String sBuildID;
-//            sBuildID = getBuildID(sApp);
-//            System.out.println("BuildID is: " + sBuildID);
-
-//            String sMinor;
-//            sMinor = getMinor(sApp);
-//            System.out.println("Minor is: " + sMinor);
-
-//            String sCWSName;
-//            sCWSName = getCWSName(sApp);
-//            System.out.println("CWSName is: " + sCWSName);
-
-//            System.exit(1);
-//        }
 
 }

@@ -104,7 +104,6 @@ public class _XComponent {
     * <code>dispose</code> method call.
     */
     public boolean _removeEventListener() {
-//        executeMethod("addEventListener()");
         if (disposed) return true;
         // the second listener should not be called
         oObj.removeEventListener( listener2 );
@@ -127,7 +126,6 @@ public class _XComponent {
     */
     public boolean _dispose() {
         disposed = false;
-//        executeMethod("removeEventListener()");
 
         log.println( "begin dispose" + Thread.currentThread());
         oObj.dispose();
@@ -149,7 +147,6 @@ public class _XComponent {
     * Forces object recreation.
     */
     protected void after() {
-//        disposeEnvironment();
     }
 
 } // finished class _XComponent

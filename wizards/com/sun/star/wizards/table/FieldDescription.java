@@ -32,12 +32,10 @@ import com.sun.star.wizards.common.PropertyNames;
 public class FieldDescription
 {
     private String tablename = PropertyNames.EMPTY_STRING;
-//  String fieldname;
     private String keyname;
     private XNameAccess xNameAccessTableNode;
     private XPropertySet xPropertySet;
     private ArrayList<PropertyValue> aPropertyValues;
-//  PropertyValue[] aPropertyValues;
     private Integer Type;
     private String Name;
     private XMultiServiceFactory xMSF;
@@ -121,7 +119,6 @@ public class FieldDescription
         try
         {
             xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
-//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");
             if (propertyexists(PropertyNames.PROPERTY_NAME))
             {
                 aPropertyValues.add(Properties.createProperty(PropertyNames.PROPERTY_NAME, Name));
@@ -133,12 +130,10 @@ public class FieldDescription
             if (propertyexists("Scale"))
             {
                 aPropertyValues.add(Properties.createProperty("Scale", xPropertySet.getPropertyValue("Scale")));
-//          Scale =
             }
             if (propertyexists("Precision"))
             {
                 aPropertyValues.add(Properties.createProperty("Precision", xPropertySet.getPropertyValue("Precision")));
-//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");
             }
             if (propertyexists("DefaultValue"))
             {

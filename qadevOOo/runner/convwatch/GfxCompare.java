@@ -29,14 +29,6 @@ import java.io.File;
 public class GfxCompare extends EnhancedComplexTestCase
 {
     // The first of the mandatory functions:
-    /**
-     * Return the name of the test.
-     * In this case it is the actual name of the service.
-     * @return The tested service.
-     */
-    // public String getTestObjectName() {
-    //     return "ConvWatch runner";
-    // }
 
     // The second of the mandatory functions: return all test methods as an
     // array. There is only one test function in this example.

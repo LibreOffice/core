@@ -73,7 +73,6 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private boolean bIDFieldisInserted = false;
     private String IDFieldName = PropertyNames.EMPTY_STRING;
     private String sColumnAlreadyExistsMessage = PropertyNames.EMPTY_STRING;
-//    private WizardDialog oUnoDialog;
     private XWindow xWindow;
 
     /**
@@ -105,8 +104,6 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         if (super.getConnection(_curPropertyValue))
         {
-            // XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
-            // xTableNames = xDBTables.getTables();
             xTableAppend = UnoRuntime.queryInterface( XAppend.class, getTableNamesAsNameAccess() );
             xTableDrop = UnoRuntime.queryInterface( XDrop.class, getTableNamesAsNameAccess() );
             xTableDataDescriptorFactory = UnoRuntime.queryInterface( XDataDescriptorFactory.class, getTableNamesAsNameAccess() );

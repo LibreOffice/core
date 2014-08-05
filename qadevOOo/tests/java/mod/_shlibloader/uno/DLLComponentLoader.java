@@ -84,7 +84,6 @@ public class DLLComponentLoader extends TestCase {
         // adding object relation for XImplementationLoader ifc test
         tEnv.addObjRelation("ImplementationLoader",
             "com.sun.star.loader.SharedLibrary") ;
-        //String fs = System.getProperty("file.separator");
         String os = (String) Param.get("OS");
         if (os == null || os == "")
             throw new StatusException(

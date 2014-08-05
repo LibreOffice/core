@@ -73,13 +73,11 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
         int curX = 0;
 
-        //while (!oObj.containsPoint(new Point(curX, bounds.Y)) && curX < bounds.Width+bounds.X) {
         while (!oObj.containsPoint(new Point(curX, 0)) &&
                (curX < bounds.Width)) {
             curX++;
         }
 
-        //if ((bounds.X <= curX) && (curX < bounds.Width+bounds.X)) {
         if (curX < bounds.Width) {
             log.println("Upper bound of box containsPoint point (" + curX +
                         ",0) - OK");
@@ -91,7 +89,6 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
         curX = 0;
 
-        //while (!oObj.containsPoint(new Point(curX, bounds.Y+bounds.Height - 1))
         while (!oObj.containsPoint(new Point(curX, bounds.Height - 1)) &&
                (curX < bounds.Width)) {
             log.println("containsPoint returns false for (" + curX + "," +
@@ -99,7 +96,6 @@ public class _XAccessibleComponent extends MultiMethodTest {
             curX++;
         }
 
-        //if ((bounds.X <= curX) && (curX < bounds.Width+bounds.X)) {
         if (curX < bounds.Width) {
             log.println("Lower bound of box containsPoint point (" + curX +
                         "," + (bounds.Height - 1) + ") - OK");
@@ -111,13 +107,11 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
         int curY = 0;
 
-        //while (!oObj.containsPoint(new Point(bounds.X, curY)) && curY < bounds.Height+bounds.Y) {
         while (!oObj.containsPoint(new Point(0, curY)) &&
                (curY < bounds.Height)) {
             curY++;
         }
 
-        //if ((bounds.Y <= curY) && (curY < bounds.Height+bounds.Y)) {
         if (curY < bounds.Height) {
             log.println("Left bound of box containsPoint point (0," + curY +
                         ") - OK");
@@ -129,14 +123,11 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
         curY = 0;
 
-        //while (!oObj.containsPoint(new Point(bounds.X+bounds.Width - 1, curY))
-        //       && curY < bounds.Height+bounds.Y) {
         while (!oObj.containsPoint(new Point(bounds.Width - 1, curY)) &&
                (curY < bounds.Height)) {
             curY++;
         }
 
-        //if ((bounds.Y <= curY) && (curY < bounds.Height + bounds.Y)) {
         if (curY < bounds.Height) {
             log.println("Right bound of box containsPoint point (" +
                         (bounds.Width - 1) + "," + curY + ") - OK");

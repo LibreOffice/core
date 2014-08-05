@@ -151,8 +151,6 @@ public class AccessibilityTree
         // return first expanded object
         TreePath aFirst = null;
 
-        //        System.out.print ("e");
-
         try
         {
             // get 'our' object

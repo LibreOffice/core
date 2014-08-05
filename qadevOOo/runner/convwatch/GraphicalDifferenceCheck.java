@@ -78,7 +78,6 @@ public class GraphicalDifferenceCheck
             }
             else
             {
-                // System.out.println("No directory.");
                 createOneReferenceFile(_sInputPath, _sReferencePath, _aGTA);
             }
         }

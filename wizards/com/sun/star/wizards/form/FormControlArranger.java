@@ -455,7 +455,6 @@ public class FormControlArranger
                 {
                     ++iReduceWidth;
                 }
-                //if (m_maxPostionX > (nFormWidth-cXOffset-cXOffset)) // cXOffset + nFormWidth
                 if (m_maxPostionX > cXOffset + nFormWidth)
                 {
                     checkJustifiedPosition(a);
@@ -587,9 +586,6 @@ public class FormControlArranger
             {
                 curLabelControl.setSize(new Size(m_LabelWidth, m_LabelHeight));
             }
-//      if (CurHelpText != PropertyNames.EMPTY_STRING){
-//          oModel.HelpText = CurHelptext;
-//      }
         }
         catch (Exception e)
         {

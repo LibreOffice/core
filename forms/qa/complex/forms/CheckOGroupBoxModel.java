@@ -45,7 +45,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
-// import complexlib.ComplexTestCase;
 
 /**
  */
@@ -55,12 +54,8 @@ public class CheckOGroupBoxModel
     private XMultiPropertySet m_xPropSet;
     private XComponent m_xDrawDoc;
 
-//    public String[] getTestMethodNames() {
-//        return new String[] {"setPropertyValues"};
-//    }
     @Before public void before()
     {
-        // XComponent xDrawDoc = null;
         SOfficeFactory SOF = SOfficeFactory.getFactory(getMSF());
 
         try

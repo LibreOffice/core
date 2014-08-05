@@ -57,17 +57,14 @@ public class ParcelDataLoader extends UniFileLoader {
 
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
-            // SystemAction.get(MountParcelAction.class),
             SystemAction.get(DeployParcelAction.class),
             null,
             SystemAction.get(CutAction.class),
             SystemAction.get(CopyAction.class),
-            // SystemAction.get(PasteAction.class),
             null,
             SystemAction.get(DeleteAction.class),
             SystemAction.get(RenameAction.class),
             null,
-            // SystemAction.get(ToolsAction.class),
             SystemAction.get(PropertiesAction.class),
         };
     }

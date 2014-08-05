@@ -81,6 +81,5 @@ public class TestInspector {
             System.err.println( e + e.getMessage());
             e.printStackTrace();
         }
-//        System.exit( 0 );
     }
 }

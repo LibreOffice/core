@@ -94,15 +94,6 @@ public class JobQueue {
             }
 
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".run - exit:" + _threadId);
-
-//              try {
-//                  Object object = new Object();
-//                  synchronized(object) {
-//                      object.wait();
-//                  }
-//              }
-//              catch(InterruptedException interruptedException) {
-//              }
         }
     }
 

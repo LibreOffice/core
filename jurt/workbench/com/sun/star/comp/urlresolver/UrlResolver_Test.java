@@ -25,7 +25,6 @@ import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.UnoRuntime;
-//import com.sun.star.connection.NoConnectionException;
 
 /** start the office with these options <br>
     soffice --accept=socket,host=localhost,port=8100;urp;

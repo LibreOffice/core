@@ -30,35 +30,17 @@ import java.util.ArrayList;
 
 // --------------------------------- PRNCompare ---------------------------------
 
-// class DifferenceType
-// {
-//     final static int NO_DIFFERENCE = 1;
-//     final static int DIFFERENCE = 2;
-
-//     public int nValue = NO_DIFFERENCE;
-//     public boolean equals(int _n)
-//         {
-//             if ( _n == nValue ) return true;
-//             return false;
-//         }
-// }
-
-
 public class PRNCompare
 {
-    // OSHelper m_aHelper;
     String fs;
 
     public PRNCompare()
         {
-            // m_aHelper = new OSHelper();
             fs = System.getProperty("file.separator");
         }
 
     String executeSynchronously(String _sCommand)
         {
-            // System.out.println(_sCommand);
-
             ProcessHandler aHandler = new ProcessHandler(_sCommand);
             aHandler.executeSynchronously();
 
@@ -74,15 +56,6 @@ public class PRNCompare
 //  TODO: check if directory exist should be done earlier
             File aDirectory = new File(_sDirectory);
             File[] aDirList = aDirectory.listFiles(
-                /*
-                  new FileFilter() {
-                  boolean accept(File filename)
-                  {
-                  if (filename.getName().endsWith("jpg"))
-                  return true;
-                  return false;
-                  }
-                  } */
                 );
 
             int nMaxNumber = 0;
@@ -95,7 +68,6 @@ public class PRNCompare
 
                     if (sDirEntry.startsWith(_sBasename))
                     {
-                        // System.out.println(sDirEntry);
                         int nJpgIdx = sDirEntry.lastIndexOf(".jpg");
                         String sValue = sDirEntry.substring(_sBasename.length(), nJpgIdx);
                         int nValue = 0;
@@ -107,7 +79,6 @@ public class PRNCompare
                         {
                         }
 
-                        // System.out.println(nValue);
                         nNum = nValue;
                     }
 
@@ -126,7 +97,6 @@ public class PRNCompare
     String m_sDocFile;
     String m_sReferenceFile;
     String m_sPostScriptFile;
-    // String m_sOldDiff;
     int m_nMaxPages = 0;
     int m_nResolutionInDPI = 0;
     TriState m_tUseBorderMove;
@@ -146,10 +116,6 @@ public class PRNCompare
 
     public void setBorderMove(TriState _b) {m_tUseBorderMove = _b;}
     public TriState getBorderMove() {return m_tUseBorderMove;}
-    // public void setOldDiffPath(String _sOldDiff)
-    //     {
-    //         m_sOldDiff = _sOldDiff;
-    //     }
     public void setMaxPages(int _n) {m_nMaxPages = _n;}
     int getMaxPages() {return m_nMaxPages;}
 
@@ -210,10 +176,6 @@ public class PRNCompare
     public static String[] createJPEGFromPostscript(String _sOutputPath, String _sSourcePath, String _sSourceFile, int _nResolutionInDPI)
         {
             String sGS_PageOutput = "%04d";
-            // if ( OSHelper.isWindows() )
-            // {
-            //     sGS_PageOutput = "%%d";
-            // }
 
             FileHelper.makeDirectories("", _sOutputPath);
 
@@ -239,14 +201,6 @@ public class PRNCompare
                     "-sOutputFile=" + sJPGFilename,
                     sOriginalFile
                 };
-            // System.out.println("Start Command array");
-            // try
-            // {
-            //     Runtime.getRuntime().exec(sCommandArray);
-            // } catch (Exception e) {
-            //     System.out.println("FAILED");
-            // }
-            // System.out.println("done");
 
             ProcessHandler aHandler = new ProcessHandler(sCommandArray);
             aHandler.executeSynchronously();
@@ -294,9 +248,6 @@ public class PRNCompare
             int nS1_Files = getMaxNumOfFileEntry(_sSourcePath1, sS1Basename);
             int nS2_Files = getMaxNumOfFileEntry(_sSourcePath2, sS2Basename);
 
-            // System.out.println("count of s1 files " + String.valueOf(nS1_Files));
-            // System.out.println("count of s2 files " + String.valueOf(nS2_Files));
-
             // take the min of both
             int nMin = Math.min(nS1_Files, nS2_Files);
             nMin = Math.min(nMin, _nMaxDiffs);
@@ -304,7 +255,6 @@ public class PRNCompare
             StatusHelper[] aList = new StatusHelper[nMin];
 
 //  TODO: if both document do not have same page count, produce an error
-            // System.out.println("min of both: " + String.valueOf(nMin));
 
             int nStatusIndex = 0;
             for (int i=1;i<=nMin;i++)
@@ -317,7 +267,6 @@ public class PRNCompare
                 String sDiffGfx = compareJPEGs(sOldGfx, sNewGfx, sDiffGfx_);
                 StatusHelper aStatus = new StatusHelper(sOldGfx, sNewGfx, sDiffGfx);
 
-                // if (FileHelper.exists(sDiffGfx))
                 if (sDiffGfx.length() > 0)
                 {
                     int nResult = identify(sDiffGfx);
@@ -332,10 +281,6 @@ public class PRNCompare
                             int nPercent = estimateGfx(sOldGfx, sNewGfx, sDiffGfx);
                             aStatus.nDiffStatus = StatusHelper.DIFF_DIFFERENCES_FOUND;
                             aStatus.nPercent = nPercent;
-
-                            // GlobalLogWriter.get().println("Hello World:  Percent:= " + nPercent);
-                            // GlobalLogWriter.get().println("Hello World: TriState:= " + _tUseBorderMove.intValue());
-                            // GlobalLogWriter.get().println("Hello World:  DocType:= " + m_sDocumentType);
 
 // TODO: insert here the new BorderRemover if the percentage value is creater than 75%
                             if (nPercent > 75 &&
@@ -357,7 +302,6 @@ public class PRNCompare
 
                                     String sDiff_BM_Gfx = compareJPEGs( sOld_BM_Gfx, sNew_BM_Gfx, sDiff_BM_Gfx_);
 
-                                    // if (FileHelper.exists(sDiff_BM_Gfx))
                                     if (sDiff_BM_Gfx.length() > 0)
                                     {
                                         nResult = identify(sDiff_BM_Gfx);
@@ -391,11 +335,6 @@ public class PRNCompare
                         }
                     }
 
-                    // checkDiff(sOldGfx, sNewGfx, sDiffGfx);
-                    // if (i >= _nMaxDiffs)
-                    // {
-                    //     break;
-                    // }
                 }
                 aList[nStatusIndex ++] = aStatus;
             }
@@ -420,20 +359,17 @@ public class PRNCompare
             StatusHelper[] aList = new StatusHelper[nMin];
 
 //  TODO: if both document do not have same page count, produce an error
-            // System.out.println("min of both: " + String.valueOf(nMin));
 
             int nStatusIndex = 0;
             for (int i=1;i<=nMin;i++)
             {
                 String sOldGfx =  _aRefList[i];
                 String sNewGfx =  _aPSList[i];
-                // String sDiffGfx_ = getJPEGName(_sOutputPath, sS1Basename + ".diff", StringHelper.createValueString(i, 4));
 
 
                 String sDiffGfx = compareJPEGs(sOldGfx, sNewGfx );
                 StatusHelper aStatus = new StatusHelper(sOldGfx, sNewGfx, sDiffGfx);
 
-                // if (FileHelper.exists(sDiffGfx))
                 if (sDiffGfx.length() > 0)
                 {
                     int nResult = identify(sDiffGfx);
@@ -446,9 +382,6 @@ public class PRNCompare
                         try
                         {
                             int nPercent = estimateGfx(sOldGfx, sNewGfx, sDiffGfx);
-                            // GlobalLogWriter.get().println("Hello World:  Percent:= " + nPercent);
-                            // GlobalLogWriter.get().println("Hello World: TriState:= " + _tUseBorderMove.intValue());
-                            // GlobalLogWriter.get().println("Hello World:  DocType:= " + m_sDocumentType);
 
                             aStatus.nDiffStatus = StatusHelper.DIFF_DIFFERENCES_FOUND;
                             aStatus.nPercent = nPercent;
@@ -481,7 +414,6 @@ public class PRNCompare
 
                                     aStatus.setFilesForBorderMove(sOld_BM_Gfx, sNew_BM_Gfx, sDiff_BM_Gfx);
 
-                                    // if (FileHelper.exists(sDiff_BM_Gfx))
                                     if (sDiff_BM_Gfx.length() > 0)
                                     {
                                         nResult = identify(sDiff_BM_Gfx);
@@ -513,11 +445,6 @@ public class PRNCompare
                         }
                     }
 
-                    // checkDiff(sOldGfx, sNewGfx, sDiffGfx);
-                    // if (i >= _nMaxDiffs)
-                    // {
-                    //     break;
-                    // }
                 }
                 aList[nStatusIndex ++] = aStatus;
             }
@@ -547,11 +474,6 @@ public class PRNCompare
                 sComposite = "composite.exe";
             }
 
-            // String sCommand = sComposite + " -compose difference " +
-            //     StringHelper.doubleQuoteIfNeed(_sOldGfx) + " " +
-            //     StringHelper.doubleQuoteIfNeed(_sNewGfx) + " " +
-            //     StringHelper.doubleQuoteIfNeed(_sDiffGfx);
-
             String[] sCommandArray =
                 {
                     sComposite,
@@ -568,7 +490,6 @@ public class PRNCompare
             String sBack = aHandler.getOutputText();
             GlobalLogWriter.get().println("'" + sBack + "'");
 
-            // return aHandler.getExitCode();
             if (FileHelper.exists(_sDiffGfx))
             {
                 return _sDiffGfx;
@@ -586,18 +507,12 @@ public class PRNCompare
             int nResult = 0;
             // would like to know what the meaning of %k is for ImageMagick's 'identify'
             String sIM_Format = "%k";
-            // if (OSHelper.isWindows())
-            // {
-            //     sIM_Format = "%%k";
-            // }
 
             String sIdentify = "identify";
             if (OSHelper.isWindows())
             {
                 sIdentify = "identify.exe";
             }
-
-            // String sCommand = sIdentify + " " + sIM_Format + " " + StringHelper.doubleQuoteIfNeed(_sDiffGfx);
 
             String[] sCommandArray =
                 {
@@ -647,23 +562,6 @@ public class PRNCompare
 
             StatusHelper aCurrentStatus = new StatusHelper(sOldGfx, sNewGfx, sDiffGfx);
 
-            // String sComposite = "composite";
-            // if (OSHelper.isWindows())
-            // {
-            //     sComposite = "composite.exe";
-            // }
-
-            // String sCommand = sComposite  +" -compose difference " +
-            //     StringHelper.doubleQuoteIfNeed(sOldGfx) + " " +
-            //     StringHelper.doubleQuoteIfNeed(sNewGfx) + " " +
-            //     StringHelper.doubleQuoteIfNeed(sDiffGfx);
-
-
-            // // System.out.println(sCommand);
-            // // executeSynchronously(sCommand);
-            // ProcessHandler aHandler = new ProcessHandler(sCommand);
-            // boolean bBackValue = aHandler.executeSynchronously();
-
             compareJPEGs(sOldGfx, sNewGfx, sDiffGfx);
 
             if (FileHelper.exists(sDiffGfx))
@@ -686,9 +584,6 @@ public class PRNCompare
                         aCurrentStatus.nPercent = -1;
                     }
                 }
-                // LLA: should diffdiff file delete?
-                // File aFile = new File(sDiffGfx);
-                // aFile.delete();
             }
             else
             {
@@ -744,50 +639,4 @@ public class PRNCompare
             return nPercent;
         }
 
-
-
-/*
- * Some selftest functionallity
- */
-//    public static void main(String[] args)
-//        {
-            // System.out.println(FileHelper.getNameNoSuffix("doc.sxw"));
-            // System.out.println(FileHelper.getSuffix("doc.sxw"));
-            // System.out.println(FileHelper.getBasename("doc.sxw"));
-            // System.out.println(FileHelper.getBasename("/tmp/doc.sxw"));
-
-//            PRNCompare a = new PRNCompare();
-//             a.setInputPath(     "/cws/so-cwsserv06/qadev18/SRC680/src.m47/convwatch.keep/input/msoffice/xp/PowerPoint");
-//             a.setReferencePath( "/cws/so-cwsserv06/qadev18/SRC680/src.m47/convwatch.keep/input/msoffice/xp/PowerPoint");
-//             a.setOutputPath(    "/tmp/convwatch_java");
-//             a.setDocFile(       "1_Gov.ppt");
-//             a.setReferenceFile( "1_Gov.prn" );
-//             a.setPostScriptFile("1_Gov.ps" );
-            // a.compare();
-
-
-// LLA: 20040804 sample how to build jpegs from reference files
-//             a.createJPEGFromPostscript("/tmp/convwatch_java",
-//                                        "/home/apitest/WorkFromHome/20040804/reference", "worddoc.prn" );
-
-//             a.createJPEGFromPostscript("/tmp/convwatch_java",
-//                                        "/home/apitest/WorkFromHome/20040804/reference", "worddoc.ps" );
-
-//             Status[] aList = a.createDiffs("/tmp/convwatch_java",
-//                                            "/tmp/convwatch_java", "worddoc.prn",
-//                                            "/tmp/convwatch_java", "worddoc.ps",
-//                                            2);
-
-// LLA: 20040805 sample how to check 2 gfx files
-// this function return DifferenceType.NO_DIFFERENCE if the pictures contain no graphically difference
-//             DifferenceType aReturnValue = a.checkDiffDiff("/tmp/convwatch_java",
-//                                                           "/tmp/convwatch_java", "worddoc.prn.diff1.jpg",
-//                                                           "/tmp/convwatch_java/old", "worddoc.prn.diff1.jpg");
-//             if (aReturnValue.equals( DifferenceType.NO_DIFFERENCE ))
-//             {
-//                 System.out.println("There is no difference between both diff files.");
-//             }
-
-            // a.setOldDiff(       "/olddiffs");
-//        }
 }

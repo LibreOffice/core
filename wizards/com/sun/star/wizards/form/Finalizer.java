@@ -123,8 +123,6 @@ public class Finalizer
 
     public boolean finish()
     {
-//        if (!oFormDocument.oMainFormDBMetaData.hasFormDocumentByName(sFormName)){
         return oFormDocument.oMainFormDBMetaData.storeDatabaseDocumentToTempPath(this.oFormDocument.xComponent, getName());
-//        }
     }
 }

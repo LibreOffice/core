@@ -34,9 +34,6 @@ public class FileHelper
 {
     public FileHelper()
         {
-            // fs = System.getProperty("file.separator");
-
-
             String sOSName = System.getProperty("os.name");
             String sOSArch = System.getProperty("os.arch");
             String sOSVersion = System.getProperty("os.version");
@@ -66,22 +63,6 @@ public class FileHelper
             {
                 return true;
             }
-            // This is just nice for DEBUG behaviour
-            // due to the fact this is absolutely context dependency no one should use it.
-            // else
-            // {
-            //     System.out.println("FileHelper:exists() tell this path doesn't exists. Check it. path is:" );
-            //     System.out.println( _sFile );
-            //     System.out.println( aFile.getAbsolutePath() );
-            //     MessageBox("Der JavaProzess wartet auf eine interaktion ihrerseits.");
-
-            //     File aFile2 = new File(_sFile);
-            //     if (aFile2.exists())
-            //     {
-            //         System.out.println("Thanks, file exists." );
-            //         return true;
-            //     }
-            // }
             return false;
         }
 
@@ -113,7 +94,6 @@ public class FileHelper
             {
                 return "";
             }
-            // String fs = System.getProperty("file.separator");
 
             int nIdx = _sFilename.lastIndexOf("\\");
             if (nIdx == -1)
@@ -161,7 +141,6 @@ public class FileHelper
             {
                 return "";
             }
-            // String fs = System.getProperty("file.separator");
 
             int nIdx = _sFilename.lastIndexOf("\\");
             if (nIdx == -1)
@@ -175,40 +154,6 @@ public class FileHelper
             return "";
         }
 
-/*
-    static ArrayList files = new ArrayList();
-    public static Object[] traverse( String afileDirectory )
-        {
-
-            File fileDirectory = new File(afileDirectory);
-            // Testing, if the file is a directory, and if so, it throws an exception
-            if ( !fileDirectory.isDirectory() )
-            {
-                throw new IllegalArgumentException( "not a directory: " + fileDirectory.getName() );
-            }
-
-            // Getting all files and directories in the current directory
-            File[] entries = fileDirectory.listFiles();
-
-            // Iterating for each file and directory
-            for ( int i = 0; i < entries.length; ++i )
-            {
-                // adding file to List
-                try
-                {
-                    // Composing the URL by replacing all backslashs
-                    String stringUrl = "file:///"
-                        + entries[ i ].getAbsolutePath().replace( '\\', '/' );
-                    files.add(stringUrl);
-                }
-                catch( Exception exception )
-                {
-                    exception.printStackTrace();
-                }
-            }
-            return files.toArray();
-        }
-*/
 
     // makeDirectories("", "/tmp/a/b");
     // creates all directories /tmp/a/b
@@ -237,7 +182,6 @@ public class FileHelper
                 String part = path_tokenizer.nextToken();
                 File new_dir = new File(already_done + File.separatorChar + part);
                 already_done = new_dir.toString();
-                // System.out.println(already_done);
                 //create the directory
                 new_dir.mkdirs();
                 if (OSHelper.isUnix() &&
@@ -409,28 +353,6 @@ public class FileHelper
                 }
             }
 
-//            try
-//            {
-//                File inputFile = new File(_sSource);
-//                File outputFile = new File(_sDestination);
-
-//                java.io.FileReader in = new java.io.FileReader(inputFile);
-//                java.io.FileWriter out = new java.io.FileWriter(outputFile);
-//                int c;
-
-//                while ((c = in.read()) != -1)
-//                {
-//                    out.write(c);
-//                }
-
-//                in.close();
-//                out.close();
-//            }
-//            catch (java.io.IOException e)
-//            {
-//                GlobalLogWriter.get().println("Exception caught. FileHelper.copy('" + _sSource + ", " + _sDestination + "')");
-//                GlobalLogWriter.get().println("Message: " + e.getMessage());
-//            }
         }
 
 
@@ -633,10 +555,6 @@ public class FileHelper
                     }
                     aIniFile.insertValue("global", "buildid", sBuildID);
 
-                    // if (_sSpecial != null && _sSpecial.length() > 0)
-                    // {
-                    //    out.write("special=" + _sSpecial + ls);
-                    // }
                     out.println();
                     out.println("# resolution given in DPI");
                     out.println("resolution=" + _aGTA.getResolutionInDPI());
@@ -647,13 +565,6 @@ public class FileHelper
                     out.println("buildid=" + _sSpecial);
                     aIniFile.insertValue("global", "buildid", _sSpecial);
                 }
-
-                // long nTime = stopTimer();
-                // if (nTime != 0)
-                // {
-                //     out.write("# time is given in milli seconds" + ls);
-                //     out.write("time=" + nTime + ls);
-                // }
 
                 out.println();
                 out.println("# Values out of System.getProperty(...)");
@@ -684,24 +595,10 @@ public class FileHelper
             }
             aIniFile.close();
 
-//            String sExtension = FileHelper.getSuffix(_aGTA.getInputFile());
-//            if (sExtension.startsWith("."))
-//            {
-//                sExtension = sExtension.substring(1);
-//            }
-
-//            DB.writeToDB(_aGTA.getInputFile(),
-//                         sNameNoSuffix,
-//                         sExtension,
-//                         sBuildID,
-//                         _aGTA.getReferenceType(),
-//                         _aGTA.getResolutionInDPI()
-//                         );
         }
 
         public static void addBasenameToFile(String _sIndexFilename, String _sBasename, String _sCreator, String _sType, String _sSource)
         {
-            // String sOutputDir = FileHelper.getPath(_sOutputFilename);
             String sPath;
             if (_sIndexFilename.startsWith("file:"))
             {
@@ -717,36 +614,17 @@ public class FileHelper
             aIniFile.insertValue(_sBasename, "type", _sType);
             aIniFile.insertValue(_sBasename, "source", _sSource);
             aIniFile.close();
-//            File aFile = new File(sIndexFilename);
-//            try
-//            {
-//                RandomAccessFile aRandomAccess = new RandomAccessFile(aFile, "rw");
-//                // String sBasename = FileHelper.getBasename(_sOutputFilename);
-//                aRandomAccess.seek(aRandomAccess.length()); // jump to the end.
-//// TODO: seems to be wrong, there exist no writeLine() with 'return' ending?
-//                aRandomAccess.writeUTF(_sBasename);
-//                aRandomAccess.close();
-//            }
-//            catch (java.io.FileNotFoundException e)
-//            {
-//            }
-//            catch (java.io.IOException e)
-//            {
-//            }
         }
 
         public static void addBasenameToPostscript(String _sOutputFilename)
         {
             String sIndexFilename = FileHelper.appendPath(_sOutputFilename, "postscript.ini");
-            // String sPath = FileHelper.getPath(sIndexFilename);
             String sBasename = FileHelper.getBasename(_sOutputFilename);
             addBasenameToFile(sIndexFilename, sBasename, "", "", "");
         }
         public static void addBasenameToIndex(String _sOutputFilename, String _sBasename, String _sCreator, String _sType, String _sSource)
         {
             String sIndexFilename = FileHelper.appendPath(_sOutputFilename, "index.ini");
-            // String sPath = FileHelper.getPath(sIndexFilename);
-            // String sBasename = FileHelper.getBasename(_sOutputFilename);
             addBasenameToFile(sIndexFilename, _sBasename, _sCreator, _sType, _sSource);
         }
 

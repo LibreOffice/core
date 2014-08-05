@@ -47,11 +47,6 @@ abstract class NodeHandler
         }
     }
 
-    /** This factory method creates an individual handler for the specified
-        object that may hold information to accelerate the access to its children.
-    */
-    //    public abstract NodeHandler createHandler (Object aObject);
-
     /** return the number of children this object has */
     public int getChildCount(Object aObject)
     {
@@ -134,10 +129,6 @@ abstract class NodeHandler
     {
         return false;
     }
-
-    /** change this child's value */
-    //    public void setChild(Object aObject, int nIndex) { }
-
 
     /** get names of supported actions */
     public String[] getActions (AccessibleTreeNode aNode)

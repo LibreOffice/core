@@ -17,7 +17,6 @@
  */
 package com.sun.star.wizards.report;
 
-// import java.util.Vector;
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextListener;
@@ -124,8 +123,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
     {
         if ((nOldStep >= SOTEMPLATEPAGE) && (nNewStep < SOTEMPLATEPAGE))
         {
-            // CurReportDocument.getDoc().oTextSectionHandler.removeTextSectionbyName("RecordSection");
-            // CurReportDocument.getDoc().oTextTableHandler.removeTextTablebyName("Tbl_RecordSection");
             m_reportDocument.removeTextTableAndTextSection();
         }
         switch (nNewStep)
@@ -279,7 +276,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                 String sCommand = (String) oCommand.getPropertySet().getPropertyValue(PropertyNames.COMMAND);
                 if (bHasEscapeProcessing)
                 {
-                    // String sCommand = (String) oCommand.xPropertySet.getPropertyValue(PropertyNames.COMMAND);
                     bQueryCreated = (!sCommand.equals(PropertyNames.EMPTY_STRING));
                     if (m_reportDocument instanceof ReportTextImplementation)
                     {
@@ -325,20 +321,13 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                         16, sShowBinaryFields, 95, 162, 1, 210
                     });
         }
-        // CurReportDocument.getDoc().xProgressBar.setValue(40);
         CurTitlesComponent = new TitlesComponent(this, SOTITLEPAGE, 97, 37, 210, 7, slblColumnNames, slblColumnTitles, 34381);
         CurTitlesComponent.addTextListener(this);
-        // CurReportDocument.getDoc().xProgressBar.setValue(50);
         CurGroupFieldHandler = new GroupFieldHandler(m_reportDocument, this);
-        // CurReportDocument.getDoc().xProgressBar.setValue(60);
         CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34346);
-        // CurReportDocument.getDoc().xProgressBar.setValue(70);
         CurReportLayouter = new ReportLayouter(xMSF, m_reportDocument, this, isReportBuilderInstalled());
-        // CurReportDocument.getDoc().xProgressBar.setValue(80);
         CurReportFinalizer = new ReportFinalizer(xMSF, m_reportDocument, this);
-        // CurReportDocument.getDoc().xProgressBar.setValue(100);
         bCloseDocument = true;
-        // CurReportDocument.getDoc().xProgressBar.end();
         enableNavigationButtons(false, false, false);
     }
 

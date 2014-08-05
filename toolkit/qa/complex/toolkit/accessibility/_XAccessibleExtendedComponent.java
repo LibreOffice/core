@@ -18,14 +18,10 @@
 
 package complex.toolkit.accessibility;
 
-// import lib.MultiMethodTest;
 import com.sun.star.accessibility.XAccessibleExtendedComponent;
-// import com.sun.star.accessibility.XAccessibleStateSet;
-// import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.awt.XFont;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-// import share.LogWriter;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleExtendedComponent</code>
@@ -42,7 +38,6 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class _XAccessibleExtendedComponent {
 
-    // private LogWriter log;
     private static final String className =
         "com.sun.star.accessibility.XAccessibleExtendedComponent" ;
 
@@ -55,7 +50,6 @@ public class _XAccessibleExtendedComponent {
 
     public _XAccessibleExtendedComponent(XInterface object/*, LogWriter log*/) {
         oObj = UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, object);
-        // this.log = log;
     }
 
     /**

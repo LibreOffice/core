@@ -64,9 +64,6 @@ public class _XInteractionHandler extends MultiMethodTest {
     public void before() {
         request = (XInteractionRequest)
             tEnv.getObjRelation("XInteractionHandler.Request") ;
-
-        //if (request == null)
-        //    throw new StatusException(Status.failed("Reelation not found")) ;
     }
 
     /**
@@ -75,66 +72,6 @@ public class _XInteractionHandler extends MultiMethodTest {
     * Always has <b>SKIPPED.OK</b> status .
     */
     public void _handle() {
-
-        /*
-
-        final XMultiServiceFactory msf = (XMultiServiceFactory)tParam.getMSF() ;
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
-        XComponent textDoc = null ;
-        try {
-            textDoc = SOF.createTextDoc( null );
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't create Document") ;
-            tRes.tested("handle()", false) ;
-            return ;
-        }
-        final XComponent fTextDoc = textDoc ;
-        final XModel xModelDoc = (XModel)
-            UnoRuntime.queryInterface(XModel.class, textDoc);
-
-        Thread thr = new Thread( new Runnable() {
-            public void run() {
-                try {
-                    Thread.sleep(1000) ;
-                } catch (InterruptedException e ) {}
-
-                //fTextDoc.dispose() ;
-
-                XFrame docFr = xModelDoc.getCurrentController().getFrame() ;
-                docFr.dispose() ;
-
-                /
-                try {
-
-                    Object dsk = msf.createInstance
-                        ("com.sun.star.frame.Desktop");
-
-                    XFrame xDsk = (XFrame)
-                        UnoRuntime.queryInterface(XFrame.class, dsk) ;
-
-                    XFrame fr = xDsk.findFrame("_top", 55) ;
-
-                    XWindow win = fr.getContainerWindow() ;
-
-                    String name = null ;
-                    if (fr != null) {
-                        name = fr.getName() ;
-                        docFr.dispose() ;
-                    }
-
-                } catch (com.sun.star.uno.Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }) ;
-        thr.start() ;
-
-        oObj.handle(request) ;
-        try {
-            thr.join(500) ;
-        } catch (InterruptedException e ) {}
-        */
-
         tRes.tested("handle()", Status.skipped(true)) ;
     }
 }

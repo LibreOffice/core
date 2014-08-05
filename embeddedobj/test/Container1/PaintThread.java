@@ -73,18 +73,6 @@ class PaintThread extends java.lang.Thread
     {
         synchronized( m_oRequestsLock )
         {
-        /*
-            System.out.println( "Paint request Pos( "
-                                                    + aRect.X + ", "
-                                                    + aRect.Y + ", "
-                                                    + aRect.Width + ", "
-                                                    + aRect.Height + " ), Clip ( "
-                                                    + aClip.X + ", "
-                                                    + aClip.Y + ", "
-                                                    + aClip.Width + ", "
-                                                    + aClip.Height + " )" );
-        */
-
             if ( PaintThread.interceptedRects( aRect, aClip ) )
             {
                 m_xBitmap = xBitmap;
@@ -92,8 +80,6 @@ class PaintThread extends java.lang.Thread
                 m_bToPaint = true;
             }
         }
-
-        // System.out.println( "Paint request to paint thread is done! xBitmap = " + xBitmap );
     }
 
     public void disposeThread()
@@ -126,15 +112,12 @@ class PaintThread extends java.lang.Thread
 
             if ( bPaint )
             {
-                // System.out.println( "The bitmap is going to be painted!" );
                 XDevice xDevice = (XDevice)UnoRuntime.queryInterface( XDevice.class, m_xWindow );
                 if ( xDevice != null )
                 {
-                     // System.out.println( "Step1" );
                     XGraphics xGraphics = xDevice.createGraphics();
                     if ( xBitmap != null )
                     {
-                        // System.out.println( "Step2" );
                         XDisplayBitmap xDisplayBitmap = xDevice.createDisplayBitmap( xBitmap );
 
                         com.sun.star.awt.Size aSize = xBitmap.getSize();
@@ -142,8 +125,6 @@ class PaintThread extends java.lang.Thread
                                                     aRect.X, aRect.Y, aRect.Width, aRect.Height );
                     }
 
-                    // System.out.println( "Step3" );
-                    // xGraphics.drawRect( aRect.X - 1, aRect.Y - 1, aRect.Width + 2, aRect.Height + 2 );
                     xGraphics.drawLine( aRect.X - 1, aRect.Y - 1,
                                         aRect.X + aRect.Width + 1, aRect.Y - 1 );
                     xGraphics.drawLine( aRect.X + aRect.Width + 1, aRect.Y - 1,
@@ -152,17 +133,6 @@ class PaintThread extends java.lang.Thread
                                         aRect.X - 1, aRect.Y + aRect.Height + 1 );
                     xGraphics.drawLine( aRect.X - 1, aRect.Y + aRect.Height + 1,
                                         aRect.X - 1, aRect.Y - 1 );
-
-                    // draw resize squares
-                    // System.out.println( "Step4" );
-                    // xGraphics.drawRect( aRect.X - 2, aRect.Y - 2, 4, 4 );
-                    // xGraphics.drawRect( aRect.X + aRect.Width - 2, aRect.Y - 2, 4, 4 );
-                    // xGraphics.drawRect( aRect.X - 2, aRect.Y + aRect.Height - 2, 4, 4 );
-                    // xGraphics.drawRect( aRect.X + aRect.Width - 2, aRect.Y + aRect.Height - 2, 4, 4 );
-
-                    // System.out.println( "Step5" );
-
-                    // System.out.println( "The bitmap is painted by paint thread!" );
                 }
             }
         }

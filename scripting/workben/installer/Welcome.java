@@ -155,7 +155,6 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
     private javax.swing.JPanel welcomePanel;
     private javax.swing.JTextArea area;
     private InstallWizard wizard;
-    //private static final String [] versions = {"OpenOffice.org 643", "StarOffice 6.1"};
     private static final String [] versions = { "StarOffice 6.1" };
     private boolean nextButtonEnable = true;
 

@@ -482,7 +482,6 @@ public class SDBCReportDataFactory implements DataSourceFactory
                     final String detail = (String) it.next();
                     if (!handledColumns.contains(detail))
                     {
-                        //String master = (String) masterIt.next();
                         oldFilter.append(quote);
                         oldFilter.append(detail);
                         oldFilter.append(quote);

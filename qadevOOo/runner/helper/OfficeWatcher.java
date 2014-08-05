@@ -91,13 +91,6 @@ public class OfficeWatcher extends Thread implements share.Watcher {
 
                     final ProcessHandler pHdl = new ProcessHandler(sKillCommand);
                     pHdl.executeSynchronously();
-//                    dbg("---> Output of killoffice:");
-//                    dbg(pHdl.getOutputText());
-//                    dbg("<--- Output of killoffice");
-//                    dbg("---> Error output of killoffice:");
-//                    dbg(pHdl.getErrorText());
-//                    dbg("<--- Error output of killoffice");
-
                 }
             }
             ph.kill();

@@ -360,8 +360,6 @@ public class MultiPropertyTest extends MultiMethodTest
                             {
                                 oldValue = AnyConverter.toObject(new Type(((Any) oldValue).getClass()), oldValue);
                             }
-//                            log.println("old = " + toString(oldValue));
-//                            log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
                         }
                         catch (com.sun.star.lang.IllegalArgumentException iae)
@@ -396,8 +394,6 @@ public class MultiPropertyTest extends MultiMethodTest
                             {
                                 oldValue = AnyConverter.toObject(new Type(((Any) oldValue).getClass()), oldValue);
                             }
-//                            log.println("old = " + toString(oldValue));
-//                            log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
                         }
                         catch (com.sun.star.lang.IllegalArgumentException iae)
@@ -422,7 +418,6 @@ public class MultiPropertyTest extends MultiMethodTest
                         {
                             tRes.tested(propName, false);
                         }
-                        //tRes.tested(propName, false);
                     }
                     else
                     {
@@ -433,8 +428,6 @@ public class MultiPropertyTest extends MultiMethodTest
                             {
                                 oldValue = AnyConverter.toObject(new Type(((Any) oldValue).getClass()), oldValue);
                             }
-//                            log.println("old = " + toString(oldValue));
-//                            log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
                         }
                         catch (com.sun.star.lang.IllegalArgumentException iae)

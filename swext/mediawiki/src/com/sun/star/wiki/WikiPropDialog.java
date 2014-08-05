@@ -136,9 +136,6 @@ public class WikiPropDialog extends WikiDialog{
         {
             XPropertySet xPS = GetPropSet("WikiList");
             xPS.setPropertyValue("StringItemList", WikiList);
-            // short [] nSel = new short[1];
-            // nSel[0] = (short) m_aSettings.getLastUsedWikiServer();
-            // xPS.setPropertyValue("SelectedItems", sel);
         }
         catch (Exception ex)
         {

@@ -409,34 +409,21 @@ public class _XLocaleData extends MultiMethodTest {
     public boolean goodCalendar(Calendar calendar) {
         boolean good = true;
         for (int i=0;i<calendar.Days.length;i++) {
-            //log.println("Day "+i+"(AbbrevName): "+calendar.Days[i].AbbrevName);
             good &= (! calendar.Days[i].AbbrevName.equals("") );
-            //log.println("Day "+i+"(FullName): "+calendar.Days[i].FullName);
             good &= (! calendar.Days[i].FullName.equals("") );
-            //log.println("Day "+i+"(ID): "+calendar.Days[i].ID);
             good &= (! calendar.Days[i].ID.equals("") );
         }
         for (int i=0;i<calendar.Months.length;i++) {
-            //log.println("Day "+i+"(AbbrevName): "+calendar.Months[i].AbbrevName);
             good &= (! calendar.Months[i].AbbrevName.equals("") );
-            //log.println("Day "+i+"(FullName): "+calendar.Months[i].FullName);
             good &= (! calendar.Months[i].FullName.equals("") );
-            //log.println("Day "+i+"(ID): "+calendar.Months[i].ID);
             good &= (! calendar.Months[i].ID.equals("") );
         }
         for (int i=0;i<calendar.Eras.length;i++) {
-            //log.println("Era "+i+"(AbbrevName): "+calendar.Eras[i].AbbrevName);
             good &= (! calendar.Eras[i].AbbrevName.equals("") );
-            //log.println("Era "+i+"(FullName): "+calendar.Eras[i].FullName);
             good &= (! calendar.Eras[i].FullName.equals("") );
-            //log.println("Era "+i+"(ID): "+calendar.Eras[i].ID);
             good &= (! calendar.Eras[i].ID.equals("") );
         }
-        //log.println("Start of Week: "+calendar.StartOfWeek);
         good &= (! calendar.StartOfWeek.equals("") );
-        //log.println("MinimumNumberOfDaysForFirstWeek: "+calendar.MinimumNumberOfDaysForFirstWeek);
-        //log.println("Default: "+calendar.Default);
-        //log.println("Name: "+calendar.Name);
         good &= (! calendar.Name.equals("") );
         return good;
     }

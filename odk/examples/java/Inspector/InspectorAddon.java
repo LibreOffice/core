@@ -220,7 +220,4 @@ public class InspectorAddon {
         return Factory.writeRegistryServiceInfo(InspectorAddonImpl.class.getName(), InspectorAddonImpl.getServiceNames(), regKey);
     }
 
-//    __create( XComponentContext ){
-
-//    }
 }

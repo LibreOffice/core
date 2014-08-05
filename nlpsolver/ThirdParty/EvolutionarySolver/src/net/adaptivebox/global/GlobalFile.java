@@ -62,15 +62,6 @@ public class GlobalFile {
     raFile.seek(raFile.length());
     raFile.writeBytes(inStr);
     raFile.close();
-
-
-//    String oldFileStr = getStringFromFile(fileStr);
-//    String newFileStr = inStr;
-//    if (oldFileStr != null) {
-//      newFileStr = oldFileStr+inStr;
-//    }
-//    saveStringToFile(newFileStr,fileStr);
-
   }
 
   public static Object loadObjectFromFile(String fileName) throws Exception {

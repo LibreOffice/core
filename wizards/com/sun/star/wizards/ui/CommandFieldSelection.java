@@ -19,12 +19,9 @@ package com.sun.star.wizards.ui;
 
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.*;
-// import com.sun.star.awt.XWindow;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sdb.CommandType;
-// import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
-// import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.*;
 import com.sun.star.beans.PropertyValue;
 import java.text.Collator;
@@ -36,7 +33,6 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     private CommandMetaData CurDBMetaData;
     private XListBox xTableListBox;
     private XFixedText xlblTable;
-    // private String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
     private String sTableListBoxName;
     private String sTableLabelName;
     private String sQueryPrefix;
@@ -45,7 +41,6 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     private short iOldSelPos = -1;
     private boolean bpreselectCommand = true;
     private boolean bgetQueries;
-    // boolean AppendMode;
     private WizardDialog oWizardDialog;
     private Collator aCollator = null;
 
@@ -145,7 +140,6 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
                     {
                         Boolean.TRUE, Boolean.FALSE, 12, HelpIds.getHelpIdString(super.FirstHelpIndex - 1), new Short(UnoDialog.getListBoxLineCount()), 95, 37, IStep, new Short((short) 4), getListboxWidth()
                     });
-            // XWindow xTableListBoxWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xTableListBox);
             fillupCommandListBox();
         }
         catch (Exception exception)
@@ -223,7 +217,6 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
             String curCommandName = PropertyNames.EMPTY_STRING;
             //As the peer of the control might not yet exist we have to query the model for the SelectedItems
             short iSelPos = getselectedItemPos();
-            // String[] sLocList = (String[]) CurUnoDialog.getControlProperty(sTableListBoxName, PropertyNames.STRING_ITEM_LIST);
             final String sSelectedTableName = xTableListBox.getItem(iSelPos);
             if (!bgetQueries)
             {
@@ -278,7 +271,6 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         short[] iSelArray = new short[0];
         boolean bgetFields = false;
         String[] ContentList = new String[0];
-        // CurDBMetaData.initCommandNames();
         if (bgetQueries)
         {
             ContentList = new String[CurDBMetaData.getTableNames().length + CurDBMetaData.getQueryNames().length];

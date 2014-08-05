@@ -47,11 +47,9 @@ public class XOutputStreamToByteArrayAdapter
             externalBuffer = true;
             buffer = aBuffer;
             size = buffer.length;
-            // System.err.println("new outputbuffer with external storage");
         } else {
             size = initialSize;
             buffer = new byte[size];
-            // System.err.println("new outputbuffer with internal storage");
         }
     }
 
@@ -85,14 +83,12 @@ public class XOutputStreamToByteArrayAdapter
             com.sun.star.io.BufferSizeExceededException,
             com.sun.star.io.IOException
     {
-        // System.err.println("writeBytes("+values.length+")");
         if ( values.length > size-position )
         {
             if ( externalBuffer )
                 throw new BufferSizeExceededException("out of buffer space, cannot grow external buffer");
             while ( values.length > size-position )
                 size *= 2;
-            // System.err.println("new buffer size is "+size+" bytes.");
             byte[] newBuffer = new byte[size];
             System.arraycopy(buffer, 0, newBuffer, 0, position);
             buffer = newBuffer;

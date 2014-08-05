@@ -140,7 +140,6 @@ public class URLHelper
         int index = sFileURL.indexOf(sBaseURL);
         String sURL = sFileURL.substring(0,index) + sServerURL +
                                 sFileURL.substring(index+sBaseURL.length());
-        //String sURL = sFileURL.replaceFirst(sBaseURL,sServerURL);
         return sURL;
     }
 

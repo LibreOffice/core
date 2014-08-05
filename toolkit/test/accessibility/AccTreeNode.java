@@ -274,7 +274,7 @@ class AccTreeNode
             handlers show no children */
     public boolean isLeaf()
     {
-        return (maHandlers.size() == 0);// || (getChildCount() == 0);
+        return (maHandlers.size() == 0);
     }
 
     public boolean equals (Object aOther)

@@ -369,7 +369,6 @@ public class Assurance
         state &= s;
         if (!s) {
             message += msg + "\r\n";
-            // log.println(msg);
             if (!cont) {
                 throw new AssureException(msg);
             }

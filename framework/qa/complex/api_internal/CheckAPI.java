@@ -15,7 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-// package name: as default, start with complex
 package complex.api_internal;
 
 // imports
@@ -48,14 +47,6 @@ import com.sun.star.uno.UnoRuntime;
  * inside of the ChekAPI.props to determine which tetss will be executed.
  */
 public class CheckAPI  {
-
-    /**
-     * Return all test methods.
-     * @return The test methods.
-     */
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkAPI"};
-//    }
 
     /**
      * The test parameters

@@ -230,7 +230,6 @@ public class java_fat_service implements TestBase {
             }
 
             log.println("Creating: "+tCase.getObjectName());
-            // LogWriter log = (LogWriter)dcl.getInstance( (String)param.get("LogWriter"));
             log.initialize(entry,true);
             entry.UserDefinedParams = param;
             tCase.setLogWriter((PrintWriter) log);
@@ -246,11 +245,5 @@ public class java_fat_service implements TestBase {
             }
             return tEnv;
     }
-
-//    protected void shortWait(int millis) {
-//        try {
-//            Thread.sleep(millis);
-//        } catch (java.lang.InterruptedException ie) {}
-//    }
 
 }

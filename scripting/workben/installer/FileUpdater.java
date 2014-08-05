@@ -98,7 +98,6 @@ public class FileUpdater {
             FileWriter out = null;
             int count = 0;
 
-        //System.out.println("updateScriptXLC");
             try {
                 in_file = new File( installPath+File.separator+"user"+File.separator+"basic"+File.separator+"script.xlc" );
 
@@ -128,7 +127,6 @@ public class FileUpdater {
                 out = new FileWriter( out_file );
 
                 //split the string into a string array with one line of xml in each element
-                //String[] xmlArray = xmlLine.split("\n");
         for(int i=0; i<count + 1; i++) {
                     out.write(xmlArray[i]+"\n");
                     if( ( xmlArray[i].indexOf( "<library:libraries xmlns:library" ) != -1 ) && ( xmlArray[i+1].indexOf( "ScriptBindingLibrary" ) == -1 ) ) {
@@ -169,7 +167,6 @@ public class FileUpdater {
             FileWriter out = null;
             int count = 0;
 
-            //System.out.println( "updateDialogXLC" );
             try {
                 in_file = new File( installPath+File.separator+"user"+File.separator+"basic"+File.separator+"dialog.xlc" );
 
@@ -199,7 +196,6 @@ public class FileUpdater {
                 out = new FileWriter( out_file );
 
                 //split the string into a string array with one line of xml in each element
-                // String[] xmlArray = xmlLine.split("\n");
         for(int i=0; i<count + 1; i++) {
                     out.write(xmlArray[i]+"\n");
                     if( ( xmlArray[i].indexOf( "<library:libraries xmlns:library" ) != -1 ) && ( xmlArray[i+1].indexOf( "ScriptBindingLibrary" ) == -1 ) ) {

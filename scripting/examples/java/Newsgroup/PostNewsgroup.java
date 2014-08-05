@@ -321,7 +321,6 @@ public class PostNewsgroup extends JFrame
 
         if( subscribedNewsgroups == null )
         {
-            //System.out.println( "Couldn't find any subscibed newsgroups in .mozilla" );
             JOptionPane.showMessageDialog( window, "No subscribed newsgroups found in mozilla/netscape profile \nPlease enter newsgroup and host name",
                             "Newsgroups Information", JOptionPane.INFORMATION_MESSAGE );
         }
@@ -467,7 +466,6 @@ public class PostNewsgroup extends JFrame
                 Sender sender = new Sender( statusWindow, officeAttach, replyto, subject, comment, host, group );
                 if( !sender.sendMail() )
                 {
-                    //System.out.println( "Should end here (?)" );
                     statusWindow.enableCancelButton( true );
                     officeAttach.cleanUpOnError();
                     return false;
@@ -478,7 +476,6 @@ public class PostNewsgroup extends JFrame
             }
             else
             {
-                //System.out.println( "Non valid data" );
                 return false;
             }
             return true;
@@ -593,7 +590,6 @@ public class PostNewsgroup extends JFrame
         }
         if( newsgroupString.length() == 0 )
         {
-            //System.out.println( "Please enter a newsgroup name" );
             newsgroupComboBox.requestFocus();
             JOptionPane.showMessageDialog( window, "Please enter a newsgroup name", "Input Error", JOptionPane.ERROR_MESSAGE );
             return false;
@@ -604,7 +600,6 @@ public class PostNewsgroup extends JFrame
         String  hostString = hostTextField.getText();
                 if( hostString.length() == 0 )
                 {
-            //System.out.println( "Please enter a hostname" );
             hostTextField.requestFocus();
             JOptionPane.showMessageDialog( window, "Please enter a hostname", "Input Error", JOptionPane.ERROR_MESSAGE );
                         return false;
@@ -618,10 +613,8 @@ public class PostNewsgroup extends JFrame
         int atPos = replyString.indexOf( "@" );
         int dotPos = replyString.lastIndexOf( "." );
         int length = replyString.length();
-        //System.out.println( "length: " + length + "\n atPos: " + atPos + "\n dotPos: " + dotPos );
         if( length == 0 || atPos == -1 || dotPos == -1 || atPos < 2 || dotPos < atPos || dotPos + 2 == length || atPos + 2 == dotPos || atPos != replyString.lastIndexOf( "@" ) || replyString.indexOf(" ") != -1 )
         {
-            //System.out.println( "Please enter a valid reply to email address" );
             replyTextField.requestFocus();
             JOptionPane.showMessageDialog( window, "Please enter a valid reply to email address", "Input Error", JOptionPane.ERROR_MESSAGE );
             return false;
@@ -632,7 +625,6 @@ public class PostNewsgroup extends JFrame
         String subjectString = subjectTextField.getText();
         if( subjectString.length() == 0 )
         {
-            //System.out.println( "Please enter subject title" );
             subjectTextField.requestFocus();
             JOptionPane.showMessageDialog( window, "Please enter subject title", "Input Error", JOptionPane.ERROR_MESSAGE );
             return false;

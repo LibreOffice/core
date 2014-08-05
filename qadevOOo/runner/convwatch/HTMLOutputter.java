@@ -108,7 +108,6 @@ public class HTMLOutputter
             StringBuffer a = new StringBuffer();
             if (! OSHelper.isWindows())
             {
-                // System.out.println("Tu'nix system.");
                 a.append("<A HREF=\"");
                 a.append(_sHREF);
                 a.append("\">");
@@ -117,42 +116,13 @@ public class HTMLOutputter
             }
             else
             {
-                // System.out.println("Windows system.");
                 //! this should be replaced by a better method
                 //! name(WIN|UNIX)
                 a.append("<A HREF=\"");
                 a.append(_sHREF);
                 a.append("\">");
                 a.append(_sPathInfo);
-                // a.append("(first)");
                 a.append("</A>");
-                // if (_sHREF.charAt(1) == ':' && (_sHREF.charAt(0) == 'x' || _sHREF.charAt(0) == 'X'))
-                // int index = 0;
-                // index = _sHREF.indexOf("X:");
-                // if (index == -1)
-                // {
-                //     index = _sHREF.indexOf("x:");
-                // }
-                // if (index >= 0)
-                // {
-                //     // int index = 0;
-                //     // remove "X:" and insert "/tausch"
-                //     StringBuffer sbUNIXPath = new StringBuffer( _sHREF.substring(0, index) );
-                //     sbUNIXPath.append("/tausch");
-                //     sbUNIXPath.append(_sHREF.substring(index + 2));
-                //     String sUNIXPath = sbUNIXPath.toString();
-                //     sUNIXPath = utils.replaceAll13(sUNIXPath, "\\", "/");
-
-                //     a.append("<A HREF=\"");
-                //     a.append(sUNIXPath);
-                //     a.append("\">");
-                //     a.append("(second)");
-                //     a.append("</A>");
-                // }
-                // else
-                // {
-                //     System.out.println("Path is '" + _sHREF + "'");
-                // }
 
             }
             return a.toString();
@@ -366,8 +336,6 @@ public class HTMLOutputter
             {
                 m_aOut.write( "<TR>" + ls);
                 // the link to the old difference can't offer here
-                //  String sLink = getHREF(FileHelper.getBasename(_aStatus.m_sOldGfx), FileHelper.getBasename(_aStatus.m_sOldGfx));
-                //  m_aOut.write( tableDataCell(sLink) );
 
                 String sBasename = FileHelper.getBasename(m_sFilename);
                 String sNew = sBasename.substring(m_sNamePrefix.length());
@@ -383,10 +351,6 @@ public class HTMLOutputter
                 m_aOut.write( tableDataCell(sLink) );
 
                 String sPercent = String.valueOf(_aStatus.nPercent) + "%";
-                // if (_aStatus.nPercent > 0 && _aStatus.nPercent < 5)
-                // {
-                //     sPercent += " (less 5% is ok)";
-                // }
                 m_aOut.write(tableDataCell( sPercent ) );
 
                 // is the check positiv, in a defined range

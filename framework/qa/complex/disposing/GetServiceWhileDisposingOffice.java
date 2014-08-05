@@ -36,14 +36,6 @@ import static org.junit.Assert.*;
 public class GetServiceWhileDisposingOffice
 {
 
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                    "checkServiceWhileDisposing"
-//                };
-//    }
-
     @Test public void checkServiceWhileDisposing()
     {
         XMultiServiceFactory xMSF = getMSF();

@@ -54,7 +54,6 @@ public class ParcelBrowseNode extends PropertySet
     implements XBrowseNode, XInvocation
 {
     private ScriptProvider provider;
-    //private RootBrowseNode parent;
     private Collection<XBrowseNode> browsenodes;
     private ParcelContainer container;
     private Parcel parcel;
@@ -255,8 +254,6 @@ public class ParcelBrowseNode extends PropertySet
                 LogUtils.DEBUG( LogUtils.getTrace( e ) );
                 result = new Any(new Type(Boolean.class), Boolean.FALSE);
 
-                // throw new com.sun.star.reflection.InvocationTargetException(
-                //     "Error creating script: " + e.getMessage());
             }
         }
         else if (aFunctionName.equals("Deletable"))
@@ -275,9 +272,6 @@ public class ParcelBrowseNode extends PropertySet
             catch (Exception e)
             {
                 result =  new Any(new Type(Boolean.class), Boolean.FALSE);
-
-                // throw new com.sun.star.reflection.InvocationTargetException(
-                //     "Error deleting parcel: " + e.getMessage());
             }
         }
         else if (aFunctionName.equals("Renamable"))
@@ -327,9 +321,6 @@ public class ParcelBrowseNode extends PropertySet
             catch (Exception e)
             {
                 result =  new Any(new Type(Boolean.class), Boolean.FALSE);
-
-                // throw new com.sun.star.reflection.InvocationTargetException(
-                //     "Error renaming parcel: " + e.getMessage());
             }
         }
 

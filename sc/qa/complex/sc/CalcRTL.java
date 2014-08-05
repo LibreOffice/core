@@ -35,24 +35,17 @@ import com.sun.star.sheet.XCellRangeAddressable;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
-// import com.sun.star.table.XCell;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
 
-// import complexlib.ComplexTestCase;
-
-// import java.io.PrintWriter;
-
 import util.DrawTools;
 import util.SOfficeFactory;
 import util.ValueComparer;
 
-// import org.junit.After;
 import org.junit.AfterClass;
-// import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
@@ -74,12 +67,6 @@ public class CalcRTL /* extends ComplexTestCase */
      * <br>
      * 3. A calc document is opened and a shape inserted, afterwards the effect of changing the TableLayout to the shape is checked
      */
-//     public String[] getTestMethodNames() {
-//         return new String[] {
-//             "checkSpreadsheetProperties", "checkShapeProperties",
-//             "checkInfluenceOfSpreadsheetChange"
-//         };
-//     }
 
     /*
      * In this method a spreadsheet document is opened<br>

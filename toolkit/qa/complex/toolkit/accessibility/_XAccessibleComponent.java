@@ -47,8 +47,6 @@ import com.sun.star.uno.XInterface;
  */
 public class _XAccessibleComponent {
 
-    // private LogWriter log;
-
     public XAccessibleComponent oObj = null;
 
     private Rectangle bounds = null ;
@@ -60,7 +58,6 @@ public class _XAccessibleComponent {
     public _XAccessibleComponent(XInterface object/*, LogWriter log*/) {
         oObj = UnoRuntime.queryInterface(
                                     XAccessibleComponent.class, object);
-        // this.log = log;
     }
 
      /**
@@ -83,11 +80,9 @@ public class _XAccessibleComponent {
         boolean result = true ;
 
         int curX = 0;
-        //while (!oObj.containsPoint(new Point(curX, bounds.Y)) && curX < bounds.Width+bounds.X) {
         while (!oObj.containsPoint(new Point(curX, 0)) && curX < bounds.Width) {
             curX++;
         }
-        //if ((bounds.X <= curX) && (curX < bounds.Width+bounds.X)) {
         if (curX < bounds.Width) {
             System.out.println("Upper bound of box contains point ("
                 + curX + ",0) - OK");
@@ -98,14 +93,12 @@ public class _XAccessibleComponent {
         }
 
         curX = 0;
-        //while (!oObj.containsPoint(new Point(curX, bounds.Y+bounds.Height - 1))
         while (!oObj.containsPoint(new Point(curX, bounds.Height - 1))
                && curX < bounds.Width) {
 
                System.out.println("Contains returns false for ("+curX+","+bounds.Height+")");
             curX++;
         }
-        //if ((bounds.X <= curX) && (curX < bounds.Width+bounds.X)) {
         if (curX < bounds.Width) {
             System.out.println("Lower bound of box contains point ("
                 + curX + "," + (bounds.Height - 1) + ") - OK");
@@ -116,11 +109,9 @@ public class _XAccessibleComponent {
         }
 
         int curY = 0;
-        //while (!oObj.containsPoint(new Point(bounds.X, curY)) && curY < bounds.Height+bounds.Y) {
         while (!oObj.containsPoint(new Point(0, curY)) && curY < bounds.Height) {
             curY++;
         }
-        //if ((bounds.Y <= curY) && (curY < bounds.Height+bounds.Y)) {
         if (curY < bounds.Height) {
             System.out.println("Left bound of box contains point (0,"
                 + curY + ") - OK");
@@ -131,12 +122,9 @@ public class _XAccessibleComponent {
         }
 
         curY = 0;
-        //while (!oObj.containsPoint(new Point(bounds.X+bounds.Width - 1, curY))
-        //       && curY < bounds.Height+bounds.Y) {
         while (!oObj.containsPoint(new Point(bounds.Width - 1, curY)) && curY < bounds.Height) {
             curY++;
         }
-        //if ((bounds.Y <= curY) && (curY < bounds.Height + bounds.Y)) {
         if (curY < bounds.Height) {
             System.out.println("Right bound of box contains point ("
                 + (bounds.Width - 1) + "," + curY + ") - OK");

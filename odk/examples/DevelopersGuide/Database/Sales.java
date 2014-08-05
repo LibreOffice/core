@@ -32,7 +32,6 @@
  *
  *************************************************************************/
 
-//  import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.*;
 import com.sun.star.util.Date;
 import com.sun.star.beans.XPropertySet;

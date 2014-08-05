@@ -109,21 +109,8 @@ public class CheckContextMenuInterceptor
 
         xFrame = null;
 
-//        xClose = UnoRuntime.queryInterface(XCloseable.class, xDrawDoc);
-//        try
-//        {
-//            xClose.close(true);
-//        }
-//        catch (com.sun.star.util.CloseVetoException exVeto)
-//        {
-//            fail("Test DrawDoc couldn't be closed successfully.");
-//        }
-
     }
 
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkContextMenuInterceptor"};
-//    }
     @Test
     public void checkContextMenuInterceptor()
     {
@@ -156,7 +143,6 @@ public class CheckContextMenuInterceptor
             try
             {
                 String sFile = OfficeFileUrl.getAbsolute(new File("space-metal.jpg"));
-                // String sFile = util.utils.getFullTestURL("space-metal.jpg");
                 oShapeProps.setPropertyValue("GraphicURL", sFile);
                 Object oProp = oShapeProps.getPropertyValue("GraphicObjectFillBitmap");
                 xBitmap = (XBitmap) AnyConverter.toObject(new Type(XBitmap.class), oProp);

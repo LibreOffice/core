@@ -77,8 +77,6 @@ public class TypeInspector
             ArrayList<Integer> aMinScaleVector = new ArrayList<Integer>();
             ArrayList<Integer> aMaxScaleVector = new ArrayList<Integer>();
             ArrayList<Integer> aSearchableVector = new ArrayList<Integer>();
-            // Integer[] aIntegerDataTypes = null;
-//      XResultSet xResultSet = xDBMetaDagetTypeInfo();
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             while (xResultSet.next())
             {
@@ -274,8 +272,6 @@ public class TypeInspector
         {
             if (nDataTypeInfos[i] == _curDataType)
             {
-//                 System.out.println( "Desired prec " + precision + ",nPrecisionInfos[i]="+nPrecisionInfos[i] + ",sDataTypeNames[i]="+sDataTypeNames[i] );
-
                 if (precision == null || nPrecisionInfos[i] >= precision.intValue())
                 {
                     ret = sDataTypeNames[i]; // this fits best !
@@ -289,7 +285,6 @@ public class TypeInspector
                 }
             }
         }
-//         System.out.println( "_curDataType="+_curDataType+",precision="+precision+",ret="+
         return ret;
     }
 

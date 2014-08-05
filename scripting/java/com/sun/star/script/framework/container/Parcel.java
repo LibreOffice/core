@@ -251,7 +251,6 @@ public class Parcel implements XNameContainer
             ScriptMetaData script = null;
             if ( ( script = (ScriptMetaData)getByName( Name ) ) != null )
             {
-//                if ( script.hasSource() )
                 {
                    if ( !script.removeSourceFile() )
                    {

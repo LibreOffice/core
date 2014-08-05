@@ -127,7 +127,6 @@ public class CheckImageManager  {
         _XUIConfigurationPersistence _xUIConfigPersistence = new _XUIConfigurationPersistence(param, xUIConfigPersistence);
         _xUIConfigPersistence.before();
         assertTrue(testObjectName + "::XUIConfigPersistence.isModified", _xUIConfigPersistence._isModified());
-        // System.out.println(testObjectName + "::XUIConfigPersistence.isReadOnly "+ _xUIConfigPersistence._isReadOnly());
         assertTrue(testObjectName + "::XUIConfigPersistence.isReadOnly", _xUIConfigPersistence._isReadOnly());
         assertTrue(testObjectName + "::XUIConfigPersistence.reload", _xUIConfigPersistence._reload());
         assertTrue(testObjectName + "::XUIConfigPersistence.store", _xUIConfigPersistence._store());

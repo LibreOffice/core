@@ -74,7 +74,6 @@ public class UCB
 
     public void delete(String filename) throws Exception
     {
-        //System.out.println("UCB.delete(" + filename);
         executeCommand( getContent(filename),"delete",Boolean.TRUE);
     }
 

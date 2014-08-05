@@ -18,15 +18,11 @@
 package com.sun.star.wizards.db;
 
 
-// import com.sun.star.lang.IllegalArgumentException;
-// import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.*;
-// import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbcx.XColumnsSupplier;
-// import com.sun.star.sdb.XColumn;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
 import com.sun.star.ui.dialogs.XExecutableDialog;
@@ -45,10 +41,7 @@ public class SQLQueryComposer
 {
 
     public XColumnsSupplier xColSuppl;
-    // XSQLQueryComposer xSQLQueryComposer;
     QueryMetaData CurDBMetaData;
-    // String m_sSelectClause;
-    // String m_sFromClause;
     public XSingleSelectQueryAnalyzer m_xQueryAnalyzer;
     ArrayList<CommandName> composedCommandNames = new ArrayList<CommandName>(1);
     private XSingleSelectQueryComposer m_queryComposer;

@@ -192,9 +192,9 @@ public class UnoDialog implements EventNames
             return xPSet.getPropertyValue(PropertyName);
         }
         catch (com.sun.star.uno.Exception exception)
-        { // com.sun.star.container.NoSuchElementException, com.sun.star.beans.UnknownPropertyException,
-            exception.printStackTrace(System.err); // com.sun.star.lang.WrappedTargetException, com.sun.star.beans.PropertyVetoException
-            return null; // com.sun.star.lang.IllegalArgumentException
+        {
+            exception.printStackTrace(System.err);
+            return null;
         }
     }
 

@@ -20,14 +20,11 @@ package complex.passwordcontainer;
 
 import com.sun.star.task.UserRecord;
 
-// import share.LogWriter;
 
 public class TestHelper {
-    // LogWriter m_aLogWriter;
     String m_sTestPrefix;
 
     public TestHelper(  String sTestPrefix ) {
-        // m_aLogWriter = aLogWriter;
         m_sTestPrefix = sTestPrefix;
     }
 

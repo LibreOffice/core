@@ -68,7 +68,6 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
         log.println(testdata.get("description"));
 
-        // try {
             log.println("In _XScriptInfoAccess.getScriptLogicalNames()");
             String[] logicalNames = oObj.getScriptLogicalNames();
 
@@ -84,11 +83,6 @@ public class _XScriptInfoAccess extends MultiMethodTest {
                     }
                 }
             }
-        // }
-        // catch (com.sun.star.uno.Exception e) {
-            // log.println("Caught UNO Exception :" + e);
-            // output = "com.sun.star.uno.Exception";
-        // }
 
         log.println("expected: " + expected + ", output: " + output);
         if (output.equals(expected))

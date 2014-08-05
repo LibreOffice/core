@@ -39,36 +39,10 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import com.sun.star.lang.XServiceInfo;
 
-// import util.BasicMacroTools;
-// import util.DesktopTools;
-// import util.dbg;
 import complexlib.ComplexTestCase;
 import helper.OfficeProvider;
 import helper.URLHelper;
 import helper.OfficeWatcher;
-
-// import convwatch.DB;
-
-// import java.util.Date;
-// import java.text.SimpleDateFormat;
-// import java.text.ParsePosition;
-// import java.sql.Time;
-
-// import java.io.BufferedReader;
-// import java.io.File;
-// import java.io.FileReader;
-// import java.io.IOException;
-// import java.io.FilenameFilter;
-
-// import java.util.Vector;
-
-// import helper.AppProvider;
-// import java.text.DecimalFormat;
-// import util.DynamicClassLoader;
-// import java.util.StringTokenizer;
-
-
-
 
 class PropertySetHelper
 {
@@ -173,11 +147,6 @@ public class ReportDesignerTest extends ComplexTestCase {
                 }
             }
 
-            // if (sOfficePath.startsWith("\"") ||
-            //     sOfficePath.startsWith("'"))
-            // {
-            //     sOfficePath = sOfficePath.substring(1);
-            // }
             sOfficePath = helper.StringHelper.removeQuoteIfExists(sOfficePath);
 
             log.println(sOfficePath);
@@ -231,12 +200,10 @@ public class ReportDesignerTest extends ComplexTestCase {
     private static XMultiServiceFactory m_xXMultiServiceFactory = null;
     private void startOffice()
         {
-            // int tempTime = param.getInt("SingleTimeOut");
             param.put("TimeOut", new Integer(300000));
             System.out.println("TimeOut: " + param.getInt("TimeOut"));
             System.out.println("ThreadTimeOut: " + param.getInt("ThreadTimeOut"));
 
-            // OfficeProvider aProvider = null;
             m_aProvider = new OfficeProvider();
             m_xXMultiServiceFactory = (XMultiServiceFactory) m_aProvider.getManager(param);
             param.put("ServiceFactory", m_xXMultiServiceFactory);
@@ -254,9 +221,6 @@ public class ReportDesignerTest extends ComplexTestCase {
 
     private String m_sMailAddress = null;
     private String m_sParentDistinct = null;
-
-    // private String m_sUPDMinor;
-    // private String m_sCWS_WORK_STAMP;
 
     private static String m_sSourceVersion;
     private static String m_sDestinationVersion;
@@ -285,9 +249,6 @@ public class ReportDesignerTest extends ComplexTestCase {
                 String sUser = System.getProperty("user.name");
                 log.println("user.name='" + sUser + "'");
 
-                // String sVCSID = System.getProperty("VCSID");
-                // log.println("VCSID='" + sVCSID + "'");
-                // m_sMailAddress = sVCSID + "@openoffice.org";
                 m_sMailAddress = System.getProperty("MailAddress");
                 log.println("Assumed mail address: " + m_sMailAddress);
 
@@ -297,9 +258,6 @@ public class ReportDesignerTest extends ComplexTestCase {
                 m_sSourceName = System.getProperty("SourceName");
                 m_sDestinationVersion = System.getProperty("DestinationVersion");
                 m_sDestinationName = System.getProperty("DestinationName");
-                // createDBEntry();
-                // log.println("Current CWS: " + m_sCWS_WORK_STAMP);
-                // log.println("Current MWS: " + m_sUPDMinor);
 
                 if (m_sSourceVersion == null)
                 {
@@ -311,12 +269,9 @@ public class ReportDesignerTest extends ComplexTestCase {
                 log.println("sAppExecutionCommand='" + sAppExecutionCommand + "'");
 
                 // an other way to replace strings
-                // sAppExecutionCommand = utils.replaceAll13(sAppExecutionCommand, "${USERNAME}", sUser);
 
                 checkIfOfficeExists(sAppExecutionCommand);
                 param.put("AppExecutionCommand", sAppExecutionCommand);
-
-                // System.exit(1);
 
                 // --------------------------- Start the given Office ---------------------------
 
@@ -324,23 +279,9 @@ public class ReportDesignerTest extends ComplexTestCase {
 
                 // ------------------------------ Start a test run ------------------------------
 
-                // String sCurrentDirectory = System.getProperty("user.dir");
-                // log.println("Current Dir: " + sCurrentDirectory);
                 String sDocument = (String) param.get(convwatch.PropertyName.DOC_COMPARATOR_INPUT_PATH);
                 sDocument = helper.StringHelper.removeQuoteIfExists( sDocument );
                 startTestForFile(sDocument);
-                // if (sDocument.toLowerCase().indexOf("writer") >= 0)
-                // {
-                //     startTestForFile(sDocument, WRITER);
-                // }
-                // else if (sDocument.toLowerCase().indexOf("calc") >= 0)
-                // {
-                //     startTestForFile(sDocument, CALC);
-                // }
-                // else
-                // {
-                //     assure("Can't identify the document no 'writer' nor 'calc' in its name given.", false);
-                // }
             }
             catch (AssureException e)
             {
@@ -363,15 +304,6 @@ public class ReportDesignerTest extends ComplexTestCase {
 
             XComponent xDocComponent = loadComponent(sFileURL, getXDesktop(), null);
             log.println("Load done");
-//  context = createUnoService("com.sun.star.sdb.DatabaseContext")
-//     oDataBase = context.getByName("hh")
-//     oDBDoc = oDataBase.DatabaseDocument
-
-//  dim args(1) as new com.sun.star.beans.PropertyValue
-//  args(0).Name = "ActiveConnection"
-//  args(0).Value = oDBDoc.getCurrentController().getPropertyValue("ActiveConnection")
-//  reportContainer = oDBDoc.getReportDocuments()
-//     report = reportContainer.loadComponentFromURL("Report40","",0,args)
 
             try
             {
@@ -382,45 +314,25 @@ public class ReportDesignerTest extends ComplexTestCase {
                 XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, x);
                 showElements(xNameAccess);
                 Object aObj = xNameAccess.getByName(sFileURL);
-//                    log.println("1");
 
-                    // PropertySetHelper aHelper = new PropertySetHelper(aObj);
                 XDocumentDataSource xDataSource = UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
-//                    Object aDatabaseDocmuent = aHelper.getPropertyValueAsObject("DatabaseDocument");
                 XOfficeDatabaseDocument xOfficeDBDoc = xDataSource.getDatabaseDocument();
 
-                // XOfficeDatabaseDocument xOfficeDBDoc = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, aDatabaseDocument);
                 assure("can't access DatabaseDocument", xOfficeDBDoc != null);
-//                    log.println("2");
 
                 XModel xDBSource = UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
                 Object aController = xDBSource.getCurrentController();
                 assure("Controller of xOfficeDatabaseDocument is empty!", aController != null);
-//                     log.println("3");
 
                 XDatabaseDocumentUI aDBDocUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
                 aDBDocUI.connect();
-//                     if (aDBDocUI.isConnected())
-//                     {
-//                         System.out.println("true");
-//                     }
-//                     else
-//                     {
-//                         System.out.println("false");
-//                     }
-//                     log.println("4");
 
-                // aHelper = new PropertySetHelper(aController);
-
-                // Object aActiveConnectionObj = aHelper.getPropertyValueAsObject("ActiveConnection");
                 Object aActiveConnectionObj = aDBDocUI.getActiveConnection();
                 assure("ActiveConnection is empty", aActiveConnectionObj != null);
-//                     log.println("5");
 
                 XReportDocumentsSupplier xSupplier = UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
                 xNameAccess = xSupplier.getReportDocuments();
                 assure("xOfficeDatabaseDocument returns no Report Document", xNameAccess != null);
-//                     log.println("5");
 
                 showElements(xNameAccess);
 
@@ -440,11 +352,6 @@ public class ReportDesignerTest extends ComplexTestCase {
                 log.println("Message: " + e.getMessage());
             }
 
-            // String mTestDocumentPath = (String) param.get("TestDocumentPath");
-            // System.out.println("mTestDocumentPath: '" + mTestDocumentPath + "'");
-            // // workaround for issue using deprecated "DOCPTH" prop
-            // System.setProperty("DOCPTH", mTestDocumentPath);
-
             // Close the document
             closeComponent(xDocComponent);
         }
@@ -452,7 +359,6 @@ public class ReportDesignerTest extends ComplexTestCase {
     private String getDocumentPoolName(/*int _nType*/)
         {
             return "AutogenReportDesignTest";
-            // return getFileFormat(_nType);
         }
 
 
@@ -464,14 +370,8 @@ public class ReportDesignerTest extends ComplexTestCase {
             DB.init(sDBConnection);
 
             String sSourceVersion = m_sSourceVersion;
-            // String sSourceVersion = sFixRefSubDirectory;
             String sSourceName = m_sSourceName;
-            // String sSourceCreatorType = "fixref";
             String sSourceCreatorType = "";
-            // if (sDestinationVersion.length() == 0)
-            // {
-            //     sDestinationVersion = m_sUPDMinor;
-            // }
             String sDestinationName = m_sDestinationName;
             String sDestinationCreatorType = "";
             String sDocumentPoolDir = getOutputPath(/*_nType*/);
@@ -483,8 +383,6 @@ public class ReportDesignerTest extends ComplexTestCase {
                                           sDocumentPoolDir, sDocumentPoolName, m_sMailAddress,
                                           sSpecial, m_sParentDistinct);
             TimeHelper.waitInSeconds(1, "wait for DB.");
-            // DB.test();
-            // System.exit(1);
         }
 
     private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList<PropertyValue> _aPropertyList /*, int _nType*/ )
@@ -524,36 +422,6 @@ public class ReportDesignerTest extends ComplexTestCase {
              return sExtension;
          }
 
-    //         switch(_nType)
-    //         {
-    //         case WRITER:
-    //             sExtension = ".odt";
-    //             break;
-    //         case CALC:
-    //             sExtension = ".ods";
-    //             break;
-    //         default:
-    //             sExtension = ".UNKNOWN";
-    //         }
-    //         return sExtension;
-    //     }
-    // private String getFileFormat(int _nType)
-    //     {
-    //         String sFileType;
-    //         switch(_nType)
-    //         {
-    //         case WRITER:
-    //             sFileType = "writer8";
-    //             break;
-    //         case CALC:
-    //             sFileType = "calc8";
-    //             break;
-    //         default:
-    //             sFileType = "UNKNOWN";
-    //         }
-    //         return sFileType;
-    //     }
-
     private String m_sOutputPath = null;
 
     private String getOutputPath(/*int _nType*/)
@@ -568,12 +436,8 @@ public class ReportDesignerTest extends ComplexTestCase {
                 {
                     sOutputPath += System.getProperty("file.separator");
                 }
-                // sOutputPath += "tmp_123";
                 sOutputPath += DateHelper.getDateTimeForFilename();
                 sOutputPath += System.getProperty("file.separator");
-
-                // sOutputPath += getFileFormat(_nType);
-                // sOutputPath += System.getProperty("file.separator");
 
                 File aOutputFile = new File(sOutputPath); // create the directory of the given output path
                 aOutputFile.mkdirs();
@@ -602,11 +466,6 @@ public class ReportDesignerTest extends ComplexTestCase {
             String sOutputURL = URLHelper.getFileURLFromSystemPath(sOutputPath);
 
             ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>(); // set some properties for storeAsURL
-
-            // PropertyValue aFileFormat = new PropertyValue();
-            // aFileFormat.Name = "FilterName";
-            // aFileFormat.Value = getFileFormat(_nType);
-            // aPropertyList.add(aFileFormat);
 
             PropertyValue aOverwrite = new PropertyValue(); // always overwrite already exist files
             aOverwrite.Name = "Overwrite";

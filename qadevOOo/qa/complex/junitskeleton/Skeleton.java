@@ -118,7 +118,6 @@ public class Skeleton
 
     @Test public void checkOpenDocumentWithOffice()
     {
-        // SOfficeFactory aFactory = new SOfficeFactory(getMSF());
         SOfficeFactory SOF = SOfficeFactory.getFactory(getMSF());
         final String sREADME = TestDocument.getUrl("README.txt");
         try

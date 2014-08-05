@@ -143,7 +143,6 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
                 if (result == true && target.isDirectory()) {
                     showNagDialog();
-                    // refreshOffice((String)versions.get(label));
                 }
             }
         });

@@ -198,13 +198,6 @@ public class AccessibleTreeListBox extends TestCase {
 
         final Object[] fParams = params;
 
-//        tEnv.addObjRelation("EventProducer",
-//            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-//                public void fireEvent() {
-//                    fXComp.grabFocus();
-//                }
-//            });
-
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {

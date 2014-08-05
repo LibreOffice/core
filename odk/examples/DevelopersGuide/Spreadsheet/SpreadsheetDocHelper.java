@@ -51,7 +51,6 @@ public class SpreadsheetDocHelper
 
     private com.sun.star.uno.XComponentContext  mxRemoteContext;
     private com.sun.star.lang.XMultiComponentFactory  mxRemoteServiceManager;
-//    private com.sun.star.lang.XMultiServiceFactory  mxMSFactory;
     private com.sun.star.sheet.XSpreadsheetDocument mxDocument;
 
 

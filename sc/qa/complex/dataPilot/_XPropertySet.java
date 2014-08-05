@@ -29,8 +29,6 @@ import com.sun.star.lang.EventObject;
 import java.util.Random;
 import java.util.StringTokenizer;
 import lib.TestParameters;
-// import share.LogWriter;
-//import lib.MultiMethodTest;
 import util.ValueChanger;
 import util.utils;
 
@@ -59,11 +57,6 @@ public class _XPropertySet {
      * The test parameters
      */
     private TestParameters param = null;
-
-    /**
-     * The log writer
-     */
-    // private LogWriter log = null;
 
     /**
     * Flag that indicates change listener was called.
@@ -522,9 +515,6 @@ public class _XPropertySet {
             if (name.startsWith("IsNumbering")) isWritable = false;
             if (name.startsWith("LayerName")) isWritable = false;
             if (name.startsWith("Line")) isWritable = false;
-
-            //if (name.equals("xinterfaceA") || name.equals("xtypeproviderA")
-            //|| name.equals("arAnyA")) isWritable=false;
 
             if ( isWritable && isNotNull ) canChange = isChangeable(name);
 

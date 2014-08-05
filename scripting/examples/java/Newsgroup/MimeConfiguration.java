@@ -78,7 +78,6 @@ public class MimeConfiguration
         {
                     if( ! new File( java.net.URLDecoder.decode( mailcapPath )  ).exists() )
                            {
-                //System.out.println( "URLDecoder: " + java.net.URLDecoder.decode( mailcapPath ) );
                 File mailcapFile = new File( mailcapPath );
                 FileWriter out = new FileWriter( mailcapFile );
                 String[] lines = getMailcapText();
@@ -90,7 +89,6 @@ public class MimeConfiguration
                     }
                     else
                     {
-                //System.out.println( "URLDecoder: " + java.net.URLDecoder.decode( mailcapPath ) );
                     }
 
 
@@ -140,7 +138,6 @@ public class MimeConfiguration
         {
                     if( ! new File( java.net.URLDecoder.decode( mimetypesPath )  ).exists() )
                            {
-                //System.out.println( "URLDecoder: " + java.net.URLDecoder.decode( mimetypesPath ) );
                 File mimetypesFile = new File( mimetypesPath );
                 FileWriter out = new FileWriter( mimetypesFile );
                 String[] lines = getMimeTypesText();
@@ -152,7 +149,6 @@ public class MimeConfiguration
                     }
                     else
                     {
-                //System.out.println( "URLDecoder: " + java.net.URLDecoder.decode( mimetypesPath ) );
                     }
 
             MimetypesFileTypeMap mimeTypes = new MimetypesFileTypeMap( mimetypesPath );

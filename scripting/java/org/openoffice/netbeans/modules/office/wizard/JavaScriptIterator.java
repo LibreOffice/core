@@ -54,8 +54,6 @@ import org.openoffice.netbeans.modules.office.utils.PackageRemover;
 public class JavaScriptIterator implements TemplateWizard.Iterator {
 
 
-    // private static final long serialVersionUID = ...L;
-
     // You should define what panels you want to use here:
 
     protected WizardDescriptor.Panel[] createPanels() {

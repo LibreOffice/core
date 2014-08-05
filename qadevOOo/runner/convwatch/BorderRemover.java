@@ -53,15 +53,6 @@ class BorderRemover
 
     // --------------------------------- test mode ---------------------------------
 
-    // void pixelValue(int pixel)
-    // {
-    //     int alpha = (pixel >> 24) & 0xff;
-    //     int red   = (pixel >> 16) & 0xff;
-    //     int green = (pixel >>  8) & 0xff;
-    //     int blue  = (pixel      ) & 0xff;
-    //     int dummy = 0;
-    // }
-
     /*
      * compares 2 colors with a given tolerance. So it's possible to check differences approximate.
      * @param _nColor1
@@ -131,17 +122,7 @@ class BorderRemover
     public boolean createNewImageWithoutBorder(String _sFilenameFrom, String _sFilenameTo)
         throws java.io.IOException
         {
-            // System.out.println("load image: " + fileName);
             m_aImage = ImageHelper.createImageHelper(_sFilenameFrom);
-
-            // System.out.println("image  width:" + String.valueOf(m_aImage.getWidth()));
-            // System.out.println("image height:" + String.valueOf(m_aImage.getHeight()));
-
-            // int nw = graphics_stuff.countNotWhitePixel(m_aImage);
-            // System.out.println("not white pixels:" + String.valueOf(nw));
-
-            // int nb = graphics_stuff.countNotBlackPixel(m_aImage);
-            // System.out.println("not black pixels:" + String.valueOf(nb));
 
             int nBorderColor = m_aImage.getPixel(0,0);
             Rect aInnerRect = findBorder(m_aImage, nBorderColor);
@@ -149,22 +130,18 @@ class BorderRemover
             RenderedImage aImage = createImage(m_aImage, aInnerRect);
 
             File aWriteFile = new File(_sFilenameTo);
-            // GlobalLogWriter.get().println("Hello World: File to: " + _sFilenameTo);
 
             Exception ex = null;
             try
             {
                 Class<?> imageIOClass = Class.forName("javax.imageio.ImageIO");
-                // GlobalLogWriter.get().println("Hello World: get Class");
 
                 Method getWriterMIMETypesMethod = imageIOClass.getDeclaredMethod("getWriterMIMETypes", new Class[]{ });
-                // GlobalLogWriter.get().println("Hello World: get Methode");
 
                 getWriterMIMETypesMethod.invoke(imageIOClass, new Object[]{ });
                 Method writeMethod = imageIOClass.getDeclaredMethod("write", new Class[]{ java.awt.image.RenderedImage.class,
                                                                                           java.lang.String.class,
                                                                                           java.io.File.class});
-                // GlobalLogWriter.get().println("Hello World: get Methode");
                 writeMethod.invoke(imageIOClass, new Object[]{aImage, "image/jpeg", aWriteFile});
             }
             catch(java.lang.ClassNotFoundException e) {
@@ -191,7 +168,6 @@ class BorderRemover
                     "Cannot construct object with current Java version " +
                     javaVersion + ": " + ex.getMessage());
             }
-//            ImageIO.write(aImage, "jpg", aWriteFile);
 
             return true;
         }
@@ -216,19 +192,12 @@ class BorderRemover
             {
                 for (int x = 0; x < nXMin; x++)
                 {
-                    // handlesinglepixel(x+i, y+j, pixels[j * w + i]);
                     int nCurrentColor = _aImage.getPixel(x, y);
                     if (! compareColorWithTolerance(nCurrentColor, _nBorderColor, 10))
                     {
-                        // pixelValue(nCurrentColor);
-                        // System.out.print("*");
                         nXMin = java.lang.Math.min(nXMin, x);
                         nYMin = java.lang.Math.min(nYMin, y);
                     }
-                    // else
-                    // {
-                    //     System.out.print(" ");
-                    // }
                 }
             }
             for (int y = 0; y < h; y++)
@@ -243,12 +212,7 @@ class BorderRemover
                         nYMax = java.lang.Math.max(nYMax, ny);
                     }
                 }
-                // System.out.println();
             }
-            // System.out.println("xmin: " + String.valueOf(nXMin));
-            // System.out.println("xmax: " + String.valueOf(nXMax));
-            // System.out.println("ymin: " + String.valueOf(nYMin));
-            // System.out.println("ymax: " + String.valueOf(nYMax));
 
             Rect aRect;
             if (nXMin < nXMax && nYMin < nYMax)
@@ -266,10 +230,6 @@ class BorderRemover
             }
 
 
-            // m_nXMin = nXMin;
-            // m_nXMax = nXMax;
-            // m_nYMin = nYMin;
-            // m_nYMax = nYMax;
             return aRect;
         }
 
@@ -298,9 +258,6 @@ class BorderRemover
                     aBI.setRGB(x, y, _aImage.getPixel(x + nXOffset, y + nYOffset));
                 }
             }
-            // java.awt.image.MemoryImageSource aSource = new java.awt.image.MemoryImageSource(w, h, aPixels, 0, w);
-//             return java.awt.Component.createImage(aSource);
-             // return java.awt.Toolkit.getDefaultToolkit().createImage(aSource);
              return aBI;
         }
 

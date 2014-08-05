@@ -31,7 +31,6 @@ import helper.BuildEnvTools;
 import helper.ComplexDescGetter;
 import helper.CwsDataExchangeImpl;
 import java.io.File;
-// import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -127,14 +126,6 @@ public class CheckModuleAPI extends ComplexTestCase
         log.println("exit code of dmake: " + procHdl.getExitCode());
         String test = procHdl.getOutputText();
         test += procHdl.getErrorText();
-//        if (mDebug) {
-//            log.println("---> Output of dmake:");
-//            log.println(procHdl.getOutputText());
-//            log.println("<--- Output of dmake:");
-//            log.println("---> Error output of dmake:");
-//            log.println(procHdl.getErrorText());
-//            log.println("<--- Error output of dmake:");
-//        }
         assure("module '" + module + "' failed", verifyOutput(test), mContinue);
         log.println(utils.getDateTime() + " module '" + module + "': kill existing office...");
 
@@ -309,8 +300,6 @@ public class CheckModuleAPI extends ComplexTestCase
                 while (iterator.hasNext())
                 {
                     String sModuleName = iterator.next();
-                    // String sFilename = mSRC_ROOT; //  + File.separator + sModuleName;
-                    // final File sourceRoot = new File(sFilename);
                     if (doesQaUnoApiFolderExist(mSRC_ROOT, sModuleName))
                     {
                         moduleNames.add(sModuleName);
@@ -347,12 +336,6 @@ public class CheckModuleAPI extends ComplexTestCase
             {
                 final String moduleName = names[i].trim();
 
-//                File sourceRoot = new File(mSRC_ROOT + File.separator + moduleName);
-//                if (!sourceRoot.exists())
-//                {
-//                    sourceRoot = new File(mSRC_ROOT + File.separator + moduleName + ".lnk");
-//                }
-
                 if (doesQaUnoApiFolderExist(mSRC_ROOT, moduleName))
                 {
                     checkModules[i] = "checkModule(" + moduleName + ")";
@@ -361,11 +344,6 @@ public class CheckModuleAPI extends ComplexTestCase
         }
         else
         {
-//            File sourceRoot = new File(mSRC_ROOT + File.separator + module);
-//            if (!sourceRoot.exists())
-//            {
-//                sourceRoot = new File(mSRC_ROOT + File.separator + module + ".lnk");
-//            }
             if (doesQaUnoApiFolderExist(mSRC_ROOT, module))
             {
                 checkModules = new String[]
@@ -478,15 +456,12 @@ public class CheckModuleAPI extends ComplexTestCase
         final File sourceRoot = new File(mSRC_ROOT);
         final File[] sourceTree = sourceRoot.listFiles();
 
-//        assure("Could not find any files in SOURCE_ROOT=" + mSRC_ROOT, sourceTree != null, false);
-
         for (int i = 0; i < sourceTree.length; i++)
         {
             final File moduleName = sourceTree[i];
             String sModuleName = moduleName.getName(); // (String)moduleNames.get(i);
             if (doesQaUnoApiFolderExist(mSRC_ROOT, sModuleName))
             {
-                // addIfQaUnoApiFolderExist(moduleName, moduleNames);
                 moduleNames.add(sModuleName);
             }
         }
@@ -590,32 +565,4 @@ public class CheckModuleAPI extends ComplexTestCase
                 };
     }
 
-//    class _FolderFilter implements FileFilter
-//    {
-
-//        private String mFolderName;
-
-//        public FolderFilter(String folderName)
-//        {
-//            mFolderName = folderName;
-//        }
-
-//        public boolean accept_(File pathname)
-//        {
-
-//            boolean found = false;
-//            if (pathname.isDirectory())
-//            {
-//                if (pathname.getName().equals(mFolderName))
-//                {
-//                    found = true;
-//                }
-//                else if (pathname.getName().equals(mFolderName + ".lnk"))
-//                {
-//                    found = true;
-//                }
-//            }
-//            return found;
-//        }
-//    }
 }

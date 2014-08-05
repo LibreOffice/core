@@ -77,14 +77,12 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
             nav.enableBack(false);
             nav.enableCancel(false);
             ArrayList<?> locations = InstallWizard.getLocations();
-            //System.out.println("here "+locations.size());
             // Returned 1
             String progpath=null;
             String path=null;
             String classespath=null;
             for (int i =0;i<locations.size();i++){
                 path= (String)locations.get(i);
-            //InstallWizard.currentPath = path;
             xud = new XmlUpdater(path, statusLine,progressBar,InstallWizard.bNetworkInstall,InstallWizard.bBindingsInstall);
         xud.addInstallListener(this);
         InstallWizard.setInstallStarted(true);
@@ -111,9 +109,7 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
 
 
     public void installationComplete(InstallationEvent ev) {
-        //System.out.println("Detected installation complete");
     if( InstUtil.hasNetbeansInstallation() ) {
-        //System.out.println("Detected installation complete (IDE(s) detected)");
         nav.removeCancelListener(this);
         nav.setCancelListener(nav);
         nav.navCancel.setText("Finish");
@@ -122,7 +118,6 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
         xud = null;
     }
     else {
-        //System.out.println("Detected installation complete (No IDE(s) detected)");
         nav.removeCancelListener(this);
         nav.setCancelListener(nav);
         nav.navCancel.setText("Finish");

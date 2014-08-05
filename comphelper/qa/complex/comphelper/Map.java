@@ -29,10 +29,8 @@ import com.sun.star.container.XIdentifierAccess;
 import com.sun.star.container.XMap;
 import com.sun.star.container.XSet;
 import com.sun.star.form.XFormComponent;
-// import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.Locale;
-// import com.sun.star.lang.NoSupportException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
@@ -43,9 +41,7 @@ import com.sun.star.uno.XInterface;
 import java.util.HashSet;
 import java.util.Set;
 
-// import org.junit.After;
 import org.junit.AfterClass;
-// import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
@@ -55,23 +51,6 @@ import static org.junit.Assert.*;
  */
 public class Map /* extends complexlib.ComplexTestCase */
 {
-//    @Override
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[] {
-//            "testSimpleKeyTypes",
-//            "testComplexKeyTypes",
-//            "testValueTypes",
-//            "testEnumerations",
-//            "testSpecialValues"
-//        };
-//    }
-
-//    public static String getShortTestDescription()
-//    {
-//        return "tests the css.container.Map implementation from comphelper/source/misc/map.cxx";
-//    }
-
     private static String impl_getNth( int n )
     {
         switch ( n % 10 )

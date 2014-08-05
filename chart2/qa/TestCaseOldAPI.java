@@ -273,21 +273,6 @@ public class TestCaseOldAPI extends ComplexTestCase {
                     xProp.getPropertyValue( "HasYAxisDescription" ));
                 assure( "Removing description of first y-axis", bNewFirstYAxisText == bFirstYAxisText );
 
-//                 boolean bYAxisTitle = true;
-//                 xProp.setPropertyValue( "HasYAxisTitle", new Boolean( bYAxisTitle ));
-//                 boolean bNewYAxisTitle = AnyConverter.toBoolean(
-//                     xProp.getPropertyValue( "HasYAxisTitle" ));
-//                 assure( "Adding y-axis title", bNewYAxisTitle == bYAxisTitle );
-
-                // set title text
-//                 XAxisYSupplier xYAxisSuppl = (XAxisYSupplier) UnoRuntime.queryInterface(
-//                     XAxisYSupplier.class, mxOldDoc.getDiagram() );
-//                 assure( "Diagram is no y-axis supplier", xYAxisSuppl != null );
-//                 XPropertySet xAxisTitleProp = (XPropertySet) UnoRuntime.queryInterface(
-//                     XPropertySet.class, xYAxisSuppl.getYAxisTitle() );
-//                 assure( "Y-Axis Title is no XPropertySet", xAxisTitleProp != null );
-//                 xAxisTitleProp.setPropertyValue( "String", "New y axis title" );
-
                 // second y-axis
                 boolean bSecondaryYAxis = true;
                 xProp.setPropertyValue( "HasSecondaryYAxis", new Boolean( bSecondaryYAxis ));
@@ -315,8 +300,6 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 xDiagramShape.setPosition( aSetPos );
 
                 Point aNewPos = xDiagramShape.getPosition();
-                //System.out.println( "set X = " + aSetPos.X + ", new X = " + aNewPos.X );
-                //System.out.println( "set Y = " + aSetPos.Y + ", new Y = " + aNewPos.Y );
                 assure( "Diagram Position X", approxEqual( aNewPos.X, aSetPos.X, 1 ));
                 assure( "Diagram Position Y", approxEqual( aNewPos.Y, aSetPos.Y, 1 ));
             }
@@ -335,8 +318,6 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 xDiagramShape.setSize( aSetSize );
 
                 Size aNewSize = xDiagramShape.getSize();
-                //System.out.println( "set width = " + aSetSize.Width + ", new width = " + aNewSize.Width );
-                //System.out.println( "set height = " + aSetSize.Height + ", new height = " + aNewSize.Height );
                 assure( "Diagram Width", approxEqual( aNewSize.Width, aSetSize.Width, 2 ));
                 assure( "Diagram Height", approxEqual( aNewSize.Height, aSetSize.Height, 2 ));
             }
@@ -504,19 +485,6 @@ public class TestCaseOldAPI extends ComplexTestCase {
             int nColor = 0xf5fffa; // mint cream
             xArea.setPropertyValue( "FillColor", new Integer( nColor ) );
             xArea.setPropertyValue( "FillStyle", FillStyle.SOLID );
-//             XPropertySetInfo xInfo = xArea.getPropertySetInfo();
-//             assure( "Area does not support ChartUserDefinedAttributes",
-//                     xInfo.hasPropertyByName( "ChartUserDefinedAttributes" ));
-
-//             String aTestAttributeName = "test:foo";
-//             String aTestAttributeValue = "content";
-//             XNameContainer xUserDefAttributes = (XNameContainer) AnyConverter.toObject(
-//                 new Type( XNameContainer.class ), xArea.getPropertyValue( "ChartUserDefinedAttributes" ));
-//             xUserDefAttributes.insertByName( aTestAttributeName, aTestAttributeValue );
-
-//             String aContent = AnyConverter.toString( xUserDefAttributes.getByName( aTestAttributeName ));
-//             assure( "Wrong content in UserDefinedAttributes container",
-//                     aContent.equals( aTestAttributeValue ));
 
             int nNewColor = AnyConverter.toInt( xArea.getPropertyValue( "FillColor" ) );
             assure( "Changing FillColor of Area failed", nNewColor == nColor );

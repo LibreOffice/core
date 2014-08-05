@@ -28,16 +28,6 @@ import convwatch.GraphicalTestArguments;
 
 public abstract class EnhancedComplexTestCase extends ComplexTestCase
 {
-    // public void before()
-    //     {
-    //         // System.out.println("before()");
-    //     }
-
-    // public void after()
-    //     {
-    //         // System.out.println("after()");
-    //     }
-
     void checkExistance(String _sScriptFile, String _sName)
         {
             // Process testshl = Runtime.getRuntime().exec(scriptFile);
@@ -53,12 +43,9 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             {
                 String sError = "Must quit. " + _sName + " may be not accessible.";
                 assure(sError, false);
-                // System.exit(1);
             }
             else
             {
-                // System.out.println("Output from script:");
-                // System.out.println(sText);
             }
         }
 

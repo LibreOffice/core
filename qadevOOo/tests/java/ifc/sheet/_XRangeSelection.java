@@ -128,22 +128,6 @@ public class _XRangeSelection extends MultiMethodTest {
         clickOnSheet(closer);
         util.utils.shortWait(5000);
 
-//        System.out.println("X: " + closer.X + "    Y: " + closer.Y);
-
-        // just check that we do not have the page instead of the range descriptor
-/*        int childCount = xRoot.getAccessibleContext().getAccessibleChildCount();
-        if (childCount > 3) {// too many children: wrong type
-            throw new StatusException(Status.failed("Could not get the Range Descriptor"));
-        }
-        XAccessible xAcc = null;
-        try {
-            xAcc = xRoot.getAccessibleContext().getAccessibleChild(1);
-        }
-        catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-
-        }
-        accTools.printAccessibleTree(log, xAcc);
-*/
         // open a new range selection
         props[0].Value = "C4:E6";
         oObj.startRangeSelection(props);
@@ -296,8 +280,6 @@ public class _XRangeSelection extends MultiMethodTest {
         }
 
         Point p = xAccessibleComponent.getLocationOnScreen();
-//        System.out.println("ScreenPoint: " + p.X + "   " + p.Y );
-//        System.out.println("WindowPoint: " + posSize.X + "   " + posSize.Y + "   " + posSize.Width + "   " + posSize.Height);
         Point closer = new Point();
         closer.X = p.X + posSize.Width - 2;
         closer.Y = p.Y + 5;

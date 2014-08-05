@@ -41,7 +41,6 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
         setLayout(new java.awt.BorderLayout());
 
         welcomePanel.setLayout(new java.awt.BorderLayout());
-        //area.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         area.setEditable(false);
         area.setLineWrap(true);
         area.setText("\n Click Next to include Scripting Framework support for IDEs.");
@@ -49,18 +48,12 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
     if( InstUtil.hasNetbeansInstallation() ) {
         area.append("\n \tA version of Netbeans has been detected. \n");
     }
-    //if( InstUtil.hasJeditInstallation() ) {
-    //  area.append("\n \tA version of jEdit has been detected.");
-    //}
 
         welcomePanel.add(area, java.awt.BorderLayout.CENTER);
         add(welcomePanel, java.awt.BorderLayout.CENTER);
         NavPanel nav = new NavPanel(wizard, false, true, true, "", InstallWizard.IDEVERSIONS);
         nav.setNextListener(this);
         add(nav, java.awt.BorderLayout.SOUTH);
-
-        //Banner br = new Banner();
-        //add(br, java.awt.BorderLayout.WEST);
 
     }//GEN-END:initComponents
 

@@ -65,7 +65,6 @@ import com.sun.star.test.XTestDialogHandler;
 // ComponentBase, see implementation of TestComponentA.
 public class DialogComponent {
 
-    // public static class _DialogComponent extends WeakBase
     public static class _DialogComponent
         implements XTypeProvider, XServiceInfo, XTestDialogHandler, XDialogEventHandler {
 

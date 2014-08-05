@@ -122,7 +122,6 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
             if ("sub-document".equals(tagName))
             {
                 final SubDocumentReadHandler subDocReadHandler = new SubDocumentReadHandler(section);
-                // children.add(subDocReadHandler);
                 return subDocReadHandler;
             }
         }

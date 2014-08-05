@@ -77,11 +77,6 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
             super.println("LOG> " + msg);
             super.flush();
         }
-    // else
-    // {
-    //     super.println(" ++ " + msg);
-    //     super.flush();
-    // }
     }
 
     public boolean summary(share.DescEntry entry) {

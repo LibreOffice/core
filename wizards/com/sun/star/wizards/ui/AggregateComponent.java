@@ -351,9 +351,6 @@ public class AggregateComponent extends ControlScroller
             for (int i = _index; i < ControlRowVector.size(); i++)
             {
                 ControlRow oControlRow = ControlRowVector.get(i);
-//              if (i == _index)
-//                  oControlRow.settovoid();
-//              else
                 oControlRow.setVisible(false);
             }
         }

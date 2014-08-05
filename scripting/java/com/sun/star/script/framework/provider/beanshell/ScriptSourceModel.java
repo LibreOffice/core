@@ -79,8 +79,6 @@ public class ScriptSourceModel {
         throws Exception
     {
         Object result = null;
-        // Thread execThread = new Thread() {
-            // public void run() {
                 if ( cl != null )
                 {
                     // sets this threads class loader
@@ -118,9 +116,6 @@ public class ScriptSourceModel {
                 else {
                     result = interpreter.eval(getText());
                 }
-            // }
-        // };
-        // execThread.start();
         return result;
     }
     public void indicateErrorLine( int lineNum )

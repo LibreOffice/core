@@ -63,12 +63,6 @@ public class WikiArticle
 
         m_aMainURI = new URI( sMainUrl );
 
-//         viewURL = sMainUrl + "index.php?title=" + m_sTitle;
-//         editURL = sMainUrl + "index.php?title=" + m_sTitle + "&action=edit";
-//         submitURL = sMainUrl + "index.php?title=" + m_sTitle + "&action=submit";
-//         loginURL = sMainUrl + "index.php?title=Special:Userlogin";
-//         loginSubmitURL = sMainUrl + "index.php?title=Special:Userlogin&action=submitlogin";
-
         if ( bLogin )
         {
             WikiEditSettingDialog aDialog = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", wikiSettings, false );

@@ -30,7 +30,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
-// import static org.junit.Assert.*;
 
 
 /** @short  todo document me
@@ -52,26 +51,6 @@ public class CheckConfigItems
 
 
     // test environment
-
-
-    /** @short  A function to tell the framework,
-                which test functions are available.
-
-        @return All test methods.
-        @todo   Think about selection of tests from outside ...
-     */
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//        {
-//            "checkPicklist",
-//            "checkURLHistory",
-//            "checkHelpBookmarks",
-//            "checkPrintOptions",
-//            "checkAccessibilityOptions",
-//          "checkUserOptions"
-//        };
-//    }
 
 
     /** @short  Create the environment for following tests.
@@ -138,17 +117,6 @@ public class CheckConfigItems
     {
         impl_triggerTest("checkHelpBookmarks");
     }
-
-
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
-     */
-//     @Test public void checkPrintOptions()
-//         throws java.lang.Exception
-//     {
-//         impl_triggerTest("checkPrintOptions");
-//     }
 
 
     /**

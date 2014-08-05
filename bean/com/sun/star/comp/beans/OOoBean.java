@@ -78,7 +78,6 @@ public class OOoBean
     // debugging method
     private void dbgPrint( String aMessage )
     {
-        // System.err.println( "OOoBean: " + aMessage );
     }
 
     // @requirement FUNC.PER/0.2

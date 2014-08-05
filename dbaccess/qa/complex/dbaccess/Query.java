@@ -56,11 +56,6 @@ public class Query extends TestCase
     }
 
 
-//    private XMultiServiceFactory getFactory()
-//    {
-//        return (XMultiServiceFactory)param.getMSF();
-//    }
-
     @Test
     public void testQueryColumns()
     {

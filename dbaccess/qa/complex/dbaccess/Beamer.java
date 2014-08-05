@@ -41,11 +41,8 @@ import java.io.IOException;
 
 // ---------- junit imports -----------------
 import org.junit.After;
-// import org.junit.AfterClass;
 import org.junit.Before;
-// import org.junit.BeforeClass;
 import org.junit.Test;
-// import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 
 

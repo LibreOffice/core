@@ -22,7 +22,6 @@ import java.awt.Image;
 import java.awt.image.PixelGrabber;
 import java.awt.image.ImageObserver;
 import java.io.File;
-//import javax.imageio.ImageIO;
 import java.lang.reflect.Method;
 
 class ImageHelper
@@ -68,11 +67,6 @@ class ImageHelper
             return m_aPixels[y * m_w + x];
         }
 
-    // Write down the current image to a file.
-    // public void storeImage(String _sFilename)
-    //    {
-    //    }
-
     public static ImageHelper createImageHelper(String _sFilename)
         throws java.io.IOException
         {
@@ -105,7 +99,6 @@ class ImageHelper
                     "Cannot construct object with current Java version " +
                     javaVersion + ": " + ex.getMessage());
             }
-//            aImage = ImageIO.read(aFile);
             return new ImageHelper(aImage);
         }
 }

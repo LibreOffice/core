@@ -60,7 +60,6 @@ import com.sun.star.awt.XItemEventBroadcaster;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XKeyListener;
 import com.sun.star.awt.XListBox;
-//import com.sun.star.awt.XMessageBoxFactory;
 import com.sun.star.awt.XMouseListener;
 import com.sun.star.awt.XPointer;
 import com.sun.star.awt.XReschedule;

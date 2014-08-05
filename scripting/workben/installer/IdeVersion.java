@@ -63,34 +63,15 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
                 System.out.println("It got here1");
                 String path = null;
                 if ( (path = netbeansProps.getProperty(key) ) != null ) {
-                    //System.out.println( "n="+n+" v="+v + " Netbeans " + " key=" + key + " path=" + path );
                     ideProps.put(key, path);
                 }
             }
         }
         }
-                //System.out.println("*** About to look for jedit install");
-        /*
-        if(jeditProps!=null)
-        {
-            for( int j = 0; j < jeditProps.size(); j++ ) {
-                for( int v = 0; v < InstUtil.versions.length; v++ ) {
-                System.out.println("j: " +j+" v: " +v);
-                    String key = InstUtil.versions[v];
-                    String path = null;
-                    if ((path = jeditProps.getProperty(key)) != null) {
-                        //System.out.println( "j="+j+" v="+v + " jEdit " + " key=" + key + " path=" + path );
-                        ideProps.put(key, path);
-                    }
-                }
-            }
-        }
-        */
         props = ideProps;
     }
         catch (IOException eIO) {
             System.err.println("Failed to parse .netbeans/ide.log");
-        //JOptionPane.showMessageDialog(this, "There was a problem reading from the NetBeans ide.log file.", "Parse Error", JOptionPane.ERROR_MESSAGE);
         }
         catch (Exception e) {
             System.err.println("Exception thrown in initComponents");
@@ -101,7 +82,6 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     if (tableModel.getRowCount() == 0)
     {
             JOptionPane.showMessageDialog(this, "No compatible IDEs were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);
-            //wizard.exitForm(null);
     }
 
         tableModel.addTableModelListener(this);
@@ -182,8 +162,6 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
             if (((Boolean)list.get(0)).booleanValue() == true)
                 InstallWizard.storeLocation((String)list.get(2));
         }
-
-        //System.out.println(wizard.getLocations());
     }
 
 
@@ -271,7 +249,6 @@ class MyTableModelIDE extends AbstractTableModel {
 
     MyTableModelIDE (Properties properties, String [] validVersions) {
         data = new ArrayList<ArrayList<Object>>();
-        //System.out.println(properties);
 
         int len = validVersions.length;
         for (int i = 0; i < len; i++) {

@@ -130,9 +130,6 @@ public class SwXDrawPage extends TestCase {
         xDP = XDPSupp.getDrawPage();
         oObj = xDP;
 
-        //dbg.printInterfaces(oObj);
-        //System.exit(0);
-
         log.println( "inserting some Shapes" );
         oShapes = UnoRuntime.queryInterface(XShapes.class, oObj);
         oShapes.add(SOF.createShape(xTextDoc,2000,1500,1000,1000,"Line"));

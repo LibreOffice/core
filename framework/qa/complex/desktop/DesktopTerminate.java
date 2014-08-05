@@ -41,19 +41,6 @@ public class DesktopTerminate
     private int iOfficeCloseTime = 1000;
 
     /**
-     * A frunction to tell the framework, which test functions are available.
-     * Right now, it's only 'checkPersistentWindowState'.
-     * @return All test methods.
-     */
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                    "checkPersistentWindowState"
-//                };
-//    }
-
-    /**
      * Test if all available document types change the
      * persistent Window Attributes
      *
@@ -80,14 +67,6 @@ public class DesktopTerminate
         {
 
             System.out.println("Connect the first time.");
-//            System.out.println("AppExecCommand: " + (String) param.get("AppExecutionCommand"));
-//            System.out.println("ConnString: " + (String) param.get("ConnectionString"));
-//            oProvider = new OfficeProvider();
-//            iOfficeCloseTime = param.getInt("OfficeCloseTime");
-//            if (iOfficeCloseTime == 0)
-//            {
-//                iOfficeCloseTime = 1000;
-//            }
 
             if (!connect())
             {

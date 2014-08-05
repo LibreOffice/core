@@ -71,8 +71,6 @@ public class _XViewDataSupplier extends MultiMethodTest {
                 oldProps = (PropertyValue[])xAccess.getByIndex(0);
                 newProps = new PropertyValue[oldProps.length];
                 for (int j=0; j<oldProps.length; j++) {
-//                    log.println("Name: " + oldProps[j].Name);
-//                    log.println("Value: " + oldProps[j].Value.toString());
                     newProps[j] = new PropertyValue();
                     newProps[j].Name = oldProps[j].Name;
                     newProps[j].Handle = oldProps[j].Handle;
@@ -97,8 +95,6 @@ public class _XViewDataSupplier extends MultiMethodTest {
             if (count > 0) {
                 oldProps = (PropertyValue[])xAccess.getByIndex(0);
                 for (int j=0; j<oldProps.length; j++) {
-//                    log.println("Name: " + oldProps[j].Name);
-//                    log.println("Value: " + oldProps[j].Value.toString());
                     if (oldProps[j].Name.equals("ViewId")) {
                         retValue = (String)newProps[j].Value;
                     }

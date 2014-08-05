@@ -57,11 +57,9 @@ public class JdbcLongVarCharTest extends ComplexTestCase
             System.out.println("== Start testing ==");
 
             String url = "jdbc:mysql://localhost:3306/mysql?user=root";
-            //String url = "jdbc:ingres://localhost:II7/demodb;AUTO=multi";
             com.sun.star.sdbc.XConnection xConnection = null;
             com.sun.star.beans.PropertyValue prop[] = new PropertyValue[1];
             prop[0] = new PropertyValue("JavaDriverClass", 0, "com.mysql.jdbc.Driver", PropertyState.DIRECT_VALUE);
-            //prop[0] = new PropertyValue("JavaDriverClass", 0, "com.ingres.jdbc.IngresDriver", PropertyState.DIRECT_VALUE);
 
             // get the remote office component context
             XMultiServiceFactory xServiceManager = param.getMSF();
@@ -70,7 +68,6 @@ public class JdbcLongVarCharTest extends ComplexTestCase
             com.sun.star.sdbc.XDriver xDriver = xDriverAccess.getDriverByURL(url);
             xConnection = xDriver.connect(url, prop);
 
-            //Object prepStmnt = xConnection.prepareStatement("SELECT * FROM t1 WHERE t1.c1 = ?");
             Object prepStmnt = xConnection.prepareStatement("SELECT * FROM i90114 WHERE i90114.c1 = ?");
             UnoRuntime.queryInterface(XParameters.class, prepStmnt).clearParameters();
             UnoRuntime.queryInterface(XParameters.class, prepStmnt).setInt(1, 1);

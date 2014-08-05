@@ -177,10 +177,6 @@ public class utils {
             } else {
                 if (fullDocPath.startsWith("/")) {
                     prefix = "file://";
-//                    if (helper.OSHelper.isLinuxIntel())
-//                    {
-//                        prefix = "file:/";
-//                    }
                 }
                 else
                 {

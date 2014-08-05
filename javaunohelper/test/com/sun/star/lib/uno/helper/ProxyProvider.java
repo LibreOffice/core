@@ -22,9 +22,7 @@ import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.uno.IQueryInterface;
-//import com.sun.star.lib.uno.environments.java.Proxy;
 import com.sun.star.lib.uno.environments.java.java_environment;
-//import com.sun.star.lib.uno.environments.java.IRequester;
 
 
 public class ProxyProvider
@@ -108,49 +106,5 @@ class Proxy implements IQueryInterface, XEventListener
 }
 
 
-//class Requester //implements IRequester
-//{
-//    int _modus;
-//    boolean _virtual;
-//    boolean _forceSynchronous;
-//    boolean _passed = true;
-//
-//    Object _xEventListenerProxy;
-//    int nDisposingCalled= 0;
-//
-//    Requester(boolean virtual, boolean forceSynchronous, Object evtListener)
-//    {
-//        _virtual = virtual;
-//        _forceSynchronous = forceSynchronous;
-//        _xEventListenerProxy= evtListener;
-//
-//    }
-//
-//    public Object sendRequest(Object object,
-//    Type type,
-//    String operation,
-//    Object params[],
-//    Boolean synchron[],
-//    Boolean mustReply[]) throws Throwable
-//    {
-//
-//        Object result = null;
-//        if (operation.equals("disposing"))
-//        {
-//            System.out.println("Disposing called on XEventListener proxy");
-//            nDisposingCalled++;
-//        }
-//        else if (operation.equals("queryInterface"))
-//        {
-//            if (params[0] instanceof Type)
-//            {
-//                Type t= (Type) params[0];
-//                if (t.equals( new Type("com.sun.star.lang.XEventListener")))
-//                    result= _xEventListenerProxy;
-//            }
-//        }
-//        return result;
-//    }
-//}
 
 

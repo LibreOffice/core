@@ -24,9 +24,7 @@ import com.sun.star.uno.UnoRuntime;
 
 import java.awt.*;
 
-// import org.junit.After;
 import org.junit.AfterClass;
-// import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
@@ -42,23 +40,6 @@ class PrivateLocalOfficeConnection extends com.sun.star.comp.beans.LocalOfficeCo
 
 public class OOoBeanTest
 {
-
-//    public String[] getTestMethodNames()
-//    {
-//        // TODO think about trigger of sub-tests from outside
-//        return new String[]
-//        {
-//              "test1",
-//              "test2",
-//              "test3",
-//              "test4",
-//              "test5",
-//              "test6",
-//              "test6a",
-//              "test7",
-//              "test8"
-//        };
-//    }
 
     /** For X-Windows we need to prolong the time between painting windows. Because
         it takes longer than on Windows.

@@ -17,8 +17,6 @@
  */
 package complex.tempfile;
 
-// import complexlib.ComplexTestCase;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.io.*;

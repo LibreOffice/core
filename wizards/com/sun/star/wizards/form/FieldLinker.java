@@ -156,7 +156,6 @@ public class FieldLinker extends DBLimitedFieldSelection
 
     protected void enableNextControlRow(int curindex)
     {
-        // setMaxSelIndex();
         boolean bSlaveField = lstSlaveFields[curindex].getSelectedItemPos() > 0;
         boolean bMasterField = lstMasterFields[curindex].getSelectedItemPos() > 0;
         boolean bDoEnable = (bSlaveField && bMasterField);
@@ -217,8 +216,6 @@ public class FieldLinker extends DBLimitedFieldSelection
 
     public void initialize(String[] _AllMasterFieldNames, String[] _AllSlaveFieldNames, String[][] _LinkFieldNames)
     {
-        // short[] MasterSelList = null;
-        // short[] SlaveSelList = null;
         int SOMASTERINDEX = 1;
         String[] MasterLinkNames = JavaTools.ArrayOutOfMultiDimArray(_LinkFieldNames, SOMASTERINDEX);
         int SOSLAVEINDEX = 0;
@@ -252,7 +249,6 @@ public class FieldLinker extends DBLimitedFieldSelection
      */
     public String[][] getLinkFieldNames()
     {
-        // setMaxSelIndex();
         int nSelectedIndex = getMaxSelIndex();
         String[][] LinkFieldNames = new String[2][nSelectedIndex + 1];
         for (int i = 0; i <= nSelectedIndex; i++)

@@ -181,7 +181,6 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         {
             if (method_name.equals( "queryInterface" ))
             {
-                // Object queryInterface( Type type )
                 Object registered_proxy =
                     m_java_env.getRegisteredInterface( m_oid, (Type)args[ 0 ] );
                 if (null == registered_proxy)
@@ -200,7 +199,6 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
             }
             else if (method_name.equals( "getOid" ))
             {
-                // String getOid()
                 return m_oid;
             }
         }

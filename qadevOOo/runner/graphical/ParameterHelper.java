@@ -65,8 +65,6 @@ public class ParameterHelper
     */
     private String m_sReferenceType = null;
 
-    // private String m_sTargetFrameName = "_blank";
-
     private String m_sPrinterName = null;
 
     private int m_nResolutionInDPI = 180;
@@ -75,18 +73,12 @@ public class ParameterHelper
 
     private String m_sInputPath = null;
     private String m_sOutputPath = null;
-//    private String m_sReferencePath = null;
 
     private TestParameters m_aCurrentParams;
-
-    // private GlobalLogWriter m_aLog;
 
     public ParameterHelper(TestParameters param)
         {
             m_aCurrentParams = param;
-            // m_aLog = log;
-            // interpretReferenceType();
-            // interpretPrinterName();
         }
 
 
@@ -133,24 +125,6 @@ public class ParameterHelper
         return m_sOutputPath;
     }
 
-//    public String getReferencePath()
-//    {
-//        if (m_sReferencePath == null)
-//        {
-//            String sReferencePath = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_REFERENCE_PATH );
-//            if (sReferencePath == null || sReferencePath.length() == 0)
-//            {
-//                GlobalLogWriter.println("Please set reference path (path to reference documents) " + PropertyName.DOC_COMPARATOR_REFERENCE_PATH + "=path.");
-//            }
-//            else
-//            {
-//                m_sReferencePath = sReferencePath;
-//            }
-//        }
-//        return m_sReferencePath;
-//    }
-
-
     public boolean isIncludeSubDirectories()
         {
             m_bIncludeSubdirectories = true;
@@ -183,7 +157,6 @@ public class ParameterHelper
                 }
                 else
                 {
-                    // log.println("found REFERENCE_TYPE " + sReferenceType );
                     m_sReferenceType = sReferenceType;
                 }
             }
@@ -203,7 +176,6 @@ public class ParameterHelper
                 }
                 else
                 {
-                    // log.println("found PRINTER_NAME " + sPrinterName );
                     m_sPrinterName = sPrinterName;
                 }
             }
@@ -232,7 +204,6 @@ public class ParameterHelper
     public String getBuildID()
         {
             String sAPP = (String)m_aCurrentParams.get(util.PropertyName.APP_EXECUTION_COMMAND);
-            // return getBuildID(sAPP);
 //  TODO: here we need the getBuildID(string) method
             String sBuildID = BuildID.getBuildID(sAPP);
             return sBuildID;
@@ -320,27 +291,6 @@ public class ParameterHelper
         {
             return m_sDocumentType;
         }
-
-
-//    String m_sDefaultXMLFormatApplication = null;
-//    public String getDefaultXMLFormatApp()
-//    {
-//        if (m_sDefaultXMLFormatApplication == null)
-//        {
-//            // DEFAULT_XML_FORMAT_APP ------
-
-//            String sDefaultXMLFormatApp = (String)m_aCurrentParams.get( PropertyName.DOC_COMPARATOR_DEFAULT_XML_FORMAT_APP );
-//            if (sDefaultXMLFormatApp == null || sDefaultXMLFormatApp.length() == 0)
-//            {
-//                m_sDefaultXMLFormatApplication = "word";
-//            }
-//            else
-//            {
-//                m_sDefaultXMLFormatApplication = sDefaultXMLFormatApp;
-//            }
-//        }
-//        return m_sDefaultXMLFormatApplication;
-//    }
 
 
     // Pages -------------------------------------------------------------------

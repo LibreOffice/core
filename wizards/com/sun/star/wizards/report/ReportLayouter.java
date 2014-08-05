@@ -18,7 +18,6 @@
 package com.sun.star.wizards.report;
 
 import com.sun.star.awt.XListBox;
-// import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;
@@ -38,29 +37,19 @@ public class ReportLayouter
 {
 
     UnoDialog CurUnoDialog;
-//    static String sOrientationHeader;
-//    static String sOrientVertical;
-//    static String sOrientHorizontal;
     final int SOTXTTITLE = 28;
     final int SOCONTENTLST = 29;
     final static public int SOOPTLANDSCAPE = 30;
     final static public int SOOPTPORTRAIT = 31;
     final int SOLAYOUTLST = 32;
-//    static String sReportTitle;
-//    static String slblDataStructure;
-//    static String slblPageLayout;
-//    static String sOrganizeFields;
     XListBox xContentListBox;
     XListBox xLayoutListBox;
     int iOldContentPos;
     int iOldLayoutPos;
-    // ReportTextDocument CurReportDocument;
     IReportDocument CurReportDocument;
     public String[][] LayoutFiles;
     public String[][] ContentFiles;
-    // private Desktop.OfficePathRetriever curofficepath;
     Object aOrientationImage;
-    // boolean m_bLandscape = true;
     private XMultiServiceFactory m_xMSF;
     private XTextRange          trTitleconst, trAuthorconst, trDateconst, trPageconst;
     private TextElement         teTitleconst, teAuthorconst, teDateconst, tePageconst;
@@ -77,23 +66,12 @@ public class ReportLayouter
             this.CurUnoDialog = _CurUnoDialog;
             this.CurReportDocument = _CurReportDocument;
             //TODO the constructor for the OfficePathRetriever is redundant and should be instantiated elsewhere
-            // Desktop odesktop = new Desktop();
-            // curofficepath = odesktop.new OfficePathRetriever(m_xMSF);
             String slblDataStructure = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 15);
             String slblPageLayout = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 16);
-// String                sOrganizeFields = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 19);
 
             String sOrientationHeader = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 22);
             String sOrientVertical = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 23);
             String sOrientHorizontal = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 24);
-
-            // XInterface xUcbInterface = (XInterface) m_xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            // XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
-            // boolean bcntexists = xSimpleFileAccess.exists(CurReportDocument.getReportPath() + "/cnt-default.ott");
-            // boolean bstlexists = xSimpleFileAccess.exists(CurReportDocument.getReportPath() + "/stl-default.ott");
-            //      if ((bcntexists == false) || (bstlexists == false))
-            //          throw  new NoValidPathException(CurReportDocument.xMSF);
-
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblContent",
                     new String[]
@@ -106,7 +84,6 @@ public class ReportLayouter
                     });
 
             short iSelPos = 0;
-//                    ContentFiles = FileAccess.getFolderTitles(m_xMSF, "cnt", CurReportDocument.getReportPath());
             ContentFiles = CurReportDocument.getDataLayout();
             iSelPos = (short) JavaTools.FieldInList(ContentFiles[1], CurReportDocument.getContentPath());
             if (iSelPos < 0)
@@ -138,7 +115,6 @@ public class ReportLayouter
                     });
 
             short iSelLayoutPos = 0;
-//                    LayoutFiles = FileAccess.getFolderTitles(m_xMSF, "stl", CurReportDocument.getReportPath());
             LayoutFiles = CurReportDocument.getHeaderLayout();
             iSelLayoutPos = (short) JavaTools.FieldInList(LayoutFiles[1], CurReportDocument.getLayoutPath());
             if (iSelLayoutPos < 0)
@@ -231,17 +207,14 @@ public class ReportLayouter
 
     public void initialize(String _defaultTemplatePath)
     {
-//             CurReportDocument.getDoc().xTextDocument.lockControllers();
         CurReportDocument.layout_setupRecordSection(_defaultTemplatePath);
         if (CurUnoDialog.getControlProperty("txtTitle", "Text").equals(PropertyNames.EMPTY_STRING))
         {
             String[] sCommandNames = CurReportDocument.getRecordParser().getIncludedCommandNames();
             CurUnoDialog.setControlProperty("txtTitle", "Text", sCommandNames[0]);
         }
-        // CurReportDocument.getDoc().oViewHandler.selectFirstPage(CurReportDocument.getDoc().oTextTableHandler);
         CurReportDocument.layout_selectFirstPage();
         CurUnoDialog.setFocus("lblContent");
-//            CurReportDocument.getDoc().unlockallControllers();
     }
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
@@ -321,7 +294,6 @@ public class ReportLayouter
             {
                 e.printStackTrace();
             }
-            // CurReportDocument.getDoc().unlockallControllers();
             Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         }
 
@@ -342,7 +314,6 @@ public class ReportLayouter
             try
             {
                 Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-//                     CurReportDocument.getDoc().xTextDocument.lockControllers();
                 boolean blandscape = (((Short) CurUnoDialog.getControlProperty("optLandscape", PropertyNames.PROPERTY_STATE)).shortValue() == 1);
                 CurReportDocument.setPageOrientation((blandscape) ? SOOPTLANDSCAPE : SOOPTPORTRAIT);
             }
@@ -350,7 +321,6 @@ public class ReportLayouter
             {
                 exception.printStackTrace(System.err);
             }
-//                CurReportDocument.getDoc().unlockallControllers();
             Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         }
     }

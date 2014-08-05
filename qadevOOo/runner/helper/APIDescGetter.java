@@ -285,8 +285,6 @@ public class APIDescGetter extends DescGetter
                     continue;
                 }
 // TODO Probleme here
-                // int nFirstSemicolon = line.indexOf(";");
-                // int nLastSemicolon = line.lastIndexOf(";");
 
                 String ifc_name = ""; //  = line.substring(line.indexOf(";") + 2, line.lastIndexOf(";") - 1);
                 String meth_name = ""; //  = line.substring(line.lastIndexOf(";") + 2, line.length() - 1);
@@ -308,9 +306,6 @@ public class APIDescGetter extends DescGetter
                 {
                     meth_name = StringHelper.removeQuoteIfExists(aToken.nextToken());
                 }
-
-                // String ifc_name = line.substring(line.indexOf(";") + 2, line.lastIndexOf(";") - 1);
-                // String meth_name = line.substring(line.lastIndexOf(";") + 2, line.length() - 1);
 
                 DescEntry methDesc = createDescEntry(meth_name, ifc_name, parent);
 
@@ -578,10 +573,6 @@ public class APIDescGetter extends DescGetter
                 {
 
                     String entry = e.nextElement().toString();
-
-//                    if (debug) {
-//                        System.out.println("### Read from connetion: " + entry);
-//                    }
 
                     if ((entry.lastIndexOf(sStartModule) != -1) &&
                             entry.endsWith(sEndsWithCSVName))

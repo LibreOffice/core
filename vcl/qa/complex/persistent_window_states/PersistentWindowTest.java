@@ -31,9 +31,7 @@ import helper.ConfigurationRead;
 
 
 
-// import org.junit.After;
 import org.junit.AfterClass;
-// import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
@@ -48,26 +46,6 @@ import static org.junit.Assert.*;
 public class PersistentWindowTest
 {
 
-    // private XMultiServiceFactory xMSF;
-//    private OfficeProvider oProvider;
-
-    /**
-     * A frunction to tell the framework, which test functions are available.
-     * Right now, it's only 'checkPersistentWindowState'.
-     * @return All test methods.
-     */
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                    "checkPersistentWindowState"
-//                };
-//    }
-
-   /**
-     * The test parameters
-     */
-  //  private static TestParameters param = null;
 
     /**
      * Test if all available document types change the
@@ -92,33 +70,14 @@ public class PersistentWindowTest
      */
     @Test public void checkPersistentWindowState()
     {
-        // final XMultiServiceFactory xMsf = getMSF();
-
-        // some Tests need the qadevOOo TestParameters, it is like a Hashmap for Properties.
-//        param = new TestParameters();
-//        param.put("ServiceFactory", xMsf); // some qadevOOo functions need the ServiceFactory
-
         try
         {
-
-            // At first we are already connected
-            // if (!connect())
-            // {
-            //     return;
-            // }
-
-            // fetch the multi service factory for setup
-            // XMultiServiceFactory xCP = getMSF();
-
-            // create the configuration reader
-            // ConfigurationRead cfgRead = new ConfigurationRead(xCP);
 
             // just test the wrong ones, not all.
             String[] els = new String[]
             {
                 "Office/Factories/com.sun.star.drawing.DrawingDocument",
                 "Office/Factories/com.sun.star.formula.FormulaProperties",
-                //"Office/Factories/com.sun.star.presentation.PresentationDocument",
                 "Office/Factories/com.sun.star.sheet.SpreadsheetDocument",
                 "Office/Factories/com.sun.star.text.GlobalDocument",
                 "Office/Factories/com.sun.star.text.TextDocument",

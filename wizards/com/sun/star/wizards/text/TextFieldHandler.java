@@ -106,18 +106,6 @@ public class TextFieldHandler
             xDepField.attachTextFieldMaster(xPSet);
             xTextCursor.getText().insertTextContent(xTextCursor, xFieldContent, false);
 
-//            try
-//            {
-//                XPropertySet xTestProp = xDepField.getTextFieldMaster();
-//                String UserFieldName = (String) xTestProp.getPropertyValue(PropertyNames.PROPERTY_NAME);
-//                // UserFieldName == FieldName?
-//                int dummy = 0;
-//            }
-//            catch (com.sun.star.uno.Exception e)
-//            {
-//                int dummy2 = 0;
-//            }
-
         }
         catch (com.sun.star.uno.Exception exception)
         {
@@ -131,9 +119,6 @@ public class TextFieldHandler
         XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, oMaster);
         xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, FieldName);
         xPSet.setPropertyValue("Content", FieldTitle);
-
-        // DEBUG
-        // String sFieldName = (String)xPSet.getPropertyValue(PropertyNames.PROPERTY_NAME);
 
         return xPSet;
     }

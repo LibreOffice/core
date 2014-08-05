@@ -96,12 +96,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
     private final String sWriterDoc = "sxw,writer_pdf_Export";
     private final String sCalcDoc = "sxc,calc_pdf_Export";
     private final String sImpressDoc = "sxi,impress_pdf_Export";
-    // private String sProcessIdCommand = null;
     TempDir m_aTempDir;
-    // private String sFS = null;
-    // private String sMemoryMap1 = null;
-    // private String sMemoryMap2 = null;
-    // private String sDocumentPath = "";
     private String[][] sDocTypeExportFilter;
     private String[][] sDocuments;
     private int iAllowMemoryIncrease = 10;
@@ -111,13 +106,6 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
      */
     private static TestParameters param = null;
 
-    /**
-     * Get all test methods
-     * @return The test methods.
-    //     */
-//    public String[] getTestMethodNames() {
-//        return new String[] {"loadAndSaveDocuments"};
-//    }
     /**
      * Collect all documents to load and all filters used for export.
      */
@@ -186,11 +174,8 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
         }
 
         // get files to load and export
-//        sDocumentPath = (String) param.get("TestDocumentPath");
         String sDocumentPath = TestDocument.getUrl();
         File f = new File(FileHelper.getJavaCompatibleFilename(sDocumentPath));
-        // sDocumentPath = f.getAbsolutePath();
-        // String sFS = System.getProperty("file.separator");
         sDocuments = new String[sDocTypeExportFilter.length][];
         for (int j = 0; j < sDocTypeExportFilter.length; j++)
         {
@@ -199,8 +184,6 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
             sDocuments[j] = new String[doc.length];
             for (int i = 0; i < doc.length; i++)
             {
-                // final String sDocument = FileHelper.appendPath(sDocumentPath, doc[i]);
-                // sDocuments[j][i] = utils.getFullURL(sDocuments[j][i]);
                 sDocuments[j][i] = TestDocument.getUrl(doc[i]);
             }
         }
@@ -212,19 +195,6 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
     @After
     public void after()
     {
-        // delete the constructed files.
-// we don't need to delete anything, all is stored in $USER_TREE
-//        for (int i = 0; i < iExportDocCount; i++)
-//        {
-//            final String sDocumentName = "DocExport" + i + ".pdf";
-//            final String sFilename = FileHelper.appendPath(m_sTempDir, sDocumentName);
-//            File f = new File(FileHelper.getJavaCompatibleFilename(sFilename));
-//            f.delete();
-//        }
-        // File f = new File(sProcessIdCommand);
-        // f.delete();
-        // f = new File(sOfficeMemoryCommand);
-        // f.delete();
     }
 
     /**
@@ -252,15 +222,8 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
                 final String sDocument = sDocuments[k][i];
                 final String sExtension = sDocTypeExportFilter[k][1];
 
-//                OfficeMemchecker aChecker = new OfficeMemchecker();
-//                aChecker.setDocumentName(FileHelper.getBasename(sDocument));
-//                aChecker.setExtension(sExtension);
-//                aChecker.start();
-
                 loadAndSaveNTimesDocument(sDocument, 1, sExtension);
 
-//                nOk += checkMemory(aChecker);
-//                nRunThrough ++;
             }
             System.out.println();
             System.out.println();
@@ -335,7 +298,6 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
             {
                 final String sDocumentName = FileHelper.getBasename(_sDocument) + "_" + j + ".pdf";
                 final String sFilename = FileHelper.appendPath(m_aTempDir.getOfficeTempDir(), sDocumentName);
-                // String url = utils.getFullURL(sFilename);
                 String url = sFilename; // graphical.FileHelper.getFileURLFromSystemPath(sFilename);
                 try
                 {

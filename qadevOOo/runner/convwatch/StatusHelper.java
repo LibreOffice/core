@@ -26,7 +26,6 @@ public class StatusHelper
     final static public int DIFF_AFTER_MOVE_DONE_NO_PROBLEMS =       4;
     final static public int DIFF_AFTER_MOVE_DONE_DIFFERENCES_FOUND = 5;
 
-    // public String m_sOutputPath;
     public String m_sMainName;
 
     public String m_sOldGfx;
@@ -86,14 +85,4 @@ public class StatusHelper
             }
         }
 
-
-
-
-
-//  TODO: stream output
-//     public stream& statusline(stream)
-//         {
-//             stream << name << "PASS" << nDiff==0?"PASS":"FAIL" << endl;
-//             return stream;
-//         }
 }

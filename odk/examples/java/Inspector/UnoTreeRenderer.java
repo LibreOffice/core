@@ -81,28 +81,19 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
             String  sLabelText = (String)node.getUserObject();
             if (sLabelText != null){
                 if (sLabelText.equals(XUnoFacetteNode.SCONTAINERDESCRIPTION)){
-//                setIcon(m_oContainerIcon);
                 } else if (sLabelText.equals(XUnoFacetteNode.SCONTENTDESCRIPTION)){
-//                setIcon(m_oContentIcon);
                 } else if (sLabelText.equals(XUnoFacetteNode.SINTERFACEDESCRIPTION)){
-//                setIcon(m_oInterfaceIcon);
                 } else if (sLabelText.equals(XUnoFacetteNode.SMETHODDESCRIPTION)){
-//                setIcon(m_oMethodIcon);
                 } else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYDESCRIPTION)){
-//                setIcon(m_oPropertyIcon);
                 } else if (sLabelText.startsWith(XUnoFacetteNode.SPROPERTYINFODESCRIPTION)){
-//                setIcon(m_oPropertyIcon);
                 } else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION)){
-//                setIcon(m_oPropertyValueIcon);
                 } else if (sLabelText.equals(XUnoFacetteNode.SSERVICEDESCRIPTION)){
-//                setIcon(m_oServiceIcon);
                 } else{
                     setText(sLabelText);
                     rc.validate();
                 }
-                setSize(getPreferredSize()); //fm.stringWidth(sLabelText), (int) getSize().getHeight());
+                setSize(getPreferredSize());
                 rc.validate();
-//            nWidth = (int) rc.getPreferredSize().getWidth();
                 doLayout();
             }
         } catch (RuntimeException e) {
@@ -123,8 +114,6 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
             x = getIcon().getIconWidth() + getIconTextGap();
         }
         g.setColor(getForeground());
-//         g.fillRect(x,y,x + fm.stringWidth(getText()),y);
-//        System.out.println("Text: " + getText());
         super.paintComponent(g);
     }
 }

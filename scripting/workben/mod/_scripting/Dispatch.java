@@ -41,7 +41,6 @@ import com.sun.star.util.XURLTransformer;
 
 
 public class Dispatch extends TestCase {
-    //private String scriptURL = "script://MemoryUtils.MemUsage";
     private String scriptURL = "script://HighlightText.showForm";
     public void initialize( TestParameters tParam, PrintWriter log ) {
     }

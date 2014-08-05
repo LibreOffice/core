@@ -67,11 +67,6 @@ public class ViewHandler
             XTextContent xTextTable = UnoRuntime.queryInterface(XTextContent.class, xAllTextTables.getByIndex(0));
             XTextRange xRange = UnoRuntime.queryInterface(XTextRange.class, xTextTable.getAnchor().getText());
             xViewTextCursor.gotoRange(xRange, false);
-//            if (xPageCursor.getPage() == (short) 1) {
-//                Helper.setUnoPropertyValue(xTextTable, "PageDescName", "First Page");
-//                TextTableHandler.resetBreakTypeofTextTable(xTextTable);
-//            }
-            //      }
             XTextRange xHeaderRange = (XTextRange) Helper.getUnoPropertyValue(oPageStyle, "HeaderText", XTextRange.class);
             if (!com.sun.star.uno.AnyConverter.isVoid(xHeaderRange))
             {

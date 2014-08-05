@@ -179,7 +179,6 @@ public class HsqlDatabase extends AbstractDatabase
 
         createStatement.append(')');
 
-        //System.err.println( createStatement );
         executeSQL(createStatement.toString());
     }
 

@@ -504,14 +504,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     public void contentsChanged(ListDataEvent event)
     {
-        /*//if the content that was changed is in the displayed range, refresh...
-        if (  (event.getIndex1() <  getIndexFor(0)) // range is before...
-        || event.getIndex0() > getIndexFor( cols*rows - 1)) ; //do nothing
-        else
-        refreshImages();
-         */        //selected = 0;
-        //pageStart = 0;
-        //if (event.refreshImages();
     }
 
     public void intervalAdded(ListDataEvent event)

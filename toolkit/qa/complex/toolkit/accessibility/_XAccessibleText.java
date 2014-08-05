@@ -19,9 +19,6 @@
 package complex.toolkit.accessibility;
 
 import com.sun.star.accessibility.XAccessibleText;
-// import lib.MultiMethodTest;
-//import lib.StatusException;
-//import lib.Status;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Point;
@@ -30,7 +27,6 @@ import com.sun.star.accessibility.AccessibleTextType;
 import com.sun.star.accessibility.TextSegment;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-// import share.LogWriter;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleText</code>
@@ -67,8 +63,6 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class _XAccessibleText {
 
-    // private LogWriter log;
-
     public XAccessibleText oObj = null;
     private XMultiServiceFactory xMSF;
 
@@ -82,7 +76,6 @@ public class _XAccessibleText {
     public _XAccessibleText(XInterface object, XMultiServiceFactory xMSF, String editOnly) {
         oObj = UnoRuntime.queryInterface(XAccessibleText.class, object);
         this.xMSF = xMSF;
-        // this.log = log;
         this.editOnly = editOnly;
     }
 

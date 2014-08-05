@@ -29,12 +29,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionListener
-{ // extends ReportWizard
+{
 
     // ReportTextDocument CurReportDocument;
     IReportDocument CurReportDocument;
 
-//    PropertyValue[] CurProperties;
     static boolean bStopProcess;
     static String sProgressDBConnection;
     static String sProgressDataImport;
@@ -43,14 +42,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
     static String sProgressTitle;
     static String sStop;
 
-//    public static final String TBLRECORDSECTION = ReportTextDocument.TBLRECORDSECTION;
-//    public static final String TBLGROUPSECTION = ReportTextDocument.TBLGROUPSECTION;
-//    public static final String RECORDSECTION = ReportTextDocument.RECORDSECTION;
-//    public static final String GROUPSECTION = ReportTextDocument.GROUPSECTION;
-//    public static final String COPYOFTBLRECORDSECTION = ReportTextDocument.COPYOFTBLRECORDSECTION;
-//    public static final String COPYOFTBLGROUPSECTION = ReportTextDocument.COPYOFTBLGROUPSECTION;
-//    public static final String COPYOFRECORDSECTION = ReportTextDocument.COPYOFRECORDSECTION;
-//    public static final String COPYOFGROUPSECTION = ReportTextDocument.COPYOFGROUPSECTION;
     public Dataimport(XMultiServiceFactory _xMSF)
     {
         super(_xMSF);
@@ -158,7 +149,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         }
     }
 
-    // public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport, final ReportTextDocument CurReportDocument.getDoc()) {
     public void importReportData(final XMultiServiceFactory _xMSF, final Dataimport _CurDataimport, IReportDocument _CurReportDocument, PropertyValue[] _properties)
     {
         if (CurReportDocument.reconnectToDatabase(_xMSF, _properties))

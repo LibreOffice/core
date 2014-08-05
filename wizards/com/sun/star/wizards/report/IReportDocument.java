@@ -166,8 +166,6 @@ public interface IReportDocument
      */
     public void liveupdate_changeContentTemplate(String ContentTemplatePath);
 
-    //    public String[] getLayoutTemplates();
-    //    public String[] getContentTemplates();
     public void layout_selectFirstPage();
 
     public void layout_setupRecordSection(String TemplateName);
@@ -217,13 +215,11 @@ public interface IReportDocument
 
     /* DataImport */
     // ???
-    // public void addTextSectionCopies();
     // ???
     public boolean reconnectToDatabase(XMultiServiceFactory xMSF, PropertyValue[] Properties);
     // ???
     public void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF);
     // ???
-    // public com.sun.star.lang.XMultiServiceFactory getDocumentServiceFactory();
     /**
      * set a internal variable to stop a maybe longer DB access.
      */

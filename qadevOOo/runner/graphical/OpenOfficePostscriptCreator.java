@@ -43,7 +43,6 @@ import helper.URLHelper;
 import helper.PropertyHelper;
 import helper.OSHelper;
 
-// import helper.Parameter;
 import java.io.File;
 
 /**
@@ -158,8 +157,6 @@ public class OpenOfficePostscriptCreator implements IOffice
             for (int i=0;i<aArgs.length;i++)
             {
                 PropertyValue aValue = aArgs[i];
-                // System.out.print("Property: '" + aValue.Name);
-                // System.out.println("' := '" + aValue.Value + "'");
                 if (aValue.Name.equals("FilterName") ||
                     aValue.Name.equals("MediaType"))
                 {
@@ -198,30 +195,10 @@ public class OpenOfficePostscriptCreator implements IOffice
                 if (aDesktop != null)
                 {
                     GlobalLogWriter.println("com.sun.star.frame.Desktop created.");
-                    // String sInputURL = aCurrentParameter.sInputURL;
-                    // String sOutputURL = aCurrentParameter.sOutputURL;
-                    // String sPrintFileURL = aCurrentParameter.sPrintToFileURL;
-                    // System.out.println(_sInputURL);
-
-
                     // set here the loadComponentFromURL() properties
                     // at the moment only 'Hidden' is set, so no window is opened at work
 
                     ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
-
-                    // check which properties should set and count it.
-                    // if (_aGTA.isHidden())
-                    // {
-                    //     nPropertyCount ++;
-                    // }
-                    // if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
-                    // {
-                    //     nPropertyCount ++;
-                    // }
-
-                    // initialize the propertyvalue
-                    // int nPropertyIndex = 0;
-                    // aProps = new PropertyValue[ nPropertyCount ];
 
                     // set all property values
                     if (_aGTA.isHidden())
@@ -369,31 +346,10 @@ public class OpenOfficePostscriptCreator implements IOffice
 
 
 
-//    public boolean storeAsPDF(ParameterHelper _aGTA,
-//                                     String _sInputURL,
-//                                     String _sOutputURL)
-//        {
-//            boolean bBack = false;
-//            XComponent aDoc = loadFromURL(_aGTA, _sInputURL);
-
-//            if (aDoc == null)
-//            {
-//                GlobalLogWriter.println("Can't load document.");
-//                return bBack;
-//            }
-//            bBack = storeAsPDF(_aGTA, aDoc, _sOutputURL);
-//            FileHelper.createInfoFile(_sOutputURL, _aGTA, "as pdf");
-
-//            GlobalLogWriter.println("Close document.");
-//            aDoc.dispose();
-//            return bBack;
-//        }
-
     public boolean storeAsPDF(ParameterHelper _aGTA,
                                      XComponent _aDoc,
                                      String _sOutputURL) throws OfficeException
         {
-            // try {
             boolean bBack = true;
             _aGTA.getPerformance().startTime(PerformanceContainer.StoreAsPDF);
             bBack = exportToPDF(_aDoc, _sOutputURL);
@@ -402,7 +358,6 @@ public class OpenOfficePostscriptCreator implements IOffice
             if (!bBack)
             {
                 GlobalLogWriter.println("Can't store document as PDF.");
-//                bBack = false;
                 throw new OfficeException("Can't store document as PDF");
             }
             else
@@ -411,50 +366,6 @@ public class OpenOfficePostscriptCreator implements IOffice
             }
             return bBack;
         }
-
-
-
-    /**
-     * print the document found in file (_sInputURL) to as postscript to file (_sPrintFileURL)
-     * Due to the fact we use a printer to convert the file to postscript, the default printer
-     * to create such postscript format must be installed, this is not tested here.
-     *
-     * @return true, if print has been done.
-     *         Be careful, true means only print returns with no errors, to be sure print is really done
-     *         check existence of _sPrintFileURL
-     */
-
-//    public boolean printToFileWithOOo(ParameterHelper _aGTA,
-//                                             String _sInputURL,
-//                                             String _sOutputURL,
-//                                             String _sPrintFileURL)
-//        {
-//            // waitInSeconds(1);
-//            boolean bBack = false;
-
-//            XComponent aDoc = loadFromURL(_aGTA, _sInputURL);
-//            if (aDoc != null)
-//            {
-//                if ( _sInputURL.equals(_sOutputURL) )
-//                {
-//                    // don't store document
-//                    // input and output are equal OR
-//                    GlobalLogWriter.println("Warning: Inputpath and Outputpath are equal. Document will not stored again.");
-//                    disallowStore();
-//                }
-//                bBack = impl_printToFileWithOOo(_aGTA, aDoc, _sOutputURL, _sPrintFileURL);
-
-//                GlobalLogWriter.println("Close document.");
-//                aDoc.dispose();
-//            }
-//            else
-//            {
-//                GlobalLogWriter.println("loadDocumentFromURL() failed with document: " + _sInputURL);
-//            }
-//            return bBack;
-//        }
-
-
 
 
     private boolean impl_printToFileWithOOo(ParameterHelper _aGTA,
@@ -488,7 +399,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                             _aGTA.getPerformance().stopTime(PerformanceContainer.Store);
 
                             GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Store document done.");
-                            // TimeHelper.waitInSeconds(1, "After store as URL to:" + _sOutputURL);
                             GlobalLogWriter.println("Reload stored file test.");
                             XComponent aDoc = loadFromURL(_aGTA, _sOutputURL);
                             if (aDoc == null)
@@ -506,7 +416,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                                 {
                                     aDoc.dispose();
                                 }
-                                // TimeHelper.waitInSeconds(1, "after close temp document");
                             }
                         }
                     }
@@ -533,27 +442,12 @@ public class OpenOfficePostscriptCreator implements IOffice
             try
             {
 
-                // System.out.println("Document loaded.");
                 // Change Pagesettings to DIN A4
 
                 GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Print document.");
                 XPrintable aPrintable =  UnoRuntime.queryInterface( XPrintable.class, _aDoc);
                 if (aPrintable != null)
                 {
-                    // System.out.println("  Set PaperFormat to DIN A4");
-                    // {
-                    //     PropertyValue[] aPrinterProps = aPrintable.getPrinter();
-                    //     System.out.println("PrinterProps size: " + String.valueOf(aPrinterProps.length));
-                    //     int nPropIndex = 0;
-                    //     while (!"PaperFormat".equals(aPrinterProps[nPropIndex].Name))
-                    //     {
-                    //         // System.out.println(aPrinterProps[nPropIndex].Name);
-                    //         nPropIndex++;
-                    //     }
-                    //     aPrinterProps[nPropIndex].Value = com.sun.star.view.PaperFormat.A4;
-                    //     aPrintable.setPrinter(aPrinterProps);
-                    // }
-
                     // configure Office to allow to execute macos
 
 // TODO: We need a possibility to set the printer name also for StarOffice/OpenOffice
@@ -576,14 +470,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                     // set property values for XPrintable.print()
                     // more can be found at "http://api.libreoffice.org/docs/common/ref/com/sun/star/view/PrintOptions.html"
 
-                    // int nProperties = 1;                    // default for 'FileName' property
-                    // if (_aGTA.printAllPages() == false)
-                    // {
-                    //     // we don't want to print all pages, build Pages string by ourself
-                    //     nProperties ++;
-                    // }
-                    // int nPropsCount = 0;
-
                     // If we are a SpreadSheet (calc), we need to set PrintAllSheets property to 'true'
                     XServiceInfo xServiceInfo =  UnoRuntime.queryInterface( XServiceInfo.class, _aDoc );
                     if ( xServiceInfo.supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
@@ -599,13 +485,10 @@ public class OpenOfficePostscriptCreator implements IOffice
                     }
 
                     ArrayList<PropertyValue> aPrintProps = new ArrayList<PropertyValue>();
-                    // GlobalLogWriter.println("Property FileName:=" + _sPrintFileURL);
 
-                    // PropertyValue [] aPrintProps = new PropertyValue[nProperties];
                     PropertyValue Arg = new PropertyValue();
                     Arg.Name = "FileName";
                     Arg.Value = _sPrintFileURL;
-                    // aPrintProps[nPropsCount ++] = Arg;
                     aPrintProps.add(Arg);
                     showProperty(Arg);
 
@@ -634,8 +517,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                         showProperty(Arg);
                     }
 
-                    // GlobalLogWriter.println("Start printing.");
-
                     _aGTA.getPerformance().startTime(PerformanceContainer.Print);
                     aPrintable.print(PropertyHelper.createPropertyValueArrayFormArrayList(aPrintProps));
                     TimeHelper.waitInSeconds(1, "Start waiting for print ready.");
@@ -649,7 +530,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                         int nPropIndex = 0;
                         while (!"IsBusy".equals(aPrinterProps[nPropIndex].Name))
                         {
-                            // System.out.println(aPrinterProps[nPropIndex].Name);
                             nPropIndex++;
                         }
                         isBusy = (aPrinterProps[nPropIndex].Value == Boolean.TRUE);
@@ -662,9 +542,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                             throw new com.sun.star.uno.Exception("Convwatch exception, wait too long for printing.");
                         }
                     }
-// TODO:
-//                    TimeHelper.waitInSeconds(40, "Start waiting after print ready.");
-
                     _aGTA.getPerformance().stopTime(PerformanceContainer.Print);
                     GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Print document done.");
 
@@ -713,32 +590,22 @@ public class OpenOfficePostscriptCreator implements IOffice
         {
             if (! FileHelper.exists(_sAbsoluteInputFile))
             {
-                // throw new ConvWatchCancelException("Input file: " + _sAbsoluteInputFile + " does not exist.");
                 return false;
             }
 
-            // String fs = System.getProperty("file.separator");
-
-            // String sInputFileURL = URLHelper.getFileURLFromSystemPath(_sAbsoluteInputFile);
-
             String sInputFileBasename = FileHelper.getBasename(_sAbsoluteInputFile);
-            // String sOutputFileURL = null;
             String sOutputPath;
             if (_sAbsoluteOutputPath != null)
             {
                 sOutputPath    = _sAbsoluteOutputPath;
-                // FileHelper.makeDirectories("", sOutputPath);
             }
             else
             {
                 String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
                 sOutputPath    = sInputPath;
             }
-            // sOutputFileURL = URLHelper.getFileURLFromSystemPath(sOutputPath + fs + sInputFileBasename);
-            // sOutputFileURL = null;
 
             String sPrintFilename = FileHelper.getNameNoSuffix(sInputFileBasename);
-            // String sPrintFileURL;
 
             String sAbsolutePrintFilename = FileHelper.appendPath(sOutputPath, sPrintFilename + ".prn");
             if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
@@ -748,142 +615,6 @@ public class OpenOfficePostscriptCreator implements IOffice
             }
             return false;
         }
-
-
-    /**
-     * create a reference file
-     * _sAbsoluteInputPath  contains the source file, if not exists, return with failure.
-     * _sAbsoluteOutputPath contains the destination, where the file will store after load with StarOffice/OpenOffice.org
-     *                      if is null, print only near the Input file path
-     * _sPrintType ".prn" Print input file with StarOffice/OpenOffice.org and the default printer as PostScript
-     *
-     * @param _aGTA
-     * @return
-     */
-//    public static boolean buildReference(ParameterHelper _aGTA,
-//                                         String _sAbsoluteOutputPath,
-//                                         String _sAbsoluteInputFile)
-//        throws OfficeException
-//        {
-//            if (! FileHelper.exists(_sAbsoluteInputFile))
-//            {
-//                throw new OfficeException("buildReference(): Input file: " + _sAbsoluteInputFile + " does not exist.");
-//            }
-
-//            String fs = System.getProperty("file.separator");
-
-//            String sInputFileURL = URLHelper.getFileURLFromSystemPath(_sAbsoluteInputFile);
-
-//            String sInputFileBasename = FileHelper.getBasename(_sAbsoluteInputFile);
-//            String sOutputFileURL = null;
-//            String sOutputPath;
-//            if (_sAbsoluteOutputPath != null)
-//            {
-//                sOutputPath    = _sAbsoluteOutputPath;
-//                FileHelper.makeDirectories("", sOutputPath);
-//            }
-//            else
-//            {
-//                String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
-//                sOutputPath    = sInputPath;
-//            }
-//            // sOutputFileURL = URLHelper.getFileURLFromSystemPath(sOutputPath + fs + sInputFileBasename);
-//            sOutputFileURL = null;
-
-//            String sPrintFilename = FileHelper.getNameNoSuffix(sInputFileBasename);
-//            String sPrintFileURL;
-
-//            String sAbsolutePrintFilename = sOutputPath + fs + sPrintFilename + ".prn";
-//            if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
-//            {
-//                GlobalLogWriter.println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
-//                return true;
-//            }
-
-//            if (_aGTA.getReferenceType().toLowerCase().equals("msoffice"))
-//            {
-//                sPrintFileURL = URLHelper.getFileURLFromSystemPath(sAbsolutePrintFilename);
-//            }
-//            else if (_aGTA.getReferenceType().toLowerCase().equals("pdf"))
-//            {
-////  TODO: If we rename the stored file to *.pdf, we have to be sure that we use *.pdf also as a available reference
-//                sPrintFileURL = URLHelper.getFileURLFromSystemPath(sAbsolutePrintFilename );
-//            }
-//            else if (_aGTA.getReferenceType().toLowerCase().equals("ooo"))
-//            {
-//                sPrintFileURL = URLHelper.getFileURLFromSystemPath(sAbsolutePrintFilename );
-//            }
-//            else
-//            {
-//                GlobalLogWriter.println("OfficePrint.buildreference(): Unknown print type.");
-//                return false;
-//            }
-//            return printToFile(_aGTA, sInputFileURL, sOutputFileURL, sPrintFileURL);
-//        }
-
-
-
-    // TODO: Das Teil muss hier raus!
-
-
-//    public static boolean printToFile(ParameterHelper _aGTA,
-//                                      String _sInputFileURL,
-//                                      String _sOutputFileURL,
-//                                      String _sPrintFileURL) throws OfficeException
-//        {
-//            boolean bBack = false;
-//            String sPrintFileURL = null;
-
-
-//            // remember the current timer, to know how long a print process need.
-//            // startTimer();
-
-//            if (_aGTA.getReferenceType().toLowerCase().equals("ooo"))
-//            {
-//                bBack = printToFileWithOOo(_aGTA, _sInputFileURL, _sOutputFileURL, _sPrintFileURL);
-//            }
-//            else if (_aGTA.getReferenceType().toLowerCase().equals("pdf"))
-//            {
-//                GlobalLogWriter.println("USE PDF AS EXPORT FORMAT.");
-//                bBack = storeAsPDF(_aGTA, _sInputFileURL, _sPrintFileURL);
-//            }
-//            else if (_aGTA.getReferenceType().toLowerCase().equals("msoffice"))
-//            {
-//                if (MSOfficePostscriptCreator.isMSOfficeDocumentFormat(_sInputFileURL))
-//                {
-//                    GlobalLogWriter.println("USE MSOFFICE AS EXPORT FORMAT.");
-//                    MSOfficePostscriptCreator a = new MSOfficePostscriptCreator();
-//                    try
-//                    {
-//                        a.printToFileWithMSOffice(_aGTA, FileHelper.getSystemPathFromFileURL(_sInputFileURL),
-//                                                  FileHelper.getSystemPathFromFileURL(_sPrintFileURL));
-//                    }
-//                    catch(OfficeException e)
-//                    {
-//                        e.printStackTrace();
-//                        GlobalLogWriter.println(e.getMessage());
-//                        throw new OfficeException("Exception caught. Problem with MSOffice printer methods.");
-//                    }
-//                    catch(java.io.IOException e)
-//                    {
-//                        GlobalLogWriter.println(e.getMessage());
-//                        throw new OfficeException("IOException caught. Problem with MSOffice printer methods.");
-//                    }
-//                    bBack = true;
-//                }
-//                else
-//                {
-//                    GlobalLogWriter.println("This document type is not recognized as MSOffice format, as default fallback StarOffice/OpenOffice.org instead is used.");
-//                    bBack = printToFileWithOOo(_aGTA, _sInputFileURL, _sOutputFileURL, _sPrintFileURL);
-//                }
-//            }
-//            else
-//            {
-//                // System.out.println("");
-//                throw new OfficeException("OfficePrint.printToFile(): Unknown print type.");
-//            }
-//            return bBack;
-//        }
 
 
     // TODO: move this away!
@@ -924,7 +655,6 @@ public class OpenOfficePostscriptCreator implements IOffice
         {
             if (_sFilterName.length() == 0)
             {
-                // System.out.println("No FilterName set.");
                 return null;
             }
 
@@ -933,7 +663,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                 GlobalLogWriter.println("MultiServiceFactory not set.");
                 return null;
             }
-            // XFilterFactory aFilterFactory = null;
             Object aObj = null;
             try
             {
@@ -950,18 +679,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                 if (aNameAccess != null)
                 {
 
-                    // if (_sFilterName.toLowerCase().equals("help"))
-                    // {
-                    //     System.out.println("Show all possible ElementNames from current version." );
-                    // String[] aElementNames = aNameAccess.getElementNames();
-                    // for (int i = 0; i<aElementNames.length; i++)
-                    // {
-                    //     System.out.println(aElementNames[i]);
-                    // }
-                    //     System.out.println("Must quit.");
-                    //     System.out.exit(1);
-                    // }
-
                     if (! aNameAccess.hasByName(_sFilterName))
                     {
                         GlobalLogWriter.println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
@@ -975,15 +692,12 @@ public class OpenOfficePostscriptCreator implements IOffice
                         if (aElements != null)
                         {
                             String sInternalFilterName = null;
-                            // System.out.println("getByName().length: " + String.valueOf(aElements.length));
                             for (int i=0;i<aElements.length; i++)
                             {
                                 PropertyValue aPropertyValue = (PropertyValue)aElements[i];
-                                // System.out.println("PropertyValue.Name: " + aPropertyValue.Name);
                                 if (aPropertyValue.Name.equals("Type"))
                                 {
                                     String sValue = (String)aPropertyValue.Value;
-                                    // System.out.println("Type: " + sValue);
                                     sInternalFilterName = sValue;
                                 }
                             }
@@ -1014,7 +728,6 @@ public class OpenOfficePostscriptCreator implements IOffice
         {
             if (_sFilterName.length() == 0)
             {
-                // System.out.println("No FilterName set.");
                 return null;
             }
 
@@ -1023,7 +736,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                 GlobalLogWriter.println("MultiServiceFactory not set.");
                 return null;
             }
-            // XFilterFactory aFilterFactory = null;
             Object aObj = null;
             try
             {
@@ -1052,14 +764,12 @@ public class OpenOfficePostscriptCreator implements IOffice
                         if (aElements != null)
                         {
                             String sServiceName = null;
-                            // System.out.println("getByName().length: " + String.valueOf(aElements.length));
                             for (int i=0;i<aElements.length; i++)
                             {
                                 PropertyValue aPropertyValue = (PropertyValue)aElements[i];
                                 if (aPropertyValue.Name.equals("DocumentService"))
                                 {
                                     String sValue = (String)aPropertyValue.Value;
-                                    // System.out.println("DocumentService: " + sValue);
                                     sServiceName = sValue;
                                     break;
                                 }
@@ -1090,7 +800,6 @@ public class OpenOfficePostscriptCreator implements IOffice
         {
             if (_sInternalFilterName.length() == 0)
             {
-                // System.out.println("No FilterName set.");
                 return null;
             }
 
@@ -1116,13 +825,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                 if (aNameAccess != null)
                 {
 
-                    // System.out.println("Show ElementNames" );
-                    // String[] aElementNames = aNameAccess.getElementNames();
-                    // for (int i = 0; i<aElementNames.length; i++)
-                    // {
-                    //     System.out.println(aElementNames[i]);
-                    // }
-
                     if (! aNameAccess.hasByName(_sInternalFilterName))
                     {
                         GlobalLogWriter.println("TypeDetection.hasByName() says there exist no '" + _sInternalFilterName + "'" );
@@ -1137,11 +839,9 @@ public class OpenOfficePostscriptCreator implements IOffice
                         if (aElements != null)
                         {
                             String sExtension = null;
-                            // System.out.println("getByName().length: " + String.valueOf(aElements.length));
                             for (int i=0;i<aElements.length; i++)
                             {
                                 PropertyValue aPropertyValue = (PropertyValue)aElements[i];
-                                // System.out.println("PropertyValue.Name: " + aPropertyValue.Name);
                                 if (aPropertyValue.Name.equals("Extensions"))
                                 {
                                     aExtensions = (String[])aPropertyValue.Value;
@@ -1189,7 +889,6 @@ public class OpenOfficePostscriptCreator implements IOffice
             }
 
             String sInputURL = URLHelper.getFileURLFromSystemPath(_sInputFile);
-            // showType(sInputURL, xMSF);
             XComponent aDoc = loadFromURL( _aGTA, sInputURL);
             if (aDoc == null)
             {
@@ -1208,12 +907,8 @@ public class OpenOfficePostscriptCreator implements IOffice
                 GlobalLogWriter.println("It's not allowed to store, check Input/Output path.");
                 return;
             }
-//  TODO: Do we need to wait?
-//            TimeHelper.waitInSeconds(1, "wait after loadFromURL.");
 
             XServiceInfo xServiceInfo =  UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
-            // String sFilter = getFilterName_forExcel(xServiceInfo);
-            // System.out.println("Filter is " + sFilter);
 
             // store the document in an other directory
             XStorable xStorable =  UnoRuntime.queryInterface( XStorable.class, aDoc);
@@ -1225,9 +920,6 @@ public class OpenOfficePostscriptCreator implements IOffice
 
             String sFilterName = _aGTA.getExportFilterName();
 
-            // initialize PropertyArray
-            // PropertyValue [] aStoreProps = new PropertyValue[ nPropertyCount ];
-            // int nPropertyIndex = 0;
             ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
             String sExtension = "";
@@ -1270,7 +962,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                 PropertyValue Arg = new PropertyValue();
                 Arg.Name = "FilterName";
                 Arg.Value = sFilterName;
-                // aStoreProps[nPropertyIndex ++] = Arg;
                 aPropertyList.add(Arg);
                 showProperty(Arg);
                 GlobalLogWriter.println("FilterName is set to: " + sFilterName);
@@ -1281,9 +972,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             {
                 // create the new filename with the extension, which is ok to the file format
                 String sInputFileBasename = FileHelper.getBasename(_sInputFile);
-                // System.out.println("InputFileBasename " + sInputFileBasename);
                 String sInputFileNameNoSuffix = FileHelper.getNameNoSuffix(sInputFileBasename);
-                // System.out.println("InputFilename no suffix " + sInputFileNameNoSuffix);
                 String fs = System.getProperty("file.separator");
                 String sOutputFile = _sOutputPath;
                 if (! sOutputFile.endsWith(fs))
@@ -1315,38 +1004,12 @@ public class OpenOfficePostscriptCreator implements IOffice
             {
                 GlobalLogWriter.println("Can't store document '" + sOutputURL + "'. Message is :'" + e.getMessage() + "'");
             }
-//  TODO: Do we need to wait?
-//            TimeHelper.waitInSeconds(1, "unknown in OfficePrint.convertDocument()");
 
         }
-
-    /**
-     *
-     * @return false, if 'NoOffice=yes' is given
-     */
-//    private boolean shouldOfficeStart()
-//    {
-//        String sNoOffice = (String)m_aParameterHelper.getTestParameters().get( "NoOffice" );
-//        if (sNoOffice != null)
-//        {
-//            if (sNoOffice.toLowerCase().startsWith("t") || sNoOffice.toLowerCase().startsWith("y"))
-//            {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
 
     OfficeProvider m_aProvider = null;
     private void startOffice()
     {
-        // SimpleFileSemaphore aSemaphore = new SimpleFileSemaphore();
-//        if (shouldOfficeStart())
-//        {
-            // if (OSHelper.isWindows())
-            // {
-            //     aSemaphore.P(aSemaphore.getSemaphoreFile());
-            // }
             m_aParameterHelper.getTestParameters().put(util.PropertyName.DONT_BACKUP_USERLAYER, Boolean.TRUE);
 
             m_aParameterHelper.getPerformance().startTime(PerformanceContainer.OfficeStart);
@@ -1356,9 +1019,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             m_aParameterHelper.getPerformance().stopTime(PerformanceContainer.OfficeStart);
 
             long nStartTime = m_aParameterHelper.getPerformance().getTime(PerformanceContainer.OfficeStart);
-            // aGTA = getParameterHelper(); // get new TestArguments
             m_aParameterHelper.getPerformance().setTime(PerformanceContainer.OfficeStart, nStartTime);
-//        }
 
         // Watcher Object is need in log object to give a simple way to say if a running office is alive.
         // As long as a log comes, it pings the Watcher and says the office is alive, if not an
@@ -1381,13 +1042,6 @@ public class OpenOfficePostscriptCreator implements IOffice
             {
                 m_aProvider.closeExistingOffice(m_aParameterHelper.getTestParameters(), true);
             }
-            // if (OSHelper.isWindows())
-            // {
-            //     aSemaphore.V(aSemaphore.getSemaphoreFile());
-            //     aSemaphore.sleep(2);
-            //     // wait some time maybe an other process will take the semaphore
-            //     // I know, this is absolutely dirty, but the whole convwatch is dirty and need a big cleanup.
-            // }
         }
     }
 
@@ -1400,7 +1054,6 @@ public class OpenOfficePostscriptCreator implements IOffice
     public boolean isStoreAllowed()
         {
         return false;
-        // return m_bStoreFile;
         }
 
 }

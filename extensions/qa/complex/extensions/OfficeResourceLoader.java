@@ -45,21 +45,6 @@ public class OfficeResourceLoader
     }
 
     /* ------------------------------------------------------------------ */
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[] {
-//            "checkSimpleStringAccess",
-//            "checkLocales"
-//        };
-//    }
-
-    /* ------------------------------------------------------------------ */
-//    public String getTestObjectName()
-//    {
-//        return "Extensions - OfficeResourceLoader";
-//    }
-
-    /* ------------------------------------------------------------------ */
     @Before public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         XPropertySet orb = UnoRuntime.queryInterface(XPropertySet.class, getMSF());

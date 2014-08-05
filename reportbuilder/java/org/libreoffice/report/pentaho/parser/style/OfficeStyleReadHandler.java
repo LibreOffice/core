@@ -61,9 +61,6 @@ public class OfficeStyleReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-//    if (OfficeParserUtil.getInstance().isValidStyleElement(uri, tagName))
-//    {
-//    }
         final StyleDefinitionReadHandler readHandler =
                 new StyleDefinitionReadHandler();
         children.add(readHandler);

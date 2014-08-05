@@ -18,7 +18,6 @@
 
 package convwatch;
 
-// import java.awt.Image;
 import convwatch.ImageHelper;
 
 
@@ -34,7 +33,6 @@ class CountNotWhite extends CountPixel
 {
     public CountNotWhite()
         {
-            // System.out.println("CountWhite()");
         }
 
     public void count(int pixel)
@@ -43,7 +41,6 @@ class CountNotWhite extends CountPixel
             int green = (pixel >>  8) & 0xff;
             int blue  = (pixel      ) & 0xff;
 
-            // System.out.println(String.valueOf(red) + ":" + String.valueOf(green) + ":" + String.valueOf(blue));
             if (red == 0xff && green == 0xff && blue == 0xff)
             {
                 return;
@@ -57,7 +54,6 @@ class CountNotBlack extends CountPixel
 {
     public CountNotBlack()
         {
-            // System.out.println("CountBlack()");
         }
 
     public void count(int pixel)
@@ -132,7 +128,6 @@ class graphics_stuff
 
 
 public class PixelCounter {
-    // private Image m_aImage;
     ImageHelper m_aImage;
 
 
@@ -167,23 +162,6 @@ public class PixelCounter {
         }
 
 
-
-//    public static void main(String[] args) {
-
-//        String a = helper.StringHelper.createValueString(10, 4);
-//        int dummy = 1;
-//
-// BorderRemover a = new BorderRemover();
-//        try
-//        {
-//            a.createNewImageWithoutBorder(args[0], args[1]);
-//        }
-//        catch(java.io.IOException e)
-//        {
-//            System.out.println("Exception caught.");
-//        }
-// */
-//    }
 
 }
 

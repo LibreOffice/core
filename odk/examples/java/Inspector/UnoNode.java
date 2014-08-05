@@ -228,20 +228,6 @@ public class UnoNode{
     }
 
 
-//    public static String getServiceDescription(Object _oUnoObject){
-//        String sClassName = "";
-//        XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, _oUnoObject);
-//        if (xServiceInfo != null){
-//            String[] sChildServiceNames = removeMandatoryServiceNames(xServiceInfo.getSupportedServiceNames());
-//            if (sChildServiceNames.length > 0){
-//                sClassName = sChildServiceNames[0];
-//            }
-//        }
-//        return sClassName;
-//    }
-
-
-
     private static String[] getMandatoryServiceNames(String _sServiceName){
     String[] sMandatoryServiceNames  = new String[]{};
     try {

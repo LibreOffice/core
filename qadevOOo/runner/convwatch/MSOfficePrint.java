@@ -124,9 +124,6 @@ public class MSOfficePrint
                 {
                     aStartCommand = createExcelStoreHelper();
                 }
-                // else
-                // {
-                // }
             }
             else
             {
@@ -141,11 +138,6 @@ public class MSOfficePrint
 // TODO: hardcoded FilterName in perl script
                     sFilterName = ""; // xlXMLSpreadsheet";
                 }
-
-                // String sCommand = sStartCommand + " " +
-                //     _sInputFile + " " +
-                //     StringHelper.doubleQuote(sFilterName) + " " +
-                //     _sOutputFile;
 
                 aStartCommand.add(_sInputFile);
                 aStartCommand.add(sFilterName);
@@ -214,10 +206,6 @@ public class MSOfficePrint
                     sPrinterName = "";
                 }
 
-                // String sCommand = sStartCommand + " " +
-                //     _sInputFile + " " +
-                //     StringHelper.doubleQuote(m_sPrinterName) + " " +
-                //     _sPrintFilename;
                 aStartCommand.add(_sInputFile);
                 aStartCommand.add(m_sPrinterName);
                 aStartCommand.add(_sPrintFilename);
@@ -406,8 +394,6 @@ public class MSOfficePrint
                 }
 
                 String sName = aPerlScript.getAbsolutePath();
-                // String sCommand = "perl " + sName;
-                // System.out.println(sCommand);
                 aList.add("perl");
                 aList.add(sName);
                 return aList;
@@ -422,7 +408,6 @@ public class MSOfficePrint
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
 
-            // ArrayList aList = new ArrayList();
             String sSaveViaWord = "saveViaWord.pl";
 
             ArrayList<String> aList = searchLocalFile(sSaveViaWord);
@@ -584,9 +569,6 @@ public class MSOfficePrint
             out.write( "{" + ls);
             out.write( "   print FILE \"name=$ARGV[0]\\n\";" + ls);
             out.write( "   print FILE \"ExcelVersion=$sVersion\\n\";" + ls);
-//            out.write( "   print FILE \"WordStartTime=$stopWordTime\\n\";" + ls);
-//            out.write( "   print FILE \"WordLoadTime=$stopLoadWordTime\\n\";" + ls);
-//            out.write( "   print FILE \"WordPrintTime=$stopPrintWordTime\\n\";" + ls);
             out.write( "   close(FILE);" + ls);
             out.write( "}" + ls);
             out.close();
@@ -776,9 +758,6 @@ public class MSOfficePrint
             out.write( "{" + ls);
             out.write( "   print FILE \"name=$ARGV[0]\\n\";" + ls);
             out.write( "   print FILE \"PowerPointVersion=$sVersion\\n\";" + ls);
-//            out.write( "   print FILE \"WordStartTime=$stopWordTime\\n\";" + ls);
-//            out.write( "   print FILE \"WordLoadTime=$stopLoadWordTime\\n\";" + ls);
-//            out.write( "   print FILE \"WordPrintTime=$stopPrintWordTime\\n\";" + ls);
             out.write( "   close(FILE);" + ls);
             out.write( "}" + ls);
             out.close();

@@ -65,8 +65,6 @@ public class _XChild {
     * </ul>
     */
     public boolean _setParent(boolean supported) {
-//        requiredMethod("getParent()") ;
-
         String parentComment = null;//String) tEnv.getObjRelation("cannotSwitchParent");
 
         if (parentComment != null) {

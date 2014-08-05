@@ -55,8 +55,6 @@ import org.openoffice.netbeans.modules.office.filesystem.OpenOfficeDocFileSystem
 public class ParcelContentsIterator implements TemplateWizard.Iterator {
 
 
-    // private static final long serialVersionUID = ...L;
-
     // You should define what panels you want to use here:
 
     public static final String PROP_LANGUAGE =

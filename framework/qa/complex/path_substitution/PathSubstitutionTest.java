@@ -43,14 +43,6 @@ public class PathSubstitutionTest
     private VariableContainer substVars = null;
 
     /**
-     * A function to tell the framework, which test functions are available.
-     * Right now, it's only 'checkXStringSubstitution'.
-     * @return All test methods.
-     */
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkXStringSubstitution"};
-//    }
-    /**
      * Create an array with all substitution variables
      */
     @Before public void initialize()

@@ -23,8 +23,6 @@ import java.util.StringTokenizer;
 import java.util.ArrayList;
 import helper.OSHelper;
 
-// import convwatch.DBHelper;
-
 public class DB extends DBHelper
 {
     private static DB m_aDB = null;
@@ -205,48 +203,6 @@ public class DB extends DBHelper
             }
         }
 
-    // public static void insertinto_file(String _sFilename,
-    //                                    String _sBasename,
-    //                                    String _sFileFormat,
-    //                                    String _sBuildID,
-    //                                    String _sSourceType,
-    //                                    int _nResolution )
-    //     {
-    //         Connection aCon = new ShareConnection().getConnection();
-
-    //         String sFilename = _sFilename.replace('\\', '/');
-
-    //         String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
-    //         ExecSQL(aCon, sDeleteOld);
-
-    //         String sValueLine = "type, filename, basename, fileformat, buildid, resolution, date";
-    //         StringBuffer aDataLine = new StringBuffer();
-    //         aDataLine.append( Quote(_sSourceType) ) . append( sComma ) .
-    //             append( Quote( sFilename) )   . append( sComma ) .
-    //             append( Quote( _sBasename) )   . append( sComma ) .
-    //             append( Quote( _sFileFormat) ) . append( sComma ) .
-    //             append( Quote( _sBuildID) )    . append( sComma ) .
-    //             append( _nResolution)    . append( sComma ) .
-    //             append( Quote( today() ) );
-
-    //         SQLinsertValues(aCon, "file", sValueLine, aDataLine.toString());
-    //     }
-
-    // public static void updatestate_currentdocs(String _sFilename,
-    //                                            String _sState)
-    //     {
-    //         Connection aCon = new ShareConnection().getConnection();
-
-    //         String sFilename = _sFilename.replace('\\', '/');
-
-    //         // String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
-    //         // ExecSQL(aCon, sDeleteOld);
-
-    //         String sSet = "state=" + Quote(_sState);
-    //         String sWhere = getWhereClause() + sAND + "name=" + Quote(sFilename);
-    //         SQLupdateValue( aCon, "currentdocs", sSet, sWhere );
-    //     }
-
     private void sql_test()
         {
             String sUUID = getDBDistinct();
@@ -265,11 +221,6 @@ public class DB extends DBHelper
                 java.sql.ResultSetMetaData aResultSetMetaData = aResultSet.getMetaData();
 
                 int nColumnCount = aResultSetMetaData.getColumnCount();         // java sql starts with '1'
-                // String[] aColumnName = new String[nColumnCount];
-                // for(int i=1;i<nColumnCount;i++)
-                // {
-                //     String aColumnName[i - 1] = aResultSetMetaData.getColumnName(i);
-                // }
 
                 while( aResultSet.next() )
                 {
@@ -299,12 +250,9 @@ public class DB extends DBHelper
                                 sValue = "UNSUPPORTED TYPE";
                             }
                             aResult.append(sValue).append(", ");
-                            // String sName = aObj.getClass().getName();
-                            // System.out.println("sqlresult: Class name: " + sName);
                         }
                         String sResult = aResult.toString();
                         aResultList.add(sResult);
-                        // System.out.println(sResult);
                     }
                     catch (java.sql.SQLException e)
                     {
@@ -324,11 +272,6 @@ public class DB extends DBHelper
         {
             Connection aCon = new ShareConnection().getConnection();
 
-            // String sInfo = _sInfo.replace('\\', '/');
-
-            // String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
-            // ExecSQL(aCon, sDeleteOld);
-
             String sSet = "state=" + Quote(_sStatus);
             String sWhere = getWhereClause();
             if (sWhere.length() > 0)
@@ -339,11 +282,6 @@ public class DB extends DBHelper
     private void updateinfo_status(String _sInfo)
         {
             Connection aCon = new ShareConnection().getConnection();
-
-            // String sInfo = _sInfo.replace('\\', '/');
-
-            // String sDeleteOld = "DELETE FROM file WHERE filename = " + Quote(sFilename);
-            // ExecSQL(aCon, sDeleteOld);
 
             String sSet = "info=" + Quote(_sInfo);
             String sWhere = getWhereClause();
@@ -383,14 +321,6 @@ public class DB extends DBHelper
     private String getWhereClause()
         {
             StringBuffer aWhereClause = new StringBuffer();
-            // WHERE environment='' and referenceversion='' and currentversion='' and documentpool=''
-            // aWhere.append( "environment" ). append(sEqual) . append(Quote(m_sEnvironment)) .
-            //     append(sAND) .
-            //     append( "referenceversion" ). append(sEqual) . append(Quote(m_sSourceVersion)) .
-            //     append(sAND) .
-            //     append( "currentversion" ). append(sEqual) . append(Quote(m_sDestinationVersion)) .
-            //     append(sAND) .
-            //     append( "documentpool" ). append(sEqual) . append(Quote(m_sDocumentPool));
             boolean bAND = false;
             if (m_sDocID != null)
             {
@@ -423,22 +353,12 @@ public class DB extends DBHelper
                 while (aTokenizer.hasMoreTokens())
                 {
                     String sToken = aTokenizer.nextToken();
-                    // System.out.println("PART: " + sToken);
                     int nIndex = sToken.indexOf("uuid()=");
-                    // System.out.println("Index " + nIndex);
                     int nIndexTuettel = sToken.indexOf("'", nIndex);
-                    // System.out.println("IndexTuettel " + nIndexTuettel);
                     int nIndexTuettel2 = sToken.lastIndexOf("'");
-                    // System.out.println("IndexTuettel2 " + nIndexTuettel2);
                     String sUuid = sToken.substring(nIndexTuettel + 1, nIndexTuettel2);
-                    // if (sPart.startsWith("p:"))
-                    // {
-                        // m_sSourceVersion = sPart.substring(2);
-                        // GlobalLogWriter.get().println("DB: source version: " + m_sSourceVersion);
-                    // }
                     return sUuid;
                 }
-                // System.out.println(sResult);
             }
 
             return "0";
@@ -490,65 +410,4 @@ public class DB extends DBHelper
             SQLinsertValues(aCon, "documentcompare", sValueLine, aDataLine.toString());
         }
 
-    // public static void filesRemove(String _sDBInfoString)
-    //     {
-    //         if (_sDBInfoString == null) return;
-    //         fillVariables(_sDBInfoString);
-
-    //         Connection aCon = new ShareConnection().getConnection();
-
-    //         String sDeleteSQL = "DELETE FROM currentdocs WHERE " + getWhereClause();
-
-    //         ExecSQL(aCon, sDeleteSQL);
-    //     }
-
-    // public static void fileInsert(String _sDBInfoString,
-    //                               String _sFilename,
-    //                               String _sRemovePath)
-    //     {
-    //         if (_sDBInfoString == null) return;
-    //         fillVariables(_sDBInfoString);
-
-    //         String sFilename = _sFilename.replace('\\', '/');
-
-    //         Connection aCon = new ShareConnection().getConnection();
-
-    //         String sValueLine = "environment, referenceversion, currentversion, documentpool, name, state";
-    //         StringBuffer aDataLine = new StringBuffer();
-    //         aDataLine.append( Quote(m_sEnvironment) ) . append( sComma ) .
-    //             append( Quote( m_sSourceVersion) )   . append( sComma ) .
-    //             append( Quote( m_sDestinationVersion) )   . append( sComma ) .
-    //             append( Quote( m_sDocumentPool) ) . append( sComma ) .
-    //             append( Quote( sFilename) )    . append( sComma ) .
-    //             append( Quote( "undone"));
-
-    //         SQLinsertValues(aCon, "currentdocs", sValueLine, aDataLine.toString());
-    //     }
-
-
-    // public static void insertinto_file(String _sFilename, String _sFileFormat, String _sBuildID)
-    //     {
-    //         Connection aCon = new ShareConnection().getConnection();
-
-    //         String sValueLine = "type, filename, fileformat, buildid, date";
-    //         StringBuffer aDataLine = new StringBuffer();
-    //         aDataLine.append( "1" )            . append( sComma ) .
-    //             append( Quote( _sFilename) )   . append( sComma ) .
-    //             append( Quote( _sFileFormat) ) . append( sComma ) .
-    //             append( Quote( _sBuildID) )    . append( sComma ) .
-    //             append( Quote( today() ) );
-
-    //         SQLinsertValues(aCon, "file", sValueLine, aDataLine.toString());
-    //     }
-
-    // public static void main( String[] args )
-    //     {
-
-    //         String _sFilename = "";
-    //         String _sFileFormat = "";
-    //         String _sBuildID = "";
-
-    //         // insertinto_file("c:\temp\test.txt", "test", "txt", "nix", "", 0);
-    //         fillVariables("p:m128,c:m134,d:demo");
-    //     }
 }

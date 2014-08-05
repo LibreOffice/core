@@ -38,8 +38,6 @@ public class MethodPanel extends JPanel {
     private File basedir;
     private ArrayList<String> classpath;
 
-    // private JTable table;
-    // private MethodTableModel model;
     private JList list;
     private ScriptEntry[] values;
 
@@ -72,7 +70,6 @@ public class MethodPanel extends JPanel {
 
     private void initUI() {
         JLabel label = new JLabel("Available Methods:");
-        // table = new JTable(model);
         list = new JList(values);
 
         JScrollPane pane = new JScrollPane(list);

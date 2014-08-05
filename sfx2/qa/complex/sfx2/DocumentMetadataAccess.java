@@ -18,7 +18,6 @@
 
 package complex.sfx2;
 
-// import complexlib.ComplexTestCase;
 import com.sun.star.beans.Pair;
 import com.sun.star.rdf.Literal;
 import com.sun.star.rdf.XLiteral;

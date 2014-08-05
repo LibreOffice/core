@@ -33,7 +33,6 @@ public class QuerySummary extends QueryMetaData
     final protected int RID_REPORT = 2400;
     String sSummary;
     Resource oResource;
-    // XMultiServiceFactory xMSF;
     private String sSeparator;
     private String sReturnChar;
     private String sAnd;
@@ -43,7 +42,6 @@ public class QuerySummary extends QueryMetaData
     {
         super(_xMSF);
         this.oResource = _oResource;
-        // this.xMSF = _xMSF;
         sAnd = oResource.getResText(RID_QUERY + 38);
         sOr = oResource.getResText(RID_QUERY + 39);
         sSeparator = oResource.getResText(RID_QUERY + 91);
@@ -66,8 +64,6 @@ public class QuerySummary extends QueryMetaData
                         "<FIELDNAME>", "<SORTMODE>"
                     }) + sReturnChar;
             sFilterFraction = combineFilterNameFraction(this.getFilterConditions(), RID_QUERY + 53, RID_QUERY + 54) + sReturnChar;
-            //      if (xDBMetaData.getNumericFunctions().length() > 0)
-            //          sAggregateFraction = combinePartString(RID_QUERY + 55, AggregateFieldNames, RID_QUERY + 56, RID_QUERY + 95, new String[]{ "<CALCULATEDFUNCTION>", "<FIELDNAME>"}) + sReturnChar;
             if (xDBMetaData.supportsGroupBy())
             {
                 sGroupByFraction = combinePartString(RID_QUERY + 57, GroupFieldNames, RID_QUERY + 58) + sReturnChar;

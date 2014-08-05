@@ -43,14 +43,6 @@ public class TypeDetection6FileFormat
 
     static XMultiServiceFactory xMSF;
 
-    /**
-     * A function to tell the framework, which test functions are available.
-     * @return All test methods.
-     */
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkFilterFactory",
-//                            "checkTypeDetection"};
-//    }
     /** Create the environment for following tests.
      * Use either a component loader from desktop or
      * from frame

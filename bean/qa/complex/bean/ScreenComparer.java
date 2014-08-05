@@ -18,16 +18,11 @@
 package complex.bean;
 
 
-// import complexlib.ComplexTestCase;
 import java.io.File;
 import java.awt.Rectangle;
-// import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
-// import java.awt.event.*;
-// import java.awt.Frame;
 import javax.imageio.ImageIO;
-// import javax.imageio.stream.FileImageOutputStream;
 
 
 

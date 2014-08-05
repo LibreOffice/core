@@ -56,10 +56,6 @@ public class CheckTransientDocumentsDocumentContent {
     private XMultiServiceFactory xMSF = null;
     private XTextDocument xTextDoc = null;
 
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkTransientDocumentsDocumentContent"};
-//    }
-
     @Before public void before() {
         xMSF = getMSF();
         System.out.println("Open a document.");

@@ -26,9 +26,6 @@ public class SectionLabel extends SectionObject
     protected SectionLabel(XFixedText _aFixedText)
     {
         m_aParentObject = _aFixedText;
-    // We would like to know, what properties are in this object.
-//        PropertySetHelper aHelper = new PropertySetHelper(_aFixedText);
-//        aHelper.showProperties();
     }
 
     public static SectionObject create(XFixedText _aFixedText)

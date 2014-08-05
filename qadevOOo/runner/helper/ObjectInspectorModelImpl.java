@@ -59,7 +59,6 @@ public class ObjectInspectorModelImpl implements XObjectInspectorModel{
             inCat =(CategoryMem == category)? ++inCat: 1;
             CategoryMem = category;
 
-            //System.out.println("Category" + category + "Number" + inCat);
             m_Categories[n].ProgrammaticName = "Category" + category;
             m_Categories[n].UIName = "Category" + category + "Number" + inCat;
             m_Categories[n].HelpURL = "h:" + n;

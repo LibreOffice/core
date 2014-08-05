@@ -187,13 +187,8 @@ public class UnitConversion
             checkSize(aSize, com.sun.star.util.MeasureUnit.INCH_100TH, "1/100inch");
             checkSize(aSize, com.sun.star.util.MeasureUnit.INCH_10TH, "1/10inch");
             checkSize(aSize, com.sun.star.util.MeasureUnit.INCH, "inch");
-            // checkSize(aSize, com.sun.star.util.MeasureUnit.M, "m");
             checkSize(aSize, com.sun.star.util.MeasureUnit.POINT, "point");
             checkSize(aSize, com.sun.star.util.MeasureUnit.TWIP, "twip");
-            // checkSize(aSize, com.sun.star.util.MeasureUnit.KM, "km");
-            // checkSize(aSize, com.sun.star.util.MeasureUnit.PICA, "pica");
-            // checkSize(aSize, com.sun.star.util.MeasureUnit.FOOT, "foot");
-            // checkSize(aSize, com.sun.star.util.MeasureUnit.MILE, "mile");
         }
         catch (com.sun.star.lang.IllegalArgumentException e)
         {

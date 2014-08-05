@@ -125,17 +125,6 @@ public class Register{
                 }
         }
 
-            // if ( !regSingletons( path, progpath, opSys, statusLabel ) )
-        // {
-            //     return false;
-            // }
-            // updating ProtocolHandler
-            /* statusLabel.setText("Updating ProtocolHandler...");
-            if(!FileUpdater.updateProtocolHandler(path, statusLabel)) {
-            statusLabel.setText("Updating ProtocolHandler failed, please view SFrameworkInstall.log");
-            return false;
-        } */
-
             // updating StarBasic libraries
             statusLabel.setText("Updating StarBasic libraries...");
             if(!FileUpdater.updateScriptXLC(path, statusLabel)) {

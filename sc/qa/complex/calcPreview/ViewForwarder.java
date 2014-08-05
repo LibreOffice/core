@@ -18,21 +18,16 @@
 
 package complex.calcPreview;
 
-// import complexlib.ComplexTestCase;
-
 import com.sun.star.awt.XWindow;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
-// import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
-// import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.table.XCell;
-// import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -50,7 +45,6 @@ import util.SOfficeFactory;
 import util.utils;
 
 import com.sun.star.beans.XPropertySet;
-// import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XHeaderFooterContent;
@@ -58,18 +52,7 @@ import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XText;
-// import com.sun.star.drawing.XDrawPageSupplier;
-// import com.sun.star.drawing.XDrawPage;
-// import com.sun.star.drawing.XShape;
-// import com.sun.star.drawing.XShapes;
 
-
-// import com.sun.star.beans.Property;
-// import com.sun.star.lang.XServiceInfo;
-
-
-
-// import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -86,28 +69,12 @@ public class ViewForwarder {
     /** The MultiServiceFactory **/
     private XMultiServiceFactory mXMSF = null;
 
-    /** Get all test methods.
-     * @return The test methods.
-     */
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkPositiveViewForwarder",
-//                            "checkNegativeViewForwarder",
-//                            "checkPreviewHeaderCells",
-//                            "checkPreviewShape"
-//                            };
-//    }
-
     /**
      * Get a MultiServiceFactory from the Office before the test.
      */
     @Before public void before()
     {
         mXMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        // SOfficeFactory SOF = SOfficeFactory.getFactory(mXMSF);
-
-        // param = new TestParameters();
-        // param.put("ServiceFactory", xMsf);
-        // mXMSF = (XMultiServiceFactory)param.getMSF();
     }
 
 
@@ -901,8 +868,6 @@ public class ViewForwarder {
         XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, xModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-//        System.out.println("ImplementationName " + utils.getImplName(oObj));
-
         System.out.println("Press any key when the header cell is on top.");
         try{
             byte[]b = new byte[16];
@@ -917,9 +882,6 @@ public class ViewForwarder {
         try {
             System.out.println("Count: " +AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.TABLE, "").getAccessibleChildCount());
-//            parent = at.getAccessibleObjectForRole
-//                (xRoot, AccessibleRole.TABLE, "").getAccessibleChild(0);
-//            oObj = parent.getAccessibleContext().getAccessibleChild(1);
             System.out.println("Getting child 2");
             oObj = AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.TABLE, "").getAccessibleChild(2);
@@ -934,16 +896,6 @@ public class ViewForwarder {
         util.dbg.printInterfaces(oObj);
         System.out.println("*****************");
 
-
-/*        XAccessibleContext accCtx = (XAccessibleContext)
-                UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
-        try {
-            System.out.println("Children now: " + accCtx.getAccessibleChild(0).getAccessibleContext().getAccessibleChildCount());
-        } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            fail(iabe.getMessage());
-            return;
-        }
-*/
 
         XAccessibleValue accV =
                 UnoRuntime.queryInterface(XAccessibleValue.class, oObj);
@@ -982,7 +934,6 @@ public class ViewForwarder {
         try {
             String docName = "calcshapes.sxc";
             System.out.println("Loading a spreadsheetdocument.");
-            // String url = utils.getFullURL((String)param.get("TestDocumentPath") + "/" + docName);
             String url = TestDocument.getUrl(docName);
             System.out.println("loading document '" + url + "'");
             xComp = SOF.loadDocument(url);

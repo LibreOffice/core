@@ -68,12 +68,10 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
 
     public void before()
         {
-            // System.out.println("before()");
         }
 
     public void after()
         {
-            // System.out.println("after()");
         }
 
     // The test method itself.
@@ -111,7 +109,6 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
 
             if (bQuit == true)
             {
-                // log.println("must quit.");
                 assure("Must quit, Parameter problems.", false);
             }
 
@@ -140,9 +137,6 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             // check if all need software is installed and accessible
             checkEnvironment(mustInstalledSoftware());
 
-            // test_removeFirstDirectorysAndBasenameFrom();
-            // Get the MultiServiceFactory.
-            // XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
             if (aGTA == null)
             {
@@ -165,13 +159,6 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 FileFilter aFileFilter = FileHelper.getFileFilter();
 
                 Object[] aList = DirectoryHelper.traverse(m_sInputPath, aFileFilter, aGTA.includeSubDirectories());
-                // fill into DB
-                // DB.filesRemove(aGTA.getDBInfoString());
-                // for (int j=0;j<aList.length;j++)
-                // {
-                //     String sEntry = (String)aList[j];
-                //     DB.fileInsert(aGTA.getDBInfoString(), sEntry, sRemovePath);
-                // }
 
                 // normal run.
                 for (int i=0;i<aList.length;i++)
@@ -195,9 +182,6 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             }
             else
             {
-                // String sRemovePath = aInputPath.getAbsolutePath();
-                // DB.fileInsert(aGTA.getDBInfoString(), m_sInputPath, sRemovePath);
-                // DB.updatestate_status(aGTA.getDBInfoString(), "started: " + m_sInputPath);
                 if (aGTA.checkIfUsableDocumentType(m_sInputPath))
                 {
                     runGDC(m_sInputPath, m_sReferencePath);
@@ -217,10 +201,6 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 // SimpleFileSemaphore aSemaphore = new SimpleFileSemaphore();
                 if (aGTA.shouldOfficeStart())
                 {
-                    // if (OSHelper.isWindows())
-                    // {
-                    //     aSemaphore.P(aSemaphore.getSemaphoreFile());
-                    // }
                     aGTA.getPerformance().startTime(PerformanceContainer.OfficeStart);
                     aProvider = new OfficeProvider();
                     XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
@@ -238,7 +218,6 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 GlobalLogWriter.get().println("Set office watcher");
                 Object aWatcher = param.get("Watcher");
                 GlobalLogWriter.get().setWatcher(aWatcher);
-                // initializeWatcher(param);
 
                 try
                 {
@@ -269,13 +248,6 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     boolean bClosed = aProvider.closeExistingOffice(param, true);
                     // Hope I can check that the close of the office fails
                     assure("Office closed", bClosed, true);
-                    // if (OSHelper.isWindows())
-                    // {
-                    //     aSemaphore.V(aSemaphore.getSemaphoreFile());
-                    //     aSemaphore.sleep(2);
-                    //     // wait some time maybe an other process will take the semaphore
-                    //     // I know, this is absolutely dirty, but the whole convwatch is dirty and need a big cleanup.
-                    // }
                 }
             }
             else

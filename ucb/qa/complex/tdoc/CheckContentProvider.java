@@ -59,33 +59,6 @@ public class CheckContentProvider {
     private XTextDocument[] xTextDoc = null;
     private XContent xContent = null;
 
-    /**
-     * The test methods: the test methods have to be executed in a specified
-     * order. This order is:
-     * <ol>
-     * <li>"checkTDOCRoot"</li>
-     * <li>"checkTDOCRootInterfaces"</li>
-     * <li>"checkTDOCDocument"</li>
-     * <li>"checkTDOCDocumentInterfaces"</li>
-     * <li>"checkTDOCFolder"</li>
-     * <li>"checkTDOCFolderInterfaces"</li>
-     * <li>"checkTDOCStream"</li>
-     * <li>"checkTDOCStreamInterfaces"</li>
-     * </ol>
-     * Important is, that the test of the element comes first, then the test of
-     * its interfaces.
-     **/
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkTDOCRoot",
-//                            "checkTDOCRootInterfaces",
-//                            "checkTDOCDocument",
-//                            "checkTDOCDocumentInterfaces",
-//                            "checkTDOCFolder",
-//                            "checkTDOCFolderInterfaces",
-//                            "checkTDOCStream",
-//                            "checkTDOCStreamInterfaces",
-//                            };
-//    }
 
     /**
      * Open some documents before the test
@@ -327,7 +300,6 @@ public class CheckContentProvider {
         // check the XChild interface
         _XChild xChild = new _XChild();
         xChild.oObj = UnoRuntime.queryInterface(XChild.class, xContent);
-        // xChild.log = log;
         // hasParent dermines, if this content has a parent
         assertNotNull("getParent()", xChild._getParent(hasParent));
         // parameter does dermine, if this funczion is supported: generally not supported with tdcp content
@@ -336,7 +308,6 @@ public class CheckContentProvider {
         // check the XPropertyChangeNotifier interface
         _XPropertiesChangeNotifier xPropChange = new _XPropertiesChangeNotifier();
         xPropChange.oObj = UnoRuntime.queryInterface(XPropertiesChangeNotifier.class, xContent);
-        // xPropChange.log = log;
         assertNotNull("addPropertiesChangeListener()", xPropChange._addPropertiesChangeListener());
     assertNotNull("removePropertiesChangeListener()", xPropChange._removePropertiesChangeListener());
 
@@ -376,7 +347,6 @@ public class CheckContentProvider {
         // xComponent.log = log;
         assertNotNull("addEventListener()", xComponent._addEventListener());
         assertNotNull("removeEventListener()", xComponent._removeEventListener());
-//        assure("dispose()", xComponent._dispose());
     }
 
 

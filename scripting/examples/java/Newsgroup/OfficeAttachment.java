@@ -98,50 +98,38 @@ public class OfficeAttachment
     public boolean createTempDocs()
     {
         String filenameURL = "file:///" + templocationURL +  "/" + attachmentName;
-        //String filenameSystem = templocationSystem + System.getProperty( "file.separator" ) + attachmentName;
-        //JOptionPane.showMessageDialog( null, "Filename URL " + filenameURL );
         try
         {
             if( isHtmlDoc )
             {
-                //JOptionPane.showMessageDialog( null, "Saving doc in HTML format" );
                 statusLine = "Saving doc in HTML format";
                 status.setStatus( 4, statusLine );
-                //System.out.print( "Saving attachment as " + filename + ".html..." );
                        PropertyValue[] propertyvalue_html = new PropertyValue[2];
                     propertyvalue_html[0] = new PropertyValue();
                         propertyvalue_html[0].Name = new String("Overwrite");
                     propertyvalue_html[0].Value = new Boolean(true);
                        propertyvalue_html[1] = new PropertyValue();
                     propertyvalue_html[1].Name = ("FilterName");
-//                  propertyvalue_html[1].Value = new String("scalc: HTML (StarCalc)");
                     propertyvalue_html[1].Value = new String("swriter: HTML (StarWriter)");
                 storedDoc.storeAsURL( filenameURL + ".html", propertyvalue_html);
 
                 File homedir = new File( templocationSystem );
-                //JOptionPane.showMessageDialog( null, "homedir (Java File): " + homedir.getPath() );
                 File homefiles[] = homedir.listFiles();
                 String file = "";
                 for(int i=0; i < homefiles.length; i++ )
                 {
                     if( homefiles[i].getName().equals( attachmentName + ".html" ) )
                     {
-                        //htmlFile = new File( homefiles[i].getAbsolutePath() );
-                        //JOptionPane.showMessageDialog( null, "Found HTML" );
                         file = homefiles[i].getAbsolutePath();
                     }
                 }
                 htmlFile = new File( file );
-                //htmlFile = new File( filename + ".html" );
-                //htmlFile = new File( storedDoc.getLocation() );
             }
 
             if( isOfficeDoc )
             {
-                //JOptionPane.showMessageDialog( null, "Saving doc in .sxw format" );
                 statusLine = "Saving doc in .sxw format";
                 status.setStatus( 4, statusLine );
-                //System.out.print( "Saving attachment as " + filename + ".sxw..." );
                 PropertyValue[] propertyvalue_sxw = new PropertyValue[2];
                     propertyvalue_sxw[0] = new PropertyValue();
                     propertyvalue_sxw[0].Name = new String("Overwrite");
@@ -152,8 +140,6 @@ public class OfficeAttachment
                     storedDoc.storeAsURL( filenameURL + ".sxw", propertyvalue_sxw);
 
                 File homedir = new File( templocationSystem );
-
-                //JOptionPane.showMessageDialog( null, "homedir (Java File): " + homedir.getPath() );
 
                                 File homefiles[] = homedir.listFiles();
                 String file = "";
@@ -212,24 +198,17 @@ public class OfficeAttachment
         {
             if( isOfficeDoc && isHtmlDoc )
             {
-                //System.out.println( "Removing: " + htmlFile.getPath() + " " + officeFile.getPath() );
-                //System.out.println( "htmlfile " + htmlFile.exists() + " officeFile " + officeFile.exists() );
-                //JOptionPane.showMessageDialog( null, "Removing: " + htmlFile.getPath() + " " + officeFile.getPath() );
-                //JOptionPane.showMessageDialog( null, "htmlfile " + htmlFile.exists() + " officeFile " + officeFile.exists() );
                 htmlFile.delete();
                 officeFile.delete();
-                //JOptionPane.showMessageDialog( null, "htmlfile " + htmlFile.exists() + " officeFile " + officeFile.exists() );
             }
             else
             {
                 if( isOfficeDoc )
                                {
-                    //System.out.println( "Removing: " + officeFile.getPath() );
                     officeFile.delete();
                 }
                 else
                 {
-                    //System.out.println( "Removing: " + htmlFile.getPath() );
                     htmlFile.delete();
                 }
             }

@@ -55,7 +55,6 @@ public class FactoryHelper {
     static protected class Factory
         implements XSingleServiceFactory, XSingleComponentFactory, XServiceInfo,
         XTypeProvider {
-//        private static final boolean DEBUG = false;
 
         protected XMultiServiceFactory _xMultiServiceFactory;
         protected XRegistryKey         _xRegistryKey;

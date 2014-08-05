@@ -296,10 +296,6 @@ public class DBMetaData
                 Object oCommand;
                 this.Name = _CommandName;
                 this.CommandType = _CommandType;
-                // if (getTableNamesAsNameAccess() == null)
-                // {
-                //     initCommandNames();
-                // }
                 if (CommandType == com.sun.star.sdb.CommandType.TABLE)
                 {
                     oCommand = getTableNamesAsNameAccess().getByName(Name);

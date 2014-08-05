@@ -32,16 +32,6 @@ import static org.junit.Assert.*;
 public class PasswordContainerUnitTest {
     private XMultiServiceFactory m_xMSF = null;
 
-////    public String[] getTestMethodNames() {
-////        return new String[] {
-////            "ExecuteTest01",
-////            "ExecuteTest02",
-////            "ExecuteTest03"};
-////    }
-//    public String getTestObjectName() {
-//        return "PasswordContainerUnitTest";
-//    }
-
     @Before public void before() {
         try {
             m_xMSF = getMSF();

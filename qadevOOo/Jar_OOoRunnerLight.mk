@@ -51,7 +51,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunnerLight,\
     qadevOOo/runner/complexlib/ComplexTestCase \
     qadevOOo/runner/complexlib/MethodThread \
     qadevOOo/runner/complexlib/ShowTargets \
-    qadevOOo/runner/convwatch/Basename \
     qadevOOo/runner/convwatch/BorderRemover \
     qadevOOo/runner/convwatch/BuildID \
     qadevOOo/runner/convwatch/ConvWatch \
@@ -79,7 +78,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunnerLight,\
     qadevOOo/runner/convwatch/MSOfficePrint \
     qadevOOo/runner/convwatch/NameHelper \
     qadevOOo/runner/convwatch/OfficePrint \
-    qadevOOo/runner/convwatch/OSHelper \
     qadevOOo/runner/convwatch/PerformanceContainer \
     qadevOOo/runner/convwatch/PixelCounter \
     qadevOOo/runner/convwatch/PRNCompare \
@@ -187,7 +185,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunnerLight,\
     qadevOOo/runner/util/compare/DocComparatorFactory \
     qadevOOo/runner/util/compare/GraphicalComparator \
     qadevOOo/runner/util/compare/PDFComparator \
-    qadevOOo/runner/util/compare/XMLComparator \
     qadevOOo/runner/util/ControlDsc \
     qadevOOo/runner/util/db/DatabaseDocument \
     qadevOOo/runner/util/db/DataSource \

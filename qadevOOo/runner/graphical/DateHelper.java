@@ -43,7 +43,6 @@ public class DateHelper
             Locale aLocale = new Locale("en","US");
             SimpleDateFormat aFormat = new SimpleDateFormat(_sFormat, aLocale);
             aBuf = aFormat.format(aCalendar.getTime(), aBuf, new FieldPosition(0) );
-            // DebugHelper.writeInfo("Date: " + aBuf.toString());
             return aBuf.toString();
         }
 }

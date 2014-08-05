@@ -139,7 +139,6 @@ public class FormHandler
         oControlData[14] = createControlData(DataType.DATE,        SODATECONTROL, DATEFIELD, DATEFIELD, false);
         oControlData[15] = createControlData(DataType.TIME,        SOTIMECONTROL, TIMEFIELD, TIMEFIELD, false);
         oControlData[16] = createControlData(DataType.TIMESTAMP,   SODATECONTROL, DATEFIELD, TEXTFIELD, false);
-        // oImageControlData = new ControlData[4];
         oControlData[17] = createControlData(DataType.BINARY,      SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
         oControlData[18] = createControlData(DataType.VARBINARY,   SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
         oControlData[19] = createControlData(DataType.LONGVARBINARY, SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);

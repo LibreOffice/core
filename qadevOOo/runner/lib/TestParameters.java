@@ -26,8 +26,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XComponentContext;
 
-//import com.sun.star.lang.XMultiServiceFactory;
-
 /**
  * TestParameters describes a parameters (in a form of pairs: name, value) to
  * be passed to tests and which may affect the test behaviour. That can be,

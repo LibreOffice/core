@@ -34,7 +34,6 @@ public class EditorFrame extends JFrame
     {
         public void windowClosing( WindowEvent e )
         {
-            // m_aBufImage = m_aTextArea.getGraphicsConfiguration().createCompatibleImage( m_aTextArea.getWidth(), m_aTextArea.getHeight() );
             m_aBufImage = new BufferedImage( m_aTextArea.getWidth(), m_aTextArea.getHeight(), BufferedImage.TYPE_INT_RGB );
             Graphics2D aGr = m_aBufImage.createGraphics();
             m_aTextArea.paintAll( aGr );
@@ -54,7 +53,6 @@ public class EditorFrame extends JFrame
 
         add( "Center", m_aTextArea );
         pack();
-        // setResizable( false );
     }
 
     public String getText()
@@ -82,8 +80,6 @@ public class EditorFrame extends JFrame
 
         setSize( aToSet );
         validate();
-
-        // pack();
     }
 
     public byte[] getReplacementImage()

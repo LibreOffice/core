@@ -40,12 +40,6 @@ import com.sun.star.uno.AnyConverter;
 import helper.URLHelper;
 import helper.PropertyHelper;
 import helper.OSHelper;
-// import convwatch.FileHelper;
-// import convwatch.MSOfficePrint;
-// import convwatch.GraphicalTestArguments;
-// import convwatch.ConvWatchCancelException;
-
-// import helper.Parameter;
 
 /**
  * This Object is to print a given document with OpenOffice.org / StarOffice
@@ -53,39 +47,6 @@ import helper.OSHelper;
  * or over it's pdf exporter
  */
 public class OfficePrint {
-
-
-//     static long m_nStartTime;
-//     // static Date m_aDateCache = null;
-
-//     /*
-//       simple helper functions to start/stop a timer, to know how long a process need in milliseconds
-//      */
-//     public static void startTimer()
-//         {
-//             // if (m_aDateCache == null)
-//             // {
-//             //     m_aDateCache = new Date();
-//             // }
-//             // m_nStartTime = m_aDateCache.getTime();
-//             m_nStartTime = System.currentTimeMillis();
-//         }
-//     public static long stopTimer()
-//         {
-//             // if (m_aDateCache == null)
-//             // {
-//             //     System.out.println("Forgotten to initialise start timer.");
-//             //     return 0;
-//             // }
-//             // long m_nStopTime = m_aDateCache.getTime();
-//             if (m_nStartTime == 0)
-//             {
-//                 System.out.println("Forgotten to initialise start timer.");
-//                 return 0;
-//             }
-//             long m_nStopTime = System.currentTimeMillis();
-//             return m_nStopTime - m_nStartTime;
-//         }
 
 
     private static void showProperty(PropertyValue _aValue)
@@ -114,8 +75,6 @@ public class OfficePrint {
             for (int i=0;i<aArgs.length;i++)
             {
                 PropertyValue aValue = aArgs[i];
-                // System.out.print("Property: '" + aValue.Name);
-                // System.out.println("' := '" + aValue.Value + "'");
                 if (aValue.Name.equals("FilterName") ||
                     aValue.Name.equals("MediaType"))
                 {
@@ -157,30 +116,12 @@ public class OfficePrint {
                 if (aDesktop != null)
                 {
                     GlobalLogWriter.get().println("com.sun.star.frame.Desktop created.");
-                    // String sInputURL = aCurrentParameter.sInputURL;
-                    // String sOutputURL = aCurrentParameter.sOutputURL;
-                    // String sPrintFileURL = aCurrentParameter.sPrintToFileURL;
-                    // System.out.println(_sInputURL);
 
 
                     // set here the loadComponentFromURL() properties
                     // at the moment only 'Hidden' is set, so no window is opened at work
 
                     ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
-
-                    // check which properties should set and count it.
-                    // if (_aGTA.isHidden())
-                    // {
-                    //     nPropertyCount ++;
-                    // }
-                    // if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
-                    // {
-                    //     nPropertyCount ++;
-                    // }
-
-                    // initialize the propertyvalue
-                    // int nPropertyIndex = 0;
-                    // aProps = new PropertyValue[ nPropertyCount ];
 
                     // set all property values
                     if (_aGTA.isHidden())
@@ -201,11 +142,8 @@ public class OfficePrint {
                     }
 
                     GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Load document");
-                    // GlobalLogWriter.get().flush();
 
                     XComponentLoader aCompLoader = UnoRuntime.queryInterface( XComponentLoader.class, aDesktop);
-
-                    // XComponent aDoc = null;
 
                     _aGTA.getPerformance().startTime(PerformanceContainer.Load);
                     aDoc = aCompLoader.loadComponentFromURL(_sInputURL, "_blank", 0, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList) );
@@ -451,10 +389,6 @@ public class OfficePrint {
                         sBuildID = _aGTA.getBuildID();
                         out.write("buildid=" + sBuildID + ls);
                     }
-                    // if (_sSpecial != null && _sSpecial.length() > 0)
-                    // {
-                    //    out.write("special=" + _sSpecial + ls);
-                    // }
                     out.write(ls);
                     out.write("# resolution given in DPI" + ls);
                     out.write("resolution=" + _aGTA.getResolutionInDPI() + ls);
@@ -463,12 +397,6 @@ public class OfficePrint {
                 {
                     out.write("buildid=" + _sSpecial + ls);
                 }
-                // long nTime = stopTimer();
-                // if (nTime != 0)
-                // {
-                //     out.write("# time is given in milli seconds" + ls);
-                //     out.write("time=" + nTime + ls);
-                // }
 
                 out.write(ls);
                 out.write("# Values out of System.getProperty(...)" + ls);
@@ -565,27 +493,12 @@ public class OfficePrint {
             try
             {
 
-                // System.out.println("Document loaded.");
                 // Change Pagesettings to DIN A4
 
                 GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Print document.");
                 XPrintable aPrintable =  UnoRuntime.queryInterface( XPrintable.class, _aDoc);
                 if (aPrintable != null)
                 {
-                    // System.out.println("  Set PaperFormat to DIN A4");
-                    // {
-                    //     PropertyValue[] aPrinterProps = aPrintable.getPrinter();
-                    //     System.out.println("PrinterProps size: " + String.valueOf(aPrinterProps.length));
-                    //     int nPropIndex = 0;
-                    //     while (!"PaperFormat".equals(aPrinterProps[nPropIndex].Name))
-                    //     {
-                    //         // System.out.println(aPrinterProps[nPropIndex].Name);
-                    //         nPropIndex++;
-                    //     }
-                    //     aPrinterProps[nPropIndex].Value = com.sun.star.view.PaperFormat.A4;
-                    //     aPrintable.setPrinter(aPrinterProps);
-                    // }
-
                     // configure Office to allow to execute macos
 
 // TODO: We need a possibility to set the printer name also for StarOffice/OpenOffice
@@ -594,27 +507,17 @@ public class OfficePrint {
                         if (_aGTA.getPrinterName() != null)
                         {
                             ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
-                            // PropertyValue [] aPrintProps = new PropertyValue[1];
                             PropertyValue Arg = new PropertyValue();
                             Arg.Name = "Name";
                             Arg.Value = _aGTA.getPrinterName();
                             aPropertyList.add(Arg);
                             showProperty(Arg);
-                            // GlobalLogWriter.get().println("Printername is not null, so set to " + _aGTA.getPrinterName());
                             aPrintable.setPrinter(PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
                         }
                     }
 
                     // set property values for XPrintable.print()
                     // more can be found at "http://api.libreoffice.org/docs/common/ref/com/sun/star/view/PrintOptions.html"
-
-                    // int nProperties = 1;                    // default for 'FileName' property
-                    // if (_aGTA.printAllPages() == false)
-                    // {
-                    //     // we don't want to print all pages, build Pages string by ourself
-                    //     nProperties ++;
-                    // }
-                    // int nPropsCount = 0;
 
                     // If we are a SpreadSheet (calc), we need to set PrintAllSheets property to 'true'
                     XServiceInfo xServiceInfo = UnoRuntime.queryInterface( XServiceInfo.class, _aDoc );
@@ -631,13 +534,10 @@ public class OfficePrint {
                     }
 
                     ArrayList<PropertyValue> aPrintProps = new ArrayList<PropertyValue>();
-                    // GlobalLogWriter.get().println("Property FileName:=" + _sPrintFileURL);
 
-                    // PropertyValue [] aPrintProps = new PropertyValue[nProperties];
                     PropertyValue Arg = new PropertyValue();
                     Arg.Name = "FileName";
                     Arg.Value = _sPrintFileURL;
-                    // aPrintProps[nPropsCount ++] = Arg;
                     aPrintProps.add(Arg);
                     showProperty(Arg);
 
@@ -664,8 +564,6 @@ public class OfficePrint {
                         showProperty(Arg);
                     }
 
-                    // GlobalLogWriter.get().println("Start printing.");
-
                     _aGTA.getPerformance().startTime(PerformanceContainer.Print);
                     aPrintable.print(PropertyHelper.createPropertyValueArrayFormArrayList(aPrintProps));
                     TimeHelper.waitInSeconds(1, "Start waiting for print ready.");
@@ -679,7 +577,6 @@ public class OfficePrint {
                         int nPropIndex = 0;
                         while (!"IsBusy".equals(aPrinterProps[nPropIndex].Name))
                         {
-                            // System.out.println(aPrinterProps[nPropIndex].Name);
                             nPropIndex++;
                         }
                         isBusy = (aPrinterProps[nPropIndex].Value == Boolean.TRUE);
@@ -740,32 +637,24 @@ public class OfficePrint {
         {
             if (! FileHelper.exists(_sAbsoluteInputFile))
             {
-                // throw new ConvWatchCancelException("Input file: " + _sAbsoluteInputFile + " does not exist.");
                 return false;
             }
 
             String fs = System.getProperty("file.separator");
 
-            // String sInputFileURL = URLHelper.getFileURLFromSystemPath(_sAbsoluteInputFile);
-
             String sInputFileBasename = FileHelper.getBasename(_sAbsoluteInputFile);
-            // String sOutputFileURL = null;
             String sOutputPath;
             if (_sAbsoluteOutputPath != null)
             {
                 sOutputPath    = _sAbsoluteOutputPath;
-                // FileHelper.makeDirectories("", sOutputPath);
             }
             else
             {
                 String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
                 sOutputPath    = sInputPath;
             }
-            // sOutputFileURL = URLHelper.getFileURLFromSystemPath(sOutputPath + fs + sInputFileBasename);
-            // sOutputFileURL = null;
 
             String sPrintFilename = FileHelper.getNameNoSuffix(sInputFileBasename);
-            // String sPrintFileURL;
 
             String sAbsolutePrintFilename = sOutputPath + fs + sPrintFilename + ".prn";
             if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
@@ -817,7 +706,6 @@ public class OfficePrint {
                 String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
                 sOutputPath    = sInputPath;
             }
-            // sOutputFileURL = URLHelper.getFileURLFromSystemPath(sOutputPath + fs + sInputFileBasename);
             sOutputFileURL = null;
 
             String sPrintFilename = FileHelper.getNameNoSuffix(sInputFileBasename);
@@ -868,9 +756,6 @@ public class OfficePrint {
             }
 
 
-            // remember the current timer, to know how long a print process need.
-            // startTimer();
-
             if (_aGTA.getReferenceType().toLowerCase().equals("ooo"))
             {
                 bBack = printToFileWithOOo(_aGTA, _sInputFileURL, _sOutputFileURL, _sPrintFileURL);
@@ -912,7 +797,6 @@ public class OfficePrint {
             }
             else
             {
-                // System.out.println("");
                 throw new ConvWatchCancelException("OfficePrint.printToFile(): Unknown print type.");
             }
             return bBack;
@@ -957,7 +841,6 @@ public class OfficePrint {
         {
             if (_sFilterName.length() == 0)
             {
-                // System.out.println("No FilterName set.");
                 return null;
             }
 
@@ -966,7 +849,6 @@ public class OfficePrint {
                 GlobalLogWriter.get().println("MultiServiceFactory not set.");
                 return null;
             }
-            // XFilterFactory aFilterFactory = null;
             Object aObj = null;
             try
             {
@@ -983,18 +865,6 @@ public class OfficePrint {
                 if (aNameAccess != null)
                 {
 
-                    // if (_sFilterName.toLowerCase().equals("help"))
-                    // {
-                    //     System.out.println("Show all possible ElementNames from current version." );
-                    // String[] aElementNames = aNameAccess.getElementNames();
-                    // for (int i = 0; i<aElementNames.length; i++)
-                    // {
-                    //     System.out.println(aElementNames[i]);
-                    // }
-                    //     System.out.println("Must quit.");
-                    //     System.out.exit(1);
-                    // }
-
                     if (! aNameAccess.hasByName(_sFilterName))
                     {
                         GlobalLogWriter.get().println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
@@ -1008,15 +878,12 @@ public class OfficePrint {
                         if (aElements != null)
                         {
                             String sInternalFilterName = null;
-                            // System.out.println("getByName().length: " + String.valueOf(aElements.length));
                             for (int i=0;i<aElements.length; i++)
                             {
                                 PropertyValue aPropertyValue = (PropertyValue)aElements[i];
-                                // System.out.println("PropertyValue.Name: " + aPropertyValue.Name);
                                 if (aPropertyValue.Name.equals("Type"))
                                 {
                                     String sValue = (String)aPropertyValue.Value;
-                                    // System.out.println("Type: " + sValue);
                                     sInternalFilterName = sValue;
                                 }
                             }
@@ -1047,7 +914,6 @@ public class OfficePrint {
         {
             if (_sFilterName.length() == 0)
             {
-                // System.out.println("No FilterName set.");
                 return null;
             }
 
@@ -1085,14 +951,12 @@ public class OfficePrint {
                         if (aElements != null)
                         {
                             String sServiceName = null;
-                            // System.out.println("getByName().length: " + String.valueOf(aElements.length));
                             for (int i=0;i<aElements.length; i++)
                             {
                                 PropertyValue aPropertyValue = (PropertyValue)aElements[i];
                                 if (aPropertyValue.Name.equals("DocumentService"))
                                 {
                                     String sValue = (String)aPropertyValue.Value;
-                                    // System.out.println("DocumentService: " + sValue);
                                     sServiceName = sValue;
                                     break;
                                 }
@@ -1123,7 +987,6 @@ public class OfficePrint {
         {
             if (_sInternalFilterName.length() == 0)
             {
-                // System.out.println("No FilterName set.");
                 return null;
             }
 
@@ -1149,13 +1012,6 @@ public class OfficePrint {
                 if (aNameAccess != null)
                 {
 
-                    // System.out.println("Show ElementNames" );
-                    // String[] aElementNames = aNameAccess.getElementNames();
-                    // for (int i = 0; i<aElementNames.length; i++)
-                    // {
-                    //     System.out.println(aElementNames[i]);
-                    // }
-
                     if (! aNameAccess.hasByName(_sInternalFilterName))
                     {
                         GlobalLogWriter.get().println("TypeDetection.hasByName() says there exist no '" + _sInternalFilterName + "'" );
@@ -1170,11 +1026,9 @@ public class OfficePrint {
                         if (aElements != null)
                         {
                             String sExtension = null;
-                            // System.out.println("getByName().length: " + String.valueOf(aElements.length));
                             for (int i=0;i<aElements.length; i++)
                             {
                                 PropertyValue aPropertyValue = (PropertyValue)aElements[i];
-                                // System.out.println("PropertyValue.Name: " + aPropertyValue.Name);
                                 if (aPropertyValue.Name.equals("Extensions"))
                                 {
                                     aExtensions = (String[])aPropertyValue.Value;
@@ -1222,7 +1076,6 @@ public class OfficePrint {
             }
 
             String sInputURL = URLHelper.getFileURLFromSystemPath(_sInputFile);
-            // showType(sInputURL, xMSF);
             XComponent aDoc = loadFromURL( _aGTA, sInputURL);
             if (aDoc == null)
             {
@@ -1245,8 +1098,6 @@ public class OfficePrint {
             TimeHelper.waitInSeconds(1, "wait after loadFromURL.");
 
             XServiceInfo xServiceInfo = UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
-            // String sFilter = getFilterName_forExcel(xServiceInfo);
-            // System.out.println("Filter is " + sFilter);
 
             // store the document in an other directory
             XStorable xStorable = UnoRuntime.queryInterface( XStorable.class, aDoc);
@@ -1258,9 +1109,6 @@ public class OfficePrint {
 
             String sFilterName = _aGTA.getExportFilterName();
 
-            // initialize PropertyArray
-            // PropertyValue [] aStoreProps = new PropertyValue[ nPropertyCount ];
-            // int nPropertyIndex = 0;
             ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
             String sExtension = "";
@@ -1303,7 +1151,6 @@ public class OfficePrint {
                 PropertyValue Arg = new PropertyValue();
                 Arg.Name = "FilterName";
                 Arg.Value = sFilterName;
-                // aStoreProps[nPropertyIndex ++] = Arg;
                 aPropertyList.add(Arg);
                 showProperty(Arg);
                 GlobalLogWriter.get().println("FilterName is set to: " + sFilterName);
@@ -1314,9 +1161,7 @@ public class OfficePrint {
             {
                 // create the new filename with the extension, which is ok to the file format
                 String sInputFileBasename = FileHelper.getBasename(_sInputFile);
-                // System.out.println("InputFileBasename " + sInputFileBasename);
                 String sInputFileNameNoSuffix = FileHelper.getNameNoSuffix(sInputFileBasename);
-                // System.out.println("InputFilename no suffix " + sInputFileNameNoSuffix);
                 String fs = System.getProperty("file.separator");
                 String sOutputFile = _sOutputPath;
                 if (! sOutputFile.endsWith(fs))

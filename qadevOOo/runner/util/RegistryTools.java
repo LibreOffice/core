@@ -356,6 +356,4 @@ public class RegistryTools {
     }
 
 
-//  public static void compareKeyTrees
-
 }

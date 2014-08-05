@@ -284,7 +284,6 @@ public class ServiceManager implements XMultiServiceFactory,
         }
         return null;
     }
-//      public String[] getAvailableServiceNames();
 
     /**
      * Removes all listeners from the <code>ServiceManager</code> and clears the

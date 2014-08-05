@@ -92,33 +92,6 @@ public class EventTest {
 
 
     /**
-     * The test methods are:
-     * <ul>
-     *    <li><CODE>checkTextDocument</CODE></LI>
-     *    <li><CODE>checkCalcDocument</CODE></LI>
-     *    <li><CODE>checkDrawDocument</CODE></LI>
-     *    <li><CODE>checkImpressDocument</CODE></LI>
-     *    <li><CODE>checkChartDocument</CODE></LI>
-     *    <li><CODE>checkMathDocument</CODE></li>
-     * </ul>
-     * @short A function to tell the framework,
-     * which test functions are available.
-     * @return All test methods.
-     * @todo Think about selection of tests from outside ...
-     */
-//    public String[] getTestMethodNames() {
-//        return new String[]
-//        { "checkTextDocument",
-//          "checkCalcDocument",
-//          "checkDrawDocument",
-//          "checkImpressDocument",
-//          "checkChartDocument",
-//          "checkMathDocument",
-//        };
-//    }
-
-
-    /**
      * creates the mebmer <CODE>m_xMSF</CODE> and <CODE>m_SOF</CODE>
      * @short Create the environment for following tests.
      * @descr create an empty test frame, where we can load

@@ -180,10 +180,6 @@ public class INIOutputter
                 m_aOut.write( "diffgfx=" + _aStatus.m_sDiffGfx + ls);
 
                 String sPercent = String.valueOf(_aStatus.nPercent) + "%";
-                // if (_aStatus.nPercent > 0 && _aStatus.nPercent < 5)
-                // {
-                //     sPercent += " (less 5% is ok)";
-                // }
                 m_aOut.write("percent=" + sPercent + ls);
 
                 // is the check positiv, in a defined range

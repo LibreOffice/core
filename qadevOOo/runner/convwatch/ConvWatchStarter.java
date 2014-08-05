@@ -49,14 +49,6 @@ import convwatch.PerformanceContainer;
 public class ConvWatchStarter extends EnhancedComplexTestCase
 {
     // The first of the mandatory functions:
-    /**
-     * Return the name of the test.
-     * In this case it is the actual name of the service.
-     * @return The tested service.
-     */
-    // public String getTestObjectName() {
-    //     return "ConvWatch runner";
-    // }
 
     // The second of the mandatory functions: return all test methods as an
     // array. There is only one test function in this example.
@@ -94,7 +86,6 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             String sREF = (String)param.get( PropertyName.DOC_COMPARATOR_REFERENCE_PATH );
             if (sREF == null || sREF.length() == 0)
             {
-                // log.println("Please set reference file (path to good documents) REFERENCEFILE=path.");
                 log.println("Assumtion, reference directory and input directory are the same.");
                 m_sReferencePath = m_sInputPath;
             }
@@ -119,7 +110,6 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
 
             if (bQuit == true)
             {
-                // log.println("must quit.");
                 assure("Must quit", false);
             }
 
@@ -204,12 +194,6 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             String sBuildID = aGTA.getBuildID();
             log.println("Current Office has buildid: " + sBuildID);
 
-            // LLA: sample code, how to access all parameters
-            // for (Enumeration e = param.keys() ; e.hasMoreElements() ;)
-            // {
-            //     System.out.println(e.nextElement());
-            // }
-
             String fs = System.getProperty("file.separator");
 
             String sHTMLName = "index.html";
@@ -256,16 +240,11 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                         {
                             if (sNewReferencePath != null)
                                 sNewReferencePath = sNewReferencePath + fs + sNewSubDir;
-                            // String sNameNoSuffix = FileHelper.getNameNoSuffix(FileHelper.getBasename(sEntry));
-                            // sNewReferenceFile = sNewReferencePath + fs + sNameNoSuffix + ".prn";
 
                             sNewOutputPath = sNewOutputPath + fs + sNewSubDir;
                             if (sNewDiffPath != null)
                                 sNewDiffPath = sNewDiffPath + fs + sNewSubDir;
                         }
-
-                        // NameHelper aNameContainer = new NameHelper(m_sOutputPath, sNewSubDir, FileHelper.getBasename(sEntry));
-                        // aNameContainer.print();
 
                         if (aGTA.checkIfUsableDocumentType(sEntry))
                         {
@@ -301,14 +280,8 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
 
             OfficeProvider aProvider = null;
-            // SimpleFileSemaphore aSemaphore = new SimpleFileSemaphore();
             if (aGTA.shouldOfficeStart())
             {
-                // if (OSHelper.isWindows())
-                // {
-                //     aSemaphore.P(aSemaphore.getSemaphoreFile());
-                // }
-
                 aGTA.getPerformance().startTime(PerformanceContainer.OfficeStart);
                 aProvider = new OfficeProvider();
                 XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
@@ -369,13 +342,6 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             if (aProvider != null)
             {
                 aProvider.closeExistingOffice(param, true);
-                // if (OSHelper.isWindows())
-                // {
-                //     aSemaphore.V(aSemaphore.getSemaphoreFile());
-                //     aSemaphore.sleep(2);
-                //     // wait some time maybe an other process will take the semaphore
-                //     // I know, this is absolutely dirty, but the whole convwatch is dirty and need a big cleanup.
-                // }
             }
 
             // -------------------- Status --------------------
@@ -407,17 +373,8 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             GlobalLogWriter.get().println("    NewPath: " + _sNewSubDir);
             GlobalLogWriter.get().println("----------------------------------------------------------------------");
 
-//             if (_sNewSubDir.length() > 0)
-//             {
-//                 sLink   = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + sFilenameNoSuffix + ".ini";
-//                 sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
-//             }
-//             else
-//             {
             sLink = sHTMLPrefix   /* + "/cw.php?inifile=" */ + _sOutputPath + fs + sFilenameNoSuffix + ".ini";
-                // sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
             sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
-//             }
             sLinkName = sFilenameNoSuffix;
             sLinkDDName = sFilenameNoSuffix + " (DiffDiff)";
 

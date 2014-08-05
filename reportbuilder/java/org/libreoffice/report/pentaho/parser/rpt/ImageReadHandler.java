@@ -58,7 +58,6 @@ public class ImageReadHandler extends ElementReadHandler
     {
         super.startParsing(attrs);
         final String formula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
-//        final String preserveIRI = attrs.getValue(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI);
         if (formula != null && formula.length() != 0)
         {
             // now, the evaulated content ends up in the 'content' attribute of the

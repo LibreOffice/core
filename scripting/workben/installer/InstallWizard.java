@@ -229,7 +229,6 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     public static void main(String args[]) {
         String officePath = null;
         String netbeansPath = null;
-        //String jeditPath = null;
         int i = 0;
 
         while (i < args.length) {
@@ -245,12 +244,9 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
                 bNetworkInstall = true;
             if (args[i].equals("-bindings"))
                 bBindingsInstall = true;
-            //if (args[i].equals("-jedit"))
-            //    jeditPath = args[++i];
             i++;
         }
 
-        //if (officePath == null && netbeansPath == null && jeditPath == null)
         if (officePath == null && netbeansPath == null)
             new InstallWizard().show();
 
@@ -281,11 +277,6 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
             IdeUpdater ideup = new IdeUpdater(netbeansPath, label, progressbar);
             ideup.run();
         }
-
-        //if (jeditPath != null) {
-        //    IdeUpdater ideup = new IdeUpdater(jeditPath, label, progressbar);
-        //    ideup.run();
-        //}
     }
 
     private static void printUsage() {
@@ -296,7 +287,6 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         System.err.println("\t[-bindings]");
         System.err.println("\n\n-net indicates that this is the network part of a network install.");
         System.err.println("-bindings will only install the menu & key bindings in user/config/soffice.cfg.");
-        //System.err.println("\t[-jedit <path_to_jedit_installation]");
     }
 
     public static synchronized boolean isPatchedTypes()

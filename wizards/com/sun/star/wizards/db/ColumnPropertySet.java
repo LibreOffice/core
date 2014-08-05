@@ -23,7 +23,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
-// import com.sun.star.wizards.db.TypeInspector;
 
 public class ColumnPropertySet
 {

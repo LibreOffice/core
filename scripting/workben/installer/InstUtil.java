@@ -176,11 +176,6 @@ public class InstUtil {
 
     public static Properties getJeditLocation() throws IOException {
 
-    /*if( !hasJeditInstallation() ) {
-        System.out.println( "No Jedit found (line195 InstUtil");
-        return null;
-    }*/
-
     Properties results = new Properties();
 
     StringBuffer str = new StringBuffer();
@@ -190,7 +185,6 @@ public class InstUtil {
 
         String os = System.getProperty("os.name");
         thePath.append(".jedit");
-    //System.out.println( ".jedit path " + thePath );
 
     File jeditLogFile = new File( thePath.toString() + File.separator + "activity.log" );
     if( jeditLogFile.exists() ) {
@@ -220,17 +214,9 @@ public class InstUtil {
         s.trim();
         if( s.indexOf( "IDE Install" ) != -1 ) {
             int pathStart = s.indexOf( "=" ) + 2;
-            //System.out.println( "pathStart " + pathStart );
             installPath = s.substring( pathStart, s.length() );
-            //System.out.println( "installPath 1" + installPath );
             int pathEnd = installPath.indexOf( ";");
-            //System.out.println( "pathEnd " + pathEnd );
             installPath = installPath.substring( 0, pathEnd ) +File.separator;
-            //System.out.println( "pathStart " + pathStart );
-            //int pathEnd = s.indexOf( ";");
-            //System.out.println( "pathEnd " + pathEnd );
-            //System.out.println( "s is " + s + " and " + s.length() + " long" );
-            //installPath = s.substring( pathStart, pathEnd - 1 );
             installPath.trim();
             break;
         }
@@ -240,9 +226,6 @@ public class InstUtil {
         catch( IOException ioe ) {
         System.out.println( "Error reading Netbeans location information" );
             }
-        //catch( FileNotFoundException fnfe ) {
-        //System.out.println( "NetBeans ide.log FileNotFoundException" );
-        //}
 
         return installPath;
     }
@@ -259,20 +242,9 @@ public class InstUtil {
         s.trim();
         if( s.indexOf( "jEdit home directory is" ) != -1 ) {
             int pathStart = new String( "[message] jEdit: jEdit home directory is " ).length();
-            //System.out.println( "pathStart " + pathStart );
             installPath = s.substring( pathStart, s.length() ) +File.separator;
             System.out.println( "installPath 1" + installPath );
-            //int pathEnd = installPath.indexOf( ";");
-            //System.out.println( "pathEnd " + pathEnd );
-            //installPath = installPath.substring( 0, pathEnd ) +File.separator;
-            //System.out.println( "pathStart " + pathStart );
-            //int pathEnd = s.indexOf( ";");
-            //System.out.println( "pathEnd " + pathEnd );
-            //System.out.println( "s is " + s + " and " + s.length() + " long" );
-            //installPath = s.substring( pathStart, pathEnd - 1 );
             installPath.trim();
-            //System.out.println( "installPath 2 " + installPath );
-            //break;
             jeditDetails[0] = installPath;
         }
         if( s.indexOf( "jEdit: jEdit version" ) != -1 ) {
@@ -289,9 +261,6 @@ public class InstUtil {
         catch( IOException ioe ) {
         System.out.println( "Error reading Jedit location information" );
             }
-        //catch( FileNotFoundException fnfe ) {
-        //System.out.println( "Jedit activity.log FileNotFoundException" );
-        //}
         return jeditDetails;
     }
 
@@ -335,12 +304,10 @@ public class InstUtil {
 
         for (String s = reader.readLine(); s != null; s = reader.readLine()) {
             s.trim();
-            //System.out.println(s);
             if (s.length() == 0)
                 continue;
             if (s.charAt(0) == '[') {
                 sectionName = s.substring(1, s.length() - 1);
-                //System.out.println(sectionName);
                 continue;
             }
             if ((sectionName != null) && sectionName.equalsIgnoreCase("Versions")) {
@@ -351,14 +318,8 @@ public class InstUtil {
         String [] parts = new String[2];
         parts[0] = officeName;
         parts[1] = instPath + File.separator;
-        //System.out.println( "InstUtil officeName " + officeName );
-        //System.out.println( "InstUtil instPath " + instPath );
 
-        //String [] parts = s.split("=");
                 if (parts.length == 2) {
-                    //ver.version = parts[0].trim();
-                    //File f = new File(parts[1].trim());
-            //results.put(parts[0].trim(), f.getPath());
             try {
                         URL url = new URL("file://" + parts[1].trim());
             String opSys =System.getProperty("os.name");
@@ -382,23 +343,11 @@ public class InstUtil {
                 results.put( parts[0].trim(), windowsPath );
             }
             else {
-                //System.err.println( " InstUtil URLDecoder " + URLDecoder.decode(url.getPath()) );
                 results.put(parts[0].trim(), URLDecoder.decode(url.getPath()));
             }
-                        //File f = new File(url);
-
-            //.sversion: OpenOffice.org 643=file:///scriptdev/neil/ScriptFrameOpenoffice1.0.1
-            // parts = Installation name. f.getPath = Installation path
-                        //results.put(parts[0].trim(), f.getPath());
-
-                        //results.put(parts[0].trim(), URLDecoder.decode(url.getPath()));
-            //results.put( parts[0].trim(), windowsPath );
-
                     }
                     catch (MalformedURLException eSyntax) {
-                        //throw new IOException("Error while reading version information");
             results.put(parts[0].trim(), parts[1].trim());
-            //System.out.println(parts[0].trim() + " : " + parts[1].trim());
             System.err.println("GotHereException");
                     }
                 }

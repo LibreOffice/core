@@ -85,11 +85,9 @@ public class WeakBase_Test
         StringBuffer buff= new StringBuffer();
         for (int c= 0; c < ar.length - 4; c++){
             buff.append((char) ar[4 + c]);
-//            buff.append(" ");
         }
         String retStr= buff.toString();
         r[i++]= retStr.equals("com.sun.star.lib.uno.helper.SomeClass");
-//        System.out.println(buff.toString());
 
         Foo1 f1= new Foo1();
         Foo1 f2= new Foo1();

@@ -32,7 +32,6 @@ class CountNotWhite extends CountPixel
 {
     public CountNotWhite()
         {
-            // System.out.println("CountWhite()");
         }
 
     public void countold(final int pixel)
@@ -42,7 +41,6 @@ class CountNotWhite extends CountPixel
             final int green = (pixel >>  8) & 0xff;
             final int blue  = (pixel      ) & 0xff;
 
-            // System.out.println(String.valueOf(red) + ":" + String.valueOf(green) + ":" + String.valueOf(blue));
             if (red == 0xff && green == 0xff && blue == 0xff)
             {
                 return;
@@ -78,7 +76,6 @@ class CountNotBlack extends CountPixel
 {
     public CountNotBlack()
         {
-            // System.out.println("CountBlack()");
         }
 
     public void countold(final int pixel)
@@ -121,38 +118,10 @@ class CountNotBlack extends CountPixel
 
 class graphics_stuff
 {
-//    public int stuff()
-//        {
-//// (1) decoding
-//            int rgba = 0; // ...; // comes from PixelGrabber, BufferedImage.getRGB etc.
-//            int red = (rgba >> 16) & 0xff;
-//            int green = (rgba >> 8) & 0xff;
-//            int blue = rgba & 0xff;
-//            int alpha = (rgba >> 24) & 0xff;
-//// (2) now modify red, green, blue and alpha as you like;
-////     make sure that each of the four values stays in the
-////     interval 0 to 255
-////            ...
-//// (3) and encode back to an int, e.g. to give it to MemoryImageSource or
-////     BufferedImage.setRGB
-//                rgba = (alpha << 24) | (red << 16) | (green << 8) | blue;
-//                return 0;
-//        }
-
-//    public static void handlesinglepixel(int x, int y, int pixel)
-//        {
-//            int alpha = (pixel >> 24) & 0xff;
-//            int red   = (pixel >> 16) & 0xff;
-//            int green = (pixel >>  8) & 0xff;
-//            int blue  = (pixel      ) & 0xff;
-//            // Deal with the pixel as necessary...
-//        }
-
     public static void countPixel(ImageHelper img, int _x, int _y, int _w, int _h, CountPixel _aPixelCounter)
         {
             for (int y = 0; y < _h; y++) {
                 for (int x = 0; x < _w; x++) {
-                    // handlesinglepixel(x+i, y+j, pixels[j * w + i]);
                     _aPixelCounter.count(img.getPixel(x,y));
                 }
             }
@@ -181,9 +150,6 @@ class graphics_stuff
 
 
 public class PixelCounter {
-    // private Image m_aImage;
-    // ImageHelper m_aImage;
-
 
     public int countNotWhitePixel(String _sFile)
         throws java.io.IOException
@@ -216,23 +182,6 @@ public class PixelCounter {
         }
 
 
-
-//    public static void main(String[] args) {
-
-//        String a = helper.StringHelper.createValueString(10, 4);
-//        int dummy = 1;
-//
-// BorderRemover a = new BorderRemover();
-//        try
-//        {
-//            a.createNewImageWithoutBorder(args[0], args[1]);
-//        }
-//        catch(java.io.IOException e)
-//        {
-//            System.out.println("Exception caught.");
-//        }
-// */
-//    }
 }
 
 

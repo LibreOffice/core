@@ -176,14 +176,12 @@ public class FormDocument extends TextDocument
         else
         {
             ControlForm aMainForm = oControlForms.get(0);
-            // boolean bHasSubForm = aMainForm.xFormContainer.hasByName(SOSUBFORM);
             // WRONG if (oFormHandler.hasFormByName(SOSUBFORM))
             if (aMainForm.xFormContainer != null && aMainForm.xFormContainer.hasByName(SOSUBFORM))
             {
                 oFormHandler.removeControlsofForm(SOSUBFORM);
                 oFormHandler.removeElement( aMainForm.xFormContainer, SOSUBFORM );
                 oControlForms.get(1).oFormController = null;
-                // aMainForm.xFormContainer = null; // .removeFormByName(SOSUBFORM);
                 oControlForms.remove(1);
                 adjustMainFormSize(_NBorderType);
             }
@@ -219,9 +217,6 @@ public class FormDocument extends TextDocument
 
     private Size getSubFormSize()
     {
-//      int nSubFormHeight = (int) ((double)nFormHeight/2) - SOFORMGAP;
-//      int nSubFormFieldCount = this.oSubFormDBMetaData.FieldNames.length;
-//      int totfieldcount = oMainFormDBMetaData.FieldNames.length + nSubFormFieldCount;
         int nMainFormHeight = oControlForms.get(0).getActualFormHeight();
         return new Size(nFormWidth, nFormHeight - nMainFormHeight - SOFORMGAP);
     }

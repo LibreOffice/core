@@ -79,11 +79,6 @@ public class RDFRepositoryTest
      */
     private static TestParameters param = null;
 
-//    public String[] getTestMethodNames ()
-//    {
-//        return new String[] { "check", "checkSPARQL", "checkRDFa" };
-//    }
-
     @Before public void before()
     {
         try {
@@ -359,7 +354,6 @@ public class RDFRepositoryTest
             System.out.println("Checking SPARQL queries...");
 
             XInputStream xIn = new StreamSimulator(TestDocument.getUrl("example.rdf"), true, param);
-                // util.utils.getFullTestDocName("example.rdf"), true, param);
             xRep.importGraph(FileFormat.RDF_XML, xIn, manifest, base);
 
             String query;
@@ -409,18 +403,14 @@ public class RDFRepositoryTest
 //FIXME redland BUG
             String uri = "uri:example-element-2";
             query = "SELECT ?path ?idref FROM <" + toS(manifest) +  "> WHERE { "
-//                + "<" + toS(uuid) + "> rdf:type pkg:Package ; "
-//                                 + " pkg:hasPart ?part . "
                 + "<" + toS(uuid) + "> pkg:hasPart ?part . "
                 + "?part pkg:path ?path ; "
                      + " rdf:type ?type ; "
                      + " pkg:hasPart <" + uri + "> . "
-//                + "<" + uri + "> rdf:type odf:Element ; "
                 + "<" + uri + "> "
                       + " pkg:idref ?idref . "
                 + " FILTER (?type = odf:ContentFile || ?type = odf:StylesFile)"
                 + " }";
-//System.out.println(query);
             result = xRep.querySelect(mkNss() + query);
             assertTrue("query: example-element-2\n" + query,
                 eq(result, new String[] { "path", "idref" },
@@ -598,36 +588,11 @@ public class RDFRepositoryTest
         return blank != null;
     }
 
-/*
-    static class Statement implements XStatement
-    {
-        XResource m_Subject;
-        XResource m_Predicate;
-        XNode m_Object;
-        XURI m_Graph;
-
-        Statement(XResource i_Subject, XResource i_Predicate, XNode i_Object,
-            XURI i_Graph)
-        {
-            m_Subject = i_Subject;
-            m_Predicate = i_Predicate;
-            m_Object = i_Object;
-            m_Graph = i_Graph;
-        }
-
-        public XResource getSubject() { return m_Subject; }
-        public XResource getPredicate() { return m_Predicate; }
-        public XNode getObject() { return m_Object; }
-        public XURI getGraph() { return m_Graph; }
-    }
-*/
-
     static Statement[] toSeq(XEnumeration i_Enum) throws Exception
     {
         java.util.Collection<Statement> c = new java.util.ArrayList<Statement>();
         while (i_Enum.hasMoreElements()) {
             Statement s = (Statement) i_Enum.nextElement();
-//System.out.println("toSeq: " + s.getSubject().getStringValue() + " " + s.getPredicate().getStringValue() + " " + s.getObject().getStringValue() + ".");
             c.add(s);
         }
         return c.toArray(new Statement[c.size()]);
