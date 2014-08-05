@@ -25,6 +25,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <dialmgr.hxx>
+#include "cuires.hrc"
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -63,7 +65,7 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     m_vSearchSuggestions[4]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
     get( m_pEdit, "search_term" );
-    m_pEdit->SetPlaceholderText( "Search term..." );
+    m_pEdit->SetPlaceholderText( CUI_RES( RID_SVXSTR_SEARCHTERM ) );
 
     get( m_pProgressLabel, "progress_label" );
 
@@ -170,7 +172,7 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, PushButton*, pButton )
                 // get the persona name from the setting variable to show in the progress.
                 sal_Int32 nNameIndex = m_aSelectedPersona.indexOf( ';' );
                 OUString aName = m_aSelectedPersona.copy( 0, nNameIndex );
-                OUString aProgress( "Selected Persona: " );
+                OUString aProgress( CUI_RES( RID_SVXSTR_SELECTEDPERSONA ) );
                 aProgress += aName;
                 SetProgress( aProgress );
             }
@@ -542,7 +544,7 @@ void SearchAndParseThread::execute()
     if( m_aURL.startsWith( "https://" ) )
     {
         m_pPersonaDialog->ClearSearchResults();
-        OUString sProgress( "Searching.. Please Wait.." );
+        OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHING ) );
         m_pPersonaDialog->SetProgress( sProgress );
         Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
         Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
@@ -560,7 +562,7 @@ void SearchAndParseThread::execute()
         }
         catch (...)
         {
-            sProgress = "Something went wrong. Please try again.";
+            sProgress = CUI_RES( RID_SVXSTR_SEARCHERROR );
             m_pPersonaDialog->SetProgress( sProgress );
             return;
         }
@@ -571,7 +573,7 @@ void SearchAndParseThread::execute()
 
         if( !pHandler->hasResults() )
         {
-            sProgress = "No results found.";
+            sProgress = CUI_RES( RID_SVXSTR_NORESULTS );
             m_pPersonaDialog->SetProgress( sProgress );
             return;
         }
@@ -611,7 +613,7 @@ void SearchAndParseThread::execute()
 
     else
     {
-        OUString sProgress( "Applying persona.." );
+        OUString sProgress( CUI_RES( RID_SVXSTR_APPLYPERSONA ) );
         m_pPersonaDialog->SetProgress( sProgress );
 
         uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
@@ -660,7 +662,7 @@ void SearchAndParseThread::execute()
         }
         catch ( const uno::Exception & )
         {
-            sProgress = "Something went wrong. Please try again.";
+            sProgress = CUI_RES( RID_SVXSTR_SEARCHERROR );
             m_pPersonaDialog->SetProgress( sProgress );
             return;
         }
@@ -688,7 +690,7 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPrev
     }
     catch (...)
     {
-        OUString sProgress = "Something went wrong. Please try again.";
+        OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHERROR ) );
         m_pPersonaDialog->SetProgress( sProgress );
         return;
     }
