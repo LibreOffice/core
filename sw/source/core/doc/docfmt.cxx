@@ -2136,6 +2136,22 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
         rDstDesc.GetLeft().DelDiffs( aAttrSet );
         rDstDesc.GetLeft().SetFmtAttr( aAttrSet );
+
+        aAttrSet.ClearItem();
+        aAttrSet.Put( rSrcDesc.GetFirstMaster().GetAttrSet() );
+        aAttrSet.ClearItem( RES_HEADER );
+        aAttrSet.ClearItem( RES_FOOTER );
+
+        rDstDesc.GetFirstMaster().DelDiffs( aAttrSet );
+        rDstDesc.GetFirstMaster().SetFmtAttr( aAttrSet );
+
+        aAttrSet.ClearItem();
+        aAttrSet.Put( rSrcDesc.GetFirstLeft().GetAttrSet() );
+        aAttrSet.ClearItem( RES_HEADER );
+        aAttrSet.ClearItem( RES_FOOTER );
+
+        rDstDesc.GetFirstLeft().DelDiffs( aAttrSet );
+        rDstDesc.GetFirstLeft().SetFmtAttr( aAttrSet );
     }
 
     CopyHeader( rSrcDesc.GetMaster(), rDstDesc.GetMaster() );
