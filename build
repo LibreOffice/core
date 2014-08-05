@@ -57,6 +57,20 @@ fi
 do_configure()
 {
   OPTIONS=(
+    --disable-online-update
+    --enable-extension-integration
+    --enable-release-build
+    --enable-ext-nlpsolver
+    --enable-ext-presenter-minimizer
+    --enable-ext-wiki-publisher
+    --with-build-version="${BUILD_NUMBER}"
+    --with-help
+    --with-java
+    --with-lang='en-US de fr es it pt'
+    --with-myspell-dicts
+    --without-junit
+    --with-system-dicts
+    --with-vendor='it@M Landeshauptstadt München'
   )
   if [ "_$windows" = "_1" ]; then
     if [ -f  /cygdrive/c/EigeneProgramme/Java/Java1.7.0_45_32/bin/javac.exe ] ; then
@@ -65,22 +79,8 @@ do_configure()
       echo "Kein JDK unter  /cygdrive/c/EigeneProgramme/Java/Java1.7.0_45_32/bin/ gefunden!"
     fi
     OPTIONS+=(
-      --disable-online-update
-      --enable-extension-integration
-      --enable-ext-nlpsolver
-      --enable-ext-presenter-minimizer
-      --enable-ext-wiki-publisher
-      --enable-release-build
       --with-ant-home=/cygdrive/c/ant
-      --with-build-version="${BUILD_NUMBER}"
-      --with-help
-      --with-java
       --with-jdk-home="${JDK_HOME}"
-      --with-lang='en-US de fr es it pt'
-      --with-myspell-dicts
-      --without-junit
-      --with-system-dicts
-      --with-vendor='it@M Landeshauptstadt München'
     )
   else
     if [ -f /usr/lib/j2sdk1.5-sun/bin/javac  ]; then
@@ -93,39 +93,25 @@ do_configure()
       --disable-"${disable_kde}"
       --disable-gconf
       --disable-gnome-vfs
-      --disable-online-update
       --disable-randr-link
       --enable-"${enable_kde}"
       --enable-epm
       --enable-evolution2
-      --enable-extension-integration
-      --enable-ext-nlpsolver
-      --enable-ext-presenter-minimizer
-      --enable-ext-wiki-publisher
       --enable-lockdown
       --enable-odk
       --enable-python=internal
-      --enable-release-build
-      --with-build-version="${BUILD_NUMBER}"
-      --with-help
-      --with-java
       --with-jdk-home="${JDK_HOME}"
-      --with-lang='en-US de fr es it pt'
-      --with-myspell-dicts
       --without-afms
       --without-doxygen
       --without-fonts
-      --without-junit
       --without-ppds
       --with-package-format=deb
       --with-system-curl
-      --with-system-dicts
       --with-system-expat
       --with-system-jpeg
       --with-system-libxml
       --with-system-sane
       --with-system-zlib
-      --with-vendor='it@M Landeshauptstadt München'
     )
   fi
   ./autogen.sh "${OPTIONS[@]}" || error 'autogen.sh fehlgeschlagen.'
