@@ -36,7 +36,7 @@ namespace dbaui
         virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
 
     public:
-        OColumnTreeBox( Window* pParent, const ResId& rResId );
+        OColumnTreeBox( Window* pParent, WinBits nBits = WB_BORDER );
 
         void FillListBox( const ODatabaseExport::TColumnVector& _rList);
         void SetReadOnly(bool _bRo=true) { m_bReadOnly = _bRo; }
@@ -50,18 +50,20 @@ namespace dbaui
     // Name matching for data appending
     class OWizNameMatching : public OWizardPage
     {
-        FixedText           m_FT_TABLE_LEFT;
-        FixedText           m_FT_TABLE_RIGHT;
-        OColumnTreeBox      m_CTRL_LEFT;    // left side
-        OColumnTreeBox      m_CTRL_RIGHT;   // right side
-        ImageButton         m_ibColumn_up;
-        ImageButton         m_ibColumn_down;
-        ImageButton         m_ibColumn_up_right;
-        ImageButton         m_ibColumn_down_right;
-        PushButton          m_pbAll;
-        PushButton          m_pbNone;
+        FixedText           *m_pTABLE_LEFT;
+        FixedText           *m_pTABLE_RIGHT;
+        OColumnTreeBox      *m_pCTRL_LEFT;    // left side
+        OColumnTreeBox      *m_pCTRL_RIGHT;   // right side
+        PushButton          *m_pColumn_up;
+        PushButton          *m_pColumn_down;
+        PushButton          *m_pColumn_up_right;
+        PushButton          *m_pColumn_down_right;
+        PushButton          *m_pAll;
+        PushButton          *m_pNone;
         OUString            m_sSourceText;
         OUString            m_sDestText;
+        Image               m_aImgUp;
+        Image               m_aImgDown;
 
         DECL_LINK( ButtonClickHdl, Button * );
         DECL_LINK( RightButtonClickHdl, Button * );

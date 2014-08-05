@@ -37,6 +37,7 @@ namespace dbaui
     class OWizTypeSelectControl : public OFieldDescControl
     {
     protected:
+        Window*             m_pParentTabPage;
         virtual void        ActivateAggregate( EControlType eType ) SAL_OVERRIDE;
         virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
 
@@ -50,7 +51,7 @@ namespace dbaui
         virtual OUString            getAutoIncrementValue() const SAL_OVERRIDE;
 
     public:
-        OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar=NULL);
+        OWizTypeSelectControl(Window* pParent, Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=NULL);
         virtual ~OWizTypeSelectControl();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
@@ -68,16 +69,14 @@ namespace dbaui
                                                 bool _bSet = false);
     protected:
         virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        Window*                 m_pParentTabPage;
     public:
         OWizTypeSelectList( Window* pParent, WinBits nStyle = WB_BORDER )
             : MultiListBox(pParent,nStyle)
             , m_bPKey(false)
             {}
-        OWizTypeSelectList( Window* pParent, const ResId& rResId )
-            : MultiListBox(pParent,rResId)
-            , m_bPKey(false)
-            {}
         void                    SetPKey(bool bPKey) { m_bPKey = bPKey; }
+        void                    SetParentTabPage(Window* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
     };
 
     // Wizard Page: OWizTypeSelect
@@ -91,13 +90,13 @@ namespace dbaui
         DECL_LINK( ColumnSelectHdl, MultiListBox* );
         DECL_LINK( ButtonClickHdl, Button * );
     protected:
-        OWizTypeSelectList      m_lbColumnNames;
-        FixedLine               m_flColumns;
-        OWizTypeSelectControl   m_aTypeControl;
-        FixedLine               m_flAutoType;
-        FixedText               m_ftAuto;
-        NumericField            m_etAuto;
-        PushButton              m_pbAuto;
+        OWizTypeSelectList      *m_pColumnNames;
+        FixedText               *m_pColumns;
+        OWizTypeSelectControl   *m_pTypeControl;
+        FixedText               *m_pAutoType;
+        FixedText               *m_pAutoFt;
+        NumericField            *m_pAutoEt;
+        PushButton              *m_pAutoPb;
 
         Image                   m_imgPKey;
         SvStream*               m_pParserStream; // stream to read the tokens from or NULL
@@ -113,7 +112,6 @@ namespace dbaui
     public:
         virtual void            Reset ( ) SAL_OVERRIDE;
         virtual void            ActivatePage( ) SAL_OVERRIDE;
-        virtual void            Resize() SAL_OVERRIDE;
         virtual bool            LeavePage() SAL_OVERRIDE;
         virtual OUString        GetTitle() const SAL_OVERRIDE;
 
