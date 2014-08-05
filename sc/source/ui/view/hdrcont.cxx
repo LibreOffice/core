@@ -271,7 +271,8 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     }
 
     ScViewData& rViewData = pViewSh->GetViewData();
-    MapMode aMapMode( GetMapMode() );
+    const MapMode aOriginalMapMode = GetMapMode();
+    MapMode aMapMode = aOriginalMapMode;
     aMapMode.SetMapUnit( MAP_TWIP );
     aMapMode.SetScaleX( rViewData.GetZoomX() * Fraction(0.96) );
     aMapMode.SetScaleY( rViewData.GetZoomY() * Fraction(0.96) );
@@ -592,10 +593,10 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                                 aTxtPos = LogicToPixel( aTxtPos );
                                 // Text is in pixels, so easiest just to map that way
                                 // only here.
-                                const MapMode aOriginalMapMode( GetMapMode() );
-                                SetMapMode( MapMode( MAP_PIXEL ) );
-                                DrawText( aTxtPos, aString );
+                                const MapMode aCurrentMode( GetMapMode() );
                                 SetMapMode( aOriginalMapMode );
+                                DrawText( aTxtPos, aString );
+                                SetMapMode( aCurrentMode );
                             }
                             break;
                     }
@@ -611,6 +612,8 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
 
         aGrid.Flush();
     }
+
+    SetMapMode( aOriginalMapMode );
 }
 
 SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) const
@@ -620,9 +623,10 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) 
     SCCOLROW    nHitNo = nPos;
     SCCOLROW    nEntryNo = 1 + nPos;
     long    nScrPos;
-    long    nMousePos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
+    long    nMousePos = bVertical ? PixelToLogic(rMEvt.GetPosPixel()).Y() :
+                                    PixelToLogic(rMEvt.GetPosPixel()).X();
     long    nDif;
-    Size    aSize = GetOutputSizePixel();
+    Size    aSize = PixelToLogic(GetOutputSizePixel());
     long    nWinSize = bVertical ? aSize.Height() : aSize.Width();
 
     bool bLayoutRTL = IsLayoutRTL();
