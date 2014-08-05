@@ -34,6 +34,10 @@ class ContentHandler(xml.sax.handler.ContentHandler):
         if self.inFasttoken:
             self.chars.append(characters)
 
+    def endDocument(self):
+        print("const Token_t OOXML_FAST_TOKENS_END = %s;" % self.counter)
+
+
 print("""
 /*
 
@@ -62,9 +66,7 @@ parser = xml.sax.make_parser()
 parser.setContentHandler(ContentHandler())
 parser.parse(sys.argv[1])
 
-print("""const Token_t OOXML_FAST_TOKENS_END =5805;
-
-namespace writerfilter {
+print("""namespace writerfilter {
 namespace ooxml {
 
 #ifdef DEBUG_DOMAINMAPPER
