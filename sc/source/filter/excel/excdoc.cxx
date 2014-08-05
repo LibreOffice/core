@@ -377,6 +377,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 
         // COUNTRY - in BIFF8 in workbook globals
         Add( new XclExpCountry( GetRoot() ) );
+
         // link table: SUPBOOK, XCT, CRN, EXTERNNAME, EXTERNSHEET, NAME
         aRecList.AppendRecord( CreateRecord( EXC_ID_EXTERNSHEET ) );
         aRecList.AppendRecord( CreateRecord( EXC_ID_NAME ) );
