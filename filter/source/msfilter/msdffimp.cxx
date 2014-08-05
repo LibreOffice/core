@@ -2628,7 +2628,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         }
 
         if ( bHasShadow )
-            rSet.Put( SdrShadowItem( bHasShadow ) );
+            rSet.Put( makeSdrShadowItem( bHasShadow ) );
     }
     ApplyLineAttributes( rSet, rObjData.eShapeType ); // #i28269#
     ApplyFillAttributes( rIn, rSet, rObjData );

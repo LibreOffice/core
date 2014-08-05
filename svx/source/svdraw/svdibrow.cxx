@@ -756,7 +756,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         case SDRATTR_SHADOWPERSP       : {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_SHADOW,pItem)) {
-                bool bShadow=((const SdrShadowItem*)pItem)->GetValue();
+                bool bShadow=((const SdrOnOffItem*)pItem)->GetValue();
                 if (!bShadow) return true;
             }
         } break;

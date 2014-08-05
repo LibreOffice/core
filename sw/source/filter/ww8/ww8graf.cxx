@@ -231,7 +231,7 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
         }
     }
     if( SVBT16ToShort( rSh.shdwpi ) ){                  // shadow
-        rSet.Put(SdrShadowItem(true));
+        rSet.Put(makeSdrShadowItem(true));
         rSet.Put( SdrShadowXDistItem( SVBT16ToShort( rSh.xaOffset ) ) );
         rSet.Put( SdrShadowYDistItem( SVBT16ToShort( rSh.yaOffset ) ) );
     }
@@ -1694,7 +1694,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     rFlySet.Put( aBox );
 
     // Schattenwurf der Box: SvxShadowItem
-    if( WW8ITEMVALUE(rOldSet, SDRATTR_SHADOW, SdrShadowItem) )
+    if( WW8ITEMVALUE(rOldSet, SDRATTR_SHADOW, SdrOnOffItem) )
     {
         SvxShadowItem aShadow( RES_SHADOW );
 

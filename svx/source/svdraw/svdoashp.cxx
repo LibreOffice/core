@@ -206,7 +206,7 @@ static bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
 SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
 {
     SdrObject* pRetval = 0L;
-    const bool bShadow(((SdrShadowItem&)rOriginalSet.Get(SDRATTR_SHADOW)).GetValue());
+    const bool bShadow(((SdrOnOffItem&)rOriginalSet.Get(SDRATTR_SHADOW)).GetValue());
 
     if(bShadow)
     {
@@ -280,7 +280,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         aTempSet.Put( SvxWritingModeItem( com::sun::star::text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION ) );
 
         // no shadow
-        aTempSet.Put(SdrShadowItem(false));
+        aTempSet.Put(makeSdrShadowItem(false));
         aTempSet.Put(SdrShadowXDistItem(0L));
         aTempSet.Put(SdrShadowYDistItem(0L));
 
@@ -456,7 +456,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
         if(pSdrObject)
         {
             const SfxItemSet& rOriginalSet = GetObjectItemSet();
-            const bool bShadow(((SdrShadowItem&)rOriginalSet.Get( SDRATTR_SHADOW )).GetValue());
+            const bool bShadow(((SdrOnOffItem&)rOriginalSet.Get( SDRATTR_SHADOW )).GetValue());
 
             if(bShadow)
             {
@@ -2906,10 +2906,10 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) co
 
         if(pRetval)
         {
-            const bool bShadow(((SdrShadowItem&)GetMergedItem(SDRATTR_SHADOW)).GetValue());
+            const bool bShadow(((SdrOnOffItem&)GetMergedItem(SDRATTR_SHADOW)).GetValue());
             if(bShadow)
             {
-                pRetval->SetMergedItem(SdrShadowItem(true));
+                pRetval->SetMergedItem(makeSdrShadowItem(true));
             }
         }
 

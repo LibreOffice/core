@@ -1871,7 +1871,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     {
         bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DShadow3DItem(bValue));
-        rAttrs.Put(SdrShadowItem(bValue));
+        rAttrs.Put(makeSdrShadowItem(bValue));
     }
     else
     {

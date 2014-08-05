@@ -335,7 +335,7 @@ namespace drawinglayer
 
         attribute::SdrShadowAttribute createNewSdrShadowAttribute(const SfxItemSet& rSet)
         {
-            const bool bShadow(((SdrShadowItem&)rSet.Get(SDRATTR_SHADOW)).GetValue());
+            const bool bShadow(((SdrOnOffItem&)rSet.Get(SDRATTR_SHADOW)).GetValue());
 
             if(bShadow)
             {

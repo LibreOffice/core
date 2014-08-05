@@ -1987,7 +1987,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 aClosedPolyPolygon.setClosed(true);
                 SdrPathObj* pFill = new SdrPathObj(OBJ_POLY, aClosedPolyPolygon, dBrightness);
                 SfxItemSet aTempSet(*this);
-                aTempSet.Put(SdrShadowItem(false));
+                aTempSet.Put(makeSdrShadowItem(false));
                 aTempSet.Put(XLineStyleItem(XLINE_NONE));
                 pFill->SetMergedItemSet(aTempSet);
                 rObjectList.push_back(pFill);
@@ -2003,7 +2003,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
                     aNewB2DPolyPolygon, dBrightness);
                 SfxItemSet aTempSet(*this);
-                aTempSet.Put(SdrShadowItem(false));
+                aTempSet.Put(makeSdrShadowItem(false));
                 aTempSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
                 pStroke->SetMergedItemSet(aTempSet);
                 rObjectList.push_back(pStroke);
@@ -2013,7 +2013,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
         {
             SdrPathObj* pObj = 0;
             SfxItemSet aTempSet(*this);
-            aTempSet.Put(SdrShadowItem(false));
+            aTempSet.Put(makeSdrShadowItem(false));
 
             if(bNoFill)
             {

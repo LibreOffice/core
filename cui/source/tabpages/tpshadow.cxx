@@ -255,9 +255,9 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         TriState eState = m_pTsbShowShadow->GetState();
         if( m_pTsbShowShadow->IsValueChangedFromSaved() )
         {
-            SdrShadowItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
+            SdrOnOffItem aItem( makeSdrShadowItem(sal::static_int_cast< sal_Bool >( eState )) );
             pOld = GetOldItem( *rAttrs, SDRATTR_SHADOW );
-            if ( !pOld || !( *(const SdrShadowItem*)pOld == aItem ) )
+            if ( !pOld || !( *(const SdrOnOffItem*)pOld == aItem ) )
             {
                 rAttrs->Put( aItem );
                 bModified = true;
@@ -366,7 +366,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         {
             m_pTsbShowShadow->EnableTriState( false );
 
-            if( ( ( const SdrShadowItem& ) rAttrs->Get( SDRATTR_SHADOW ) ).GetValue() )
+            if( ( ( const SdrOnOffItem& ) rAttrs->Get( SDRATTR_SHADOW ) ).GetValue() )
                 m_pTsbShowShadow->SetState( TRISTATE_TRUE );
             else
             {

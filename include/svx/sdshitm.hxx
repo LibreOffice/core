@@ -22,14 +22,9 @@
 #include <svx/sdooitm.hxx>
 #include <svx/svddef.hxx>
 
-/*
- * class SdrShadowItem
- */
-class SdrShadowItem: public SdrOnOffItem {
-public:
-    SdrShadowItem(bool bShadow=false): SdrOnOffItem(SDRATTR_SHADOW, bShadow) {}
-    SdrShadowItem(SvStream& rIn):      SdrOnOffItem(SDRATTR_SHADOW, rIn)     {}
-};
+inline SdrOnOffItem makeSdrShadowItem(bool bShadow) {
+    return SdrOnOffItem(SDRATTR_SHADOW, bShadow);
+}
 
 #endif
 

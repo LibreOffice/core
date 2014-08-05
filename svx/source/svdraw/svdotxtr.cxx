@@ -372,7 +372,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                     SdrPathObj* pPathObj = 0;
 
                     // always clear objectshadow; this is included in the extraction
-                    aAttributeSet.Put(SdrShadowItem(false));
+                    aAttributeSet.Put(makeSdrShadowItem(false));
 
                     if(rCandidate.getIsFilled())
                     {

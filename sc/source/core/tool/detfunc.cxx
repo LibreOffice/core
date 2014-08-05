@@ -214,7 +214,7 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
     //  SdrShadowItem has sal_False, instead the shadow is set for the rectangle
     //  only with SetSpecialTextBoxShadow when the object is created
     //  (item must be set to adjust objects from older files)
-    aCaptionSet.Put( SdrShadowItem( false ) );
+    aCaptionSet.Put( makeSdrShadowItem( false ) );
     aCaptionSet.Put( SdrShadowXDistItem( 100 ) );
     aCaptionSet.Put( SdrShadowYDistItem( 100 ) );
 

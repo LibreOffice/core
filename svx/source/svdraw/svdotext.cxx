@@ -618,7 +618,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
 
         // test if shadow needs to be avoided for TakeContour()
         const SfxItemSet& rSet = GetObjectItemSet();
-        bool bShadowOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
+        bool bShadowOn = ((SdrOnOffItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
 
         // #i33696#
         // Remember TextObject currently set at the DrawOutliner, it WILL be
@@ -630,7 +630,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
         {
             // force shadow off
             SdrObject* pCopy = Clone();
-            pCopy->SetMergedItem(SdrShadowItem(false));
+            pCopy->SetMergedItem(makeSdrShadowItem(false));
             *pContourPolyPolygon = pCopy->TakeContour();
             SdrObject::Free( pCopy );
         }

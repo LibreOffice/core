@@ -486,7 +486,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
         pSheet->SetParent( OUString() );
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
-        rBackgroundObjectsSet.Put(SdrShadowItem(false));
+        rBackgroundObjectsSet.Put(makeSdrShadowItem(false));
         rBackgroundObjectsSet.Put(SdrShadowColorItem(Color(COL_GRAY)));
         rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm shadow distance
         rBackgroundObjectsSet.Put(SdrShadowYDistItem(200));

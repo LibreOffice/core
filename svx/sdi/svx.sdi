@@ -10308,7 +10308,7 @@ SvxShadowItem BorderShadow SID_ATTR_BORDER_SHADOW
 ]
 
 
-SdrShadowItem FillShadow SID_ATTR_FILL_SHADOW
+SdrOnOffItem FillShadow SID_ATTR_FILL_SHADOW
 
 [
     /* flags: */
