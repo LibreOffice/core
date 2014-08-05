@@ -19,7 +19,6 @@
 import com.sun.star.awt.MouseEvent;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XControl;
-import com.sun.star.awt.XMouseListener;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XMultiPropertySet;
 import com.sun.star.lang.EventObject;
@@ -28,7 +27,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
 
-public class UnoMenu2 extends UnoMenu implements XMouseListener{
+public class UnoMenu2 extends UnoMenu {
 
 public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
     super(_xContext, _xMCF);

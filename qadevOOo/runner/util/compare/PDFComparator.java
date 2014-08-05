@@ -22,7 +22,7 @@ import util.compare.DocComparator;
 import lib.TestParameters;
 import util.compare.GraphicalComparator;
 
-class PDFComparator extends GraphicalComparator implements DocComparator
+class PDFComparator extends GraphicalComparator
 {
     protected PDFComparator(TestParameters aParams)
         {

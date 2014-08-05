@@ -1372,7 +1372,6 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
     private class EventListener
         extends Thread
         implements
-            com.sun.star.lang.XEventListener,
             com.sun.star.frame.XTerminateListener
     {
         String aTag;

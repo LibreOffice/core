@@ -24,7 +24,6 @@ import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;

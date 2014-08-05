@@ -26,8 +26,7 @@ import com.sun.star.util.XCloseable;
 /**
  * wraps the coms.sun.star.frame.Frame service
  */
-public class Frame implements   XFrame,
-                                XDispatchProvider,
+public class Frame implements   XDispatchProvider,
                                 XDispatchProviderInterception,
                                 XFramesSupplier,
                                 XStatusIndicatorFactory,

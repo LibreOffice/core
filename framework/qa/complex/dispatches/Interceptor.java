@@ -41,8 +41,7 @@ import com.sun.star.util.URL;
 /**
  * implements a configurable interceptor for dispatch events.
  */
-public class Interceptor implements XDispatchProvider,
-                                    XDispatch,
+public class Interceptor implements XDispatch,
                                     XDispatchProviderInterceptor,
                                     XInterceptorInfo
 {

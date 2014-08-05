@@ -20,17 +20,12 @@ package com.sun.star.script.framework.browse;
 
 import com.sun.star.uno.XComponentContext;
 
-import com.sun.star.script.XInvocation;
-
-import com.sun.star.script.browse.XBrowseNode;
-
 import com.sun.star.script.framework.provider.ScriptProvider;
 import com.sun.star.script.framework.log.*;
 import com.sun.star.script.framework.container.*;
 
 
 public class PkgProviderBrowseNode extends ProviderBrowseNode
-    implements XBrowseNode, XInvocation
 {
 
     public PkgProviderBrowseNode( ScriptProvider provider, ParcelContainer container, XComponentContext xCtx ) {

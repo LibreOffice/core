@@ -198,7 +198,7 @@ public final class java_remote_bridge_Test {
     }
 
     private static final class TestProxy
-        implements com.sun.star.lib.uno.Proxy, IQueryInterface, XInterface,
+        implements com.sun.star.lib.uno.Proxy, IQueryInterface,
             TestInterface
     {
         public TestProxy(String oid) {

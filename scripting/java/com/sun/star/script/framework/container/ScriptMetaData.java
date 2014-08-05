@@ -41,7 +41,7 @@ import com.sun.star.ucb.XSimpleFileAccess2;
 
 import com.sun.star.uno.UnoRuntime;
 
-public class ScriptMetaData extends ScriptEntry implements Cloneable {
+public class ScriptMetaData extends ScriptEntry {
     private boolean hasSource = false;
     private String locationPlaceHolder = "";
     private String source;
