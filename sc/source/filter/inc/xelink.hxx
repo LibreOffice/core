@@ -200,6 +200,9 @@ public:
     /** Writes the entire Link table. */
     virtual void        Save( XclExpStream& rStrm );
 
+    /** Writes the entire Link table to OOXML. */
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+
 private:
     typedef boost::shared_ptr< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;
     XclExpLinkMgrImplPtr mxImpl;

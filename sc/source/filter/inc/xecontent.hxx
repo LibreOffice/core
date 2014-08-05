@@ -110,13 +110,14 @@ public:
 
     virtual void        WriteEmbeddedData( XclExpStream& rStrm );
     void                SetDisplay( bool bDisplay ) { mbSetDisplay = bDisplay; }
-private:
+
     /** Builds file name from the passed file URL. Tries to convert to relative file name.
         @param rnLevel  (out-param) The parent directory level.
         @param rbRel  (out-param) true = path is relative. */
-    OUString            BuildFileName(
+    static OUString     BuildFileName(
                             sal_uInt16& rnLevel, bool& rbRel,
-                            const OUString& rUrl, const XclExpRoot& rRoot ) const;
+                            const OUString& rUrl, const XclExpRoot& rRoot );
+private:
 
     /** Writes the body of the HLINK record. */
     virtual void        WriteBody( XclExpStream& rStrm );
