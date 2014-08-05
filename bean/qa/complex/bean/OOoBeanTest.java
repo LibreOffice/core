@@ -32,6 +32,9 @@ import org.openoffice.test.OfficeConnection;
 
 import static org.junit.Assert.*;
 
+/**
+ * This only here to expose the protected constructor.
+ */
 class PrivateLocalOfficeConnection extends com.sun.star.comp.beans.LocalOfficeConnection
 {
     public PrivateLocalOfficeConnection(com.sun.star.uno.XComponentContext xContext)
