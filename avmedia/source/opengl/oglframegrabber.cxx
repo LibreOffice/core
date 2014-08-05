@@ -20,6 +20,7 @@
 #include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
+using namespace libgltf;
 
 namespace avmedia { namespace ogl {
 
