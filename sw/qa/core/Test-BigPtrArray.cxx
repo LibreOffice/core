@@ -30,6 +30,7 @@
 #include <stdlib.h>
 
 #include <bparr.hxx>
+#include <ndarr.hxx>
 
 using namespace std;
 
@@ -53,11 +54,6 @@ namespace /* private */
             return count_;
         }
 
-        void setCount(sal_uLong newCount)
-        {
-            count_ = newCount;
-        }
-
         sal_uLong Position() const
         {
             return GetPos();
@@ -66,13 +62,6 @@ namespace /* private */
     private:
         sal_uLong count_;
     };
-
-    bool AddToCount(const ElementPtr& rElem, void* pArgs)
-    {
-        BigPtrEntryMock* const pbem = static_cast<BigPtrEntryMock* const>(rElem);
-        pbem->setCount(pbem->getCount() + *((sal_uLong*)pArgs));
-        return true;
-    }
 
     void dumpBigPtrArray(const BigPtrArray& bparr)
     {
@@ -591,124 +580,6 @@ public:
         releaseBigPtrArrayContent(bparr);
     }
 
-    void test_for_each()
-    {
-        printMethodName("test_for_each\n");
-
-        BigPtrArray bparr;
-
-        fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
-
-        sal_uLong addCount = 1;
-        bparr.ForEach(AddToCount, &addCount);
-
-        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
-        {
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "test_for_each failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i+1)
-            );
-        }
-
-        releaseBigPtrArrayContent(bparr);
-        dumpBigPtrArray(bparr);
-    }
-
-    void test_for_some1()
-    {
-        printMethodName("test_for_some1\n");
-
-        BigPtrArray bparr;
-
-        fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
-
-        sal_uLong addCount = 1;
-        bparr.ForEach(0, NUM_ENTRIES / 2, AddToCount, &addCount);
-
-        sal_uLong i = 0;
-        for (/* */; i < NUM_ENTRIES / 2; i++)
-        {
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "test_for_some1 failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i+1)
-            );
-        }
-
-        for (/* */; i < NUM_ENTRIES; i++)
-        {
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "test_for_some1 failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i)
-            );
-        }
-
-        releaseBigPtrArrayContent(bparr);
-        dumpBigPtrArray(bparr);
-    }
-
-    void test_for_some2()
-    {
-        printMethodName("test_for_some2\n");
-
-        BigPtrArray bparr;
-
-        fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
-
-        sal_uLong addCount = 1;
-        bparr.ForEach(NUM_ENTRIES / 2, NUM_ENTRIES, AddToCount, &addCount);
-
-        sal_uLong i = 0;
-        for (/* */; i < NUM_ENTRIES / 2; i++)
-        {
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "test_for_some2 failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i)
-            );
-        }
-
-        for (/* */; i < NUM_ENTRIES; i++)
-        {
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "test_for_some2 failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i+1)
-            );
-        }
-
-        releaseBigPtrArrayContent(bparr);
-        dumpBigPtrArray(bparr);
-    }
-
-    void test_for_some3()
-    {
-        printMethodName("test_for_some3\n");
-
-        BigPtrArray bparr;
-
-        fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
-
-        sal_uLong addCount = 1;
-        bparr.ForEach(0, 0, AddToCount, &addCount);
-
-        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
-        {
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "test_for_some3 failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == i
-            );
-        }
-        releaseBigPtrArrayContent(bparr);
-    }
-
     CPPUNIT_TEST_SUITE(BigPtrArrayUnittest);
     CPPUNIT_TEST(test_ctor);
     CPPUNIT_TEST(test_insert_entries_at_front);
@@ -724,10 +595,6 @@ public:
     CPPUNIT_TEST(test_move_elements_from_higher_to_lower_pos);
     CPPUNIT_TEST(test_move_to_same_position);
     CPPUNIT_TEST(test_replace_elements);
-    CPPUNIT_TEST(test_for_each);
-    CPPUNIT_TEST(test_for_some1);
-    CPPUNIT_TEST(test_for_some2);
-    CPPUNIT_TEST(test_for_some3);
     CPPUNIT_TEST_SUITE_END();
 };
 

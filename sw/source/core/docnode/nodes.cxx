@@ -2176,11 +2176,41 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
     return pFrmNd;
 }
 
+void SwNodes::ForEach( sal_uLong nStart, sal_uLong nEnd,
+                       FnForEach_SwNodes fn, void* pArgs )
+{
+    if( nEnd > nSize )
+        nEnd = nSize;
+
+    if( nStart < nEnd )
+    {
+        sal_uInt16 cur = Index2Block( nStart );
+        BlockInfo** pp = ppInf + cur;
+        BlockInfo* p = *pp;
+        sal_uInt16 nElem = sal_uInt16( nStart - p->nStart );
+        ElementPtr* pElem = p->pData + nElem;
+        nElem = p->nElem - nElem;
+        for(;;)
+        {
+            if( !(*fn)( static_cast<SwNode *>(*pElem++), pArgs ) || ++nStart >= nEnd )
+                break;
+
+            // next element
+            if( !--nElem )
+            {
+                // new block
+                p = *++pp;
+                pElem = p->pData;
+                nElem = p->nElem;
+            }
+        }
+    }
+}
+
 void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs )
 {
-    BigPtrArray::ForEach( rStart.GetIndex(), rEnd.GetIndex(),
-                            (FnForEach) fnForEach, pArgs );
+    ForEach( rStart.GetIndex(), rEnd.GetIndex(), fnForEach, pArgs );
 }
 
 namespace {

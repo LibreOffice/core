@@ -146,13 +146,9 @@ public:
     sal_uLong Count() const { return BigPtrArray::Count(); }
     void ForEach( FnForEach_SwNodes fnForEach, void* pArgs = 0 )
     {
-        BigPtrArray::ForEach( 0, BigPtrArray::Count(),
-                                (FnForEach) fnForEach, pArgs );
+        ForEach( 0, BigPtrArray::Count(), fnForEach, pArgs );
     }
-    void ForEach( sal_uLong nStt, sal_uLong nEnd, FnForEach_SwNodes fnForEach, void* pArgs = 0 )
-    {
-        BigPtrArray::ForEach( nStt, nEnd, (FnForEach) fnForEach, pArgs );
-    }
+    void ForEach( sal_uLong nStt, sal_uLong nEnd, FnForEach_SwNodes fnForEach, void* pArgs = 0 );
     void ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs = 0 );
 

@@ -81,44 +81,6 @@ void BigPtrArray::Move( sal_uLong from, sal_uLong to )
     }
 }
 
-/** Apply function to every element.
-
-    @param nStart First element to start with
-    @param nEnd   Last element (exclusive!)
-    @param fn     Function
-    @param pArgs  Additional arguments for <fn>
-*/
-void BigPtrArray::ForEach( sal_uLong nStart, sal_uLong nEnd,
-                            FnForEach fn, void* pArgs )
-{
-    if( nEnd > nSize )
-        nEnd = nSize;
-
-    if( nStart < nEnd )
-    {
-        sal_uInt16 cur = Index2Block( nStart );
-        BlockInfo** pp = ppInf + cur;
-        BlockInfo* p = *pp;
-        sal_uInt16 nElem = sal_uInt16( nStart - p->nStart );
-        ElementPtr* pElem = p->pData + nElem;
-        nElem = p->nElem - nElem;
-        for(;;)
-        {
-            if( !(*fn)( *pElem++, pArgs ) || ++nStart >= nEnd )
-                break;
-
-            // next element
-            if( !--nElem )
-            {
-                // new block
-                p = *++pp;
-                pElem = p->pData;
-                nElem = p->nElem;
-            }
-        }
-    }
-}
-
 ElementPtr BigPtrArray::operator[]( sal_uLong idx ) const
 {
     assert(idx < nSize); // operator[]: Index out of bounds
