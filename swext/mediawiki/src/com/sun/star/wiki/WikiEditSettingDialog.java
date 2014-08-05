@@ -212,7 +212,7 @@ public class WikiEditSettingDialog extends WikiDialog
 
                 if ( sURL.length() > 0 )
                 {
-                    URI aURI = new URI( sURL );
+                    URI aURI = new URI( sURL, false );
                     GetMethod aRequest = new GetMethod( aURI.getEscapedPathQuery() );
                     aRequest.setFollowRedirects( false );
                     Helper.ExecuteMethod( aRequest, aHostConfig, aURI, m_xContext, bInitHost );

@@ -787,7 +787,7 @@ public class Helper
         {
             HostConfiguration aNewHostConfig = new HostConfiguration();
 
-            URI aURI = new URI( aMainURL.toString() + "index.php?title=Special:Userlogin" );
+            URI aURI = new URI( aMainURL.toString() + "index.php?title=Special:Userlogin", false );
             GetMethod aGetCookie = new GetMethod( aURI.getEscapedPathQuery() );
 
             ExecuteMethod( aGetCookie, aNewHostConfig, aURI, xContext, true );
@@ -804,7 +804,7 @@ public class Helper
                 String sLoginToken = GetLoginToken( sLoginPage );
 
                 PostMethod aPost = new PostMethod();
-                URI aPostURI = new URI( aMainURL.getPath() + "index.php?title=Special:Userlogin&action=submitlogin" );
+                URI aPostURI = new URI( aMainURL.getPath() + "index.php?title=Special:Userlogin&action=submitlogin", false );
                 aPost.setPath( aPostURI.getEscapedPathQuery() );
 
                 aPost.addParameter( "wpName", sWikiUser );

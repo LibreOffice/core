@@ -61,7 +61,7 @@ public class WikiArticle
         m_sWikiPass = wikiSettings.get("Password");
         m_sTitle = sTitle;
 
-        m_aMainURI = new URI( sMainUrl );
+        m_aMainURI = new URI( sMainUrl, false );
 
         if ( bLogin )
         {
@@ -123,7 +123,7 @@ public class WikiArticle
 
         if ( m_aHostConfig != null )
         {
-            URI aURI = new URI( m_aMainURI.toString() + "index.php?title=" + m_sTitle + "&action=edit" );
+            URI aURI = new URI( m_aMainURI.toString() + "index.php?title=" + m_sTitle + "&action=edit", false );
             GetMethod aRequest = new GetMethod( aURI.getEscapedPathQuery() );
 
             Helper.ExecuteMethod( aRequest, m_aHostConfig, aURI, m_xContext, false );
@@ -165,7 +165,7 @@ public class WikiArticle
     {
         if ( m_aHostConfig != null )
         {
-            URI aURI = new URI( m_aMainURI.toString() + "index.php?title=" + m_sTitle );
+            URI aURI = new URI( m_aMainURI.toString() + "index.php?title=" + m_sTitle, false );
             GetMethod aRequest = new GetMethod( aURI.getEscapedPathQuery() );
 
             Helper.ExecuteMethod( aRequest, m_aHostConfig, aURI, m_xContext, false );
@@ -206,7 +206,7 @@ public class WikiArticle
             // get the edit time and token
             getArticleWiki();
 
-            URI aURI = new URI( m_aMainURI.getPath() + "index.php?title=" + m_sTitle + "&action=submit" );
+            URI aURI = new URI( m_aMainURI.getPath() + "index.php?title=" + m_sTitle + "&action=submit", false );
             PostMethod aPost = new PostMethod();
             aPost.setPath( aURI.getEscapedPathQuery() );
 
