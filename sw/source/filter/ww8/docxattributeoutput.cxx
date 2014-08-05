@@ -2950,6 +2950,21 @@ void DocxAttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t /*
 {
 }
 
+/// Does the same as comphelper::string::padToLength(), but extends the start, not the end.
+OString lcl_padStartToLength(OString aString, sal_Int32 nLen, sal_Char cFill)
+{
+    if (nLen > aString.getLength())
+    {
+        sal_Int32 nDiff = nLen - aString.getLength();
+        OStringBuffer aBuffer;
+        comphelper::string::padToLength(aBuffer, nDiff, cFill);
+        aBuffer.append(aString);
+        return aBuffer.makeStringAndClear();
+    }
+    else
+        return aString;
+}
+
 void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
@@ -3057,6 +3072,36 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             m_aTableStyleConf[ BOX_LINE_LEFT ] = aGrabBagElement->second.get<table::BorderLine2>();
         else if( aGrabBagElement->first == "TableStyleRightBorder" )
             m_aTableStyleConf[ BOX_LINE_RIGHT ] = aGrabBagElement->second.get<table::BorderLine2>();
+        else if (aGrabBagElement->first == "TableStyleLook")
+        {
+            FastAttributeList* pAttributeList = m_pSerializer->createAttrList();
+            uno::Sequence<beans::PropertyValue> aAttributeList = aGrabBagElement->second.get< uno::Sequence<beans::PropertyValue> >();
+
+            for (sal_Int32 i = 0; i < aAttributeList.getLength(); ++i)
+            {
+                if (aAttributeList[i].Name == "val")
+                    pAttributeList->add(FSNS(XML_w, XML_val), lcl_padStartToLength(OString::number(aAttributeList[i].Value.get<sal_Int32>(), 16), 4, '0'));
+                else
+                {
+                    static DocxStringTokenMap const aTokens[] =
+                    {
+                        {"firstRow", XML_firstRow},
+                        {"lastRow", XML_lastRow},
+                        {"firstColumn", XML_firstColumn},
+                        {"lastColumn", XML_lastColumn},
+                        {"noHBand", XML_noHBand},
+                        {"noVBand", XML_noVBand},
+                        {0, 0}
+                    };
+
+                    if (sal_Int32 nToken = DocxStringGetToken(aTokens, aAttributeList[i].Name))
+                        pAttributeList->add(FSNS(XML_w, nToken), (aAttributeList[i].Value.get<sal_Int32>() ? "1" : "0"));
+                }
+            }
+
+            XFastAttributeListRef xAttributeList(pAttributeList);
+            m_pSerializer->singleElementNS(XML_w, XML_tblLook, xAttributeList);
+        }
         else if (aGrabBagElement->first == "TablePosition" )
         {
             FastAttributeList *attrListTablePos = m_pSerializer->createAttrList( );
@@ -3114,6 +3159,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             m_pSerializer->singleElementNS( XML_w, XML_tblpPr, xAttrListTablePosRef);
             attrListTablePos = NULL;
         }
+        else
+            SAL_WARN("sw.ww8", "DocxAttributeOutput::TableDefinition: unhandled property: " << aGrabBagElement->first);
     }
 
     // Output the table alignement
