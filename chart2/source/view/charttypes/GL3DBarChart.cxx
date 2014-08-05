@@ -180,12 +180,15 @@ public:
     RenderBenchMarkThread(GL3DBarChart * pChart):
     RenderThread(pChart),
     mbExecuting(false),
-    miFrameCount(0)
+    miFrameCount(0),
+    mbNeedFlyBack(false)
     {
         osl_getSystemTime(&mafpsRenderStartTime);
         osl_getSystemTime(&mafpsRenderEndTime);
         osl_getSystemTime(&maScreenTextUpdateStartTime);
         osl_getSystemTime(&maScreenTextUpdateEndTime);
+        osl_getSystemTime(&maClickFlyBackStartTime);
+        osl_getSystemTime(&maClickFlyBackEndTime);
     }
 protected:
     virtual void execute() SAL_OVERRIDE;
@@ -198,12 +201,14 @@ private:
     void ProcessScroll();
     void UpdateScreenText();
     void UpdateFPS();
-    int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
+    int CalcTimeInterval(TimeValue &startTime, TimeValue &endTime);
+    void ProcessClickFlyBack();
 private:
     glm::vec3 maStartPos;
     glm::vec3 maEndPos;
     sal_Int32 mnSteps;
     bool mbExecuting;
+    bool mbNeedFlyBack;
     glm::vec3 maStep;
     glm::vec3 maStepDirection;
     size_t mnStep;
@@ -212,6 +217,8 @@ private:
     TimeValue mafpsRenderEndTime;
     TimeValue maScreenTextUpdateStartTime;
     TimeValue maScreenTextUpdateEndTime;
+    TimeValue maClickFlyBackStartTime;
+    TimeValue maClickFlyBackEndTime;
     int miFrameCount;
     OUString maFPS;
 };
@@ -231,7 +238,14 @@ void RenderBenchMarkThread::MoveCamera()
         mnStep = 0;
         mbExecuting = false;
         if (mpChart->maRenderEvent == EVENT_CLICK)
+        {
             mpChart->mpRenderer->EndClick();
+            mbNeedFlyBack = true;
+            osl_getSystemTime(&maClickFlyBackStartTime);
+            osl_getSystemTime(&maClickFlyBackEndTime);
+        }
+        else
+            mbNeedFlyBack = false;
         mpChart->maRenderEvent = EVENT_NONE;
     }
 }
@@ -307,8 +321,21 @@ void RenderBenchMarkThread::ProcessScroll()
     mpChart->maRenderEvent = EVENT_NONE;
 }
 
+void RenderBenchMarkThread::ProcessClickFlyBack()
+{
+    if (!mbNeedFlyBack)
+        return;
+    osl_getSystemTime(&maClickFlyBackEndTime);
+    int aDeltaMs = CalcTimeInterval(maClickFlyBackStartTime, maClickFlyBackEndTime);
+    if(aDeltaMs >= 10000)
+    {
+        mpChart->maRenderEvent = EVENT_MOVE_TO_DEFAULT;
+    }
+}
+
 void RenderBenchMarkThread::ProcessMouseEvent()
 {
+    ProcessClickFlyBack();
     if (mpChart->maRenderEvent == EVENT_CLICK)
     {
         MoveToBar();
@@ -327,7 +354,7 @@ void RenderBenchMarkThread::ProcessMouseEvent()
     }
 }
 
-int RenderBenchMarkThread::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
+int RenderBenchMarkThread::CalcTimeInterval(TimeValue &startTime, TimeValue &endTime)
 {
     TimeValue aTime;
     aTime.Seconds = endTime.Seconds - startTime.Seconds - 1;
@@ -339,11 +366,11 @@ int RenderBenchMarkThread::calcTimeInterval(TimeValue &startTime, TimeValue &end
 
 void RenderBenchMarkThread::UpdateFPS()
 {
-    int aDeltaMs = calcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
+    int aDeltaMs = CalcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
     if(aDeltaMs >= 500)
     {
         osl_getSystemTime(&mafpsRenderEndTime);
-        aDeltaMs = calcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
+        aDeltaMs = CalcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
         int iFPS = miFrameCount * 1000 / aDeltaMs;
         maFPS = OUString("Render FPS: ") + OUString::number(iFPS);
         miFrameCount = 0;
@@ -364,7 +391,7 @@ void RenderBenchMarkThread::UpdateFPS()
 
 void RenderBenchMarkThread::UpdateScreenText()
 {
-    int aDeltaMs = calcTimeInterval(maScreenTextUpdateStartTime, maScreenTextUpdateEndTime);
+    int aDeltaMs = CalcTimeInterval(maScreenTextUpdateStartTime, maScreenTextUpdateEndTime);
     if (aDeltaMs >= 20)
     {
         mpChart->mpRenderer->ReleaseScreenTextShapes();
