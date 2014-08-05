@@ -127,31 +127,6 @@ namespace {
 
 class theExplicitValueProviderUnoTunnelId  : public rtl::Static<UnoTunnelIdInit, theExplicitValueProviderUnoTunnelId> {};
 
-#if ENABLE_GL3D_BARCHART
-
-/**
- * Only used for initial debugging of the new GL chart (until we can
- * visualize it).
- */
-void debugGL3DOutput( ChartModel& rModel )
-{
-    uno::Reference<XDiagram> xDiagram = rModel.getFirstDiagram();
-    if (!xDiagram.is())
-        return;
-
-    try
-    {
-        uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-        bool bRoundedEdge = false;
-        xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= bRoundedEdge;
-
-        SAL_INFO("chart2.barchart3D", "GL3D: rounded edge = " << bRoundedEdge);
-    }
-    catch (...) {}
-}
-
-#endif
-
 }
 
 class GL2DRenderer : public IRenderer
@@ -2501,10 +2476,6 @@ void ChartView::createShapes()
     {
         maTimeBased.bTimeBased = true;
     }
-
-#if ENABLE_GL3D_BARCHART
-    debugGL3DOutput(mrChartModel);
-#endif
 
     //make sure add-in is refreshed after creating the shapes
     const ::comphelper::ScopeGuard aGuard( boost::bind( &ChartView::impl_refreshAddIn, this ) );
