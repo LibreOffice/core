@@ -2951,7 +2951,7 @@ void DocxAttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t /*
 }
 
 /// Does the same as comphelper::string::padToLength(), but extends the start, not the end.
-OString lcl_padStartToLength(OString aString, sal_Int32 nLen, sal_Char cFill)
+OString lcl_padStartToLength(OString const & aString, sal_Int32 nLen, sal_Char cFill)
 {
     if (nLen > aString.getLength())
     {
