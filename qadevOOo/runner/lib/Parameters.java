@@ -39,8 +39,6 @@ import com.sun.star.uno.Type;
  */
 
 public class Parameters implements XPropertySet {
-/*    final protected Map parameters;
-    final Parameters defaults; */
     final protected Map<String, Object> parameters;
     final Parameters defaults;
     Property[] props;

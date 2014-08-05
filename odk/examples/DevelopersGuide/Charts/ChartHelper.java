@@ -35,25 +35,27 @@
 // __________ Imports __________
 
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Any;
-
-// factory for creating components
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.beans.XPropertySet;
-
-// application specific classes
-import com.sun.star.chart.XChartDocument;
-import com.sun.star.chart.XDiagram;
-import com.sun.star.drawing.*;
-import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextContent;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XText;
 // base graphics things
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
+import com.sun.star.beans.XPropertySet;
+// application specific classes
+import com.sun.star.chart.XChartDocument;
+import com.sun.star.chart.XDiagram;
+import com.sun.star.drawing.XDrawPageSupplier;
+import com.sun.star.drawing.XDrawPagesSupplier;
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
+import com.sun.star.frame.XModel;
+// factory for creating components
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
 
 // __________ Implementation __________
 
@@ -90,7 +92,7 @@ public class ChartHelper
                     XPropertySet xPropSet = UnoRuntime.queryInterface(
                         XPropertySet.class, xTextContent);
 
-                    Any aAny = new Any(String.class, msChartClassID);
+                    Any aAny = new Any(new Type(String.class), msChartClassID);
                     xPropSet.setPropertyValue("CLSID", aAny );
 
                     XTextDocument xTextDoc = UnoRuntime.queryInterface(XTextDocument.class,
@@ -106,15 +108,15 @@ public class ChartHelper
                         XShape.class, xTextContent);
                     xShape.setSize( aExtent );
 
-                    aAny = new Any(Short.class,
+                    aAny = new Any(new Type(Short.class),
                                new Short(com.sun.star.text.VertOrientation.NONE));
                     xPropSet.setPropertyValue("VertOrient", aAny );
-                    aAny = new Any(Short.class,
+                    aAny = new Any(new Type(Short.class),
                                new Short(com.sun.star.text.HoriOrientation.NONE));
                     xPropSet.setPropertyValue("HoriOrient", aAny );
-                    aAny = new Any(Integer.class, new Integer(aUpperLeft.Y));
+                    aAny = new Any(new Type(Integer.class), new Integer(aUpperLeft.Y));
                     xPropSet.setPropertyValue("VertOrientPosition", aAny );
-                    aAny = new Any(Integer.class, new Integer(aUpperLeft.X));
+                    aAny = new Any(new Type(Integer.class), new Integer(aUpperLeft.X));
                     xPropSet.setPropertyValue("HoriOrientPosition", aAny );
 
                     // retrieve the chart document as model of the OLE shape

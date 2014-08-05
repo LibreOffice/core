@@ -26,7 +26,7 @@ import com.sun.star.loader.XImplementationLoader;
 
 import com.sun.star.registry.XSimpleRegistry;
 
-
+@Deprecated
 public class SharedLibraryLoader_Test {
 
     private static final String NATIVE_SERVICE_MANAGER_IMP_NAME = "com.sun.star.comp.stoc.OServiceManager";

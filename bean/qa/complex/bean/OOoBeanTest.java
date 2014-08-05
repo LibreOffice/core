@@ -19,6 +19,7 @@ package complex.bean;
 
 
 import java.awt.event.*;
+
 import com.sun.star.comp.beans.OOoBean;
 import com.sun.star.uno.UnoRuntime;
 
@@ -28,6 +29,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
+
 import static org.junit.Assert.*;
 
 class PrivateLocalOfficeConnection extends com.sun.star.comp.beans.LocalOfficeConnection
@@ -38,6 +40,7 @@ class PrivateLocalOfficeConnection extends com.sun.star.comp.beans.LocalOfficeCo
     }
 }
 
+@Deprecated
 public class OOoBeanTest
 {
 

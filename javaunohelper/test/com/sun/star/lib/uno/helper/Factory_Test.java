@@ -35,7 +35,7 @@ import com.sun.star.comp.helper.RegistryServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 
-
+@Deprecated
 public class Factory_Test
     extends WeakBase
     implements XServiceInfo

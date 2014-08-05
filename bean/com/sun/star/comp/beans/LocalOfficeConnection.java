@@ -193,6 +193,7 @@ public class LocalOfficeConnection
      * @param containerFactory This is a application provided AWT container
      *  factory.
      */
+    @Deprecated
     public void setContainerFactory(ContainerFactory containerFactory)
     {
     }
@@ -221,6 +222,7 @@ public class LocalOfficeConnection
      * @param container This is an AWT container.
      * @return The office window instance.
      */
+    @Deprecated
     public OfficeWindow createOfficeWindow(Container container)
     {
         return new LocalOfficeWindow(this);
