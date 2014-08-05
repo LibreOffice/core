@@ -87,13 +87,7 @@ public class SwXTableRows extends TestCase {
 
         log.println( "creating a test environment" );
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
-        try {
-            oTable = SOfficeFactory.createTextTable( xTextDoc );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create TextTable: "
-                +e.getMessage(),e);
-        }
+        oTable = SOfficeFactory.createTextTable( xTextDoc );
 
         try {
             SOfficeFactory.insertTextContent(xTextDoc, oTable );

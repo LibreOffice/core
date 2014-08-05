@@ -1064,7 +1064,7 @@ public class OfficePrint {
         }
 
 
-    public static void convertDocument(String _sInputFile, String _sOutputPath, GraphicalTestArguments _aGTA) throws ConvWatchCancelException
+    public static void convertDocument(String _sInputFile, String _sOutputPath, GraphicalTestArguments _aGTA)
         {
             XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();
             if (xMSF == null)

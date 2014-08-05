@@ -179,7 +179,7 @@ public class CheckFlies {
         }
     }
 
-    @Before public void setUpDocument() throws com.sun.star.uno.Exception {
+    @Before public void setUpDocument() {
         document = util.WriterTools.loadTextDoc(
             UnoRuntime.queryInterface(
                 XMultiServiceFactory.class,

@@ -68,23 +68,23 @@ public class DBColumn
     RecordTable CurRecordTable;
     TextTableHandler oTextTableHandler;
 
-    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i) throws Exception
+    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i)
     {
         CurRecordTable = new RecordTable(_oTextTableHandler);
         initializeRecordTableMembers(CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, false);
     }
 
-    public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i, boolean _bforce) throws Exception
+    public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i, boolean _bforce)
     {
         initializeRecordTableMembers(_CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, _bforce);
     }
 
-    public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i) throws Exception
+    public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i)
     {
         initializeRecordTableMembers(_CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, false);
     }
 
-    private void initializeRecordTableMembers(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i, boolean _bForce) throws Exception
+    private void initializeRecordTableMembers(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i, boolean _bForce)
     {
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
@@ -137,8 +137,7 @@ public class DBColumn
         return false;
     }
 
-    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName, DBColumn OldDBColumn) throws Exception
-    {
+    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName, DBColumn OldDBColumn) {
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
         CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);

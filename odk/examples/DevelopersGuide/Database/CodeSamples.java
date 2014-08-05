@@ -113,7 +113,7 @@ public class CodeSamples
     }
 
     // check if the connection is not null aand dispose it later on.
-    public static void checkConnection(XConnection con) throws com.sun.star.uno.Exception
+    public static void checkConnection(XConnection con)
     {
         if(con != null)
         {

@@ -277,10 +277,11 @@ public class Parcel implements XNameContainer
 
     }
     // rename parcel
-    public void rename( String name ) throws com.sun.star.lang.WrappedTargetException
+    public void rename( String name )
     {
         this.name = name;
     }
+
     public ParcelContainer getParent() { return parent; }
     /**
      * Returns the path of this  <tt>Parcel</tt>

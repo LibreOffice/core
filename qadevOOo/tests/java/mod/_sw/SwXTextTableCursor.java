@@ -86,15 +86,8 @@ public class SwXTextTableCursor extends TestCase {
         // create testobject here
 
         XTextTable oTable = null;
-        try {
-            oTable = SOfficeFactory.createTextTable( xTextDoc );
-            SOfficeFactory.insertTextContent(xTextDoc, oTable );
-        }
-        catch( com.sun.star.uno.Exception uE ) {
-            uE.printStackTrace( log );
-            throw new StatusException("Couldn't create TextTable : "
-                    + uE.getMessage(), uE);
-        }
+        oTable = SOfficeFactory.createTextTable( xTextDoc );
+        SOfficeFactory.insertTextContent(xTextDoc, oTable );
 
         oObj = oTable.createCursorByCellName("A1");
 

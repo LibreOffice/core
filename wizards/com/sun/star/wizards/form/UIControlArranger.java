@@ -26,7 +26,6 @@ import com.sun.star.awt.XRadioButton;
 import com.sun.star.lang.EventObject;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
-import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.ui.ButtonList;
 import com.sun.star.wizards.ui.UIConsts;
@@ -51,7 +50,7 @@ public class UIControlArranger
     private final int SOIMAGELISTHEIGHT = 60;
     private final String SOALIGNMETHOD = "alignLabelControls";
 
-    public UIControlArranger(FormWizard _CurUnoDialog, FormDocument _curFormDocument) throws NoValidPathException
+    public UIControlArranger(FormWizard _CurUnoDialog, FormDocument _curFormDocument)
     {
         this.CurUnoDialog = _CurUnoDialog;
         this.curFormDocument = _curFormDocument;

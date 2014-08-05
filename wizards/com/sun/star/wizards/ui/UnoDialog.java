@@ -458,42 +458,26 @@ public class UnoDialog implements EventNames
 
     public XRadioButton insertRadioButton(String sName, int iControlKey, XItemListener xItemListener, String[] sProperties, Object[] sValues)
     {
-        try
+        XRadioButton xRadioButton = insertRadioButton(sName, iControlKey, sProperties, sValues);
+        if (xItemListener != null)
         {
-            XRadioButton xRadioButton = insertRadioButton(sName, iControlKey, sProperties, sValues);
-            if (xItemListener != null)
-            {
-                xRadioButton.addItemListener(xItemListener);
-            }
-            return xRadioButton;
+            xRadioButton.addItemListener(xItemListener);
         }
-        catch (com.sun.star.uno.Exception exception)
-        {
-            exception.printStackTrace(System.err);
-            return null;
-        }
+        return xRadioButton;
     }
 
     public XButton insertRadioButton(String sName, int iControlKey, XActionListener xActionListener, String[] sProperties, Object[] sValues)
     {
-        try
+        XRadioButton xRadioButton = insertRadioButton(sName, iControlKey, sProperties, sValues);
+        XButton xButton = UnoRuntime.queryInterface(XButton.class, xRadioButton);
+        if (xActionListener != null)
         {
-            XRadioButton xRadioButton = insertRadioButton(sName, iControlKey, sProperties, sValues);
-            XButton xButton = UnoRuntime.queryInterface(XButton.class, xRadioButton);
-            if (xActionListener != null)
-            {
-                xButton.addActionListener(xActionListener);
-            }
-            return xButton;
+            xButton.addActionListener(xActionListener);
         }
-        catch (com.sun.star.uno.Exception exception)
-        {
-            exception.printStackTrace(System.err);
-            return null;
-        }
+        return xButton;
     }
 
-    public XRadioButton insertRadioButton(String sName, int iControlKey, String[] sProperties, Object[] sValues) throws com.sun.star.uno.Exception
+    public XRadioButton insertRadioButton(String sName, int iControlKey, String[] sProperties, Object[] sValues)
     {
         XRadioButton xRadioButton = insertRadioButton(sName, sProperties, sValues);
         Integer ControlKey = new Integer(iControlKey);

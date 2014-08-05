@@ -24,7 +24,6 @@ import com.sun.star.sdb.application.DatabaseObject;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.db.DatabaseObjectWizard;
 import com.sun.star.wizards.db.RelationController;
@@ -219,7 +218,7 @@ public class FormWizard extends DatabaseObjectWizard
         }
     }
 
-    public void buildSteps() throws NoValidPathException
+    public void buildSteps()
     {
         curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields, slblTables, true, 34411);
         curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());

@@ -234,14 +234,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
             }
             else
             {
-                try
-                {
-                    OfficePrint.convertDocument(_sInputFile, _sReferencePath, aGTA);
-                }
-                catch(ConvWatchCancelException e)
-                {
-                    assure(e.getMessage(), false);
-                }
+                OfficePrint.convertDocument(_sInputFile, _sReferencePath, aGTA);
             }
 
             if (aGTA.restartOffice())

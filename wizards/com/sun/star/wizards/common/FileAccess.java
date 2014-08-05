@@ -201,7 +201,7 @@ public class FileAccess
         return ResultPath;
     }
 
-    public static ArrayList<String> getOfficePaths(XMultiServiceFactory xMSF, String _sPath, String sType, String sSearchDir) throws NoValidPathException
+    public static ArrayList<String> getOfficePaths(XMultiServiceFactory xMSF, String _sPath, String sType, String sSearchDir)
     {
         //This method currently only works with sPath="Template"
 
@@ -317,7 +317,7 @@ public class FileAccess
         return _sPath;
     }
 
-    public static void combinePaths(XMultiServiceFactory xMSF, ArrayList<String> _aFirstPath, String _sSecondPath) throws NoValidPathException
+    public static void combinePaths(XMultiServiceFactory xMSF, ArrayList<String> _aFirstPath, String _sSecondPath)
     {
         for (int i = 0; i < _aFirstPath.size(); ++i)
         {

@@ -792,7 +792,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     }
 
     protected void startReportSection(final AttributeMap attrs, final int role)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws ReportProcessingException
     {
         if (allowBuffering(role))
         {
@@ -804,7 +804,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             throws IOException, DataSourceException, ReportProcessingException;
 
     protected void startGroup(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
     {
         final Object repeatingHeaderOrFooter = attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, "repeating-header-or-footer");
         if (OfficeToken.TRUE.equals(repeatingHeaderOrFooter))
@@ -821,12 +820,10 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     }
 
     protected void startGroupInstance(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
     {
     }
 
     protected void startGroupBody(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
     {
     }
 
@@ -993,12 +990,11 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     }
 
     protected void endGroupBody(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws IOException
     {
     }
 
     protected void endGroupInstance(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
     {
     }
 
@@ -1012,7 +1008,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
     protected void endReportSection(final AttributeMap attrs,
             final int role)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws IOException, ReportProcessingException
     {
         if (allowBuffering(role))
         {
@@ -1021,7 +1017,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     }
 
     protected void endGroup(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws ReportProcessingException
     {
     }
 
@@ -1029,7 +1025,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             throws IOException, DataSourceException, ReportProcessingException;
 
     protected void endBody(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws IOException
     {
         getXmlWriter().writeCloseTag();
     }
@@ -1167,7 +1163,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
     }
 
-    public BufferState finishBuffering() throws ReportProcessingException
+    public BufferState finishBuffering()
     {
         final BufferState state = (BufferState) xmlWriters.pop();
         try

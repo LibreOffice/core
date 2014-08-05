@@ -18,7 +18,6 @@
 
 package ifc.registry;
 
-import com.sun.star.registry.CannotRegisterImplementationException;
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.RuntimeException;
@@ -62,7 +61,7 @@ public class _XImplementationRegistration extends MultiMethodTest {
     *
     */
     public void _registerImplementation()
-        throws CannotRegisterImplementationException, RuntimeException
+        throws RuntimeException
     {
         url = util.utils.getFullTestURL("qadevlibs/MyPersistObjectImpl.jar");
         loader = "com.sun.star.loader.Java2";

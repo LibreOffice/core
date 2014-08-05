@@ -351,9 +351,6 @@ public class OOoBean
         the currently displayed document.
      */
     public synchronized void clearDocument( boolean bClearStateToo )
-        throws
-            com.sun.star.util.CloseVetoException,
-            NoConnectionException
     {
         // TBD
         clear();
@@ -1036,8 +1033,6 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         {@link #setAllBarsVisible setAllBarsVisible}.
      */
     protected void applyToolVisibilities()
-        throws
-            java.lang.InterruptedException
     {
         bIgnoreVisibility = true;
         setMenuBarVisible( bMenuBarVisible );

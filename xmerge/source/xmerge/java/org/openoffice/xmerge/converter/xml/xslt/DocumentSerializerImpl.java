@@ -42,15 +42,11 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.Source;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-// Imported java classes
-import java.io.FileNotFoundException;
 
 /**
  *  <p>Xslt implementation of
@@ -227,7 +223,7 @@ public final class DocumentSerializerImpl
     }
 
 
-    /*
+    /**
      * This method performs the sxl transformation on the supplied <code>
      * Document</code> and returns a <code>DOMResult</code> object.
      *
@@ -235,15 +231,9 @@ public final class DocumentSerializerImpl
      *
      * @return baos A <code>ByteArrayOutputStream</code> object containing
      *               the result of the Xslt transformation.
-     * @throws TransformerException,TransformerConfigurationException
-     *        , FileNotFoundException,IOException
-     *
      */
-
-
     private ByteArrayOutputStream transform(org.w3c.dom.Document domDoc)
-       throws TransformerException,TransformerConfigurationException
-          , FileNotFoundException,IOException{
+    {
        ConverterInfo ci = pluginFactory.getConverterInfo();
        ByteArrayOutputStream baos= new ByteArrayOutputStream();
        try{

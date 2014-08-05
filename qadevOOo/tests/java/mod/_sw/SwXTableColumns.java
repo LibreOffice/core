@@ -92,13 +92,7 @@ public class SwXTableColumns extends TestCase {
 
         log.println( "creating a test environment" );
 
-        try {
-            oTable = SOfficeFactory.createTextTable( xTextDoc );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create TextTable: "
-                +e.getMessage(),e);
-        }
+        oTable = SOfficeFactory.createTextTable( xTextDoc );
 
         try {
             SOfficeFactory.insertTextContent(xTextDoc, oTable );

@@ -148,7 +148,7 @@ public class CopyTableWizard extends CRMBasedTestCase
         }
     }
 
-    private void copyTable(final String tableName, final XConnection sourceConnection, final XConnection destConnection) throws Exception, IOException, java.lang.Exception
+    private void copyTable(final String tableName, final XConnection sourceConnection, final XConnection destConnection) throws Exception, java.lang.Exception
     {
 
         final XInteractionHandler interAction = new CopyTableInterActionHandler();

@@ -198,14 +198,6 @@ class ScriptImpl implements XScript
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.MALFORMED_URL );
             }
-            catch ( NoSuitableClassLoaderException nsc )
-            {
-                // Framework error
-                throw new ScriptFrameworkErrorException(
-                    nsc.getMessage(), null,
-                    metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
-            }
             // Set class loader to be used for class files
             // and jar files
             Thread.currentThread().setContextClassLoader(cl);

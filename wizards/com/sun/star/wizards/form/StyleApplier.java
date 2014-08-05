@@ -64,7 +64,7 @@ public class StyleApplier
     private final static int SOBORDERCOLOR = 5;
     private Short IBorderValue = new Short((short) 1);
 
-    public StyleApplier(WizardDialog _CurUnoDialog, FormDocument _curFormDocument) throws NoValidPathException
+    public StyleApplier(WizardDialog _CurUnoDialog, FormDocument _curFormDocument)
     {
             this.curFormDocument = _curFormDocument;
             xMSF = curFormDocument.xMSF;

@@ -98,7 +98,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void after() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void after() throws java.lang.Exception
     {
         closeDocument();
     }

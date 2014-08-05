@@ -105,7 +105,7 @@ public class CRMDatabase
     }
 
 
-    public void saveAndClose() throws SQLException, IOException
+    public void saveAndClose() throws IOException
     {
         XDatabaseDocumentUI ui = getDocumentUI();
         if ( ui != null )

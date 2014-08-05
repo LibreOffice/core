@@ -40,7 +40,6 @@ import org.jfree.layouting.namespace.Namespaces;
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.JFreeReportBoot;
 import org.jfree.report.JFreeReportInfo;
-import org.jfree.report.ReportProcessingException;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Section;
@@ -82,7 +81,7 @@ public class StylesWriter
 
     public void writeContentStyles(final OfficeStylesCollection predefined,
             final OfficeStylesCollection globals)
-            throws IOException, ReportProcessingException
+            throws IOException
     {
         writeFontFaces(new OfficeStylesCollection[]
                 {
@@ -96,7 +95,7 @@ public class StylesWriter
 
     public void writeGlobalStyles(final OfficeStylesCollection predefined,
             final OfficeStylesCollection globals)
-            throws IOException, ReportProcessingException
+            throws IOException
     {
         if (writeOpeningTag)
         {

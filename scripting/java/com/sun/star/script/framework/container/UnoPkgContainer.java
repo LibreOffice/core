@@ -137,7 +137,7 @@ public class UnoPkgContainer extends ParcelContainer
         LogUtils.DEBUG("Leaving deRegisterPackageContainer for " + url );
     }
 
-    private void init() throws com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
+    private void init() throws com.sun.star.lang.IllegalArgumentException
     {
         LogUtils.DEBUG("getting container for  " + containerUrl );
         DeployedUnoPackagesDB db =  null;

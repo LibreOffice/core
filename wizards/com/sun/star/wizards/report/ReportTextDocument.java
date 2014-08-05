@@ -346,7 +346,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         }
     }
 
-    public void updateTextSections(String[] SelGroupNames) throws Exception
+    public void updateTextSections(String[] SelGroupNames)
     {
         String TableName;
         DBColumn OldDBColumn;
@@ -395,47 +395,40 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
 
     public void insertColumnstoRecordTable()
     {
-        try
+        int GroupCount = CurDBMetaData.GroupFieldNames.length;
+        DBColumn CurDBColumn;
+        // Note for some reason the table might lose its name and has to be renamed therefor
+        String OldTableName = CurRecordTable.xTableName.getName();
+        if (OldTableName.compareTo(TBLRECORDSECTION) != 0)
         {
-            int GroupCount = CurDBMetaData.GroupFieldNames.length;
-            DBColumn CurDBColumn;
-            // Note for some reason the table might lose its name and has to be renamed therefor
-            String OldTableName = CurRecordTable.xTableName.getName();
-            if (OldTableName.compareTo(TBLRECORDSECTION) != 0)
-            {
-                CurRecordTable = new RecordTable(oTextTableHandler);
-            }
-            com.sun.star.table.XTableColumns xColumns = CurRecordTable.xTextTable.getColumns();
-            int ColCount = xColumns.getCount();
-            int RecordCount = CurDBMetaData.getRecordFieldNames().length;
-            if (ColCount > RecordCount)
-            {
-                int RemoveCount = ColCount - RecordCount;
-                xColumns.removeByIndex(0, RemoveCount);
-            }
-            else if (ColCount < RecordCount)
-            {
-                int AddCount = RecordCount - ColCount;
-                CurRecordTable.xTextTable.getColumns().insertByIndex(ColCount, AddCount);
-            }
-            for (int i = 0; i < RecordCount; i++)
-            {
-                CurDBColumn = new DBColumn(CurRecordTable, oTextTableHandler, CurDBMetaData, i, true);
-                CurDBColumn.initializeNumberFormat();
-                CurDBColumn.insertColumnData(oTextFieldHandler, this.bIsCurLandscape);
-                if (DBColumnsVector.size() <= (i + GroupCount))
-                {
-                    DBColumnsVector.add(CurDBColumn);
-                }
-                else
-                {
-                    DBColumnsVector.set(i + GroupCount, CurDBColumn);
-                }
-            }
+            CurRecordTable = new RecordTable(oTextTableHandler);
         }
-        catch (Exception exception)
+        com.sun.star.table.XTableColumns xColumns = CurRecordTable.xTextTable.getColumns();
+        int ColCount = xColumns.getCount();
+        int RecordCount = CurDBMetaData.getRecordFieldNames().length;
+        if (ColCount > RecordCount)
         {
-            showCommonReportErrorBox(exception);
+            int RemoveCount = ColCount - RecordCount;
+            xColumns.removeByIndex(0, RemoveCount);
+        }
+        else if (ColCount < RecordCount)
+        {
+            int AddCount = RecordCount - ColCount;
+            CurRecordTable.xTextTable.getColumns().insertByIndex(ColCount, AddCount);
+        }
+        for (int i = 0; i < RecordCount; i++)
+        {
+            CurDBColumn = new DBColumn(CurRecordTable, oTextTableHandler, CurDBMetaData, i, true);
+            CurDBColumn.initializeNumberFormat();
+            CurDBColumn.insertColumnData(oTextFieldHandler, this.bIsCurLandscape);
+            if (DBColumnsVector.size() <= (i + GroupCount))
+            {
+                DBColumnsVector.add(CurDBColumn);
+            }
+            else
+            {
+                DBColumnsVector.set(i + GroupCount, CurDBColumn);
+            }
         }
     }
 
@@ -473,23 +466,16 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         removeGroupNamesofRecordTable(NewSelGroupNames.length + 1);
         FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByTitle(CurGroupTitle);
         GroupFieldVector.remove(CurFieldColumn.getFieldName());
-        try
+        oTextSectionHandler.removeLastTextSection();
+        oTextTableHandler.removeLastTextTable();
+        // if the previously selected item is somewhere in the middle of the listbox (and not at the end) the
+        // Textsections have to be updated
+        if (JavaTools.FieldInList(NewSelGroupNames, CurGroupTitle) == -1)
         {
-            oTextSectionHandler.removeLastTextSection();
-            oTextTableHandler.removeLastTextTable();
-            // if the previously selected item is somewhere in the middle of the listbox (and not at the end) the
-            // Textsections have to be updated
-            if (JavaTools.FieldInList(NewSelGroupNames, CurGroupTitle) == -1)
-            {
-                updateTextSections(NewSelGroupNames);
-            }
-            int iSelItemCount = NewSelGroupNames.length;
-            DBColumnsVector.remove(iSelItemCount);
+            updateTextSections(NewSelGroupNames);
         }
-        catch (Exception exception)
-        {
-            showCommonReportErrorBox(exception);
-        }
+        int iSelItemCount = NewSelGroupNames.length;
+        DBColumnsVector.remove(iSelItemCount);
     }
 
     public void removeGroupNamesofRecordTable(int GroupFieldCount)

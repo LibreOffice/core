@@ -50,7 +50,6 @@ public class Factory_Test
     }
 
     public Factory_Test( XComponentContext xContext )
-        throws com.sun.star.uno.Exception
     {
         if (null == xContext.getValueByName( "/singletons/com.sun.star.lang.theServiceManager" ))
         {
@@ -60,7 +59,6 @@ public class Factory_Test
     }
 
     public static Object __create( XComponentContext xContext )
-        throws com.sun.star.uno.Exception
     {
         return new Factory_Test( xContext );
     }

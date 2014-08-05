@@ -52,7 +52,7 @@ public class WikiArticle
 
     /** Creates a new instance of WikiArticle */
     public WikiArticle( XComponentContext xContext, String sTitle, Map<String,String> wikiSettings, boolean bLogin, WikiPropDialog aPropDialog )
-        throws java.net.MalformedURLException, com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
+        throws java.net.MalformedURLException, java.io.IOException, WikiCancelException
     {
         m_xContext = xContext;
 
@@ -117,7 +117,7 @@ public class WikiArticle
     }
 
     private String getArticleWiki()
-        throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
+        throws java.io.IOException, WikiCancelException
     {
         String sWikiCode = null;
 
@@ -161,7 +161,7 @@ public class WikiArticle
     }
 
     private void InitArticleHTML()
-        throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
+        throws java.io.IOException, WikiCancelException
     {
         if ( m_aHostConfig != null )
         {
@@ -197,7 +197,7 @@ public class WikiArticle
     }
 
     protected boolean setArticle( String sWikiCode, String sWikiComment, boolean bMinorEdit )
-        throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
+        throws java.io.IOException, WikiCancelException
     {
         boolean bResult = false;
 
@@ -238,7 +238,7 @@ public class WikiArticle
     }
 
     protected boolean Login()
-        throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
+        throws java.io.IOException, WikiCancelException
     {
         m_aHostConfig = Helper.Login( m_aMainURI, m_sWikiUser, m_sWikiPass, m_xContext );
         return ( m_aHostConfig != null );

@@ -878,7 +878,7 @@ public class OpenOfficePostscriptCreator implements IOffice
         }
 
 
-    public void convertDocument(String _sInputFile, String _sOutputPath, ParameterHelper _aGTA) throws OfficeException
+    public void convertDocument(String _sInputFile, String _sOutputPath, ParameterHelper _aGTA)
         {
             XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();
             if (xMSF == null)

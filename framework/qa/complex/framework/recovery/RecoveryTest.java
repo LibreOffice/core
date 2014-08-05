@@ -281,12 +281,7 @@ public class RecoveryTest extends ComplexTestCase {
             if (cancel) {
                 log.println("clicking 'Cancel' button...");
 
-                try{
-                    rt.clickThreadButton(xMSF, xWindow, "Cancel");
-                } catch (com.sun.star.accessibility.IllegalAccessibleComponentStateException e){
-                    failed("Could not click 'Cancel' at CrashReporter Dialog");
-                }
-
+                rt.clickThreadButton(xMSF, xWindow, "Cancel");
             }
             else {
                 log.println("clicking 'Next' button...");
@@ -377,11 +372,7 @@ public class RecoveryTest extends ComplexTestCase {
                 if (cancel) {
                     log.println("clicking 'Cancel' button...");
 
-                    try{
-                        rt.clickThreadButton(xMSF, xWindow, "Cancel");
-                    } catch (com.sun.star.accessibility.IllegalAccessibleComponentStateException e){
-                        failed("Could not click 'Cancel' at recovery-dialog.");
-                    }
+                     rt.clickThreadButton(xMSF, xWindow, "Cancel");
 
                 }
                 else {
@@ -394,11 +385,7 @@ public class RecoveryTest extends ComplexTestCase {
             } else {
                     log.println("do not recover: clicking 'Cancel' button...");
 
-                    try{
-                        rt.clickThreadButton(xMSF, xWindow, "Cancel");
-                    } catch (com.sun.star.accessibility.IllegalAccessibleComponentStateException e){
-                        failed("Could not click 'Cancel' at recovery-dialog");
-                    }
+                    rt.clickThreadButton(xMSF, xWindow, "Cancel");
             }
 
         } catch (Exception e){

@@ -76,11 +76,8 @@ public class ConfigurationRead {
      * @param name The hierarchical name of a subnode.
      * @return True, if the node exists.
      */
-    public boolean hasByHieracrhicalName(String name) throws NoSuchElementException,
-                                    com.sun.star.lang.WrappedTargetException {
-
+    public boolean hasByHieracrhicalName(String name) {
         return root.hasByHierarchicalName(name);
-
     }
 
 
@@ -89,7 +86,6 @@ public class ConfigurationRead {
      * @return All elements of the root node.
      */
     public String[] getRootNodeNames() {
-
         XNameAccess xName = UnoRuntime.queryInterface(XNameAccess.class, root);
         String[]names = xName.getElementNames();
         return names;

@@ -42,13 +42,13 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
     }
 
     /* ------------------------------------------------------------------ */
-    public void before() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void before() throws java.lang.Exception
     {
         m_orb = param.getMSF();
     }
 
     /* ------------------------------------------------------------------ */
-    public void after() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void after() throws java.lang.Exception
     {
     }
 

@@ -71,7 +71,7 @@ public class ValueBinding extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void checkBindingProperties() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void checkBindingProperties() throws java.lang.Exception
     {
     }
 

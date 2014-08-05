@@ -300,7 +300,6 @@ public class RecoveryTools {
     }
 
     public void clickThreadButton(XMultiServiceFactory xMSF, XWindow xWindow, String buttonName)
-                throws com.sun.star.accessibility.IllegalAccessibleComponentStateException
     {
         KlickButtonThread kbt = new KlickButtonThread(xMSF, xWindow, buttonName);
         kbt.start();

@@ -210,7 +210,7 @@ public class _XTreeControl extends MultiMethodTest {
         }
     }
 
-    public void _isNodeExpanded() throws ExpandVetoException{
+    public void _isNodeExpanded() {
 
         boolean bOK = true;
 

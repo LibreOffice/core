@@ -49,7 +49,7 @@ public class JdbcLongVarCharTest extends ComplexTestCase
         return "LongVarCharTest";
     }
 
-    public void testLongVarChar() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    public void testLongVarChar()
     {
 
         try

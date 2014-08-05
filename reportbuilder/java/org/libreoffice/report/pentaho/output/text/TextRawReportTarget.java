@@ -1050,7 +1050,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     }
 
     protected void startReportSection(final AttributeMap attrs, final int role)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws ReportProcessingException
     {
         sectionHeight = new LengthCalculator();
         if (role == OfficeDocumentReportTarget.ROLE_TEMPLATE || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
@@ -1099,7 +1099,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     }
 
     protected void startGroup(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
     {
         super.startGroup(attrs);
         final PageContext pageContext = new PageContext(getCurrentContext());
@@ -1136,7 +1135,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     }
 
     protected void startGroupInstance(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
     {
         if (getGroupContext().isGroupWithRepeatingSection())
         {
@@ -1145,7 +1143,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     }
 
     protected void endGroup(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws ReportProcessingException
     {
         if (getGroupContext().isGroupWithRepeatingSection())
         {
@@ -1177,7 +1175,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     }
 
     protected void endReportSection(final AttributeMap attrs, final int role)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws IOException, ReportProcessingException
     {
         if (role == ROLE_TEMPLATE || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
         {
@@ -1386,7 +1384,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     }
 
     protected void endGroupBody(final AttributeMap attrs)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws IOException
     {
         if (tableLayoutConfig == TABLE_LAYOUT_SINGLE_DETAIL_TABLE && detailBandProcessingState == DETAIL_SECTION_OTHER_PRINTED)
         {

@@ -241,7 +241,7 @@ public class SOfficeFactory {
      * creates a simple TextTable defaultet to 2 rows and 2 columns
      */
     public static XTextTable createTextTable(XTextDocument xTextDoc)
-        throws com.sun.star.uno.Exception {
+    {
 
         TableDsc tDsc = new TableDsc();
         InstCreator instCreate = new InstCreator(xTextDoc, tDsc);
@@ -255,7 +255,7 @@ public class SOfficeFactory {
      */
     public static XTextTable createTextTable(XTextDocument xTextDoc,
         int rows, int columns)
-        throws com.sun.star.uno.Exception {
+    {
 
         TableDsc tDsc = new TableDsc(rows, columns);
         InstCreator instCreate = new InstCreator(xTextDoc, tDsc);
@@ -269,7 +269,7 @@ public class SOfficeFactory {
      * ... to be continued
      */
     public static XTextFrame createTextFrame(XTextDocument xTextDoc)
-        throws com.sun.star.uno.Exception {
+    {
 
         FrameDsc tDsc = new FrameDsc();
         InstCreator instCreate = new InstCreator(xTextDoc, tDsc);
@@ -293,7 +293,7 @@ public class SOfficeFactory {
     }
 
     public static void insertString(XTextDocument xTextDoc, String cString)
-        throws com.sun.star.uno.Exception {
+    {
         XText xText = xTextDoc.getText();
         XText oText = UnoRuntime.queryInterface(
             XText.class, xText);
@@ -328,7 +328,7 @@ public class SOfficeFactory {
      * the method createBookmark
      */
     public static XTextContent createBookmark(XTextDocument xTextDoc)
-        throws com.sun.star.uno.Exception {
+    {
 
         BookmarkDsc tDsc = new BookmarkDsc();
         InstCreator instCreate = new InstCreator(xTextDoc, tDsc);
@@ -342,7 +342,7 @@ public class SOfficeFactory {
      * the method createReferenceMark
      */
     public static XTextContent createReferenceMark(XTextDocument xTextDoc)
-        throws com.sun.star.uno.Exception {
+    {
 
         ReferenceMarkDsc tDsc = new ReferenceMarkDsc();
         InstCreator instCreate = new InstCreator(xTextDoc, tDsc);
@@ -356,7 +356,7 @@ public class SOfficeFactory {
      * the method createFootnote
      */
     public static XTextContent createFootnote(XTextDocument xTextDoc)
-        throws com.sun.star.uno.Exception {
+    {
 
         FootnoteDsc tDsc = new FootnoteDsc();
         InstCreator instCreate = new InstCreator(xTextDoc, tDsc);

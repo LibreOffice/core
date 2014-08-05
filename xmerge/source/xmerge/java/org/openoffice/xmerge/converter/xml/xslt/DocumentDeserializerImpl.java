@@ -20,7 +20,6 @@ package org.openoffice.xmerge.converter.xml.xslt;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -28,7 +27,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
@@ -138,18 +136,14 @@ public final class DocumentDeserializerImpl
         return null;
     }
 
-     /*
+     /**
      * This method performs the xslt transformation on the supplied Dom Tree.
      *
      *  Xslt transformation code
      *
-     * @throws TransformerException,TransformerConfigurationException
-     *        , FileNotFoundException,IOException
-     *
      */
     private ByteArrayOutputStream  transform(org.w3c.dom.Document xmlDoc)
-       throws TransformerException,TransformerConfigurationException
-          , FileNotFoundException,IOException{
+    {
 
        log("\nTransforming...");
        ConverterInfo ci = pluginFactory.getConverterInfo();

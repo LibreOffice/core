@@ -59,7 +59,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    public void before() throws com.sun.star.uno.Exception, java.lang.Exception
+    public void before() throws java.lang.Exception
     {
         m_orb = param.getMSF();
     }

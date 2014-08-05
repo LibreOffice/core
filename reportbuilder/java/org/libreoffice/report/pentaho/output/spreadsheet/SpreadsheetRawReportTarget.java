@@ -264,7 +264,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
-    protected void startReportSection(final AttributeMap attrs, final int role) throws IOException, DataSourceException, ReportProcessingException
+    protected void startReportSection(final AttributeMap attrs, final int role) throws ReportProcessingException
     {
         if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) && (!PageSection.isPrintWithReportHeader(attrs) || !PageSection.isPrintWithReportFooter(attrs)))
         {
@@ -276,7 +276,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
-    protected void endReportSection(final AttributeMap attrs, final int role) throws IOException, DataSourceException, ReportProcessingException
+    protected void endReportSection(final AttributeMap attrs, final int role) throws IOException, ReportProcessingException
     {
         if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) && (!PageSection.isPrintWithReportHeader(attrs) || !PageSection.isPrintWithReportFooter(attrs)))
         {

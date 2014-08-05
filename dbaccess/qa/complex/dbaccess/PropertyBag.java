@@ -203,7 +203,7 @@ public class PropertyBag extends TestCase
     }
 
     @Test
-    public void checkDynamicSet() throws com.sun.star.uno.Exception
+    public void checkDynamicSet()
     {
         System.out.println( "checking proper dynamic of the set" );
         createStandardBag( false );

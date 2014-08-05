@@ -309,10 +309,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
     private void fillParameter(final Map parameters,
             final XRowSet rowSet, final ParameterDefinition paramDef)
             throws SQLException,
-            UnknownPropertyException,
-            PropertyVetoException,
-            IllegalArgumentException,
-            WrappedTargetException
+            IllegalArgumentException
     {
         final ArrayList<?> masterValues = (ArrayList<?>) parameters.get(MASTER_VALUES);
         if (masterValues != null && !masterValues.isEmpty())

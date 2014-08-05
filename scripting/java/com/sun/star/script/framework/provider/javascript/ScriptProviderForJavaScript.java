@@ -196,14 +196,6 @@ class ScriptImpl implements XScript
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.MALFORMED_URL );
             }
-            catch ( com.sun.star.script.framework.provider.NoSuitableClassLoaderException nsc )
-            {
-                // Framework error
-                throw new ScriptFrameworkErrorException(
-                    nsc.getMessage(), null,
-                    metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
-            }
             Context ctxt = null;
 
             try

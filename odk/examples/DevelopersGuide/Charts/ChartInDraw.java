@@ -201,8 +201,7 @@ public class ChartInDraw
 
     public void testThreeD()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
-        com.sun.star.lang.IllegalArgumentException, WrappedTargetException,
-        com.sun.star.lang.IndexOutOfBoundsException
+        com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
         XPropertySet aDiaProp = UnoRuntime.queryInterface( XPropertySet.class, maDiagram );
         Boolean aTrue = new Boolean( true );

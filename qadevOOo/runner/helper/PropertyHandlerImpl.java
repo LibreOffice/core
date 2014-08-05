@@ -17,7 +17,6 @@
  */
 package helper;
 
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.inspection.LineDescriptor;
 import com.sun.star.inspection.XPropertyControlFactory;
 import com.sun.star.inspection.XPropertyHandler;
@@ -240,7 +239,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     /**
      * This method currently does nothing
      */
-    public void describePropertyLine(String string, LineDescriptor[] lineDescriptor, XPropertyControlFactory xPropertyControlFactory) throws UnknownPropertyException, com.sun.star.lang.NullPointerException {
+    public void describePropertyLine(String string, LineDescriptor[] lineDescriptor, XPropertyControlFactory xPropertyControlFactory) {
     }
 
 }

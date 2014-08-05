@@ -27,7 +27,7 @@ public class GlobalFile {
   * return null.
   */
     public static File createTempDir(String prefix, String directory)
-            throws IOException {
+    {
         File f = null;
         String tempDir;
         boolean isCreated = false;

@@ -85,15 +85,10 @@ public class SwXBookmarks extends TestCase {
         XInterface oObj = null;
 
         log.println( "creating a test environment" );
-        try {
-            oObj = SOfficeFactory.createBookmark( xTextDoc );
-            SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) oObj );
-            oObj = SOfficeFactory.createBookmark( xTextDoc );
-            SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) oObj );
-        } catch( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create Bookmark", e );
-        }
+        oObj = SOfficeFactory.createBookmark( xTextDoc );
+        SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) oObj );
+        oObj = SOfficeFactory.createBookmark( xTextDoc );
+        SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) oObj );
 
         XBookmarksSupplier oBSupp = UnoRuntime.queryInterface(XBookmarksSupplier.class, xTextDoc);
         XNameAccess oBookNA = oBSupp.getBookmarks();

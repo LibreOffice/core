@@ -147,7 +147,6 @@ public class DesktopTerminate
     }
 
     @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
     {
         System.out.println("tearDownConnection()");
         // don't do a tearDown here, desktop is already terminated.

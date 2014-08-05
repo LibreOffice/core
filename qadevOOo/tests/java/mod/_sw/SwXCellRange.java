@@ -92,14 +92,8 @@ public class SwXCellRange extends TestCase {
 
         XTextTable the_table = null;
         XInterface oObj = null;
-        try {
-            the_table = SOfficeFactory.createTextTable( xTextDoc );
-            the_table.initialize(5, 5);
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create testobj: "
-                +e.getMessage(),e);
-        }
+        the_table = SOfficeFactory.createTextTable( xTextDoc );
+        the_table.initialize(5, 5);
 
         if( SOfficeFactory.getTableCollection( xTextDoc ).getCount() == 0 ) {
             try {

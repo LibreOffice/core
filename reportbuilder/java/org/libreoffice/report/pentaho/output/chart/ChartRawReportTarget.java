@@ -99,12 +99,11 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
     }
 
     protected void startReportSection(final AttributeMap attrs, final int role)
-            throws IOException, DataSourceException, ReportProcessingException
+            throws ReportProcessingException
     {
     }
 
     protected void endReportSection(final AttributeMap attrs, final int role)
-            throws IOException, DataSourceException, ReportProcessingException
     {
     }
 

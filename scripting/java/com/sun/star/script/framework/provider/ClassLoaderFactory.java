@@ -31,7 +31,6 @@ public class ClassLoaderFactory
     private ClassLoaderFactory() {}
 
     public static ClassLoader getURLClassLoader( ScriptMetaData scriptData )
-        throws NoSuitableClassLoaderException, MalformedURLException
     {
         ClassLoader parent = scriptData.getClass().getClassLoader();
         URL[] classPath = scriptData.getClassPath();

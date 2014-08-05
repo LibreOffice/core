@@ -54,7 +54,7 @@ public class OfficeResourceLoader
     }
 
     /* ------------------------------------------------------------------ */
-    @After public void after() throws com.sun.star.uno.Exception, java.lang.Exception
+    @After public void after() throws java.lang.Exception
     {
     }
 
@@ -94,7 +94,7 @@ public class OfficeResourceLoader
     }
 
     /* ------------------------------------------------------------------ */
-    @Test public void checkLocales() throws com.sun.star.uno.Exception, java.lang.Exception
+    @Test public void checkLocales() throws java.lang.Exception
     {
         // en-US bundle (should always be built and thus present and thus found)
         m_bundle = m_loader.loadBundle( "orl", new Locale( "en", "US", "" ) );

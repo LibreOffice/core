@@ -84,14 +84,8 @@ public class SwXTextTable extends TestCase {
         TestEnvironment tEnv = null;
         Object instance = null;
 
-        try {
-            oObj = SOfficeFactory.createTextTable(xTextDoc);
-            instance = SOfficeFactory.createTextTable(xTextDoc);
-        } catch (com.sun.star.uno.Exception uE) {
-            uE.printStackTrace(log);
-            throw new StatusException("Couldn't create testobj : " +
-                                      uE.getMessage(), uE);
-        }
+        oObj = SOfficeFactory.createTextTable(xTextDoc);
+        instance = SOfficeFactory.createTextTable(xTextDoc);
 
         int nRow = 6;
         int nCol = 2;

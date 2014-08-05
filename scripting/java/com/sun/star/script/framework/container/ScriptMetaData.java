@@ -235,7 +235,7 @@ public class ScriptMetaData extends ScriptEntry {
         return "\nParcelLocation = " + getParcelLocation() + "\nLocationPlaceHolder = " + locationPlaceHolder + super.toString();
     }
 
-    public URL[] getClassPath() throws java.net.MalformedURLException
+    public URL[] getClassPath()
     {
     try
     {

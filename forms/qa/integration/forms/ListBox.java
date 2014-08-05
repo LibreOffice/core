@@ -31,7 +31,6 @@ import com.sun.star.form.runtime.FormFeature;
 import com.sun.star.form.runtime.XFormController;
 import com.sun.star.form.runtime.XFormOperations;
 import com.sun.star.sdb.CommandType;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XParameters;
 import com.sun.star.sdbc.XPreparedStatement;
 import com.sun.star.uno.Exception;
@@ -140,7 +139,7 @@ public class ListBox extends TestCase
     }
 
     /* ------------------------------------------------------------------ */
-    private String[] impl_getTypedValue( final String _asType, final int _rowNum ) throws SQLException
+    private String[] impl_getTypedValue( final String _asType, final int _rowNum )
     {
         Map< String, String[] > valueMap = new HashMap< String, String[] >();
         valueMap.put( "bigint",     new String[] { "1111111111", "222222222" } );

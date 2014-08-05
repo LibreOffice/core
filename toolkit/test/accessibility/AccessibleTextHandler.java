@@ -476,7 +476,7 @@ class AccessibleTextHandler extends NodeHandler
 /**
  * Display a dialog with a text field and a pair of cancel/do-it buttons
  */
-class TextActionDialog extends JDialog
+abstract class TextActionDialog extends JDialog
     implements ActionListener
 {
     AccTreeNode aNode;
@@ -588,11 +588,8 @@ class TextActionDialog extends JDialog
 
 
     /** override this for dialog-specific action */
-    boolean action( JTextComponent aText, AccTreeNode aNode )
-        throws IndexOutOfBoundsException
-    {
-        return false;
-    }
+    abstract boolean action( JTextComponent aText, AccTreeNode aNode )
+        throws IndexOutOfBoundsException;
 }
 
 

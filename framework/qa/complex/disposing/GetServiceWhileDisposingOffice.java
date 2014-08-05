@@ -87,7 +87,6 @@ public class GetServiceWhileDisposingOffice
 
     @AfterClass
     public static void tearDownConnection()
-            throws InterruptedException, com.sun.star.uno.Exception
     {
         System.out.println("tearDownConnection()");
         // Office is already terminated.

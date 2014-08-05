@@ -123,7 +123,7 @@ public class TextFieldHandler
         return xPSet;
     }
 
-    private XDependentTextField[] getTextFieldsByProperty(String _PropertyName, Object _aPropertyValue, String _TypeName) throws Exception
+    private XDependentTextField[] getTextFieldsByProperty(String _PropertyName, Object _aPropertyValue, String _TypeName)
     {
         try
         {
@@ -285,20 +285,13 @@ public class TextFieldHandler
 
     public void removeUserFieldByContent(String _FieldContent)
     {
-        try
+        XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("Content", _FieldContent, "String");
+        if (xDependentTextFields != null)
         {
-            XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("Content", _FieldContent, "String");
-            if (xDependentTextFields != null)
+            for (int i = 0; i < xDependentTextFields.length; i++)
             {
-                for (int i = 0; i < xDependentTextFields.length; i++)
-                {
-                    xDependentTextFields[i].dispose();
-                }
+                xDependentTextFields[i].dispose();
             }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
         }
     }
 

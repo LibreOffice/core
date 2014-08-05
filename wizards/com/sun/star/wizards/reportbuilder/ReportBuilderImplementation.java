@@ -37,7 +37,6 @@ import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XModifiable;
 import com.sun.star.util.XURLTransformer;
-import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.FieldColumn;
 import java.lang.reflect.Constructor;
@@ -504,16 +503,9 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
         if (m_aReportPath == null)
         {
-            try
-            {
-                // Check general availability of office paths
-                m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
-                FileAccess.combinePaths(getMSF(), m_aReportPath, "/wizard/report");
-            }
-            catch (NoValidPathException ex)
-            {
-                Logger.getLogger(ReportBuilderImplementation.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            // Check general availability of office paths
+            m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
+            FileAccess.combinePaths(getMSF(), m_aReportPath, "/wizard/report");
         }
         return m_aReportPath;
     }

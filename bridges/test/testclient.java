@@ -62,7 +62,7 @@ class MyCallMe implements XCallMe
         }
 
     // Methods
-    public void call( /*IN*/String s, /*IN*/int nToDo ) throws test.TestBridgeException, com.sun.star.uno.RuntimeException
+    public void call( /*IN*/String s, /*IN*/int nToDo ) throws com.sun.star.uno.RuntimeException
         {
 
         }

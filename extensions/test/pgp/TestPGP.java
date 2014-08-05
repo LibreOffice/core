@@ -17,8 +17,6 @@
  */
 
 
-import java.io.IOException;
-
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
@@ -39,7 +37,7 @@ import com.sun.star.uno.XNamingService;
 public class TestPGP {
 
 
-    static void doSomething(Object r) throws com.sun.star.uno.Exception, IOException, Exception {
+    static void doSomething(Object r) throws com.sun.star.uno.Exception, Exception {
         XNamingService rName = UnoRuntime.queryInterface(XNamingService.class, r);
 
         if(rName != null) {

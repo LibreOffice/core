@@ -64,7 +64,7 @@ public class DocumentPreview
         createPreviewFrame(xmsf, xControl);
     }
 
-    protected XComponent setDocument(String url_, String[] propNames, Object[] propValues) throws com.sun.star.lang.IllegalArgumentException, IOException, CloseVetoException
+    protected XComponent setDocument(String url_, String[] propNames, Object[] propValues) throws com.sun.star.lang.IllegalArgumentException, IOException
     {
         url = url_;
 
@@ -77,7 +77,7 @@ public class DocumentPreview
         return setDocument(url, ps.getProperties());
     }
 
-    protected XComponent setDocument(String url, PropertyValue[] lArgs) throws com.sun.star.lang.IllegalArgumentException, IOException, CloseVetoException
+    protected XComponent setDocument(String url, PropertyValue[] lArgs) throws com.sun.star.lang.IllegalArgumentException, IOException
     {
         loadArgs = lArgs;
         XComponentLoader xCompLoader = UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
@@ -100,7 +100,7 @@ public class DocumentPreview
         }
     }
 
-    public XComponent setDocument(String url, int mode) throws com.sun.star.lang.IllegalArgumentException, IOException, CloseVetoException
+    public XComponent setDocument(String url, int mode) throws com.sun.star.lang.IllegalArgumentException, IOException
     {
         switch (mode)
         {

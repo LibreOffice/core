@@ -122,8 +122,7 @@ public class LinguisticExamples
     /** Get the SpellChecker to be used.
     */
     public boolean GetSpell()
-        throws com.sun.star.uno.Exception,
-        com.sun.star.uno.RuntimeException
+        throws com.sun.star.uno.RuntimeException
     {
         if (mxLinguSvcMgr != null)
             mxSpell = mxLinguSvcMgr.getSpellChecker();
@@ -133,8 +132,7 @@ public class LinguisticExamples
     /** Get the Hyphenator to be used.
     */
     public boolean GetHyph()
-        throws com.sun.star.uno.Exception,
-        com.sun.star.uno.RuntimeException
+        throws com.sun.star.uno.RuntimeException
     {
         if (mxLinguSvcMgr != null)
             mxHyph = mxLinguSvcMgr.getHyphenator();
@@ -144,8 +142,7 @@ public class LinguisticExamples
     /** Get the Thesaurus to be used.
     */
     public boolean GetThes()
-        throws com.sun.star.uno.Exception,
-        com.sun.star.uno.RuntimeException
+        throws com.sun.star.uno.RuntimeException
     {
         if (mxLinguSvcMgr != null)
             mxThes = mxLinguSvcMgr.getThesaurus();

@@ -270,7 +270,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
 
-    public short executeDialogWithembeddedExampleSnippets() throws com.sun.star.script.BasicErrorException {
+    public short executeDialogWithembeddedExampleSnippets() {
         if (m_xWindowPeer == null){
             createWindowPeer();
         }
@@ -282,7 +282,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public short executeDialog() throws com.sun.star.script.BasicErrorException {
+    public short executeDialog() {
         if (m_xWindowPeer == null) {
             createWindowPeer();
         }
@@ -299,7 +299,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public void initialize(String[] PropertyNames, Object[] PropertyValues) throws com.sun.star.script.BasicErrorException{
+    public void initialize(String[] PropertyNames, Object[] PropertyValues) {
         try{
             XMultiPropertySet xMultiPropertySet = UnoRuntime.queryInterface(XMultiPropertySet.class, m_xDlgModelNameContainer);
             xMultiPropertySet.setPropertyValues(PropertyNames, PropertyValues);
@@ -317,7 +317,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
      * @return
      * @throws java.lang.Exception
      */
-    public XWindowPeer createWindowPeer(XWindowPeer _xWindowParentPeer) throws com.sun.star.script.BasicErrorException{
+    public XWindowPeer createWindowPeer(XWindowPeer _xWindowParentPeer) {
         try{
             if (_xWindowParentPeer == null){
                 XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, m_xDlgContainer);
@@ -357,7 +357,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
      * @return
      * @throws java.lang.Exception
      */
-    public XWindowPeer createWindowPeer() throws com.sun.star.script.BasicErrorException{
+    public XWindowPeer createWindowPeer() {
         return createWindowPeer(null);
     }
 
@@ -366,7 +366,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public Object insertControlModel(String ServiceName, String sName, String[] sProperties, Object[] sValues) throws com.sun.star.script.BasicErrorException{
+    public Object insertControlModel(String ServiceName, String sName, String[] sProperties, Object[] sValues) {
         try {
             Object oControlModel = m_xMSFDialogModel.createInstance(ServiceName);
             XMultiPropertySet xControlMultiPropertySet = UnoRuntime.queryInterface(XMultiPropertySet.class, oControlModel);

@@ -122,7 +122,7 @@ public class SQLQueryComposer
         }
     }
 
-    public void appendFilterConditions() throws SQLException
+    public void appendFilterConditions()
     {
         try
         {

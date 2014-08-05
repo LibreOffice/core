@@ -20,7 +20,6 @@ package installer;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -69,9 +68,6 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         }
         }
         props = ideProps;
-    }
-        catch (IOException eIO) {
-            System.err.println("Failed to parse .netbeans/ide.log");
         }
         catch (Exception e) {
             System.err.println("Exception thrown in initComponents");

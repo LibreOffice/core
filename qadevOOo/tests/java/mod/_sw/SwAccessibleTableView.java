@@ -71,13 +71,7 @@ public class SwAccessibleTableView extends TestCase {
         XTextTable oTable = null;
 
         SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
-        try {
-            oTable = SOfficeFactory.createTextTable( xTextDoc );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create TextTable : " +
-                e.getMessage(), e);
-        }
+        oTable = SOfficeFactory.createTextTable( xTextDoc );
 
         try {
             SOfficeFactory.insertTextContent(xTextDoc, oTable );

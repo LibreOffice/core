@@ -176,7 +176,7 @@ public class sdbcx
     // 15. example
     // print all columns of a XColumnsSupplier
 
-    public static void printColumns(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception,SQLException
+    public static void printColumns(XColumnsSupplier xColumnsSup)
     {
         System.out.println("Example printColumns");
         // the table must be at least support a XColumnsSupplier interface
@@ -190,7 +190,7 @@ public class sdbcx
     // 16. example
     // print all keys inclusive the columns of a key
 
-    public static void printKeys(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception,SQLException
+    public static void printKeys(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception
     {
         System.out.println("Example printKeys");
         XKeysSupplier xKeysSup = UnoRuntime.queryInterface(XKeysSupplier.class,xColumnsSup);
@@ -212,7 +212,7 @@ public class sdbcx
     // 17. example
     // print all keys inclusive the columns of a key
 
-    public static void printIndexes(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception,SQLException
+    public static void printIndexes(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception
     {
         System.out.println("Example printIndexes");
         XIndexesSupplier xIndexesSup = UnoRuntime.queryInterface(XIndexesSupplier.class,xColumnsSup);
@@ -235,7 +235,7 @@ public class sdbcx
     // 18. example
     // column properties
 
-    public static void printColumnProperties(Object column) throws com.sun.star.uno.Exception,SQLException
+    public static void printColumnProperties(Object column) throws com.sun.star.uno.Exception
     {
         System.out.println("Example printColumnProperties");
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,column);
@@ -260,7 +260,7 @@ public class sdbcx
     // 19. example
     // index properties
 
-    public static void printIndexProperties(Object index) throws com.sun.star.uno.Exception,SQLException
+    public static void printIndexProperties(Object index) throws com.sun.star.uno.Exception
     {
         System.out.println("Example printIndexProperties");
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,index);
@@ -275,7 +275,7 @@ public class sdbcx
     // 20. example
     // key properties
 
-    public static void printKeyProperties(Object key) throws com.sun.star.uno.Exception,SQLException
+    public static void printKeyProperties(Object key) throws com.sun.star.uno.Exception
     {
         System.out.println("Example printKeyProperties");
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,key);

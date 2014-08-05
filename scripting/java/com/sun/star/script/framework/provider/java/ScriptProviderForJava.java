@@ -30,8 +30,6 @@ import com.sun.star.uno.Any;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.net.MalformedURLException;
-
 import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.provider.XScript;
 import com.sun.star.script.provider.ScriptExceptionRaisedException;
@@ -193,28 +191,6 @@ class ScriptImpl implements XScript
                 scriptLoader = ClassLoaderFactory.getURLClassLoader(
                         metaData );
                 LogUtils.DEBUG( "Classloader finished..." );
-            }
-            catch (MalformedURLException mfe )
-            {
-                // Framework error
-                ScriptFrameworkErrorException e2 =
-                    new ScriptFrameworkErrorException(
-                        mfe.toString(), null,
-                        metaData.getLanguageName(), metaData.getLanguage(),
-                        ScriptFrameworkErrorType.MALFORMED_URL );
-                e2.initCause( mfe );
-                throw e2;
-            }
-            catch (NoSuitableClassLoaderException ncl )
-            {
-                // Framework error
-                ScriptFrameworkErrorException e2 =
-                    new ScriptFrameworkErrorException(
-                        ncl.toString(), null,
-                        metaData.getLanguageName(), metaData.getLanguage(),
-                        ScriptFrameworkErrorType.UNKNOWN );
-                e2.initCause( ncl );
-                throw e2;
             }
             catch (ArrayStoreException e )
             {

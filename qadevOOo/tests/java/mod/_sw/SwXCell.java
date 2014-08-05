@@ -91,12 +91,7 @@ public class SwXCell extends TestCase {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         log.println( "creating a test environment" );
-        try {
-            oTable = SOfficeFactory.createTextTable(xTextDoc, 3, 4);
-        } catch ( com.sun.star.uno.Exception e ) {
-            log.println("Unable to create TextTable...");
-            e.printStackTrace(log);
-        }
+        oTable = SOfficeFactory.createTextTable(xTextDoc, 3, 4);
         try {
             SOfficeFactory.insertTextContent( xTextDoc, oTable );
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {

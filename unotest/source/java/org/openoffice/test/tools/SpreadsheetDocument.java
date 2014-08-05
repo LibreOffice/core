@@ -36,7 +36,7 @@ public class SpreadsheetDocument extends OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
-    public SpreadsheetDocument( XMultiServiceFactory orb, XComponent document ) throws com.sun.star.uno.Exception
+    public SpreadsheetDocument( XMultiServiceFactory orb, XComponent document )
     {
         super( orb, document );
     }
@@ -44,7 +44,7 @@ public class SpreadsheetDocument extends OfficeDocument
     /* ------------------------------------------------------------------ */
     /** returns the sheets collection
     */
-    public XSpreadsheets getSheets() throws com.sun.star.uno.Exception
+    public XSpreadsheets getSheets()
     {
         XSpreadsheetDocument spreadsheetDoc = UnoRuntime.queryInterface( XSpreadsheetDocument.class, getDocument() );
         return spreadsheetDoc.getSheets();

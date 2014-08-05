@@ -87,14 +87,9 @@ public class SwXBookmark extends TestCase {
         XInterface oObj = null;
         Object instance = null;
         log.println( "creating a test environment" );
-        try {
-            oObj = SOfficeFactory.createBookmark( xTextDoc );
-            SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) oObj );
-            instance = SOF.createInstance(xTextDoc,"com.sun.star.text.Bookmark");
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create Bookmark", e );
-        }
+        oObj = SOfficeFactory.createBookmark( xTextDoc );
+        SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) oObj );
+        instance = SOF.createInstance(xTextDoc,"com.sun.star.text.Bookmark");
         log.println( "creating a new environment for bodytext object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

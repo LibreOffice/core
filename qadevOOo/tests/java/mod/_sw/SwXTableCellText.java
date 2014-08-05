@@ -117,13 +117,7 @@ public class SwXTableCellText extends TestCase {
         XTextTable oTable = null;
 
         log.println( "Creating a test environment" );
-        try {
-            oTable = SOfficeFactory.createTextTable( xTextDoc );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't create TextTable : "
-                +e.getMessage(),e);
-        }
+        oTable = SOfficeFactory.createTextTable( xTextDoc );
 
         try {
             SOfficeFactory.insertTextContent(xTextDoc, oTable );

@@ -347,7 +347,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
 
-    private void impl_closeDocument(XModel _databaseDoc) throws CloseVetoException, IOException, Exception
+    private void impl_closeDocument(XModel _databaseDoc) throws CloseVetoException, Exception
     {
         final XCloseable closeDoc = UnoRuntime.queryInterface(XCloseable.class, _databaseDoc);
         closeDoc.close(true);
@@ -511,7 +511,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
 
-    private void impl_storeDocument( final XModel _document ) throws Exception, IOException
+    private void impl_storeDocument( final XModel _document ) throws Exception
     {
         // store the document
         final String documentURL = FileHelper.getOOoCompatibleFileURL( _document.getURL() );

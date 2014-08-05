@@ -36,9 +36,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.view.XSelectionSupplier;
-import java.io.IOException;
-
-
 // ---------- junit imports -----------------
 import org.junit.After;
 import org.junit.Before;
@@ -81,7 +78,7 @@ public class Beamer extends TestCase
 
 
     @Test
-    public void testBeamer() throws Exception, IOException, java.lang.Exception
+    public void testBeamer() throws Exception, java.lang.Exception
     {
         final XController controller = docModel.getCurrentController();
         final XFrame frame = controller.getFrame();

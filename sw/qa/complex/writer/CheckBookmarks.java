@@ -101,9 +101,6 @@ public class CheckBookmarks {
     }
 
     @Test public void checkBookmarks()
-        throws com.sun.star.uno.Exception,
-            com.sun.star.io.IOException,
-            java.security.NoSuchAlgorithmException
     {
         actualHashes.assertExpectation(get20111110Expectations());
     }
@@ -170,7 +167,6 @@ public class CheckBookmarks {
     }
 
     private void insertRandomParts(long seed)
-        throws com.sun.star.uno.Exception
     {
         java.util.Random rnd = new java.util.Random(seed);
         XTextCursor xCrsr = m_xDoc.getText().createTextCursor();
@@ -181,7 +177,6 @@ public class CheckBookmarks {
     }
 
     private void deleteRandomParts(long seed)
-        throws com.sun.star.uno.Exception
     {
         java.util.Random rnd = new java.util.Random(seed);
         XTextCursor xCrsr = m_xDoc.getText().createTextCursor();
@@ -193,7 +188,6 @@ public class CheckBookmarks {
     }
 
     private void insertLinebreaks(long seed)
-        throws com.sun.star.uno.Exception
     {
         XText xText = m_xDoc.getText();
         java.util.Random rnd = new java.util.Random(seed);

@@ -65,19 +65,10 @@ public class InstUtil {
 
     public static boolean hasNetbeansInstallation() {
         boolean result = false;
-        try
-        {
-            result = checkForSupportedVersion( getNetbeansLocation(), versions );
+        result = checkForSupportedVersion( getNetbeansLocation(), versions );
 
-            if (result == false)
-                System.out.println("No supported version of NetBeans found.");
-        }
-        catch ( IOException ioe )
-        {
-            System.err.println("Exception caught trying to determine netbeans installation: " + ioe );
-            ioe.printStackTrace();
-            result = false;
-        }
+        if (result == false)
+            System.out.println("No supported version of NetBeans found.");
         return result;
     }
 
@@ -102,26 +93,17 @@ public class InstUtil {
 
     public static boolean hasJeditInstallation() {
         boolean result = false;
-        try
+        result = checkForSupportedVersion( getJeditLocation(), versions );
+        if ( !result )
         {
-            result = checkForSupportedVersion( getJeditLocation(), versions );
-            if ( !result )
-            {
-                System.out.println("No supported version for JEdit found.");
-            }
-        }
-        catch ( IOException ioe )
-        {
-            System.err.println("Exception caught trying to determine jedit installation: " + ioe );
-            ioe.printStackTrace();
-            result = false;
+            System.out.println("No supported version for JEdit found.");
         }
         return result;
     }
 
 
 
-    public static Properties getNetbeansLocation() throws IOException {
+    public static Properties getNetbeansLocation() {
     Properties results = new Properties();
 
     StringBuffer str = new StringBuffer();
@@ -168,7 +150,7 @@ public class InstUtil {
 
 
 
-    public static Properties getJeditLocation() throws IOException {
+    public static Properties getJeditLocation() {
 
     Properties results = new Properties();
 

@@ -779,7 +779,7 @@ public class Helper
     }
 
     static protected HostConfiguration Login( URI aMainURL, String sWikiUser, String sWikiPass, XComponentContext xContext )
-        throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
+        throws java.io.IOException, WikiCancelException
     {
         HostConfiguration aHostConfig = null;
 
