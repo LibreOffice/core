@@ -42,6 +42,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/migratepage \
     dbaccess/uiconfig/ui/mysqlnativepage \
     dbaccess/uiconfig/ui/mysqlnativesettings \
+    dbaccess/uiconfig/ui/namematchingpage \
     dbaccess/uiconfig/ui/odbcpage \
     dbaccess/uiconfig/ui/parametersdialog \
     dbaccess/uiconfig/ui/password \
@@ -62,6 +63,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/tablesjoindialog \
     dbaccess/uiconfig/ui/textconnectionsettings \
     dbaccess/uiconfig/ui/textpage \
+    dbaccess/uiconfig/ui/typeselectpage \
     dbaccess/uiconfig/ui/useradmindialog \
     dbaccess/uiconfig/ui/useradminpage \
 ))
