@@ -344,10 +344,9 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
         }
     }
 
-    sal_uIntPtr nMarkedEdgeAnz = GetMarkedEdgesOfMarkedNodes().GetMarkCount();
-    sal_uInt16 i;
+    const size_t nMarkedEdgeAnz = GetMarkedEdgesOfMarkedNodes().GetMarkCount();
 
-    for (i=0; i<nMarkedEdgeAnz; i++) {
+    for (size_t i=0; i<nMarkedEdgeAnz; ++i) {
         SdrMark* pEM = GetMarkedEdgesOfMarkedNodes().GetMark(i);
         SdrObject* pEdgeTmp=pEM->GetMarkedSdrObj();
         SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pEdgeTmp);
@@ -474,11 +473,11 @@ void SdrEditView::CheckPossibilities()
     if (bPossibilitiesDirty) {
         ImpResetPossibilityFlags();
         SortMarkedObjects();
-        sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
+        const size_t nMarkAnz=GetMarkedObjectCount();
         if (nMarkAnz!=0) {
             bReverseOrderPossible=nMarkAnz>=2;
 
-            sal_uIntPtr nMovableCount=0;
+            size_t nMovableCount=0;
             bGroupPossible=nMarkAnz>=2;
             bCombinePossible=nMarkAnz>=2;
             if (nMarkAnz==1) {
@@ -536,7 +535,7 @@ void SdrEditView::CheckPossibilities()
             bool bNoMovRotFound=false;
             const SdrPageView* pPV0=NULL;
 
-            for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++) {
+            for (size_t nm=0; nm<nMarkAnz; ++nm) {
                 const SdrMark* pM=GetSdrMarkByIndex(nm);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
                 const SdrPageView* pPV=pM->GetPageView();
@@ -655,7 +654,7 @@ void SdrEditView::CheckPossibilities()
 void SdrEditView::ForceMarkedObjToAnotherPage()
 {
     bool bFlg=false;
-    for (sal_uIntPtr nm=0; nm<GetMarkedObjectCount(); nm++) {
+    for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         Rectangle aObjRect(pObj->GetCurrentBoundRect());
@@ -694,18 +693,17 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
             BegUndo();
-        const sal_uInt32 nMarkAnz(rMark.GetMarkCount());
+        const size_t nMarkAnz(rMark.GetMarkCount());
 
         if(nMarkAnz)
         {
-            sal_uInt32 nm(0);
             std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
 
             if( bUndo )
             {
-                for(nm = nMarkAnz; nm > 0;)
+                for(size_t nm = nMarkAnz; nm > 0;)
                 {
-                    nm--;
+                    --nm;
                     SdrMark* pM = rMark.GetMark(nm);
                     SdrObject* pObj = pM->GetMarkedSdrObj();
 
@@ -722,9 +720,9 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
 
             std::vector< SdrObject* > aRemoved3DObjects;
 
-            for(nm = nMarkAnz; nm > 0;)
+            for(size_t nm = nMarkAnz; nm > 0;)
             {
-                nm--;
+                --nm;
                 SdrMark* pM = rMark.GetMark(nm);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
                 SdrObjList*  pOL = pObj->GetObjList();
@@ -792,10 +790,9 @@ void SdrEditView::DeleteMarkedObj()
 
         {
             const SdrMarkList& rMarkList = GetMarkedObjectList();
-            const sal_uInt32 nCount(rMarkList.GetMarkCount());
-            sal_uInt32 a(0);
+            const size_t nCount(rMarkList.GetMarkCount());
 
-            for(a = 0; a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 // in the first run, add all found parents, but only once
                 SdrMark* pMark = rMarkList.GetMark(a);
@@ -826,7 +823,7 @@ void SdrEditView::DeleteMarkedObj()
                 // in a 2nd run, remove all objects which may already be scheduled for
                 // removal. I am not sure if this can happen, but theoretically
                 // a to-be-removed object may already be the group/3DScene itself
-                for(a = 0; a < nCount; a++)
+                for(size_t a = 0; a < nCount; ++a)
                 {
                     SdrMark* pMark = rMarkList.GetMark(a);
                     SdrObject* pObject = pMark->GetMarkedSdrObj();
@@ -883,8 +880,8 @@ void SdrEditView::CopyMarkedObj()
     SdrMarkList aSourceObjectsForCopy(GetMarkedObjectList());
     // The following loop is used instead of MarkList::Merge(), to be
     // able to flag the MarkEntries.
-    sal_uIntPtr nEdgeAnz = GetEdgesOfMarkedNodes().GetMarkCount();
-    for (sal_uIntPtr nEdgeNum=0; nEdgeNum<nEdgeAnz; nEdgeNum++) {
+    const size_t nEdgeAnz = GetEdgesOfMarkedNodes().GetMarkCount();
+    for (size_t nEdgeNum=0; nEdgeNum<nEdgeAnz; ++nEdgeNum) {
         SdrMark aM(*GetEdgesOfMarkedNodes().GetMark(nEdgeNum));
         aM.SetUser(1);
         aSourceObjectsForCopy.InsertEntry(aM);
@@ -898,10 +895,9 @@ void SdrEditView::CopyMarkedObj()
     const bool bUndo = IsUndoEnabled();
 
     GetMarkedObjectListWriteAccess().Clear();
-    sal_uIntPtr nCloneErrCnt=0;
-    sal_uIntPtr nMarkAnz=aSourceObjectsForCopy.GetMarkCount();
-    sal_uIntPtr nm;
-    for (nm=0; nm<nMarkAnz; nm++) {
+    size_t nCloneErrCnt=0;
+    const size_t nMarkAnz=aSourceObjectsForCopy.GetMarkCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm) {
         SdrMark* pM=aSourceObjectsForCopy.GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj()->Clone();
         if (pO!=NULL) {
@@ -929,7 +925,7 @@ void SdrEditView::CopyMarkedObj()
     // New mechanism to re-create the connections of cloned connectors
     aCloneList.CopyConnections();
 
-    if(0L != nCloneErrCnt)
+    if(nCloneErrCnt)
     {
 #ifdef DBG_UTIL
         OStringBuffer aStr("SdrEditView::CopyMarkedObj(): Error when cloning ");

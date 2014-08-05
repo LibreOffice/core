@@ -651,8 +651,8 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles,  bool _bBo
         if ( rView.AreObjectsMarked() )
         {
             rView.SortMarkedObjects();
-            const sal_uInt32 nCount = rView.GetMarkedObjectCount();
-            for (sal_uInt32 i=0; i < nCount; ++i)
+            const size_t nCount = rView.GetMarkedObjectCount();
+            for (size_t i=0; i < nCount; ++i)
             {
                 const SdrMark* pM = rView.GetSdrMarkByIndex(i);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
@@ -1074,8 +1074,8 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
 
         if ( rView.AreObjectsMarked() )
         {
-            const sal_uInt32 nCount = rView.GetMarkedObjectCount();
-            for (sal_uInt32 i=0; i < nCount; ++i)
+            const size_t nCount = rView.GetMarkedObjectCount();
+            for (size_t i=0; i < nCount; ++i)
             {
                 const SdrMark* pM = rView.GetSdrMarkByIndex(i);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
@@ -1433,7 +1433,7 @@ sal_uInt32 OViewsWindow::getMarkedObjectCount() const
     TSectionsMap::const_iterator aIter = m_aSections.begin();
     TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (; aIter != aEnd; ++aIter)
-        nCount += (*aIter)->getReportSection().getSectionView().GetMarkedObjectCount();
+        nCount += static_cast<sal_uInt32>((*aIter)->getReportSection().getSectionView().GetMarkedObjectCount());
     return nCount;
 }
 
@@ -1518,7 +1518,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                         }
                         bool bCheck = false;
                         const SdrMarkList& rMarkList = rView.GetMarkedObjectList();
-                        for (sal_uInt32 i =  0; !bCheck && i < rMarkList.GetMarkCount();++i )
+                        for (size_t i = 0; !bCheck && i < rMarkList.GetMarkCount(); ++i )
                         {
                             SdrMark* pMark = rMarkList.GetMark(i);
                             bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL|| dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
@@ -1606,7 +1606,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                         Rectangle aNewRect;
                         bool bCheck = false;
                         const SdrMarkList& rMarkList = rView.GetMarkedObjectList();
-                        for (sal_uInt32 i =  0; !bCheck && i < rMarkList.GetMarkCount();++i )
+                        for (size_t i = 0; !bCheck && i < rMarkList.GetMarkCount(); ++i )
                         {
                             SdrMark* pMark = rMarkList.GetMark(i);
                             bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL || dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj()) != NULL;

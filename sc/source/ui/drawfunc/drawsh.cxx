@@ -106,7 +106,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
     SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
     SdrObject* pSingleSelectedObj = NULL;
     if ( nMarkCount > 0 )
         pSingleSelectedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();

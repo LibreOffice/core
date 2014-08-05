@@ -319,9 +319,9 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
             if( mpView )
             {
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-                const sal_uInt32 nCount = rMarkList.GetMarkCount();
+                const size_t nCount = rMarkList.GetMarkCount();
 
-                for(sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+                for(size_t nNum = 0; nNum < nCount; ++nNum)
                 {
                     SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
                     if( pObj->GetObjInventor() == SdrInventor )

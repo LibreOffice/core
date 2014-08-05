@@ -851,10 +851,10 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 bRet=MarkNextObj(aLogicPos,nHitTolLog,rVEvt.bMarkPrev);
             } else {
                 SortMarkedObjects();
-                sal_uIntPtr nAnz0=GetMarkedObjectCount();
+                const size_t nAnz0=GetMarkedObjectCount();
                 bRet=MarkObj(aLogicPos,nHitTolLog,rVEvt.bAddMark);
                 SortMarkedObjects();
-                sal_uIntPtr nAnz1=GetMarkedObjectCount();
+                const size_t nAnz1=GetMarkedObjectCount();
                 bUnmark=nAnz1<nAnz0;
             }
             if (!bUnmark) {
@@ -1073,7 +1073,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
 
                 // are 3D objects selected?
                 bool b3DObjSelected = false;
-                for (sal_uInt32 a=0; !b3DObjSelected && a<GetMarkedObjectCount(); a++) {
+                for (size_t a=0; !b3DObjSelected && a<GetMarkedObjectCount(); ++a) {
                     SdrObject* pObj = GetMarkedObjectByIndex(a);
                     if(pObj && pObj->ISA(E3dObject))
                         b3DObjSelected = true;
@@ -1298,12 +1298,12 @@ SdrViewContext SdrView::GetContext() const
     if( IsGluePointEditMode() )
         return SDRCONTEXT_GLUEPOINTEDIT;
 
-    const sal_uIntPtr nMarkAnz = GetMarkedObjectCount();
+    const size_t nMarkAnz = GetMarkedObjectCount();
 
     if( HasMarkablePoints() && !IsFrameHandles() )
     {
         bool bPath=true;
-        for( sal_uIntPtr nMarkNum = 0; nMarkNum < nMarkAnz && bPath; nMarkNum++ )
+        for( size_t nMarkNum = 0; nMarkNum < nMarkAnz && bPath; ++nMarkNum )
             if (!GetMarkedObjectByIndex(nMarkNum)->ISA(SdrPathObj))
                 bPath=false;
 
@@ -1315,7 +1315,7 @@ SdrViewContext SdrView::GetContext() const
     {
         bool bGraf = true, bMedia = true, bTable = true;
 
-        for( sal_uIntPtr nMarkNum = 0; nMarkNum < nMarkAnz && ( bGraf || bMedia ); nMarkNum++ )
+        for( size_t nMarkNum = 0; nMarkNum < nMarkAnz && ( bGraf || bMedia ); ++nMarkNum )
         {
             const SdrObject* pMarkObj = GetMarkedObjectByIndex( nMarkNum );
             DBG_ASSERT( pMarkObj, "SdrView::GetContext(), null pointer in mark list!" );

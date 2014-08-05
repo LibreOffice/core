@@ -1842,19 +1842,19 @@ extern "C" int SAL_CALL ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 
 void SdrHdlList::TravelFocusHdl(bool bForward)
 {
     // security correction
-    if(mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && mnFocusIndex >= GetHdlCount())
-        mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
+    if (mnFocusIndex >= GetHdlCount())
+        mnFocusIndex = SAL_MAX_SIZE;
 
     if(!aList.empty())
     {
         // take care of old handle
-        const sal_uIntPtr nOldHdlNum(mnFocusIndex);
+        const size_t nOldHdlNum(mnFocusIndex);
         SdrHdl* pOld = GetHdl(nOldHdlNum);
 
         if(pOld)
         {
             // switch off old handle
-            mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
+            mnFocusIndex = SAL_MAX_SIZE;
             pOld->Touch();
         }
 
@@ -1862,8 +1862,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
         boost::scoped_array<ImplHdlAndIndex> pHdlAndIndex(new ImplHdlAndIndex[aList.size()]);
 
         // build sorted handle list
-        sal_uInt32 a;
-        for( a = 0; a < aList.size(); a++)
+        for( size_t a = 0; a < aList.size(); ++a)
         {
             pHdlAndIndex[a].mpHdl = aList[a];
             pHdlAndIndex[a].mnIndex = a;
@@ -1872,11 +1871,11 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
         qsort(pHdlAndIndex.get(), aList.size(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
 
         // look for old num in sorted array
-        sal_uIntPtr nOldHdl(nOldHdlNum);
+        size_t nOldHdl(nOldHdlNum);
 
-        if(nOldHdlNum != CONTAINER_ENTRY_NOTFOUND)
+        if(nOldHdlNum != SAL_MAX_SIZE)
         {
-            for(a = 0; a < aList.size(); a++)
+            for(size_t a = 0; a < aList.size(); ++a)
             {
                 if(pHdlAndIndex[a].mpHdl == pOld)
                 {
@@ -1887,17 +1886,17 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
         }
 
         // build new HdlNum
-        sal_uIntPtr nNewHdl(nOldHdl);
+        size_t nNewHdl(nOldHdl);
 
         // do the focus travel
         if(bForward)
         {
-            if(nOldHdl != CONTAINER_ENTRY_NOTFOUND)
+            if(nOldHdl != SAL_MAX_SIZE)
             {
                 if(nOldHdl == aList.size() - 1)
                 {
                     // end forward run
-                    nNewHdl = CONTAINER_ENTRY_NOTFOUND;
+                    nNewHdl = SAL_MAX_SIZE;
                 }
                 else
                 {
@@ -1913,7 +1912,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
         }
         else
         {
-            if(nOldHdl == CONTAINER_ENTRY_NOTFOUND)
+            if(nOldHdl == SAL_MAX_SIZE)
             {
                 // start backward run at last entry
                 nNewHdl = aList.size() - 1;
@@ -1924,7 +1923,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
                 if(nOldHdl == 0)
                 {
                     // end backward run
-                    nNewHdl = CONTAINER_ENTRY_NOTFOUND;
+                    nNewHdl = SAL_MAX_SIZE;
                 }
                 else
                 {
@@ -1938,11 +1937,11 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
         sal_uIntPtr nNewHdlNum(nNewHdl);
 
         // look for old num in sorted array
-        if(nNewHdl != CONTAINER_ENTRY_NOTFOUND)
+        if(nNewHdl != SAL_MAX_SIZE)
         {
             SdrHdl* pNew = pHdlAndIndex[nNewHdl].mpHdl;
 
-            for(a = 0; a < aList.size(); a++)
+            for(size_t a = 0; a < aList.size(); ++a)
             {
                 if(aList[a] == pNew)
                 {
@@ -1968,7 +1967,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
 
 SdrHdl* SdrHdlList::GetFocusHdl() const
 {
-    if(mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && mnFocusIndex < GetHdlCount())
+    if(mnFocusIndex < GetHdlCount())
         return GetHdl(mnFocusIndex);
     else
         return 0L;
@@ -1982,9 +1981,9 @@ void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
 
         if(!pActual || pActual != pNew)
         {
-            sal_uIntPtr nNewHdlNum = GetHdlNum(pNew);
+            const size_t nNewHdlNum = GetHdlNum(pNew);
 
-            if(nNewHdlNum != CONTAINER_ENTRY_NOTFOUND)
+            if(nNewHdlNum != SAL_MAX_SIZE)
             {
                 mnFocusIndex = nNewHdlNum;
 
@@ -2007,7 +2006,7 @@ void SdrHdlList::ResetFocusHdl()
 {
     SdrHdl* pHdl = GetFocusHdl();
 
-    mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
+    mnFocusIndex = SAL_MAX_SIZE;
 
     if(pHdl)
     {
@@ -2018,7 +2017,7 @@ void SdrHdlList::ResetFocusHdl()
 
 
 SdrHdlList::SdrHdlList(SdrMarkView* pV)
-:   mnFocusIndex(CONTAINER_ENTRY_NOTFOUND),
+:   mnFocusIndex(SAL_MAX_SIZE),
     pView(pV),
     aList()
 {
@@ -2041,7 +2040,7 @@ void SdrHdlList::SetHdlSize(sal_uInt16 nSiz)
         nHdlSize = nSiz;
 
         // propagate change to IAOs
-        for(sal_uIntPtr i=0; i<GetHdlCount(); i++)
+        for(size_t i=0; i<GetHdlCount(); ++i)
         {
             SdrHdl* pHdl = GetHdl(i);
             pHdl->Touch();
@@ -2057,7 +2056,7 @@ void SdrHdlList::SetMoveOutside(bool bOn)
         bMoveOutside = bOn ? 1 : 0;
 
         // propagate change to IAOs
-        for(sal_uIntPtr i=0; i<GetHdlCount(); i++)
+        for(size_t i=0; i<GetHdlCount(); ++i)
         {
             SdrHdl* pHdl = GetHdl(i);
             pHdl->Touch();
@@ -2075,7 +2074,7 @@ void SdrHdlList::SetDistortShear(bool bOn)
     bDistortShear = bOn ? 1 : 0;
 }
 
-SdrHdl* SdrHdlList::RemoveHdl(sal_uIntPtr nNum)
+SdrHdl* SdrHdlList::RemoveHdl(size_t nNum)
 {
     SdrHdl* pRetval = aList[nNum];
     aList.erase(aList.begin() + nNum);
@@ -2100,7 +2099,7 @@ void SdrHdlList::RemoveAllByKind(SdrHdlKind eKind)
 
 void SdrHdlList::Clear()
 {
-    for (sal_uIntPtr i=0; i<GetHdlCount(); i++)
+    for (size_t i=0; i<GetHdlCount(); ++i)
     {
         SdrHdl* pHdl=GetHdl(i);
         delete pHdl;
@@ -2136,13 +2135,13 @@ void SdrHdlList::Sort()
     }
 }
 
-sal_uIntPtr SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
+size_t SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
 {
     if (pHdl==NULL)
-        return CONTAINER_ENTRY_NOTFOUND;
+        return SAL_MAX_SIZE;
     std::deque<SdrHdl*>::const_iterator it = std::find( aList.begin(), aList.end(), pHdl);
     if( it == aList.end() )
-        return CONTAINER_ENTRY_NOTFOUND;
+        return SAL_MAX_SIZE;
     return it - aList.begin();
 }
 
@@ -2165,8 +2164,8 @@ void SdrHdlList::AddHdl(SdrHdl* pHdl, bool bAtBegin)
 SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, bool bBack, bool bNext, SdrHdl* pHdl0) const
 {
    SdrHdl* pRet=NULL;
-   sal_uIntPtr nAnz=GetHdlCount();
-   sal_uIntPtr nNum=bBack ? 0 : nAnz;
+   const size_t nAnz=GetHdlCount();
+   size_t nNum=bBack ? 0 : nAnz;
    while ((bBack ? nNum<nAnz : nNum>0) && pRet==NULL)
    {
        if (!bBack)
@@ -2191,7 +2190,7 @@ SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, bool bBack, bool bNext, SdrH
 SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
 {
    SdrHdl* pRet=NULL;
-   for (sal_uIntPtr i=0; i<GetHdlCount() && pRet==NULL; i++)
+   for (size_t i=0; i<GetHdlCount() && pRet==NULL; ++i)
    {
        SdrHdl* pHdl=GetHdl(i);
        if (pHdl->GetKind()==eKind1)

@@ -381,7 +381,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         pOwnData->SetInternalMove( true );
                         SortMarkedObjects();
 
-                        for( sal_uLong nM = 0; nM < GetMarkedObjectCount(); nM++ )
+                        for( size_t nM = 0; nM < GetMarkedObjectCount(); ++nM )
                         {
                             SdrMark*    pM = GetSdrMarkByIndex( nM );
                             SdrObject*  pO = pM->GetMarkedSdrObj();
@@ -439,7 +439,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                 // stuff to remember originals and clones
                                 std::vector<ImpRememberOrigAndClone*> aConnectorContainer;
-                                sal_uInt32  a, nConnectorCount(0L);
+                                size_t nConnectorCount = 0;
                                 Point       aCurPos;
 
                                 // calculate real position of current
@@ -458,7 +458,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                 const Size aVector( maDropPos.X() - aCurPos.X(), maDropPos.Y() - aCurPos.Y() );
 
-                                for(a = 0; a < pMarkList->GetMarkCount(); a++)
+                                for(size_t a = 0; a < pMarkList->GetMarkCount(); ++a)
                                 {
                                     SdrMark* pM = pMarkList->GetMark(a);
                                     SdrObject* pObj = pM->GetMarkedSdrObj()->Clone();
@@ -493,7 +493,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 // try to re-establish connections at clones
                                 if(nConnectorCount)
                                 {
-                                    for(a = 0; a < aConnectorContainer.size(); a++)
+                                    for(size_t a = 0; a < aConnectorContainer.size(); ++a)
                                     {
                                         ImpRememberOrigAndClone* pRem = aConnectorContainer[a];
 
@@ -570,7 +570,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 }
 
                                 // cleanup remember classes
-                                for(a = 0; a < aConnectorContainer.size(); a++)
+                                for(size_t a = 0; a < aConnectorContainer.size(); ++a)
                                     delete aConnectorContainer[a];
 
                                 if( pMarkList != mpDragSrcMarkList )

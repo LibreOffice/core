@@ -715,7 +715,7 @@ void SvxPositionSizeTabPage::Construct()
 
         if(!maAnchor.equalZero()) // -> Writer
         {
-            for(sal_uInt16 i(1); i < rMarkList.GetMarkCount(); i++)
+            for(size_t i = 1; i < rMarkList.GetMarkCount(); ++i)
             {
                 pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 

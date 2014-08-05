@@ -797,7 +797,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
     // clone object(s) and insert the clone(s) into the list
     const SdrMarkList& rMarkList   = rView.GetMarkedObjectList();
-    sal_uLong              nMarkCount  = rMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
     SdPage*            pPage       = pMyDoc->GetSdPage(0, PK_STANDARD);
     sal_uLong              nCloneCount = pPage->GetObjCount();
 
@@ -916,7 +916,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
             // take objects separately
             if( bAllObjects )
             {
-                for( sal_uLong nObject= 0; nObject < nMarkCount; nObject++ )
+                for( size_t nObject= 0; nObject < nMarkCount; ++nObject )
                 {
                     // Clone
                     SdrObject* pObject = rMarkList.GetMark( nObject )->GetMarkedSdrObj();
@@ -943,7 +943,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 SdrObjGroup* pCloneGroup = new SdrObjGroup;
                 SdrObjList*  pObjList    = pCloneGroup->GetSubList();
 
-                for (sal_uLong nObject= 0; nObject < nMarkCount; nObject++)
+                for (size_t nObject= 0; nObject < nMarkCount; ++nObject)
                     pObjList->InsertObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj()->Clone(), CONTAINER_APPEND);
 
                 pPage->InsertObject(pCloneGroup, m_nCurrentFrame + 1);

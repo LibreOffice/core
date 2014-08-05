@@ -61,7 +61,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
     // Single selection
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
 
     if ( nMarkCount == 1 )
     {
@@ -319,9 +319,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             bool bEdgeObj = false; // Connector
             bool bE3dCompoundObject = false;
 
-            for( sal_uLong i = 0;
-                 i < nMarkCount && !bText && i < 50;
-                 i++ )
+            for( size_t i = 0; i < nMarkCount && !bText && i < 50; ++i )
             {
                 SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                 sal_uInt32 nInv = pObj->GetObjInventor();

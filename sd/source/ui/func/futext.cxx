@@ -1361,7 +1361,7 @@ void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFo
     {
 
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        for( sal_uInt32 nMark = 0; nMark < rMarkList.GetMarkCount(); nMark++ )
+        for( size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark )
         {
             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( rMarkList.GetMark(nMark)->GetMarkedSdrObj() );
             if( pTextObj )

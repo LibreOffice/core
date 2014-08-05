@@ -341,14 +341,14 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
 
     // insert control models of marked objects into clipboard dialog model
     const SdrMarkList& rMarkedList = m_pView->GetMarkedObjectList();
-    const sal_uLong nMark = rMarkedList.GetMarkCount();
+    const size_t nMark = rMarkedList.GetMarkCount();
 
     ::std::vector< uno::Reference<report::XReportComponent> > aCopies;
     aCopies.reserve(nMark);
 
     SdrUndoFactory& rUndo = m_pView->GetModel()->GetSdrUndoFactory();
 
-    for( sal_uLong i = nMark; i > 0; )
+    for( size_t i = nMark; i > 0; )
     {
         --i;
         SdrObject* pSdrObject = rMarkedList.GetMark(i)->GetMarkedSdrObj();
@@ -690,9 +690,8 @@ uno::Reference< report::XReportComponent > OReportSection::getCurrentControlMode
     if ( m_pView )
     {
         const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
-        sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
 
-        if ( nMarkCount == 1 )
+        if ( rMarkList.GetMarkCount() == 1 )
         {
             SdrObject* pDlgEdObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             OObjectBase* pObj = dynamic_cast<OObjectBase*>(pDlgEdObj);
@@ -708,9 +707,9 @@ void OReportSection::fillControlModelSelection(::std::vector< uno::Reference< un
     if ( m_pView )
     {
         const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
-        const sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
+        const size_t nMarkCount = rMarkList.GetMarkCount();
 
-        for (sal_uInt32 i=0; i < nMarkCount; ++i)
+        for (size_t i=0; i < nMarkCount; ++i)
         {
             const SdrObject* pDlgEdObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
             const OObjectBase* pObj = dynamic_cast<const OObjectBase*>(pDlgEdObj);

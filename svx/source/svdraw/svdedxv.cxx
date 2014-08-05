@@ -1407,9 +1407,9 @@ sal_uInt16 SdrObjEditView::GetScriptType() const
     }
     else
     {
-        sal_uInt32 nMarkCount( GetMarkedObjectCount() );
+        const size_t nMarkCount( GetMarkedObjectCount() );
 
-        for( sal_uInt32 i = 0; i < nMarkCount; i++ )
+        for( size_t i = 0; i < nMarkCount; ++i )
         {
             OutlinerParaObject* pParaObj = GetMarkedObjectByIndex( i )->GetOutlinerParaObject();
 
@@ -1984,7 +1984,7 @@ bool SdrObjEditView::TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFor
         return true;
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    if( rMarkList.GetMarkCount() >= 1 )
+    if( rMarkList.GetMarkCount() > 0 )
     {
         OutlinerView* pOLV = GetTextEditOutlinerView();
 

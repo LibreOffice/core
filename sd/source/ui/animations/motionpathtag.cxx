@@ -679,7 +679,7 @@ bool MotionPathTag::OnMarkHandle( const KeyEvent& rKEvt )
             // restore point with focus
             SdrHdl* pNewOne = 0L;
 
-            for(sal_uInt32 a(0); !pNewOne && a < rHdlList.GetHdlCount(); a++)
+            for(size_t a = 0; !pNewOne && a < rHdlList.GetHdlCount(); ++a)
             {
                 SdrHdl* pAct = rHdlList.GetHdl(a);
 
@@ -833,10 +833,13 @@ bool MotionPathTag::MarkPoints(const Rectangle* pRect, bool bUnmark )
 
     if( mpPathObj && isSelected() )
     {
-        sal_Int32 nHdlNum = mrView.GetHdlList().GetHdlCount() - 1;
-        while( nHdlNum > 0 )
+        size_t nHdlNum = mrView.GetHdlList().GetHdlCount();
+        if ( nHdlNum <= 1 )
+            return false;
+
+        while( --nHdlNum > 0 )
         {
-            SmartHdl* pHdl = dynamic_cast< SmartHdl* >( mrView.GetHdl( sal::static_int_cast< sal_uLong >( nHdlNum-- ) ) );
+            SmartHdl* pHdl = dynamic_cast< SmartHdl* >( mrView.GetHdl( nHdlNum ) );
 
             if( pHdl && (pHdl->getTag().get() == this) && mrView.IsPointMarkable(*pHdl) && pHdl->IsSelected() == bUnmark)
             {
@@ -930,13 +933,12 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
                 mpPathObj->AddToHdlList( aTemp );
                 const SdrUShortCont* pMrkPnts=mpMark->GetMarkedPoints();
 
-                sal_uInt32 nHandle;
-                for( nHandle = 0; nHandle < aTemp.GetHdlCount(); ++nHandle )
+                for( size_t nHandle = 0; nHandle < aTemp.GetHdlCount(); ++nHandle )
                 {
                     SdrHdl* pTempHdl = aTemp.GetHdl( nHandle );
 
                     SmartHdl* pSmartHdl = new SmartHdl( xThis, mpPathObj, pTempHdl->GetPos(), pTempHdl->GetKind() );
-                    pSmartHdl->SetObjHdlNum( nHandle );
+                    pSmartHdl->SetObjHdlNum( static_cast<sal_uInt32>(nHandle) );
                     pSmartHdl->SetPolyNum( pTempHdl->GetPolyNum() );
                     pSmartHdl->SetPointNum( pTempHdl->GetPointNum() );
                     pSmartHdl->SetPlusHdl(  pTempHdl->IsPlusHdl() );
@@ -971,7 +973,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 
                 if(!aRect.IsEmpty())
                 {
-                    sal_uLong nCount = rHandlerList.GetHdlCount();
+                    size_t nCount = rHandlerList.GetHdlCount();
 
                     bool bWdt0=aRect.Left()==aRect.Right();
                     bool bHgt0=aRect.Top()==aRect.Bottom();

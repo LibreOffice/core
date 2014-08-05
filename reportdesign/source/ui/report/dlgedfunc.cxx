@@ -557,7 +557,7 @@ bool DlgEdFunc::isOnlyCustomShapeMarked()
 {
     bool bReturn = true;
     const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
-    for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
+    for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i )
     {
         SdrMark* pMark = rMarkList.GetMark(i);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -738,7 +738,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         {
             OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
             const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
-            for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
+            for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i )
             {
                 SdrMark* pMark = rMarkList.GetMark(i);
                 OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());

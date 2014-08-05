@@ -1862,14 +1862,14 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
 
     // consider anchor position (for Writer)
     const SdrMarkList& rMarkList = m_pSdrView->GetMarkedObjectList();
-    if( rMarkList.GetMarkCount() >= 1 )
+    if( rMarkList.GetMarkCount() > 0 )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         m_aAnchorPos = pObj->GetAnchorPos();
 
         if( m_aAnchorPos != Point(0,0) ) // -> Writer
         {
-            for( sal_uLong i = 1; i < rMarkList.GetMarkCount(); i++ )
+            for( size_t i = 1; i < rMarkList.GetMarkCount(); ++i )
             {
                 pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                 if( m_aAnchorPos != pObj->GetAnchorPos() )

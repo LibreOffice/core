@@ -241,13 +241,14 @@ protected:
 public:
     // all available const methods for read access to selection
     const SdrMarkList& GetMarkedObjectList() const { return mpSdrViewSelection->GetMarkedObjectList(); }
-    sal_uIntPtr TryToFindMarkedObject(const SdrObject* pObj) const { return GetMarkedObjectList().FindObject(pObj); }
-    SdrPageView* GetSdrPageViewOfMarkedByIndex(sal_uIntPtr nNum) const { return GetMarkedObjectList().GetMark(nNum)->GetPageView(); }
-    SdrMark* GetSdrMarkByIndex(sal_uIntPtr nNum) const { return GetMarkedObjectList().GetMark(nNum); }
-    SdrObject* GetMarkedObjectByIndex(sal_uIntPtr nNum) const { return (GetMarkedObjectList().GetMark(nNum))->GetMarkedSdrObj(); }
-    sal_uIntPtr GetMarkedObjectCount() const { return GetMarkedObjectList().GetMarkCount(); }
+    // returns SAL_MAX_SIZE if not found
+    size_t TryToFindMarkedObject(const SdrObject* pObj) const { return GetMarkedObjectList().FindObject(pObj); }
+    SdrPageView* GetSdrPageViewOfMarkedByIndex(size_t nNum) const { return GetMarkedObjectList().GetMark(nNum)->GetPageView(); }
+    SdrMark* GetSdrMarkByIndex(size_t nNum) const { return GetMarkedObjectList().GetMark(nNum); }
+    SdrObject* GetMarkedObjectByIndex(size_t nNum) const { return (GetMarkedObjectList().GetMark(nNum))->GetMarkedSdrObj(); }
+    size_t GetMarkedObjectCount() const { return GetMarkedObjectList().GetMarkCount(); }
     void SortMarkedObjects() const { GetMarkedObjectList().ForceSort(); }
-    bool AreObjectsMarked() const { return (0L != GetMarkedObjectList().GetMarkCount()); }
+    bool AreObjectsMarked() const { return 0 != GetMarkedObjectList().GetMarkCount(); }
     OUString GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }
     OUString GetDescriptionOfMarkedPoints() const { return GetMarkedObjectList().GetPointMarkDescription(); }
     OUString GetDescriptionOfMarkedGluePoints() const { return GetMarkedObjectList().GetGluePointMarkDescription(); }
@@ -279,13 +280,13 @@ public:
     // SDRSEARCH_DEEP SDRSEARCH_ALSOONMASTER SDRSEARCH_TESTMARKABLE SDRSEARCH_TESTTEXTEDIT
     // SDRSEARCH_WITHTEXT SDRSEARCH_TESTTEXTAREA SDRSEARCH_BACKWARD SDRSEARCH_MARKED
     // SDRSEARCH_WHOLEPAGE
-    virtual bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions, SdrObject** ppRootObj, sal_uIntPtr* pnMarkNum=NULL, sal_uInt16* pnPassNum=NULL) const;
+    virtual bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions, SdrObject** ppRootObj, size_t* pnMarkNum=NULL, sal_uInt16* pnPassNum=NULL) const;
     virtual bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const;
     // bool PickObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const { return PickObj(rPnt,nHitTolLog,rpObj,rpPV,nOptions); }
     bool MarkObj(const Point& rPnt, short nTol=-2, bool bToggle=false, bool bDeep=false);
 
     // Pick: Supported options for nOptions are SDRSEARCH_PASS2BOUND und SDRSEARCH_PASS3NEAREST
-    bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr* pnMarkNum=NULL, sal_uIntPtr nOptions=0) const;
+    bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, size_t* pnMarkNum=NULL, sal_uIntPtr nOptions=0) const;
 
     // Selects the most upper of the marked objects (O1) and scans from there
     // towards bottom direction, selecting the first non-marked object (O2).
@@ -349,9 +350,9 @@ public:
     bool MarkNextPoint(const Point& rPnt, bool bPrev=false);
 
     // Search for the number of the suitable handle. In case of empty search result,
-    // CONTAINER_ENTRY_NOTFOUND is returned.
-    sal_uIntPtr GetHdlNum(SdrHdl* pHdl) const { return aHdl.GetHdlNum(pHdl); }
-    SdrHdl* GetHdl(sal_uIntPtr nHdlNum)  const { return aHdl.GetHdl(nHdlNum); }
+    // SAL_MAX_SIZE is returned.
+    size_t GetHdlNum(SdrHdl* pHdl) const { return aHdl.GetHdlNum(pHdl); }
+    SdrHdl* GetHdl(size_t nHdlNum)  const { return aHdl.GetHdl(nHdlNum); }
     const SdrHdlList& GetHdlList() const { return aHdl; }
 
     // Draw a selection frame for marking of points.

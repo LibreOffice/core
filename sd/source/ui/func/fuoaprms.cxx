@@ -78,8 +78,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     ::svl::IUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
 
     const SdrMarkList& rMarkList  = mpView->GetMarkedObjectList();
-    sal_uLong        nCount     = rMarkList.GetMarkCount();
-    sal_uLong        nObject    = 0;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     short nAnimationSet     = ATTR_MISSING;
     short nEffectSet        = ATTR_MISSING;
@@ -176,7 +175,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     }
 
     // if necessary, inspect more objects
-    for( nObject = 1; nObject < nCount; nObject++ )
+    for( size_t nObject = 1; nObject < nCount; ++nObject )
     {
         pMark = rMarkList.GetMark( nObject );
         SdrObject* pObject = pMark->GetMarkedSdrObj();
@@ -672,7 +671,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             pUndoMgr->AddUndoAction(mpDoc->GetSdrUndoFactory().CreateUndoMoveObject( *pRunningObj, aDistance));
         }
 
-        for (nObject = 0; nObject < nCount; nObject++)
+        for (size_t nObject = 0; nObject < nCount; ++nObject)
         {
             SdrObject* pObject = rMarkList.GetMark(nObject)->GetMarkedSdrObj();
 

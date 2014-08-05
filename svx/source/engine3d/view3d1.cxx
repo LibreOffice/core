@@ -119,9 +119,9 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) co
 
         // calc flags for SID_ATTR_3D_INTERN
         const SdrMarkList& rMarkList = GetMarkedObjectList();
-        sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
+        const size_t nMarkCnt(rMarkList.GetMarkCount());
 
-        for(sal_uInt32 a(0); a < nMarkCnt; a++)
+        for(size_t a = 0; a < nMarkCnt; ++a)
         {
             SdrObject* pObj = GetMarkedObjectByIndex(a);
             Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
@@ -169,9 +169,9 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, bool
 
         // old run
         const SdrMarkList& rMarkList = GetMarkedObjectList();
-        const sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
+        const size_t nMarkCnt(rMarkList.GetMarkCount());
 
-        for(sal_uInt32 a(0); a < nMarkCnt; a++)
+        for(size_t a = 0; a < nMarkCnt; ++a)
         {
             SdrObject* pObj = GetMarkedObjectByIndex(a);
             Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);

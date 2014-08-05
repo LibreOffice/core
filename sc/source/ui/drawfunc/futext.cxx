@@ -164,7 +164,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     {
         SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
-        sal_uLong nHdlNum = pView->GetHdlNum(pHdl);
+        const size_t nHdlNum = pView->GetHdlNum(pHdl);
 
         if (pHdl != NULL)
         {

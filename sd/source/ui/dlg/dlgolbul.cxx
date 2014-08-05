@@ -69,8 +69,8 @@ OutlineBulletDlg::OutlineBulletDlg(
     if( pView )
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        const sal_uLong nCount = rMarkList.GetMarkCount();
-        for(sal_uLong nNum = 0; nNum < nCount; nNum++)
+        const size_t nCount = rMarkList.GetMarkCount();
+        for(size_t nNum = 0; nNum < nCount; ++nNum)
         {
             SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor )

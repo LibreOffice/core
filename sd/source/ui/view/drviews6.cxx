@@ -185,7 +185,7 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
     sal_uInt16 nValue;
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount == 0 )
         nValue = 0;

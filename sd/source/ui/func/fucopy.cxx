@@ -183,7 +183,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         }
 
         const SdrMarkList   aMarkList( mpView->GetMarkedObjectList() );
-        const sal_uLong         nMarkCount = aMarkList.GetMarkCount();
+        const size_t nMarkCount = aMarkList.GetMarkCount();
         SdrObject*          pObj = NULL;
 
         // calculate number of possible copies
@@ -221,10 +221,10 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
             // get newly selected objects
             SdrMarkList aCopyMarkList( mpView->GetMarkedObjectList() );
-            sal_uLong       j, nCopyMarkCount = aMarkList.GetMarkCount();
+            const size_t nCopyMarkCount = aMarkList.GetMarkCount();
 
             // set protection flags at marked copies to null
-            for( j = 0; j < nCopyMarkCount; j++ )
+            for( size_t j = 0; j < nCopyMarkCount; ++j )
             {
                 pObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();
 
@@ -250,7 +250,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             // set protection flags at marked copies to original values
             if( nMarkCount == nCopyMarkCount )
             {
-                for( j = 0; j < nMarkCount; j++ )
+                for( size_t j = 0; j < nMarkCount; ++j )
                 {
                     SdrObject* pSrcObj = aMarkList.GetMark( j )->GetMarkedSdrObj();
                     SdrObject* pDstObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();

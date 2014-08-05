@@ -647,8 +647,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 bool bEnable = false;
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                const sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
-                for (sal_uInt32 nIndex = 0; nIndex < nMarkCount; nIndex++)
+                const size_t nMarkCount = rMarkList.GetMarkCount();
+                for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
                 {
                     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(rMarkList.GetMark(nIndex)->GetMarkedSdrObj());
                     if (pTextObj && pTextObj->GetObjInventor() == SdrInventor)

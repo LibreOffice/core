@@ -684,9 +684,8 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
     ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
     const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
     const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), false );
-    sal_uInt32                                  n, nCount;
 
-    for( n = 0, nCount = GetMarkedObjectCount(); n < nCount; n++ )
+    for( size_t n = 0, nCount = GetMarkedObjectCount(); n < nCount; ++n )
     {
         SdrMark* pMark = GetSdrMarkByIndex( n );
 
@@ -697,11 +696,11 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
             rObjVector1.push_back( pMark );
     }
 
-    for( n = 0, nCount = aObjVectors.size(); n < nCount; n++ )
+    for( size_t n = 0, nCount = aObjVectors.size(); n < nCount; ++n )
     {
         ::std::vector< SdrMark* >& rObjVector = aObjVectors[ n ];
 
-        for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
+        for( size_t i = 0; i < rObjVector.size(); ++i )
         {
             SdrMark*    pMark = rObjVector[ i ];
             aRetval.push_back(pMark->GetMarkedSdrObj());

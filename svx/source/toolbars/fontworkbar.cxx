@@ -51,10 +51,10 @@ using namespace ::com::sun::star::uno;
 void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     sal_Int32   nAlignment = -1;
-    for( i = 0; i < nCount; i++ )
+    for( size_t i = 0; i < nCount; ++i )
     {
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -88,10 +88,10 @@ void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
 void SetCharacterSpacingState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     sal_Int32   nCharacterSpacing = -1;
-    for( i = 0; i < nCount; i++ )
+    for( size_t i = 0; i < nCount; ++i )
     {
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -113,10 +113,10 @@ void SetCharacterSpacingState( SdrView* pSdrView, SfxItemSet& rSet )
 void SetKernCharacterPairsState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     bool    bChecked = false;
-    for( i = 0; i < nCount; i++ )
+    for( size_t i = 0; i < nCount; ++i )
     {
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -132,11 +132,11 @@ void SetKernCharacterPairsState( SdrView* pSdrView, SfxItemSet& rSet )
 void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     OUString aFontWorkShapeType;
 
-    for( i = 0; i < nCount; i++ )
+    for( size_t i = 0; i < nCount; ++i )
     {
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( pObj->ISA( SdrObjCustomShape ) )
@@ -225,9 +225,9 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
     static const OUString  sTextPath( "TextPath" );
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
     bool bFound = false;
-    for(i=0;(i<nCount) && !bFound ; i++)
+    for(size_t i=0; (i<nCount) && !bFound ; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -449,8 +449,8 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
             if ( !aCustomShape.isEmpty() )
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                sal_uInt32 nCount = rMarkList.GetMarkCount(), i;
-                for( i = 0; i < nCount; i++ )
+                const size_t nCount = rMarkList.GetMarkCount();
+                for( size_t i = 0; i < nCount; ++i )
                 {
                     SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                     if( pObj->ISA(SdrObjCustomShape) )
@@ -525,8 +525,8 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                 nStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_SAME_LETTER_HEIGHT;
 
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-            sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
-            for( i = 0; i < nCount; i++ )
+            const size_t nCount = rMarkList.GetMarkCount();
+            for( size_t i = 0; i < nCount; ++i )
             {
                 SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                 if( pObj->ISA(SdrObjCustomShape) )

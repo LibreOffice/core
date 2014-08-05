@@ -281,8 +281,8 @@ namespace
     {
         _rInterfaces.clear();
 
-        sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
-        for ( sal_uInt32 i = 0; i < nMarkCount; ++i)
+        const size_t nMarkCount = _rMarkList.GetMarkCount();
+        for ( size_t i = 0; i < nMarkCount; ++i)
         {
             SdrObject* pCurrent = _rMarkList.GetMark( i )->GetMarkedSdrObj();
 
@@ -557,12 +557,12 @@ bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterface>
 bool isControlList(const SdrMarkList& rMarkList)
 {
     // enthaelt die liste nur Controls und mindestens ein control
-    sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
     bool  bControlList = nMarkCount != 0;
 
     bool bHadAnyLeafs = false;
 
-    for (sal_uInt32 i = 0; i < nMarkCount && bControlList; i++)
+    for (size_t i = 0; i < nMarkCount && bControlList; ++i)
     {
         SdrObject *pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         E3dObject* pAs3DObject = PTR_CAST(E3dObject, pObj);

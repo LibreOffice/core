@@ -71,7 +71,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, bool bCopy)
 {
     DBG_ASSERT(!rRect.IsEmpty(),"SetMarkedObjRect() with an empty Rect does not make sense.");
     if (rRect.IsEmpty()) return;
-    sal_uIntPtr nAnz=GetMarkedObjectCount();
+    const size_t nAnz=GetMarkedObjectCount();
     if (nAnz==0) return;
     Rectangle aR0(GetMarkedObjRect());
     DBG_ASSERT(!aR0.IsEmpty(),"SetMarkedObjRect(): GetMarkedObjRect() is empty.");
@@ -96,7 +96,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, bool bCopy)
     if (bCopy)
         CopyMarkedObj();
 
-    for (sal_uIntPtr nm=0; nm<nAnz; nm++)
+    for (size_t nm=0; nm<nAnz; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
@@ -194,8 +194,8 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
     if (bCopy)
         CopyMarkedObj();
 
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
@@ -227,8 +227,8 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
     if (bCopy)
         CopyMarkedObj();
 
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
@@ -264,8 +264,8 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
     if (bCopy)
         CopyMarkedObj();
 
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
@@ -333,13 +333,13 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
 
     double nSin=sin(nWink*nPi180);
     double nCos=cos(nWink*nPi180);
-    const sal_uInt32 nMarkAnz(GetMarkedObjectCount());
+    const size_t nMarkAnz(GetMarkedObjectCount());
 
     if(nMarkAnz)
     {
         std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
 
-        for(sal_uInt32 nm(0); nm < nMarkAnz; nm++)
+        for(size_t nm = 0; nm < nMarkAnz; ++nm)
         {
             SdrMark* pM = GetSdrMarkByIndex(nm);
             SdrObject* pO = pM->GetMarkedSdrObj();
@@ -393,13 +393,13 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
     if (bCopy)
         CopyMarkedObj();
 
-    const sal_uInt32 nMarkAnz(GetMarkedObjectCount());
+    const size_t nMarkAnz(GetMarkedObjectCount());
 
     if(nMarkAnz)
     {
         std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
 
-        for(sal_uInt32 nm(0); nm < nMarkAnz; nm++)
+        for(size_t nm = 0; nm < nMarkAnz; ++nm)
         {
             SdrMark* pM = GetSdrMarkByIndex(nm);
             SdrObject* pO = pM->GetMarkedSdrObj();
@@ -455,8 +455,8 @@ long SdrEditView::GetMarkedObjShear() const
     bool b1st=true;
     bool bOk=true;
     long nWink=0;
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz && bOk; nm++) {
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz && bOk; ++nm) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         long nWink2=pO->GetShearAngle();
@@ -487,8 +487,8 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nWink, bool bVShear, bo
         CopyMarkedObj();
 
     double nTan=tan(nWink*nPi180);
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
@@ -603,8 +603,8 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
     if (bCopy)
         CopyMarkedObj();
 
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
@@ -677,8 +677,8 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
     if (bCopy)
         CopyMarkedObj();
 
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
@@ -778,8 +778,8 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bRep
     const bool bUndo = IsUndoEnabled();
 
     // TODO: check if WhichRange is necessary.
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
         const SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -817,8 +817,8 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool /*bOnlyH
     long nShrAngle=0;      bool bShrAngleDC=false;
     Rectangle aSnapRect;
     Rectangle aLogicRect;
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++) {
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm) {
         const SdrMark* pM=GetSdrMarkByIndex(nm);
         const SdrObject* pObj=pM->GetMarkedSdrObj();
         if (nm==0) {
@@ -924,9 +924,9 @@ SfxItemSet SdrEditView::GetAttrFromMarked(bool bOnlyHardAttr) const
 
 void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) const
 {
-    sal_uInt32 nMarkAnz(GetMarkedObjectCount());
+    const size_t nMarkAnz(GetMarkedObjectCount());
 
-    for(sal_uInt32 a(0); a < nMarkAnz; a++)
+    for(size_t a = 0; a < nMarkAnz; ++a)
     {
         // #80277# merging was done wrong in the prev version
         const SfxItemSet& rSet = GetMarkedObjectByIndex(a)->GetMergedItemSet();
@@ -1031,7 +1031,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             BegUndo(aStr);
         }
 
-        const sal_uInt32 nMarkAnz(GetMarkedObjectCount());
+        const size_t nMarkAnz(GetMarkedObjectCount());
         std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
 
         // create ItemSet without SFX_ITEM_DONTCARE. Put()
@@ -1053,7 +1053,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             nNewLineWidth = ((const XLineWidthItem&)aAttr.Get(XATTR_LINEWIDTH)).GetValue();
         }
 
-        for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+        for (size_t nm=0; nm<nMarkAnz; ++nm)
         {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pObj = pM->GetMarkedSdrObj();
@@ -1187,8 +1187,8 @@ SfxStyleSheet* SdrEditView::GetStyleSheetFromMarked() const
 {
     SfxStyleSheet* pRet=NULL;
     bool b1st=true;
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++) {
+    const size_t nMarkAnz=GetMarkedObjectCount();
+    for (size_t nm=0; nm<nMarkAnz; ++nm) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SfxStyleSheet* pSS=pM->GetMarkedSdrObj()->GetStyleSheet();
         if (b1st) pRet=pSS;
@@ -1214,8 +1214,8 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRe
             BegUndo(aStr);
         }
 
-        sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-        for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+        const size_t nMarkAnz=GetMarkedObjectCount();
+        for (size_t nm=0; nm<nMarkAnz; ++nm)
         {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             if( bUndo )
@@ -1344,13 +1344,13 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 
         // check every object whether it is protected
         const SdrMarkList& rMarkList=GetMarkedObjectList();
-        sal_uIntPtr nMarkCount=rMarkList.GetMarkCount();
+        const size_t nMarkCount=rMarkList.GetMarkCount();
         SdrObject* pObj=rMarkList.GetMark(0)->GetMarkedSdrObj();
         bool bPosProt=pObj->IsMoveProtect();
         bool bSizProt=pObj->IsResizeProtect();
         bool bPosProtDontCare=false;
         bool bSizProtDontCare=false;
-        for (sal_uIntPtr i=1; i<nMarkCount && (!bPosProtDontCare || !bSizProtDontCare); i++)
+        for (size_t i=1; i<nMarkCount && (!bPosProtDontCare || !bSizProtDontCare); ++i)
         {
             pObj=rMarkList.GetMark(i)->GetMarkedSdrObj();
             if (bPosProt!=pObj->IsMoveProtect()) bPosProtDontCare=true;
@@ -1466,7 +1466,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     long nOldRotateAngle=GetMarkedObjRotate();
     long nOldShearAngle=GetMarkedObjShear();
     const SdrMarkList& rMarkList=GetMarkedObjectList();
-    sal_uIntPtr nMarkCount=rMarkList.GetMarkCount();
+    const size_t nMarkCount=rMarkList.GetMarkCount();
     SdrObject* pObj=NULL;
 
     RECT_POINT eSizePoint=RP_MM;
@@ -1675,7 +1675,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         const bool bProtPos(((const SfxBoolItem*)pPoolItem)->GetValue());
         bool bChanged(false);
 
-        for(sal_uInt32 i(0); i < nMarkCount; i++)
+        for(size_t i = 0; i < nMarkCount; ++i)
         {
             pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
@@ -1716,7 +1716,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
             const bool bProtSize(((const SfxBoolItem*)pPoolItem)->GetValue());
             bool bChanged(false);
 
-            for(sal_uInt32 i(0); i < nMarkCount; i++)
+            for(size_t i = 0; i < nMarkCount; ++i)
             {
                 pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
@@ -1745,7 +1745,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 bool SdrEditView::IsAlignPossible() const
 {  // at least two selected objects, at least one of them movable
     ForcePossibilities();
-    sal_uIntPtr nAnz=GetMarkedObjectCount();
+    const size_t nAnz=GetMarkedObjectCount();
     if (nAnz==0) return false;         // nothing selected!
     if (nAnz==1) return bMoveAllowed;  // align single object to page
     return bOneOrMoreMovable;          // otherwise: MarkCount>=2
@@ -1757,7 +1757,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool 
         return;
 
     SortMarkedObjects();
-    if (GetMarkedObjectCount()<1)
+    if (!GetMarkedObjectCount())
         return;
 
     const bool bUndo = IsUndoEnabled();
@@ -1796,10 +1796,9 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool 
     }
 
     Rectangle aBound;
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    sal_uIntPtr nm;
+    const size_t nMarkAnz=GetMarkedObjectCount();
     bool bHasFixed=false;
-    for (nm=0; nm<nMarkAnz; nm++)
+    for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -1816,7 +1815,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool 
     {
         if (nMarkAnz==1)
         {   // align single object to page
-            const SdrObject* pObj=GetMarkedObjectByIndex(0L);
+            const SdrObject* pObj=GetMarkedObjectByIndex(0);
             const SdrPage* pPage=pObj->GetPage();
             const SdrPageGridFrameList* pGFL=pPage->GetGridFrameList(GetSdrPageViewOfMarkedByIndex(0),&(pObj->GetSnapRect()));
             const SdrPageGridFrame* pFrame=NULL;
@@ -1845,7 +1844,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool 
         }
     }
     Point aCenter(aBound.Center());
-    for (nm=0; nm<nMarkAnz; nm++)
+    for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();

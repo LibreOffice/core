@@ -58,8 +58,8 @@ Point aDragStartDiff;
 void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle )
 {
     rAnyOle = rOneOle = false;
-    sal_uLong nCount = rMarkList.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+    const size_t nCount = rMarkList.GetMarkCount();
+    for (size_t i=0; i<nCount; ++i)
     {
         SdrMark* pMark = rMarkList.GetMark(i);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -464,8 +464,8 @@ void ScDrawView::SetMarkedOriginalSize()
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     long nDone = 0;
-    sal_uLong nCount = rMarkList.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+    const size_t nCount = rMarkList.GetMarkCount();
+    for (size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         sal_uInt16 nIdent = pObj->GetObjIdentifier();

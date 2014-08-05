@@ -257,12 +257,12 @@ Any SAL_CALL SdUnoDrawView::getSelection()
     if( !aAny.hasValue() )
     {
         const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
-        sal_uInt32 nCount = rMarkList.GetMarkCount();
+        const size_t nCount = rMarkList.GetMarkCount();
         if( nCount )
         {
             Reference< drawing::XShapes > xShapes( drawing::ShapeCollection::create(
                         comphelper::getProcessComponentContext()), UNO_QUERY );
-            for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+            for( size_t nNum = 0; nNum < nCount; ++nNum)
             {
                 SdrMark *pMark = rMarkList.GetMark(nNum);
                 if(pMark==NULL)

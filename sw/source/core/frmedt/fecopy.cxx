@@ -178,7 +178,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
     {
         SwPosition aPos( aSttIdx, SwIndex( pTxtNd, 0 ));
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+        for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
 
@@ -283,7 +283,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
 
     // The list should be copied, because below new objects will be selected
     const SdrMarkList aMrkList( Imp()->GetDrawView()->GetMarkedObjectList() );
-    sal_uLong nMarkCount = aMrkList.GetMarkCount();
+    const size_t nMarkCount = aMrkList.GetMarkCount();
     if( !pDestShell->Imp()->GetDrawView() )
         // should create it now
         pDestShell->MakeDrawView();
@@ -297,7 +297,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
     SwDoc* pDestDoc = pDestShell->GetDoc();
 
     Size aSiz( rInsPt.X() - rSttPt.X(), rInsPt.Y() - rSttPt.Y() );
-    for( sal_uInt16 i = 0; i < nMarkCount; ++i )
+    for( size_t i = 0; i < nMarkCount; ++i )
     {
         SdrObject *pObj = aMrkList.GetMark( i )->GetMarkedSdrObj();
 
@@ -418,16 +418,13 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             const SdrMarkList aList( pSrcDrwView->GetMarkedObjectList() );
             pSrcDrwView->UnmarkAll();
 
-            sal_uLong nMrkCnt = aMrkList.GetMarkCount();
-            sal_uInt16 i;
-            for ( i = 0; i < nMrkCnt; ++i )
+            for ( size_t i = 0, nMrkCnt = aMrkList.GetMarkCount(); i < nMrkCnt; ++i )
             {
                 SdrObject *pObj = aMrkList.GetMark( i )->GetMarkedSdrObj();
                 pSrcDrwView->MarkObj( pObj, pSrcPgView );
             }
             DelSelectedObj();
-            nMrkCnt = aList.GetMarkCount();
-            for ( i = 0; i < nMrkCnt; ++i )
+            for ( size_t i = 0, nMrkCnt = aList.GetMarkCount(); i < nMrkCnt; ++i )
             {
                 SdrObject *pObj = aList.GetMark( i )->GetMarkedSdrObj();
                 pSrcDrwView->MarkObj( pObj, pSrcPgView );
@@ -1518,11 +1515,11 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
         lcl_ConvertSdrOle2ObjsToSdrGrafObjs( pModel );
         pView->Paste(*pModel, aPos, NULL, 0, OUString(), OUString());
 
-        sal_uLong nCnt = pView->GetMarkedObjectList().GetMarkCount();
+        const size_t nCnt = pView->GetMarkedObjectList().GetMarkCount();
         if( nCnt )
         {
             const Point aNull( 0, 0 );
-            for( sal_uLong i=0; i < nCnt; ++i )
+            for( size_t i=0; i < nCnt; ++i )
             {
                 SdrObject *pObj = pView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
                 pObj->ImpSetAnchorPos( aNull );

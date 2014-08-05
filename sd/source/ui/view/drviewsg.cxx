@@ -79,9 +79,8 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
     if( GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
         const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
-        sal_uLong               nMarkCount = rMarkList.GetMarkCount();
 
-        if ( nMarkCount == 1 )
+        if ( rMarkList.GetMarkCount() == 1 )
         {
             const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 

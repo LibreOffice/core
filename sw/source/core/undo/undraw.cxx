@@ -506,7 +506,7 @@ SwUndoDrawDelete::~SwUndoDrawDelete()
     if( bDelFmt )
     {
         SwUndoGroupObjImpl* pTmp = pObjArr;
-        for( sal_uInt16 n = 0; n < pMarkLst->GetMarkCount(); ++n, ++pTmp )
+        for( size_t n = 0; n < pMarkLst->GetMarkCount(); ++n, ++pTmp )
             delete pTmp->pFmt;
     }
     delete [] pObjArr;
@@ -517,7 +517,7 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     bDelFmt = false;
     SwFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < pMarkLst->GetMarkCount(); ++n )
+    for( size_t n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
@@ -542,7 +542,7 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     bDelFmt = true;
     SwFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < pMarkLst->GetMarkCount(); ++n )
+    for( size_t n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
         SdrObject *pObj = rSave.pObj;

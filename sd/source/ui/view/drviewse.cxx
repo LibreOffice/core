@@ -344,9 +344,9 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             }
             else if (nSlotId == SID_OBJECT_SHEAR)
             {
-                sal_uLong i = 0;
+                size_t i = 0;
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                sal_uLong nMarkCnt = rMarkList.GetMarkCount();
+                const size_t nMarkCnt = rMarkList.GetMarkCount();
                 bool b3DObjMarked = false;
 
                 while (i < nMarkCnt && !b3DObjMarked)
@@ -1359,7 +1359,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             mpDrawView->BegUndo(SD_RESSTR(STR_UNDO_COLORRESOLUTION));
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
-            for (sal_uLong i=0; i<rMarkList.GetMarkCount(); i++)
+            for (size_t i=0; i<rMarkList.GetMarkCount(); ++i)
             {
                 SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 

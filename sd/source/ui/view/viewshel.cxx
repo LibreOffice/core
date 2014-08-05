@@ -412,7 +412,7 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         bReturn = GetViewShell()->KeyInput(rKEvt);
     }
 
-    sal_Int32 OriCount = GetView()->GetMarkedObjectList().GetMarkCount();
+    const size_t OriCount = GetView()->GetMarkedObjectList().GetMarkCount();
     if(!bReturn)
     {
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
@@ -441,7 +441,7 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
             }
         }
     }
-    sal_Int32 EndCount = GetView()->GetMarkedObjectList().GetMarkCount();
+    const size_t EndCount = GetView()->GetMarkedObjectList().GetMarkCount();
     // Here, oriCount or endCount must have one value=0, another value > 0, then to switch focus between Document and shape objects
     if(bReturn &&  (OriCount + EndCount > 0) && (OriCount * EndCount == 0))
     {
@@ -738,11 +738,11 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
             bool bTitle = false;
 
             if( mpView )
-                 {
+            {
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-                const sal_uInt32 nCount = rMarkList.GetMarkCount();
+                const size_t nCount = rMarkList.GetMarkCount();
 
-                for(sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+                for(size_t nNum = 0; nNum < nCount; ++nNum)
                 {
                     SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
                     if( pObj->GetObjInventor() == SdrInventor )

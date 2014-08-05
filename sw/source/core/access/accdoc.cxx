@@ -668,7 +668,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         if(pCrsrShell->Imp()->GetDrawView())
         {
             const SdrMarkList &rMrkList = pCrsrShell->Imp()->GetDrawView()->GetMarkedObjectList();
-            for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+            for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
                 SwFrmFmt* pFmt = ((SwDrawContact*)pObj->GetUserCall())->GetFmt();

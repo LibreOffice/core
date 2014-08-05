@@ -239,7 +239,7 @@ static void lcl_SelectSdrMarkList( SwEditShell* pShell,
     {
         SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
         bool bFirst = true;
-        for( sal_uInt16 i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
+        for( size_t i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
         {
             SdrObject *pObj = pSdrMarkList->GetMark( i )->GetMarkedSdrObj();
             if( pObj )

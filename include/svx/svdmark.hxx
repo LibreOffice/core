@@ -212,16 +212,17 @@ public:
         mbSorted = false;
     }
 
-    sal_uLong GetMarkCount() const
+    size_t GetMarkCount() const
     {
         return maList.size();
     }
 
-    SdrMark* GetMark(sal_uLong nNum) const;
-    sal_uLong FindObject(const SdrObject* pObj) const;
+    SdrMark* GetMark(size_t nNum) const;
+    // returns SAL_MAX_SIZE if not found
+    size_t FindObject(const SdrObject* pObj) const;
     void InsertEntry(const SdrMark& rMark, bool bChkSort = true);
-    void DeleteMark(sal_uLong nNum);
-    void ReplaceMark(const SdrMark& rNewMark, sal_uLong nNum);
+    void DeleteMark(size_t nNum);
+    void ReplaceMark(const SdrMark& rNewMark, size_t nNum);
     void Merge(const SdrMarkList& rSrcList, bool bReverse = false);
     bool DeletePageView(const SdrPageView& rPV);
     bool InsertPageView(const SdrPageView& rPV);

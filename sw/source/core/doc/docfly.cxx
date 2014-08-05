@@ -695,7 +695,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
     GetIDocumentUndoRedo().StartUndo( UNDO_INSATTR, NULL );
 
     bool bUnmark = false;
-    for ( sal_uInt16 i = 0; i < _rMrkList.GetMarkCount(); ++i )
+    for ( size_t i = 0; i < _rMrkList.GetMarkCount(); ++i )
     {
         SdrObject* pObj = _rMrkList.GetMark( i )->GetMarkedSdrObj();
         if ( !pObj->ISA(SwVirtFlyDrawObj) )

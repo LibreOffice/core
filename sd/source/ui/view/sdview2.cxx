@@ -404,11 +404,11 @@ void View::DragFinished( sal_Int8 nDropAction )
         if( bUndo )
             BegUndo();
 
-        sal_uLong nm, nAnz = mpDragSrcMarkList->GetMarkCount();
+        const size_t nAnz = mpDragSrcMarkList->GetMarkCount();
 
-         for( nm = nAnz; nm>0; )
+        for( size_t nm = nAnz; nm>0; )
         {
-            nm--;
+            --nm;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);
             if( bUndo )
                 AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
@@ -416,9 +416,9 @@ void View::DragFinished( sal_Int8 nDropAction )
 
         mpDragSrcMarkList->GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
 
-        for (nm=nAnz; nm>0;)
+        for (size_t nm = nAnz; nm>0;)
         {
-            nm--;
+            --nm;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);
             SdrObject* pObj=pM->GetMarkedSdrObj();
 
@@ -524,7 +524,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 {
                     const SdrHdlList& rHdlList = GetHdlList();
 
-                    for( sal_uInt32 n = 0; n < rHdlList.GetHdlCount(); n++ )
+                    for( size_t n = 0; n < rHdlList.GetHdlCount(); ++n )
                     {
                         SdrHdl* pIAOHandle = rHdlList.GetHdl( n );
 
@@ -678,7 +678,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
             {
                 const SdrHdlList& rHdlList = GetHdlList();
 
-                for( sal_uInt32 n = 0; !nRet && n < rHdlList.GetHdlCount(); n++ )
+                for( size_t n = 0; !nRet && n < rHdlList.GetHdlCount(); ++n )
                 {
                     SdrHdl* pIAOHandle = rHdlList.GetHdl( n );
 

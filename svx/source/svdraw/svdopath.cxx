@@ -148,10 +148,10 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
     {
         const SdrMarkView& rMarkView = *rDrag.GetView();
         const SdrHdlList& rHdlList = rMarkView.GetHdlList();
-        const sal_uInt32 nHdlCount = rHdlList.GetHdlCount();
+        const size_t nHdlCount = rHdlList.GetHdlCount();
         const SdrObject* pInteractionObject(nHdlCount && rHdlList.GetHdl(0) ? rHdlList.GetHdl(0)->GetObj() : 0);
 
-        for(sal_uInt32 a(0); a < nHdlCount; a++)
+        for(size_t a = 0; a < nHdlCount; ++a)
         {
             SdrHdl* pTestHdl = rHdlList.GetHdl(a);
 
@@ -576,11 +576,11 @@ bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat& rDrag )  const
     {
         const SdrMarkView& rMarkView = *rDrag.GetView();
         const SdrHdlList& rHdlList = rMarkView.GetHdlList();
-        const sal_uInt32 nHdlCount = rHdlList.GetHdlCount();
+        const size_t nHdlCount = rHdlList.GetHdlCount();
         const SdrObject* pInteractionObject(nHdlCount && rHdlList.GetHdl(0) ? rHdlList.GetHdl(0)->GetObj() : 0);
         sal_uInt32 nSelectedPoints(0);
 
-        for(sal_uInt32 a(0); a < nHdlCount; a++)
+        for(size_t a = 0; a < nHdlCount; ++a)
         {
             SdrHdl* pTestHdl = rHdlList.GetHdl(a);
 

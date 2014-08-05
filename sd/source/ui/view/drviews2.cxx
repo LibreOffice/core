@@ -785,7 +785,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 // get some necessary info and ensure it
                 const SdrMarkList& rMarkList(mpDrawView->GetMarkedObjectList());
-                const sal_uInt32 nMarkCount(rMarkList.GetMarkCount());
+                const size_t nMarkCount(rMarkList.GetMarkCount());
                 SdrPageView* pPageView = mpDrawView->GetSdrPageView();
                 OSL_ENSURE(nMarkCount, "DrawViewShell::FuTemporary: SID_CONVERT_TO_BITMAP with empty selection (!)");
                 OSL_ENSURE(pPageView, "DrawViewShell::FuTemporary: SID_CONVERT_TO_BITMAP without SdrPageView (!)");
@@ -798,10 +798,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 // #i71540# to keep the order, it is necessary to replace the lowest object
                 // of the selection with the new object. This also means that with multi
                 // selection, all other objects need to be deleted first
-                SdrMark* pFirstMark = rMarkList.GetMark(0L);
+                SdrMark* pFirstMark = rMarkList.GetMark(0);
                 SdrObject* pReplacementCandidate = pFirstMark->GetMarkedSdrObj();
 
-                if(nMarkCount > 1L)
+                if(nMarkCount > 1)
                 {
                     // take first object out of selection
                     mpDrawView->MarkObj(pReplacementCandidate, pPageView, true, true);
@@ -844,7 +844,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                sal_uLong nCount = rMarkList.GetMarkCount();
+                const size_t nCount = rMarkList.GetMarkCount();
 
                 // For every presentation object a SfxItemSet of hard attributes
                 // and the UserCall is stored in this list. This is because
@@ -852,9 +852,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 // they get lost and have to be restored.
                 std::vector<std::pair<SfxItemSet*,SdrObjUserCall*> > aAttrList;
                 SdPage* pPresPage = (SdPage*) mpDrawView->GetSdrPageView()->GetPage();
-                sal_uLong i;
 
-                for ( i = 0; i < nCount; i++ )
+                for ( size_t i = 0; i < nCount; ++i )
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
@@ -871,7 +870,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 sal_uLong j = 0;
 
-                for ( i = 0; i < nCount; i++ )
+                for ( size_t i = 0; i < nCount; ++i )
                 {
                     SfxStyleSheet* pSheet = NULL;
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
@@ -2113,10 +2112,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // only allow for single object selection since the name of an object needs
             // to be unique
-            if(1L == mpDrawView->GetMarkedObjectCount())
+            if(1 == mpDrawView->GetMarkedObjectCount())
             {
                 // #i68101#
-                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
+                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aName(pSelected->GetName());
 
@@ -2146,9 +2145,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         // #i68101#
         case SID_OBJECT_TITLE_DESCRIPTION:
         {
-            if(1L == mpDrawView->GetMarkedObjectCount())
+            if(1 == mpDrawView->GetMarkedObjectCount())
             {
-                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
+                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());
@@ -2350,11 +2349,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                sal_uLong nAnz=rMarkList.GetMarkCount();
+                const size_t nAnz=rMarkList.GetMarkCount();
 
                 // determine the sum of meta objects of all selected meta files
                 sal_uLong nCount = 0;
-                for(sal_uLong nm=0; nm<nAnz; nm++)
+                for(size_t nm=0; nm<nAnz; ++nm)
                 {
                     SdrMark*     pM=rMarkList.GetMark(nm);
                     SdrObject*   pObj=pM->GetMarkedSdrObj();
@@ -2390,7 +2389,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                     if( pFact )
                     {
-                        boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, nAnz ));
+                        boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, static_cast<sal_uLong>(nAnz) ));
                         if( pDlg )
                         {
                             pDlg->Execute();

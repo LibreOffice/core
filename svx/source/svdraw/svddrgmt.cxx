@@ -367,12 +367,12 @@ void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, s
 
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
 {
-    const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
+    const size_t nMarkAnz(getSdrDragView().GetMarkedObjectCount());
     SdrPageView* pPV = getSdrDragView().GetSdrPageView();
 
     if(pPV)
     {
-        for(sal_uInt32 a(0); a < nMarkAnz; a++)
+        for(size_t a = 0; a < nMarkAnz; ++a)
         {
             SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(a);
 
@@ -427,12 +427,12 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 
 void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 {
-    const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
+    const size_t nMarkAnz(getSdrDragView().GetMarkedObjectCount());
     bool bNoPolygons(getSdrDragView().IsNoDragXorPolys() || nMarkAnz > getSdrDragView().GetDragXorPolyLimit());
     basegfx::B2DPolyPolygon aResult;
     sal_uInt32 nPointCount(0);
 
-    for(sal_uInt32 a(0); !bNoPolygons && a < nMarkAnz; a++)
+    for(size_t a = 0; !bNoPolygons && a < nMarkAnz; ++a)
     {
         SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(a);
 
@@ -474,10 +474,10 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
 void SdrDragMethod::createSdrDragEntries_PointDrag()
 {
-    const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
+    const size_t nMarkAnz(getSdrDragView().GetMarkedObjectCount());
     std::vector< basegfx::B2DPoint > aPositions;
 
-    for(sal_uInt32 nm(0); nm < nMarkAnz; nm++)
+    for(size_t nm = 0; nm < nMarkAnz; ++nm)
     {
         SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(nm);
 
@@ -520,10 +520,10 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
 void SdrDragMethod::createSdrDragEntries_GlueDrag()
 {
-    const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
+    const size_t nMarkAnz(getSdrDragView().GetMarkedObjectCount());
     std::vector< basegfx::B2DPoint > aPositions;
 
-    for(sal_uInt32 nm(0); nm < nMarkAnz; nm++)
+    for(size_t nm = 0; nm < nMarkAnz; ++nm)
     {
         SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(nm);
 
@@ -888,7 +888,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
     const bool bDetail(getSdrDragView().IsDetailedEdgeDragging() && getMoveOnly());
     const SdrMarkList& rMarkedNodes = getSdrDragView().GetEdgesOfMarkedNodes();
 
-    for(sal_uInt16 a(0); a < rMarkedNodes.GetMarkCount(); a++)
+    for(size_t a = 0; a < rMarkedNodes.GetMarkCount(); ++a)
     {
         SdrMark* pEM = rMarkedNodes.GetMark(a);
 
@@ -1680,13 +1680,13 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
         { // restrict glue points to the BoundRect of the Obj
             aPt1-=DragStat().GetStart();
             const SdrMarkList& rML=GetMarkedObjectList();
-            sal_uLong nMarkAnz=rML.GetMarkCount();
+            const size_t nMarkAnz=rML.GetMarkCount();
 
-            for (sal_uLong nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++)
+            for (size_t nMarkNum=0; nMarkNum<nMarkAnz; ++nMarkNum)
             {
                 const SdrMark* pM=rML.GetMark(nMarkNum);
                 const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-                sal_uLong nPtAnz=pPts==NULL ? 0 : pPts->size();
+                const size_t nPtAnz=pPts==NULL ? 0 : pPts->size();
 
                 if (nPtAnz!=0)
                 {
@@ -3406,9 +3406,9 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
                 if (bCopy)
                     getSdrDragView().CopyMarkedObj();
 
-                sal_uLong nMarkAnz=getSdrDragView().GetMarkedObjectList().GetMarkCount();
+                const size_t nMarkAnz=getSdrDragView().GetMarkedObjectList().GetMarkCount();
 
-                for (sal_uLong nm=0; nm<nMarkAnz; nm++)
+                for (size_t nm=0; nm<nMarkAnz; ++nm)
                 {
                     SdrMark* pM=getSdrDragView().GetMarkedObjectList().GetMark(nm);
                     SdrObject* pO=pM->GetMarkedSdrObj();

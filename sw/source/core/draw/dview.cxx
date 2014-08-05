@@ -153,10 +153,10 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
             else
             {
                 // check if the object is selected in this view
-                const sal_uInt32 nMarkCount(rMrkList.GetMarkCount());
+                const size_t nMarkCount(rMrkList.GetMarkCount());
                 bool bSelected(false);
 
-                for(sal_uInt32 a(0); !bSelected && a < nMarkCount; a++)
+                for(size_t a = 0; !bSelected && a < nMarkCount; ++a)
                 {
                     if(pSwVirtFlyDrawObj == rMrkList.GetMark(a)->GetMarkedSdrObj())
                     {
@@ -818,7 +818,7 @@ void SwDrawView::CheckPossibilities()
     const SdrMarkList &rMrkList = GetMarkedObjectList();
     bool bProtect = false;
     bool bSzProtect = false;
-    for ( sal_uInt16 i = 0; !bProtect && i < rMrkList.GetMarkCount(); ++i )
+    for ( size_t i = 0; !bProtect && i < rMrkList.GetMarkCount(); ++i )
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         const SwFrm *pFrm = NULL;
@@ -890,7 +890,7 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
     {
         // collect marked objects in a local data structure
         std::vector<SdrObject*> aMarkedObjs;
-        for( sal_uInt32 i = 0; i < rMarkList.GetMarkCount(); ++i )
+        for( size_t i = 0; i < rMarkList.GetMarkCount(); ++i )
         {
             SdrObject* pMarkedObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
             aMarkedObjs.push_back( pMarkedObj );
@@ -945,7 +945,7 @@ void SwDrawView::DeleteMarked()
     // Check what textboxes have to be deleted afterwards.
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     std::vector<SwFrmFmt*> aTextBoxesToDelete;
-    for (sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); ++i)
+    for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
     {
         SdrObject *pObject = rMarkList.GetMark(i)->GetMarkedSdrObj();
         SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObject));

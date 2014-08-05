@@ -1686,8 +1686,8 @@ void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
     // muss ich es jetzt da rausnehmen, da ich sonst beim Zurueckschalten versuche, die Markierung wieder zu setzen
     // (interesanterweise geht das nur bei gruppierten Objekten schief (beim Zugriff auf deren ObjList GPF), nicht bei einzelnen)
 
-    sal_uIntPtr nCount = m_aMark.GetMarkCount();
-    for (sal_uIntPtr i = 0; i < nCount; ++i)
+    const size_t nCount = m_aMark.GetMarkCount();
+    for (size_t i = 0; i < nCount; ++i)
     {
         SdrMark* pMark = m_aMark.GetMark(i);
         SdrObject* pCurrent = pMark->GetMarkedSdrObj();
@@ -1739,8 +1739,8 @@ void FmXFormView::saveMarkList( bool _bSmartUnmark )
         m_aMark = m_pView->GetMarkedObjectList();
         if ( _bSmartUnmark )
         {
-            sal_uIntPtr nCount = m_aMark.GetMarkCount( );
-            for ( sal_uIntPtr i = 0; i < nCount; ++i )
+            const size_t nCount = m_aMark.GetMarkCount( );
+            for ( size_t i = 0; i < nCount; ++i )
             {
                 SdrMark*   pMark = m_aMark.GetMark(i);
                 SdrObject* pObj  = pMark->GetMarkedSdrObj();
@@ -1806,15 +1806,15 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
             bool bMisMatch = false;
 
             // loop through all current marks
-            sal_uIntPtr nCurrentCount = rCurrentList.GetMarkCount();
-            for ( sal_uIntPtr i=0; i<nCurrentCount&& !bMisMatch; ++i )
+            const size_t nCurrentCount = rCurrentList.GetMarkCount();
+            for ( size_t i=0; i<nCurrentCount && !bMisMatch; ++i )
             {
                 const SdrObject* pCurrentMarked = rCurrentList.GetMark( i )->GetMarkedSdrObj();
 
                 // loop through all saved marks, check for equality
                 bool bFound = false;
-                sal_uIntPtr nSavedCount = m_aMark.GetMarkCount();
-                for ( sal_uIntPtr j=0; j<nSavedCount && !bFound; ++j )
+                const size_t nSavedCount = m_aMark.GetMarkCount();
+                for ( size_t j=0; j<nSavedCount && !bFound; ++j )
                 {
                     if ( m_aMark.GetMark( j )->GetMarkedSdrObj() == pCurrentMarked )
                         bFound = true;
@@ -1839,8 +1839,8 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
         bool bFound = true;
 
         // gibt es noch alle Objecte
-        sal_uIntPtr nCount = m_aMark.GetMarkCount();
-        for (sal_uIntPtr i = 0; i < nCount && bFound; i++)
+        const size_t nCount = m_aMark.GetMarkCount();
+        for (size_t i = 0; i < nCount && bFound; ++i)
         {
             SdrMark*   pMark = m_aMark.GetMark(i);
             SdrObject* pObj  = pMark->GetMarkedSdrObj();
@@ -1861,7 +1861,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
             // Das LastObject auswerten
             if (nCount) // Objecte jetzt Markieren
             {
-                for (sal_uIntPtr i = 0; i < nCount; i++)
+                for (size_t i = 0; i < nCount; ++i)
                 {
                     SdrMark* pMark = m_aMark.GetMark(i);
                     SdrObject* pObj = pMark->GetMarkedSdrObj();

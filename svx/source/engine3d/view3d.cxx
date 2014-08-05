@@ -85,7 +85,7 @@ class Impl3DMirrorConstructOverlay
     const E3dView&                                  mrView;
 
     // the object count
-    sal_uInt32                                      mnCount;
+    size_t mnCount;
 
     // the unmirrored polygons
     basegfx::B2DPolyPolygon*                        mpPolygons;
@@ -121,7 +121,7 @@ Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
                 // Do not use the last ViewPort set at the OC at the last ProcessDisplay()
                 rOC.resetViewPort();
 
-                for(sal_uInt32 a(0);a < mnCount;a++)
+                for(size_t a = 0; a < mnCount; ++a)
                 {
                     SdrObject* pObject = mrView.GetMarkedObjectByIndex(a);
 
@@ -140,7 +140,7 @@ Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
         {
             mpPolygons = new basegfx::B2DPolyPolygon[mnCount];
 
-            for(sal_uInt32 a(0); a < mnCount; a++)
+            for(size_t a = 0; a < mnCount; ++a)
             {
                 SdrObject* pObject = mrView.GetMarkedObjectByIndex(a);
                 mpPolygons[mnCount - (a + 1)] = pObject->TakeXorPoly();
@@ -209,7 +209,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
             }
             else
             {
-                for(sal_uInt32 b(0); b < mnCount; b++)
+                for(size_t b = 0; b < mnCount; ++b)
                 {
                     // apply to polygon
                     basegfx::B2DPolyPolygon aPolyPolygon(mpPolygons[b]);
@@ -240,8 +240,8 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
     bool bSpecialHandling = false;
     E3dScene *pScene = NULL;
 
-    long nCnt = GetMarkedObjectCount();
-    for(long nObjs = 0;nObjs < nCnt;nObjs++)
+    const size_t nCnt = GetMarkedObjectCount();
+    for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
     {
         SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
         if(pObj && pObj->ISA(E3dCompoundObject))
@@ -264,8 +264,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
     {
         // Set selection flag to "not selected" for scenes related to all 3D
         // objects
-        long nObjs;
-        for(nObjs = 0;nObjs < nCnt;nObjs++)
+        for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
@@ -277,7 +276,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             }
         }
 
-        for(nObjs = 0;nObjs < nCnt;nObjs++)
+        for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dObject))
@@ -300,7 +299,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
         }
 
         // Reset selection flag
-        for(nObjs = 0;nObjs < nCnt;nObjs++)
+        for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
@@ -326,11 +325,10 @@ SdrModel* E3dView::GetMarkedObjModel() const
 {
     // Does 3D objects exist which scenes are not selected?
     bool bSpecialHandling(false);
-    const sal_uInt32 nCount(GetMarkedObjectCount());
-    sal_uInt32 nObjs(0);
+    const size_t nCount(GetMarkedObjectCount());
     E3dScene *pScene = 0;
 
-    for(nObjs = 0; nObjs < nCount; nObjs++)
+    for(size_t nObjs = 0; nObjs < nCount; ++nObjs)
     {
         const SdrObject* pObj = GetMarkedObjectByIndex(nObjs);
 
@@ -369,7 +367,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
 
     // set 3d selection flags at all directly selected objects
     // and collect SnapRect of selected objects
-    for(nObjs = 0; nObjs < nCount; nObjs++)
+    for(size_t nObjs = 0; nObjs < nCount; ++nObjs)
     {
         SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
 
@@ -389,7 +387,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
     SdrMarkList& rCurrentMarkList = ((E3dView*)this)->GetMarkedObjectListWriteAccess();
     rCurrentMarkList = aNewML;
 
-    for(nObjs = 0; nObjs < nCount; nObjs++)
+    for(size_t nObjs = 0; nObjs < nCount; ++nObjs)
     {
         SdrObject *pObj = aOldML.GetMark(nObjs)->GetMarkedSdrObj();
 
@@ -612,7 +610,7 @@ bool E3dView::IsConvertTo3DObjPossible() const
     bool bGroupSelected(false);
     bool bRetval(true);
 
-    for(sal_uInt32 a=0;!bAny3D && a<GetMarkedObjectCount();a++)
+    for(size_t a=0; !bAny3D && a<GetMarkedObjectCount(); ++a)
     {
         SdrObject *pObj = GetMarkedObjectByIndex(a);
         if(pObj)
@@ -902,7 +900,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, basegfx::B2DPoint aPnt1, baseg
             aInvLatheMat.invert();
 
             // SnapRect extension enables mirroring in the axis of rotation
-            for(sal_uInt32 a=0;a<GetMarkedObjectCount();a++)
+            for(size_t a=0; a<GetMarkedObjectCount(); ++a)
             {
                 SdrMark* pMark = GetSdrMarkByIndex(a);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -942,7 +940,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, basegfx::B2DPoint aPnt1, baseg
 
         // Walk through the selection and convert it into 3D, complete with
         // Conversion to SdrPathObject, also fonts
-        for(sal_uInt32 a=0;a<GetMarkedObjectCount();a++)
+        for(size_t a=0; a<GetMarkedObjectCount(); ++a)
         {
             SdrMark* pMark = GetSdrMarkByIndex(a);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -1213,13 +1211,13 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
            bOwnActionNecessary = false;
         }
 
-        if(bOwnActionNecessary && GetMarkedObjectCount() >= 1)
+        if(bOwnActionNecessary && GetMarkedObjectCount() > 0)
         {
             E3dDragConstraint eConstraint = E3DDRAG_CONSTR_XYZ;
             bool bThereAreRootScenes = false;
             bool bThereAre3DObjects = false;
-            long nCnt = GetMarkedObjectCount();
-            for(long nObjs = 0;nObjs < nCnt;nObjs++)
+            const size_t nCnt = GetMarkedObjectCount();
+            for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
             {
                 SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
                 if(pObj)
@@ -1380,7 +1378,7 @@ void E3dView::Start3DCreation()
 
         // and then attach the marks at the top and bottom of the object
         basegfx::B2DRange aR;
-        for(sal_uInt32 nMark(0L); nMark < GetMarkedObjectCount(); nMark++)
+        for(size_t nMark = 0; nMark < GetMarkedObjectCount(); ++nMark)
         {
             SdrObject* pMark = GetMarkedObjectByIndex(nMark);
             basegfx::B2DPolyPolygon aXPP(pMark->TakeXorPoly());
@@ -1544,13 +1542,11 @@ void E3dView::InitView ()
 
 bool E3dView::IsBreak3DObjPossible() const
 {
-    sal_uIntPtr nCount = GetMarkedObjectCount();
+    const size_t nCount = GetMarkedObjectCount();
 
     if (nCount > 0)
     {
-        sal_uIntPtr i = 0;
-
-        while (i < nCount)
+        for (size_t i = 0; i < nCount; ++i)
         {
             SdrObject* pObj = GetMarkedObjectByIndex(i);
 
@@ -1563,8 +1559,6 @@ bool E3dView::IsBreak3DObjPossible() const
             {
                 return false;
             }
-
-            i++;
         }
     }
     else
@@ -1580,10 +1574,10 @@ void E3dView::Break3DObj()
     if(IsBreak3DObjPossible())
     {
         // ALL selected objects are changed
-        sal_uInt32 nCount = GetMarkedObjectCount();
+        const size_t nCount = GetMarkedObjectCount();
 
         BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_BREAK_LATHE));
-        for(sal_uInt32 a=0;a<nCount;a++)
+        for(size_t a=0; a<nCount; ++a)
         {
             E3dObject* pObj = (E3dObject*)GetMarkedObjectByIndex(a);
             BreakSingle3DObj(pObj);
@@ -1626,10 +1620,10 @@ void E3dView::CheckPossibilities()
     // Set other flags
     if(bGroupPossible || bUnGroupPossible || bGrpEnterPossible)
     {
-        sal_Int32 nMarkCnt = GetMarkedObjectCount();
+        const size_t nMarkCnt = GetMarkedObjectCount();
         bool bCoumpound = false;
         bool b3DObject = false;
-        for(sal_Int32 nObjs = 0L; (nObjs < nMarkCnt) && !bCoumpound; nObjs++)
+        for(size_t nObjs = 0; (nObjs < nMarkCnt) && !bCoumpound; ++nObjs)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))

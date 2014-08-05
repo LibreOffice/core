@@ -659,11 +659,11 @@ bool SwView::AreOnlyFormsSelected() const
     SdrView* pSdrView = GetWrtShell().GetDrawView();
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uInt32 nCount = rMarkList.GetMarkCount();
+    const size_t nCount = rMarkList.GetMarkCount();
 
     if (nCount)
     {
-        for (sal_uInt32 i = 0; i < nCount; i++)
+        for (size_t i = 0; i < nCount; ++i)
         {
             // Except controls, are still normal draw objects selected?
             SdrObject *pSdrObj = rMarkList.GetMark(i)->GetMarkedSdrObj();

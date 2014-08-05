@@ -1719,7 +1719,7 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection( SdrObject** ppObj ) const
     if( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for( sal_uInt32 i = 0, nE = rMrkList.GetMarkCount(); i < nE; ++i )
+        for( size_t i = 0, nE = rMrkList.GetMarkCount(); i < nE; ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if( !pObj )

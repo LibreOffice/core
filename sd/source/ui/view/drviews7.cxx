@@ -266,7 +266,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(false);
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-    const sal_uLong nMarkCount = rMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
 
     //format paintbrush
     FuFormatPaintBrush::GetMenuState( *this, rSet );
@@ -961,7 +961,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         // kinds of NumBullets are marked
         bool bHasOutliner = false;
         bool bHasOther    = false;
-        for(sal_uLong nNum = 0; nNum < nMarkCount; nNum++)
+        for(size_t nNum = 0; nNum < nMarkCount; ++nNum)
         {
             SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor )
@@ -1431,8 +1431,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         bool bFoundAny            = false;
         bool bFoundTable = false;
 
-//      const int nMarkCount = (int) aMarkList.GetMarkCount();
-        for (sal_uLong i=0; i < nMarkCount && !bFoundAny; i++)
+//      const size_t nMarkCount = aMarkList.GetMarkCount();
+        for (size_t i=0; i < nMarkCount && !bFoundAny; ++i)
         {
             SdrObject* pObj=  aMarkList.GetMark(i)->GetMarkedSdrObj();
             sal_uInt16 nId = pObj->GetObjIdentifier();

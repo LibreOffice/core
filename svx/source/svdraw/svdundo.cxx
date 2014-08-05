@@ -1298,8 +1298,8 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
             rView.BegUndo(aStr);
         }
 
-        sal_uIntPtr nAnz=rML.GetMarkCount();
-        for (sal_uIntPtr nm=0; nm<nAnz; nm++)
+        const size_t nAnz=rML.GetMarkCount();
+        for (size_t nm=0; nm<nAnz; ++nm)
         {
             SdrObject* pObj2=rML.GetMark(nm)->GetMarkedSdrObj();
             SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pObj2);

@@ -235,7 +235,7 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
     // get handles using AddToHdlList from ref object
     SdrHdlList aLocalList(0);
     rRefObj.AddToHdlList(aLocalList);
-    const sal_uInt32 nHdlCount(aLocalList.GetHdlCount());
+    const size_t nHdlCount(aLocalList.GetHdlCount());
 
     if(nHdlCount)
     {
@@ -243,7 +243,7 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
         // two lists then
         const Point aOffset(GetOffset());
 
-        for(sal_uInt32 a(0L); a < nHdlCount; a++)
+        for(size_t a = 0; a < nHdlCount; ++a)
         {
             SdrHdl* pCandidate = aLocalList.GetHdl(a);
             pCandidate->SetPos(pCandidate->GetPos() + aOffset);
@@ -254,7 +254,7 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
         // source list is deleted
         while(aLocalList.GetHdlCount())
         {
-            aLocalList.RemoveHdl(aLocalList.GetHdlCount() - 1L);
+            aLocalList.RemoveHdl(aLocalList.GetHdlCount() - 1);
         }
     }
 }

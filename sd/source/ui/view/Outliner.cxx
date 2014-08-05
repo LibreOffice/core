@@ -786,11 +786,12 @@ void Outliner::DetectChange (void)
 bool Outliner::DetectSelectionChange()
 {
     bool bSelectionHasChanged = false;
-    sal_uLong nMarkCount = mpView ? mpView->GetMarkedObjectList().GetMarkCount() : 0;
 
     // If mpObj is NULL then we have not yet found our first match.
     // Detecting a change makes no sense.
     if (mpObj != NULL)
+    {
+        const size_t nMarkCount = mpView ? mpView->GetMarkedObjectList().GetMarkCount() : 0;
         switch (nMarkCount)
         {
             case 0:
@@ -813,6 +814,7 @@ bool Outliner::DetectSelectionChange()
                 bSelectionHasChanged = true;
                 break;
         }
+    }
 
     return bSelectionHasChanged;
 }
@@ -1437,12 +1439,12 @@ void Outliner::HandleChangedSelection (void)
     {
         // Make a copy of the current mark list.
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-        sal_uLong nCount = rMarkList.GetMarkCount();
+        const size_t nCount = rMarkList.GetMarkCount();
         if (nCount > 0)
         {
             maMarkListCopy.clear();
             maMarkListCopy.reserve (nCount);
-            for (sal_uLong i=0; i<nCount; i++)
+            for (size_t i=0; i<nCount; ++i)
                 maMarkListCopy.push_back (rMarkList.GetMark(i)->GetMarkedSdrObj ());
         }
         else

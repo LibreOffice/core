@@ -675,9 +675,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 * Toggle between selection and rotation
                 **************************************************************/
                 SdrObject* pSingleObj = NULL;
-                sal_uLong nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
-                if (nMarkCount==1)
+                if (mpView->GetMarkedObjectList().GetMarkCount()==1)
                 {
                     pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 }
@@ -803,7 +802,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         pHdl = NULL;
         mpWindow->ReleaseMouse();
         SdrObject* pSingleObj = NULL;
-        sal_uLong nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
+        const size_t nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
         if (nMarkCount==1)
         {

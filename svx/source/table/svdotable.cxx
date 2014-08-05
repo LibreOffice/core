@@ -2225,8 +2225,8 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
     rHdlList.AddHdl( pH = new SdrHdl(aRect.BottomCenter(),HDL_LOWER) ); pH->SetMoveOutside( true );
     rHdlList.AddHdl( pH = new SdrHdl(aRect.BottomRight(),HDL_LWRGT) ); pH->SetMoveOutside( true );
 
-    sal_uIntPtr nHdlCount = rHdlList.GetHdlCount();
-    for( sal_uIntPtr nHdl = 0; nHdl < nHdlCount; nHdl++ )
+    const size_t nHdlCount = rHdlList.GetHdlCount();
+    for( size_t nHdl = 0; nHdl < nHdlCount; ++nHdl )
         rHdlList.GetHdl(nHdl)->SetObj((SdrObject*)this);
 }
 
@@ -2242,9 +2242,9 @@ SdrHdl* SdrTableObj::GetHdl(sal_uInt32 nHdlNum) const
     SdrHdl* pRetval = 0;
     SdrHdlList aLocalList(0);
     AddToHdlList(aLocalList);
-    const sal_uInt32 nHdlCount(aLocalList.GetHdlCount());
+    const size_t nHdlCount(aLocalList.GetHdlCount());
 
-    if(nHdlCount && nHdlNum < nHdlCount)
+    if(nHdlCount && static_cast<size_t>(nHdlNum) < nHdlCount)
     {
         // remove and remember. The other created handles will be deleted again with the
         // destruction of the local list

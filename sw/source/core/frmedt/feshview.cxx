@@ -212,7 +212,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     {
         // It sucks if Drawing objects were selected and now
         // additionally a fly is selected.
-        for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+        for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pTmpObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             bool bForget = pTmpObj->ISA(SwVirtFlyDrawObj);
@@ -227,7 +227,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
 
     // If the fly frame is a textbox of a shape, then select the shape instead.
     std::map<SwFrmFmt*, SwFrmFmt*> aTextBoxShapes = SwTextBoxHelper::findShapes(mpDoc);
-    for (sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i)
+    for (size_t i = 0; i < rMrkList.GetMarkCount(); ++i)
     {
         SdrObject* pObject = rMrkList.GetMark(i)->GetMarkedSdrObj();
         SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObject));
@@ -725,7 +725,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
     // 2. The content of the frame itself has to be notified
     // 3. Frames displaced by the frame have to be notified
     // 4. Also Drawing objects can displace frames
-    for( sal_uInt16 j = 0; j < pLst->GetMarkCount(); ++j )
+    for( size_t j = 0; j < pLst->GetMarkCount(); ++j )
     {
         SwPageFrm *pPage;
         bool bCheckNeighbours = false;
@@ -844,7 +844,7 @@ short SwFEShell::GetLayerId() const
     if ( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+        for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if( !pObj )
@@ -874,7 +874,7 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
         // correct type of <nControls>
-        for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+        for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if( !pObj )
@@ -997,7 +997,7 @@ void SwFEShell::EndTextEdit()
                     DelSelectedObj();
                     if ( aSave.GetMarkCount() )
                     {
-                        for ( sal_uInt16 i = 0; i < aSave.GetMarkCount(); ++i )
+                        for ( size_t i = 0; i < aSave.GetMarkCount(); ++i )
                             pView->MarkObj( aSave.GetMark( i )->GetMarkedSdrObj(),
                                             Imp()->GetPageView() );
                     }
@@ -1898,7 +1898,7 @@ bool SwFEShell::EndMark()
             SwFlyFrm* pOldSelFly = ::GetFlyFromMarked( &rMrkList, this );
 
             if ( rMrkList.GetMarkCount() > 1 )
-                for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+                for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
                 {
                     SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
                     if( pObj->ISA(SwVirtFlyDrawObj) )
@@ -1948,7 +1948,7 @@ short SwFEShell::GetAnchorId() const
     if ( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+        for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if ( pObj->ISA(SwVirtFlyDrawObj) )
@@ -2056,7 +2056,7 @@ bool SwFEShell::IsGroupSelected()
     if ( IsObjSelected() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+        for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             // consider 'virtual' drawing objects.
@@ -2087,7 +2087,7 @@ bool SwFEShell::IsGroupAllowed() const
         const SdrObject* pUpGroup = 0L;
         const SwFrm* pHeaderFooterFrm = 0L;
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for ( sal_uInt16 i = 0; bIsGroupAllowed && i < rMrkList.GetMarkCount(); ++i )
+        for ( size_t i = 0; bIsGroupAllowed && i < rMrkList.GetMarkCount(); ++i )
         {
             const SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if ( i )
@@ -2274,7 +2274,7 @@ sal_uInt8 SwFEShell::IsSelObjProtected( sal_uInt16 eType ) const
     if( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for( sal_uLong i = rMrkList.GetMarkCount(); i; )
+        for( size_t i = rMrkList.GetMarkCount(); i; )
         {
             SdrObject *pObj = rMrkList.GetMark( --i )->GetMarkedSdrObj();
             if( !bParent )
@@ -2336,7 +2336,7 @@ bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
         return false;
 
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+    for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
@@ -2366,7 +2366,7 @@ bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
     StartUndo( UNDO_INSATTR );
 
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+    for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
@@ -2405,7 +2405,7 @@ void SwFEShell::CheckUnboundObjects()
     SET_CURR_SHELL( this );
 
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+    for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         if ( !GetUserCall(pObj) )

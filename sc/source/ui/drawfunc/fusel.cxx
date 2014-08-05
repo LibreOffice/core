@@ -413,8 +413,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( pView && pDocument )
                 {
                     const SdrMarkList& rSdrMarkList = pView->GetMarkedObjectList();
-                    sal_uLong nMarkCount = rSdrMarkList.GetMarkCount();
-                    for ( sal_uLong i = 0; i < nMarkCount; ++i )
+                    const size_t nMarkCount = rSdrMarkList.GetMarkCount();
+                    for ( size_t i = 0; i < nMarkCount; ++i )
                     {
                         SdrMark* pMark = rSdrMarkList.GetMark( i );
                         pObj = ( pMark ? pMark->GetMarkedSdrObj() : NULL );
@@ -468,11 +468,11 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 /*  if multi-selection contains a note caption object, remove
                     all other objects from selection. */
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-                sal_uLong nCount = rMarkList.GetMarkCount();
+                const size_t nCount = rMarkList.GetMarkCount();
                 if( nCount > 1 )
                 {
                     bool bFound = false;
-                    for( sal_uLong nIdx = 0; !bFound && (nIdx < nCount); ++nIdx )
+                    for( size_t nIdx = 0; !bFound && (nIdx < nCount); ++nIdx )
                     {
                         pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj();
                         bFound = ScDrawLayer::IsNoteCaption( pObj );

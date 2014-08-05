@@ -109,7 +109,7 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 // if we text hit another shape than the one currently selected, unselect the old one now
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-                if( rMarkList.GetMarkCount() >= 1 )
+                if( rMarkList.GetMarkCount() > 0 )
                 {
                     if( rMarkList.GetMarkCount() == 1 )
                     {
@@ -272,9 +272,8 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
 /* static */ void FuFormatPaintBrush::GetMenuState( DrawViewShell& rDrawViewShell, SfxItemSet &rSet )
 {
     const SdrMarkList& rMarkList = rDrawViewShell.GetDrawView()->GetMarkedObjectList();
-    const sal_uLong nMarkCount = rMarkList.GetMarkCount();
 
-    if( nMarkCount == 1 )
+    if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if( pObj && rDrawViewShell.GetDrawView()->SupportsFormatPaintbrush(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )

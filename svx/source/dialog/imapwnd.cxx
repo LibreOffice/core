@@ -470,7 +470,7 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
     {
         PopupMenu           aMenu( SVX_RES( RID_SVXMN_IMAP ) );
         const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
-        sal_uIntPtr             nMarked = rMarkList.GetMarkCount();
+        const size_t nMarked = rMarkList.GetMarkCount();
 
         aMenu.EnableItem( MN_URL, false );
         aMenu.EnableItem( MN_ACTIVATE, false );

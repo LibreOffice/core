@@ -145,13 +145,13 @@ void SvxXConnectionPreview::Construct()
     DBG_ASSERT( pView, "No valid view is passed on! ");
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uIntPtr nMarkCount = rMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount >= 1 )
     {
         bool bFound = false;
 
-        for( sal_uInt16 i = 0; i < nMarkCount && !bFound; i++ )
+        for( size_t i = 0; i < nMarkCount && !bFound; ++i )
         {
             const SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
             sal_uInt32 nInv = pObj->GetObjInventor();

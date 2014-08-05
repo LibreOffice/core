@@ -59,8 +59,8 @@ void ScDrawView::SetPageAnchored()
     {
         SdrObject* pObj = NULL;
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        sal_uLong nCount = pMark->GetMarkCount();
-        for( sal_uLong i=0; i<nCount; i++ )
+        const size_t nCount = pMark->GetMarkCount();
+        for( size_t i=0; i<nCount; ++i )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             ScDrawLayer::SetPageAnchored( *pObj );
@@ -84,8 +84,8 @@ void ScDrawView::SetCellAnchored()
     {
         SdrObject* pObj = NULL;
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        sal_uLong nCount = pMark->GetMarkCount();
-        for( sal_uLong i=0; i<nCount; i++ )
+        const size_t nCount = pMark->GetMarkCount();
+        for( size_t i=0; i<nCount; ++i )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
@@ -106,9 +106,9 @@ ScAnchorType ScDrawView::GetAnchorType() const
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        sal_uLong nCount = pMark->GetMarkCount();
+        const size_t nCount = pMark->GetMarkCount();
         const SdrObject* pObj = NULL;
-        for( sal_uLong i=0; i<nCount; i++ )
+        for( size_t i=0; i<nCount; ++i )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             if( ScDrawLayer::GetAnchorType( *pObj ) == SCA_CELL )

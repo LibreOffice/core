@@ -221,7 +221,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             bGroupMembersNotPositioned = pAnchoredDrawObj->NotYetPositioned();
         }
         // Destroy ContactObjects and formats.
-        for( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+        for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
@@ -309,7 +309,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >* pFmtsAndObjs( 0L );
-    const sal_uInt32 nMarkCount( rMrkList.GetMarkCount() );
+    const size_t nMarkCount( rMrkList.GetMarkCount() );
     if ( nMarkCount )
     {
         pFmtsAndObjs = new std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >[nMarkCount];
@@ -317,7 +317,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         if( !pMyObj->GetUpGroup() )
         {
             OUString sDrwFmtNm("DrawObject");
-            for ( sal_uInt16 i = 0; i < nMarkCount; ++i )
+            for ( size_t i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
                 if ( pObj->IsA( TYPE(SdrObjGroup) ) )
@@ -354,7 +354,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     rDrawView.UnGroupMarked();
     // creation of <SwDrawContact> instances for the former group members and
     // its connection to the Writer layout.
-    for ( sal_uInt32 i = 0; i < nMarkCount; ++i )
+    for ( size_t i = 0; i < nMarkCount; ++i )
     {
         SwUndoDrawUnGroupConnectToLayout* pUndo = 0;
         if( bUndo )
@@ -390,7 +390,6 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
     if( rMrkList.GetMarkCount() )
     {
         GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-        sal_uInt16 i;
         bool bDelMarked = true;
 
         if( 1 == rMrkList.GetMarkCount() )
@@ -408,7 +407,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             }
         }
 
-        for( i = 0; i < rMrkList.GetMarkCount(); ++i )
+        for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if( !pObj->ISA(SwVirtFlyDrawObj) )
@@ -436,7 +435,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                             : new SwUndoDrawDelete( (sal_uInt16)rMrkList.GetMarkCount() );
 
                 // Destroy ContactObjects, save formats.
-                for( i = 0; i < rMrkList.GetMarkCount(); ++i )
+                for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
                 {
                     const SdrMark& rMark = *rMrkList.GetMark( i );
                     pObj = rMark.GetMarkedSdrObj();

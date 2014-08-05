@@ -82,7 +82,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
             {
                 //  handle selection on drawing layer
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                sal_uLong nMarkCount = rMarkList.GetMarkCount();
+                const size_t nMarkCount = rMarkList.GetMarkCount();
                 if ( nMarkCount )
                 {
                     if ( nMarkCount == 1 )

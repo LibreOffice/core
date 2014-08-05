@@ -187,9 +187,8 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
         {
             // toggle between selection and rotation
             SdrObject* pSingleObj = NULL;
-            sal_uLong nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
-            if (nMarkCount==1)
+            if (mpView->GetMarkedObjectList().GetMarkCount()==1)
             {
                 pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             }

@@ -96,8 +96,7 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
         // Notes always default to Page anchor.
     bool bDisableAnchor = false;
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
-    if ( nMarkCount == 1 )
+    if ( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         if( ScDrawLayer::IsNoteCaption( pObj ) )
@@ -145,7 +144,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     }
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
 
     if ( nMarkCount <= 1 || !pView->IsGroupPossible() )
         rSet.DisableItem( SID_GROUP );
@@ -363,8 +362,8 @@ void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
 bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark)
 {
     bool bResult=true;
-    sal_uLong nCount = rMark.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+    const size_t nCount = rMark.GetMarkCount();
+    for (size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
         if ( !pObj->ISA(SdrUnoObj) )

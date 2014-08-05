@@ -634,8 +634,8 @@ static void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB
     OSL_ENSURE(pDestPV,"PageView ?");
 
     const SdrMarkList& rMarkList = rSource.GetMarkedObjectList();
-    sal_uLong nCount = rMarkList.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+    const size_t nCount = rMarkList.GetMarkCount();
+    for (size_t i=0; i<nCount; ++i)
     {
         SdrMark* pMark = rMarkList.GetMark(i);
         SdrObject* pObj = pMark->GetMarkedSdrObj();

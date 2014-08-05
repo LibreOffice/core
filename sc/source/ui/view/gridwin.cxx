@@ -4481,8 +4481,8 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
     SdrView* pDrawView = pViewData->GetViewShell()->GetSdrView();
     if (pDrawView)
     {
-        sal_uLong nCount = pDrawView->GetMarkedObjectCount();
-        for (sal_uLong i = 0; i < nCount; ++i)
+        const size_t nCount = pDrawView->GetMarkedObjectCount();
+        for (size_t i = 0; i < nCount; ++i)
         {
             SdrObject* pObj = pDrawView->GetMarkedObjectByIndex(i);
             if (pObj && pObj->GetLogicRect().IsInside(aLogicPos))

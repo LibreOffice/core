@@ -520,7 +520,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             if(1L == pSdrView->GetMarkedObjectCount())
             {
                 // #i68101#
-                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0L);
+                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aName(pSelected->GetName());
 
@@ -549,7 +549,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
             if(1L == pSdrView->GetMarkedObjectCount())
             {
-                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0L);
+                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());

@@ -824,7 +824,7 @@ namespace svxform
         FmNavRequestSelectHint rshRequestSelection;
         bool bIsMixedSelection = false;
 
-        for (sal_uLong i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
+        for (size_t i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; ++i)
         {
             SdrObject* pobjCurrent = mlMarked.GetMark(i)->GetMarkedSdrObj();
             bIsMixedSelection |= !InsertFormComponent(rshRequestSelection, pobjCurrent);

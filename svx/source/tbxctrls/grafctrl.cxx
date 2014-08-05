@@ -871,7 +871,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
     bool            bEnableTransparency = true;
     bool            bEnableCrop = ( 1 == rMarkList.GetMarkCount() );
 
-    for( int i = 0, nCount = rMarkList.GetMarkCount(); i < nCount; ++i )
+    for( size_t i = 0, nCount = rMarkList.GetMarkCount(); i < nCount; ++i )
     {
         SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >( rMarkList.GetMark( i )->GetMarkedSdrObj() );
 

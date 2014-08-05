@@ -704,8 +704,8 @@ void DlgEditor::Copy()
     }
 
     // insert control models of marked objects into clipboard dialog model
-    sal_uLong nMark = pDlgEdView->GetMarkedObjectList().GetMarkCount();
-    for( sal_uLong i = 0; i < nMark; i++ )
+    const size_t nMark = pDlgEdView->GetMarkedObjectList().GetMarkCount();
+    for( size_t i = 0; i < nMark; ++i )
     {
         SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
         DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj);
@@ -1017,9 +1017,9 @@ void DlgEditor::Delete()
         return;
 
     // remove control models of marked objects from dialog model
-    sal_uLong nMark = pDlgEdView->GetMarkedObjectList().GetMarkCount();
+    const size_t nMark = pDlgEdView->GetMarkedObjectList().GetMarkCount();
 
-    for( sal_uLong i = 0; i < nMark; i++ )
+    for( size_t i = 0; i < nMark; ++i )
     {
         SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
         DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj);

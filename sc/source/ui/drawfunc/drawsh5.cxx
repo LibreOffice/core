@@ -66,13 +66,12 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 {
     ScDrawView* pView = pViewData->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
 
         //  Hyperlink
 
     SvxHyperlinkItem aHLinkItem;
 
-    if ( nMarkCount == 1 )              // URL-Button markiert ?
+    if ( rMarkList.GetMarkCount() == 1 )              // URL-Button markiert ?
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
@@ -476,10 +475,10 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_RENAME_OBJECT:
             {
-                if(1L == pView->GetMarkedObjectCount())
+                if(1 == pView->GetMarkedObjectCount())
                 {
                     // #i68101#
-                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0L);
+                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0);
                     OSL_ENSURE(pSelected, "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
@@ -545,9 +544,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         // #i68101#
         case SID_TITLE_DESCRIPTION_OBJECT:
             {
-                if(1L == pView->GetMarkedObjectCount())
+                if(1 == pView->GetMarkedObjectCount())
                 {
-                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0L);
+                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0);
                     OSL_ENSURE(pSelected, "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())

@@ -236,8 +236,8 @@ Sequence< Reference< XInterface > >
     Sequence< Reference< XInterface > > aSeq;
     InterfaceArray aInterfaces;
 
-    sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
-    for( sal_uInt32 i = 0 ; i < nMarkCount ; i++ )
+    const size_t nMarkCount = _rMarkList.GetMarkCount();
+    for( size_t i = 0 ; i < nMarkCount ; ++i )
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
 
@@ -471,7 +471,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         }
 
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
+        const size_t nMarkCount = rMarkList.GetMarkCount();
 
         if ( nMarkCount == 0 )
         {

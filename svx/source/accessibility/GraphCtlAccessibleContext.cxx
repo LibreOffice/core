@@ -652,7 +652,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCoun
         throw DisposedException();
 
     const SdrMarkList& rList = mpView->GetMarkedObjectList();
-    return rList.GetMarkCount();
+    return static_cast<sal_Int32>(rList.GetMarkCount());
 }
 
 
@@ -667,7 +667,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAcce
     Reference< XAccessible > xAccessible;
 
     const SdrMarkList& rList = mpView->GetMarkedObjectList();
-    SdrObject* pObj = rList.GetMark(nIndex)->GetMarkedSdrObj();
+    SdrObject* pObj = rList.GetMark(static_cast<size_t>(nIndex))->GetMarkedSdrObj();
     if( pObj )
         xAccessible = getAccessible( pObj );
 
@@ -694,9 +694,8 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
             SdrPageView* pPV = mpView->GetSdrPageView();
             mpView->UnmarkAllObj( pPV );
 
-            sal_uInt32 nCount = aRefList.GetMarkCount();
-            sal_uInt32 nMark;
-            for( nMark = 0; nMark < nCount; nMark++ )
+            const size_t nCount = aRefList.GetMarkCount();
+            for( size_t nMark = 0; nMark < nCount; ++nMark )
             {
                 if( aRefList.GetMark(nMark)->GetMarkedSdrObj() != pObj )
                     mpView->MarkObj( aRefList.GetMark(nMark)->GetMarkedSdrObj(), pPV );

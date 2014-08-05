@@ -429,7 +429,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, cons
                 // local list to perform the corresponding action for each object
                 std::vector<SdrObject*> aDrawObjs;
                 {
-                    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+                    for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
                     {
                         SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
                         if( pDrawObj )

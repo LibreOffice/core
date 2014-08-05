@@ -722,13 +722,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             SdrLayerID nLayer = 0, nOldLayer = 0;
             SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-            sal_uLong nMarkCount = rMarkList.GetMarkCount();
+            const size_t nMarkCount = rMarkList.GetMarkCount();
             bool bOneLayer = true;
 
             // Use the first ten selected shapes as a (hopefully
             // representative) sample of all shapes of the current page.
             // Detect whether they belong to the same layer.
-            for( sal_uLong j = 0; j < nMarkCount && bOneLayer && j < 10; j++ )
+            for( size_t j = 0; j < nMarkCount && bOneLayer && j < 10; ++j )
             {
                 pObj = rMarkList.GetMark( j )->GetMarkedSdrObj();
                 if( pObj )

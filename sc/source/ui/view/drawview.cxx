@@ -135,8 +135,8 @@ ScDrawView::~ScDrawView()
 void ScDrawView::AddCustomHdl()
 {
     const SdrMarkList &rMrkList = GetMarkedObjectList();
-    sal_uInt32 nCount = rMrkList.GetMarkCount();
-    for(sal_uInt32 nPos=0; nPos<nCount; nPos++ )
+    const size_t nCount = rMrkList.GetMarkCount();
+    for(size_t nPos=0; nPos<nCount; ++nPos )
     {
         SdrObject* pObj = rMrkList.GetMark(nPos)->GetMarkedSdrObj();
         if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
@@ -214,8 +214,8 @@ void ScDrawView::SetMarkedToLayer( sal_uInt8 nLayerNo )
         BegUndo( ScGlobal::GetRscString( STR_UNDO_SELATTR ) );
 
         const SdrMarkList& rMark = GetMarkedObjectList();
-        sal_uLong nCount = rMark.GetMarkCount();
-        for (sal_uLong i=0; i<nCount; i++)
+        const size_t nCount = rMark.GetMarkCount();
+        for (size_t i=0; i<nCount; ++i)
         {
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
             if ( !pObj->ISA(SdrUnoObj) && (pObj->GetLayer() != SC_LAYER_INTERN) )
@@ -383,7 +383,7 @@ void ScDrawView::MarkListHasChanged()
     SdrGrafObj* pGrafObj = NULL;
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
 
     if ( nMarkCount == 0 && !pViewData->GetViewShell()->IsDrawSelMode() && !bInConstruct )
     {
@@ -427,7 +427,7 @@ void ScDrawView::MarkListHasChanged()
     {
         bool bOnlyControls = true;
         bool bOnlyGraf     = true;
-        for (sal_uLong i=0; i<nMarkCount; i++)
+        for (size_t i=0; i<nMarkCount; ++i)
         {
             SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
             if ( pObj->ISA( SdrObjGroup ) )

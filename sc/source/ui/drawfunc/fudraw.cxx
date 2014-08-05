@@ -619,7 +619,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                             // restore point with focus
                             SdrHdl* pNewOne = 0L;
 
-                            for(sal_uInt32 a(0); !pNewOne && a < rHdlList.GetHdlCount(); a++)
+                            for(size_t a = 0; !pNewOne && a < rHdlList.GetHdlCount(); ++a)
                             {
                                 SdrHdl* pAct = rHdlList.GetHdl(a);
 
@@ -783,8 +783,8 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 bool FuDraw::IsEditingANote() const
 {
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_Int32 backval=rMarkList.GetMarkCount();
-    for (sal_Int32 nlv1=0;nlv1<backval;nlv1++)
+    const size_t backval=rMarkList.GetMarkCount();
+    for (size_t nlv1=0; nlv1<backval; ++nlv1)
     {
         SdrObject* pObj = rMarkList.GetMark( nlv1 )->GetMarkedSdrObj();
         if ( ScDrawLayer::IsNoteCaption( pObj ) )

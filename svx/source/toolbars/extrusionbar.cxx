@@ -546,9 +546,9 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
             if (pSdrView)
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+                const size_t nCount = rMarkList.GetMarkCount();
 
-                for(i=0; i<nCount; i++)
+                for(size_t i=0; i<nCount; ++i)
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                     if( pObj->ISA(SdrObjCustomShape) )
@@ -625,7 +625,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
 void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     static const OUString  sExtrusion( "Extrusion" );
     static const OUString  sViewPoint( "ViewPoint" );
@@ -638,7 +638,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
     double fFinalSkewAngle = -1;
     bool bHasCustomShape = false;
 
-    for(i=0;i<nCount; i++)
+    for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -776,7 +776,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     static const OUString  sExtrusion( "Extrusion" );
     static const OUString  sProjectionMode( "ProjectionMode" );
@@ -786,7 +786,7 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
     sal_Int32 nFinalProjection = -1;
     bool bHasCustomShape = false;
 
-    for(i=0;i<nCount; i++)
+    for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -832,7 +832,7 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     static const OUString  sExtrusion( "Extrusion" );
     static const OUString  sShadeMode( "ShadeMode" );
@@ -844,7 +844,7 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
     sal_Int32 nFinalSurface = -1;
     bool bHasCustomShape = false;
 
-    for(i=0;i<nCount; i++)
+    for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -920,7 +920,7 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     static const OUString  sExtrusion( "Extrusion" );
     static const OUString  sDepth( "Depth" );
@@ -930,7 +930,7 @@ void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
     double fFinalDepth = -1;
     bool bHasCustomShape = false;
 
-    for(i=0;i<nCount; i++)
+    for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -1000,7 +1000,7 @@ static bool compare_direction( const Direction3D& d1, const Direction3D& d2 )
 void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     static const OUString  sExtrusion( "Extrusion" );
     static const OUString  sFirstLightDirection( "FirstLightDirection" );
@@ -1016,7 +1016,7 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
     int nFinalDirection = -1;
     bool bHasCustomShape = false;
 
-    for(i=0;i<nCount; i++)
+    for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -1081,7 +1081,7 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     static const OUString  sExtrusion( "Extrusion" );
     static const OUString  sBrightness( "Brightness" );
@@ -1091,7 +1091,7 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
     int nFinalLevel = -1;
     bool bHasCustomShape = false;
 
-    for(i=0;i<nCount; i++)
+    for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -1149,7 +1149,7 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
 
     static const OUString  sExtrusion( "Extrusion" );
     static const OUString  sExtrusionColor( "Color" );
@@ -1161,7 +1161,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
     Color aFinalColor;
     bool bHasCustomShape = false;
 
-    for(i=0;i<nCount; i++)
+    for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
@@ -1224,10 +1224,10 @@ bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
     static const OUString  sExtrusion( "Extrusion" );
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
+    const size_t nCount = rMarkList.GetMarkCount();
     bool bFound = false;
 
-    for(i=0;(i<nCount) && !bFound ; i++)
+    for(size_t i=0;(i<nCount) && !bFound ; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )

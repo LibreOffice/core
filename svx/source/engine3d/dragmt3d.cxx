@@ -48,16 +48,15 @@ E3dDragMethod::E3dDragMethod (
     mbMovedAtAll(false)
 {
     // Create a unit for all the 3D objects present in the selection
-    const long nCnt(rMark.GetMarkCount());
+    const size_t nCnt(rMark.GetMarkCount());
     static bool bDoInvalidate(false);
-    long nObjs(0);
 
     if(mbMoveFull)
     {
         // for non-visible 3D objects fallback to wireframe interaction
         bool bInvisibleObjects(false);
 
-        for(nObjs = 0;!bInvisibleObjects && nObjs < nCnt;nObjs++)
+        for(size_t nObjs = 0; !bInvisibleObjects && nObjs < nCnt; ++nObjs)
         {
             E3dObject* pE3dObj = dynamic_cast< E3dObject* >(rMark.GetMark(nObjs)->GetMarkedSdrObj());
 
@@ -76,7 +75,7 @@ E3dDragMethod::E3dDragMethod (
         }
     }
 
-    for(nObjs = 0;nObjs < nCnt;nObjs++)
+    for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
     {
         E3dObject* pE3dObj = dynamic_cast< E3dObject* >(rMark.GetMark(nObjs)->GetMarkedSdrObj());
 

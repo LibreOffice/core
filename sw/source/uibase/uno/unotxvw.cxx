@@ -407,7 +407,7 @@ uno::Any SwXTextView::getSelection()
                         comphelper::getProcessComponentContext());
 
                 const SdrMarkList& rMarkList = rSh.GetDrawView()->GetMarkedObjectList();
-                for(sal_uLong i = 0; i < rMarkList.GetMarkCount(); ++i)
+                for(size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                     uno::Reference< uno::XInterface >  xInt = pSvxDrawPage->GetInterface( pObj );

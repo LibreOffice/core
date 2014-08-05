@@ -146,9 +146,9 @@ void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
 {
     const SdrMarkList& rMarkedList = GetMarkedObjectList();
-    const sal_uLong nMark = rMarkedList.GetMarkCount();
+    const size_t nMark = rMarkedList.GetMarkCount();
 
-    for( sal_uLong i = 0; i < nMark; i++ )
+    for( size_t i = 0; i < nMark; ++i )
     {
         SdrObject* pSdrObj = rMarkedList.GetMark(i)->GetMarkedSdrObj();
         if (_pObject == pSdrObj)
@@ -171,8 +171,8 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
         BegUndo( );
 
         const SdrMarkList& rMark = GetMarkedObjectList();
-        sal_uLong nCount = rMark.GetMarkCount();
-        for (sal_uLong i=0; i<nCount; i++)
+        const size_t nCount = rMark.GetMarkCount();
+        for (size_t i = 0; i<nCount; ++i)
         {
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
             if ( pObj->ISA(OCustomShape) )
@@ -202,19 +202,18 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 bool OSectionView::OnlyShapesMarked() const
 {
     const SdrMarkList& rMark = GetMarkedObjectList();
-    const sal_uLong nCount = rMark.GetMarkCount();
+    const size_t nCount = rMark.GetMarkCount();
     if ( !nCount )
         return false;
-    sal_uLong i=0;
-    for (; i<nCount; i++)
+    for (size_t i = 0; i<nCount; ++i)
     {
         SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
         if ( !pObj->ISA(OCustomShape) )
         {
-            break;
+            return false;
         }
     }
-    return i == nCount;
+    return true;
 }
 
 bool OSectionView::IsDragResize() const
@@ -237,7 +236,7 @@ short OSectionView::GetLayerIdOfMarkedObjects() const
 {
     short nRet = SHRT_MAX;
     const SdrMarkList &rMrkList = GetMarkedObjectList();
-    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+    for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         if ( nRet == SHRT_MAX )

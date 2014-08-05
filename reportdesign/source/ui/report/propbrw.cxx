@@ -280,11 +280,11 @@ bool PropBrw::Close()
 
 uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const SdrMarkList& _rMarkList)
 {
-    sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
+    const size_t nMarkCount = _rMarkList.GetMarkCount();
     ::std::vector< uno::Reference< uno::XInterface> > aSets;
     aSets.reserve(nMarkCount);
 
-    for(sal_uInt32 i=0;i<nMarkCount;++i)
+    for(size_t i=0; i<nMarkCount; ++i)
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
 

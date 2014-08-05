@@ -556,7 +556,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         // restore point with focus
                         SdrHdl* pNewOne = 0L;
 
-                        for(sal_uInt32 a(0); !pNewOne && a < rHdlList.GetHdlCount(); a++)
+                        for(size_t a = 0; !pNewOne && a < rHdlList.GetHdlCount(); ++a)
                         {
                             SdrHdl* pAct = rHdlList.GetHdl(a);
 

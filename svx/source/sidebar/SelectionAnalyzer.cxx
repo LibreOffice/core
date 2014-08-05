@@ -311,7 +311,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
 
 sal_uInt32 SelectionAnalyzer::GetInventorTypeFromMark (const SdrMarkList& rMarkList)
 {
-    const sal_uLong nMarkCount (rMarkList.GetMarkCount());
+    const size_t nMarkCount (rMarkList.GetMarkCount());
 
     if (nMarkCount < 1)
         return 0;
@@ -320,7 +320,7 @@ sal_uInt32 SelectionAnalyzer::GetInventorTypeFromMark (const SdrMarkList& rMarkL
     SdrObject* pObj = pMark->GetMarkedSdrObj();
     const sal_uInt32 nFirstInv = pObj->GetObjInventor();
 
-    for (sal_uLong nIndex=1; nIndex<nMarkCount; ++nIndex)
+    for (size_t nIndex=1; nIndex<nMarkCount; ++nIndex)
     {
         pMark = rMarkList.GetMark(nIndex);
         pObj = pMark->GetMarkedSdrObj();
@@ -393,7 +393,7 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup (const SdrObject* pObj)
 
 sal_uInt16  SelectionAnalyzer::GetObjectTypeFromMark (const SdrMarkList& rMarkList)
 {
-    const sal_uLong nMarkCount (rMarkList.GetMarkCount());
+    const size_t nMarkCount (rMarkList.GetMarkCount());
 
     if (nMarkCount < 1)
         return 0;
@@ -411,7 +411,7 @@ sal_uInt16  SelectionAnalyzer::GetObjectTypeFromMark (const SdrMarkList& rMarkLi
     if (IsTextObjType(nResultType))
         nResultType = OBJ_TEXT;
 
-    for (sal_uLong nIndex=1; nIndex<nMarkCount; ++nIndex)
+    for (size_t nIndex=1; nIndex<nMarkCount; ++nIndex)
     {
         pMark = rMarkList.GetMark(nIndex);
         pObj = pMark->GetMarkedSdrObj();

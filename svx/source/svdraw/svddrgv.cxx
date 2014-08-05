@@ -269,7 +269,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         {
                             // are 3D objects selected?
                             bool b3DObjSelected = false;
-                            for(sal_uInt32 a=0;!b3DObjSelected && a<GetMarkedObjectCount();a++)
+                            for(size_t a=0; !b3DObjSelected && a<GetMarkedObjectCount(); ++a)
                             {
                                 SdrObject* pObj = GetMarkedObjectByIndex(a);
                                 if(pObj && pObj->ISA(E3dObject))
@@ -735,7 +735,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
     bool bRet=false;
     SdrObject* pObj;
     SdrPageView* pPV;
-    sal_uIntPtr nMarkNum;
+    size_t nMarkNum;
     if (PickMarkedObj(rPnt,pObj,pPV,&nMarkNum,SDRSEARCH_PASS2BOUND))
     {
         BrkAction();

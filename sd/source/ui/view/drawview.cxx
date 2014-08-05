@@ -267,8 +267,8 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
         {
             // Selection
             const SdrMarkList& rList = GetMarkedObjectList();
-            sal_uLong nMarkCount         = rList.GetMarkCount();
-            for (sal_uLong nMark = 0; nMark < nMarkCount; nMark++)
+            const size_t nMarkCount = rList.GetMarkCount();
+            for (size_t nMark = 0; nMark < nMarkCount; ++nMark)
             {
                 SdrObject* pObject = rList.GetMark(nMark)->GetMarkedSdrObj();
                 sal_uInt32 nInv = pObject->GetObjInventor();
@@ -554,11 +554,11 @@ void DrawView::DeleteMarked()
     SdPage* pPage = 0;
     bool bResetLayout = false;
 
-    const sal_uLong nMarkCount = GetMarkedObjectList().GetMarkCount();
+    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
     if( nMarkCount )
     {
         SdrMarkList aList( GetMarkedObjectList() );
-        for (sal_uLong nMark = 0; nMark < nMarkCount; nMark++)
+        for (size_t nMark = 0; nMark < nMarkCount; ++nMark)
         {
             SdrObject* pObj = aList.GetMark(nMark)->GetMarkedSdrObj();
             if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )

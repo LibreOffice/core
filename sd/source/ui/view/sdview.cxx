@@ -561,11 +561,10 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
 
     bool bSelected = false;
     bool bMasterPage = false;
-    long nMark;
-    long nMarkMax = long(pMarkList->GetMarkCount()) - 1;
 
-    for (nMark = nMarkMax; (nMark >= 0) && !bSelected; nMark--)
+    for (size_t nMark = pMarkList->GetMarkCount(); nMark && !bSelected; )
     {
+        --nMark;
         // Backwards through mark list
         pMark = pMarkList->GetMark(nMark);
         pObj = pMark->GetMarkedSdrObj();
@@ -835,10 +834,10 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
 void View::SetMarkedOriginalSize()
 {
     SdrUndoGroup* pUndoGroup = new SdrUndoGroup(mrDoc);
-    sal_uLong           nCount = GetMarkedObjectCount();
+    const size_t nCount = GetMarkedObjectCount();
     bool            bOK = false;
 
-    for( sal_uInt32 i = 0; i < nCount; i++ )
+    for( size_t i = 0; i < nCount; ++i )
     {
         SdrObject* pObj = GetMarkedObjectByIndex(i);
 
@@ -1261,8 +1260,8 @@ bool View::ShouldToggleOn(
 
     bool bToggleOn = false;
     boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel));
-    sal_uInt32 nMarkCount = GetMarkedObjectCount();
-    for (sal_uInt32 nIndex = 0; nIndex < nMarkCount && !bToggleOn; nIndex++)
+    const size_t nMarkCount = GetMarkedObjectCount();
+    for (size_t nIndex = 0; nIndex < nMarkCount && !bToggleOn; ++nIndex)
     {
         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(GetMarkedObjectByIndex(nIndex));
         if (!pTextObj || pTextObj->IsTextEditActive())
@@ -1335,8 +1334,8 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel));
     boost::scoped_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner.get(), pWindow));
 
-    const sal_uInt32 nMarkCount = GetMarkedObjectCount();
-    for (sal_uInt32 nIndex = 0; nIndex < nMarkCount; nIndex++)
+    const size_t nMarkCount = GetMarkedObjectCount();
+    for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
     {
         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(GetMarkedObjectByIndex(nIndex));
         if (!pTextObj || pTextObj->IsTextEditActive())

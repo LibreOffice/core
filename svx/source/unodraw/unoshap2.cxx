@@ -273,7 +273,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 
         for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
         {
-            if(CONTAINER_ENTRY_NOTFOUND != pView->TryToFindMarkedObject(pSdrShape))
+            if(SAL_MAX_SIZE != pView->TryToFindMarkedObject(pSdrShape))
             {
                 pView->MarkObj(pSdrShape, pView->GetSdrPageView(), true, false);
             }

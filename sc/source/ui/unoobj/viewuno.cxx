@@ -873,7 +873,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         if (pDrawView)
         {
             const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-            sal_uLong nMarkCount = rMarkList.GetMarkCount();
+            const size_t nMarkCount = rMarkList.GetMarkCount();
             if (nMarkCount)
             {
                 //  ShapeCollection erzeugen (wie in SdXImpressView::getSelection im Draw)
@@ -884,7 +884,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
 
                 uno::Reference<uno::XInterface> xRet(xShapes);
 
-                for (sal_uLong i=0; i<nMarkCount; i++)
+                for (size_t i=0; i<nMarkCount; ++i)
                 {
                     SdrObject* pDrawObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                     if (pDrawObj)

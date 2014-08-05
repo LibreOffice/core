@@ -73,7 +73,7 @@ void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMod
 
 void SdrObjListIter::ImpProcessMarkList( const SdrMarkList& rMarkList, SdrIterMode eMode )
 {
-    for( sal_uIntPtr nIdx = 0, nCount = rMarkList.GetMarkCount(); nIdx < nCount; ++nIdx )
+    for( size_t nIdx = 0, nCount = rMarkList.GetMarkCount(); nIdx < nCount; ++nIdx )
         if( SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj() )
             ImpProcessObj( pObj, eMode, false );
 }

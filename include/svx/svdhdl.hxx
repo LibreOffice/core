@@ -441,7 +441,7 @@ public:
 class SVX_DLLPUBLIC SdrHdlList
 {
 protected:
-    sal_uIntPtr                 mnFocusIndex;
+    size_t                      mnFocusIndex;
     SdrMarkView*                pView;
     std::deque<SdrHdl*>         aList;
     sal_uInt16                  nHdlSize;
@@ -474,9 +474,9 @@ public:
     //             2.Level PageView (Pointer)
     //             3.Level Position (x+y)
     void     Sort();
-    sal_uIntPtr    GetHdlCount() const                       { return aList.size(); }
-    SdrHdl*  GetHdl(sal_uIntPtr nNum) const                  { return nNum != CONTAINER_ENTRY_NOTFOUND ? aList[nNum] : NULL; }
-    sal_uIntPtr    GetHdlNum(const SdrHdl* pHdl) const;
+    size_t   GetHdlCount() const { return aList.size(); }
+    SdrHdl*  GetHdl(size_t nNum) const { return nNum<aList.size() ? aList[nNum] : NULL; }
+    size_t   GetHdlNum(const SdrHdl* pHdl) const;
     void     SetHdlSize(sal_uInt16 nSiz);
     sal_uInt16   GetHdlSize() const                        { return nHdlSize; }
     void     SetMoveOutside(bool bOn);
@@ -489,7 +489,7 @@ public:
     // AddHdl uebernimmt das Handle in sein Eigentum. Es muss
     // also auf dem Heap stehen, da Clear() ein delete macht.
     void    AddHdl(SdrHdl* pHdl, bool bAtBegin=false);
-    SdrHdl* RemoveHdl(sal_uIntPtr nNum);
+    SdrHdl* RemoveHdl(size_t nNum);
     void RemoveAllByKind(SdrHdlKind eKind);
 
     // Zuletzt eingefuegte Handles werden am ehesten getroffen
