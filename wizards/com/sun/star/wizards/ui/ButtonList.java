@@ -359,11 +359,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         return pageStart + i;
     }
 
-    private int getImageIndexFor(int i)
-    {
-        return i - pageStart;
-    }
-
     public void contentsChanged(ListDataEvent event)
     {
     }
@@ -635,12 +630,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     {
         return UnoRuntime.queryInterface(XControl.class, control).getModel();
     }
-
-    private void setBorder(Object control, Short border)
-    {
-        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_BORDER, border);
-    }
-
 
     public Object[] getSelectedObjects()
     {

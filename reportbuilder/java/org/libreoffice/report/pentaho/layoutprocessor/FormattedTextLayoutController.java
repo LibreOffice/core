@@ -55,27 +55,6 @@ public class FormattedTextLayoutController
     {
     }
 
-    private VariablesCollection getVariablesCollection()
-    {
-        LayoutController parent = getParent();
-        while (parent != null)
-        {
-            if (parent instanceof OfficeRepeatingStructureLayoutController)
-            {
-                final OfficeRepeatingStructureLayoutController orslc =
-                        (OfficeRepeatingStructureLayoutController) parent;
-                if (orslc.isNormalFlowProcessing())
-                {
-                    return null;
-                }
-
-                return orslc.getVariablesCollection();
-            }
-            parent = parent.getParent();
-        }
-        return null;
-    }
-
     public boolean isValueChanged()
     {
         try
@@ -155,21 +134,6 @@ public class FormattedTextLayoutController
         return join(getFlowController());
     }
 
-    private OfficeDocument getDocument()
-    {
-        LayoutController parent = getParent();
-        while (parent != null)
-        {
-            final Object node = parent.getNode();
-            if (node instanceof OfficeDocument)
-            {
-                return (OfficeDocument) node;
-            }
-            parent = parent.getParent();
-        }
-        return null;
-    }
-
     private Element getParentTableCell()
     {
         LayoutController parent = getParent();
@@ -185,44 +149,4 @@ public class FormattedTextLayoutController
         return null;
     }
 
-    private String computeValueStyle()
-    {
-        final Element tce = getParentTableCell();
-        if (tce == null)
-        {
-            return null;
-        }
-
-        final String cellStyleName = (String) tce.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
-        if (cellStyleName == null)
-        {
-            return null;
-        }
-        final OfficeDocument document = getDocument();
-        if (document == null)
-        {
-            return null;
-        }
-
-        final OfficeStyle style = document.getStylesCollection().getStyle("table-cell", cellStyleName);
-        return (String) style.getAttribute(OfficeNamespaces.STYLE_NS, "data-style-name");
-    }
-
-    private String computeValueType()
-    {
-        final Element tce = getParentTableCell();
-        if (tce == null)
-        {
-            // NO particular format means: Fallback to string and hope and pray ..
-            throw new IllegalStateException("A formatted text element must be a child of a Table-Cell.");
-        }
-
-        final String type = (String) tce.getAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE);
-        if (type == null)
-        {
-            LOGGER.error("The Table-Cell does not have a office:value attribute defined. Your content will be messed up.");
-            return "string";
-        }
-        return type;
-    }
 }

@@ -170,11 +170,6 @@ public class Control extends Shape
         return controlname;
     }
 
-    private void setDefaultValue(Object DatabaseField)
-    {
-        oDefaultValue = Helper.getUnoPropertyValue(DatabaseField, "DefaultValue");
-    }
-
     public int getPreferredWidth(String sText)
     {
         Size aPeerSize = getPreferredSize(sText);

@@ -210,10 +210,6 @@ public class _XPopupMenuController extends MultiMethodTest {
             return com.sun.star.awt.MenuItemType.DONTKNOW;
         }
 
-        public void setItemType(com.sun.star.awt.MenuItemType param ) {
-            System.out.println("setItemType called.");
-        }
-
         public void clear() {
             System.out.println("clear called.");
         }

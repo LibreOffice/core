@@ -182,36 +182,6 @@ public class ScriptSelector {
         show(ctxt);
     }
 
-    private void checkEnabled(XPropertySet props, String name,
-        JButton button)
-    {
-        boolean enable = false;
-
-        try
-        {
-            if (props != null)
-            {
-                Object o = props.getPropertyValue(name);
-                enable = AnyConverter.toBoolean(
-                    props.getPropertyValue(name));
-            }
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae)
-        {
-            // leave enable set to false
-        }
-        catch (com.sun.star.beans.UnknownPropertyException upe)
-        {
-            // leave enable set to false
-        }
-        catch (com.sun.star.lang.WrappedTargetException wte)
-        {
-            // leave enable set to false
-        }
-
-        button.setEnabled(enable);
-    }
-
     private XBrowseNode getRootNode(XScriptContext ctxt) {
 
         XBrowseNode result = null;

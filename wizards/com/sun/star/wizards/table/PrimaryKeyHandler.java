@@ -382,12 +382,6 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoenableAutoValueCheckBox));
     }
 
-    private void toggleSeveralPrimeKeyFields()
-    {
-        boolean bdoEnable = (this.optUseSeveral.getState());
-        curPrimaryKeySelection.toggleListboxControls(Boolean.valueOf(bdoEnable));
-    }
-
     public String[] getPrimaryKeyFields(TableDescriptor _curtabledescriptor)
     {
         if (chkcreatePrimaryKey.getState() == 0)

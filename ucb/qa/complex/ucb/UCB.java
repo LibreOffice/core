@@ -75,63 +75,6 @@ public class UCB  {
         return xCmdProcessor.execute(aCommand, 0, null);
     }
 
-    private List listFiles(String path, Verifier verifier) throws Exception {
-        Object xContent = getContent(path);
-
-        OpenCommandArgument2 aArg = new OpenCommandArgument2();
-        aArg.Mode = OpenMode.ALL;
-        aArg.Priority = 32768;
-
-        // Fill info for the properties wanted.
-        aArg.Properties = new Property[] { new Property()};
-
-        aArg.Properties[0].Name = "Title";
-        aArg.Properties[0].Handle = -1;
-
-        XDynamicResultSet xSet;
-
-        xSet =
-            UnoRuntime.queryInterface(XDynamicResultSet.class, executeCommand(xContent, "open", aArg));
-
-        XResultSet xResultSet = xSet.getStaticResultSet();
-
-        List<String> files = new ArrayList<String>();
-
-        if (xResultSet.first())
-                {
-            // obtain XContentAccess interface for child content access and XRow for properties
-            XContentAccess xContentAccess = UnoRuntime.queryInterface(XContentAccess.class, xResultSet);
-            XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
-            do
-                        {
-                // Obtain URL of child.
-                String aId = xContentAccess.queryContentIdentifierString();
-                // First column: Title (column numbers are 1-based!)
-                String aTitle = xRow.getString(1);
-                if (aTitle.length() == 0 && xRow.wasNull())
-                                {
-                                    //ignore
-                                }
-                else
-                                {
-                                    files.add(aTitle);
-                                }
-            } while (xResultSet.next()); // next child
-        }
-
-        if (verifier != null)
-                {
-                    for (int i = 0; i < files.size(); i++)
-                    {
-                        if (!verifier.verify(files.get(i)))
-                        {
-                            files.remove(i--);
-                        }
-                    }
-                }
-        return files;
-    }
-
     public Object getContentProperty(
         Object content,
         String propName,

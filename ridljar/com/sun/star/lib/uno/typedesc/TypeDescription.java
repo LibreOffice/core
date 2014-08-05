@@ -644,10 +644,6 @@ public final class TypeDescription implements ITypeDescription {
             }
         }
 
-        public boolean isEmpty() {
-            return list.isEmpty();
-        }
-
         public TypeDescription[] toArray() {
             return list.toArray(
                 new TypeDescription[list.size()]);

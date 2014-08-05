@@ -136,32 +136,6 @@ class TopWindowListener
 
 
 
-    /**  This method exists for debugging.  It prints a list of all top
-         level windows.
-    */
-    private void ShowAllTopLevelWindows ()
-    {
-        XExtendedToolkit xToolkit = maOffice.getExtendedToolkit();
-        if (xToolkit != null)
-        {
-            int nTopWindowCount = xToolkit.getTopWindowCount();
-            for (int i=0; i<nTopWindowCount; i++)
-            {
-                try
-                {
-                    System.out.println (i + " : " + xToolkit.getTopWindow (i));
-                }
-                catch (Exception e)
-                {
-                    System.out.println ("caught exception; " + e);
-                }
-            }
-        }
-    }
-
-
-
-
     // XTopWindowListener
     public void windowOpened (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException

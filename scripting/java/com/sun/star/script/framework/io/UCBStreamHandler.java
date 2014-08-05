@@ -261,8 +261,4 @@ public class UCBStreamHandler extends URLStreamHandler {
         return result;
     }
 
-    private String convertClassNameToFileName(String name) {
-        return name.replace('.', File.separatorChar) + ".class";
-    }
-
 }

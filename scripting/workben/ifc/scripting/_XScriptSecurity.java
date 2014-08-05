@@ -362,29 +362,4 @@ public class _XScriptSecurity extends MultiMethodTest {
         return access;
     }
 
-    private XModel loadDocument(String name) {
-        XModel model = null;
-        SOfficeFactory factory = SOfficeFactory.getFactory(tParam.getMSF());
-
-        String fullname = util.utils.getFullTestURL(name);
-
-        try {
-            Object obj = factory.loadDocument(fullname);
-            model = UnoRuntime.queryInterface(XModel.class, obj);
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae) {
-            return null;
-        }
-        catch (Exception e) {
-            return null;
-        }
-
-        try {
-            Thread.sleep(5000);
-        }
-        catch (InterruptedException ie) {
-        }
-
-        return model;
-    }
 }

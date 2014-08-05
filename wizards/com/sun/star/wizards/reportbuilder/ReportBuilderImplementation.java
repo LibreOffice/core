@@ -179,18 +179,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         }
     }
 
-    private void sleep(int _nSeconds)
-    {
-        try
-        {
-            Thread.sleep(_nSeconds * 1000);
-        }
-        catch (java.lang.InterruptedException e)
-        {
-        }
-
-    }
-
     private void switchOffPropertyBrowser()
     {
         try
@@ -460,11 +448,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         }
 
         dispose();
-    }
-
-    private XConnection getConnection()
-    {
-        return getRecordParser().DBConnection;
     }
 
     public void initializeFieldColumns(final int _nType, final String TableName, final String[] FieldNames)

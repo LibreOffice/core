@@ -500,22 +500,6 @@ public class CellBinding extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    /** sets the given cell range as list entry source for the given control
-    */
-    private void setListSource( XPropertySet _listSink, short _sourceCol, short _rowStart, short _rowEnd ) throws com.sun.star.uno.Exception
-    {
-        CellRangeAddress listSourceAddress = new CellRangeAddress( (short)0, _sourceCol, _rowStart, _sourceCol, _rowEnd );
-        NamedValue addressParameter = new NamedValue( "CellRange", listSourceAddress );
-
-        XListEntrySource listSource = UnoRuntime.queryInterface( XListEntrySource.class,
-            m_document.createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", new NamedValue[]{ addressParameter } )
-        );
-        XListEntrySink listSink = UnoRuntime.queryInterface( XListEntrySink.class,
-            _listSink );
-        listSink.setListEntrySource( listSource );
-    }
-
-    /* ------------------------------------------------------------------ */
     /** simulates a user action to check a radio button
     */
     private void simulateUserRadioCheck( XPropertySet radioModel ) throws com.sun.star.uno.Exception

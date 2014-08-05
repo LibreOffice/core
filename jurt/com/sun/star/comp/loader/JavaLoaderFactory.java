@@ -30,13 +30,6 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
         "com.sun.star.loader.Java2"
     };
 
-    private static final boolean DEBUG = false;
-
-    private static final void DEBUG(String dbg) {
-        if (DEBUG)
-            System.err.println(" >>> JavaLoaderFactory - " + dbg);
-    }
-
     protected XMultiServiceFactory multiServiceFactory = null;
 
     public JavaLoaderFactory(XMultiServiceFactory factory) {

@@ -275,25 +275,6 @@ public class SDBCReportDataFactory implements DataSourceFactory
         return order.toString();
     }
 
-    private XNameAccess getFieldsByCommandDescriptor(final int commandType, final String command, final XComponent[] out) throws SQLException
-    {
-        final Class[] parameter = new Class[3];
-        parameter[0] = int.class;
-        parameter[1] = String.class;
-        parameter[2] = out.getClass();
-        final XConnectionTools tools = UnoRuntime.queryInterface(XConnectionTools.class, connection);
-        try
-        {
-            tools.getClass().getMethod("getFieldsByCommandDescriptor", parameter);
-            return tools.getFieldsByCommandDescriptor(commandType, command, out);
-        }
-        catch (NoSuchMethodException ex)
-        {
-        }
-
-        throw new SQLException();
-    }
-
     private XSingleSelectQueryComposer getComposer(final XConnectionTools tools,
             final String command,
             final int commandType)

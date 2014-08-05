@@ -521,26 +521,6 @@ public class UnoDialog implements EventNames
     /**
      * The problem with setting the visibility of controls is that changing the current step
      * of a dialog will automatically make all controls visible. The PropertyNames.PROPERTY_STEP property always wins against
-     * the property "visible". Therefore a control meant to be invisible is placed on a step far far away.
-     * @param controlname the name of the control
-     * @param iStep  change the step if you want to make the control invisible
-     */
-    private void setControlVisible(String controlname, int iStep)
-    {
-        try
-        {
-            int iCurStep = AnyConverter.toInt(getControlProperty(controlname, PropertyNames.PROPERTY_STEP));
-            setControlProperty(controlname, PropertyNames.PROPERTY_STEP, new Integer(iStep));
-        }
-        catch (com.sun.star.lang.IllegalArgumentException exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
-
-    /**
-     * The problem with setting the visibility of controls is that changing the current step
-     * of a dialog will automatically make all controls visible. The PropertyNames.PROPERTY_STEP property always wins against
      * the property "visible". Therfor a control meant to be invisible is placed on a step far far away.
      * Afterwards the step property of the dialog has to be set with "repaintDialogStep". As the performance
      * of that method is very bad it should be used only once for all controls

@@ -111,25 +111,6 @@ public class DeployedUnoPackagesDB {
     }
 
 
-    private void clearEntries() {
-        NodeList langNodes;
-        Element main = document.getDocumentElement();
-        int len;
-
-        if ((langNodes = document.getElementsByTagName("language")) != null &&
-            (len = langNodes.getLength()) != 0)
-        {
-            for (int i = len - 1; i >= 0; i--) {
-                try {
-                    main.removeChild(langNodes.item(i));
-                }
-                catch (DOMException de) {
-                    // ignore
-                }
-            }
-        }
-    }
-
     public boolean removePackage( String language, String url )
     {
         Element main = document.getDocumentElement();

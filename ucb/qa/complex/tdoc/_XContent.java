@@ -56,11 +56,6 @@ public class _XContent {
         private boolean disposed = false;
         private boolean firedEvent = false;
 
-        public void reset() {
-            disposed = false;
-            firedEvent = false;
-        }
-
         public void contentEvent(com.sun.star.ucb.ContentEvent contentEvent) {
             firedEvent = true;
         }

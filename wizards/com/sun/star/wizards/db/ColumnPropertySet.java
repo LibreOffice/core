@@ -124,19 +124,6 @@ public class ColumnPropertySet
         }
     }
 
-    private int getPrecision()
-    {
-        try
-        {
-            return ((Integer) xPropertySet.getPropertyValue("Precision")).intValue();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-            return 0;
-        }
-    }
-
     private void setType(int _nType, String _sTypeName, Integer precision)
     {
         if (_sTypeName.equals(PropertyNames.EMPTY_STRING))
@@ -197,8 +184,4 @@ public class ColumnPropertySet
         }
     }
 
-    private int getType()
-    {
-        return nType;
-    }
 }

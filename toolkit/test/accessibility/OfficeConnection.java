@@ -58,11 +58,6 @@ public class OfficeConnection
         connect (msDefaultHost, mnDefaultPort);
     }
 
-    private void connect (String hostname)
-    {
-        connect (hostname, mnDefaultPort);
-    }
-
     /** @descr  Connect to a already running LibreOffice application that has
                 been started with a command line argument like
 		"--accept=socket,host=localhost,port=5678;urp;"

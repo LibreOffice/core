@@ -31,16 +31,6 @@ public class EventListener
     }
 
 
-    private static String objectToString(Object aObject)
-    {
-        if (aObject == null)
-            return null;
-        else
-            return aObject.toString();
-    }
-
-
-
     /** This method handles accessibility objects that are being disposed.
      */
     public void disposing (XAccessibleContext xContext)

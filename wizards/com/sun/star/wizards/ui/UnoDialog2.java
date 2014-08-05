@@ -338,17 +338,6 @@ public class UnoDialog2 extends UnoDialog
         return xDlgContainer.getControl(componentName);
     }
 
-    private void setControlPropertiesDebug(Object model, String[] names, Object[] values)
-    {
-        for (int i = 0; i < names.length; i++)
-        {
-            System.out.println("   Settings: " + names[i]);
-            Helper.setUnoPropertyValue(model, names[i], values[i]);
-        }
-
-
-    }
-
     public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
     {
         return UnoRuntime.queryInterface(type, insertControlModel2(serviceName, componentName, sPropNames, oPropValues));

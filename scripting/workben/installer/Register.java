@@ -27,48 +27,6 @@ public class Register{
                                            "drafts.com.sun.star.script.framework.theScriptRuntimeManager=drafts.com.sun.star.script.framework.ScriptRuntimeManager"};
 
 
-    private static String quotedString ( String stringToQuote ) {
-            String doubleQuote = "\"";
-        String result = new String ( doubleQuote + stringToQuote + doubleQuote );
-        return result;
-    }
-    private static boolean regSingletons( String path, String progPath, String opSys, JLabel statusLabel ) {
-        try{
-            boolean goodResult = false;
-            String[] env = new String[1];
-            String regCmd = null;
-            ExecCmd command = new ExecCmd();
-            for ( int i=0; i<singletonDefParams.length; i++){
-                if ( opSys.indexOf( "Windows" ) == -1 ){
-                // Not windows
-                    env[0] = "LD_LIBRARY_PATH=" + progPath;
-                    command.exec( "chmod a+x " + progPath + "regsingleton", null );
-                    regCmd = progPath + "regsingleton " + path + "user" + File.separator + "uno_packages" + File.separator + "cache" + File.separator + "services.rdb " + singletonDefParams[i];
-                    goodResult = command.exec( regCmd, env );
-                }
-                else {
-            // Windows
-                    regCmd = quotedString( progPath + "regsingleton.exe" ) + " " + quotedString( path + "user" + File.separator + "uno_packages" + File.separator + "cache" + File.separator + "services.rdb" ) + " " + quotedString( singletonDefParams[i] );
-                    goodResult = command.exec( regCmd,null );
-                }
-                if ( !goodResult ){
-                    System.out.println("Regsingleton cmd failed, cmd: " + regCmd );
-                    statusLabel.setText("Regsingleton ScriptRuntimeForJava Failed, please view SFrameworkInstall.log");
-                    return false;
-        }
-        }
-    }
-        catch ( Exception e ) {
-            String message = "\nError installing scripting package, please view SFrameworkInstall.log.";
-            System.out.println(message);
-            e.printStackTrace();
-            statusLabel.setText(message);
-            return false;
-        }
-        return true;
-
-
-    }
     public static boolean register(String path, JLabel statusLabel) {
         String[] packages = {"ooscriptframe.zip", "bshruntime.zip", "jsruntime.zip"};
 

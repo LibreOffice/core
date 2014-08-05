@@ -171,18 +171,6 @@ public class FormControlArranger
         return bisreducable;
     }
 
-    private int getControlGroupWidth()
-    {
-        if (m_dbControlWidth > m_LabelWidth)
-        {
-            return m_dbControlWidth;
-        }
-        else
-        {
-            return m_LabelWidth;
-        }
-    }
-
     private void checkJustifiedPosition(int a)
     {
         int nBaseWidth = nFormWidth + cXOffset;
@@ -645,18 +633,6 @@ public class FormControlArranger
         catch (Exception e)
         {
             e.printStackTrace(System.err);
-        }
-    }
-
-    private int assignFieldLength(int _fieldlength)
-    {
-        if (_fieldlength >= 65535)
-        {
-            return -1;
-        }
-        else
-        {
-            return _fieldlength;
         }
     }
 

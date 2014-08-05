@@ -955,41 +955,6 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
 
 
-    private XComponentContext getComponentContext( XMultiServiceFactory xFact )
-    {
-        XComponentContext xResult = null;
-
-        XPropertySet xProp = UnoRuntime.queryInterface(
-            XPropertySet.class, xFact );
-        if( xProp != null )
-            try
-            {
-                xResult = (XComponentContext)
-                    AnyConverter.toObject(
-                        new Type( XComponentContext.class ),
-                        xProp.getPropertyValue( "DefaultContext" ) );
-            }
-            catch( Exception ex )
-            {
-                failed( ex.getMessage() );
-                ex.printStackTrace( (PrintWriter)log );
-            }
-
-        return xResult;
-    }
-
-
-
-    private void printInterfacesAndServices( Object oObj )
-    {
-        log.println( "Services:" );
-        util.dbg.getSuppServices( oObj );
-        log.println( "Interfaces:" );
-        util.dbg.printInterfaces( (XInterface)oObj, true );
-    }
-
-
-
     /// see rtl/math.hxx
     private boolean approxEqual( double a, double b )
     {

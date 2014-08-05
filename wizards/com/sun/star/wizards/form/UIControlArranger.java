@@ -238,19 +238,6 @@ public class UIControlArranger
             m_aButtonList.addItemListener(this);
         }
 
-        public void setToLeftAlign()
-        {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), PropertyNames.PROPERTY_STATE, new Short((short) 1));
-        }
-
-        /* (non-Javadoc)
-         * @see javax.swing.ListModel#addListDataListener(javax.swing.event.ListDataListener)
-         */
-        public void addListDataListener(ListDataListener arg0)
-        {
-            // TODO Auto-generated method stub
-        }
-
         public void itemStateChanged(ItemEvent arg0)
         {
             try
@@ -281,30 +268,6 @@ public class UIControlArranger
             {
                 e.printStackTrace();
             }
-        }
-
-        /* (non-Javadoc)
-         * @see javax.swing.event.ListDataListener#contentsChanged(javax.swing.event.ListDataEvent)
-         */
-        public void contentsChanged(ListDataEvent arg0)
-        {
-            // TODO Auto-generated method stub
-        }
-
-        /* (non-Javadoc)
-         * @see javax.swing.event.ListDataListener#intervalAdded(javax.swing.event.ListDataEvent)
-         */
-        public void intervalAdded(ListDataEvent arg0)
-        {
-            // TODO Auto-generated method stub
-        }
-
-        /* (non-Javadoc)
-         * @see javax.swing.event.ListDataListener#intervalRemoved(javax.swing.event.ListDataEvent)
-         */
-        public void intervalRemoved(ListDataEvent arg0)
-        {
-            // TODO Auto-generated method stub
         }
 
         /* (non-Javadoc)

@@ -543,16 +543,6 @@ public class AggregateComponent extends ControlScroller
             }
         }
 
-        private String getSelectedFieldName()
-        {
-            return xFieldListBox.getSelectedItem();
-        }
-
-        private String getSelectedFunction()
-        {
-            return xFunctionListBox.getSelectedItem();
-        }
-
         private void setVisible(boolean _bvisible)
         {
             CurUnoDialog.setControlVisible(getFunctionControlName(index), _bvisible);

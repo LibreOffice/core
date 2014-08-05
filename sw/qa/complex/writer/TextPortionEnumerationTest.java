@@ -4034,8 +4034,6 @@ public class TextPortionEnumerationTest
         new FuzzyTester().doTest(intree, outtree);
     }
 
-    private void dumpTree(TreeNode tree) { dumpTree(tree, "> "); }
-
     private void dumpTree(TreeNode tree, String prefix)
     {
         System.out.println(prefix + tree.toString());

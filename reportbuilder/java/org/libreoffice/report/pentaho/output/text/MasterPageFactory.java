@@ -97,20 +97,6 @@ public class MasterPageFactory
             return result;
         }
 
-        public String getTemplate()
-        {
-            return template;
-        }
-
-        public String getPageHeader()
-        {
-            return pageHeader;
-        }
-
-        public String getPageFooter()
-        {
-            return pageFooter;
-        }
     }
 
     private static class PageLayoutKey
@@ -127,21 +113,6 @@ public class MasterPageFactory
             this.templateName = templateName;
             this.headerHeight = headerHeight;
             this.footerHeight = footerHeight;
-        }
-
-        public String getTemplateName()
-        {
-            return templateName;
-        }
-
-        public CSSNumericValue getHeaderHeight()
-        {
-            return headerHeight;
-        }
-
-        public CSSNumericValue getFooterHeight()
-        {
-            return footerHeight;
         }
 
         public boolean equals(final Object o)

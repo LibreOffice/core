@@ -765,12 +765,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         return UnoRuntime.queryInterface(XControl.class, control).getModel();
     }
 
-    //TODO what is when the image does not display an image?
-    private void setBorder(Object control, Short border)
-    {
-        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_BORDER, border);
-    }
-
     private int getImageFromEvent(Object event)
     {
         Object image = ((EventObject) event).Source;

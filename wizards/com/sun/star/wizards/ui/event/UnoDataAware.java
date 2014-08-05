@@ -72,24 +72,6 @@ public class UnoDataAware extends DataAware
         Helper.setUnoPropertyValue(unoModel, unoPropName, value);
     }
 
-    private String stringof(Object value)
-    {
-        if (value.getClass().isArray())
-        {
-            StringBuffer sb = new StringBuffer("[");
-            for (int i = 0; i < ((short[]) value).length; i++)
-            {
-                sb.append(((short[]) value)[i]).append(" , ");
-            }
-            sb.append("]");
-            return sb.toString();
-        }
-        else
-        {
-            return value.toString();
-        }
-    }
-
     /**
      * Try to get from an arbitrary object a boolean value.
      * Null returns Boolean.FALSE;

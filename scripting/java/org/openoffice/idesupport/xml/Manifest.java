@@ -120,33 +120,6 @@ public class Manifest {
         return result;
     }
 
-    private InputStream replaceNewlines(byte[] bytes) throws IOException {
-        InputStream result;
-        ByteArrayOutputStream out;
-        BufferedReader reader;
-
-        reader = new BufferedReader(new InputStreamReader(
-            new ByteArrayInputStream(bytes)));
-        out = new ByteArrayOutputStream();
-
-        int previous = reader.read();
-        out.write(previous);
-        int current;
-
-        while ((current = reader.read()) != -1) {
-            if (((char)current == '\n' || (char)current == ' ') &&
-                (char)previous == '\n')
-                continue;
-            else {
-                out.write(current);
-                previous = current;
-            }
-        }
-        result = new ByteArrayInputStream(out.toByteArray());
-
-        return result;
-    }
-
     public void write(OutputStream out) throws IOException {
         XMLParserFactory.getParser().write(document, out);
     }
