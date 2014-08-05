@@ -360,7 +360,7 @@ private:
     const char**    mpCharStringOps;
     const char**    mpCharStringEscs;
 
-    CffLocal    maCffLocal[16];
+    CffLocal    maCffLocal[256];
     CffLocal*   mpCffLocal;
 
     void        readDictOp( void);
