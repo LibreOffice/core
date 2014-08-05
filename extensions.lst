@@ -55,7 +55,7 @@
 
 # French dictionary.
 [ language=fr || language=nl || language=de || language=de_DE || language=ca || language=ca_XV ]
-    8f7ca241048c70bd7893995ac4bcca3b http://sourceforge.net/projects/aoo-extensions/files/17340/1/dict411.oxt/download "dict411.oxt"
+    48343ddb4f020f1c335189ba56f8f50c http://sourceforge.net/projects/aoo-extensions/files/17340/3/lo-oo-ressources-linguistiques-fr-v5.1.oxt/download "dict-fr.oxt"
 
 # Italian dictionary.
 [ language=it || language=de || language=de_DE ]
@@ -80,7 +80,7 @@
 
 # Russian dictionary.
 [ language=ru ]
-    a63512bc487d7378bbe2e44f59d5ef45 http://sourceforge.net/projects/aoo-extensions/files/3233/2/dict_ru_RU-0.3.6.oxt/download "dict_ru_RU-0.3.6.oxt"
+    93921f14809a22770f1bd89af65015bc http://sourceforge.net/projects/aoo-extensions/files/3233/3/dict_ru_ru-0.3.7.oxt/download "dict-ru.oxt"
 
 # Slovak dictionary.
 [ language=sk ]
@@ -88,7 +88,7 @@
 
 # Slovenian dictionary.
 [ language=sl ]
-    cfc3e4da22a3bb9f3f5fa7ae443f6407 http://sourceforge.net/projects/aoo-extensions/files/3280/5/pack-sl.oxt "pack-sl.oxt"
+    26b6cebb0534dfd8dc47ea2b746202ce http://sourceforge.net/projects/aoo-extensions/files/3280/7/pack-sl.oxt/download "dict-sl.oxt"
 
 # German (Austria) dictionary.
 [ language=de || language=de_AT || language=de_DE ]
@@ -137,7 +137,7 @@
 
 # Portuguese (European).
 [ language=pt || language=pt_PT ]
-    ad882aa5fcd1b48ebc2421b0d25ee178 http://sourceforge.net/projects/aoo-extensions/files/1196/27/oo3x-pt-pt-14.1.1.1.oxt/download "dict-pt.oxt"
+    196c27dd8da422006b64129665abd08f http://sourceforge.net/projects/aoo-extensions/files/1196/29/oo3x-pt-pt-14.7.4.1.oxt/download "dict-pt.oxt"
 
 # Catalan.
 [ language=ca ]
