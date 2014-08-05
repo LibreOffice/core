@@ -28,6 +28,7 @@
 #include "bridges/cpp_uno/shared/types.hxx"
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
+#include "call.hxx"
 #include "share.hxx"
 
 using namespace ::com::sun::star::uno;
