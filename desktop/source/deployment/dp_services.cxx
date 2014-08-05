@@ -73,11 +73,13 @@ extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL deployment_component_getFactory(
     sal_Char const * pImplName,
-    lang::XMultiServiceFactory * pServiceManager,
-    registry::XRegistryKey * pRegistryKey )
+    void * pServiceManager,
+    void * pRegistryKey )
 {
     return component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey,
+        pImplName,
+        static_cast<css::lang::XMultiServiceFactory *>(pServiceManager),
+        static_cast<css::registry::XRegistryKey *>(pRegistryKey),
         dp_registry::backend::configuration::serviceDecl,
         dp_registry::backend::component::serviceDecl,
         dp_registry::backend::help::serviceDecl,
