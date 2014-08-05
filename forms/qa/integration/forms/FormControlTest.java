@@ -598,7 +598,6 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     private boolean ensureTables() throws com.sun.star.uno.Exception,  java.lang.Exception
     {
         Connection connection = new Connection( m_dataSource.getConnection( "", "" ) );
-        assure( "could not connect to the data source", connection != null );
 
         // drop the table, if it already exists
         if  (  !implExecuteStatement( "DROP TABLE \"" + s_tableName + "\" IF EXISTS" )

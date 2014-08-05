@@ -82,7 +82,6 @@ public class _XRecentFunctions extends MultiMethodTest {
         iNumber = IDs.length;
         bResult &= (iNumber <= iMaxNumber);
         log.println("Now there are " + iNumber + " recent functions");
-        bResult &= (IDs != null);
         if (bResult) {
             for (int i = 0; i < iNumber - 1; i++)
                 for (int j = i + 1; j < iNumber; j++) {

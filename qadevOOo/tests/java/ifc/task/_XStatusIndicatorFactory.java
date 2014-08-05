@@ -60,8 +60,6 @@ public class _XStatusIndicatorFactory extends MultiMethodTest {
         //Now SI1 is active
         SI1.end();
 
-        bResult &= SI1 != null;
-
         tRes.tested("createStatusIndicator()", bResult);
     }
 }

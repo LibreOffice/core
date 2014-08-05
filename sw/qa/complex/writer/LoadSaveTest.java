@@ -148,9 +148,7 @@ public class LoadSaveTest
             if (xDoc != null) {
                 util.DesktopTools.closeDoc(xDoc);
             }
-            if (xListener != null) {
-                m_xGEB.removeDocumentEventListener(xListener);
-            }
+            m_xGEB.removeDocumentEventListener(xListener);
         }
     }
 

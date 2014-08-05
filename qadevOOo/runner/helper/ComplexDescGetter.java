@@ -128,12 +128,7 @@ public class ComplexDescGetter extends DescGetter
         }
 
         String testObjectName = className;
-        String[] testMethodNames = null;
-
-        if (testMethodNames == null)
-        {
-            testMethodNames = testClass.getTestMethodNames();
-        }
+        String[] testMethodNames = testClass.getTestMethodNames();
         if (methodNames != null)
         {
             testMethodNames = methodNames;

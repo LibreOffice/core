@@ -96,7 +96,7 @@ public class _XSheetAnnotation extends MultiMethodTest {
 
           CellAddress oCAddr = oObj.getPosition();
 
-          bResult = (oCAddr != null) && (sCAddr != null) &&
+          bResult = (oCAddr != null) &&
             ValueComparer.equalValue(oCAddr, sCAddr) ;
 
           tRes.tested("getPosition()", bResult);

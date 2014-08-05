@@ -129,16 +129,13 @@ public class ObjectInspector extends complexlib.ComplexTestCase
     private void closeExistentInspector()
     {
         Frame existentInspectorFrame = new Frame( m_desktop.findFrame( m_inspectorFrameName, 255 ) );
-        if ( existentInspectorFrame != null )
+        try
         {
-            try
-            {
-                existentInspectorFrame.close( true );
-            }
-            catch( com.sun.star.util.CloseVetoException e )
-            {
-                failed( "could not close the existent inspector frame" );
-            }
+            existentInspectorFrame.close( true );
+        }
+        catch( com.sun.star.util.CloseVetoException e )
+        {
+            failed( "could not close the existent inspector frame" );
         }
     }
 

@@ -212,8 +212,7 @@ public class _XTransliteration extends MultiMethodTest {
             log.println(out[i]);
         }
 
-        boolean bOK = out != null &&
-            out.length == 4 &&
+        boolean bOK = out.length == 4 &&
             ("A".equals(out[0]) && "I".equals(out[1]) &&
             "a".equals(out[2]) && "i".equals(out[3])) ||
             ("a".equals(out[0]) && "i".equals(out[1]) &&

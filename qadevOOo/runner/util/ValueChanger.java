@@ -748,7 +748,7 @@ public class ValueChanger {
                 if (Enum.class.equals(flds[i].getType().getSuperclass())) {
 
                     Enum value = (Enum) flds[i].get(null) ;
-                    if (newValue == null && !value.equals(oldValue)) {
+                    if (!value.equals(oldValue)) {
                         newValue = value ;
                         break ;
                     }

@@ -126,7 +126,6 @@ public class _XInputStream extends MultiMethodTest {
                 int read = oObj.readBytes(data, 1) ;
 
                 result = read == 1 &&
-                         data != null &&
                          data.length == 1 ;
             } catch (com.sun.star.io.IOException e){
                 e.printStackTrace(log) ;
@@ -161,7 +160,6 @@ public class _XInputStream extends MultiMethodTest {
                 int read = oObj.readSomeBytes(data, 1) ;
 
                 result = read == 1 &&
-                         data != null &&
                          data.length == 1 ;
             } catch (com.sun.star.io.IOException e){
                 e.printStackTrace(log) ;

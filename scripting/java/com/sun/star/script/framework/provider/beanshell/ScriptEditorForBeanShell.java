@@ -363,10 +363,7 @@ public class ScriptEditorForBeanShell
             if (fos != null) {
                 try {
                     fos.flush();
-                    if ( fos != null )
-                    {
-                        fos.close();
-                    }
+                    fos.close();
                 }
                 catch (IOException ignore) {
                 }

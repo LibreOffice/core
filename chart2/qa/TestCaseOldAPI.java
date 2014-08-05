@@ -593,7 +593,6 @@ public class TestCaseOldAPI extends ComplexTestCase {
             assure( "Changing FillColor of Data Series failed", nNewColor == nColor );
 
             // Gradient
-            assure( "No DataRowProperties for series 0", xProp != null );
 
             // note: the FillGradient property is optional, however it was
             // supported in the old chart's API

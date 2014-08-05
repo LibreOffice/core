@@ -120,7 +120,7 @@ public class OpenQuery {
         System.out.println("----------\t------");
 
         // output result rows
-        while ( xRowSet != null && xRowSet.next() ) {
+        while ( xRowSet.next() ) {
             String ident = xRow.getString(xLoc.findColumn("IDENTIFIER"));
             String author = xRow.getString(xLoc.findColumn("AUTHOR"));
             System.out.println(ident + "\t\t" + author);

@@ -80,13 +80,10 @@ class Proxy implements IQueryInterface, XEventListener
         if (object instanceof IQueryInterface)
         {
             IQueryInterface iquery = (IQueryInterface) object;
-            if (iquery != null)
-            {
-                if (iquery.getOid().equals(oid))
-                    return true;
-                else
-                    return false;
-            }
+            if (iquery.getOid().equals(oid))
+                return true;
+            else
+                return false;
         }
 
         String oidObj = UnoRuntime.generateOid(object);

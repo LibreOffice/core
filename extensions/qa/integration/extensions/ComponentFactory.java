@@ -40,7 +40,7 @@ public class ComponentFactory implements XSingleComponentFactory
         catch ( java.lang.ClassNotFoundException e ) { }
 
         Constructor ctors[] = _handlerClass.getConstructors();
-        for ( int i = 0; i < ctors.length && ctors != null; ++i)
+        for ( int i = 0; i < ctors.length; ++i)
         {
             Class ctorParams[] = ctors[i].getParameterTypes();
             if ( ( ctorParams.length == 1 ) && ( ctorParams[0].equals( XComponentContext.class ) ) )
