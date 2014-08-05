@@ -26,7 +26,6 @@
 #include "WCopyTable.hxx"
 #include "WCPage.hxx"
 #include "WExtendPages.hxx"
-#include "WizardPages.hrc"
 #include "WNameMatch.hxx"
 #include "WTypeSelect.hxx"
 
@@ -639,6 +638,8 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultNa
 
 void OCopyTableWizard::construct()
 {
+    SetSizePixel(Size(580, 350));
+
     AddButton( m_pbHelp = new HelpButton(this, WB_TABSTOP) );
     AddButton( m_pbCancel = new CancelButton(this, WB_TABSTOP) );
     AddButton( m_pbPrev = new PushButton(this, WB_TABSTOP));

@@ -51,17 +51,6 @@ SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
 OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent )
 {
     EnableAuto(false);
-    Size aflSize( m_flColumns.GetSizePixel() );
-    Point aPos(m_flColumns.GetPosPixel());
-
-    m_flColumns.SetPosSizePixel(aPos, aflSize );
-
-    sal_Int32 nHeight = m_lbColumnNames.GetSizePixel().Height() +6;
-    aPos = m_aTypeControl.GetPosPixel();
-    Size aNewSize(m_aTypeControl.GetSizePixel().Width(),nHeight - aPos.Y()-6);
-
-    aflSize = m_aTypeControl.GetSizePixel();
-    m_aTypeControl.SetPosSizePixel(aPos,aNewSize);
 }
 
 SvParser* OWizNormalExtend::createReader(sal_Int32 /*_nRows*/)

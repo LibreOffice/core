@@ -741,6 +741,12 @@
     <glade-widget-class title="DbaIndexList" name="dbulo-DbaIndexList"
                         generic-name="DbaIndexList" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="ColumnTreeBox" name="dbulo-OColumnTreeBox"
+                        generic-name="ColumnTreeBox" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="TypeSelectList" name="dbulo-OWizTypeSelectList"
+                        generic-name="TypeSelectList" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
 
     <glade-widget-class title="Icon Choice Control" name="cuilo-SvtIconChoiceCtrl"
                         generic-name="Icon Choice Control" parent="GtkIconView"

@@ -24,7 +24,6 @@
 #include <tools/debug.hxx>
 #include "dbaccess_helpid.hrc"
 #include "dbu_misc.hrc"
-#include "WizardPages.hrc"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
