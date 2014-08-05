@@ -394,12 +394,12 @@ SwFrm::~SwFrm()
 
 const SwFrmFmt * SwLayoutFrm::GetFmt() const
 {
-    return static_cast< const SwFlyFrmFmt * >( GetDep() );
+    return static_cast< const SwFrmFmt * >( GetDep() );
 }
 
 SwFrmFmt * SwLayoutFrm::GetFmt()
 {
-    return static_cast< SwFlyFrmFmt * >( GetDep() );
+    return static_cast< SwFrmFmt * >( GetDep() );
 }
 
 void SwLayoutFrm::SetFrmFmt( SwFrmFmt *pNew )
