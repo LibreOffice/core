@@ -23,7 +23,6 @@
 #include "WCopyTable.hxx"
 #include "dbaccess_helpid.hrc"
 #include "dbu_misc.hrc"
-#include "WizardPages.hrc"
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include "svtools/treelistentry.hxx"
@@ -32,42 +31,45 @@
 using namespace ::dbaui;
 // OWizColumnSelect
 OWizNameMatching::OWizNameMatching( Window* pParent)
-        :OWizardPage( pParent, ModuleRes( TAB_WIZ_NAME_MATCHING     ) )
-        ,m_FT_TABLE_LEFT(       this, ModuleRes( FT_TABLE_LEFT          ) )
-        ,m_FT_TABLE_RIGHT(      this, ModuleRes( FT_TABLE_RIGHT         ) )
-        ,m_CTRL_LEFT(           this, ModuleRes( CTRL_LEFT              ) )
-        ,m_CTRL_RIGHT(          this, ModuleRes( CTRL_RIGHT             ) )
-        ,m_ibColumn_up(         this, ModuleRes( IB_COLUMN_UP           ) )
-        ,m_ibColumn_down(       this, ModuleRes( IB_COLUMN_DOWN         ) )
-        ,m_ibColumn_up_right(   this, ModuleRes( IB_COLUMN_UP_RIGHT     ) )
-        ,m_ibColumn_down_right( this, ModuleRes( IB_COLUMN_DOWN_RIGHT   ) )
-        ,m_pbAll(               this, ModuleRes( PB_ALL                 ) )
-        ,m_pbNone(              this, ModuleRes( PB_NONE                    ) )
-
+        :OWizardPage( pParent, "NameMatching", "dbaccess/ui/namematchingpage.ui" )
+        , m_aImgUp(ModuleRes(IMG_UP))
+        , m_aImgDown(ModuleRes(IMG_DOWN))
 {
+    get(m_pTABLE_LEFT, "leftlabel");
+    get(m_pTABLE_RIGHT, "rightlabel");
+    get(m_pCTRL_LEFT, "left");
+    get(m_pCTRL_RIGHT, "right");
+    get(m_pColumn_up, "up");
+    m_pColumn_up->SetModeImage(m_aImgUp);
+    get(m_pColumn_down, "down");
+    m_pColumn_down->SetModeImage(m_aImgDown);
+    get(m_pColumn_up_right, "up_right");
+    m_pColumn_up_right->SetModeImage(m_aImgUp);
+    get(m_pColumn_down_right, "down_right");
+    m_pColumn_down_right->SetModeImage(m_aImgDown);
+    get(m_pAll, "all");
+    get(m_pNone, "none");
 
-    m_ibColumn_up.SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
-    m_ibColumn_down.SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
+    m_pColumn_up->SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
+    m_pColumn_down->SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
 
-    m_ibColumn_up_right.SetClickHdl(LINK(this,OWizNameMatching,RightButtonClickHdl));
-    m_ibColumn_down_right.SetClickHdl(LINK(this,OWizNameMatching,RightButtonClickHdl));
+    m_pColumn_up_right->SetClickHdl(LINK(this,OWizNameMatching,RightButtonClickHdl));
+    m_pColumn_down_right->SetClickHdl(LINK(this,OWizNameMatching,RightButtonClickHdl));
 
-    m_pbAll.SetClickHdl(LINK(this,OWizNameMatching,AllNoneClickHdl));
-    m_pbNone.SetClickHdl(LINK(this,OWizNameMatching,AllNoneClickHdl));
+    m_pAll->SetClickHdl(LINK(this,OWizNameMatching,AllNoneClickHdl));
+    m_pNone->SetClickHdl(LINK(this,OWizNameMatching,AllNoneClickHdl));
 
-    m_CTRL_LEFT.SetSelectHdl(LINK(this,OWizNameMatching,TableListClickHdl));
-    m_CTRL_RIGHT.SetSelectHdl(LINK(this,OWizNameMatching,TableListRightSelectHdl));
-    m_CTRL_RIGHT.EnableCheckButton( NULL );
+    m_pCTRL_LEFT->SetSelectHdl(LINK(this,OWizNameMatching,TableListClickHdl));
+    m_pCTRL_RIGHT->SetSelectHdl(LINK(this,OWizNameMatching,TableListRightSelectHdl));
+    m_pCTRL_RIGHT->EnableCheckButton( NULL );
 
-    m_CTRL_LEFT.SetStyle( m_CTRL_LEFT.GetStyle() | WB_FORCE_MAKEVISIBLE );
-    m_CTRL_RIGHT.SetStyle( m_CTRL_RIGHT.GetStyle() | WB_FORCE_MAKEVISIBLE );
+    m_pCTRL_LEFT->SetStyle( m_pCTRL_LEFT->GetStyle() | WB_FORCE_MAKEVISIBLE );
+    m_pCTRL_RIGHT->SetStyle( m_pCTRL_RIGHT->GetStyle() | WB_FORCE_MAKEVISIBLE );
 
-    m_sSourceText = m_FT_TABLE_LEFT.GetText();
+    m_sSourceText = m_pTABLE_LEFT->GetText();
     m_sSourceText += "\n";
-    m_sDestText   = m_FT_TABLE_RIGHT.GetText();
+    m_sDestText   = m_pTABLE_RIGHT->GetText();
     m_sDestText   += "\n";
-
-    FreeResource();
 }
 
 OWizNameMatching::~OWizNameMatching()
@@ -80,10 +82,10 @@ void OWizNameMatching::Reset()
     // the left tree contains bitmaps so i need to resize the right one
     if(m_bFirstTime)
     {
-        m_CTRL_RIGHT.SetReadOnly(); // sets autoinc to readonly
-        m_CTRL_RIGHT.SetEntryHeight(m_CTRL_LEFT.GetEntryHeight());
-        m_CTRL_RIGHT.SetIndent(m_CTRL_LEFT.GetIndent());
-        m_CTRL_RIGHT.SetSpaceBetweenEntries(m_CTRL_LEFT.GetSpaceBetweenEntries());
+        m_pCTRL_RIGHT->SetReadOnly(); // sets autoinc to readonly
+        m_pCTRL_RIGHT->SetEntryHeight(m_pCTRL_LEFT->GetEntryHeight());
+        m_pCTRL_RIGHT->SetIndent(m_pCTRL_LEFT->GetIndent());
+        m_pCTRL_RIGHT->SetSpaceBetweenEntries(m_pCTRL_LEFT->GetSpaceBetweenEntries());
 
         m_bFirstTime = false;
     }
@@ -97,24 +99,24 @@ void OWizNameMatching::ActivatePage( )
     OUString aName = m_sSourceText;
     aName += m_pParent->m_sSourceName;
 
-    m_FT_TABLE_LEFT.SetText(aName);
+    m_pTABLE_LEFT->SetText(aName);
 
     // set dest table name
     aName = m_sDestText;
     aName += m_pParent->m_sName;
-    m_FT_TABLE_RIGHT.SetText(aName);
+    m_pTABLE_RIGHT->SetText(aName);
 
-    m_CTRL_LEFT.FillListBox(m_pParent->getSrcVector());
-    m_CTRL_RIGHT.FillListBox(m_pParent->getDestVector());
+    m_pCTRL_LEFT->FillListBox(m_pParent->getSrcVector());
+    m_pCTRL_RIGHT->FillListBox(m_pParent->getDestVector());
 
-    m_ibColumn_up.Enable( m_CTRL_LEFT.GetEntryCount() > 1 );
-    m_ibColumn_down.Enable( m_CTRL_LEFT.GetEntryCount() > 1 );
+    m_pColumn_up->Enable( m_pCTRL_LEFT->GetEntryCount() > 1 );
+    m_pColumn_down->Enable( m_pCTRL_LEFT->GetEntryCount() > 1 );
 
-    m_ibColumn_up_right.Enable( m_CTRL_RIGHT.GetEntryCount() > 1 );
-    m_ibColumn_down_right.Enable( m_CTRL_RIGHT.GetEntryCount() > 1 );
+    m_pColumn_up_right->Enable( m_pCTRL_RIGHT->GetEntryCount() > 1 );
+    m_pColumn_down_right->Enable( m_pCTRL_RIGHT->GetEntryCount() > 1 );
 
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,false);
-    m_CTRL_LEFT.GrabFocus();
+    m_pCTRL_LEFT->GrabFocus();
 }
 
 bool OWizNameMatching::LeavePage()
@@ -128,8 +130,8 @@ bool OWizNameMatching::LeavePage()
     m_pParent->m_vColumnTypes.resize( rSrcColumns.size(), COLUMN_POSITION_NOT_FOUND );
 
     sal_Int32 nParamPos = 0;
-    SvTreeListEntry* pLeftEntry = m_CTRL_LEFT.GetModel()->First();
-    SvTreeListEntry* pRightEntry = m_CTRL_RIGHT.GetModel()->First();
+    SvTreeListEntry* pLeftEntry = m_pCTRL_LEFT->GetModel()->First();
+    SvTreeListEntry* pRightEntry = m_pCTRL_RIGHT->GetModel()->First();
     while(pLeftEntry && pRightEntry)
     {
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeftEntry->GetUserData());
@@ -141,7 +143,7 @@ bool OWizNameMatching::LeavePage()
             ;
         const sal_Int32 nPos = ::std::distance(rSrcColumns.begin(),aSrcIter);
 
-        if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
+        if(m_pCTRL_LEFT->GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
         {
             OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());
             OSL_ENSURE(pDestField,"OWizNameMatching: OColumn can not be null!");
@@ -174,8 +176,8 @@ bool OWizNameMatching::LeavePage()
             m_pParent->m_vColumnPos[nPos].second = COLUMN_POSITION_NOT_FOUND;
         }
 
-        pLeftEntry = m_CTRL_LEFT.GetModel()->Next(pLeftEntry);
-        pRightEntry = m_CTRL_RIGHT.GetModel()->Next(pRightEntry);
+        pLeftEntry = m_pCTRL_LEFT->GetModel()->Next(pLeftEntry);
+        pRightEntry = m_pCTRL_RIGHT->GetModel()->Next(pRightEntry);
     }
 
     return true;
@@ -185,28 +187,28 @@ OUString OWizNameMatching::GetTitle() const { return ModuleRes(STR_WIZ_NAME_MATC
 
 IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
 {
-    SvTreeListEntry* pEntry = m_CTRL_LEFT.FirstSelected();
+    SvTreeListEntry* pEntry = m_pCTRL_LEFT->FirstSelected();
     if ( pEntry )
     {
-        sal_Int32 nPos      = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
-        if(pButton == &m_ibColumn_up && nPos)
+        sal_Int32 nPos      = m_pCTRL_LEFT->GetModel()->GetAbsPos(pEntry);
+        if(pButton == m_pColumn_up && nPos)
             --nPos;
-        else if(pButton == &m_ibColumn_down)
+        else if(pButton == m_pColumn_down)
             nPos += 2;
 
-        m_CTRL_LEFT.ModelIsMoving(pEntry,NULL,nPos);
-        m_CTRL_LEFT.GetModel()->Move(pEntry,NULL,nPos);
-        m_CTRL_LEFT.ModelHasMoved(pEntry);
+        m_pCTRL_LEFT->ModelIsMoving(pEntry,NULL,nPos);
+        m_pCTRL_LEFT->GetModel()->Move(pEntry,NULL,nPos);
+        m_pCTRL_LEFT->ModelHasMoved(pEntry);
 
-        long nThumbPos      = m_CTRL_LEFT.GetVScroll()->GetThumbPos();
-        long nVisibleSize   = m_CTRL_LEFT.GetVScroll()->GetVisibleSize();
+        long nThumbPos      = m_pCTRL_LEFT->GetVScroll()->GetThumbPos();
+        long nVisibleSize   = m_pCTRL_LEFT->GetVScroll()->GetVisibleSize();
 
-        if(pButton == &m_ibColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
+        if(pButton == m_pColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
         {
-            m_CTRL_LEFT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
+            m_pCTRL_LEFT->GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
         }
 
-        TableListClickHdl(&m_CTRL_LEFT);
+        TableListClickHdl(m_pCTRL_LEFT);
     }
 
     return 0;
@@ -214,55 +216,55 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
 
 IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
 {
-    SvTreeListEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
+    SvTreeListEntry* pEntry = m_pCTRL_RIGHT->FirstSelected();
     if ( pEntry )
     {
-        sal_Int32 nPos      = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
-        if(pButton == &m_ibColumn_up_right && nPos)
+        sal_Int32 nPos      = m_pCTRL_RIGHT->GetModel()->GetAbsPos(pEntry);
+        if(pButton == m_pColumn_up_right && nPos)
             --nPos;
-        else if(pButton == &m_ibColumn_down_right)
+        else if(pButton == m_pColumn_down_right)
             nPos += 2;
 
-        m_CTRL_RIGHT.ModelIsMoving(pEntry,NULL,nPos);
-        m_CTRL_RIGHT.GetModel()->Move(pEntry,NULL,nPos);
-        m_CTRL_RIGHT.ModelHasMoved(pEntry);
-        long nThumbPos      = m_CTRL_RIGHT.GetVScroll()->GetThumbPos();
-        long nVisibleSize   = m_CTRL_RIGHT.GetVScroll()->GetVisibleSize();
+        m_pCTRL_RIGHT->ModelIsMoving(pEntry,NULL,nPos);
+        m_pCTRL_RIGHT->GetModel()->Move(pEntry,NULL,nPos);
+        m_pCTRL_RIGHT->ModelHasMoved(pEntry);
+        long nThumbPos      = m_pCTRL_RIGHT->GetVScroll()->GetThumbPos();
+        long nVisibleSize   = m_pCTRL_RIGHT->GetVScroll()->GetVisibleSize();
 
-        if(pButton == &m_ibColumn_down_right && (nThumbPos+nVisibleSize+1) < nPos)
-            m_CTRL_RIGHT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
-        TableListRightSelectHdl(&m_CTRL_RIGHT);
+        if(pButton == m_pColumn_down_right && (nThumbPos+nVisibleSize+1) < nPos)
+            m_pCTRL_RIGHT->GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
+        TableListRightSelectHdl(m_pCTRL_RIGHT);
     }
     return 0;
 }
 
 IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
 {
-    SvTreeListEntry* pEntry = m_CTRL_LEFT.FirstSelected();
+    SvTreeListEntry* pEntry = m_pCTRL_LEFT->FirstSelected();
     if(pEntry)
     {
-        sal_uLong nPos          = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
-        SvTreeListEntry* pOldEntry = m_CTRL_RIGHT.FirstSelected();
-        if(pOldEntry && nPos != m_CTRL_RIGHT.GetModel()->GetAbsPos(pOldEntry))
+        sal_uLong nPos          = m_pCTRL_LEFT->GetModel()->GetAbsPos(pEntry);
+        SvTreeListEntry* pOldEntry = m_pCTRL_RIGHT->FirstSelected();
+        if(pOldEntry && nPos != m_pCTRL_RIGHT->GetModel()->GetAbsPos(pOldEntry))
         {
             if(pOldEntry)
-                m_CTRL_RIGHT.Select(pOldEntry,false);
-            pOldEntry = m_CTRL_RIGHT.GetEntry(nPos);
+                m_pCTRL_RIGHT->Select(pOldEntry,false);
+            pOldEntry = m_pCTRL_RIGHT->GetEntry(nPos);
             if(pOldEntry)
             {
-                sal_uLong nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
+                sal_uLong nNewPos = m_pCTRL_LEFT->GetModel()->GetAbsPos(m_pCTRL_LEFT->GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     --nNewPos;
-                m_CTRL_RIGHT.MakeVisible(m_CTRL_RIGHT.GetEntry(nNewPos), true);
-                m_CTRL_RIGHT.Select(pOldEntry,true);
+                m_pCTRL_RIGHT->MakeVisible(m_pCTRL_RIGHT->GetEntry(nNewPos), true);
+                m_pCTRL_RIGHT->Select(pOldEntry,true);
             }
         }
         else if(!pOldEntry)
         {
-            pOldEntry = m_CTRL_RIGHT.GetEntry(nPos);
+            pOldEntry = m_pCTRL_RIGHT->GetEntry(nPos);
             if(pOldEntry)
             {
-                m_CTRL_RIGHT.Select(pOldEntry,true);
+                m_pCTRL_RIGHT->Select(pOldEntry,true);
             }
         }
     }
@@ -272,31 +274,31 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
 
 IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/ )
 {
-    SvTreeListEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
+    SvTreeListEntry* pEntry = m_pCTRL_RIGHT->FirstSelected();
     if(pEntry)
     {
-        sal_uLong nPos          = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
-        SvTreeListEntry* pOldEntry = m_CTRL_LEFT.FirstSelected();
-        if(pOldEntry && nPos != m_CTRL_LEFT.GetModel()->GetAbsPos(pOldEntry))
+        sal_uLong nPos          = m_pCTRL_RIGHT->GetModel()->GetAbsPos(pEntry);
+        SvTreeListEntry* pOldEntry = m_pCTRL_LEFT->FirstSelected();
+        if(pOldEntry && nPos != m_pCTRL_LEFT->GetModel()->GetAbsPos(pOldEntry))
         {
             if(pOldEntry)
-                m_CTRL_LEFT.Select(pOldEntry,false);
-            pOldEntry = m_CTRL_LEFT.GetEntry(nPos);
+                m_pCTRL_LEFT->Select(pOldEntry,false);
+            pOldEntry = m_pCTRL_LEFT->GetEntry(nPos);
             if(pOldEntry)
             {
-                sal_uLong nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
+                sal_uLong nNewPos = m_pCTRL_RIGHT->GetModel()->GetAbsPos(m_pCTRL_RIGHT->GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     nNewPos--;
-                m_CTRL_LEFT.MakeVisible(m_CTRL_LEFT.GetEntry(nNewPos), true);
-                m_CTRL_LEFT.Select(pOldEntry,true);
+                m_pCTRL_LEFT->MakeVisible(m_pCTRL_LEFT->GetEntry(nNewPos), true);
+                m_pCTRL_LEFT->Select(pOldEntry,true);
             }
         }
         else if(!pOldEntry)
         {
-            pOldEntry = m_CTRL_LEFT.GetEntry(nPos);
+            pOldEntry = m_pCTRL_LEFT->GetEntry(nPos);
             if(pOldEntry)
             {
-                m_CTRL_LEFT.Select(pOldEntry,true);
+                m_pCTRL_LEFT->Select(pOldEntry,true);
             }
         }
     }
@@ -306,12 +308,12 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
 
 IMPL_LINK( OWizNameMatching, AllNoneClickHdl, Button *, pButton )
 {
-    bool bAll = pButton == &m_pbAll;
-    SvTreeListEntry* pEntry = m_CTRL_LEFT.First();
+    bool bAll = pButton == m_pAll;
+    SvTreeListEntry* pEntry = m_pCTRL_LEFT->First();
     while(pEntry)
     {
-        m_CTRL_LEFT.SetCheckButtonState( pEntry, bAll ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);
-        pEntry = m_CTRL_LEFT.Next(pEntry);
+        m_pCTRL_LEFT->SetCheckButtonState( pEntry, bAll ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);
+        pEntry = m_pCTRL_LEFT->Next(pEntry);
     }
 
     return 0;
@@ -342,14 +344,19 @@ void OColumnString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDa
     rDev.DrawText( rPos, GetText() );
 }
 
-OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
-    : OMarkableTreeListBox(pParent, rResId)
+OColumnTreeBox::OColumnTreeBox( Window* pParent, WinBits nBits )
+    : OMarkableTreeListBox(pParent, nBits)
     , m_bReadOnly(false)
 {
     SetDragDropMode( 0 );
     EnableInplaceEditing( false );
-    SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
+    SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL | nBits);
     SetSelectionMode( SINGLE_SELECTION );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOColumnTreeBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new OColumnTreeBox(pParent);
 }
 
 void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)

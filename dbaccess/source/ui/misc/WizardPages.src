@@ -17,18 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WizardPages.hrc"
 #include "dbu_misc.hrc"
 #include "dbaccess_helpid.hrc"
 #include "dbaccess_slotid.hrc"
-
-#define WINDOW_SIZE_X   276
-#define WINDOW_SIZE_Y   185
-
-#define WINDOW_BORDER_Y  14
-
-#define BUTTON_SIZE_X    50
-#define BUTTON_SIZE_Y    14
 
 String STR_WIZ_COLUMN_SELECT_TITEL
 {
@@ -65,76 +56,6 @@ String STR_WIZ_PB_OK
     Text [ en-US ] = "C~reate";
 };
 
-TabPage TAB_WIZ_TYPE_SELECT
-{
-    SVLook  = TRUE ;
-    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-
-    HelpId  = HID_TAB_WIZ_TYPE_SELECT;
-    Hide    = TRUE;
-
-    MultiListBox LB_NEW_COLUMN_NAMES
-    {
-        HelpID = "dbaccess:MultiListBox:TAB_WIZ_TYPE_SELECT:LB_NEW_COLUMN_NAMES";
-        Border              = TRUE ;
-        Pos                 = MAP_APPFONT ( 6 , 6 ) ;
-        Size                = MAP_APPFONT ( 87 , WINDOW_SIZE_Y - 12 ) ;
-        TabStop             = TRUE ;
-        HScroll             = TRUE;
-        VScroll             = TRUE;
-        AutoHScroll         = TRUE;
-        SimpleMode          = TRUE;
-    };
-
-    FixedLine FL_COLUMN_NAME
-    {
-        Pos                 = MAP_APPFONT ( 99 , 3  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X -  105, 8 ) ;
-        Text [ en-US ] = "Column information" ;
-    };
-
-    TabPage CONTROL_CONTAINER
-    {
-        HelpID = "dbaccess:TabPage:CONTROL_CONTAINER";
-        Pos                 = MAP_APPFONT ( 102 , WINDOW_BORDER_Y  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X -  111, WINDOW_SIZE_Y - WINDOW_BORDER_Y - 67 );
-        SVLook              = TRUE;
-        DialogControl       = TRUE;
-    };
-
-    FixedLine FL_AUTO_TYPE
-    {
-        Pos                 = MAP_APPFONT ( 99 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 41  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 105, 8 ) ;
-        Text [ en-US ] = "Automatic type recognition" ;
-    };
-
-    FixedText FT_AUTO
-    {
-        Pos                 = MAP_APPFONT ( 105 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 28 ) ;
-        Size                = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ en-US ] = "Lines (ma~x)";
-    };
-
-    NumericField ET_AUTO
-    {
-        HelpID = "dbaccess:NumericField:TAB_WIZ_TYPE_SELECT:ET_AUTO";
-        Border              = TRUE ;
-        Pos                 = MAP_APPFONT ( 151 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 29) ;
-        Size                = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop             = TRUE ;
-    };
-
-    PushButton PB_AUTO
-    {
-        HelpID = "dbaccess:PushButton:TAB_WIZ_TYPE_SELECT:PB_AUTO";
-        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 62 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 30 ) ;
-        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        TabStop             = TRUE ;
-        Text                = "~Auto" ;
-    };
-};
-
 Menu RID_SBA_RTF_PKEYPOPUP
 {
     ItemList =
@@ -149,147 +70,32 @@ Menu RID_SBA_RTF_PKEYPOPUP
     };
 };
 
-TabPage TAB_WIZ_NAME_MATCHING
+
+Image IMG_UP
 {
-    HelpID = "dbaccess:TabPage:TAB_WIZ_NAME_MATCHING";
-    SVLook  = TRUE ;
-    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    ImageBitmap = Bitmap
+    {
+        File = "sortup.png" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
+    };
+};
 
-    Hide    = TRUE;
-
-    FixedText FT_TABLE_LEFT
+Image IMG_DOWN
+{
+    ImageBitmap = Bitmap
     {
-        Pos                 = MAP_APPFONT ( 52 , 6  ) ;
-        Size                = MAP_APPFONT ( 75 , 20) ;
-        Text [ en-US ] = "Source table: \n";
+        File = "sortdown.png" ;
     };
-
-    FixedText FT_TABLE_RIGHT
+    MaskColor = Color
     {
-        Pos                 = MAP_APPFONT ( 144, 6  ) ;
-        Size                = MAP_APPFONT ( 75 , 20) ;
-        Text [ en-US ] = "Destination table: \n";
-    };
-
-    Control CTRL_LEFT
-    {
-        Border              = TRUE;
-        Pos                 = MAP_APPFONT ( 52, 28) ;
-        Size                = MAP_APPFONT ( 82 , WINDOW_SIZE_Y - 34 ) ;
-        TabStop             = TRUE;
-        HelpId              = HID_TAB_NAMEMATCHING_COLS_AVAIL;
-        /*DialogControl       = TRUE;*/
-    };
-
-    Control CTRL_RIGHT
-    {
-        Border              = TRUE ;
-        Pos                 = MAP_APPFONT ( 144, 28) ;
-        Size                = MAP_APPFONT ( 82 , WINDOW_SIZE_Y - 34 ) ;
-        TabStop             = TRUE;
-        HelpId              = HID_TAB_NAMEMATCHING_COLS_ASSIGN;
-        /*DialogControl       = TRUE;*/
-    };
-
-    ImageButton IB_COLUMN_UP
-    {
-        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_UP";
-        Pos                 = MAP_APPFONT ( 19 ,  45 ) ;
-        Size                = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop             = TRUE;
-        DefButton           = TRUE;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap
-            {
-                File = "sortup.png" ;
-            };
-            MaskColor = Color
-            {
-                Red = 0xFFFF ;
-                Green = 0x0000 ;
-                Blue = 0xFFFF ;
-            };
-        };
-    };
-    ImageButton IB_COLUMN_DOWN
-    {
-        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_DOWN";
-        Pos                 = MAP_APPFONT ( 19 ,  63 ) ;
-        Size                = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop             = TRUE;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap
-            {
-                File = "sortdown.png" ;
-            };
-            MaskColor = Color
-            {
-                Red = 0xFFFF ;
-                Green = 0x0000 ;
-                Blue = 0xFFFF ;
-            };
-        };
-    };
-    ImageButton IB_COLUMN_UP_RIGHT
-    {
-        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_UP_RIGHT";
-        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 33, 45 ) ;
-        Size                = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop             = TRUE;
-        DefButton           = TRUE;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap
-            {
-                File = "sortup.png" ;
-            };
-            MaskColor = Color
-            {
-                Red = 0xFFFF ;
-                Green = 0x0000 ;
-                Blue = 0xFFFF ;
-            };
-        };
-    };
-    ImageButton IB_COLUMN_DOWN_RIGHT
-    {
-        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_DOWN_RIGHT";
-        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 33, 63) ;
-        Size                = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop             = TRUE ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap
-            {
-                File = "sortdown.png" ;
-            };
-            MaskColor = Color
-            {
-                Red = 0xFFFF ;
-                Green = 0x0000 ;
-                Blue = 0xFFFF ;
-            };
-        };
-    };
-
-    PushButton PB_ALL
-    {
-        HelpID = "dbaccess:PushButton:TAB_WIZ_NAME_MATCHING:PB_ALL";
-        Pos                 = MAP_APPFONT ( 6, 83) ;
-        Size                = MAP_APPFONT ( 40 , 14 ) ;
-        TabStop             = TRUE ;
-        Text [ en-US ]  = "~All" ;
-    };
-
-    PushButton PB_NONE
-    {
-        HelpID = "dbaccess:PushButton:TAB_WIZ_NAME_MATCHING:PB_NONE";
-        Pos                 = MAP_APPFONT ( 6, 103) ;
-        Size                = MAP_APPFONT ( 40 , 14 ) ;
-        TabStop             = TRUE ;
-        Text [ en-US ]  = "Non~e" ;
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
     };
 };
 

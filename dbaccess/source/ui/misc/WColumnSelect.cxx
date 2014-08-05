@@ -20,7 +20,6 @@
 #include "WColumnSelect.hxx"
 #include "dbu_misc.hrc"
 #include <osl/diagnose.h>
-#include "WizardPages.hrc"
 #include "WCopyTable.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
