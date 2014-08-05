@@ -14,7 +14,11 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
+#ifdef SYSTEM_LIBGLTF
+#include <libgltf/libgltf.h>
+#else
 #include <libgltf.h>
+#endif
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/timer.hxx>
 

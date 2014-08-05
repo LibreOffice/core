@@ -17,7 +17,11 @@
 #include <com/sun/star/media/XPlayerWindow.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
 
+#ifdef SYSTEM_LIBGLTF
+#include <libgltf/libgltf.h>
+#else
 #include <libgltf.h>
+#endif
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/syschild.hxx>
 

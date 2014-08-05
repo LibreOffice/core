@@ -3315,6 +3315,8 @@ endif # DESKTOP
 
 ifeq ($(ENABLE_GLTF),TRUE)
 
+ifneq ($(SYSTEM_LIBGLTF),TRUE)
+
 define gb_LinkTarget__use_libgltf
 $(call gb_LinkTarget_set_include,$(1),\
     -I$(call gb_UnpackedTarball_get_dir,libgltf)/inc \
@@ -3339,6 +3341,22 @@ define gb_ExternalProject__use_libgltf
 $(call gb_ExternalProject_use_external_project,$(1),libgltf)
 
 endef
+
+else # SYSTEM_LIBGLTF
+
+define gb_LinkTarget__use_libgltf
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBGLTF_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBGLTF_LIBS))
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_LIBGLTF \
+)
+
+endef
+
+endif # SYSTEN_LIBGLTF
 
 define gb_LinkTarget__use_opencollada_parser
 $(call gb_LinkTarget_set_include,$(1),\
