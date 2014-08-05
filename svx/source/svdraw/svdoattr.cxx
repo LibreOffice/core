@@ -107,9 +107,9 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
     SdrModel* pOldModel = pModel;
 
     // test for correct pool in ItemSet; move to new pool if necessary
-    if(pNewModel && GetObjectItemPool() && GetObjectItemPool() != &pNewModel->GetItemPool())
+    if(pNewModel && &GetObjectItemPool() != &pNewModel->GetItemPool())
     {
-        MigrateItemPool(GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
+        MigrateItemPool(&GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
     }
 
     // call parent

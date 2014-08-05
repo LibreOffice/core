@@ -467,7 +467,7 @@ public:
 
     virtual void SetModel(SdrModel* pNewModel);
     SdrModel* GetModel() const { return pModel;}
-    SfxItemPool* GetObjectItemPool() const;
+    SfxItemPool & GetObjectItemPool() const;
 
     void AddListener(SfxListener& rListener);
     void RemoveListener(SfxListener& rListener);

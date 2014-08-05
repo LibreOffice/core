@@ -614,13 +614,13 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
     return *mpGlobalItemPool;
 }
 
-SfxItemPool* SdrObject::GetObjectItemPool() const
+SfxItemPool & SdrObject::GetObjectItemPool() const
 {
     if(pModel)
-        return &pModel->GetItemPool();
+        return pModel->GetItemPool();
 
     // use a static global default pool
-    return &SdrObject::GetGlobalDrawObjectItemPool();
+    return SdrObject::GetGlobalDrawObjectItemPool();
 }
 
 sal_uInt32 SdrObject::GetObjInventor()   const
@@ -1214,7 +1214,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
             }
         }
 
-        SfxItemSet aNewSet(*GetObjectItemPool());
+        SfxItemSet aNewSet(GetObjectItemPool());
 
         // #i101980# ignore LineWidth; that's what the old implementation
         // did. With line width, the result may be huge due to fat/thick
@@ -2093,19 +2093,7 @@ const SfxPoolItem& SdrObject::GetObjectItem(const sal_uInt16 nWhich) const
 
 SfxMapUnit SdrObject::GetObjectMapUnit() const
 {
-    SfxMapUnit aRetval(SFX_MAPUNIT_100TH_MM);
-    SfxItemPool* pPool = GetObjectItemPool();
-
-    if(pPool)
-    {
-        aRetval = pPool->GetMetric(0);
-    }
-    else
-    {
-        OSL_ENSURE(pPool, "SdrObjects always need a pool (!)");
-    }
-
-    return aRetval;
+    return GetObjectItemPool().GetMetric(0);
 }
 
 const SfxPoolItem& SdrObject::GetMergedItem(const sal_uInt16 nWhich) const

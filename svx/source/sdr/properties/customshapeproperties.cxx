@@ -109,7 +109,7 @@ namespace sdr
                     TextProperties::ClearObjectItemDirect( nWhich2 );
                     nWhich2 = aIter.NextWhich();
                 }
-                SfxItemSet aSet((SfxItemPool&)(*GetSdrObject().GetObjectItemPool()));
+                SfxItemSet aSet(GetSdrObject().GetObjectItemPool());
                 ItemSetChanged(aSet);
             }
             else

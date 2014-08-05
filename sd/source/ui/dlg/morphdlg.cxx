@@ -44,9 +44,9 @@ MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* 
 
     LoadSettings();
 
-    SfxItemPool*    pPool = (SfxItemPool*) pObj1->GetObjectItemPool();
-    SfxItemSet      aSet1( *pPool );
-    SfxItemSet      aSet2( *pPool );
+    SfxItemPool & pPool = pObj1->GetObjectItemPool();
+    SfxItemSet      aSet1( pPool );
+    SfxItemSet      aSet2( pPool );
 
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
