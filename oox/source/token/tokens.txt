@@ -2120,8 +2120,10 @@ evalOrder
 even
 evenAndOddHeaders
 evenFooter
+evenHBand
 evenHeader
 evenPage
+evenVBand
 everyone
 evt
 evtFilter
@@ -2236,6 +2238,8 @@ firstLineOnly
 firstPage
 firstPageNumber
 firstRow
+firstRowFirstColumn
+firstRowLastColumn
 firstRowStripe
 firstRowSubheading
 firstSheet
@@ -2956,6 +2960,8 @@ lastPrinted
 lastQuarter
 lastRenderedPageBreak
 lastRow
+lastRowFirstColumn
+lastRowLastColumn
 lastTotalCell
 lastValue
 lastView
@@ -3651,8 +3657,10 @@ ocxPr
 odbc
 odcFile
 oddFooter
+oddHBand
 oddHeader
 oddPage
+oddVBand
 odso
 odxf
 ofPieChart
