@@ -281,7 +281,7 @@ static XPropertyListType getTypeOfName( const OUString &aName )
         if( aName.equalsAscii( aURLPropertyNames[i].pName ) )
             return aURLPropertyNames[i].t;
     }
-    return (XPropertyListType) -1;
+    return UNKNOWN_XPROPERTYLISTTYPE;
 }
 
 static OUString getNameOfType( XPropertyListType t )
@@ -306,7 +306,7 @@ uno::Sequence<beans::PropertyValue>
     for( sal_Int32 i = 0; i < aConfigProps.getLength(); i++ )
     {
         XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
-        if (t < 0)
+        if (t == UNKNOWN_XPROPERTYLISTTYPE)
             aRet[nRet++] = aConfigProps[i];
         else
         {

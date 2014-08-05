@@ -172,6 +172,7 @@ public:
 
 
 enum XPropertyListType {
+    UNKNOWN_XPROPERTYLISTTYPE = -1,
     XCOLOR_LIST,
     XLINE_END_LIST,
     XDASH_LIST,
