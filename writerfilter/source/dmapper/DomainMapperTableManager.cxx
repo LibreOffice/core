@@ -435,13 +435,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     }
                 }
                 break;
-            case NS_ooxml::LN_CT_TrPrBase_cnfStyle:
-                break;  // the cnfStyle doesn't matter, instead the tblLook property is used to specify conditional styles that are to be used
-            case NS_ooxml::LN_CT_PPrBase_cnfStyle:
-                // TODO cnfStyle on a paragraph
-                break;
-            case NS_ooxml::LN_CT_TcPrBase_cnfStyle:
-                break;  // the cnfStyle doesn't matter, instead the tblLook property is used to specify conditional styles that are to be used
             case NS_ooxml::LN_CT_TblPrBase_tblpPr:
                 {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();

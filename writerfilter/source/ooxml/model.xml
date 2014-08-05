@@ -18035,6 +18035,42 @@
         <attribute name="val">
           <ref name="ST_Cnf"/>
         </attribute>
+        <attribute name="firstRow">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="lastRow">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="firstColumn">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="lastColumn">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="oddVBand">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="evenVBand">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="oddHBand">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="evenHBand">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="firstRowFirstColumn">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="firstRowLastColumn">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="lastRowFirstColumn">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="lastRowLastColumn">
+          <ref name="ST_OnOff"/>
+        </attribute>
       </define>
       <define name="CT_TrPrBase">
         <oneOrMore>
@@ -23089,9 +23125,20 @@
       <action name="end" action="endParagraphGroup"/>
     </resource>
     <resource name="ST_Cnf" resource="String" generated="yes"/>
-    <resource name="CT_Cnf" resource="Value" generated="yes">
-      <attribute name="val" tokenid="ooxml:CT_Cnf_val" action="setValue"/>
-      <action name="start" action="setDefaultStringValue"/>
+    <resource name="CT_Cnf" resource="Properties">
+      <attribute name="val" tokenid="ooxml:CT_Cnf_val"/>
+      <attribute name="firstRow" tokenid="ooxml:CT_Cnf_firstRow"/>
+      <attribute name="lastRow" tokenid="ooxml:CT_Cnf_lastRow"/>
+      <attribute name="firstColumn" tokenid="ooxml:CT_Cnf_firstColumn"/>
+      <attribute name="lastColumn" tokenid="ooxml:CT_Cnf_lastColumn"/>
+      <attribute name="oddVBand" tokenid="ooxml:CT_Cnf_oddVBand"/>
+      <attribute name="evenVBand" tokenid="ooxml:CT_Cnf_evenVBand"/>
+      <attribute name="oddHBand" tokenid="ooxml:CT_Cnf_oddHBand"/>
+      <attribute name="evenHBand" tokenid="ooxml:CT_Cnf_evenHBand"/>
+      <attribute name="firstRowFirstColumn" tokenid="ooxml:CT_Cnf_firstRowFirstColumn"/>
+      <attribute name="firstRowLastColumn" tokenid="ooxml:CT_Cnf_firstRowLastColumn"/>
+      <attribute name="lastRowFirstColumn" tokenid="ooxml:CT_Cnf_lastRowFirstColumn"/>
+      <attribute name="lastRowLastColumn" tokenid="ooxml:CT_Cnf_lastRowLastColumn"/>
     </resource>
     <resource name="CT_TrPrBase" resource="Properties">
       <element name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
