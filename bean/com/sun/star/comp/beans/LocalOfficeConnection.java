@@ -50,7 +50,6 @@ public class LocalOfficeConnection
     public static final String      OFFICE_ID_SUFFIX    = "_Office";
 
     private Process                 mProcess;
-    private ContainerFactory        mContainerFactory;
     private XComponentContext       mContext;
     private XBridge mBridge;
 
@@ -196,7 +195,6 @@ public class LocalOfficeConnection
      */
     public void setContainerFactory(ContainerFactory containerFactory)
     {
-        mContainerFactory   = containerFactory;
     }
 
     /**
@@ -258,8 +256,6 @@ public class LocalOfficeConnection
 
             mBridge = null;
         }
-
-        mContainerFactory = null;
         mContext = null;
     }
 

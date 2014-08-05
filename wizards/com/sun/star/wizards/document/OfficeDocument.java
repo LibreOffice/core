@@ -60,12 +60,10 @@ public class OfficeDocument
 {
 
     private XWindowPeer xWindowPeer;
-    private XMultiServiceFactory xMSF;
 
     /** Creates a new instance of OfficeDocument */
     public OfficeDocument(XMultiServiceFactory _xMSF)
     {
-        xMSF = _xMSF;
     }
 
     public static void attachEventCall(XComponent xComponent, String EventName, String EventType, String EventURL)

@@ -488,16 +488,13 @@ XInitialization {
    }
 
     public class ActionListenerImpl implements com.sun.star.awt.XActionListener {
-        private XControlContainer _xControlCont;
         private String _buttonName;
         public ActionListenerImpl( XControlContainer xControlCont, String buttonName ) {
-            _xControlCont = xControlCont;
             _buttonName = buttonName;
         }
 
         // XEventListener
         public void disposing( EventObject eventObject ) {
-            _xControlCont = null;
         }
 
         // XActionListener

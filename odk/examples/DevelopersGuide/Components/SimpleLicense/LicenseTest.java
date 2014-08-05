@@ -55,29 +55,11 @@ public class LicenseTest {
         static private final String __serviceName =
         "org.openoffice.LicenseTest";
 
-        /** The initial component contextr, that gives access to
-         * the service manager, supported singletons, ...
-         * It's often later used
-         */
-        private XComponentContext m_cmpCtx;
-
-        /** The service manager, that gives access to all registered services.
-         * It's often later used
-         */
-        private XMultiComponentFactory m_xMCF;
-
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
          */
         public _LicenseTest(XComponentContext xCompContext) {
-            try {
-                m_cmpCtx = xCompContext;
-                m_xMCF = m_cmpCtx.getServiceManager();
-            }
-            catch( Exception e ) {
-                e.printStackTrace();
-            }
         }
 
         /** This method returns an array of all supported service names.

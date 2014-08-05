@@ -22,9 +22,6 @@ import java.lang.String;
 import java.io.*;
 import javax.swing.*;
 public class Register{
-    private static String[] singletonDefParams = { "drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava",
-                                           "drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager",
-                                           "drafts.com.sun.star.script.framework.theScriptRuntimeManager=drafts.com.sun.star.script.framework.ScriptRuntimeManager"};
 
 
     public static boolean register(String path, JLabel statusLabel) {

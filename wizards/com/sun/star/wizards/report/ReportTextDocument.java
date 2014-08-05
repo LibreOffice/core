@@ -57,7 +57,6 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     private String sMsgTableNotExisting;
     private String sMsgCommonReportError;
     private String ContentTemplatePath;
-    private String LayoutTemplatePath;
     private String sMsgEndAutopilot;
     public boolean bIsCurLandscape;
     public TextTableHandler oTextTableHandler;
@@ -160,7 +159,6 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     {
         try
         {
-            this.LayoutTemplatePath = LayoutTemplatePath;
             boolean bOldIsCurLandscape = AnyConverter.toBoolean(Helper.getUnoPropertyValue(ReportPageStyle, ISLANDSCAPE));
             oTextStyleHandler.loadStyleTemplates(LayoutTemplatePath, "LoadPageStyles");
             changePageOrientation(bOldIsCurLandscape);

@@ -35,18 +35,7 @@ public class SmoketestCommandEnvironment extends WeakBase
     static private final String __serviceName =
     "com.sun.star.deployment.test.SmoketestCommandEnvironment";
 
-    private XComponentContext m_cmpCtx;
-    private XMultiComponentFactory m_xMCF;
-
-
     public SmoketestCommandEnvironment(XComponentContext xCompContext) {
-        try {
-            m_cmpCtx = xCompContext;
-            m_xMCF = m_cmpCtx.getServiceManager();
-        }
-        catch( Exception e ) {
-            e.printStackTrace();
-        }
     }
 
     public static String[] getServiceNames() {

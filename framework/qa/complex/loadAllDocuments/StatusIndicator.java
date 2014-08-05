@@ -45,10 +45,6 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
 
 
 
-    /**
-     * @member m_nRange     max value for any progress
-     */
-    private int             m_nRange    ;
     private boolean         m_bWasUsed  ;
 
 
@@ -59,7 +55,6 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
      */
     public StatusIndicator( int nOut)
     {
-        m_nRange    = 100           ;
         m_bWasUsed  = false;
     }
 
@@ -79,7 +74,6 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         synchronized(this)
         {
             m_bWasUsed = true;
-            m_nRange = nRange;
         }
         impl_show();
     }
@@ -94,7 +88,6 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         synchronized(this)
         {
             m_bWasUsed = true;
-            m_nRange = 100;
         }
         impl_show();
     }

@@ -179,8 +179,6 @@ public class ReportDesignerTest
         }
 
 
-    private OfficeProvider m_aProvider = null;
-
     private String m_sMailAddress = null;
     private String m_sUPDMinor;
 

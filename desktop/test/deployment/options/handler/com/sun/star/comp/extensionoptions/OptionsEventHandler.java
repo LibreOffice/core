@@ -52,8 +52,6 @@ public class OptionsEventHandler {
 
         private XComponentContext m_cmpCtx;
 
-        private XMultiComponentFactory m_xMCF;
-
         private XNameAccess m_xAccessLeaves;
 
         /**Names of supported options pages.
@@ -71,7 +69,6 @@ public class OptionsEventHandler {
 
         public _OptionsEventHandler(XComponentContext xCompContext) {
                 m_cmpCtx = xCompContext;
-                m_xMCF = m_cmpCtx.getServiceManager();
 
             //Create the com.sun.star.configuration.ConfigurationUpdateAccess
             //for the registry node which contains the data for our option

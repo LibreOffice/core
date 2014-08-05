@@ -70,7 +70,6 @@ class Canvas
         setShowDescriptions (true);
         setShowNames (true);
         setAntialiasing (true);
-        maLastWidgetSize = new Dimension (0,0);
     }
 
     /** Tell the canvas which tree view to use to highlight accessible
@@ -340,7 +339,6 @@ class Canvas
                 mnVOffset = 0;
             }
         }
-        maLastWidgetSize = aWidgetSize;
     }
 
 
@@ -463,7 +461,4 @@ class Canvas
         maBoundingBox;
     private JTree
         maTree;
-    // The size of the widget at the last call of setupTransformation()
-    private Dimension
-        maLastWidgetSize;
 }

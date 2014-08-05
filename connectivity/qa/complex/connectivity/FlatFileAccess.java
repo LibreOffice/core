@@ -86,11 +86,6 @@ public class FlatFileAccess extends ComplexTestCase
             super( i_day, i_month, i_year );
         }
 
-        EqualityDate( Date i_date )
-        {
-            super( i_date.Day, i_date.Month, i_date.Year );
-        }
-
         @Override
         public boolean equals( Object i_compare )
         {

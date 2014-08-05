@@ -41,14 +41,12 @@ public class TextSectionHandler
 
     public XTextSectionsSupplier xTextSectionsSupplier;
     private XMultiServiceFactory xMSFDoc;
-    private XTextDocument xTextDocument;
     private XText xText;
 
     /** Creates a new instance of TextSectionHandler */
     public TextSectionHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
     {
         this.xMSFDoc = xMSF;
-        this.xTextDocument = xTextDocument;
         xText = xTextDocument.getText();
         xTextSectionsSupplier = UnoRuntime.queryInterface(XTextSectionsSupplier.class, xTextDocument);
     }

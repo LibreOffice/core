@@ -348,7 +348,6 @@ public final class Bug107753_Test extends ComplexTestCase {
 
     private static final class Provider implements XInstanceProvider {
         public Provider(TestBed testBed) {
-            this.testBed = testBed;
         }
 
         public Object getInstance(String instanceName) {
@@ -362,8 +361,6 @@ public final class Bug107753_Test extends ComplexTestCase {
                     }
                 };
         }
-
-        private final TestBed testBed;
     }
 
     public interface XTransport extends XInterface {

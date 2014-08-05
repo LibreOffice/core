@@ -44,7 +44,6 @@ public class LocalOfficeConnection
     public static final String      OFFICE_ID_SUFFIX    = "_Office";
 
     private Process             mProcess;
-    private ContainerFactory        mContainerFactory;
     private XComponentContext       mContext;
 
     private String              mURL;
@@ -134,14 +133,13 @@ public class LocalOfficeConnection
     }
 
     /**
-     * Sets an AWT container catory.
+     * Sets an AWT container factory.
      *
      * @param containerFactory This is a application provided AWT container
      *  factory.
      */
     public void setContainerFactory(ContainerFactory containerFactory)
     {
-        mContainerFactory   = containerFactory;
     }
 
     /**
@@ -185,8 +183,6 @@ public class LocalOfficeConnection
             catch ( RuntimeException aExc ) {}
         }
         mComponents.clear();
-
-        mContainerFactory = null;
         mContext = null;
     }
 

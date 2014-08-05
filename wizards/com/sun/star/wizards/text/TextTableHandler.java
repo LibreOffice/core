@@ -48,7 +48,6 @@ public class TextTableHandler
     public XMultiServiceFactory xMSFDoc;
     public XTextDocument xTextDocument;
     public XSimpleText xSimpleText;
-    private XText xText;
     private NumberFormatter oNumberFormatter;
     private Locale aCharLocale;
 
@@ -59,7 +58,6 @@ public class TextTableHandler
         {
             this.xMSFDoc = xMSF;
             this.xTextDocument = xTextDocument;
-            xText = xTextDocument.getText();
             xTextTablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
             xSimpleText = UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
             XNumberFormatsSupplier xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);

@@ -24,7 +24,6 @@ import javax.swing.*;
 
 public class XmlUpdater extends Thread {
 
-    private String classesPath = null;
     private String installPath;
     private boolean netInstall;
     private boolean bindingsInstall;
@@ -153,8 +152,6 @@ public class XmlUpdater extends Thread {
     public void run() {
 
         internalThread = Thread.currentThread();
-
-        classesPath= installPath.concat(File.separator+"program"+File.separator+"classes"+File.separator);
 
         String progpath=installPath;
         progpath= progpath.concat(File.separator+"program"+File.separator);

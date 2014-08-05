@@ -46,7 +46,6 @@ public final class LocalOfficeImpl
     private final static String     STORAGE_MRG_SINGLETON =
         "/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager";
 
-    private transient String                    mOfficePath;
     private transient XMultiComponentFactory    mComponentFactory;
     private transient XComponentContext         mComponentContext;
     /**
@@ -66,7 +65,6 @@ public final class LocalOfficeImpl
     protected void connect(String officePath, int port)
         throws ConnectException
     {
-        mOfficePath    = officePath;
         try {
             bootstrap(port);
         } catch (java.lang.Exception ex) {
