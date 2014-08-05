@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "ooxml/OOXMLFastTokens.hxx"
 #include <algorithm>
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
@@ -190,7 +189,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/vml/vmlformatting.hxx>
-#include <ooxml/OOXMLFastTokens.hxx>
 #include <ooxml/OOXMLnamespaceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <osl/diagnose.h>
