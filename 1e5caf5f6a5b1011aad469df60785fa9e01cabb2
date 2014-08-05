@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_ba810dfe",
+        "filename": "filter/source/config/fragments/filters/Beagle_Works.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-05T06:18:38Z",
+      "side": 1,
+      "message": "I would prefer to use Foo Bar Text Document / Spreadsheet / Drawing.",
+      "revId": "1e5caf5f6a5b1011aad469df60785fa9e01cabb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
