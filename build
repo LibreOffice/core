@@ -71,17 +71,16 @@ do_configure()
       --enable-ext-wiki-publisher \
       --enable-release-build \
       --with-ant-home=/cygdrive/c/ant \
-      --with-build-version=${BUILD_NUMBER} \
+      --with-build-version="${BUILD_NUMBER}" \
       --with-help \
       --with-java \
-      --with-jdk-home=${JDK_HOME} \
-      --with-lang="en-US de fr es it pt " \
+      --with-jdk-home="${JDK_HOME}" \
       --with-lang="en-US de fr es it pt" \
       --with-myspell-dicts \
       --without-junit \
       --with-system-dicts \
-      --with-vendor="IT@m Landeshauptstadt München" \
-      || echo autogen.sh ist fehlgeschlagen
+      --with-vendor='it@M Landeshauptstadt München' \
+      || error 'autogen.sh fehlgeschlagen.'
   else
     if [ -f /usr/lib/j2sdk1.5-sun/bin/javac  ]; then
       JDK_HOME="/usr/lib/j2sdk1.5-sun"
@@ -91,12 +90,12 @@ do_configure()
 
     ./autogen.sh \
       --disable-dbus \
-      --disable-${disable_kde} \
+      --disable-"${disable_kde}" \
       --disable-gconf \
       --disable-gnome-vfs \
       --disable-online-update \
       --disable-randr-link \
-      --enable-${enable_kde}\
+      --enable-"${enable_kde}"\
       --enable-epm \
       --enable-evolution2 \
       --enable-extension-integration \
@@ -110,8 +109,8 @@ do_configure()
       --with-build-version="${BUILD_NUMBER}" \
       --with-help \
       --with-java \
-      --with-jdk-home=$JDK_HOME \
-      --with-lang="en-US de fr es it pt" \
+      --with-jdk-home="${JDK_HOME}" \
+      --with-lang='en-US de fr es it pt' \
       --with-myspell-dicts \
       --without-afms \
       --without-doxygen \
@@ -126,8 +125,8 @@ do_configure()
       --with-system-libxml \
       --with-system-sane \
       --with-system-zlib \
-      --with-vendor="IT@M Landeshauptstadt München" \
-      || error "autogen.sh fehlgeschlagen."
+      --with-vendor='it@M Landeshauptstadt München' \
+      || error 'autogen.sh fehlgeschlagen.'
   fi
 
 }
