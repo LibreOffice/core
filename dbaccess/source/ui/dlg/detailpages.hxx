@@ -97,11 +97,9 @@ namespace dbaui
 
         ODbaseDetailsPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
     private:
-        // please add new controls also to <method>fillControls</method> or <method>fillWindows</method>
-        CheckBox            m_aShowDeleted;
-        FixedLine           m_aFL_1;
-        FixedText           m_aFT_Message;
-        PushButton          m_aIndexes;
+        CheckBox*           m_pShowDeleted;
+        FixedText*          m_pFT_Message;
+        PushButton*         m_pIndexes;
 
         OUString            m_sDsn;
 
@@ -111,8 +109,6 @@ namespace dbaui
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnButtonClicked, Button * );

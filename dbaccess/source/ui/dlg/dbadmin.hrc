@@ -24,7 +24,6 @@
 
 #define FT_OPTIONS              5
 #define FT_JDBCDRIVERCLASS      7
-#define FT_SPECIAL_MESSAGE      8
 #define FT_HOSTNAME             10
 #define FT_BASEDN               11
 #define FT_PORTNUMBER           12
@@ -35,10 +34,8 @@
 #define ET_HOSTNAME             5
 #define ET_BASEDN               6
 
-#define PB_INDICIES             1
 #define PB_TESTDRIVERCLASS      5
 
-#define CB_SHOWDELETEDROWS      2
 #define CB_USESSL               3
 #define CB_USECATALOG           4
 
