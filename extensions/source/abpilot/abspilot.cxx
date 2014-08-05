@@ -128,7 +128,7 @@ namespace abp
         typeSelectionChanged( m_aSettings.eType );
 
         OUString sDialogTitle = ModuleRes(RID_STR_ABSOURCEDIALOGTITLE).toString();
-        SetText(sDialogTitle);
+        setTitleBase(sDialogTitle);
         SetHelpId(HID_ABSPILOT);
     }
 

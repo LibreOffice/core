@@ -35,22 +35,20 @@ namespace dbaui
     class OConnectionTabPage : public OConnectionHelper
     {
     protected:
-        // connection
-        FixedLine           m_aFL1;
         // user authentification
-        FixedLine           m_aFL2;
-        FixedText           m_aUserNameLabel;
-        Edit                m_aUserName;
-        CheckBox            m_aPasswordRequired;
+        FixedText*          m_pFL2;
+        FixedText*          m_pUserNameLabel;
+        Edit*               m_pUserName;
+        CheckBox*           m_pPasswordRequired;
 
         // jdbc driver
-        FixedLine           m_aFL3;
-        FixedText           m_aJavaDriverLabel;
-        Edit                m_aJavaDriver;
-        PushButton          m_aTestJavaDriver;
+        FixedText*          m_pFL3;
+        FixedText*          m_pJavaDriverLabel;
+        Edit*               m_pJavaDriver;
+        PushButton*         m_pTestJavaDriver;
 
         // connection test
-        PushButton          m_aTestConnection;
+        PushButton*         m_pTestConnection;
 
         // called when the test connection button was clicked
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
@@ -73,11 +71,6 @@ namespace dbaui
         OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
             // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~OConnectionTabPage();
-
-        // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
     private:
         /** enables the test connection button, if allowed

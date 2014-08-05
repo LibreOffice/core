@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 #include "ConnectionPage.hxx"
-#include "ConnectionPage.hrc"
 #include "dbu_dlg.hrc"
 #include "dsmeta.hxx"
 #if HAVE_FEATURE_JAVA
@@ -89,30 +88,26 @@ namespace dbaui
     }
     // OConnectionTabPage
     OConnectionTabPage::OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs)
-        :OConnectionHelper(pParent, ModuleRes(PAGE_CONNECTION), _rCoreAttrs)
-        ,m_aFL1(this, ModuleRes(FL_SEPARATOR1))
-        ,m_aFL2(this, ModuleRes(FL_SEPARATOR2))
-        ,m_aUserNameLabel(this, ModuleRes(FT_USERNAME))
-        ,m_aUserName(this, ModuleRes(ET_USERNAME))
-        ,m_aPasswordRequired(this, ModuleRes(CB_PASSWORD_REQUIRED))
-        ,m_aFL3(this, ModuleRes(FL_SEPARATOR3))
-        ,m_aJavaDriverLabel(this, ModuleRes(FT_JDBCDRIVERCLASS))
-        ,m_aJavaDriver(this, ModuleRes(ET_JDBCDRIVERCLASS))
-        ,m_aTestJavaDriver(this, ModuleRes(PB_TESTDRIVERCLASS))
-        ,m_aTestConnection(this, ModuleRes(PB_TESTCONNECTION))
+        :OConnectionHelper(pParent, "ConnectionPage", "dbaccess/ui/connectionpage.ui", _rCoreAttrs)
     {
+        get(m_pFL2, "userlabel");
+        get(m_pUserNameLabel, "userNameLabel");
+        get(m_pUserName, "userNameEntry");
+        get(m_pPasswordRequired, "passCheckbutton");
+        get(m_pFL3, "JDBCLabel");
+        get(m_pJavaDriverLabel, "javaDriverLabel");
+        get(m_pJavaDriver, "driverEntry");
+        get(m_pTestJavaDriver, "driverButton");
+        get(m_pTestConnection, "connectionButton");
+
         m_pConnectionURL->SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
-        m_aJavaDriver.SetModifyHdl(getControlModifiedLink());
-        m_aJavaDriver.SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
-        m_aUserName.SetModifyHdl(getControlModifiedLink());
-        m_aPasswordRequired.SetClickHdl(getControlModifiedLink());
+        m_pJavaDriver->SetModifyHdl(getControlModifiedLink());
+        m_pJavaDriver->SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
+        m_pUserName->SetModifyHdl(getControlModifiedLink());
+        m_pPasswordRequired->SetClickHdl(getControlModifiedLink());
 
-        m_aTestConnection.SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
-        m_aTestJavaDriver.SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
-
-        FreeResource();
-
-        LayoutHelper::fitSizeRightAligned( m_aTestConnection );
+        m_pTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
+        m_pTestJavaDriver->SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
     }
 
     OConnectionTabPage::~OConnectionTabPage()
@@ -128,7 +123,6 @@ namespace dbaui
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
         OConnectionHelper::implInitControls( _rSet, _bSaveValue);
 
-        LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
         ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
         switch( eType )
         {
@@ -188,7 +182,7 @@ namespace dbaui
                 m_pFT_Connection->SetText(OUString(ModuleRes(STR_NO_ADDITIONAL_SETTINGS)));
                 {
                     OUString sText = m_pFT_Connection->GetText();
-                    sText = sText.replaceAll("%test",m_aTestConnection.GetText());
+                    sText = sText.replaceAll("%test",m_pTestConnection->GetText());
                     OUString sTemp;
                     sText = sText.replaceAll("~",sTemp);
                     m_pFT_Connection->SetText(sText);
@@ -207,12 +201,12 @@ namespace dbaui
         bool bShowUser = ( eAuthMode == AuthUserPwd );
 
         m_pPB_Connection->SetHelpId(HID_DSADMIN_BROWSECONN);
-        m_aFL2.Show( bShowUserAuthenfication );
-        m_aUserNameLabel.Show( bShowUser && bShowUserAuthenfication );
-        m_aUserName.Show( bShowUser && bShowUserAuthenfication );
-        m_aPasswordRequired.Show( bShowUserAuthenfication );
+        m_pFL2->Show( bShowUserAuthenfication );
+        m_pUserNameLabel->Show( bShowUser && bShowUserAuthenfication );
+        m_pUserName->Show( bShowUser && bShowUserAuthenfication );
+        m_pPasswordRequired->Show( bShowUserAuthenfication );
         if ( !bShowUser && bShowUserAuthenfication )
-            m_aPasswordRequired.SetPosPixel(m_aUserNameLabel.GetPosPixel());
+            m_pPasswordRequired->SetPosPixel(m_pUserNameLabel->GetPosPixel());
 
         // collect the items
         SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, true);
@@ -224,8 +218,8 @@ namespace dbaui
         // forward the values to the controls
         if ( bValid )
         {
-            m_aUserName.SetText(pUidItem->GetValue());
-            m_aPasswordRequired.Check(pAllowEmptyPwd->GetValue());
+            m_pUserName->SetText(pUidItem->GetValue());
+            m_pPasswordRequired->Check(pAllowEmptyPwd->GetValue());
 
             OUString sUrl = pUrlItem->GetValue();
             setURL( sUrl );
@@ -236,64 +230,43 @@ namespace dbaui
                 OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
                 if ( !sDefaultJdbcDriverName.isEmpty() )
                 {
-                    m_aJavaDriver.SetText(sDefaultJdbcDriverName);
-                    m_aJavaDriver.SetModifyFlag();
+                    m_pJavaDriver->SetText(sDefaultJdbcDriverName);
+                    m_pJavaDriver->SetModifyFlag();
                 }
             }
             else
-                m_aJavaDriver.SetText(pJdbcDrvItem->GetValue());
+                m_pJavaDriver->SetText(pJdbcDrvItem->GetValue());
 
-            m_aJavaDriverLabel.Show(bEnableJDBC);
-            m_aJavaDriver.Show(bEnableJDBC);
-            m_aTestJavaDriver.Show(bEnableJDBC);
-            m_aTestJavaDriver.Enable( !m_aJavaDriver.GetText().trim().isEmpty() );
-            m_aFL3.Show(bEnableJDBC);
+            m_pJavaDriverLabel->Show(bEnableJDBC);
+            m_pJavaDriver->Show(bEnableJDBC);
+            m_pTestJavaDriver->Show(bEnableJDBC);
+            m_pTestJavaDriver->Enable( !m_pJavaDriver->GetText().trim().isEmpty() );
+            m_pFL3->Show(bEnableJDBC);
 
             checkTestConnection();
 
-            m_aUserName.ClearModifyFlag();
+            m_pUserName->ClearModifyFlag();
             m_pConnectionURL->ClearModifyFlag();
-            m_aJavaDriver.ClearModifyFlag();
+            m_pJavaDriver->ClearModifyFlag();
         }
-    }
-    void OConnectionTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
-    {
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL1));
-
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL2));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aJavaDriverLabel));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aTestJavaDriver));
-
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL3));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aUserNameLabel));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aTestConnection));
-        OConnectionHelper::fillWindows(_rControlList);
-
-    }
-    void OConnectionTabPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
-    {
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aJavaDriver));
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aUserName));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aPasswordRequired));
-        OConnectionHelper::fillControls(_rControlList);
     }
 
     bool OConnectionTabPage::FillItemSet(SfxItemSet* _rSet)
     {
         bool bChangedSomething = false;
 
-        if (m_aUserName.IsValueChangedFromSaved())
+        if (m_pUserName->IsValueChangedFromSaved())
         {
-            _rSet->Put(SfxStringItem(DSID_USER, m_aUserName.GetText()));
+            _rSet->Put(SfxStringItem(DSID_USER, m_pUserName->GetText()));
             _rSet->Put(SfxStringItem(DSID_PASSWORD, OUString()));
             bChangedSomething = true;
         }
 
-        fillBool(*_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,m_pPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
 
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
         {
-            fillString(*_rSet,&m_aJavaDriver, DSID_JDBCDRIVERCLASS, bChangedSomething);
+            fillString(*_rSet,m_pJavaDriver, DSID_JDBCDRIVERCLASS, bChangedSomething);
         }
 
         fillString(*_rSet,m_pConnectionURL, DSID_CONNECTURL, bChangedSomething);
@@ -307,11 +280,11 @@ namespace dbaui
 #if HAVE_FEATURE_JAVA
         try
         {
-            if ( !m_aJavaDriver.GetText().trim().isEmpty() )
+            if ( !m_pJavaDriver->GetText().trim().isEmpty() )
             {
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
-                m_aJavaDriver.SetText(m_aJavaDriver.GetText().trim()); // fdo#68341
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aJavaDriver.GetText().trim());
+                m_pJavaDriver->SetText(m_pJavaDriver->GetText().trim()); // fdo#68341
+                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_pJavaDriver->GetText().trim());
             }
         }
         catch(Exception&)
@@ -330,14 +303,14 @@ namespace dbaui
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bEnableTestConnection = !m_pConnectionURL->IsVisible() || !m_pConnectionURL->GetTextNoPrefix().isEmpty();
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
-            bEnableTestConnection = bEnableTestConnection && (!m_aJavaDriver.GetText().trim().isEmpty());
-        m_aTestConnection.Enable(bEnableTestConnection);
+            bEnableTestConnection = bEnableTestConnection && (!m_pJavaDriver->GetText().trim().isEmpty());
+        m_pTestConnection->Enable(bEnableTestConnection);
         return true;
     }
     IMPL_LINK(OConnectionTabPage, OnEditModified, Edit*, _pEdit)
     {
-        if ( _pEdit == &m_aJavaDriver )
-            m_aTestJavaDriver.Enable( !m_aJavaDriver.GetText().trim().isEmpty() );
+        if ( _pEdit == m_pJavaDriver )
+            m_pTestJavaDriver->Enable( !m_pJavaDriver->GetText().trim().isEmpty() );
 
         checkTestConnection();
         // tell the listener we were modified
