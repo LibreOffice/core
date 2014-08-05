@@ -131,7 +131,6 @@ public class CachedDynamicResultSetStubFactory extends TestCase {
                 (OpenMode.ALL, 10000, null, new Property[] {prop},
                  new NumberedSortingInfo[0])) ;
 
-            dynResSet = null;
             try {
                 dynResSet = (XDynamicResultSet)
                     AnyConverter.toObject(new Type(XDynamicResultSet.class),

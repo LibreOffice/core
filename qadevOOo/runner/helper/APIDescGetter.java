@@ -791,12 +791,7 @@ public class APIDescGetter extends DescGetter
         {
             File dirs = new File(descPath);
 
-            if (!dirs.exists())
-            {
-                modules = null;
-            }
-            else
-            {
+            if (dirs.exists()) {
                 modules = dirs.list();
             }
         }

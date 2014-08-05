@@ -722,7 +722,7 @@ XMultiPropertySet
        //The member that keeps the value of the Property is an Object.Objects are similar to Anys in that they can
        // hold all types.
         if (obj == null || (obj instanceof Any && ((Any) obj).getObject() == null))
-            retVal= null;
+        {}
         else if(cl.equals(Object.class))
         {
             if (obj instanceof Any)

@@ -496,7 +496,6 @@ public class ParcelZipper
             }
         }
         catch (IOException ioe) {
-            result = null;
         }
         finally {
             try {

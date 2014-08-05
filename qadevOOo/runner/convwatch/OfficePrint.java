@@ -175,7 +175,6 @@ public class OfficePrint {
                 GlobalLogWriter.get().println("UNO Exception caught.");
                 GlobalLogWriter.get().println("Message: " + e.getMessage());
                 e.printStackTrace();
-                aDoc = null;
             }
             return aDoc;
         }
@@ -706,7 +705,6 @@ public class OfficePrint {
                 String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
                 sOutputPath    = sInputPath;
             }
-            sOutputFileURL = null;
 
             String sPrintFilename = FileHelper.getNameNoSuffix(sInputFileBasename);
             String sPrintFileURL;

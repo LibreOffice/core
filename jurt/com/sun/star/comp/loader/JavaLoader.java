@@ -316,9 +316,7 @@ public class JavaLoader implements XImplementationLoader,
             try {
                 method = clazz.getMethod("__getServiceFactory", paramTypes);
             } catch ( NoSuchMethodException noSuchMethodEx) {
-                method = null;
             } catch ( SecurityException secEx) {
-                method = null;
             }
         }
 

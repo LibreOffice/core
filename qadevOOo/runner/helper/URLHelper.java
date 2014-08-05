@@ -60,7 +60,6 @@ public class URLHelper
         }
         catch( MalformedURLException exWrong )
         {
-            sFileURL = null;
         }
 
         // problem of java: file URL's are coded with 1 slash instead of 2 or 3 ones!

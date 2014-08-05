@@ -71,7 +71,6 @@ public class _XFramesSupplier extends MultiMethodTest {
             for (int i = 0; i < frames.getCount(); i++) {
                 XFrame fr = null ;
                 try {
-                   fr = null;
                    try {
                        fr = (XFrame) AnyConverter.toObject(
                                 new Type(XFrame.class),frames.getByIndex(i));
@@ -181,8 +180,6 @@ public class _XFramesSupplier extends MultiMethodTest {
             }
         } else if (frames.getCount() > 0) {
             sFrame = active ;
-        } else {
-            sFrame = null;
         }
 
         oObj.setActiveFrame(sFrame) ;

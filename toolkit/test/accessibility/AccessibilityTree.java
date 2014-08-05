@@ -160,8 +160,7 @@ public class AccessibilityTree
             if( aExpander.expand( aObj ) )
             {
                 maTree.expandPath (aPath);
-                if( aFirst == null )
-                    aFirst = aPath;
+                aFirst = aPath;
             }
 
             // visit all children

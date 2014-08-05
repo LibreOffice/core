@@ -261,7 +261,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                 GlobalLogWriter.println("UNO Exception caught.");
                 GlobalLogWriter.println("Message: " + e.getMessage());
                 e.printStackTrace();
-                aDoc = null;
             }
             return aDoc;
         }
