@@ -897,6 +897,7 @@
 #define UNO_NAME_CHAR_INTEROP_GRAB_BAG "CharInteropGrabBag"
 #define UNO_NAME_TEXT_VERT_ADJUST "TextVerticalAdjust"
 #define UNO_NAME_CELL_INTEROP_GRAB_BAG "CellInteropGrabBag"
+#define UNO_NAME_ROW_INTEROP_GRAB_BAG "RowInteropGrabBag"
 #define UNO_NAME_TABLE_INTEROP_GRAB_BAG "TableInteropGrabBag"
 
 #endif
