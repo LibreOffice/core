@@ -605,24 +605,24 @@ def factoryAttributeActionDefineInner(nsNode, defineNode):
     for resourceNode in [i for i in getChildrenByName(nsNode, "resource") if i.getAttribute("name") == defineName]:
         for attributeNode in getChildrenByName(resourceNode, "attribute"):
             if attributeNode.hasAttribute("action"):
-                block.append("case %s:" % fastToken(attributeNode))
-                block.append("    pHandler->%s(pValue);" % attributeNode.getAttribute("action"))
-                block.append("    break;")
+                block.append("            case %s:" % fastToken(attributeNode))
+                block.append("                pHandler->%s(pValue);" % attributeNode.getAttribute("action"))
+                block.append("                break;")
     if len(block):
         resource = ""
         for resourceNode in [i for i in getChildrenByName(nsNode, "resource") if i.getAttribute("name") == defineName]:
             resource = resourceNode.getAttribute("resource")
             break
-        ret.append("{")
-        ret.append("    OOXMLFastContextHandler%s* pHandler = dynamic_cast<OOXMLFastContextHandler%s*>(_pHandler);" % (resource, resource))
+        ret.append("        {")
+        ret.append("            OOXMLFastContextHandler%s* pHandler = dynamic_cast<OOXMLFastContextHandler%s*>(_pHandler);" % (resource, resource))
         ret.append("")
-        ret.append("    switch (nToken)")
-        ret.append("    {")
+        ret.append("            switch (nToken)")
+        ret.append("            {")
         ret.extend(block)
-        ret.append("    default:")
-        ret.append("        break;")
-        ret.append("    }")
-        ret.append("}")
+        ret.append("            default:")
+        ret.append("                break;")
+        ret.append("            }")
+        ret.append("        }")
 
     return ret
 
