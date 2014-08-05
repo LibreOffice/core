@@ -25,7 +25,7 @@
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 
-#include <ooxml/OOXMLFastTokens.hxx>
+#include <oox/token/tokens.hxx>
 
 #include "OOXMLFastContextHandler.hxx"
 #include <boost/intrusive_ptr.hpp>

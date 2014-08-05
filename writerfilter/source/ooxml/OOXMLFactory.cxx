@@ -213,7 +213,7 @@ OOXMLFactory::createFastChildContext(OOXMLFastContextHandler * pHandler,
     uno::Reference< xml::sax::XFastContextHandler> ret;
 
     //Avoid handling unknown tokens and recursing to death
-    if ((Element & 0xffff) < OOXML_FAST_TOKENS_END)
+    if ((Element & 0xffff) < oox::XML_TOKEN_COUNT)
         ret = createFastChildContextFromFactory(pHandler, pFactory, Element);
 
     return ret;

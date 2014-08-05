@@ -32,9 +32,10 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <dmapperLoggers.hxx>
-#include <ooxml/OOXMLFastTokens.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace com::sun::star;
+using namespace oox;
 
 namespace writerfilter {
 namespace dmapper {
@@ -124,10 +125,10 @@ namespace dmapper {
                     switch( nSprmId )
                     {
                         case NS_ooxml::LN_CT_TrPr_ins:
-                            nToken = OOXML_tableRowInsert;
+                            nToken = XML_tableRowInsert;
                             break;
                         case NS_ooxml::LN_CT_TrPr_del:
-                            nToken = OOXML_tableRowDelete;
+                            nToken = XML_tableRowDelete;
                             break;
                     };
                     TrackChangesHandlerPtr pTrackChangesHandler( new TrackChangesHandler( nToken ) );
@@ -152,10 +153,10 @@ namespace dmapper {
                     switch( nSprmId )
                     {
                         case NS_ooxml::LN_CT_TcPrBase_cellIns:
-                            nToken = OOXML_tableCellInsert;
+                            nToken = XML_tableCellInsert;
                             break;
                         case NS_ooxml::LN_CT_TcPrBase_cellDel:
-                            nToken = OOXML_tableCellDelete;
+                            nToken = XML_tableCellDelete;
                             break;
                         default:
                             throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", NULL, 0);

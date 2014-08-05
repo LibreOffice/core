@@ -143,7 +143,7 @@ string fastTokenToId(sal_uInt32 nToken)
     for token in [t.getAttribute("localname") for t in getElementsByTagNamesNS(model, "http://relaxng.org/ns/structure/1.0", ["element", "attribute"])]:
         if not token in tokens:
             tokens.append(token)
-            print("""    case OOXML_%s:
+            print("""    case oox::XML_%s:
         sResult += "%s";
         break;""" % (token, token))
 

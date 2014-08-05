@@ -22,7 +22,7 @@
 #include <iostream>
 #include <resourcemodel/QNameToString.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <ooxml/OOXMLFastTokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <ooxml/resourceids.hxx>
 
 namespace writerfilter {

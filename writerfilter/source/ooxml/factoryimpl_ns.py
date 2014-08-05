@@ -114,7 +114,7 @@ def fastNamespace(attrNode):
 
 
 def fastLocalName(attrNode):
-    return "OOXML_%s" % attrNode.getAttribute("localname")
+    return "oox::XML_%s" % attrNode.getAttribute("localname")
 
 
 def fastToken(attrNode):
@@ -668,6 +668,7 @@ def createImpl(modelNode, nsName):
 #include "ooxml/resourceids.hxx"
 #include "OOXMLFactory_%s.hxx"
 #include "ooxml/OOXMLFastHelper.hxx"
+#include "oox/token/tokens.hxx"
 
 #ifdef _MSC_VER
 #pragma warning(disable:4065) // switch statement contains 'default' but no 'case' labels

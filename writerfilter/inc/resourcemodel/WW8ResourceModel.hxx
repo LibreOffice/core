@@ -396,6 +396,8 @@ protected:
     ~Sprm() {}
 };
 
+typedef sal_Int32 Token_t;
+
 }
 
 #endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_WW8RESOURCEMODEL_HXX

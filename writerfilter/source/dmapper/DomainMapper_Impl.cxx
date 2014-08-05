@@ -73,7 +73,7 @@
 #include <resourcemodel/util.hxx>
 #include <dmapperLoggers.hxx>
 #endif
-#include <ooxml/OOXMLFastTokens.hxx>
+#include <oox/token/tokens.hxx>
 
 #include <map>
 #include <boost/tuple/tuple.hpp>
@@ -85,6 +85,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
+using namespace oox;
 namespace writerfilter {
 namespace dmapper{
 
@@ -1592,16 +1593,16 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             PropertyNameSupplier & rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier(  );
             switch ( pRedline->m_nToken & 0xffff )
             {
-            case OOXML_mod:
+            case XML_mod:
                 sType = rPropNameSupplier.GetName( PROP_FORMAT );
                 break;
-            case OOXML_ins:
+            case XML_ins:
                 sType = rPropNameSupplier.GetName( PROP_INSERT );
                 break;
-            case OOXML_del:
+            case XML_del:
                 sType = rPropNameSupplier.GetName( PROP_DELETE );
                 break;
-            case OOXML_ParagraphFormat:
+            case XML_ParagraphFormat:
                 sType = rPropNameSupplier.GetName( PROP_PARAGRAPH_FORMAT );
                 break;
             default:
@@ -1645,7 +1646,7 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& 
         // Adding the non-mod redlines to the temporary vector
         if ( pIt->get( ) )
         {
-            if (((*pIt)->m_nToken & 0xffff) != OOXML_mod && ((*pIt)->m_nToken & 0xffff) != OOXML_ParagraphFormat)
+            if (((*pIt)->m_nToken & 0xffff) != XML_mod && ((*pIt)->m_nToken & 0xffff) != XML_ParagraphFormat)
                 aCleaned.push_back(*pIt);
         }
     }
@@ -4508,7 +4509,7 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
 void DomainMapper_Impl::AddNewRedline(  )
 {
     RedlineParamsPtr pNew( new RedlineParams );
-    pNew->m_nToken = OOXML_mod;
+    pNew->m_nToken = XML_mod;
     if ( !m_bIsParaMarkerChange )
     {
         m_aRedlines.top().push_back( pNew );

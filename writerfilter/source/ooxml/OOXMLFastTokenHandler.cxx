@@ -50,7 +50,7 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
 ::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getToken(const OUString & Identifier)
     throw (css::uno::RuntimeException, std::exception)
 {
-    ::sal_Int32 nResult = OOXML_FAST_TOKENS_END;
+    ::sal_Int32 nResult = oox::XML_TOKEN_COUNT;
 
     struct tokenmap::token * pToken =
         tokenmap::Perfect_Hash::in_word_set
@@ -89,7 +89,7 @@ sal_Int32 OOXMLFastTokenHandler::getTokenDirect( const char *pStr, sal_Int32 nLe
     struct tokenmap::token * pToken =
         tokenmap::Perfect_Hash::in_word_set( pStr, nLength );
 
-    sal_Int32 nResult = pToken != NULL ? pToken->nToken : OOXML_FAST_TOKENS_END;
+    sal_Int32 nResult = pToken != NULL ? pToken->nToken : oox::XML_TOKEN_COUNT;
 
 #ifdef DEBUG_TOKEN
     clog << "getTokenFromUTF8: "

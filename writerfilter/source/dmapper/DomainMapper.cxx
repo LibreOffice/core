@@ -28,7 +28,7 @@
 #include <MeasureHandler.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/paper.hxx>
-#include <ooxml/OOXMLFastTokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -70,6 +70,7 @@
 #include <GraphicHelpers.hxx>
 
 using namespace ::com::sun::star;
+using namespace oox;
 
 namespace writerfilter {
 
@@ -3388,23 +3389,23 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
 
     if (nSprmId == NS_ooxml::LN_CT_PPr_pPrChange)
     {
-        m_pImpl->SetCurrentRedlineToken(OOXML_ParagraphFormat);
+        m_pImpl->SetCurrentRedlineToken(XML_ParagraphFormat);
     }
     else if (nSprmId == NS_ooxml::LN_CT_TrPr_ins)
     {
-        m_pImpl->SetCurrentRedlineToken(OOXML_tableRowInsert);
+        m_pImpl->SetCurrentRedlineToken(XML_tableRowInsert);
     }
     else if (nSprmId == NS_ooxml::LN_CT_TrPr_del)
     {
-        m_pImpl->SetCurrentRedlineToken(OOXML_tableRowDelete);
+        m_pImpl->SetCurrentRedlineToken(XML_tableRowDelete);
     }
     else if (nSprmId == NS_ooxml::LN_CT_TcPrBase_cellIns)
     {
-        m_pImpl->SetCurrentRedlineToken(OOXML_tableCellInsert);
+        m_pImpl->SetCurrentRedlineToken(XML_tableCellInsert);
     }
     else if (nSprmId == NS_ooxml::LN_CT_TcPrBase_cellDel)
     {
-        m_pImpl->SetCurrentRedlineToken(OOXML_tableCellDelete);
+        m_pImpl->SetCurrentRedlineToken(XML_tableCellDelete);
     }
 
     resolveSprmProps(*this, rSprm );
@@ -3412,14 +3413,14 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
     sal_Int32 nToken = m_pImpl->GetCurrentRedlineToken();
     switch( nToken & 0xffff )
     {
-        case OOXML_mod:
-        case OOXML_ins:
-        case OOXML_del:
-        case OOXML_ParagraphFormat:
-        case OOXML_tableRowInsert:
-        case OOXML_tableRowDelete:
-        case OOXML_tableCellInsert:
-        case OOXML_tableCellDelete:
+        case XML_mod:
+        case XML_ins:
+        case XML_del:
+        case XML_ParagraphFormat:
+        case XML_tableRowInsert:
+        case XML_tableRowDelete:
+        case XML_tableCellInsert:
+        case XML_tableCellDelete:
             break;
         default: OSL_FAIL( "redline token other than mod, ins, del or table row" ); break;
     }

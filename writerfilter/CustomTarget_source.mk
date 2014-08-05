@@ -48,7 +48,6 @@ writerfilter_ALL = \
 	$(writerfilter_GEN_ooxml_Factory_cxx) \
 	$(writerfilter_GEN_ooxml_Factory_hxx) \
 	$(writerfilter_GEN_ooxml_FactoryValues_hxx) \
-	$(writerfilter_GEN_ooxml_FastTokens_hxx) \
 	$(writerfilter_GEN_ooxml_GperfFastToken_hxx) \
 	$(writerfilter_GEN_ooxml_NamespaceIds_hxx) \
 	$(writerfilter_GEN_ooxml_QNameToStr_cxx) \
@@ -61,14 +60,12 @@ writerfilter_DEP_ooxml_Namespaces_txt=$(call gb_CustomTarget_get_workdir,oox/gen
 writerfilter_GEN_ooxml_FactoryValues_hxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_values.hxx
 writerfilter_GEN_ooxml_Factory_cxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_generated.cxx
 writerfilter_GEN_ooxml_Factory_hxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_generated.hxx
-writerfilter_GEN_ooxml_FastTokens_hxx=$(writerfilter_WORK)/ooxml/OOXMLFastTokens.hxx
 writerfilter_GEN_ooxml_GperfFastToken_hxx=$(writerfilter_WORK)/ooxml/gperffasttoken.hxx
 writerfilter_GEN_ooxml_Model_processed=$(writerfilter_WORK)/ooxml/model_preprocessed.xml
 writerfilter_GEN_ooxml_NamespaceIds_hxx=$(writerfilter_WORK)/ooxml/OOXMLnamespaceids.hxx
 writerfilter_GEN_ooxml_QNameToStr_cxx=$(writerfilter_WORK)/ooxml/qnametostr.cxx
 writerfilter_GEN_ooxml_ResourceIds_hxx=$(writerfilter_WORK)/ooxml/resourceids.hxx
 writerfilter_GEN_ooxml_Token_xml=$(writerfilter_WORK)/ooxml/token.xml
-writerfilter_SRC_ooxml_FastTokens_py=$(writerfilter_SRC)/ooxml/fasttokens.py
 writerfilter_SRC_ooxml_GperfFastTokenHandler_py=$(writerfilter_SRC)/ooxml/gperffasttokenhandler.py
 writerfilter_SRC_ooxml_Model=$(writerfilter_SRC)/ooxml/model.xml
 writerfilter_SRC_ooxml_Preprocess_py=$(writerfilter_SRC)/ooxml/modelpreprocess.py
@@ -82,10 +79,6 @@ $(writerfilter_GEN_ooxml_Factory_cxx) : $(writerfilter_SRC)/ooxml/factoryimpl.py
 $(writerfilter_GEN_ooxml_Factory_hxx) : $(writerfilter_SRC)/ooxml/factoryinc.py $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
-
-$(writerfilter_GEN_ooxml_FastTokens_hxx) : $(writerfilter_SRC_ooxml_FastTokens_py) $(writerfilter_GEN_ooxml_Token_xml) | $(writerfilter_WORK)/ooxml/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_FastTokens_py) $(writerfilter_GEN_ooxml_Token_xml)) > $@
 
 $(writerfilter_GEN_ooxml_GperfFastToken_hxx) : $(writerfilter_SRC_ooxml_GperfFastTokenHandler_py) $(writerfilter_GEN_ooxml_Token_xml)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,GPF,1)

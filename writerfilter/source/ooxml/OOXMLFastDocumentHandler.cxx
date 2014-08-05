@@ -21,7 +21,7 @@
 #include <boost/shared_ptr.hpp>
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLFastContextHandler.hxx"
-#include "ooxml/OOXMLFastTokens.hxx"
+#include "oox/token/tokens.hxx"
 #include "OOXMLFactory.hxx"
 
 namespace writerfilter {

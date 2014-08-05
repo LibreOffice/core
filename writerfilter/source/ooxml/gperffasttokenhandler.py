@@ -25,7 +25,7 @@ class ContentHandler(xml.sax.handler.ContentHandler):
         if name == "fasttoken":
             chars = "".join(self.chars)
             token = chars.replace('-', '_')
-            print("%s, OOXML_%s" % (token, token))
+            print("%s, oox::XML_%s" % (token, token))
             self.chars = []
             self.inFasttoken = False
 
@@ -35,7 +35,7 @@ class ContentHandler(xml.sax.handler.ContentHandler):
 
 print("""
 %{
-#include "ooxml/OOXMLFastTokens.hxx"
+#include "oox/token/tokens.hxx"
 
 namespace writerfilter { namespace ooxml { namespace tokenmap {
 %}
@@ -46,7 +46,7 @@ parser = xml.sax.make_parser()
 parser.setContentHandler(ContentHandler())
 parser.parse(sys.argv[1])
 
-print("""FAST_TOKENS_END, OOXML_FAST_TOKENS_END
+print("""FAST_TOKENS_END, oox::XML_TOKEN_COUNT
 %%
 
 }}}""")

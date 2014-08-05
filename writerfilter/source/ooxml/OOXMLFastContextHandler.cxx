@@ -55,6 +55,7 @@ namespace writerfilter {
 namespace ooxml
 {
 using namespace ::com::sun::star;
+using namespace oox;
 using namespace ::std;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -119,7 +120,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
 : mpParent(NULL),
   mId(0),
   mnDefine(0),
-  mnToken(OOXML_FAST_TOKENS_END),
+  mnToken(oox::XML_TOKEN_COUNT),
   mpStream(NULL),
   mnTableDepth(0),
   mnInstanceNumber(mnInstanceCount),
@@ -143,7 +144,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mpParent(pContext),
   mId(0),
   mnDefine(0),
-  mnToken(OOXML_FAST_TOKENS_END),
+  mnToken(oox::XML_TOKEN_COUNT),
   mpStream(pContext->mpStream),
   mnTableDepth(pContext->mnTableDepth),
   mnInstanceNumber(mnInstanceCount),
@@ -171,7 +172,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
 {
     switch (oox::getBaseToken(nElement))
     {
-        case OOXML_AlternateContent:
+        case XML_AlternateContent:
             {
                 SavedAlternateState aState;
                 aState.m_bDiscardChildren = m_bDiscardChildren;
@@ -181,9 +182,9 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
                 mpParserState->getSavedAlternateStates().push_back(aState);
             }
             break;
-        case OOXML_Choice:
+        case XML_Choice:
         {
-            OUString aRequires = rAttribs->getOptionalValue(OOXML_Requires);
+            OUString aRequires = rAttribs->getOptionalValue(XML_Requires);
             static const char* aFeatures[] = {
                 "wps",
                 "wpg",
@@ -199,7 +200,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
             return true;
         }
             break;
-        case OOXML_Fallback:
+        case XML_Fallback:
             // If Choice is already taken, then let's ignore the Fallback.
             return m_bTookChoice;
             break;
@@ -236,9 +237,9 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 void SAL_CALL OOXMLFastContextHandler::endFastElement(Token_t Element)
 throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    if (Element == (NS_mce | OOXML_Choice) || Element == (NS_mce | OOXML_Fallback))
+    if (Element == (NS_mce | XML_Choice) || Element == (NS_mce | XML_Fallback))
         m_bDiscardChildren = false;
-    else if (Element == (NS_mce | OOXML_AlternateContent))
+    else if (Element == (NS_mce | XML_AlternateContent))
     {
         SavedAlternateState aState(mpParserState->getSavedAlternateStates().back());
         mpParserState->getSavedAlternateStates().pop_back();
@@ -255,9 +256,9 @@ void OOXMLFastContextHandler::lcl_startFastElement
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     OOXMLFactory::getInstance()->startAction(this, Element);
-    if( Element == (NS_wordprocessingDrawing|OOXML_positionV) )
+    if( Element == (NS_wordprocessingDrawing|XML_positionV) )
         inPositionV = true;
-    else if( Element == (NS_wordprocessingDrawing|OOXML_positionH) )
+    else if( Element == (NS_wordprocessingDrawing|XML_positionH) )
         inPositionV = false;
 
 }
@@ -1142,13 +1143,13 @@ void OOXMLFastContextHandlerProperties::handleXNotes()
 {
     switch (mnToken)
     {
-    case NS_wordprocessingml|OOXML_footnoteReference:
+    case NS_wordprocessingml|XML_footnoteReference:
         {
             OOXMLFootnoteHandler aFootnoteHandler(this);
             mpPropertySet->resolve(aFootnoteHandler);
         }
         break;
-    case NS_wordprocessingml|OOXML_endnoteReference:
+    case NS_wordprocessingml|XML_endnoteReference:
         {
             OOXMLEndnoteHandler aEndnoteHandler(this);
             mpPropertySet->resolve(aEndnoteHandler);
@@ -1163,13 +1164,13 @@ void OOXMLFastContextHandlerProperties::handleHdrFtr()
 {
     switch (mnToken)
     {
-    case NS_wordprocessingml|OOXML_footerReference:
+    case NS_wordprocessingml|XML_footerReference:
         {
             OOXMLFooterHandler aFooterHandler(this);
             mpPropertySet->resolve(aFooterHandler);
         }
         break;
-    case NS_wordprocessingml|OOXML_headerReference:
+    case NS_wordprocessingml|XML_headerReference:
         {
             OOXMLHeaderHandler aHeaderHandler(this);
             mpPropertySet->resolve(aHeaderHandler);
@@ -1747,7 +1748,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
             newProperty(NS_ooxml::LN_shape, pValue);
             m_bShapeSent = true;
 
-            bool bIsPicture = Element == ( NS_picture | OOXML_pic );
+            bool bIsPicture = Element == ( NS_picture | XML_pic );
 
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
@@ -1772,7 +1773,7 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
     OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
 
     // Ending the shape should be the last thing to do
-    bool bIsPicture = Element == ( NS_picture | OOXML_pic );
+    bool bIsPicture = Element == ( NS_picture | XML_pic );
     if ( !bIsPicture && m_bShapeStarted)
         mpStream->endShape( );
 }
@@ -1794,9 +1795,9 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 {
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
-    bool bGroupShape = Element == Token_t(NS_vml | OOXML_group);
+    bool bGroupShape = Element == Token_t(NS_vml | XML_group);
     // drawingML version also counts as a group shape.
-    bGroupShape |= mrShapeContext->getStartToken() == Token_t(NS_wpg | OOXML_wgp);
+    bGroupShape |= mrShapeContext->getStartToken() == Token_t(NS_wpg | XML_wgp);
     sal_uInt32 nNamespace = Element & 0xffff0000;
 
     switch (nNamespace)
@@ -1823,7 +1824,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                         pWrapper->addNamespace(NS_wordprocessingml);
                         pWrapper->addNamespace(NS_vml_wordprocessingDrawing);
                         pWrapper->addNamespace(NS_office);
-                        pWrapper->addToken( NS_vml|OOXML_textbox );
+                        pWrapper->addToken( NS_vml|XML_textbox );
                     }
 
                     xContextHandler.set(pWrapper);
@@ -1838,8 +1839,8 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     // OOXMLFastContextHandlerWrapper::lcl_createFastChildContext(), here we
     // handle the WPS import of shape text, as there the parent context is a
     // Shape one, so a different situation.
-    if (Element == static_cast<sal_Int32>(NS_wps | OOXML_txbx) ||
-        Element == static_cast<sal_Int32>(NS_wps | OOXML_linkedTxbx) )
+    if (Element == static_cast<sal_Int32>(NS_wps | XML_txbx) ||
+        Element == static_cast<sal_Int32>(NS_wps | XML_linkedTxbx) )
         sendShape(Element);
 
     return xContextHandler;
@@ -1988,7 +1989,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     // processed by writerfilter (instead of oox), but we have no method to
     // filter out a single token. Just hardwire the wrap token here till we
     // need a more generic solution.
-    bool bIsWrap = Element == static_cast<sal_Int32>(NS_vml_wordprocessingDrawing | OOXML_wrap);
+    bool bIsWrap = Element == static_cast<sal_Int32>(NS_vml_wordprocessingDrawing | XML_wrap);
     if ( bInNamespaces && ((pShapeCtx->isShapeSent() && bIsWrap) || !bIsWrap) )
         xResult.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
     else if (mxContext.is())

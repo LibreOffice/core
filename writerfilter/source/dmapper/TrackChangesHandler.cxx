@@ -10,13 +10,14 @@
 #include <PropertyMap.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
-#include <ooxml/OOXMLFastTokens.hxx>
+#include <oox/token/tokens.hxx>
 #include "dmapperLoggers.hxx"
 
 namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
+using namespace oox;
 
 
 TrackChangesHandler::TrackChangesHandler( sal_Int32 nToken ) :
@@ -69,16 +70,16 @@ uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() 
     OUString sType;
     switch ( m_pRedlineParams->m_nToken & 0xffff )
     {
-        case OOXML_tableRowInsert:
+        case XML_tableRowInsert:
             sType = rPropNameSupplier.GetName( PROP_TABLE_ROW_INSERT );
             break;
-        case OOXML_tableRowDelete:
+        case XML_tableRowDelete:
             sType = rPropNameSupplier.GetName( PROP_TABLE_ROW_DELETE );
             break;
-        case OOXML_tableCellInsert:
+        case XML_tableCellInsert:
             sType = rPropNameSupplier.GetName( PROP_TABLE_CELL_INSERT );
             break;
-        case OOXML_tableCellDelete:
+        case XML_tableCellDelete:
             sType = rPropNameSupplier.GetName( PROP_TABLE_CELL_DELETE );
             break;
     }

@@ -45,7 +45,7 @@
 
 #include <oox/mathml/import.hxx>
 #include <ooxml/resourceids.hxx>
-#include <ooxml/OOXMLFastTokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <dmapper/GraphicHelpers.hxx>
@@ -4684,7 +4684,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     case RTF_DELETED:
     case RTF_REVISED:
     {
-        RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_DELETED ? OOXML_del : OOXML_ins));
+        RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_DELETED ? oox::XML_del : oox::XML_ins));
         lcl_putNestedAttribute(m_aStates.top().aCharacterSprms,
                                NS_ooxml::LN_trackchange, NS_ooxml::LN_token, pValue);
     }

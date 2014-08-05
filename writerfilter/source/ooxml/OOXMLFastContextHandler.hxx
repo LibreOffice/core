@@ -31,7 +31,7 @@
 #include "OOXMLParserState.hxx"
 #include "OOXMLPropertySetImpl.hxx"
 #include "OOXMLDocumentImpl.hxx"
-#include <ooxml/OOXMLFastTokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <oox/mathml/import.hxx>
