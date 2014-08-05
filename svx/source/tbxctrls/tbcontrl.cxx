@@ -1035,6 +1035,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     get(mpColorSet,         "colorset");
 
     mpColorSet->SetStyle( WinBits(WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) );
+    mpColorSet->SetEdgeBlending( false );
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
     {
         mpColorSet->SetStyle( mpColorSet->GetStyle() | WB_NONEFIELD );
@@ -1149,6 +1150,7 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, OpenPickerClickHdl)
 
 void SvxColorWindow_Impl::Resize()
 {
+    mpColorSet->SetSizePixel( this->GetOutputSizePixel() );
     SetOutputSizePixel(maWindowSize);
 }
 
