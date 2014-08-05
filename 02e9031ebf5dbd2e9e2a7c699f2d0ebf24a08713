@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_5a231106",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000572
+      },
+      "writtenOn": "2014-08-05T11:53:52Z",
+      "side": 1,
+      "message": "Hi, \n\n- The file contains a section break [continuous].\n- In this condition, the \u0027( SFX_ITEM_ON !\u003d pSet-\u003eGetItemState(RES_PAGEDESC, true, \u0026pI)\u0027 turns out as false.\n- As far as I can understand, itmeans that the RES_PAGEDESC is set ON\n_ so there is a section break, but can\u0027t identify which one .. continuous OR next\n- Is there any flag which can indicate that this PAGEDESC is a section break [continuous]\n- Kindly suggest. Thanks :)",
+      "revId": "02e9031ebf5dbd2e9e2a7c699f2d0ebf24a08713",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
