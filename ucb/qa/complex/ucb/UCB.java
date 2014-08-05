@@ -18,11 +18,7 @@
 
 package complex.ucb;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import com.sun.star.beans.Property;
-import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.ucb.*;
 import com.sun.star.uno.UnoRuntime;

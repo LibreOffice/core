@@ -35,7 +35,6 @@ import com.sun.star.table.CellAddress;
 import com.sun.star.table.XCell;
 import com.sun.star.sheet.XCellRangeData;
 import com.sun.star.sheet.XCellRangeFormula;
-import com.sun.star.table.CellRangeAddress;
 import com.sun.star.text.XTextRange;
 
 public class CellBinding extends complexlib.ComplexTestCase

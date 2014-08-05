@@ -31,13 +31,11 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.frame.XModel;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.util.XChangesBatch;
 import lib.MultiMethodTest;
 import lib.StatusException;
 import lib.Parameters;
-import util.SOfficeFactory;
 
 public class _XScriptSecurity extends MultiMethodTest {
 

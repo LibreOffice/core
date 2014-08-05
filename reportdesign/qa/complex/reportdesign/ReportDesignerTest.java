@@ -38,7 +38,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 
-import helper.OfficeProvider;
 import helper.URLHelper;
 
 import convwatch.DB;

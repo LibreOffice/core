@@ -20,7 +20,6 @@ package com.sun.star.comp.extensionoptions;
 import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.WrappedTargetException;

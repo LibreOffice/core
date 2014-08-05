@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import java.io.InputStream;
-import java.io.OutputStream;
-
 import com.sun.star.script.framework.log.LogUtils;
 
 import com.sun.star.script.framework.provider.PathUtils;

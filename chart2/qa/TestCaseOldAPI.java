@@ -21,11 +21,8 @@ package qa;
 
 // imports
 import complexlib.ComplexTestCase;
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Type;
-import com.sun.star.uno.XComponentContext;
-
 import java.io.PrintWriter;
 import com.sun.star.lang.*;
 import com.sun.star.beans.*;

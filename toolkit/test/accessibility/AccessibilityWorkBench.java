@@ -17,7 +17,6 @@
  */
 
 import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XModel;
 import com.sun.star.frame.XTerminateListener;
 import com.sun.star.uno.UnoRuntime;
 

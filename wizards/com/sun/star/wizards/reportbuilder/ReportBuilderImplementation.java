@@ -33,7 +33,6 @@ import com.sun.star.report.XReportDefinition;
 import com.sun.star.sdb.XSubDocument;
 import com.sun.star.sdb.application.DatabaseObject;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
-import com.sun.star.sdbc.XConnection;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XModifiable;

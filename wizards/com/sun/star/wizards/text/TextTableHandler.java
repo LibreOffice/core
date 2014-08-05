@@ -26,7 +26,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.BreakType;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XSimpleText;
-import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextTable;

@@ -18,12 +18,8 @@
 
 package org.libreoffice.report.pentaho.layoutprocessor;
 
-import org.libreoffice.report.OfficeToken;
 import org.libreoffice.report.pentaho.OfficeNamespaces;
 import org.libreoffice.report.pentaho.model.FormattedTextElement;
-import org.libreoffice.report.pentaho.model.OfficeDocument;
-import org.libreoffice.report.pentaho.model.OfficeStyle;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

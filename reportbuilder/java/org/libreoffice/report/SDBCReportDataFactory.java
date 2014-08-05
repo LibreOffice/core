@@ -26,7 +26,6 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.XCompletedExecution;
 import com.sun.star.sdb.XParametersSupplier;

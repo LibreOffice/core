@@ -18,7 +18,6 @@
 
 package complex.tdoc;
 
-import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;

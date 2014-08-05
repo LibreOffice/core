@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.JTree;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 

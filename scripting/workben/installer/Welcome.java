@@ -19,9 +19,6 @@
 package installer;
 
 import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.util.Properties;
 
 public class Welcome extends javax.swing.JPanel implements ActionListener {
 

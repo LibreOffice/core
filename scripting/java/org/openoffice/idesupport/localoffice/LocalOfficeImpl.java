@@ -20,7 +20,6 @@ package org.openoffice.idesupport.localoffice;
 
 import java.net.ConnectException;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;

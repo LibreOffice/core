@@ -20,7 +20,6 @@ package com.sun.star.wizards.text;
 import com.sun.star.awt.Size;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.style.XStyleLoader;
 import com.sun.star.text.XTextDocument;
