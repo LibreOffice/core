@@ -126,7 +126,7 @@ public class SVersionRCFile {
         String s;
 
         while ((s = br.readLine()) != null &&
-              (s.equals(VERSIONS_LINE)) != true);
+              (s.equals(VERSIONS_LINE)) != true) {}
 
         while ((s = br.readLine()) != null &&
               (s.equals("")) != true) {

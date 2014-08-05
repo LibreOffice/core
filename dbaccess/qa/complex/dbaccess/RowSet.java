@@ -782,7 +782,7 @@ public class RowSet extends TestCase
         m_resultSetUpdate.deleteRow();
         assertTrue("|deleteRow|, but no |rowDeleted| (this should have been found much earlier!)", m_resultSet.rowDeleted());
         clone.beforeFirst();
-        while (clone.next());
+        while (clone.next()) {}
         assertTrue("row set forgot that the current row is deleted", m_resultSet.rowDeleted());
 
         assertTrue("moving to the next record after |deleteRow| and clone moves failed", m_resultSet.next());

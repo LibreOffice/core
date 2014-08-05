@@ -89,7 +89,7 @@ class Reader extends Thread
         try
         {
             byte[] buf = new byte[1024];
-            while (-1 != is.read(buf));
+            while (-1 != is.read(buf)) {}
         }
         catch (java.io.IOException exc)
         {
