@@ -147,6 +147,8 @@ SdPage::~SdPage()
 
     if( mpItems )
         delete mpItems;
+
+    Clear();
 }
 
 struct OrdNumSorter
