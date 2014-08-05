@@ -1867,6 +1867,11 @@ AC_ARG_WITH(system-lpsolve,
         [Use lpsolve already on system.]),,
     [with_system_lpsolve="$with_system_libs"])
 
+AC_ARG_WITH(system-coinmp,
+    AS_HELP_STRING([--with-system-coinmp],
+        [Use CoinMP already on system.]),,
+    [with_system_coinmp="$with_system_libs"])
+
 AC_ARG_WITH(system-liblangtag,
     AS_HELP_STRING([--with-system-liblangtag],
         [Use liblangtag library already on system.]),,
@@ -9661,12 +9666,19 @@ AC_MSG_CHECKING([whether to build with CoinMP])
 if test "$enable_coinmp" != "no"; then
     ENABLE_COINMP=TRUE
     AC_MSG_RESULT([yes])
-    # Should we check for system CoinMP ? How to do that ?
-    BUILD_TYPE="$BUILD_TYPE COINMP"
+    if test "$with_system_coinmp" = "yes"; then
+	SYSTEM_COINMP=TRUE
+	PKG_CHECK_MODULES( COINMP, coinmp )
+    else
+    	BUILD_TYPE="$BUILD_TYPE COINMP"
+    fi
 else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_COINMP)
+AC_SUBST(SYSTEM_COINMP)
+AC_SUBST(COINMP_CFLAGS)
+AC_SUBST(COINMP_LIBS)
 
 ENABLE_LPSOLVE=
 AC_MSG_CHECKING([whether to build with lpsolve])

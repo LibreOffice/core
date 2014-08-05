@@ -2250,6 +2250,8 @@ endif # ENABLE_LPSOLVE
 
 ifneq ($(ENABLE_COINMP),)
 
+ifneq ($(SYSTEM_COINMP),TRUE)
+
 define gb_LinkTarget__use_coinmp
 $(call gb_LinkTarget_use_package,$(1),coinmp)
 ifeq ($(COM),MSC)
@@ -2278,6 +2280,19 @@ endef
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	coinmp \
 ))
+
+else # SYSTEM_COINMP
+
+define gb_LinkTarget__use_coinmp
+$(call gb_LinkTarget_set_include,$(1),\
+       $$(INCLUDE) \
+       $(COINMP_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(COINMP_LIBS))
+
+endef
+
+endif
 
 else
 
