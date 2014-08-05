@@ -157,7 +157,7 @@ private:
     void exportDataPoints(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesProperties,
         sal_Int32 nSeriesLength );
-    void exportDataLabels( const css::uno::Reference<css::chart2::XDataSeries>& xSeries, sal_Int32 nSeriesLength );
+    void exportDataLabels( const css::uno::Reference<css::chart2::XDataSeries>& xSeries, sal_Int32 nSeriesLength, sal_Int32 eChartType );
     void exportGrouping( bool isBar = false );
     void exportTrendlines( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > xSeries );
     void exportMarker( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > xSeries );

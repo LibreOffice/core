@@ -1761,7 +1761,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     // Excel does not like our current data label export
                     // for scatter charts
                     if( eChartType != chart::TYPEID_SCATTER )
-                        exportDataLabels(aSeriesSeq[nSeriesIdx], nSeriesLength);
+                        exportDataLabels(aSeriesSeq[nSeriesIdx], nSeriesLength, eChartType);
 
                     exportTrendlines( aSeriesSeq[nSeriesIdx] );
 
@@ -2555,18 +2555,17 @@ const char* toOOXMLPlacement( sal_Int32 nPlacement )
     return "outEnd";
 }
 
-void writeLabelProperties( FSHelperPtr pFS, const uno::Reference<beans::XPropertySet>& xPropSet )
+void writeLabelProperties(
+    FSHelperPtr pFS, const uno::Reference<beans::XPropertySet>& xPropSet, bool bLabelPlacement )
 {
     if (!xPropSet.is())
         return;
 
     chart2::DataPointLabel aLabel;
-    sal_Int32 nLabelPlacement = css::chart::DataLabelPlacement::OUTSIDE;
     sal_Int32 nLabelBorderWidth = 0;
     sal_Int32 nLabelBorderColor = 0x00FFFFFF;
 
     xPropSet->getPropertyValue("Label") >>= aLabel;
-    xPropSet->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
     xPropSet->getPropertyValue("LabelBorderWidth") >>= nLabelBorderWidth;
     xPropSet->getPropertyValue("LabelBorderColor") >>= nLabelBorderColor;
 
@@ -2584,7 +2583,13 @@ void writeLabelProperties( FSHelperPtr pFS, const uno::Reference<beans::XPropert
         pFS->endElement(FSNS(XML_c, XML_spPr));
     }
 
-    pFS->singleElement(FSNS(XML_c, XML_dLblPos), XML_val, toOOXMLPlacement(nLabelPlacement), FSEND);
+    if (bLabelPlacement)
+    {
+        sal_Int32 nLabelPlacement = css::chart::DataLabelPlacement::OUTSIDE;
+        xPropSet->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
+        pFS->singleElement(FSNS(XML_c, XML_dLblPos), XML_val, toOOXMLPlacement(nLabelPlacement), FSEND);
+    }
+
     pFS->singleElement(FSNS(XML_c, XML_showLegendKey), XML_val, BS(aLabel.ShowLegendSymbol), FSEND);
     pFS->singleElement(FSNS(XML_c, XML_showVal), XML_val, BS(aLabel.ShowNumber), FSEND);
     pFS->singleElement(FSNS(XML_c, XML_showCatName), XML_val, BS(aLabel.ShowCategoryName), FSEND);
@@ -2594,8 +2599,8 @@ void writeLabelProperties( FSHelperPtr pFS, const uno::Reference<beans::XPropert
 
 }
 
-void ChartExport::exportDataLabels( const uno::Reference<chart2::XDataSeries> & xSeries,
-    sal_Int32 nSeriesLength )
+void ChartExport::exportDataLabels(
+    const uno::Reference<chart2::XDataSeries> & xSeries, sal_Int32 nSeriesLength, sal_Int32 eChartType )
 {
     if (!xSeries.is() || nSeriesLength <= 0)
         return;
@@ -2610,6 +2615,10 @@ void ChartExport::exportDataLabels( const uno::Reference<chart2::XDataSeries> & 
     uno::Sequence<sal_Int32> aAttrLabelIndices;
     xPropSet->getPropertyValue("AttributedDataPoints") >>= aAttrLabelIndices;
 
+    bool bLabelPlacement = !mbIs3DChart;
+    if (eChartType == chart::TYPEID_PIE)
+        bLabelPlacement = true;
+
     const sal_Int32* p = aAttrLabelIndices.getConstArray();
     const sal_Int32* pEnd = p + aAttrLabelIndices.getLength();
     for (; p != pEnd; ++p)
@@ -2619,15 +2628,15 @@ void ChartExport::exportDataLabels( const uno::Reference<chart2::XDataSeries> & 
         if (!xLabelPropSet.is())
             continue;
 
-        // Individual label property thhat overwrites the baseline.
+        // Individual label property that overwrites the baseline.
         pFS->startElement(FSNS(XML_c, XML_dLbl), FSEND);
         pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, I32S(nIdx), FSEND);
-        writeLabelProperties(pFS, xLabelPropSet);
+        writeLabelProperties(pFS, xLabelPropSet, bLabelPlacement);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
     // Baseline label properties for all labels.
-    writeLabelProperties(pFS, xPropSet);
+    writeLabelProperties(pFS, xPropSet, bLabelPlacement);
 
     pFS->endElement(FSNS(XML_c, XML_dLbls));
 }
