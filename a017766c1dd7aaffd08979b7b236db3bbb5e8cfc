@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_ba98ed6b",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 6947,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-05T07:17:02Z",
+      "side": 1,
+      "message": "Are you sure that CPUNAME need not in practice reflect bitness of what gets built?  There are further places like bridges/Library_cpp_uno.mk that use CPUNAME to select which (bitness-specific, among other things) parts to build.",
+      "revId": "a017766c1dd7aaffd08979b7b236db3bbb5e8cfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
