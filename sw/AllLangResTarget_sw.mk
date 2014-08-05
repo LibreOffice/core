@@ -100,7 +100,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/envelp/envelp.src \
     sw/source/ui/envelp/label.src \
     sw/source/ui/envelp/labfmt.src \
-    sw/source/ui/envelp/mailmrge.src \
     sw/source/ui/fldui/fldui.src \
     sw/source/ui/frmdlg/frmui.src \
     sw/source/ui/globdoc/globdoc.src \

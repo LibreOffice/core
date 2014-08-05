@@ -51,55 +51,46 @@ class SwMailMergeDlg : public SvxStandardDialog
 {
     friend class SwXSelChgLstnr_Impl;
 
-    Window*         pBeamerWin;
+    Window*         m_pBeamerWin;
 
-    RadioButton     aAllRB;
-    RadioButton     aMarkedRB;
-    RadioButton     aFromRB;
-    NumericField    aFromNF;
-    FixedText       aBisFT;
-    NumericField    aToNF;
-    FixedLine       aRecordFL;
+    RadioButton*     m_pAllRB;
+    RadioButton*     m_pMarkedRB;
+    RadioButton*     m_pFromRB;
+    NumericField*    m_pFromNF;
+    NumericField*    m_pToNF;
 
-    FixedLine       aSeparatorFL;
+    RadioButton*     m_pPrinterRB;
+    RadioButton*     m_pMailingRB;
+    RadioButton*     m_pFileRB;
 
-    RadioButton     aPrinterRB;
-    RadioButton     aMailingRB;
-    RadioButton     aFileRB;
+    CheckBox*        m_pSingleJobsCB;
 
-    CheckBox        aSingleJobsCB;
+    FixedText*       m_pSaveMergedDocumentFT;
+    RadioButton*     m_pSaveSingleDocRB;
+    RadioButton*     m_pSaveIndividualRB;
 
-    FixedLine       aSaveMergedDocumentFL;
-    RadioButton     aSaveSingleDocRB;
-    RadioButton     aSaveIndividualRB;
+    CheckBox*        m_pGenerateFromDataBaseCB;
 
-    CheckBox        aGenerateFromDataBaseCB;
+    FixedText*       m_pColumnFT;
+    ListBox*         m_pColumnLB;
+    FixedText*       m_pPathFT;
+    Edit*            m_pPathED;
+    PushButton*      m_pPathPB;
+    FixedText*       m_pFilterFT;
+    ListBox*         m_pFilterLB;
 
-    FixedText       aColumnFT;
-    ListBox         aColumnLB;
-    FixedText       aPathFT;
-    Edit            aPathED;
-    PushButton      aPathPB;
-    FixedText       aFilterFT;
-    ListBox         aFilterLB;
+    ListBox*         m_pAddressFldLB;
+    FixedText*       m_pSubjectFT;
+    Edit*            m_pSubjectED;
+    FixedText*       m_pFormatFT;
+    FixedText*       m_pAttachFT;
+    Edit*            m_pAttachED;
+    PushButton*      m_pAttachPB;
+    CheckBox*        m_pFormatHtmlCB;
+    CheckBox*        m_pFormatRtfCB;
+    CheckBox*        m_pFormatSwCB;
 
-    ListBox         aAddressFldLB;
-    FixedText       aSubjectFT;
-    Edit            aSubjectED;
-    FixedText       aFormatFT;
-    FixedText       aAttachFT;
-    Edit            aAttachED;
-    PushButton      aAttachPB;
-    CheckBox        aFormatHtmlCB;
-    CheckBox        aFormatRtfCB;
-    CheckBox        aFormatSwCB;
-    FixedLine       aDestFL;
-
-    FixedLine       aBottomSeparatorFL;
-
-    OKButton        aOkBTN;
-    CancelButton    aCancelBTN;
-    HelpButton      aHelpBTN;
+    OKButton*        m_pOkBTN;
 
     SwMailMergeDlg_Impl* pImpl;
 
@@ -121,7 +112,6 @@ class SwMailMergeDlg : public SvxStandardDialog
     DECL_LINK( SaveTypeHdl, RadioButton* pBtn );
 
     virtual void    Apply() SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
     bool            ExecQryShell();
 
 public:
@@ -135,10 +125,10 @@ public:
 
     inline sal_uInt16   GetMergeType() { return nMergeType; }
 
-    bool IsSaveIndividualDocs() const { return aSaveIndividualRB.IsChecked(); }
-    bool IsGenerateFromDataBase() const { return aGenerateFromDataBaseCB.IsChecked(); }
-    OUString GetColumnName() const { return aColumnLB.GetSelectEntry();}
-    OUString GetPath() const { return aPathED.GetText();}
+    bool IsSaveIndividualDocs() const { return m_pSaveIndividualRB->IsChecked(); }
+    bool IsGenerateFromDataBase() const { return m_pGenerateFromDataBaseCB->IsChecked(); }
+    OUString GetColumnName() const { return m_pColumnLB->GetSelectEntry();}
+    OUString GetPath() const { return m_pPathED->GetText();}
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}
     inline const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const { return m_aSelection; }
