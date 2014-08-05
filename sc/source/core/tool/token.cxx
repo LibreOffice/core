@@ -3712,11 +3712,11 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
         switch (rToken.GetType())
         {
             case svExternalName:
-                rBuf.append(rCxt.mpRefConv->makeExternalNameStr(aFileName, aTabName));
+                rBuf.append(rCxt.mpRefConv->makeExternalNameStr(nFileId, aFileName, aTabName));
             break;
             case svExternalSingleRef:
                 rCxt.mpRefConv->makeExternalRefStr(
-                       rBuf, rPos, aFileName, aTabName, static_cast<const ScToken&>(rToken).GetSingleRef());
+                       rBuf, rPos, nFileId, aFileName, aTabName, static_cast<const ScToken&>(rToken).GetSingleRef());
             break;
             case svExternalDoubleRef:
             {
@@ -3727,7 +3727,8 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                     return;
 
                 rCxt.mpRefConv->makeExternalRefStr(
-                    rBuf, rPos, aFileName, it->second, aTabName, static_cast<const ScToken&>(rToken).GetDoubleRef());
+                        rBuf, rPos, nFileId, aFileName, it->second, aTabName,
+                        static_cast<const ScToken&>(rToken).GetDoubleRef());
             }
             break;
             default:
