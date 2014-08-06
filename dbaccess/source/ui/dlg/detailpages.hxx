@@ -171,32 +171,27 @@ namespace dbaui
     {
     public:
         OGeneralSpecialJDBCDetailsPage(   Window* pParent
-                                        , sal_uInt16 _nResId
                                         , const SfxItemSet& _rCoreAttrs
                                         , sal_uInt16 _nPortId
+                                        , bool _pShowSocket = true
                                         );
 
     protected:
 
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
 
-        FixedLine           m_aFL_1;
-        FixedText           m_aFTHostname;
-        Edit                m_aEDHostname;
-        FixedText           m_aPortNumber;
-        NumericField        m_aNFPortNumber;
-        FixedText           m_aFTSocket;
-        Edit                m_aEDSocket;
+        Edit*               m_pEDHostname;
+        NumericField*       m_pNFPortNumber;
+        FixedText*          m_pFTSocket;
+        Edit*               m_pEDSocket;
 
-        FixedText           m_aFTDriverClass;
-        Edit                m_aEDDriverClass;
-        PushButton          m_aTestJavaDriver;
+        FixedText*          m_pFTDriverClass;
+        Edit*               m_pEDDriverClass;
+        PushButton*         m_pTestJavaDriver;
 
         OUString              m_sDefaultJdbcDriverName;
         sal_uInt16              m_nPortId;
