@@ -17,8 +17,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libgltf,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/missing_include.patch \
-	external/libgltf/patches/fix_configure_flags.patch \
-	external/libgltf/patches/autoreconf_run.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
