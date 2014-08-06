@@ -809,7 +809,7 @@ public:
     OUString m_aInteropGrabBagName;
 
     /// A toplevel dmapper grabbag, like 'pPr'.
-    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
+    comphelper::SequenceAsVector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     /// A sub-grabbag of m_aInteropGrabBag, like 'spacing'.
     std::vector<css::beans::PropertyValue> m_aSubInteropGrabBag;

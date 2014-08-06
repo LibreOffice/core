@@ -971,6 +971,45 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_PTab_relativeTo:
         case NS_ooxml::LN_CT_PTab_alignment:
             break;
+        case NS_ooxml::LN_CT_Cnf_lastRowLastColumn:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lastRowLastColumn", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_lastRowFirstColumn:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lastRowFirstColumn", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_firstRowLastColumn:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "firstRowLastColumn", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_oddHBand:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "oddHBand", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_firstRowFirstColumn:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "firstRowFirstColumn", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_evenVBand:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "evenVBand", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_evenHBand:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "evenHBand", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_lastColumn:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lastColumn", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_firstColumn:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "firstColumn", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_oddVBand:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "oddVBand", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_lastRow:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lastRow", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_firstRow:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "firstRow", OUString::number(nIntValue));
+            break;
+        case NS_ooxml::LN_CT_Cnf_val:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "val", sStringValue);
+            break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -2463,6 +2502,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             pProperties->resolve(*this);
             m_pImpl->getTableManager().finishTableLook();
         }
+    }
+    break;
+    case NS_ooxml::LN_CT_PPrBase_cnfStyle:
+    {
+        m_pImpl->enableInteropGrabBag("cnfStyle");
+        resourcemodel::resolveSprmProps(*this, rSprm);
+        rContext->Insert(PROP_PARA_CNF_STYLE, uno::makeAny(m_pImpl->m_aInteropGrabBag.getAsConstList()), true, PARA_GRAB_BAG);
+        m_pImpl->disableInteropGrabBag();
     }
     break;
     default:
