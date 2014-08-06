@@ -16,6 +16,24 @@
       "revId": "02e9031ebf5dbd2e9e2a7c699f2d0ebf24a08713",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_da4e0196",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-08-06T08:03:33Z",
+      "side": 1,
+      "message": "If \u0027( SFX_ITEM_ON !\u003d pSet-\u003eGetItemState(RES_PAGEDESC, true, \u0026pI)\u0027 is false, then that means that the current item set doesn\u0027t have a page desc item.\n\nOn export, there are two situations which may be prepresented as a section break in OOXML:\n\n1) When the page style changes (different headers, footers, page border, page size, margins, etc)\n2) When a new Writer section starts / ends (different number of columns)\n\nSo a page style is never a \"a section break\", but changing page styles usually results in a section break on DOCX export, yes.\n\nThe primary problem with this hunk is that RES_CNTNT is never part of a paragraph item set, and the hunk was written with the intention that RES_CNTNT has something to do with continuous section breaks, but that\u0027s not true. RES_CNTNT is \"content\", as in e.g. content of a TextFrame, so it specifies an anchor position.",
+      "parentUuid": "9abe1de1_5a231106",
+      "revId": "02e9031ebf5dbd2e9e2a7c699f2d0ebf24a08713",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
