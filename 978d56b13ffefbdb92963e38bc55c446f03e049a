@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_7d3a4fcf",
+        "filename": "vcl/Library_vclplug_gen.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-08-06T12:03:19Z",
+      "side": 1,
+      "message": "please kill USE_XINERAMA_VERSION variable too since there should be only Xorg left",
+      "revId": "978d56b13ffefbdb92963e38bc55c446f03e049a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
