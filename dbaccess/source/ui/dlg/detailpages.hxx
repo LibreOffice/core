@@ -227,17 +227,11 @@ namespace dbaui
         OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     private:
-        FixedLine           m_aFL_1;
-        FixedText           m_aBaseDN;
-        Edit                m_aETBaseDN;
-        CheckBox            m_aCBUseSSL;
-        FixedText           m_aPortNumber;
-        NumericField        m_aNFPortNumber;
-        FixedText           m_aFTRowCount;
-        NumericField        m_aNFRowCount;
+        Edit*               m_pETBaseDN;
+        CheckBox*           m_pCBUseSSL;
+        NumericField*       m_pNFPortNumber;
+        NumericField*       m_pNFRowCount;
 
         sal_Int32           m_iSSLPort;
         sal_Int32           m_iNormalPort;

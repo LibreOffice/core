@@ -24,21 +24,16 @@
 
 #define FT_OPTIONS              5
 #define FT_HOSTNAME             10
-#define FT_BASEDN               11
 #define FT_PORTNUMBER           12
-#define FT_LDAPROWCOUNT         13
 
 #define ET_OPTIONS              3
 #define ET_HOSTNAME             5
-#define ET_BASEDN               6
 
-#define CB_USESSL               3
 #define CB_USECATALOG           4
 
 #define TLB_ACTIONS             1
 
 #define NF_PORTNUMBER           1
-#define NF_LDAPROWCOUNT         2
 
 #endif // _DBAUI_DBADMIN_HRC_
 
