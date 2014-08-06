@@ -21,7 +21,7 @@
 #include <vcl/msgbox.hxx>
 
 #include "conflictsdlg.hxx"
-#include "conflictsdlg.hrc"
+#include "sc.hrc"
 #include "scresid.hxx"
 #include "viewdata.hxx"
 #include "dbfunc.hxx"
@@ -372,21 +372,11 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
 // class ScConflictsDlg
 
 ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList )
-    :ModalDialog( pParent, ScResId( RID_SCDLG_CONFLICTS ) )
-    ,maFtConflicts      ( this, ScResId( FT_CONFLICTS ) )
-    ,m_aLbConflictsContainer(this, ScResId( LB_CONFLICTS))
-    ,maLbConflicts(m_aLbConflictsContainer)
-    ,maBtnKeepMine      ( this, ScResId( BTN_KEEPMINE ) )
-    ,maBtnKeepOther     ( this, ScResId( BTN_KEEPOTHER ) )
-    ,maFlConflicts      ( this, ScResId( FL_CONFLICTS ) )
-    ,maBtnKeepAllMine   ( this, ScResId( BTN_KEEPALLMINE ) )
-    ,maBtnKeepAllOthers ( this, ScResId( BTN_KEEPALLOTHERS ) )
-    ,maBtnCancel        ( this, ScResId( BTN_CANCEL ) )
-    ,maBtnHelp          ( this, ScResId( BTN_HELP ) )
+    :ModalDialog( pParent, "ConflictsDialog", "modules/scalc/ui/conflictsdialog.ui" )
     ,maStrTitleConflict ( ScResId( STR_TITLE_CONFLICT ) )
     ,maStrTitleAuthor   ( ScResId( STR_TITLE_AUTHOR ) )
     ,maStrTitleDate     ( ScResId( STR_TITLE_DATE ) )
-    ,maStrUnknownUser   ( ScResId( STR_UNKNOWN_USER ) )
+    ,maStrUnknownUser   ( ScResId( STR_UNKNOWN_USER_CONFLICT ) )
     ,mpViewData         ( pViewData )
     ,mpOwnDoc           ( NULL )
     ,mpOwnTrack         ( NULL )
@@ -397,6 +387,13 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     ,mbInSelectHdl      ( false )
     ,mbInDeselectHdl    ( false )
 {
+    get(m_pBtnKeepMine, "keepmine");
+    get(m_pBtnKeepOther, "keepother");
+    get(m_pBtnKeepAllMine, "keepallmine");
+    get(m_pBtnKeepAllOthers, "keepallothers");
+    get(m_pLbConflictsContainer, "container");
+    m_pLbConflicts = new SvxRedlinTable(*m_pLbConflictsContainer);
+
     OSL_ENSURE( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
     mpOwnDoc = ( mpViewData ? mpViewData->GetDocument() : NULL );
     OSL_ENSURE( mpOwnDoc, "ScConflictsDlg CTOR: mpOwnDoc is null!" );
@@ -406,12 +403,10 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     mpSharedTrack = ( mpSharedDoc ? mpSharedDoc->GetChangeTrack() : NULL );
     OSL_ENSURE( mpSharedTrack, "ScConflictsDlg CTOR: mpSharedTrack is null!" );
 
-    FreeResource();
-
     SetMinOutputSizePixel( maDialogSize );
 
     long nTabs[] = { 3, 10, 216, 266 };
-    maLbConflicts.SetTabs( nTabs );
+    m_pLbConflicts->SetTabs( nTabs );
 
     OUString aTab('\t');
     OUString aHeader( maStrTitleConflict );
@@ -419,34 +414,35 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     aHeader += maStrTitleAuthor;
     aHeader += aTab;
     aHeader += maStrTitleDate;
-    maLbConflicts.InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER );
+    m_pLbConflicts->InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER );
 
-    maLbConflicts.SetStyle( maLbConflicts.GetStyle() | WB_HASLINES | WB_CLIPCHILDREN | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL );
-    maLbConflicts.SetSelectionMode( MULTIPLE_SELECTION );
-    maLbConflicts.SetHighlightRange();
+    m_pLbConflicts->SetStyle( m_pLbConflicts->GetStyle() | WB_HASLINES | WB_CLIPCHILDREN | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL );
+    m_pLbConflicts->SetSelectionMode( MULTIPLE_SELECTION );
+    m_pLbConflicts->SetHighlightRange();
 
     maSelectionTimer.SetTimeout( 100 );
     maSelectionTimer.SetTimeoutHdl( LINK( this, ScConflictsDlg, UpdateSelectionHdl ) );
 
-    maLbConflicts.SetSelectHdl( LINK( this, ScConflictsDlg, SelectHandle ) );
-    maLbConflicts.SetDeselectHdl( LINK( this, ScConflictsDlg, DeselectHandle ) );
+    m_pLbConflicts->SetSelectHdl( LINK( this, ScConflictsDlg, SelectHandle ) );
+    m_pLbConflicts->SetDeselectHdl( LINK( this, ScConflictsDlg, DeselectHandle ) );
 
-    maBtnKeepMine.SetClickHdl( LINK( this, ScConflictsDlg, KeepMineHandle ) );
-    maBtnKeepOther.SetClickHdl( LINK( this, ScConflictsDlg, KeepOtherHandle ) );
-    maBtnKeepAllMine.SetClickHdl( LINK( this, ScConflictsDlg, KeepAllMineHandle ) );
-    maBtnKeepAllOthers.SetClickHdl( LINK( this, ScConflictsDlg, KeepAllOthersHandle ) );
+    m_pBtnKeepMine->SetClickHdl( LINK( this, ScConflictsDlg, KeepMineHandle ) );
+    m_pBtnKeepOther->SetClickHdl( LINK( this, ScConflictsDlg, KeepOtherHandle ) );
+    m_pBtnKeepAllMine->SetClickHdl( LINK( this, ScConflictsDlg, KeepAllMineHandle ) );
+    m_pBtnKeepAllOthers->SetClickHdl( LINK( this, ScConflictsDlg, KeepAllOthersHandle ) );
 
     UpdateView();
 
-    SvTreeListEntry* pEntry = maLbConflicts.First();
+    SvTreeListEntry* pEntry = m_pLbConflicts->First();
     if ( pEntry != NULL )
     {
-        maLbConflicts.Select( pEntry );
+        m_pLbConflicts->Select( pEntry );
     }
 }
 
 ScConflictsDlg::~ScConflictsDlg()
 {
+    delete m_pLbConflicts;
 }
 
 OUString ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflictEntry )
@@ -497,35 +493,35 @@ OUString ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocum
 
 void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
 {
-    SvTreeListEntry* pSelEntry = maLbConflicts.GetCurEntry();
+    SvTreeListEntry* pSelEntry = m_pLbConflicts->GetCurEntry();
     if ( !pSelEntry )
     {
-        pSelEntry = maLbConflicts.FirstSelected();
+        pSelEntry = m_pLbConflicts->FirstSelected();
     }
     if ( !pSelEntry )
     {
         return;
     }
 
-    SvTreeListEntry* pRootEntry = maLbConflicts.GetRootLevelParent( pSelEntry );
+    SvTreeListEntry* pRootEntry = m_pLbConflicts->GetRootLevelParent( pSelEntry );
     if ( pRootEntry )
     {
         if ( bSelectHandle )
         {
-            maLbConflicts.SelectAll( false );
+            m_pLbConflicts->SelectAll( false );
         }
-        if ( !maLbConflicts.IsSelected( pRootEntry ) )
+        if ( !m_pLbConflicts->IsSelected( pRootEntry ) )
         {
-            maLbConflicts.Select( pRootEntry );
+            m_pLbConflicts->Select( pRootEntry );
         }
-        SvTreeListEntry* pEntry = maLbConflicts.FirstChild( pRootEntry );
+        SvTreeListEntry* pEntry = m_pLbConflicts->FirstChild( pRootEntry );
         while ( pEntry )
         {
-            if ( !maLbConflicts.IsSelected( pEntry ) )
+            if ( !m_pLbConflicts->IsSelected( pEntry ) )
             {
-                maLbConflicts.Select( pEntry );
+                m_pLbConflicts->Select( pEntry );
             }
-            pEntry = maLbConflicts.NextSibling( pEntry );
+            pEntry = m_pLbConflicts->NextSibling( pEntry );
         }
     }
 }
@@ -569,10 +565,10 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl)
     ScTabView* pTabView = mpViewData->GetView();
     pTabView->DoneBlockMode();
     bool bContMark = false;
-    SvTreeListEntry* pEntry = maLbConflicts.FirstSelected();
+    SvTreeListEntry* pEntry = m_pLbConflicts->FirstSelected();
     while ( pEntry )
     {
-        if ( pEntry != maLbConflicts.GetRootLevelParent( pEntry ) )
+        if ( pEntry != m_pLbConflicts->GetRootLevelParent( pEntry ) )
         {
             RedlinData* pUserData = static_cast< RedlinData* >( pEntry->GetUserData() );
             if  ( pUserData )
@@ -584,14 +580,14 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl)
                     const ScBigRange& rBigRange = ( static_cast< const ScChangeAction* >( pAction ) )->GetBigRange();
                     if ( rBigRange.IsValid( mpOwnDoc ) )
                     {
-                        bool bSetCursor = !maLbConflicts.NextSelected( pEntry );
+                        bool bSetCursor = !m_pLbConflicts->NextSelected( pEntry );
                         pTabView->MarkRange( rBigRange.MakeRange(), bSetCursor, bContMark );
                         bContMark = true;
                     }
                 }
             }
         }
-        pEntry = maLbConflicts.NextSelected( pEntry );
+        pEntry = m_pLbConflicts->NextSelected( pEntry );
     }
 
     return 0;
@@ -609,8 +605,8 @@ void ScConflictsDlg::SetConflictAction( SvTreeListEntry* pRootEntry, ScConflictA
 
 void ScConflictsDlg::KeepHandler( bool bMine )
 {
-    SvTreeListEntry* pEntry = maLbConflicts.FirstSelected();
-    SvTreeListEntry* pRootEntry = ( pEntry ? maLbConflicts.GetRootLevelParent( pEntry ) : NULL );
+    SvTreeListEntry* pEntry = m_pLbConflicts->FirstSelected();
+    SvTreeListEntry* pRootEntry = ( pEntry ? m_pLbConflicts->GetRootLevelParent( pEntry ) : NULL );
     if ( !pRootEntry )
     {
         return;
@@ -618,9 +614,9 @@ void ScConflictsDlg::KeepHandler( bool bMine )
     SetPointer( Pointer( POINTER_WAIT ) );
     ScConflictAction eConflictAction = ( bMine ? SC_CONFLICT_ACTION_KEEP_MINE : SC_CONFLICT_ACTION_KEEP_OTHER );
     SetConflictAction( pRootEntry, eConflictAction );
-    maLbConflicts.RemoveEntry( pRootEntry );
+    m_pLbConflicts->RemoveEntry( pRootEntry );
     SetPointer( Pointer( POINTER_ARROW ) );
-    if ( maLbConflicts.GetEntryCount() == 0 )
+    if ( m_pLbConflicts->GetEntryCount() == 0 )
     {
         EndDialog( RET_OK );
     }
@@ -628,8 +624,8 @@ void ScConflictsDlg::KeepHandler( bool bMine )
 
 void ScConflictsDlg::KeepAllHandler( bool bMine )
 {
-    SvTreeListEntry* pEntry = maLbConflicts.First();
-    SvTreeListEntry* pRootEntry = ( pEntry ? maLbConflicts.GetRootLevelParent( pEntry ) : NULL );
+    SvTreeListEntry* pEntry = m_pLbConflicts->First();
+    SvTreeListEntry* pRootEntry = ( pEntry ? m_pLbConflicts->GetRootLevelParent( pEntry ) : NULL );
     if ( !pRootEntry )
     {
         return;
@@ -639,11 +635,11 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
     while ( pRootEntry )
     {
         SetConflictAction( pRootEntry, eConflictAction );
-        pRootEntry = maLbConflicts.NextSibling( pRootEntry );
+        pRootEntry = m_pLbConflicts->NextSibling( pRootEntry );
     }
-    maLbConflicts.SetUpdateMode( false );
-    maLbConflicts.Clear();
-    maLbConflicts.SetUpdateMode( true );
+    m_pLbConflicts->SetUpdateMode( false );
+    m_pLbConflicts->Clear();
+    m_pLbConflicts->SetUpdateMode( true );
     SetPointer( Pointer( POINTER_ARROW ) );
     EndDialog( RET_OK );
 }
@@ -676,7 +672,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, KeepAllOthersHandle)
     return 0;
 }
 
-static void lcl_MoveControlX( Window& rWindow, long nDelta )
+/*static void lcl_MoveControlX( Window& rWindow, long nDelta )
 {
     Point aPos( rWindow.GetPosPixel() );
     aPos.X() += nDelta;
@@ -702,9 +698,9 @@ static void lcl_ChangeControlHeight( Window& rWindow, long nDelta )
     Size aSize( rWindow.GetSizePixel() );
     aSize.Height() += nDelta;
     rWindow.SetSizePixel( aSize );
-}
+}*/
 
-void ScConflictsDlg::Resize()
+/*void ScConflictsDlg::Resize()
 {
     Size aSize( GetSizePixel() );
     long nDeltaWidth = aSize.Width() - maDialogSize.Width();
@@ -736,7 +732,7 @@ void ScConflictsDlg::Resize()
 
     lcl_MoveControlX( maBtnHelp, nDeltaWidth );
     lcl_MoveControlY( maBtnHelp, nDeltaHeight );
-}
+}*/
 
 void ScConflictsDlg::UpdateView()
 {
@@ -748,7 +744,7 @@ void ScConflictsDlg::UpdateView()
         {
             RedlinData* pRootUserData = new RedlinData();
             pRootUserData->pData = static_cast< void* >( pConflictEntry );
-            SvTreeListEntry* pRootEntry = maLbConflicts.InsertEntry( GetConflictString( *aItr ), pRootUserData );
+            SvTreeListEntry* pRootEntry = m_pLbConflicts->InsertEntry( GetConflictString( *aItr ), pRootUserData );
 
             ScChangeActionList::const_iterator aEndShared = aItr->maSharedActions.end();
             for ( ScChangeActionList::const_iterator aItrShared = aItr->maSharedActions.begin(); aItrShared != aEndShared; ++aItrShared )
@@ -767,7 +763,7 @@ void ScConflictsDlg::UpdateView()
                     }
 
                     OUString aString( GetActionString( pAction, mpSharedDoc ) );
-                    maLbConflicts.InsertEntry( aString, static_cast< RedlinData* >( NULL ), pRootEntry );
+                    m_pLbConflicts->InsertEntry( aString, static_cast< RedlinData* >( NULL ), pRootEntry );
                 }
             }
 
@@ -790,11 +786,11 @@ void ScConflictsDlg::UpdateView()
                     OUString aString( GetActionString( pAction, mpOwnDoc ) );
                     RedlinData* pUserData = new RedlinData();
                     pUserData->pData = static_cast< void* >( pAction );
-                    maLbConflicts.InsertEntry( aString, pUserData, pRootEntry );
+                    m_pLbConflicts->InsertEntry( aString, pUserData, pRootEntry );
                 }
             }
 
-            maLbConflicts.Expand( pRootEntry );
+            m_pLbConflicts->Expand( pRootEntry );
         }
     }
 }

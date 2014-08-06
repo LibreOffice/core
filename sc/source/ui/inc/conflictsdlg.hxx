@@ -116,16 +116,12 @@ public:
 class ScConflictsDlg : public ModalDialog
 {
 private:
-    FixedText           maFtConflicts;
-    SvSimpleTableContainer m_aLbConflictsContainer;
-    SvxRedlinTable      maLbConflicts;
-    PushButton          maBtnKeepMine;
-    PushButton          maBtnKeepOther;
-    FixedLine           maFlConflicts;
-    PushButton          maBtnKeepAllMine;
-    PushButton          maBtnKeepAllOthers;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
+    SvSimpleTableContainer *m_pLbConflictsContainer;
+    SvxRedlinTable      *m_pLbConflicts;
+    PushButton          *m_pBtnKeepMine;
+    PushButton          *m_pBtnKeepOther;
+    PushButton          *m_pBtnKeepAllMine;
+    PushButton          *m_pBtnKeepAllOthers;
 
     OUString            maStrTitleConflict;
     OUString            maStrTitleAuthor;
@@ -164,7 +160,7 @@ public:
                         ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList );
                         virtual ~ScConflictsDlg();
 
-    virtual void        Resize() SAL_OVERRIDE;
+    //virtual void        Resize() SAL_OVERRIDE;
     void                UpdateView();
 };
 
