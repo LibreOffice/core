@@ -87,40 +87,6 @@ TabPage PAGE_ADO
     AUTO_CHARSET(UNRELATED_CONTROLS,PAGE_X)
 };
 
-TabPage PAGE_ODBC
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    Hide = TRUE;
-    HelpId = HID_DSADMIN_PAGE_ODBC;
-
-    AUTO_CHARSET(UNRELATED_CONTROLS,PAGE_X)
-    FixedLine FL_SEPARATOR1
-    {
-        Pos = MAP_APPFONT ( 4 , 2*UNRELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "Optional Settings";
-    };
-
-    FixedText FT_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "ODBC ~options" ;
-    };
-    Edit ET_OPTIONS
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS -1 ) ;
-        Size = MAP_APPFONT ( 130 , EDIT_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_ODBC_OPTIONS;
-    };
-
-    AUTO_USECATALOG(        3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS )
-};
-
 TabPage PAGE_MYSQL_ODBC
 {
     HelpID = "dbaccess:TabPage:PAGE_MYSQL_ODBC";

@@ -42,6 +42,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/migratepage \
     dbaccess/uiconfig/ui/mysqlnativepage \
     dbaccess/uiconfig/ui/mysqlnativesettings \
+    dbaccess/uiconfig/ui/odbcpage \
     dbaccess/uiconfig/ui/parametersdialog \
     dbaccess/uiconfig/ui/password \
     dbaccess/uiconfig/ui/preparepage \

@@ -336,20 +336,10 @@ namespace dbaui
 
     // OOdbcDetailsPage
     OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_OPTIONS,false)
-        ,m_aFL_1        (this, ModuleRes(FL_SEPARATOR1))
-        ,m_aUseCatalog  (this, ModuleRes(CB_USECATALOG))
+        :OCommonBehaviourTabPage(pParent, "ODBC", "dbaccess/ui/odbcpage.ui", _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_OPTIONS)
     {
-        m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
-        FreeResource();
-
-        Window* pWindows[] = {  m_pCharsetLabel, m_pCharset
-                                ,m_pOptionsLabel,m_pOptions,&m_aUseCatalog
-                                };
-
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
-        for (sal_Int32 i=1; i < nCount; ++i)
-            pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
+        get(m_pUseCatalog, "useCatalogCheckbutton");
+        m_pUseCatalog->SetToggleHdl(getControlModifiedLink());
     }
 
     SfxTabPage* ODriversSettings::CreateODBC( Window* pParent, const SfxItemSet* _rAttrSet )
@@ -360,18 +350,8 @@ namespace dbaui
     bool OOdbcDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
-        fillBool(*_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
+        fillBool(*_rSet,m_pUseCatalog,DSID_USECATALOG,bChangedSomething);
         return bChangedSomething;
-    }
-    void OOdbcDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
-    {
-        OCommonBehaviourTabPage::fillControls(_rControlList);
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aUseCatalog));
-    }
-    void OOdbcDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
-    {
-        OCommonBehaviourTabPage::fillWindows(_rControlList);
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
     void OOdbcDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
@@ -382,7 +362,7 @@ namespace dbaui
         SFX_ITEMSET_GET(_rSet, pUseCatalogItem, SfxBoolItem, DSID_USECATALOG, true);
 
         if ( bValid )
-            m_aUseCatalog.Check(pUseCatalogItem->GetValue());
+            m_pUseCatalog->Check(pUseCatalogItem->GetValue());
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }

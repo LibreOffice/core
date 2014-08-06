@@ -133,11 +133,8 @@ namespace dbaui
         OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     private:
-        FixedLine           m_aFL_1;
-        CheckBox            m_aUseCatalog;
+        CheckBox*           m_pUseCatalog;
     };
 
     // OUserDriverDetailsPage
