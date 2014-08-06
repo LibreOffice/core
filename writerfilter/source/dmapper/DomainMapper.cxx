@@ -2504,6 +2504,18 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         }
     }
     break;
+    case NS_ooxml::LN_CT_TrPrBase_cnfStyle:
+    {
+        m_pImpl->enableInteropGrabBag("cnfStyle");
+        resourcemodel::resolveSprmProps(*this, rSprm);
+
+        TablePropertyMapPtr pPropMap(new TablePropertyMap());
+        pPropMap->Insert(PROP_ROW_CNF_STYLE, uno::makeAny(uno::makeAny(m_pImpl->m_aInteropGrabBag.getAsConstList())), true, ROW_GRAB_BAG);
+        m_pImpl->getTableManager().insertRowProps(pPropMap);
+
+        m_pImpl->disableInteropGrabBag();
+    }
+    break;
     case NS_ooxml::LN_CT_TcPrBase_cnfStyle:
     {
         m_pImpl->enableInteropGrabBag("cnfStyle");
