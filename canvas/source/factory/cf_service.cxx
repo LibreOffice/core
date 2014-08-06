@@ -513,8 +513,8 @@ extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL canvasfactory_component_getFactory(
     sal_Char const * pImplName,
-    lang::XMultiServiceFactory * pServiceManager,
-    registry::XRegistryKey * pRegistryKey )
+    void * pServiceManager,
+    void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(
         pImplName, pServiceManager, pRegistryKey, s_entries );
