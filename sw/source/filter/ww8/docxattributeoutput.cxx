@@ -7817,8 +7817,44 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr grab bag property " << aPropertyValue.Name);
             }
         }
+        else if (i->first == "ParaCnfStyle")
+        {
+            FastAttributeList* pAttributeList = m_pSerializer->createAttrList();
+            uno::Sequence<beans::PropertyValue> aAttributeList = i->second.get< uno::Sequence<beans::PropertyValue> >();
+
+            for (sal_Int32 j = 0; j < aAttributeList.getLength(); ++j)
+            {
+                if (aAttributeList[j].Name == "val")
+                    pAttributeList->add(FSNS(XML_w, XML_val), rtl::OUStringToOString(aAttributeList[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+                else
+                {
+                    static DocxStringTokenMap const aTokens[] =
+                    {
+                        {"firstRow", XML_firstRow},
+                        {"lastRow", XML_lastRow},
+                        {"firstColumn", XML_firstColumn},
+                        {"lastColumn", XML_lastColumn},
+                        {"oddVBand", XML_oddVBand},
+                        {"evenVBand", XML_evenVBand},
+                        {"oddHBand", XML_oddHBand},
+                        {"evenHBand", XML_evenHBand},
+                        {"firstRowFirstColumn", XML_firstRowFirstColumn},
+                        {"firstRowLastColumn", XML_firstRowLastColumn},
+                        {"lastRowFirstColumn", XML_lastRowFirstColumn},
+                        {"lastRowLastColumn", XML_lastRowLastColumn},
+                        {0, 0}
+                    };
+
+                    if (sal_Int32 nToken = DocxStringGetToken(aTokens, aAttributeList[j].Name))
+                        pAttributeList->add(FSNS(XML_w, nToken), rtl::OUStringToOString(aAttributeList[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+                }
+            }
+
+            XFastAttributeListRef xAttributeList(pAttributeList);
+            m_pSerializer->singleElementNS(XML_w, XML_cnfStyle, xAttributeList);
+        }
         else
-            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
+            SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
     }
 }
 
