@@ -33,6 +33,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/finalpagewizard \
     dbaccess/uiconfig/ui/generalpagedialog \
     dbaccess/uiconfig/ui/generalpagewizard \
+    dbaccess/uiconfig/ui/generalspecialjdbcdetailspage \
     dbaccess/uiconfig/ui/generatedvaluespage \
     dbaccess/uiconfig/ui/indexdesigndialog \
     dbaccess/uiconfig/ui/jdbcconnectionpage \
