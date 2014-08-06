@@ -77,27 +77,6 @@ String STR_DATABASE_TYPE_CHANGE
     Text [ en-US ] = "Database properties" ;
 };
 
-TabPage PAGE_ADO
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    Hide = TRUE;
-    HelpId = HID_DSADMIN_PAGE_ADO;
-    AUTO_CHARSET(UNRELATED_CONTROLS,PAGE_X)
-};
-
-TabPage PAGE_MYSQL_ODBC
-{
-    HelpID = "dbaccess:TabPage:PAGE_MYSQL_ODBC";
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    Hide = TRUE;
-
-    AUTO_CHARSET( UNRELATED_CONTROLS, PAGE_X )
-};
-
 TabPage PAGE_LDAP
 {
     SVLook = TRUE ;
