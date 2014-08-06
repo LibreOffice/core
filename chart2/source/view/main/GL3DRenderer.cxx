@@ -114,8 +114,8 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     , m_fMinCoordX(0.0f)
     , m_fMaxCoordX(0.0f)
     , m_fCurDistance(0.0f)
-    , m_bUndrawFlag(false)
     , m_ScrollMoveMatrix(glm::mat4(1.0))
+    , m_bUndrawFlag(false)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -162,6 +162,7 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
 
 OpenGL3DRenderer::ShaderResources::ShaderResources()
     : m_b330Support(false)
+    , m_bScrollFlag(false)
     , m_3DProID(0)
     , m_3DProjectionID(0)
     , m_3DViewID(0)
@@ -207,7 +208,6 @@ OpenGL3DRenderer::ShaderResources::ShaderResources()
     , m_BatchTextVertexID(0)
     , m_BatchTextTexCoordID(0)
     , m_BatchTextTexID(0)
-    , m_bScrollFlag(false)
 {
 }
 

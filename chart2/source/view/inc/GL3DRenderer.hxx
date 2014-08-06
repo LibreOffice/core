@@ -464,9 +464,9 @@ private:
     sal_uInt32 m_uiSelectID;
     float m_fScrollSpeed;
     float m_fScrollDistance;
-    float m_fCurDistance;
     float m_fMinCoordX;
     float m_fMaxCoordX;
+    float m_fCurDistance;
     glm::mat4 m_ScrollMoveMatrix;
     bool m_bUndrawFlag;
 };

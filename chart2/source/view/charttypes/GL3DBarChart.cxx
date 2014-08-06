@@ -180,8 +180,8 @@ public:
     RenderBenchMarkThread(GL3DBarChart * pChart):
     RenderThread(pChart),
     mbExecuting(false),
-    miFrameCount(0),
-    mbNeedFlyBack(false)
+    mbNeedFlyBack(false),
+    miFrameCount(0)
     {
         osl_getSystemTime(&mafpsRenderStartTime);
         osl_getSystemTime(&mafpsRenderEndTime);
