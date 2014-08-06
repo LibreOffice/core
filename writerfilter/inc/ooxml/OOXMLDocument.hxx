@@ -273,6 +273,10 @@ public:
 
 void ooxmlidsToXML(::std::iostream & out);
 
+#ifdef DEBUG_DOMAINMAPPER
+std::string fastTokenToId(sal_uInt32 nToken);
+#endif
+
 }}
 #endif // INCLUDED_WRITERFILTER_INC_OOXML_OOXMLDOCUMENT_HXX
 

@@ -81,7 +81,7 @@ TokenToIdMapPointer OOXMLFactory_ns::getTokenToIdMap(Id nId)
 }
 
 #ifdef DEBUG_DOMAINMAPPER
-string OOXMLFactory_ns::getDefineName(Id /*nId*/) const
+std::string OOXMLFactory_ns::getDefineName(Id /*nId*/) const
 {
     return "";
 }
