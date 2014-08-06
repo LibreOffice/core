@@ -538,19 +538,6 @@ import com.sun.star.uno.XComponentContext;
         }
 
 
-        /** In opposition to 'getUnoObjectOfTreeNode' this method inspects the passed node if it represents a Uno object
-         *  If not it returns null
-         *
-         */
-        private Object getUnoObjectOfExplicitTreeNode(XTreePathProvider _xTreePathProvider){
-            XUnoNode oUnoNode = _xTreePathProvider.getLastPathComponent();
-            if (oUnoNode != null){
-                return oUnoNode.getUnoObject();
-            }
-            return null;
-        }
-
-
         public String getFilter(XUnoNode _oUnoNode){
             String sFilter = "";
             if (_oUnoNode != null){
@@ -572,29 +559,6 @@ import com.sun.star.uno.XComponentContext;
                 } while(!bleaveLoop);
             }
             return sFilter;
-        }
-
-
-        /** In opposition to 'getUnoObjectOfexplictTreeNode' this method inspects the passed node if it represents a Uno object
-         *  if not it keeps checking all ancestors until it finds a Uno representation
-         */
-        private Object getUnoObjectOfTreeNode(XTreePathProvider _xTreePathProvider){
-            XTreePathProvider xTreePathProvider = _xTreePathProvider;
-            Object oUnoObject = null;
-            while (xTreePathProvider != null){
-                oUnoObject = getUnoObjectOfExplicitTreeNode(xTreePathProvider);
-                if (oUnoObject != null){
-                    if (oUnoObject instanceof String){
-                    }
-                    else{
-                        if (!Introspector.isUnoTypeObject(oUnoObject)){
-                            return oUnoObject;
-                        }
-                    }
-                }
-                xTreePathProvider = xTreePathProvider.getParentPath();
-            }
-            return null;
         }
 
 

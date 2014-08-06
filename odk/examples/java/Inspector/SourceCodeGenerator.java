@@ -329,11 +329,6 @@ public class SourceCodeGenerator {
         }
     }
 
-    private String getRootDescription(XUnoNode _oUnoNode){
-        return "_o" + _oUnoNode.toString();
-    }
-
-
     private String getHeaderSourceCode(){
         for(UnoObjectDefinition oUnoObjectDefinition : aVariables.values()){
             String sCurHeaderStatement = m_xLanguageSourceCodeGenerator.getHeaderSourceCode(oUnoObjectDefinition.getUnoObject(), oUnoObjectDefinition.getTypeName(), oUnoObjectDefinition.getTypeClass());

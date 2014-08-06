@@ -32,9 +32,6 @@
  *
  *************************************************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XDesktop;
@@ -43,11 +40,6 @@ import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.reflection.TypeDescriptionSearchDepth;
-import com.sun.star.reflection.XServiceTypeDescription;
-import com.sun.star.reflection.XTypeDescription;
-import com.sun.star.reflection.XTypeDescriptionEnumeration;
-import com.sun.star.reflection.XTypeDescriptionEnumerationAccess;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
@@ -94,11 +86,6 @@ public class UnoNode{
 
     protected XMultiComponentFactory getXMultiComponentFactory(){
         return m_xMultiComponentFactory;
-    }
-
-
-    private static XTypeDescriptionEnumerationAccess getXTypeDescriptionEnumerationAccess(){
-       return Introspector.getIntrospector().getXTypeDescriptionEnumerationAccess();
     }
 
 
@@ -208,15 +195,6 @@ public class UnoNode{
     }}
 
 
-    private PropertyValue[] loadArgs(String url) {
-        PropertyValue pv = new PropertyValue();
-        pv.Name = "URL";
-        pv.Value = url;
-        return new PropertyValue[] {pv};
-    }
-
-
-
     public boolean isFilterApplicable(String _sFilter, String _sName){
         boolean bFilterDoesApply = true;
         if (_sFilter.length() > 0){
@@ -225,55 +203,6 @@ public class UnoNode{
             }
         }
         return bFilterDoesApply;
-    }
-
-
-    private static String[] getMandatoryServiceNames(String _sServiceName){
-    String[] sMandatoryServiceNames  = new String[]{};
-    try {
-        TypeClass[] eTypeClasses = new com.sun.star.uno.TypeClass[1];
-        eTypeClasses[0] = com.sun.star.uno.TypeClass.SERVICE;
-        XTypeDescriptionEnumeration xTDEnumeration = getXTypeDescriptionEnumerationAccess().createTypeDescriptionEnumeration(Introspector.getModuleName(_sServiceName), eTypeClasses, TypeDescriptionSearchDepth.INFINITE);
-        while (xTDEnumeration.hasMoreElements()) {
-            XTypeDescription xTD = xTDEnumeration.nextTypeDescription();
-            if (xTD.getName().equals(_sServiceName)){
-                XServiceTypeDescription xServiceTypeDescription = UnoRuntime.queryInterface(XServiceTypeDescription.class, xTD);
-                XServiceTypeDescription[] xMandatoryServiceTypeDescriptions =  xServiceTypeDescription.getMandatoryServices();
-                int nlength = xMandatoryServiceTypeDescriptions.length;
-                sMandatoryServiceNames  = new String[nlength];
-                for (int i = 0; i < nlength; i++){
-                    sMandatoryServiceNames[i] = xMandatoryServiceTypeDescriptions[i].getName();
-                }
-
-            }
-        }
-    } catch ( java.lang.Exception e) {
-        System.out.println(System.out);
-    }
-        return sMandatoryServiceNames;
-    }
-
-
-    private static String[] removeMandatoryServiceNames(String[] _sServiceNames){
-    try{
-        List<String> aList = java.util.Arrays.asList(_sServiceNames);
-        ArrayList<String> aVector = new ArrayList<String>(aList);
-        for (int n = 0; n < _sServiceNames.length; n++){
-            String[] sDelServiceNames = getMandatoryServiceNames(_sServiceNames[n]);
-            for (int m = 0; m < sDelServiceNames.length; m++){
-                if (aVector.contains(sDelServiceNames[m])){
-                    int nIndex = aVector.indexOf(sDelServiceNames[m]);
-                    aVector.remove(nIndex);
-                }
-            }
-        }
-        String[] sRetArray = new String[aVector.size()];
-        aVector.toArray(sRetArray);
-        return sRetArray;
-    } catch (java.lang.Exception exception) {
-        exception.printStackTrace(System.err);
-    }
-        return new String[]{};
     }
 
 
