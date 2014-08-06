@@ -288,6 +288,7 @@ public class OOoBean
             final OfficeConnection iConn = getOOoConnection();
 
             Thread aConnectorThread = new Thread() {
+                @Override
                 public void run()
                 {
                     com.sun.star.lang.XMultiComponentFactory aFactory =
@@ -1306,6 +1307,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
     /**
         @deprecated
      */
+    @Override
     public void paint( java.awt.Graphics aGraphics )
     {
     }
@@ -1429,6 +1431,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         }
 
         /// watching the connection
+        @Override
         public void run()
         {
             dbgPrint( "EventListener(" + aTag + ").run()" );

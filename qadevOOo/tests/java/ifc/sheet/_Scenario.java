@@ -24,6 +24,7 @@ import lib.MultiPropertyTest;
 
 
 public class _Scenario extends MultiPropertyTest {
+    @Override
     public void before() {
         oObj = UnoRuntime.queryInterface(XPropertySet.class,
                                                         tEnv.getObjRelation(

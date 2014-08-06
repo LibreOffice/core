@@ -67,6 +67,7 @@ public class ScAreaLinkObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -84,6 +85,7 @@ public class ScAreaLinkObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface
@@ -99,6 +101,7 @@ public class ScAreaLinkObj extends TestCase {
     * collection, which has a source in the same document. This
     * link is passed as a tested object.
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log ) throws StatusException {
 

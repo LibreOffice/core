@@ -77,6 +77,7 @@ public class ChartRawReportProcessor extends SinglePassReportProcessor
         this.dataSourceFactory = dataSourceFactory;
     }
 
+    @Override
     protected ReportTarget createReportTarget(final ReportJob job)
             throws ReportProcessingException
     {
@@ -87,6 +88,7 @@ public class ChartRawReportProcessor extends SinglePassReportProcessor
                 inputRepository, outputRepository, targetName, imageService, dataSourceFactory);
     }
 
+    @Override
     public void processReport(final ReportJob job) throws ReportDataFactoryException, DataSourceException,
             ReportProcessingException
     {

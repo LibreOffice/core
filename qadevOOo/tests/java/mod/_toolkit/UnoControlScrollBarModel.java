@@ -64,6 +64,7 @@ public class UnoControlScrollBarModel extends TestCase {
     *      {@link ifc.io._XPersistObject} </li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log)
         throws StatusException {

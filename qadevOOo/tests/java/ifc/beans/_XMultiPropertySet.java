@@ -76,6 +76,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
     /**
     * Initializes some fields.
     */
+    @Override
     public void before() {
         exclProps = (Set<String>) tEnv.getObjRelation("XMultiPropertySet.ExcludeProps");
         if (exclProps == null) exclProps = new HashSet<String>(0);
@@ -354,6 +355,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
     /*
     * Does nothing.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

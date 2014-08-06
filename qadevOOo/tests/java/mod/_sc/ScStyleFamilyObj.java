@@ -66,6 +66,7 @@ public class ScStyleFamilyObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -82,6 +83,7 @@ public class ScStyleFamilyObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
@@ -111,6 +113,7 @@ public class ScStyleFamilyObj extends TestCase {
     * </ul>
     * @see com.sun.star.style.CellStyle
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         // creation of testobject here

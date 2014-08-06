@@ -157,6 +157,7 @@ public class LocalOfficeWindow
        class ComponentEventHandler
                extends java.awt.event.ComponentAdapter
        {
+        @Override
         public void componentHidden( java.awt.event.ComponentEvent e)
         {
             // only when we become invisible, we might lose our system window
@@ -167,6 +168,7 @@ public class LocalOfficeWindow
             {} // ignore
         }
 
+        @Override
         public void componentShown( java.awt.event.ComponentEvent e)
         {
             // only when we become visible, we get a system window
@@ -175,6 +177,7 @@ public class LocalOfficeWindow
     }
 
     /// Overriding java.awt.Component.setVisible() due to Java bug (no showing event).
+    @Override
     public void setVisible( boolean b )
     {
         super.setVisible(b);
@@ -277,6 +280,7 @@ public class LocalOfficeWindow
                                 throw new InterruptedException();
                 }
 
+                @Override
                 public void run()
                 {
                         while ( aWatchedThread != null )

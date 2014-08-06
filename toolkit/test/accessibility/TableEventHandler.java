@@ -29,6 +29,7 @@ class TableEventHandler
         super (aEvent, aTreeModel);
     }
 
+    @Override
     public void PrintOldAndNew (PrintStream out)
     {
         switch (mnEventId)
@@ -47,6 +48,7 @@ class TableEventHandler
         }
     }
 
+    @Override
     public void Process ()
     {
         maTreeModel.updateNode (mxEventSource, AccessibleTableHandler.class);

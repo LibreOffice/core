@@ -37,9 +37,11 @@ public class Function extends TestCase {
     private String script = "script://returns-Integer";
     private String doc = "doc_with_beanshell_scripts.sxw";
 
+    @Override
     public void initialize( TestParameters tParam, PrintWriter log ) {
     }
 
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log ) throws StatusException {
         XInterface oObj = null;
@@ -72,6 +74,7 @@ public class Function extends TestCase {
         return tEnv ;
     }
 
+    @Override
     public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
             TestParameters tParam) {
     }

@@ -58,6 +58,7 @@ public class SxwDocument extends OfficeDocument {
      *
      *  @return  The Office file extension for the SXW format.
      */
+    @Override
     protected String getFileExtension() {
         return OfficeConstants.SXW_FILE_EXTENSION;
     }
@@ -68,6 +69,7 @@ public class SxwDocument extends OfficeDocument {
      *
      *  @return  The Office attribute for the SXW format.
      */
+    @Override
     protected String getOfficeClassAttribute() {
         return OfficeConstants.SXW_TYPE;
     }
@@ -77,6 +79,7 @@ public class SxwDocument extends OfficeDocument {
      *
      * @return  String  The document's MIME type.
      */
+    @Override
     protected final String getDocumentMimeType() {
         return OfficeConstants.SXW_MIME_TYPE;
     }

@@ -30,6 +30,7 @@ public class _XUpdateHandler extends MultiMethodTest {
     public XUpdateHandler oObj;
     protected XLayerHandlerImpl xLayerHandler = null;
 
+    @Override
     public void before() {
         xLayerHandler = (XLayerHandlerImpl) tEnv.getObjRelation("LayerHandler");
 

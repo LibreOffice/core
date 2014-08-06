@@ -93,6 +93,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
      * @throw StatusException If object doesn't support <code>XFilePicker</code>
      * interface.
      */
+    @Override
     public void before() {
         fps = UnoRuntime.queryInterface
                 (XFilePicker.class, oObj) ;
@@ -188,6 +189,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
             this.Diag = Diag ;
         }
 
+        @Override
         public void run() {
             try {
                 execRes = Diag.execute();

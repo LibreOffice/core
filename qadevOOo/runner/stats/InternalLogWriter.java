@@ -54,6 +54,7 @@ public class InternalLogWriter extends PrintWriter
      * Method to print a line that is added to the StringBuffer.
      * @param msg The message that is printed.
      */
+    @Override
     public void println(String msg) {
         if (active)
             super.println(msg);
@@ -63,6 +64,7 @@ public class InternalLogWriter extends PrintWriter
      * Method to print to the StringBuffer.
      * @param msg The message that is printed.
      */
+    @Override
     public void print(String msg) {
         if (active)
             super.print(msg);

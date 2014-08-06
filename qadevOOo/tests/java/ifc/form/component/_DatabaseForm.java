@@ -48,6 +48,7 @@ public class _DatabaseForm extends MultiPropertyTest {
     public void _NavigationBarMode() {
         dbg.printPropertyInfo(oObj, "NavigationBarMode");
         testProperty("NavigationBarMode", new PropertyTester() {
+            @Override
             public String toString(Object obj) {
                 if (obj == null) {
                     return "null";
@@ -66,10 +67,12 @@ public class _DatabaseForm extends MultiPropertyTest {
     public void _Cycle() {
         dbg.printPropertyInfo(oObj, "Cycle");
         testProperty("Cycle", new PropertyTester() {
+            @Override
             public Object getNewValue(String propName, Object oldValue) {
                 return TabulatorCycle.CURRENT;
             }
 
+            @Override
             public String toString(Object obj) {
                 if (obj == null) {
                     return "null";

@@ -94,6 +94,7 @@ public class OFileControlModel extends TestCase {
     /**
      * Creates Draw document where controls are placed.
      */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory((tParam.getMSF()));
 
@@ -110,6 +111,7 @@ public class OFileControlModel extends TestCase {
     /**
      * Disposes Draw document.
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xDrawDoc ");
 
@@ -134,6 +136,7 @@ public class OFileControlModel extends TestCase {
      *    represented by this object. </li>
      * </ul>
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log) {
         XInterface oObj = null;

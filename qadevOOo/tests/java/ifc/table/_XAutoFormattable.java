@@ -119,6 +119,7 @@ public class _XAutoFormattable extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

@@ -39,6 +39,7 @@ public class UcbContentProviderProxyFactory extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.ucb.ContentProviderFactory</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment
             (TestParameters Param,PrintWriter log ) {
 

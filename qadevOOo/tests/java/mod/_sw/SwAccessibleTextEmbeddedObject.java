@@ -60,6 +60,7 @@ public class SwAccessibleTextEmbeddedObject extends TestCase {
     * @see TestEnvironment
     * @see #getTestEnvironment
     */
+    @Override
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
 
@@ -116,6 +117,7 @@ public class SwAccessibleTextEmbeddedObject extends TestCase {
     * @param Param test parameters
     * @param log writer to log information while testing
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("dispose text document");
         util.DesktopTools.closeDoc(xTextDoc);
@@ -131,6 +133,7 @@ public class SwAccessibleTextEmbeddedObject extends TestCase {
      *
      * @see #initializeTestCase
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "open a text document" );
         String testdoc = utils.getFullTestURL("SwXTextEmbeddedObject.sxw");

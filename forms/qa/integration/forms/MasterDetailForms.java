@@ -65,6 +65,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -80,6 +81,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String getTestObjectName()
     {
         return "Form Control Spreadsheet Cell Binding Test";

@@ -61,6 +61,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     private final String            m_dataSourceName = "integration.forms.FormControlTest";
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -75,6 +76,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String getTestObjectName()
     {
         return "Database Form Controls Test";

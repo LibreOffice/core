@@ -62,6 +62,7 @@ public class ScAutoFormatFieldObj extends TestCase {
     * and then from this format one of its compound fields is
     * retrieved.
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log ) throws StatusException {
 

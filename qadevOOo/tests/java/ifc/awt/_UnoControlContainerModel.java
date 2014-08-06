@@ -42,6 +42,7 @@ public class _UnoControlContainerModel extends MultiPropertyTest {
     * Redefined method returns value, that differs from property value.
     */
     protected PropertyTester ColorTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (util.ValueComparer.equalValue(oldValue, new Integer(17)))
                 return new Integer(25);

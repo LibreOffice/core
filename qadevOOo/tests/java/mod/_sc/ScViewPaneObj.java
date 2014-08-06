@@ -69,6 +69,7 @@ public class ScViewPaneObj extends TestCase {
     /**
      * Creates Spreadsheet document.
      */
+    @Override
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
         SOF = SOfficeFactory.getFactory( Param.getMSF());
@@ -85,6 +86,7 @@ public class ScViewPaneObj extends TestCase {
     /**
      * Disposes Spreadsheet document.
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println("disposing xSpreadsheetDocument");
         XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
@@ -106,6 +108,7 @@ public class ScViewPaneObj extends TestCase {
      * </ul>
      * @see com.sun.star.frame.XModel
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XDrawPage oDrawPage;
 

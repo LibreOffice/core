@@ -89,6 +89,7 @@ public class ScTabViewObj extends TestCase {
     /**
      * Creates Spreadsheet document.
      */
+    @Override
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
 
@@ -110,6 +111,7 @@ public class ScTabViewObj extends TestCase {
     /**
      * Disposes Spreadsheet document.
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc) ;
@@ -133,6 +135,7 @@ public class ScTabViewObj extends TestCase {
      * @see com.sun.star.frame.XModel
      * @see com.sun.star.sheet.SpreadsheetView
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XDrawPage oDrawPage = null;
 

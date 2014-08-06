@@ -53,6 +53,7 @@ public class _XAccessibleValue extends MultiMethodTest {
     private Object val = null;
     XAccessibleValue anotherFromGroup = null;
 
+    @Override
     protected void before() {
         anotherFromGroup = (XAccessibleValue)tEnv.getObjRelation(
             "XAccessibleValue.anotherFromGroup");
@@ -336,6 +337,7 @@ public class _XAccessibleValue extends MultiMethodTest {
     /**
      * Disposes test environment.
      */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

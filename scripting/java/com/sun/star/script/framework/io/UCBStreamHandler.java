@@ -46,6 +46,7 @@ public class UCBStreamHandler extends URLStreamHandler {
         this.m_xSimpleFileAccess = xSFA;
     }
 
+    @Override
     public void parseURL(URL url, String spec, int start, int limit) {
         LogUtils.DEBUG("**XUCBStreamHandler, parseURL: " + url + " spec: " + spec + " start: " + start + " limit: " + limit );
 
@@ -60,6 +61,7 @@ public class UCBStreamHandler extends URLStreamHandler {
         setURL(url, m_ucbscheme, null, -1, null, null, file, null, null);
     }
 
+    @Override
     public URLConnection openConnection(URL u) throws IOException {
         return new UCBConnection(u);
     }
@@ -70,9 +72,11 @@ public class UCBStreamHandler extends URLStreamHandler {
             super(url);
         }
 
+        @Override
         public void connect() {
         }
 
+        @Override
         public InputStream getInputStream() throws IOException {
             LogUtils.DEBUG("UCBConnectionHandler GetInputStream on " + url );
             String sUrl = url.toString();
@@ -88,6 +92,7 @@ public class UCBStreamHandler extends URLStreamHandler {
                 return getUCBStream(file, path);
             }
         }
+        @Override
         public OutputStream getOutputStream() throws IOException {
             LogUtils.DEBUG("UCBConnectionHandler getOutputStream on " + url );
             OutputStream os = null;

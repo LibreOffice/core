@@ -113,6 +113,7 @@ public class OComboBoxModel extends GenericModelTest {
      * @param tParam the test parameter
      * @param log the log writer
      */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
 
         super.initialize(tParam, log);
@@ -136,6 +137,7 @@ public class OComboBoxModel extends GenericModelTest {
      * @param tParam the test parameter
      * @param log the log writer
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         super.cleanup(tParam, log);
     }
@@ -147,6 +149,7 @@ public class OComboBoxModel extends GenericModelTest {
      * @param log the log writer
      * @return lib.TestEnvironment
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         return super.createTestEnvironment(Param, log);

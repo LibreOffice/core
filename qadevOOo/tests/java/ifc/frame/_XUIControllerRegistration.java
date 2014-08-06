@@ -26,6 +26,7 @@ public class _XUIControllerRegistration extends MultiMethodTest {
     private String aRegisteredController = null;
     private String aController = ".uno:MySecondController";
 
+    @Override
     public void before() {
         aRegisteredController = (String)tEnv.getObjRelation("XUIControllerRegistration.RegisteredController");
     }

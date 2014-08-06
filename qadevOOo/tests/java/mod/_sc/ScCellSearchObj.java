@@ -64,6 +64,7 @@ public class ScCellSearchObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -81,6 +82,7 @@ public class ScCellSearchObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
@@ -96,6 +98,7 @@ public class ScCellSearchObj extends TestCase {
     * implemented by a spreasheet.
     * @see com.sun.star.util.XSearchable
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;

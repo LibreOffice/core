@@ -37,12 +37,14 @@ import util.DrawTools;
 public class SvxUnoNumberingRules extends TestCase {
     static XComponent xDrawDoc;
 
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a drawdoc");
         xDrawDoc = DrawTools.createDrawDoc(
                            tParam.getMSF());
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         XMultiServiceFactory docMSF = UnoRuntime.queryInterface(
@@ -78,6 +80,7 @@ public class SvxUnoNumberingRules extends TestCase {
         return tEnv;
     }
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xDrawDoc ");
         util.DesktopTools.closeDoc(xDrawDoc);

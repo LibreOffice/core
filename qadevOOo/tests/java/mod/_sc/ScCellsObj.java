@@ -60,6 +60,7 @@ public class ScCellsObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
@@ -78,6 +79,7 @@ public class ScCellsObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
@@ -94,6 +96,7 @@ public class ScCellsObj extends TestCase {
     * <code>com.sun.star.sheet.Cells</code>.
     * @see com.sun.star.sheet.XCellRangesQuery
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

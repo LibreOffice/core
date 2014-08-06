@@ -62,6 +62,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         super(reportJob, resourceManager, baseResource, inputRepository, outputRepository, target, imageService, dataSourceFactory);
     }
 
+    @Override
     protected String getTargetMimeType()
     {
         return "application/vnd.oasis.opendocument.chart";
@@ -77,6 +78,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         return "raw/" + PentahoReportEngineMetaData.OPENDOCUMENT_CHART;
     }
 
+    @Override
     protected void startContent(final AttributeMap attrs) throws IOException, DataSourceException, ReportProcessingException
     {
         inFilterElements = false;
@@ -88,6 +90,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         ++closeTags;
     }
 
+    @Override
     protected void endContent(final AttributeMap attrs) throws IOException, DataSourceException, ReportProcessingException
     {
         final XmlWriter xmlWriter = getXmlWriter();
@@ -98,15 +101,18 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void startReportSection(final AttributeMap attrs, final int role)
             throws ReportProcessingException
     {
     }
 
+    @Override
     protected void endReportSection(final AttributeMap attrs, final int role)
     {
     }
 
+    @Override
     protected void startOther(final AttributeMap attrs) throws IOException, DataSourceException, ReportProcessingException
     {
         final String namespace = ReportTargetUtil.getNamespaceFromAttribute(attrs);
@@ -129,6 +135,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         return OfficeToken.TABLE_HEADER_COLUMNS.equals(elementType) || OfficeToken.TABLE_HEADER_ROWS.equals(elementType) || OfficeToken.TABLE_COLUMNS.equals(elementType);
     }
 
+    @Override
     protected void endOther(final AttributeMap attrs) throws IOException, DataSourceException, ReportProcessingException
     {
         if (tableRowsStarted && getCurrentRole() == ROLE_TEMPLATE)
@@ -169,6 +176,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     public void processContent(final DataFlags value)
             throws DataSourceException, ReportProcessingException
     {
@@ -227,6 +235,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
     }
 
 
+    @Override
     public void processText(final String text) throws DataSourceException, ReportProcessingException
     {
         if (inFilterElements && tableCount > 1)
@@ -236,6 +245,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         super.processText(text);
     }
 
+    @Override
     public void endReport(final ReportStructureRoot report)
             throws DataSourceException, ReportProcessingException
     {

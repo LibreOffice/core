@@ -65,6 +65,7 @@ public class Thesaurus extends TestCase {
      * Creates an instance of the service
      * <code>com.sun.star.linguistic2.Thesaurus</code>.
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF();

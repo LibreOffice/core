@@ -37,6 +37,7 @@ public class _XGoalSeek extends MultiMethodTest {
     CellAddress aFormula = null;
     CellAddress aValue = null;
 
+    @Override
     public void before() {
         Exception ex = null;
         // get two sheets

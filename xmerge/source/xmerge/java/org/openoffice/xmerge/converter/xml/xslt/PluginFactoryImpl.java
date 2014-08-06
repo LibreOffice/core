@@ -95,7 +95,8 @@ public final class PluginFactoryImpl extends PluginFactory
         return new DocumentDeserializerImpl(this,cd);
     }
 
-     public org.openoffice.xmerge.Document createDeviceDocument(java.lang.String str, java.io.InputStream inputStream) throws java.io.IOException {
+     @Override
+    public org.openoffice.xmerge.Document createDeviceDocument(java.lang.String str, java.io.InputStream inputStream) throws java.io.IOException {
         String ext = this.getDeviceFileExtension();
         DOMDocument domDoc = new DOMDocument(str,ext);
         domDoc.read(inputStream);
@@ -103,7 +104,8 @@ public final class PluginFactoryImpl extends PluginFactory
     }
 
 
-     public Document createOfficeDocument(String name, InputStream is)
+     @Override
+    public Document createOfficeDocument(String name, InputStream is)
         throws IOException {
 
         // read zipped XML stream
@@ -112,7 +114,8 @@ public final class PluginFactoryImpl extends PluginFactory
         return doc;
     }
 
-     public Document createOfficeDocument(String name, InputStream is,boolean isZip)
+     @Override
+    public Document createOfficeDocument(String name, InputStream is,boolean isZip)
         throws IOException {
 
         // read zipped XML stream

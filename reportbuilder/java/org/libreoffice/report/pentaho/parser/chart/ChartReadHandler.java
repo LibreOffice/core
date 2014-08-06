@@ -57,6 +57,7 @@ public class ChartReadHandler extends ElementReadHandler
      * @return the handler or null, if the tagname is invalid.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected XmlReadHandler getHandlerForChild(final String uri,
             final String tagName,
             final Attributes atts)
@@ -84,6 +85,7 @@ public class ChartReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void doneParsing() throws SAXException
     {
         for (ElementReadHandler handler : children)
@@ -92,6 +94,7 @@ public class ChartReadHandler extends ElementReadHandler
         }
     }
 
+    @Override
     public Element getElement()
     {
         return element;

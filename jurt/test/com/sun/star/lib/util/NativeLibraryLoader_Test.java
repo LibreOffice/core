@@ -39,6 +39,7 @@ public final class NativeLibraryLoader_Test {
 
         File file2 = NativeLibraryLoader.getResource(
             new ClassLoader() {
+                @Override
                 public URL getResource(String name) {
                     return url;
                 }
@@ -61,6 +62,7 @@ public final class NativeLibraryLoader_Test {
 
         File file2 = NativeLibraryLoader.getResource(
             new ClassLoader() {
+                @Override
                 public URL getResource(String name) {
                     return url;
                 }

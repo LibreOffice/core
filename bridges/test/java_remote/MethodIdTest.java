@@ -36,6 +36,7 @@ import test.lib.TestBed;
  * short-cutting to the local object.</P>
  */
 public final class MethodIdTest extends ComplexTestCase {
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -51,6 +52,7 @@ public final class MethodIdTest extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             XTest t = UnoRuntime.queryInterface(
                 XTest.class, getBridge(context).getInstance("Test"));

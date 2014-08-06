@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 public final class DefaultProvider extends TestCase {
     public DefaultProvider() {}
 
+    @Override
     protected TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log)
     {

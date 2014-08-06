@@ -58,6 +58,7 @@ public class MasterPageFactory
             this.pageFooter = pageFooter;
         }
 
+        @Override
         public boolean equals(final Object o)
         {
             if (this != o)
@@ -89,6 +90,7 @@ public class MasterPageFactory
             return true;
         }
 
+        @Override
         public int hashCode()
         {
             int result = (template != null ? template.hashCode() : 0);
@@ -115,6 +117,7 @@ public class MasterPageFactory
             this.footerHeight = footerHeight;
         }
 
+        @Override
         public boolean equals(final Object o)
         {
             if (this == o)
@@ -143,6 +146,7 @@ public class MasterPageFactory
 
         }
 
+        @Override
         public int hashCode()
         {
             int result;

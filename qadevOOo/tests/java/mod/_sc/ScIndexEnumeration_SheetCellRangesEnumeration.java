@@ -44,6 +44,7 @@ public class ScIndexEnumeration_SheetCellRangesEnumeration extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
@@ -62,6 +63,7 @@ public class ScIndexEnumeration_SheetCellRangesEnumeration extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp =
@@ -69,6 +71,7 @@ public class ScIndexEnumeration_SheetCellRangesEnumeration extends TestCase {
         util.DesktopTools.closeDoc(oComp);
     }
 
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

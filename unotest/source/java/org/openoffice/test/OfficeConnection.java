@@ -202,6 +202,7 @@ public final class OfficeConnection {
     {
         final Thread t1 = Thread.currentThread();
         Thread t2 = new Thread("waitForProcess") {
+                @Override
                 public void run() {
                     try {
                         Thread.sleep(millis);
@@ -238,6 +239,7 @@ public final class OfficeConnection {
             this.out = out;
         }
 
+        @Override
         public void run() {
             for (;;) {
                 byte[] buf = new byte[1024];

@@ -36,10 +36,12 @@ import test.lib.TestBed;
  * object, they must have the same hash code.</p>
  */
 public final class Bug107753_Test extends ComplexTestCase {
+    @Override
     public String getTestObjectName() {
         return getClass().getName();
     }
 
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -54,6 +56,7 @@ public final class Bug107753_Test extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             boolean success = true;
             XTransport transport = UnoRuntime.queryInterface(

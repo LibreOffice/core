@@ -51,6 +51,7 @@ public class UnoTreeControl extends TestCase {
     private static XMutableTreeDataModel mXTreeDataModel;
     private static XMultiServiceFactory mxMSF;
 
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
             Param.getMSF());
@@ -65,9 +66,11 @@ public class UnoTreeControl extends TestCase {
         }
     }
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log) {
         String sTreeControlName = "UnoTreeControl-Test";
@@ -261,6 +264,7 @@ public class UnoTreeControl extends TestCase {
             mXDialog = xDialog;
         }
 
+        @Override
         public void run() {
             mXDialog.endExecute();
         }

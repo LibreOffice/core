@@ -45,6 +45,7 @@ import util.utils;
 public class TabController extends TestCase {
     private static XTextDocument xTextDoc = null;
 
+    @Override
     protected void initialize(TestParameters param, PrintWriter log) {
         try {
             log.println("creating a textdocument");
@@ -57,11 +58,13 @@ public class TabController extends TestCase {
         }
     }
 
+    @Override
     protected void cleanup(TestParameters param, PrintWriter log) {
         log.println("disposing xTextDoc");
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
+    @Override
     public TestEnvironment createTestEnvironment(TestParameters param,
                                                  PrintWriter log) {
         XInterface oObj = null;

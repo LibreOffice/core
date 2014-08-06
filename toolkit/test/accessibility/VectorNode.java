@@ -40,28 +40,33 @@ class VectorNode
         maChildren.add (aChild);
     }
 
+    @Override
     public int getChildCount ()
     {
         return maChildren.size();
     }
 
+    @Override
     public AccessibleTreeNode getChild (int nIndex)
         throws IndexOutOfBoundsException
     {
         return maChildren.get(nIndex);
     }
 
+    @Override
     public boolean removeChild (int nIndex)
         throws IndexOutOfBoundsException
     {
         return maChildren.remove (nIndex) != null;
     }
 
+    @Override
     public int indexOf (AccessibleTreeNode aNode)
     {
         return maChildren.indexOf (aNode);
     }
 
+    @Override
     public boolean isLeaf()
     {
         return maChildren.isEmpty();

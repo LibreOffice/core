@@ -46,6 +46,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         xout = out;
     }
 
+    @Override
     public void close() throws IOException {
         try {
             xout.closeOutput();
@@ -54,6 +55,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         }
     }
 
+    @Override
     public void flush() throws IOException {
         try {
             xout.flush();
@@ -62,6 +64,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         }
     }
 
+    @Override
     public void write(byte[] b) throws IOException {
 
     try {
@@ -71,6 +74,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         }
     }
 
+    @Override
     public void write(byte[] b, int off, int len) throws IOException {
 
         byte[] tmp = new byte[len];
@@ -86,6 +90,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         }
     }
 
+    @Override
     public void write(int b) throws IOException {
 
         byte [] oneByte = new byte [1];

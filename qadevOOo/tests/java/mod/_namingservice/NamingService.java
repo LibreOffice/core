@@ -56,6 +56,7 @@ public class NamingService extends TestCase {
     *      service.</li>
     * </ul>
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

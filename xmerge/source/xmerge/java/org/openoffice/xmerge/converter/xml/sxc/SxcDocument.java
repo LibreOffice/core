@@ -57,6 +57,7 @@ public class SxcDocument extends OfficeDocument {
      *
      *  @return  The Office file extension for the SXC format.
      */
+    @Override
     protected String getFileExtension() {
         return OfficeConstants.SXC_FILE_EXTENSION;
     }
@@ -66,6 +67,7 @@ public class SxcDocument extends OfficeDocument {
      *
      *  @return  The Office attribute for the SXC format.
      */
+    @Override
     protected String getOfficeClassAttribute() {
         return OfficeConstants.SXC_TYPE;
     }
@@ -75,6 +77,7 @@ public class SxcDocument extends OfficeDocument {
      *
      * @return  String  The document's MIME type.
      */
+    @Override
     protected final String getDocumentMimeType() {
         return OfficeConstants.SXC_MIME_TYPE;
     }

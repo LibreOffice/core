@@ -203,6 +203,7 @@ public class _XTreeControl extends MultiMethodTest {
         mTreeNodeEdit2 = false;
     }
 
+    @Override
     public void before(){
         mXNode = (XMutableTreeNode) tEnv.getObjRelation("XTreeControl_Node");
         if (mXNode == null) {

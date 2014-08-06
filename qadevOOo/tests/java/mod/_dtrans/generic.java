@@ -39,6 +39,7 @@ public class generic extends TestCase {
      * Creates an instance of the service
      * <code>com.sun.star.comp.datatransfer.generic</code>.
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
 

@@ -61,6 +61,7 @@ public class ScAnnotationTextCursor extends TestCase {
 
     private XSpreadsheetDocument xSheetDoc = null;
 
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(  tParam.getMSF() );
 
@@ -75,6 +76,7 @@ public class ScAnnotationTextCursor extends TestCase {
 
     }
 
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface
@@ -86,6 +88,7 @@ public class ScAnnotationTextCursor extends TestCase {
     /**
      *    creating a Testenvironment for the interfaces to be tested
      */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
             throws StatusException {

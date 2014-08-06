@@ -39,6 +39,7 @@ public class FontFaceReadHandler extends ElementReadHandler
         this.fontFaceElement = new FontFaceElement();
     }
 
+    @Override
     public Element getElement()
     {
         return fontFaceElement;

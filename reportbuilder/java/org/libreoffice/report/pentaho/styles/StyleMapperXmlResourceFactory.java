@@ -34,6 +34,7 @@ public class StyleMapperXmlResourceFactory extends AbstractXmlResourceFactory
     {
     }
 
+    @Override
     protected Configuration getConfiguration()
     {
         return JFreeReportBoot.getInstance().getGlobalConfig();

@@ -50,6 +50,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
     String sheetName = null;
     Point pos = null;
 
+    @Override
     public void before() {
         Exception ex = null;
         // get two sheets
@@ -126,6 +127,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         }
     }
 
+    @Override
     public void after() {
         // switch the automatic refresh back on
         PropertyValue[] props = new PropertyValue[1];

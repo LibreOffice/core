@@ -24,6 +24,7 @@ import com.sun.star.accessibility.XAccessible;
 
 class AccessibleCellHandler extends NodeHandler
 {
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         AccessibleCellHandler aCellHandler = null;
@@ -59,6 +60,7 @@ class AccessibleCellHandler extends NodeHandler
             XAccessibleTable.class, aObject);
     }
 
+    @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
         AccessibleTreeNode aChild = null;

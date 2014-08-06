@@ -66,6 +66,7 @@ public class SwXTextEmbeddedObject extends TestCase {
      *    @see PrintWriter
      *
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
@@ -91,6 +92,7 @@ public class SwXTextEmbeddedObject extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         XInterface oObj = null;

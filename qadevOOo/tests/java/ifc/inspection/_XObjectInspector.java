@@ -69,6 +69,7 @@ public class _XObjectInspector extends MultiMethodTest {
      *   <li>XObjectInspector.toInspect</li>
      * </ul>
      */
+    @Override
     public void before() {
 
         oInspect = (Object[]) tEnv.getObjRelation("XObjectInspector.toInspect");

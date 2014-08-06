@@ -60,6 +60,7 @@ public class _BarDiagram extends MultiPropertyTest {
     * Retrieves object relations and prepares a chart document.
     * @throws StatusException if one of relations not found.
     */
+    @Override
     protected void before() {
         log.println("Setting Diagram type to BarDiagram");
         doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");
@@ -98,11 +99,13 @@ public class _BarDiagram extends MultiPropertyTest {
     /**
     * Sets the old diagram for a chart document.
     */
+    @Override
     protected void after() {
         doc.setDiagram(oldDiagram);
     }
 
     protected PropertyTester LineTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             int a = 0;

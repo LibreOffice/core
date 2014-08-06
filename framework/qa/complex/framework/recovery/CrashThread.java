@@ -41,6 +41,7 @@ public class CrashThread extends Thread {
         this.msf = msf;
     }
 
+    @Override
     public void run() {
         try{
             XModel xModel = UnoRuntime.queryInterface(XModel.class, xDoc);

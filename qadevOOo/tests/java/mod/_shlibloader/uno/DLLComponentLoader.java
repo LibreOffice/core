@@ -45,6 +45,7 @@ public class DLLComponentLoader extends TestCase {
     /**
     * Does nothing.
     */
+    @Override
     protected void initialize ( TestParameters Param, PrintWriter log) {
 
     }
@@ -61,6 +62,7 @@ public class DLLComponentLoader extends TestCase {
     *  <li> <code>'ImplementationName'</code> : Name of the implementation.</li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;

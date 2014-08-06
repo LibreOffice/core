@@ -22,6 +22,7 @@ import lib.MultiPropertyTest;
 
 public class _Text extends MultiPropertyTest {
 
+    @Override
     protected boolean compare(Object ob1, Object ob2) {
 
         return super.compare(ob1, ob2);

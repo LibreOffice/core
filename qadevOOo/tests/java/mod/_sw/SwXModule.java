@@ -49,6 +49,7 @@ public class SwXModule extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.text.GlobalSettings</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws StatusException {
         XInterface oObj = null;

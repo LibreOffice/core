@@ -65,12 +65,14 @@ public class _RowSet extends MultiPropertyTest {
     protected class SafeTester extends PropertyTester {
         Object oldValue = null ;
 
+        @Override
         protected Object getNewValue(String prop, Object old) {
             log.println("Testing with SafeTester ...") ;
             oldValue = old ;
             return super.getNewValue(prop, old) ;
         }
 
+        @Override
         protected void checkResult(String propName, Object oldValue,
             Object newValue, Object resValue, Exception exception)
             throws Exception {
@@ -102,6 +104,7 @@ public class _RowSet extends MultiPropertyTest {
      *
      * @see SafeTester
      */
+    @Override
     protected void testProperty(String propName) {
         testProperty(propName, new SafeTester()) ;
     }
@@ -132,6 +135,7 @@ public class _RowSet extends MultiPropertyTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

@@ -80,6 +80,7 @@ public class AccessibleMenu extends TestCase {
      * Finds accessible component with role <code>MENU</code>
      * walking through the accessible component tree of a document.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XMultiServiceFactory msf = Param.getMSF();
@@ -156,6 +157,7 @@ public class AccessibleMenu extends TestCase {
         return tEnv;
     }
 
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         try {
             util.DesktopTools.closeDoc(xTextDoc);
@@ -167,6 +169,7 @@ public class AccessibleMenu extends TestCase {
     /**
      * Creates a new writer document
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
     }
 

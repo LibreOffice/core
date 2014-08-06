@@ -233,6 +233,7 @@ public class ThreadPool_Test {
                 this.count = count;
             }
 
+            @Override
             public void run() {
                 try {
                     for (int i = 0; i < count; ++i) {
@@ -249,6 +250,7 @@ public class ThreadPool_Test {
         }
 
         Stress stress1 = new Stress(50) {
+                @Override
                 protected void runTest() throws InterruptedException {
                     testThreadAsync();
                 }
@@ -256,6 +258,7 @@ public class ThreadPool_Test {
         stress1.start();
 
         Stress stress2 = new Stress(50) {
+                @Override
                 protected void runTest() throws InterruptedException {
                     testDynamicThreadSync();
                 }
@@ -263,6 +266,7 @@ public class ThreadPool_Test {
         stress2.start();
 
         Stress stress3 = new Stress(50) {
+                @Override
                 protected void runTest() throws InterruptedException {
                     testStaticThreadSync();
                 }
@@ -270,6 +274,7 @@ public class ThreadPool_Test {
         stress3.start();
 
         Stress stress4 = new Stress(50) {
+                @Override
                 protected void runTest() throws InterruptedException {
                     testDynamicThreadAsyncSyncOrder();
                 }
@@ -277,6 +282,7 @@ public class ThreadPool_Test {
         stress4.start();
 
         Stress stress5 = new Stress(50) {
+                @Override
                 protected void runTest() throws InterruptedException {
                     testStaticThreadAsyncSyncOrder();
                 }
@@ -284,6 +290,7 @@ public class ThreadPool_Test {
         stress5.start();
 
         Stress stress6 = new Stress(500) {
+                @Override
                 protected void runTest() throws InterruptedException {
                     testDispose();
                 }
@@ -348,6 +355,7 @@ public class ThreadPool_Test {
             _iThreadPool = iThreadPool;
         }
 
+        @Override
         public void run() {
             _threadId = _iThreadPool.getThreadId();
 

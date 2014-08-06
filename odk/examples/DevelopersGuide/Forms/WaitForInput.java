@@ -31,6 +31,7 @@ class WaitForInput extends java.lang.Thread
         return m_bDone;
     }
 
+    @Override
     public void run()
     {
         try

@@ -35,6 +35,7 @@ import complexlib.ComplexTestCase;
 public class JdbcLongVarCharTest extends ComplexTestCase
 {
 
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[]

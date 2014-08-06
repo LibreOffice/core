@@ -105,6 +105,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
      * 'Numbering 1' and 'Numbering 2' styles.
      */
     protected PropertyTester NumberingStyleTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                               throws java.lang.IllegalArgumentException {
             if ((oldValue != null) && (oldValue.equals("Numbering 1"))) {
@@ -120,6 +121,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
      * 'Salutation' and 'Heading' styles.
      */
     protected PropertyTester charStyleTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (!utils.isVoid(oldValue) && (oldValue.equals("Example"))) {
                 return "Emphasis";
@@ -134,6 +136,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
      * 'Salutation' and 'Heading' styles.
      */
     protected PropertyTester ParaStyleTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (!utils.isVoid(oldValue) && (oldValue.equals("Heading"))) {
                 return "Salutation";
@@ -148,6 +151,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
      * 'HTML' and 'Standard' descriptor names.
      */
     protected PropertyTester PageDescTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (!util.utils.isVoid(oldValue) &&
                     (oldValue.equals("Default"))) {
@@ -164,6 +168,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
      * be specified. Switches between two different values.
      */
     protected PropertyTester ShortTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if ((oldValue != null) &&
                     (oldValue.equals(new Short((short) 0)))) {
@@ -180,6 +185,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
      * be specified. Switches between true and false.
      */
     protected PropertyTester BooleanTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if ((oldValue != null) &&
                     (oldValue.equals(new Boolean(false)))) {
@@ -195,6 +201,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
      * Switches between two JPG images' URLs.
      */
     protected PropertyTester URLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg"))) {
                 return util.utils.getFullTestURL("crazy-blue.jpg");
@@ -209,11 +216,13 @@ public class _ParagraphProperties extends MultiPropertyTest {
     /**
      * Creates tester for 'NumberingRules' depending on relation.
      */
+    @Override
     public void before() {
         final Object nRules = tEnv.getObjRelation("NRULES");
 
         if (nRules != null) {
             rules = new PropertyTester() {
+                @Override
                 protected Object getNewValue(String propName, Object oldValue) {
                     return nRules;
                 }

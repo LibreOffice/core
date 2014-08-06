@@ -68,6 +68,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(
                     XDesktop.class, DesktopTools.createDesktop(Param.getMSF()) );
@@ -77,6 +78,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
 
         log.println("disposing xTextDoc");
@@ -108,6 +110,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         log.println( "creating a test environment" );

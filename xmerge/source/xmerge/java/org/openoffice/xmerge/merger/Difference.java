@@ -176,6 +176,7 @@ public final class Difference {
      *
      *  @return  true if equal, false otherwise.
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Difference) {
             Difference diff = (Difference) obj;
@@ -223,6 +224,7 @@ public final class Difference {
      *
      *  @return  orgPosition, modPosition and operation as a single string.
      */
+    @Override
     public String toString() {
 
         return orgPosition + " " + modPosition + " " + operation;

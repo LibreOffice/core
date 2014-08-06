@@ -72,6 +72,7 @@ public class _XTextListener extends MultiMethodTest {
     * Retrieves object relation.
     * @throws StatusException If the relation not found.
     */
+    @Override
     public void before() {
         textListener = (TestTextListener)
             tEnv.getObjRelation("TestTextListener");
@@ -110,6 +111,7 @@ public class _XTextListener extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

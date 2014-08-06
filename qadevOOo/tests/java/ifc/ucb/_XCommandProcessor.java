@@ -195,6 +195,7 @@ public class _XCommandProcessor extends MultiMethodTest {
         }
 
         Thread aborter = new Thread() {
+            @Override
             public void run() {
                 for (int i = 0; i < 10; i++) {
                     log.println("try to abort command");

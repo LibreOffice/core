@@ -49,6 +49,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
     private PropertyState[] states = null;
     private String[] names = null;
 
+    @Override
     public void before() {
         names = (String[]) tEnv.getObjRelation("PropertyNames");
         if (names == null) {

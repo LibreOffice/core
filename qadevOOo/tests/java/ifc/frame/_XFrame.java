@@ -567,6 +567,7 @@ public class _XFrame extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     public void after() {
         disposeEnvironment();
     }

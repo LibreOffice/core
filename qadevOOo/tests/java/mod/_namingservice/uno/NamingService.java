@@ -54,6 +54,7 @@ public class NamingService extends TestCase {
     *      service.</li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;

@@ -32,6 +32,7 @@ public class EditorFrame extends JFrame
 
     WindowListener m_aCloser = new WindowAdapter()
     {
+        @Override
         public void windowClosing( WindowEvent e )
         {
             m_aBufImage = new BufferedImage( m_aTextArea.getWidth(), m_aTextArea.getHeight(), BufferedImage.TYPE_INT_RGB );

@@ -88,11 +88,13 @@ public class StateSetView
 
 
 
+    @Override
     public String GetTitle ()
     {
         return ("StateSet");
     }
 
+    @Override
     public void notifyEvent (AccessibleEventObject aEvent)
     {
         if (aEvent.EventId == AccessibleEventId.STATE_CHANGED)
@@ -146,6 +148,7 @@ public static class StateSetAllView
         setMinimumSize (new Dimension(200,80));
     }
 
+    @Override
     public void paintChildren (Graphics g)
     {
         synchronized (g)
@@ -237,6 +240,7 @@ public static class StateSetSetView
     }
 
 
+    @Override
     synchronized public void Update ()
     {
         XAccessibleStateSet xStateSet = mxContext.getAccessibleStateSet();

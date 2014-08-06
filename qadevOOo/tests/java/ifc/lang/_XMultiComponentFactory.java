@@ -41,6 +41,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
     public XComponentContext xContext = null;
     private String[] availableServiceNames = null;
 
+    @Override
     public void before(){
         xContext = (XComponentContext)tEnv.getObjRelation("DC");
         availableServiceNames = (String[])tEnv.getObjRelation("XMultiComponentFactory.ServiceNames");

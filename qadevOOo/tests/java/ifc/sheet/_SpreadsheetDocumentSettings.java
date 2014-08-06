@@ -53,6 +53,7 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
      *This class is destined to custom test of property <code>NullDate</code>.
      */
     protected PropertyTester DateTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             Date date = (Date) oldValue;
             Date newDate = new Date((short) (date.Day - 1), date.Month,
@@ -66,10 +67,12 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
      *This class is destined to custom test of property <code>ForbiddenCharacters</code>.
      */
     protected PropertyTester ChrTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             return new ForbiddenChrTest();
         }
 
+        @Override
         protected boolean compare(Object obj1, Object obj2) {
             Locale loc = new Locale("ru", "RU", "");
             XForbiddenCharacters fc1 = UnoRuntime.queryInterface(

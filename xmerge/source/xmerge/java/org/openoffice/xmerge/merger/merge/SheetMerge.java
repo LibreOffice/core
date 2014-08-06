@@ -51,6 +51,7 @@ public final class SheetMerge extends DocumentMerge {
      *
      *  @param  node  <code>Node</code> to remove.
      */
+    @Override
     protected void removeNode(Node node) {
 
         clearRow(node);

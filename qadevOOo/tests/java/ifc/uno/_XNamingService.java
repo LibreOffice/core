@@ -46,6 +46,7 @@ public class _XNamingService extends MultiMethodTest {
     * Retrieves object relation.
     * @throws StatusException If the relation not found.
     */
+    @Override
     public void before() {
         regObject = (XInterface)
             tEnv.getObjRelation("XNamingService.RegisterObject") ;

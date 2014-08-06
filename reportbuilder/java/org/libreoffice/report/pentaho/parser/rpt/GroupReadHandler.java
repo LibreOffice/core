@@ -66,6 +66,7 @@ public class GroupReadHandler extends ElementReadHandler
      * @param attrs the attributes.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void startParsing(final Attributes attrs) throws SAXException
     {
         super.startParsing(attrs);
@@ -92,6 +93,7 @@ public class GroupReadHandler extends ElementReadHandler
      * @return the handler or null, if the tagname is invalid.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected XmlReadHandler getHandlerForChild(final String uri,
             final String tagName,
             final Attributes atts)
@@ -137,6 +139,7 @@ public class GroupReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void doneParsing() throws SAXException
     {
         for (int i = 0; i < functionHandlers.size(); i++)
@@ -170,6 +173,7 @@ public class GroupReadHandler extends ElementReadHandler
         }
     }
 
+    @Override
     public Element getElement()
     {
         return group;

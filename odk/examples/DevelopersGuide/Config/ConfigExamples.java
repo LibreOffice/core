@@ -363,6 +363,7 @@ public class ConfigExamples
         public int subdivision_x;
         public int subdivision_y;
 
+        @Override
         public String toString() {
             StringBuffer aBuffer = new StringBuffer();
             aBuffer.append("[ Grid is "); aBuffer.append(visible ? "VISIBLE" : "HIDDEN");

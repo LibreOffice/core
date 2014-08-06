@@ -73,6 +73,7 @@ public class ObjectInspector extends TestCase {
      * @see share.LogWriter
      * @see com.sun.star.frame.Desktop
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println("create a desktop...");
         StarDesktop = DesktopTools.createDesktop(Param.getMSF());
@@ -95,6 +96,7 @@ public class ObjectInspector extends TestCase {
      * @see util.DesktopTools
      * @see helper.PropertyHandlerImpl
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         this.cleanup(tParam, log);
@@ -182,6 +184,7 @@ public class ObjectInspector extends TestCase {
      * @param Param the test parameter
      * @param log the logger
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    Closing dialog if one exists ... ");
 

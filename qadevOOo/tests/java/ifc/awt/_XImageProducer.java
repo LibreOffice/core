@@ -95,6 +95,7 @@ public class _XImageProducer extends MultiMethodTest {
     /**
     * Creates a new XImageConsumer implementation.
     */
+    @Override
     public void before() {
         consumer = new TestImageConsumer(log) ;
     }

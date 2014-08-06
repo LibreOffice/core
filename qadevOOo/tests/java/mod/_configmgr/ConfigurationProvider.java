@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 public final class ConfigurationProvider extends TestCase {
     public ConfigurationProvider() {}
 
+    @Override
     protected TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log)
     {

@@ -38,6 +38,7 @@ public class _ParagraphPropertiesAsian extends MultiPropertyTest {
      * be specified. Switches between true and false.
      */
     protected PropertyTester BooleanTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if ((oldValue != null) &&
                     (oldValue.equals(new Boolean(false)))) {

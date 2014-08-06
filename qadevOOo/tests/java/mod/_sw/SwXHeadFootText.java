@@ -78,6 +78,7 @@ public class SwXHeadFootText extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(  tParam.getMSF() );
         try {
@@ -92,6 +93,7 @@ public class SwXHeadFootText extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -113,6 +115,7 @@ public class SwXHeadFootText extends TestCase {
     *    {@link ifc.text._XRelativeTextContentInsert} : paragraph creator</li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         XPropertySet PropSet;

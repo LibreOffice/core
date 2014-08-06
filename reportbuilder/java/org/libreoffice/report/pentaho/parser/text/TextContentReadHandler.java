@@ -52,6 +52,7 @@ public class TextContentReadHandler extends NoCDATATextContentReadHandler
      * @param length the length.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException
     {

@@ -83,6 +83,7 @@ public class AccessibleButton extends lib.TestCase {
      * window) and finds accessible button 'OK' walking through the
      * accessible component tree.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
@@ -158,6 +159,7 @@ public class AccessibleButton extends lib.TestCase {
      * Closes the dialog using accessible button 'OK' found in
      * <code>createTestEnvironment()</code>.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
@@ -175,6 +177,7 @@ public class AccessibleButton extends lib.TestCase {
     /**
      * Opens new writer document.
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -198,6 +201,7 @@ public class AccessibleButton extends lib.TestCase {
             this.msf = msf;
         }
 
+        @Override
         public void run() {
             XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                                xTextDoc);

@@ -38,6 +38,7 @@ public class _SheetLink extends MultiPropertyTest {
      *This class is destined to custom test of property <code>Url</code>.
      */
     protected PropertyTester UrlTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             String newValue = (String) ValueChanger.changePValue(oldValue);
             if ( !newValue.startsWith("file://") ) {
@@ -59,6 +60,7 @@ public class _SheetLink extends MultiPropertyTest {
      *This class is destined to custom test of property <code>Filter</code>.
      */
     protected PropertyTester FilterTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             return "StarCalc 4.0";
         }

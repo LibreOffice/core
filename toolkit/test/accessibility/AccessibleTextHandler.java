@@ -51,6 +51,7 @@ import javax.swing.text.JTextComponent;
 
 class AccessibleTextHandler extends NodeHandler
 {
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleText xText = UnoRuntime.queryInterface (
@@ -71,6 +72,7 @@ class AccessibleTextHandler extends NodeHandler
             maChildList.setSize (8);
     }
 
+    @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
         AccessibleTreeNode aChild = null;
@@ -379,6 +381,7 @@ class AccessibleTextHandler extends NodeHandler
         new String[] { "select...", "copy...",
                        "cut...", "paste...", "edit...", "format..." };
 
+    @Override
     public String[] getActions (AccessibleTreeNode aNode)
     {
         XAccessibleEditableText xEText = null;
@@ -388,6 +391,7 @@ class AccessibleTextHandler extends NodeHandler
         return (xEText == null) ? aTextActions : aEditableTextActions;
     }
 
+    @Override
     public void performAction (AccessibleTreeNode aNode, int nIndex)
     {
         if ( ! (aNode instanceof AccTreeNode))
@@ -404,6 +408,7 @@ class AccessibleTextHandler extends NodeHandler
                                                 "Select range:",
                                                 "select" )
                     {
+                        @Override
                         boolean action(
                             JTextComponent aText, AccTreeNode aNode )
                             throws IndexOutOfBoundsException
@@ -419,6 +424,7 @@ class AccessibleTextHandler extends NodeHandler
                                                 "Select range and copy:",
                                                 "copy" )
                     {
+                        @Override
                         boolean action(
                             JTextComponent aText, AccTreeNode aNode )
                             throws IndexOutOfBoundsException
@@ -434,6 +440,7 @@ class AccessibleTextHandler extends NodeHandler
                                                 "Select range and cut:",
                                                 "cut" )
                     {
+                        @Override
                         boolean action(
                             JTextComponent aText, AccTreeNode aNode )
                             throws IndexOutOfBoundsException
@@ -449,6 +456,7 @@ class AccessibleTextHandler extends NodeHandler
                                                 "Place Caret and paste:",
                                                 "paste" )
                     {
+                        @Override
                         boolean action(
                             JTextComponent aText, AccTreeNode aNode )
                             throws IndexOutOfBoundsException
@@ -602,6 +610,7 @@ class TextEditDialog extends TextActionDialog
         super( aNode, sExplanation, sButtonText );
     }
 
+    @Override
     protected void init( String sExplanation,
                          String sText,
                          String sButtonText )
@@ -612,6 +621,7 @@ class TextEditDialog extends TextActionDialog
 
 
     /** edit the text */
+    @Override
     boolean action( JTextComponent aText, AccTreeNode aNode )
     {
         // is this text editable? if not, fudge you and return
@@ -694,6 +704,7 @@ class TextAttributeDialog extends TextActionDialog
     private JCheckBox aBold, aUnderline, aItalics;
     private Color aForeground, aBackground;
 
+    @Override
     protected void init( String sExplanation,
                          String sText,
                          String sButtonText )
@@ -767,6 +778,7 @@ class TextAttributeDialog extends TextActionDialog
 
 
     /** edit the text */
+    @Override
     boolean action( JTextComponent aText, AccTreeNode aNode )
         throws IndexOutOfBoundsException
     {

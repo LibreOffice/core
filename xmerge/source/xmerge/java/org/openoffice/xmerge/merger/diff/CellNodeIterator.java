@@ -61,6 +61,7 @@ public final class CellNodeIterator extends NodeIterator  {
      *
      *  @return  true if the <code>Node</code> is supported, false otherwise.
      */
+    @Override
     protected boolean nodeSupported(Node node) {
 
         // can use an array later to check all possible tags for
@@ -70,6 +71,7 @@ public final class CellNodeIterator extends NodeIterator  {
     }
 
 
+    @Override
     protected boolean childrenEqual(Node node1, Node node2) {
 
         boolean equal = false;

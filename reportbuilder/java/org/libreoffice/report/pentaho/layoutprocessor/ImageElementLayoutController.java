@@ -66,6 +66,7 @@ public class ImageElementLayoutController
     {
     }
 
+    @Override
     protected LayoutController delegateContentGeneration(final ReportTarget target)
             throws ReportProcessingException, ReportDataFactoryException,
             DataSourceException
@@ -230,6 +231,7 @@ public class ImageElementLayoutController
         return null;
     }
 
+    @Override
     public boolean isValueChanged()
     {
         final ImageElement imageElement = (ImageElement) getNode();

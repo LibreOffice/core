@@ -36,6 +36,7 @@ public class SelfTest extends TestCase
 {
     private XTextDocument xTextDoc = null;
 
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log)
     {
         // get a soffice factory object
@@ -57,12 +58,14 @@ public class SelfTest extends TestCase
     /**
      * Disposes text document.
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log)
     {
         log.println("    cleanup selftest");
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log)
     {
         XInterface oObj = null;

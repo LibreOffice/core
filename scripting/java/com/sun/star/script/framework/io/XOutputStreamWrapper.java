@@ -25,6 +25,7 @@ public class XOutputStreamWrapper extends OutputStream {
         public XOutputStreamWrapper(XOutputStream xOs ) {
             this.m_xOutputStream = xOs;
         }
+        @Override
         public void write(int b)
                         throws java.io.IOException
         {
@@ -43,6 +44,7 @@ public class XOutputStreamWrapper extends OutputStream {
                 throw new java.io.IOException(ioe.getMessage());
             }
         }
+        @Override
         public void write(byte[] b)
                         throws java.io.IOException
         {
@@ -60,6 +62,7 @@ public class XOutputStreamWrapper extends OutputStream {
                 throw new java.io.IOException(ioe.getMessage());
             }
         }
+        @Override
         public void write( byte[] b, int off, int len )
                         throws java.io.IOException
         {
@@ -82,6 +85,7 @@ public class XOutputStreamWrapper extends OutputStream {
             }
         }
 
+        @Override
         public void flush()
             throws java.io.IOException
         {
@@ -98,6 +102,7 @@ public class XOutputStreamWrapper extends OutputStream {
                 throw new java.io.IOException(ioe.getMessage());
             }
         }
+        @Override
         public void close()
             throws java.io.IOException
         {

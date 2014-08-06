@@ -84,6 +84,7 @@ public class AccessibleTabControl extends TestCase {
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
@@ -94,6 +95,7 @@ public class AccessibleTabControl extends TestCase {
      * Closes an InsertFields dialog, disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         try {
             if (accCloseButton != null) {
@@ -136,6 +138,7 @@ public class AccessibleTabControl extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleSelection
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         log.println("creating a test environment");

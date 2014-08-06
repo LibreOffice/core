@@ -157,6 +157,7 @@ public class ProviderBrowseNode extends PropertySet
         return BrowseNodeTypes.CONTAINER;
     }
 
+    @Override
     public String toString()
     {
         return getName();

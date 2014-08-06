@@ -64,6 +64,7 @@ public class OSQLMessageDialog extends TestCase {
      *      {@link ifc.sdb._ErrorMessageDialog} </li>
      * </ul>
      */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
         PrintWriter log ) throws StatusException {
         XInterface oObj = null;

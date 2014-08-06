@@ -50,6 +50,7 @@ public class IndexEntrySupplier extends TestCase {
      * Creates an instance of the service
      * <code>com.sun.star.i18n.IndexEntrySupplier</code>.
      */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

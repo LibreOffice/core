@@ -44,6 +44,7 @@ public class AccessibleTreeCellRenderer
         maChangedLines = new ArrayList<Boolean> ();
     }
 
+    @Override
     public Component getTreeCellRendererComponent (
         JTree tree,
         Object value,

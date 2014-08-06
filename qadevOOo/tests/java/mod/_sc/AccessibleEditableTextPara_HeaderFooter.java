@@ -51,6 +51,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
     protected static XMultiServiceFactory msf = null;
     protected static XAccessibleAction action = null;
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XAccessibleContext oObj = null;
@@ -130,6 +131,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
      * Closes the dialog using accessible button 'OK' found in
      * <code>createTestEnvironment()</code>.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    disposing xCalcDoc ");
 
@@ -147,6 +149,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
     /**
      * Opens new writer document.
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         msf = Param.getMSF();
 
@@ -173,6 +176,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
             this.msf = msf;
         }
 
+        @Override
         public void run() {
             XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                                xCalcDoc);

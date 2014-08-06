@@ -61,6 +61,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
     protected boolean OneAlwaysSelected = false;
 
     // temporary while accessibility package is in com.sun.star
+    @Override
     protected String getTestedClassName() {
         return className;
     }
@@ -71,6 +72,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
      * @see com.sun.star.accessibility.XAccessibleContext
      * @see ifc.accessibility._XAccessibleContext
      */
+    @Override
     protected void before() {
         xAC = UnoRuntime.queryInterface(
                       XAccessibleContext.class, oObj);

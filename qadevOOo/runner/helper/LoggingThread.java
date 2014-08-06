@@ -52,6 +52,7 @@ public class LoggingThread extends Thread {
         this.debug = tParam.getBool(PropertyName.DEBUG_IS_ACTIVE);
     }
 
+    @Override
     public void run() {
         final int timeOut = param.getInt(PropertyName.TIME_OUT) / 2;
         int count = 0;

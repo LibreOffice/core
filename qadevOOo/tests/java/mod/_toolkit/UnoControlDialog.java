@@ -82,6 +82,7 @@ public class UnoControlDialog extends TestCase {
     * for Control, adds to Dialog a button, sets its size and
     * sets the dialog visible. <p>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log) {
         XInterface oObj = null;
@@ -221,6 +222,7 @@ public class UnoControlDialog extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("Disposing dialog ...");
         xWinDlg.dispose();
@@ -229,6 +231,7 @@ public class UnoControlDialog extends TestCase {
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      tParam.getMSF());

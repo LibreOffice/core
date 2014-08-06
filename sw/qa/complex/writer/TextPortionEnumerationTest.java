@@ -95,6 +95,7 @@ class TreeNode
     TreeNode() { m_Children = new ArrayList<TreeNode>(); }
     TreeNode appendChild(TreeNode child)
     { m_Children.add(child); return this; }
+    @Override
     public String toString() {
         return "<" + getType() + ">";
     }
@@ -113,6 +114,7 @@ abstract class MarkNode extends TreeNode
         return (other.m_Name.equals(m_Name)) && (other.m_isPoint == m_isPoint)
             && (other.m_isStart == m_isStart);
     }
+    @Override
     public String toString() {
         return super.toString() + "\tname: " + m_Name +
             "\tisPoint: " + m_isPoint + "\tisStart: " + m_isStart;
@@ -123,17 +125,21 @@ class BookmarkNode extends MarkNode
 {
     private StringPair m_XmlId;
     StringPair getXmlId() { return m_XmlId; }
+    @Override
     BookmarkNode dup() { return new BookmarkNode(getName(), getXmlId()); }
     BookmarkNode(String name) { this(name, new StringPair());  }
     BookmarkNode(String name, StringPair xmlid) {
         super(name); m_XmlId = xmlid;
     }
+    @Override
     String getType() { return "Bookmark"; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof BookmarkNode)
             && super.equals((MarkNode) other)
             && MetaNode.eq(((BookmarkNode) other).m_XmlId, m_XmlId);
     }
+    @Override
     public String toString() {
         return super.toString()
             + "\txmlid: " + m_XmlId.First + "#" + m_XmlId.Second;
@@ -142,6 +148,7 @@ class BookmarkNode extends MarkNode
 
 class BookmarkStartNode extends BookmarkNode
 {
+    @Override
     BookmarkStartNode dup() { return new BookmarkStartNode(getName()); }
     BookmarkStartNode(String name) { this(name, new StringPair()); }
     BookmarkStartNode(String name, StringPair xmlid) {
@@ -151,6 +158,7 @@ class BookmarkStartNode extends BookmarkNode
 
 class BookmarkEndNode extends BookmarkNode
 {
+    @Override
     BookmarkEndNode dup() { return new BookmarkEndNode(getName()); }
     BookmarkEndNode(String name) { this(name, new StringPair()); }
     BookmarkEndNode(String name, StringPair xmlid) {
@@ -160,9 +168,12 @@ class BookmarkEndNode extends BookmarkNode
 
 class ReferenceMarkNode extends MarkNode
 {
+    @Override
     ReferenceMarkNode dup() { return new ReferenceMarkNode(getName()); }
     ReferenceMarkNode(String name) { super(name); }
+    @Override
     String getType() { return "ReferenceMark"; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof ReferenceMarkNode)
             && super.equals((MarkNode) other);
@@ -171,6 +182,7 @@ class ReferenceMarkNode extends MarkNode
 
 class ReferenceMarkStartNode extends ReferenceMarkNode
 {
+    @Override
     ReferenceMarkStartNode dup()
     { return new ReferenceMarkStartNode(getName()); }
     ReferenceMarkStartNode(String name) {
@@ -180,6 +192,7 @@ class ReferenceMarkStartNode extends ReferenceMarkNode
 
 class ReferenceMarkEndNode extends ReferenceMarkNode
 {
+    @Override
     ReferenceMarkEndNode dup()
     { return new ReferenceMarkEndNode(getName()); }
     ReferenceMarkEndNode(String name) {
@@ -189,10 +202,13 @@ class ReferenceMarkEndNode extends ReferenceMarkNode
 
 class DocumentIndexMarkNode extends MarkNode
 {
+    @Override
     DocumentIndexMarkNode dup()
     { return new DocumentIndexMarkNode(getName()); }
     DocumentIndexMarkNode(String name) { super(name); }
+    @Override
     String getType() { return "DocumentIndexMark"; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof DocumentIndexMarkNode)
             && super.equals((MarkNode) other);
@@ -201,6 +217,7 @@ class DocumentIndexMarkNode extends MarkNode
 
 class DocumentIndexMarkStartNode extends DocumentIndexMarkNode
 {
+    @Override
     DocumentIndexMarkStartNode dup()
     { return new DocumentIndexMarkStartNode(getName()); }
     DocumentIndexMarkStartNode(String name) {
@@ -210,6 +227,7 @@ class DocumentIndexMarkStartNode extends DocumentIndexMarkNode
 
 class DocumentIndexMarkEndNode extends DocumentIndexMarkNode
 {
+    @Override
     DocumentIndexMarkEndNode dup()
     { return new DocumentIndexMarkEndNode(getName()); }
     DocumentIndexMarkEndNode(String name) {
@@ -221,13 +239,16 @@ abstract class ContentNode extends TreeNode
 {
     private String m_Content;
     String getContent() { return m_Content; }
+    @Override
     boolean hasContent() { return true; }
     ContentNode(String content) {
         m_Content = content;
     }
+    @Override
     TreeNode appendChild(TreeNode t) {
         throw new RuntimeException("ContentNode.appendChild");
     }
+    @Override
     public String toString() {
         return super.toString() + "\tcontent: " + m_Content;
     }
@@ -238,9 +259,12 @@ abstract class ContentNode extends TreeNode
 
 class TextNode extends ContentNode
 {
+    @Override
     TextNode dup() { return new TextNode(getContent()); }
     TextNode(String content) { super(content); }
+    @Override
     String getType() { return "Text"; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof TextNode) && super.equals((ContentNode) other);
     }
@@ -248,9 +272,12 @@ class TextNode extends ContentNode
 
 class TextFieldNode extends ContentNode
 {
+    @Override
     TextFieldNode dup() { return new TextFieldNode(getContent()); }
     TextFieldNode(String content) { super(content); }
+    @Override
     String getType() { return "TextField"; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof TextFieldNode)
             && super.equals((ContentNode) other);
@@ -263,16 +290,20 @@ class FrameNode extends TreeNode
     private TextContentAnchorType m_Anchor;
     String getName() { return m_Name; }
     TextContentAnchorType getAnchor() { return m_Anchor; }
+    @Override
     FrameNode dup() { return new FrameNode(getName(), getAnchor()); }
     FrameNode(String name, TextContentAnchorType anchor) {
         m_Name = name; m_Anchor = anchor;
     }
+    @Override
     String getType() { return "Frame"; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof FrameNode)
             && (((FrameNode) other).m_Name.equals(m_Name))
             && (((FrameNode) other).m_Anchor == m_Anchor);
     }
+    @Override
     public String toString() {
         return super.toString()
             + "\tname: " + m_Name + "\tanchor: " + toString(m_Anchor);
@@ -293,13 +324,17 @@ class FootnoteNode extends TreeNode
 {
     private String m_Label;
     String getLabel() { return m_Label; }
+    @Override
     FootnoteNode dup() { return new FootnoteNode(getLabel()); }
     FootnoteNode(String label) { m_Label = label; }
+    @Override
     String getType() { return "Footnote"; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof FootnoteNode)
             && (((FootnoteNode) other).m_Label.equals(m_Label));
     }
+    @Override
     public String toString() {
         return super.toString() + "\tlabel: " + m_Label;
     }
@@ -309,13 +344,17 @@ class ControlCharacterNode extends TreeNode
 {
     private short m_Char;
     short getChar() { return m_Char; }
+    @Override
     ControlCharacterNode dup() { return new ControlCharacterNode(getChar()); }
     ControlCharacterNode(short c) { m_Char = c; }
+    @Override
     String getType() { return "ControlCharacter"; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof ControlCharacterNode)
             && (((ControlCharacterNode) other).m_Char == m_Char);
     }
+    @Override
     public String toString() {
         return super.toString() + "\tchar: " + m_Char;
     }
@@ -323,7 +362,9 @@ class ControlCharacterNode extends TreeNode
 
 class SoftPageBreakNode extends TreeNode
 {
+    @Override
     String getType() { return "SoftPageBreak"; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof SoftPageBreakNode);
     }
@@ -333,17 +374,22 @@ class HyperlinkNode extends TreeNode
 {
     private String m_URL;
     String getURL() { return m_URL; }
+    @Override
     HyperlinkNode dup() { return new HyperlinkNode(getURL()); }
     HyperlinkNode(String url) {
         if (url.length() == 0) throw new RuntimeException("HyperlinkNode");
         m_URL = url;
     }
+    @Override
     String getType() { return "Hyperlink"; }
+    @Override
     boolean isNesting() { return true; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof HyperlinkNode)
             && (((HyperlinkNode) other).m_URL.equals(m_URL));
     }
+    @Override
     public String toString() {
         return super.toString() + "\turl: " + m_URL;
     }
@@ -353,17 +399,22 @@ class RubyNode extends TreeNode
 {
     private String m_Ruby;
     String getRubyText() { return m_Ruby; }
+    @Override
     RubyNode dup() { return new RubyNode(getRubyText()); }
     RubyNode(String ruby) {
         if (ruby.length() == 0) throw new RuntimeException("RubyNode");
         m_Ruby = ruby;
     }
+    @Override
     String getType() { return "Ruby"; }
+    @Override
     boolean isNesting() { return true; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof RubyNode)
             && (((RubyNode) other).m_Ruby.equals(m_Ruby));
     }
+    @Override
     public String toString() {
         return super.toString() + "\trubytext: " + m_Ruby;
     }
@@ -373,10 +424,14 @@ class MetaNode extends TreeNode
 {
     private StringPair m_XmlId;
     StringPair getXmlId() { return m_XmlId; }
+    @Override
     MetaNode dup() { return new MetaNode(getXmlId()); }
     MetaNode (StringPair xmlid) { m_XmlId = xmlid; }
+    @Override
     String getType() { return "InContentMetadata"; }
+    @Override
     boolean isNesting() { return true; }
+    @Override
     public boolean equals(Object other) {
         return (other instanceof MetaNode)
             && eq(((MetaNode) other).m_XmlId, m_XmlId);
@@ -386,6 +441,7 @@ class MetaNode extends TreeNode
         return left.First.equals(right.First)
             && left.Second.equals(right.Second);
     }
+    @Override
     public String toString() {
         return super.toString()
             + "\txmlid: " + m_XmlId.First + "#" + m_XmlId.Second;
@@ -394,8 +450,10 @@ class MetaNode extends TreeNode
 
 class MetaFieldNode extends MetaNode
 {
+    @Override
     MetaFieldNode dup() { return new MetaFieldNode(getXmlId()); }
     MetaFieldNode (StringPair xmlid) { super(xmlid); }
+    @Override
     String getType() { return "MetadataField"; }
 }
 
@@ -3307,10 +3365,13 @@ public class TextPortionEnumerationTest
     {
         doMetaXTextAttach( new AttachHelper()
             {
+                @Override
                 boolean isAttribute() { return true; }
+                @Override
                 TreeNode mkTreeNode() {
                     return new DocumentIndexMarkNode( mkName("toxmark") );
                 }
+                @Override
                 XTextContent mkTextContent(Inserter inserter, TreeNode node)
                         throws Exception {
                     return inserter.makeDocumentIndexMark(
@@ -3323,10 +3384,13 @@ public class TextPortionEnumerationTest
     {
         doMetaXTextAttach( new AttachHelper()
             {
+                @Override
                 boolean isAttribute() { return true; }
+                @Override
                 TreeNode mkTreeNode() {
                     return new ReferenceMarkNode( mkName("refmark") );
                 }
+                @Override
                 XTextContent mkTextContent(Inserter inserter, TreeNode node)
                         throws Exception {
                     return inserter.makeReferenceMark(
@@ -3339,10 +3403,13 @@ public class TextPortionEnumerationTest
     {
         doMetaXTextAttach( new AttachHelper()
             {
+                @Override
                 boolean isAttribute() { return false; }
+                @Override
                 TreeNode mkTreeNode() {
                     return new TextFieldNode( mkName("field") );
                 }
+                @Override
                 XTextContent mkTextContent(Inserter inserter, TreeNode node)
                         throws Exception {
                     return inserter.makeTextField(
@@ -3355,10 +3422,13 @@ public class TextPortionEnumerationTest
     {
         doMetaXTextAttach( new AttachHelper()
             {
+                @Override
                 boolean isAttribute() { return false; }
+                @Override
                 TreeNode mkTreeNode() {
                     return new FootnoteNode( mkName("ftn") );
                 }
+                @Override
                 XTextContent mkTextContent(Inserter inserter, TreeNode node)
                         throws Exception {
                     return inserter.makeFootnote(
@@ -3371,10 +3441,13 @@ public class TextPortionEnumerationTest
     {
         doMetaXTextAttach( new AttachHelper()
             {
+                @Override
                 boolean isAttribute() { return true; }
+                @Override
                 TreeNode mkTreeNode() {
                     return new MetaNode( mkId("id") );
                 }
+                @Override
                 XTextContent mkTextContent(Inserter inserter, TreeNode node)
                         throws Exception {
                     return inserter.makeMeta();
@@ -3790,6 +3863,7 @@ public class TextPortionEnumerationTest
                     .appendChild( new MetaFieldNode(mkId_("id16"))
                         .appendChild( new TextNode("12") ) ) ) )
             .appendChild( new MetaNode(mkId_("")) {
+                                @Override
                                 public boolean equals(Object other) {
                                     return (other instanceof MetaNode);
                                 } }

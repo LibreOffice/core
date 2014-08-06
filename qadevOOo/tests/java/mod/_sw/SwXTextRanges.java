@@ -45,6 +45,7 @@ import com.sun.star.util.XSearchable;
 public class SwXTextRanges extends TestCase {
     XTextDocument xTextDoc;
 
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -58,6 +59,7 @@ public class SwXTextRanges extends TestCase {
         }
     }
 
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -74,6 +76,7 @@ public class SwXTextRanges extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
 

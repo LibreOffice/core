@@ -45,9 +45,11 @@ public class _XScriptSecurity extends MultiMethodTest {
     /**
     * Retrieves object relation.
     */
+    @Override
     public void before() throws StatusException {
     }
 
+    @Override
     public void after() throws StatusException {
     }
 

@@ -87,6 +87,7 @@ public class AccessibilityTreeModel
 
 
 
+    @Override
     public synchronized void setRoot (AccessibleTreeNode aRoot)
     {
         if (getRoot() == null)
@@ -95,6 +96,7 @@ public class AccessibilityTreeModel
         {
             lock ();
             maNodeMap.ForEach (new NodeMapCallback () {
+                    @Override
                     public void Apply (AccTreeNode aNode)
                     {
                         if (maCanvas != null)
@@ -119,6 +121,7 @@ public class AccessibilityTreeModel
     /** Delegate the request to the parent and then register listeners at
         the child and add the child to the canvas.
     */
+    @Override
     public Object getChild (Object aParent, int nIndex)
     {
         AccessibleTreeNode aChild = (AccessibleTreeNode)super.getChild (aParent, nIndex);
@@ -132,6 +135,7 @@ public class AccessibilityTreeModel
         return aChild;
     }
 
+    @Override
     public Object getChildNoCreate (Object aParent, int nIndex)
     {
         AccessibleTreeNode aChild = (AccessibleTreeNode)super.getChildNoCreate (aParent, nIndex);

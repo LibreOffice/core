@@ -82,6 +82,7 @@ public class _TableAutoFormatField extends MultiPropertyTest {
     */
     public void _CharFontName() {
         testProperty("CharFontName", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return "Courier".equals(old) ? "Times New Roman" : "Courier" ;
             }
@@ -95,6 +96,7 @@ public class _TableAutoFormatField extends MultiPropertyTest {
     */
     public void _CharLocale() {
         testProperty("CharLocale", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return old == null || ((Locale)old).Language == "de" ?
                     new Locale("es", "ES", "") : new Locale("de", "DE", "") ;
@@ -108,6 +110,7 @@ public class _TableAutoFormatField extends MultiPropertyTest {
     */
     public void _ShadowFormat() {
         testProperty("ShadowFormat", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return old == null ? new com.sun.star.table.ShadowFormat() :
                     super.getNewValue(p, old) ;

@@ -48,6 +48,7 @@ public class OfficeGroupSectionLayoutController extends SectionLayoutController
     {
     }
 
+    @Override
     protected LayoutController startElement(final ReportTarget target)
             throws DataSourceException, ReportProcessingException, ReportDataFactoryException
     {
@@ -74,6 +75,7 @@ public class OfficeGroupSectionLayoutController extends SectionLayoutController
         return clone;
     }
 
+    @Override
     protected AttributeMap computeAttributes(final FlowController fc,
             final Element element,
             final ReportTarget target)

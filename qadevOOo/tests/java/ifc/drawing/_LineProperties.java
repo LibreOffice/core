@@ -49,6 +49,7 @@ public class _LineProperties extends MultiPropertyTest {
      * only predefined String values.
      */
     protected PropertyTester LineTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals("Arrow"))

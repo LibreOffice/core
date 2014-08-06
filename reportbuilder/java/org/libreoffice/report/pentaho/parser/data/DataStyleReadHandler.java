@@ -55,6 +55,7 @@ public class DataStyleReadHandler extends ElementReadHandler
      * @return the handler or null, if the tagname is invalid.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected XmlReadHandler getHandlerForChild(final String uri,
             final String tagName,
             final Attributes atts)
@@ -78,6 +79,7 @@ public class DataStyleReadHandler extends ElementReadHandler
      * @param length the length.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException
     {
@@ -92,6 +94,7 @@ public class DataStyleReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void doneParsing() throws SAXException
     {
         for (int i = 0; i < children.size(); i++)
@@ -114,6 +117,7 @@ public class DataStyleReadHandler extends ElementReadHandler
         return dataStyle;
     }
 
+    @Override
     public Element getElement()
     {
         return dataStyle;

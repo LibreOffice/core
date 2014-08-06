@@ -70,6 +70,7 @@ public class ScAutoFormatObj extends TestCase {
     * is created. From this collection one Format is retrieved as
     * object tested.
     */
+    @Override
     public TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
 

@@ -297,6 +297,7 @@ XMultiPropertySet
     /** Makes sure that listeners which are kept in aBoundLC (XPropertyChangeListener) and aVetoableLC
      *  (XVetoableChangeListener) receive a disposing call. Also those listeners are relesased.
      */
+    @Override
     protected void postDisposing()
     {
         // Create an event with this as sender

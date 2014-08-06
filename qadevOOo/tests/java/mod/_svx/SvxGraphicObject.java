@@ -102,6 +102,7 @@ public class SvxGraphicObject extends TestCase {
     /**
      * Creates a new Draw document.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a drawdoc" );
@@ -111,6 +112,7 @@ public class SvxGraphicObject extends TestCase {
     /**
      * Disposes the Draw document created before
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xDrawDoc " );
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -146,6 +148,7 @@ public class SvxGraphicObject extends TestCase {
      *      service. </li>
      * </ul>
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;

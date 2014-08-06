@@ -54,6 +54,7 @@ public class BreakIterator extends TestCase {
      * Loads a Text document with name 'Iterator.sxw' from test
      * documents directory
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
@@ -73,6 +74,7 @@ public class BreakIterator extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.i18n.BreakIterator</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {
@@ -105,6 +107,7 @@ public class BreakIterator extends TestCase {
     /**
     * Disposes the Text document loaded before.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         xTextDoc.dispose();

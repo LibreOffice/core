@@ -74,6 +74,7 @@ public class Desktop extends TestCase {
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
 
         log.println("disposing xTextDoc");
@@ -89,6 +90,7 @@ public class Desktop extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.frame.Desktop</code>.
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         // get a soffice factory object

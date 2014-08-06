@@ -61,6 +61,7 @@ public class ScDataPilotFieldsObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -78,6 +79,7 @@ public class ScDataPilotFieldsObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSheetDoc) ;
@@ -98,6 +100,7 @@ public class ScDataPilotFieldsObj extends TestCase {
     * @see com.sun.star.sheet.XDataPilotTablesSupplier
     * @see com.sun.star.sheet.XDataPilotDescriptor
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

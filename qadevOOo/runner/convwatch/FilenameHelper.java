@@ -267,6 +267,7 @@ abstract class FilenameHelper_impl implements Filenamer
  */
 class OriginalFilename  extends FilenameHelper_impl
 {
+    @Override
     public String buildName()
         {
             return getName();
@@ -281,10 +282,12 @@ class OriginalFilename  extends FilenameHelper_impl
  */
 class OriginalReferenceFilename extends FilenameHelper_impl
 {
+    @Override
     public String getSuffix()
         {
             return "prn";
         }
+    @Override
     public String buildName()
         {
             return getName();
@@ -298,10 +301,12 @@ class OriginalReferenceFilename extends FilenameHelper_impl
  */
 class OriginalReferencePictureFilename extends FilenameHelper_impl
 {
+    @Override
     public String getSuffix()
         {
             return "jpg";
         }
+    @Override
     public String buildName()
         {
             return getName() + "-" + getNumber() + "-ref";
@@ -320,10 +325,12 @@ class OriginalReferencePictureFilename extends FilenameHelper_impl
  */
 class CurrentReferenceFilename extends FilenameHelper_impl
 {
+    @Override
     public String getSuffix()
         {
             return "ps";
         }
+    @Override
     public String buildName()
         {
             return getName();
@@ -338,10 +345,12 @@ class CurrentReferenceFilename extends FilenameHelper_impl
  */
 class CurrentReferencePictureFilename extends FilenameHelper_impl
 {
+    @Override
     public String getSuffix()
         {
             return "jpg";
         }
+    @Override
     public String buildName()
         {
             return getName() + "-" + getNumber() + "-new-ref";

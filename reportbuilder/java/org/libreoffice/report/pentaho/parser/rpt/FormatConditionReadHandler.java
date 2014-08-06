@@ -48,6 +48,7 @@ public class FormatConditionReadHandler extends AbstractXmlReadHandler
         this.element = element;
     }
 
+    @Override
     protected void startParsing(final Attributes attrs) throws SAXException
     {
         super.startParsing(attrs);

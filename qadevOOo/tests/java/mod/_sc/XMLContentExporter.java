@@ -72,6 +72,7 @@ public class XMLContentExporter extends TestCase {
     /**
      * New spreadsheet document created.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -85,6 +86,7 @@ public class XMLContentExporter extends TestCase {
         }
     }
 
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xCalcDoc " );
         util.DesktopTools.closeDoc(xSheetDoc);
@@ -111,6 +113,7 @@ public class XMLContentExporter extends TestCase {
     *      {@link ifc.document._XExporter} interface </li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;

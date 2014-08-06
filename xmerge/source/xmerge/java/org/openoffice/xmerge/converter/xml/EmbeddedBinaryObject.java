@@ -92,6 +92,7 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
      * @param   zip     An <code>OfficeZip</code> instance representing the file
      *                  the data is to be written to.
      */
+    @Override
     void write(OfficeZip zip) {
         if (hasChanged) {
             zip.setNamedBytes(objName, objData);
@@ -103,6 +104,7 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
      * Package private method that constructs the manifest.xml entries for this
      * embedded object.
      */
+    @Override
     void writeManifestData(Document manifestDoc) throws DOMException {
         Element objNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
 

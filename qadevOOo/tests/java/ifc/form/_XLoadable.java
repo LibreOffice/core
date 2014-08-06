@@ -93,6 +93,7 @@ public class _XLoadable extends MultiMethodTest {
     /**
     * Creates new listener.
     */
+    @Override
     public void before() {
         loadListener = new TestLoadListener(log) ;
     }
@@ -231,6 +232,7 @@ public class _XLoadable extends MultiMethodTest {
         tRes.tested("removeLoadListener()", result) ;
     }
 
+    @Override
     protected void after() {
         disposeEnvironment();
     }

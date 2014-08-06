@@ -25,6 +25,7 @@ class AccessibleComponentHandler
     extends NodeHandler
 {
 
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleComponent xComponent =
@@ -47,6 +48,7 @@ class AccessibleComponentHandler
             maChildList.setSize (6);
     }
 
+    @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
         AccessibleTreeNode aChild = null;
@@ -109,6 +111,7 @@ class AccessibleComponentHandler
         return aChild;
     }
 
+    @Override
     public void update (AccessibleTreeNode aNode)
     {
         maChildList.clear();

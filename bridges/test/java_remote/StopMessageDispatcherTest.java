@@ -35,6 +35,7 @@ import test.lib.TestBed;
 public final class StopMessageDispatcherTest extends ComplexTestCase {
     public StopMessageDispatcherTest() {}
 
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -50,6 +51,7 @@ public final class StopMessageDispatcherTest extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             XTest test = UnoRuntime.queryInterface(
                 XTest.class, getBridge(context).getInstance("Test"));

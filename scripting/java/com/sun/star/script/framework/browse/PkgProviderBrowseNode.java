@@ -39,6 +39,7 @@ public class PkgProviderBrowseNode extends ProviderBrowseNode
 
     }
 
+    @Override
     public String getName() {
         String name = "Unknown";
         if ( container != null )

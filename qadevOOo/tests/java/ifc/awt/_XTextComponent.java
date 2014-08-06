@@ -75,6 +75,7 @@ public class _XTextComponent extends MultiMethodTest {
     * Retrieves object relation, then sets flag 'num' to 'true'
     * if relation is not null.
     */
+    @Override
     public void before() {
         if (tEnv.getObjRelation("XTextComponent.onlyNumbers") != null)
             num = true;

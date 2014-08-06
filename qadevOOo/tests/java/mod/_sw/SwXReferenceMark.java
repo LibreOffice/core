@@ -60,6 +60,7 @@ public class SwXReferenceMark extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -74,6 +75,7 @@ public class SwXReferenceMark extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -87,6 +89,7 @@ public class SwXReferenceMark extends TestCase {
     * Finally, renamed ReferenceMark is inserted to a major text of text
     * document as a text content.
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         XText oText = null;

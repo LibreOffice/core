@@ -228,6 +228,7 @@ public class ODatabaseForm extends TestCase {
     protected XConnection conn = null;
     private Object dbSrc = null;
 
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         tmpDir = utils.getOfficeTemp((tParam.getMSF()));
 
@@ -304,6 +305,7 @@ public class ODatabaseForm extends TestCase {
     /**
      *  *    creating a Testenvironment for the interfaces to be tested
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         if (xTextDoc != null) {
@@ -731,6 +733,7 @@ public class ODatabaseForm extends TestCase {
     /**
     * Closes connection of <code>RowSet</code> instance created.
     */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("closing connection...");
         try {

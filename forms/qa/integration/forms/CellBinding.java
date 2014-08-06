@@ -51,6 +51,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     {
     }
 
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -64,6 +65,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         };
     }
 
+    @Override
     public String getTestObjectName()
     {
         return "Form Control Spreadsheet Cell Binding Test";

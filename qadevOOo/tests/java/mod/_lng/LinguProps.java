@@ -62,6 +62,7 @@ public class LinguProps extends TestCase {
      * Creates an instance of the service
      * <code>com.sun.star.linguistic2.LinguProperties</code>.
      */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
             throws StatusException {

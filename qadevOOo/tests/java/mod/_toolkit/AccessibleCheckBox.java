@@ -88,6 +88,7 @@ public class AccessibleCheckBox extends TestCase {
      * window) and finds first accessible check box walking through the
      * accessible component tree.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XMultiServiceFactory msf = Param.getMSF();
@@ -182,6 +183,7 @@ public class AccessibleCheckBox extends TestCase {
      * Closes the dialog using accessible button 'Cancel' found in
      * <code>createTestEnvironment()</code>.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         try {
             log.println("closing dialog");
@@ -199,6 +201,7 @@ public class AccessibleCheckBox extends TestCase {
         }
     }
 
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
     }
 
@@ -214,6 +217,7 @@ public class AccessibleCheckBox extends TestCase {
             this.msf = msf;
         }
 
+        @Override
         public void run() {
             XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                                xTextDoc);

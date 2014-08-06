@@ -37,6 +37,7 @@ public class KlickButtonThread extends Thread {
         this.buttonName = buttonName;
     }
 
+    @Override
     public void run() {
         try{
             UITools oUITools = new UITools(xMSF, xWindow);

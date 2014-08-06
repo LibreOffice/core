@@ -123,6 +123,7 @@ public class ComponentBase extends WeakBase implements XComponent
         }
     }
 
+    @Override
     protected void finalize() throws Throwable
     {
         if ( ! bInDispose && ! bDisposed)

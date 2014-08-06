@@ -47,6 +47,7 @@ public class ProxyFactory extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.reflection.ProxyFactory</code>.
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF();

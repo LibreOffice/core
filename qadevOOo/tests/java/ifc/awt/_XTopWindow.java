@@ -95,6 +95,7 @@ public class _XTopWindow extends MultiMethodTest {
     XTextDocument aTextDoc = null;
 
 
+    @Override
     protected void before() {
         aTextDoc = util.WriterTools.createTextDoc(tParam.getMSF());
     }
@@ -181,6 +182,7 @@ public class _XTopWindow extends MultiMethodTest {
     /**
      * Disposes the document created in <code>before</code> method.
      */
+    @Override
     protected void after() {
         aTextDoc.dispose();
     }

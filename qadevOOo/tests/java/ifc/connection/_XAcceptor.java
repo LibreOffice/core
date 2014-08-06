@@ -73,6 +73,7 @@ public class _XAcceptor extends MultiMethodTest {
         /**
         * Call <code>accept()</code> method.
         */
+        @Override
         public void run() {
             try {
                 acceptedCall = acc.accept(connectString) ;
@@ -92,6 +93,7 @@ public class _XAcceptor extends MultiMethodTest {
     /**
     * Retrieves object relation.
     */
+    @Override
     public void before() throws StatusException {
         connectString = (String)
             tEnv.getObjRelation("XAcceptor.connectStr") ;

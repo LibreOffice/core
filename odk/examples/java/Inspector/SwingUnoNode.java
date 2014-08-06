@@ -127,6 +127,7 @@ public class SwingUnoNode extends HideableMutableTreeNode implements XUnoNode{
     }
 
 
+    @Override
     public int getChildCount(){
         return super.getChildCount();
     }

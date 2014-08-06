@@ -40,6 +40,7 @@ public class CoreReflection extends TestCase {
     /**
     * Does nothing.
     */
+    @Override
     protected void initialize ( TestParameters Param, PrintWriter log) {
 
     }
@@ -48,6 +49,7 @@ public class CoreReflection extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates <code>com.sun.star.reflection.CoreReflection</code> service.
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;

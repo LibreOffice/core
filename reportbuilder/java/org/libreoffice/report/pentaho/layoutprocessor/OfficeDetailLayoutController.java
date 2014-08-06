@@ -66,6 +66,7 @@ public class OfficeDetailLayoutController extends SectionLayoutController
      * @throws org.jfree.report.ReportDataFactoryException
      *          if a query failed.
      */
+    @Override
     public void initialize(final Object node,
             final FlowController flowController,
             final LayoutController parent)
@@ -90,6 +91,7 @@ public class OfficeDetailLayoutController extends SectionLayoutController
      * @throws org.jfree.report.ReportDataFactoryException
      *          if a query failed.
      */
+    @Override
     protected LayoutController startElement(final ReportTarget target)
             throws DataSourceException, ReportProcessingException, ReportDataFactoryException
     {
@@ -120,6 +122,7 @@ public class OfficeDetailLayoutController extends SectionLayoutController
         return super.startElement(target);
     }
 
+    @Override
     protected void resetSectionForRepeat()
     {
         super.resetSectionForRepeat();
@@ -135,6 +138,7 @@ public class OfficeDetailLayoutController extends SectionLayoutController
      * @return the joined layout controller that incorperates all changes from the
      *         delegate.
      */
+    @Override
     public LayoutController join(final FlowController flowController)
     {
         if (waitForJoin)

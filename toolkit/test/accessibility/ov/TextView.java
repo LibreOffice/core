@@ -84,6 +84,7 @@ public class TextView
     /** Additionally to the context store a reference to the
         XAccessibleText interface.
     */
+    @Override
     public void SetObject (XAccessibleContext xObject)
     {
         mxText = UnoRuntime.queryInterface(
@@ -91,11 +92,13 @@ public class TextView
         super.SetObject (xObject);
     }
 
+    @Override
     synchronized public void Destroy ()
     {
         super.Destroy();
     }
 
+    @Override
     synchronized public void Update ()
     {
         if (mxText == null)
@@ -110,11 +113,13 @@ public class TextView
         }
     }
 
+    @Override
     public String GetTitle ()
     {
         return ("Text");
     }
 
+    @Override
     public void notifyEvent (AccessibleEventObject aEvent)
     {
         System.out.println (aEvent);

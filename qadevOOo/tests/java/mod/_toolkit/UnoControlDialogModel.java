@@ -70,6 +70,7 @@ public class UnoControlDialogModel extends TestCase {
     *      {@link ifc.io._XPersistObject} </li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         XInterface oObj = null;

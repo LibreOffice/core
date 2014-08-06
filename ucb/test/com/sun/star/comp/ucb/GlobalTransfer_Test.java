@@ -46,10 +46,12 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
     static private final String fileTargetDir
         = "file:///d:/temp/";
 
+    @Override
     public String getTestObjectName() {
         return getClass().getName();
     }
 
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "testNameClashASK" };
     }

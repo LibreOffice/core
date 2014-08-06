@@ -55,6 +55,7 @@ public class TriState
                 <code>false</code> otherwise.
     */
 
+    @Override
     public boolean equals(Object obj)
         {
             if ((obj != null) &&

@@ -55,6 +55,7 @@ public class _XMultiSelectionSupplier extends MultiMethodTest {
     Object[] selections = null;
     Comparator<Object> ObjCompare = null;
 
+    @Override
     protected void before() {
         selections = (Object[])tEnv.getObjRelation("Selections");
         if (selections == null) {
@@ -65,6 +66,7 @@ public class _XMultiSelectionSupplier extends MultiMethodTest {
         ObjCompare = (Comparator<Object>)tEnv.getObjRelation("Comparer");
     }
 
+    @Override
     protected void after() {
         disposeEnvironment();
     }

@@ -62,6 +62,7 @@ public class _XSubTotalDescriptor extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

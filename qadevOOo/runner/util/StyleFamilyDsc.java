@@ -35,13 +35,16 @@ public class StyleFamilyDsc extends InstDescr {
         service = "com.sun.star.style." + kind;
         initStyleFamily();
     }
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getIfcName() {
         return ifcName;
     }
+    @Override
     public String getService() {
         return service;
     }
@@ -53,6 +56,7 @@ public class StyleFamilyDsc extends InstDescr {
         catch( ClassNotFoundException cnfE ) {
         }
     }
+    @Override
     public XInterface createInstance( XMultiServiceFactory docMSF ) {
 
 

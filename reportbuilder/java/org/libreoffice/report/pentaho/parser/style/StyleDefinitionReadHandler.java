@@ -57,6 +57,7 @@ public class StyleDefinitionReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected XmlReadHandler getHandlerForChild(final String uri,
             final String tagName,
             final Attributes atts)
@@ -73,6 +74,7 @@ public class StyleDefinitionReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void doneParsing()
             throws SAXException
     {
@@ -83,6 +85,7 @@ public class StyleDefinitionReadHandler extends ElementReadHandler
         }
     }
 
+    @Override
     public Element getElement()
     {
         return rawSection;

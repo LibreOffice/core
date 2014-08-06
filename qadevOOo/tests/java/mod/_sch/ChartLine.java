@@ -51,6 +51,7 @@ public class ChartLine extends TestCase {
     /**
     * Creates Chart document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -68,6 +69,7 @@ public class ChartLine extends TestCase {
     /**
     * Disposes Chart document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         if( xChartDoc!=null ) {
             log.println( "    closing xChartDoc" );
@@ -84,6 +86,7 @@ public class ChartLine extends TestCase {
     * the service <code>com.sun.star.chart.ChartLine</code>.
     * @see com.sun.star.chart.ChartLine
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XPropertySet oObj = null;

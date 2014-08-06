@@ -77,6 +77,7 @@ public class _XTextRangeCompare extends MultiMethodTest {
      * @throws StatusException If neither 'TEXTDOC' nore 'TEXT'
      * relation exists.
      */
+    @Override
     public void before() {
         nameStr = this.getClass().getName();
 

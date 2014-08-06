@@ -29,6 +29,7 @@ public class _XExtendedTransliteration extends MultiMethodTest {
     public XExtendedTransliteration oObj = null;
     private Locale loc = new Locale("en", "US", "") ;
 
+    @Override
     public void before() {
         oObj.loadModule(TransliterationModules.LOWERCASE_UPPERCASE, loc);
     }

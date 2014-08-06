@@ -64,6 +64,7 @@ public class SwAccessibleDocumentView extends TestCase {
     * @see TestEnvironment
     * @see #getTestEnvironment
     */
+    @Override
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
 
@@ -152,6 +153,7 @@ public class SwAccessibleDocumentView extends TestCase {
     * @param Param test parameters
     * @param log writer to log information while testing
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("dispose text document");
         util.DesktopTools.closeDoc(xTextDoc);
@@ -166,6 +168,7 @@ public class SwAccessibleDocumentView extends TestCase {
      *
      * @see #initializeTestCase
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
         xTextDoc = WriterTools.createTextDoc(Param.getMSF());

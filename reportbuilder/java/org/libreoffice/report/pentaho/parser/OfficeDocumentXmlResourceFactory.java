@@ -34,6 +34,7 @@ public class OfficeDocumentXmlResourceFactory extends JFreeReportXmlResourceFact
     {
     }
 
+    @Override
     public Class getFactoryType()
     {
         return OfficeDocument.class;

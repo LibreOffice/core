@@ -44,6 +44,7 @@ public class CalendarImpl extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.i18n.Calendar</code>.
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;

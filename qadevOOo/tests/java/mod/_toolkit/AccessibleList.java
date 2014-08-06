@@ -62,6 +62,7 @@ public class AccessibleList extends TestCase {
      * Then the TREE component is found and the 'New Document' tab is
      * selected to make list box visible. After that list box is obtained.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
@@ -185,6 +186,7 @@ public class AccessibleList extends TestCase {
     /**
      * Closes dialog using action of button 'Close'
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    Closing dialog ... ");
 
@@ -202,6 +204,7 @@ public class AccessibleList extends TestCase {
     /**
      * Creates writer document
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             msf = Param.getMSF();

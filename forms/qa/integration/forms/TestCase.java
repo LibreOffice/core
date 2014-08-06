@@ -36,6 +36,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String getTestObjectName()
     {
         return this.getClass().getName();

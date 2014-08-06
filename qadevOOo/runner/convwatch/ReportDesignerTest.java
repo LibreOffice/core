@@ -125,6 +125,7 @@ public class ReportDesignerTest extends ComplexTestCase {
      * This method returns a list of Strings, each string must be a function name in this class.
      * @return
      */
+    @Override
     public String[] getTestMethodNames()
         {
             return new String[] {"ReportDesignTest"}; // MAIN

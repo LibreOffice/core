@@ -73,6 +73,7 @@ class PrintComponentTree extends ComponentTreeTraversal
         m_sPrefix = new String();
     }
 
+    @Override
     public void handle( Object aFormComponent ) throws com.sun.star.uno.Exception
     {
         // the name of the child
@@ -117,6 +118,7 @@ class RevokeButtons extends ComponentTreeTraversal
         m_aOperator = aOperator;
     }
 
+    @Override
     public void handle( Object aFormComponent ) throws com.sun.star.uno.Exception
     {
         // check if it's a button
@@ -343,6 +345,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     /* ------------------------------------------------------------------ */
     // XEventListener overridables
     /* ------------------------------------------------------------------ */
+    @Override
     public void disposing( EventObject aEvent )
     {
         // simply disambiguate
@@ -681,6 +684,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     /* ------------------------------------------------------------------ */
     /** creates our sample document
     */
+    @Override
     protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();
@@ -887,6 +891,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     protected void onFormsAlive()
     {
         m_aOperator.onFormsAlive();
@@ -895,6 +900,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     /* ------------------------------------------------------------------ */
     /** performs any cleanup before exiting the program
     */
+    @Override
     protected void cleanUp( ) throws java.lang.Exception
     {
         // remove the listeners at the buttons

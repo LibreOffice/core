@@ -42,6 +42,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -53,6 +54,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String getTestObjectName()
     {
         return "Form Radio Buttons Test";

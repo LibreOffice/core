@@ -56,6 +56,7 @@ public class JDBCDriver extends TestCase {
      *      <code>jdbc.user</code> and <code>jdbc.password</code>.</li>
      * </ul>
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

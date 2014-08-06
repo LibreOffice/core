@@ -68,6 +68,7 @@ public class SwXStyle extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -82,6 +83,7 @@ public class SwXStyle extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -106,6 +108,7 @@ public class SwXStyle extends TestCase {
     *  <code>XIndexAccess</code> interface.</li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
 

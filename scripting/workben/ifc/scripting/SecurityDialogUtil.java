@@ -73,6 +73,7 @@ public boolean hasErrorMessage()
 /**
  * Press the named button in the currently visible dialog box.
  */
+@Override
 public void run()
 {
     // wait for the message box to appear

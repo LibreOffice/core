@@ -277,6 +277,7 @@ public final class Loader {
             this.stream = stream;
         }
 
+        @Override
         public void run() {
             try {
                 while (stream.read() != -1) {}
@@ -296,6 +297,7 @@ public final class Loader {
             super( urls );
         }
 
+        @Override
         protected Class findClass( String name ) throws ClassNotFoundException {
             // This is only called via this.loadClass -> super.loadClass ->
             // this.findClass, after this.loadClass has already called
@@ -303,6 +305,7 @@ public final class Loader {
             throw new ClassNotFoundException( name );
         }
 
+        @Override
         protected Class loadClass( String name, boolean resolve )
             throws ClassNotFoundException
         {

@@ -60,6 +60,7 @@ public class _XDataDefinitionSupplier extends MultiMethodTest {
     * Retrieves relations.
     * @throw StatusException If any relation not found.
     */
+    @Override
     protected void before() {
         url = (String)tEnv.getObjRelation("XDriver.URL");
         if (url == null) {

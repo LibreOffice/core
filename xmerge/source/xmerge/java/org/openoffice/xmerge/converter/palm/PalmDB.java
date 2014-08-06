@@ -402,6 +402,7 @@ public final class PalmDB {
      *  @return  true if <code>obj</code> is equal to this, otherwise
      *           false.
      */
+    @Override
     public boolean equals(Object obj) {
 
         boolean bool = false;

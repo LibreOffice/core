@@ -111,6 +111,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         screens = new javax.swing.JPanel();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 exitForm();
             }

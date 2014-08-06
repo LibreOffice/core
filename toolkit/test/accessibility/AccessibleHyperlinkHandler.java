@@ -23,6 +23,7 @@ import com.sun.star.accessibility.XAccessibleHyperlink;
 
 class AccessibleHyperlinkHandler extends AccessibleTreeHandler
 {
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleHyperlink xLink =
@@ -52,6 +53,7 @@ class AccessibleHyperlinkHandler extends AccessibleTreeHandler
         return xHyperlink;
     }
 
+    @Override
     public AccessibleTreeNode getChild (AccessibleTreeNode aParent, int nIndex)
     {
         return new StringNode ("interface XAccessibleHyperlink is supported", aParent);

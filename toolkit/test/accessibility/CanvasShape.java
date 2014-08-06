@@ -292,6 +292,7 @@ class CanvasShape
         return mxComponent;
     }
 
+    @Override
     public String toString ()
     {
         return ">"+msName+", "+msDescription+" +"+maPosition.x+"+"+maPosition.y

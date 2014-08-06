@@ -154,12 +154,14 @@ public class SwingDialogProvider implements XDialogProvider{
 
 
         private class InspectorComponentAdapter extends ComponentAdapter{
+            @Override
             public void componentHidden(ComponentEvent e){
                 m_jInspectorDialog.pack();
                 m_jInspectorDialog.invalidate();
 
             }
 
+            @Override
             public void componentShown(ComponentEvent e){
                 m_jInspectorDialog.pack();
                 m_jInspectorDialog.invalidate();
@@ -167,11 +169,13 @@ public class SwingDialogProvider implements XDialogProvider{
         }
 
         private class InspectorWindowAdapter extends WindowAdapter{
+            @Override
             public void windowClosed(WindowEvent e){
                 removeTabPanes();
                 m_oInspector.disposeHiddenDocuments();
             }
 
+            @Override
             public void windowClosing(WindowEvent e){
                 removeTabPanes();
                 m_oInspector.disposeHiddenDocuments();

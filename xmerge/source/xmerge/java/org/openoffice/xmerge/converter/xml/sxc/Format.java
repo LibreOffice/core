@@ -380,7 +380,8 @@ public class Format implements Cloneable {
       *
       *  @return  A string indicating the value and category.
       */
-     public String toString() {
+     @Override
+    public String toString() {
          return new String("Value : " + getValue() + " Category : " + getCategory());
      }
 

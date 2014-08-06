@@ -87,6 +87,7 @@ public class _XResultSetUpdate extends MultiMethodTest {
     * Retrieves relation.
     * @throw StatusException If relation not found.
     */
+    @Override
     public void before() throws StatusException {
         tester = (UpdateTester)tEnv.getObjRelation
             ("XResultSetUpdate.UpdateTester") ;
@@ -245,6 +246,7 @@ public class _XResultSetUpdate extends MultiMethodTest {
     /**
     * Forces environment to be recreated.
     */
+    @Override
     public void after() {
         //disposeEnvironment() ;
     }

@@ -71,6 +71,7 @@ public class _XSimpleRegistry extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of required relations not found.
     */
+    @Override
     protected void before() {
         if (tEnv.getObjRelation("configuration") != null) {
             configuration = true;

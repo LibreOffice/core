@@ -219,6 +219,7 @@ public class HsqlDatabase
         return new RowSet( m_context, getDocumentURL(), _commandType, _command );
     }
 
+    @Override
     protected void finalize() throws Throwable
     {
         closeAndDelete();

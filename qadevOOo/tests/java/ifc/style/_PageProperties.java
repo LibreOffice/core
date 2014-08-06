@@ -38,6 +38,7 @@ public class _PageProperties  extends MultiPropertyTest {
      * Switch on Header and Footer properties
      * so all props can be tested.
      */
+    @Override
     protected void before() {
         try {
             oObj.setPropertyValue("HeaderIsOn", Boolean.TRUE);

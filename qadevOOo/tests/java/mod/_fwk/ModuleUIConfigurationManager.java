@@ -53,6 +53,7 @@ public class ModuleUIConfigurationManager extends TestCase {
      * @param tParam The test parameters.
      * @param log The log writer.
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
         if (xTextDoc != null) {
@@ -72,6 +73,7 @@ public class ModuleUIConfigurationManager extends TestCase {
     /**
      * Create environment.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
 

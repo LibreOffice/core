@@ -57,6 +57,7 @@ public class _XSearchable extends MultiMethodTest {
      * the inserted object may influence following tests.
      *
      */
+    @Override
     protected void before() {
         Object o = tEnv.getObjRelation("SEARCHSTRING");
         if (o != null) {
@@ -166,6 +167,7 @@ public class _XSearchable extends MultiMethodTest {
      * In case the interface itself made the entry to search for, the environment
      * must be disposed
      */
+    @Override
     protected void after() {
         if(mDispose) {
             disposeEnvironment();

@@ -44,6 +44,7 @@ public class ConsoleWait implements com.sun.star.lang.XEventListener
             return m_done;
         }
 
+        @Override
         public void run()
         {
             try

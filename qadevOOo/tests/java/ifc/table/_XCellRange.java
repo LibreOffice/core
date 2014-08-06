@@ -134,6 +134,7 @@ public class _XCellRange extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

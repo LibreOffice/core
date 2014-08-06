@@ -27,6 +27,7 @@ public final class JavaThreadPoolFactory_Test {
         assertEquals(i1, JavaThreadPoolFactory.getThreadId());
         final ThreadId[] i2 = new ThreadId[1];
         new Thread() {
+            @Override
             public void run() {
                 synchronized (i2) {
                     i2[0] = JavaThreadPoolFactory.getThreadId();

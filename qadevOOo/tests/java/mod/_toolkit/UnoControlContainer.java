@@ -54,6 +54,7 @@ public class UnoControlContainer extends TestCase {
     private static XControl xCtrl1;
     private static XControl xCtrl2;
 
+    @Override
     protected void initialize(TestParameters param, PrintWriter log) {
         try {
             log.println("creating a textdocument");
@@ -68,6 +69,7 @@ public class UnoControlContainer extends TestCase {
         }
     }
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
@@ -75,6 +77,7 @@ public class UnoControlContainer extends TestCase {
         util.DesktopTools.closeDoc(xTD2);
     }
 
+    @Override
     public TestEnvironment createTestEnvironment(TestParameters param,
                                                  PrintWriter log) {
         // create Object Relations -------------------------------------------

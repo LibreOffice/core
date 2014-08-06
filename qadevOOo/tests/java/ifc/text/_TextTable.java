@@ -101,6 +101,7 @@ public class _TextTable extends MultiPropertyTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

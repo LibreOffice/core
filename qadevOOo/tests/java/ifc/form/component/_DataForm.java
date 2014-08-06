@@ -46,6 +46,7 @@ public class _DataForm extends MultiPropertyTest {
     */
     public void _NavigationBarMode() {
         testProperty("NavigationBarMode", new PropertyTester() {
+            @Override
             public String toString(Object obj) {
                 if (util.utils.isVoid(obj)) {
                     return "null";
@@ -63,9 +64,11 @@ public class _DataForm extends MultiPropertyTest {
     */
     public void _Cycle() {
         testProperty("Cycle", new PropertyTester() {
+            @Override
             public Object getNewValue(String propName, Object oldValue) {
                 return TabulatorCycle.CURRENT;
             }
+            @Override
             public String toString(Object obj) {
                 if (util.utils.isVoid(obj))
                     return "null";

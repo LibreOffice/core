@@ -69,6 +69,7 @@ public class SwXAutoTextGroup extends TestCase {
     /**
      * Creates text document.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -83,6 +84,7 @@ public class SwXAutoTextGroup extends TestCase {
     /**
      * Disposes text document.
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -99,6 +101,7 @@ public class SwXAutoTextGroup extends TestCase {
      *      {@link ifc.text._XAutoTextGroup} range of text</li>
      * </ul>
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

@@ -143,6 +143,7 @@ public class various extends TestCase {
         * Call <code>accept()</code> method and establish a bridge with an
         * instance provider
         */
+        @Override
         public void run() {
             try {
                 acceptedCall = acc.accept(connectString) ;
@@ -168,6 +169,7 @@ public class various extends TestCase {
     *   for <code>initialize()</code> method test.</li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF();
@@ -251,6 +253,7 @@ public class various extends TestCase {
     /**
      * Stop the acceptor thread and dispose the bridge
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
 
         System.out.println("++++++++ cleanup");

@@ -32,6 +32,7 @@ public class _PageStyle extends _PageProperties {
      * Test is used from _PageProperties
      * @see ifc.style._PageProperties
      */
+    @Override
     public void _PrinterPaperTray() {
         super._PrinterPaperTray();
     }
@@ -41,6 +42,7 @@ public class _PageStyle extends _PageProperties {
      * Test is used from _PageProperties
      * @see ifc.style._PageProperties
      */
+    @Override
     public void _UserDefinedAttributes() {
         super._UserDefinedAttributes();
     }

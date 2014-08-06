@@ -37,6 +37,7 @@ public class _ChartTitle extends MultiPropertyTest {
     */
     public void _TextRotation() {
         testProperty("TextRotation", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 Object ValueToSet = ValueChanger.changePValue(oldValue);
                 int ro = ((Integer) ValueToSet).intValue() * 100;

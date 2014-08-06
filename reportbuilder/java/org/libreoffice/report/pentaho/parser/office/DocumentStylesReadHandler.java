@@ -56,6 +56,7 @@ public class DocumentStylesReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected XmlReadHandler getHandlerForChild(final String uri,
             final String tagName,
             final Attributes atts)
@@ -89,6 +90,7 @@ public class DocumentStylesReadHandler extends ElementReadHandler
         return null;
     }
 
+    @Override
     public Element getElement()
     {
         return officeStylesCollection;

@@ -63,6 +63,7 @@ public class ScScenariosObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
@@ -79,6 +80,7 @@ public class ScScenariosObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
@@ -102,6 +104,7 @@ public class ScScenariosObj extends TestCase {
     * @see com.sun.star.sheet.Scenarios
     * @see com.sun.star.sheet.XScenariosSupplier
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         log.println("getting sheets");

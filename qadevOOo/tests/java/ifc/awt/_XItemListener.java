@@ -70,6 +70,7 @@ public class _XItemListener extends MultiMethodTest {
     * Retrieves object relation.
     * @throws StatusException If the relation not found.
     */
+    @Override
     public void before() {
         itemListener = (TestItemListener) tEnv.getObjRelation("TestItemListener") ;
         if (itemListener == null)

@@ -57,6 +57,7 @@ public class ContentHandlerFactory extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.frame.ContentHandlerFactory</code>. <p>
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;

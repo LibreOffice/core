@@ -226,6 +226,7 @@ public class _XCommandProcessor {
         command = new Command(commandName, -1, arg);
 
         Thread aborter = new Thread() {
+            @Override
             public void run() {
                 for (int i = 0; i < 10; i++) {
                     log.println("try to abort command");

@@ -43,6 +43,7 @@ public class ValueBinding extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -51,12 +52,14 @@ public class ValueBinding extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String getTestObjectName()
     {
         return "Form Control Value Binding Test";
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         super.before();
@@ -64,6 +67,7 @@ public class ValueBinding extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public void after() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         super.waitForUserInput();
@@ -76,6 +80,7 @@ public class ValueBinding extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();

@@ -46,6 +46,7 @@ public class XLinkReadHandler extends AbstractXmlReadHandler
      * @param attrs the attributes.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void startParsing(final Attributes attrs) throws SAXException
     {
         uri = attrs.getValue(OfficeNamespaces.XLINK_NS, "uri");
@@ -65,6 +66,7 @@ public class XLinkReadHandler extends AbstractXmlReadHandler
         return uri;
     }
 
+    @Override
     public String getUri()
     {
         return uri;

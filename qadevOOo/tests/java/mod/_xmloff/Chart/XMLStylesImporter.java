@@ -63,6 +63,7 @@ public class XMLStylesImporter extends TestCase {
     /**
     * New chart document created.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -82,6 +83,7 @@ public class XMLStylesImporter extends TestCase {
    /**
      * Close document
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         if( xChartDoc!=null ) {
             log.println( "    closing xChartDoc" );
@@ -107,6 +109,7 @@ public class XMLStylesImporter extends TestCase {
     *      {@link ifc.document._XImporter} interface </li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
 

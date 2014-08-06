@@ -64,6 +64,7 @@ public class _XDatabaseRange extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     protected void before() {
         oldCRA = (CellRangeAddress)tEnv.getObjRelation("DATAAREA");
         if (oldCRA == null) {
@@ -227,6 +228,7 @@ public class _XDatabaseRange extends MultiMethodTest {
         tRes.tested("setDataArea()", true);
     }
 
+    @Override
     protected void after() {
         disposeEnvironment();
     }

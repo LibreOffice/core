@@ -29,6 +29,7 @@ import util.utils;
 
 
 public class UnoControlPatternFieldModel extends TestCase {
+    @Override
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log) {
         XInterface oObj = null;

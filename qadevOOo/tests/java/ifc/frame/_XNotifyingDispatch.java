@@ -83,6 +83,7 @@ public class _XNotifyingDispatch extends MultiMethodTest {
     * Retrieves object relations and creates new listeners.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         notificationListener = new TestNotificationListener(log) ;
         url = (URL) tEnv.getObjRelation("XDispatch.URL") ;

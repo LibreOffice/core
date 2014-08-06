@@ -30,6 +30,7 @@ import com.sun.star.uno.XInterface;
 
 public class UcbPropertiesManager extends TestCase {
 
+    @Override
     public TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log ) {
 

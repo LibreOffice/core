@@ -214,6 +214,7 @@ public class GenericModelTest extends TestCase {
      * @param tParam the test paremter
      * @param log the log writer
      */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a textdocument");
         m_xTextDoc = WriterTools.createTextDoc((tParam.getMSF()));
@@ -230,6 +231,7 @@ public class GenericModelTest extends TestCase {
      * @param tParam the test parameter
      * @param log the log writer
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("closing connection...");
 
@@ -366,6 +368,7 @@ public class GenericModelTest extends TestCase {
      * @param log the log writer
      * @return a test environment
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         XInterface oObj = null;

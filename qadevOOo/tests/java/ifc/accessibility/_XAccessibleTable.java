@@ -58,6 +58,7 @@ public class _XAccessibleTable extends MultiMethodTest {
     XAccessibleSelection xASel = null;
     XAccessibleContext xACont = null;
 
+    @Override
     protected void before() {
         xASel = UnoRuntime.queryInterface(XAccessibleSelection.class, oObj);
         if (xASel == null) {

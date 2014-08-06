@@ -80,6 +80,7 @@ public class ScModelObj extends TestCase {
     /**
     * Disposes Spreadsheet documents.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
 
@@ -113,6 +114,7 @@ public class ScModelObj extends TestCase {
     *      spreadsheet)</li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         // creation of the testobject here

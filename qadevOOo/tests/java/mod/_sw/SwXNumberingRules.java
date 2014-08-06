@@ -67,6 +67,7 @@ public class SwXNumberingRules extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -81,6 +82,7 @@ public class SwXNumberingRules extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -94,6 +96,7 @@ public class SwXNumberingRules extends TestCase {
     * is obtained. At the end property value 'NumberingRules' is obtained from
     * given style.
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         XInterface oObj = null;
         XIndexAccess NumStyleI = null;

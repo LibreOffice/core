@@ -100,6 +100,7 @@ public class _XChangeBroadcaster extends MultiMethodTest {
      * @throw StatusException If neither relation is found nor interface
      * is queried.
      */
+    @Override
     public void before() {
         xText = UnoRuntime.queryInterface(XTextComponent.class,oObj);
         changer = (Changer) tEnv.getObjRelation("XChangeBroadcaster.Changer") ;

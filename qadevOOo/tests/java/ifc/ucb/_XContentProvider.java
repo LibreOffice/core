@@ -60,6 +60,7 @@ public class _XContentProvider extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         CIF = (XContentIdentifierFactory) tEnv.getObjRelation("FACTORY");
         String tmp = (String) tEnv.getObjRelation("CONTENT1") ;

@@ -39,6 +39,7 @@ public class UcbStore extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.ucb.Store</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

@@ -82,6 +82,7 @@ public class _XClipboard extends MultiMethodTest {
     /**
      * Initially sets the content of the clipboard.
      */
+    @Override
     public void before() {
         oObj.setContents(myTransferable1 = new MyTransferable(),
                 myOwner = new MyOwner());

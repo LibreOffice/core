@@ -84,6 +84,7 @@ public final class TestBed {
     private void pipe(final InputStream in, final PrintStream out,
                       final String prefix) {
         new Thread("Pipe: " + prefix) {
+            @Override
             public void run() {
                 BufferedReader r
                     = new BufferedReader(new InputStreamReader(in));
@@ -151,6 +152,7 @@ public final class TestBed {
             this.provider = provider;
         }
 
+        @Override
         public void run() {
             try {
                 XComponentContext context

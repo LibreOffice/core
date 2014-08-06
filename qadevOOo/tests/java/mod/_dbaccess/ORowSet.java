@@ -156,6 +156,7 @@ public class ORowSet extends TestCase {
     * @throws StatusException if DataSource can not be created or
     * registered.
     */
+    @Override
     protected void initialize ( TestParameters Param, PrintWriter _log)
         throws StatusException
     {
@@ -240,6 +241,7 @@ public class ORowSet extends TestCase {
     * @see com.sun.star.sdb.DatabaseContext
     * @see com.sun.star.sdb.DataSource
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
             PrintWriter log)
     {
@@ -497,6 +499,7 @@ public class ORowSet extends TestCase {
     /**
     * Closes connection of <code>RowSet</code> instance created.
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log)
     {
         String doing = null;

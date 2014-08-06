@@ -255,6 +255,7 @@ public final class Protocol_Test {
         {
             protocol = new urp(bridge, null, input, output);
             new Thread() {
+                @Override
                 public void run() {
                     for (;;) {
                         Object o;

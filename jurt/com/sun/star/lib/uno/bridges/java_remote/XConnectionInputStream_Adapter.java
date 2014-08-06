@@ -39,6 +39,7 @@ class XConnectionInputStream_Adapter extends InputStream {
         _xConnection = xConnection;
     }
 
+    @Override
     public int read() throws IOException {
         int len;
 

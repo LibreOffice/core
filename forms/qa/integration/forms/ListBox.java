@@ -52,6 +52,7 @@ public class ListBox extends TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -112,6 +113,7 @@ public class ListBox extends TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public void before() throws Exception, java.lang.Exception
     {
         super.before();
@@ -119,6 +121,7 @@ public class ListBox extends TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();

@@ -56,6 +56,7 @@ public class ScHeaderFooterContentObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -73,6 +74,7 @@ public class ScHeaderFooterContentObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc);
@@ -93,6 +95,7 @@ public class ScHeaderFooterContentObj extends TestCase {
     * @see com.sun.star.sheet.XHeaderFooterContent
     * @see com.sun.star.sheet.HeaderFooterContent
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;

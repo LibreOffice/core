@@ -50,6 +50,7 @@ public class ScSpreadsheetSettingsObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -67,6 +68,7 @@ public class ScSpreadsheetSettingsObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
@@ -78,6 +80,7 @@ public class ScSpreadsheetSettingsObj extends TestCase {
     * The spreadsheet document is the instance of the service
     * <code>com.sun.star.sheet.SpreadsheetDocumentSettings</code>.
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws StatusException {
 

@@ -91,6 +91,7 @@ public class JoinViewAccessibility extends TestCase {
      * @throws StatusException
      * @see TestEnvironment
      */
+    @Override
     protected TestEnvironment createTestEnvironment (TestParameters Param,
     PrintWriter log)
     {
@@ -347,6 +348,7 @@ public class JoinViewAccessibility extends TestCase {
     /**
      * Closes the DatasourceAdministration dialog and Query Dialog.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         try
         {

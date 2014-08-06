@@ -125,6 +125,7 @@ public class ScTableSheetObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -143,6 +144,7 @@ public class ScTableSheetObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
 
@@ -180,6 +182,7 @@ public class ScTableSheetObj extends TestCase {
     * </ul>
     * @see com.sun.star.sheet.XArrayFormulaRange
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         XInterface oObj = null;

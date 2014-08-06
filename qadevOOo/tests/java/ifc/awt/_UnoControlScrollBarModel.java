@@ -49,6 +49,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
     */
     public void _BackgroundColor() {
         testProperty("BackgroundColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(32768) : null ;
             }
@@ -61,6 +62,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
     */
     public void _BorderColor() {
         testProperty("BorderColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(1234) : null ;
             }
@@ -73,6 +75,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
     */
     public void _SymbolColor() {
         testProperty("SymbolColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(65324) : null ;
             }
@@ -85,6 +88,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
     */
     public void _ScrollValue() {
         testProperty("ScrollValue", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(10) : new Integer(15) ;
             }
@@ -97,6 +101,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
     */
     public void _VisibleSize() {
         testProperty("VisibleSize", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(10) : null ;
             }

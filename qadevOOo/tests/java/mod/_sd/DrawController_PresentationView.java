@@ -88,6 +88,7 @@ public class DrawController_PresentationView extends TestCase {
     * <code>com.sun.star.frame.Desktop</code>.
     * @see com.sun.star.frame.Desktop
     */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(
             XDesktop.class, DesktopTools.createDesktop(
@@ -100,6 +101,7 @@ public class DrawController_PresentationView extends TestCase {
     * @param Param test parameters
     * @param log writer to log information while testing
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing impress documents");
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -143,6 +145,7 @@ public class DrawController_PresentationView extends TestCase {
     * @see com.sun.star.frame.XModel
     * @see com.sun.star.drawing.DrawingDocumentDrawView
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
 

@@ -69,6 +69,7 @@ public class OfficeStyles extends Element
             return name;
         }
 
+        @Override
         public boolean equals(final Object obj)
         {
             if (this != obj)
@@ -88,6 +89,7 @@ public class OfficeStyles extends Element
             return true;
         }
 
+        @Override
         public int hashCode()
         {
             int result = family.hashCode();

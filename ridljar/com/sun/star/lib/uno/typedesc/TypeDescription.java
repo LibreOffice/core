@@ -215,6 +215,7 @@ public final class TypeDescription implements ITypeDescription {
     }
 
     // @see Object#toString
+    @Override
     public String toString() {
         return "[" + getClass().getName() + ": " + getTypeClass() + ", "
             + getTypeName() + "]";

@@ -95,6 +95,7 @@ public class ScHeaderFooterTextCursor extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -111,6 +112,7 @@ public class ScHeaderFooterTextCursor extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
@@ -131,6 +133,7 @@ public class ScHeaderFooterTextCursor extends TestCase {
     * <code>com.sun.star.text.TextCursor</code>.
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;

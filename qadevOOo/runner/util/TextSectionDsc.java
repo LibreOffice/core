@@ -41,14 +41,17 @@ public class TextSectionDsc extends InstDescr {
         initTextSection();
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getIfcName() {
         return ifcName;
     }
 
+    @Override
     public String getService() {
         return service;
     }
@@ -60,6 +63,7 @@ public class TextSectionDsc extends InstDescr {
         catch( ClassNotFoundException cnfE ) {
         }
     }
+    @Override
     public XInterface createInstance( XMultiServiceFactory docMSF ) {
         Object ServiceObj = null;
 

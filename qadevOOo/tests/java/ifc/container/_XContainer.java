@@ -80,6 +80,7 @@ public class _XContainer extends MultiMethodTest {
     * @throws StatusException If one of relations not found or
     * object doesn't implement <code>XNameContainer</code> interface.
     */
+    @Override
     public void before() throws StatusException {
         // do this test with a different object
         Object altObj = tEnv.getObjRelation("XContainer.AlternateObject");

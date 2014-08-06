@@ -71,6 +71,7 @@ public class _XFilter extends MultiMethodTest {
     * therefore the methods of this interface will be skipped
     * in this case
     */
+    @Override
     public void before() {
         String name = tEnv.getTestCase().getObjectName();
         if (name.indexOf("Importer")>0) {
@@ -93,6 +94,7 @@ public class _XFilter extends MultiMethodTest {
         catch (com.sun.star.lang.IllegalArgumentException e) {}
     }
 
+    @Override
     public void after() {
         if (dummy) {
             throw new StatusException(Status.skipped(true));
@@ -163,6 +165,7 @@ public class _XFilter extends MultiMethodTest {
             this.Filter = Filter ;
         }
 
+        @Override
         public void run() {
             filterRes = Filter.filter(mdesc);
         }

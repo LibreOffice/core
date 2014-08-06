@@ -49,6 +49,7 @@ public class _ChartAxisYSupplier extends MultiPropertyTest {
     * Retrieves object relations and prepares a chart document.
     * @throws StatusException if one of relations not found.
     */
+    @Override
     protected void before() {
         XChartDocument doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");
         if (doc == null) throw new StatusException(Status.failed

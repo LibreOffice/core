@@ -38,6 +38,7 @@ import connectivity.tools.HsqlDatabase;
 public class HsqlDriverTest extends ComplexTestCase {
 
 
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }

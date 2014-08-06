@@ -93,6 +93,7 @@ public class TableWindowAccessibility extends TestCase {
      * @throws StatusException
      * @see TestEnvironment
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
@@ -334,6 +335,7 @@ public class TableWindowAccessibility extends TestCase {
     /**
      * Closes all open documents.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         try
         {

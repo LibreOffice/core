@@ -65,6 +65,7 @@ public class SwXDocumentIndexMark extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -79,6 +80,7 @@ public class SwXDocumentIndexMark extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -92,6 +94,7 @@ public class SwXDocumentIndexMark extends TestCase {
     * created DocumentIndexMark, and inserts DocumentIndexMark to the
     * text document.
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XText oText = xTextDoc.getText();

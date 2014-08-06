@@ -44,10 +44,12 @@ import test.lib.TestBed;
  * considers the process hanging if it has not completed by then.</p>
  */
 public final class Bug98508_Test extends ComplexTestCase {
+    @Override
     public String getTestObjectName() {
         return getClass().getName();
     }
 
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -62,6 +64,7 @@ public final class Bug98508_Test extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             Test98508Interface ifc
                 = UnoRuntime.queryInterface(
@@ -83,6 +86,7 @@ public final class Bug98508_Test extends ComplexTestCase {
 
         public Object getInstance(String instanceName) {
             return new Test98508Interface() {
+                    @Override
                     public Test98508Struct get() {
                         testBed.serverDone(true);
                         return new Test98508Struct(Boolean.FALSE);

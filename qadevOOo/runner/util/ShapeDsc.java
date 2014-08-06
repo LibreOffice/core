@@ -44,13 +44,16 @@ public class ShapeDsc extends InstDescr {
         service="com.sun.star.drawing."+kind+"Shape";
         initShape();
     }
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getIfcName() {
         return ifcName;
     }
+    @Override
     public String getService() {
         return service;
     }
@@ -62,6 +65,7 @@ public class ShapeDsc extends InstDescr {
         catch( ClassNotFoundException cnfE ) {
         }
     }
+    @Override
     public XInterface createInstance( XMultiServiceFactory docMSF ) {
 
 

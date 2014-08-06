@@ -51,6 +51,7 @@ public class SmModel extends TestCase {
      * Creates a <code>StarMath</code> document and passes it as
      * tested component.
      */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
             throws StatusException {
@@ -79,6 +80,7 @@ public class SmModel extends TestCase {
      * Disposes the document created in <code>createTestEnvironment</code>
      * method.
      */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
 
         log.println( "    disposing xMathDoc " );

@@ -227,6 +227,7 @@ class ScriptSelectorPanel extends JPanel {
 
         DefaultMutableTreeNode top =
             new DefaultMutableTreeNode(myrootnode) {
+                @Override
                 public String toString() {
                     return ((XBrowseNode)getUserObject()).getName();
                 }
@@ -283,6 +284,7 @@ class ScriptSelectorPanel extends JPanel {
     public void addNode(DefaultMutableTreeNode parent, XBrowseNode xbn) {
         DefaultMutableTreeNode newNode =
             new DefaultMutableTreeNode(xbn) {
+                @Override
                 public String toString() {
                     return ((XBrowseNode)getUserObject()).getName();
                 }
@@ -309,6 +311,7 @@ class ScriptSelectorPanel extends JPanel {
                     }
                     DefaultMutableTreeNode newNode =
                         new DefaultMutableTreeNode(children[i]) {
+                            @Override
                             public String toString() {
                                 return ((XBrowseNode)getUserObject()).getName();
                             }
@@ -336,6 +339,7 @@ class ScriptTreeRenderer extends DefaultTreeCellRenderer {
         containerIcon = new ImageIcon(getClass().getResource("container.gif"));
     }
 
+    @Override
     public Component getTreeCellRendererComponent(
                         JTree tree,
                         Object value,

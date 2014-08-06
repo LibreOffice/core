@@ -82,6 +82,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
 
         tableModel.addTableModelListener(this);
         JTable tableVersions = new JTable(tableModel) {
+            @Override
             public String getToolTipText(MouseEvent event)
             {
                 int col = columnAtPoint( event.getPoint() );
@@ -100,6 +101,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
                 return o.toString();
             }
 
+            @Override
             public Point getToolTipLocation(MouseEvent event)
             {
                 int col = columnAtPoint( event.getPoint() );
@@ -145,6 +147,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     }// initComponents
 
 
+    @Override
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(320, 280);
     }
@@ -278,6 +281,7 @@ class MyTableModelIDE extends AbstractTableModel {
         return data.size();
     }
 
+    @Override
     public String getColumnName(int col) {
         return colNames[col];
     }
@@ -291,10 +295,12 @@ class MyTableModelIDE extends AbstractTableModel {
         return aRow.get(col);
     }
 
+        @Override
         public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
         }
 
+        @Override
         public boolean isCellEditable(int row, int col) {
         if (col == 0) {
             return true;
@@ -303,6 +309,7 @@ class MyTableModelIDE extends AbstractTableModel {
         }
         }
 
+        @Override
         public void setValueAt(Object value, int row, int col) {
         ArrayList<Object> aRow = data.get(row);
         aRow.set(col, value);

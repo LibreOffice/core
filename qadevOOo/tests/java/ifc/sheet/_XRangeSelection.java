@@ -52,6 +52,7 @@ public class _XRangeSelection extends MultiMethodTest {
     public XRangeSelection oObj = null;
     MyRangeSelectionListener aListener = null;
 
+    @Override
     public void before() {
         aListener = new _XRangeSelection.MyRangeSelectionListener(log);
         // workaround for i34499

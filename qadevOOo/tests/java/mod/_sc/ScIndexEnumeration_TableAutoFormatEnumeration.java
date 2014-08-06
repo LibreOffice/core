@@ -39,6 +39,7 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -55,6 +56,7 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface
@@ -62,6 +64,7 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
         util.DesktopTools.closeDoc(oComp);
     }
 
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

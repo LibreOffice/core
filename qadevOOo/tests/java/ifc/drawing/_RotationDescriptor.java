@@ -37,6 +37,7 @@ public class _RotationDescriptor extends MultiPropertyTest {
      * Custom tester which increases value by 200
      */
     protected PropertyTester drawMeasureTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             int val = ((Integer)oldValue).intValue() ;
             return new Integer(val + 200) ;

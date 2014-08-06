@@ -44,6 +44,7 @@ public class Tabular extends ReportBuilderLayouter
         return getResource().getResText(UIConsts.RID_REPORT + 80);
     }
 
+    @Override
     protected void insertDetailFields()
     {
         copyDetailProperties();
@@ -76,6 +77,7 @@ public class Tabular extends ReportBuilderLayouter
         xSection.setHeight(nHeight);
     }
 
+    @Override
     protected void insertDetailFieldTitles(int lastGroupPostion)
     {
         final String[] aFieldTitleNames = getFieldTitleNames();

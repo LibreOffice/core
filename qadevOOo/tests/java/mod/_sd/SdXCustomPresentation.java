@@ -69,6 +69,7 @@ public class SdXCustomPresentation extends TestCase {
     /**
     * Creates Impress document.
     */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -88,6 +89,7 @@ public class SdXCustomPresentation extends TestCase {
     /**
     * Disposes Impress document.
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xImpressDoc");
         util.DesktopTools.closeDoc(xImpressDoc);
@@ -114,6 +116,7 @@ public class SdXCustomPresentation extends TestCase {
     * @see com.sun.star.presentation.XCustomPresentationSupplier
     * @see com.sun.star.presentation.CustomPresentation
     */
+    @Override
     protected TestEnvironment createTestEnvironment(
                                 TestParameters Param, PrintWriter log) {
 

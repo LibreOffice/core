@@ -37,6 +37,7 @@ public class OfficePageSectionLayoutController extends SectionLayoutController
     {
     }
 
+    @Override
     protected AttributeMap computeAttributes(final FlowController flowController, final Element element, final ReportTarget reportTarget) throws DataSourceException
     {
         final AttributeMap map = new AttributeMap(super.computeAttributes(flowController, element, reportTarget));

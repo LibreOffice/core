@@ -54,6 +54,7 @@ public class UnoDataAware extends DataAware
         inverse = i;
     }
 
+    @Override
     protected void enableControls(Object value)
     {
         Boolean b = getBoolean(value);
@@ -67,6 +68,7 @@ public class UnoDataAware extends DataAware
         }
     }
 
+    @Override
     protected void setToUI(Object value)
     {
         Helper.setUnoPropertyValue(unoModel, unoPropName, value);
@@ -115,6 +117,7 @@ public class UnoDataAware extends DataAware
         disableObjects = controls;
     }
 
+    @Override
     protected Object getFromUI()
     {
         return Helper.getUnoPropertyValue(unoModel, unoPropName);

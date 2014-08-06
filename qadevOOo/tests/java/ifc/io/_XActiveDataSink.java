@@ -53,6 +53,7 @@ public class _XActiveDataSink extends MultiMethodTest {
         /**
         * Take the XInputStream from the environment for setting and getting
     */
+    @Override
     public void before() {
             XInterface x = (XInterface)tEnv.getObjRelation("InputStream");
             iStream = UnoRuntime.queryInterface
@@ -94,6 +95,7 @@ public class _XActiveDataSink extends MultiMethodTest {
                 tRes.tested("getInputStream()", getStream != oldStream) ;
     }
 
+    @Override
     public void after() {
         this.disposeEnvironment() ;
     }

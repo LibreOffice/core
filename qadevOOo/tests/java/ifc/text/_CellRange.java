@@ -55,6 +55,7 @@ public class _CellRange extends MultiPropertyTest {
         final Short val2 = new Short( (short) 6 );
         log.println("Testing with custom Property tester") ;
         testProperty("BackColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 if ( oldValue.equals(val1) )
                     return val2;
@@ -79,6 +80,7 @@ public class _CellRange extends MultiPropertyTest {
     public void _BackGraphicURL() {
         log.println("Testing with custom Property tester") ;
         testProperty("BackGraphicURL", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 if (oldValue.equals(util.utils.getFullTestURL
                         ("space-metal.jpg")))

@@ -88,10 +88,12 @@ public class SwXParagraph extends TestCase {
     /**
      * Creates text document.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
     }
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
@@ -128,6 +130,7 @@ public class SwXParagraph extends TestCase {
      *  a property 'NumberingRules'. </li>
      * </ul>
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment
     (TestParameters tParam, PrintWriter log) {
 

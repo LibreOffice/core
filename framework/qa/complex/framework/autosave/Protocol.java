@@ -183,6 +183,7 @@ public class Protocol extends JComponent
         }
 
         /** format this line as an ascii string for writing log files */
+        @Override
         public synchronized String toString()
         {
             StringBuffer sLine = new StringBuffer(1000);

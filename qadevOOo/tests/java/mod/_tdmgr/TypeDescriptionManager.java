@@ -33,6 +33,7 @@ import com.sun.star.uno.XInterface;
 
 public class TypeDescriptionManager extends TestCase {
 
+    @Override
     protected void initialize ( TestParameters Param, PrintWriter log) {
 
     }
@@ -40,6 +41,7 @@ public class TypeDescriptionManager extends TestCase {
     /**
      *    creating a Testenvironment for the interfaces to be tested
      */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

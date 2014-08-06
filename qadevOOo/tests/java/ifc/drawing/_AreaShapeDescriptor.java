@@ -22,6 +22,7 @@ import lib.MultiPropertyTest;
 
 public class _AreaShapeDescriptor extends MultiPropertyTest {
 
+    @Override
     protected boolean compare(Object ob1, Object ob2) {
 
         return super.compare(ob1, ob2);
@@ -29,6 +30,7 @@ public class _AreaShapeDescriptor extends MultiPropertyTest {
     }
 
     protected PropertyTester URLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg")))
@@ -38,6 +40,7 @@ public class _AreaShapeDescriptor extends MultiPropertyTest {
     } ;
 
     protected PropertyTester StringTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals(str1))

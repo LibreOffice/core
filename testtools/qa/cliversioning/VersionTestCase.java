@@ -23,6 +23,7 @@ import complexlib.ComplexTestCase;
 
 public class VersionTestCase extends ComplexTestCase
 {
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[]
@@ -82,6 +83,7 @@ class Reader extends Thread
         start();
     }
 
+    @Override
     public void run()
     {
         try

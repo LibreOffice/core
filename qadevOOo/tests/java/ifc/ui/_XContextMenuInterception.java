@@ -53,6 +53,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
     private XMultiServiceFactory xMSF = null;
     private Point point = null;
 
+    @Override
     public void before() {
         docModel = UnoRuntime.queryInterface(
                 XModel.class,tEnv.getObjRelation("FirstModel"));
@@ -70,6 +71,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
         utils.shortWait(3000);
     }
 
+    @Override
     public void after() {
         if (xCI != null) {
             oObj.releaseContextMenuInterceptor(xCI);

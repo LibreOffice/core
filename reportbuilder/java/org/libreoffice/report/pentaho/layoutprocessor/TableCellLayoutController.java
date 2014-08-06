@@ -56,6 +56,7 @@ public class TableCellLayoutController extends SectionLayoutController
     {
     }
 
+    @Override
     protected AttributeMap computeAttributes(final FlowController fc,
             final Element element,
             final ReportTarget target)

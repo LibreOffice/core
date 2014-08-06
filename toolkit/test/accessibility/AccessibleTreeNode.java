@@ -102,6 +102,7 @@ class AccessibleTreeNode
         return true;
     }
 
+    @Override
     public String toString()
     {
         return maDisplayObject.toString();

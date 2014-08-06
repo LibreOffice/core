@@ -62,6 +62,7 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
     }
 
 
+    @Override
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
     }

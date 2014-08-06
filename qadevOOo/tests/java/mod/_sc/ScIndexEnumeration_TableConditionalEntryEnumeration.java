@@ -49,6 +49,7 @@ public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCas
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -66,12 +67,14 @@ public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCas
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

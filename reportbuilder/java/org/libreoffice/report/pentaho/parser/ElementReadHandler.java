@@ -41,6 +41,7 @@ public abstract class ElementReadHandler extends AbstractXmlReadHandler
      * @param attrs the attributes.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void startParsing(final Attributes attrs) throws SAXException
     {
         final Element element = getElement();

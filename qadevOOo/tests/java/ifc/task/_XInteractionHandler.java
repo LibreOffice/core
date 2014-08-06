@@ -61,6 +61,7 @@ public class _XInteractionHandler extends MultiMethodTest {
     * Retrieves an object relation. <p>
     * @throws StatusException If the relation is not found.
     */
+    @Override
     public void before() {
         request = (XInteractionRequest)
             tEnv.getObjRelation("XInteractionHandler.Request") ;

@@ -44,6 +44,7 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
     {
     }
 
+    @Override
     public boolean isValueChanged()
     {
         final ObjectOleElement element = (ObjectOleElement) getNode();
@@ -68,6 +69,7 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
         return false;
     }
 
+    @Override
     protected LayoutController delegateContentGeneration(final ReportTarget target) throws ReportProcessingException, ReportDataFactoryException, DataSourceException
     {
         final ObjectOleElement element = (ObjectOleElement) getNode();

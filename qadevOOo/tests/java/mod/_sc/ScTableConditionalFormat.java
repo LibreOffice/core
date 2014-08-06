@@ -68,6 +68,7 @@ public class ScTableConditionalFormat extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -85,6 +86,7 @@ public class ScTableConditionalFormat extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
@@ -102,6 +104,7 @@ public class ScTableConditionalFormat extends TestCase {
     * <code>com.sun.star.sheet.TableConditionalFormat</code>.
     * @see com.sun.star.sheet.TableConditionalFormat
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

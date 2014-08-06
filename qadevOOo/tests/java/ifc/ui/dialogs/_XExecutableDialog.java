@@ -104,6 +104,7 @@ public class _XExecutableDialog extends MultiMethodTest {
             this.Diag = Diag ;
         }
 
+        @Override
         public void run() {
             try {
                 execRes = Diag.execute();
@@ -126,6 +127,7 @@ public class _XExecutableDialog extends MultiMethodTest {
         }
     }
 
+    @Override
     public void after() {
         if (eThread.isAlive()) {
             log.println("Thread didn't die ... cleaning up");

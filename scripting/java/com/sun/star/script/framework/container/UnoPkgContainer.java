@@ -178,6 +178,7 @@ public class UnoPkgContainer extends ParcelContainer
     }
 
 
+    @Override
     public ScriptMetaData findScript( ParsedScriptUri psu ) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
 
     {

@@ -57,6 +57,7 @@ public class _XDataTransferProviderAccess extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         win = (XWindow) tEnv.getObjRelation
             ("XDataTransferProviderAccess.XWindow") ;

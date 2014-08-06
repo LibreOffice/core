@@ -42,6 +42,7 @@ public class _UnoControlImageControlModel extends MultiPropertyTest {
     * Custom <code>PropertyTester</code> used in <code>ImageURL</code> test.
     */
     protected PropertyTester URLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg")))
@@ -64,6 +65,7 @@ public class _UnoControlImageControlModel extends MultiPropertyTest {
     */
     public void _BackgroundColor() {
         testProperty("BackgroundColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 return utils.isVoid(oldValue) ? new Integer(8945) :
                     super.getNewValue(propName, oldValue) ;
@@ -77,6 +79,7 @@ public class _UnoControlImageControlModel extends MultiPropertyTest {
     */
     public void _BorderColor() {
         testProperty("BorderColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(1234) : null ;
             }
@@ -89,6 +92,7 @@ public class _UnoControlImageControlModel extends MultiPropertyTest {
     */
     public void _Tabstop() {
         testProperty("Tabstop", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? new Boolean(true) :
                     null ;

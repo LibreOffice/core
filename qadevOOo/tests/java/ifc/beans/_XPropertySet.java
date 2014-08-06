@@ -657,6 +657,7 @@ public class _XPropertySet extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

@@ -68,6 +68,7 @@ public class SdXShape extends TestCase {
     /**
     * Creates Drawing document.
     */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -85,6 +86,7 @@ public class SdXShape extends TestCase {
     /**
     * Disposes Drawing document.
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xDrawDoc");
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -112,6 +114,7 @@ public class SdXShape extends TestCase {
     * @see com.sun.star.drawing.XDrawPagesSupplier
     * @see com.sun.star.drawing.Shape
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(
                                     TestParameters Param, PrintWriter log) {
 

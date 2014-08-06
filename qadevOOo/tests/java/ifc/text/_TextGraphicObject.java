@@ -72,6 +72,7 @@ public class _TextGraphicObject extends MultiPropertyTest {
      * or create a new one if necessary.
      */
     protected PropertyTester PointTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                               throws java.lang.IllegalArgumentException {
             if (utils.isVoid(oldValue)) {

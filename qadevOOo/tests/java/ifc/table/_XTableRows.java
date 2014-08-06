@@ -38,6 +38,7 @@ public class _XTableRows extends MultiMethodTest {
     public XTableRows oObj = null;
     public XCellRange range = null;
 
+    @Override
     public void before() {
         range = (XCellRange) tEnv.getObjRelation("XTableRows.XCellRange");
         if (range==null) {

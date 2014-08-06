@@ -75,6 +75,7 @@ public class SwXTableCellText extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -89,6 +90,7 @@ public class SwXTableCellText extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -111,6 +113,7 @@ public class SwXTableCellText extends TestCase {
     *      {@link ifc.text._XText} : creates text sections</li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws StatusException {
         XInterface oObj = null;

@@ -35,6 +35,7 @@ import test.lib.TestBed;
  * a fresh, unterminated bridge.</p>
  */
 public final class Bug114133_Test extends ComplexTestCase {
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -50,6 +51,7 @@ public final class Bug114133_Test extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             new WaitUnreachable(getBridge(context).getInstance("Test")).
                 waitUnreachable();

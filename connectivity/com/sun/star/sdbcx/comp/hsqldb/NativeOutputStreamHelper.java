@@ -36,22 +36,27 @@ public class NativeOutputStreamHelper extends java.io.OutputStream{
         out = new StorageNativeOutputStream(file,key);
     }
 
+    @Override
     public void write(byte[] b, int off, int len)  throws java.io.IOException{
         out.write(key,file,b, off, len);
     }
 
+    @Override
     public void write(byte[] b)  throws java.io.IOException{
         out.write(key,file,b);
     }
 
+    @Override
     public void close()  throws java.io.IOException{
         out.close(key,file);
     }
 
+    @Override
     public void write(int b)  throws java.io.IOException{
         out.write(key,file,b);
     }
 
+    @Override
     public void flush()  throws java.io.IOException{
         out.flush(key,file);
     }

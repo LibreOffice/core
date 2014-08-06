@@ -67,6 +67,7 @@ public class SwXStyleFamily extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -81,6 +82,7 @@ public class SwXStyleFamily extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -113,6 +115,7 @@ public class SwXStyleFamily extends TestCase {
     *      <code>com.sun.star.style.CharacterStyle</code>.</li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XNameAccess oSFNA = null;

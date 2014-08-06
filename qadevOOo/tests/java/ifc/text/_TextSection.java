@@ -92,6 +92,7 @@ public class _TextSection extends MultiPropertyTest {
     */
     protected PropertyTester TextColumnsTester = new PropertyTester() {
 
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
         XTextColumns TC = null;
         short val2set = 25;
@@ -108,6 +109,7 @@ public class _TextSection extends MultiPropertyTest {
         return TC;
         }
 
+        @Override
         protected boolean compare(Object obj1, Object obj2) {
             short val1 = 0;
             short val2 = 1;
@@ -122,6 +124,7 @@ public class _TextSection extends MultiPropertyTest {
             return val1 == val2;
         }
 
+        @Override
         protected String toString(Object obj) {
             return "XTextColumns: ColumnCount = "+
                         ((XTextColumns) obj).getColumnCount();

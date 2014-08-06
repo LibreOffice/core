@@ -3,8 +3,13 @@
 
   #Supported parameters:
   NAME    VALUE_type   Range      DefaultV        Description
+<<<<<<< HEAD
   FACTOR   real        (0, 1.2]   0.5           DEAgent: scale constant
   CR       real        [0, 1]     0.9           DEAgent: crossover constant
+=======
+  FACTOR   real        (0, 1.2]   0.5             DEAgent: scale constant
+  CR       real        [0, 1]     0.9             DEAgent: crossover constant
+>>>>>>> java: add @Override annotation to overriding methods
   //Other choices for FACTOR and CR: (0.5, 0.1)
 
  *
@@ -46,6 +51,7 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
     pbest_t = pbest;
   }
 
+  @Override
   public void generateBehavior(SearchPoint trailPoint, ProblemEncoder problemEncoder) {
     SearchPoint gbest_t = socialLib.getGbest();
 
@@ -66,6 +72,7 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
     }
   }
 
+  @Override
   public void testBehavior(SearchPoint trailPoint, IGoodnessCompareEngine qualityComparator) {
     Library.replace(qualityComparator, trailPoint, pbest_t);
   }

@@ -65,6 +65,7 @@ public class NestedRegistry extends TestCase {
     XSimpleRegistry reg1;
     XSimpleRegistry reg2;
 
+    @Override
     public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
         TestParameters tParam ) {
         try {
@@ -127,6 +128,7 @@ public class NestedRegistry extends TestCase {
     *  </li>
     * </ul>
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {
@@ -184,6 +186,7 @@ public class NestedRegistry extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
 
 

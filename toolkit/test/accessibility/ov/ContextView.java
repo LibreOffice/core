@@ -92,6 +92,7 @@ public class ContextView
         add (maRole, constraints);
     }
 
+    @Override
     public void Update ()
     {
         if (mxContext == null)
@@ -108,6 +109,7 @@ public class ContextView
         }
     }
 
+    @Override
     public String GetTitle ()
     {
         return ("Context");
@@ -115,6 +117,7 @@ public class ContextView
 
     /** Listen for changes regarding displayed values.
     */
+    @Override
     public void notifyEvent (AccessibleEventObject aEvent)
     {
         switch (aEvent.EventId)

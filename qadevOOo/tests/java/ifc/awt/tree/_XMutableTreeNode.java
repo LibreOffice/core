@@ -51,6 +51,7 @@ public class _XMutableTreeNode extends MultiMethodTest {
         public XMutableTreeNode createNode(String name);
     }
 
+    @Override
     public void before(){
         nodeCreator = (XMutableTreeNodeCreator) tEnv.getObjRelation("XMutableTreeNodeCreator");
         if (nodeCreator == null){

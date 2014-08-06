@@ -124,6 +124,7 @@ final class ProxyFactory {
             }
         }
 
+        @Override
         protected void finalize() {
             AsynchronousFinalizer.add(new AsynchronousFinalizer.Job() {
                     public void run() throws Throwable {

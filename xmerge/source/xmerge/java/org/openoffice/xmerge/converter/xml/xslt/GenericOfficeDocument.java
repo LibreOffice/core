@@ -56,6 +56,7 @@ public class GenericOfficeDocument extends OfficeDocument {
      *
      *  @return  The Office file extension for the generic format.
      */
+    @Override
     protected String getFileExtension() {
         return "";
     }
@@ -65,6 +66,7 @@ public class GenericOfficeDocument extends OfficeDocument {
      *
      *  @return  The Office attribute for the generic format.
      */
+    @Override
     protected String getOfficeClassAttribute() {
 
     return "";
@@ -75,6 +77,7 @@ public class GenericOfficeDocument extends OfficeDocument {
      *
      * @return  String  The document's MIME type.
      */
+    @Override
     protected String getDocumentMimeType() {
         /* TODO: Determine the MIME-type from the input. */
         return "";

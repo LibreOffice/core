@@ -37,6 +37,7 @@ public class DocumentSettings extends TestCase
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log)
     {
         log.println("    opening xTextDoc ");
@@ -47,12 +48,14 @@ public class DocumentSettings extends TestCase
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log)
     {
         log.println("    disposing xTextDoc ");
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log
     )

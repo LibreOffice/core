@@ -79,6 +79,7 @@ public class _XAccessibleText extends MultiMethodTest {
      * Retrieves a string representation of the component's text.
      * The length of retrieved string must be greater than zero.
      */
+    @Override
     protected void before() {
         Object xat = tEnv.getObjRelation("XAccessibleText");
 

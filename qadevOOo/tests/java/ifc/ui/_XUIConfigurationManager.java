@@ -47,6 +47,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
      * Some stuff before the tests:
      * extract the multi service factory.
      */
+    @Override
     protected void before() {
         mxMSF = tParam.getMSF();
         sShortCutManagerServiceName = (String)tEnv.getObjRelation("XConfigurationManager.ShortCutManager");

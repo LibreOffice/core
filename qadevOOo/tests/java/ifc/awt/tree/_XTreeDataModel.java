@@ -102,6 +102,7 @@ public class _XTreeDataModel extends MultiMethodTest {
 
     }
 
+    @Override
     public void before(){
         mListenerEvent = (XTreeDataModelListenerEvent) tEnv.getObjRelation("XTreeDataModelListenerEvent");
         if (mListenerEvent == null) {

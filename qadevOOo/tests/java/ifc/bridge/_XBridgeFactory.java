@@ -50,6 +50,7 @@ public class _XBridgeFactory extends MultiMethodTest {
     /**
      * Interrupts the acceptor after test is finished
      */
+    @Override
     protected void after() {
         acceptorThread.acc.stopAccepting();
         if (acceptorThread.isAlive()) {
@@ -86,6 +87,7 @@ public class _XBridgeFactory extends MultiMethodTest {
         /**
         * Call <code>accept()</code> method.
         */
+        @Override
         public void run() {
             try {
                 acceptedCall = acc.accept(connectString);

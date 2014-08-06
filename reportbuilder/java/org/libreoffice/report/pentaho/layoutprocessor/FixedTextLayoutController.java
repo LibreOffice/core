@@ -49,6 +49,7 @@ public class FixedTextLayoutController
     {
     }
 
+    @Override
     public boolean isValueChanged()
     {
         final FlowController controller = getFlowController();
@@ -57,6 +58,7 @@ public class FixedTextLayoutController
         return reportDataRow.getCursor() == 0;
     }
 
+    @Override
     protected LayoutController delegateContentGeneration(final ReportTarget target)
             throws ReportProcessingException, ReportDataFactoryException,
             DataSourceException

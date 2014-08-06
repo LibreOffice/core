@@ -52,6 +52,7 @@ public class _ChartStatistics extends MultiPropertyTest {
     * Retrieves object relations and prepares a chart document.
     * @throws StatusException if one of relations not found.
     */
+    @Override
     protected void before() {
         log.println("Setting Diagram type to LineDiagram");
         XChartDocument doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");

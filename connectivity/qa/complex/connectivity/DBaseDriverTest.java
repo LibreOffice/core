@@ -27,6 +27,7 @@ import share.LogWriter;
 
 public class DBaseDriverTest extends ComplexTestCase implements TestCase
 {
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[]

@@ -37,6 +37,7 @@ import com.sun.star.uno.XInterface;
 public class ScFunctionDescriptionObj extends TestCase {
     private XSpreadsheetDocument xSheetDoc = null;
 
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(  tParam.getMSF() );
 
@@ -51,6 +52,7 @@ public class ScFunctionDescriptionObj extends TestCase {
 
     }
 
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.
@@ -62,6 +64,7 @@ public class ScFunctionDescriptionObj extends TestCase {
     /**
      *    creating a Testenvironment for the interfaces to be tested
      */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
                                     TestParameters Param, PrintWriter log )
                                                        throws StatusException {

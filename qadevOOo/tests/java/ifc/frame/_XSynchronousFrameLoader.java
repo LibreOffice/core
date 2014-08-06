@@ -70,6 +70,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
      *
      * @throws StatusException If one of required relations not found.
      */
+    @Override
     public void before() {
         url = (String) tEnv.getObjRelation("FrameLoader.URL") ;
         frame = (XFrame) tEnv.getObjRelation("FrameLoader.Frame") ;
@@ -143,6 +144,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
         final boolean[] result = new boolean[1] ;
 
         (new Thread() {
+            @Override
             public void run() {
                 result[0] = oObj.load(descr, frame);
             }
@@ -161,6 +163,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
     /**
      * Disposes document if it was created for frame supplying.
      */
+    @Override
     protected void after() {
         if (frameSup != null) {
             frameSup.dispose();

@@ -41,6 +41,7 @@ public class ComplexDescGetter extends DescGetter
         testClass = null;
     }
 
+    @Override
     public DescEntry[] getDescriptionFor(String entry, String DescPath,
             boolean debug)
     {
@@ -67,6 +68,7 @@ public class ComplexDescGetter extends DescGetter
         return null;
     }
 
+    @Override
     protected DescEntry getDescriptionForSingleJob(String className, String descPath, boolean debug)
     {
         DynamicClassLoader dcl = new DynamicClassLoader();
@@ -175,6 +177,7 @@ public class ComplexDescGetter extends DescGetter
         return dEntry;
     }
 
+    @Override
     protected String[] createScenario(String descPath, String job, boolean debug)
     {
         return new String[] {};

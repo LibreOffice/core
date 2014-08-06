@@ -56,6 +56,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
      * Return all test methods.
      * @return The test methods.
      */
+    @Override
     public String[] getTestMethodNames() {
         return new String[]{"compareGraphicalDiffs"};
     }
@@ -139,6 +140,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
      *
      * @return a List of software which must accessible as an external executable
      */
+    @Override
     protected String[] mustInstalledSoftware()
         {
             ArrayList<String> aList = new ArrayList<String>();

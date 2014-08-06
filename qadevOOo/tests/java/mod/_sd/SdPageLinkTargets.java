@@ -56,6 +56,7 @@ public class SdPageLinkTargets extends TestCase {
     /**
     * Creates Drawing document.
     */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
        // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -74,6 +75,7 @@ public class SdPageLinkTargets extends TestCase {
     /**
     * Disposes Drawing document.
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xDrawDoc");
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -89,6 +91,7 @@ public class SdPageLinkTargets extends TestCase {
     * @see com.sun.star.document.XLinkTargetSupplier
     * @see com.sun.star.document.LinkTargets
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws StatusException {
 

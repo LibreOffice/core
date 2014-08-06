@@ -32,6 +32,7 @@ public class AllFilesFilter implements FileFilter {
         return true;
     }
 
+    @Override
     public String toString() {
         return "<all files>";
     }

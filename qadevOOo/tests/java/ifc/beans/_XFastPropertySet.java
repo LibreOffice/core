@@ -62,7 +62,8 @@ public class _XFastPropertySet extends MultiMethodTest {
     /**
      * Retrieves relation.
      */
-     protected void before() {
+     @Override
+    protected void before() {
         exclude = (Set<String>) tEnv.getObjRelation("XFastPropertySet.ExcludeProps") ;
         if (exclude == null) {
             exclude = new java.util.HashSet<String>() ;

@@ -109,6 +109,7 @@ public class StarReportDataFactory implements ReportDataFactory, Cloneable
         }
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException
     {
         return super.clone();

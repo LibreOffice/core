@@ -56,6 +56,7 @@ public class _XUIConfiguration extends MultiMethodTest {
      * try to get a listener out of the object relation
      * <CODE>XUIConfiguration.XUIConfigurationListenerImpl</CODE>
      */
+    @Override
     public void before() {
         xListener = (XUIConfigurationListenerImpl)tEnv.getObjRelation(
                         "XUIConfiguration.XUIConfigurationListenerImpl");
@@ -86,6 +87,7 @@ public class _XUIConfiguration extends MultiMethodTest {
     /**
      * Dispose because the UIConfigurationManager has to be recreated
      */
+    @Override
     public void after() {
         disposeEnvironment();
     }

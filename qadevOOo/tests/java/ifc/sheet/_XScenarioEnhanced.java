@@ -26,6 +26,7 @@ import lib.MultiMethodTest;
 public class _XScenarioEnhanced extends MultiMethodTest {
     public XScenarioEnhanced oObj = null;
 
+    @Override
     public void before() {
         oObj = UnoRuntime.queryInterface(
                        XScenarioEnhanced.class,

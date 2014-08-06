@@ -64,6 +64,7 @@ public class _Presentation extends MultiPropertyTest {
     }
 
     protected PropertyTester CustomShowTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if ( ((String)oldValue).equals("SecondPresentation") ) {

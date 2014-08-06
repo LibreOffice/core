@@ -175,6 +175,7 @@ class GlyphGutter extends JComponent {
         setSize(d);
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         JTextArea textArea = view.getTextArea();
 

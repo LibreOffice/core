@@ -50,6 +50,7 @@ public class _UnoControlPatternFieldModel extends MultiPropertyTest {
     */
     public void _BackgroundColor() {
         testProperty("BackgroundColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(1234) : null ;
             }
@@ -62,6 +63,7 @@ public class _UnoControlPatternFieldModel extends MultiPropertyTest {
     */
     public void _BorderColor() {
         testProperty("BorderColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(1234) : null ;
             }
@@ -74,6 +76,7 @@ public class _UnoControlPatternFieldModel extends MultiPropertyTest {
     */
     public void _TextColor() {
         testProperty("TextColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(4321) : null ;
             }
@@ -86,6 +89,7 @@ public class _UnoControlPatternFieldModel extends MultiPropertyTest {
     */
     public void _TextLineColor() {
         testProperty("TextLineColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(4321) : null ;
             }
@@ -98,6 +102,7 @@ public class _UnoControlPatternFieldModel extends MultiPropertyTest {
     */
     public void _Tabstop() {
         testProperty("Tabstop", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Boolean(true) : null ;
             }

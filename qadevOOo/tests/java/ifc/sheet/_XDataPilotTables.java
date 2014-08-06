@@ -54,6 +54,7 @@ public class _XDataPilotTables extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     protected void before() {
         oSheet = (XSpreadsheet)tEnv.getObjRelation("SHEET");
         if (oSheet == null) throw new StatusException(Status.failed

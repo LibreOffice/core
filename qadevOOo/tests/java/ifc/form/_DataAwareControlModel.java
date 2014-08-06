@@ -105,9 +105,11 @@ public class _DataAwareControlModel extends MultiPropertyTest {
             ("DataAwareControlModel.NewFieldName") ;
         final String newVal = relVal == null ? "Address" : relVal ;
         testProperty("DataField", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object oldVal) {
                 return newVal ;
             }
+            @Override
             protected void checkResult(String propName, Object oldValue,
                 Object newValue, Object resValue, Exception exception)
                 throws java.lang.Exception{
@@ -142,6 +144,7 @@ public class _DataAwareControlModel extends MultiPropertyTest {
         final XInterface xTextLabel = (XInterface)tEnv.getObjRelation("LC");
 
         testProperty("LabelControl", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object oldVal) {
                 if (utils.isVoid(oldVal)) return xTextLabel ;
                 else return super.getNewValue("LabelControl",oldVal);
@@ -152,6 +155,7 @@ public class _DataAwareControlModel extends MultiPropertyTest {
     /**
     * Forces environment recreateation.
     */
+    @Override
     public void after() {
         disposeEnvironment() ;
     }

@@ -63,6 +63,7 @@ public class ODatabaseContext extends TestCase {
     /**
     * Does nothing.
     */
+    @Override
     protected void initialize ( TestParameters Param, PrintWriter log) {
 
     }
@@ -78,6 +79,7 @@ public class ODatabaseContext extends TestCase {
     *      service. </li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;

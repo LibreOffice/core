@@ -68,6 +68,7 @@ public class AccessibleMenuBar extends TestCase {
      * Finds accessible component with role <code>MENUBAR</code>
      * walking through the accessible component tree of a document.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         shortWait();
@@ -111,6 +112,7 @@ public class AccessibleMenuBar extends TestCase {
     /**
      * Creates writer document.
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -124,6 +126,7 @@ public class AccessibleMenuBar extends TestCase {
     /**
      * Disposes document.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
     }

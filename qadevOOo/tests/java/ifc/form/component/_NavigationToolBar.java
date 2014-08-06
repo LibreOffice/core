@@ -24,6 +24,7 @@ public class _NavigationToolBar extends MultiPropertyTest {
 
     public void _TextColor() {
         testProperty("TextColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String prop, Object old) {
                 return util.utils.isVoid(old) ? new Integer(20010507) :
                     super.getNewValue(prop, old) ;
@@ -33,6 +34,7 @@ public class _NavigationToolBar extends MultiPropertyTest {
 
     public void _TextLineColor() {
         testProperty("TextLineColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String prop, Object old) {
                 return util.utils.isVoid(old) ? new Integer(20050507) :
                     super.getNewValue(prop, old) ;

@@ -50,6 +50,7 @@ public abstract class SxcPluginFactory
     }
 
 
+    @Override
     public Document createOfficeDocument(String name, InputStream is)
         throws IOException {
 
@@ -60,7 +61,8 @@ public abstract class SxcPluginFactory
         return doc;
     }
 
-     public Document createOfficeDocument(String name, InputStream is,boolean isZip)
+     @Override
+    public Document createOfficeDocument(String name, InputStream is,boolean isZip)
         throws IOException {
 
         // read zipped XML stream

@@ -94,6 +94,7 @@ public class OCurrencyControl extends TestCase {
     /**
      * Creates a new text document.
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
 
@@ -110,6 +111,7 @@ public class OCurrencyControl extends TestCase {
     /**
      * Disposes the text document created before
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
@@ -156,6 +158,7 @@ public class OCurrencyControl extends TestCase {
      *      can have only numeric values the relation must be specified. </li>
      * </ul>
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;

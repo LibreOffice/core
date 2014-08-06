@@ -70,6 +70,7 @@ public class ScriptEntry implements Cloneable {
         this("Java", languagename, location);
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
@@ -113,6 +114,7 @@ public class ScriptEntry implements Cloneable {
         return description;
     }
 
+    @Override
     public String toString() {
         return "\nLogicalName = " + logicalname +  "\nLanguageName = " + languagename + "\nLocation = " + location + "\nLanguaguageProperties = " + languagedepprops;
     }

@@ -39,6 +39,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
      * Get an object implementation of the _XPrintJobListener interface from the
      * test environment.
      */
+    @Override
     public void before() {
         listenerImpl = (MyPrintJobListener)tEnv.getObjRelation("XPrintJobBroadcaster.XPrintJobListener");
         if (listenerImpl == null) {

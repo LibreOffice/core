@@ -66,6 +66,7 @@ public class APIDescGetter extends DescGetter
      * @param entry contains the entry name, e.g. sw.SwXBodyText
      * @param debug if true some debug information is displayed on standard out
      */
+    @Override
     public DescEntry[] getDescriptionFor(String job, String descPath,
             boolean debug)
     {
@@ -184,6 +185,7 @@ public class APIDescGetter extends DescGetter
         }
     }
 
+    @Override
     protected DescEntry getDescriptionForSingleJob(String job, String descPath,
             boolean debug)
     {
@@ -716,6 +718,7 @@ public class APIDescGetter extends DescGetter
         return aEntry;
     }
 
+    @Override
     protected ArrayList<String> getSubInterfaces(String job)
     {
         ArrayList<String> namesList = new ArrayList<String>();
@@ -747,6 +750,7 @@ public class APIDescGetter extends DescGetter
         return namesList;
     }
 
+    @Override
     protected String[] createScenario(String descPath, String job,
             boolean debug)
     {

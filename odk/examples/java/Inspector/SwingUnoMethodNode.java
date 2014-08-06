@@ -59,10 +59,12 @@ public class SwingUnoMethodNode extends SwingUnoNode implements ActionListener, 
         return m_oUnoMethodNode.isFoldable();
     }
 
+    @Override
     public String getName(){
         return m_oUnoMethodNode.getName();
     }
 
+    @Override
     public String getClassName(){
         String sClassName = "";
         sClassName = getXIdlMethod().getDeclaringClass().getName();
@@ -72,6 +74,7 @@ public class SwingUnoMethodNode extends SwingUnoNode implements ActionListener, 
         return sClassName;
     }
 
+    @Override
     public String getAnchor(){
         return m_oUnoMethodNode.getAnchor();
     }

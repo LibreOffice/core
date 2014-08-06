@@ -62,6 +62,7 @@ public class SwXTextColumns extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -76,6 +77,7 @@ public class SwXTextColumns extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -91,6 +93,7 @@ public class SwXTextColumns extends TestCase {
     * of this style is returned as a test component. Finally, several
     * paragraphs within the text are inserted to a text document.
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         XInterface oObj = null;
         TestEnvironment tEnv = null;

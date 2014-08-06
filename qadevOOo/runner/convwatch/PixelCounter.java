@@ -35,6 +35,7 @@ class CountNotWhite extends CountPixel
         {
         }
 
+    @Override
     public void count(int pixel)
         {
             int red   = (pixel >> 16) & 0xff;
@@ -56,6 +57,7 @@ class CountNotBlack extends CountPixel
         {
         }
 
+    @Override
     public void count(int pixel)
         {
             int red   = (pixel >> 16) & 0xff;

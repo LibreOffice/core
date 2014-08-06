@@ -49,6 +49,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
      * In this case it is the actual name of the service.
      * @return The tested service.
      */
+    @Override
     public String getTestObjectName() {
         return "ReferenceBuilder runner";
     }
@@ -59,6 +60,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
      * Return all test methods.
      * @return The test methods.
      */
+    @Override
     public String[] getTestMethodNames() {
         return new String[]{"buildreference"};
     }
@@ -123,6 +125,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
     /**
      * Function returns a List of software which must accessible as an external executable
      */
+    @Override
     protected String[] mustInstalledSoftware()
         {
             return new String[] { "perl -version" };

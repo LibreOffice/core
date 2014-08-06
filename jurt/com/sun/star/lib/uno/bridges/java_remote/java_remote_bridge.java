@@ -85,6 +85,7 @@ public class java_remote_bridge
             super("MessageDispatcher");
         }
 
+        @Override
         public void run() {
             try {
                 for (;;) {

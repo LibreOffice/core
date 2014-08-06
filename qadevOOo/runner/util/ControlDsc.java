@@ -36,13 +36,16 @@ public class ControlDsc extends InstDescr {
         service="com.sun.star.form.component."+kind;
         initControl();
     }
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getIfcName() {
         return ifcName;
     }
+    @Override
     public String getService() {
         return service;
     }
@@ -54,6 +57,7 @@ public class ControlDsc extends InstDescr {
         catch( ClassNotFoundException cnfE ) {
         }
     }
+    @Override
     public XInterface createInstance( XMultiServiceFactory docMSF ) {
 
         Object SrvObj = null;

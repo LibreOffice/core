@@ -58,6 +58,7 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
     add(nav, java.awt.BorderLayout.SOUTH);
     }//GEN-END:initComponents
 
+    @Override
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
     }

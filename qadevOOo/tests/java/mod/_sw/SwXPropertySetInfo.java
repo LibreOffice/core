@@ -49,6 +49,7 @@ public class SwXPropertySetInfo extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -59,6 +60,7 @@ public class SwXPropertySetInfo extends TestCase {
     * creates text document, then obtains PropertySetInfo of created text
     * document using <code>XPropertySet</code> interface.
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws StatusException {
         XInterface oObj = null;

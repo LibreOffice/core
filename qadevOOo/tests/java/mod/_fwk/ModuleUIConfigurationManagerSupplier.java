@@ -32,6 +32,7 @@ import lib.TestParameters;
 public class ModuleUIConfigurationManagerSupplier extends TestCase{
     XInterface oObj = null;
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         try {

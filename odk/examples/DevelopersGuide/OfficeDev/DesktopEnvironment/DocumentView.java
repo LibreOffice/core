@@ -300,6 +300,7 @@ public class DocumentView extends    JFrame
     /**
      * Overridden so we can react for window closing of this view.
      */
+    @Override
     protected void processWindowEvent(WindowEvent aEvent)
     {
         if (aEvent.getID()!=WindowEvent.WINDOW_CLOSING)

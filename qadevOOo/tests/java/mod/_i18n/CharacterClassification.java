@@ -50,6 +50,7 @@ public class CharacterClassification extends TestCase {
      * Creates an instance of the service
      * <code>com.sun.star.i18n.CharacterClassification</code>.
      */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

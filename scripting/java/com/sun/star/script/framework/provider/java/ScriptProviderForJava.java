@@ -52,6 +52,7 @@ public class ScriptProviderForJava
             super (ctx, "Java");
         }
 
+        @Override
         public XScript getScript( /*IN*/String scriptURI )
             throws com.sun.star.uno.RuntimeException,
                    ScriptFrameworkErrorException
@@ -77,11 +78,13 @@ public class ScriptProviderForJava
 
         }
 
+        @Override
         public boolean hasScriptEditor()
         {
             return false;
         }
 
+        @Override
         public ScriptEditor getScriptEditor()
         {
             return null;

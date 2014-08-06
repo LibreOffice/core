@@ -60,11 +60,13 @@ public class OQueryDesign extends TestCase {
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         xDesk = UnoRuntime.queryInterface(
                     XDesktop.class, DesktopTools.createDesktop(Param.getMSF()) );
     }
 
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         log.println( "creating a test environment" );

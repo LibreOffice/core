@@ -62,6 +62,7 @@ public class _LineDiagram extends MultiPropertyTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     protected void before() {
         log.println("Setting Diagram type to LineDiagram");
         doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");
@@ -80,11 +81,13 @@ public class _LineDiagram extends MultiPropertyTest {
     /**
     * Sets the old diagram for a chart document.
     */
+    @Override
     protected void after() {
         doc.setDiagram(oldDiagram);
     }
 
     protected PropertyTester URLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg")))
@@ -94,6 +97,7 @@ public class _LineDiagram extends MultiPropertyTest {
     } ;
 
     protected PropertyTester SymbolTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
 
@@ -106,6 +110,7 @@ public class _LineDiagram extends MultiPropertyTest {
     } ;
 
     protected PropertyTester SplineTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
 

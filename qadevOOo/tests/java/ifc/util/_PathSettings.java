@@ -63,6 +63,7 @@ public class _PathSettings extends MultiPropertyTest {
      */
     public void _UIConfig() {
         testProperty("UIConfig", new PropertyTester() {
+            @Override
             public Object getNewValue(String propName, Object oldVal) {
                 String path = (String) oldVal;
                 if (path == null) path = "";

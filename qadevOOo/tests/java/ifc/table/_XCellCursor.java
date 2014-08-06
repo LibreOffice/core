@@ -201,6 +201,7 @@ public class _XCellCursor extends MultiMethodTest {
     /**
     * Forces object environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

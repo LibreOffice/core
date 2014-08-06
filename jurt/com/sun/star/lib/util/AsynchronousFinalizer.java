@@ -69,6 +69,7 @@ public final class AsynchronousFinalizer {
 
     static {
         Thread t = new Thread() {
+                @Override
                 public void run() {
                     for (;;) {
                         Job j;

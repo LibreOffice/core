@@ -186,6 +186,7 @@ public class _XImportable extends MultiMethodTest {
     /**
      * Dispose environment.
      */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

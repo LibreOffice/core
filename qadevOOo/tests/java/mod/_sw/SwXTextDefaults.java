@@ -70,6 +70,7 @@ public class SwXTextDefaults extends TestCase {
     /**
      * Creates the service <code>com.sun.star.text.Defaults</code>
      */
+    @Override
     protected TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log) {
 
@@ -92,6 +93,7 @@ public class SwXTextDefaults extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -106,6 +108,7 @@ public class SwXTextDefaults extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);

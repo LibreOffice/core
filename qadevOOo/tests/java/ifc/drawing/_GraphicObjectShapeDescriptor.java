@@ -24,6 +24,7 @@ import com.sun.star.awt.XBitmap;
 
 public class _GraphicObjectShapeDescriptor extends MultiPropertyTest {
 
+    @Override
     protected boolean compare(Object ob1, Object ob2) {
 
         return super.compare(ob1, ob2);
@@ -31,6 +32,7 @@ public class _GraphicObjectShapeDescriptor extends MultiPropertyTest {
     }
 
     protected PropertyTester URLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg")))
@@ -40,6 +42,7 @@ public class _GraphicObjectShapeDescriptor extends MultiPropertyTest {
     } ;
 
     protected PropertyTester BitmapTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             XBitmap aBitmap1=(XBitmap) tEnv.getObjRelation("Bitmap1");

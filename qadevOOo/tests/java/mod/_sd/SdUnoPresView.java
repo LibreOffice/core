@@ -84,6 +84,7 @@ public class SdUnoPresView extends TestCase {
     * Creates the instance of the service <code>com.sun.star.frame.Desktop</code>.
     * @see com.sun.star.frame.Desktop
     */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(
             XDesktop.class, DesktopTools.createDesktop(
@@ -96,6 +97,7 @@ public class SdUnoPresView extends TestCase {
     * @param Param test parameters
     * @param log writer to log information while testing
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing impress documents");
         util.DesktopTools.closeDoc(xImpressDoc);
@@ -136,6 +138,7 @@ public class SdUnoPresView extends TestCase {
     * @see com.sun.star.frame.XModel
     * @see com.sun.star.drawing.DrawingDocumentDrawView
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
 

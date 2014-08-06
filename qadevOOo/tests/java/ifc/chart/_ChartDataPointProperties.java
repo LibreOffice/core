@@ -54,6 +54,7 @@ public class _ChartDataPointProperties extends MultiPropertyTest {
     * Retrieves object relations and prepares a chart document.
     * @throws StatusException if one of relations not found.
     */
+    @Override
     protected void before() {
         log.println("Setting Diagram type to LineDiagram");
         XChartDocument doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");
@@ -68,6 +69,7 @@ public class _ChartDataPointProperties extends MultiPropertyTest {
     }
 
     protected PropertyTester URLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             return utils.getFullTestURL("space-metal.jpg");

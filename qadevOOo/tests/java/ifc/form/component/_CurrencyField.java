@@ -38,6 +38,7 @@ public class _CurrencyField extends MultiPropertyTest {
     */
     public void _DefaultValue() {
         testProperty("DefaultValue", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return util.utils.isVoid(old) ? new Double(17.5) :
                     super.getNewValue(p, old) ;

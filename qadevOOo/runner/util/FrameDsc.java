@@ -53,12 +53,15 @@ public class FrameDsc extends InstDescr {
         width = nWidth;
         initFrame();
     }
+    @Override
     public String getName() {
         return name;
     }
+    @Override
     public String getIfcName() {
         return ifcName;
     }
+    @Override
     public String getService() {
         return service;
     }
@@ -70,6 +73,7 @@ public class FrameDsc extends InstDescr {
         catch( ClassNotFoundException cnfE ) {
         }
     }
+    @Override
     public XInterface createInstance( XMultiServiceFactory docMSF ) {
         Object SrvObj = null;
 

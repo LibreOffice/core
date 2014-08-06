@@ -56,6 +56,7 @@ public class Pipe extends TestCase {
     * </ul>
     * @see com.sun.star.io.Pipe
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

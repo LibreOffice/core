@@ -183,6 +183,7 @@ public class SelectionChangeListener implements XSelectionChangeListener {
             mMCF = xMCF;
         }
 
+        @Override
         public void run() {
             XDesktop aDesktop = null;
             XInterface aToolKit = null;

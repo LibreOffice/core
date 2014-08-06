@@ -557,6 +557,7 @@ public class CheckModuleAPI extends ComplexTestCase
         }
     }
 
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[]

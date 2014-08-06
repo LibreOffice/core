@@ -73,6 +73,7 @@ public class ObjectOutputStream extends TestCase {
     * <code>com.sun.star.cmp.PersistObject</code> if not yet registered.
     * @see com.sun.star.cmp.PersistObject
     */
+    @Override
     public void initialize(TestParameters tParam, PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF();
         Object oPersObj = null;
@@ -159,6 +160,7 @@ public class ObjectOutputStream extends TestCase {
     * @see com.sun.star.io.MarkableOutputStream
     * @see com.sun.star.cmp.PersistObject
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

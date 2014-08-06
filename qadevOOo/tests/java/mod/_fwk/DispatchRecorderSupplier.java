@@ -43,6 +43,7 @@ public class DispatchRecorderSupplier extends TestCase {
     * Creates instance of
     *  <code>com.sun.star.comp.framework.DispatchRecorderSupplier</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
         PrintWriter log ) throws StatusException {
 

@@ -60,6 +60,7 @@ public class _XInputStream extends MultiMethodTest {
      * Before the test, the stream writer and the data are ecxtracted from
      * the object relations and the data is written to the stream.
      */
+    @Override
     public void before() {
         XInterface x = (XInterface)tEnv.getObjRelation("StreamWriter");
         oStream = UnoRuntime.queryInterface(
@@ -77,6 +78,7 @@ public class _XInputStream extends MultiMethodTest {
      * After the test, the stream writer is closed and the
      * environment is disposed.
      */
+    @Override
     public void after() {
         try {
             oStream.flush();

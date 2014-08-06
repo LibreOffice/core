@@ -88,6 +88,7 @@ public class _XFrameLoader extends MultiMethodTest {
     * creates their default values. <p>
     * @throws StatusException If one of required relations not found.
     */
+    @Override
     public void before() {
         url = (String) tEnv.getObjRelation("FrameLoader.URL") ;
         frame = (XFrame) tEnv.getObjRelation("FrameLoader.Frame") ;
@@ -182,6 +183,7 @@ public class _XFrameLoader extends MultiMethodTest {
         tRes.tested("cancel()", result) ;
     }
 
+    @Override
     public void after() {
         if (frameSup != null) frameSup.dispose() ;
         frame.dispose();

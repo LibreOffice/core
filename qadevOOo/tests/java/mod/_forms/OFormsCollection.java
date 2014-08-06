@@ -74,6 +74,7 @@ public class OFormsCollection extends TestCase {
     /**
     * Creates Drawing document.
     */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a draw document");
         xDrawDoc = DrawTools.createDrawDoc((tParam.getMSF()));
@@ -82,6 +83,7 @@ public class OFormsCollection extends TestCase {
     /**
     * Disposes drawing document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xDrawDoc ");
 
@@ -113,6 +115,7 @@ public class OFormsCollection extends TestCase {
     *   names. In case of forms' collection forms can have equal names.</li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         XInterface oObj = null;

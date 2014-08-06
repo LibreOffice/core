@@ -53,6 +53,7 @@ public class ConditionalParagraphStyle extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -67,6 +68,7 @@ public class ConditionalParagraphStyle extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         DesktopTools.closeDoc(xTextDoc);
@@ -79,6 +81,7 @@ public class ConditionalParagraphStyle extends TestCase {
      * @param tParam The test parameters
      * @param log The log writer.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         XNameAccess oSFNA = null;

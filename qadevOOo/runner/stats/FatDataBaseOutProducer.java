@@ -63,6 +63,7 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
         mSqlInput.put("api_version_name", apiVersion);
     }
 
+    @Override
     protected boolean prepareDataBase(LogWriter log) {
         executeSQLCommand("SHOW TABLES");
 
@@ -90,6 +91,7 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
         return true;
     }
 
+    @Override
     protected boolean insertEntry(LogWriter log) {
 
         executeSQLCommand("SELECT id AS \"entry.id\", name AS \"entry.name\" FROM entry WHERE name = \"$EntryLongName\";", true);

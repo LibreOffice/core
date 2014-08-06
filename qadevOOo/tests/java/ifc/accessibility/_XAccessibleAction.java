@@ -151,6 +151,7 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

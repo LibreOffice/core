@@ -57,6 +57,7 @@ public class _XSingleServiceFactory extends MultiMethodTest {
     public XSingleServiceFactory oObj = null;
     private Class<?>[] mustSupport = null ;
 
+    @Override
     public void before() {
         mustSupport = (Class[]) tEnv.getObjRelation
             ("XSingleServiceFactory.MustSupport") ;

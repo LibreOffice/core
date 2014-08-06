@@ -32,12 +32,14 @@ class AccessibleActionNode
         mnActionIndex = nActionIndex;
     }
 
+    @Override
     public String[] getActions ()
     {
         return new String[] {"Perform Action"};
     }
 
     /** perform action */
+    @Override
     public void performAction (int nIndex)
     {
         if (nIndex != 0)

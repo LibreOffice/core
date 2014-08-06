@@ -73,6 +73,7 @@ public class ScAnnotationShapeObj extends TestCase {
     /**
     * Creates a spreadsheet document.
     */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF =
             SOfficeFactory.getFactory(tParam
@@ -96,6 +97,7 @@ public class ScAnnotationShapeObj extends TestCase {
     /**
     * Disposes a spreadsheet document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
 
@@ -119,6 +121,7 @@ public class ScAnnotationShapeObj extends TestCase {
     *      contains the annotation cell address.</li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws StatusException {
         XInterface oObj = null;

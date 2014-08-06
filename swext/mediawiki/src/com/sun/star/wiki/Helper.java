@@ -721,6 +721,7 @@ public class Helper
     static private class HTMLParse extends HTMLEditorKit
     {
 
+        @Override
         public HTMLEditorKit.Parser getParser()
         {
             return super.getParser();

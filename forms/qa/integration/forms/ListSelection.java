@@ -45,6 +45,7 @@ public class ListSelection extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -53,6 +54,7 @@ public class ListSelection extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String getTestObjectName()
     {
         return "Form Control List Selection Test";
@@ -213,6 +215,7 @@ public class ListSelection extends integration.forms.TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();

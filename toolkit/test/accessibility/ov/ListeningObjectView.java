@@ -40,6 +40,7 @@ abstract class ListeningObjectView
     /** Add this object as event listener at the broadcasting
         accessible object.
     */
+    @Override
     public void SetObject (XAccessibleContext xContext)
     {
         super.SetObject (xContext);
@@ -54,6 +55,7 @@ abstract class ListeningObjectView
     /** Remove this object as event listener from the broadcasting
         accessible object.
     */
+    @Override
     public void Destroy ()
     {
         super.Destroy ();

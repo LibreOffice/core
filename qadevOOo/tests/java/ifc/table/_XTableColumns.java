@@ -52,6 +52,7 @@ public class _XTableColumns extends MultiMethodTest {
     private XCellRange xCellRange = null;
     private int lastColumn = 0;
 
+    @Override
     public void before() {
         xCellRange = (XCellRange)
             tEnv.getObjRelation("XTableColumns.XCellRange") ;

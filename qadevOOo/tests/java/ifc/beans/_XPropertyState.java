@@ -69,6 +69,7 @@ public class _XPropertyState extends MultiMethodTest {
         * @throws StatusException If <code>XPropertySet</code> is not
         * implemented by object.
         */
+        @Override
         public void before() throws StatusException {
             oPS = UnoRuntime.queryInterface( XPropertySet.class, oObj );
             if (oPS == null)
@@ -256,6 +257,7 @@ public class _XPropertyState extends MultiMethodTest {
             tRes.tested("setPropertyToDefault()", result);
         }
 
+        @Override
         public void after() {
             disposeEnvironment() ;
         }

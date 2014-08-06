@@ -47,6 +47,7 @@ public class ScDrawPageObj extends TestCase {
     /**
      * Creates a new Draw document.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -64,6 +65,7 @@ public class ScDrawPageObj extends TestCase {
     /**
      * Disposes the Draw document created before
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent xComp = UnoRuntime.queryInterface(XComponent.class, xDoc);
@@ -89,6 +91,7 @@ public class ScDrawPageObj extends TestCase {
      *      <code>com.sun.star.drawing.Line</code> service </li>
      * </ul>
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;

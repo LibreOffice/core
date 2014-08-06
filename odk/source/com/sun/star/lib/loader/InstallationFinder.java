@@ -556,6 +556,7 @@ final class InstallationFinder {
             m_istream = istream;
         }
 
+        @Override
         public void run() {
             try {
                 BufferedReader br = new BufferedReader(

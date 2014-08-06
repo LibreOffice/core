@@ -94,6 +94,7 @@ public class OfficeInstallation implements java.io.Serializable {
         return true;
     }
 
+    @Override
     public String toString() {
         return getName();
     }

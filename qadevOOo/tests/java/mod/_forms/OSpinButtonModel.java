@@ -38,6 +38,7 @@ public class OSpinButtonModel extends TestCase {
     /**
      * Creates a Writer document.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a textdocument" );
@@ -47,6 +48,7 @@ public class OSpinButtonModel extends TestCase {
     /**
      * Disposes the Writer document.
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
@@ -66,6 +68,7 @@ public class OSpinButtonModel extends TestCase {
      * Creating a Testenvironment for the interfaces to be tested.
      * Adds spin button into text and retrieves it's control model.
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

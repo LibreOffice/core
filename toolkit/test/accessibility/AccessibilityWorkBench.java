@@ -103,7 +103,8 @@ public class AccessibilityWorkBench
         maAccessibilityTree.getComponent().addTreeSelectionListener (this);
 
         addWindowListener (new WindowAdapter ()
-            { public void windowClosing (WindowEvent e)
+            { @Override
+            public void windowClosing (WindowEvent e)
                   { System.exit(0); }
             });
 

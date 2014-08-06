@@ -53,6 +53,7 @@ public class _XTextTable extends MultiMethodTest {
 
     String cellNamesList[] = null ;
 
+    @Override
     protected void before() {
         Integer num_row = (Integer)tEnv.getObjRelation("NROW");
         if (num_row == null) {

@@ -65,6 +65,7 @@ public class _XCellRangesQuery extends MultiMethodTest {
     public static final int QUERYROWDIFFERENCES = 5;
     public static final int QUERYVISIBLECELLS = 6;
 
+    @Override
     protected void before() {
         oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
 
@@ -290,6 +291,7 @@ public class _XCellRangesQuery extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         if(bMakeEntriesAndDispose) {
             disposeEnvironment();

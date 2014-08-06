@@ -65,6 +65,7 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
      * @throws org.jfree.report.ReportDataFactoryException
      *          if a query failed.
      */
+    @Override
     public void initialize(final Object node, final FlowController flowController, final LayoutController parent)
             throws DataSourceException, ReportDataFactoryException, ReportProcessingException
     {
@@ -172,6 +173,7 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
         }
     }
 
+    @Override
     public Node[] getNodes()
     {
         return nodes;

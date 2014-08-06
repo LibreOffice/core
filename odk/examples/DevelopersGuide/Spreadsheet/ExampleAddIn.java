@@ -86,6 +86,7 @@ class ExampleAddInThread extends Thread
         aCounters = aResults;
     }
 
+    @Override
     public void run()
     {
         while ( true )

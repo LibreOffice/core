@@ -46,6 +46,7 @@ public class MutableTreeNode extends TestCase {
     /**
      * Creates StarOffice Writer document.
      */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         mxMSF = tParam.getMSF();
     }
@@ -53,12 +54,14 @@ public class MutableTreeNode extends TestCase {
     /**
      * Disposes StarOffice Writer document.
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log) {
         XMutableTreeNode xNode;

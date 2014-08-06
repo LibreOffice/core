@@ -219,6 +219,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      * @param   zip     An <code>OfficeZip</code> instance representing the file
      *                  the data is to be written to.
      */
+    @Override
     void write(OfficeZip zip) throws IOException {
         if (hasChanged == true) {
             if (contentDOM != null) {
@@ -242,6 +243,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      *
      * @param  manifestDoc    <code>Document</code> containing the manifest entries.
      */
+    @Override
     void writeManifestData(Document manifestDoc) throws DOMException {
         Node root = manifestDoc.getDocumentElement();
 

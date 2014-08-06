@@ -49,6 +49,7 @@ public class PropChgHelper_Spell extends PropChgHelper
 
     // XPropertyChangeListener
 
+    @Override
     public void propertyChange( PropertyChangeEvent aEvt )
             throws com.sun.star.uno.RuntimeException
     {

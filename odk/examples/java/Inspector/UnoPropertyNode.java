@@ -94,6 +94,7 @@ public class UnoPropertyNode extends UnoNode{
     }
 
 
+    @Override
     public String getClassName(){
         String sClassName = "";
         if (m_oUnoObject != null){
@@ -115,6 +116,7 @@ public class UnoPropertyNode extends UnoNode{
     }
 
 
+    @Override
     public String getAnchor(){
         return m_sPropertyName;
     }

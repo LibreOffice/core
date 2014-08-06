@@ -190,6 +190,7 @@ public class ViewContainer extends Thread
      * on shutdown. We inform all current registered listener and
      * views. They should deinitialize her internal things then.
      */
+    @Override
     public void run()
     {
         synchronized(this)

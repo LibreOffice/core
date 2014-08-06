@@ -49,12 +49,15 @@ public class TableDsc extends InstDescr {
         columns = nColumns;
         initTable();
     }
+    @Override
     public String getName() {
         return name;
     }
+    @Override
     public String getIfcName() {
         return ifcName;
     }
+    @Override
     public String getService() {
         return service;
     }
@@ -66,6 +69,7 @@ public class TableDsc extends InstDescr {
         catch( ClassNotFoundException cnfE ) {
         }
     }
+    @Override
     public XInterface createInstance( XMultiServiceFactory docMSF ) {
         Object SrvObj = null;
         try {

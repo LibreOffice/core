@@ -102,6 +102,7 @@ public class ScCellCursorObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      tParam.getMSF());
@@ -119,6 +120,7 @@ public class ScCellCursorObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
 
@@ -143,6 +145,7 @@ public class ScCellCursorObj extends TestCase {
     *      retieved from collection)</li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         XInterface oObj = null;

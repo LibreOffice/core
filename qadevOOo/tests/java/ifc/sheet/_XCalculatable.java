@@ -35,6 +35,7 @@ public class _XCalculatable extends MultiMethodTest {
      * Get object relation: four cells with values and formulas.
      * @see mod._sc.ScModelObj
      */
+    @Override
     public void before() {
         xCells = (XCell[])tEnv.getObjRelation("XCalculatable.Cells");
         if (xCells == null || xCells.length != 3)
@@ -45,6 +46,7 @@ public class _XCalculatable extends MultiMethodTest {
     /**
      * Restore begin setting
      */
+    @Override
     public void after() {
         // reset to begin value
         oObj.enableAutomaticCalculation(bIsAutomaticCalculationEnabled);

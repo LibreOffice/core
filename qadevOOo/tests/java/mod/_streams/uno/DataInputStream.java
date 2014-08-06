@@ -77,6 +77,7 @@ public class DataInputStream extends TestCase {
     *      {@link ifc.io._XActiveDataSink}(an input stream to set and get) </li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         Object oInterface = null;

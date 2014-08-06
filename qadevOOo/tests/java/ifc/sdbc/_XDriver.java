@@ -61,6 +61,7 @@ public class _XDriver extends MultiMethodTest {
     * Retrieves relations.
     * @throw StatusException If any relation not found.
     */
+    @Override
     protected void before() {
         nbu = (String) tEnv.getObjRelation("NoBadURL");
         url = (String)tEnv.getObjRelation("XDriver.URL");

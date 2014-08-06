@@ -38,6 +38,7 @@ public class _NumericField extends MultiPropertyTest {
     */
     public void _DefaultValue() {
         testProperty("DefaultValue", new PropertyTester() {
+            @Override
             protected Object getNewValue(String prop, Object old) {
                 return util.utils.isVoid(old) ? new Double(111.11) :
                     super.getNewValue(prop, old) ;

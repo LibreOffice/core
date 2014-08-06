@@ -25,6 +25,7 @@ import java.io.File;
 
 public class JPEGCreator extends EnhancedComplexTestCase
 {
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[]{"PostscriptOrPDFToJPEG"};

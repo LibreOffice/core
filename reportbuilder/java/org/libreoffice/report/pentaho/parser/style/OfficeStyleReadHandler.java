@@ -56,6 +56,7 @@ public class OfficeStyleReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected XmlReadHandler getHandlerForChild(final String uri,
             final String tagName,
             final Attributes atts)
@@ -72,6 +73,7 @@ public class OfficeStyleReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void doneParsing() throws SAXException
     {
         for (int i = 0; i < children.size(); i++)
@@ -86,6 +88,7 @@ public class OfficeStyleReadHandler extends ElementReadHandler
         return officeStyle;
     }
 
+    @Override
     public Element getElement()
     {
         return officeStyle;

@@ -171,6 +171,7 @@ public final class UnoRuntime_Test {
     }
 
     private final class TestThread extends Thread {
+        @Override
         public void run() {
             //TODO: JUnit does not notice if these asserts fail:
             assertNull(UnoRuntime.getCurrentContext());

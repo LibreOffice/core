@@ -52,6 +52,7 @@ public class SwingUnoFacetteNode extends SwingUnoNode implements XUnoFacetteNode
         m_sFilter = _sFilter;
     }
 
+    @Override
     public String getName(){
         return toString();
     }

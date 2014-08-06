@@ -44,6 +44,7 @@ public class _XIndent extends MultiMethodTest {
     /**
      * Ensures that the ObjRelation PropSet is given.
      */
+    @Override
     public void before() {
         PropSet = (XPropertySet) tEnv.getObjRelation("PropSet");
         if (PropSet == null) {

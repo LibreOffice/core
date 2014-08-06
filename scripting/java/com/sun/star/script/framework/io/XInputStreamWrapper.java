@@ -27,6 +27,7 @@ public class XInputStreamWrapper extends InputStream {
         m_xInputStream = xInputStream;
     }
 
+    @Override
     public int read() throws java.io.IOException
     {
         byte[][] byteRet = new byte[1][0];
@@ -45,6 +46,7 @@ public class XInputStreamWrapper extends InputStream {
         return byteRet[0][0];
     }
 
+    @Override
     public int read( byte[] b ) throws java.io.IOException
     {
         byte[][] byteRet = new byte[1][];
@@ -59,6 +61,7 @@ public class XInputStreamWrapper extends InputStream {
         }
     }
 
+    @Override
     public long skip(long n) throws java.io.IOException
     {
         try {
@@ -70,6 +73,7 @@ public class XInputStreamWrapper extends InputStream {
         }
     }
 
+    @Override
     public int available() throws java.io.IOException
     {
         try {
@@ -80,6 +84,7 @@ public class XInputStreamWrapper extends InputStream {
         }
     }
 
+    @Override
     public void close() throws java.io.IOException
     {
         try {

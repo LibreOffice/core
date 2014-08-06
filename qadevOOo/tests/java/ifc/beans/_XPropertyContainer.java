@@ -55,6 +55,7 @@ public class _XPropertyContainer extends MultiMethodTest {
      * checks if the object relation <CODE>XPropertyAccess.propertyNotRemovable</CODE>
      * is available
      */
+    @Override
     public void before() {
         propertyNotRemovable = (String) tEnv.getObjRelation("XPropertyContainer.propertyNotRemovable");
         if (propertyNotRemovable == null) {

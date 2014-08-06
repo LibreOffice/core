@@ -39,6 +39,7 @@ public class ScIndexEnumeration_SpreadsheetsEnumeration extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
 
@@ -55,12 +56,14 @@ public class ScIndexEnumeration_SpreadsheetsEnumeration extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println("disposing xSpreadsheetDocument");
         XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         log.println("getting sheets");

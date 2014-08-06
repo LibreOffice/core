@@ -23,6 +23,7 @@ import com.sun.star.accessibility.XAccessibleImage;
 
 class AccessibleImageHandler extends NodeHandler
 {
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleImage xImage =
@@ -50,6 +51,7 @@ class AccessibleImageHandler extends NodeHandler
             XAccessibleImage.class, aNode.getContext());
     }
 
+    @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
         if (aParent instanceof AccTreeNode)

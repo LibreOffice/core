@@ -61,6 +61,7 @@ class ShareConnection
                 m_sSQL = _sSQL;
             }
 
+        @Override
         public void run()
             {
                 Statement oStmt = null;

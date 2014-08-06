@@ -56,6 +56,7 @@ public class OfficeWatcher extends Thread implements share.Watcher {
         return StoredPing;
     }
 
+    @Override
     public void run() {
         dbg("started");
         boolean isDone = false;

@@ -153,6 +153,7 @@ public final class java_environment implements IEnvironment {
     // bridges forbids to transparently share proxies between bridges, and using
     // different java_environment instances for different bridges is the way to
     // enforce this.
+    @Override
     public boolean equals(Object obj) {
         return false;
     }

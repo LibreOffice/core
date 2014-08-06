@@ -56,6 +56,7 @@ public final class TextNodeIterator extends NodeIterator {
      *  @return  true if the <code>Node</code> is supported, false
      *           otherwise.
      */
+    @Override
     protected boolean nodeSupported(Node node) {
 
         // can use an array later to check all possible tags for

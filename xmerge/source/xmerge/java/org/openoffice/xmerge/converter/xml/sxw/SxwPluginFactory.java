@@ -46,6 +46,7 @@ public abstract class SxwPluginFactory extends PluginFactory {
     }
 
 
+    @Override
     public Document createOfficeDocument(String name, InputStream is)
         throws IOException {
 
@@ -55,7 +56,8 @@ public abstract class SxwPluginFactory extends PluginFactory {
         return doc;
     }
 
-     public Document createOfficeDocument(String name, InputStream is,boolean isZip)
+     @Override
+    public Document createOfficeDocument(String name, InputStream is,boolean isZip)
         throws IOException {
 
         // read XML stream

@@ -57,6 +57,7 @@ public class FrameLoaderFactory extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.frame.FrameLoaderFactory</code>. <p>
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;

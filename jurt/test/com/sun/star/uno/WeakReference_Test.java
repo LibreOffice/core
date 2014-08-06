@@ -43,6 +43,7 @@ public final class WeakReference_Test {
             return adapter;
         }
 
+        @Override
         protected void finalize() {
             adapter.dispose();
         }

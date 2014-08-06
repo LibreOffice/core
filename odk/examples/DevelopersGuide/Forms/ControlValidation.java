@@ -29,6 +29,7 @@ public class ControlValidation extends DocumentBasedExample
     /* ------------------------------------------------------------------ */
     /* public test methods                                                */
     /* ------------------------------------------------------------------ */
+    @Override
     protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();

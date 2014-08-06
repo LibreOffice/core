@@ -72,6 +72,7 @@ public class TypeDetection extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -84,6 +85,7 @@ public class TypeDetection extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.document.TypeDetection</code>. <p>
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;

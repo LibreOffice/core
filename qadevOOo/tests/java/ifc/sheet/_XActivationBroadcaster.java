@@ -72,6 +72,7 @@ public class _XActivationBroadcaster extends MultiMethodTest {
         tRes.tested("removeActivationEventListener()", !listenerCalled);
     }
 
+    @Override
     public void before() {
         xSpreadsheetView = UnoRuntime.queryInterface(
                                    XSpreadsheetView.class,

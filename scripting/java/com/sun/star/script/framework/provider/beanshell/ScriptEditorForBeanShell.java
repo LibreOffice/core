@@ -278,6 +278,7 @@ public class ScriptEditorForBeanShell
         frame.addWindowListener(
             new WindowAdapter()
             {
+                @Override
                 public void windowClosing(WindowEvent e) {
                     doClose();
                 }

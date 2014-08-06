@@ -84,6 +84,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             this.maxRows = maxRows;
         }
 
+        @Override
         public boolean equals(Object obj)
         {
             if (obj == null)
@@ -118,6 +119,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             return true;
         }
 
+        @Override
         public int hashCode()
         {
             int hash = 3;

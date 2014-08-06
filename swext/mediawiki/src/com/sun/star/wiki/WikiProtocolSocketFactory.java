@@ -146,11 +146,13 @@ class WikiProtocolSocketFactory implements SecureProtocolSocketFactory
         return GetNotSoSecureSSLContext().getSocketFactory().createSocket( aSocket, sHost, nPort, bAutoClose );
     }
 
+    @Override
     public boolean equals(Object obj)
     {
         return ((obj != null) && obj.getClass().equals(WikiProtocolSocketFactory.class));
     }
 
+    @Override
     public int hashCode()
     {
         return WikiProtocolSocketFactory.class.hashCode();

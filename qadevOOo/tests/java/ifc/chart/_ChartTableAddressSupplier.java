@@ -40,6 +40,7 @@ public class _ChartTableAddressSupplier extends MultiPropertyTest {
     */
     public void _SeriesAddresses() {
         testProperty("SeriesAddresses", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 ChartSeriesAddress[] addr = (ChartSeriesAddress[]) oldValue ;
                 ChartSeriesAddress[] newAddr = null ;

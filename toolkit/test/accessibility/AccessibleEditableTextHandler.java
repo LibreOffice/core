@@ -23,6 +23,7 @@ import com.sun.star.accessibility.XAccessibleEditableText;
 
 class AccessibleEditableTextHandler extends NodeHandler
 {
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleEditableText xText =
@@ -50,6 +51,7 @@ class AccessibleEditableTextHandler extends NodeHandler
             XAccessibleEditableText.class, aNode.getContext());
     }
 
+    @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
         return new StringNode ("XAccessibleEditableText is supported", aParent);

@@ -81,6 +81,7 @@ public class _XRowSet extends MultiMethodTest {
     * Retrieves relation.
     * @throw StatusException If relation not found.
     */
+    @Override
     public void before() throws StatusException {
         checker = (_XRowSetApproveBroadcaster.RowSetApproveChecker)
             tEnv.getObjRelation("XRowSetApproveBroadcaster.ApproveChecker") ;
@@ -182,6 +183,7 @@ public class _XRowSet extends MultiMethodTest {
     /**
     * Disposes test environment.
     */
+    @Override
     public void after() {
         disposeEnvironment() ;
     }

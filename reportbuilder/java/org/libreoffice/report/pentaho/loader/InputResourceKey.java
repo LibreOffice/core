@@ -46,6 +46,7 @@ public class InputResourceKey implements Serializable
         return path;
     }
 
+    @Override
     public String toString()
     {
         return "InputResourceKey{" + "inputRepositoryId=" + inputRepositoryId + ", path='" + path + '\'' + '}';

@@ -34,6 +34,7 @@ class ChildEventHandler
             XAccessible.class, aEvent.NewValue);
     }
 
+    @Override
     public void PrintOldAndNew (PrintStream out)
     {
         if (mxOldChild != null)
@@ -42,6 +43,7 @@ class ChildEventHandler
             out.println ("   adding child " + mxNewChild);
     }
 
+    @Override
     public void Process ()
     {
         // Insertion and removal of children should be mutually exclusive.

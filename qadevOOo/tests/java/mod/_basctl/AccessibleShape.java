@@ -49,6 +49,7 @@ public class AccessibleShape extends TestCase {
     XTextDocument xTextDoc = null;
     XInterface oObj = null;
 
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("Cleaning up");
         DesktopTools.closeDoc(xTextDoc);
@@ -62,6 +63,7 @@ public class AccessibleShape extends TestCase {
         }
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF();
         log.println( "creating a test environment" );

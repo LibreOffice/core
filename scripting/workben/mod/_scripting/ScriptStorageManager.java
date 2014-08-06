@@ -31,9 +31,11 @@ import lib.TestParameters;
 
 public class ScriptStorageManager extends TestCase {
 
+    @Override
     public void initialize( TestParameters tParam, PrintWriter log ) {
     }
 
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log ) throws StatusException {
 
@@ -63,6 +65,7 @@ public class ScriptStorageManager extends TestCase {
         return tEnv ;
     }
 
+    @Override
     public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
             TestParameters tParam) {
     }

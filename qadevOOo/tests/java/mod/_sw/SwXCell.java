@@ -54,6 +54,7 @@ public class SwXCell extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -68,6 +69,7 @@ public class SwXCell extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -84,6 +86,7 @@ public class SwXCell extends TestCase {
     *  within a text</li>
     * </ul>
     */
+    @Override
     public TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log ) throws StatusException {
         XInterface oObj = null;

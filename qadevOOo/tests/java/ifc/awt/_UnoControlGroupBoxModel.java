@@ -44,6 +44,7 @@ public class _UnoControlGroupBoxModel extends MultiPropertyTest {
     */
     public void _TextColor() {
         testProperty("TextColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(4321) :
                     super.getNewValue(p, old) ;
@@ -55,6 +56,7 @@ public class _UnoControlGroupBoxModel extends MultiPropertyTest {
     * Redefined method returns value, that differs from property value.
     */
     protected PropertyTester ColorTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (util.ValueComparer.equalValue(oldValue, new Integer(17)))
                 return new Integer(25);

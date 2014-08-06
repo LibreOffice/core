@@ -37,6 +37,7 @@ public class _XUIConfigurationStorage extends MultiMethodTest {
     public XUIConfigurationStorage oObj;
     private XStorage xStore = null;
 
+    @Override
     public void before() {
         xStore = (XStorage)tEnv.getObjRelation("XUIConfigurationStorage.Storage");
     }

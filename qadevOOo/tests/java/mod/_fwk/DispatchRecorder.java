@@ -65,6 +65,7 @@ public class DispatchRecorder extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.frame.Desktop</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
         PrintWriter log ) throws StatusException {
 
@@ -156,6 +157,7 @@ public class DispatchRecorder extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(oDoc);
     }

@@ -47,6 +47,7 @@ class CountNotWhite extends CountPixel
             }
             ++m_nCount;
         }
+    @Override
     public void count(final int pixel)
         {
             // final int alpha = (pixel >> 24) & 0xff;
@@ -91,6 +92,7 @@ class CountNotBlack extends CountPixel
             }
             ++m_nCount;
         }
+    @Override
     public void count(final int pixel)
         {
             // final int alpha = (pixel >> 24) & 0xff;

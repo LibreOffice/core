@@ -45,6 +45,7 @@ public class MailToDispatcher extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.framework.MailToDispatcher</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
         PrintWriter log ) throws StatusException {
 

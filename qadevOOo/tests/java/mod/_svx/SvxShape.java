@@ -116,6 +116,7 @@ public class SvxShape extends TestCase {
      * Loads a Draw document with name 'SvxShape.sxd' from test
      * documents directory
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
@@ -134,6 +135,7 @@ public class SvxShape extends TestCase {
     /**
      * Disposes the Draw document loaded before.
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xDrawDoc " );
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -158,6 +160,7 @@ public class SvxShape extends TestCase {
      *      service. </li>
      * </ul>
      */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
 

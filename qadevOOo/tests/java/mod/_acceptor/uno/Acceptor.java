@@ -47,6 +47,7 @@ public class Acceptor extends TestCase {
     * Retrieves host name where StarOffice is started from test
     * parameter <code>'CNCSTR'</code>.
     */
+    @Override
     public void initialize( TestParameters tParam, PrintWriter log ) {
         String cncstr = (String) tParam.get("CNCSTR") ;
         int idx = cncstr.indexOf("host=") + 5 ;
@@ -69,6 +70,7 @@ public class Acceptor extends TestCase {
      *   when disposing environment, to free this port number. </li>
      * <ul>
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
@@ -102,6 +104,7 @@ public class Acceptor extends TestCase {
     /**
     * Just clears flag which indicates that port is free now.
     */
+    @Override
     public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
             TestParameters tParam) {
 

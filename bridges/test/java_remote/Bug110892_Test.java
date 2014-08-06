@@ -43,6 +43,7 @@ import test.lib.TestBed;
  * has not garbage-collected the object by then.</p>
  */
 public final class Bug110892_Test extends ComplexTestCase {
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -58,6 +59,7 @@ public final class Bug110892_Test extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             XTest test = UnoRuntime.queryInterface(
                 XTest.class, getBridge(context).getInstance("Test"));

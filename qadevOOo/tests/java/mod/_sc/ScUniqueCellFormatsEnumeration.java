@@ -46,6 +46,7 @@ public class ScUniqueCellFormatsEnumeration extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -64,10 +65,12 @@ public class ScUniqueCellFormatsEnumeration extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         util.DesktopTools.closeDoc(xSheetDoc);
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         log.println("Getting the first sheet");

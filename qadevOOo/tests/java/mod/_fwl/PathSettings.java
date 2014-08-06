@@ -70,6 +70,7 @@ public class PathSettings extends TestCase {
      * @param tParam the test parameter
      * @param log the log writer
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("restore old values of path settings...");
 
@@ -90,6 +91,7 @@ public class PathSettings extends TestCase {
      * Creates an instance of the service
      * <code>com.sun.star.comp.framework.PathSettings</code>.
      */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;

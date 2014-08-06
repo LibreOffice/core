@@ -60,6 +60,7 @@ public class SwXFrames extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -74,6 +75,7 @@ public class SwXFrames extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -86,6 +88,7 @@ public class SwXFrames extends TestCase {
     * to the text, and finally gets all frames of text document using
     * <code>XTextFramesSupplier</code> interface.<br>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws StatusException {
         XInterface oObj = null;

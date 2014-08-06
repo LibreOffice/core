@@ -72,6 +72,7 @@ public class MultiPropertyTest extends MultiMethodTest
     /**
      * Overrides super.before() to check the service is supported by the object.
      */
+    @Override
     protected void before()
     {
         XServiceInfo xInfo = UnoRuntime.queryInterface(
@@ -102,6 +103,7 @@ public class MultiPropertyTest extends MultiMethodTest
      *
      * @see MultiMethodTest#invokeTestMethod
      */
+    @Override
     protected void invokeTestMethod(Method meth, String methName)
     {
         if (meth != null)
@@ -513,6 +515,7 @@ public class MultiPropertyTest extends MultiMethodTest
          * @return The second value if old value is equal to the first
          * one, the first value otherwise.
          */
+        @Override
         protected Object getNewValue(String propName, Object old)
         {
             if (ValueComparer.equalValue(val1, old))

@@ -56,6 +56,7 @@ import com.sun.star.uno.XInterface;
 public class SwXTextSection extends TestCase {
     XTextDocument xTextDoc;
 
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
     SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -69,6 +70,7 @@ public class SwXTextSection extends TestCase {
     }
     }
 
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
     log.println( "    disposing xTextDoc " );
     util.DesktopTools.closeDoc(xTextDoc);
@@ -77,6 +79,7 @@ public class SwXTextSection extends TestCase {
     /**
      *    creating a Testenvironment for the interfaces to be tested
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

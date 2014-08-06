@@ -33,6 +33,7 @@ public class _XSubTotalCalculatable extends MultiMethodTest {
     protected XSubTotalDescriptor desc;
     protected XSpreadsheet oSheet;
 
+    @Override
     protected void before() {
         oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
 

@@ -45,6 +45,7 @@ public class SwXPropertySet extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -54,6 +55,7 @@ public class SwXPropertySet extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Method creates text document as a test component.
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws StatusException {
 

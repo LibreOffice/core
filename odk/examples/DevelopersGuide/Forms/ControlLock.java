@@ -60,6 +60,7 @@ class LockControlModels extends ComponentTreeTraversal
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     protected boolean shouldStepInto( XIndexContainer xContainer ) throws com.sun.star.uno.Exception
     {
         if ( !super.shouldStepInto( xContainer ) )
@@ -75,6 +76,7 @@ class LockControlModels extends ComponentTreeTraversal
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public void handle( Object aFormComponent ) throws com.sun.star.uno.Exception
     {
         // entering this nesting level

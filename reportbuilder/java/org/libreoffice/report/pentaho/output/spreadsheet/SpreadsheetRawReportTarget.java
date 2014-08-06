@@ -134,11 +134,13 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             }
         }
 
+        @Override
         public boolean equals(final Object obj)
         {
             return obj instanceof ColumnBoundary && ((ColumnBoundary) obj).boundary == boundary;
         }
 
+        @Override
         public int hashCode()
         {
             assert false : "hashCode not designed";
@@ -180,6 +182,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         oleHandled = false;
     }
 
+    @Override
     public void startOther(final AttributeMap attrs) throws DataSourceException, ReportProcessingException
     {
         if (ReportTargetUtil.isElementOfType(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.OBJECT_OLE, attrs))
@@ -264,6 +267,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void startReportSection(final AttributeMap attrs, final int role) throws ReportProcessingException
     {
         if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) && (!PageSection.isPrintWithReportHeader(attrs) || !PageSection.isPrintWithReportFooter(attrs)))
@@ -276,6 +280,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void endReportSection(final AttributeMap attrs, final int role) throws IOException, ReportProcessingException
     {
         if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) && (!PageSection.isPrintWithReportHeader(attrs) || !PageSection.isPrintWithReportFooter(attrs)))
@@ -609,6 +614,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void endOther(final AttributeMap attrs) throws DataSourceException, ReportProcessingException
     {
         if (ReportTargetUtil.isElementOfType(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.OBJECT_OLE, attrs) || oleHandled)
@@ -693,6 +699,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     }
 
 
+    @Override
     public void processText(final String text) throws DataSourceException, ReportProcessingException
     {
         if (!(isRepeatingSection() || isElementBoundaryCollectionPass()))
@@ -702,6 +709,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     public void processContent(final DataFlags value) throws DataSourceException, ReportProcessingException
     {
         if (!(isRepeatingSection() || isElementBoundaryCollectionPass()))
@@ -716,6 +724,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         return "spreadsheet";
     }
 
+    @Override
     protected void startContent(final AttributeMap attrs) throws IOException, DataSourceException,
             ReportProcessingException
     {
@@ -795,6 +804,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         return masterPage.getStyleName();
     }
 
+    @Override
     protected void endContent(final AttributeMap attrs) throws IOException, DataSourceException,
             ReportProcessingException
     {
@@ -807,6 +817,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     public void endReport(final ReportStructureRoot report) throws DataSourceException, ReportProcessingException
     {
         super.endReport(report);
@@ -928,6 +939,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         return span;
     }
 
+    @Override
     protected String getTargetMimeType()
     {
         return "application/vnd.oasis.opendocument.spreadsheet";

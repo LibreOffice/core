@@ -33,6 +33,7 @@ public class _SelfTest extends MultiMethodTest
 
     /**
     */
+    @Override
     public void before()
         {
             log.println("_SelfTest.before()");
@@ -62,6 +63,7 @@ public class _SelfTest extends MultiMethodTest
     /**
     * Forces object environment recreation.
     */
+    @Override
     public void after()
         {
             log.println("_SelfTest.after()");

@@ -70,6 +70,7 @@ public class AccessibleMenuSeparator extends TestCase {
      * and implementation name <code>AccessibleMenuSeparator</code>
      * walking through the accessible component tree of a document.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         shortWait();
@@ -126,6 +127,7 @@ public class AccessibleMenuSeparator extends TestCase {
     /**
      * Creates writer document.
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             msf = Param.getMSF();
@@ -140,6 +142,7 @@ public class AccessibleMenuSeparator extends TestCase {
     /**
      * Disposes document.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
     }

@@ -21,6 +21,7 @@ package graphical;
 public class GraphicalComparator extends EnhancedComplexTestCase
 {
 
+    @Override
     public String[] getTestMethodNames() {
         return new String[]{"check"};
     }

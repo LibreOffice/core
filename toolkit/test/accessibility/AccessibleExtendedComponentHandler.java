@@ -24,6 +24,7 @@ import com.sun.star.accessibility.XAccessibleExtendedComponent;
 class AccessibleExtendedComponentHandler
     extends NodeHandler
 {
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleExtendedComponent xEComponent =
@@ -53,6 +54,7 @@ class AccessibleExtendedComponentHandler
     }
 
 
+    @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
         AccessibleTreeNode aChild = null;

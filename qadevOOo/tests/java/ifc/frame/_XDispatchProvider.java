@@ -51,6 +51,7 @@ public class _XDispatchProvider extends MultiMethodTest {
     /**
     * Retrieves object relation.
     */
+    @Override
     public void before() {
         dispatchUrl = (String) tEnv.getObjRelation("XDispatchProvider.URL") ;
         if (dispatchUrl == null) {

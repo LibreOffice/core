@@ -38,6 +38,7 @@ public class Test
         f.validate();
 
         f.addWindowListener(new WindowAdapter() {
+                @Override
                 public void windowClosing( java.awt.event.WindowEvent e){
                     b.stopOOoConnection();
                     System.exit(0);

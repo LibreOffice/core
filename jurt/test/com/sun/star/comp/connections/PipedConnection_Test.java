@@ -52,6 +52,7 @@ public final class PipedConnection_Test {
             _pipedConnection = pipedConnection;
         }
 
+        @Override
         public void run() {
             try {
                 for (byte v = 0;; v++) {
@@ -81,6 +82,7 @@ public final class PipedConnection_Test {
             _pipedConnection = pipedConnection;
         }
 
+        @Override
         public void run() {
             try {
                 byte v = 0;

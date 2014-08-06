@@ -49,6 +49,7 @@ public class _XTypeDetection extends MultiMethodTest {
     /**
      * Get the document URL.
      */
+    @Override
     public void before() {
         docURL = utils.getFullTestURL("XTypeDetection.sxw");
         bookmarkURL =  (String) tEnv.getObjRelation("XTypeDetection.bookmarkDoc");

@@ -165,6 +165,7 @@ public class ParcelBrowseNode extends PropertySet
         return BrowseNodeTypes.CONTAINER;
     }
 
+    @Override
     public String toString()
     {
         return getName();

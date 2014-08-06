@@ -72,6 +72,7 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         checker = (UpdateChecker)
             tEnv.getObjRelation("XUpdateBroadcaster.Checker") ;
@@ -230,6 +231,7 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

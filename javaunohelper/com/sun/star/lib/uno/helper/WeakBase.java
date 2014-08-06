@@ -53,6 +53,7 @@ public class WeakBase implements XWeak, XTypeProvider
      * then the garbage collector calls this method. Thereby causing the adapter object
      * to be notified. The adapter, in turn, notifies all listeners (com.sun.star.uno.XReference)
      */
+    @Override
     protected void finalize() throws java.lang.Throwable
     {
         if (m_adapter != null)

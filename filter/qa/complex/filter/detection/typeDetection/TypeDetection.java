@@ -186,6 +186,7 @@ public class TypeDetection extends ComplexTestCase {
      * A function to tell the framework, which test functions are available.
      * @return All test methods.
      */
+    @Override
     public String[] getTestMethodNames() {
         return new String[]{"checkByURLonly",
                             "checkPreselectedType",

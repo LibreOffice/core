@@ -76,6 +76,7 @@ public class _XDeleteRows extends MultiMethodTest {
         tRes.tested("deleteRows()", rowsBefore - 1 == rowsAfter);
     }
 
+    @Override
     protected void after() {
         disposeEnvironment();
     }

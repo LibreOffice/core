@@ -80,6 +80,7 @@ public class ScAccessiblePreviewCell extends TestCase {
     /**
      * Creates a spreadsheet document.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -95,6 +96,7 @@ public class ScAccessiblePreviewCell extends TestCase {
     /**
      * Disposes a spreadsheet document.
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface
@@ -107,6 +109,7 @@ public class ScAccessiblePreviewCell extends TestCase {
      * Creating a Testenvironment for the interfaces to be tested.
      * Obtains the accessible object for a one of cell in preview mode.
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XCell xCell = null;
 

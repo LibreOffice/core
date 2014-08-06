@@ -98,6 +98,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Gets relations.
     */
+    @Override
     public void before() {
         rowData = (List<Object>) tEnv.getObjRelation("CurrentRowData") ;
         if (rowData == null) {
@@ -671,6 +672,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Disposes environment.
     */
+    @Override
     public void after() {
         disposeEnvironment() ;
     }

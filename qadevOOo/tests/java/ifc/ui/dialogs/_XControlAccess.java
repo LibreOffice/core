@@ -56,6 +56,7 @@ public class _XControlAccess extends MultiMethodTest {
      * @throw StatusException if interface is not supported or
      * properties couldn't be get.
      */
+    @Override
     protected void before() {
         xCI = UnoRuntime.queryInterface
             (XControlInformation.class, oObj);

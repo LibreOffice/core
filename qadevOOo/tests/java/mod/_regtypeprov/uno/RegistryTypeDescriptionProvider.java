@@ -51,6 +51,7 @@ import lib.TestParameters;
 */
 public class RegistryTypeDescriptionProvider extends TestCase {
 
+    @Override
     protected void initialize ( TestParameters Param, PrintWriter log) {
 
     }
@@ -67,6 +68,7 @@ public class RegistryTypeDescriptionProvider extends TestCase {
     *      <code>com.sun.star.uno.XInterface</code> interface.</li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;

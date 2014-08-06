@@ -37,10 +37,12 @@ import test.lib.TestBed;
  * the code.</p>
  */
 public final class Bug108825_Test extends ComplexTestCase {
+    @Override
     public String getTestObjectName() {
         return getClass().getName();
     }
 
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -55,6 +57,7 @@ public final class Bug108825_Test extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             XTest test = UnoRuntime.queryInterface(
                 XTest.class, getBridge(context).getInstance("Test"));
@@ -84,6 +87,7 @@ public final class Bug108825_Test extends ComplexTestCase {
         }
 
         private final class Dummy implements XDummy {
+            @Override
             protected void finalize() {
                 synchronized (lock) {
                     ++finalizedCount;

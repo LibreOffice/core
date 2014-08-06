@@ -44,11 +44,13 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
     {
     }
 
+    @Override
     public void handleComment( char[] data,int pos )
     {
         // insert code to handle comments
     }
 
+    @Override
     public void handleEndTag( HTML.Tag t,int pos )
     {
         if ( t == HTML.Tag.TEXTAREA )
@@ -69,10 +71,12 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
         }
     }
 
+    @Override
     public void handleError( String errorMsg,int pos )
     {
     }
 
+    @Override
     public void handleSimpleTag( HTML.Tag t, MutableAttributeSet a,int pos )
     {
         // insert code to handle simple tags
@@ -118,6 +122,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
 
     }
 
+    @Override
     public void handleStartTag( HTML.Tag t, MutableAttributeSet a,int pos )
     {
         // insert code to handle starting tags

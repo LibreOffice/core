@@ -40,6 +40,7 @@ public class _TextFrame extends MultiPropertyTest {
      * Property tester which switches two shorts.
      */
     protected PropertyTester WModeTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals(new Short(com.sun.star.text.WritingMode2.LR_TB)))

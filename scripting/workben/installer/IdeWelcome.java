@@ -57,6 +57,7 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
 
     }//GEN-END:initComponents
 
+    @Override
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
     }

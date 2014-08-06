@@ -36,6 +36,7 @@ public class _Spreadsheet extends MultiPropertyTest {
      *This class is destined to custom test of property <code>PageStyle</code>.
      */
     protected PropertyTester styleTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             String str = "Default";
             String str2= "Report";

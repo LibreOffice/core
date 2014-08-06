@@ -170,6 +170,7 @@ public class TestParameters extends HashMap<String,Object> {
      * @return The value of this key.
      * @see java.util.HashMap
      */
+    @Override
     public Object get(Object key) {
         Object val = super.get(key);
         if (val == null && DebugIsActive) {
@@ -237,6 +238,7 @@ public class TestParameters extends HashMap<String,Object> {
      * @return The value of this key.
      * @see java.util.HashMap
      */
+    @Override
     public Object put(String key, Object val) {
         return super.put(key,val);
     }

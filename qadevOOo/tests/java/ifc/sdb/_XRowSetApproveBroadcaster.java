@@ -117,6 +117,7 @@ public class _XRowSetApproveBroadcaster extends MultiMethodTest {
     /**
     * Tries to retrieve object relation.
     */
+    @Override
     public void before() {
         checker = (RowSetApproveChecker) tEnv.getObjRelation
             ("XRowSetApproveBroadcaster.ApproveChecker") ;
@@ -196,6 +197,7 @@ public class _XRowSetApproveBroadcaster extends MultiMethodTest {
     /**
     * Disposes object environment.
     */
+    @Override
     public void after() {
         disposeEnvironment() ;
     }

@@ -45,6 +45,7 @@ public class ReportElementReadHandler extends ElementReadHandler
         this.element = element;
     }
 
+    @Override
     public Element getElement()
     {
         return element;
@@ -56,6 +57,7 @@ public class ReportElementReadHandler extends ElementReadHandler
      * @param attrs the attributes.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void startParsing(final Attributes attrs)
             throws SAXException
     {
@@ -74,6 +76,7 @@ public class ReportElementReadHandler extends ElementReadHandler
      * @return the handler or null, if the tagname is invalid.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected XmlReadHandler getHandlerForChild(final String uri,
             final String tagName,
             final Attributes atts)

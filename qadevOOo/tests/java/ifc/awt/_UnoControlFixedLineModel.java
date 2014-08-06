@@ -46,6 +46,7 @@ public class _UnoControlFixedLineModel extends MultiPropertyTest {
     */
     public void _TextColor() {
         testProperty("TextColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(4321) : null ;
             }
@@ -58,6 +59,7 @@ public class _UnoControlFixedLineModel extends MultiPropertyTest {
     */
     public void _TextLineColor() {
         testProperty("TextLineColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(4321) : null ;
             }

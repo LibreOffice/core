@@ -37,6 +37,7 @@ public class CoveredCellReadHandler extends ElementReadHandler
         coveredCell = new Section();
     }
 
+    @Override
     public Element getElement()
     {
         return coveredCell;

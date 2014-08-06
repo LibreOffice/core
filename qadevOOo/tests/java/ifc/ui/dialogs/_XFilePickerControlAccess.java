@@ -61,6 +61,7 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         Short ID = (Short) tEnv.getObjRelation
             ("XFilePickerControlAccess.ControlID") ;

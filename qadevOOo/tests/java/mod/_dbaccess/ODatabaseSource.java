@@ -86,10 +86,12 @@ public class ODatabaseSource extends TestCase {
     * Assigns database's name unique suffix for this object depending
     * on static field. For names differs in different object threads.
     */
+    @Override
     protected void initialize ( TestParameters Param, PrintWriter log) {
         uniqueSuffix = uniqueSuffixStat++ ;
     }
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing not longer needed docs... ");
         DesktopTools.closeDoc(xDBDoc);
@@ -115,6 +117,7 @@ public class ODatabaseSource extends TestCase {
     * @see com.sun.star.sdb.DatabaseContext
     * @see com.sun.star.sdb.DataSource
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;

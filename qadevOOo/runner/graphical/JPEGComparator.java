@@ -120,6 +120,7 @@ class CountNotWhitePixelsFromImage extends CountNotXXXPixelsFromImage
         super(_sFilename);
     }
 
+    @Override
     public void run()
     {
         try
@@ -142,6 +143,7 @@ class CountNotBlackPixelsFromImage extends CountNotXXXPixelsFromImage
         super(_sFilename);
     }
 
+    @Override
     public void run()
     {
         try
@@ -159,6 +161,7 @@ class CountNotBlackPixelsFromImage extends CountNotXXXPixelsFromImage
 public class JPEGComparator extends EnhancedComplexTestCase
 {
 
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[]{"CompareJPEGvsJPEG"};

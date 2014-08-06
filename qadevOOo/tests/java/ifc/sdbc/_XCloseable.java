@@ -76,6 +76,7 @@ public class _XCloseable extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     public void after() {
         disposeEnvironment() ;
     }

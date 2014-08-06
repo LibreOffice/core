@@ -72,7 +72,8 @@ public class _XAccessibleEditableText extends MultiMethodTest {
       * Retrieves object relation. Stores initial component text
       * for restoding it in <code>after</code>.
       */
-     protected void before() {
+     @Override
+    protected void before() {
         Boolean b = (Boolean)
             tEnv.getObjRelation("XAccessibleEditableText.hasAttr");
         if (b != null) {
@@ -527,6 +528,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
     /**
      * Restores initial component text.
      */
+    @Override
     protected void after() {
         oObj.setText(initialText);
     }

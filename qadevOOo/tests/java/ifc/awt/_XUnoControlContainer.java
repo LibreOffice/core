@@ -51,6 +51,7 @@ public class _XUnoControlContainer extends MultiMethodTest {
      * This method gets the object relations.
      *
      */
+    @Override
     protected void before() {
 
         tabControl1 = (XTabController) tEnv.getObjRelation("TABCONTROL1");

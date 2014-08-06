@@ -50,6 +50,7 @@ public class OCommandDefinition extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.sdb.QueryDefinition</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

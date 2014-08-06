@@ -23,6 +23,7 @@ import complexlib.ComplexTestCase;
 import util.WaitUnreachable;
 
 public abstract class TestBase extends ComplexTestCase {
+    @Override
     public final String[] getTestMethodNames() {
         return new String[] { "test" };
     }

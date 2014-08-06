@@ -21,6 +21,7 @@ package graphical;
 public class PostscriptCreator extends EnhancedComplexTestCase
 {
 
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[]{"DocumentToPostscript"};

@@ -119,6 +119,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
+    @Override
     protected void enterStep(int nOldStep, int nNewStep)
     {
         if ((nOldStep >= SOTEMPLATEPAGE) && (nNewStep < SOTEMPLATEPAGE))
@@ -162,6 +163,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
+    @Override
     protected void leaveStep(int nOldStep, int nNewStep)
     {
 
@@ -331,6 +333,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         enableNavigationButtons(false, false, false);
     }
 
+    @Override
     public boolean finishWizard()
     {
         final int ncurStep = getCurrentStep();
@@ -350,6 +353,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         return false;
     }
 
+    @Override
     public void cancelWizard()
     {
         xDialog.endExecute();
@@ -611,10 +615,12 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
+    @Override
     public void disposing(EventObject EventObject)
     {
     }
 
+    @Override
     public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue)
     {
         switch (_ndialogpage)

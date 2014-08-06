@@ -42,6 +42,7 @@ public class _UnoControlButtonModel extends MultiPropertyTest {
     * Redefined method returns value, that differs from property value.
     */
     protected PropertyTester ColorTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (util.ValueComparer.equalValue(oldValue, new Integer(17)))
                 return new Integer(25);
@@ -54,6 +55,7 @@ public class _UnoControlButtonModel extends MultiPropertyTest {
     * Redefined method returns value, that differs from property value.
     */
     protected PropertyTester BoolTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (util.ValueComparer.equalValue(oldValue, new Boolean(true)))
                 return new Boolean(false);

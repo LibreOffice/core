@@ -66,6 +66,7 @@ public class ChXChartDocument extends TestCase {
     /**
     * Disposes Chart documents.
     */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         if( xChartDoc!=null ) {
             log.println( "    closing xChartDoc" );
@@ -105,6 +106,7 @@ public class ChXChartDocument extends TestCase {
     * @see com.sun.star.chart.XChartData
     * @see com.sun.star.chart.ChartDocument
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam,
                                                                  PrintWriter log) {
         // get a soffice factory object

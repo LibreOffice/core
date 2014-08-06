@@ -58,6 +58,7 @@ public class ScAccessibleCsvRuler extends TestCase {
      * @see TestEnvironment
      * @see #getTestEnvironment
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
@@ -141,6 +142,7 @@ public class ScAccessibleCsvRuler extends TestCase {
     * @param Param test parameters
     * @param log writer to log information while testing
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
 /*        log.println( "    closing Dialog " );
         try {
@@ -160,6 +162,7 @@ public class ScAccessibleCsvRuler extends TestCase {
      *
      * @see #initializeTestCase
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
@@ -204,6 +207,7 @@ public class ScAccessibleCsvRuler extends TestCase {
             this.args = Args;
         }
 
+        @Override
         public void run() {
             try {
                 String url= utils.getFullTestURL("10test.csv");

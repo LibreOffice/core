@@ -36,6 +36,7 @@ public class _XSheetFilterable extends MultiMethodTest {
     protected XSpreadsheet oSheet;
     protected XSheetFilterDescriptor desc;
 
+    @Override
     protected void before() {
         oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
 

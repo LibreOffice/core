@@ -45,6 +45,7 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
     XDrawPage drawPage = null;
     static String test_name = "For DrawingDocumentDrawView";
 
+    @Override
     protected void before() {
         drawPage = (XDrawPage)tEnv.getObjRelation("DrawPage");
         XNamed xNamed = UnoRuntime.queryInterface(XNamed.class, drawPage);
@@ -56,10 +57,12 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
     * and compares draw pages.
     */
     protected PropertyTester CurPageTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             return drawPage;
         }
 
+        @Override
         protected boolean compare(Object obj1, Object obj2) {
             XNamed named1 = UnoRuntime.queryInterface(XNamed.class, obj1);
             XNamed named2 = UnoRuntime.queryInterface(XNamed.class, obj2);
@@ -76,6 +79,7 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
             return res;
         }
 
+        @Override
         protected String toString(Object obj) {
             XNamed named = UnoRuntime.queryInterface(XNamed.class, obj);
             String res = (named == null) ? "null" : named.getName();

@@ -52,6 +52,7 @@ public class _XJob extends MultiMethodTest {
      * <code>executeArgs</code> [<code>NamedValue[]</code>]
      * @throw StatusException If relations are not found
      */
+    @Override
     public void before() {
         Object[] XJobArgs = (Object[]) tEnv.getObjRelation("XJobArgs") ;
         if (XJobArgs == null)

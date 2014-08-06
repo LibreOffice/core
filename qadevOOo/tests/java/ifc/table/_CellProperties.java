@@ -55,6 +55,7 @@ public class _CellProperties extends MultiPropertyTest {
      */
     public void _CellStyle() {
         testProperty("CellStyle", new PropertyTester() {
+            @Override
             protected Object getNewValue(String name, Object old) {
                 return "Default".equals(old) ? "Result" : "Default" ;
             }

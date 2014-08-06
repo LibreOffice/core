@@ -48,6 +48,7 @@ public class UnoControlButton extends TestCase {
     private static XTextDocument xTextDoc;
     private static XTextDocument xTD2;
 
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      Param.getMSF());
@@ -64,6 +65,7 @@ public class UnoControlButton extends TestCase {
         }
     }
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
@@ -71,6 +73,7 @@ public class UnoControlButton extends TestCase {
         util.DesktopTools.closeDoc(xTD2);
     }
 
+    @Override
     public TestEnvironment createTestEnvironment(TestParameters Param,
                                                  PrintWriter log) {
         XInterface oObj = null;

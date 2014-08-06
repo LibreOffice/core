@@ -44,6 +44,7 @@ public class Introspection extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.comp.stoc.Introspection</code>.
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;

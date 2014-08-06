@@ -141,6 +141,7 @@ public class _XDialog extends MultiMethodTest {
     /**
     * Disposes object environment.
     */
+    @Override
     public void after() {
         disposeEnvironment() ;
     }

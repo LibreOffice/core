@@ -38,6 +38,7 @@ public class SimpleDataAware extends DataAware
     UIHelper.setEnabled(disableObjects[i],b);
     }
      */
+    @Override
     protected void setToUI(Object value)
     {
         controlValue.set(value, control);
@@ -68,6 +69,7 @@ public class SimpleDataAware extends DataAware
     disableObjects = controls;
     }
      */
+    @Override
     protected Object getFromUI()
     {
         return controlValue.get(control);

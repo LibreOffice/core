@@ -49,6 +49,7 @@ public class SortedDynamicResultSetFactory extends TestCase {
      * Creates an instance of the service
      * <code>com.sun.star.ucb.SortedDynamicResultSetFactory</code>.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
         XInterface oObj = null;

@@ -139,6 +139,7 @@ public class OGridControlModel extends GenericModelTest {
      * @param log the log writer
      */
 
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
 
         super.initialize(tParam, log);
@@ -155,6 +156,7 @@ public class OGridControlModel extends GenericModelTest {
      * @param tParam the test parameter
      * @param log the log writer
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         super.cleanup(tParam, log);
     }
@@ -166,6 +168,7 @@ public class OGridControlModel extends GenericModelTest {
      * @param log the log writer
      * @return lib.TestEnvironment
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
             PrintWriter log) {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
@@ -260,6 +263,7 @@ class OGridControlModelold extends TestCase {
     /**
     * Creates Drawing document.
     */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory((tParam.getMSF()));
 
@@ -275,6 +279,7 @@ class OGridControlModelold extends TestCase {
     /**
     * Disposes drawing document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xDrawDoc ");
 
@@ -310,6 +315,7 @@ class OGridControlModelold extends TestCase {
     *      {@link ifc.container._XContainer} : a column instance. </li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         XInterface oObj = null;

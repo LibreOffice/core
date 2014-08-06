@@ -669,6 +669,7 @@ public class OOoBeanTest
             setLayout(new BorderLayout());
             add(b, BorderLayout.CENTER);
         }
+        @Override
         public Dimension getPreferredSize()
         {
             return new Dimension(200, 200);

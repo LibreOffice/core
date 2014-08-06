@@ -55,6 +55,7 @@ public class ScImportDescriptorBase extends TestCase {
      *    @see PrintWriter
      *
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(  tParam.getMSF() );
 
@@ -80,6 +81,7 @@ public class ScImportDescriptorBase extends TestCase {
      *    @see PrintWriter
      *
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface
@@ -100,6 +102,7 @@ public class ScImportDescriptorBase extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters tParam,
                                                   PrintWriter log )
                                                     throws StatusException {

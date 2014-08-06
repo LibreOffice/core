@@ -35,6 +35,7 @@ import com.sun.star.drawing.XShape;
 public class _ConnectorShape extends MultiPropertyTest {
     public XShape[] conShapes = null;
 
+    @Override
     protected void before() {
         conShapes = (XShape[]) tEnv.getObjRelation("XConnectorShape.Shapes");
     }

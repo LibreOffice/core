@@ -330,6 +330,7 @@ public class Bootstrap {
         final InputStream in, final PrintStream out, final String prefix ) {
 
         new Thread( "Pipe: " + prefix) {
+            @Override
             public void run() {
                 BufferedReader r = new BufferedReader(
                     new InputStreamReader( in ) );

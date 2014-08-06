@@ -137,6 +137,7 @@ public class ScriptBrowseNode extends PropertySet
         return BrowseNodeTypes.SCRIPT;
     }
 
+    @Override
     public String toString() {
         return getName();
     }

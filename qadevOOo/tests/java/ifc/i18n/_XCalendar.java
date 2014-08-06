@@ -68,6 +68,7 @@ public class _XCalendar extends MultiMethodTest {
     double aOriginalDTime = 0;
     Locale[] installed_locales;
 
+    @Override
     public void before() {
         XLocaleData locData = null;
         try {
@@ -91,6 +92,7 @@ public class _XCalendar extends MultiMethodTest {
      * Restore the changed time during the test to the original value of the
      * machine: has to be correct for the following interface tests.
      */
+    @Override
     public void after() {
         oObj.loadDefaultCalendar(installed_locales[0]);
         oObj.setDateTime(aOriginalDTime);

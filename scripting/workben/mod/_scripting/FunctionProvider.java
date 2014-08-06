@@ -33,9 +33,11 @@ import com.sun.star.frame.XDesktop;
 public class FunctionProvider extends TestCase {
 
     String docPath = null;
+    @Override
     public void initialize( TestParameters tParam, PrintWriter log ) {
     }
 
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log ) throws StatusException {
         XInterface oObj = null;
@@ -63,6 +65,7 @@ public class FunctionProvider extends TestCase {
         return tEnv ;
     }
 
+    @Override
     public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
             TestParameters tParam) {
     }

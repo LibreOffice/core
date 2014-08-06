@@ -57,6 +57,7 @@ public class UIConfigurationManager extends TestCase {
      * @param log The log writer.
      * @return The test environment.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         XMultiServiceFactory xMSF = tParam.getMSF();

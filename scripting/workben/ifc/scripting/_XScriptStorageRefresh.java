@@ -34,6 +34,7 @@ public class _XScriptStorageRefresh extends MultiMethodTest {
     /**
     * Retrieves object relation.
     */
+    @Override
     public void before() throws StatusException {
     }
 

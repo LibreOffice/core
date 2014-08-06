@@ -62,6 +62,7 @@ public class Invocation extends TestCase {
     *   <code>com.sun.star.script.XInvocation</code> interface.
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF();
 

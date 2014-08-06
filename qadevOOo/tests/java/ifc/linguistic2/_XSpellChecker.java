@@ -41,6 +41,7 @@ public class _XSpellChecker extends MultiMethodTest {
     public XSpellChecker oObj = null;
     XSpellChecker alternative = null;
 
+    @Override
     public void before() {
         alternative = (XSpellChecker) tEnv.getObjRelation("AlternativeChecker");
         if  (alternative == null) throw new StatusException(Status.failed

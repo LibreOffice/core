@@ -69,6 +69,7 @@ public class ScCellFieldObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -86,6 +87,7 @@ public class ScCellFieldObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
@@ -110,6 +112,7 @@ public class ScCellFieldObj extends TestCase {
     *      {@link ifc.text._XTextContent} (the text of the cell)</li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
 

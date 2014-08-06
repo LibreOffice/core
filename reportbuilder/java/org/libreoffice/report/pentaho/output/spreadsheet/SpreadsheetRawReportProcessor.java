@@ -95,6 +95,7 @@ public class SpreadsheetRawReportProcessor extends AbstractReportProcessor
         processReportRun(job, reportTarget);
     }
 
+    @Override
     protected ReportContext createReportContext(final ReportJob job,
             final ReportTarget target)
     {

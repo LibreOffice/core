@@ -33,6 +33,7 @@ import lib.TestParameters;
 public class StatusBarControllerFactory extends TestCase {
     XInterface oObj = null;
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         XMultiServiceFactory xMSF = tParam.getMSF();

@@ -53,6 +53,7 @@ public class _XTwoAxisYSupplier extends MultiMethodTest {
     /**
     * Forces object environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

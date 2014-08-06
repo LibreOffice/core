@@ -65,6 +65,7 @@ public class DicList extends TestCase {
      * entry is added to each of dictionaries and they both are activated.
      * The distionary list is retruned as a component for testing.
      */
+    @Override
     public synchronized TestEnvironment createTestEnvironment( TestParameters Param, PrintWriter log )
            throws StatusException {
 

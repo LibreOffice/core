@@ -122,6 +122,7 @@ class OnewayExecutor extends Thread
      * give him all necessary parameters.
      * After that we die by ourselves ...
      */
+    @Override
     public void run()
     {
         if (m_rLink==null)

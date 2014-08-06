@@ -68,6 +68,7 @@ public class ScAnnotationsObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -85,6 +86,7 @@ public class ScAnnotationsObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
@@ -98,6 +100,7 @@ public class ScAnnotationsObj extends TestCase {
     * of annotations is retrieved using spreadsheet's
     * <code>com.sun.star.sheet.XSheetAnnotationsSupplier</code> interface.
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

@@ -234,10 +234,15 @@ public class AccessibilityTree
         {
             maTree=aTree;
         }
+        @Override
         public void mousePressed(MouseEvent e) { popupTrigger(e); }
+        @Override
         public void mouseClicked(MouseEvent e) { popupTrigger(e); }
+        @Override
         public void mouseEntered(MouseEvent e) { popupTrigger(e); }
+        @Override
         public void mouseExited(MouseEvent e) { popupTrigger(e); }
+        @Override
         public void mouseReleased(MouseEvent e) { popupTrigger(e); }
 
         public boolean popupTrigger( MouseEvent e )
@@ -359,12 +364,14 @@ public class AccessibilityTree
     /** expand all nodes */
     class AllExpander extends Expander
     {
+        @Override
         public boolean expand(Object aObject) { return true; }
     }
 
     /** expand all nodes with accessibility roles > 100 */
     class ShapeExpander extends Expander
     {
+        @Override
         public boolean expand (Object aObject)
         {
             if (aObject instanceof AccTreeNode)

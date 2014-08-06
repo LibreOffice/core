@@ -191,6 +191,7 @@ public class _XNamedRange extends MultiMethodTest {
     /**
     * Forces object environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

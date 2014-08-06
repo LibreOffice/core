@@ -99,17 +99,20 @@ public class TimeStampControl extends DatabaseControl
         oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sTimeAppendix);
     }
 
+    @Override
     public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception
     {
         oDateControl.setPropertyValue(_sPropertyName, _aPropertyValue);
         oTimeControl.setPropertyValue(_sPropertyName, _aPropertyValue);
     }
 
+    @Override
     public int getPreferredWidth()
     {
         return nDBWidth;
     }
 
+    @Override
     public void setSize(Size _aSize)
     {
         try
@@ -125,17 +128,20 @@ public class TimeStampControl extends DatabaseControl
         }
     }
 
+    @Override
     public Size getSize()
     {
         int ncontrolwidth = oDateControl.xShape.getSize().Width + oTimeControl.xShape.getSize().Width;
         return new Size(ncontrolwidth, oDateControl.xShape.getSize().Height);
     }
 
+    @Override
     public Point getPosition()
     {
         return xShapeGroup.getPosition();
     }
 
+    @Override
     public void setPosition(Point _aPoint)
     {
         // --> TESTING
@@ -145,6 +151,7 @@ public class TimeStampControl extends DatabaseControl
         Point aAfterPt = xShapeGroup.getPosition();
     }
 
+    @Override
     public int getControlType()
     {
         return FormHandler.SODATETIMECONTROL;

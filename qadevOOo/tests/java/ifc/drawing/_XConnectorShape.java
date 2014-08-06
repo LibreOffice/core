@@ -60,6 +60,7 @@ public class _XConnectorShape extends MultiMethodTest {
      * @throw StatusException If the relation is not found or shapes don't
      * support <code>XConnectableShape</code> interface.
      */
+    @Override
     public void before() {
         log.println("No shapes implementing XConnectableShape still found.");
         XShape[] shapes = (XShape[])

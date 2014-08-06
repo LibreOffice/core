@@ -83,6 +83,7 @@ public class ComplexDataBaseOutProducer extends DataBaseOutProducer {
      * @parameter log A log writer
      * @return True, if everything worked.
      */
+    @Override
     protected boolean prepareDataBase(LogWriter log) {
         executeSQLCommand("SELECT id AS \"test_run.id\", api_version_id, description, date FROM test_run" +
                           " WHERE date = \"$date\" AND description = \"$test_run_description\";", true);
@@ -112,6 +113,7 @@ public class ComplexDataBaseOutProducer extends DataBaseOutProducer {
      * @parameter log A log writer
      * @return True, if everything worked.
      */
+    @Override
     protected boolean insertEntry(LogWriter log) {
 
         if ( m_bDebug ) {

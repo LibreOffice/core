@@ -68,6 +68,7 @@ public class XMLMetaImporter extends TestCase {
     /**
     * New spreadsheet document created.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -86,6 +87,7 @@ public class XMLMetaImporter extends TestCase {
     /**
     * Spreadsheet document destroyed.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing document " );
         util.DesktopTools.closeDoc(comp);
@@ -111,6 +113,7 @@ public class XMLMetaImporter extends TestCase {
     *      {@link ifc.document._XImporter} interface </li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment( TestParameters tParam,
                                                   PrintWriter log )
                                                     throws StatusException {

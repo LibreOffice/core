@@ -37,6 +37,7 @@ public class _XMultipleOperation extends MultiMethodTest {
     protected XSpreadsheet oSheet = null;
     boolean both = true;
 
+    @Override
     protected void before() {
         oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
 
@@ -167,6 +168,7 @@ public class _XMultipleOperation extends MultiMethodTest {
     /**
      * Restores initial component text.
      */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

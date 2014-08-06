@@ -27,6 +27,7 @@ public class _XModuleUIConfigurationManager extends MultiMethodTest {
     public XModuleUIConfigurationManager oObj = null;
     private String resourceUrl = null;
 
+    @Override
     public void before() {
         resourceUrl = (String)tEnv.getObjRelation("XModuleUIConfigurationManager.ResourceURL");
     }

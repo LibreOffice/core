@@ -64,6 +64,7 @@ public class MethodThread extends Thread
     /**
      * Invoke the method.
      */
+    @Override
     public void run()
     {
         try
@@ -115,6 +116,7 @@ public class MethodThread extends Thread
      * Stop the running method.
      * @deprecated
      */
+    @Override
     public void destroy()
     {
         stop();

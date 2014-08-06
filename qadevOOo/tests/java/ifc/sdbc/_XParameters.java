@@ -99,6 +99,7 @@ public class _XParameters extends MultiMethodTest {
     /**
     * Gets object relation
     */
+    @Override
     public void before() {
         data = (List<Object>) tEnv.getObjRelation("XParameters.ParamValues") ;
         if (data == null) {

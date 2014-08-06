@@ -29,16 +29,19 @@ public class ColumnarThreeColumns extends ColumnarTwoColumns
         super(_xDefinitionAccess, _aResource);
     }
 
+    @Override
     public String getName()
     {
         return "ColumnarThreeColumnsLayoutOfData";
     }
 
+    @Override
     public String getLocalizedName()
     {
         return getResource().getResText(UIConsts.RID_REPORT + 83);
     }
 
+    @Override
     protected void insertDetailFields()
     {
         insertDetailFields(3);

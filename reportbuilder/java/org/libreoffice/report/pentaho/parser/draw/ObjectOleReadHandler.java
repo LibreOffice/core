@@ -47,6 +47,7 @@ public class ObjectOleReadHandler extends ElementReadHandler
      * @param attrs the attributes.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void startParsing(final Attributes attrs) throws SAXException
     {
         super.startParsing(attrs);
@@ -68,6 +69,7 @@ public class ObjectOleReadHandler extends ElementReadHandler
         }
     }
 
+    @Override
     public Element getElement()
     {
         return element;

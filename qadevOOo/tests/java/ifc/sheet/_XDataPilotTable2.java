@@ -70,6 +70,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
      */
     private class ResultCellFailure extends com.sun.star.uno.Exception {}
 
+    @Override
     protected void before()
     {
         Object o = tEnv.getObjRelation("DATAPILOTTABLE2");

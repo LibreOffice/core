@@ -53,6 +53,7 @@ public class _XTreeNode extends MultiMethodTest {
     String msNodeGraphicURL = null;
 
 
+    @Override
     public void before(){
         msDisplayValue = (String) tEnv.getObjRelation("XTreeNode_DisplayValue");
         if (msDisplayValue == null){

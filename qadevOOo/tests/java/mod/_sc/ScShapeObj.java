@@ -36,6 +36,7 @@ public class ScShapeObj extends TestCase {
 
     static XComponent xSheetDoc;
 
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
@@ -50,6 +51,7 @@ public class ScShapeObj extends TestCase {
         }
     }
 
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         util.DesktopTools.closeDoc(xSheetDoc);
@@ -74,6 +76,7 @@ public class ScShapeObj extends TestCase {
      *      service. </li>
      * </ul>
      */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
 

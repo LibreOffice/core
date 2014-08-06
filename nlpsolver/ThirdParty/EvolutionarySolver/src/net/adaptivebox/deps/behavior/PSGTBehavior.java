@@ -83,6 +83,7 @@ public class PSGTBehavior extends AbsGTBehavior {
     pold_t = pold;
   }
 
+  @Override
   public void generateBehavior(SearchPoint trailPoint, ProblemEncoder problemEncoder) {
     SearchPoint gbest_t = socialLib.getGbest();
     DesignSpace designSpace = problemEncoder.getDesignSpace();
@@ -107,6 +108,7 @@ public class PSGTBehavior extends AbsGTBehavior {
     }
   }
 
+  @Override
   public void testBehavior(SearchPoint trailPoint, IGoodnessCompareEngine qualityComparator) {
     Library.replace(qualityComparator, trailPoint, pbest_t);
     pold_t.importLocation(pcurrent_t);

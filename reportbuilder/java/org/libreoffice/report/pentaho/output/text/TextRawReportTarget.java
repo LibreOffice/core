@@ -140,6 +140,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         this.tableLayoutConfig = TABLE_LAYOUT_SINGLE_DETAIL_TABLE;
     }
 
+    @Override
     protected String getTargetMimeType()
     {
         return "application/vnd.oasis.opendocument.text";
@@ -425,6 +426,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
      * @throws org.jfree.report.ReportProcessingException
      *          if some other error occured.
      */
+    @Override
     public void startReport(final ReportStructureRoot report)
             throws DataSourceException, ReportProcessingException
     {
@@ -505,6 +507,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         return variablesSectionStyle;
     }
 
+    @Override
     protected void startContent(final AttributeMap attrs)
             throws IOException, DataSourceException, ReportProcessingException
     {
@@ -527,6 +530,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
     }
 
+    @Override
     protected void startOther(final AttributeMap attrs)
             throws IOException, DataSourceException, ReportProcessingException
     {
@@ -1049,6 +1053,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
     }
 
+    @Override
     protected void startReportSection(final AttributeMap attrs, final int role)
             throws ReportProcessingException
     {
@@ -1098,6 +1103,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void startGroup(final AttributeMap attrs)
     {
         super.startGroup(attrs);
@@ -1134,6 +1140,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void startGroupInstance(final AttributeMap attrs)
     {
         if (getGroupContext().isGroupWithRepeatingSection())
@@ -1142,6 +1149,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void endGroup(final AttributeMap attrs)
             throws ReportProcessingException
     {
@@ -1174,6 +1182,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void endReportSection(final AttributeMap attrs, final int role)
             throws IOException, ReportProcessingException
     {
@@ -1234,6 +1243,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
     }
 
+    @Override
     public void endReport(final ReportStructureRoot report)
             throws DataSourceException, ReportProcessingException
     {
@@ -1277,6 +1287,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void endOther(final AttributeMap attrs)
             throws IOException, DataSourceException, ReportProcessingException
     {
@@ -1383,6 +1394,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
+    @Override
     protected void endGroupBody(final AttributeMap attrs)
             throws IOException
     {
@@ -1396,6 +1408,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
     }
 
+    @Override
     protected void endContent(final AttributeMap attrs)
             throws IOException, DataSourceException, ReportProcessingException
     {

@@ -80,6 +80,7 @@ public class TextRawReportProcessor extends SinglePassReportProcessor
         this.dataSourceFactory = dataSourceFactory;
     }
 
+    @Override
     protected ReportTarget createReportTarget(final ReportJob job)
             throws ReportProcessingException
     {
@@ -90,6 +91,7 @@ public class TextRawReportProcessor extends SinglePassReportProcessor
                 inputRepository, outputRepository, targetName, imageService, dataSourceFactory);
     }
 
+    @Override
     protected ReportContext createReportContext(final ReportJob job,
             final ReportTarget target)
     {

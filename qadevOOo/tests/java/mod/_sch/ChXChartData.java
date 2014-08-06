@@ -45,6 +45,7 @@ public class ChXChartData extends TestCase {
     /**
     * Creates Chart document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -62,6 +63,7 @@ public class ChXChartData extends TestCase {
     /**
     * Disposes Chart document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         if( xChartDoc!=null ) {
             log.println( "    closing xChartDoc" );
@@ -76,6 +78,7 @@ public class ChXChartData extends TestCase {
     * of the service <code>com.sun.star.chart.ChartData</code>.
     * @see com.sun.star.chart.ChartData
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         // get the Data

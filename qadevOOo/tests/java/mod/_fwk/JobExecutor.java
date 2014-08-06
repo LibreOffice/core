@@ -99,6 +99,7 @@ public class JobExecutor extends TestCase {
      * Note: SOffice is started again while the next
      * <code>(XMultiServiceFactory)SOLink.getMSF()</code>  call.
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         boolean serviceRegistered = false;
         boolean configured = false;
@@ -197,6 +198,7 @@ public class JobExecutor extends TestCase {
      * Service <code>com.sun.star.comp.framework.JobExecutor</code>
      * is created.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
@@ -222,6 +224,7 @@ public class JobExecutor extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
     }
 }

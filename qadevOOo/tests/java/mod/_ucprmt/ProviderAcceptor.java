@@ -31,6 +31,7 @@ import com.sun.star.uno.XInterface;
 
 public class ProviderAcceptor extends TestCase {
 
+    @Override
     public TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
 

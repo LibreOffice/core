@@ -32,6 +32,7 @@ public abstract class UnconstrainedProblemEncoder extends ProblemEncoder {
     setDefaultYAt(0, BasicBound.MINDOUBLE, BasicBound.MINDOUBLE);
   }
 
+  @Override
   protected double calcTargetAt(int index, double[] VX) {
     return calcTarget(VX);
   }

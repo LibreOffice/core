@@ -66,6 +66,7 @@ public class XMLContentExporter extends TestCase {
     /**
      * New text document created.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
@@ -84,6 +85,7 @@ public class XMLContentExporter extends TestCase {
     /**
      * Close document
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         if( xChartDoc!=null ) {
             log.println( "    closing xChartDoc" );
@@ -113,6 +115,7 @@ public class XMLContentExporter extends TestCase {
     *      {@link ifc.document._XExporter} interface </li>
     * </ul>
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;

@@ -50,6 +50,7 @@ public class _XSortable extends MultiMethodTest {
     XSortChecker checker = null;
     PropertyValue[] oPV = null;
 
+    @Override
     protected void before() {
         checker = (XSortChecker) tEnv.getObjRelation("SORTCHECKER");
 
@@ -222,6 +223,7 @@ public class _XSortable extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

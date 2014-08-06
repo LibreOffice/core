@@ -60,6 +60,7 @@ public class _XImplementationLoader extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         implLoader = (String) tEnv.getObjRelation("ImplementationLoader") ;
         implUrl = (String) tEnv.getObjRelation("ImplementationUrl") ;
@@ -171,6 +172,7 @@ public class _XImplementationLoader extends MultiMethodTest {
     /**
     * Forces object recreation.
     */
+    @Override
     public void after() {
         this.disposeEnvironment() ;
     }

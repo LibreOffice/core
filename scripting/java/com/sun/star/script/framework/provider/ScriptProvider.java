@@ -443,6 +443,7 @@ public abstract class ScriptProvider
         return BrowseNodeTypes.CONTAINER;
     }
 
+    @Override
     public String toString()
     {
         return getName();

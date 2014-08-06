@@ -61,6 +61,7 @@ public class Frame extends TestCase {
     /**
     * Creates a text document and obtains a frame of current controller.
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
         PrintWriter log ) throws StatusException {
 
@@ -99,6 +100,7 @@ public class Frame extends TestCase {
      * the frame containing the document (for case when the frame
      * contains no model after some interafce manipulations).
      */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         try {
             XCloseable xTextClose = UnoRuntime.queryInterface(XCloseable.class, xTextDoc);

@@ -238,6 +238,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             this.groupWithRepeatingSection = groupWithRepeatingSection;
         }
 
+        @Override
         public String toString()
         {
             return "GroupContext{" + "parent=" + parent + ", iterationCount=" + iterationCount + ", groupWithRepeatingSection=" + groupWithRepeatingSection + '}';

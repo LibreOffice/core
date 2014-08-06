@@ -33,6 +33,7 @@ public class TestApplet extends java.applet.Applet {
     /** Initialization method that will be called after the applet is loaded
      *  into the browser.
      */
+    @Override
     public void init () {
         setBackground( Color.green);
         resize( 300, 300);
@@ -56,6 +57,7 @@ public class TestApplet extends java.applet.Applet {
 
     }
 
+    @Override
     public void paint( Graphics g) {
         super.paint( g);
     }

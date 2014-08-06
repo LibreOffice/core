@@ -314,7 +314,8 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         };
 
      new Thread( doRun ) {
-         public void run() { javax.swing.SwingUtilities.invokeLater(doRun); }
+         @Override
+        public void run() { javax.swing.SwingUtilities.invokeLater(doRun); }
      }.start();
     }
 

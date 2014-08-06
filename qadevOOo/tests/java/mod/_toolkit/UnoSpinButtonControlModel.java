@@ -35,6 +35,7 @@ public class UnoSpinButtonControlModel extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.awt.UnoControlSpinButtonModel</code>.
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log)
         throws StatusException {

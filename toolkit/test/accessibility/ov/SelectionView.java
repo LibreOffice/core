@@ -70,6 +70,7 @@ class SelectionView
         Layout();
     }
 
+    @Override
     public String GetTitle ()
     {
         return "Selection";
@@ -127,6 +128,7 @@ class SelectionView
     }
 
 
+    @Override
     public void SetObject (XAccessibleContext xContext)
     {
         mxSelection = UnoRuntime.queryInterface(
@@ -135,6 +137,7 @@ class SelectionView
     }
 
 
+    @Override
     public void Update ()
     {
         maChildrenSelector.removeAll ();
@@ -228,6 +231,7 @@ class SelectionView
     }
 
 
+    @Override
     public void notifyEvent (AccessibleEventObject aEvent)
     {
         if (aEvent.EventId == AccessibleEventId.SELECTION_CHANGED)

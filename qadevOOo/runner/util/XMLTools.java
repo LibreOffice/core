@@ -284,6 +284,7 @@ public class XMLTools {
             printXMLData = false ;
         }
 
+        @Override
         public void startDocument() {
             super.startDocument();
 
@@ -294,6 +295,7 @@ public class XMLTools {
 
             docStarted = true ;
         }
+        @Override
         public void endDocument() {
             super.endDocument();
             if (!docStarted) {
@@ -302,6 +304,7 @@ public class XMLTools {
             }
             docEnded = true ;
         }
+        @Override
         public void startElement(String name, XAttributeList attr) {
             super.startElement(name, attr);
             if (attr == null) {
@@ -311,6 +314,7 @@ public class XMLTools {
             }
             tagStack.add(0, name) ;
         }
+        @Override
         public void endElement(String name) {
             super.endElement(name);
             if (wellFormed) {
@@ -402,6 +406,7 @@ public class XMLTools {
             chars.put(ch, outerTag) ;
         }
 
+        @Override
         public void startElement(String name, XAttributeList attrs) {
             super.startElement(name, attrs) ;
             if (tags.containsKey(name)) {
@@ -424,6 +429,7 @@ public class XMLTools {
             }
         }
 
+        @Override
         public void characters(String ch) {
             super.characters(ch) ;
 
@@ -564,6 +570,7 @@ public class XMLTools {
         /**
          * Gets tag String description.
          */
+        @Override
         public String toString() {
             String ret = "<" + name ;
             for (int i = 0; i < attrList.length; i++) {
@@ -648,6 +655,7 @@ public class XMLTools {
             chars.add(new Object[] {ch.trim(), outerTag}) ;
         }
 
+        @Override
         public void startElement(String name, XAttributeList attr) {
             try {
             super.startElement(name, attr);
@@ -683,6 +691,7 @@ public class XMLTools {
             }
         }
 
+        @Override
         public void characters(String ch) {
             super.characters(ch) ;
             for (int i = 0; i < chars.size(); i++) {
@@ -708,6 +717,7 @@ public class XMLTools {
             }
         }
 
+        @Override
         public void endElement(String name) {
             try {
             super.endElement(name);

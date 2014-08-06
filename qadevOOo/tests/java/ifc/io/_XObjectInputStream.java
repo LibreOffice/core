@@ -158,6 +158,7 @@ public class _XObjectInputStream extends MultiMethodTest {
     /**
     * Forces object environment recreation.
     */
+    @Override
     public void after() {
         this.disposeEnvironment() ;
     }

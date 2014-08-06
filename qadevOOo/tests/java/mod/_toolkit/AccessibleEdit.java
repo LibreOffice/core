@@ -85,6 +85,7 @@ public class AccessibleEdit extends TestCase {
      * button 'Close' (for closing this dialog when disposing)
      * walking through the accessible component tree.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
@@ -183,6 +184,7 @@ public class AccessibleEdit extends TestCase {
     /**
      * Closes dialog using action of button 'Close'
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    Closing dialog ... ");
 
@@ -200,6 +202,7 @@ public class AccessibleEdit extends TestCase {
     /**
      * Creates writer document
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(

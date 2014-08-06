@@ -26,6 +26,7 @@ public class CrashLoopTest extends ReferenceBuilder
      * In this case it is the actual name of the service.
      * @return The tested service.
      */
+    @Override
     public String getTestObjectName() {
         return "CrashLoopTest runner";
     }
@@ -36,6 +37,7 @@ public class CrashLoopTest extends ReferenceBuilder
      * Return all test methods.
      * @return The test methods.
      */
+    @Override
     public String[] getTestMethodNames() {
         return new String[]{"testcrashandloops"};
     }

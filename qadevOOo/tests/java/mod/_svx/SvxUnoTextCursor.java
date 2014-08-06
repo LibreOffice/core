@@ -50,6 +50,7 @@ public class SvxUnoTextCursor extends TestCase {
      *    @see PrintWriter
      *
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         try {
             log.println( "creating a drawdoc" );
@@ -72,6 +73,7 @@ public class SvxUnoTextCursor extends TestCase {
      *    @see PrintWriter
      *
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xDrawDoc " );
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -89,6 +91,7 @@ public class SvxUnoTextCursor extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters tParam,
                                                   PrintWriter log )
                                                     throws StatusException {

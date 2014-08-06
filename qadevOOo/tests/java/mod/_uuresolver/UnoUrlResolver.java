@@ -32,6 +32,7 @@ import com.sun.star.uno.XInterface;
 public class UnoUrlResolver extends TestCase {
 
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF();

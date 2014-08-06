@@ -45,6 +45,7 @@ public class AccessibleOLEShape extends TestCase {
     static XComponent xDrawDoc;
     static XModel aModel;
 
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
@@ -64,11 +65,13 @@ public class AccessibleOLEShape extends TestCase {
     /**
      * Disposes the Draw document loaded before.
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xDrawDoc " );
         util.DesktopTools.closeDoc(xDrawDoc);
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
 

@@ -28,6 +28,7 @@ import tools.NameProvider;
 class AccessibleRelationHandler
     extends NodeHandler
 {
+    @Override
     public NodeHandler createHandler( XAccessibleContext xContext )
     {
         AccessibleRelationHandler aHandler = null;
@@ -51,6 +52,7 @@ class AccessibleRelationHandler
             maChildList.setSize( 1 );
     }
 
+    @Override
     public AccessibleTreeNode createChild( AccessibleTreeNode aParent,
                                            int nIndex )
     {

@@ -25,6 +25,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
 public final class LocalServiceTest extends TestBase {
+    @Override
     protected TestServiceFactory getTestServiceFactory() throws Exception {
         return new TestServiceFactory() {
                 public Object get() throws Exception {

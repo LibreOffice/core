@@ -67,6 +67,7 @@ public class XMLMetaExporter extends TestCase {
     /**
      * New math document created.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -83,6 +84,7 @@ public class XMLMetaExporter extends TestCase {
     /**
      * Document disposed here.
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xMathDoc " );
         xMathDoc.dispose();
@@ -109,6 +111,7 @@ public class XMLMetaExporter extends TestCase {
     *      {@link ifc.document._XExporter} interface </li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF() ;

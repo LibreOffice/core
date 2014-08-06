@@ -26,6 +26,7 @@ public class _PresentationView extends MultiPropertyTest {
      * Property tester which changes DrawPage.
      */
     protected PropertyTester PageTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals(tEnv.getObjRelation("FirstPage")))

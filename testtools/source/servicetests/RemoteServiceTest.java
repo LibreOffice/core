@@ -34,6 +34,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 public final class RemoteServiceTest extends TestBase {
+    @Override
     protected TestServiceFactory getTestServiceFactory() throws Exception {
         final Process p = Runtime.getRuntime().exec(new String[] {
             "java", "-classpath", System.getProperty("java.class.path"),
@@ -87,6 +88,7 @@ public final class RemoteServiceTest extends TestBase {
     private void pipe(final InputStream in, final PrintStream out,
                       final String prefix) {
         new Thread("Pipe: " + prefix) {
+            @Override
             public void run() {
                 BufferedReader r
                     = new BufferedReader(new InputStreamReader(in));

@@ -38,6 +38,7 @@ public class _XExtendedCalendar extends MultiMethodTest {
     /**
      * Load a calendar
      */
+    @Override
     public void before() {
         Locale[] installed_locales = null;
         XLocaleData locData = null;

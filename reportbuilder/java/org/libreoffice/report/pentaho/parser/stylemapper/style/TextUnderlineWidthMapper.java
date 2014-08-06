@@ -41,6 +41,7 @@ public class TextUnderlineWidthMapper extends OneOfConstantsMapper
         addMapping("thick", BorderWidth.THICK);
     }
 
+    @Override
     public void updateStyle(final String uri,
             final String attrName,
             final String attrValue,

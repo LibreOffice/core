@@ -85,6 +85,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
+    @Override
     protected void leaveStep(int nOldStep, int nNewStep)
     {
         switch (nOldStep)
@@ -107,6 +108,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
+    @Override
     protected void enterStep(int nOldStep, int nNewStep)
     {
         switch (nNewStep)
@@ -131,6 +133,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#iscompleted(int)
      */
+    @Override
     public boolean iscompleted(int _ndialogpage)
     {
         switch (_ndialogpage)
@@ -155,6 +158,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#setcompleted(int, boolean)
      */
+    @Override
     public void setcompleted(int _ndialogpage, boolean _biscompleted)
     {
         boolean bScenarioiscompleted = _biscompleted;
@@ -276,6 +280,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         return bIsSuccessfull;
     }
 
+    @Override
     public boolean finishWizard()
     {
         super.switchToStep(super.getCurrentStep(), SOFINALPAGE);
@@ -332,6 +337,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
+    @Override
     public void cancelWizard()
     {
         xDialog.endExecute();

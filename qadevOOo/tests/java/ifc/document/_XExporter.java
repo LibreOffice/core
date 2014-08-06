@@ -49,6 +49,7 @@ public class _XExporter extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         source = (XComponent) tEnv.getObjRelation("SourceDocument") ;
 

@@ -86,6 +86,7 @@ public class _BaseFrame extends MultiPropertyTest {
     * Redefined method returns value, that differs from property value.
     */
     protected PropertyTester StringTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (str1.equals(oldValue))
                 return str2;

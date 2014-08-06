@@ -42,6 +42,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sdbc._XDriverManager
 */
 public class OConnectionPool extends TestCase {
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XMultiServiceFactory xMSF = Param.getMSF();

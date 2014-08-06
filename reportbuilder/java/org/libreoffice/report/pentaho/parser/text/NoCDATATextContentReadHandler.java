@@ -75,6 +75,7 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
      * @param attrs the attributes.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void startParsing(final Attributes attrs) throws SAXException
     {
         super.startParsing(attrs);
@@ -94,6 +95,7 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
      * @return the handler or null, if the tagname is invalid.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected XmlReadHandler getHandlerForChild(final String uri,
             final String tagName,
             final Attributes atts)
@@ -157,6 +159,7 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void doneParsing() throws SAXException
     {
         for (int i = 0; i < children.size(); i++)
@@ -174,6 +177,7 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
         }
     }
 
+    @Override
     public Element getElement()
     {
         return section;

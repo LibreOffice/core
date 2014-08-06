@@ -124,6 +124,7 @@ public class SbaXGridControl extends TestCase {
     /**
     * Creates Writer document.
     */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
 
@@ -140,6 +141,7 @@ public class SbaXGridControl extends TestCase {
     /**
     * Disposes Writer document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         //closing the appearing dialog before disposing the document
         XInterface toolkit = null;
@@ -224,6 +226,7 @@ public class SbaXGridControl extends TestCase {
     *      inserted into collection. Is a column instance.</li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;

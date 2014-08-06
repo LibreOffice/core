@@ -27,6 +27,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 class AccessibleSelectionHandler
     extends NodeHandler
 {
+    @Override
     public NodeHandler createHandler( XAccessibleContext xContext )
     {
         XAccessibleSelection xSelection =
@@ -46,6 +47,7 @@ class AccessibleSelectionHandler
             maChildList.setSize( 2 );
     }
 
+    @Override
     public AccessibleTreeNode createChild( AccessibleTreeNode aParent,
                                            int nIndex )
     {
@@ -120,6 +122,7 @@ class AccessibleSelectionHandler
     }
 
 
+    @Override
     public String[] getActions (AccessibleTreeNode aNode)
     {
         if( aNode instanceof AccTreeNode )
@@ -134,6 +137,7 @@ class AccessibleSelectionHandler
         return new String[0];
     }
 
+    @Override
     public void performAction (AccessibleTreeNode aNode, int nIndex)
     {
         new SelectionDialog( (AccTreeNode)aNode ).show();

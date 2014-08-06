@@ -52,6 +52,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -60,6 +61,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String getTestObjectName()
     {
         return "Form Control Spreadsheet Cell Binding Test";

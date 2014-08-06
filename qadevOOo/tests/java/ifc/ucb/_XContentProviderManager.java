@@ -92,6 +92,7 @@ public class _XContentProviderManager extends MultiMethodTest {
      * @see #firstContentProvider
      * @see #contentProvider
      */
+    @Override
     public void before() {
         XMultiServiceFactory xMSF = tParam.getMSF();
 

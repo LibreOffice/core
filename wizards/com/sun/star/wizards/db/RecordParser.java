@@ -285,6 +285,7 @@ public class RecordParser extends QueryMetaData
         return true;
     }
 
+    @Override
     public void dispose()
     {
         if (xRowSetComponent != null)

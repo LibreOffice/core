@@ -30,6 +30,7 @@ public class TestSkeleton extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -38,6 +39,7 @@ public class TestSkeleton extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String getTestObjectName()
     {
         return "Test Skeleton";

@@ -36,6 +36,7 @@ public class _DateField extends MultiPropertyTest {
     */
     public void _DefaultDate() {
         testProperty("DefaultDate", new PropertyTester() {
+            @Override
             protected Object getNewValue(String prop, Object old) {
                 return util.utils.isVoid(old) ? new Integer(20010507) :
                     super.getNewValue(prop, old) ;

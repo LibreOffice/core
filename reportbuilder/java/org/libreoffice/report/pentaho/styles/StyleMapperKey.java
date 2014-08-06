@@ -72,6 +72,7 @@ public final class StyleMapperKey
         return attributeName;
     }
 
+    @Override
     public boolean equals(final Object o)
     {
         if (this != o)
@@ -101,6 +102,7 @@ public final class StyleMapperKey
         return result;
     }
 
+    @Override
     public int hashCode()
     {
         return hashCode;

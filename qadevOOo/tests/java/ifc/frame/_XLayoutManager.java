@@ -34,6 +34,7 @@ public class _XLayoutManager extends MultiMethodTest {
     private XFrame xFrame = null;
     private String sElementName = "private:resource/menubar/myMenu";
 
+    @Override
     public void before() {
         xFrame = (XFrame)tEnv.getObjRelation("XLayoutManager.Frame");
     }

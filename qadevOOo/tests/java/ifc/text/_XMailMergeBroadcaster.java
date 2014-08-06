@@ -69,6 +69,7 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
      * [<code>XJob</code>]
      * @throw StatusException If relations are not found
      */
+    @Override
     public void before() {
         NamedValue[] executeArgs = (NamedValue[]) tEnv.getObjRelation("executeArgs") ;
         if (executeArgs == null)

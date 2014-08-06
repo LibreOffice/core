@@ -20,6 +20,7 @@ package graphical;
 
 public class JPEGEvaluator extends EnhancedComplexTestCase
 {
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[]{"EvaluateResult"};

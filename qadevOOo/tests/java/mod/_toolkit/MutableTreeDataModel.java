@@ -40,6 +40,7 @@ public class MutableTreeDataModel extends TestCase {
     /**
      * Creates StarOffice Writer document.
      */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a textdocument");
         xTextDoc = WriterTools.createTextDoc(
@@ -49,12 +50,14 @@ public class MutableTreeDataModel extends TestCase {
     /**
      * Disposes StarOffice Writer document.
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log) {
 

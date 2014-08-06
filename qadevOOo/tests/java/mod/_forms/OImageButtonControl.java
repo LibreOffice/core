@@ -77,6 +77,7 @@ public class OImageButtonControl extends TestCase {
     /**
      * Creates a new text document.
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory((Param.getMSF()));
 
@@ -93,6 +94,7 @@ public class OImageButtonControl extends TestCase {
     /**
      * Disposes the text document created before
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
@@ -136,6 +138,7 @@ public class OImageButtonControl extends TestCase {
      *      component. </li>
      * </ul>
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;

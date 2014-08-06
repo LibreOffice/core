@@ -85,6 +85,7 @@ public class ScAccessibleCell extends TestCase {
     * @see TestEnvironment
     * @see #getTestEnvironment
     */
+    @Override
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
 
@@ -176,6 +177,7 @@ public class ScAccessibleCell extends TestCase {
     * @param Param test parameters
     * @param log writer to log information while testing
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;

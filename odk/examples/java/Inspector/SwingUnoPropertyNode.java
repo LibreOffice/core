@@ -58,6 +58,7 @@ public class SwingUnoPropertyNode extends SwingUnoNode implements XUnoPropertyNo
         m_oUnoPropertyNode = new UnoPropertyNode(_aPropertyValue, _oUnoObject, _oUnoReturnObject);
     }
 
+    @Override
     public String getName(){
         return m_oUnoPropertyNode.getName();
     }
@@ -68,6 +69,7 @@ public class SwingUnoPropertyNode extends SwingUnoNode implements XUnoPropertyNo
     }
 
 
+    @Override
     public String getClassName(){
         String sClassName = m_oUnoPropertyNode.getClassName();
         if (sClassName.equals("")){
@@ -76,6 +78,7 @@ public class SwingUnoPropertyNode extends SwingUnoNode implements XUnoPropertyNo
         return sClassName;
     }
 
+    @Override
     public String getAnchor(){
         return m_oUnoPropertyNode.getAnchor();
     }

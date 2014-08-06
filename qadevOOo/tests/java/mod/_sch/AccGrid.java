@@ -41,6 +41,7 @@ public class AccGrid extends TestCase {
 
     XChartDocument xChartDoc = null;
 
+    @Override
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
 
@@ -97,6 +98,7 @@ public class AccGrid extends TestCase {
     * @param Param test parameters
     * @param log writer to log information while testing
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         if( xChartDoc!=null ) {
             log.println( "    closing xChartDoc" );

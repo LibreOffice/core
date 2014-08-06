@@ -28,11 +28,13 @@ class GeometryEventHandler
         super (aEvent, aTreeModel);
     }
 
+    @Override
     public void PrintOldAndNew (PrintStream out)
     {
         out.println ("   children not relevant");
     }
 
+    @Override
     public void Process ()
     {
         AccTreeNode aNode = maTreeModel.updateNode (mxEventSource,

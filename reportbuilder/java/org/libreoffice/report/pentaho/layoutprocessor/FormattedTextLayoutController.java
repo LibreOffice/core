@@ -51,6 +51,7 @@ public class FormattedTextLayoutController
     {
     }
 
+    @Override
     public boolean isValueChanged()
     {
         try
@@ -70,6 +71,7 @@ public class FormattedTextLayoutController
         }
     }
 
+    @Override
     protected LayoutController delegateContentGeneration(final ReportTarget target)
             throws ReportProcessingException, ReportDataFactoryException,
             DataSourceException

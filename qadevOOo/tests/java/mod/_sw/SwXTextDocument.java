@@ -53,9 +53,11 @@ public class SwXTextDocument extends TestCase {
     XTextDocument xTextDoc;
     XTextDocument xSecondTextDoc;
 
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
     }
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
         DesktopTools.closeDoc(xSecondTextDoc);
@@ -65,6 +67,7 @@ public class SwXTextDocument extends TestCase {
     /**
      *    creating a Testenvironment for the interfaces to be tested
      */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log)
         throws StatusException {

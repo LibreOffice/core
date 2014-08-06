@@ -137,6 +137,7 @@ public class ChXDiagram extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -154,6 +155,7 @@ public class ChXDiagram extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    closing xSheetDoc " );
         util.DesktopTools.closeDoc(xSheetDoc);
@@ -207,6 +209,7 @@ public class ChXDiagram extends TestCase {
     * @see com.sun.star.chart.Diagram
     * @see com.sun.star.chart.StockDiagram
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
 

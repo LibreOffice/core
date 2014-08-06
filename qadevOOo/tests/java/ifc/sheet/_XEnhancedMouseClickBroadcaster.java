@@ -43,6 +43,7 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
     protected XEnhancedMouseClickHandler listener = new MyListener();
     private XModel docModel = null;
 
+    @Override
     public void before() {
         docModel = UnoRuntime.queryInterface(
                 XModel.class,tEnv.getObjRelation("FirstModel"));

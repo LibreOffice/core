@@ -61,6 +61,7 @@ public final class LocalOfficeImpl
      *   to the office distribution.
      * @param port is a communication port.
      */
+    @Override
     protected void connect(String officePath, int port)
         throws ConnectException
     {
@@ -76,6 +77,7 @@ public final class LocalOfficeImpl
      *
      * @param uri is an identifier of storage has to be refreshed.
      */
+    @Override
     public void refreshStorage(String uri)
     {
         try {
@@ -95,6 +97,7 @@ System.out.println("*** LocalOfficeImpl.refreshStorage: DONE");
     /**
      * Closes the connection to the running office.
      */
+    @Override
     public void disconnect()
     {
 /*

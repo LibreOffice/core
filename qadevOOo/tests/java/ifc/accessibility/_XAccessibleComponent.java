@@ -608,6 +608,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
     /**
      * Restores initial component text.
      */
+    @Override
     protected void after() {
         if (tEnv.getObjRelation("Destroy") != null) {
             disposeEnvironment();

@@ -72,6 +72,7 @@ public class _CellProperties extends MultiPropertyTest {
     public void _TextSection() {
         log.println("Testing with custom Property tester") ;
         testProperty("TextSection", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 return tEnv.getObjRelation("CellProperties.TextSection");
             }
@@ -87,6 +88,7 @@ public class _CellProperties extends MultiPropertyTest {
         final Short val2 = new Short( (short) 6 );
         log.println("Testing with custom Property tester") ;
         testProperty("BackColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 if ( oldValue.equals(val1) )
                     return val2;
@@ -103,6 +105,7 @@ public class _CellProperties extends MultiPropertyTest {
     public void _BackGraphicURL() {
         log.println("Testing with custom Property tester") ;
         testProperty("BackGraphicURL", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 if (oldValue.equals(util.utils.getFullTestURL
                         ("space-metal.jpg")))
@@ -120,6 +123,7 @@ public class _CellProperties extends MultiPropertyTest {
     public void _UserDefinedAttributes() {
         log.println("Testing with custom property tester");
         testProperty("UserDefinedAttributes", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 XNameContainer NC = null;
                 try {

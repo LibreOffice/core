@@ -58,6 +58,7 @@ public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
     * Retrieves object relation.
     * @throws StatusException If relation not found.
     */
+    @Override
     public void before() {
         resSet = (XDynamicResultSet) tEnv.getObjRelation("DynamicResultSet") ;
         if (resSet == null) {

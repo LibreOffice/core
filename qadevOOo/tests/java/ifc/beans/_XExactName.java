@@ -74,6 +74,7 @@ public class _XExactName extends MultiMethodTest {
      * Checking if the Object relation expectedName is given
      * throw a StatusException if not.
      */
+    @Override
     protected void before() {
         expectedName = (String) tEnv.getObjRelation("expectedName");
 

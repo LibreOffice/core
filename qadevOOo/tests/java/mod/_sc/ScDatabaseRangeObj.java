@@ -74,6 +74,7 @@ public class ScDatabaseRangeObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      tParam.getMSF());
@@ -91,6 +92,7 @@ public class ScDatabaseRangeObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
 
@@ -118,6 +120,7 @@ public class ScDatabaseRangeObj extends TestCase {
     * @see com.sun.star.sheet.DatabaseRange
     * @see com.sun.star.table.CellRangeAddress
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         XInterface oObj = null;

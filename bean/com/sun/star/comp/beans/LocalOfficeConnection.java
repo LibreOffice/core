@@ -739,6 +739,7 @@ public class LocalOfficeConnection
             start();
         }
 
+        @Override
         public void run() {
             java.io.BufferedReader r = new java.io.BufferedReader(
                 new java.io.InputStreamReader(m_in) );

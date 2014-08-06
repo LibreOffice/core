@@ -29,6 +29,7 @@ import util.utils;
 
 
 public class UnoControlTimeFieldModel extends TestCase {
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         XInterface oObj = null;

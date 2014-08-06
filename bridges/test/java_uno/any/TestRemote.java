@@ -39,6 +39,7 @@ public final class TestRemote {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             XTransport transport = UnoRuntime.queryInterface(
                 XTransport.class, getBridge(context).getInstance("Transport"));

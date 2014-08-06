@@ -51,6 +51,7 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
         return true;
     }
 
+    @Override
     public void println(String msg) {
         if ((ow == null) && (entry != null))
         {

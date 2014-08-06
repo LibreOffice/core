@@ -33,6 +33,7 @@ public class _XSchema extends MultiMethodTest {
     XSchemaHandlerImpl xSchemaHandlerImpl = new XSchemaHandlerImpl();
     String filename = null;
 
+    @Override
     protected void before() {
         filename = (String)tEnv.getObjRelation("ParsedFileName");
     }

@@ -26,6 +26,7 @@ class AccessibleContextHandler
 {
     protected int nChildrenCount;
 
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         if (xContext != null)
@@ -46,6 +47,7 @@ class AccessibleContextHandler
             maChildList.setSize (4);
     }
 
+    @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
         XAccessibleContext xContext = null;

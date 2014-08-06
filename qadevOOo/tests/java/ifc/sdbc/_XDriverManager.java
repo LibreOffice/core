@@ -60,6 +60,7 @@ public class _XDriverManager extends MultiMethodTest {
     /**
      * Retrieves the required object relations.
      */
+    @Override
     protected void before() {
         sdbcURL = (String)tEnv.getObjRelation("SDBC.URL");
         if (sdbcURL == null) {

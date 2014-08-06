@@ -34,6 +34,7 @@ import com.sun.star.uno.XInterface;
  * @see ifc.lang._XMultiServiceFactory
  */
 public class HierarchyDataSource extends TestCase {
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
         XInterface oObj = null;

@@ -84,6 +84,7 @@ public class _XBreakIterator extends MultiMethodTest {
      * Retrieves object relations.
      * @throws StatusException If one of relations not found.
      */
+    @Override
     protected void before() {
         locale = (Locale)tEnv.getObjRelation("Locale");
         if (locale == null) {

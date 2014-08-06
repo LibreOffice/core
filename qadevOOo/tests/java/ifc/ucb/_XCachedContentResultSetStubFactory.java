@@ -53,6 +53,7 @@ public class _XCachedContentResultSetStubFactory extends MultiMethodTest {
     * Retrieves object relation.
     * @throws StatusException If relation not found.
     */
+    @Override
     public void before() {
         resSet = (XResultSet) tEnv.getObjRelation("ContentResultSet") ;
         if (resSet == null) {

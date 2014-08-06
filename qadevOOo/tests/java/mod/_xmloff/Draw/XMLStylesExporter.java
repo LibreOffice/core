@@ -70,6 +70,7 @@ public class XMLStylesExporter extends TestCase {
     /**
     * New draw document created.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
@@ -88,6 +89,7 @@ public class XMLStylesExporter extends TestCase {
     /**
     * Document disposed here.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xDrawDoc " );
         xDrawDoc.dispose();
@@ -114,6 +116,7 @@ public class XMLStylesExporter extends TestCase {
     *      {@link ifc.document._XExporter} interface </li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log) throws StatusException {
 

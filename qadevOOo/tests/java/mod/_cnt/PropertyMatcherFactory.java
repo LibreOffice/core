@@ -48,6 +48,7 @@ public class PropertyMatcherFactory extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.cnt.PropertyMatcherFactory</code>. <p>
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

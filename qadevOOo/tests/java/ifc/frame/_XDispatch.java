@@ -147,6 +147,7 @@ public class _XDispatch extends MultiMethodTest {
     * Retrieves object relations and creates new listeners.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         listener = new TestStatusListener(log) ;
         url = (URL) tEnv.getObjRelation("XDispatch.URL") ;

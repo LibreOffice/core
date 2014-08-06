@@ -43,7 +43,8 @@ public class ScIndexEnumeration_CellAreaLinksEnumeration extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
-   protected void initialize( TestParameters tParam, PrintWriter log ) {
+   @Override
+protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
         try {
@@ -60,6 +61,7 @@ public class ScIndexEnumeration_CellAreaLinksEnumeration extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface
@@ -68,6 +70,7 @@ public class ScIndexEnumeration_CellAreaLinksEnumeration extends TestCase {
     }
 
 
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log){
 

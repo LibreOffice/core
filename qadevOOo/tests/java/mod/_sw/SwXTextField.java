@@ -60,6 +60,7 @@ public class SwXTextField extends TestCase {
      *    @see PrintWriter
      *
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -84,6 +85,7 @@ public class SwXTextField extends TestCase {
      *    @see PrintWriter
      *
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -101,6 +103,7 @@ public class SwXTextField extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;

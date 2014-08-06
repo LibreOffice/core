@@ -57,6 +57,7 @@ public class TitlesComponent extends ControlScroller
                 });
     }
 
+    @Override
     protected void insertControlGroup(int i, int ypos)
     {
         iLabelPosX = iCompPosX + iRelLabelPosXDist;
@@ -65,6 +66,7 @@ public class TitlesComponent extends ControlScroller
 
     }
 
+    @Override
     protected void setControlGroupVisible(int _index, boolean _bIsVisible)
     {
         CurUnoDialog.setControlVisible(getColumnName(_index), _bIsVisible);
@@ -127,6 +129,7 @@ public class TitlesComponent extends ControlScroller
         return SOTITLEPREFIX + Integer.toString(_index + 1);
     }
 
+    @Override
     protected void initializeScrollFields()
     {
         for (int i = 0; i < fieldnames.length; i++)

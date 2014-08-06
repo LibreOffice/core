@@ -37,6 +37,7 @@ class XConnectionOutputStream_Adapter extends OutputStream {
         _xConnection = xConnection;
     }
 
+    @Override
     public void write(int b) throws IOException {
         _bytes[0] = (byte)b;
 

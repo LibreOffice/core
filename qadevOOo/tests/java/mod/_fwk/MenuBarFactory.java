@@ -31,6 +31,7 @@ import lib.TestParameters;
 public class MenuBarFactory extends TestCase {
     XInterface oObj = null;
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         try {

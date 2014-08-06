@@ -22,6 +22,7 @@ import lib.MultiPropertyTest;
 
 public class _BaseFrameProperties extends MultiPropertyTest {
     protected PropertyTester FrameTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             Object frame = tEnv.getObjRelation("TextFrame");
 

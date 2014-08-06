@@ -66,6 +66,7 @@ public class SmEditAccessible extends TestCase {
      * Creates a <code>StarMath</code> document and obtains an accessibility
      * component with the role <code>AccessibleRole.PANEL</code>.
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
@@ -147,6 +148,7 @@ public class SmEditAccessible extends TestCase {
      * Disposes the document created in <code>createTestEnvironment</code>
      * method.
      */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
 
         log.println( "    disposing xMathDoc " );

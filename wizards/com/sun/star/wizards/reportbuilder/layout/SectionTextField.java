@@ -34,6 +34,7 @@ public class SectionTextField extends SectionObject
         return new SectionTextField(_aFormattedField);
     }
 
+    @Override
     public FontDescriptor getFontDescriptor()
     {
         FontDescriptor a = null;

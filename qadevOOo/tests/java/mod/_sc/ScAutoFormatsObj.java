@@ -64,6 +64,7 @@ public class ScAutoFormatsObj extends TestCase{
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -80,6 +81,7 @@ public class ScAutoFormatsObj extends TestCase{
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface
@@ -101,6 +103,7 @@ public class ScAutoFormatsObj extends TestCase{
     *   object for each interface thread. </li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log )
             throws StatusException {

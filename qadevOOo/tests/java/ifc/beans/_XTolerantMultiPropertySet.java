@@ -56,6 +56,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
      * to get the direct properties<br>
      * Throws a lib StatusException if the Component doesn't support XPropertySet or XPropertyState
      */
+    @Override
     public void before() {
         PS = UnoRuntime.queryInterface(XPropertySet.class,
                                                       tEnv.getTestObject());

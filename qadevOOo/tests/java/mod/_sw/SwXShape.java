@@ -65,6 +65,7 @@ public class SwXShape extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -79,6 +80,7 @@ public class SwXShape extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -90,6 +92,7 @@ public class SwXShape extends TestCase {
     * interface. Then shape (rectangle) is created and added to DrawPage
     * obtained before, then returned as a test component.
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log ) throws StatusException {
         XInterface oObj = null;

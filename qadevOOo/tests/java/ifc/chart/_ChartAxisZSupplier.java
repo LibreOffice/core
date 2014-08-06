@@ -52,6 +52,7 @@ public class _ChartAxisZSupplier extends MultiPropertyTest {
     * Retrieves object relations and prepares a chart document.
     * @throws StatusException if one of relations not found.
     */
+    @Override
     protected void before() {
         log.println("Setting Diagram type to BarDiagram");
         XChartDocument doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");
@@ -186,6 +187,7 @@ public class _ChartAxisZSupplier extends MultiPropertyTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

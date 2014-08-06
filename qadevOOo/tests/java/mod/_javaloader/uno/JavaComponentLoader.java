@@ -53,6 +53,7 @@ public class JavaComponentLoader extends TestCase {
     *  <li> <code>'ImplementationName'</code> : Name of the implementation.</li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;

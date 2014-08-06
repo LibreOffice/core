@@ -42,9 +42,11 @@ import com.sun.star.util.XURLTransformer;
 
 public class Dispatch extends TestCase {
     private String scriptURL = "script://HighlightText.showForm";
+    @Override
     public void initialize( TestParameters tParam, PrintWriter log ) {
     }
 
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log ) throws StatusException {
     log.println("creating test environment");
@@ -84,6 +86,7 @@ public class Dispatch extends TestCase {
         return tEnv ;
     }
 
+    @Override
     public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
             TestParameters tParam) {
     }

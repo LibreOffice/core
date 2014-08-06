@@ -38,6 +38,7 @@ import com.sun.star.java.XJavaThreadRegister_11;
 public class _XJavaThreadRegister_11 extends MultiMethodTest {
     public XJavaThreadRegister_11 oObj;
 
+    @Override
     protected void after() {
         log.println("Skipping all XJavaThreadRegister_11 methods, since they"
                 + " can't be tested in the context");

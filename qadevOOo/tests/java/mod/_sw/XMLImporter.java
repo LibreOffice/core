@@ -64,6 +64,7 @@ public class XMLImporter extends TestCase {
     /**
     * New text document created.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
 
@@ -80,6 +81,7 @@ public class XMLImporter extends TestCase {
     /**
     * Text document destroyed.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -103,6 +105,7 @@ public class XMLImporter extends TestCase {
     *      {@link ifc.document._XImporter} interface </li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters tParam, PrintWriter log) {
 

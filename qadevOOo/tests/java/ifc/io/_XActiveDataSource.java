@@ -53,6 +53,7 @@ public class _XActiveDataSource extends MultiMethodTest {
     /**
     * Take the XOutputStream from the environment for setting and getting.
     */
+    @Override
     public void before() {
         XInterface x = (XInterface)tEnv.getObjRelation("OutputStream");
         oStream = UnoRuntime.queryInterface
@@ -88,6 +89,7 @@ public class _XActiveDataSource extends MultiMethodTest {
     /**
     * Forces object environment recreation.
     */
+    @Override
     public void after() {
         this.disposeEnvironment() ;
     }

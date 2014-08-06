@@ -59,6 +59,7 @@ public class _GraphicObjectShape extends MultiPropertyTest {
      * Property tester which changes URL.
      */
     protected PropertyTester URLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg")))
                 return util.utils.getFullTestURL("crazy-blue.jpg"); else
@@ -71,6 +72,7 @@ public class _GraphicObjectShape extends MultiPropertyTest {
      * It also uses two object relations with bitmaps.
      */
     protected PropertyTester BitmapTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue){
             XBitmap aBitmap1=(XBitmap) tEnv.getObjRelation("Bitmap1");
             XBitmap aBitmap2=(XBitmap) tEnv.getObjRelation("Bitmap2");
@@ -85,6 +87,7 @@ public class _GraphicObjectShape extends MultiPropertyTest {
      * Property tester which returns new <code>XIndexAccess</code> object.
      */
     protected PropertyTester ImapTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             return set;
         }

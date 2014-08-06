@@ -52,6 +52,7 @@ import lib.TestParameters;
 */
 public class SwXMailMerge extends TestCase {
 
+    @Override
     public void initialize( TestParameters Param, PrintWriter log ) {
         if (! Param.containsKey("uniqueSuffix")){
             Param.put("uniqueSuffix", new Integer(0));
@@ -70,6 +71,7 @@ public class SwXMailMerge extends TestCase {
     *    {@link ifc.task._XJob} : Object[]</li>
     * </ul>
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
@@ -385,6 +387,7 @@ public class SwXMailMerge extends TestCase {
 
     }
 
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("closing connections...");
         XMultiServiceFactory xMsf = Param.getMSF();

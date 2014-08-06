@@ -59,6 +59,7 @@ public class SwXBookmark extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -73,6 +74,7 @@ public class SwXBookmark extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -82,6 +84,7 @@ public class SwXBookmark extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested. After creating
     * a bookmark, it is inserted to the text document.
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
         XInterface oObj = null;

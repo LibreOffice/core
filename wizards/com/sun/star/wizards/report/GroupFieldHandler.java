@@ -115,6 +115,7 @@ public class GroupFieldHandler extends FieldSelection
         CurDBMetaData.GroupFieldNames = GroupFieldNames;
     }
     // @Override
+    @Override
     protected void toggleListboxButtons(short iFieldsSelIndex, short iSelFieldsSelIndex)
     {
         super.toggleListboxButtons(iFieldsSelIndex, iSelFieldsSelIndex);
@@ -125,6 +126,7 @@ public class GroupFieldHandler extends FieldSelection
         }
     }
 
+    @Override
     public void selectFields(boolean bMoveAll)
     {
         int iSelCount = xSelectedFieldsListBox.getItemCount();

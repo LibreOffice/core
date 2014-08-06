@@ -276,6 +276,7 @@ public class _XTextTableCursor extends MultiMethodTest {
     /**
      * Forces object environment recreation.
      */
+    @Override
     public void after() {
         disposeEnvironment() ;
     }

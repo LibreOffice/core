@@ -440,6 +440,7 @@ public class InterfaceContainer implements Cloneable
      *
      * @return  a clone of this <tt>List</tt> instance.
      */
+    @Override
     synchronized public Object clone()
     {
         Object ret= null;

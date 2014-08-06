@@ -208,6 +208,7 @@ class Canvas
     }
 
 
+    @Override
     public void paintComponent (Graphics g)
     {
         synchronized (g)

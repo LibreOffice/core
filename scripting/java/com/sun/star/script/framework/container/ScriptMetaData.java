@@ -90,6 +90,7 @@ public class ScriptMetaData extends ScriptEntry {
         }
 
     }
+    @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
@@ -230,6 +231,7 @@ public class ScriptMetaData extends ScriptEntry {
     }
 
 
+    @Override
     public String toString()
     {
         return "\nParcelLocation = " + getParcelLocation() + "\nLocationPlaceHolder = " + locationPlaceHolder + super.toString();

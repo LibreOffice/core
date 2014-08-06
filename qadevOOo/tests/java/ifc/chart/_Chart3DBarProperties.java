@@ -50,6 +50,7 @@ public class _Chart3DBarProperties extends MultiPropertyTest {
     * Retrieves object relations and prepares a chart document.
     * @throws StatusException if one of relations not found.
     */
+    @Override
     protected void before() {
         log.println("Setting Diagram type to BarDiagram");
         XChartDocument doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");
@@ -87,6 +88,7 @@ public class _Chart3DBarProperties extends MultiPropertyTest {
     /**
     * Sets the diagram back to 2D as 2D rendering is much faster for the following tests.
     */
+    @Override
     protected void after() {
         log.println("Setting Diagram back to 2D");
         XChartDocument doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");

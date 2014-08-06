@@ -58,7 +58,8 @@ public class SvxShapeGroup extends TestCase {
      * in general this method initializes the document
      */
 
-       protected void initialize(TestParameters Param, PrintWriter log) {
+       @Override
+    protected void initialize(TestParameters Param, PrintWriter log) {
 
        // get a soffice factory object
     SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
@@ -78,7 +79,8 @@ public class SvxShapeGroup extends TestCase {
      * in general this method disposes the document
      */
 
-       protected void cleanup( TestParameters Param, PrintWriter log) {
+       @Override
+    protected void cleanup( TestParameters Param, PrintWriter log) {
 
         log.println("disposing xDrawDoc");
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -88,6 +90,7 @@ public class SvxShapeGroup extends TestCase {
     /**
      *    creating a Testenvironment for the interfaces to be tested
      */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log ) {
 

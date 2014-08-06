@@ -47,6 +47,7 @@ import util.utils;
 public class Toolkit extends TestCase {
     private static XTextDocument xTextDoc;
 
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      Param.getMSF());
@@ -61,6 +62,7 @@ public class Toolkit extends TestCase {
         }
     }
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
         util.DesktopTools.closeDoc(xTextDoc);
@@ -70,6 +72,7 @@ public class Toolkit extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates <code>com.sun.star.awt.Toolkit</code> service.
     */
+    @Override
     public TestEnvironment createTestEnvironment(TestParameters Param,
                                                  PrintWriter log)
                                           throws StatusException {

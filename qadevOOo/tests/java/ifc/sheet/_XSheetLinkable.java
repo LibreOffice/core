@@ -32,6 +32,7 @@ public class _XSheetLinkable extends MultiMethodTest {
     String linkUrl = null;
     String linkUrl2 = null;
 
+    @Override
     public void before() {
         // get a document for linking.
         linkUrl = (String)tEnv.getObjRelation("XSheetLinkable.LinkSheet");

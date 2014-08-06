@@ -73,6 +73,7 @@ public class AccessibleFixedText extends TestCase {
      * displays it. Then the text's accessible component is
      * obtained.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
@@ -177,6 +178,7 @@ public class AccessibleFixedText extends TestCase {
     /**
      * Closes dialog using action of button 'Close'
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    Closing dialog ... ");
         xWinDlg.dispose();

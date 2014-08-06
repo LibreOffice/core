@@ -61,6 +61,7 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
     /**
      * Creates Spreadsheet document.
      */
+    @Override
     protected void initialize (TestParameters tParam, PrintWriter log)
     {
         SOfficeFactory SOF = SOfficeFactory.getFactory (
@@ -82,6 +83,7 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
     /**
      * Disposes Spreadsheet document.
      */
+    @Override
     protected void cleanup (TestParameters tParam, PrintWriter log)
     {
         log.println ("    disposing xSheetDoc ");
@@ -91,6 +93,7 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
         util.DesktopTools.closeDoc (oComp);
     }
 
+    @Override
     protected synchronized TestEnvironment createTestEnvironment (TestParameters Param,
         PrintWriter log)
     {

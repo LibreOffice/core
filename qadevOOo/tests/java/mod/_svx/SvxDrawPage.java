@@ -93,6 +93,7 @@ public class SvxDrawPage extends TestCase {
     /**
      * Creates a new Draw document.
      */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -111,6 +112,7 @@ public class SvxDrawPage extends TestCase {
     /**
      * Disposes the Draw document created before
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
         util.DesktopTools.closeDoc(xDoc);
@@ -134,6 +136,7 @@ public class SvxDrawPage extends TestCase {
      *      <code>com.sun.star.drawing.Line</code> service </li>
      * </ul>
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         XInterface oObj = null;

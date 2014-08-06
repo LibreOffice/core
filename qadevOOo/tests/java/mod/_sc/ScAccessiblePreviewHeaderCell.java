@@ -84,12 +84,14 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
     /**
      * Creates a spreadsheet document.
      */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
     }
 
     /**
      * Disposes a spreadsheet document.
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
 
@@ -115,6 +117,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
      * Switchs the document to preview mode and then obtains the
      * accessible object for the header cell.
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         if (xSheetDoc != null) {

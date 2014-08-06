@@ -64,6 +64,7 @@ public class XMLImporter extends TestCase {
     /**
     * New math document created.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
@@ -78,6 +79,7 @@ public class XMLImporter extends TestCase {
     /**
     * Disposes document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xMathDoc " );
         xMathDoc.dispose();
@@ -102,6 +104,7 @@ public class XMLImporter extends TestCase {
     *      {@link ifc.document._XImporter} interface </li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log )
             throws StatusException {

@@ -63,6 +63,7 @@ public class _DataSource extends MultiPropertyTest {
             Object oldInfo = oObj.getPropertyValue("Info") ;
 
             testProperty("Info", new PropertyTester() {
+                @Override
                 protected Object getNewValue(String propName, Object oldValue) {
 
                     PropertyValue propUsr = new PropertyValue(),
@@ -140,6 +141,7 @@ public class _DataSource extends MultiPropertyTest {
     */
     public void _NumberFormatsSupplier() {
         testProperty("NumberFormatsSupplier", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 return null ;
             }
@@ -149,6 +151,7 @@ public class _DataSource extends MultiPropertyTest {
     /**
     * If object test allows to recreate environment it is better to do it.
     */
+    @Override
     public void after() {
         try {
             oObj.setPropertyValue("IsPasswordRequired",new Boolean(false));

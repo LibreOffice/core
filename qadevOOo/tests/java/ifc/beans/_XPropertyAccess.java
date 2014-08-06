@@ -55,6 +55,7 @@ public class _XPropertyAccess extends MultiMethodTest {
      * checks if the object relation <CODE>XPropertyAccess.propertyToChange</CODE>
      * is available
      */
+    @Override
     public void before() {
         propertyToChange = (PropertyValue) tEnv.getObjRelation("XPropertyAccess.propertyToChange");
         if (propertyToChange == null) {

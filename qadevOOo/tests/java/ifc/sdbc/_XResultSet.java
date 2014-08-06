@@ -71,6 +71,7 @@ public class _XResultSet extends MultiMethodTest {
      * Positions the cursor to the first row.
      * Forces method tests to be executed in definite order.
      */
+    @Override
     public void before() {
         try {
             oObj.last() ;
@@ -481,6 +482,7 @@ public class _XResultSet extends MultiMethodTest {
      * Moves the cursor to the first row to avoid affection to
      * the following interfaces tests
      */
+    @Override
     public void after() {
         log.println("Finally moving cursor to the first row ...");
         try {

@@ -46,6 +46,7 @@ public class Collator extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.i18n.Collator</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

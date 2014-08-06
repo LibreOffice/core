@@ -40,6 +40,7 @@ public class WebDAVContentProvider extends TestCase {
      * and adds a <code>XContentIdentifierFactory</code> instance as a "FACTORY"
      * relation for <code>XContentProviderTest</code>.
      */
+    @Override
     public TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF();

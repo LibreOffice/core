@@ -61,6 +61,7 @@ public class AccessibleDrawDocumentView extends TestCase {
      * @see TestEnvironment
      * @see #getTestEnvironment
      */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
@@ -134,6 +135,7 @@ public class AccessibleDrawDocumentView extends TestCase {
     * @param Param test parameters
     * @param log writer to log information while testing
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing Draw document");
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -149,6 +151,7 @@ public class AccessibleDrawDocumentView extends TestCase {
      *
      * @see #initializeTestCase
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(

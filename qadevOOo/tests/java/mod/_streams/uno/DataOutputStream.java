@@ -74,6 +74,7 @@ public class DataOutputStream extends TestCase {
     *      ifc.io._XOutputStream.StreamChecker ) </li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

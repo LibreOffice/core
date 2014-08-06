@@ -29,6 +29,7 @@ import com.sun.star.uno.Type;
 class AccessibleUNOHandler
     extends NodeHandler
 {
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         if (xContext == null)
@@ -62,6 +63,7 @@ class AccessibleUNOHandler
         return xTypeProvider;
     }
 
+    @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent,
                                            int nIndex)
     {

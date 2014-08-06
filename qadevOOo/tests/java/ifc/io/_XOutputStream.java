@@ -56,6 +56,7 @@ public class _XOutputStream extends MultiMethodTest {
         public void resetStreams();
     }
 
+    @Override
     protected void before() {
         checker = (StreamChecker)
             tEnv.getObjRelation("XOutputStream.StreamChecker");
@@ -157,6 +158,7 @@ public class _XOutputStream extends MultiMethodTest {
     /**
     * Forces object environment recreation.
     */
+    @Override
     public void after() {
         this.disposeEnvironment() ;
     }

@@ -50,6 +50,7 @@ public class SubstituteVariables extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.util.PathSubstitution</code>. <p>
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;

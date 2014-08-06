@@ -23,6 +23,7 @@ import complexlib.ComplexTestCase;
 
 public class ClimakerTestCase extends ComplexTestCase
 {
+    @Override
     public String[] getTestMethodNames()
     {
         // TODO think about trigger of sub-tests from outside
@@ -75,6 +76,7 @@ class Reader extends Thread
         start();
     }
 
+    @Override
     public void run()
     {
         try

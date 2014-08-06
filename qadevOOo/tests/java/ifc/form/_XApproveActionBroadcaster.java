@@ -90,6 +90,7 @@ public class _XApproveActionBroadcaster extends MultiMethodTest {
     /**
     * Just log output
     */
+    @Override
     protected void after() {
         log.println("Skipping all XApproveActionBroadcaster methods, since they"
                 + " need user interaction");

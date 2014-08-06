@@ -149,6 +149,7 @@ public class XmlUpdater extends Thread {
     }// setStop
 
 
+    @Override
     public void run() {
 
         internalThread = Thread.currentThread();

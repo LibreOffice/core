@@ -45,11 +45,13 @@ public class DocumentTemplates extends TestCase {
 
     XTextDocument xTextDoc;
 
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         String aURL=util.utils.getFullTestURL("report2.stw");
         xTextDoc = util.WriterTools.loadTextDoc(tParam.getMSF(),aURL);
     }
 
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         xTextDoc.dispose();
@@ -60,6 +62,7 @@ public class DocumentTemplates extends TestCase {
      * Creates an instance of the service
      * <code>com.sun.star.frame.DocumentTemplates</code>.
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
 

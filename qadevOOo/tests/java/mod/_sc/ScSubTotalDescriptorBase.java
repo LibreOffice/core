@@ -63,6 +63,7 @@ public class ScSubTotalDescriptorBase extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     public void initialize( TestParameters Param, PrintWriter log ) {
         // creation of the testobject here
         // first we write what we are intend to do to log file
@@ -83,6 +84,7 @@ public class ScSubTotalDescriptorBase extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
@@ -98,6 +100,7 @@ public class ScSubTotalDescriptorBase extends TestCase {
     * @see com.sun.star.sheet.XSubTotalCalculatable
     * @see com.sun.star.sheet.SubTotalDescriptor
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         log.println("getting sheets");

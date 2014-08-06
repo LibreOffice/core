@@ -120,6 +120,7 @@ public class _XUsedAreaCursor extends MultiMethodTest {
     /**
     * Forces object environment recreation.
     */
+    @Override
     protected void after() {
         this.disposeEnvironment();
     }

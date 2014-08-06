@@ -37,13 +37,16 @@ public class DefaultDsc extends InstDescr {
         ifcName = Interface;
         initDefault();
     }
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getIfcName() {
         return ifcName;
     }
+    @Override
     public String getService() {
         return service;
     }
@@ -55,6 +58,7 @@ public class DefaultDsc extends InstDescr {
         catch( ClassNotFoundException cnfE ) {
         }
     }
+    @Override
     public XInterface createInstance( XMultiServiceFactory docMSF ) {
 
         Object SrvObj = null;

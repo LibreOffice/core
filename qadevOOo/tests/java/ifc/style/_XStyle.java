@@ -50,6 +50,7 @@ public class _XStyle extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         oMyStyle = (XStyle) tEnv.getObjRelation("PoolStyle");
         if (oMyStyle == null) throw new StatusException

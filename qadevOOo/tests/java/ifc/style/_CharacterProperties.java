@@ -106,6 +106,7 @@ public class _CharacterProperties extends MultiPropertyTest {
 
     public void _CharHeight() {
         testProperty("CharHeight", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object old) {
                 if (utils.isVoid(old)) {
                     return new Float(10) ;
@@ -121,6 +122,7 @@ public class _CharacterProperties extends MultiPropertyTest {
      * Switches between two JPG images' URLs.
      */
     protected PropertyTester URLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (oldValue.equals("http://www.sun.com"))
                 return "http://www.openoffice.org"; else
@@ -156,6 +158,7 @@ public class _CharacterProperties extends MultiPropertyTest {
      * between 'Citation' and 'Emphasis' names.
      */
     protected PropertyTester StyleTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             String oStyleName1 = (String) tEnv.getObjRelation("STYLENAME1");
             String oStyleName2 = (String) tEnv.getObjRelation("STYLENAME2");
@@ -178,6 +181,7 @@ public class _CharacterProperties extends MultiPropertyTest {
      * 'Citation' and 'Emphasis' names.
      */
     protected PropertyTester StylesTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (utils.isVoid(oldValue) || (oldValue.equals("Standard")))
                 return new String[] {"Citation"}; else
@@ -259,6 +263,7 @@ public class _CharacterProperties extends MultiPropertyTest {
      * Custom tester for the ruby text property.
      */
     protected PropertyTester RubyTextTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (utils.isVoid(oldValue)) {

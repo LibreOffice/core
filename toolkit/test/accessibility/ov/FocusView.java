@@ -78,6 +78,7 @@ public class FocusView
     /** Additionally to the context store a reference to the
         XAccessibleComponent interface.
     */
+    @Override
     public void SetObject (XAccessibleContext xObject)
     {
         mxComponent = UnoRuntime.queryInterface(
@@ -85,12 +86,14 @@ public class FocusView
         super.SetObject (xObject);
     }
 
+    @Override
     synchronized public void Destroy ()
     {
         super.Destroy();
         maGrabFocus.removeActionListener (this);
     }
 
+    @Override
     synchronized public void Update ()
     {
         if (mxContext == null)
@@ -110,6 +113,7 @@ public class FocusView
         }
     }
 
+    @Override
     public String GetTitle ()
     {
         return ("Focus");
@@ -123,6 +127,7 @@ public class FocusView
         }
     }
 
+    @Override
     public void notifyEvent (AccessibleEventObject aEvent)
     {
         System.out.println (aEvent);

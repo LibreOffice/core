@@ -56,6 +56,7 @@ public class _XDataOutputStream extends MultiMethodTest {
     * If relation or data of some type in stream not found then
     * tests of corresponding methods are skipped.
     */
+    @Override
     public void before() throws RuntimeException {
 
         List<Object> data = (List<Object>) tEnv.getObjRelation("StreamData") ;
@@ -253,6 +254,7 @@ public class _XDataOutputStream extends MultiMethodTest {
     /**
     * Forces object environment recreation.
     */
+    @Override
     public void after() {
         this.disposeEnvironment() ;
     }

@@ -61,6 +61,7 @@ public class _XContainerQuery extends MultiMethodTest {
     * Retrieves object relations
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() throws StatusException {
 
         m_querySequenze = (NamedValue[]) tEnv.getObjRelation(

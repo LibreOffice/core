@@ -51,6 +51,7 @@ public class _XConnectable extends MultiMethodTest {
     /**
      * Get another connectable object from object relations.
     */
+    @Override
     public void before() {
         XInterface x = (XInterface)tEnv.getObjRelation("Connectable");
         xConnect = UnoRuntime.queryInterface(
@@ -116,6 +117,7 @@ public class _XConnectable extends MultiMethodTest {
     /**
     * Forces object environment recreation.
     */
+    @Override
     public void after() {
         this.disposeEnvironment() ;
     }

@@ -107,6 +107,7 @@ public class _XUnoUrlResolver extends MultiMethodTest {
             this.connectString = connectString;
         }
 
+        @Override
         public void run() {
             try {
                 // create a connection

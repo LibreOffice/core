@@ -79,6 +79,7 @@ public class _XModuleManager extends MultiMethodTest {
     private PropertyValue[] xModelSeq = null;
     /** Retrieves object relations. */
 
+    @Override
     public void before() {
 
         xFrameSeq = (PropertyValue[]) tEnv.getObjRelation("XModuleManager.XFrame") ;

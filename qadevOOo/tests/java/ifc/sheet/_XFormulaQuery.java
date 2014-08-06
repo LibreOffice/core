@@ -40,6 +40,7 @@ public class _XFormulaQuery extends MultiMethodTest {
     private int[] miExpectedDependentValues;
     private int[] miExpectedPrecedentValues;
 
+    @Override
     protected void before() {
         oSheet = (XSpreadsheet)tEnv.getObjRelation("SHEET");
 
@@ -181,6 +182,7 @@ public class _XFormulaQuery extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

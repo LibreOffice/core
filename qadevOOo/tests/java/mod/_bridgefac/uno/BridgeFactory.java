@@ -40,12 +40,14 @@ public class BridgeFactory extends TestCase {
     * Retrieves host name where StarOffice is started from test
     * parameter <code>'CNCSTR'</code>.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         String cncstr = (String) tParam.get("CNCSTR") ;
         int idx = cncstr.indexOf("host=") + 5 ;
         sOfficeHost = cncstr.substring(idx, cncstr.indexOf(",", idx)) ;
     }
 
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
     }
 
@@ -62,6 +64,7 @@ public class BridgeFactory extends TestCase {
      * Just creates <code>com.sun.star.bridge.BridgeFactory</code>
      * service as object to be tested.
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null ;
@@ -97,6 +100,7 @@ public class BridgeFactory extends TestCase {
     /**
     * Just clears flag which indicates that port is free now.
     */
+    @Override
     public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
             TestParameters tParam) {
         curPort = ((Integer)tEnv.getObjRelation("Connector.Port")).intValue() ;

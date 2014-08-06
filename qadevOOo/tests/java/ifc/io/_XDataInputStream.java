@@ -76,6 +76,7 @@ public class _XDataInputStream extends MultiMethodTest {
      * data of different types and fills the appropriate variables.
      * @throws StatusException If one of relations not found.
      */
+    @Override
     public void before(){
 
         XInterface x = (XInterface)tEnv.getObjRelation("StreamWriter") ;
@@ -396,6 +397,7 @@ public class _XDataInputStream extends MultiMethodTest {
     /**
      * Forces object environment recreation.
      */
+    @Override
     public void after() {
         try {
             oStream.flush();

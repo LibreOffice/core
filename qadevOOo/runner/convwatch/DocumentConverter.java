@@ -50,6 +50,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
      * In this case it is the actual name of the service.
      * @return The tested service.
      */
+    @Override
     public String getTestObjectName() {
         return "DocumentConverter runner";
     }
@@ -60,6 +61,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
      * Return all test methods.
      * @return The test methods.
      */
+    @Override
     public String[] getTestMethodNames() {
         return new String[]{"convert"};
     }
@@ -124,6 +126,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
     /**
      * Function returns a List of software which must accessible as an external executable
      */
+    @Override
     protected String[] mustInstalledSoftware()
         {
             ArrayList<String> aList = new ArrayList<String>();

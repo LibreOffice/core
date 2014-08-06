@@ -38,6 +38,7 @@ import com.sun.star.java.XJavaVM;
 public class _XJavaVM extends MultiMethodTest {
     public XJavaVM oObj;
 
+    @Override
     protected void after() {
         log.println("Skipping all XJavaVM methods, since they"
                 + " can't be tested in the context");

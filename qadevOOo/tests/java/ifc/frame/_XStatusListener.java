@@ -26,6 +26,7 @@ public class _XStatusListener extends MultiMethodTest {
     public XStatusListener oObj = null;
 
 
+    @Override
     public void before() {
 
     }

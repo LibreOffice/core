@@ -58,6 +58,7 @@ public class ControlMenuController extends TestCase {
     /**
      * Create test environment.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         XMultiServiceFactory xMSF = tParam.getMSF();

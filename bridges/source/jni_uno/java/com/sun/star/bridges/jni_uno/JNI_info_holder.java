@@ -50,6 +50,7 @@ public final class JNI_info_holder
 
     private native void finalize( long jni_info_handle );
 
+    @Override
     protected void finalize()
     {
         finalize( s_jni_info_handle );

@@ -114,6 +114,7 @@ public class ImageProducer
             this.keyData = keyData;
         }
 
+        @Override
         public boolean equals(final Object o)
         {
             if (this != o)
@@ -133,6 +134,7 @@ public class ImageProducer
             return true;
         }
 
+        @Override
         public int hashCode()
         {
             if (hashCode != null)

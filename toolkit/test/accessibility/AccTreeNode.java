@@ -75,6 +75,7 @@ class AccTreeNode
         object.  This is done by replacing every handler by a new one.  An
         update method at each handler would be better of course.
     */
+    @Override
     public void update ()
     {
         for (int i=0; i<maHandlers.size(); i++)
@@ -165,6 +166,7 @@ class AccTreeNode
         return aDescriptor;
     }
 
+    @Override
     public int getChildCount()
     {
         int nChildCount = 0;
@@ -177,6 +179,7 @@ class AccTreeNode
     }
 
     /** iterate over handlers until the child is found */
+    @Override
     public AccessibleTreeNode getChild (int nIndex)
         throws IndexOutOfBoundsException
     {
@@ -200,6 +203,7 @@ class AccTreeNode
         return null;
     }
 
+    @Override
     public AccessibleTreeNode getChildNoCreate (int nIndex)
         throws IndexOutOfBoundsException
     {
@@ -223,6 +227,7 @@ class AccTreeNode
         return null;
     }
 
+    @Override
     public boolean removeChild (int nIndex)
         throws IndexOutOfBoundsException
     {
@@ -251,6 +256,7 @@ class AccTreeNode
     }
 
 
+    @Override
     public int indexOf (AccessibleTreeNode aNode)
     {
         int nBaseIndex = 0;
@@ -272,11 +278,13 @@ class AccTreeNode
 
     /** this node is a leaf if have no handlers, or is those
             handlers show no children */
+    @Override
     public boolean isLeaf()
     {
         return (maHandlers.size() == 0);
     }
 
+    @Override
     public boolean equals (Object aOther)
     {
         return (this == aOther) || (aOther!=null && aOther.equals(mxContext));
@@ -298,6 +306,7 @@ class AccTreeNode
         }
     }
 
+    @Override
     public void performAction( int nIndex )
     {
         if( nIndex >= 0 )

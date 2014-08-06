@@ -36,6 +36,7 @@ import util.SOfficeFactory;
 public class ScDocumentConfiguration extends TestCase {
     private XSpreadsheetDocument xSheetDoc = null;
 
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -54,11 +55,13 @@ public class ScDocumentConfiguration extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
         DesktopTools.closeDoc(xSheetDoc);
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         XMultiServiceFactory docMSF = UnoRuntime.queryInterface(

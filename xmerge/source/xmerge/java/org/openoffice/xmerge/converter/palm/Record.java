@@ -172,6 +172,7 @@ public final class Record {
      *
      *  @return  true if obj is equal, otherwise false.
      */
+    @Override
     public boolean equals(Object obj) {
 
         boolean bool = false;

@@ -53,6 +53,7 @@ public class _XAccessibleContext extends MultiMethodTest {
     private XAccessible parent = null;
 
     // temporary while accessibility package is in com.sun.star
+    @Override
     protected String getTestedClassName() {
         return className;
     }

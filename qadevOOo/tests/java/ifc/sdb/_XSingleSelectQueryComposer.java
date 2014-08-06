@@ -72,6 +72,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
      * @see com.sun.star.sdb.XSingleSelectQueryAnalyzer
      * @see com.sun.star.beans.XPropertySet
      */
+    @Override
     protected void before() /* throws Exception*/ {
 
         xQueryAna = UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,

@@ -28,6 +28,7 @@ public class _XBackendEntities extends MultiMethodTest {
     String adm = "";
     public XBackendEntities oObj;
 
+    @Override
     public void before() {
         adm = (String) tEnv.getObjRelation("NoAdmin");
     }

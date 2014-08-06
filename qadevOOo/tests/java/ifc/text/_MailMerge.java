@@ -31,6 +31,7 @@ public class _MailMerge extends MultiPropertyTest {
      * Switches between two valid folders
      */
     protected PropertyTester URLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (oldValue.equals(util.utils.getOfficeTemp(tParam.getMSF())))
                 return util.utils.getFullTestURL(""); else
@@ -43,6 +44,7 @@ public class _MailMerge extends MultiPropertyTest {
      * Switches between two document URLs.
      */
     protected PropertyTester DocumentURLTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (oldValue.equals(util.utils.getFullTestURL("MailMerge.sxw")))
                 return util.utils.getFullTestURL("sForm.sxw"); else
@@ -155,6 +157,7 @@ public class _MailMerge extends MultiPropertyTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

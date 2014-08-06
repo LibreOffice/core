@@ -58,6 +58,7 @@ public class Pipe extends TestCase {
     * </ul>
     * @see com.sun.star.io.Pipe
     */
+    @Override
     public TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws StatusException {
 

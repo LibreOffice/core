@@ -131,6 +131,7 @@ public class _XDocumentHandler extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         locator = new DocumentLocator(log) ;
         if (tEnv.getTestCase().getObjectName().equals("XMLSettingsImporter")) {

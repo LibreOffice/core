@@ -45,6 +45,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         xin = in;
     }
 
+    @Override
     public int available() throws IOException {
 
         int bytesAvail;
@@ -58,6 +59,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         return(bytesAvail);
     }
 
+    @Override
     public void close() throws IOException {
         try {
             xin.closeInput();
@@ -66,6 +68,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         }
     }
 
+    @Override
     public int read () throws IOException {
         byte [][] tmp = new byte [1][1];
         try {
@@ -86,6 +89,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         }
     }
 
+    @Override
     public int read (byte[] b) throws IOException {
 
         byte [][] tmp = new byte [1][b.length];
@@ -107,6 +111,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         return (bytesRead);
     }
 
+    @Override
     public int read(byte[] b, int off, int len) throws IOException {
         byte [][] tmp = new byte [1][b.length];
         try {
@@ -138,6 +143,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         }
     }
 
+    @Override
     public long skip(long n) throws IOException {
 
         int avail;
@@ -180,14 +186,17 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
     *
     *  @returns  false
     */
+    @Override
     public boolean markSupported() {
        return false;
     }
 
+    @Override
     public void mark(int readlimit) {
         // Not supported.
     }
 
+    @Override
     public void reset() throws IOException {
         // Not supported.
     }

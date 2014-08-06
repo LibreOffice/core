@@ -35,6 +35,7 @@ public class _XFunctionProvider extends MultiMethodTest {
     /**
     * Retrieves object relation.
     */
+    @Override
     public void before() throws StatusException {
     }
 

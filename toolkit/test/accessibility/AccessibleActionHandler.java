@@ -24,6 +24,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 class AccessibleActionHandler
     extends NodeHandler
 {
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleAction xEComponent =
@@ -51,6 +52,7 @@ class AccessibleActionHandler
             XAccessibleAction.class, aParent.getContext());
     }
 
+    @Override
     public AccessibleTreeNode createChild (
         AccessibleTreeNode aParent,
         int nIndex)

@@ -36,6 +36,7 @@ public class _XCellSeries extends MultiMethodTest {
     protected boolean forceFillAuto = false;
 
 
+    @Override
     protected void before() {
         oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
 
@@ -229,6 +230,7 @@ public class _XCellSeries extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     public void after() {
         disposeEnvironment();
     }

@@ -140,6 +140,7 @@ public class OSingleSelectQueryComposer extends TestCase {
     public XConnection conn = null;
 
 
+    @Override
     protected void initialize ( TestParameters Param, PrintWriter log)
         throws StatusException {
 
@@ -164,6 +165,7 @@ public class OSingleSelectQueryComposer extends TestCase {
     * </ul>
     *
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
             PrintWriter log) {
 
@@ -261,6 +263,7 @@ public class OSingleSelectQueryComposer extends TestCase {
     /**
     * Closes connection of <code>RowSet</code> instance created.
     */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
     }
 }

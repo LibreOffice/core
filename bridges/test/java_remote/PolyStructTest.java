@@ -27,6 +27,7 @@ import complexlib.ComplexTestCase;
 import test.lib.TestBed;
 
 public final class PolyStructTest extends ComplexTestCase {
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -42,6 +43,7 @@ public final class PolyStructTest extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             TestTransport t = UnoRuntime.queryInterface(
                 TestTransport.class, getBridge(context).getInstance(""));

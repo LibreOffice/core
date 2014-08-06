@@ -53,6 +53,7 @@ public class _XDiagram extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         rowamount = (Integer)tEnv.getObjRelation("ROWAMOUNT");
         if (rowamount == null) throw new StatusException(Status.failed

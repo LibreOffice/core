@@ -36,6 +36,7 @@ import test.lib.TestBed;
  * short-cutting to the local object.</P>
  */
 public final class Bug111153_Test extends ComplexTestCase {
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -50,6 +51,7 @@ public final class Bug111153_Test extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             XTransport t = UnoRuntime.queryInterface(
                 XTransport.class, getBridge(context).getInstance("Transport"));

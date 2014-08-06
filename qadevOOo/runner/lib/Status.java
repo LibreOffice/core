@@ -110,6 +110,7 @@ public class Status extends SimpleStatus {
      * description and appends to it it the reason, for example:
      * "FAILED.The getLabel works wrong", "PASSED.OK".
      */
+    @Override
     public String toString() {
         String str = getRunStateString() + "." + getStateString();
 

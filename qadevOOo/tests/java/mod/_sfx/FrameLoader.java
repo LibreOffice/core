@@ -54,6 +54,7 @@ public class FrameLoader extends TestCase {
     *      {@link ifc.frame._XFrameLoader} </li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;

@@ -28,6 +28,7 @@ public class TestSkeleton extends TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String[] getTestMethodNames()
     {
         return new String[] {
@@ -36,6 +37,7 @@ public class TestSkeleton extends TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public String getTestObjectName()
     {
         return "Test Skeleton";
@@ -47,18 +49,21 @@ public class TestSkeleton extends TestCase
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public void before() throws Exception, java.lang.Exception
     {
         super.before();
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     public void after() throws Exception, java.lang.Exception
     {
         super.before();
     }
 
     /* ------------------------------------------------------------------ */
+    @Override
     protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();

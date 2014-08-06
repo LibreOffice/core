@@ -361,6 +361,7 @@ public class AutoSave
         DocThread()
         {}
 
+        @Override
         public void run()
         {
             impl_checkConcurrentAutoSaveToNormalUISave();

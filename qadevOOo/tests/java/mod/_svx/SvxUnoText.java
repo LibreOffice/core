@@ -54,6 +54,7 @@ public class SvxUnoText extends TestCase {
      *  *    @see PrintWriter
      *
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         try {
             log.println( "creating a drawdoc" );
@@ -76,6 +77,7 @@ public class SvxUnoText extends TestCase {
      *  *    @see PrintWriter
      *
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xDrawDoc " );
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -100,6 +102,7 @@ public class SvxUnoText extends TestCase {
      *  @see TestParameters
      *  *    @see PrintWriter
      */
+    @Override
     protected TestEnvironment createTestEnvironment
         (TestParameters tParam, PrintWriter log) {
 

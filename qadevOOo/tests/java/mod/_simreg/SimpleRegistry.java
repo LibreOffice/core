@@ -109,6 +109,7 @@ public class SimpleRegistry extends TestCase {
      *       temp directory. </li>
      * </ul>
      */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

@@ -102,6 +102,7 @@ public class WikiPropDialog extends WikiDialog{
         }
     }
 
+    @Override
     public boolean show()
     {
         EnableControls( true );
@@ -113,6 +114,7 @@ public class WikiPropDialog extends WikiDialog{
         return bResult;
     }
 
+    @Override
     public synchronized void ThreadStop( boolean bSelf )
     {
         boolean bShowError = ( !bSelf && m_aThread != null && !m_bThreadFinished );
@@ -236,6 +238,7 @@ public class WikiPropDialog extends WikiDialog{
         }
     }
 
+    @Override
     public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
     {
         if ( MethodName.equals( sSendMethod ) )
@@ -286,6 +289,7 @@ public class WikiPropDialog extends WikiDialog{
             {
                 m_aThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
                 {
+                    @Override
                     public void run()
                     {
                         try
@@ -359,6 +363,7 @@ public class WikiPropDialog extends WikiDialog{
         return false;
     }
 
+    @Override
     public void windowClosed( EventObject e )
     {
         ThreadStop( false );

@@ -60,6 +60,7 @@ public class _BaseIndex extends MultiPropertyTest {
     * Redefined method returns object, that contains changed property value.
     */
     protected PropertyTester CustomTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             XTextColumns TC = UnoRuntime.queryInterface(
                                       XTextColumns.class, oldValue);
@@ -102,6 +103,7 @@ public class _BaseIndex extends MultiPropertyTest {
             PropertyValue[][] newVal = null;
             PropertyValue[][] oldVal = null;
 
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 XIndexReplace indProp = UnoRuntime.queryInterface(
                                                 XIndexReplace.class, oldValue);
@@ -138,6 +140,7 @@ public class _BaseIndex extends MultiPropertyTest {
                 return indProp;
             }
 
+            @Override
             protected void checkResult(String propName, Object oldValue,
                                        Object newValue, Object resValue,
                                        Exception exception)

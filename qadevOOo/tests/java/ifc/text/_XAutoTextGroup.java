@@ -74,6 +74,7 @@ public class _XAutoTextGroup extends MultiMethodTest {
      *
      * @throws StatusException if the relation is not found.
      */
+    @Override
     public void before() {
         str = pref + uniq++ ;
         String[] names = oObj.getElementNames() ;

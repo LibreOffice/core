@@ -53,6 +53,7 @@ public class _XDataPilotTable extends MultiMethodTest {
     XCell xCellForCheck = null;
     CellAddress OutputRange = null;
 
+    @Override
     protected void before() {
         xCellForChange = (XCell)tEnv.getObjRelation("CELLFORCHANGE");
         xCellForCheck = (XCell)tEnv.getObjRelation("CELLFORCHECK");

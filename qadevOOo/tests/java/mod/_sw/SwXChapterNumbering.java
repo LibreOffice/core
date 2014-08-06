@@ -58,6 +58,7 @@ public class SwXChapterNumbering extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -72,6 +73,7 @@ public class SwXChapterNumbering extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -82,6 +84,7 @@ public class SwXChapterNumbering extends TestCase {
     * numbering rules are gotten from text document using interface
     * <code>XChapterNumberingSupplier</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log ) throws StatusException {
         XInterface oObj = null;

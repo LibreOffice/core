@@ -54,6 +54,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
     {
     }
 
+    @Override
     public void initialize(final Object node, final FlowController flowController, final LayoutController parent)
             throws DataSourceException, ReportDataFactoryException, ReportProcessingException
     {
@@ -61,6 +62,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
         state = STATE_PROCESS_VARIABLES;
     }
 
+    @Override
     protected LayoutController processContent(final ReportTarget target)
             throws DataSourceException, ReportProcessingException, ReportDataFactoryException
     {
@@ -80,6 +82,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
 
     // isDisplayable is private in version 0.9.1, so until the upgrade we keep this copy of the method
     // todo: Delete it unce the sun-cvs contains version 0.9.2.
+    @Override
     protected LayoutController processChild(final SectionLayoutController derived,
             final Node node,
             final FlowController flowController)
@@ -101,6 +104,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
         }
     }
 
+    @Override
     protected boolean isDisplayable(final Node node) throws DataSourceException
     {
         if (!(node instanceof OfficeGroupSection))
@@ -131,6 +135,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
         return Boolean.TRUE.equals(result);
     }
 
+    @Override
     protected void resetSectionForRepeat()
     {
         super.resetSectionForRepeat();
@@ -146,6 +151,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
      * @return the joined layout controller that incorperates all changes from the
      *         delegate.
      */
+    @Override
     public LayoutController join(final FlowController flowController)
     {
         if (waitForJoin)
@@ -159,6 +165,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
         return super.join(flowController);
     }
 
+    @Override
     protected AttributeMap computeAttributes(final FlowController fc, final Element element, final ReportTarget target)
             throws DataSourceException
     {

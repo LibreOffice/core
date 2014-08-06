@@ -77,6 +77,7 @@ public class AccessibleComboBox extends TestCase {
      * finds AccessibleComboBox walking through the
      * accessible component tree.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
@@ -159,6 +160,7 @@ public class AccessibleComboBox extends TestCase {
      * Closes the dialog using accessible button 'Cancel' found in
      * <code>createTestEnvironment()</code>.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    closing dialog ");
 
@@ -176,6 +178,7 @@ public class AccessibleComboBox extends TestCase {
     /**
      * Creates writer doc
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -199,6 +202,7 @@ public class AccessibleComboBox extends TestCase {
             this.msf = msf;
         }
 
+        @Override
         public void run() {
             XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                                xTextDoc);

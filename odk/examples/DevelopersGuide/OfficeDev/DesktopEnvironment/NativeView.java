@@ -79,6 +79,7 @@ public class NativeView extends java.awt.Canvas
      * can be called more than ones - but call native code one times only
      * and safe the handle and the system type on our members maHandle/maSystem!
      */
+    @Override
     public void setVisible(boolean bState)
     {
         getHWND();
@@ -91,16 +92,19 @@ public class NativeView extends java.awt.Canvas
      * (e.g. JSplitPane) we must provide some information about our
      * preferred/minimum and maximum size.
      */
+    @Override
     public Dimension getPreferredSize()
     {
         return new Dimension(500,300);
     }
 
+    @Override
     public Dimension getMaximumSize()
     {
         return new Dimension(1024,768);
     }
 
+    @Override
     public Dimension getMinimumSize()
     {
         return new Dimension(100,100);
@@ -116,6 +120,7 @@ public class NativeView extends java.awt.Canvas
      * May the remote window is already plugged. In such case we
      * shouldn't paint it over.
      */
+    @Override
     public void paint(Graphics aGraphic)
     {
         if(maHandle==null)

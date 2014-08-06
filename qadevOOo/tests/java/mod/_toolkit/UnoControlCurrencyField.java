@@ -47,6 +47,7 @@ import util.utils;
 public class UnoControlCurrencyField extends TestCase {
     private static XTextDocument xTextDoc;
 
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      Param.getMSF());
@@ -61,12 +62,14 @@ public class UnoControlCurrencyField extends TestCase {
         }
     }
 
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;

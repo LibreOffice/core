@@ -85,6 +85,7 @@ public class _XChangesNotifier extends MultiMethodTest {
      * Before the test: get the 'XChangesNotifier.ChangesBatch' object relation
      * and create the listener.
      */
+    @Override
     protected void before() {
         xBatch = (XChangesBatch)tEnv.getObjRelation("XChangesNotifier.ChangesBatch");
         changeElement = tEnv.getObjRelation("XChangesNotifier.ChangeElement");

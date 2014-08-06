@@ -2095,6 +2095,7 @@ final class TestAny {
             this.unboxInner = unboxInner;
         }
 
+        @Override
         public boolean equal(Object o1, Object o2) {
             if (o1 instanceof Any) {
                 return o2 instanceof Any
@@ -2141,6 +2142,7 @@ final class TestAny {
             this.unboxInner = unboxInner;
         }
 
+        @Override
         public boolean equal(Object o1, Object o2) {
             return new CompareBoxed(unboxInner).equal(((Any) o1).getObject(),
                                                       o2);
@@ -2154,6 +2156,7 @@ final class TestAny {
             this.specific = specific;
         }
 
+        @Override
         public boolean equal(Object o1, Object o2) {
             return new CompareBoxed().equal(specific, o2);
         }
@@ -2166,6 +2169,7 @@ final class TestAny {
             this.clazz = clazz;
         }
 
+        @Override
         public boolean equal(Object o1, Object o2) {
             return o2 != null && o2.getClass() == clazz;
         }
@@ -2182,24 +2186,28 @@ final class TestAny {
             return new Enum1();
         }
 
+        @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == Enum1.class;
         }
     }
 
     public static class Enum2 extends Enum1 {
+        @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == Enum2.class;
         }
     }
 
     public static class BaseStruct {
+        @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == BaseStruct.class;
         }
     }
 
     public static class DerivedStruct extends BaseStruct {
+        @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == DerivedStruct.class;
         }
@@ -2212,6 +2220,7 @@ final class TestAny {
             super(message);
         }
 
+        @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == BaseException.class;
         }
@@ -2224,6 +2233,7 @@ final class TestAny {
             super(message);
         }
 
+        @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == DerivedException.class;
         }
@@ -2238,6 +2248,7 @@ final class TestAny {
             super(message);
         }
 
+        @Override
         public boolean equals(Object obj) {
             return obj != null
                 && obj.getClass() == BaseRuntimeException.class;
@@ -2252,6 +2263,7 @@ final class TestAny {
             super(message);
         }
 
+        @Override
         public boolean equals(Object obj) {
             return obj != null
                 && obj.getClass() == DerivedRuntimeException.class;

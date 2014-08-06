@@ -71,6 +71,7 @@ public class SwXAutoTextEntry extends TestCase {
     /**
      * Creates text document.
      */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         XMultiServiceFactory msf = tParam.getMSF();
         SOfficeFactory SOF = SOfficeFactory.getFactory( msf );
@@ -86,6 +87,7 @@ public class SwXAutoTextEntry extends TestCase {
     /**
      *  Removes added element from AutoTextGroup
      */
+    @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
         try {
             if ( oGroup.hasByName("NewEntryName") ) {
@@ -116,6 +118,7 @@ public class SwXAutoTextEntry extends TestCase {
      *    {@link ifc.text._XAutoTextEntry} : text document</li>
      * </ul>
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
 

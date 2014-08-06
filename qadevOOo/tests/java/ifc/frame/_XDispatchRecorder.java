@@ -51,6 +51,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
     URL dispURL = null;
     PropertyValue[] dispArgs = new PropertyValue[0];
 
+    @Override
     protected void before() {
         xFrame = (XFrame) tEnv.getObjRelation("XDispatchRecorder.Frame");
 

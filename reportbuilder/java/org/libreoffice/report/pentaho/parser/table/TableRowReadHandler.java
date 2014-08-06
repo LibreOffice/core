@@ -57,6 +57,7 @@ public class TableRowReadHandler extends ElementReadHandler
      * @return the handler or null, if the tagname is invalid.
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected XmlReadHandler getHandlerForChild(final String uri,
             final String tagName,
             final Attributes atts)
@@ -94,6 +95,7 @@ public class TableRowReadHandler extends ElementReadHandler
      *
      * @throws org.xml.sax.SAXException if there is a parsing error.
      */
+    @Override
     protected void doneParsing() throws SAXException
     {
         for (int i = 0; i < tableCells.size(); i++)
@@ -109,6 +111,7 @@ public class TableRowReadHandler extends ElementReadHandler
      *
      * @return the object.
      */
+    @Override
     public Element getElement()
     {
         return tableRow;

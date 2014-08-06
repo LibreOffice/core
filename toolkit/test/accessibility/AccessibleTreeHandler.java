@@ -30,6 +30,7 @@ class AccessibleTreeHandler
 {
     protected XAccessibleContext mxContext;
 
+    @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         if (xContext != null)
@@ -57,6 +58,7 @@ class AccessibleTreeHandler
             }
     }
 
+    @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
         AccessibleTreeNode aChild = null;
@@ -117,6 +119,7 @@ class AccessibleTreeHandler
     /** Update only the child count node.  Trust on other ways to update the
         accessible children.
     */
+    @Override
     public void update (AccessibleTreeNode aNode)
     {
         synchronized (maChildList)

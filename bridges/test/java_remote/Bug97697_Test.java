@@ -41,10 +41,12 @@ import test.lib.TestBed;
  * considers the process hanging if it has not completed by then.</p>
  */
 public final class Bug97697_Test extends ComplexTestCase {
+    @Override
     public String getTestObjectName() {
         return getClass().getName();
     }
 
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -59,6 +61,7 @@ public final class Bug97697_Test extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             XTransport transport = UnoRuntime.queryInterface(
                 XTransport.class, getBridge(context).getInstance("Transport"));

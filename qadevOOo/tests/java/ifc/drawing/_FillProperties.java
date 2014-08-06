@@ -63,6 +63,7 @@ public class _FillProperties extends MultiPropertyTest {
      */
     protected PropertyTester URLTester = new PropertyTester() {
 
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg"))) {
@@ -77,6 +78,7 @@ public class _FillProperties extends MultiPropertyTest {
      */
     protected PropertyTester StringTester = new PropertyTester() {
 
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (oldValue.equals(str1)) {
@@ -91,6 +93,7 @@ public class _FillProperties extends MultiPropertyTest {
      */
     protected PropertyTester BitmapTester = new PropertyTester() {
 
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (util.ValueComparer.equalValue(oldValue, the_bitmap)) {

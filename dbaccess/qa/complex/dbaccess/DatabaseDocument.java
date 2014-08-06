@@ -246,6 +246,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
 
 
+    @Override
     @Before
     public void before() throws java.lang.Exception
     {
@@ -274,6 +275,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
 
+    @Override
     @After
     public void after() throws java.lang.Exception
     {

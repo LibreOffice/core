@@ -99,6 +99,7 @@ public class _XDocumentInsertable extends MultiMethodTest {
      * @throws StatusException If neither relation found nor
      * <code>XTextRange</code> interface is queried.
      */
+    @Override
     public void before() {
         checker = (InsertChecker)
             tEnv.getObjRelation("XDocumentInsertable.Checker") ;
@@ -181,6 +182,7 @@ public class _XDocumentInsertable extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

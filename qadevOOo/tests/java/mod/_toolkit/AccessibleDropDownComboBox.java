@@ -69,6 +69,7 @@ public class AccessibleDropDownComboBox extends TestCase {
      * Finds AccessibleDropDownComboBox walking through the
      * accessible component tree of a writer document.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
@@ -108,6 +109,7 @@ public class AccessibleDropDownComboBox extends TestCase {
     /**
      * Creates writer document.
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(
@@ -121,6 +123,7 @@ public class AccessibleDropDownComboBox extends TestCase {
     /**
      * Disposes writer document.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
     }

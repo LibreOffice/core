@@ -48,6 +48,7 @@ public class ImplementationRegistration extends TestCase {
     * Creates service
     * <code>com.sun.star.registry.ImplementationRegistration</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

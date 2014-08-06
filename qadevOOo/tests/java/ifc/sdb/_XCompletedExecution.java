@@ -47,6 +47,7 @@ public class _XCompletedExecution extends MultiMethodTest {
         public boolean checkInteractionHandler();
     }
 
+    @Override
     protected void before() {
         checkHandler = (CheckInteractionHandler)
                         tEnv.getObjRelation("InteractionHandlerChecker");
@@ -69,6 +70,7 @@ public class _XCompletedExecution extends MultiMethodTest {
         tRes.tested("executeWithCompletion()", checkHandler.checkInteractionHandler());
     }
 
+    @Override
     protected void after() {
         disposeEnvironment();
     }

@@ -33,6 +33,7 @@ import com.sun.star.uno.XInterface;
 
 public class ProxyProvider extends TestCase {
 
+    @Override
     public TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log ) {
 

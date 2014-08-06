@@ -34,6 +34,7 @@ abstract class conversionAlgorithm {
  *  This algorithm expects only values in millimeters, e.g. "20.3mm".
  */
 class horizSize extends conversionAlgorithm {
+    @Override
     int I(String value) {
         if (value.endsWith("mm")) {
             float size = (float)0.0;
@@ -59,6 +60,7 @@ class horizSize extends conversionAlgorithm {
  *  a percentage.
  */
 class lineHeight extends conversionAlgorithm {
+    @Override
     int I(String value) {
         if (value.endsWith("mm")) {
             float size = (float)0.0;
@@ -91,6 +93,7 @@ class lineHeight extends conversionAlgorithm {
  *  This class converts alignment values.
  */
 class alignment extends conversionAlgorithm {
+    @Override
     int I(String value) {
         if (value.equals("end"))
             return ParaStyle.ALIGN_RIGHT;

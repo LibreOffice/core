@@ -51,6 +51,7 @@ public class CharacterStyle extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -65,6 +66,7 @@ public class CharacterStyle extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         DesktopTools.closeDoc(xTextDoc);
@@ -89,6 +91,7 @@ public class CharacterStyle extends TestCase {
     *  <code>XIndexAccess</code> interface.</li>
     * </ul>
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         TestEnvironment tEnv = null;

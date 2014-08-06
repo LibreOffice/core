@@ -34,6 +34,7 @@ public class _XPrintAreas extends MultiMethodTest {
     CellRangeAddress titleColumns;
     CellRangeAddress titleRows;
 
+    @Override
     public void before() {
         address = (CellRangeAddress)tEnv.getObjRelation("CellRangeAddress");
         subaddress = (CellRangeAddress)tEnv.getObjRelation("CellRangeSubAddress");

@@ -54,6 +54,7 @@ public class _Shape extends MultiPropertyTest {
      * Custom tester which switches between two styles.
      */
     protected PropertyTester StyleTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (util.ValueComparer.equalValue(oldValue,style1))
@@ -67,6 +68,7 @@ public class _Shape extends MultiPropertyTest {
      * Strings ('layout' and 'controls').
      */
     protected PropertyTester StringTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (util.ValueComparer.equalValue(oldValue,"layout"))

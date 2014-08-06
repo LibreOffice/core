@@ -54,6 +54,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
      * In this case it is the actual name of the service.
      * @return The tested service.
      */
+    @Override
     public String getTestObjectName() {
         return testedServiceName;
     }
@@ -64,6 +65,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
      * Return all test methods.
      * @return The test methods.
      */
+    @Override
     public String[] getTestMethodNames() {
         // For some tests a view needs to be created. Accessing the model via
         // this program and the view may lead to problems

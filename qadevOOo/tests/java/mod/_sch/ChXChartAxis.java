@@ -57,6 +57,7 @@ public class ChXChartAxis extends TestCase {
     /**
     * Creates Chart document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -74,6 +75,7 @@ public class ChXChartAxis extends TestCase {
     /**
     * Disposes Chart document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         if( xChartDoc!=null ) {
             log.println( "    closing xChartDoc" );
@@ -91,6 +93,7 @@ public class ChXChartAxis extends TestCase {
     * @see com.sun.star.chart.XAxisYSupplier
     * @see com.sun.star.chart.ChartAxis
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XPropertySet oObj = null;

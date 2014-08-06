@@ -72,6 +72,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
      * Also a <code>com.sun.star.frame.Desktop</code>
      * service created for obtaining document's frame.
      */
+    @Override
     protected void before() {
         SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
 
@@ -227,6 +228,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
     /**
      * Disposes the document created in <code>before()</code>
      */
+    @Override
     protected void after() {
         xTextDoc.dispose();
     }

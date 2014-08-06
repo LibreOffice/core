@@ -64,6 +64,7 @@ public class XMLMetaImporter extends TestCase {
     /**
     * New impress document created.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
@@ -82,6 +83,7 @@ public class XMLMetaImporter extends TestCase {
     /**
     * Impress document destroyed.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing document " );
         xImpressDoc.dispose();
@@ -106,6 +108,7 @@ public class XMLMetaImporter extends TestCase {
     *      {@link ifc.document._XImporter} interface </li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
         (TestParameters tParam,PrintWriter log ) throws StatusException {
 

@@ -53,6 +53,7 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
      * Insert some text fields into a cell on the sheet, so this interface test
      * makes sense.
      */
+    @Override
     protected void before() {
         Object o = tEnv.getObjRelation("XTextFieldsSupplier.MAKEENTRY");
         if (o != null && ((Boolean)o).booleanValue()) {
@@ -168,6 +169,7 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
         tRes.tested(method, false);
     }
 
+    @Override
     protected void after() {
         if (mDispose)
             disposeEnvironment();

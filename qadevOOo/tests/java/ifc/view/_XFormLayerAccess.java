@@ -51,6 +51,7 @@ public class _XFormLayerAccess extends MultiMethodTest {
      * checks if the object relation <CODE>XFormLayerAccess.XForm</CODE>
      * is available
      */
+    @Override
     public void before() {
         xForm = (XForm) tEnv.getObjRelation("XFormLayerAccess.XForm");
         if (xForm == null) {

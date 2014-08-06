@@ -87,6 +87,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
      * Retrieves relation.
      * @throws StatusException If the relation is not found.
      */
+    @Override
     public void before() {
         prod = (EventProducer) tEnv.getObjRelation("EventProducer") ;
         if (prod == null) {
@@ -193,6 +194,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         if (destroy) disposeEnvironment();
     }

@@ -40,6 +40,7 @@ public class _DataPilotField extends MultiPropertyTest {
      *This class is destined to custom test of property <code>SortInfo</code>.
      */
     protected PropertyTester SortInfoTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             DataPilotFieldSortInfo sortInfo = new DataPilotFieldSortInfo();
         sortInfo.Mode = com.sun.star.sheet.DataPilotFieldSortMode.MANUAL;
@@ -66,6 +67,7 @@ public class _DataPilotField extends MultiPropertyTest {
      *This class is destined to custom test of property <code>LayoutInfo</code>.
      */
     protected PropertyTester LayoutInfoTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             DataPilotFieldLayoutInfo layoutInfo = new DataPilotFieldLayoutInfo();
             layoutInfo.LayoutMode = com.sun.star.sheet.DataPilotFieldLayoutMode.OUTLINE_SUBTOTALS_BOTTOM;
@@ -91,6 +93,7 @@ public class _DataPilotField extends MultiPropertyTest {
      *This class is destined to custom test of property <code>AutoShowInfo</code>.
      */
     protected PropertyTester AutoShowInfoTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             DataPilotFieldAutoShowInfo AutoShowInfo = new DataPilotFieldAutoShowInfo();
             AutoShowInfo.DataField = "Col1";
@@ -116,6 +119,7 @@ public class _DataPilotField extends MultiPropertyTest {
      *This class is destined to custom test of property <code>Reference</code>.
      */
     protected PropertyTester ReferenceTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             DataPilotFieldReference Reference = new DataPilotFieldReference();
             Reference.ReferenceField="Col1";

@@ -49,6 +49,7 @@ public class JavaVirtualMachine extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.java.JavaVirtualMachine</code>.
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
         XMultiServiceFactory xMSF = tParam.getMSF();

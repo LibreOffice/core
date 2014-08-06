@@ -89,6 +89,7 @@ public class ScriptPanel extends JPanel {
         column.setCellEditor(new DefaultCellEditor(new JTextField()));
 
         table.addFocusListener(new FocusAdapter() {
+            @Override
             public void focusLost(FocusEvent evt) {
                 tableFocusLost();
             }
@@ -138,6 +139,7 @@ public class ScriptPanel extends JPanel {
             return scripts.size();
         }
 
+        @Override
         public String getColumnName(int col) {
             return columnNames[col];
         }
@@ -178,6 +180,7 @@ public class ScriptPanel extends JPanel {
             return result;
         }
 
+        @Override
         public boolean isCellEditable(int row, int col) {
             if (col == 0)
                 return false;
@@ -185,6 +188,7 @@ public class ScriptPanel extends JPanel {
                 return true;
         }
 
+        @Override
         public void setValueAt(Object value, int row, int col) {
             ScriptEntry entry = scripts.get(row);
             entry.setLogicalName((String)value);

@@ -27,6 +27,7 @@ public class _XUIConfigurationPersistence extends MultiMethodTest {
     public XUIConfigurationPersistence oObj;
     private XStorage xStore = null;
 
+    @Override
     public void before() {
         xStore = (XStorage)tEnv.getObjRelation("XUIConfigurationStorage.Storage");
     }

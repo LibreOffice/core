@@ -175,6 +175,7 @@ public class _XImplementationRegistration extends MultiMethodTest {
         tRes.tested("revokeImplementation()", true) ;
     }
 
+    @Override
     public void after() {
         this.disposeEnvironment() ;
     }

@@ -38,6 +38,7 @@ public class LogStream extends PrintStream
     {
         super( new FileOutputStream( logFileName ) );
     }
+    @Override
     public  void println(String x)
     {
         super.println( getTimeStamp() + x );

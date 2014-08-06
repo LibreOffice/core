@@ -106,6 +106,7 @@ public class SimpleRegistry extends TestCase {
      *       temp directory. </li>
      * </ul>
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;

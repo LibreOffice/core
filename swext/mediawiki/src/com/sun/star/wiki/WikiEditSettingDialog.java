@@ -92,6 +92,7 @@ public class WikiEditSettingDialog extends WikiDialog
         InitSaveCheckbox( xContext, bInitSaveCheckBox );
     }
 
+    @Override
     public boolean show( )
     {
         SetThrobberVisible( false );
@@ -347,6 +348,7 @@ public class WikiEditSettingDialog extends WikiDialog
         }
     }
 
+    @Override
     public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
     {
         if ( MethodName.equals( sOKMethod ) )
@@ -365,6 +367,7 @@ public class WikiEditSettingDialog extends WikiDialog
                 m_bThreadFinished = false;
                 m_aThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
                 {
+                    @Override
                     public void run()
                     {
                         try
@@ -412,6 +415,7 @@ public class WikiEditSettingDialog extends WikiDialog
         return false;
     }
 
+    @Override
     public void windowClosed( EventObject e )
     {
         ThreadStop( false );

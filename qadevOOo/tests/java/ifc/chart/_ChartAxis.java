@@ -145,6 +145,7 @@ public class _ChartAxis extends MultiPropertyTest {
     }
 
     protected PropertyTester StepMainTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             Double ValueToSet = (Double) ValueChanger.changePValue(oldValue);

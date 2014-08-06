@@ -83,6 +83,7 @@ public class RecoveryTest extends ComplexTestCase {
      * @todo: after a second start after the crash there should no documents recovered anymore
      * @todo: enable remove of recovery files
      */
+    @Override
     public String[] getTestMethodNames() {
         return new String[]{"testCrash"};
     }

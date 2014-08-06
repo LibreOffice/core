@@ -85,13 +85,16 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         e.printStackTrace();
     }}
 
+    @Override
     protected void closeDialog(){
         xDialog.endExecute();
     }
 
+    @Override
     public void mouseReleased(MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mousePressed(MouseEvent mouseEvent) {
         if (mouseEvent.PopupTrigger){
             Rectangle aPos = new Rectangle(mouseEvent.X, mouseEvent.Y, 0, 0);
@@ -100,12 +103,15 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         }
     }
 
+    @Override
     public void mouseExited(MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent mouseEvent) {
     }
 
+    @Override
     public void disposing(EventObject eventObject) {
     }
 }

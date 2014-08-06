@@ -93,6 +93,7 @@ public class SdXImpressDocument extends TestCase {
      * @param Param test parameters
      * @param log writer to log information while testing
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xImpressDoc");
         util.DesktopTools.closeDoc(xImpressDoc);
@@ -105,6 +106,7 @@ public class SdXImpressDocument extends TestCase {
      * <code>com.sun.star.presentation.PresentationDocument</code>.
      * @see com.sun.star.presentation.PresentationDocument
      */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log)
         throws StatusException {

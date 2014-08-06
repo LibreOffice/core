@@ -36,6 +36,7 @@ public class _XFunction extends MultiMethodTest {
     /**
     * Retrieves object relation.
     */
+    @Override
     public void before() throws StatusException {
         log.println("getting provider");
         oProvider = (XFunctionProvider) tEnv.getObjRelation("provider");

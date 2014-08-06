@@ -49,6 +49,7 @@ public class _XChartDataArray extends MultiMethodTest {
     private boolean mbExcludeSetRowAndSetColumn = false;
     private String msExcludeMessage;
 
+    @Override
     protected void before() {
         Object o = tEnv.getObjRelation("CRDESC");
         if (o != null) {
@@ -216,6 +217,7 @@ public class _XChartDataArray extends MultiMethodTest {
         tRes.tested("getData()", bResult);
     }
 
+    @Override
     protected void after() {
         disposeEnvironment();
     }

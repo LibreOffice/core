@@ -2941,9 +2941,11 @@ public class DOMTest
         }
 
         public NodeType getNodeType() { return ELEMENT_NODE; }
+        @Override
         public XNamedNodeMap getAttributes() {
             return new MockNodeMap(m_attributes);
         }
+        @Override
         public boolean hasAttributes() { return m_attributes.length != 0; }
 
         public String getAttribute(String n) {

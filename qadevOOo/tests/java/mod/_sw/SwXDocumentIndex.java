@@ -64,6 +64,7 @@ public class SwXDocumentIndex extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -78,6 +79,7 @@ public class SwXDocumentIndex extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -90,6 +92,7 @@ public class SwXDocumentIndex extends TestCase {
     * is inserted to the text of the document as content.
     *
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         XTextContent xTC = null;
         Object instance = null;

@@ -31,6 +31,7 @@ public class _XScenario extends MultiMethodTest {
     String comment = null;
     boolean skipTest = false;
 
+    @Override
     public void before() {
         // testing a scenario containing the whole sheet does not make sense.
         // test is skipped until this interface is implemented somewhere else

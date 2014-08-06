@@ -37,6 +37,7 @@ public class OfficeStylesXmlResourceFactory extends AbstractXmlResourceFactory
     {
     }
 
+    @Override
     protected Configuration getConfiguration()
     {
         return JFreeReportBoot.getInstance().getGlobalConfig();

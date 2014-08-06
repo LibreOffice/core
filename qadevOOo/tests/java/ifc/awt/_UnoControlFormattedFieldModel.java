@@ -59,6 +59,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     *
     */
     protected PropertyTester ControlTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if (util.ValueComparer.equalValue(oldValue,
                         "com.sun.star.form.control.FormattedField"))
@@ -82,6 +83,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _BorderColor() {
         testProperty("BorderColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(1234) : null ;
             }
@@ -94,6 +96,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _TextColor() {
         testProperty("TextColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? new Integer(123) :
                     super.getNewValue(p,v) ;
@@ -107,6 +110,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _TextLineColor() {
         testProperty("TextLineColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? new Integer(123) :
                     super.getNewValue(p,v) ;
@@ -120,6 +124,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _BackgroundColor() {
         testProperty("BackgroundColor", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? new Integer(123) :
                     super.getNewValue(p,v) ;
@@ -149,6 +154,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _EffectiveMax() {
         testProperty("EffectiveMax", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? new Double(123.8) :
                     super.getNewValue(p,v) ;
@@ -162,6 +168,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _FormatsSupplier() {
         testProperty("FormatsSupplier", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 Object newValue = null;
                 try {
@@ -179,6 +186,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _EffectiveMin() {
         testProperty("EffectiveMin", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? new Double(0.1) :
                     super.getNewValue(p,v) ;
@@ -192,6 +200,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _FormatKey() {
         testProperty("FormatKey", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? new Integer(0) :
                     super.getNewValue(p,v) ;
@@ -205,6 +214,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _StrictFromat() {
         testProperty("StrictFromat", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? new Boolean(true) :
                     super.getNewValue(p,v) ;
@@ -218,6 +228,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _Tabstop() {
         testProperty("Tabstop", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? new Boolean(true) :
                     null ;
@@ -231,6 +242,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     */
     public void _Text() {
         testProperty("Text", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object v) {
                 return utils.isVoid(v) ? "UnoControlFormattedFieldModel" :
                     super.getNewValue(p,v) ;

@@ -54,6 +54,7 @@ import com.sun.star.uno.XInterface;
 */
 public class RegistryTypeDescriptionProvider extends TestCase {
 
+    @Override
     protected void initialize ( TestParameters Param, PrintWriter log) {
 
     }
@@ -70,6 +71,7 @@ public class RegistryTypeDescriptionProvider extends TestCase {
     *      <code>com.sun.star.uno.XInterface</code> interface.</li>
     * </ul>
     */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
                                                   PrintWriter log )
                                                     throws StatusException {

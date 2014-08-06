@@ -64,6 +64,7 @@ public class ModuleManager extends TestCase {
      * @throws StatusException was thrwon on error
      * @return the test environement
      */
+    @Override
     public TestEnvironment createTestEnvironment( TestParameters Param,
         PrintWriter log ) throws StatusException {
 
@@ -258,6 +259,7 @@ public class ModuleManager extends TestCase {
      * @param tParam test parameters
      * @param log simple logger
      */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    closing all documents " );
         DesktopTools.closeDoc(xTextDoc);

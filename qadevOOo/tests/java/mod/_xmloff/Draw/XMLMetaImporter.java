@@ -64,6 +64,7 @@ public class XMLMetaImporter extends TestCase {
     /**
     * New draw document created.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
@@ -82,6 +83,7 @@ public class XMLMetaImporter extends TestCase {
     /**
     * Draw document destroyed.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing document " );
         xDrawDoc.dispose();
@@ -106,6 +108,7 @@ public class XMLMetaImporter extends TestCase {
     *      {@link ifc.document._XImporter} interface </li>
     * </ul>
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment
             (TestParameters tParam,PrintWriter log ) {
 

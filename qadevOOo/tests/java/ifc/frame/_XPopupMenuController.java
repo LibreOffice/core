@@ -27,6 +27,7 @@ import lib.MultiMethodTest;
 public class _XPopupMenuController extends MultiMethodTest {
     public XPopupMenuController oObj = null;
 
+    @Override
     public void before() {
 
     }

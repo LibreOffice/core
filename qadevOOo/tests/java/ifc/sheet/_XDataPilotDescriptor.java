@@ -67,6 +67,7 @@ public class _XDataPilotDescriptor extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     protected void before() {
         Integer amount = (Integer)tEnv.getObjRelation("FIELDSAMOUNT");
         if (amount == null) throw new StatusException(Status.failed
@@ -411,6 +412,7 @@ public class _XDataPilotDescriptor extends MultiMethodTest {
     /**
      * Recreates object(to back old orientations of the fields).
      */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

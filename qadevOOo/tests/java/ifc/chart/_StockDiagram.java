@@ -52,6 +52,7 @@ public class _StockDiagram extends MultiPropertyTest {
     * Retrieves object relations and prepares a chart document.
     * @throws StatusException if one of relations not found.
     */
+    @Override
     protected void before() {
         log.println("Setting Diagram type to StockDiagram");
         doc = (XChartDocument) tEnv.getObjRelation("CHARTDOC");
@@ -70,6 +71,7 @@ public class _StockDiagram extends MultiPropertyTest {
     /**
     * Sets the old diagram for a chart document.
     */
+    @Override
     protected void after() {
         doc.setDiagram(oldDiagram);
     }

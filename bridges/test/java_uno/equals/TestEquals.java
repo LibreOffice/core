@@ -79,6 +79,7 @@ public final class TestEquals {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             XTestFrame f = UnoRuntime.queryInterface(
                 XTestFrame.class, getBridge(context).getInstance("TestFrame"));
@@ -146,6 +147,7 @@ public final class TestEquals {
                         final Object object2)
                     {
                         new Thread() {
+                            @Override
                             public void run() {
                                 try {
                                     Object test1Aa = object1;

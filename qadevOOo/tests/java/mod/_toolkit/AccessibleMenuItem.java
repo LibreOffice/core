@@ -79,6 +79,7 @@ public class AccessibleMenuItem extends TestCase {
      * Finds first accessible component with role <code>MENUITEM</code>
      * walking through the accessible component tree of a document.
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
         XInterface oObj = null;
@@ -160,6 +161,7 @@ public class AccessibleMenuItem extends TestCase {
     /**
      * Creates writer document.
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
             msf = Param.getMSF();
@@ -174,6 +176,7 @@ public class AccessibleMenuItem extends TestCase {
     /**
      * Disposes document.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
     }

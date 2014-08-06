@@ -38,6 +38,7 @@ public class _TimeField extends MultiPropertyTest {
     */
     public void _DefaultTime() {
         testProperty("DefaultTime", new PropertyTester() {
+            @Override
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(4321) :
                     super.getNewValue(p, old) ;

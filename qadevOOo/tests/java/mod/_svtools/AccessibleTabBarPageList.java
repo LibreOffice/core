@@ -72,6 +72,7 @@ public class AccessibleTabBarPageList extends TestCase {
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xDoc");
 
@@ -98,6 +99,7 @@ public class AccessibleTabBarPageList extends TestCase {
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         log.println("creating a test environment");

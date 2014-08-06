@@ -266,6 +266,7 @@ public class MethodParametersDialog extends JDialog{
 
 
     private class UpdateUIAdapter extends KeyAdapter{
+        @Override
         public void keyReleased(KeyEvent e){
             boolean bIsCompleted = isCompleted();
             jOKButton.setEnabled(bIsCompleted);

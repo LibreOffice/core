@@ -158,6 +158,7 @@ public class LocalOfficeWindow
 
 
     /// Overriding java.awt.Component.setVisible() due to Java bug (no showing event).
+    @Override
     public void setVisible( boolean b )
     {
         super.setVisible(b);
@@ -220,6 +221,7 @@ public class LocalOfficeWindow
     /** We make sure that the office window is notified that the parent
      *  will be removed.
      */
+    @Override
     public void removeNotify()
     {
         try {

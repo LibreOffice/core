@@ -52,6 +52,7 @@ public class _XTextCursor extends MultiMethodTest {
     /**
      * Stores component's text.
      */
+    @Override
     public void before() {
         oObj.gotoStart(false);
         oObj.gotoEnd(true);
@@ -223,6 +224,7 @@ public class _XTextCursor extends MultiMethodTest {
      * Restores the text of the component to the
      * state it was before this interafce test.
      */
+    @Override
     public void after() {
         oObj.gotoStart(false);
         oObj.gotoEnd(true);

@@ -168,6 +168,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
 
 
         private class InspectorKeyFilterAdapter extends KeyAdapter{
+            @Override
             public void keyReleased(KeyEvent e){
                 String sFilter = jtxtFilter.getText();
                 SwingTreePathProvider oSwingTreePathProvider = new SwingTreePathProvider(jTree.getSelectionPath());
@@ -234,6 +235,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
                 );
             //  Add KeyListener for help
             jTree.addKeyListener( new java.awt.event.KeyAdapter() {
+                @Override
                 public void keyReleased(java.awt.event.KeyEvent event) {
                     if ( event.getKeyCode() == KeyEvent.VK_F1 ) {
                         //  function key F1 pressed
@@ -244,6 +246,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
                 }
             });
             jTree.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mousePressed (MouseEvent e) {
                     if (e.isPopupTrigger()){
                         m_oInspectorPane.showPopUpMenu(e.getComponent(), e.getX(), e.getY());

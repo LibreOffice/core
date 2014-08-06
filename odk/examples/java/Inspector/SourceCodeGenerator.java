@@ -373,7 +373,8 @@ public class SourceCodeGenerator {
        }
 
 
-       public boolean add(String _oElement){
+       @Override
+    public boolean add(String _oElement){
             if (!contains(_oElement)){
                 super.add(_oElement);
                 return true;

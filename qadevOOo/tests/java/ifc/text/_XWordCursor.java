@@ -43,6 +43,7 @@ public class _XWordCursor extends MultiMethodTest {
     /**
      * Moves the cursor to start of the text.
      */
+    @Override
     public void before() {
         oObj.gotoStart(false);
     }

@@ -39,6 +39,7 @@ public class RadioDataAware extends DataAware
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.DataAware#setToUI(java.lang.Object)
      */
+    @Override
     protected void setToUI(Object value)
     {
         int selected = ((Number) value).intValue();
@@ -58,6 +59,7 @@ public class RadioDataAware extends DataAware
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.DataAware#getFromUI()
      */
+    @Override
     protected Object getFromUI()
     {
         for (int i = 0; i < radioButtons.length; i++)

@@ -30,6 +30,7 @@ public class _ParagraphPropertiesComplex extends MultiPropertyTest {
 
 
     protected PropertyTester WritingModeTester = new PropertyTester() {
+        @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if ((oldValue != null) && (oldValue.equals(new Short(com.sun.star.text.WritingMode2.LR_TB))))
                 return new Short(com.sun.star.text.WritingMode2.PAGE); else

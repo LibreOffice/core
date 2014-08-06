@@ -32,6 +32,7 @@ public class OOoViewer extends Applet {
 
     Object  m_objBean;
 
+    @Override
     public void init() {
         try {
             if (m_loader == null) {
@@ -59,6 +60,7 @@ public class OOoViewer extends Applet {
         }
     }
 
+    @Override
     public void start() {
         try {
         Class beanClass = m_loader.loadClass("com.sun.star.comp.beans.OOoBean");
@@ -94,6 +96,7 @@ public class OOoViewer extends Applet {
         validate();
     }
 
+    @Override
     public void stop() {
         try {
             Method methStop = m_objBean.getClass().getMethod(
@@ -110,9 +113,11 @@ public class OOoViewer extends Applet {
 
     }
 
+    @Override
     public void destroy() {
     }
 
+    @Override
     public void paint(Graphics g) {
     }
 }
@@ -126,6 +131,7 @@ final class CustomURLClassLoader extends URLClassLoader {
         super( urls );
     }
 
+    @Override
     protected Class findClass( String name ) throws ClassNotFoundException {
         // This is only called via this.loadClass -> super.loadClass ->
         // this.findClass, after this.loadClass has already called
@@ -136,6 +142,7 @@ final class CustomURLClassLoader extends URLClassLoader {
 
 
 
+    @Override
     protected Class loadClass( String name, boolean resolve )
         throws ClassNotFoundException
     {
@@ -163,6 +170,7 @@ final class CustomURLClassLoader extends URLClassLoader {
         resourcePaths.add(rurl);
     }
 
+    @Override
     public URL getResource(String name) {
         if (resourcePaths == null) return null;
 

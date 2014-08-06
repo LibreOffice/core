@@ -95,6 +95,7 @@ public class ODatasourceBrowser extends TestCase {
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
+    @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
@@ -106,6 +107,7 @@ public class ODatasourceBrowser extends TestCase {
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
+    @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xTextDoc");
         System.setProperty("hideMe", "true");
@@ -171,6 +173,7 @@ public class ODatasourceBrowser extends TestCase {
      * @see com.sun.star.frame.XController
      * @see com.sun.star.frame.XDispatchProvider
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
         log.println("creating a test environment");

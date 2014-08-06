@@ -47,6 +47,7 @@ public class ScSpreadsheetSettings extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.sheet.GlobalSheetSettings</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log) throws StatusException {
 

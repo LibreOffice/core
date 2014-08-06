@@ -100,6 +100,7 @@ public class _XRow extends MultiMethodTest {
     /**
     * Retrieves object relation first.
     */
+    @Override
     public void before() {
         data = (List<Object>) tEnv.getObjRelation("CurrentRowData") ;
     }

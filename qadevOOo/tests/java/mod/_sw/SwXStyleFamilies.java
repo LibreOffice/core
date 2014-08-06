@@ -57,6 +57,7 @@ public class SwXStyleFamilies extends TestCase {
     /**
     * Creates text document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
         try {
@@ -71,6 +72,7 @@ public class SwXStyleFamilies extends TestCase {
     /**
     * Disposes text document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
@@ -81,6 +83,7 @@ public class SwXStyleFamilies extends TestCase {
     * are gotten from text document using <code>XStyleFamiliesSupplier</code>
     * interface and returned as a test component.
     */
+    @Override
     public synchronized TestEnvironment createTestEnvironment(
             TestParameters Param, PrintWriter log ) throws StatusException {
 

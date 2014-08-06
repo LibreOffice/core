@@ -71,6 +71,7 @@ public class GraphicExporter extends TestCase {
     /**
      * Creates a new draw document.
      */
+    @Override
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a drawdoc");
         xDrawDoc = DrawTools.createDrawDoc(
@@ -80,6 +81,7 @@ public class GraphicExporter extends TestCase {
     /**
      * Disposes the draw document created before
      */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xDrawDoc ");
         util.DesktopTools.closeDoc(xDrawDoc);
@@ -114,6 +116,7 @@ public class GraphicExporter extends TestCase {
      *   </li>
      * </ul>
      */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         XInterface oObj = null;

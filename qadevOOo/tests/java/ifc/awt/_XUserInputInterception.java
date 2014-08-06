@@ -93,6 +93,7 @@ public class _XUserInputInterception extends MultiMethodTest {
     /** get the object rlation XUserInputInterception.XModel from the
      * test environment
      */
+    @Override
     protected void before() {
         log.print("try to get object relation 'XUserInputInterception.XModel': ");
         m_XModel = (XModel)tEnv.getObjRelation("XUserInputInterception.XModel");
@@ -235,6 +236,7 @@ public class _XUserInputInterception extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }
@@ -432,6 +434,7 @@ public class _XUserInputInterception extends MultiMethodTest {
          *    </LI>
          * </UL>
          */
+        @Override
         public void run(){
 
             switch (this.eventType){

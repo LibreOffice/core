@@ -89,6 +89,7 @@ public class _XDispatchProviderInterception extends MultiMethodTest {
     /**
     * Cereates new interceptor implementation.
     */
+    @Override
     public void before() {
         interceptor = new TestInterceptor(log) ;
     }

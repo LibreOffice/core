@@ -71,6 +71,7 @@ public class Hyphenator extends TestCase {
      * Then a property for using new German rules for hyphenation
      * is set.
      */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment
         (TestParameters Param, PrintWriter log) {
 

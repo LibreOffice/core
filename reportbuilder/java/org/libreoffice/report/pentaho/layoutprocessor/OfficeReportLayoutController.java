@@ -78,6 +78,7 @@ public class OfficeReportLayoutController extends ElementLayoutController
      * @throws org.jfree.report.ReportDataFactoryException
      *          if a query failed.
      */
+    @Override
     public void initialize(final Object node, final FlowController flowController,
             final LayoutController parent)
             throws DataSourceException, ReportDataFactoryException,
@@ -104,6 +105,7 @@ public class OfficeReportLayoutController extends ElementLayoutController
      * @throws org.jfree.report.ReportDataFactoryException
      *          if a query failed.
      */
+    @Override
     protected LayoutController processContent(final ReportTarget target)
             throws DataSourceException, ReportProcessingException,
             ReportDataFactoryException

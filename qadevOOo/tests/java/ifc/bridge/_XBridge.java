@@ -60,6 +60,7 @@ public class _XBridge extends MultiMethodTest {
     * Retrieves object relations.
     * @throws StatusException If one of relations not found.
     */
+    @Override
     public void before() {
         args = (Object[])tEnv.getObjRelation("XInitialization.args");
 
@@ -131,6 +132,7 @@ public class _XBridge extends MultiMethodTest {
     /**
     * Disposes object environment.
     */
+    @Override
     public void after() {
         disposeEnvironment() ;
     }

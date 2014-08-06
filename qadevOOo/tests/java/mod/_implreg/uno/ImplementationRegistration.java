@@ -45,6 +45,7 @@ public class ImplementationRegistration extends TestCase {
     * Creates service
     * <code>com.sun.star.registry.ImplementationRegistration</code>.
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;

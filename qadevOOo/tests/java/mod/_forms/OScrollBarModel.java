@@ -38,6 +38,7 @@ public class OScrollBarModel extends TestCase {
     /**
     * Creates Writer document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a textdocument" );
@@ -47,6 +48,7 @@ public class OScrollBarModel extends TestCase {
     /**
     * Disposes the Writer document.
     */
+    @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
@@ -61,6 +63,7 @@ public class OScrollBarModel extends TestCase {
         }
     }
 
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;

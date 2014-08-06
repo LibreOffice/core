@@ -48,6 +48,7 @@ public class _TextColumns extends MultiPropertyTest {
     public void _AutomaticDistance() {
         log.println("Testing with custom Property tester") ;
         testProperty("AutomaticDistance", new PropertyTester() {
+            @Override
             protected Object getNewValue(String propName, Object oldValue) {
                 XTextColumns xTC = UnoRuntime.queryInterface
                     (XTextColumns.class,tEnv.getTestObject());

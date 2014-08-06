@@ -36,6 +36,7 @@ import test.lib.TestBed;
  * create different bridges.</p>
  */
 public final class Bug51323_Test extends ComplexTestCase {
+    @Override
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -51,6 +52,7 @@ public final class Bug51323_Test extends ComplexTestCase {
             new Client().execute();
         }
 
+        @Override
         protected boolean run(XComponentContext context) throws Throwable {
             XConnection connection =
                 Connector.create(context).connect(getConnectionDescription());

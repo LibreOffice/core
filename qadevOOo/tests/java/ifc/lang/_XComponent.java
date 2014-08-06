@@ -75,6 +75,7 @@ public class _XComponent extends MultiMethodTest {
      * element.  TODO: Is this needed for anything else, too, or should it be
      * removed?
      */
+    @Override
     protected void before() {
         // do not dispose this component, but parent instead
         altDispose = (XComponent)tEnv.getObjRelation("XComponent.DisposeThis");
@@ -161,6 +162,7 @@ public class _XComponent extends MultiMethodTest {
     /**
     * Forces object recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

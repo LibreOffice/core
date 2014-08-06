@@ -48,6 +48,7 @@ public class _XCancellable extends MultiMethodTest {
     /**
      * Forces object recreation.
      */
+    @Override
     public void after() {
         disposeEnvironment() ;
     }

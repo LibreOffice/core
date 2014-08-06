@@ -80,6 +80,7 @@ public class ConnectionAwareClient extends java.awt.Frame
         addWindowListener(
             new WindowAdapter()
             {
+                @Override
                 public void windowClosing(WindowEvent event)
                 {
                     System.exit(0);

@@ -41,6 +41,7 @@ public class UniversalContentBroker extends TestCase {
     * Creates an instance of the service
     * <code>com.sun.star.ucb.UniversalContentBroker</code>.
     */
+    @Override
     public TestEnvironment createTestEnvironment
             ( TestParameters Param, PrintWriter log ) {
 

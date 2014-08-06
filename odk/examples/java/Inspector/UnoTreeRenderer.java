@@ -73,6 +73,7 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
     }
 
 
+    @Override
     public synchronized Component getTreeCellRendererComponent(JTree tree,Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus){
         try{
             bSelected = sel;
@@ -104,6 +105,7 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
 
 
 
+    @Override
     public void paintComponent(Graphics g) {
         FontMetrics fm = getFontMetrics(getFont());
         int x, y;

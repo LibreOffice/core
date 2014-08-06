@@ -130,6 +130,7 @@ public class TableCellTextBinding
 
     /** runs the thread
     */
+    @Override
     public void run()
     {
         try

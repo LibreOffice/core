@@ -65,6 +65,7 @@ public class ScTableSheetsObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
+    @Override
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
 
@@ -81,6 +82,7 @@ public class ScTableSheetsObj extends TestCase {
     /**
     * Disposes Spreadsheet document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println("disposing xSpreadsheetDocument");
         XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
@@ -106,6 +108,7 @@ public class ScTableSheetsObj extends TestCase {
     * @see com.sun.star.sheet.XSpreadsheetDocument
     * @see com.sun.star.sheet.Spreadsheet
     */
+    @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());

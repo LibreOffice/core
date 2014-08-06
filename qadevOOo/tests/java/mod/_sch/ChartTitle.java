@@ -63,6 +63,7 @@ public class ChartTitle extends TestCase {
     /**
     * Creates Chart document.
     */
+    @Override
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
@@ -80,6 +81,7 @@ public class ChartTitle extends TestCase {
     /**
     * Disposes Chart document.
     */
+    @Override
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         if( xChartDoc!=null ) {
             log.println( "    closing xChartDoc" );
@@ -94,6 +96,7 @@ public class ChartTitle extends TestCase {
     * The retrieved shape is the instance of the service
     * <code>com.sun.star.chart.ChartTitle</code>.
     */
+    @Override
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         // get the Title

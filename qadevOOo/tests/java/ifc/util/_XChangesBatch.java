@@ -39,6 +39,7 @@ public class _XChangesBatch extends MultiMethodTest {
     /**
      * add a change that can be committed
      */
+    @Override
     protected void before() {
         changeElement = tEnv.getObjRelation("XChangesBatch.ChangeElement");
         originalElement = tEnv.getObjRelation("XChangesBatch.OriginalElement");

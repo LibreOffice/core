@@ -58,6 +58,7 @@ public final class Relay implements XRelay, XSource {
             throw new WrappedTargetRuntimeException(e.toString(), this, e);
         }
         new Thread() {
+            @Override
             public void run() {
                 try {
                     // Use "127.0.0.1" instead of "localhost", see #i32281#:

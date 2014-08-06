@@ -44,6 +44,7 @@ public class _XSheetCellRangeContainer extends MultiMethodTest {
     * After method called, the new array of structures 'CellRangeAddress'
     *  is created. Then container is cleared.
     */
+    @Override
     public void before() {
         for ( short i=0; i<=2; i++ ) {
             rAddr[i] = new CellRangeAddress();
@@ -189,6 +190,7 @@ public class _XSheetCellRangeContainer extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
+    @Override
     protected void after() {
         disposeEnvironment();
     }

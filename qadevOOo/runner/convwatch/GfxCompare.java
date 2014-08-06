@@ -37,6 +37,7 @@ public class GfxCompare extends EnhancedComplexTestCase
      * @return The test methods.
      */
 
+    @Override
     public String[] getTestMethodNames() {
         return new String[]{"gfxcompare"};
     }
@@ -45,6 +46,7 @@ public class GfxCompare extends EnhancedComplexTestCase
      *
      * @return a List of software which must accessible as an external executable
      */
+    @Override
     protected String[] mustInstalledSoftware()
         {
             ArrayList<String> aList = new ArrayList<String>();

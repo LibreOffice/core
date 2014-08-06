@@ -106,6 +106,7 @@ public class MessageArea
 
 
 
+    @Override
     public void paintComponent (Graphics g)
     {
         synchronized (g)
