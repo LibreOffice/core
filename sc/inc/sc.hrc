@@ -991,7 +991,12 @@
 #define STR_HASH_GOOD           (STR_START + 438)
 #define STR_HASH_REGENERATED    (STR_START + 439)
 #define STR_RETYPE              (STR_START + 440)
-#define STR_END                 (STR_RETYPE)
+
+#define STR_TITLE_CONFLICT      (STR_START + 441)
+#define STR_TITLE_AUTHOR        (STR_START + 442)
+#define STR_TITLE_DATE          (STR_START + 443)
+#define STR_UNKNOWN_USER_CONFLICT    (STR_START + 444)
+#define STR_END                 (STR_UNKNOWN_USER_CONFLICT)
 
 #define BMP_START               (STR_END)
 

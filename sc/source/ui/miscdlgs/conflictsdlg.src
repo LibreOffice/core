@@ -17,90 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "conflictsdlg.hrc"
+#include "sc.hrc"
 
-ModalDialog RID_SCDLG_CONFLICTS
+String STR_TITLE_CONFLICT
 {
-    OutputSize = TRUE ;
-    HelpId = HID_SCDLG_CONFLICTS ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 338 , 192 ) ;
-    Text [ en-US ] = "Resolve Conflicts" ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    FixedText FT_CONFLICTS
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 326 , 26 ) ;
-        WordBreak = TRUE ;
-        Text [ en-US ] = "There are conflicting changes in this shared spreadsheet. Conflicts must be resolved before saving the spreadsheet. Keep either own or other changes." ;
-    };
-    Control LB_CONFLICTS
-    {
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
-        Size = MAP_APPFONT ( 326 , 104 ) ;
-        Border = TRUE ;
-    };
-    PushButton BTN_KEEPMINE
-    {
-        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPMINE";
-        Pos = MAP_APPFONT ( 72 , 145 ) ;
-        Size = MAP_APPFONT ( 76 , 14 ) ;
-        Text [ en-US ] = "Keep ~Mine" ;
-    };
-    PushButton BTN_KEEPOTHER
-    {
-        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPOTHER";
-        Pos = MAP_APPFONT ( 190 , 145 ) ;
-        Size = MAP_APPFONT ( 76 , 14 ) ;
-        Text [ en-US ] = "Keep ~Other" ;
-    };
-    FixedLine FL_CONFLICTS
-    {
-        Pos = MAP_APPFONT ( 1 , 162 ) ;
-        Size = MAP_APPFONT ( 338 , 8 ) ;
-    };
-    PushButton BTN_KEEPALLMINE
-    {
-        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPALLMINE";
-        Pos = MAP_APPFONT ( 6 , 172 ) ;
-        Size = MAP_APPFONT ( 104 , 14 ) ;
-        Text [ en-US ] = "~Keep All Mine" ;
-    };
-    PushButton BTN_KEEPALLOTHERS
-    {
-        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPALLOTHERS";
-        Pos = MAP_APPFONT ( 116 , 172 ) ;
-        Size = MAP_APPFONT ( 104 , 14 ) ;
-        Text [ en-US ] = "Keep ~All Others" ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 226 , 172 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 282 , 172 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    String STR_TITLE_CONFLICT
-    {
-        Text [ en-US ] = "Conflict" ;
-    };
-    String STR_TITLE_AUTHOR
-    {
-        Text [ en-US ] = "Author" ;
-    };
-    String STR_TITLE_DATE
-    {
-        Text [ en-US ] = "Date" ;
-    };
-    String STR_UNKNOWN_USER
-    {
-        Text [ en-US ] = "Unknown User" ;
-    };
+    Text [ en-US ] = "Conflict" ;
+};
+
+String STR_TITLE_AUTHOR
+{
+    Text [ en-US ] = "Author" ;
+};
+
+String STR_TITLE_DATE
+{
+    Text [ en-US ] = "Date" ;
+};
+
+String STR_UNKNOWN_USER_CONFLICT
+{
+    Text [ en-US ] = "Unknown User" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
