@@ -133,7 +133,7 @@ public class DocumentEvents extends JUnitBasedTest
         {
             // not interested in
         }
-    };
+    }
 
     private class CloseListener implements XCloseListener
     {
@@ -155,7 +155,7 @@ public class DocumentEvents extends JUnitBasedTest
         {
             // not interested in
         }
-    };
+    }
 
     private class DocDisposeListener implements XEventListener
     {
@@ -170,7 +170,7 @@ public class DocumentEvents extends JUnitBasedTest
                 m_document.notifyAll();
             }
         }
-    };
+    }
 
     private class DocCloser extends Thread
     {
@@ -187,14 +187,14 @@ public class DocumentEvents extends JUnitBasedTest
                 Logger.getLogger(DocumentEvents.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    };
+    }
 
     private enum CloseEventType
     {
         OnUnload,
         NotifyClosing,
         Disposing
-    };
+    }
 
     private OfficeDocument m_document = null;
     final private ArrayList< CloseEventType > m_observedCloseEvents = new ArrayList<DocumentEvents.CloseEventType>();

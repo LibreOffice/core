@@ -61,7 +61,7 @@ public class InspectorAddon {
     private static final String[] m_serviceNames = {
         "org.openoffice.InstanceInspectorAddon",
         "com.sun.star.frame.ProtocolHandler" };
-                                                     ;
+
         private XComponentContext m_xContext = null;
 
     /** Creates a new instance of InspectorAddon */

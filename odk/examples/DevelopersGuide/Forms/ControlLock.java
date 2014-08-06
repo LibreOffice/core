@@ -103,7 +103,7 @@ class LockControlModels extends ComponentTreeTraversal
         // leaving this nesting level
         --m_nLevel;
     }
-};
+}
 
 /**************************************************************************/
 /** a class which automatically handles control locking.

@@ -504,4 +504,4 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         // not interested in
     }
 
-};
+}

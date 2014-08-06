@@ -212,7 +212,7 @@ public class ResourceManager {
         }
 
         if ( m_contenturl == null || m_contenturl.equals( "" )) {
-            m_contenturl = Helper.prependCurrentDirAsAbsoluteFileURL( "data/data.txt" );;
+            m_contenturl = Helper.prependCurrentDirAsAbsoluteFileURL( "data/data.txt" );
         }
 
         if ( m_targetFolderURL == null || m_targetFolderURL.equals( "" )) {

@@ -569,7 +569,7 @@ public class UndoManager
         private int     getUndoActionCount() { return m_undoCount; }
         private int     getRedoActionCount() { return m_redoCount; }
         private String  getCurrentUndoContextTitle() { return m_activeUndoContexts.peek(); }
-        private String  getMostRecentlyAddedActionTitle() { return m_mostRecentlyAddedAction; };
+        private String  getMostRecentlyAddedActionTitle() { return m_mostRecentlyAddedAction; }
         private String  getMostRecentlyUndoneTitle() { return m_mostRecentlyUndone; }
         private int     getCurrentUndoContextDepth() { return m_activeUndoContexts.size(); }
         private boolean isDisposed() { return m_isDisposed; }
@@ -604,7 +604,7 @@ public class UndoManager
         private String  m_mostRecentlyAddedAction = null;
         private String  m_mostRecentlyUndone = null;
         private final Object    m_allContextsClosedCondition = new Object();
-    };
+    }
 
 
     private void impl_checkUndo() throws Exception
@@ -1399,7 +1399,7 @@ public class UndoManager
         }
 
         private final ArrayList<XEventListener> m_eventListeners = new ArrayList<XEventListener>();
-    };
+    }
 
 
     private class CallbackComponent implements XJob, XTypeProvider

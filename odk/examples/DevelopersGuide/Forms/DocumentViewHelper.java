@@ -217,5 +217,5 @@ class DocumentViewHelper
         // So you could easily have a document where the first control model is bound to a shape which
         // has a greater ordinate than any other control model.
     }
-};
+}
 

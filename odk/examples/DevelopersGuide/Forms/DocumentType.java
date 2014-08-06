@@ -46,5 +46,5 @@ public class DocumentType extends com.sun.star.uno.Enum
             default: return UNKNOWN;
         }
     }
-};
+}
 

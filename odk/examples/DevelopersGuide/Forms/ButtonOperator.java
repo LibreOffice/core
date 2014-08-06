@@ -213,5 +213,5 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
             updateButtonState( buttonModel, getAssociatedFormFeature( buttonModel ) );
         }
     }
-};
+}
 

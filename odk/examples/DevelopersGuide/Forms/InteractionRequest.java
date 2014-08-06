@@ -70,5 +70,5 @@ class InteractionRequest implements XInteractionRequest
     {
         return m_aContinuations.toArray( new XInteractionContinuation[ m_aContinuations.size() ] );
     }
-};
+}
 

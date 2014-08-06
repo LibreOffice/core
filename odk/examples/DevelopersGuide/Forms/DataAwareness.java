@@ -104,7 +104,7 @@ class PrintComponentTree extends ComponentTreeTraversal
         super.handle( aFormComponent );
         m_sPrefix = m_sPrefix.substring( 0, m_sPrefix.length() - 1 );
     }
-};
+}
 
 /**************************************************************************/
 /** a class revoking button models from a ButtonOperator instance

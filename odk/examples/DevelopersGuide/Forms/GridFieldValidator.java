@@ -168,4 +168,4 @@ class GridFieldValidator implements XUpdateListener
     {
         // not interested in
     }
-};
+}

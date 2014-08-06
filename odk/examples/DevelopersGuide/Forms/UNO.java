@@ -87,4 +87,4 @@ public class UNO
         return (XFoo)UnoRuntime.queryInterface( XFoo.class, aObject );
     }
 */
-};
+}

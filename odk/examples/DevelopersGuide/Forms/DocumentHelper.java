@@ -171,7 +171,7 @@ public class DocumentHelper
         // get the parent
         XChild xAsChild = UnoRuntime.queryInterface( XChild.class, aForm );
         XIndexContainer xContainer = UnoRuntime.queryInterface(
-            XIndexContainer.class, xAsChild.getParent() );;
+            XIndexContainer.class, xAsChild.getParent() );
         // append a new form to this parent container
         return createSubForm( xContainer, sInitialName );
     }
@@ -304,5 +304,5 @@ public class DocumentHelper
             m_documentComponent );
         return (XInterface) xORB.createInstanceWithArguments( serviceSpecifier, arguments );
     }
-};
+}
 

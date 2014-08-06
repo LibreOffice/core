@@ -316,7 +316,7 @@ public class DrawingDemo
                 pPolyPoints[ 1 ].X = nPageWidth / 2;
                 pPolyPoints[ 1 ].Y = nPageHeight;
                 pPolyFlags[ 1 ] = PolygonFlags.CONTROL;
-                pPolyPoints[ 2 ].X = nPageWidth / 2;;
+                pPolyPoints[ 2 ].X = nPageWidth / 2;
                 pPolyPoints[ 2 ].Y = nPageHeight;
                 pPolyFlags[ 2 ] = PolygonFlags.CONTROL;
                 pPolyPoints[ 3 ].X = nPageWidth;
@@ -329,7 +329,7 @@ public class DrawingDemo
                 pPolyPoints[ 5 ].X = nPageWidth / 2;
                 pPolyPoints[ 5 ].Y = nPageHeight / 2;
                 pPolyFlags[ 5 ] = PolygonFlags.CONTROL;
-                pPolyPoints[ 6 ].X = nPageWidth / 2;;
+                pPolyPoints[ 6 ].X = nPageWidth / 2;
                 pPolyPoints[ 6 ].Y = nPageHeight / 2;
                 pPolyFlags[ 6 ] = PolygonFlags.CONTROL;
                 pPolyPoints[ 7 ].X = 1000;

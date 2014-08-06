@@ -41,7 +41,7 @@ import com.sun.star.lang.*;
 interface IFormComponentAction
 {
     public abstract void handle( Object aFormComponent ) throws java.lang.Exception;
-};
+}
 
 /**************************************************************************/
 /** a helper class for travelling a form component tree

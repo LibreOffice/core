@@ -174,7 +174,7 @@ class UniqueColumnValue
             xCol.updateInt( generatePrimaryKey( xForm, sFieldName ) );
         }
     }
-};
+}
 
 /**************************************************************************/
 /** base class for helpers dealing with unique column values
@@ -286,7 +286,7 @@ class KeyGeneratorForReset extends UniqueColumnValue implements XResetListener
     {
         // not interested in
     }
-};
+}
 
 
 /**************************************************************************/
@@ -346,7 +346,7 @@ class KeyGeneratorForUpdate extends UniqueColumnValue implements XRowSetApproveL
     {
         // not interested in
     }
-};
+}
 
 /**************************************************************************/
 /** allows to generate unique keys for a field of a Form
@@ -428,4 +428,4 @@ public class KeyGenerator
             m_bUpdateListening = true;
         }
     }
-};
+}

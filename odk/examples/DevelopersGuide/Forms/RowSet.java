@@ -277,4 +277,4 @@ public class RowSet implements XRowSet, XRow
     {
         return m_row.getArray(i);
     }
-};
+}
