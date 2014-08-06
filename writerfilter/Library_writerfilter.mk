@@ -117,7 +117,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/ooxml/OOXMLFactory \
     writerfilter/source/ooxml/OOXMLFastContextHandler \
     writerfilter/source/ooxml/OOXMLFastDocumentHandler \
-    writerfilter/source/ooxml/OOXMLFastTokenHandler \
     writerfilter/source/ooxml/OOXMLParserState \
     writerfilter/source/ooxml/OOXMLPropertySetImpl \
     writerfilter/source/ooxml/OOXMLStreamImpl \
