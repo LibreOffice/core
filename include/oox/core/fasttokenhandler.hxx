@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_CORE_FASTTOKENHANDLER_HXX
 #define INCLUDED_OOX_CORE_FASTTOKENHANDLER_HXX
 
+#include <oox/dllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -37,7 +38,7 @@ typedef ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo, ::com::su
 /** Wrapper implementing the com.sun.star.xml.sax.XFastTokenHandler API interface
     that provides access to the tokens generated from the internal token name list.
  */
-class FastTokenHandler : public FastTokenHandler_BASE,
+class OOX_DLLPUBLIC FastTokenHandler : public FastTokenHandler_BASE,
                          public sax_fastparser::FastTokenHandlerBase
 {
 public:

@@ -18,7 +18,7 @@
  */
 
 #include "OOXMLStreamImpl.hxx"
-#include "OOXMLFastTokenHandler.hxx"
+#include "oox/core/fasttokenhandler.hxx"
 #include <iostream>
 
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
@@ -412,7 +412,7 @@ uno::Reference<uno::XComponentContext> OOXMLStreamImpl::getContext()
 uno::Reference <xml::sax::XFastTokenHandler> OOXMLStreamImpl::getFastTokenHandler()
 {
     if (! mxFastTokenHandler.is())
-        mxFastTokenHandler.set(new OOXMLFastTokenHandler());
+        mxFastTokenHandler.set(new oox::core::FastTokenHandler());
 
     return mxFastTokenHandler;
 }
