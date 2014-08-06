@@ -55,7 +55,7 @@ public class FieldFormatter implements XItemListener
     String suntitled;
     Integer IFieldFormatStep;
 
-    public FieldFormatter(TableWizard _CurUnoDialog, TableDescriptor _curTableDescriptor)
+    public FieldFormatter(TableWizard _CurUnoDialog)
     {
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (TableWizard.SOFIELDSFORMATPAGE * 100);
@@ -388,11 +388,6 @@ public class FieldFormatter implements XItemListener
             Helper.setUnoPropertyValue(oColumnDescriptorModel, "Column", xNewPropertySet);
         }
         txtfieldname.setText(_ColumnName);
-    }
-
-    public XPropertySet clonePropertySet(XPropertySet _xPropertySet)
-    {
-        return null;
     }
 
     public void itemStateChanged(ItemEvent arg0)

@@ -293,7 +293,7 @@ public class ScriptMetaData extends ScriptEntry {
         URL url = null;
         int indexOfColon = path.indexOf(":");
         String scheme = path.substring( 0, indexOfColon );
-        UCBStreamHandler handler = new UCBStreamHandler( parent.parent.m_xCtx, scheme, parent.m_xSFA);
+        UCBStreamHandler handler = new UCBStreamHandler( scheme, parent.m_xSFA);
 
         path += UCBStreamHandler.separator;
         url = new URL(null, path, handler);

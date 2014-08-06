@@ -67,23 +67,23 @@ public class Control extends Shape
     {
         super(_oFormHandler, _aPoint, _aSize);
         xFormName = _xFormName;
-        createControl(_icontroltype, _aPoint, _aSize, null, _FieldName);
+        createControl(_icontroltype, null, _FieldName);
     }
 
     public Control(FormHandler _oFormHandler, XShapes _xGroupShapes, XNameContainer _xFormName, int _icontroltype, Point _aPoint, Size _aSize)
     {
         super(_oFormHandler, _aPoint, _aSize);
         xFormName = _xFormName;
-        createControl(_icontroltype, _aPoint, _aSize, _xGroupShapes, null);
+        createControl(_icontroltype, _xGroupShapes, null);
     }
 
     public Control(FormHandler _oFormHandler, int _icontroltype, Point _aPoint, Size _aSize)
     {
         super(_oFormHandler, _aPoint, _aSize);
-        createControl(_icontroltype, _aPoint, _aSize, null, null);
+        createControl(_icontroltype, null, null);
     }
 
-    public void createControl(int _icontroltype, Point _aPoint, Size _aSize, XShapes _xGroupShapes, String _FieldName)
+    public void createControl(int _icontroltype, XShapes _xGroupShapes, String _FieldName)
     {
         try
         {

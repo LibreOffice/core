@@ -292,7 +292,7 @@ public class CheckModuleAPI extends ComplexTestCase
             {
                 // cws version: all added modules must be tested
                 final String cws = version.substring(4, version.length());
-                final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(cws, param, log);
+                final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(param, log);
                 final ArrayList<String> addedModules = cde.getModules();
 
                 final ArrayList<String> moduleNames = new ArrayList<String>();
@@ -546,7 +546,7 @@ public class CheckModuleAPI extends ComplexTestCase
 
                     // cws version: all added modules must be tested
                     final String cws = version.substring(4, version.length());
-                    final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(cws, param, log);
+                    final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(param, log);
                     cde.setUnoApiCwsStatus(status);
                 }
                 catch (ParameterNotFoundException ex)

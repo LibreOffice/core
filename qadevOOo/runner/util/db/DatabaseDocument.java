@@ -22,7 +22,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.uno.UnoRuntime;
@@ -32,7 +31,7 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class DatabaseDocument
 {
-    protected DatabaseDocument( final XMultiServiceFactory _orb, final DataSource _dataSource )
+    protected DatabaseDocument( final DataSource _dataSource )
     {
         m_dataSource = _dataSource;
 

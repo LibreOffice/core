@@ -240,8 +240,8 @@ public class FormDocument extends TextDocument
         {
             oMainControlForm.oFormController.positionControls(oMainControlForm.curArrangement,
                     oMainControlForm.aStartPoint,
-                    oMainControlForm.getFormSize(),
-                    curUIControlArranger.getAlignValue(), _NBorderType);
+                    curUIControlArranger.getAlignValue(),
+                    _NBorderType);
         }
     }
 
@@ -262,7 +262,7 @@ public class FormDocument extends TextDocument
         {
 //          oSubControlForm.oFormController.adjustYPositions(_idiffheight);
             oSubControlForm.setStartPoint(new Point(oSubControlForm.aStartPoint.X, oMainControlForm.getActualFormHeight() + oMainControlForm.aStartPoint.Y + SOFORMGAP));
-            oSubControlForm.oFormController.positionControls(oSubControlForm.curArrangement, oSubControlForm.aStartPoint, oSubControlForm.getAvailableFormSize(), curUIControlArranger.getAlignValue(), _NBorderType);
+            oSubControlForm.oFormController.positionControls(oSubControlForm.curArrangement, oSubControlForm.aStartPoint, curUIControlArranger.getAlignValue(), _NBorderType);
         }
     }
 
@@ -404,11 +404,11 @@ public class FormDocument extends TextDocument
             else
             {
                 adaptControlStyles = !oFormController.areControlsexisting();
-                oFormController.positionControls(_curArrangement, aStartPoint, getAvailableFormSize(), curUIControlArranger.getAlignValue(), _NBorderType);
+                oFormController.positionControls(_curArrangement, aStartPoint, curUIControlArranger.getAlignValue(), _NBorderType);
             }
             if (adaptControlStyles)
             {
-                curStyleApplier.applyStyle(false, true);
+                curStyleApplier.applyStyle(true);
             }
             if ((Name.equals(SOMAINFORM)) && (oControlForms.size() > 1))
             {

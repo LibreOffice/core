@@ -228,7 +228,7 @@ public class APIDescGetter extends DescGetter
                 System.out.println("## reading from jar");
             }
 
-            entry = getFromClassPath(job, debug);
+            entry = getFromClassPath(job);
         }
 
         boolean foundInterface = false;
@@ -515,7 +515,7 @@ public class APIDescGetter extends DescGetter
         return entries;
     }
 
-    protected DescEntry getFromClassPath(String aEntry, boolean debug)
+    protected DescEntry getFromClassPath(String aEntry)
     {
         int dotindex = aEntry.indexOf('.');
 

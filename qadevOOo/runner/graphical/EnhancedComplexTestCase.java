@@ -292,10 +292,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
         return "";
     }
 
-    public void runThroughOneFileInIndex(String _sPath, String _sBasename, ParameterHelper _aParam)
-    {
-
-    }
 /**
  * Run through a given index.ini or run through a given directory,
  * find all postscript or pdf files.

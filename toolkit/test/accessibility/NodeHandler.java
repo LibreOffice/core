@@ -48,7 +48,7 @@ abstract class NodeHandler
     }
 
     /** return the number of children this object has */
-    public int getChildCount(Object aObject)
+    public int getChildCount()
     {
         synchronized (maChildList)
         {
@@ -77,7 +77,7 @@ abstract class NodeHandler
         }
     }
 
-    public AccessibleTreeNode getChildNoCreate (AccessibleTreeNode aParent, int nIndex)
+    public AccessibleTreeNode getChildNoCreate (int nIndex)
     {
         synchronized (maChildList)
         {
@@ -87,7 +87,7 @@ abstract class NodeHandler
 
     /** Remove the specified child from the list of children.
     */
-    public boolean removeChild (AccessibleTreeNode aNode, int nIndex)
+    public boolean removeChild (int nIndex)
     {
         try
         {
@@ -123,12 +123,6 @@ abstract class NodeHandler
     // The following methods support editing of children and actions.
     // They have default implementations for no actions and read-only.
 
-
-    /** May this child be changed? */
-    public boolean isChildEditable (AccessibleTreeNode aNode, int nIndex)
-    {
-        return false;
-    }
 
     /** get names of supported actions */
     public String[] getActions (AccessibleTreeNode aNode)

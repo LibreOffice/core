@@ -149,10 +149,10 @@ public class PRNCompare
             String[] aRefList = createJPEGFromPostscript(m_sOutputPath, m_sReferencePath, m_sReferenceFile, getResolutionInDPI());
 //  TODO: Assume, that Postscript is already in the OutputPath, this may change.
             String[] aPSList = createJPEGFromPostscript(m_sOutputPath, m_sOutputPath, m_sPostScriptFile, getResolutionInDPI());
-            StatusHelper[] aList = createDiffs(m_sOutputPath,
-                                               aRefList,
+            StatusHelper[] aList = createDiffs(aRefList,
                                                aPSList,
-                                               getMaxPages(), m_tUseBorderMove);
+                                               getMaxPages(),
+                                               m_tUseBorderMove);
 
             return aList;
         }
@@ -342,7 +342,7 @@ public class PRNCompare
         }
 
 
-    public StatusHelper[] createDiffs(String _sOutputPath, String[] _aRefList, String[] _aPSList, int _nMaxDiffs, TriState _tUseBorderMove)
+    public StatusHelper[] createDiffs(String[] _aRefList, String[] _aPSList, int _nMaxDiffs, TriState _tUseBorderMove)
         {
             if (_nMaxDiffs < 1)
             {

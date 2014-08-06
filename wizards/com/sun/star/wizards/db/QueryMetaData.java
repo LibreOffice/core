@@ -200,7 +200,7 @@ public class QueryMetaData extends CommandMetaData
         return oTable.getColumns().getElementNames();
     }
 
-    public void initializeFieldTitleSet(boolean _bAppendMode)
+    public void initializeFieldTitleSet()
     {
         try
         {

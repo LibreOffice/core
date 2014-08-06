@@ -351,7 +351,7 @@ public class ReportDesignerTest
             return sFileType;
         }
 
-    private String getOutputPath(int _nType)
+    private String getOutputPath()
         {
             String sOutputPath = util.utils.getOfficeTemp/*Dir*/(getMSF());// (String)param.get( convwatch.PropertyName.DOC_COMPARATOR_OUTPUT_PATH );
 
@@ -374,7 +374,7 @@ public class ReportDesignerTest
      */
     private void storeComponent(String _sName, Object _xComponent, int _nType)
         {
-            String sOutputPath = getOutputPath(_nType);
+            String sOutputPath = getOutputPath();
 
             // add DocumentPoolName
             sOutputPath += getDocumentPoolName(_nType);

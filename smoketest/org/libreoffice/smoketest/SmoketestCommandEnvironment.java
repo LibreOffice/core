@@ -20,7 +20,6 @@ package org.libreoffice.smoketest;
 
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.ucb.XCommandEnvironment;
 

@@ -139,7 +139,7 @@ public class ListBox extends TestCase
     }
 
     /* ------------------------------------------------------------------ */
-    private String[] impl_getTypedValue( final String _asType, final int _rowNum )
+    private String[] impl_getTypedValue( final String _asType )
     {
         Map< String, String[] > valueMap = new HashMap< String, String[] >();
         valueMap.put( "bigint",     new String[] { "1111111111", "222222222" } );
@@ -207,7 +207,7 @@ public class ListBox extends TestCase
                 XPreparedStatement statement = connection.prepareStatement( sql.toString() );
                 XParameters statementParameters = UnoRuntime.queryInterface( XParameters.class, statement );
 
-                final String[] keyValues = impl_getTypedValue( keyTypes[i], 0 );
+                final String[] keyValues = impl_getTypedValue( keyTypes[i] );
 
                 for ( int row=0; row<displayValues.length; ++row )
                 {

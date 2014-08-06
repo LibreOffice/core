@@ -179,11 +179,6 @@ public class FilterComponent
         public void disposing(EventObject eventObject)
         {
         }
-
-        public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent)
-        {
-            getfilterstate();
-        }
     }
 
     public static String getIndexNumber(String _sStr)
@@ -948,7 +943,7 @@ public class FilterComponent
             return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Text"));
         }
 
-        protected String getDateTimeString(boolean bgetDate)
+        protected String getDateTimeString()
         {
             double dblValue = ((Double) getValue()).doubleValue();
             NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();

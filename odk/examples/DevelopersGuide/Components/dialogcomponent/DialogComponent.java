@@ -124,7 +124,7 @@ public class DialogComponent {
             return "Created dialog \"" + DialogURL + "\"";
         }
 
-        public void copyText( XDialog xDialog, Object aEventObject ) {
+        public void copyText( XDialog xDialog ) {
             XControlContainer xControlContainer = UnoRuntime.queryInterface(
                 XControlContainer.class, xDialog );
             String aTextPropertyStr = "Text";

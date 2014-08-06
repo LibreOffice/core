@@ -121,7 +121,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             oUnoDialogSample2.createWindowPeer();
             // add the roadmap control. Note that the roadmap may not be created before the windowpeer of the dialog exists
             // (see http://qa.openoffice.org/issues/show_bug.cgi?id=67369)
-            oUnoDialogSample2.addRoadmap(oUnoDialogSample2.getRoadmapItemStateChangeListener());
+            oUnoDialogSample2.addRoadmap();
             oUnoDialogSample2.insertRoadmapItem(0, true, "Introduction", 1);
             oUnoDialogSample2.insertRoadmapItem(1, true, "Supported Services", 2);
             oUnoDialogSample2.insertRoadmapItem(2, true, "Interfaces", 3);

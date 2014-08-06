@@ -263,7 +263,7 @@ public class DBTools {
     * Creates class instance.
     * @param xMSF <code>XMultiServiceFactory</code>.
     */
-    public DBTools(XMultiServiceFactory xMSF, PrintWriter _logger )
+    public DBTools(XMultiServiceFactory xMSF )
     {
         this.xMSF = xMSF ;
         try {

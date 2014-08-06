@@ -165,7 +165,7 @@ public class ORowSet extends TestCase {
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
-        dbTools = new DBTools( m_orb, _log );
+        dbTools = new DBTools( m_orb );
 
         // creating DataSource and registering it in DatabaseContext
         String dbURL = (String) Param.get("test.db.url");

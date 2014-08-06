@@ -220,7 +220,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         }
     }
 
-    private String getOrderStatement(final int commandType, final String command, final List sortExpressions)
+    private String getOrderStatement(final List sortExpressions)
     {
         final StringBuffer order = new StringBuffer();
         final int count = sortExpressions.size();
@@ -493,7 +493,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             WrappedTargetException,
             NoSuchElementException
     {
-        final StringBuffer order = new StringBuffer(getOrderStatement(commandType, command, (ArrayList<?>) parameters.get(SORT_EXPRESSIONS)));
+        final StringBuffer order = new StringBuffer(getOrderStatement((ArrayList<?>) parameters.get(SORT_EXPRESSIONS)));
         if (order.length() > 0 && commandType != CommandType.TABLE)
         {
             String statement = command;

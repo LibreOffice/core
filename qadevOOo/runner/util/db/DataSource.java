@@ -70,7 +70,7 @@ public class DataSource
         synchronized ( this )
         {
             if ( m_document == null )
-                m_document = new DatabaseDocument( m_orb, this );
+                m_document = new DatabaseDocument( this );
         }
         return m_document;
     }

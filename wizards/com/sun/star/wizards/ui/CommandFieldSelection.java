@@ -222,7 +222,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
             {
                 curCommandName = sSelectedTableName; // sLocList[iSelPos];
                 CurDBMetaData.setTableByName(curCommandName);
-                binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
+                binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE);
             }
             else
             {
@@ -231,14 +231,14 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
                     CurDBMetaData.setCommandType(CommandType.TABLE);
                     curCommandName = JavaTools.replaceSubString(sSelectedTableName, PropertyNames.EMPTY_STRING, sTablePrefix);
                     CurDBMetaData.setTableByName(curCommandName);
-                    binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
+                    binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE);
                 }
                 else
                 {
                     CurDBMetaData.setCommandType(CommandType.QUERY);
                     curCommandName = JavaTools.replaceSubString(sSelectedTableName, PropertyNames.EMPTY_STRING, sQueryPrefix);
                     CurDBMetaData.setQueryByName(curCommandName);
-                    binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.QUERY, AppendMode);
+                    binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.QUERY);
                 }
             }
             if (binitialize)

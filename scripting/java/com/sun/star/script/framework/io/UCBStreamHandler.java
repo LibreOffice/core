@@ -23,13 +23,11 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
-
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.PathUtils;
 
@@ -41,7 +39,7 @@ public class UCBStreamHandler extends URLStreamHandler {
     private HashMap<String,InputStream> m_jarStreamMap = new HashMap<String,InputStream>(12);
     public static String m_ucbscheme;
 
-    public UCBStreamHandler( XComponentContext ctxt, String scheme, XSimpleFileAccess xSFA )
+    public UCBStreamHandler( String scheme, XSimpleFileAccess xSFA )
     {
         LogUtils.DEBUG( "UCBStreamHandler ctor, scheme = " + scheme );
         UCBStreamHandler.m_ucbscheme = scheme;

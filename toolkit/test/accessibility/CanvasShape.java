@@ -240,16 +240,6 @@ class CanvasShape
 
 
 
-    /** Callback for disposing events.
-    */
-    public void disposing (com.sun.star.lang.EventObject e)
-    {
-        System.out.println ("Disposing");
-    }
-
-
-
-
     /** Compute whether the specified point lies inside the object's
         bounding box.
     */

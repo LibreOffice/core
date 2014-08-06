@@ -21,7 +21,6 @@ import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
@@ -186,7 +185,7 @@ public class StyleApplier
         return (short) -1;
     }
 
-    public void applyStyle(boolean _bmodifyBackground, boolean _bapplyalways)
+    public void applyStyle(boolean _bapplyalways)
     {
         short iStyle = getStyleIndex();
         if ((iStyle != iOldLayoutPos) || _bapplyalways)

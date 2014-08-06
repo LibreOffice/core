@@ -149,7 +149,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         }
     }
 
-    public void importReportData(final XMultiServiceFactory _xMSF, final Dataimport _CurDataimport, IReportDocument _CurReportDocument, PropertyValue[] _properties)
+    public void importReportData(final XMultiServiceFactory _xMSF, PropertyValue[] _properties)
     {
         if (CurReportDocument.reconnectToDatabase(_xMSF, _properties))
         {
@@ -167,6 +167,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
     {
         CurReportDocument = ReportTextImplementation.create( xMSF, i_documentUI, _textDocument, m_oResource );
         showProgressDisplay(true);
-        importReportData(xMSF, this, CurReportDocument, properties);
+        importReportData(xMSF, properties);
     }
 }

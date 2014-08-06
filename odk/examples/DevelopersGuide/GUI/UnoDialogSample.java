@@ -167,7 +167,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             oUnoDialogSample.insertFileControl(oUnoDialogSample, 106, 290, 200 );
             oUnoDialogSample.insertButton(oUnoDialogSample, 106, 320, 50, "~Close dialog", (short) PushButtonType.OK_value);
             oUnoDialogSample.createWindowPeer();
-            oUnoDialogSample.addRoadmap(oUnoDialogSample.getRoadmapItemStateChangeListener());
+            oUnoDialogSample.addRoadmap();
             oUnoDialogSample.insertRoadmapItem(0, true, "Introduction", 1);
             oUnoDialogSample.insertRoadmapItem(1, true, "Documents", 2);
             oUnoDialogSample.xDialog = UnoRuntime.queryInterface(XDialog.class, oUnoDialogSample.m_xDialogControl);
@@ -274,7 +274,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
         if (m_xWindowPeer == null){
             createWindowPeer();
         }
-        addRoadmap(getRoadmapItemStateChangeListener());
+        addRoadmap();
         insertRoadmapItem(0, true, "Introduction", 1);
         insertRoadmapItem(1, true, "Documents", 2);
         xDialog = UnoRuntime.queryInterface(XDialog.class, m_xDialogControl);
@@ -1411,7 +1411,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     XSingleServiceFactory m_xSSFRoadmap;
     XIndexContainer m_xRMIndexCont;
 
-    public void addRoadmap(XItemListener _xItemListener) {
+    public void addRoadmap() {
         XPropertySet xDialogModelPropertySet = null;
         try {
             // create a unique name by means of an own implementation...

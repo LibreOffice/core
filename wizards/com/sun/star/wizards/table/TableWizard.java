@@ -237,7 +237,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     public void buildSteps()
     {
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);
-        curFieldFormatter = new FieldFormatter(this, curTableDescriptor);
+        curFieldFormatter = new FieldFormatter(this);
         if ( this.curTableDescriptor.supportsPrimaryKeys() )
         {
             curPrimaryKeyHandler = new PrimaryKeyHandler(this, curTableDescriptor);
@@ -254,7 +254,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         String catalogname = curFinalizer.getCatalogName();
         if (curTableDescriptor.supportsPrimaryKeys())
         {
-            String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields(curTableDescriptor);
+            String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields();
             if (keyfieldnames != null)
             {
                 if (keyfieldnames.length > 0)

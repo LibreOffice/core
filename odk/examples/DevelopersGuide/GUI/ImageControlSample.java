@@ -77,7 +77,7 @@ public class ImageControlSample extends UnoDialogSample{
                     new Object[] { new Integer(16), "This code-sample demonstrates how to create an ImageControlSample within a dialog", Boolean.TRUE, "HeaderLabel", new Integer(6), new Integer(6), new Integer(210)});
             // add the model to the NameContainer of the dialog model
             oImageControlSample.m_xDlgModelNameContainer.insertByName("Headerlabel", oFTHeaderModel);
-            XPropertySet xICModelPropertySet = oImageControlSample.insertImageControl(xMCF, 68, 30, 32, 90);
+            XPropertySet xICModelPropertySet = oImageControlSample.insertImageControl(68, 30, 32, 90);
             oImageControlSample.insertButton(oImageControlSample, 90, 75, 50, "~Close dialog", (short) PushButtonType.OK_value);
             oImageControlSample.createWindowPeer();
             // note: due to issue i76718 ("Setting graphic at a controlmodel required dialog peer") the graphic of the image control
@@ -101,7 +101,7 @@ public class ImageControlSample extends UnoDialogSample{
     }
 
 
-    public XPropertySet insertImageControl(XMultiComponentFactory _xMCF, int _nPosX, int _nPosY, int _nHeight, int _nWidth){
+    public XPropertySet insertImageControl(int _nPosX, int _nPosY, int _nHeight, int _nWidth){
         XPropertySet xICModelPropertySet = null;
         try{
             // create a unique name by means of an own implementation...

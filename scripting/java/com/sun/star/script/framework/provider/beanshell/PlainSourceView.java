@@ -109,20 +109,20 @@ public class PlainSourceView extends JScrollPane
 
     /* Implementation of DocumentListener interface */
     public void insertUpdate(DocumentEvent e) {
-        doChanged(e);
+        doChanged();
     }
 
     public void removeUpdate(DocumentEvent e) {
-        doChanged(e);
+        doChanged();
     }
 
     public void changedUpdate(DocumentEvent e) {
-        doChanged(e);
+        doChanged();
     }
 
     /* If the number of lines in the JTextArea has changed then update the
        GlyphGutter */
-    public void doChanged(DocumentEvent e) {
+    public void doChanged() {
         isModified = true;
 
         if (linecount != ta.getLineCount()) {

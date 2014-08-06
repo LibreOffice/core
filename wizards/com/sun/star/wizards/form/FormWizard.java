@@ -120,7 +120,7 @@ public class FormWizard extends DatabaseObjectWizard
                     {
                         final String sTableName = curSubFormFieldSelection.getSelectedCommandName();
                         String[] aFieldNames = curSubFormFieldSelection.getSelectedFieldNames();
-                        curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
+                        curFormDocument.oSubFormDBMetaData.initializeFieldColumns(sTableName, aFieldNames);
                     }
                     else
                     {
@@ -172,7 +172,7 @@ public class FormWizard extends DatabaseObjectWizard
             {
                 final String sTableName = curDBCommandFieldSelection.getSelectedCommandName();
                 final String[] aFieldNames = curDBCommandFieldSelection.getSelectedFieldNames();
-                curFormDocument.oMainFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
+                curFormDocument.oMainFormDBMetaData.initializeFieldColumns(sTableName, aFieldNames);
 
                 final String[] aMainFieldNames = curFormDocument.oMainFormDBMetaData.getFieldNames();
                 try
@@ -190,7 +190,7 @@ public class FormWizard extends DatabaseObjectWizard
             {
                 final String sTableName = curSubFormFieldSelection.getSelectedCommandName();
                 final String[] aFieldNames = curSubFormFieldSelection.getSelectedFieldNames();
-                curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
+                curFormDocument.oSubFormDBMetaData.initializeFieldColumns(sTableName, aFieldNames);
 
                 final String[] aSubFieldNames = curFormDocument.oSubFormDBMetaData.getFieldNames();
                 try

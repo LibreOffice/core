@@ -82,7 +82,7 @@ public class CommandMetaData extends DBMetaData
         super(xMSF);
     }
 
-    public void initializeFieldColumns(boolean _bgetDefaultValue, String _CommandName, String[] _FieldNames)
+    public void initializeFieldColumns(String _CommandName, String[] _FieldNames)
     {
         this.setCommandName(_CommandName);
         FieldColumns = new FieldColumn[_FieldNames.length];
@@ -271,7 +271,7 @@ public class CommandMetaData extends DBMetaData
         throw new com.sun.star.uno.RuntimeException();
     }
 
-    public boolean getFieldNamesOfCommand(String _commandname, int _commandtype, boolean _bAppendMode)
+    public boolean getFieldNamesOfCommand(String _commandname, int _commandtype)
     {
         try
         {
@@ -658,10 +658,6 @@ public class CommandMetaData extends DBMetaData
             e.printStackTrace();
         }
         return skeycolumnnames;
-    }
-
-    public void openFormDocument(boolean _bReadOnly)
-    {
     }
 
     public void setCommandComposingAttributes()

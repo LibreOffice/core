@@ -204,7 +204,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                 sHTMLName = m_sInputPath.substring(n + 1);
                 sHTMLName += ".html";
             }
-            HTMLOutputter HTMLoutput = HTMLOutputter.create(m_sOutputPath, sHTMLName, "", "");
+            HTMLOutputter HTMLoutput = HTMLOutputter.create(m_sOutputPath, sHTMLName, "");
             HTMLoutput.header( m_sOutputPath );
             HTMLoutput.indexSection( m_sOutputPath );
             LISTOutputter LISToutput = LISTOutputter.create(m_sOutputPath, "allfiles.txt");

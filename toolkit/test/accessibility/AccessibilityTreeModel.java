@@ -19,7 +19,6 @@
 import java.util.ArrayList;
 
 import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 
 import com.sun.star.accessibility.XAccessible;

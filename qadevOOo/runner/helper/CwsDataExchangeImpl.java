@@ -28,7 +28,7 @@ import util.PropertyName;
 import util.utils;
 
 /**
- * Implementaion of the interface CwsDataExchange
+ * Implementation of the interface CwsDataExchange
  * @see share.CwsDataExchange
  */
 public class CwsDataExchangeImpl implements CwsDataExchange
@@ -39,7 +39,7 @@ public class CwsDataExchangeImpl implements CwsDataExchange
     private final BuildEnvTools bet;
     private final boolean mDebug;
 
-    public CwsDataExchangeImpl(String cwsName, TestParameters param, LogWriter log) throws ParameterNotFoundException
+    public CwsDataExchangeImpl(TestParameters param, LogWriter log) throws ParameterNotFoundException
     {
         this.param = param;
         this.log = log;

@@ -210,7 +210,7 @@ public class ConvWatch
             // Status end
 
             String sINIFile = _sFilenamePrefix + sNameNoSuffix + ".ini";
-            INIOutputter INIoutput = INIOutputter.create(_sOutputPath, sINIFile, "", "");
+            INIOutputter INIoutput = INIOutputter.create(_sOutputPath, sINIFile, "");
             INIoutput.createHeader();
 //  TODO: version info was fine
 
@@ -272,7 +272,7 @@ public class ConvWatch
             String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
             String sINIFile = _sFilenamePrefix + sNameNoSuffix + ".ini";
 
-            INIOutputter INIoutput = INIOutputter.create(_sOutputPath, sINIFile, _sFilenamePrefix, "");
+            INIOutputter INIoutput = INIOutputter.create(_sOutputPath, sINIFile, _sFilenamePrefix);
             INIoutput.createHeader();
             // LLA? what if the are no values in the list? true or false;
             INIoutput.writeSection("global");

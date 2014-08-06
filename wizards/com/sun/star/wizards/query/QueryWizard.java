@@ -139,7 +139,7 @@ public class QueryWizard extends DatabaseObjectWizard
         return m_createdQuery;
     }
 
-    public void enableRoadmapItems(String[] _FieldNames, boolean _bEnabled)
+    public void enableRoadmapItems(boolean _bEnabled)
     {
         try
         {
@@ -324,7 +324,7 @@ public class QueryWizard extends DatabaseObjectWizard
         {
             case SOFIELDSELECTION_PAGE:
                 m_DBMetaData.reorderFieldColumns(m_DBCommandFieldSelectio.getSelectedFieldNames());
-                m_DBMetaData.initializeFieldTitleSet(true);
+                m_DBMetaData.initializeFieldTitleSet();
                 m_DBMetaData.setNumericFields();
                 searchForOutdatedFields();
                 break;
@@ -387,7 +387,7 @@ public class QueryWizard extends DatabaseObjectWizard
         boolean bEnabled = NewItems.length > 0;
         setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, bEnabled);
         setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, bEnabled);
-        enableRoadmapItems(NewItems, bEnabled); // Note: Performancewise this could be improved
+        enableRoadmapItems(bEnabled); // Note: Performancewise this could be improved
     }
 
     public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener

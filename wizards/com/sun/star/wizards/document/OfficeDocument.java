@@ -62,7 +62,7 @@ public class OfficeDocument
     private XWindowPeer xWindowPeer;
 
     /** Creates a new instance of OfficeDocument */
-    public OfficeDocument(XMultiServiceFactory _xMSF)
+    public OfficeDocument()
     {
     }
 

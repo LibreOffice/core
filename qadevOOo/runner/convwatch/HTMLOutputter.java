@@ -34,7 +34,7 @@ public class HTMLOutputter
     String ls;
 
     HTMLOutputter() {}
-    public static HTMLOutputter create( String _sOutputPath, String _sHTMLFilename, String _sNamePrefix, String _sTitle )
+    public static HTMLOutputter create( String _sOutputPath, String _sHTMLFilename, String _sNamePrefix )
         {
             FileHelper.makeDirectories("", _sOutputPath);
             HTMLOutputter a = new HTMLOutputter();

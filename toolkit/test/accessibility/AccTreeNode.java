@@ -83,7 +83,7 @@ class AccTreeNode
             HandlerDescriptor aDescriptor = maHandlers.get(i);
             aDescriptor.maHandler = aDescriptor.maHandler.createHandler (mxContext);
             aDescriptor.mnChildCount =
-                    aDescriptor.maHandler.getChildCount (this);
+                    aDescriptor.maHandler.getChildCount ();
         }
     }
 
@@ -161,7 +161,7 @@ class AccTreeNode
         HandlerDescriptor aDescriptor = maHandlers.get(i);
         if (aDescriptor.mnChildCount < 0)
             aDescriptor.mnChildCount =
-                    aDescriptor.maHandler.getChildCount (this);
+                    aDescriptor.maHandler.getChildCount ();
         return aDescriptor;
     }
 
@@ -211,7 +211,7 @@ class AccTreeNode
                 // search with next handler
                 HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
                 if (nIndex < aDescriptor.mnChildCount)
-                    return aDescriptor.maHandler.getChildNoCreate (this, nIndex);
+                    return aDescriptor.maHandler.getChildNoCreate (nIndex);
                 else
                     nIndex -= aDescriptor.mnChildCount;
             }
@@ -236,8 +236,8 @@ class AccTreeNode
                 HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
                 if (nIndex < aDescriptor.mnChildCount)
                 {
-                    bStatus = aDescriptor.maHandler.removeChild (this, nIndex);
-                    aDescriptor.mnChildCount = aDescriptor.maHandler.getChildCount (this);
+                    bStatus = aDescriptor.maHandler.removeChild (nIndex);
+                    aDescriptor.mnChildCount = aDescriptor.maHandler.getChildCount ();
                     break;
                 }
                 else
@@ -334,7 +334,7 @@ class AccTreeNode
             {
                 AccessibleTreeHandler aHandler = (AccessibleTreeHandler)aDescriptor.maHandler;
                 AccessibleTreeNode aNode = aHandler.addAccessibleChild (this, xChild);
-                aDescriptor.mnChildCount = aHandler.getChildCount (this);
+                aDescriptor.mnChildCount = aHandler.getChildCount ();
                 return aNode;
             }
         }
@@ -363,7 +363,7 @@ class AccTreeNode
             {
                 aDescriptor.maHandler.update(this);
                 // Get updated number of children.
-                int nChildCount = aDescriptor.maHandler.getChildCount (this);
+                int nChildCount = aDescriptor.maHandler.getChildCount ();
                 aDescriptor.mnChildCount = nChildCount;
                 // Fill in the indices of the updated children.
                 for (int j=0; j<nChildCount; j++)

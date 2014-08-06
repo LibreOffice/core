@@ -397,7 +397,7 @@ public class GenericModelTest extends TestCase {
             log.println("copy '"+sourceTestDB + "' -> '" + destTestDB + "'");
             utils.copyFile(xMSF, sourceTestDB, destTestDB);
 
-            m_dbTools = new DBTools( xMSF, log );
+            m_dbTools = new DBTools( xMSF );
             String tmpDir = utils.getOfficeTemp((xMSF));
 
             m_srcInf = m_dbTools.newDataSourceInfo();

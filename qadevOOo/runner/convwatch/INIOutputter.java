@@ -32,7 +32,7 @@ public class INIOutputter
      */
     String ls;
 
-    public static INIOutputter create( String _sOutputPath, String _sHTMLFilename, String _sNamePrefix, String _sTitle )
+    public static INIOutputter create( String _sOutputPath, String _sHTMLFilename, String _sNamePrefix )
         {
             FileHelper.makeDirectories("", _sOutputPath);
             INIOutputter a = new INIOutputter();

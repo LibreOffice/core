@@ -233,7 +233,7 @@ public class ODatabaseForm extends TestCase {
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
-        dbTools = new DBTools( tParam.getMSF(), log );
+        dbTools = new DBTools( tParam.getMSF() );
 
         // creating DataSource and registering it in DatabaseContext
         String dbURL = (String) tParam.get("test.db.url");

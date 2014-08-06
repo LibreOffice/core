@@ -91,7 +91,7 @@ class graphics_stuff
                 return 0;
         }
 
-    public static void countPixel(ImageHelper img, int _x, int _y, int _w, int _h, CountPixel _aPixelCounter)
+    public static void countPixel(ImageHelper img, int _w, int _h, CountPixel _aPixelCounter)
         {
             for (int y = 0; y < _h; y++) {
                 for (int x = 0; x < _w; x++) {
@@ -105,7 +105,7 @@ class graphics_stuff
             int h = _aImage.getHeight();
 
             CountPixel aCountNotWhite = new CountNotWhite();
-            countPixel(_aImage, 0, 0, w, h, aCountNotWhite);
+            countPixel(_aImage, w, h, aCountNotWhite);
             return aCountNotWhite.getCount();
         }
 
@@ -115,7 +115,7 @@ class graphics_stuff
             int h = _aImage.getHeight();
 
             CountPixel aCountNotBlack = new CountNotBlack();
-            countPixel(_aImage, 0, 0, w, h, aCountNotBlack);
+            countPixel(_aImage, w, h, aCountNotBlack);
             return aCountNotBlack.getCount();
         }
 }

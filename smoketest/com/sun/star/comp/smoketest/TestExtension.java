@@ -21,7 +21,6 @@ package com.sun.star.comp.smoketest;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lang.XServiceInfo;
 
