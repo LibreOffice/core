@@ -130,7 +130,6 @@ public class SwingDialogProvider implements XDialogProvider{
         public InspectorPane getInspectorPage(int _nIndex){
             InspectorPane oInspectorPane = null;
             if (_nIndex > -1){
-                JPanel jPnlContainerInspectorPanel = (JPanel) m_jTabbedPane1.getComponentAt(_nIndex);
                 String sInspectorPanelTitle = m_jTabbedPane1.getTitleAt(_nIndex);
                 oInspectorPane = m_oInspector.getInspectorPages().get(sInspectorPanelTitle);
             }

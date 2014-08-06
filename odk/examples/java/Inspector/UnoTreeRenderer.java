@@ -107,9 +107,7 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
 
     @Override
     public void paintComponent(Graphics g) {
-        FontMetrics fm = getFontMetrics(getFont());
-        int x, y;
-        y = fm.getAscent() + 2;
+        int x;
         if(getIcon() == null) {
             x = 0;
         } else {

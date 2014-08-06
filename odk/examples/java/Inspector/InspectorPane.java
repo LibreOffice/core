@@ -75,7 +75,6 @@ import com.sun.star.uno.XComponentContext;
 
 
         private void setMaximumOfProgressBar(Object _oUnoObject){
-            int nMaxValue = 0;
             xIdlMethods = m_oIntrospector.getMethods(_oUnoObject);
             aProperties = m_oIntrospector.getProperties(_oUnoObject);
         }
@@ -263,19 +262,19 @@ import com.sun.star.uno.XComponentContext;
 
         private void addFacetteNodesToTreeNode(XUnoNode _oParentNode, Object _oUnoObject){
             if (m_oIntrospector.hasMethods(_oUnoObject)){
-                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SMETHODDESCRIPTION, _oUnoObject);
+                addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SMETHODDESCRIPTION, _oUnoObject);
             }
             if (m_oIntrospector.hasProperties(_oUnoObject)){
-                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SPROPERTYDESCRIPTION, _oUnoObject);
+                addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SPROPERTYDESCRIPTION, _oUnoObject);
             }
             if (m_oIntrospector.hasInterfaces(_oUnoObject)){
-                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SINTERFACEDESCRIPTION, _oUnoObject);
+                addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SINTERFACEDESCRIPTION, _oUnoObject);
             }
             if (m_oIntrospector.isContainer(_oUnoObject)){
-                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SCONTAINERDESCRIPTION, _oUnoObject);
+                addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SCONTAINERDESCRIPTION, _oUnoObject);
             }
             if (m_oIntrospector.hasSupportedServices(_oUnoObject)){
-                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SSERVICEDESCRIPTION, _oUnoObject);
+                addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SSERVICEDESCRIPTION, _oUnoObject);
             }
         }
 
@@ -409,14 +408,14 @@ import com.sun.star.uno.XComponentContext;
                 Object[] object = ( Object[] ) _oUnoObject;
                 for ( int i = 0; i < object.length; i++ ) {
                     if (Introspector.isObjectPrimitive(object[i])){
-                        XUnoNode oChildNode = addUnoNode(_oUnoNode, null, UnoNode.getNodeDescription(object[i]));
+                        addUnoNode(_oUnoNode, null, UnoNode.getNodeDescription(object[i]));
                     }
                 }
             }
             else{
                 String[] sDisplayValues = UnoNode.getDisplayValuesofPrimitiveArray(_oUnoObject);
                 for ( int i = 0; i < sDisplayValues.length; i++ ) {
-                    XUnoNode oUnoNode = addUnoNode(_oUnoNode, null, sDisplayValues[i]);
+                    addUnoNode(_oUnoNode, null, sDisplayValues[i]);
                 }
             }
         }
@@ -591,7 +590,6 @@ import com.sun.star.uno.XComponentContext;
          */
         private Object getUnoObjectOfTreeNode(XTreePathProvider _xTreePathProvider){
             XTreePathProvider xTreePathProvider = _xTreePathProvider;
-            HideableMutableTreeNode oNode = null;
             Object oUnoObject = null;
             while (xTreePathProvider != null){
                 oUnoObject = getUnoObjectOfExplicitTreeNode(xTreePathProvider);

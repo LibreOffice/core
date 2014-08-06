@@ -233,8 +233,7 @@ public class DocumentMetadataAccess
             System.out.println("Checking some invalid args...");
 
             String content = "behold, for i am the content.";
-            XTextRange xTR = new TestRange(content);
-            XMetadatable xM = (XMetadatable) xTR;
+            new TestRange(content);
 
             try {
                 xDocMDAccess.getElementByURI(null);
@@ -468,7 +467,6 @@ public class DocumentMetadataAccess
             Object o = xTextEnum.createEnumeration().nextElement();
             XMetadatable xMeta1 = UnoRuntime.queryInterface(XMetadatable.class, o);
 
-            XURI uri;
             XMetadatable xMeta;
             xMeta = xDocMDAccess.getElementByURI(xMeta1);
             assertTrue("getElementByURI: null", null != xMeta);
@@ -814,8 +812,7 @@ public class DocumentMetadataAccess
                         x_FooBarLit
                     }));
 
-            Statement x_FooLabelLit14 =
-                new Statement(foo, rdfs_label, mkLit("14"), null);
+            new Statement(foo, rdfs_label, mkLit("14"), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
             result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 14",

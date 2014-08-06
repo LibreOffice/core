@@ -77,7 +77,6 @@ public class SourceCodeGenerator {
 
 
     public String addSourceCodeOfUnoObject(XTreePathProvider _xTreepathProvider, boolean _brememberPath, boolean _bAddMethodSignature, boolean _baddHeader){
-        String sSourceCode = "";
         String sVariableName = "";
         if (_xTreepathProvider != null) {
             for (int i = 0; i < _xTreepathProvider.getPathCount(); i++){
@@ -142,7 +141,6 @@ public class SourceCodeGenerator {
         aVariables.clear();
         this.sHeaderStatements.clear();
         setLanguage(_nLanguage);
-        String sHeaderCode = "";
         sStatementCode = "";
     }
 

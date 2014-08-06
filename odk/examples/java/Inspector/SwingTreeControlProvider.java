@@ -105,7 +105,6 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
     }
 
     private void ComponentSelector(Object _oRootObject, String _sRootTreeNodeName) {
-        String sTreeNodeName =  _sRootTreeNodeName;
         oRootNode = new SwingUnoNode(_oRootObject);
         oRootNode.setLabel(_sRootTreeNodeName);
         treeModel = new HideableTreeModel(oRootNode);

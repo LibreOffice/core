@@ -405,7 +405,6 @@ public class UnoNode{
         if ( xServiceInfo != null ) {
             return xServiceInfo.getImplementationName();
         }
-        String sClassName = _oUnoObject.getClass().getName();
         if (Introspector.isObjectPrimitive(_oUnoObject)){         //super.isO{sObjectClassName.equals("java.lang.String"))issClassName.equals("java.lang.String"))
             return _oUnoObject.toString();
         }

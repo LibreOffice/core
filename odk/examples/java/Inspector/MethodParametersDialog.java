@@ -74,7 +74,6 @@ public class MethodParametersDialog extends JDialog{
         m_xIdlMethod = _xUnoMethodNode.getXIdlMethod();
         m_aParamInfo = m_xIdlMethod.getParameterInfos();
         m_oUnoObject = m_xUnoMethodNode.getUnoObject();
-        Object[] m_aParameterObjects = new Object[m_aParamInfo.length];
     }
 
 

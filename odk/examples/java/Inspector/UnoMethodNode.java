@@ -160,7 +160,6 @@ public class UnoMethodNode extends UnoNode{
     public String getParameterDescription(){
         ParamInfo[] paramInfo = m_xIdlMethod.getParameterInfos();
         String sParameters = "";
-        String sStandardMethodDisplayText = m_xIdlMethod.getReturnType().getName() + " " + m_xIdlMethod.getName() + " (" + sParameters + " )";
         if (Introspector.isValid(paramInfo)) {
             //  get all parameters with type and mode
             for ( int i = 0; i < paramInfo.length; i++ ) {

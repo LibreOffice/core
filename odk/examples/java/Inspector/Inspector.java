@@ -191,7 +191,7 @@ public class Inspector{
             XMessageBox xMessageBox = xMessageBoxFactory.createMessageBox(_xWindowPeer, com.sun.star.awt.MessageBoxType.ERRORBOX, com.sun.star.awt.MessageBoxButtons.BUTTONS_OK, _sTitle, _sMessage);
             XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, xMessageBox);
             if (xMessageBox != null){
-                short nResult = xMessageBox.execute();
+                xMessageBox.execute();
                 xComponent.dispose();
             }
         } catch (com.sun.star.uno.Exception ex) {
