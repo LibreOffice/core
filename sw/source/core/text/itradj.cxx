@@ -651,7 +651,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
                 }
             }
 
-            pGlue = (SwFlyPortion*)pPos;
+            pGlue = (SwGluePortion*)pPos;
             bComplete = false;
         }
         nLen = nLen + pPos->GetLen();
