@@ -90,7 +90,7 @@ private:
     void cppunitAssertEqual(const xmlChar *expected, const xmlChar *found);
 
     /// Error message for cppunit that prints out when expected and found are not equal - for doubles.
-    void cppunitAssertEqualDouble(const xmlChar *node, double expected, double found, double delta);
+    void cppunitAssertEqualDouble(const xmlNodePtr node, const xmlAttrPtr attr, double expected, double found, double delta);
 
     ToleranceContainer toleranceContainer;
     xmlDocPtr xmlFile1;
@@ -260,11 +260,13 @@ void XMLDiff::cppunitAssertEqual(const xmlChar *expected, const xmlChar *found)
 #endif
 }
 
-void XMLDiff::cppunitAssertEqualDouble(const xmlChar *node, double expected, double found, double delta)
+void XMLDiff::cppunitAssertEqualDouble(const xmlNodePtr node, const xmlAttrPtr attr, double expected, double found, double delta)
 {
 #if USE_CPPUNIT
+    xmlChar * path = xmlGetNodePath(node);
     std::stringstream stringStream;
-    stringStream << "Reference: " << fileName << "\n- Node: " << (const char*) node;
+    stringStream << "Reference: " << fileName << "\n- Node: " << (const char*) path << "\n- Attr: " << (const char*) attr->name;
+    xmlFree(path);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(stringStream.str(), expected, found, delta);
 #endif
@@ -334,7 +336,7 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
             else
             {
 #if USE_CPPUNIT
-                cppunitAssertEqualDouble(attr1->name, dVal1, dVal2, 1e-08);
+                cppunitAssertEqualDouble(node1, attr1, dVal1, dVal2, 1e-08);
 #else
                 if (dVal1 != dVal2)
                     return false;
