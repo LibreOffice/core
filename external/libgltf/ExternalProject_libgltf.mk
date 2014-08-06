@@ -52,16 +52,17 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 			/p:AdditionalLibraryDirectories=$(if $(SYSTEM_GLEW),,"$(subst /,\,$(call gb_UnpackedTarball_get_dir,glew))\lib\$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)\Win32") \
 	,build/win32)
 
-else
+else # !ifeq($(COM),MSC)
 
-libgltf_CPPFLAGS :=
+libgltf_CPPFLAGS=$(CPPFLAGS)
+ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX NETBSD OPENBSD,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
-	libgltf_CPPFLAGS += -D_GLIBCXX_DEBUG
+libgltf_CPPFLAGS+=-D_GLIBCXX_DEBUG
+endif
 endif
 
 $(call gb_ExternalProject_get_state_target,libgltf,build) :
 	$(call gb_ExternalProject_run,build,\
-		CPPFLAGS='$(libgltf_CPPFLAGS)' \
 		export PKG_CONFIG="" \
 		&& ./configure \
 			--disable-shared \
@@ -72,6 +73,7 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost)) -I$(BUILDDIR)/config_$(gb_Side)" \
 			GLEW_CFLAGS="$(if $(SYSTEM_GLEW),$(GLEW_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,glew)/include)" \
 			GLM_CFLAGS="$(if $(SYSTEM_GLM),$(GLM_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,glm))" \
+			$(if $(libgltf_CPPFLAGS),CPPFLAGS='$(libgltf_CPPFLAGS)') \
 		&& $(MAKE) \
 	)
 

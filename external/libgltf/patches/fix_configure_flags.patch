@@ -1,0 +1,54 @@
+diff -ur libgltf-0.0.0.orig/configure.ac libgltf-0.0.0/configure.ac
+--- libgltf-0.0.0.orig/configure.ac	2014-07-30 20:09:19.000000000 +0200
++++ libgltf-0.0.0/configure.ac	2014-08-06 11:15:24.000000000 +0200
+@@ -90,15 +90,12 @@
+  [enable_werror=yes]
+ )
+ AS_IF([test x"$enable_werror" != "xno"], [
+- CFLAGS="$CFLAGS -Werror"
+- CXXFLAGS="$CXXFLAGS -Werror"
++  LIBGLTF_CXXFLAGS="$LIBGLTF_CXXFLAGS -Werror"
+ ])
+ AS_IF([test x"$GCC" = xyes], [
+ # Be tough with warnings and produce less careless code
+-CFLAGS="$CFLAGS -Wall -pedantic -Wextra -Wshadow"
+-CXXFLAGS="$CXXFLAGS -Wall -pedantic -Wextra -Weffc++ -Wshadow"
++  LIBGLTF_CXXFLAGS="${LIBGLTF_CXXFLAGS} -Wall -pedantic -Wextra -Weffc++ -Wshadow"
+ ])
+-AC_SUBST(DEBUG_CXXFLAGS)
+ 
+ # ============
+ # Debug switch
+@@ -109,13 +106,15 @@
+  [enable_debug=no]
+ )
+ AS_IF([test "x$enable_debug" = "xyes"], [
+- DEBUG_CXXFLAGS="-DDEBUG -g"
++  LIBGLTF_CPPFLAGS="${LIBGLTF_CPPFLAGS} -DDEBUG"
++  LIBGLTF_CXXFLAGS="${LIBGLTF_CXXFLAGS} -g"
++ 
+ ], [
+- DEBUG_CXXFLAGS="-DNDEBUG"
++  LIBGLTF_CPPFLAGS="${LIBGLTF_CXXFLAGS} -DNDEBUG"
+ ])
+-LIBGLTF_CXXFLAGS="$LIBGLTF_CFLAGS"
++
++AC_SUBST(LIBGLTF_CPPFLAGS)
+ AC_SUBST(LIBGLTF_CXXFLAGS)
+-AC_SUBST(DEBUG_CXXFLAGS)
+ 
+ # =====================
+ # Prepare all .in files
+diff -ur libgltf-0.0.0.orig/src/Makefile.am libgltf-0.0.0/src/Makefile.am
+--- libgltf-0.0.0.orig/src/Makefile.am	2014-08-04 20:33:09.000000000 +0200
++++ libgltf-0.0.0/src/Makefile.am	2014-08-06 11:16:39.000000000 +0200
+@@ -7,7 +7,8 @@
+  $(top_srcdir)/inc/libgltf.h \
+  $(top_srcdir)/inc/types.h
+ 
+-AM_CXXFLAGS = -I$(top_srcdir)/inc $(BOOST_CFLAGS) $(GLEW_CFLAGS) $(GLM_CFLAGS) $(DEBUG_CXXFLAGS)
++AM_CXXFLAGS = -I$(top_srcdir)/inc $(BOOST_CFLAGS) $(GLEW_CFLAGS) $(GLM_CFLAGS) $(LIBGLTF_CXXFLAGS)
++AM_CPPFLAGS = $(LIBGLTF_CPPFLAGS)
+ 
+ libgltf_@GLTF_MAJOR_VERSION@_@GLTF_MINOR_VERSION@_la_LIBADD = $(BOOST_LIBS) $(GLEW_LIBS) $(GLM_LIBS)
+ libgltf_@GLTF_MAJOR_VERSION@_@GLTF_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined
