@@ -39,6 +39,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/jdbcconnectionpage \
     dbaccess/uiconfig/ui/joindialog \
     dbaccess/uiconfig/ui/ldapconnectionpage \
+    dbaccess/uiconfig/ui/ldappage \
     dbaccess/uiconfig/ui/migratepage \
     dbaccess/uiconfig/ui/mysqlnativepage \
     dbaccess/uiconfig/ui/mysqlnativesettings \
