@@ -53,197 +53,6 @@ static int lcl_XErrorHandler( unx::Display*, unx::XErrorEvent* )
     return 0;
 }
 
-/** Dummy vertex processing. Simply uses default pipeline for vertex
-   transformation, and forwards texture coodinates to fragment shader
- */
-static const char dummyVertexShader[] =
-{
-    "varying vec2 v_textureCoords2d;                                            "
-    "void main(void)                                                            "
-    "{                                                                          "
-    "    gl_Position = ftransform();                                            "
-    "    v_textureCoords2d = gl_MultiTexCoord0.st;                              "
-    "}                                                                          "
-};
-
-/** Two-color linear gradient
- */
-static const char linearTwoColorGradientFragmentShader[] =
-{
-    "#version 120                                                            \n"
-    "uniform vec4   v_startColor4d;                                            "
-    "uniform vec4   v_endColor4d;                                              "
-    "uniform mat3x2 m_transform;                                               "
-    "varying vec2   v_textureCoords2d;                                         "
-    "void main(void)                                                           "
-    "{                                                                         "
-    "    gl_FragColor = mix(v_startColor4d,                                    "
-    "                       v_endColor4d,                                      "
-    "                       clamp(                                             "
-    "                          (m_transform * vec3(v_textureCoords2d,1)).s,    "
-    "                          0.0, 1.0));                                     "
-    "}                                                                         "
-};
-
-/** N-color linear gradient
- */
-static const char linearMultiColorGradientFragmentShader[] =
-{
-    "#version 120                                                            \n"
-    "uniform int       i_nColors;                                              "
-    "uniform sampler1D t_colorArray4d;                                         "
-    "uniform sampler1D t_stopArray1d;                                          "
-    "uniform mat3x2    m_transform;                                            "
-    "varying vec2      v_textureCoords2d;                                      "
-    "                                                                          "
-    "int findBucket(float t)                                                   "
-    "{                                                                         "
-    "    int nMinBucket=0;                                                     "
-    "    while( nMinBucket < i_nColors &&                                      "
-    "           texture1D(t_stopArray1d, nMinBucket).s < t )                   "
-    "        ++nMinBucket;                                                     "
-    "    return max(nMinBucket-1,0);                                           "
-    "}                                                                         "
-    "                                                                          "
-    "void main(void)                                                           "
-    "{                                                                         "
-    "    const float fAlpha =                                                  "
-    "        clamp( (m_transform * vec3(v_textureCoords2d,1)).s,               "
-    "               0.0, 1.0 );                                                "
-    "                                                                          "
-    "    const int nMinBucket=findBucket( fAlpha );                            "
-    "                                                                          "
-    "    const float fLerp =                                                   "
-    "        (fAlpha-texture1D(t_stopArray1d, nMinBucket).s) /                 "
-    "        (texture1D(t_stopArray1d, nMinBucket+1).s -                       "
-    "         texture1D(t_stopArray1d, nMinBucket).s);                         "
-    "                                                                          "
-    "    gl_FragColor = mix(texture1D(t_colorArray4d, nMinBucket),             "
-    "                       texture1D(t_colorArray4d, nMinBucket+1),           "
-    "                       fLerp);                                            "
-    "}                                                                         "
-};
-
-/** Two-color radial gradient
- */
-static const char radialTwoColorGradientFragmentShader[] =
-{
-    "#version 120                                                             \n"
-    "uniform vec4   v_startColor4d;                                             "
-    "uniform vec4   v_endColor4d;                                               "
-    "uniform mat3x2 m_transform;                                                "
-    "varying vec2   v_textureCoords2d;                                          "
-    "const vec2     v_center2d = vec2(0,0);                                     "
-    "void main(void)                                                            "
-    "{                                                                          "
-    "    gl_FragColor = mix(v_startColor4d,                                     "
-    "                       v_endColor4d,                                       "
-    "                       1.0 - distance(                                     "
-    "                          vec2(                                            "
-    "                             m_transform * vec3(v_textureCoords2d,1)),     "
-    "                          v_center2d));                                    "
-    "}                                                                          "
-};
-
-/** Multi-color radial gradient
- */
-static const char radialMultiColorGradientFragmentShader[] =
-{
-    "#version 120                                                             \n"
-    "uniform int       i_nColors;                                              "
-    "uniform sampler1D t_colorArray4d;                                         "
-    "uniform sampler1D t_stopArray1d;                                          "
-    "uniform mat3x2    m_transform;                                            "
-    "varying vec2      v_textureCoords2d;                                      "
-    "const vec2        v_center2d = vec2(0,0);                                 "
-    "                                                                          "
-    "int findBucket(float t)                                                   "
-    "{                                                                         "
-    "    int nMinBucket=0;                                                     "
-    "    while( nMinBucket < i_nColors &&                                      "
-    "           texture1D(t_stopArray1d, nMinBucket).s < t )                   "
-    "        ++nMinBucket;                                                     "
-    "    return max(nMinBucket-1,0);                                           "
-    "}                                                                         "
-    "                                                                          "
-    "void main(void)                                                           "
-    "{                                                                         "
-    "    const float fAlpha =                                                  "
-    "        clamp( 1.0 - distance(                                            "
-    "               vec2( m_transform * vec3(v_textureCoords2d,1)),            "
-    "                     v_center2d),                                         "
-    "               0.0, 1.0 );                                                "
-    "                                                                          "
-    "    const int nMinBucket=findBucket( fAlpha );                            "
-    "                                                                          "
-    "    const float fLerp =                                                   "
-    "        (fAlpha-texture1D(t_stopArray1d, nMinBucket).s) /                 "
-    "        (texture1D(t_stopArray1d, nMinBucket+1).s -                       "
-    "         texture1D(t_stopArray1d, nMinBucket).s);                         "
-    "                                                                          "
-    "    gl_FragColor = mix(texture1D(t_colorArray4d, nMinBucket),             "
-    "                       texture1D(t_colorArray4d, nMinBucket+1),           "
-    "                       fLerp);                                            "
-    "}                                                                         "
-};
-
-/** Two-color rectangular gradient
- */
-static const char rectangularTwoColorGradientFragmentShader[] =
-{
-    "#version 120                                                             \n"
-    "uniform vec4   v_startColor4d;                                             "
-    "uniform vec4   v_endColor4d;                                               "
-    "uniform mat3x2 m_transform;                                                "
-    "varying vec2   v_textureCoords2d;                                          "
-    "void main(void)                                                            "
-    "{                                                                          "
-    "    const vec2 v = abs( vec2(m_transform * vec3(v_textureCoords2d,1)) );   "
-    "    const float t = max(v.x, v.y);                                         "
-    "    gl_FragColor = mix(v_startColor4d,                                     "
-    "                       v_endColor4d,                                       "
-    "                       1.0-t);                                             "
-    "}                                                                          "
-};
-
-/** Multi-color rectangular gradient
- */
-static const char rectangularMultiColorGradientFragmentShader[] =
-{
-    "#version 120                                                             \n"
-    "uniform int       i_nColors;                                              "
-    "uniform sampler1D t_colorArray4d;                                         "
-    "uniform sampler1D t_stopArray1d;                                          "
-    "uniform mat3x2    m_transform;                                            "
-    "varying vec2      v_textureCoords2d;                                      "
-    "                                                                          "
-    "int findBucket(float t)                                                   "
-    "{                                                                         "
-    "    int nMinBucket=0;                                                     "
-    "    while( nMinBucket < i_nColors &&                                      "
-    "           texture1D(t_stopArray1d, nMinBucket).s < t )                   "
-    "        ++nMinBucket;                                                     "
-    "    return max(nMinBucket-1,0);                                           "
-    "}                                                                         "
-    "                                                                          "
-    "void main(void)                                                           "
-    "{                                                                         "
-    "    const vec2  v = abs( vec2(m_transform * vec3(v_textureCoords2d,1)) ); "
-    "    const float fAlpha = 1 - max(v.x, v.y);                               "
-    "                                                                          "
-    "    const int nMinBucket=findBucket( fAlpha );                            "
-    "                                                                          "
-    "    const float fLerp =                                                   "
-    "        (fAlpha-texture1D(t_stopArray1d, nMinBucket).s) /                 "
-    "        (texture1D(t_stopArray1d, nMinBucket+1).s -                       "
-    "         texture1D(t_stopArray1d, nMinBucket).s);                         "
-    "                                                                          "
-    "    gl_FragColor = mix(texture1D(t_colorArray4d, nMinBucket),             "
-    "                       texture1D(t_colorArray4d, nMinBucket+1),           "
-    "                       fLerp);                                            "
-    "}                                                                         "
-};
-
 static void initContext()
 {
     // need the backside for mirror effects
@@ -529,13 +338,6 @@ namespace oglcanvas
         mpGLPBufContext(NULL),
         mpFBConfig(NULL),
         mpTextureCache(new TextureCache()),
-        mnDummyVertexProgram(0),
-        mnLinearTwoColorGradientFragmentProgram(0),
-        mnLinearMultiColorGradientFragmentProgram(0),
-        mnRadialTwoColorGradientFragmentProgram(0),
-        mnRadialMultiColorGradientFragmentProgram(0),
-        mnRectangularTwoColorGradientFragmentProgram(0),
-        mnRectangularMultiColorGradientFragmentProgram(0),
         mnLinearTwoColorGradientProgram(0),
         mnLinearMultiColorGradientProgram(0),
         mnRadialTwoColorGradientProgram(0),
@@ -648,46 +450,23 @@ namespace oglcanvas
             // init window context
             initContext();
 
-            // compile & link shaders - code courtesy rodo
-            compileShader(mnDummyVertexProgram,
-                          GL_VERTEX_SHADER,
-                          dummyVertexShader);
-            compileShader(mnLinearTwoColorGradientFragmentProgram,
-                          GL_FRAGMENT_SHADER,
-                          linearTwoColorGradientFragmentShader);
-            compileShader(mnLinearMultiColorGradientFragmentProgram,
-                          GL_FRAGMENT_SHADER,
-                          linearMultiColorGradientFragmentShader);
-            compileShader(mnRadialTwoColorGradientFragmentProgram,
-                          GL_FRAGMENT_SHADER,
-                          radialTwoColorGradientFragmentShader);
-            compileShader(mnRadialMultiColorGradientFragmentProgram,
-                          GL_FRAGMENT_SHADER,
-                          radialMultiColorGradientFragmentShader);
-            compileShader(mnRectangularTwoColorGradientFragmentProgram,
-                          GL_FRAGMENT_SHADER,
-                          rectangularTwoColorGradientFragmentShader);
-            compileShader(mnRectangularMultiColorGradientFragmentProgram,
-                          GL_FRAGMENT_SHADER,
-                          rectangularMultiColorGradientFragmentShader);
-            linkShaders(mnLinearTwoColorGradientProgram,
-                        mnDummyVertexProgram,
-                        mnLinearTwoColorGradientFragmentProgram);
-            linkShaders(mnLinearMultiColorGradientProgram,
-                        mnDummyVertexProgram,
-                        mnLinearMultiColorGradientFragmentProgram);
-            linkShaders(mnRadialTwoColorGradientProgram,
-                        mnDummyVertexProgram,
-                        mnRadialTwoColorGradientFragmentProgram);
-            linkShaders(mnRadialMultiColorGradientProgram,
-                        mnDummyVertexProgram,
-                        mnRadialMultiColorGradientFragmentProgram);
-            linkShaders(mnRectangularTwoColorGradientProgram,
-                        mnDummyVertexProgram,
-                        mnRectangularTwoColorGradientFragmentProgram);
-            linkShaders(mnRectangularMultiColorGradientProgram,
-                        mnDummyVertexProgram,
-                        mnRectangularMultiColorGradientFragmentProgram);
+            mnLinearMultiColorGradientProgram =
+                OpenGLHelper::LoadShaders("dummyVertexShader.glsl", "linearMultiColorGradientFragmentShader.glsl");
+
+            mnLinearTwoColorGradientProgram =
+                OpenGLHelper::LoadShaders("dummyVertexShader.glsl", "linearTwoColorGradientFragmentShader.glsl");
+
+            mnRadialMultiColorGradientProgram =
+                OpenGLHelper::LoadShaders("dummyVertexShader.glsl", "radialMultiColorGradientFragmentShader.glsl");
+
+            mnRadialTwoColorGradientProgram =
+                OpenGLHelper::LoadShaders("dummyVertexShader.glsl", "radialTwoColorGradientFragmentShader.glsl");
+
+            mnRectangularMultiColorGradientProgram =
+                OpenGLHelper::LoadShaders("dummyVertexShader.glsl", "rectangularMultiColorGradientFragmentShader.glsl");
+
+            mnRectangularTwoColorGradientProgram =
+                OpenGLHelper::LoadShaders("dummyVertexShader.glsl", "rectangularTwoColorGradientFragmentShader.glsl");
 
             glXMakeCurrent(pDisplay, None, NULL);
         }
@@ -716,13 +495,6 @@ namespace oglcanvas
             glDeleteProgram( mnRadialMultiColorGradientProgram );
             glDeleteProgram( mnLinearTwoColorGradientProgram );
             glDeleteProgram( mnLinearMultiColorGradientProgram );
-            glDeleteShader( mnRectangularTwoColorGradientFragmentProgram );
-            glDeleteShader( mnRectangularMultiColorGradientFragmentProgram );
-            glDeleteShader( mnRadialTwoColorGradientFragmentProgram );
-            glDeleteShader( mnRadialMultiColorGradientFragmentProgram );
-            glDeleteShader( mnLinearTwoColorGradientFragmentProgram );
-            glDeleteShader( mnLinearMultiColorGradientFragmentProgram );
-            glDeleteShader( mnDummyVertexProgram );
 
             glXDestroyContext(reinterpret_cast<unx::Display*>(mpDisplay),
                               reinterpret_cast<unx::GLXContext>(mpGLContext));
