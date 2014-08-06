@@ -2241,7 +2241,7 @@ bool SdrObjCustomShape::IsAutoGrowHeight() const
     const SfxItemSet& rSet = GetMergedItemSet();
     bool bIsAutoGrowHeight = ((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
     if ( bIsAutoGrowHeight && IsVerticalWriting() )
-        bIsAutoGrowHeight = !((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue();
+        bIsAutoGrowHeight = !((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue();
     return bIsAutoGrowHeight;
 }
 bool SdrObjCustomShape::IsAutoGrowWidth() const
@@ -2249,7 +2249,7 @@ bool SdrObjCustomShape::IsAutoGrowWidth() const
     const SfxItemSet& rSet = GetMergedItemSet();
     bool bIsAutoGrowWidth = ((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
     if ( bIsAutoGrowWidth && !IsVerticalWriting() )
-        bIsAutoGrowWidth = !((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue();
+        bIsAutoGrowWidth = !((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue();
     return bIsAutoGrowWidth;
 }
 
@@ -2609,7 +2609,7 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Recta
     if ( nMaxHgt == 0 || nMaxHgt > aMaxSiz.Height() )
         nMaxHgt=aMaxSiz.Height();
 
-    if (((SdrTextWordWrapItem&)(GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue())
+    if (((SdrOnOffItem&)(GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue())
     {
         if ( IsVerticalWriting() )
         {
@@ -2711,7 +2711,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     long nAnkWdt=aAnkRect.GetWidth();
     long nAnkHgt=aAnkRect.GetHeight();
 
-    if (((SdrTextWordWrapItem&)(GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue())
+    if (((SdrOnOffItem&)(GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue())
     {
         if ( IsVerticalWriting() )
             nMaxAutoPaperHeight = nAnkHgt;

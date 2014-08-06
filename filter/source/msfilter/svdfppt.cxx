@@ -1078,7 +1078,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
             else
             {
-                pTObj->SetMergedItem( SdrTextWordWrapItem( bWordWrap ) );
+                pTObj->SetMergedItem( makeSdrTextWordWrapItem( bWordWrap ) );
                 pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bFitShapeToText ) );
             }
 

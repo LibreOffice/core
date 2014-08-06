@@ -203,7 +203,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     // wordwrap text
     if ( rAttrs->GetItemState( SDRATTR_TEXT_WORDWRAP ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbWordWrapText->SetState( ( ( const SdrTextWordWrapItem& )rAttrs->Get( SDRATTR_TEXT_WORDWRAP ) ).
+        m_pTsbWordWrapText->SetState( ( ( const SdrOnOffItem& )rAttrs->Get( SDRATTR_TEXT_WORDWRAP ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbWordWrapText->EnableTriState( false );
     }
@@ -376,7 +376,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     eState = m_pTsbWordWrapText->GetState();
     if( m_pTsbWordWrapText->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( SdrTextWordWrapItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( makeSdrTextWordWrapItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbContour->GetState();

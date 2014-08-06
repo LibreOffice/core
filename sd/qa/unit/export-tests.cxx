@@ -323,17 +323,17 @@ void SdFiltersTest::testFdo71961()
     SdrObjCustomShape *pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 1 ));
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
     CPPUNIT_ASSERT_EQUAL( OUString( "Text to be always wrapped" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
-    CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrTextWordWrapItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrOnOffItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
 
     pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 2 ));
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
     CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape non-wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
-    CPPUNIT_ASSERT_EQUAL( false, (static_cast<const SdrTextWordWrapItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( false, (static_cast<const SdrOnOffItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
 
     pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 3 ));
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
     CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
-    CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrTextWordWrapItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrOnOffItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
 
     xDocShRef->DoClose();
 }

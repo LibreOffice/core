@@ -109,23 +109,13 @@ class SdrCustomShapeReplacementURLItem : public SfxStringItem
             SdrCustomShapeReplacementURLItem();
 };
 
+inline SdrOnOffItem makeSdrTextWordWrapItem( bool bAuto ) {
+    return SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto );
+}
 
-// class SdrTextWordWrapItem
-
-class SdrTextWordWrapItem : public SdrOnOffItem {
-public:
-    SdrTextWordWrapItem( bool bAuto = false ):  SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto ) {}
-    SdrTextWordWrapItem( SvStream& rIn )  :     SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, rIn )   {}
-};
-
-
-// class SdrTextAutoGrowSizeItem
-
-class SdrTextAutoGrowSizeItem : public SdrOnOffItem {
-public:
-    SdrTextAutoGrowSizeItem( bool bAuto = false ):      SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) {}
-    SdrTextAutoGrowSizeItem( SvStream& rIn )   :        SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, rIn )   {}
-};
+inline SdrOnOffItem makeSdrTextAutoGrowSizeItem( bool bAuto ) {
+    return SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) ;
+}
 
 // some useful inline methods
 

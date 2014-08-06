@@ -1438,7 +1438,7 @@ SdrObject* XclImpTextObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Re
     bool bAutoSize = ::get_flag( maTextData.maData.mnFlags, EXC_OBJ_TEXT_AUTOSIZE );
     xSdrObj->SetMergedItem( makeSdrTextAutoGrowWidthItem( bAutoSize ) );
     xSdrObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoSize ) );
-    xSdrObj->SetMergedItem( SdrTextWordWrapItem( true ) );
+    xSdrObj->SetMergedItem( makeSdrTextWordWrapItem( true ) );
     rDffConv.Progress();
     return xSdrObj.release();
 }
