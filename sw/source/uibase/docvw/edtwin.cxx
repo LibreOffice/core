@@ -1892,8 +1892,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
                 case KEY_BACKSPACE:
                 case KEY_BACKSPACE | KEY_SHIFT:
-                    if ( !rSh.HasReadonlySel()
-                         && !rSh.CrsrInsideInputFld() )
+                    if ( !rSh.HasReadonlySel() )
                     {
                         bool bDone = false;
                         // try to add comment for code snip:
