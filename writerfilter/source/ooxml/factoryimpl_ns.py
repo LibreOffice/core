@@ -188,6 +188,7 @@ def idToLabel(idName):
     else:
         return idName
 
+
 def appendValueData(values, name, value):
     first = name[0:1]
 
@@ -195,6 +196,7 @@ def appendValueData(values, name, value):
         values[first] = []
 
     values[first].append([name, value])
+
 
 def printValueData(values):
     if "" in values:
@@ -220,6 +222,7 @@ def printValueData(values):
             print("            return true;")
             print("            break;")
     print("        }")
+
 
 def factoryGetListValue(nsNode):
     print("""bool OOXMLFactory_%s::getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue)
