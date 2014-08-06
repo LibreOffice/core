@@ -72,6 +72,42 @@ void DocxTableStyleExport::CharFormat(css::uno::Sequence<css::beans::PropertyVal
     m_pImpl->tableStyleRPr(rRPr);
 }
 
+void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttributeList)
+{
+    sax_fastparser::FastAttributeList* pAttributeList = m_pImpl->m_pSerializer->createAttrList();
+
+    for (sal_Int32 j = 0; j < rAttributeList.getLength(); ++j)
+    {
+        if (rAttributeList[j].Name == "val")
+            pAttributeList->add(FSNS(XML_w, XML_val), rtl::OUStringToOString(rAttributeList[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+        else
+        {
+            static DocxStringTokenMap const aTokens[] =
+            {
+                {"firstRow", XML_firstRow},
+                {"lastRow", XML_lastRow},
+                {"firstColumn", XML_firstColumn},
+                {"lastColumn", XML_lastColumn},
+                {"oddVBand", XML_oddVBand},
+                {"evenVBand", XML_evenVBand},
+                {"oddHBand", XML_oddHBand},
+                {"evenHBand", XML_evenHBand},
+                {"firstRowFirstColumn", XML_firstRowFirstColumn},
+                {"firstRowLastColumn", XML_firstRowLastColumn},
+                {"lastRowFirstColumn", XML_lastRowFirstColumn},
+                {"lastRowLastColumn", XML_lastRowLastColumn},
+                {0, 0}
+            };
+
+            if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttributeList[j].Name))
+                pAttributeList->add(FSNS(XML_w, nToken), rtl::OUStringToOString(rAttributeList[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+        }
+    }
+
+    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
+    m_pImpl->m_pSerializer->singleElementNS(XML_w, XML_cnfStyle, xAttributeList);
+}
+
 void DocxTableStyleExport::TableStyles(sal_uInt16 nCountStylesToWrite)
 {
     // Do we have table styles from InteropGrabBag available?

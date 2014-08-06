@@ -2783,6 +2783,18 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
                 FSEND );
     }
 
+    if (const SfxGrabBagItem* pItem = sw::util::HasItem<SfxGrabBagItem>(pTblBox->GetFrmFmt()->GetAttrSet(), RES_FRMATR_GRABBAG))
+    {
+        const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
+        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find("CellCnfStyle");
+        if (it != rGrabBag.cend())
+        {
+            uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
+            m_pTableStyleExport->CnfStyle(aAttributes);
+        }
+    }
+
+
     const SvxBoxItem& rBox = pTblBox->GetFrmFmt( )->GetBox( );
     const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrmFmt( )->GetBox( );
     {
@@ -7819,39 +7831,8 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         }
         else if (i->first == "ParaCnfStyle")
         {
-            FastAttributeList* pAttributeList = m_pSerializer->createAttrList();
-            uno::Sequence<beans::PropertyValue> aAttributeList = i->second.get< uno::Sequence<beans::PropertyValue> >();
-
-            for (sal_Int32 j = 0; j < aAttributeList.getLength(); ++j)
-            {
-                if (aAttributeList[j].Name == "val")
-                    pAttributeList->add(FSNS(XML_w, XML_val), rtl::OUStringToOString(aAttributeList[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
-                else
-                {
-                    static DocxStringTokenMap const aTokens[] =
-                    {
-                        {"firstRow", XML_firstRow},
-                        {"lastRow", XML_lastRow},
-                        {"firstColumn", XML_firstColumn},
-                        {"lastColumn", XML_lastColumn},
-                        {"oddVBand", XML_oddVBand},
-                        {"evenVBand", XML_evenVBand},
-                        {"oddHBand", XML_oddHBand},
-                        {"evenHBand", XML_evenHBand},
-                        {"firstRowFirstColumn", XML_firstRowFirstColumn},
-                        {"firstRowLastColumn", XML_firstRowLastColumn},
-                        {"lastRowFirstColumn", XML_lastRowFirstColumn},
-                        {"lastRowLastColumn", XML_lastRowLastColumn},
-                        {0, 0}
-                    };
-
-                    if (sal_Int32 nToken = DocxStringGetToken(aTokens, aAttributeList[j].Name))
-                        pAttributeList->add(FSNS(XML_w, nToken), rtl::OUStringToOString(aAttributeList[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
-                }
-            }
-
-            XFastAttributeListRef xAttributeList(pAttributeList);
-            m_pSerializer->singleElementNS(XML_w, XML_cnfStyle, xAttributeList);
+            uno::Sequence<beans::PropertyValue> aAttributes = i->second.get< uno::Sequence<beans::PropertyValue> >();
+            m_pTableStyleExport->CnfStyle(aAttributes);
         }
         else
             SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
