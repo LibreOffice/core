@@ -3290,6 +3290,9 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
 
         for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
         {
+            if (!aGrabBagElement->second.has<OUString>())
+                continue;
+
             OString sValue = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
             if( aGrabBagElement->first == "themeFill")
                 AddToAttrList( aAttrList, FSNS( XML_w, XML_themeFill ), sValue.getStr() );

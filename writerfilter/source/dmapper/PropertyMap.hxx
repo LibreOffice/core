@@ -68,6 +68,7 @@ enum BorderPosition
 enum GrabBagType
 {
     NO_GRAB_BAG,
+    CELL_GRAB_BAG,
     PARA_GRAB_BAG,
     CHAR_GRAB_BAG
 };
