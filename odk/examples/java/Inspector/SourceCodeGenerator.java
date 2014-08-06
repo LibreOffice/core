@@ -76,7 +76,7 @@ public class SourceCodeGenerator {
     }
 
 
-    public String addSourceCodeOfUnoObject(XTreePathProvider _xTreepathProvider, boolean _brememberPath, boolean _bAddMethodSignature, boolean _baddHeader){
+    public String addSourceCodeOfUnoObject(XTreePathProvider _xTreepathProvider, boolean _brememberPath, boolean _baddHeader){
         String sVariableName = "";
         if (_xTreepathProvider != null) {
             for (int i = 0; i < _xTreepathProvider.getPathCount(); i++){
@@ -108,7 +108,7 @@ public class SourceCodeGenerator {
                 }
             }
         }
-        String sCompleteCode = combineCompleteSourceCode(sMainMethodSignature, _baddHeader);
+        String sCompleteCode = combineCompleteSourceCode(_baddHeader);
         xTreepathProvider = _xTreepathProvider;
         if (_brememberPath){
             aTreepathProviders.add(_xTreepathProvider);
@@ -203,7 +203,7 @@ public class SourceCodeGenerator {
         resetSourceCodeGeneration(_nLanguage);
         int ncount = aTreepathProviders.size();
         for (int i=0; i< ncount; i++){
-            sSourceCode = addSourceCodeOfUnoObject(aTreepathProviders.get(i), false, (i==0), (i == (ncount-1)));
+            sSourceCode = addSourceCodeOfUnoObject(aTreepathProviders.get(i), false, (i == (ncount-1)));
     }
         return sSourceCode;
     }
@@ -240,7 +240,7 @@ public class SourceCodeGenerator {
     }
 
 
-    private String combineCompleteSourceCode(String _sMethodSignature, boolean _bAddHeader){
+    private String combineCompleteSourceCode(boolean _bAddHeader){
         String sCompleteCode = "";
         if (_bAddHeader){
             sMainMethodSignature = m_xLanguageSourceCodeGenerator.getMainMethodSignatureSourceCode(oInitialUnoNode, sINITIALVARIABLENAME);

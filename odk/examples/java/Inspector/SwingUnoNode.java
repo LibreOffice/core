@@ -72,7 +72,7 @@ public class SwingUnoNode extends HideableMutableTreeNode implements XUnoNode{
     }
 
     public void openIdlDescription(String _SDKPath) {
-        m_oUnoNode.openIdlDescription(_SDKPath, getClassName(), getAnchor());
+        m_oUnoNode.openIdlDescription(_SDKPath, getClassName());
     }
 
     public Object[] getParameterObjects() {

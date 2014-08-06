@@ -281,7 +281,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
                     public void treeWillExpand(javax.swing.event.TreeExpansionEvent event) throws javax.swing.tree.ExpandVetoException {
                         SwingTreePathProvider oSwingTreePathProvider = new SwingTreePathProvider(event.getPath());
                         XUnoNode oUnoNode = oSwingTreePathProvider.getLastPathComponent();
-                        if (!m_oInspectorPane.expandNode(oUnoNode, oSwingTreePathProvider)){
+                        if (!m_oInspectorPane.expandNode(oUnoNode)){
                             throw new ExpandVetoException(event);
                         }
                     }

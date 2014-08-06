@@ -218,7 +218,7 @@ import com.sun.star.uno.XComponentContext;
                     invoke(oUnoMethodNode);
                 }
             }
-            String sSourceCode = m_oSourceCodeGenerator.addSourceCodeOfUnoObject(oTreePathProvider, true, true, true);
+            String sSourceCode = m_oSourceCodeGenerator.addSourceCodeOfUnoObject(oTreePathProvider, true, true);
             m_xTreeControlProvider.setSourceCode(sSourceCode);
         }
 
@@ -454,7 +454,7 @@ import com.sun.star.uno.XComponentContext;
     }
 
 
-    public boolean expandNode(XUnoNode _oUnoNode, XTreePathProvider _xTreePathProvider){
+    public boolean expandNode(XUnoNode _oUnoNode){
         if ( _oUnoNode != null ) {
             _oUnoNode.setFoldable(false);
             if (m_xTreeControlProvider.isMethodNode(_oUnoNode)){

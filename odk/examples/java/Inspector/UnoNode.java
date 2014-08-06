@@ -134,7 +134,7 @@ public class UnoNode{
         sLabel = _sLabel;
     }
 
-    public void openIdlDescription(String _sIDLUrl, String _sClassName, String _sAnchor){
+    public void openIdlDescription(String _sIDLUrl, String _sClassName){
     try{
         String sIDLUrl = _sIDLUrl;
         String sAnchor = ""; // TODO find out how the Anchor may be set at the html file;  //_sAnchor;

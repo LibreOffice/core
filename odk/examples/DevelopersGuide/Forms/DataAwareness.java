@@ -409,7 +409,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     /* ------------------------------------------------------------------ */
     /** add a specified table name to the table filter of the given data source.
     */
-    protected void makeTableVisible( XDataSource xDS, XConnection xConn, String sTableName ) throws java.lang.Exception
+    protected void makeTableVisible( XDataSource xDS, String sTableName ) throws java.lang.Exception
     {
         // get the table filter
         XPropertySet xDSP = UNO.queryPropertySet( xDS );
