@@ -122,6 +122,9 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
     glAttachShader(ProgramID, FragmentShaderID);
     glLinkProgram(ProgramID);
 
+    glDeleteShader(VertexShaderID);
+    glDeleteShader(FragmentShaderID);
+
     // Check the program
     glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
     if ( !Result )
@@ -139,9 +142,6 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
 
         return 0;
     }
-
-    glDeleteShader(VertexShaderID);
-    glDeleteShader(FragmentShaderID);
 
     return ProgramID;
 }
