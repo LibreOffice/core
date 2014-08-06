@@ -94,8 +94,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
 
         uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
             (pDocHandler);
-        uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler
-            (mpStream->getFastTokenHandler(xContext));
+        uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler(mpStream->getFastTokenHandler());
 
         xParser->setFastDocumentHandler(xDocumentHandler);
         xParser->setTokenHandler(xTokenHandler);
@@ -471,8 +470,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         pDocHandler->setIsSubstream( mbIsSubstream );
         uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
             (pDocHandler);
-        uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler
-            (mpStream->getFastTokenHandler(xContext));
+        uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler(mpStream->getFastTokenHandler());
 
         resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
         mxThemeDom = importSubStream(OOXMLStream::THEME);

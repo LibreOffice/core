@@ -41,10 +41,9 @@ namespace ooxml
 
 using namespace ::std;
 
-OOXMLFastTokenHandler::OOXMLFastTokenHandler
-(css::uno::Reference< css::uno::XComponentContext > const & context)
-: m_xContext(context)
-{}
+OOXMLFastTokenHandler::OOXMLFastTokenHandler()
+{
+}
 
 // ::com::sun::star::xml::sax::XFastTokenHandler:
 ::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getToken(const OUString & Identifier)

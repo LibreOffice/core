@@ -80,8 +80,7 @@ public:
     virtual OUString getTargetForId(const OUString & rId) SAL_OVERRIDE;
     virtual const OUString & getTarget() const SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::xml::sax::XFastTokenHandler>
-    getFastTokenHandler(css::uno::Reference<css::uno::XComponentContext> rContext) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::sax::XFastTokenHandler> getFastTokenHandler() SAL_OVERRIDE;
 
     void setInputStream(css::uno::Reference<css::io::XInputStream> rxInputStream);
     // Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.

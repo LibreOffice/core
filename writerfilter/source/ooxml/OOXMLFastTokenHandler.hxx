@@ -36,7 +36,7 @@ class OOXMLFastTokenHandler:
     public sax_fastparser::FastTokenHandlerBase
 {
 public:
-    explicit OOXMLFastTokenHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit OOXMLFastTokenHandler();
 
     // ::com::sun::star::xml::sax::XFastTokenHandler:
     virtual ::sal_Int32 SAL_CALL getToken(const OUString & Identifier) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -52,8 +52,6 @@ private:
     void operator =(OOXMLFastTokenHandler &); // not defined
 
     virtual ~OOXMLFastTokenHandler() {}
-
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
 }}

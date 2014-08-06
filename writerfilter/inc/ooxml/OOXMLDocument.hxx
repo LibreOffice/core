@@ -111,7 +111,7 @@ public:
     virtual const OUString & getTarget() const = 0;
 
     virtual css::uno::Reference<css::xml::sax::XFastTokenHandler>
-    getFastTokenHandler(css::uno::Reference<css::uno::XComponentContext> rContext) = 0;
+    getFastTokenHandler() = 0;
 
 };
 
