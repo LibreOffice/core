@@ -11,7 +11,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase.hxx>
 
 #include <sax/tools/documenthandleradapter.hxx>
 

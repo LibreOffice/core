@@ -23,7 +23,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase.hxx>
 
 #include <rtl/ref.hxx>
 

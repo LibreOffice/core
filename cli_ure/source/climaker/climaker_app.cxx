@@ -31,7 +31,6 @@
 #include "osl/file.hxx"
 #include "osl/thread.h"
 #include "rtl/ustrbuf.hxx"
-#include "cppuhelper/shlib.hxx"
 #include "cppuhelper/bootstrap.hxx"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"

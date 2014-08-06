@@ -22,7 +22,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase.hxx>
 
 #include <sax/tools/documenthandleradapter.hxx>
 
