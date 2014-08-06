@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_9d452319",
+        "filename": "cppuhelper/source/implbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-06T13:58:58Z",
+      "side": 0,
+      "message": "many of these symbols are part of the stable ABI, listed in cppuhelper/source/gcc3.map, they must not be removed completely, but rather empty stubs need to be put in cppuhelper/source/compat.cxx",
+      "revId": "3bc61ac26f00e5bc3c7ae4ab8a44d0d7e519e2c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
