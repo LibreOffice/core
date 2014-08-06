@@ -84,7 +84,7 @@ void Chart2XShapeTest::testFdo75075()
 void Chart2XShapeTest::testPropertyMappingBarChart()
 {
     load("chart2/qa/extras/xshape/data/ods/", "property-mapping-bar.ods");
-    compareAgainstReference("property-mapping-bar.xml", true);
+    compareAgainstReference("property-mapping-bar.xml");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2XShapeTest);
