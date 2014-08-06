@@ -507,31 +507,6 @@ def factoryActions(nsNode):
     print()
 
 
-# factoryGetDefineName
-
-
-def factoryGetDefineName(nsNode):
-    print("""#ifdef DEBUG_DOMAINMAPPER
-string OOXMLFactory_%s::getDefineName(Id nId) const
-{
-    static IdToStringMapPointer pMap;
-
-    if (pMap.get() == NULL)
-    {
-        pMap = IdToStringMapPointer(new IdToStringMap());
-
-""" % nsToLabel(nsNode))
-    for defineNode in getChildrenByName(getChildByName(nsNode, "grammar"), "define"):
-        print("""        (*pMap)[%s] = "%s";""" % (idForDefine(nsNode, defineNode), defineNode.getAttribute("name")))
-    print("""    }
-
-    return (*pMap)[nId];
-}
-#endif
-
-""")
-
-
 # factoryGetResourceId
 
 
@@ -704,7 +679,6 @@ namespace ooxml {
         factoryGetListValue(nsNode)
         factoryCreateElementMap(files, nsNode)
         factoryActions(nsNode)
-        factoryGetDefineName(nsNode)
         factoryGetResourceId(nsNode)
         factoryAttributeAction(nsNode)
 

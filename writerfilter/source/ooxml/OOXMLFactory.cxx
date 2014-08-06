@@ -72,13 +72,6 @@ CreateElementMapPointer OOXMLFactory_ns::getCreateElementMap(Id nId)
     return m_CreateElementsMap[nId];
 }
 
-#ifdef DEBUG_DOMAINMAPPER
-std::string OOXMLFactory_ns::getDefineName(Id /*nId*/) const
-{
-    return "";
-}
-#endif
-
 // class OOXMLFactory
 
 typedef rtl::Static< osl::Mutex, OOXMLFactory > OOXMLFactory_Mutex;

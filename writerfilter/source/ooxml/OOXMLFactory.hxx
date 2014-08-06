@@ -93,9 +93,6 @@ public:
     virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);
     virtual void endAction(OOXMLFastContextHandler * pHandler);
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
-#ifdef DEBUG_DOMAINMAPPER
-    virtual std::string getDefineName(Id nId) const;
-#endif
 
     AttributeToResourceMapPointer getAttributeToResourceMap(Id nId);
     CreateElementMapPointer getCreateElementMap(Id nId);
