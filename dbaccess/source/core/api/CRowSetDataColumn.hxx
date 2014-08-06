@@ -21,11 +21,12 @@
 
 #include "datacolumn.hxx"
 #include "RowSetRow.hxx"
-#include "RowSetCacheIterator.hxx"
 #include "columnsettings.hxx"
 
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/proparrhlp.hxx>
+
+#include <boost/function.hpp>
 
 namespace dbaccess
 {
@@ -37,7 +38,7 @@ namespace dbaccess
                                 public ORowSetDataColumn_PROP
     {
     protected:
-        ORowSetCacheIterator        m_aColumnValue;
+        const boost::function< const ::connectivity::ORowSetValue& ( sal_Int32 ) > m_pGetValue;
         ::com::sun::star::uno::Any  m_aOldValue;
 
         OUString             m_sLabel;
@@ -52,7 +53,7 @@ namespace dbaccess
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                           const OUString& _rDescription,
                           const OUString& i_sLabel,
-                          const ORowSetCacheIterator& _rColumnValue);
+                          const boost::function< const ::connectivity::ORowSetValue& ( sal_Int32 ) > &_getValue);
 
 
         // com::sun::star::lang::XTypeProvider
