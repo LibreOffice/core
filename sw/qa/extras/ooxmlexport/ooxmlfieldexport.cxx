@@ -582,6 +582,15 @@ DECLARE_OOXMLEXPORT_TEST(testEditTime, "fdo81341.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo81945, "fdo81945.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "//w:sdt//w:sdt", 0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
