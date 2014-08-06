@@ -21,6 +21,7 @@
 
 #include <map>
 #include <utility>
+#include <boost/bind.hpp>
 
 #include <string.h>
 #include "RowSet.hxx"
@@ -1876,7 +1877,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                             m_xActiveConnection->getMetaData(),
                                                                             aDescription,
                                                                             OUString(),
-                                                                            m_aCurrentRow);
+                                                                            boost::bind(&ORowSet::getInsertValue, this, _1));
                         aColumnMap.insert(std::make_pair(sName,0));
                         aColumns->get().push_back(pColumn);
                         pColumn->setName(sName);
@@ -1978,7 +1979,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                         m_xActiveConnection->getMetaData(),
                                                                         aDescription,
                                                                         sParseLabel,
-                                                                        m_aCurrentRow);
+                                                                        boost::bind(&ORowSet::getInsertValue, this, _1));
                     aColumns->get().push_back(pColumn);
 
                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,makeAny(rKeyColumns.find(i) != rKeyColumns.end()));
@@ -2810,7 +2811,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
                                                                 rParent.m_xActiveConnection->getMetaData(),
                                                                 aDescription,
                                                                 sParseLabel,
-                                                                m_aCurrentRow);
+                                                                boost::bind(&ORowSetClone::getValue, this, _1));
             aColumns->get().push_back(pColumn);
             pColumn->setName(*pIter);
             aNames.push_back(*pIter);
