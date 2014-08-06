@@ -33,6 +33,7 @@ class SVX_DLLPUBLIC SdrEdgeLine1DeltaItem: public SdrMetricItem {
 public:
     SdrEdgeLine1DeltaItem(long nVal=0): SdrMetricItem(SDRATTR_EDGELINE1DELTA,nVal)  {}
     SdrEdgeLine1DeltaItem(SvStream& rIn): SdrMetricItem(SDRATTR_EDGELINE1DELTA,rIn) {}
+    virtual SfxPoolItem * Clone(SfxItemPool *) const SAL_OVERRIDE;
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 };

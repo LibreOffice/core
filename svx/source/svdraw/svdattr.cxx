@@ -1747,6 +1747,11 @@ bool SdrEdgeNode2VertDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
+SfxPoolItem * SdrEdgeLine1DeltaItem::Clone(SfxItemPool *) const
+{
+    return new SdrEdgeLine1DeltaItem(*this);
+}
+
 bool SdrEdgeLine1DeltaItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
