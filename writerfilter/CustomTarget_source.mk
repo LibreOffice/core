@@ -63,7 +63,6 @@ writerfilter_GEN_ooxml_Model_processed=$(writerfilter_WORK)/ooxml/model_preproce
 writerfilter_GEN_ooxml_NamespaceIds_hxx=$(writerfilter_WORK)/ooxml/OOXMLnamespaceids.hxx
 writerfilter_GEN_ooxml_QNameToStr_cxx=$(writerfilter_WORK)/ooxml/qnametostr.cxx
 writerfilter_GEN_ooxml_ResourceIds_hxx=$(writerfilter_WORK)/ooxml/resourceids.hxx
-writerfilter_GEN_ooxml_Token_xml=$(writerfilter_WORK)/ooxml/token.xml
 writerfilter_SRC_ooxml_Model=$(writerfilter_SRC)/ooxml/model.xml
 writerfilter_SRC_ooxml_Preprocess_py=$(writerfilter_SRC)/ooxml/modelpreprocess.py
 writerfilter_SRC_ooxml_QNameToStr_py=$(writerfilter_SRC)/ooxml/qnametostr.py
@@ -92,11 +91,6 @@ $(writerfilter_GEN_ooxml_QNameToStr_cxx): $(writerfilter_SRC_ooxml_QNameToStr_py
 $(writerfilter_GEN_ooxml_ResourceIds_hxx) : $(writerfilter_SRC_ooxml_ResourceIds_py) $(writerfilter_GEN_ooxml_Model_processed) | $(writerfilter_WORK)/ooxml/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_ResourceIds_py) $(writerfilter_GEN_ooxml_Model_processed)) > $@
-
-$(writerfilter_GEN_ooxml_Token_xml) : $(SRCDIR)/oox/source/token/tokens.txt $(writerfilter_SRC)/ooxml/tokens-to-xml.sed | $(writerfilter_WORK)/ooxml/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CAT,1)
-	sed -f $(writerfilter_SRC)/ooxml/tokens-to-xml.sed \
-		< $(SRCDIR)/oox/source/token/tokens.txt > $@
 
 $(writerfilter_WORK)/ooxml/OOXMLFactory%.cxx : $(writerfilter_SRC)/ooxml/factoryimpl_ns.py $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
