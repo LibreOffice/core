@@ -2787,7 +2787,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     {
         const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
         std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find("CellCnfStyle");
-        if (it != rGrabBag.cend())
+        if (it != rGrabBag.end())
         {
             uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
             m_pTableStyleExport->CnfStyle(aAttributes);
@@ -2927,7 +2927,7 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t p
     {
         const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
         std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find("RowCnfStyle");
-        if (it != rGrabBag.cend())
+        if (it != rGrabBag.end())
         {
             uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
             m_pTableStyleExport->CnfStyle(aAttributes);
