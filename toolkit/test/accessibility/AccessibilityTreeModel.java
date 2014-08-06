@@ -242,7 +242,7 @@ public class AccessibilityTreeModel
                 // index relative to its parent.  Therefore the
                 // more expensive fireTreeStructureChanged is
                 // necessary.
-                fireTreeNodesInserted (createEvent (xParent, xChild));
+                fireTreeNodesInserted (createChildUpdateEvent (xParent));
                 updateNode (xParent, AccessibleTreeHandler.class);
             }
             maCanvas.repaint ();
@@ -344,7 +344,7 @@ public class AccessibilityTreeModel
     /** Create a TreeModelEvent object that informs listeners that one child
         has been removed from or inserted into its parent.
     */
-    public TreeModelEvent createEvent (XAccessibleContext xParent, XAccessible xChild)
+    public TreeModelEvent createChildUpdateEvent (XAccessibleContext xParent)
     {
         AccessibleTreeNode aParentNode = maNodeMap.GetNode (xParent);
         return createEvent (aParentNode, xParent);

@@ -75,7 +75,7 @@ public class UnoDialog2 extends UnoDialog
         return insertButton(sName, actionPerformed, this, sPropNames, oPropValues);
     }
 
-    public XButton insertImageButton(String sName, com.sun.star.awt.XActionListener actionPerformed, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XButton insertImageButton(String sName, com.sun.star.awt.XActionListener actionPerformed, String[] sPropNames, Object[] oPropValues)
     {
 
         XButton xButton = (XButton) insertControlModel2("com.sun.star.awt.UnoControlButtonModel", sName, sPropNames, oPropValues, XButton.class);
@@ -85,11 +85,6 @@ public class UnoDialog2 extends UnoDialog
             xButton.addActionListener(actionPerformed);
         }
         return xButton;
-    }
-
-    public XButton insertImageButton(String sName, com.sun.star.awt.XActionListener actionPerformed, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertImageButton(sName, actionPerformed, this, sPropNames, oPropValues);
     }
 
     public XCheckBox insertCheckBox(String sName, String itemChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
