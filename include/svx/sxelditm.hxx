@@ -29,24 +29,17 @@ public:
     SdrEdgeLineDeltaAnzItem(SvStream& rIn): SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ,rIn)  {}
 };
 
-class SVX_DLLPUBLIC SdrEdgeLine1DeltaItem: public SdrMetricItem {
-public:
-    SdrEdgeLine1DeltaItem(long nVal=0): SdrMetricItem(SDRATTR_EDGELINE1DELTA,nVal)  {}
-    SdrEdgeLine1DeltaItem(SvStream& rIn): SdrMetricItem(SDRATTR_EDGELINE1DELTA,rIn) {}
-    virtual SfxPoolItem * Clone(SfxItemPool *) const SAL_OVERRIDE;
-};
+inline SdrMetricItem makeSdrEdgeLine1DeltaItem(long nVal) {
+    return SdrMetricItem(SDRATTR_EDGELINE1DELTA, nVal);
+}
 
-class SVX_DLLPUBLIC SdrEdgeLine2DeltaItem: public SdrMetricItem {
-public:
-    SdrEdgeLine2DeltaItem(long nVal=0): SdrMetricItem(SDRATTR_EDGELINE2DELTA,nVal)  {}
-    SdrEdgeLine2DeltaItem(SvStream& rIn): SdrMetricItem(SDRATTR_EDGELINE2DELTA,rIn) {}
-};
+inline SdrMetricItem makeSdrEdgeLine2DeltaItem(long nVal) {
+    return SdrMetricItem(SDRATTR_EDGELINE2DELTA, nVal);
+}
 
-class SVX_DLLPUBLIC SdrEdgeLine3DeltaItem: public SdrMetricItem {
-public:
-    SdrEdgeLine3DeltaItem(long nVal=0): SdrMetricItem(SDRATTR_EDGELINE3DELTA,nVal)  {}
-    SdrEdgeLine3DeltaItem(SvStream& rIn): SdrMetricItem(SDRATTR_EDGELINE3DELTA,rIn) {}
-};
+inline SdrMetricItem makeSdrEdgeLine3DeltaItem(long nVal) {
+    return SdrMetricItem(SDRATTR_EDGELINE3DELTA, nVal);
+}
 
 #endif
 

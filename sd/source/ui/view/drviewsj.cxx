@@ -205,9 +205,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                     aAttrSet.GetItemState( SDRATTR_EDGELINE2DELTA ) >= SFX_ITEM_AVAILABLE &&
                     aAttrSet.GetItemState( SDRATTR_EDGELINE3DELTA ) >= SFX_ITEM_AVAILABLE )
                 {
-                    long nVal1 = ( ( const SdrEdgeLine1DeltaItem& ) aAttrSet.Get( SDRATTR_EDGELINE1DELTA ) ).GetValue();
-                    long nVal2 = ( ( const SdrEdgeLine2DeltaItem& ) aAttrSet.Get( SDRATTR_EDGELINE2DELTA ) ).GetValue();
-                    long nVal3 = ( ( const SdrEdgeLine3DeltaItem& ) aAttrSet.Get( SDRATTR_EDGELINE3DELTA ) ).GetValue();
+                    long nVal1 = ( ( const SdrMetricItem& ) aAttrSet.Get( SDRATTR_EDGELINE1DELTA ) ).GetValue();
+                    long nVal2 = ( ( const SdrMetricItem& ) aAttrSet.Get( SDRATTR_EDGELINE2DELTA ) ).GetValue();
+                    long nVal3 = ( ( const SdrMetricItem& ) aAttrSet.Get( SDRATTR_EDGELINE3DELTA ) ).GetValue();
                     {
                         if( nVal1 != 0 || nVal2 != 0 || nVal3 != 0 )
                             bDisable = false;

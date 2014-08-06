@@ -180,9 +180,9 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[SDRATTR_EDGENODE1GLUEDIST-SDRATTR_START]=new SdrEdgeNode1GlueDistItem;
     mppLocalPoolDefaults[SDRATTR_EDGENODE2GLUEDIST-SDRATTR_START]=new SdrEdgeNode2GlueDistItem;
     mppLocalPoolDefaults[SDRATTR_EDGELINEDELTAANZ -SDRATTR_START]=new SdrEdgeLineDeltaAnzItem;
-    mppLocalPoolDefaults[SDRATTR_EDGELINE1DELTA   -SDRATTR_START]=new SdrEdgeLine1DeltaItem;
-    mppLocalPoolDefaults[SDRATTR_EDGELINE2DELTA   -SDRATTR_START]=new SdrEdgeLine2DeltaItem;
-    mppLocalPoolDefaults[SDRATTR_EDGELINE3DELTA   -SDRATTR_START]=new SdrEdgeLine3DeltaItem;
+    mppLocalPoolDefaults[SDRATTR_EDGELINE1DELTA   -SDRATTR_START]=new SdrMetricItem(SDRATTR_EDGELINE1DELTA, 0);
+    mppLocalPoolDefaults[SDRATTR_EDGELINE2DELTA   -SDRATTR_START]=new SdrMetricItem(SDRATTR_EDGELINE2DELTA, 0);
+    mppLocalPoolDefaults[SDRATTR_EDGELINE3DELTA   -SDRATTR_START]=new SdrMetricItem(SDRATTR_EDGELINE3DELTA, 0);
     mppLocalPoolDefaults[SDRATTR_MEASUREKIND             -SDRATTR_START]=new SdrMeasureKindItem;
     mppLocalPoolDefaults[SDRATTR_MEASURETEXTHPOS         -SDRATTR_START]=new SdrMeasureTextHPosItem;
     mppLocalPoolDefaults[SDRATTR_MEASURETEXTVPOS         -SDRATTR_START]=new SdrMeasureTextVPosItem;
@@ -1745,11 +1745,6 @@ bool SdrEdgeNode2VertDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
 
     SetValue( nValue );
     return true;
-}
-
-SfxPoolItem * SdrEdgeLine1DeltaItem::Clone(SfxItemPool *) const
-{
-    return new SdrEdgeLine1DeltaItem(*this);
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

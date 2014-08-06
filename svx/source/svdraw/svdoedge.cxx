@@ -194,9 +194,9 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
     SdrEdgeKind eKind = ((SdrEdgeKindItem&)(rSet.Get(SDRATTR_EDGEKIND))).GetValue();
-    sal_Int32 nVal1 = ((SdrEdgeLine1DeltaItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
-    sal_Int32 nVal2 = ((SdrEdgeLine2DeltaItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
-    sal_Int32 nVal3 = ((SdrEdgeLine3DeltaItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
+    sal_Int32 nVal1 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
+    sal_Int32 nVal2 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
+    sal_Int32 nVal3 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
 
     if(eKind == SDREDGE_ORTHOLINES || eKind == SDREDGE_BEZIER)
     {
@@ -265,9 +265,9 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
     const SfxItemSet& rSet = GetObjectItemSet();
     SdrEdgeKind eKind = ((SdrEdgeKindItem&)(rSet.Get(SDRATTR_EDGEKIND))).GetValue();
     sal_Int32 nValAnz = ((SdrEdgeLineDeltaAnzItem&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
-    sal_Int32 nVal1 = ((SdrEdgeLine1DeltaItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
-    sal_Int32 nVal2 = ((SdrEdgeLine2DeltaItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
-    sal_Int32 nVal3 = ((SdrEdgeLine3DeltaItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
+    sal_Int32 nVal1 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
+    sal_Int32 nVal2 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
+    sal_Int32 nVal3 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
     sal_Int32 nVals[3] = { nVal1, nVal2, nVal3 };
     sal_uInt16 n = 0;
 
@@ -323,17 +323,17 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 
         if(nVals[0] != nVal1)
         {
-            GetProperties().SetObjectItemDirect(SdrEdgeLine1DeltaItem(nVals[0]));
+            GetProperties().SetObjectItemDirect(makeSdrEdgeLine1DeltaItem(nVals[0]));
         }
 
         if(nVals[1] != nVal2)
         {
-            GetProperties().SetObjectItemDirect(SdrEdgeLine2DeltaItem(nVals[1]));
+            GetProperties().SetObjectItemDirect(makeSdrEdgeLine2DeltaItem(nVals[1]));
         }
 
         if(nVals[2] != nVal3)
         {
-            GetProperties().SetObjectItemDirect(SdrEdgeLine3DeltaItem(nVals[2]));
+            GetProperties().SetObjectItemDirect(makeSdrEdgeLine3DeltaItem(nVals[2]));
         }
 
         if(n < 3)

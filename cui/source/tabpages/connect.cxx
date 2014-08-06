@@ -224,7 +224,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE1DELTA );
     if( pItem )
     {
-        long nValue = ( ( const SdrEdgeLine1DeltaItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldLine1, nValue, eUnit );
     }
     else
@@ -238,7 +238,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE2DELTA );
     if( pItem )
     {
-        long nValue = ( ( const SdrEdgeLine2DeltaItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldLine2, nValue, eUnit );
     }
     else
@@ -252,7 +252,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE3DELTA );
     if( pItem )
     {
-        long nValue = ( ( const SdrEdgeLine3DeltaItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldLine3, nValue, eUnit );
     }
     else
@@ -343,21 +343,21 @@ bool SvxConnectionPage::FillItemSet( SfxItemSet* rAttrs)
     if( m_pMtrFldLine1->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLine1, eUnit );
-        rAttrs->Put( SdrEdgeLine1DeltaItem( nValue ) );
+        rAttrs->Put( makeSdrEdgeLine1DeltaItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldLine2->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLine2, eUnit );
-        rAttrs->Put( SdrEdgeLine2DeltaItem( nValue ) );
+        rAttrs->Put( makeSdrEdgeLine2DeltaItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldLine3->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLine3, eUnit );
-        rAttrs->Put( SdrEdgeLine3DeltaItem( nValue ) );
+        rAttrs->Put( makeSdrEdgeLine3DeltaItem( nValue ) );
         bModified = true;
     }
 
@@ -429,19 +429,19 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
     if( p == m_pMtrFldLine1 )
     {
         sal_Int32 nValue = GetCoreValue( *m_pMtrFldLine1, eUnit );
-        aAttrSet.Put( SdrEdgeLine1DeltaItem( nValue ) );
+        aAttrSet.Put( makeSdrEdgeLine1DeltaItem( nValue ) );
     }
 
     if( p == m_pMtrFldLine2 )
     {
         sal_Int32 nValue = GetCoreValue( *m_pMtrFldLine2, eUnit );
-        aAttrSet.Put( SdrEdgeLine2DeltaItem( nValue ) );
+        aAttrSet.Put( makeSdrEdgeLine2DeltaItem( nValue ) );
     }
 
     if( p == m_pMtrFldLine3 )
     {
         sal_Int32 nValue = GetCoreValue( *m_pMtrFldLine3, eUnit );
-        aAttrSet.Put( SdrEdgeLine3DeltaItem( nValue ) );
+        aAttrSet.Put( makeSdrEdgeLine3DeltaItem( nValue ) );
     }
 
 
