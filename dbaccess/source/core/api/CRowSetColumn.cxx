@@ -36,9 +36,13 @@ using namespace ::com::sun::star::beans;
 namespace dbaccess
 {
 
-ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaData, const Reference < XRow >& _xRow, sal_Int32 _nPos,
-                const Reference< XDatabaseMetaData >& _rxDBMeta, const OUString& _rDescription, const OUString& i_sLabel,ORowSetCacheIterator& _rColumnValue )
-    :ORowSetDataColumn( _xMetaData, _xRow, NULL, _nPos, _rxDBMeta, _rDescription, i_sLabel,_rColumnValue )
+ORowSetColumn::ORowSetColumn( const Reference < XResultSetMetaData >& _xMetaData,
+                              const Reference < XRow >& _xRow, sal_Int32 _nPos,
+                              const Reference< XDatabaseMetaData >& _rxDBMeta,
+                              const OUString& _rDescription,
+                              const OUString& i_sLabel,
+                              const boost::function< const ::connectivity::ORowSetValue& ( sal_Int32 ) > &_getValue )
+    :ORowSetDataColumn( _xMetaData, _xRow, NULL, _nPos, _rxDBMeta, _rDescription, i_sLabel, _getValue )
 {
 }
 
