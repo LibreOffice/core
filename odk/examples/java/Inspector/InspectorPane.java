@@ -50,9 +50,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
     public class InspectorPane extends WeakBase implements XInstanceInspector{  //, XServiceInfo
-        private XIdlMethod[] xIdlMethods;
-        private Property[] aProperties;
-        private boolean bIncludeContent = false;
         private XComponentContext m_xComponentContext;
         private XDialogProvider m_xDialogProvider;
         private Introspector m_oIntrospector = null;
@@ -72,13 +69,6 @@ import com.sun.star.uno.XComponentContext;
             m_oSourceCodeGenerator = new SourceCodeGenerator(_nLanguage);
             _xTreeControlProvider.addInspectorPane(this);
         }
-
-
-        private void setMaximumOfProgressBar(Object _oUnoObject){
-            xIdlMethods = m_oIntrospector.getMethods(_oUnoObject);
-            aProperties = m_oIntrospector.getProperties(_oUnoObject);
-        }
-
 
         /** Inspect the given object for methods, properties, interfaces, and
          * services.

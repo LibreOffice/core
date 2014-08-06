@@ -241,13 +241,6 @@ public class ViewContainer extends Thread
 
 
     /**
-     * @const   BASICNAME   it's used to create uinque names for all regieterd views
-     */
-    private static final String BASICNAME = "Document View ";
-
-
-
-    /**
      * @member  mbInplace           indicates using of inplace office frames instead of outplace ones
      * @member  maSingleton         singleton instance of this view container
      * @member  mlViews             list of all currently registered document views

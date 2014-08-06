@@ -50,19 +50,14 @@ public class SourceCodeGenerator {
     private ArrayList<String> sExceptions = new ArrayList<String>();
     ArrayList<String> sHeaderStatements = new HeaderStatements();
     private XLanguageSourceCodeGenerator m_xLanguageSourceCodeGenerator;
-    private String sHeaderCode = "";
     private String sStatementCode = "";
     private String sMainMethodSignature = "";
 
     private HashMap<String, UnoObjectDefinition> aVariables = new HashMap<String, UnoObjectDefinition>();
     private final String SSUFFIXSEPARATOR = "_";
     private final String SVARIABLENAME = "VariableName";
-    private final String SARRAYVARIABLENAME = "VariableNameList";
-    private final String SUNOOBJECTNAME = "oUnobject";
-    private final String SUNOSTRUCTNAME = "aUnoStruct";
     private Introspector m_oIntrospector;
     private ArrayList<XTreePathProvider> aTreepathProviders = new ArrayList<XTreePathProvider>();
-    private XTreePathProvider xTreepathProvider = null;
     private boolean baddExceptionHandling = false;
     private boolean bXPropertySetExceptionsAreAdded = false;
     private XUnoNode oInitialUnoNode = null;
@@ -109,7 +104,6 @@ public class SourceCodeGenerator {
             }
         }
         String sCompleteCode = combineCompleteSourceCode(_baddHeader);
-        xTreepathProvider = _xTreepathProvider;
         if (_brememberPath){
             aTreepathProviders.add(_xTreepathProvider);
         }

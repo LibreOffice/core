@@ -57,7 +57,6 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                                     com.sun.star.frame.XDispatchProviderInterceptor,
-                                    com.sun.star.frame.XDispatchProvider,
                                     com.sun.star.frame.XDispatch,
                                     com.sun.star.frame.XInterceptorInfo,
                                     IShutdownListener,

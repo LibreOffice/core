@@ -153,7 +153,6 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
 
     private XPropertySet            m_xMasterForm;
     private ButtonOperator          m_aOperator;
-    private SalesFilter             m_aSalesFilter;
 
     private KeyGenerator            m_aSalesmanKeyGenerator;
     private KeyGenerator            m_aSalesKeyGenerator;
@@ -806,7 +805,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         XPropertySet xApplyFilter = m_formLayer.createControlAndShape( "CommandButton", 139, 125, 25, 6, xSalesFilterForm );
         xApplyFilter.setPropertyValue( "Name", "ApplyFilter" );
         xApplyFilter.setPropertyValue( "DefaultButton", new Boolean( true ) );
-        m_aSalesFilter = new SalesFilter( m_document, xSalesFormProps, xFilterSelection,
+        new SalesFilter( m_document, xSalesFormProps, xFilterSelection,
             xManualFilter, xApplyFilter );
 
 

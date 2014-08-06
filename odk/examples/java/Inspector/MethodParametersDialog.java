@@ -60,7 +60,6 @@ public class MethodParametersDialog extends JDialog{
     private JButton jHelpButton = new JButton("Help");
     private JButton jOKButton = new JButton("Ok");
     private JButton jInvokeButton = new JButton("Invoke");
-    private Object m_oReturnButton = null;
     private Object m_oUnoObject = null;
     private Object m_oUnoReturnObject = null;
     private JLabel jLblResult;

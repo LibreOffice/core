@@ -359,7 +359,6 @@ public class KeyGenerator
     private boolean                 m_bResetListening;
     private boolean                 m_bUpdateListening;
 
-    private DocumentHelper          m_aDocument;
     private XPropertySet            m_xForm;
 
     /* ------------------------------------------------------------------ */

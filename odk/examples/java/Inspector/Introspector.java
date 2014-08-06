@@ -76,9 +76,7 @@ public class Introspector extends WeakBase{
     private XMultiComponentFactory m_xMultiComponentFactory;
     private XComponentContext m_xComponentContext;
     private XTypeDescriptionEnumerationAccess m_xTDEnumerationAccess;
-    private static XComponentContext xOfficeComponentContext;
     private XIdlReflection mxIdlReflection;
-    private URL openHyperlink;
     private static Introspector m_oIntrospector = null;
     private XSimpleFileAccess xSimpleFileAccess = null;
 

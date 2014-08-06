@@ -35,7 +35,6 @@
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.reflection.XConstantTypeDescription;
 import com.sun.star.reflection.XPropertyTypeDescription;
 import com.sun.star.uno.UnoRuntime;
 
@@ -47,8 +46,6 @@ public class UnoPropertyNode extends UnoNode{
     Object m_oUnoReturnObject;
     private int m_nPropertyType = XUnoPropertyNode.nDEFAULT;
     private String sLabel = "";
-
-    private static XConstantTypeDescription[] xPropertyAttributesTypeDescriptions = null;
 
 
     /** Creates a new instance of UnoMethodNode */

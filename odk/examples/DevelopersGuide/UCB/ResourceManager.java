@@ -48,7 +48,6 @@ public class ResourceManager {
     private  Helper      m_helper;
     private  XInterface  m_ucb;
     private  String      m_contenturl = "";
-    private  String      m_srcURL = "";
     private  String      m_targetFolderURL = "";
     private  String      m_newTitle = "";
     private  String      m_transOperation = "";

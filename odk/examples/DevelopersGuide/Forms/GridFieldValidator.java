@@ -48,7 +48,6 @@ import com.sun.star.task.*;
 */
 class GridFieldValidator implements XUpdateListener
 {
-    private DocumentHelper      m_aDocument;
     private XComponentContext   m_xCtx;
     private XPropertySet        m_xWatchedColumn;
 
@@ -60,7 +59,7 @@ class GridFieldValidator implements XUpdateListener
         // remember
         m_xCtx = xCtx;
         m_xWatchedColumn = xWatchedGridColumn;
-        m_aDocument = DocumentHelper.getDocumentForComponent(xWatchedGridColumn,
+        DocumentHelper.getDocumentForComponent(xWatchedGridColumn,
                                                              xCtx);
 
         m_bWatching = false;
