@@ -13,6 +13,7 @@ my %module_dirname = (
     "help"              => "helpcontent2",
     "translations"      => "translations"
 );
+my $lo_topdir_name;
 
 # get libreoffice-build version from the given libreoffice-build sources
 sub get_config_version($)
@@ -159,7 +160,7 @@ sub generate_tarball($$$)
 
     print "Creating $tarball...";
     # generate the tarball in the current directory; avoid "./" prefix in the stored paths; show progress
-    system ("tar -c $tar_compress_option -f $tarball -C $dir --checkpoint=500 --checkpoint-action=exec=\"echo -n .\" --transform=\"s|^\./||\" .") && 
+    system ("tar -c $tar_compress_option -f $tarball -C $dir --checkpoint=500 --checkpoint-action=exec=\"echo -n .\" $lo_topdir_name") && 
         die "Error: releasing failed: $!\n";
     print "\n";
 }
@@ -351,7 +352,6 @@ my $state_release_version;
 my $lo_core_tempdir;
 my $force;
 my $verbose=1;
-my $lo_topdir_name;
 my %module_tarball_name;
 
 ###################
