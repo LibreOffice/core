@@ -1,0 +1,13 @@
+--- nss/lib/libpkix/pkix/util/pkix_tools.h
++++ nss/lib/libpkix/pkix/util/pkix_tools.h
+@@ -1458,8 +1458,8 @@
+ 
+ extern PRLogModuleInfo *pkixLog;
+ 
+-#define PKIX_MAGIC_HEADER           LL_INIT(0xFEEDC0FF, 0xEEFACADE)
+-#define PKIX_MAGIC_HEADER_DESTROYED LL_INIT(0xBAADF00D, 0xDEADBEEF)
++#define PKIX_MAGIC_HEADER           LL_INIT(0xFEEDC0FFU, 0xEEFACADEU)
++#define PKIX_MAGIC_HEADER_DESTROYED LL_INIT(0xBAADF00DU, 0xDEADBEEFU)
+ 
+ /* see source file for function documentation */
+ 

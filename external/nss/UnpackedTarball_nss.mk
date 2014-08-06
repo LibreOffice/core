@@ -22,7 +22,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	$(if $(filter WNTGCC,$(OS)$(COM)),external/nss/nspr-4.9-build.patch.3 \
 		external/nss/nss-3.13.3-build.patch.3 \
 		external/nss/nss.mingw.patch.3) \
-        external/nss/nspr-build-config.patch \
+    external/nss/nspr-build-config.patch \
+    external/nss/ubsan.patch.0 \
 ))
 
 # nss-pem is only needed for internal curl to read the NSS CA database
