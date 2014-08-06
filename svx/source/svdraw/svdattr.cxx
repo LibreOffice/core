@@ -1752,54 +1752,6 @@ SfxPoolItem * SdrEdgeLine1DeltaItem::Clone(SfxItemPool *) const
     return new SdrEdgeLine1DeltaItem(*this);
 }
 
-bool SdrEdgeLine1DeltaItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
-{
-    rVal <<= (sal_Int32)GetValue();
-    return true;
-}
-
-bool SdrEdgeLine1DeltaItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
-{
-    sal_Int32 nValue = 0;
-    if(!(rVal >>= nValue))
-        return false;
-
-    SetValue( nValue );
-    return true;
-}
-
-bool SdrEdgeLine2DeltaItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
-{
-    rVal <<= (sal_Int32)GetValue();
-    return true;
-}
-
-bool SdrEdgeLine2DeltaItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
-{
-    sal_Int32 nValue = 0;
-    if(!(rVal >>= nValue))
-        return false;
-
-    SetValue( nValue );
-    return true;
-}
-
-bool SdrEdgeLine3DeltaItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
-{
-    rVal <<= (sal_Int32)GetValue();
-    return true;
-}
-
-bool SdrEdgeLine3DeltaItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
-{
-    sal_Int32 nValue = 0;
-    if(!(rVal >>= nValue))
-        return false;
-
-    SetValue( nValue );
-    return true;
-}
-
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Measure
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
