@@ -2921,6 +2921,20 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t p
     TableHeight( pTableTextNodeInfoInner );
     TableCanSplit( pTableTextNodeInfoInner );
 
+    const SwTableBox *pTableBox = pTableTextNodeInfoInner->getTableBox();
+    const SwTableLine* pTableLine = pTableBox->GetUpper();
+    if (const SfxGrabBagItem* pItem = sw::util::HasItem<SfxGrabBagItem>(pTableLine->GetFrmFmt()->GetAttrSet(), RES_FRMATR_GRABBAG))
+    {
+        const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
+        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find("RowCnfStyle");
+        if (it != rGrabBag.cend())
+        {
+            uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
+            m_pTableStyleExport->CnfStyle(aAttributes);
+        }
+    }
+
+
     m_pSerializer->endElementNS( XML_w, XML_trPr );
 }
 

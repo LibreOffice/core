@@ -1980,6 +1980,25 @@ DECLARE_OOXMLEXPORT_TEST(testTableThemePreservation, "table-theme-preservation.d
     // check that one cell attribute present in the original document has been preserved
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/*", 1);
 
+    // Check that w:cnfStyle row, cell and paragraph property is preserved.
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "val", "100000000000");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "firstRow", "1");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "lastRow", "0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "firstColumn", "0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "lastColumn", "0");
+
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "val", "001000000000");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "oddVBand", "0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "evenVBand", "0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "oddHBand", "0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "evenHBand", "0");
+
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "val", "100000000000");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "firstRowFirstColumn", "0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "firstRowLastColumn", "0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "lastRowFirstColumn", "0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "lastRowLastColumn", "0");
+
 }
 
 DECLARE_OOXMLEXPORT_TEST(testcantSplit, "2_table_doc.docx")
