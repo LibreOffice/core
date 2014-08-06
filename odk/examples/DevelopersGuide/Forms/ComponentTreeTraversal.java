@@ -55,7 +55,7 @@ class ComponentTreeTraversal implements IFormComponentAction
         control model or a <service scope="com.sun.star.form">FormComponents</service>
         instance.</p>
     */
-    protected boolean shouldStepInto( XIndexContainer xContainer ) throws com.sun.star.uno.Exception
+    protected boolean shouldStepInto( XIndexContainer xContainer )
     {
         // step down the tree, if possible
         XServiceInfo xSI = UNO.queryServiceInfo( xContainer );

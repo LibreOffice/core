@@ -105,7 +105,7 @@ public class DocumentEvents extends JUnitBasedTest
     }
 
     //@Test
-    public void testCloseByAPI() throws Exception
+    public void testCloseByAPI()
     {
         impl_setupDocCloseTest();
         // closing the doc by API is synchronous, so do this in a separate thread, else we will get a deadlock

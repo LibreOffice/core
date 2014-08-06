@@ -33,7 +33,7 @@ public class SpreadsheetDocument extends DocumentHelper
         super( xCtx, implCreateBlankDocument( xCtx, "private:factory/scalc" ) );
     }
 
-    public SpreadsheetDocument( XComponentContext xCtx, XComponent document ) throws com.sun.star.uno.Exception
+    public SpreadsheetDocument( XComponentContext xCtx, XComponent document )
     {
         super( xCtx, document );
     }

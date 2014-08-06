@@ -61,7 +61,7 @@ class LockControlModels extends ComponentTreeTraversal
 
     /* ------------------------------------------------------------------ */
     @Override
-    protected boolean shouldStepInto( XIndexContainer xContainer ) throws com.sun.star.uno.Exception
+    protected boolean shouldStepInto( XIndexContainer xContainer )
     {
         if ( !super.shouldStepInto( xContainer ) )
             return false;   // don't try to be more clever than our base class

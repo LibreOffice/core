@@ -47,7 +47,7 @@ import static org.junit.Assert.*;
 
 public class ChartDocumentTest implements DocumentTest
 {
-    public ChartDocumentTest( final XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception, InterruptedException
+    public ChartDocumentTest( final XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception
     {
         m_textDocument = OfficeDocument.blankDocument( i_orb, DocumentType.WRITER );
 

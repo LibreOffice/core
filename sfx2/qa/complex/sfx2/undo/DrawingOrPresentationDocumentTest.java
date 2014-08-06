@@ -165,7 +165,6 @@ public abstract class DrawingOrPresentationDocumentTest extends DocumentTestBase
      * verifies the given shape has the given size
      */
     private void verifyShapeGeometry( final Object i_shapeObject, final int i_expectedWidth, final int i_expectedHeight )
-         throws com.sun.star.uno.Exception
     {
         final XShape shape = UnoRuntime.queryInterface( XShape.class, i_shapeObject );
         final Size shapeSize = shape.getSize();

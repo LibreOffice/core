@@ -76,7 +76,7 @@ public class FLTools
     /* ------------------------------------------------------------------ */
     /** returns the name of the given form component
     */
-    public static String getName( Object aFormComponent ) throws com.sun.star.uno.Exception
+    public static String getName( Object aFormComponent )
     {
         XNamed xNamed = UnoRuntime.queryInterface( XNamed.class,
             aFormComponent );
