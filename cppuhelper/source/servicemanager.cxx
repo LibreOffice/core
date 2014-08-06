@@ -33,7 +33,6 @@
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/shlib.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
