@@ -28,6 +28,12 @@
 #include <osl/module.h>
 #include <sal/types.h>
 
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <cppuhelper/cppuhelperdllapi.h>
+
 namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiComponentFactory;
@@ -112,6 +118,60 @@ loadSharedLibComponentFactory(
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+//From deleted include/cppuhelper/implbase.hxx
+
+struct Type_Offset
+{
+    sal_Int32 nOffset;
+    typelib_InterfaceTypeDescription * pTD;
+};
+
+struct CPPUHELPER_DLLPUBLIC ClassDataBase
+{
+    sal_Bool  bOffsetsInit;
+    sal_Int32 nType2Offset;
+    sal_Int32 nClassCode;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > * pTypes;
+    ::com::sun::star::uno::Sequence< sal_Int8 > * pId;
+    ClassDataBase();
+    ClassDataBase( sal_Int32 nClassCode );
+    ~ClassDataBase();
+};
+
+ClassDataBase::ClassDataBase() { }
+ClassDataBase::ClassDataBase( sal_Int32 ) { }
+ClassDataBase::~ClassDataBase() { }
+
+struct CPPUHELPER_DLLPUBLIC ClassData : public ClassDataBase
+{
+    Type_Offset arType2Offset[1];
+    void SAL_CALL initTypeProvider();
+    void SAL_CALL writeTypeOffset( const ::com::sun::star::uno::Type & rType, sal_Int32 nOffset );
+    ::com::sun::star::uno::Any SAL_CALL query(
+        const ::com::sun::star::uno::Type & rType, ::com::sun::star::lang::XTypeProvider * pBase );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes();
+    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId();
+};
+
+void SAL_CALL initTypeProvider()
+{
+}
+void SAL_CALL writeTypeOffset( const ::com::sun::star::uno::Type &, sal_Int32 )
+{
+}
+::com::sun::star::uno::Any SAL_CALL query(
+    const ::com::sun::star::uno::Type &, ::com::sun::star::lang::XTypeProvider *)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
