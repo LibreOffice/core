@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_bd7b477b",
+        "filename": "sw/source/ui/envelp/mailmrge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-06T13:34:52Z",
+      "side": 1,
+      "message": "You should define the min/max values in the UI file. See commit 64992cc56e0e8a480e33b847d3a327f8229535d2 for inspiration.",
+      "revId": "3cac23986239fbd7021d10c3143bf14b5b4f3dbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_7dafefe3",
+        "filename": "sw/uiconfig/swriter/ui/mailmerge.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-06T13:34:52Z",
+      "side": 1,
+      "message": "There is nothing translatable in \"...\". It has not been translatable before either. (it was declared as Text \u003d \"...\", not Text [en-US] \u003d \"...\")",
+      "revId": "3cac23986239fbd7021d10c3143bf14b5b4f3dbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_5dac2bed",
+        "filename": "sw/uiconfig/swriter/ui/mailmerge.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-06T13:34:52Z",
+      "side": 1,
+      "message": "Again, \"...\" is not translatable.",
+      "revId": "3cac23986239fbd7021d10c3143bf14b5b4f3dbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
