@@ -85,10 +85,6 @@ typedef boost::unordered_map<Id, CreateElementMapPointer> CreateElementsMap;
 typedef boost::unordered_map<Id, std::string> IdToStringMap;
 typedef boost::shared_ptr<IdToStringMap> IdToStringMapPointer;
 
-typedef boost::unordered_map<Id, Token_t> TokenToIdMap;
-typedef boost::shared_ptr<TokenToIdMap> TokenToIdMapPointer;
-typedef boost::unordered_map<Id, TokenToIdMapPointer> TokenToIdsMap;
-
 class OOXMLFactory_ns {
 public:
     typedef boost::shared_ptr<OOXMLFactory_ns> Pointer_t;
@@ -103,21 +99,19 @@ public:
 
     AttributeToResourceMapPointer getAttributeToResourceMap(Id nId);
     CreateElementMapPointer getCreateElementMap(Id nId);
-    TokenToIdMapPointer getTokenToIdMap(Id nId);
 
 protected:
     virtual ~OOXMLFactory_ns();
 
     AttributesMap m_AttributesMap;
     CreateElementsMap m_CreateElementsMap;
-    TokenToIdsMap m_TokenToIdsMap;
 
     virtual AttributeToResourceMapPointer createAttributeToResourceMap(Id nId) = 0;
     virtual CreateElementMapPointer createCreateElementMap(Id nId) = 0;
-    virtual TokenToIdMapPointer createTokenToIdMap(Id nId) = 0;
 
 public:
     virtual bool getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue) = 0;
+    virtual Id getResourceId(Id nDefine, sal_Int32 nToken) = 0;
 };
 
 class OOXMLFactory

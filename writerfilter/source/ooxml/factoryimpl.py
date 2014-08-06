@@ -30,11 +30,10 @@ def createFastChildContextFromFactory(model):
     if (pFactory.get() != NULL)
     {
         CreateElementMapPointer pMap = pFactory->getCreateElementMap(nDefine);
-        TokenToIdMapPointer pTokenMap = pFactory->getTokenToIdMap(nDefine);
 
         if (pMap.get() != NULL)
         {
-            Id nId = (*pTokenMap)[Element];
+            Id nId = pFactory->getResourceId(nDefine, Element);
             CreateElement aCreateElement = (*pMap)[Element];
 
             switch (aCreateElement.m_nResource)

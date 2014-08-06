@@ -36,9 +36,9 @@ public:
     static Pointer_t getInstance();
 
     virtual AttributeToResourceMapPointer createAttributeToResourceMap(Id nId);
-    virtual bool getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue);
     virtual CreateElementMapPointer createCreateElementMap(Id nId);
-    virtual TokenToIdMapPointer createTokenToIdMap(Id nId);
+    virtual bool getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue);
+    virtual Id getResourceId(Id nDefine, sal_Int32 nToken);
 #ifdef DEBUG_DOMAINMAPPER
     virtual string getDefineName(Id nId) const;
 #endif

@@ -72,14 +72,6 @@ CreateElementMapPointer OOXMLFactory_ns::getCreateElementMap(Id nId)
     return m_CreateElementsMap[nId];
 }
 
-TokenToIdMapPointer OOXMLFactory_ns::getTokenToIdMap(Id nId)
-{
-    if (m_TokenToIdsMap.find(nId) == m_TokenToIdsMap.end())
-        m_TokenToIdsMap[nId] = createTokenToIdMap(nId);
-
-    return m_TokenToIdsMap[nId];
-}
-
 #ifdef DEBUG_DOMAINMAPPER
 std::string OOXMLFactory_ns::getDefineName(Id /*nId*/) const
 {
@@ -120,7 +112,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 
     if (pFactory.get() != NULL)
     {
-        TokenToIdMapPointer pTokenToIdMap = pFactory->getTokenToIdMap(nDefine);
         AttributeToResourceMapPointer pMap = pFactory->getAttributeToResourceMap(nDefine);
 
         AttributeToResourceMap::const_iterator aIt;
@@ -135,7 +126,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
             sal_Int32 nToken = aIt->first;
             if (pAttribs->hasAttribute(nToken))
             {
-                Id nId = (*pTokenToIdMap)[nToken];
+                Id nId = pFactory->getResourceId(nDefine, nToken);
 
                 switch (aIt->second.m_nResource)
                 {

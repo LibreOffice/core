@@ -532,64 +532,72 @@ string OOXMLFactory_%s::getDefineName(Id nId) const
 """)
 
 
-# factoryTokenToIdMap
+# factoryGetResourceId
 
 
-def factoryTokenToIdMapInner(nsNode, defineNode):
-    ret = []
+def collectTokenToId(nsNode, defineNode):
+    ret = {}
     for refNode in defineNode.getElementsByTagName("ref"):
         refName = refNode.getAttribute("name")
         parent = refNode.parentNode
         if parent.localName in ("element", "attribute"):
             continue
-        refblock1 = []
+        refblock1 = {}
         for define in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "define") if i.getAttribute("name") == refName]:
-            refblock1.extend(factoryTokenToIdMapInner(nsNode, define))
+            refblock1.update(collectTokenToId(nsNode, define))
         if not len(refblock1):
             for namespaceNode in getChildrenByName(nsNode.parentNode, "namespace"):
                 for define in [i for i in getChildrenByName(getChildByName(namespaceNode, "grammar"), "define") if i.getAttribute("name") == refName]:
-                    ret.extend(factoryTokenToIdMapInner(namespaceNode, define))
+                    ret.update(collectTokenToId(namespaceNode, define))
         else:
-            ret.extend(refblock1)
+            ret.update(refblock1)
 
-    body = []
     defineName = defineNode.getAttribute("name")
     for resourceNode in [i for i in getChildrenByName(nsNode, "resource") if i.getAttribute("name") == defineName]:
         for node in [i for i in resourceNode.childNodes if i.localName in ("element", "attribute")]:
             if node.hasAttribute("tokenid"):
-                body.append("(*pMap)[%s] = %s;" % (fastToken(node), idToLabel(node.getAttribute("tokenid"))))
-    if len(body):
-        ret.append("// %s" % defineName)
-        ret.extend(body)
+                ret[fastToken(node)] = idToLabel(node.getAttribute("tokenid"))
 
     return ret
 
+def factoryTokenToIdMapInner(nsNode, defineNode):
+    ids = collectTokenToId(nsNode, defineNode)
+    ret = []
+    for i in ids.keys():
+        ret.append("        case %s: return %s;" % (i, ids[i]))
 
-def factoryTokenToIdMap(nsNode):
-    print("""TokenToIdMapPointer OOXMLFactory_%s::createTokenToIdMap(Id nId)
+    return ret
+
+def factoryGetResourceId(nsNode):
+    print("""Id OOXMLFactory_%s::getResourceId(Id nDefine, sal_Int32 nToken)
 {
-    TokenToIdMapPointer pMap(new TokenToIdMap());
+    (void) nDefine;
+    (void) nToken;
 
-    switch (nId)
+    switch (nDefine)
     {""" % nsToLabel(nsNode))
     for defineNode in getChildrenByName(getChildByName(nsNode, "grammar"), "define"):
         inner = "\n".join(factoryTokenToIdMapInner(nsNode, defineNode))
         if len(inner):
             print("    case %s:" % idForDefine(nsNode, defineNode))
+            print("        switch (nToken)")
+            print("        {")
             print(inner)
+            print("        }")
             print("        break;")
     print("    default:")
+    print("        switch (nToken)")
+    print("        {")
     for startNode in getChildrenByName(nsNode, "start"):
         startName = startNode.getAttribute("name")
-        print("    // %s" % startName)
         for defineNode in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "define") if i.getAttribute("name") == startName]:
             inner = factoryTokenToIdMapInner(nsNode, defineNode)
             if len(inner):
                 print("\n".join(inner))
-    print("""        break;
+    print("""        }
+        break;
     }
-
-    return pMap;
+    return 0;
 }
 """)
 
@@ -697,7 +705,7 @@ namespace ooxml {
         factoryCreateElementMap(files, nsNode)
         factoryActions(nsNode)
         factoryGetDefineName(nsNode)
-        factoryTokenToIdMap(nsNode)
+        factoryGetResourceId(nsNode)
         factoryAttributeAction(nsNode)
 
     print("""/// @endcond
