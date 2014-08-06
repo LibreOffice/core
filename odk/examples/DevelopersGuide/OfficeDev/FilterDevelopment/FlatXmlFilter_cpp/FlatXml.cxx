@@ -37,7 +37,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <uno/lbnames.h>
 
 #include <com/sun/star/lang/XComponent.hpp>

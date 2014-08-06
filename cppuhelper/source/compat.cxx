@@ -32,6 +32,7 @@ namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiComponentFactory;
         class XMultiServiceFactory;
+        class XTypeProvider;
     }
     namespace reflection { class XIdlClass; }
     namespace registry {
@@ -110,6 +111,61 @@ loadSharedLibComponentFactory(
     rtl::OUString const &)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+struct SAL_DLLPUBLIC_EXPORT ClassData {
+    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId();
+
+    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes();
+
+    void SAL_CALL initTypeProvider();
+
+    css::uno::Any SAL_CALL query(
+        css::uno::Type const &, css::lang::XTypeProvider *);
+
+    void SAL_CALL writeTypeOffset(css::uno::Type const &, sal_Int32);
+};
+
+css::uno::Sequence<sal_Int8> ClassData::getImplementationId() {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+css::uno::Sequence<css::uno::Type> ClassData::getTypes() {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+void ClassData::initTypeProvider() {
+    std::abort();
+}
+
+css::uno::Any ClassData::query(
+    css::uno::Type const &, css::lang::XTypeProvider *)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+void ClassData::writeTypeOffset(css::uno::Type const &, sal_Int32) {
+    std::abort();
+}
+
+struct SAL_DLLPUBLIC_EXPORT ClassDataBase {
+    ClassDataBase();
+
+    ClassDataBase(sal_Int32);
+
+    ~ClassDataBase();
+};
+
+ClassDataBase::ClassDataBase() {
+    std::abort();
+}
+
+ClassDataBase::ClassDataBase(sal_Int32) {
+    std::abort();
+}
+
+ClassDataBase::~ClassDataBase() {
+    std::abort();
 }
 
 }

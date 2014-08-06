@@ -35,7 +35,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	cppuhelper/access_control.hxx \
 	cppuhelper/basemutex.hxx \
 	cppuhelper/bootstrap.hxx \
-	cppuhelper/compbase.hxx \
 	cppuhelper/compbase1.hxx \
 	cppuhelper/compbase10.hxx \
 	cppuhelper/compbase11.hxx \
@@ -55,7 +54,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	cppuhelper/exc_hlp.hxx \
 	cppuhelper/factory.hxx \
 	cppuhelper/findsofficepath.h \
-	cppuhelper/implbase.hxx \
 	cppuhelper/implbase1.hxx \
 	cppuhelper/implbase10.hxx \
 	cppuhelper/implbase11.hxx \
