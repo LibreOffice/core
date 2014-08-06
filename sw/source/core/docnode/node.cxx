@@ -913,7 +913,7 @@ SwCntntNode::~SwCntntNode()
     // The base class SwClient of SwFrm excludes itself from the dependency list!
     // Thus, we need to delete all Frames in the dependency list.
     if( GetDepends() )
-        DelFrms(true, false);
+        DelFrms(false);
 
     delete pCondColl;
 
@@ -1224,11 +1224,9 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
  * Deletes all Views from the Doc for this Node.
  * The ContentFrames are removed from the corresponding Layout.
  *
- * An input param to identify if the acc table should be disposed.  and a
- * flag(bNeedDel) to indicate whether to del corresponding frm even in doc
- * loading process,
+ * An input param to identify if the acc table should be disposed.
  */
-void SwCntntNode::DelFrms( bool /*bNeedDel*/, bool bIsDisposeAccTable )
+void SwCntntNode::DelFrms( bool bIsDisposeAccTable )
 {
     if( !GetDepends() )
         return;

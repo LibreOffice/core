@@ -427,7 +427,7 @@ public:
 
         Add an input param to identify if acc table should be disposed
     */
-    void DelFrms( bool bNeedDel = false, bool bIsAccTableDispose = true );
+    void DelFrms( bool bIsAccTableDispose = true );
 
     /** @return count of elements of node content. Default is 1.
        There are differences between text node and formula node. */

@@ -799,7 +799,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             //Add special function to text node.
             {
                 if( bNewFrms && pAktNode->GetCntntNode() )
-                    ((SwCntntNode*)pAktNode)->DelFrms( false );
+                    ((SwCntntNode*)pAktNode)->DelFrms();
                 pAktNode->pStartOfSection = aSttNdStack[ nLevel ];
                 nInsPos++;
                 aRg.aEnd--;
