@@ -33,17 +33,8 @@
 
 #define RID_OFAPAGE_HTMLOPT             (RID_OFA_START + 100)
 #define RID_OFA_AUTOCORR_DLG            (RID_OFA_START + 101)
-#define RID_OFAPAGE_AUTOCORR_OPTIONS    (RID_OFA_START + 102)
-#define RID_OFAPAGE_AUTOCORR_REPLACE    (RID_OFA_START + 103)
-#define RID_OFAPAGE_AUTOCORR_EXCEPT     (RID_OFA_START + 104)
-#define RID_OFAPAGE_AUTOCORR_QUOTE      (RID_OFA_START + 109)
-#define RID_OFAPAGE_AUTOFMT_APPLY       (RID_OFA_START + 110)
-#define RID_OFADLG_PRCNT_SET            (RID_OFA_START + 111)
 #define RID_OFADLG_OPTIONS_TREE_PAGES   (RID_OFA_START + 116)
-#define RID_OFAPAGE_AUTOCOMPLETE_OPTIONS (RID_OFA_START + 119)
-#define RID_OFAPAGE_MSFILTEROPT         (RID_OFA_START + 120)
 #define RID_OFAPAGE_MSFILTEROPT2        (RID_OFA_START + 121)
-#define RID_OFAPAGE_CONNPOOLOPTIONS     (RID_OFA_START + 122)
 
 // TabPages --------------------------------------------------------------
 
@@ -64,7 +55,6 @@
 #define RID_SW_TP_BACKGROUND            (RID_OFA_START + 217)
 #define SID_SC_TP_LAYOUT                (RID_OFA_START + 218)
 #define SID_SC_TP_CONTENT               (RID_OFA_START + 219)
-#define SID_SC_TP_INPUT                 (RID_OFA_START + 220)
 #define SID_SC_TP_GRID                  (RID_OFA_START + 221)
 #define SID_SC_TP_USERLISTS             (RID_OFA_START + 222)
 #define SID_SC_TP_CALC                  (RID_OFA_START + 223)

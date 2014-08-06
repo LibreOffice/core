@@ -119,7 +119,6 @@
 #define RID_SW_TP_OPTCAPTION_PAGE       (RID_OFA_START + 256)
 #define SID_SC_TP_LAYOUT                (RID_OFA_START + 218)
 #define SID_SC_TP_CONTENT               (RID_OFA_START + 219)
-#define SID_SC_TP_INPUT                 (RID_OFA_START + 220)
 #define SID_SC_TP_GRID                  (RID_OFA_START + 221)
 #define SID_SC_TP_USERLISTS             (RID_OFA_START + 222)
 #define SID_SC_TP_CALC                  (RID_OFA_START + 223)
@@ -1040,12 +1039,7 @@
 // I suggest sticking to per-type ids instead of per-semantic ids, this is
 // better maintainable (IMO), and does not waste that much ids
 
-// "Window" resource ids
-
 // "ModalDialog" resource ids
-
-// "Menu" resource ids
-#define RID_SVX_MDLG_FONTWORK_CHARSPACING   ( RID_SVX_START + 19 )
 
 // document recovery and error report
 // recycling ids from DBManager

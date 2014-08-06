@@ -96,7 +96,6 @@
 
 // options
 #define RID_SVXSTR_DIAGRAM_ROW                              (RID_SVX_START + 1162)
-#define RID_OFAPAGE_CONNPOOLOPTIONS     (RID_OFA_START + 122)
 #define QUERY_DELETE_CONFIRM                    (RID_SVX_START + 1110)
 #define RID_SVXPAGE_JSEARCH_OPTIONS         (RID_SVX_START +  840)
 #define STR_LINKEDDOC_DOESNOTEXIST              (RID_SVX_START + 1111)
@@ -112,7 +111,6 @@
 #define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)//?
 
 // options
-#define RID_SVXDLG_SECURITY_OPTIONS         (RID_SVX_START + 300)
 #define RID_SVXPAGE_ONLINEUPDATE            (RID_SVX_START + 298)
 #define OFA_TP_MEMORY                   (RID_OFA_START + 250)
 #define RID_SVXPAGE_INET_SECURITY           (RID_SVX_START + 200)
@@ -123,11 +121,9 @@
 #define OFA_TP_LANGUAGES                (RID_OFA_START + 205)
 #define OFA_TP_MISC                     (RID_OFA_START + 200)
 #define OFA_TP_VIEW                     (RID_OFA_START + 202)
-#define RID_OFAPAGE_MSFILTEROPT         (RID_OFA_START + 120)
 #define RID_OFAPAGE_MSFILTEROPT2        (RID_OFA_START + 121)
 #define RID_SVXPAGE_OPTIONS_CTL             (RID_SVX_START + 252)
 #define RID_SVXPAGE_OPTIONS_JAVA            (RID_SVX_START + 253)
-#define RID_SVXPAGE_ABOUT_CONFIG            (RID_SVX_START + 301)
 #define RID_SVXPAGE_ACCESSIBILITYCONFIG     (RID_SVX_START + 250)
 #define RID_SVXPAGE_ASIAN_LAYOUT            (RID_SVX_START + 246)
 #define RID_OPTPAGE_CHART_DEFCOLORS         (RID_SVX_START + 299)
@@ -140,8 +136,6 @@
 #define RID_SVXSTR_COLOR_CONFIG_DELETE      (RID_SVX_START + 855)
 #define RID_SVXSTR_OPT_DOUBLE_DICTS         (RID_SVX_START + 320)
 #define RID_SVXERR_OPT_PROXYPORTS           (RID_SVX_START + 224)
-#define RID_SVXDLG_JAVA_PARAMETER           (RID_SVX_START + 254)
-#define RID_SVXDLG_JAVA_CLASSPATH           (RID_SVX_START + 255)
 #define RID_SVXERR_JRE_NOT_RECOGNIZED       (RID_SVX_START + 256)
 #define RID_SVXERR_JRE_FAILED_VERSION       (RID_SVX_START + 257)
 #define RID_SVXSTR_PATH_NAME_START          (RID_SVX_START + 1003)
@@ -174,7 +168,6 @@
 #define RID_SVXSTR_KEY_USERDICTIONARY_DIR   (RID_SVX_START + 1025)//?
 
 // dialogs
-#define RID_SVX_WND_COMMON_LINGU            ( RID_SVX_START +  0 )
 #define STR_MODIFY                          (RID_SVX_START + 336)//from optdict.src
 
 // hyperlink dialog
@@ -213,9 +206,6 @@
 #define RID_SVXSTR_HYPERDLG_FORM_BUTTON     (RID_SVX_START +  813)
 #define RID_SVXSTR_HYPERDLG_FROM_TEXT       (RID_SVX_START +  814)
 
-// hangulhanja
-#define RID_SVX_MDLG_HANGULHANJA            (RID_SVX_START +  1 )
-
 // icon choice
 #define RID_SVXSTR_ICONCHOICEDLG_RESETBUT   (RID_SVX_START + 580)
 
@@ -249,15 +239,8 @@
 #define RID_SVXSTR_ERROR_TYPE_LABEL             (RID_SVX_START + 1108)
 #define RID_SVXSTR_ERROR_MESSAGE_LABEL          (RID_SVX_START + 1109)
 
-// spell check dialog
-#define RID_SVXDLG_SPELLCHECK               (RID_SVX_START +  32)
-
-// split cells
-#define RID_SVX_SPLITCELLDLG                ( RID_SVX_START + 43 )
-
 // customize
 #define RID_SVXDLG_CUSTOMIZE                (RID_SVX_START + 291)
-#define RID_SVXPAGE_TOOLBARS                (RID_SVX_START + 294)
 #define RID_SVXPAGE_CONFIGGROUPBOX          (RID_SVX_START + 304)
 
 #define RID_SVXSTR_NEW_MENU                 (RID_SVX_START + 1039)
