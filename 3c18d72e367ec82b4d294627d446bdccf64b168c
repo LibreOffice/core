@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_7d96cf95",
+        "filename": "sc/source/ui/inc/conflictsdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-06T13:41:06Z",
+      "side": 1,
+      "message": "Why haven\u0027t you removed this decl. completely?",
+      "revId": "3c18d72e367ec82b4d294627d446bdccf64b168c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_ddeddb26",
+        "filename": "sc/source/ui/miscdlgs/conflictsdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-06T13:41:06Z",
+      "side": 1,
+      "message": "Instead of an explicit delete, you should declare the variable as boost::scoped_ptr.",
+      "revId": "3c18d72e367ec82b4d294627d446bdccf64b168c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_5d930ba4",
+        "filename": "sc/source/ui/miscdlgs/conflictsdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-06T13:41:06Z",
+      "side": 1,
+      "message": "Just remove these, no?",
+      "revId": "3c18d72e367ec82b4d294627d446bdccf64b168c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
