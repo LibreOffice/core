@@ -60,7 +60,7 @@ endif
 
 $(call gb_ExternalProject_get_state_target,libgltf,build) :
 	$(call gb_ExternalProject_run,build,\
-		CPPFLAGS='$(libgltf_CPPFLAGS)' \
+		export CPPFLAGS='$(libgltf_CPPFLAGS)' \
 		export PKG_CONFIG="" \
 		&& ./configure \
 			--with-pic \
