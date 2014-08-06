@@ -417,71 +417,6 @@ namespace basegfx
 
             if(rCandidate.count() && rClip.count())
             {
-                // #125349# detect if both given PolyPolygons are indeed ranges
-                bool bBothRectangle(false);
-
-                if(basegfx::tools::isRectangle(rCandidate))
-                {
-                    if(basegfx::tools::isRectangle(rClip))
-                    {
-                        // both are ranges
-                        bBothRectangle = true;
-                    }
-                    else
-                    {
-                        // rCandidate is rectangle -> clip rClip on rRectangle, use the much
-                        // cheaper and numerically more stable clipping against a range
-                        // This simplification (exchanging content and clip) is valid
-                        // since we do a logical AND operation
-                        return clipPolyPolygonOnRange(rClip, rCandidate.getB2DRange(), bInside, bStroke);
-                    }
-                }
-                else if(basegfx::tools::isRectangle(rClip))
-                {
-                    if(basegfx::tools::isRectangle(rCandidate))
-                    {
-                        // both are ranges
-                        bBothRectangle = true;
-                    }
-                    else
-                    {
-                        // rClip is rectangle -> clip rCandidate on rRectangle, use the much
-                        // cheaper and numerically more stable clipping against a range
-                        return clipPolyPolygonOnRange(rCandidate, rClip.getB2DRange(), bInside, bStroke);
-                    }
-                }
-
-                if(bBothRectangle)
-                {
-                    // both are rectangle
-                    if(rCandidate.getB2DRange().equal(rClip.getB2DRange()))
-                    {
-                        // if both are equal -> no change
-                        return rCandidate;
-                    }
-                    else
-                    {
-                        // not equal -> create new intersection from both ranges,
-                        // but much cheaper based on the ranges
-                        basegfx::B2DRange aIntersectionRange(rCandidate.getB2DRange());
-
-                        aIntersectionRange.intersect(rClip.getB2DRange());
-
-                        if(aIntersectionRange.isEmpty())
-                        {
-                            // no common IntersectionRange -> the clip will be empty
-                            return B2DPolyPolygon();
-                        }
-                        else
-                        {
-                            // use common aIntersectionRange as result, convert
-                            // to expected PolyPolygon form
-                            return basegfx::B2DPolyPolygon(
-                                basegfx::tools::createPolygonFromRect(aIntersectionRange));
-                        }
-                    }
-                }
-
                 // one or both are no rectangle - go the hard way and clip PolyPolygon
                 // against PolyPolygon...
                 if(bStroke)
@@ -552,6 +487,77 @@ namespace basegfx
                 }
                 else
                 {
+                    // check for simplification with ranges if !bStroke (handling as stroke is more simple),
+                    // but also only when bInside, else the simplification may lead to recursive calls (see
+                    // calls to clipPolyPolygonOnPolyPolygon in clipPolyPolygonOnRange and clipPolygonOnRange)
+                    if(bInside)
+                    {
+                        // #125349# detect if both given PolyPolygons are indeed ranges
+                        bool bBothRectangle(false);
+
+                        if(basegfx::tools::isRectangle(rCandidate))
+                        {
+                            if(basegfx::tools::isRectangle(rClip))
+                            {
+                                // both are ranges
+                                bBothRectangle = true;
+                            }
+                            else
+                            {
+                                // rCandidate is rectangle -> clip rClip on rRectangle, use the much
+                                // cheaper and numerically more stable clipping against a range
+                                // This simplification (exchanging content and clip) is valid
+                                // since we do a logical AND operation
+                                return clipPolyPolygonOnRange(rClip, rCandidate.getB2DRange(), bInside, bStroke);
+                            }
+                        }
+                        else if(basegfx::tools::isRectangle(rClip))
+                        {
+                            if(basegfx::tools::isRectangle(rCandidate))
+                            {
+                                // both are ranges
+                                bBothRectangle = true;
+                            }
+                            else
+                            {
+                                // rClip is rectangle -> clip rCandidate on rRectangle, use the much
+                                // cheaper and numerically more stable clipping against a range
+                                return clipPolyPolygonOnRange(rCandidate, rClip.getB2DRange(), bInside, bStroke);
+                            }
+                        }
+
+                        if(bBothRectangle)
+                        {
+                            // both are rectangle
+                            if(rCandidate.getB2DRange().equal(rClip.getB2DRange()))
+                            {
+                                // if both are equal -> no change
+                                return rCandidate;
+                            }
+                            else
+                            {
+                                // not equal -> create new intersection from both ranges,
+                                // but much cheaper based on the ranges
+                                basegfx::B2DRange aIntersectionRange(rCandidate.getB2DRange());
+
+                                aIntersectionRange.intersect(rClip.getB2DRange());
+
+                                if(aIntersectionRange.isEmpty())
+                                {
+                                    // no common IntersectionRange -> the clip will be empty
+                                    return B2DPolyPolygon();
+                                }
+                                else
+                                {
+                                    // use common aIntersectionRange as result, convert
+                                    // to expected PolyPolygon form
+                                    return basegfx::B2DPolyPolygon(
+                                        basegfx::tools::createPolygonFromRect(aIntersectionRange));
+                                }
+                            }
+                        }
+                    }
+
                     // area clipping
                     B2DPolyPolygon aMergePolyPolygonA(rClip);
 
