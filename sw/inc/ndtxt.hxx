@@ -72,7 +72,7 @@ typedef std::set< sal_Int32 > SwSoftPageBreakList;
 /// SwTxtNode is a paragraph in the document model.
 class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 {
-
+    friend class SwCntntNode;
     /// For creating the first TextNode.
     friend class SwDoc;         ///< CTOR and AppendTxtNode()
     friend class SwNodes;
@@ -180,6 +180,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     SAL_DLLPRIVATE void impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet);
 
     const SwTxtInputFld* GetOverlappingInputFld( const SwTxtAttr& rTxtAttr ) const;
+
+    void DelFrms_TxtNodePart();
 
 public:
     bool IsWordCountDirty() const;

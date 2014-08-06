@@ -1284,19 +1284,9 @@ void SwCntntNode::DelFrms( bool bIsDisposeAccTable )
         delete pFrm;
     }
 
-    if( IsTxtNode() )
+    if( bIsDisposeAccTable && IsTxtNode() )
     {
-        ((SwTxtNode*)this)->SetWrong( NULL );
-        ((SwTxtNode*)this)->SetWrongDirty( true );
-
-        ((SwTxtNode*)this)->SetGrammarCheck( NULL );
-        ((SwTxtNode*)this)->SetGrammarCheckDirty( true );
-
-        ((SwTxtNode*)this)->SetSmartTags( NULL );
-        ((SwTxtNode*)this)->SetSmartTagDirty( true );
-
-        ((SwTxtNode*)this)->SetWordCountDirty( true );
-        ((SwTxtNode*)this)->SetAutoCompleteWordDirty( true );
+        static_cast<SwTxtNode *>(this)->DelFrms_TxtNodePart();
     }
 }
 

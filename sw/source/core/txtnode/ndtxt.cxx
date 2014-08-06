@@ -262,6 +262,11 @@ SwTxtNode::~SwTxtNode()
     RemoveFromList();
 
     InitSwParaStatistics( false );
+
+    if (GetDepends())
+    {
+        DelFrms_TxtNodePart();
+    }
 }
 
 void SwTxtNode::FileLoadedInitHints()
@@ -1307,6 +1312,21 @@ const SwTxtInputFld* SwTxtNode::GetOverlappingInputFld( const SwTxtAttr& rTxtAtt
     }
 
     return pTxtInputFld;
+}
+
+void SwTxtNode::DelFrms_TxtNodePart()
+{
+    SetWrong( NULL );
+    SetWrongDirty( true );
+
+    SetGrammarCheck( NULL );
+    SetGrammarCheckDirty( true );
+
+    SetSmartTags( NULL );
+    SetSmartTagDirty( true );
+
+    SetWordCountDirty( true );
+    SetAutoCompleteWordDirty( true );
 }
 
 SwTxtFld* SwTxtNode::GetFldTxtAttrAt(
