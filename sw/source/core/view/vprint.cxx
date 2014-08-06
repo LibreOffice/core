@@ -48,6 +48,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>
@@ -584,8 +585,8 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
     // For printing a shell is needed. Either the Doc already has one, than we
     // create a new view, or it has none, than we create the first view.
     SwViewShell *pSh;
-    if( pDoc->GetCurrentViewShell() )
-        pSh = new SwViewShell( *pDoc->GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+        pSh = new SwViewShell( *pDoc->getIDocumentLayoutAccess().GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );
     else
         pSh = new SwViewShell( *pDoc, 0, pOpt, pOleOut);
 

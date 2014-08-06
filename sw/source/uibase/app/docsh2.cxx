@@ -79,6 +79,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
@@ -394,7 +395,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                      pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
                 {
                     SwDoc* pTmp = pDocSh->GetDoc();
-                    if ( pTmp->GetCurrentViewShell() )
+                    if ( pTmp->getIDocumentLayoutAccess().GetCurrentViewShell() )
                         pTmp->InvalidateAutoCompleteFlag();
                 }
             }

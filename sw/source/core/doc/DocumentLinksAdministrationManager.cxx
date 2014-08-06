@@ -23,6 +23,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
@@ -229,7 +230,7 @@ void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
                 SfxMedium* pMedium = m_rSwdoc.GetDocShell()->GetMedium();
                 SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
                 Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
-                if( m_rSwdoc.GetCurrentViewShell() && !m_rSwdoc.GetEditShell( &pVSh ) && !pVSh )
+                if( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() && !m_rSwdoc.GetEditShell( &pVSh ) && !pVSh )
                 {
                     SwViewShell aVSh( m_rSwdoc, 0, 0 );
 

@@ -35,6 +35,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
@@ -482,7 +483,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         aNewAnchor.SetPageNum( rAnchor.GetPageNum() );
 
     Point aDrawSavePt, aDrawOldPt;
-    if( pDoc->GetCurrentViewShell() )
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         if( RES_DRAWFRMFMT == pFrmFmt->Which() )
         {

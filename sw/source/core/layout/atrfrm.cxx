@@ -47,6 +47,7 @@
 #include <hfspacingitem.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -2468,13 +2469,13 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     if( pH && pH->IsActive() && !pH->GetHeaderFmt() )
     {   //If he doesn't have one, I'll add one
-        SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_HEADER, 0 );
+        SwFrmFmt *pFmt = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFmt( RND_STD_HEADER, 0 );
         pH->RegisterToFormat( *pFmt );
     }
 
     if( pF && pF->IsActive() && !pF->GetFooterFmt() )
     {   //If he doesn't have one, I'll add one
-        SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_FOOTER, 0 );
+        SwFrmFmt *pFmt = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFmt( RND_STD_FOOTER, 0 );
         pF->RegisterToFormat( *pFmt );
     }
 
@@ -2691,7 +2692,7 @@ SwFlyFrmFmt::~SwFlyFrmFmt()
 void SwFlyFrmFmt::MakeFrms()
 {
     // is there a layout?
-    if( !GetDoc()->GetCurrentViewShell() )
+    if( !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
         return;
 
     SwModify *pModify = 0;
@@ -2752,7 +2753,7 @@ void SwFlyFrmFmt::MakeFrms()
     case FLY_AT_PAGE:
         {
             sal_uInt16 nPgNum = aAnchorAttr.GetPageNum();
-            SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetCurrentLayout()->Lower();
+            SwPageFrm *pPage = (SwPageFrm*)GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->Lower();
             if( nPgNum == 0 && aAnchorAttr.GetCntntAnchor() )
             {
                 SwCntntNode *pCNd = aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();

@@ -30,6 +30,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <cstdlib>
 #include <vector>
 #include <set>
@@ -1406,7 +1407,7 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
 
-    if( bSameHeight && pDoc->GetCurrentViewShell() )
+    if( bSameHeight && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         SwSplitLines aRowLines;
         SwSplitLines aSplitLines;

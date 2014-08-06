@@ -55,6 +55,7 @@
 #include <cmdid.h>
 #include <app.hrc>
 #include "helpid.h"
+#include <IDocumentLayoutAccess.hxx>
 
 #include <unomid.h>
 #include <tools/color.hxx>
@@ -617,7 +618,7 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
              pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
         {
             SwDoc* pTmp = pDocSh->GetDoc();
-            if ( pTmp->GetCurrentViewShell() )
+            if ( pTmp->getIDocumentLayoutAccess().GetCurrentViewShell() )
             {
                 pTmp->SpellItAgainSam( bInvalid, bOnlyWrong, bSmartTags );
                 SwViewShell* pViewShell = 0;

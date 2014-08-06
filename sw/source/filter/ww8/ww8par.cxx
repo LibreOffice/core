@@ -74,6 +74,7 @@
 #include <section.hxx>
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docufld.hxx>
 #include <swfltopt.hxx>
 #include <viewsh.hxx>
@@ -5325,7 +5326,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                     // Remove additional pictures
                     for (sal_uInt16 i = 0; i < vecFrmFmt.size(); ++i)
                     {
-                        rDoc.DelLayoutFmt(vecFrmFmt[i]);
+                        rDoc.getIDocumentLayoutAccess().DelLayoutFmt(vecFrmFmt[i]);
                     }
                 }
             }

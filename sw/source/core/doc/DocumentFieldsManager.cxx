@@ -21,6 +21,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <dbmgr.hxx>
 #include <chpfld.hxx>
 #include <dbfld.hxx>
@@ -709,7 +710,7 @@ void DocumentFieldsManager::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         // is in the special section, that's expensive!
                         Point aPt;      // return the first frame of the layout - Tab.Headline!!
-                        pFrm = rTxtNd.getLayoutFrm( m_rSwdoc.GetCurrentLayout(), &aPt );
+                        pFrm = rTxtNd.getLayoutFrm( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt );
                         if( pFrm )
                         {
                             SwPosition aPos( *pTblNd );
@@ -779,7 +780,7 @@ void DocumentFieldsManager::UpdateTblFlds( SfxPoolItem* pHt )
                         if( !pCNd )
                             pCNd = m_rSwdoc.GetNodes().GoNext( &aCNdIdx );
 
-                        if( pCNd && 0 != (pFrm = pCNd->getLayoutFrm( m_rSwdoc.GetCurrentLayout(), &aPt )) )
+                        if( pCNd && 0 != (pFrm = pCNd->getLayoutFrm( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt )) )
                         {
                             SwPosition aPos( *pCNd );
                             if( GetBodyTxtNode( m_rSwdoc, aPos, *pFrm ) )

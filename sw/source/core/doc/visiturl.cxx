@@ -22,6 +22,7 @@
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <visiturl.hxx>
 #include <hints.hxx>
 #include <ndtxt.hxx>
@@ -41,7 +42,7 @@ SwURLStateChanged::~SwURLStateChanged()
 
 void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if( rHint.ISA( INetURLHistoryHint ) && pDoc->GetCurrentViewShell() )
+    if( rHint.ISA( INetURLHistoryHint ) && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // This URL has been changed:
         const INetURLObject* pIURL = ((INetURLHistoryHint&)rHint).GetObject();

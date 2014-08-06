@@ -54,6 +54,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentListsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <fldbas.hxx>
@@ -121,7 +122,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
 
     // if there is no layout or it is in a hidden section, MakeFrms is not needed
     const SwSectionNode* pSectNd;
-    if( !GetDoc()->GetCurrentViewShell() ||
+    if( !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ||
         ( 0 != (pSectNd = pNode->FindSectionNode()) &&
             pSectNd->GetSection().IsHiddenFlag() ))
         return pNode;
@@ -296,7 +297,7 @@ sal_Int32 SwTxtNode::Len() const
 static void lcl_ChangeFtnRef( SwTxtNode &rNode )
 {
     SwpHints *pSwpHints = rNode.GetpSwpHints();
-    if( pSwpHints && rNode.GetDoc()->GetCurrentViewShell() )
+    if( pSwpHints && rNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         SwTxtAttr* pHt;
         SwCntntFrm* pFrm = NULL;
@@ -500,7 +501,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         // text node.
         const SwRootFrm *pRootFrm;
         if ( (nTxtLen != nSplitPos) ||
-            ( (pRootFrm = pNode->GetDoc()->GetCurrentLayout()) != 0 &&
+            ( (pRootFrm = pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()) != 0 &&
               pRootFrm->IsAnyShellAccessible() ) )
         {
             // dann sage den Frames noch, das am Ende etwas "geloescht" wurde

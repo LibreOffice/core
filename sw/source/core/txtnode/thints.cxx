@@ -54,6 +54,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -1120,7 +1121,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 // zeichengebundener Frames" in fesh.cxx, SwFEShell::DelFmt()
                 SwFrmFmt* pFmt = pAttr->GetFlyCnt().GetFrmFmt();
                 if( pFmt )      // vom Undo auf 0 gesetzt ??
-                    pDoc->DelLayoutFmt( pFmt );
+                    pDoc->getIDocumentLayoutAccess().DelLayoutFmt( pFmt );
             }
             break;
 

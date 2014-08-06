@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <node.hxx>
 #include <rootfrm.hxx>
 #include <editsh.hxx>
@@ -323,10 +324,11 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
 
 SwEditShell* SwDoc::GetEditShell( SwViewShell** ppSh ) const
 {
+    SwViewShell *pCurrentView = const_cast<SwViewShell*>( getIDocumentLayoutAccess().GetCurrentViewShell() );
     // Layout and OLE shells should be available
-    if( mpCurrentView )
+    if( pCurrentView )
     {
-        SwViewShell *pSh = mpCurrentView, *pVSh = pSh;
+        SwViewShell *pSh = pCurrentView, *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 

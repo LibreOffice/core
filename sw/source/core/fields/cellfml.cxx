@@ -27,6 +27,7 @@
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -725,7 +726,7 @@ static const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
     SwCntntNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
     OSL_ENSURE( pCNd, "Box has no TextNode" );
     Point aPt;      // get the first frame of the layout - table headline
-    return pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, NULL, false );
+    return pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, NULL, false );
 }
 
 static sal_Int32 lcl_GetLongBoxNum( OUString& rStr )

@@ -36,6 +36,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
 #include <docary.hxx>

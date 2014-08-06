@@ -24,6 +24,7 @@
 #include <cntfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <fmtanchr.hxx>
@@ -308,7 +309,7 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
     SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
     if( !pNode )
         return;
-    SwFrm* pFrm = pNode->getLayoutFrm( pDoc->GetCurrentLayout() );
+    SwFrm* pFrm = pNode->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
     if( pFrm )
     {
         if( !pFrm->GetDrawObjs() )

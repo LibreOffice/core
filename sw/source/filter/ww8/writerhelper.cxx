@@ -50,6 +50,7 @@
 #include <numrule.hxx>
 #include <vcl/svapp.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;
@@ -837,7 +838,7 @@ namespace sw
         }
 
         InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
-            : mbHasRoot(rDoc.GetCurrentLayout())
+            : mbHasRoot(rDoc.getIDocumentLayoutAccess().GetCurrentLayout())
         {
         }
 

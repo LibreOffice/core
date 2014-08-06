@@ -18,6 +18,7 @@
  */
 
 #include "doc.hxx"
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include "dcontact.hxx"
 #include "flyfrm.hxx"
@@ -45,7 +46,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
     {
         pNdIdx = new SwNodeIndex( rIdx );
     }
-    else if( pFmt->GetDoc()->GetCurrentViewShell() )
+    else if( pFmt->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         if( RES_FLYFRMFMT == pFmt->Which() )
         {

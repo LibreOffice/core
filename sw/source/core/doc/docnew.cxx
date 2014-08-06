@@ -101,6 +101,7 @@
 #include <DocumentFieldsManager.hxx>
 #include <DocumentStatisticsManager.hxx>
 #include <DocumentStateManager.hxx>
+#include <DocumentLayoutManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -217,6 +218,7 @@ SwDoc::SwDoc()
     m_pDocumentContentOperationsManager( new ::sw::DocumentContentOperationsManager( *this ) ),
     m_pDocumentFieldsManager( new ::sw::DocumentFieldsManager( *this ) ),
     m_pDocumentStatisticsManager( new ::sw::DocumentStatisticsManager( *this ) ),
+    m_pDocumentLayoutManager( new ::sw::DocumentLayoutManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -232,7 +234,6 @@ SwDoc::SwDoc()
     mpGrfFmtCollTbl( new SwGrfFmtColls() ),
     mpTOXTypes( new SwTOXTypes() ),
     mpDefTOXBases( new SwDefTOXBase_Impl() ),
-    mpCurrentView( 0 ),
     mpGlossaryDoc( 0 ),
     mpOutlineRule( 0 ),
     mpFtnInfo( new SwFtnInfo ),
@@ -247,7 +248,6 @@ SwDoc::SwDoc()
     mpUnoCrsrTbl( new SwUnoCrsrTbl() ),
     mpPgPViewPrtData( 0 ),
     mpExtInputRing( 0 ),
-    mpLayouter( 0 ),
     mpStyleAccess( 0 ),
     mpLayoutCache( 0 ),
     mpUnoCallBack(new SwModify(0)),
@@ -256,8 +256,6 @@ SwDoc::SwDoc()
     mReferenceCount(0),
     mbGlossDoc(false),
     mbDtor(false),
-    mbCopyIsMove(false),
-    mbInReading(false),
     mbInXMLImport(false),
     mbUpdateTOX(false),
     mbInLoadAsynchron(false),
@@ -444,9 +442,6 @@ SwDoc::~SwDoc()
 
     delete mpUnoCallBack, mpUnoCallBack = 0;
     delete mpURLStateChgd;
-
-    delete mpLayouter;
-    mpLayouter = 0L;
 
     // Deactivate Undo notification from Draw
     if( GetDocumentDrawModelManager().GetDrawModel() )
@@ -676,7 +671,7 @@ void SwDoc::ClearDoc()
     // if there are still FlyFrames dangling around, delete them too
     sal_uInt16 n;
     while ( 0 != (n = GetSpzFrmFmts()->size()) )
-        DelLayoutFmt((*mpSpzFrmFmtTbl)[n-1]);
+        getIDocumentLayoutAccess().DelLayoutFmt((*mpSpzFrmFmtTbl)[n-1]);
     OSL_ENSURE( !GetDocumentDrawModelManager().GetDrawModel() || !GetDocumentDrawModelManager().GetDrawModel()->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
 
@@ -697,7 +692,7 @@ void SwDoc::ClearDoc()
     // create the first one over and over again (without attributes/style etc.
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, mpDfltTxtFmtColl );
 
-    if( mpCurrentView )
+    if( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // set the layout to the dummy pagedesc
         pFirstNd->SetAttr( SwFmtPageDesc( pDummyPgDsc ));
@@ -750,12 +745,12 @@ void SwDoc::ClearDoc()
     DeleteAndDestroy(*mpGrfFmtCollTbl, 1, mpGrfFmtCollTbl->size());
     DeleteAndDestroy(*mpCharFmtTbl, 1, mpCharFmtTbl->size());
 
-    if( mpCurrentView )
+    if( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
-        mpFrmFmtTbl->erase( std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), mpCurrentView->GetLayout()->GetFmt() ) );
+        mpFrmFmtTbl->erase( std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout()->GetFmt() ) );
         DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
-        mpFrmFmtTbl->push_back( mpCurrentView->GetLayout()->GetFmt() );
+        mpFrmFmtTbl->push_back( getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout()->GetFmt() );
     }
     else
         DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
@@ -788,6 +783,11 @@ void SwDoc::SetPreviewPrtData( const SwPagePreviewPrtData* pNew )
     else if( mpPgPViewPrtData )
         DELETEZ( mpPgPViewPrtData );
     getIDocumentState().SetModified();
+}
+
+void SwDoc::SetOLEObjModified()
+{
+    if( getIDocumentLayoutAccess().GetCurrentViewShell() ) maOLEModifiedTimer.Start();
 }
 
 /** SwDoc: Reading and writing of the layout cache. */
@@ -978,7 +978,7 @@ void SwDoc::Paste( const SwDoc& rSource )
                     }
                     else
                         continue;
-                    this->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+                    this->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
             }
         }
     }

@@ -22,6 +22,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <index.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -169,7 +170,7 @@ bool SwDDETable::NoDDETable()
                                    GetTabLines().begin(), GetTabLines().end() ); // move lines
     GetTabLines().clear();
 
-    if( pDoc->GetCurrentViewShell() )
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
         ((SwDDEFieldType*)aDepend.GetRegisteredIn())->DecRefCnt();
 
     pTblNd->SetNewTable( pNewTbl );       // replace table

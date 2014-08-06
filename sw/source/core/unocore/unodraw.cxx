@@ -34,6 +34,7 @@
 #include <docary.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtflcnt.hxx>
 #include <txtatr.hxx>
@@ -703,11 +704,11 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         else
             throw uno::RuntimeException();
     }
-    else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) && pDoc->GetCurrentLayout())
+    else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) && pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
     {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aTmp(convertMm100ToTwip(aMM100Pos.X), convertMm100ToTwip(aMM100Pos.Y));
-        pDoc->GetCurrentLayout()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );
+        pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );
         aAnchor.SetAnchor( pPam->GetPoint() );
 
         // #i32349# - adjustment of vertical positioning
@@ -1216,7 +1217,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     aValue >>= nPositionLayoutDir;
                     pFmt->SetPositionLayoutDir( nPositionLayoutDir );
                 }
-                else if( pDoc->GetCurrentLayout())
+                else if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
                 {
                     UnoActionContext aCtx(pDoc);
                     if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
@@ -1310,11 +1311,11 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             //if the fly has been anchored at page then it needs to be connected
                             //to the content position
                             SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
-                            if( pDoc->GetCurrentLayout() )
+                            if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
                             {
                                 SwCrsrMoveState aState( MV_SETONLYTEXT );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
+                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
                             }
                             else
                             {
@@ -1331,11 +1332,11 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             (FLY_AS_CHAR != eOldAnchorId))
                         {
                             SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
-                            if( pDoc->GetCurrentLayout() )
+                            if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
                             {
                                 SwCrsrMoveState aState( MV_SETONLYTEXT );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
+                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
                             }
                             else
                             {
@@ -1444,7 +1445,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             {
                     aKeepedPosition = getPosition();
             }
-            if( pFmt && pFmt->GetDoc()->GetCurrentViewShell() )
+            if( pFmt && pFmt->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
             {
                 UnoActionContext aCtx(pFmt->GetDoc());
                 xPrSet->setPropertyValue(rPropertyName, aValue);
@@ -2156,7 +2157,7 @@ void SwXShape::dispose(void) throw( uno::RuntimeException, std::exception )
                 pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
             }
             else
-                pFmt->GetDoc()->DelLayoutFmt( pFmt );
+                pFmt->GetDoc()->getIDocumentLayoutAccess().DelLayoutFmt( pFmt );
         }
     }
     if(xShapeAgg.is())

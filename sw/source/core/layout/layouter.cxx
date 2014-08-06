@@ -23,6 +23,7 @@
 #include "pagefrm.hxx"
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
+#include <IDocumentLayoutAccess.hxx>
 
 #include <movedfwdfrmsbyobjpos.hxx>
 #include <objstmpconsiderwrapinfl.hxx>
@@ -281,16 +282,16 @@ void SwLayouter::EndLoopControl()
 void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
 {
     assert(pDoc && "No doc, no fun");
-    if( !pDoc->GetLayouter() )
-        pDoc->SetLayouter( new SwLayouter() );
-    pDoc->GetLayouter()->_CollectEndnotes( pSect );
+    if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
+        pDoc->getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
+    pDoc->getIDocumentLayoutAccess().GetLayouter()->_CollectEndnotes( pSect );
 }
 
 bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
 {
-    if( !pDoc->GetLayouter() )
+    if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
         return false;
-    SwLayouter *pLayouter = pDoc->GetLayouter();
+    SwLayouter *pLayouter = pDoc->getIDocumentLayoutAccess().GetLayouter();
     if( pLayouter->pEndnoter && pLayouter->pEndnoter->GetSect() && pSect &&
         ( pLayouter->pEndnoter->GetSect()->IsAnFollow( pSect ) ||
           pSect->IsAnFollow( pLayouter->pEndnoter->GetSect() ) ) )
@@ -305,10 +306,10 @@ bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
 bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
 {
     OSL_ENSURE( pDoc, "No doc, no fun" );
-    if( !pDoc->GetLayouter() )
-        pDoc->SetLayouter( new SwLayouter() );
-    return !pDoc->GetLayouter()->pLooping &&
-            pDoc->GetLayouter()->StartLooping( pPage );
+    if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
+        pDoc->getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
+    return !pDoc->getIDocumentLayoutAccess().GetLayouter()->pLooping &&
+            pDoc->getIDocumentLayoutAccess().GetLayouter()->StartLooping( pPage );
 }
 
 // #i28701#
@@ -316,10 +317,10 @@ bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
 // of its anchored objects
 void SwLayouter::ClearMovedFwdFrms( const SwDoc& _rDoc )
 {
-    if ( _rDoc.GetLayouter() &&
-         _rDoc.GetLayouter()->mpMovedFwdFrms )
+    if ( _rDoc.getIDocumentLayoutAccess().GetLayouter() &&
+         _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms )
     {
-        _rDoc.GetLayouter()->mpMovedFwdFrms->Clear();
+        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->Clear();
     }
 }
 
@@ -327,18 +328,18 @@ void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
                                     const SwTxtFrm& _rMovedFwdFrmByObjPos,
                                     const sal_uInt32 _nToPageNum )
 {
-    if ( !_rDoc.GetLayouter() )
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
     {
-        const_cast<SwDoc&>(_rDoc).SetLayouter( new SwLayouter() );
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
     }
 
-    if ( !_rDoc.GetLayouter()->mpMovedFwdFrms )
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms )
     {
-        const_cast<SwDoc&>(_rDoc).GetLayouter()->mpMovedFwdFrms =
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms =
                                                 new SwMovedFwdFrmsByObjPos();
     }
 
-    _rDoc.GetLayouter()->mpMovedFwdFrms->Insert( _rMovedFwdFrmByObjPos,
+    _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->Insert( _rMovedFwdFrmByObjPos,
                                                  _nToPageNum );
 }
 
@@ -349,7 +350,7 @@ void SwLayouter::RemoveMovedFwdFrm( const SwDoc& _rDoc,
     sal_uInt32 nDummy;
     if ( SwLayouter::FrmMovedFwdByObjPos( _rDoc, _rTxtFrm, nDummy ) )
     {
-        _rDoc.GetLayouter()->mpMovedFwdFrms->Remove( _rTxtFrm );
+        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->Remove( _rTxtFrm );
     }
 }
 
@@ -357,19 +358,19 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                       const SwTxtFrm& _rTxtFrm,
                                       sal_uInt32& _ornToPageNum )
 {
-    if ( !_rDoc.GetLayouter() )
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
     {
         _ornToPageNum = 0;
         return false;
     }
-    else if ( !_rDoc.GetLayouter()->mpMovedFwdFrms )
+    else if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms )
     {
         _ornToPageNum = 0;
         return false;
     }
     else
     {
-        return _rDoc.GetLayouter()->mpMovedFwdFrms->
+        return _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->
                                 FrmMovedFwdByObjPos( _rTxtFrm, _ornToPageNum );
     }
 }
@@ -378,17 +379,17 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
 bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                             const SwRowFrm& _rRowFrm )
 {
-    if ( !_rDoc.GetLayouter() )
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
     {
         return false;
     }
-    else if ( !_rDoc.GetLayouter()->mpMovedFwdFrms )
+    else if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms )
     {
         return false;
     }
     else
     {
-        return _rDoc.GetLayouter()->
+        return _rDoc.getIDocumentLayoutAccess().GetLayouter()->
                         mpMovedFwdFrms->DoesRowContainMovedFwdFrm( _rRowFrm );
     }
 }
@@ -396,28 +397,28 @@ bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
 // #i35911#
 void SwLayouter::ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc )
 {
-    if ( _rDoc.GetLayouter() &&
-         _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl )
+    if ( _rDoc.getIDocumentLayoutAccess().GetLayouter() &&
+         _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl )
     {
-        _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl->Clear();
+        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl->Clear();
     }
 }
 void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
                                             const SwDoc& _rDoc,
                                             SwAnchoredObject& _rAnchoredObj )
 {
-    if ( !_rDoc.GetLayouter() )
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
     {
-        const_cast<SwDoc&>(_rDoc).SetLayouter( new SwLayouter() );
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
     }
 
-    if ( !_rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl )
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl )
     {
-        const_cast<SwDoc&>(_rDoc).GetLayouter()->mpObjsTmpConsiderWrapInfl =
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl =
                                 new SwObjsMarkedAsTmpConsiderWrapInfluence();
     }
 
-    _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
+    _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
 }
 
 void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
@@ -425,9 +426,9 @@ void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
     if ( bCondition )
     {
         const SwDoc& rDoc = *rTxtFrm.GetAttrSet()->GetDoc();
-        if ( rDoc.GetLayouter() )
+        if ( rDoc.getIDocumentLayoutAccess().GetLayouter() )
         {
-            const_cast<SwDoc&>(rDoc).GetLayouter()->LoopingLouieLight( rDoc, rTxtFrm );
+            const_cast<SwDoc&>(rDoc).getIDocumentLayoutAccess().GetLayouter()->LoopingLouieLight( rDoc, rTxtFrm );
         }
     }
 }
@@ -439,9 +440,9 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
 {
     bool bMoveBwdSuppressed( false );
 
-    if ( !p_rDoc.GetLayouter() )
+    if ( !p_rDoc.getIDocumentLayoutAccess().GetLayouter() )
     {
-        const_cast<SwDoc&>(p_rDoc).SetLayouter( new SwLayouter() );
+        const_cast<SwDoc&>(p_rDoc).getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
     }
 
     // create hash map key
@@ -464,7 +465,7 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
 
     // check for moving backward suppress threshold
     const sal_uInt16 cMoveBwdCountSuppressThreshold = 20;
-    if ( ++const_cast<SwDoc&>(p_rDoc).GetLayouter()->maMoveBwdLayoutInfo[ aMoveBwdLayoutInfo ] >
+    if ( ++const_cast<SwDoc&>(p_rDoc).getIDocumentLayoutAccess().GetLayouter()->maMoveBwdLayoutInfo[ aMoveBwdLayoutInfo ] >
                                                 cMoveBwdCountSuppressThreshold )
     {
         bMoveBwdSuppressed = true;
@@ -475,8 +476,8 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
 
 void SwLayouter::ClearMoveBwdLayoutInfo( const SwDoc& _rDoc )
 {
-    if ( _rDoc.GetLayouter() )
-        const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.clear();
+    if ( _rDoc.getIDocumentLayoutAccess().GetLayouter() )
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->maMoveBwdLayoutInfo.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

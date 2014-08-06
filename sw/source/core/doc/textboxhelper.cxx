@@ -15,6 +15,7 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
@@ -111,7 +112,7 @@ void SwTextBoxHelper::destroy(SwFrmFmt* pShape)
 
         // Delete the associated TextFrame.
         if (pFmt)
-            pShape->GetDoc()->DelLayoutFmt(pFmt);
+            pShape->GetDoc()->getIDocumentLayoutAccess().DelLayoutFmt(pFmt);
     }
 }
 

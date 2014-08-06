@@ -25,6 +25,7 @@
 #include <vbahelper/vbahelper.hxx>
 #include <swtypes.hxx>
 #include <viewsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -52,7 +53,7 @@ double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const css
 
     sal_Int32 nCurrentPage = handleWdActiveEndPageNumber( xTVCursor );
     SwDoc* pDoc = word::getDocShell( xModel )->GetDoc();
-    SwViewShell* pViewSh = pDoc->GetCurrentViewShell();
+    SwViewShell* pViewSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     sal_Int32 nPageHeight = pViewSh ? pViewSh->GetPageSize( nCurrentPage, false ).Height() : 0;
     // FIXME: handle multipul page style
     // it is very strange that the curros position is incorrect when open Word file.

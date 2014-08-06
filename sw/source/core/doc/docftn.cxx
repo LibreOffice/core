@@ -31,6 +31,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
@@ -249,7 +250,7 @@ SwFtnInfo::SwFtnInfo(SwTxtFmtColl *pFmt) :
 
 void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
+    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
     if( !(GetFtnInfo() == rInfo) )
     {
         const SwFtnInfo &rOld = GetFtnInfo();
@@ -318,7 +319,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 
 void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
+    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
     if( !(GetEndNoteInfo() == rInfo) )
     {
         if(GetIDocumentUndoRedo().DoesUndo())
@@ -388,7 +389,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
                        sal_uInt16 nNumber, bool bIsEndNote )
 {
     SwFtnIdxs& rFtnArr = GetFtnIdxs();
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
+    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
 
     const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
     const sal_uLong nSttNd = pStt->nNode.GetIndex();

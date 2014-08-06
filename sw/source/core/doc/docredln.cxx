@@ -31,6 +31,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <redline.hxx>
@@ -452,7 +453,7 @@ void SwRedlineTbl::Remove( sal_uInt16 nP )
 
     SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
-        0 != ( pSh = pDoc->GetCurrentViewShell()) )
+        0 != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()) )
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
 }
 
@@ -473,7 +474,7 @@ void SwRedlineTbl::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 
     SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
-        0 != ( pSh = pDoc->GetCurrentViewShell() ) )
+        0 != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
 }
 
@@ -1630,7 +1631,7 @@ void SwExtraRedlineTbl::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )
     /*
     SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
-        0 != ( pSh = pDoc->GetCurrentViewShell() ) )
+        0 != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
     */
 }

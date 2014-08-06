@@ -48,6 +48,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <fldbas.hxx>
@@ -503,7 +504,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 pFmt->SetFmtAttr(aAnchor);
                 // So the frames will be created when inserting into
                 // existing doc (after setting the anchor!):
-                if(pDoc->GetCurrentViewShell()
+                if(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()
                    && (FLY_AT_PARA == pFmt->GetAnchor().GetAnchorId()))
                 {
                     pFmt->MakeFrms();
@@ -1706,7 +1707,7 @@ void SwFltOutDoc::EndTable()
     rStack.SetAttr( *pPaM->GetPoint(), 0, false );
     rEndStack.SetAttr( *pPaM->GetPoint(), 0, false );
 
-    if (GetDoc().GetCurrentViewShell()){
+    if (GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell()){
         SwTableNode* pTableNode = GetDoc().IsIdxInTbl(
             pPaM->GetPoint()->nNode);
         pTableNode->DelFrms();

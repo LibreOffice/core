@@ -33,6 +33,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <ndindex.hxx>
 #include <docary.hxx>
 #include <drawdoc.hxx>
@@ -174,7 +175,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
                             const SwFrmFmt* pFlyFmt )
 {
     Point aRet;
-    if( rDoc.GetCurrentViewShell() )
+    if( rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
         switch( rAnch.GetAnchorId() )
         {
         case FLY_AS_CHAR:
@@ -192,7 +193,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             {
                 const SwPosition *pPos = rAnch.GetCntntAnchor();
                 const SwCntntNode* pNd = pPos->nNode.GetNode().GetCntntNode();
-                const SwFrm* pOld = pNd ? pNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aRet, 0, false ) : 0;
+                const SwFrm* pOld = pNd ? pNd->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aRet, 0, false ) : 0;
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -212,7 +213,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
         case FLY_AT_PAGE:
             {
                 sal_uInt16 nPgNum = rAnch.GetPageNum();
-                const SwPageFrm *pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();
+                const SwPageFrm *pPage = (SwPageFrm*)rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->Lower();
                 for( sal_uInt16 i = 1; (i <= nPgNum) && pPage; ++i,
                                     pPage = (const SwPageFrm*)pPage->GetNext() )
                     if( i == nPgNum )
@@ -683,7 +684,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                            const bool _bSameOnly,
                            const bool _bPosCorr )
 {
-    OSL_ENSURE( GetCurrentLayout(), "No layout!" );
+    OSL_ENSURE( getIDocumentLayoutAccess().GetCurrentLayout(), "No layout!" );
 
     if ( !_rMrkList.GetMarkCount() ||
          _rMrkList.GetMark( 0 )->GetMarkedSdrObj()->GetUpGroup() )
@@ -777,11 +778,11 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         SwPosition aPos( GetNodes() );
                         Point aPoint( aPt );
                         aPoint.setX(aPoint.getX() - 1);
-                        GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
+                        getIDocumentLayoutAccess().GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
                         // consider that drawing objects can be in
                         // header/footer. Thus, <GetFrm()> by left-top-corner
                         pTxtFrm = aPos.nNode.GetNode().
-                                        GetCntntNode()->getLayoutFrm( GetCurrentLayout(), &aPt, 0, false );
+                                        GetCntntNode()->getLayoutFrm( getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
                     }
                     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aPt );
                     pNewAnchorFrm = pTmp->FindFlyFrm();
@@ -799,7 +800,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 }
             case FLY_AT_PAGE:
                 {
-                    pNewAnchorFrm = GetCurrentLayout()->Lower();
+                    pNewAnchorFrm = getIDocumentLayoutAccess().GetCurrentLayout()->Lower();
                     while ( pNewAnchorFrm && !pNewAnchorFrm->Frm().IsInside( aPt ) )
                         pNewAnchorFrm = pNewAnchorFrm->GetNext();
                     if ( !pNewAnchorFrm )
@@ -838,7 +839,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // We need to find a TextNode, because only there we can anchor a
                     // content-bound DrawObject.
                         SwCrsrMoveState aState( MV_SETONLYTEXT );
-                        GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
+                        getIDocumentLayoutAccess().GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
                     }
                     else
                     {

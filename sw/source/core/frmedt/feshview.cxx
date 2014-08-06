@@ -39,6 +39,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <cmdid.h>
 #include <drawdoc.hxx>
 #include <textboxhelper.hxx>

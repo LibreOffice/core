@@ -19,6 +19,7 @@
 
 #include "viewsh.hxx"
 #include "doc.hxx"
+#include <IDocumentLayoutAccess.hxx>
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "ndtxt.hxx"

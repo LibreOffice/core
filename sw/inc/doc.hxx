@@ -23,7 +23,6 @@
 #include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentExternalData.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -191,6 +190,7 @@ class IDocumentContentOperations;
 class IDocumentRedlineAccess;
 class IDocumentStatistics;
 class IDocumentState;
+class IDocumentLayoutAccess;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -214,6 +214,7 @@ namespace sw {
     class DocumentFieldsManager;
     class DocumentStatisticsManager;
     class DocumentStateManager;
+    class DocumentLayoutManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -252,7 +253,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentStylePoolAccess,
-    public IDocumentLayoutAccess,
     public IDocumentExternalData
 {
     friend class ::sw::DocumentContentOperationsManager;
@@ -293,6 +293,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentContentOperationsManager > m_pDocumentContentOperationsManager;
     const ::boost::scoped_ptr< ::sw::DocumentFieldsManager > m_pDocumentFieldsManager;
     const ::boost::scoped_ptr< ::sw::DocumentStatisticsManager > m_pDocumentStatisticsManager;
+    const ::boost::scoped_ptr< ::sw::DocumentLayoutManager > m_pDocumentLayoutManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -312,8 +313,6 @@ class SW_DLLPUBLIC SwDoc :
 
     SwTOXTypes      *mpTOXTypes;         //< Tables/indices
     SwDefTOXBase_Impl * mpDefTOXBases;   //< defaults of SwTOXBase's
-
-    SwViewShell       *mpCurrentView;  //< SwDoc should get a new member mpCurrentView
 
     SwDBManager         *mpDBManager;            /**< Pointer to the DBManager for
                                          evaluation of DB-fields. */
@@ -344,8 +343,6 @@ class SW_DLLPUBLIC SwDoc :
     SwPagePreviewPrtData *mpPgPViewPrtData;  //< Indenting / spacing for printing of page view.
     SwPaM           *mpExtInputRing;
 
-    SwLayouter      *mpLayouter;     /**< ::com::sun::star::frame::Controller for complex layout formatting
-                                     like footnote/endnote in sections */
     IStyleAccess    *mpStyleAccess;  //< handling of automatic styles
     SwLayoutCache   *mpLayoutCache;  /**< Layout cache to read and save with the
                                      document for a faster formatting */
@@ -582,19 +579,11 @@ public:
     ::sw::DocumentDrawModelManager & GetDocumentDrawModelManager();
 
     // IDocumentLayoutAccess
-    virtual void SetCurrentViewShell( SwViewShell* pNew ) SAL_OVERRIDE;
-    virtual SwLayouter* GetLayouter() SAL_OVERRIDE;
-    virtual const SwLayouter* GetLayouter() const SAL_OVERRIDE;
-    virtual void SetLayouter( SwLayouter* pNew ) SAL_OVERRIDE;
-    virtual SwFrmFmt* MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet ) SAL_OVERRIDE;
-    virtual void DelLayoutFmt( SwFrmFmt *pFmt ) SAL_OVERRIDE;
-    virtual SwFrmFmt* CopyLayoutFmt( const SwFrmFmt& rSrc, const SwFmtAnchor& rNewAnchor, bool bSetTxtFlyAtt, bool bMakeFrms ) SAL_OVERRIDE;
-    virtual const SwViewShell *GetCurrentViewShell() const SAL_OVERRIDE;
-    virtual SwViewShell *GetCurrentViewShell() SAL_OVERRIDE; //< It must be able to communicate to a SwViewShell.This is going to be removerd later.
-    virtual const SwRootFrm *GetCurrentLayout() const SAL_OVERRIDE;
-    virtual SwRootFrm *GetCurrentLayout() SAL_OVERRIDE;
-    virtual bool HasLayout() const SAL_OVERRIDE;
-    void ClearSwLayouterEntries();
+    IDocumentLayoutAccess const & getIDocumentLayoutAccess() const;
+    IDocumentLayoutAccess & getIDocumentLayoutAccess();
+
+    ::sw::DocumentLayoutManager const & GetDocumentLayoutManager() const;
+    ::sw::DocumentLayoutManager & GetDocumentLayoutManager();
 
     // IDocumentTimerAccess
     // Our own 'IdleTimer' calls the following method
@@ -1493,8 +1482,7 @@ public:
 
     /** update all modified OLE-Objects. The modification is called over the
      StarOne - Interface */
-    void SetOLEObjModified()
-    {   if( GetCurrentViewShell() ) maOLEModifiedTimer.Start(); }
+    void SetOLEObjModified();
 
     // Uno - Interfaces
     const SwUnoCrsrTbl& GetUnoCrsrTbl() const       { return *mpUnoCrsrTbl; }

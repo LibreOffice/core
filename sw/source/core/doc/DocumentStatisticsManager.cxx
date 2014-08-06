@@ -22,6 +22,7 @@
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
 #include <switerator.hxx>
@@ -169,7 +170,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         }
     }
 
-    mpDocStat->nPage     = m_rSwdoc.GetCurrentLayout() ? m_rSwdoc.GetCurrentLayout()->GetPageNum() : 0;
+    mpDocStat->nPage     = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout() ? m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum() : 0;
     mpDocStat->bModified = false;
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);

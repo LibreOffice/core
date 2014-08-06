@@ -22,6 +22,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <docsh.hxx>
@@ -118,7 +119,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         // Here's the code which disables the usage of "multiple" layouts at the moment
         // If the problems with controls and groups objects are solved,
         // this code can be removed...
-        SwViewShell *pCurrShell = GetDoc()->GetCurrentViewShell();
+        SwViewShell *pCurrShell = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
         if( pCurrShell )
             mpLayout = pCurrShell->mpLayout;
         // end of "disable multiple layouts"
@@ -355,8 +356,8 @@ SwViewShell::~SwViewShell()
     if ( mpDoc )
     {
         GetLayout()->DeRegisterShell( this );
-        if(mpDoc->GetCurrentViewShell()==this)
-            mpDoc->SetCurrentViewShell( this->GetNext()!=this ?
+        if(mpDoc->getIDocumentLayoutAccess().GetCurrentViewShell()==this)
+            mpDoc->getIDocumentLayoutAccess().SetCurrentViewShell( this->GetNext()!=this ?
             (SwViewShell*)this->GetNext() : NULL );
     }
 

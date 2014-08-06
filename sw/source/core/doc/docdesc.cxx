@@ -37,6 +37,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
 #include <frmtool.hxx>
@@ -238,7 +239,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
         const SwFmtHeader &rFmtHead = rDescFrmFmt.GetHeader();
         if ( !rFmtHead.IsActive() )
         {
-            SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
+            SwFmtHeader aHead( getIDocumentLayoutAccess().MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
             rDescFrmFmt.SetFmtAttr( aHead );
             // take over additional attributes (margins, borders ...)
             ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), false);
@@ -315,7 +316,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
         const SwFmtFooter &rFmtFoot = rDescFrmFmt.GetFooter();
         if ( !rFmtFoot.IsActive() )
         {
-            SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
+            SwFmtFooter aFoot( getIDocumentLayoutAccess().MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
             rDescFrmFmt.SetFmtAttr( aFoot );
             // Take over additional attributes (margins, borders ...).
             ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), false);
@@ -369,7 +370,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     OSL_ENSURE( i < maPageDescs.size(), "PageDescs is out of range." );
 
     SwPageDesc *pDesc = maPageDescs[i];
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
+    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -550,7 +551,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
     SwPageDescHint aHint( maPageDescs[0] );
     pDel->CallSwClientNotify( aHint );
 
-    bool bHasLayout = HasLayout();
+    bool bHasLayout = getIDocumentLayoutAccess().HasLayout();
     if ( mpFtnInfo->DependsOn( pDel ) )
     {
         mpFtnInfo->ChgPageDesc( maPageDescs[0] );
@@ -698,14 +699,14 @@ extern std::vector<SvGlobalName*> *pGlobalOLEExcludeList;
 void SwDoc::PrtOLENotify( bool bAll )
 {
     SwFEShell *pShell = 0;
-    if ( GetCurrentViewShell() )
+    if ( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwViewShell *pSh = GetCurrentViewShell();
+        SwViewShell *pSh = getIDocumentLayoutAccess().GetCurrentViewShell();
         if ( !pSh->ISA(SwFEShell) )
             do
             {   pSh = (SwViewShell*)pSh->GetNext();
             } while ( !pSh->ISA(SwFEShell) &&
-                      pSh != GetCurrentViewShell() );
+                      pSh != getIDocumentLayoutAccess().GetCurrentViewShell() );
 
         if ( pSh->ISA(SwFEShell) )
             pShell = (SwFEShell*)pSh;
@@ -733,7 +734,7 @@ void SwDoc::PrtOLENotify( bool bAll )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
                              0, pNodes->size(), GetDocShell());
-            GetCurrentLayout()->StartAllAction();
+            getIDocumentLayoutAccess().GetCurrentLayout()->StartAllAction();
 
             for( sal_uInt16 i = 0; i < pNodes->size(); ++i )
             {
@@ -772,7 +773,7 @@ void SwDoc::PrtOLENotify( bool bAll )
                 }
             }
             delete pNodes;
-            GetCurrentLayout()->EndAllAction();
+            getIDocumentLayoutAccess().GetCurrentLayout()->EndAllAction();
             ::EndProgress( GetDocShell() );
         }
     }
@@ -790,7 +791,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
                              0, pNodes->size(), GetDocShell());
-            GetCurrentLayout()->StartAllAction();
+            getIDocumentLayoutAccess().GetCurrentLayout()->StartAllAction();
             SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
 
             for( sal_uInt16 i = 0; i < pNodes->size(); ++i )
@@ -807,7 +808,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
                     pOLENd->ModifyNotification( &aMsgHint, &aMsgHint );
                 }
             }
-            GetCurrentLayout()->EndAllAction();
+            getIDocumentLayoutAccess().GetCurrentLayout()->EndAllAction();
             ::EndProgress( GetDocShell() );
             delete pNodes;
         }

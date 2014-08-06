@@ -21,6 +21,7 @@
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
 #include <unotools/lingucfg.hxx>
@@ -84,12 +85,12 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
 
-    SwRootFrm* pTmpRoot = m_rSwdoc.GetCurrentLayout();
+    SwRootFrm* pTmpRoot = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pTmpRoot &&
         !SfxProgress::GetActiveProgress( m_rSwdoc.GetDocShell() ) )
     {
         SwViewShell *pSh, *pStartSh;
-        pSh = pStartSh = m_rSwdoc.GetCurrentViewShell();
+        pSh = pStartSh = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell();
         do {
             if( pSh->ActionPend() )
             {

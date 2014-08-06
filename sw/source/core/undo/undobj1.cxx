@@ -30,6 +30,7 @@
 #include <UndoDraw.hxx>
 #include <rolbck.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
 #include <swundo.hxx>
@@ -324,13 +325,13 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
     }
     else if (FLY_AT_PAGE == aAnchor.GetAnchorId())
     {
-        aAnchor.SetPageNum( pDoc->GetCurrentLayout()->GetCurrPage( &rContext.GetRepeatPaM() ));
+        aAnchor.SetPageNum( pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCurrPage( &rContext.GetRepeatPaM() ));
     }
     else {
         OSL_FAIL( "What kind of anchor is this?" );
     }
 
-    SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
+    SwFrmFmt* pFlyFmt = pDoc->getIDocumentLayoutAccess().CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
     (void) pFlyFmt;
 }
 

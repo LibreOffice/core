@@ -40,6 +40,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <pagefrm.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -239,7 +240,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
             continue;
 
         Point aPt;
-        const SwCntntFrm* pCFrm = pTOXSrc->getLayoutFrm( GetCurrentLayout(), &aPt, 0, false );
+        const SwCntntFrm* pCFrm = pTOXSrc->getLayoutFrm( getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
         if (!pCFrm)
             continue;
 
@@ -1150,7 +1151,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
             // If selected use marks from the same chapter only
             if( pTOXSrc->GetNodes().IsDocNodes() &&
                 pTOXSrc->GetTxt().getLength() && pTOXSrc->GetDepends() &&
-                pTOXSrc->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
+                pTOXSrc->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
                (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc, 0 ) == pOwnChapterNode ) &&
                !pTOXSrc->HasHiddenParaField() &&
                !SwScriptInfo::IsInHiddenRange( *pTOXSrc, pTxtMark->GetStart() ) )
@@ -1208,7 +1209,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         if( pTxtNd && pTxtNd->Len() && pTxtNd->GetDepends() &&
             sal_uInt16( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() &&
-            pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
+            pTxtNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
            !pTxtNd->HasHiddenParaField() &&
            !pTxtNd->HasHiddenCharAttribute( true ) &&
             ( !IsFromChapter() ||
@@ -1246,7 +1247,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
                 ::SetProgressState( 0, pDoc->GetDocShell() );
 
                 if (pTxtNd->GetTxt().getLength() &&
-                    pTxtNd->getLayoutFrm(pDoc->GetCurrentLayout()) &&
+                    pTxtNd->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
                     pTxtNd->GetNodes().IsDocNodes() &&
                     ( !IsFromChapter() || pOwnChapterNode ==
                         ::lcl_FindChapterNode( *pTxtNd, 0 ) ) )
@@ -1277,7 +1278,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
         if (rTxtNode.GetTxt().getLength() &&
-            rTxtNode.getLayoutFrm(pDoc->GetCurrentLayout()) &&
+            rTxtNode.getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
             rTxtNode.GetNodes().IsDocNodes() &&
             ( !IsFromChapter() ||
                 ::lcl_FindChapterNode( rTxtNode, 0 ) == pOwnChapterNode ) )
@@ -1320,11 +1321,11 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
         if (rTxtNode.GetTxt().getLength() &&
-            rTxtNode.getLayoutFrm(pDoc->GetCurrentLayout()) &&
+            rTxtNode.getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
             rTxtNode.GetNodes().IsDocNodes() )
         {
             //#106485# the body node has to be used!
-            SwCntntFrm *pFrm = rTxtNode.getLayoutFrm( pDoc->GetCurrentLayout() );
+            SwCntntFrm *pFrm = rTxtNode.getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
             SwPosition aFldPos(rTxtNode);
             const SwTxtNode* pTxtNode = 0;
             if(pFrm && !pFrm->IsInDocBody())
@@ -1472,7 +1473,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                 }
             }
 
-            if( pCNd->getLayoutFrm( pDoc->GetCurrentLayout() ) && ( !IsFromChapter() ||
+            if( pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) && ( !IsFromChapter() ||
                     ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
             {
                 SwTOXPara * pNew = new SwTOXPara( *pCNd, eMyType,
@@ -1510,7 +1511,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
             while( 0 != ( pCNd = rNds.GoNext( &aCntntIdx ) ) &&
                 aCntntIdx.GetIndex() < pTblNd->EndOfSectionIndex() )
             {
-                if( pCNd->getLayoutFrm( pDoc->GetCurrentLayout() ) && (!IsFromChapter() ||
+                if( pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) && (!IsFromChapter() ||
                     ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
                 {
                     SwTOXTable * pNew = new SwTOXTable( *pCNd );
@@ -1588,7 +1589,7 @@ void SwTOXBaseSection::UpdatePageNum()
                 SwTOXSource& rTOXSource = pSortBase->aTOXSources[j];
                 if( rTOXSource.pNd )
                 {
-                    SwCntntFrm* pFrm = rTOXSource.pNd->getLayoutFrm( pDoc->GetCurrentLayout() );
+                    SwCntntFrm* pFrm = rTOXSource.pNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
                     OSL_ENSURE( pFrm || pDoc->IsUpdateTOX(), "TOX, no Frame found");
                     if( !pFrm )
                         continue;

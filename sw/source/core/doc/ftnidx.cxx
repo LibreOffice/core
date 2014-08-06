@@ -21,6 +21,7 @@
 #include <fmtftn.hxx>
 #include <ftninfo.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <ftnidx.hxx>
 #include <ndtxt.hxx>
 #include <ndindex.hxx>
@@ -166,7 +167,7 @@ void SwFtnIdxs::UpdateAllFtn()
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
-    SwRootFrm* pTmpRoot = pDoc->GetCurrentLayout();
+    SwRootFrm* pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
     // For normal Footnotes per-chapter and per-document numbering are treated separately.
     // For Endnotes we only have document-wise numbering.

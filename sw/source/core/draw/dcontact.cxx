@@ -52,6 +52,7 @@
 #include <dcontact.hxx>
 #include <unodraw.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <doc.hxx>
 #include <hints.hxx>
 #include <txtfrm.hxx>
@@ -1043,8 +1044,8 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     // #i26791# - no event handling, if existing <SwViewShell>
     // is in contruction
     SwDoc* pDoc = GetFmt()->GetDoc();
-    if ( pDoc->GetCurrentViewShell() &&
-         pDoc->GetCurrentViewShell()->IsInConstructor() )
+    if ( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
+         pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor() )
     {
         return;
     }
@@ -1059,7 +1060,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
 
     //Put on Action, but not if presently anywhere an action runs.
     SwViewShell *pSh = 0, *pOrg;
-    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();
+    SwRootFrm *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
     {
         pDoc->GetEditShell( &pOrg );

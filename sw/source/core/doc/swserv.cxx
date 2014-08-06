@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <swtypes.hxx>
 #include <swserv.hxx>
 #include <swbaslnk.hxx>
@@ -302,7 +303,7 @@ SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
 SwDataChanged::~SwDataChanged()
 {
     // JP 09.04.96: Only if the Layout is available (thus during input)
-    if( pDoc->GetCurrentViewShell() )
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         const ::sfx2::SvLinkSources& rServers = pDoc->getIDocumentLinksAdministration().GetLinkManager().GetServers();
 

@@ -23,6 +23,7 @@
 #include "cntfrm.hxx"
 #include "fchrfmt.hxx"
 #include "doc.hxx"
+#include <IDocumentLayoutAccess.hxx>
 #include "fmtinfmt.hxx"
 #include "ndtxt.hxx"
 #include "pagedesc.hxx"
@@ -115,7 +116,7 @@ ToxTextGenerator::HandleChapterToken(const SwTOXSortTabBase& rBase, const SwForm
     }
 
     // #i53420#
-    const SwCntntFrm* contentFrame = contentNode->getLayoutFrm(pDoc->GetCurrentLayout());
+    const SwCntntFrm* contentFrame = contentNode->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     if (!contentFrame) {
         return OUString();
     }
@@ -203,7 +204,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
 
             case TOKEN_TAB_STOP: {
                 ToxTabStopTokenHandler::HandledTabStopToken htst =
-                        mTabStopTokenHandler->HandleTabStopToken(aToken, *pTOXNd, pDoc->GetCurrentLayout());
+                        mTabStopTokenHandler->HandleTabStopToken(aToken, *pTOXNd, pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
                 rTxt += htst.text;
                 aTStops.Insert(htst.tabStop);
                 break;

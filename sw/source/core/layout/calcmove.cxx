@@ -42,6 +42,7 @@
 #include <flyfrms.hxx>
 
 #include <DocumentSettingManager.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 // Move methods
 
@@ -865,7 +866,7 @@ bool SwTxtNode::IsCollapse() const
         // The paragraph is collapsed only if the NdAfter is the end of a cell
         bool bInTable = this->FindTableNode( ) != NULL;
 
-        SwSortedObjs* pObjs = this->getLayoutFrm( GetDoc()->GetCurrentLayout() )->GetDrawObjs( );
+        SwSortedObjs* pObjs = this->getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )->GetDrawObjs( );
         sal_uInt32 nObjs = ( pObjs != NULL ) ? pObjs->Count( ) : 0;
 
         return pNdBefore!=NULL && pNdAfter!=NULL && nObjs == 0 && bInTable;

@@ -75,6 +75,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <DocumentFieldsManager.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>
 #include <wview.hxx>
@@ -194,7 +195,7 @@ void SwView::GotFocus() const
     if( GetWrtShellPtr() )
     {
         SwWrtShell& rWrtShell = GetWrtShell();
-        rWrtShell.GetDoc()->SetCurrentViewShell( GetWrtShellPtr() );
+        rWrtShell.GetDoc()->getIDocumentLayoutAccess().SetCurrentViewShell( GetWrtShellPtr() );
         rWrtShell.GetDoc()->getIDocumentSettingAccess().set( IDocumentSettingAccess::BROWSE_MODE,
                                  rWrtShell.GetViewOptions()->getBrowseMode() );
     }
@@ -799,9 +800,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         m_pWrtShell = new SwWrtShell( *((SwView*)pExistingSh)->m_pWrtShell,
                                     m_pEditWin, *this);
     }
-    else if( dynamic_cast<SwWrtShell*>( pDocSh->GetDoc()->GetCurrentViewShell() ) )
+    else if( dynamic_cast<SwWrtShell*>( pDocSh->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
     {
-        m_pWrtShell = new SwWrtShell( *(SwWrtShell*)pDocSh->GetDoc()->GetCurrentViewShell(),
+        m_pWrtShell = new SwWrtShell( *(SwWrtShell*)pDocSh->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell(),
                                     m_pEditWin, *this);
     }
     else

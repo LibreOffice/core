@@ -23,6 +23,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <pam.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -352,7 +353,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
     if( bNewFrms )
         bNewFrms = &GetDoc()->GetNodes() == (const SwNodes*)&rNds &&
-                    GetDoc()->GetCurrentViewShell();
+                    GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
 
     if( bNewFrms )
     {
@@ -2060,7 +2061,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
     SwNode* pFrmNd = 0;
 
     // no layout -> skip
-    if( GetDoc()->GetCurrentViewShell() )
+    if( GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         SwNode* pSttNd = &rFrmIdx.GetNode();
 

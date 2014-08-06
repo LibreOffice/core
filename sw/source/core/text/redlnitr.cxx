@@ -29,6 +29,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <breakit.hxx>
 #include <vcl/keycodes.hxx>

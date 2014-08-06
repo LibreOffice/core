@@ -34,6 +34,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <frame.hxx>
 #include <swundo.hxx>
@@ -64,7 +65,7 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
         GetIDocumentUndoRedo().DoesDrawUndo())
     {
         const SdrMarkList* pMarkList = 0;
-        SwViewShell* pSh = GetCurrentViewShell();
+        SwViewShell* pSh = getIDocumentLayoutAccess().GetCurrentViewShell();
         if( pSh && pSh->HasDrawView() )
             pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 

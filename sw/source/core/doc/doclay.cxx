@@ -68,6 +68,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -111,399 +112,6 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
         bResult = true;
 
     return bResult;
-}
-
-/** Create a new format whose settings fit to the Request by default.
-
-    The format is put into the respective format array.
-    If there already is a fitting format, it is returned instead. */
-SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
-{
-    SwFrmFmt *pFmt = 0;
-    const bool bMod = getIDocumentState().IsModified();
-    bool bHeader = false;
-
-    switch ( eRequest )
-    {
-    case RND_STD_HEADER:
-    case RND_STD_HEADERL:
-    case RND_STD_HEADERR:
-        {
-            bHeader = true;
-            // no break, we continue further down
-        }
-    case RND_STD_FOOTER:
-    case RND_STD_FOOTERL:
-    case RND_STD_FOOTERR:
-        {
-            pFmt = new SwFrmFmt( GetAttrPool(),
-                                 (bHeader ? "Right header" : "Right footer"),
-                                 GetDfltFrmFmt() );
-
-            SwNodeIndex aTmpIdx( GetNodes().GetEndOfAutotext() );
-            SwStartNode* pSttNd =
-                GetNodes().MakeTextSection
-                ( aTmpIdx,
-                  bHeader ? SwHeaderStartNode : SwFooterStartNode,
-                  GetTxtCollFromPool(static_cast<sal_uInt16>( bHeader
-                                     ? ( eRequest == RND_STD_HEADERL
-                                         ? RES_POOLCOLL_HEADERL
-                                         : eRequest == RND_STD_HEADERR
-                                         ? RES_POOLCOLL_HEADERR
-                                         : RES_POOLCOLL_HEADER )
-                                     : ( eRequest == RND_STD_FOOTERL
-                                         ? RES_POOLCOLL_FOOTERL
-                                         : eRequest == RND_STD_FOOTERR
-                                         ? RES_POOLCOLL_FOOTERR
-                                         : RES_POOLCOLL_FOOTER )
-                                     ) ) );
-            pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));
-
-            if( pSet )      // Set a few more attributes
-                pFmt->SetFmtAttr( *pSet );
-
-            // Why set it back?  Doc has changed, or not?
-            // In any case, wrong for the FlyFrames!
-            if ( !bMod )
-                getIDocumentState().ResetModified();
-        }
-        break;
-
-    case RND_DRAW_OBJECT:
-        {
-            pFmt = MakeDrawFrmFmt( OUString(), GetDfltFrmFmt() );
-            if( pSet )      // Set a few more attributes
-                pFmt->SetFmtAttr( *pSet );
-
-            if (GetIDocumentUndoRedo().DoesUndo())
-            {
-                GetIDocumentUndoRedo().AppendUndo(
-                    new SwUndoInsLayFmt(pFmt, 0, 0));
-            }
-        }
-        break;
-
-#if OSL_DEBUG_LEVEL > 0
-    case FLY_AT_PAGE:
-    case FLY_AT_CHAR:
-    case FLY_AT_FLY:
-    case FLY_AT_PARA:
-    case FLY_AS_CHAR:
-        OSL_FAIL( "use new interface instead: SwDoc::MakeFlySection!" );
-        break;
-#endif
-
-    default:
-        OSL_ENSURE( false,
-                "LayoutFormat was requested with an invalid Request." );
-
-    }
-    return pFmt;
-}
-
-/// Deletes the denoted format and its content.
-void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
-{
-    // A chain of frames needs to be merged, if necessary,
-    // so that the Frame's contents are adjusted accordingly before we destroy the Frames.
-    const SwFmtChain &rChain = pFmt->GetChain();
-    if ( rChain.GetPrev() )
-    {
-        SwFmtChain aChain( rChain.GetPrev()->GetChain() );
-        aChain.SetNext( rChain.GetNext() );
-        SetAttr( aChain, *rChain.GetPrev() );
-    }
-    if ( rChain.GetNext() )
-    {
-        SwFmtChain aChain( rChain.GetNext()->GetChain() );
-        aChain.SetPrev( rChain.GetPrev() );
-        SetAttr( aChain, *rChain.GetNext() );
-    }
-
-    const SwNodeIndex* pCntIdx = 0;
-    // The draw format doesn't own its content, it just has a pointer to it.
-    if (pFmt->Which() != RES_DRAWFRMFMT)
-        pCntIdx = pFmt->GetCntnt().GetCntntIdx();
-    if (pCntIdx && !GetIDocumentUndoRedo().DoesUndo())
-    {
-        // Disconnect if it's an OLE object
-        SwOLENode* pOLENd = GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
-        if( pOLENd && pOLENd->GetOLEObj().IsOleRef() )
-        {
-
-            // TODO: the old object closed the object and cleared all references to it, but didn't remove it from the container.
-            // I have no idea, why, nobody could explain it - so I do my very best to mimic this behavior
-            //uno::Reference < util::XCloseable > xClose( pOLENd->GetOLEObj().GetOleRef(), uno::UNO_QUERY );
-            //if ( xClose.is() )
-            {
-                try
-                {
-                    pOLENd->GetOLEObj().GetOleRef()->changeState( embed::EmbedStates::LOADED );
-                }
-                catch ( uno::Exception& )
-                {
-                }
-            }
-
-        }
-    }
-
-    // Destroy Frames
-    pFmt->DelFrms();
-
-    // Only FlyFrames are undoable at first
-    const sal_uInt16 nWh = pFmt->Which();
-    if (GetIDocumentUndoRedo().DoesUndo() &&
-        (RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh))
-    {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoDelLayFmt( pFmt ));
-    }
-    else
-    {
-        // #i32089# - delete at-frame anchored objects
-        if ( nWh == RES_FLYFRMFMT )
-        {
-            // determine frame formats of at-frame anchored objects
-            const SwNodeIndex* pCntntIdx = 0;
-            if (pFmt->Which() != RES_DRAWFRMFMT)
-                pCntntIdx = pFmt->GetCntnt().GetCntntIdx();
-            if (pCntntIdx)
-            {
-                const SwFrmFmts* pTbl = pFmt->GetDoc()->GetSpzFrmFmts();
-                if ( pTbl )
-                {
-                    std::vector<SwFrmFmt*> aToDeleteFrmFmts;
-                    const sal_uLong nNodeIdxOfFlyFmt( pCntntIdx->GetIndex() );
-
-                    for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
-                    {
-                        SwFrmFmt* pTmpFmt = (*pTbl)[i];
-                        const SwFmtAnchor &rAnch = pTmpFmt->GetAnchor();
-                        if ( rAnch.GetAnchorId() == FLY_AT_FLY &&
-                             rAnch.GetCntntAnchor()->nNode.GetIndex() == nNodeIdxOfFlyFmt )
-                        {
-                            aToDeleteFrmFmts.push_back( pTmpFmt );
-                        }
-                    }
-
-                    // delete found frame formats
-                    while ( !aToDeleteFrmFmts.empty() )
-                    {
-                        SwFrmFmt* pTmpFmt = aToDeleteFrmFmts.back();
-                        pFmt->GetDoc()->DelLayoutFmt( pTmpFmt );
-
-                        aToDeleteFrmFmts.pop_back();
-                    }
-                }
-            }
-        }
-
-        // Delete content
-        if( pCntIdx )
-        {
-            SwNode *pNode = &pCntIdx->GetNode();
-            ((SwFmtCntnt&)pFmt->GetFmtAttr( RES_CNTNT )).SetNewCntntIdx( 0 );
-            getIDocumentContentOperations().DeleteSection( pNode );
-        }
-
-        // Delete the character for FlyFrames anchored as char (if necessary)
-        const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        if ((FLY_AS_CHAR == rAnchor.GetAnchorId()) && rAnchor.GetCntntAnchor())
-        {
-            const SwPosition* pPos = rAnchor.GetCntntAnchor();
-            SwTxtNode *pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-
-            // attribute is still in text node, delete it
-            if ( pTxtNd )
-            {
-                SwTxtFlyCnt* const pAttr = static_cast<SwTxtFlyCnt*>(
-                    pTxtNd->GetTxtAttrForCharAt( pPos->nContent.GetIndex(),
-                        RES_TXTATR_FLYCNT ));
-                if ( pAttr && (pAttr->GetFlyCnt().GetFrmFmt() == pFmt) )
-                {
-                    // dont delete, set pointer to 0
-                    const_cast<SwFmtFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFmt();
-                    SwIndex aIdx( pPos->nContent );
-                    pTxtNd->EraseText( aIdx, 1 );
-                }
-            }
-        }
-
-        DelFrmFmt( pFmt );
-    }
-    getIDocumentState().SetModified();
-}
-
-/** Copies the stated format (pSrc) to pDest and returns pDest.
-
-    If there's no pDest, it is created.
-    If the source format is located in another document, also copy correctly
-    in this case.
-    The Anchor attribute's position is always set to 0! */
-SwFrmFmt *SwDoc::CopyLayoutFmt(
-    const SwFrmFmt& rSource,
-    const SwFmtAnchor& rNewAnchor,
-    bool bSetTxtFlyAtt,
-    bool bMakeFrms )
-{
-    const bool bFly = RES_FLYFRMFMT == rSource.Which();
-    const bool bDraw = RES_DRAWFRMFMT == rSource.Which();
-    OSL_ENSURE( bFly || bDraw, "this method only works for fly or draw" );
-
-    SwDoc* pSrcDoc = (SwDoc*)rSource.GetDoc();
-
-    // May we copy this object?
-    // We may, unless it's 1) it's a control (and therfore a draw)
-    //                     2) anchored in a header/footer
-    //                     3) anchored (to paragraph?)
-    bool bMayNotCopy = false;
-    if( bDraw )
-    {
-        const SwDrawContact* pDrawContact =
-            static_cast<const SwDrawContact*>( rSource.FindContactObj() );
-
-        bMayNotCopy =
-            ((FLY_AT_PARA == rNewAnchor.GetAnchorId()) ||
-             (FLY_AT_FLY  == rNewAnchor.GetAnchorId()) ||
-             (FLY_AT_CHAR == rNewAnchor.GetAnchorId())) &&
-            rNewAnchor.GetCntntAnchor() &&
-            IsInHeaderFooter( rNewAnchor.GetCntntAnchor()->nNode ) &&
-            pDrawContact != NULL  &&
-            pDrawContact->GetMaster() != NULL  &&
-            CheckControlLayer( pDrawContact->GetMaster() );
-    }
-
-    // just return if we can't copy this
-    if( bMayNotCopy )
-        return NULL;
-
-    SwFrmFmt* pDest = GetDfltFrmFmt();
-    if( rSource.GetRegisteredIn() != pSrcDoc->GetDfltFrmFmt() )
-        pDest = CopyFrmFmt( *(SwFrmFmt*)rSource.GetRegisteredIn() );
-    if( bFly )
-    {
-        // #i11176#
-        // To do a correct cloning concerning the ZOrder for all objects
-        // it is necessary to actually create a draw object for fly frames, too.
-        // These are then added to the DrawingLayer (which needs to exist).
-        // Together with correct sorting of all drawinglayer based objects
-        // before cloning ZOrder transfer works correctly then.
-        SwFlyFrmFmt *pFormat = MakeFlyFrmFmt( rSource.GetName(), pDest );
-        pDest = pFormat;
-
-        SwXFrame::GetOrCreateSdrObject(*pFormat);
-    }
-    else
-        pDest = MakeDrawFrmFmt( OUString(), pDest );
-
-    // Copy all other or new attributes
-    pDest->CopyAttrs( rSource );
-
-    // Do not copy chains
-    pDest->ResetFmtAttr( RES_CHAIN );
-
-    if( bFly )
-    {
-        // Duplicate the content.
-        const SwNode& rCSttNd = rSource.GetCntnt().GetCntntIdx()->GetNode();
-        SwNodeRange aRg( rCSttNd, 1, *rCSttNd.EndOfSectionNode() );
-
-        SwNodeIndex aIdx( GetNodes().GetEndOfAutotext() );
-        SwStartNode* pSttNd = GetNodes().MakeEmptySection( aIdx, SwFlyStartNode );
-
-        // Set the Anchor/CntntIndex first.
-        // Within the copying part, we can access the values (DrawFmt in Headers and Footers)
-        aIdx = *pSttNd;
-        SwFmtCntnt aAttr( rSource.GetCntnt() );
-        aAttr.SetNewCntntIdx( &aIdx );
-        pDest->SetFmtAttr( aAttr );
-        pDest->SetFmtAttr( rNewAnchor );
-
-        if( !mbCopyIsMove || this != pSrcDoc )
-        {
-            if( mbInReading )
-                pDest->SetName( OUString() );
-            else
-            {
-                // Test first if the name is already taken, if so generate a new one.
-                sal_Int8 nNdTyp = aRg.aStart.GetNode().GetNodeType();
-
-                OUString sOld( pDest->GetName() );
-                pDest->SetName( OUString() );
-                if( FindFlyByName( sOld, nNdTyp ) )     // found one
-                    switch( nNdTyp )
-                    {
-                    case ND_GRFNODE:    sOld = GetUniqueGrfName();      break;
-                    case ND_OLENODE:    sOld = GetUniqueOLEName();      break;
-                    default:            sOld = GetUniqueFrameName();    break;
-                    }
-
-                pDest->SetName( sOld );
-            }
-        }
-
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
-        }
-
-        // Make sure that FlyFrames in FlyFrames are copied
-        aIdx = *pSttNd->EndOfSectionNode();
-
-        //fdo#36631 disable (scoped) any undo operations associated with the
-        //contact object itself. They should be managed by SwUndoInsLayFmt.
-        const ::sw::DrawUndoGuard drawUndoGuard(GetIDocumentUndoRedo());
-
-        pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aIdx, NULL, false, true, true );
-    }
-    else
-    {
-        OSL_ENSURE( RES_DRAWFRMFMT == rSource.Which(), "Neither Fly nor Draw." );
-        // #i52780# - Note: moving object to visible layer not needed.
-        SwDrawContact* pSourceContact = (SwDrawContact *)rSource.FindContactObj();
-
-        SwDrawContact* pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
-                                CloneSdrObj( *pSourceContact->GetMaster(),
-                                        mbCopyIsMove && this == pSrcDoc ) );
-        // #i49730# - notify draw frame format that position attributes are
-        // already set, if the position attributes are already set at the
-        // source draw frame format.
-        if ( pDest->ISA(SwDrawFrmFmt) &&
-             rSource.ISA(SwDrawFrmFmt) &&
-             static_cast<const SwDrawFrmFmt&>(rSource).IsPosAttrSet() )
-        {
-            static_cast<SwDrawFrmFmt*>(pDest)->PosAttrSet();
-        }
-
-        if( pDest->GetAnchor() == rNewAnchor )
-        {
-            // Do *not* connect to layout, if a <MakeFrms> will not be called.
-            if ( bMakeFrms )
-            {
-                pContact->ConnectToLayout( &rNewAnchor );
-            }
-        }
-        else
-            pDest->SetFmtAttr( rNewAnchor );
-
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
-        }
-    }
-
-    if (bSetTxtFlyAtt && (FLY_AS_CHAR == rNewAnchor.GetAnchorId()))
-    {
-        const SwPosition* pPos = rNewAnchor.GetCntntAnchor();
-        SwFmtFlyCnt aFmt( pDest );
-        pPos->nNode.GetNode().GetTxtNode()->InsertItem(
-            aFmt, pPos->nContent.GetIndex(), 0 );
-    }
-
-    if( bMakeFrms )
-        pDest->MakeFrms();
-
-    return pDest;
 }
 
 SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
@@ -674,7 +282,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     }
 
     // Set up frames
-    if( GetCurrentViewShell() )
+    if( getIDocumentLayoutAccess().GetCurrentViewShell() )
         pFmt->MakeFrms();           // ???
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -938,12 +546,12 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
 
     // If we don't have a layout we can't get page anchored FlyFrames.
     // Also, page anchored FlyFrames are only returned if no range is specified.
-    if( !GetCurrentViewShell() || pCmpRange )
+    if( !getIDocumentLayoutAccess().GetCurrentViewShell() || pCmpRange )
     {
         return aRetval;
     }
 
-    SwPageFrm *pPage = (SwPageFrm*)GetCurrentLayout()->GetLower();
+    SwPageFrm *pPage = (SwPageFrm*)getIDocumentLayoutAccess().GetCurrentLayout()->GetLower();
     while( pPage )
     {
         if( pPage->GetSortedObjs() )
@@ -1667,7 +1275,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
 IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 {
     SwViewShell *pSh, *pStartSh;
-    pSh = pStartSh = pThis->GetCurrentViewShell();
+    pSh = pStartSh = pThis->getIDocumentLayoutAccess().GetCurrentViewShell();
     if( pStartSh )
         do {
             if( pSh->GetWin() )
@@ -1906,9 +1514,9 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     // Because Redlines are also attached to Start and EndNoden,
     // the Index must not necessarily be from a ContentNode.
     SwNode* pNd = &rIdx.GetNode();
-    if( pNd->IsCntntNode() && mpCurrentView )
+    if( pNd->IsCntntNode() && getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        const SwFrm *pFrm = pNd->GetCntntNode()->getLayoutFrm( GetCurrentLayout() );
+        const SwFrm *pFrm = pNd->GetCntntNode()->getLayoutFrm( getIDocumentLayoutAccess().GetCurrentLayout() );
         if( pFrm )
         {
             const SwFrm *pUp = pFrm->GetUpper();
@@ -2019,61 +1627,10 @@ bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) const
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
 }
 
-void SwDoc::SetCurrentViewShell( SwViewShell* pNew )
-{
-    mpCurrentView = pNew;
-}
-
-SwLayouter* SwDoc::GetLayouter()
-{
-    return mpLayouter;
-}
-
-const SwLayouter* SwDoc::GetLayouter() const
-{
-    return mpLayouter;
-}
-
-void SwDoc::SetLayouter( SwLayouter* pNew )
-{
-    mpLayouter = pNew;
-}
-
-const SwViewShell *SwDoc::GetCurrentViewShell() const
-{
-    return mpCurrentView;
-}
-
-SwViewShell *SwDoc::GetCurrentViewShell()
-{
-    return mpCurrentView;
-}
-
-// It must be able to communicate to a SwViewShell. This is going to be removed later.
-const SwRootFrm *SwDoc::GetCurrentLayout() const
-{
-    if(GetCurrentViewShell())
-        return GetCurrentViewShell()->GetLayout();
-    return 0;
-}
-
-SwRootFrm *SwDoc::GetCurrentLayout()
-{
-    if(GetCurrentViewShell())
-        return GetCurrentViewShell()->GetLayout();
-    return 0;
-}
-
-bool SwDoc::HasLayout() const
-{
-    // if there is a view, there is always a layout
-    return (mpCurrentView != 0);
-}
-
 std::set<SwRootFrm*> SwDoc::GetAllLayouts()
 {
     std::set<SwRootFrm*> aAllLayouts;
-    SwViewShell *pStart = GetCurrentViewShell();
+    SwViewShell *pStart = getIDocumentLayoutAccess().GetCurrentViewShell();
     SwViewShell *pTemp = pStart;
     if ( pTemp )
     {

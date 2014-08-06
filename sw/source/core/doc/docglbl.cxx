@@ -35,6 +35,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <DocumentSettingManager.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -387,7 +388,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                                     aSIdx <= pAPos->nNode &&
                                     pAPos->nNode < aEIdx )
                                 {
-                                    DelLayoutFmt( pFly );
+                                    getIDocumentLayoutAccess().DelLayoutFmt( pFly );
                                     --n;
                                 }
                             }

@@ -42,6 +42,7 @@
 #include <unotools/tempfile.hxx>
 
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include "docsh.hxx"
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
@@ -166,7 +167,7 @@ void SwMacrosTest::testFdo55289()
     SwDocShellRef pDocShell = new SwDocShell(pDoc, SFX_CREATE_MODE_EMBEDDED);
     // this needs to run with no layout to tickle the bugs in the special
     // cases in SwXShape re-anchoring
-    assert(!pDoc->GetCurrentLayout());
+    assert(!pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
 
     uno::Reference<frame::XModel> const xModel(pDocShell->GetModel());
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, UNO_QUERY);

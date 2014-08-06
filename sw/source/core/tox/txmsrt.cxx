@@ -23,6 +23,7 @@
 #include <editeng/unolingu.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <cntfrm.hxx>
 #include <node.hxx>
@@ -157,7 +158,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
             {
                 // Then get the 'anchor' (body) position
                 Point aPt;
-                const SwCntntFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aPt, 0, false );
+                const SwCntntFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
                 if( pFrm )
                 {
                     SwPosition aPos( *pNd );

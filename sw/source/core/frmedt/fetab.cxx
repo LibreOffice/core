@@ -35,6 +35,7 @@
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
@@ -1031,7 +1032,7 @@ static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
     const SwCntntFrm *pFrm;
 
     if( 0 != ( pNd = rPos.nNode.GetNode().GetCntntNode() ))
-        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, &rPos, false );
+        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aTmpPt, &rPos, false );
     else
         pFrm = 0;
 

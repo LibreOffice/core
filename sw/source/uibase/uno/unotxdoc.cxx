@@ -102,6 +102,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
@@ -3131,7 +3132,7 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
                                  long nTileWidth, long nTileHeight )
 {
     SwDoc* pDoc = pDocShell->GetDoc();
-    SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
+    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->PaintTile(rDevice, nOutputWidth, nOutputHeight,
                           nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
@@ -3139,7 +3140,7 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
 Size SwXTextDocument::getDocumentSize()
 {
     SwDoc* pDoc = pDocShell->GetDoc();
-    SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
+    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     return pViewShell->GetDocSize();
 }
 

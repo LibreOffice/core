@@ -35,6 +35,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <frmatr.hxx>
 #include <grfatr.hxx>
 #include <swtypes.hxx>
@@ -215,7 +216,7 @@ bool SwGrfNode::ReRead(
 
             if( refLink.Is() )
             {
-                if( getLayoutFrm( GetDoc()->GetCurrentLayout() ) )
+                if( getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
                 {
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     ModifyNotification( &aMsgHint, &aMsgHint );

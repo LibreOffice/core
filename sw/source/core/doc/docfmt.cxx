@@ -40,6 +40,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <hints.hxx>
@@ -1396,7 +1397,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                             bool bCopyPoolIds )
 {
     bool bNotifyLayout = false;
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
+    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
 
     rDstDesc.SetLandscape( rSrcDesc.GetLandscape() );
     rDstDesc.SetNumType( rSrcDesc.GetNumType() );

@@ -37,6 +37,7 @@
 #include <set>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <DocumentLayoutManager.hxx>
 
 SwLayVout     *SwRootFrm::pVout = 0;
 bool           SwRootFrm::bInPaint = false;
@@ -584,7 +585,7 @@ SwRootFrm::~SwRootFrm()
     {
         SwDoc *pDoc = pRegisteredInNonConst->GetDoc();
         pDoc->DelFrmFmt( pRegisteredInNonConst );
-        pDoc->ClearSwLayouterEntries();
+        pDoc->GetDocumentLayoutManager().ClearSwLayouterEntries();
     }
     delete pDestroy;
     pDestroy = 0;

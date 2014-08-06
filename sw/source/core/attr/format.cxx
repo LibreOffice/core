@@ -763,8 +763,8 @@ bool SwFmt::IsShadowTransparent() const
 const IDocumentSettingAccess* SwFmt::getIDocumentSettingAccess() const { return & GetDoc()->GetDocumentSettingManager(); }
 const IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() const { return & GetDoc()->getIDocumentDrawModelAccess(); }
 IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() { return & GetDoc()->getIDocumentDrawModelAccess(); }
-const IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() const { return GetDoc(); }
-IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() { return GetDoc(); }
+const IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() const { return &GetDoc()->getIDocumentLayoutAccess(); }
+IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() { return &GetDoc()->getIDocumentLayoutAccess(); }
 IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return & GetDoc()->getIDocumentTimerAccess(); }
 IDocumentFieldsAccess* SwFmt::getIDocumentFieldsAccess() { return &GetDoc()->getIDocumentFieldsAccess(); }
 IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() { return & GetDoc()->getIDocumentChartDataProviderAccess(); }

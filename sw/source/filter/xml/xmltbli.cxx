@@ -40,6 +40,7 @@
 #include "fmtfordr.hxx"
 #include "doc.hxx"
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include "swtable.hxx"
 #include "swtblfmt.hxx"
 #include "pam.hxx"
@@ -2803,7 +2804,7 @@ void SwXMLTableContext::MakeTable()
     }
 
     // ??? this is always false: root frame is only created in SwViewShell::Init
-    if( pTableNode->GetDoc()->GetCurrentViewShell() )
+    if( pTableNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         pTableNode->DelFrms();
         SwNodeIndex aIdx( *pTableNode->EndOfSectionNode(), 1 );

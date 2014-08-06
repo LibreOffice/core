@@ -40,6 +40,7 @@
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docstat.hxx>
 #include <docsh.hxx>
 
@@ -374,7 +375,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
         }
     }
 
-    if( pDoc->GetCurrentViewShell() && pDoc->getIDocumentStatistics().GetDocStat().nPage > 1 &&
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pDoc->getIDocumentStatistics().GetDocStat().nPage > 1 &&
         !(bOrganizerMode || bBlock || bErr) )
     {
         try

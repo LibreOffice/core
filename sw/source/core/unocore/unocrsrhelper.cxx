@@ -46,6 +46,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
 #include <charfmt.hxx>
@@ -894,7 +895,7 @@ void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
 {
     if (!rPaM.GetCntntNode())
         return; // TODO: is there an easy way to get it for tables/sections?
-    const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->GetCurrentLayout())->FindPageFrm();
+    const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout())->FindPageFrm();
     if(pPage)
     {
         SwStyleNameMapper::FillProgName(pPage->GetPageDesc()->GetName(),

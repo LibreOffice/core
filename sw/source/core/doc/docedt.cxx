@@ -24,6 +24,7 @@
 #include <UndoManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <doctxm.hxx>
@@ -77,7 +78,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         pFmt->GetDoc()->GetSpzFrmFmts()->push_back( pFmt );
         pFmt->SetFmtAttr( aAnchor );
         SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
-        if( pCNd && pCNd->getLayoutFrm( pFmt->GetDoc()->GetCurrentLayout(), 0, 0, false ) )
+        if( pCNd && pCNd->getLayoutFrm( pFmt->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false ) )
             pFmt->MakeFrms();
     }
 }
@@ -211,7 +212,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                         i = rTbl.GetPos( pFmt );
                 }
 
-                pDoc->DelLayoutFmt( pFmt );
+                pDoc->getIDocumentLayoutAccess().DelLayoutFmt( pFmt );
 
                 // DelLayoutFmt can also trigger the deletion of objects.
                 if( i > rTbl.size() )
@@ -511,7 +512,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
             switch( pNd->GetNodeType() )
             {
             case ND_TEXTNODE:
-                if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( GetCurrentLayout() )) )
+                if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( getIDocumentLayoutAccess().GetCurrentLayout() )) )
                 {
                     // skip protected and hidden Cells and Flys
                     if( pCntFrm->IsProtected() )
@@ -739,7 +740,7 @@ static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
     SwHyphArgs *pHyphArgs = (SwHyphArgs*)pArgs;
     if( pNode )
     {
-        SwCntntFrm* pCntFrm = pNode->getLayoutFrm( pNode->GetDoc()->GetCurrentLayout() );
+        SwCntntFrm* pCntFrm = pNode->getLayoutFrm( pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
         if( pCntFrm && !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
         {
             sal_uInt16 *pPageSt = pHyphArgs->GetPageSt();

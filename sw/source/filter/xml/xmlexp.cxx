@@ -63,6 +63,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 
 #include <pausethreadstarting.hxx>
@@ -437,8 +438,8 @@ void SwXMLExport::SetBodyAttributes()
 {
     // export use of soft page breaks
     SwDoc *pDoc = getDoc();
-    if( pDoc->GetCurrentViewShell() &&
-        pDoc->GetCurrentViewShell()->GetPageCount() > 1 )
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
+        pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->GetPageCount() > 1 )
     {
         bool bValue = true;
         OUStringBuffer sBuffer;

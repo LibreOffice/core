@@ -29,6 +29,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
@@ -595,7 +596,7 @@ void lcl_MakeFldLst(
         {
             const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
             const SwCntntFrm* pCFrm =
-                rTxtNode.getLayoutFrm( rTxtNode.GetDoc()->GetCurrentLayout(), &aPt, 0, false );
+                rTxtNode.getLayoutFrm( rTxtNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
             if ( pCFrm != NULL
                  && ( bInReadOnly || !pCFrm->IsProtected() ) )
             {
@@ -1653,7 +1654,7 @@ bool SwContentAtPos::IsInProtectSect() const
 
     const SwCntntFrm* pFrm;
     return pNd && ( pNd->IsInProtectSect() ||
-                    ( 0 != ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), 0, 0, false)) &&
+                    ( 0 != ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false)) &&
                         pFrm->IsProtected() ));
 }
 

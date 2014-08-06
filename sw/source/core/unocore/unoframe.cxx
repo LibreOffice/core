@@ -43,6 +43,7 @@
 #include <drawdoc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <swcli.hxx>
@@ -2604,7 +2605,7 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException, std::exception )
                 pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
             }
             else
-                pFmt->GetDoc()->DelLayoutFmt(pFmt);
+                pFmt->GetDoc()->getIDocumentLayoutAccess().DelLayoutFmt(pFmt);
         }
     }
 

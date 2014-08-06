@@ -32,6 +32,7 @@
 #include <DocumentFieldsManager.hxx>
 #include <DocumentStatisticsManager.hxx>
 #include <DocumentStateManager.hxx>
+#include <DocumentLayoutManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -448,6 +449,27 @@ IDocumentState & SwDoc::getIDocumentState()
 ::sw::DocumentStateManager & SwDoc::GetDocumentStateManager()
 {
     return *m_pDocumentStateManager;
+}
+
+//IDocumentLayoutAccess
+IDocumentLayoutAccess const & SwDoc::getIDocumentLayoutAccess() const
+{
+    return *m_pDocumentLayoutManager;
+}
+
+IDocumentLayoutAccess & SwDoc::getIDocumentLayoutAccess()
+{
+    return *m_pDocumentLayoutManager;
+}
+
+::sw::DocumentLayoutManager const & SwDoc::GetDocumentLayoutManager() const
+{
+    return *m_pDocumentLayoutManager;
+}
+
+::sw::DocumentLayoutManager & SwDoc::GetDocumentLayoutManager()
+{
+    return *m_pDocumentLayoutManager;
 }
 
 /* Implementations the next Interface here */
@@ -1047,18 +1069,6 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
     return nCount;
 }
 
-//Load document from fdo#42534 under valgrind, drag the scrollbar down so full
-//document layout is triggered. Close document before layout has completed, and
-//SwAnchoredObject objects deleted by the deletion of layout remain referenced
-//by the SwLayouter
-void SwDoc::ClearSwLayouterEntries()
-{
-    SwLayouter::ClearMovedFwdFrms( *this );
-    SwLayouter::ClearObjsTmpConsiderWrapInfluence( *this );
-    // #i65250#
-    SwLayouter::ClearMoveBwdLayoutInfo( *this );
-}
-
 static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
@@ -1113,7 +1123,7 @@ static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 {
     std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-    OSL_ENSURE( GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
+    OSL_ENSURE( getIDocumentLayoutAccess().GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
     if( bInvalid )
     {
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::AllInvalidateSmartTagsOrSpelling),bSmartTags));
@@ -1128,7 +1138,7 @@ void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 
 void SwDoc::InvalidateAutoCompleteFlag()
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
+    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
     if( pTmpRoot )
     {
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();

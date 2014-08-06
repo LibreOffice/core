@@ -33,6 +33,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -995,7 +996,7 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
         case LTYPE_OBJECT:
             {
                 SwFlyFrm* pFly;
-                SwCntntFrm *pCnt = pCNd->getLayoutFrm( rDoc.GetCurrentLayout() );
+                SwCntntFrm *pCnt = pCNd->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
                 if( pCnt && 0 != ( pFly = pCnt->FindFlyFrm() ) )
                     nIdx = pFly->GetFmt()->GetCntnt().GetCntntIdx()->GetIndex();
             }

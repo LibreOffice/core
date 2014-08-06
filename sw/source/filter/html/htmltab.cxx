@@ -43,6 +43,7 @@
 #include "frmatr.hxx"
 #include "pam.hxx"
 #include "doc.hxx"
+#include <IDocumentLayoutAccess.hxx>
 #include "ndtxt.hxx"
 #include "shellio.hxx"
 #include "poolfmt.hxx"
@@ -4995,7 +4996,7 @@ void _TblSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc
     SwTableNode *pTblNd = pTCntxt->GetTableNode();
     OSL_ENSURE( pTblNd, "Wo ist der Tabellen-Node" );
 
-    if( pDoc->GetCurrentViewShell() && pTblNd )
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pTblNd )
     {
         // Existiert schon ein Layout, dann muss an dieser Tabelle die
         // BoxFrames neu erzeugt werden.

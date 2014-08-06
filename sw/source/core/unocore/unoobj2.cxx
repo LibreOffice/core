@@ -27,6 +27,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <textboxhelper.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
@@ -176,9 +177,9 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
             ? FLY_AT_CHAR : FLY_AT_PARA);
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
-    if( pDoc->GetCurrentViewShell() &&
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
         0 != (pCNd = rIdx.GetNode().GetCntntNode()) &&
-        0 != (pCFrm = pCNd->getLayoutFrm( pDoc->GetCurrentLayout())) )
+        0 != (pCFrm = pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout())) )
     {
         const SwSortedObjs *pObjs = pCFrm->GetDrawObjs();
         if( pObjs )
@@ -240,7 +241,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
 UnoActionContext::UnoActionContext(SwDoc *const pDoc)
     : m_pDoc(pDoc)
 {
-    SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
+    SwRootFrm *const pRootFrm = m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if (pRootFrm)
     {
         pRootFrm->StartAllAction();
@@ -252,7 +253,7 @@ UnoActionContext::~UnoActionContext()
     // Doc may already have been removed here
     if (m_pDoc)
     {
-        SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
+        SwRootFrm *const pRootFrm = m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
         if (pRootFrm)
         {
             pRootFrm->EndAllAction();
@@ -263,7 +264,7 @@ UnoActionContext::~UnoActionContext()
 UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
     : m_pDoc(pDoc)
 {
-    SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
+    SwRootFrm *const pRootFrm = m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if (pRootFrm)
     {
         pRootFrm->UnoRemoveAllActions();
@@ -272,7 +273,7 @@ UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
 
 UnoActionRemoveContext::~UnoActionRemoveContext()
 {
-    SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
+    SwRootFrm *const pRootFrm = m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if (pRootFrm)
     {
         pRootFrm->UnoRestoreAllActions();

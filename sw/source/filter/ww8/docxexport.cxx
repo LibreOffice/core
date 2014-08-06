@@ -42,6 +42,7 @@
 
 #include <IMark.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
 #include <ndtxt.hxx>
 #include <wrtww8.hxx>
@@ -792,7 +793,7 @@ void DocxExport::WriteProperties( )
 
 void DocxExport::WriteSettings()
 {
-    SwViewShell *pViewShell(pDoc->GetCurrentViewShell());
+    SwViewShell *pViewShell(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
     if( !pViewShell && !m_aSettings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
         return;
 

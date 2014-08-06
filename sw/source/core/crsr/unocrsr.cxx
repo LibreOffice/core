@@ -19,6 +19,7 @@
 
 #include <unocrsr.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <swtable.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
@@ -211,9 +212,9 @@ void SwUnoTableCrsr::MakeBoxSels()
     const SwCntntNode* pCNd;
     bool bMakeTblCrsrs = true;
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
-            0 != ( pCNd = GetCntntNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) &&
-            0 != ( pCNd = GetCntntNode(false) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) )
-        bMakeTblCrsrs = GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *this );
+            0 != ( pCNd = GetCntntNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+            0 != ( pCNd = GetCntntNode(false) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
+        bMakeTblCrsrs = GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->MakeTblCrsrs( *this );
 
     if ( !bMakeTblCrsrs )
     {

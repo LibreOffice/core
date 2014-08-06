@@ -30,6 +30,7 @@
 #include "switerator.hxx"
 #include "ftnfrm.hxx"
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwFtnBossFrm( pFmt, pSib )
@@ -210,7 +211,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         // SaveCntnt would also suck up the content of the footnote container
         // and store it within the normal text flow.
         if( IsPageBodyFrm() )
-            pDoc->GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), true, false );
+            pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), true, false );
         pSave = ::SaveCntnt( this );
 
         //If columns exist, they get deleted if a column count of 0 or 1 is requested.

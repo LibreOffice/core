@@ -36,6 +36,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <unofldmid.h>
 #include <unoprnms.hxx>
 #include <switerator.hxx>
@@ -284,7 +285,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
             const SwTxtNode& rFldTxtNode = pTxtFld->GetTxtNode();
             SwPosition aFldPos(rFldTxtNode);
             SwDoc& rDoc = *(SwDoc*)rFldTxtNode.GetDoc();
-            SwCntntFrm *pFrm = rFldTxtNode.getLayoutFrm( rDoc.GetCurrentLayout() );
+            SwCntntFrm *pFrm = rFldTxtNode.getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
             const SwTxtNode* pTxtNode = 0;
             if(pFrm && !pFrm->IsInDocBody())
                 pTxtNode = GetBodyTxtNode( rDoc, aFldPos, *pFrm );
@@ -293,7 +294,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
             if(!pTxtNode)
                 pTxtNode = &rFldTxtNode;
             if (!pTxtNode->GetTxt().isEmpty() &&
-                pTxtNode->getLayoutFrm( rDoc.GetCurrentLayout() ) &&
+                pTxtNode->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ) &&
                 pTxtNode->GetNodes().IsDocNodes() )
             {
                 SwTOXAuthority* pNew = new SwTOXAuthority( *pTxtNode,

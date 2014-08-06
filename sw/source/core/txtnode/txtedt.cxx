@@ -37,6 +37,7 @@
 #include <acmplwrd.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -1596,7 +1597,7 @@ bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( pLinguNode != this )
     {
         pLinguNode = this;
-        pLinguFrm = (SwTxtFrm*)getLayoutFrm( GetDoc()->GetCurrentLayout(), (Point*)(rHyphInf.GetCrsrPos()) );
+        pLinguFrm = (SwTxtFrm*)getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), (Point*)(rHyphInf.GetCrsrPos()) );
     }
     SwTxtFrm *pFrm = pLinguFrm;
     if( pFrm )

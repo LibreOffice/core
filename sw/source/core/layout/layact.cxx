@@ -33,6 +33,7 @@
 #include "docstat.hxx"
 #include "swevent.hxx"
 #include <IDocumentStatistics.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 #include <sfx2/event.hxx>
 

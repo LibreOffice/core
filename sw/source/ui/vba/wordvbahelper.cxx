@@ -30,6 +30,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <unotxdoc.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <view.hxx>
 #include <viewsh.hxx>
 
@@ -85,7 +86,7 @@ uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame
 sal_Int32 getPageCount( const uno::Reference< frame::XModel>& xModel ) throw (uno::RuntimeException)
 {
     SwDocShell* pDocShell = getDocShell( xModel );
-    SwViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->GetCurrentViewShell() : 0;
+    SwViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() : 0;
     return pViewSh ? pViewSh->GetPageCount() : 0;
 }
 

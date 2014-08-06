@@ -36,6 +36,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
@@ -2319,7 +2320,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > SwViewShell::Crea
     OSL_ENSURE( mpLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
-    if( mpDoc->GetCurrentViewShell() && GetWin() )
+    if( mpDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && GetWin() )
         xAcc = Imp()->GetAccessibleMap().GetDocumentView();
 
     return xAcc;
@@ -2532,8 +2533,8 @@ const IDocumentDrawModelAccess* SwViewShell::getIDocumentDrawModelAccess() const
 IDocumentDrawModelAccess* SwViewShell::getIDocumentDrawModelAccess() { return & mpDoc->getIDocumentDrawModelAccess(); }
 const IDocumentRedlineAccess* SwViewShell::getIDocumentRedlineAccess() const { return &mpDoc->getIDocumentRedlineAccess(); }
 IDocumentRedlineAccess* SwViewShell::getIDocumentRedlineAccess() { return &mpDoc->getIDocumentRedlineAccess(); }
-const IDocumentLayoutAccess* SwViewShell::getIDocumentLayoutAccess() const { return mpDoc; }
-IDocumentLayoutAccess* SwViewShell::getIDocumentLayoutAccess() { return mpDoc; }
+const IDocumentLayoutAccess* SwViewShell::getIDocumentLayoutAccess() const { return &mpDoc->getIDocumentLayoutAccess(); }
+IDocumentLayoutAccess* SwViewShell::getIDocumentLayoutAccess() { return &mpDoc->getIDocumentLayoutAccess(); }
 IDocumentContentOperations* SwViewShell::getIDocumentContentOperations() { return &mpDoc->getIDocumentContentOperations(); }
 IDocumentStylePoolAccess* SwViewShell::getIDocumentStylePoolAccess() { return mpDoc; }
 const IDocumentStatistics* SwViewShell::getIDocumentStatistics() const { return &mpDoc->getIDocumentStatistics(); }

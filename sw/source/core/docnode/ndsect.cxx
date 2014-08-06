@@ -29,6 +29,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <rootfrm.hxx>
@@ -893,7 +894,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     // We could optimize this, by not removing already contained Frames and recreating them,
     // but by simply rewiring them
     bool bInsFrm = bCreateFrms && !pSectNd->GetSection().IsHidden() &&
-                   GetDoc()->GetCurrentViewShell();
+                   GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     SwNode2Layout *pNode2Layout = NULL;
     if( bInsFrm )
     {
@@ -1056,7 +1057,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
 {
     // Take my succsessive or preceding ContentFrame
     SwNodes& rNds = GetNodes();
-    if( rNds.IsDocNodes() && rNds.GetDoc()->GetCurrentViewShell() )
+    if( rNds.IsDocNodes() && rNds.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         if( GetSection().IsHidden() || IsCntntHidden() )
         {
@@ -1278,7 +1279,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
 
     // Copy the Links/Server
     if( pNewSect->IsLinkType() ) // Add the Link
-        pNewSect->CreateLink( pDoc->GetCurrentViewShell() ? CREATE_CONNECT : CREATE_NONE );
+        pNewSect->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? CREATE_CONNECT : CREATE_NONE );
 
     // If we copy from the Undo as Server, enter it again
     if (m_pSection->IsServer()
@@ -1359,7 +1360,7 @@ void SwSectionNode::NodesArrChgd()
             OSL_ENSURE( pDoc == GetDoc(),
                     "Moving to different Documents?" );
             if( m_pSection->IsLinkType() ) // Remove the Link
-                m_pSection->CreateLink( pDoc->GetCurrentViewShell() ? CREATE_CONNECT : CREATE_NONE );
+                m_pSection->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? CREATE_CONNECT : CREATE_NONE );
 
             if (m_pSection->IsServer())
                 pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertServer( m_pSection->GetObject() );

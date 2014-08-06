@@ -38,6 +38,7 @@
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
 #include <trvltbl.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 /// set cursor into next/previous cell
 bool SwCrsrShell::GoNextCell( bool bAppendLine )
@@ -371,7 +372,7 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
     if ( !pCNd )
         return false;
 
-    SwCntntFrm* pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() );
+    SwCntntFrm* pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
 
     if ( 0 == pFrm || pCNd->FindTableNode() != pTblNd ||
         (!bInReadOnly && pFrm->IsProtected() ) )
@@ -403,7 +404,7 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
                 return false;
 
             // check if we have found a suitable table cell:
-            pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() );
+            pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
 
             if ( 0 != pFrm && pCNd->FindTableNode() == pTblNd &&
                 (bInReadOnly || !pFrm->IsProtected() ) )
@@ -444,7 +445,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
     if ( !pCNd )
         return false;
 
-    SwCntntFrm* pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() );
+    SwCntntFrm* pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
 
     if( 0 == pFrm || pCNd->FindTableNode() != pTblNd ||
         (!bInReadOnly && pFrm->IsProtected() ))
@@ -465,7 +466,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
             if ( !pCNd )
                 return false;
 
-            pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() );
+            pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
 
             if( 0 != pFrm && pCNd->FindTableNode() == pTblNd &&
                 (bInReadOnly || !pFrm->IsProtected() ) )

@@ -32,6 +32,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -1012,7 +1013,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
 
     // always the first! (in tab headline, header-/footer)
     Point aPt;
-    const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, false );
+    const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
 
     _SetGetExpFld* pNew = NULL;
     bool bIsInBody = false;
@@ -1077,7 +1078,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
 
             // always the first! (in tab headline, header-/footer)
             Point aPt;
-            const SwCntntFrm* pFrm = pCNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, false );
+            const SwCntntFrm* pFrm = pCNd->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
             if( !pFrm )
                 break;
 

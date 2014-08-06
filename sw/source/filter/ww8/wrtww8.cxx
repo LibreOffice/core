@@ -59,6 +59,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <viewopt.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -332,7 +333,7 @@ static void WriteDop( WW8Export& rWrt )
     rDop.dxaTab = (sal_uInt16)rTabStop[0].GetTabPos();
 
     // Zoom factor
-    SwViewShell *pViewShell(rWrt.pDoc->GetCurrentViewShell());
+    SwViewShell *pViewShell(rWrt.pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
         rDop.wScaleSaved = pViewShell->GetViewOptions()->GetZoom();
 

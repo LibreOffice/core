@@ -18,6 +18,7 @@
  */
 
 #include "doc.hxx"
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
 #include "lineinfo.hxx"
 #include "charfmt.hxx"
@@ -28,7 +29,7 @@
 
 void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
+    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
     if (  pTmpRoot &&
          (rNew.IsCountBlankLines() != mpLineNumberInfo->IsCountBlankLines() ||
           rNew.IsRestartEachPage() != mpLineNumberInfo->IsRestartEachPage()) )
@@ -134,7 +135,7 @@ void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
 {
     CheckRegistration( pOld, pNew );
     SwDoc *pDoc = ((SwCharFmt*)GetRegisteredIn())->GetDoc();
-    SwRootFrm* pRoot = pDoc->GetCurrentLayout();
+    SwRootFrm* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRoot )
     {
         pRoot->StartAllAction();

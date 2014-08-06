@@ -23,6 +23,7 @@
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <pamtyp.hxx>
@@ -536,7 +537,7 @@ sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
     const SwPosition* pPos = bAtPoint ? m_pPoint : m_pMark;
 
     if( 0 != ( pNd = pPos->nNode.GetNode().GetCntntNode() ) &&
-        0 != ( pCFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), pLayPos, pPos, false )) &&
+        0 != ( pCFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), pLayPos, pPos, false )) &&
         0 != ( pPg = pCFrm->FindPageFrm() ))
         return pPg->GetPhyPageNum();
     return 0;
@@ -577,7 +578,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
     if ( pNd != NULL )
     {
         Point aTmpPt;
-        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetPoint(), false );
+        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aTmpPt, GetPoint(), false );
     }
 
     // Will be set if point are inside edit-in-readonly environment
@@ -610,7 +611,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
         if ( pNd != NULL )
         {
             Point aTmpPt;
-            pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetMark(), false );
+            pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aTmpPt, GetMark(), false );
         }
 
         const SwFrm* pMarkEditInReadonlyFrm = NULL;
@@ -752,7 +753,7 @@ SwCntntNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
             {
                 if(
                     (
-                        0 == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout() ) ) ||
+                        0 == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
                         ( !bInReadOnly && pFrm->IsProtected() ) ||
                         (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow())
                     ) ||
@@ -785,7 +786,7 @@ SwCntntNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
                     if( (aPos.*fnMove->fnCmpOp)( *rPam.GetMark() ) )
                     {
                         // only in AutoTextSection can be nodes that are hidden
-                        if( 0 == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout() ) ) ||
+                        if( 0 == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
                             ( !bInReadOnly && pFrm->IsProtected() ) ||
                             ( pFrm->IsTxtFrm() &&
                                 ((SwTxtFrm*)pFrm)->IsHiddenNow() ) )

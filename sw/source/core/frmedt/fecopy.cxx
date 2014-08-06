@@ -57,6 +57,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <DocumentFieldsManager.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -103,7 +104,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
     for( sal_uInt16 n = 0; n < pClpDoc->GetSpzFrmFmts()->size(); ++n )
     {
         SwFlyFrmFmt* pFly = (SwFlyFrmFmt*)(*pClpDoc->GetSpzFrmFmts())[n];
-        pClpDoc->DelLayoutFmt( pFly );
+        pClpDoc->getIDocumentLayoutAccess().DelLayoutFmt( pFly );
     }
     pClpDoc->GetDocumentFieldsManager().GCFieldTypes();        // delete the FieldTypes
 
@@ -140,7 +141,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
             }
             aAnchor.SetAnchor( &aPos );
         }
-        pFlyFmt = pClpDoc->CopyLayoutFmt( *pFlyFmt, aAnchor, true, true );
+        pFlyFmt = pClpDoc->getIDocumentLayoutAccess().CopyLayoutFmt( *pFlyFmt, aAnchor, true, true );
 
        // assure the "RootFmt" is the first element in Spz-Array
         // (if necessary Flys were copied in Flys)
@@ -208,7 +209,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
                     aAnchor.SetAnchor( &aPos );
                 }
 
-                pClpDoc->CopyLayoutFmt( *pFmt, aAnchor, true, true );
+                pClpDoc->getIDocumentLayoutAccess().CopyLayoutFmt( *pFmt, aAnchor, true, true );
             }
         }
         bRet = true;
@@ -380,7 +381,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     pFmt = pDestDoc->getIDocumentContentOperations().InsertDrawObj( *pDestShell->GetCrsr(), *pNew, aSet );
                 }
                 else
-                    pFmt = pDestDoc->CopyLayoutFmt( *pFmt, aAnchor, true, true );
+                    pFmt = pDestDoc->getIDocumentLayoutAccess().CopyLayoutFmt( *pFmt, aAnchor, true, true );
 
                 // Can be 0, as Draws are not allowed in Headers/Footers
                 if ( pFmt )
@@ -531,7 +532,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         if( bRet )
         {
             SwFrmFmt *pOldFmt = pFlyFmt;
-            pFlyFmt = pDestShell->GetDoc()->CopyLayoutFmt( *pFlyFmt, aAnchor, true, true );
+            pFlyFmt = pDestShell->GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( *pFlyFmt, aAnchor, true, true );
 
             if ( FLY_AS_CHAR != aAnchor.GetAnchorId() )
             {
@@ -545,7 +546,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             const Point aPt( pDestShell->GetCrsrDocPos() );
 
             if( bIsMove )
-                GetDoc()->DelLayoutFmt( pOldFmt );
+                GetDoc()->getIDocumentLayoutAccess().DelLayoutFmt( pOldFmt );
 
             // only select if it can be shifted/copied in the same shell
             if( bSelectInsert )
@@ -965,7 +966,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                                         0, aPt, *this, aAnchor, aPt, false );
                     }
 
-                    SwFrmFmt * pNew = GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+                    SwFrmFmt * pNew = GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
 
                     if( pNew )
                     {
@@ -1084,7 +1085,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                         }
                         else
                             continue;
-                        GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+                        GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
                     }
                 }
             }
@@ -1190,7 +1191,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
             }
             else
                 continue;
-            rToFill.GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+            rToFill.GetDoc()->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
         }
     }
     GetDoc()->getIDocumentFieldsAccess().UnlockExpFlds();

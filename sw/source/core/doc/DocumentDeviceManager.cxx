@@ -24,6 +24,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
@@ -301,7 +302,7 @@ void DocumentDeviceManager::PrtDataChanged()
     // #i41075#
     OSL_ENSURE( m_rSwdoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
             0 != getPrinter( false ), "PrtDataChanged will be called recursively!" );
-    SwRootFrm* pTmpRoot = m_rSwdoc.GetCurrentLayout();
+    SwRootFrm* pTmpRoot = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout();
     boost::scoped_ptr<SwWait> pWait;
     bool bEndAction = false;
 
@@ -311,7 +312,7 @@ void DocumentDeviceManager::PrtDataChanged()
     bool bDraw = true;
     if ( pTmpRoot )
     {
-        SwViewShell *pSh = m_rSwdoc.GetCurrentViewShell();
+        SwViewShell *pSh = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell();
         if( pSh &&
             (!pSh->GetViewOptions()->getBrowseMode() ||
              pSh->GetViewOptions()->IsPrtFormat()) )
@@ -339,7 +340,7 @@ void DocumentDeviceManager::PrtDataChanged()
                 pSh->InitPrt( getPrinter(false) );
                 pSh = (SwViewShell*)pSh->GetNext();
             }
-            while ( pSh != m_rSwdoc.GetCurrentViewShell() );
+            while ( pSh != m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
         }
     }
     if ( bDraw && m_rSwdoc.getIDocumentDrawModelAccess().GetDrawModel() )

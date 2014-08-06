@@ -36,6 +36,7 @@
 #include <fltshell.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
 #include "writerwordglue.hxx"
@@ -370,7 +371,7 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
         &aFlySet, &rGrfSet, NULL);
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
-    if (rDoc.GetCurrentViewShell() &&
+    if (rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
         (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()))
     {
         pFlyFmt->MakeFrms();

@@ -22,6 +22,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <DocumentRedlineManager.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <UndoManager.hxx>
 #include <docary.hxx>
 #include <textboxhelper.hxx>
@@ -1857,7 +1858,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
                      (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     aRg.aStart <= pAPos->nNode && pAPos->nNode <= aRg.aEnd )
                 {
-                    m_rSwdoc.DelLayoutFmt( pFly );
+                    m_rSwdoc.getIDocumentLayoutAccess().DelLayoutFmt( pFly );
                     --n;
                 }
             }
@@ -2751,7 +2752,7 @@ SwDrawFrmFmt* DocumentContentOperationsManager::InsertDrawObj(
     SwDrawContact* pContact = new SwDrawContact( pFmt, &rDrawObj );
 
     // Create Frames if necessary
-    if( m_rSwdoc.GetCurrentViewShell() )
+    if( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // create layout representation
         pFmt->MakeFrms();
@@ -3367,7 +3368,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 
         // Copy the format and set the new anchor
         if( bMakeCpy )
-            aVecSwFrmFmt.push_back( pDest->CopyLayoutFmt( *(*it).GetFmt(),
+            aVecSwFrmFmt.push_back( pDest->getIDocumentLayoutAccess().CopyLayoutFmt( *(*it).GetFmt(),
                         aAnchor, false, true ) );
         ++it;
     }

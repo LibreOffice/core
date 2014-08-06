@@ -24,6 +24,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
 #include <swtypes.hxx>
 #include <swhints.hxx>
@@ -149,9 +150,9 @@ void DocumentDrawModelManager::InitDrawModel()
         mpDrawModel->SetRefDevice( pRefDev );
 
     mpDrawModel->SetNotifyUndoActionHdl( LINK( &m_rSwdoc, SwDoc, AddDrawUndo ));
-    if ( m_rSwdoc.GetCurrentViewShell() )
+    if ( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwViewShell* pViewSh = m_rSwdoc.GetCurrentViewShell();
+        SwViewShell* pViewSh = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell();
         do
         {
             SwRootFrm* pRoot =  pViewSh->GetLayout();
@@ -166,7 +167,7 @@ void DocumentDrawModelManager::InitDrawModel()
                 pDrawPage->SetSize( pRoot->Frm().SSize() );
             }
             pViewSh = (SwViewShell*)pViewSh->GetNext();
-        }while( pViewSh != m_rSwdoc.GetCurrentViewShell() );
+        }while( pViewSh != m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
     }
 }
 
@@ -211,14 +212,14 @@ SwDrawModel* DocumentDrawModelManager::_MakeDrawModel()
 {
     OSL_ENSURE( !mpDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
-    if ( m_rSwdoc.GetCurrentViewShell() )
+    if ( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwViewShell* pTmp = m_rSwdoc.GetCurrentViewShell();
+        SwViewShell* pTmp = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell();
         do
         {
             pTmp->MakeDrawView();
             pTmp = (SwViewShell*) pTmp->GetNext();
-        } while ( pTmp != m_rSwdoc.GetCurrentViewShell() );
+        } while ( pTmp != m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
 
         // Broadcast, so that the FormShell can be connected to the DrawView
         if( m_rSwdoc.GetDocShell() )

@@ -63,6 +63,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <switerator.hxx>
 #include "ndole.hxx"
 
@@ -420,7 +421,7 @@ bool SwNode::IsProtect() const
     if( 0 != ( pSttNd = FindTableBoxStartNode() ) )
     {
         SwCntntFrm* pCFrm;
-        if( IsCntntNode() && 0 != (pCFrm = ((SwCntntNode*)this)->getLayoutFrm( GetDoc()->GetCurrentLayout() ) ))
+        if( IsCntntNode() && 0 != (pCFrm = ((SwCntntNode*)this)->getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ))
             return pCFrm->IsProtected();
 
         const SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().
@@ -487,7 +488,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
     {
         const SwFrm* pFrm;
         const SwPageFrm* pPage;
-        if( pNode && 0 != ( pFrm = pNode->getLayoutFrm( pNode->GetDoc()->GetCurrentLayout(), 0, 0, bCalcLay ) ) &&
+        if( pNode && 0 != ( pFrm = pNode->getLayoutFrm( pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, bCalcLay ) ) &&
             0 != ( pPage = pFrm->FindPageFrm() ) )
         {
             pPgDesc = pPage->GetPageDesc();
@@ -774,8 +775,8 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
             const SwCntntNode* pCNd = GetCntntNode();
 
             Point aPt( 0, 0 );
-            const SwFrm* pFrm = pRet->getLayoutFrm( pRet->GetDoc()->GetCurrentLayout(), &aPt, 0, false ),
-                       * pMyFrm = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, false ) : 0;
+            const SwFrm* pFrm = pRet->getLayoutFrm( pRet->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false ),
+                       * pMyFrm = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false ) : 0;
             const SwPageFrm* pPgFrm = pFrm ? pFrm->FindPageFrm() : 0;
             if( pPgFrm && pMyFrm &&
                 pPgFrm->Frm().Top() > pMyFrm->Frm().Top() )
@@ -1859,7 +1860,7 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
         aPt = *pPt;
 
     // #i72024# - No format of the frame, because this can cause recursive layout actions
-    SwFrm* pFrm = getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, &rPos, false );
+    SwFrm* pFrm = getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, &rPos, false );
 
     if ( pFrm )
     {
@@ -1914,8 +1915,8 @@ const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return &
 const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return &GetDoc()->getIDocumentRedlineAccess(); }
 const IDocumentStylePoolAccess* SwNode::getIDocumentStylePoolAccess() const { return GetDoc(); }
 const IDocumentDrawModelAccess* SwNode::getIDocumentDrawModelAccess() const { return & GetDoc()->getIDocumentDrawModelAccess(); }
-const IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() const { return GetDoc(); }
-IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() { return GetDoc(); }
+const IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() const { return &GetDoc()->getIDocumentLayoutAccess(); }
+IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() { return &GetDoc()->getIDocumentLayoutAccess(); }
 const IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() const { return &GetDoc()->getIDocumentLinksAdministration(); }
 IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return &GetDoc()->getIDocumentLinksAdministration(); }
 const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return &GetDoc()->getIDocumentFieldsAccess(); }

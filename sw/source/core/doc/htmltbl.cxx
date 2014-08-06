@@ -28,6 +28,7 @@
 #include <docary.hxx>
 #include "ndtxt.hxx"
 #include "doc.hxx"
+#include <IDocumentLayoutAccess.hxx>
 #include "swtable.hxx"
 #include "rootfrm.hxx"
 #include "docsh.hxx"
@@ -357,7 +358,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByVisArea( const SwDoc& rDoc )
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
 {
     // If we have a layout, we can get the width from there.
-    const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();
+    const SwRootFrm *pRootFrm = rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRootFrm )
     {
         const SwFrm *pPageFrm = pRootFrm->GetLower();
@@ -1712,7 +1713,7 @@ void SwHTMLTableLayout::_Resize( sal_uInt16 nAbsAvail, bool bRecalc )
     if( bRecalc )
         AutoLayoutPass1();
 
-    SwRootFrm *pRoot = (SwRootFrm*)GetDoc()->GetCurrentViewShell()->GetLayout();
+    SwRootFrm *pRoot = (SwRootFrm*)GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout();
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
         pRoot->StartAllAction();
 
@@ -1753,7 +1754,7 @@ bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, bool bRecalc,
     // VisArea's size was potentially passed.
     // If we're not in a frame we need to calculate the table for the VisArea,
     // because switching from relative to absolute wouldn't work.
-    if( pDoc->GetCurrentViewShell() && pDoc->GetCurrentViewShell()->GetViewOptions()->getBrowseMode() )
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->GetViewOptions()->getBrowseMode() )
     {
         const sal_uInt16 nVisAreaWidth = GetBrowseWidthByVisArea( *pDoc );
         if( nVisAreaWidth < nAbsAvail && !FindFlyFrmFmt() )

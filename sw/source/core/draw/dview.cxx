@@ -47,6 +47,7 @@
 #include "shellres.hxx"
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 #include <com/sun/star/embed/Aspects.hpp>
 
@@ -924,7 +925,7 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 void SwDrawView::DeleteMarked()
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
-    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();
+    SwRootFrm *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot )
         pTmpRoot->StartAllAction();
     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
@@ -960,7 +961,7 @@ void SwDrawView::DeleteMarked()
 
         // Only delete these now: earlier deletion would clear the mark list as well.
         for (std::vector<SwFrmFmt*>::iterator i = aTextBoxesToDelete.begin(); i != aTextBoxesToDelete.end(); ++i)
-            pDoc->DelLayoutFmt(*i);
+            pDoc->getIDocumentLayoutAccess().DelLayoutFmt(*i);
     }
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     if( pTmpRoot )

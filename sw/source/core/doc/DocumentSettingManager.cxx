@@ -21,6 +21,7 @@
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
@@ -399,7 +400,7 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLan
             pDrawModel->ReformatAllTextObjects();
     }
 
-    SwRootFrm* pTmpRoot = m_rDoc.GetCurrentLayout();
+    SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pTmpRoot && !m_rDoc.IsInReading() )
     {
         pTmpRoot->StartAllAction();
@@ -469,7 +470,7 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
                 pDrawModel->ReformatAllTextObjects();
         }
 
-        SwRootFrm* pTmpRoot = m_rDoc.GetCurrentLayout();
+        SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
         if( pTmpRoot && !m_rDoc.IsInReading() )
         {
             pTmpRoot->StartAllAction();

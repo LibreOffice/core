@@ -26,6 +26,7 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <shellres.hxx>
 #include <viewimp.hxx>
 #include <pagefrm.hxx>
@@ -83,7 +84,7 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                         const SdrPageView* pPV, const Rectangle *pRect ) const
 {
-    SwViewShell *pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().GetCurrentViewShell();
+    SwViewShell *pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     while (pSh && pSh->Imp()->GetPageView() != pPV)
         pSh = (SwViewShell*)pSh->GetNext();
     if (pSh)

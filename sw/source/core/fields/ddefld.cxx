@@ -22,6 +22,7 @@
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <editsh.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
@@ -302,7 +303,7 @@ void SwDDEFieldType::_RefCntChgd()
     {
         refLink->SetVisible( pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
         pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink );
-        if( pDoc->GetCurrentViewShell() )
+        if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
             UpdateNow();
     }
     else

@@ -20,6 +20,7 @@
 #include <editeng/formatbreakitem.hxx>
 #include <doc.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docstat.hxx>
 #include <docary.hxx>
 #include <fmtpdsc.hxx>
@@ -155,7 +156,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
  */
 void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 {
-    if( rDoc.GetCurrentLayout() ) // the layout itself ..
+    if( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ) // the layout itself ..
     {
         SwLayCacheIoImpl aIo( rStream, true );
         // We want to save the relative index, so we need the index
@@ -163,7 +164,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
         sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
         // The first page..
-        SwPageFrm* pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();
+        SwPageFrm* pPage = (SwPageFrm*)rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->Lower();
 
         aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
         aIo.OpenFlagRec( 0, 0 );
@@ -319,7 +320,7 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 {
     if( !pImpl )
         return true;
-    const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();
+    const SwRootFrm *pRootFrm = rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRootFrm )
     {
         sal_uInt16 nIndex = 0;

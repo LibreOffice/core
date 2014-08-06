@@ -20,6 +20,7 @@
 #include <doc.hxx>
 #include <DocumentStatisticsManager.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentLayoutManager.hxx>
 #include <docstat.hxx>
 #include <acorrect.hxx>
 
@@ -39,7 +40,7 @@ DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
 
 void DocumentStateManager::SetModified()
 {
-    m_rSwdoc.ClearSwLayouterEntries();
+    m_rSwdoc.GetDocumentLayoutManager().ClearSwLayouterEntries();
     // give the old and new modified state to the link
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state

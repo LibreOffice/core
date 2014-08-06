@@ -21,6 +21,7 @@
 #include "cntfrm.hxx"
 #include "doc.hxx"
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include "pam.hxx"
 #include "flyfrm.hxx"
 #include "ndtxt.hxx"
@@ -127,7 +128,7 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
         }
     }
 
-    SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
+    SwFrmFmt* pNew = pDoc->getIDocumentLayoutAccess().CopyLayoutFmt( *pFmt, aAnchor, false, false );
     ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
 }
 
@@ -171,11 +172,11 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
     {
         // disable undo while copying attribute
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-        SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
+        SwFrmFmt* pNew = pDoc->getIDocumentLayoutAccess().CopyLayoutFmt( *pFmt, aAnchor, false, false );
 
         ::sw::UndoGuard const undoGuardFmt(
             pFmt->GetDoc()->GetIDocumentUndoRedo());
-        pFmt->GetDoc()->DelLayoutFmt( pFmt );
+        pFmt->GetDoc()->getIDocumentLayoutAccess().DelLayoutFmt( pFmt );
         ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
     }
     else if( pNode->GetpSwpHints() &&

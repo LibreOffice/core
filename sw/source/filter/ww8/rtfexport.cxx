@@ -49,6 +49,7 @@
 #include <numrule.hxx>
 #include <lineinfo.hxx>
 #include <swmodule.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 #include "ww8par.hxx"
 
@@ -523,7 +524,7 @@ void RtfExport::ExportDocument_Impl()
     // Default TabSize
     Strm().WriteCharPtr(m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr()).WriteCharPtr(SAL_NEWLINE_STRING);
     // Zoom
-    SwViewShell* pViewShell(pDoc->GetCurrentViewShell());
+    SwViewShell* pViewShell(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_VIEWSCALE);

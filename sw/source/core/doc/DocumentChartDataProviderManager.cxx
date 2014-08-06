@@ -20,6 +20,7 @@
 #include <DocumentChartDataProviderManager.hxx>
 
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <vcl/svapp.hxx>
 #include <swtable.hxx>
 #include <unochart.hxx>
@@ -66,7 +67,7 @@ void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const S
             ++aIdx;
             if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
                 aName == pONd->GetChartTblName() /* OLE node is chart? */ &&
-                0 != (pONd->getLayoutFrm( m_rSwdoc.GetCurrentLayout() )) /* chart frame is not hidden */ )
+                0 != (pONd->getLayoutFrm( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
             {
                 uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
                 if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )

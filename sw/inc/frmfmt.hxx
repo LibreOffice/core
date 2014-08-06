@@ -33,12 +33,14 @@ class IMapObject;
 class SwRect;
 class SwContact;
 class SdrObject;
+namespace sw { class DocumentLayoutManager; }
 
 /// Style of a layout element.
 class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 {
     friend class SwDoc;
     friend class SwPageDesc;    ///< Is allowed to call protected CTor.
+    friend class ::sw::DocumentLayoutManager; ///< Is allowed to call protected CTor.
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> m_wXObject;

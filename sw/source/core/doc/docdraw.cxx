@@ -43,6 +43,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <poolfmt.hxx>
@@ -400,7 +401,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetFmt();
                 if( pFrmFmt )
                 {
-                    DelLayoutFmt( pFrmFmt );
+                    getIDocumentLayoutAccess().DelLayoutFmt( pFrmFmt );
                     bDelMarked = false;
                 }
             }
@@ -418,7 +419,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 {
                     rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), true );
                     --i;
-                    DelLayoutFmt( pFrmFmt );
+                    getIDocumentLayoutAccess().DelLayoutFmt( pFrmFmt );
                 }
             }
         }

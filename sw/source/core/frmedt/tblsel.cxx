@@ -28,6 +28,7 @@
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -132,7 +133,7 @@ void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
     if (rTblCrsr.IsChgd() || !rTblCrsr.GetSelectedBoxesCount())
     {
         SwTableCursor* pTCrsr = (SwTableCursor*)&rTblCrsr;
-        pTCrsr->GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *pTCrsr );
+        pTCrsr->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->MakeTblCrsrs( *pTCrsr );
     }
 
     if (rTblCrsr.GetSelectedBoxesCount())
@@ -228,10 +229,10 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         }
         const SwCntntNode *pCntNd = rCrsr.GetCntntNode();
         const SwLayoutFrm *pStart = pCntNd ?
-            pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aPtPos )->GetUpper() : 0;
+            pCntNd->getLayoutFrm( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPtPos )->GetUpper() : 0;
         pCntNd = rCrsr.GetCntntNode(false);
         const SwLayoutFrm *pEnd = pCntNd ?
-            pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aMkPos )->GetUpper() : 0;
+            pCntNd->getLayoutFrm( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aMkPos )->GetUpper() : 0;
         if( pStart && pEnd )
             GetTblSel( pStart, pEnd, rBoxes, 0, eSearchType );
     }
@@ -431,10 +432,10 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     // #i22135# - Also the content of the table could be
     //                          invisible - e.g. in a hidden section
     // Robust: check, if content was found (e.g. empty table cells)
-    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
+    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) == NULL )
             return false;
 
-    const SwLayoutFrm *pStart = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper();
+    const SwLayoutFrm *pStart = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aNullPos )->GetUpper();
     OSL_ENSURE( pStart, "without frame nothing works" );
 
     aIdx = rEndNd;
@@ -443,12 +444,12 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
         pCNd = aIdx.GetNodes().GoNextSection( &aIdx, false, false );
 
     // #i22135# - Robust: check, if content was found and if it's visible
-    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
+    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) == NULL )
     {
         return false;
     }
 
-    const SwLayoutFrm *pEnd = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper();
+    const SwLayoutFrm *pEnd = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aNullPos )->GetUpper();
     OSL_ENSURE( pEnd, "without frame nothing works" );
 
     bool bTblIsValid, bValidChartSel;
@@ -912,10 +913,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     Point aPt( 0, 0 );
 
     const SwCntntNode* pCntNd = rPam.GetCntntNode();
-    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
                                                         &aPt )->GetUpper();
     pCntNd = rPam.GetCntntNode(false);
-    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
                                                         &aPt )->GetUpper();
 
     // First, compute tables and rectangles
@@ -1431,10 +1432,10 @@ sal_uInt16 CheckMergeSel( const SwPaM& rPam )
 
     Point aPt;
     const SwCntntNode* pCntNd = rPam.GetCntntNode();
-    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
                                                         &aPt )->GetUpper();
     pCntNd = rPam.GetCntntNode(false);
-    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
                                                     &aPt )->GetUpper();
     GetTblSel( pStart, pEnd, aBoxes, 0 );
     return CheckMergeSel( aBoxes );
@@ -1961,10 +1962,10 @@ bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
     }
 
     const SwCntntNode* pCntNd = rCrsr.GetCntntNode();
-    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
                                                         &aPtPos )->GetUpper();
     pCntNd = rCrsr.GetCntntNode(false);
-    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
                                 &aMkPos )->GetUpper();
 
     SWRECTFN( pStart->GetUpper() )
