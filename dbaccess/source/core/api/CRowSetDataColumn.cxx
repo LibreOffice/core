@@ -39,16 +39,16 @@ using namespace cppu;
 using namespace osl;
 
 
-ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& _xMetaData,
+ORowSetDataColumn::ORowSetDataColumn( const Reference < XResultSetMetaData >& _xMetaData,
                                       const Reference < XRow >& _xRow,
                                       const Reference < XRowUpdate >& _xRowUpdate,
                                       sal_Int32 _nPos,
                                       const Reference< XDatabaseMetaData >& _rxDBMeta,
                                       const OUString& _rDescription,
                                       const OUString& i_sLabel,
-                                      const ORowSetCacheIterator& _rColumnValue)
+                                      const boost::function< const ORowSetValue& (sal_Int32)> &_getValue)
     :ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
-    ,m_aColumnValue(_rColumnValue)
+    ,m_pGetValue(_getValue)
     ,m_sLabel(i_sLabel)
     ,m_aDescription(_rDescription)
 {
@@ -105,16 +105,7 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
 {
     if ( PROPERTY_ID_VALUE == nHandle )
     {
-        if ( !m_aColumnValue.isNull() && m_aColumnValue->is() )
-        {
-            ::osl::Mutex* pMutex = m_aColumnValue.getMutex();
-            ::osl::MutexGuard aGuard( *pMutex );
-#if OSL_DEBUG_LEVEL > 0
-            ORowSetRow aRow = *m_aColumnValue;
-#endif
-            OSL_ENSURE((sal_Int32)aRow->get().size() > m_nPos,"Pos is greater than size of vector");
-            rValue = ((*m_aColumnValue)->get())[m_nPos].makeAny();
-        }
+        rValue = m_pGetValue(m_nPos).makeAny();
     }
     else if ( PROPERTY_ID_LABEL == nHandle && !m_sLabel.isEmpty() )
         rValue <<= m_sLabel;
@@ -179,19 +170,12 @@ Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeExce
 
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 {
-    if ( !m_aColumnValue.isNull() && m_aColumnValue->is() && (((*m_aColumnValue)->get())[m_nPos] != _rOldValue) )
+    const ORowSetValue &value(m_pGetValue(m_nPos));
+    if ( value != _rOldValue)
     {
-        sal_Int32 nHandle = PROPERTY_ID_VALUE;
+        sal_Int32 nHandle(PROPERTY_ID_VALUE);
         m_aOldValue = _rOldValue.makeAny();
-        Any aNew = ((*m_aColumnValue)->get())[m_nPos].makeAny();
-
-        fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
-    }
-    else if ( !m_aColumnValue.isNull() && !_rOldValue.isNull() )
-    {
-        sal_Int32 nHandle = PROPERTY_ID_VALUE;
-        m_aOldValue = _rOldValue.makeAny();
-        Any aNew;
+        Any aNew = value.makeAny();
 
         fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
     }
