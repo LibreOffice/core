@@ -58,6 +58,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
@@ -338,6 +339,10 @@ namespace XSLT
             {
                 try
                     {
+                        css::uno::Reference<css::io::XSeekable> xSeek(xInputStream, UNO_QUERY);
+                        if (xSeek.is())
+                            xSeek->seek(0);
+
                         // we want to be notfied when the processing is done...
                         m_tcontrol->addListener(css::uno::Reference<XStreamListener> (
                                 this));
