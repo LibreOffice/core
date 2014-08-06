@@ -32,7 +32,6 @@ public class URLHelper
      * @return [String]
      *          a file url which represent the given system path
      */
-    @SuppressWarnings("deprecation")
     public static String getFileURLFromSystemPath( File aSystemPath )
     {
         String sFileURL = null;

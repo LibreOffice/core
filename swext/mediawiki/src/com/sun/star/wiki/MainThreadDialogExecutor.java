@@ -56,7 +56,9 @@ public class MainThreadDialogExecutor implements XCallback
 
     static public boolean Close( XComponentContext xContext, XDialog xDialog )
     {
-        MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xDialog, true );
+        MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xDialog );
+        aExecutor.m_bClose = true;
+        aExecutor.m_bCalled = true; // no yielding, asynchronous closing
         return GetCallback( xContext, aExecutor );
     }
 
@@ -114,13 +116,6 @@ public class MainThreadDialogExecutor implements XCallback
     private MainThreadDialogExecutor( XDialog xDialog )
     {
         m_xDialog = xDialog;
-    }
-
-    private MainThreadDialogExecutor( XDialog xDialog, boolean bClose )
-    {
-        m_xDialog = xDialog;
-        m_bClose = true;
-        m_bCalled = true; // no yielding, asynchronous closing
     }
 
     private MainThreadDialogExecutor( XMessageBox xMessageBox )
