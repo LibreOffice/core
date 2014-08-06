@@ -1054,38 +1054,11 @@
 // !!!! double defined ID's (see below) !!!
 #define RID_OFA_AUTOCORR_DLG            (RID_OFA_START + 101)
 
-#define RID_OFA_GENERAL_OPTIONS_DLG     (RID_OFA_START + 105)
-#define RID_OFADLG_INTERNET             (RID_OFA_START + 106)
-#define RID_OFA_TABNEW_DLG              (RID_OFA_START + 107)
-#define RID_OFADLG_BROWSER              (RID_OFA_START + 108)
-#define RID_OFA_FORMNEW_DLG             (RID_OFA_START + 112)
-#define RID_OFA_TABPROPERTIES           (RID_OFA_START + 113)
-#define RID_OFADLG_REGISTRATION         (RID_OFA_START + 114)
-#define RID_OFADLG_AWCP_VALUES          (RID_OFA_START + 117)
-
 // TabPages --------------------------------------------------------------
 
 // !!!! double defined ID's (see above) !!!
 
-#define OFA_TP_APPEARANCE               (RID_OFA_START + 203)
-#define OFA_TP_TABPROPERTIES_GENERAL    (RID_OFA_START + 204)
-
-//the RID_??_TP_*  are duplicate in offids.hrc
-
-#define RID_SW_TP_LAYOUT_OPT            (RID_OFA_START + 207)
-#define RID_SW_TP_OPTINSERT_PAGE        (RID_OFA_START + 213)
 #define RID_SW_TP_OPTTEST_PAGE          (RID_OFA_START + 215)
-#define RID_SW_TP_OPTSRCVIEW            (RID_OFA_START + 216)
-#define RID_SW_TP_OPTINSERT_HTML_PAGE   (RID_OFA_START + 238)
-#define RID_SW_TP_HTML_LAYOUT_OPT       (RID_OFA_START + 241)
-#define SID_SD_TP_LAYOUT                (RID_OFA_START + 226)
-#define SID_SD_TP_SCALE                 (RID_OFA_START + 228)
-#define SID_SD_TP_GRID                  (RID_OFA_START + 229)
-#define SID_SI_TP_LAYOUT                (RID_OFA_START + 233)
-#define SID_SI_TP_GRID                  (RID_OFA_START + 235)
-#define SID_SC_TP_MISC                  (RID_OFA_START + 239)
-#define OFA_TP_TABPROPERTIES_TEXT       (RID_OFA_START + 245)
-#define OFA_TP_HELPERPROG               (RID_OFA_START + 249)
 #define STR_COLORTABLE                  (RID_OFA_START + 257)
 #define STR_SWITCH                      (RID_OFA_START + 258)
 #define SID_SC_TP_FORMULA               (RID_OFA_START + 259)
