@@ -382,9 +382,11 @@ def charactersActionForValues(nsNode, refNode):
 
 def factoryChooseAction(actionNode):
     ret = []
+    extra_space = ""
     if actionNode.hasAttribute("tokenid"):
         ret.append("    if (sal::static_int_cast<Id>(pHandler->getId()) == %s)" % idToLabel(actionNode.getAttribute("tokenid")))
         ret.append("    {")
+        extra_space = "    "
     for condNode in getChildrenByName(actionNode, "cond"):
         ret.append("    {")
         ret.append("        OOXMLPropertySetEntryToInteger aHandler(%s);" % idToLabel(condNode.getAttribute("tokenid")))
@@ -392,43 +394,44 @@ def factoryChooseAction(actionNode):
         ret.append("")
         ret.append("        if (sal::static_int_cast<Id>(aHandler.getValue()) == %s)" % idToLabel(condNode.getAttribute("value")))
         ret.append("        {")
+        extra_space = "        "
 
     if actionNode.getAttribute("action") in ("handleXNotes", "handleHdrFtr", "handleComment", "handlePicture", "handleBreak", "handleOLE", "handleFontRel"):
-        ret.append("    dynamic_cast<OOXMLFastContextHandlerProperties*>(pHandler)->%s();" % actionNode.getAttribute("action"))
+        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerProperties*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") == "propagateCharacterPropertiesAsSet":
-        ret.append("    pHandler->propagateCharacterPropertiesAsSet(%s);" % idToLabel(actionNode.getAttribute("sendtokenid")))
+        ret.append("    %spHandler->propagateCharacterPropertiesAsSet(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
     elif actionNode.getAttribute("action") in ("startCell", "endCell"):
-        ret.append("    dynamic_cast<OOXMLFastContextHandlerTextTableCell*>(pHandler)->%s();" % actionNode.getAttribute("action"))
+        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerTextTableCell*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") in ("startRow", "endRow"):
-        ret.append("    dynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler)->%s();" % actionNode.getAttribute("action"))
+        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") == "handleGridBefore":
-        ret.append("    dynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler)->%s();" % actionNode.getAttribute("action"))
+        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") in ("sendProperty", "handleHyperlink"):
-        ret.append("    dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler)->%s();" % actionNode.getAttribute("action"))
+        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerStream*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") == "fieldstart":
-        ret.append("    pHandler->startField();")
+        ret.append("    %spHandler->startField();" % (extra_space))
     elif actionNode.getAttribute("action") == "fieldsep":
-        ret.append("    pHandler->fieldSeparator();")
+        ret.append("    %spHandler->fieldSeparator();" % (extra_space))
     elif actionNode.getAttribute("action") == "fieldend":
-        ret.append("    pHandler->endField();")
+        ret.append("    %spHandler->endField();" % (extra_space))
     elif actionNode.getAttribute("action") == "printproperty":
-        ret.append("    dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler)->sendProperty(%s);" % idToLabel(actionNode.getAttribute("sendtokenid")))
+        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerStream*>(pHandler)->sendProperty(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
     elif actionNode.getAttribute("action") == "sendPropertiesWithId":
-        ret.append("    pHandler->sendPropertiesWithId(%s);" % idToLabel(actionNode.getAttribute("sendtokenid")))
+        ret.append("    %spHandler->sendPropertiesWithId(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
     elif actionNode.getAttribute("action") == "text":
-        ret.append("    pHandler->text(sText);")
+        ret.append("    %spHandler->text(sText);" % (extra_space))
     elif actionNode.getAttribute("action") == "positionOffset":
-        ret.append("    pHandler->positionOffset(sText);")
+        ret.append("    %spHandler->positionOffset(sText);" % (extra_space))
     elif actionNode.getAttribute("action") == "positivePercentage":
-        ret.append("    pHandler->positivePercentage(sText);")
+        ret.append("    %spHandler->positivePercentage(sText);" % (extra_space))
     elif actionNode.getAttribute("action") == "alignH":
-        ret.append("    pHandler->alignH(sText);")
+        ret.append("    %spHandler->alignH(sText);" % (extra_space))
     elif actionNode.getAttribute("action") == "alignV":
-        ret.append("    pHandler->alignV(sText);")
+        ret.append("    %spHandler->alignV(sText);" % (extra_space))
     elif actionNode.getAttribute("action") == "tokenproperty":
-        ret.append("    OOXMLFastHelper<OOXMLIntegerValue>::newProperty(pHandler, %s, pHandler->getToken());" % idToLabel("ooxml:token"))
+        ret.append("    %sOOXMLFastHelper<OOXMLIntegerValue>::newProperty(pHandler, %s, pHandler->getToken());" % (extra_space, idToLabel("ooxml:token")))
     else:
-        ret.append("    pHandler->%s();" % actionNode.getAttribute("action"))
+        ret.append("    %spHandler->%s();" % (extra_space, actionNode.getAttribute("action")))
 
     for condNode in getChildrenByName(actionNode, "cond"):
         ret.append("        }")
@@ -442,7 +445,7 @@ def factoryChooseAction(actionNode):
 def factoryAction(nsNode, action):
     switchblock1 = []
     for resourceNode in [i for i in getChildrenByName(nsNode, "resource") if len([j for j in getChildrenByName(i, "action") if j.getAttribute("name") == action])]:
-        switchblock1.append("    case %s:" % idForDefine(nsNode, resourceNode))
+        switchblock1.append("case %s:" % idForDefine(nsNode, resourceNode))
         for actionNode in [i for i in getChildrenByName(resourceNode, "action") if i.getAttribute("name") == action]:
             switchblock1.extend(factoryChooseAction(actionNode))
         switchblock1.append("    break;")
@@ -453,7 +456,7 @@ def factoryAction(nsNode, action):
         for resourceNode in [i for i in getChildrenByName(nsNode, "resource") if i.getAttribute("resource") == "Value"]:
             if not len(getChildrenByName(resourceNode, "attribute")):
                 resourceName = resourceNode.getAttribute("name")
-                switchblock2.append("    case %s:" % idForDefine(nsNode, resourceNode))
+                switchblock2.append("case %s:" % idForDefine(nsNode, resourceNode))
                 ret = []
                 for define in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "define") if i.getAttribute("name") == resourceName]:
                     for refNode in getChildrenByName(define, "ref"):
@@ -475,17 +478,19 @@ def factoryAction(nsNode, action):
     if len(switchblock1):
         print("    switch (nDefine)")
         print("    {")
-        print("")
         if switchblock1[-1] == "":
             switchblock1 = switchblock1[:-1]
-        print("\n        ".join(switchblock1))
+        sys.stdout.write("    ")
+        print("\n    ".join(switchblock1))
+        print()
         print("    default:")
         print("        break;")
         print("    }")
     if len(switchblock2):
         print("    switch (nDefine)")
         print("    {")
-        print("\n        ".join(switchblock2))
+        print("\n    ".join(switchblock2))
+        print()
         print("    default:")
         print("        break;")
         print("    }")
@@ -501,7 +506,6 @@ def factoryActions(nsNode):
                 actions.append(actionName)
     for action in sorted(actions):
         factoryAction(nsNode, action)
-        print()
         print()
     factoryAction(nsNode, "characters")
     print()
