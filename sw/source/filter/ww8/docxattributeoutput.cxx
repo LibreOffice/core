@@ -1004,11 +1004,18 @@ void DocxAttributeOutput::EndRun()
     // level down, to be able to prepend the actual run start attribute (just
     // before "postponed run start")
     m_pSerializer->mark(); // let's call it "actual run start"
+    bool bCloseEarlierSDT = false;
 
     if (m_bEndCharSdt)
     {
         // This is the common case: "close sdt before the current run" was requrested by the next run.
-        EndSdtBlock();
+
+        // if another sdt starts in this run, then wait
+        // as closing the sdt now, might cause nesting of sdts
+        if (m_nRunSdtPrToken > 0)
+            bCloseEarlierSDT = true;
+        else
+            EndSdtBlock();
         m_bEndCharSdt = false;
         m_bStartedCharSdt = false;
     }
@@ -1131,6 +1138,15 @@ void DocxAttributeOutput::EndRun()
         m_nRunSdtPrToken = 0;
         lcl_deleteAndResetTheLists( m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias );
     }
+
+    if (bCloseEarlierSDT)
+    {
+        m_pSerializer->mark();
+        EndSdtBlock();
+        m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+        bCloseEarlierSDT = false;
+    }
+
     m_pSerializer->mergeTopMarks();
 
     WritePostponedMath();
