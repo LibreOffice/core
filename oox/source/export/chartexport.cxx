@@ -2640,6 +2640,7 @@ void ChartExport::exportDataLabels(
             aParam.mbExport = true;
         break;
         case chart::TYPEID_DOUGHNUT:
+        case chart::TYPEID_AREA:
             // Doughnut charts don't support label placement.
             aParam.mbExport = false;
         break;
