@@ -784,10 +784,19 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
     sfx2::FileDialogHelper aDlg( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     aDlg.SetTitle( "Insert 3D Model" );
+
+#if HAVE_FEATURE_COLLADA
     aDlg.AddFilter( "All supported formats", "*.json; *.dae; *.kmz"  );
+#else
+    aDlg.AddFilter( "All supported formats", "*.json"  );
+#endif
+
     aDlg.AddFilter( "JSON - GL Transmission Format", "*.json" );
+
+#if HAVE_FEATURE_COLLADA
     aDlg.AddFilter( "DAE - COLLADA", "*.dae" );
     aDlg.AddFilter( "KMZ - Keyhole Markup language Zipped", "*.kmz"  );
+#endif
 
     OUString sURL;
     if( aDlg.Execute() == ERRCODE_NONE )

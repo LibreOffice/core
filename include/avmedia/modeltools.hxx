@@ -14,9 +14,13 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <avmedia/avmediadllapi.h>
 
+#include <config_features.h>
+
 namespace avmedia {
 
+#if HAVE_FEATURE_COLLADA
 bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput);
+#endif
 
 bool AVMEDIA_DLLPUBLIC Embed3DModel(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,

@@ -29,7 +29,9 @@
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
-#ifdef ENABLE_COLLADA2GLTF
+#include <config_features.h>
+
+#if HAVE_FEATURE_COLLADA
 #include <COLLADA2GLTFWriter.h>
 #include <GLTFAsset.h>
 #endif
@@ -42,7 +44,7 @@ using namespace boost::property_tree;
 
 namespace avmedia {
 
-#ifdef ENABLE_COLLADA2GLTF
+#if HAVE_FEATURE_COLLADA
 
 static void lcl_UnzipKmz(const OUString& rSourceURL, const OUString& rOutputFolderURL, OUString& o_rDaeFileURL)
 {
@@ -241,7 +243,8 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
         const OUString& rSourceURL, OUString& o_rEmbeddedURL)
 {
     OUString sSource = rSourceURL;
-#ifdef ENABLE_COLLADA2GLTF
+
+#if HAVE_FEATURE_COLLADA
     if( !rSourceURL.endsWithIgnoreAsciiCase(".json") )
         KmzDae2Gltf(rSourceURL, sSource);
 #endif

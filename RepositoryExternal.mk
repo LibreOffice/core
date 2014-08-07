@@ -3373,6 +3373,8 @@ endef
 
 endif # SYSTEN_LIBGLTF
 
+ifeq ($(ENABLE_COLLADA),TRUE)
+
 define gb_LinkTarget__use_opencollada_parser
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,opencollada)/COLLADABaseUtils/include \
@@ -3403,7 +3405,9 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 endef
 
-endif
+endif # ENABLE_COLLADA
+
+endif # ENABLE_GLTF
 
 ### Jars ############################################################
 
