@@ -965,7 +965,7 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
 
         // ensure that the control is visible
         // 80210 - 12/07/00 - FS
-        const Window* pCurrentWindow = dynamic_cast< const Window* >( m_pView->GetActualOutDev() );
+        const Window* pCurrentWindow = m_pView ? dynamic_cast<const Window*>(m_pView->GetActualOutDev()) : NULL;
         if ( pCurrentWindow )
         {
             awt::Rectangle aRect = xControlWindow->getPosSize();
