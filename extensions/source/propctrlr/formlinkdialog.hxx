@@ -44,19 +44,17 @@ namespace pcr
     class FormLinkDialog : public ModalDialog
     {
     private:
-        FixedText                       m_aExplanation;
-        FixedText                       m_aDetailLabel;
-        FixedText                       m_aMasterLabel;
+        FixedText*                      m_pExplanation;
+        FixedText*                      m_pDetailLabel;
+        FixedText*                      m_pMasterLabel;
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< FieldLinkRow > m_aRow1;
         ::std::auto_ptr< FieldLinkRow > m_aRow2;
         ::std::auto_ptr< FieldLinkRow > m_aRow3;
         ::std::auto_ptr< FieldLinkRow > m_aRow4;
         SAL_WNODEPRECATED_DECLARATIONS_POP
-        OKButton                        m_aOK;
-        CancelButton                    m_aCancel;
-        HelpButton                      m_aHelp;
-        PushButton                      m_aSuggest;
+        OKButton*                       m_pOK;
+        PushButton*                     m_pSuggest;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                                         m_xContext;
