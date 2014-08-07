@@ -286,7 +286,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
         throw lang::DisposedException(THROW_WHERE );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException(THROW_WHERE );
+        throw uno::RuntimeException(THROW_WHERE);
 
     uno::Sequence< OUString > aNames( m_pZipFile->GetEntryHash().size() );
     sal_Int32 nLen = 0;
