@@ -54,9 +54,7 @@ E3dDragMethod::E3dDragMethod (
     if(mbMoveFull)
     {
         // for non-visible 3D objects fallback to wireframe interaction
-        bool bInvisibleObjects(false);
-
-        for(size_t nObjs = 0; !bInvisibleObjects && nObjs < nCnt; ++nObjs)
+        for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
         {
             E3dObject* pE3dObj = dynamic_cast< E3dObject* >(rMark.GetMark(nObjs)->GetMarkedSdrObj());
 
@@ -64,14 +62,10 @@ E3dDragMethod::E3dDragMethod (
             {
                 if(!pE3dObj->HasFillStyle() && !pE3dObj->HasLineStyle())
                 {
-                    bInvisibleObjects = true;
+                    mbMoveFull = false;
+                    break;
                 }
             }
-        }
-
-        if(bInvisibleObjects)
-        {
-            mbMoveFull = false;
         }
     }
 
