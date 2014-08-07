@@ -82,7 +82,7 @@ do_configure()
       error "Kein ANT in ${ANT_HOME} gefunden."
     fi
     OPTIONS+=(
-      --with-ant-home=/cygdrive/c/ant
+      --with-ant-home="${ANT_HOME}"
       --with-jdk-home="${JDK_HOME}"
     )
   else
