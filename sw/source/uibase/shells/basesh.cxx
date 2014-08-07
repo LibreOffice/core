@@ -268,8 +268,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                 TransferableDataHelper aDataHelper(
                     TransferableDataHelper::CreateFromSystemClipboard( &rSh.GetView().GetEditWin() ) );
                 if( aDataHelper.GetXTransferable().is()
-                    && SwTransferable::IsPaste( rSh, aDataHelper )
-                    && !rSh.CrsrInsideInputFld() )
+                    && SwTransferable::IsPaste( rSh, aDataHelper ) )
                 {
                     // Temporary variables, because the shell could already be
                     // destroyed after the paste.
@@ -417,8 +416,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
             break;
 
         case SID_PASTE:
-            if( !GetView().IsPasteAllowed()
-                || rSh.CrsrInsideInputFld() )
+            if( !GetView().IsPasteAllowed() )
             {
                 rSet.DisableItem( nWhich );
             }
