@@ -155,12 +155,16 @@ struct NWFWidgetData
 // easily and quickly reset each to a default state before using
 // them
 static boost::unordered_map<long, guint>    gWidgetDefaultFlags;
-class WidgetDataVector : public std::vector<NWFWidgetData>
+class WidgetDataVector
 {
+private:
+    std::vector<NWFWidgetData> mData;
+
 public:
-    WidgetDataVector(size_t nElems = 0) : std::vector<NWFWidgetData>( nElems ) {}
-    NWFWidgetData &operator [](size_t i) { return at(i); }
-    NWFWidgetData &operator [](const SalX11Screen &s) { return at(s.getXScreen()); }
+    WidgetDataVector(size_t nElems = 0) : mData( nElems ) {}
+    size_t size() const { return mData.size(); }
+    NWFWidgetData &operator [](size_t i) { return mData.at(i); }
+    NWFWidgetData &operator [](const SalX11Screen &s) { return mData.at(s.getXScreen()); }
 };
 static WidgetDataVector gWidgetData;
 
