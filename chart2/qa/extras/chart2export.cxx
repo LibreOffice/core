@@ -72,6 +72,7 @@ public:
     void testDataLabelBordersDOCX();
     void testDataLabel3DChartDOCX();
     void testDataLabelBarChartDOCX();
+    void testDataLabelRadarChartDOCX();
     void testDataLabelDoughnutChartDOCX();
     void testDataLabelAreaChartDOCX();
     void testDataLabelDefaultLineChartDOCX();
@@ -112,6 +113,7 @@ public:
     CPPUNIT_TEST(testDataLabelBordersDOCX);
     CPPUNIT_TEST(testDataLabel3DChartDOCX);
     CPPUNIT_TEST(testDataLabelBarChartDOCX);
+    CPPUNIT_TEST(testDataLabelRadarChartDOCX);
     CPPUNIT_TEST(testDataLabelDoughnutChartDOCX);
     CPPUNIT_TEST(testDataLabelAreaChartDOCX);
     CPPUNIT_TEST(testDataLabelDefaultLineChartDOCX);
@@ -841,6 +843,21 @@ void Chart2ExportTest::testDataLabelBarChartDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLblPos", "val", "ctr");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:dLbls/c:dLblPos", "val", "inEnd");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:dLbls/c:dLblPos", "val", "inBase");
+}
+
+void Chart2ExportTest::testDataLabelRadarChartDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "radar-chart-labels.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // We must not export label position attributes for radar charts.
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:radarChart/c:ser/c:dLbls/c:dLblPos", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:radarChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
 void Chart2ExportTest::testDataLabelDoughnutChartDOCX()
