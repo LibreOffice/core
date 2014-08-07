@@ -10,9 +10,9 @@
 
 set -o errexit
 
-# To re-generate the code, you need to be on Linux (I think). You
-# might need to have done a make test-install. oox needs to be build
-# with dbglevel=2 so that DEBUG is defined.
+# To re-generate the code, you need to be on Linux (I think).
+# It is not necessary to do a make test-install, just run from instdir.
+# oox needs to be build with dbglevel=2 so that DEBUG is defined.
 
 make oox.clean && make oox dbglevel=2
 

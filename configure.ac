@@ -9868,7 +9868,7 @@ if test "$_os" = "WINNT" -a "$cross_compiling" != "yes"; then
     if test "$WITH_MINGW" = "yes"; then
         AC_PATH_PROG([UUIDGEN], [uuid])
         if test -z "$UUIDGEN"; then
-            AC_MSG_WARN([uuid is needed for test-install])
+            AC_MSG_WARN([uuid is needed for building installation sets])
         fi
     else
         # presence is already tested above in the WINDOWS_SDK_HOME check
@@ -9878,7 +9878,7 @@ if test "$_os" = "WINNT" -a "$cross_compiling" != "yes"; then
 else
     AC_PATH_PROG([UUIDGEN], [uuidgen])
     if test -z "$UUIDGEN"; then
-        AC_MSG_WARN([uuid is needed for test-install])
+        AC_MSG_WARN([uuid is needed for building installation sets])
     fi
 fi
 
