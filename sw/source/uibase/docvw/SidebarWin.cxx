@@ -185,6 +185,8 @@ SwSidebarWin::~SwSidebarWin()
         mpVScrollbar = 0;
     }
 
+    RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
+
     AnchorOverlayObject::DestroyAnchorOverlayObject( mpAnchor );
     mpAnchor = NULL;
 
