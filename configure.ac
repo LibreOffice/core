@@ -13053,7 +13053,8 @@ AC_CONFIG_FILES([config_host.mk
                  lo.xcent
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist
-                 ios/lo.xcconfig])
+                 ios/lo.xcconfig
+                 ure/source/unorc])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
