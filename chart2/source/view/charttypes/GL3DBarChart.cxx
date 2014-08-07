@@ -177,11 +177,13 @@ void RenderAnimationThread::execute()
 class RenderBenchMarkThread : public RenderThread
 {
 public:
-    RenderBenchMarkThread(GL3DBarChart * pChart):
-    RenderThread(pChart),
-    mbExecuting(false),
-    mbNeedFlyBack(false),
-    miFrameCount(0)
+    RenderBenchMarkThread(GL3DBarChart * pChart)
+        : RenderThread(pChart)
+        , mbExecuting(false)
+        , mbNeedFlyBack(false)
+        , mnStep(0)
+        , mnStepsTotal(0)
+        , miFrameCount(0)
     {
         osl_getSystemTime(&mafpsRenderStartTime);
         osl_getSystemTime(&mafpsRenderEndTime);
