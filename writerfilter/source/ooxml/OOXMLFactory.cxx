@@ -85,84 +85,84 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    if (pFactory.get() != NULL)
+    if (pFactory.get() == NULL)
+        return;
+
+    assert( dynamic_cast< sax_fastparser::FastAttributeList *>( Attribs.get() ) != NULL );
+    sax_fastparser::FastAttributeList *pAttribs;
+    pAttribs = static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
+
+    const AttributeInfo *pAttr = pFactory->getAttributeInfoArray(nDefine);
+    if (!pAttr)
+        return;
+
+    for (; pAttr->m_nToken != -1; ++pAttr)
     {
-        assert( dynamic_cast< sax_fastparser::FastAttributeList *>( Attribs.get() ) != NULL );
-        sax_fastparser::FastAttributeList *pAttribs;
-        pAttribs = static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
+        sal_Int32 nToken = pAttr->m_nToken;
+        if (!pAttribs->hasAttribute(nToken))
+            continue;
 
-        const AttributeInfo *pAttr = pFactory->getAttributeInfoArray(nDefine);
-        if (!pAttr)
-            return;
+        Id nId = pFactory->getResourceId(nDefine, nToken);
 
-        for (; pAttr->m_nToken != -1; ++pAttr)
+        switch (pAttr->m_nResource)
         {
-            sal_Int32 nToken = pAttr->m_nToken;
-            if (pAttribs->hasAttribute(nToken))
+        case RT_Boolean:
             {
-                Id nId = pFactory->getResourceId(nDefine, nToken);
-
-                switch (pAttr->m_nResource)
+                const char *pValue = "";
+                pAttribs->getAsChar(nToken, pValue);
+                OOXMLValue::Pointer_t xValue(OOXMLBooleanValue::Create(pValue));
+                pHandler->newProperty(nId, xValue);
+                pFactory->attributeAction(pHandler, nToken, xValue);
+            }
+            break;
+        case RT_String:
+            {
+                OUString aValue(pAttribs->getValue(nToken));
+                OOXMLValue::Pointer_t xValue(new OOXMLStringValue(aValue));
+                pHandler->newProperty(nId, xValue);
+                pFactory->attributeAction(pHandler, nToken, xValue);
+            }
+            break;
+        case RT_Integer:
+            {
+                sal_Int32 nValue;
+                pAttribs->getAsInteger(nToken,nValue);
+                OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
+                pHandler->newProperty(nId, xValue);
+                pFactory->attributeAction(pHandler, nToken, xValue);
+            }
+            break;
+        case RT_Hex:
+            {
+                const char *pValue = "";
+                pAttribs->getAsChar(nToken, pValue);
+                OOXMLValue::Pointer_t xValue(new OOXMLHexValue(pValue));
+                pHandler->newProperty(nId, xValue);
+                pFactory->attributeAction(pHandler, nToken, xValue);
+            }
+            break;
+        case RT_UniversalMeasure:
+            {
+                const char *pValue = "";
+                pAttribs->getAsChar(nToken, pValue);
+                OOXMLValue::Pointer_t xValue(new OOXMLUniversalMeasureValue(pValue));
+                pHandler->newProperty(nId, xValue);
+                pFactory->attributeAction(pHandler, nToken, xValue);
+            }
+            break;
+        case RT_List:
+            {
+                sal_uInt32 nValue;
+                if (pFactory->getListValue(pAttr->m_nRef, Attribs->getValue(nToken), nValue))
                 {
-                case RT_Boolean:
-                    {
-                        const char *pValue = "";
-                        pAttribs->getAsChar(nToken, pValue);
-                        OOXMLValue::Pointer_t xValue(OOXMLBooleanValue::Create(pValue));
-                        pHandler->newProperty(nId, xValue);
-                        pFactory->attributeAction(pHandler, nToken, xValue);
-                    }
-                    break;
-                case RT_String:
-                    {
-                        OUString aValue(pAttribs->getValue(nToken));
-                        OOXMLValue::Pointer_t xValue(new OOXMLStringValue(aValue));
-                        pHandler->newProperty(nId, xValue);
-                        pFactory->attributeAction(pHandler, nToken, xValue);
-                    }
-                    break;
-                case RT_Integer:
-                    {
-                        sal_Int32 nValue;
-                        pAttribs->getAsInteger(nToken,nValue);
-                        OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
-                        pHandler->newProperty(nId, xValue);
-                        pFactory->attributeAction(pHandler, nToken, xValue);
-                    }
-                    break;
-                case RT_Hex:
-                    {
-                        const char *pValue = "";
-                        pAttribs->getAsChar(nToken, pValue);
-                        OOXMLValue::Pointer_t xValue(new OOXMLHexValue(pValue));
-                        pHandler->newProperty(nId, xValue);
-                        pFactory->attributeAction(pHandler, nToken, xValue);
-                    }
-                    break;
-                case RT_UniversalMeasure:
-                    {
-                        const char *pValue = "";
-                        pAttribs->getAsChar(nToken, pValue);
-                        OOXMLValue::Pointer_t xValue(new OOXMLUniversalMeasureValue(pValue));
-                        pHandler->newProperty(nId, xValue);
-                        pFactory->attributeAction(pHandler, nToken, xValue);
-                    }
-                    break;
-                case RT_List:
-                    {
-                        sal_uInt32 nValue;
-                        if (pFactory->getListValue(pAttr->m_nRef, Attribs->getValue(nToken), nValue))
-                        {
-                            OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
-                            pHandler->newProperty(nId, xValue);
-                            pFactory->attributeAction(pHandler, nToken, xValue);
-                        }
-                    }
-                    break;
-                default:
-                    break;
+                    OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
+                    pHandler->newProperty(nId, xValue);
+                    pFactory->attributeAction(pHandler, nToken, xValue);
                 }
             }
+            break;
+        default:
+            break;
         }
     }
 }
