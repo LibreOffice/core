@@ -21,7 +21,6 @@
 #include "vcl/window.hxx"
 
 #include <gtk/gtk.h>
-#include <gtk/gtkunixprint.h>
 
 #include <comphelper/processfactory.hxx>
 
