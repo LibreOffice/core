@@ -49,7 +49,6 @@ E3dDragMethod::E3dDragMethod (
 {
     // Create a unit for all the 3D objects present in the selection
     const size_t nCnt(rMark.GetMarkCount());
-    static bool bDoInvalidate(false);
 
     if(mbMoveFull)
     {
@@ -87,13 +86,6 @@ E3dDragMethod::E3dDragMethod (
                 // get transform between object and world, normally scene transform
                 aNewUnit.maInvDisplayTransform = aNewUnit.maDisplayTransform = pE3dObj->GetParentObj()->GetFullTransform();
                 aNewUnit.maInvDisplayTransform.invert();
-            }
-
-            // Invalidate SnapRects of the objects involved, to force a
-            // recalculation for setting the marker
-            if(bDoInvalidate)
-            {
-                pE3dObj->SetRectsDirty();
             }
 
             if(!mbMoveFull)
