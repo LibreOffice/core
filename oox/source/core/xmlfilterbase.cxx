@@ -679,7 +679,7 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     uno::Reference<beans::XPropertyAccess> xUserDefinedProperties(xProperties->getUserDefinedProperties(), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aUserDefinedProperties(xUserDefinedProperties->getPropertyValues());
     it = aUserDefinedProperties.find("Company");
-    if (it != aStats.end())
+    if (it != aUserDefinedProperties.end())
     {
         OUString aValue;
         if (it->second >>= aValue)
