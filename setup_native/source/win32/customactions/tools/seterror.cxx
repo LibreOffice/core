@@ -44,6 +44,7 @@ inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
     va_start( args, pFormat );
     StringCchVPrintf( buffer, sizeof(buffer), pFormat, args );
     OutputDebugString( buffer );
+    va_end(args);
 }
 #else
 static inline void OutputDebugStringFormat( LPCTSTR, ... )

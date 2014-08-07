@@ -80,6 +80,7 @@ inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
     va_start( args, pFormat );
     StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
     OutputDebugStringA( buffer );
+    va_end(args);
 }
 #else
 static inline void OutputDebugStringFormat( LPCSTR, ... )

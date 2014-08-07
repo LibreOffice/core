@@ -76,6 +76,7 @@ static void syslog( int priority, const char * message, ...)
     buffer = malloc( len * sizeof(char) );
     if ( buffer ) { vsprintf( buffer, message, args ); OutputDebugString( buffer ); free( buffer ); }
     WSASetLastError( err );
+    va_end(args);
 }
 #else
 
