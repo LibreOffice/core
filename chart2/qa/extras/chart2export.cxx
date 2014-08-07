@@ -72,6 +72,7 @@ public:
     void testDataLabelBordersDOCX();
     void testDataLabel3DChartDOCX();
     void testDataLabelDoughnutChartDOCX();
+    void testDataLabelDefaultLineChartDOCX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -109,6 +110,7 @@ public:
     CPPUNIT_TEST(testDataLabelBordersDOCX);
     CPPUNIT_TEST(testDataLabel3DChartDOCX);
     CPPUNIT_TEST(testDataLabelDoughnutChartDOCX);
+    CPPUNIT_TEST(testDataLabelDefaultLineChartDOCX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -835,6 +837,29 @@ void Chart2ExportTest::testDataLabelDoughnutChartDOCX()
     // We must not export label position attributes for doughnut charts.
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLblPos", 0);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
+}
+
+void Chart2ExportTest::testDataLabelDefaultLineChartDOCX()
+{
+    // This file was created by Word 2007, which doesn't provide default data
+    // label position (2010 does).  Make sure its default data label position
+    // is RIGHT when exporting.
+
+    load("/chart2/qa/extras/data/docx/", "line-chart-label-default-placement.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    reload("Office Open XML Text");
+
+    xChartDoc.set(getChartDocFromWriter(0), uno::UNO_QUERY);
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPropSet.is());
+    sal_Int32 nLabelPlacement = -1;
+    if (xPropSet->getPropertyValue("LabelPlacement") >>= nLabelPlacement)
+        // This option may not be set.  Check its value only when it's set.
+        CPPUNIT_ASSERT_MESSAGE("Line chart's default label placement should be 'right'.", nLabelPlacement == chart::DataLabelPlacement::RIGHT);
 }
 
 void Chart2ExportTest::testBarChartRotation()

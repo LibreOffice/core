@@ -44,6 +44,7 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
