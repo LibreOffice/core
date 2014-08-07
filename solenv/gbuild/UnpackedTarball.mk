@@ -413,7 +413,7 @@ endef
 %.rebuild :
 	if [ -f $(call gb_UnpackedTarball_get_target,$*) ] ; then \
 		touch $(call gb_UnpackedTarball_get_target,$*) ; \
-		make ;\
+		$(MAKE) ;\
 	fi
 
 %.genpatch :
