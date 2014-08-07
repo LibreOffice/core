@@ -277,8 +277,6 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             pNewText = rOutl.CreateParaObject( 0, nParaAnz );
         }
 
-        // we do not need the bookmark at the overflowing check anymore.
-        rOutl.ClearOverflowingParaNum();
 
         // need to end edit mode early since SetOutlinerParaObject already
         // uses GetCurrentBoundRect() which needs to take the text into account
@@ -286,6 +284,9 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         mbInEditMode = false;
         SetOutlinerParaObject(pNewText);
     }
+
+    // we do not need the bookmark at the overflowing check anymore.
+    rOutl.ClearOverflowingParaNum();
 
     pEdtOutl = NULL;
     rOutl.Clear();
