@@ -19,6 +19,8 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/viewfac.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
 #include <rtl/ustrbuf.hxx>
 
 SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldSh )
