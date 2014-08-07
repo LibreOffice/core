@@ -1295,39 +1295,29 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     }
 
     SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-    const SwFmtSurround& rSurround = pFmt->GetSurround();
-    const bool bWrapThrough =
-        rSurround.GetSurround() == SURROUND_THROUGHT;
-    SwTwips nBaseOfstForFly = 0;
-    const SwFrm* pTmpFrm = pFrm ? pFrm : pCnt;
-    if ( pTmpFrm->IsTxtFrm() )
-        nBaseOfstForFly =
-            ((SwTxtFrm*)pTmpFrm)->GetBaseOfstForFly( !bWrapThrough );
 
     if( bVert )
     {
         if( !pFrm )
-            nX += rNew.Y() - pCnt->Frm().Top() - nBaseOfstForFly;
+            nX += rNew.Y() - pCnt->Frm().Top();
         else
-            nX = rNew.Y() - pFrm->Frm().Top() - nBaseOfstForFly;
+            nX = rNew.Y() - pFrm->Frm().Top();
     }
     else
     {
         if( !pFrm )
         {
             if ( pCnt->IsRightToLeft() )
-                nX += pCnt->Frm().Right() - rNew.X() - Frm().Width() +
-                      nBaseOfstForFly;
+                nX += pCnt->Frm().Right() - rNew.X() - Frm().Width();
             else
-                nX += rNew.X() - pCnt->Frm().Left() - nBaseOfstForFly;
+                nX += rNew.X() - pCnt->Frm().Left();
         }
         else
         {
             if ( pFrm->IsRightToLeft() )
-                nX += pFrm->Frm().Right() - rNew.X() - Frm().Width() +
-                      nBaseOfstForFly;
+                nX += pFrm->Frm().Right() - rNew.X() - Frm().Width();
             else
-                nX = rNew.X() - pFrm->Frm().Left() - nBaseOfstForFly;
+                nX = rNew.X() - pFrm->Frm().Left();
         }
     }
     GetFmt()->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
