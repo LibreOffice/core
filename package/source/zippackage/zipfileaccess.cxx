@@ -350,7 +350,7 @@ sal_Bool SAL_CALL OZipFileAccess::hasElements()
         throw lang::DisposedException(THROW_WHERE );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException(THROW_WHERE );
+        throw uno::RuntimeException(THROW_WHERE);
 
     return ( m_pZipFile->GetEntryHash().size() != 0 );
 }
