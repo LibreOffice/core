@@ -7710,42 +7710,35 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             i->second >>= aGrabBagSeq;
-            OUString sVal, sShdFill, sShdColor,
-                    sThemeColor, sThemeTint, sThemeShade,
-                    sThemeFill, sThemeFillTint, sThemeFillShade;
+
             for (sal_Int32 j=0; j < aGrabBagSeq.getLength(); ++j)
             {
+                OString sVal = OUStringToOString(aGrabBagSeq[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+
+                if (sVal.isEmpty())
+                    continue;
+
                 if (aGrabBagSeq[j].Name == "val")
-                    aGrabBagSeq[j].Value >>= sVal;
+                    AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_val), sVal.getStr());
                 else if (aGrabBagSeq[j].Name == "color")
-                    aGrabBagSeq[j].Value >>= sShdColor;
+                    AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_color), sVal.getStr());
                 else if (aGrabBagSeq[j].Name == "themeColor")
-                    aGrabBagSeq[j].Value >>= sThemeColor;
+                    AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeColor), sVal.getStr());
                 else if (aGrabBagSeq[j].Name == "themeTint")
-                    aGrabBagSeq[j].Value >>= sThemeTint;
+                    AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeTint), sVal.getStr());
                 else if (aGrabBagSeq[j].Name == "themeShade")
-                    aGrabBagSeq[j].Value >>= sThemeShade;
+                    AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeShade), sVal.getStr());
                 else if (aGrabBagSeq[j].Name == "fill")
-                    aGrabBagSeq[j].Value >>= sShdFill;
+                    AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_fill), sVal.getStr());
                 else if (aGrabBagSeq[j].Name == "themeFill")
-                    aGrabBagSeq[j].Value >>= sThemeFill;
+                    AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeFill), sVal.getStr());
                 else if (aGrabBagSeq[j].Name == "themeFillTint")
-                    aGrabBagSeq[j].Value >>= sThemeFillTint;
+                    AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeFillTint), sVal.getStr());
                 else if (aGrabBagSeq[j].Name == "themeFillShade")
-                    aGrabBagSeq[j].Value >>= sThemeFillShade;
+                    AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_themeFillShade), sVal.getStr());
                 else if (aGrabBagSeq[j].Name == "originalColor")
                     aGrabBagSeq[j].Value >>= m_sOriginalBackgroundColor;
             }
-            AddToAttrList(m_pBackgroundAttrList, 9,
-                    FSNS(XML_w, XML_val), OUStringToOString(sVal, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_color), OUStringToOString(sShdColor, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_themeColor), OUStringToOString(sThemeColor, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_themeTint), OUStringToOString(sThemeTint, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_themeShade), OUStringToOString(sThemeShade, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_fill), OUStringToOString(sShdFill, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_themeFill), OUStringToOString(sThemeFill, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_themeFillTint), OUStringToOString(sThemeFillTint, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_themeFillShade), OUStringToOString(sThemeFillShade, RTL_TEXTENCODING_UTF8).getStr());
         }
         else if (i->first == "SdtPr")
         {

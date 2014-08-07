@@ -3474,6 +3474,20 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80902, "fdo80902.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:docGrid", "type", "lines");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testParaShading, "para-shading.docx")
+{
+    // Make sure the themeColor attribute is not written when it would be empty.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        xmlXPathObjectPtr pXPath = getXPathNode(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:shd");
+        xmlNodeSetPtr pXmlNodes = pXPath->nodesetval;
+        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+        // The attribute existed, so xmlGetProp() returned non-NULL.
+        CPPUNIT_ASSERT_EQUAL(static_cast<xmlChar*>(0), xmlGetProp(pXmlNode, BAD_CAST("themeColor")));
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
 {
     // Test import and export of a section's headerf/footerf properties.
