@@ -625,7 +625,7 @@ const SwTOXBase* SwSection::GetTOXBase() const
     return pRet;
 }
 
-SwSectionFmt::SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc )
+SwSectionFmt::SwSectionFmt( SwFrmFmt* pDrvdFrm, SwDoc *pDoc )
     : SwFrmFmt( pDoc->GetAttrPool(), OUString(), pDrvdFrm )
 {
     LockModify();

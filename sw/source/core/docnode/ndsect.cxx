@@ -504,9 +504,8 @@ SwSection* SwDoc::GetCurrSection( const SwPosition& rPos ) const
 
 SwSectionFmt* SwDoc::MakeSectionFmt( SwSectionFmt *pDerivedFrom )
 {
-    if( !pDerivedFrom )
-        pDerivedFrom = (SwSectionFmt*)mpDfltFrmFmt;
-    SwSectionFmt* pNew = new SwSectionFmt( pDerivedFrom, this );
+    SwSectionFmt* pNew = new SwSectionFmt(
+        pDerivedFrom == 0 ? mpDfltFrmFmt : pDerivedFrom, this );
     mpSectionFmtTbl->push_back( pNew );
     return pNew;
 }

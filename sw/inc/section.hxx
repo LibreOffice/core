@@ -291,7 +291,7 @@ class SW_DLLPUBLIC SwSectionFmt
     SAL_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
 protected:
-    SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc );
+    SwSectionFmt( SwFrmFmt* pDrvdFrm, SwDoc *pDoc );
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
 
 public:
