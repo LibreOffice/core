@@ -1,5 +1,5 @@
 /**
- * Description: basic operations on Arrays 
+ * Description: basic operations on Arrays
  *
  * @ Author        Create/Modi     Note
  * Xiaofeng Xie    Oct. 9, 2002

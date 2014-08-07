@@ -50,7 +50,7 @@
  *     optimization. Genetic and Evolutionary Computation Conference (GECCO),
  *     Seattle, WA, USA, 2004: 238-250
  *     -> a generate-and-test behavior
- *     
+ *
  */
 
 package net.adaptivebox.deps.behavior;
@@ -62,12 +62,12 @@ import net.adaptivebox.space.*;
 
 public class PSGTBehavior extends AbsGTBehavior {
   // Two normally choices for (c1, c2, weight), i.e., (2, 2, 0.4), or (1.494, 1.494, 0.729)
-  // The first is used in dissipative PSO (cf. [4]) as CL>0, and the second is achieved by using 
+  // The first is used in dissipative PSO (cf. [4]) as CL>0, and the second is achieved by using
   // constriction factors (cf. [3])
   public double c1=2;
   public double c2=2;
   public double weight = 0.4; //inertia weight
-  
+
   public double CL=0;  //See ref[4], normally be 0.001~0.005
 
   //the own memory: store the point that generated in old learning cycle

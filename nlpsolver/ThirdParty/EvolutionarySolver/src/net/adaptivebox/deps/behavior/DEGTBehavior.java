@@ -3,8 +3,8 @@
 
   #Supported parameters:
   NAME    VALUE_type   Range      DefaultV        Description
-  FACTOR   real        (0, 1.2]   0.5  	        DEAgent: scale constant
-  CR       real        [0, 1]     0.9  	        DEAgent: crossover constant
+  FACTOR   real        (0, 1.2]   0.5           DEAgent: scale constant
+  CR       real        [0, 1]     0.9           DEAgent: crossover constant
   //Other choices for FACTOR and CR: (0.5, 0.1)
 
  *
@@ -48,7 +48,7 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
 
   public void generateBehavior(SearchPoint trailPoint, ProblemEncoder problemEncoder) {
     SearchPoint gbest_t = socialLib.getGbest();
-    
+
     BasicPoint[] referPoints = getReferPoints();
     int DIMENSION = problemEncoder.getDesignSpace().getDimension();
     int rj = RandomGenerator.intRangeRandom(0, DIMENSION-1);
