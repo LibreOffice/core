@@ -84,12 +84,13 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     bool bCallPrepare = false;
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    if( RES_ATTRSET_CHG == nWhich )
+    if (RES_ATTRSET_CHG == nWhich && pNew)
     {
-        if( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
-            GetItemState( RES_SURROUND, false ) ||
+        if(pOld &&
+            (SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
+            GetItemState(RES_SURROUND, false) ||
             SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
-            GetItemState( RES_FRMMACRO, false ) )
+            GetItemState(RES_FRMMACRO, false)) )
         {
             SwAttrSetChg aOld( *(SwAttrSetChg*)pOld );
             SwAttrSetChg aNew( *(SwAttrSetChg*)pNew );
