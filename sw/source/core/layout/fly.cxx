@@ -985,7 +985,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_URL:
             // The interface changes the frame size when interacting with text frames,
             // the Map, however, needs to be relative to FrmSize().
-            if ( (!Lower() || !Lower()->IsNoTxtFrm()) &&
+            if ( (!Lower() || !Lower()->IsNoTxtFrm()) && pNew && pOld &&
                  ((SwFmtURL*)pNew)->GetMap() && ((SwFmtURL*)pOld)->GetMap() )
             {
                 const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
@@ -1006,6 +1006,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         case RES_CHAIN:
+            if (pNew)
             {
                 SwFmtChain *pChain = (SwFmtChain*)pNew;
                 if ( pChain->GetNext() )
