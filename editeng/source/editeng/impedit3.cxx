@@ -419,8 +419,6 @@ void ImpEditEngine::FormatDoc()
                 // XXX: This may not work all the time: imp. edit engine is a shared resource!!
                         // Can it be that two boxes modify it before it's used?
                 UpdateOverflowingParaNum( nPara );
-
-                fprintf(stderr, "[CHAINING] Setting first overflowing para: %d\n", nPara);
             }
 
             // InvalidRect set only once...
@@ -4606,8 +4604,10 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
 void ImpEditEngine::UpdateOverflowingParaNum(sal_Int32 nPara)
 {
     // update if not already updated
-    if ( mnOverflowingPara == -1 )
+    if ( mnOverflowingPara == -1 ) {
         mnOverflowingPara = nPara;
+        fprintf(stderr, "[CHAINING] Setting first overflowing para: %d\n", nPara);
+    }
     // XXX: where is this reset?
 }
 
