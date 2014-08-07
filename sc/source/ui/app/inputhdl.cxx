@@ -1121,7 +1121,7 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
 }
 
 namespace {
-    
+
 bool needToExtendSelection(const OUString& rSelectedText, const OUString& rInsertText)
 {
     SAL_DEBUG(rSelectedText);
@@ -1138,12 +1138,12 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
         pView->SetSelection(aSel);
         pView->SelectCurrentWord();
 
-        // a dot is a word separator so we need special
-        // treatment for any formula containing a dot
-        if(rInsert.indexOf(".") != -1)
+        // a dot and underscore are word separators so we need special
+        // treatment for any formula containing a dot or underscore
+        if(rInsert.indexOf(".") != -1 || rInsert.indexOf("_") != -1)
         {
             // need to make sure that we replace also the part before the dot
-            // incrementally go through the word to find the match with the insert string
+            // go through the word to find the match with the insert string
             aSel = pView->GetSelection();
             ESelection aOldSelection = aSel;
             OUString aSelectedText = pView->GetSelected();
@@ -1156,6 +1156,7 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
                 pView->SelectCurrentWord();
                 aSelectedText = pView->GetSelected();
             }
+            aSel.nStartPos -= ( aSelectedText.getLength() - 1 );
             aSel.nEndPos = aOldSelection.nEndPos;
             pView->SetSelection(aSel);
         }
