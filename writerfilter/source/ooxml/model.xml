@@ -847,7 +847,7 @@
       <value name="perspectiveRelaxedModerately" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveRelaxedModerately">perspectiveRelaxedModerately</value>
     </resource>
   </namespace>
-  <namespace name="dml-baseStylesheet" file="dml-baseStylesheet.rng" todo="ignore">
+  <namespace name="dml-baseStylesheet" file="dml-baseStylesheet.rng">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- ISO RELAX NG Schema -->
       <define name="ST_StyleMatrixColumnIndex">
@@ -1157,7 +1157,7 @@
       <element name="extLst" tokenid="ooxml:CT_BaseStyles_extLst"/>
     </resource>
   </namespace>
-  <namespace name="dml-textCharacter" file="dml-textCharacter.rng" todo="ignore">
+  <namespace name="dml-textCharacter" file="dml-textCharacter.rng">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeEffects.rng"/>
@@ -1502,7 +1502,7 @@
       <value name="all" tokenid="ooxml:Value_drawingml_ST_TextCapsType_all">all</value>
     </resource>
   </namespace>
-  <namespace name="dml-shapeEffects" file="dml-shapeEffects.rng" todo="ignore">
+  <namespace name="dml-shapeEffects" file="dml-shapeEffects.rng">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- start = blip -->
       <define name="CT_AlphaBiLevelEffect">
@@ -2711,7 +2711,7 @@
       <attribute name="name" tokenid="ooxml:CT_EffectContainer_name"/>
     </resource>
   </namespace>
-  <namespace name="dml-shapeLineProperties" file="dml-shapeLineProperties.rng" todo="ignore">
+  <namespace name="dml-shapeLineProperties" file="dml-shapeLineProperties.rng">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeEffects.rng"/>
@@ -3020,7 +3020,7 @@
       <attribute name="algn" tokenid="ooxml:CT_LineProperties_algn"/>
     </resource>
   </namespace>
-  <namespace name="dml-shapeProperties" file="dml-shapeProperties.rng" todo="ignore">
+  <namespace name="dml-shapeProperties" file="dml-shapeProperties.rng">
     <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shape3DStyles.rng"/>
@@ -4382,7 +4382,7 @@
     </resource>
     <resource name="ST_DrawingElementId" resource="Integer"/>
   </namespace>
-  <namespace name="dml-documentProperties" file="dml-documentProperties.rng" todo="ignore">
+  <namespace name="dml-documentProperties" file="dml-documentProperties.rng">
     <grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeGeometry.rng"/>
@@ -6653,7 +6653,7 @@
       </define>
     </grammar>
   </namespace>
-  <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng" todo="ignore">
+  <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <define name="ST_ShapeType">
           <choice>
@@ -9843,7 +9843,7 @@
     </resource>
 
   </namespace>
-  <namespace name="vml-main" file="vml-main.rng" todo="ignore">
+  <namespace name="vml-main" file="vml-main.rng">
     <start name="shape"/>
     <start name="shapetype"/>
     <start name="group"/>
