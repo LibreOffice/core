@@ -826,7 +826,10 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         case CTX_EDIT:
         {
             OSL_ENSURE(pCont, "edit without entry ? " );
-            EditContent(pCont);
+            if (pCont)
+            {
+                EditContent(pCont);
+            }
         }
         break;
         case CTX_EDIT_LINK:
