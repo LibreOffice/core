@@ -42,9 +42,7 @@ public class SearchPoint extends BasicPoint implements IEncodeEngine {
   }
 
   private void importEncodeInfo(double[] info) {
-    for(int i=0; i<encodeInfo.length; i++) {
-      encodeInfo[i] = info[i];
-    }
+    System.arraycopy(info, 0, encodeInfo, 0, encodeInfo.length);
   }
 
   private void importEncodeInfo(IEncodeEngine point) {
