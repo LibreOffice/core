@@ -19,7 +19,6 @@
 
 
 #include "formlinkdialog.hxx"
-#include "formlinkdialog.hrc"
 
 #include "modulepcr.hxx"
 #include "formresid.hrc"
@@ -27,6 +26,8 @@
 #include <vcl/combobox.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/tabpage.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/localresaccess.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
@@ -60,17 +61,16 @@ namespace pcr
 
     //= FieldLinkRow
 
-    class FieldLinkRow : public Window
+    class FieldLinkRow : public TabPage
     {
     private:
-        ComboBox    m_aDetailColumn;
-        FixedText   m_aEqualSign;
-        ComboBox    m_aMasterColumn;
+        ComboBox*   m_pDetailColumn;
+        ComboBox*   m_pMasterColumn;
 
         Link        m_aLinkChangeHandler;
 
     public:
-        FieldLinkRow( Window* _pParent, const ResId& _rId );
+        FieldLinkRow( Window* _pParent );
 
         inline void         SetLinkChangeHandler( const Link& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
 
@@ -92,25 +92,23 @@ namespace pcr
     };
 
 
-    FieldLinkRow::FieldLinkRow( Window* _pParent, const ResId& _rId )
-        :Window( _pParent, _rId )
-        ,m_aDetailColumn( this, ResId( 1, *_rId.GetResMgr() ) )
-        ,m_aEqualSign   ( this, ResId( 1, *_rId.GetResMgr() ) )
-        ,m_aMasterColumn( this, ResId( 2, *_rId.GetResMgr() ) )
+    FieldLinkRow::FieldLinkRow( Window* _pParent )
+        :TabPage( _pParent, "FieldLinkRow", "modules/spropctrlr/ui/fieldlinkrow.ui" )
     {
-        FreeResource();
+        get(m_pDetailColumn, "detailCombobox");
+        get(m_pMasterColumn, "masterCombobox");
 
-        m_aDetailColumn.SetDropDownLineCount( 10 );
-        m_aMasterColumn.SetDropDownLineCount( 10 );
+        m_pDetailColumn->SetDropDownLineCount( 10 );
+        m_pMasterColumn->SetDropDownLineCount( 10 );
 
-        m_aDetailColumn.SetModifyHdl( LINK( this, FieldLinkRow, OnFieldNameChanged ) );
-        m_aMasterColumn.SetModifyHdl( LINK( this, FieldLinkRow, OnFieldNameChanged ) );
+        m_pDetailColumn->SetModifyHdl( LINK( this, FieldLinkRow, OnFieldNameChanged ) );
+        m_pMasterColumn->SetModifyHdl( LINK( this, FieldLinkRow, OnFieldNameChanged ) );
     }
 
 
     void FieldLinkRow::fillList( LinkParticipant _eWhich, const Sequence< OUString >& _rFieldNames )
     {
-        ComboBox* pBox = ( _eWhich == eDetailField ) ? &m_aDetailColumn : &m_aMasterColumn;
+        ComboBox* pBox = ( _eWhich == eDetailField ) ? m_pDetailColumn : m_pMasterColumn;
 
         const OUString* pFieldName    = _rFieldNames.getConstArray();
         const OUString* pFieldNameEnd = pFieldName + _rFieldNames.getLength();
@@ -121,7 +119,7 @@ namespace pcr
 
     bool FieldLinkRow::GetFieldName( LinkParticipant _eWhich, OUString& /* [out] */ _rName ) const
     {
-        const ComboBox* pBox = ( _eWhich == eDetailField ) ? &m_aDetailColumn : &m_aMasterColumn;
+        const ComboBox* pBox = ( _eWhich == eDetailField ) ? m_pDetailColumn : m_pMasterColumn;
         _rName = pBox->GetText();
         return !_rName.isEmpty();
     }
@@ -129,7 +127,7 @@ namespace pcr
 
     void FieldLinkRow::SetFieldName( LinkParticipant _eWhich, const OUString& _rName )
     {
-        ComboBox* pBox = ( _eWhich == eDetailField ) ? &m_aDetailColumn : &m_aMasterColumn;
+        ComboBox* pBox = ( _eWhich == eDetailField ) ? m_pDetailColumn : m_pMasterColumn;
         pBox->SetText( _rName );
     }
 
@@ -142,6 +140,11 @@ namespace pcr
         return 0L;
     }
 
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFieldLinkRow(Window *pParent, VclBuilder::stringmap &)
+    {
+        return new FieldLinkRow(pParent);
+    }
+
 
     //= FormLinkDialog
 
@@ -151,29 +154,32 @@ namespace pcr
             const OUString& _sExplanation,
             const OUString& _sDetailLabel,
             const OUString& _sMasterLabel)
-        :ModalDialog( _pParent, PcrRes( RID_DLG_FORMLINKS ) )
-        ,m_aExplanation( this, PcrRes( FT_EXPLANATION  ) )
-        ,m_aDetailLabel( this, PcrRes( FT_DETAIL_LABEL ) )
-        ,m_aMasterLabel( this, PcrRes( FT_MASTER_LABEL ) )
-        ,m_aRow1       ( new FieldLinkRow( this, PcrRes( 1 ) ) )
-        ,m_aRow2       ( new FieldLinkRow( this, PcrRes( 2 ) ) )
-        ,m_aRow3       ( new FieldLinkRow( this, PcrRes( 3 ) ) )
-        ,m_aRow4       ( new FieldLinkRow( this, PcrRes( 4 ) ) )
-        ,m_aOK         ( this, PcrRes( PB_OK           ) )
-        ,m_aCancel     ( this, PcrRes( PB_CANCEL       ) )
-        ,m_aHelp       ( this, PcrRes( PB_HELP         ) )
-        ,m_aSuggest    ( this, PcrRes( PB_SUGGEST      ) )
-        ,m_xContext    ( _rxContext        )
+        :ModalDialog( _pParent, "FormLinks", "modules/spropctrlr/ui/formlinksdialog.ui" )
+        ,m_aRow1       ( new FieldLinkRow( get<VclVBox>("box") ) )
+        ,m_aRow2       ( new FieldLinkRow( get<VclVBox>("box") ) )
+        ,m_aRow3       ( new FieldLinkRow( get<VclVBox>("box") ) )
+        ,m_aRow4       ( new FieldLinkRow( get<VclVBox>("box") ) )
+        ,m_xContext    ( _rxContext )
         ,m_xDetailForm( _rxDetailForm )
         ,m_xMasterForm( _rxMasterForm )
         ,m_sDetailLabel(_sDetailLabel)
         ,m_sMasterLabel(_sMasterLabel)
     {
-        FreeResource();
-        if ( !_sExplanation.isEmpty() )
-            m_aExplanation.SetText(_sExplanation);
+        get(m_pExplanation, "explanationLabel");
+        get(m_pDetailLabel, "detailLabel");
+        get(m_pMasterLabel, "masterLabel");
+        get(m_pOK, "ok");
+        get(m_pSuggest, "suggestButton");
+        m_aRow1->Show();
+        m_aRow2->Show();
+        m_aRow3->Show();
+        m_aRow4->Show();
+        set_width_request(600);
 
-        m_aSuggest.SetClickHdl       ( LINK( this, FormLinkDialog, OnSuggest      ) );
+        if ( !_sExplanation.isEmpty() )
+            m_pExplanation->SetText(_sExplanation);
+
+        m_pSuggest->SetClickHdl       ( LINK( this, FormLinkDialog, OnSuggest      ) );
         m_aRow1->SetLinkChangeHandler( LINK( this, FormLinkDialog, OnFieldChanged ) );
         m_aRow2->SetLinkChangeHandler( LINK( this, FormLinkDialog, OnFieldChanged ) );
         m_aRow3->SetLinkChangeHandler( LINK( this, FormLinkDialog, OnFieldChanged ) );
@@ -275,7 +281,7 @@ namespace pcr
             }
             sDetailType = m_sDetailLabel;
         }
-        m_aDetailLabel.SetText( sDetailType );
+        m_pDetailLabel->SetText( sDetailType );
 
         // label for the master form
         OUString sMasterType = getFormDataSourceType( m_xMasterForm );
@@ -288,7 +294,7 @@ namespace pcr
             }
             sMasterType = m_sMasterLabel;
         }
-        m_aMasterLabel.SetText( sMasterType );
+        m_pMasterLabel->SetText( sMasterType );
     }
 
 
@@ -355,7 +361,7 @@ namespace pcr
                 bEnable = false;
         }
 
-        m_aOK.Enable( bEnable );
+        m_pOK->Enable( bEnable );
     }
 
 
@@ -624,7 +630,7 @@ namespace pcr
                 bEnable = ( m_aRelationMasterColumns.getLength() <= 4 );
             }
 
-            m_aSuggest.Enable( bEnable );
+            m_pSuggest->Enable( bEnable );
         }
         catch( const Exception& )
         {

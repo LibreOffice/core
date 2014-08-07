@@ -19,134 +19,21 @@
 
 #include "formresid.hrc"
 #include "propctrlr.hrc"
-#include "formlinkdialog.hrc"
 
-ModalDialog RID_DLG_FORMLINKS
+String STR_DETAIL_FORM
 {
-    HelpID = "extensions:ModalDialog:RID_DLG_FORMLINKS";
-    OutputSize = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 252, 110 ) ;
+    Text [ en-US ] = "Sub Form";
+};
 
-    Text [ en-US ] = "Link fields";
+String STR_MASTER_FORM
+{
+    Text [ en-US ] = "Master Form";
+};
 
-    FixedText FT_EXPLANATION
-    {
-        Pos = MAP_APPFONT( 6, 6 );
-        Size = MAP_APPFONT( 187, 24 );
-
-        WordBreak = TRUE;
-
-        Text [ en-US ] = "Sub forms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the sub form match which columns in the master form.";
-    };
-
-    FixedText FT_DETAIL_LABEL
-    {
-        Pos = MAP_APPFONT( 6, 36 );
-        Size = MAP_APPFONT( 85, 8 );
-    };
-
-    FixedText FT_MASTER_LABEL
-    {
-        Pos = MAP_APPFONT( 102, 36 );
-        Size = MAP_APPFONT( 85, 8 );
-    };
-
-#define ROW( n ) \
-    Window n \
-    { \
-        Pos  = MAP_APPFONT( 6, 47 + 15 * ( n - 1 ) ); \
-        Size = MAP_APPFONT( 181, 13 );                \
-                                                      \
-        Hide          = FALSE;                        \
-        DialogControl = TRUE;                         \
-                                                      \
-        ComboBox 1                                    \
-        {                                             \
-            Pos  = MAP_APPFONT( 0, 0 );               \
-            Size = MAP_APPFONT( 85, 12 );             \
-                                                      \
-            DropDown = TRUE;                          \
-            TabStop  = TRUE;                          \
-                                                      \
-            HelpId   = HID_FIELDLINK_DETAIL_COLUMN;   \
-            UniqueId = UID_FIELDLINK_DETAIL#n;        \
-        };                                            \
-        FixedText 1                                   \
-        {                                             \
-            Pos  = MAP_APPFONT( 85, 0 );              \
-            Size = MAP_APPFONT( 10, 12 );             \
-            Center = TRUE;                            \
-        };                                            \
-        ComboBox 2                                    \
-        {                                             \
-            Pos  = MAP_APPFONT( 95, 0 );              \
-            Size = MAP_APPFONT( 85, 12 );             \
-                                                      \
-            DropDown = TRUE;                          \
-            TabStop  = TRUE;                          \
-                                                      \
-            HelpId   = HID_FIELDLINK_MASTER_COLUMN;   \
-            UniqueId = UID_FIELDLINK_MASTER#n;        \
-        };                                            \
-    }
-
-    ROW( 1 );
-    ROW( 2 );
-    ROW( 3 );
-    ROW( 4 );
-
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT( 199, 6 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop   = TRUE;
-        DefButton = TRUE;
-    };
-
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT( 199, 23 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop = TRUE;
-    };
-
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT( 199, 43 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop = TRUE;
-    };
-
-    PushButton PB_SUGGEST
-    {
-        HelpID = "extensions:PushButton:RID_DLG_FORMLINKS:PB_SUGGEST";
-        Pos = MAP_APPFONT( 199, 90 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop =  TRUE;
-        Hide    = FALSE;
-        Disable =  TRUE;
-
-        Text [ en-US ] = "Suggest";
-    };
-
-    String STR_DETAIL_FORM
-    {
-        Text [ en-US ] = "Sub Form";
-    };
-
-    String STR_MASTER_FORM
-    {
-        Text [ en-US ] = "Master Form";
-    };
-
-    String STR_ERROR_RETRIEVING_COLUMNS
-    {
-        Text [ en-US ] = "The columns of '#' could not be retrieved.";
-        Text [ x-comment ] ="# will be replace with a name.";
-    };
+String STR_ERROR_RETRIEVING_COLUMNS
+{
+    Text [ en-US ] = "The columns of '#' could not be retrieved.";
+    Text [ x-comment ] ="# will be replace with a name.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
