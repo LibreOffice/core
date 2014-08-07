@@ -87,21 +87,24 @@ const XMLPropertyMapEntry* getRowPropertiesMap()
     return &aXMLRowProperties[0];
 }
 
-class StringStatisticHelper : public std::map< OUString, sal_Int32 >
+class StringStatisticHelper
 {
+private:
+    std::map< OUString, sal_Int32 > mStats;
+
 public:
     void add( const OUString& rStyleName );
-    void clear() { std::map< OUString, sal_Int32 >::clear(); }
+    void clear() { mStats.clear(); }
 
     sal_Int32 getModeString( /* out */ OUString& rModeString );
 };
 
 void StringStatisticHelper::add( const OUString& rStyleName )
 {
-    std::map< OUString, sal_Int32 >::iterator iter( find( rStyleName ) );
-    if( iter == end() )
+    std::map< OUString, sal_Int32 >::iterator iter( mStats.find( rStyleName ) );
+    if( iter == mStats.end() )
     {
-        (*this)[rStyleName] = 1;
+        mStats[rStyleName] = 1;
     }
     else
     {
@@ -112,8 +115,8 @@ void StringStatisticHelper::add( const OUString& rStyleName )
 sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
 {
     sal_Int32 nMax = 0;
-    const std::map< OUString, sal_Int32 >::const_iterator aEnd( end() );
-    for( std::map< OUString, sal_Int32 >::iterator iter( begin() );
+    const std::map< OUString, sal_Int32 >::const_iterator aEnd( mStats.end() );
+    for( std::map< OUString, sal_Int32 >::iterator iter( mStats.begin() );
         iter != aEnd; ++iter)
     {
         if( (*iter).second > nMax )
