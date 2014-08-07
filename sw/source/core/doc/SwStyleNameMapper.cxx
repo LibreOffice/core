@@ -474,7 +474,8 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
     }
 
     // Proceed if we have a pointer to a hash, and the hash hasn't already been populated
-    if ( pHashPointer && !*pHashPointer )
+    assert(pHashPointer && "null hash pointer");
+    if (!*pHashPointer )
     {
         // Compute the size of the hash we need to build
         sal_uInt16 nSize = std::accumulate( vIndexes.begin(), vIndexes.end(), 0, lcl_AccumulateIndexCount );
