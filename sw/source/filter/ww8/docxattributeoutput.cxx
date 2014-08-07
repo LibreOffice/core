@@ -3312,7 +3312,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     }
     else
     {
-        ::sax_fastparser::FastAttributeList* aAttrList = NULL;
+        ::sax_fastparser::FastAttributeList* pAttrList = NULL;
 
         for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
         {
@@ -3321,26 +3321,26 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
 
             OString sValue = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
             if( aGrabBagElement->first == "themeFill")
-                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeFill ), sValue.getStr() );
+                AddToAttrList( pAttrList, FSNS( XML_w, XML_themeFill ), sValue.getStr() );
             else if( aGrabBagElement->first == "themeFillTint")
-                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeFillTint ), sValue.getStr() );
+                AddToAttrList( pAttrList, FSNS( XML_w, XML_themeFillTint ), sValue.getStr() );
             else if( aGrabBagElement->first == "themeFillShade")
-                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeFillShade ), sValue.getStr() );
+                AddToAttrList( pAttrList, FSNS( XML_w, XML_themeFillShade ), sValue.getStr() );
             else if( aGrabBagElement->first == "fill" )
-                AddToAttrList( aAttrList, FSNS( XML_w, XML_fill ), sValue.getStr() );
+                AddToAttrList( pAttrList, FSNS( XML_w, XML_fill ), sValue.getStr() );
             else if( aGrabBagElement->first == "themeColor")
-                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeColor ), sValue.getStr() );
+                AddToAttrList( pAttrList, FSNS( XML_w, XML_themeColor ), sValue.getStr() );
             else if( aGrabBagElement->first == "themeTint")
-                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeTint ), sValue.getStr() );
+                AddToAttrList( pAttrList, FSNS( XML_w, XML_themeTint ), sValue.getStr() );
             else if( aGrabBagElement->first == "themeShade")
-                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeShade ), sValue.getStr() );
+                AddToAttrList( pAttrList, FSNS( XML_w, XML_themeShade ), sValue.getStr() );
             else if( aGrabBagElement->first == "color")
-                AddToAttrList( aAttrList, FSNS( XML_w, XML_color ), sValue.getStr() );
+                AddToAttrList( pAttrList, FSNS( XML_w, XML_color ), sValue.getStr() );
             else if( aGrabBagElement->first == "val")
-                AddToAttrList( aAttrList, FSNS( XML_w, XML_val ), sValue.getStr() );
+                AddToAttrList( pAttrList, FSNS( XML_w, XML_val ), sValue.getStr() );
         }
         m_pSerializer->singleElementNS( XML_w, XML_shd,
-                XFastAttributeListRef( aAttrList ) );
+                XFastAttributeListRef( pAttrList ) );
     }
 }
 
