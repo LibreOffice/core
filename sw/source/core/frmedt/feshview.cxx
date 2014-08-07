@@ -986,22 +986,16 @@ void SwFEShell::EndTextEdit()
         {
             if ( pView->GetMarkedObjectList().GetMarkCount() > 1 )
             {
+                SdrMarkList aSave( pView->GetMarkedObjectList() );
+                aSave.DeleteMark( aSave.FindObject( pObj ) );
+                if ( aSave.GetMarkCount() )
                 {
-                    SdrMarkList aSave( pView->GetMarkedObjectList() );
-                    aSave.DeleteMark( aSave.FindObject( pObj ) );
-                    if ( aSave.GetMarkCount() )
-                    {
-                        pView->UnmarkAll();
-                        pView->MarkObj( pObj, Imp()->GetPageView() );
-                    }
-                    DelSelectedObj();
-                    if ( aSave.GetMarkCount() )
-                    {
-                        for ( size_t i = 0; i < aSave.GetMarkCount(); ++i )
-                            pView->MarkObj( aSave.GetMark( i )->GetMarkedSdrObj(),
-                                            Imp()->GetPageView() );
-                    }
+                    pView->UnmarkAll();
+                    pView->MarkObj( pObj, Imp()->GetPageView() );
                 }
+                DelSelectedObj();
+                for ( size_t i = 0; i < aSave.GetMarkCount(); ++i )
+                    pView->MarkObj( aSave.GetMark( i )->GetMarkedSdrObj(), Imp()->GetPageView() );
             }
             else
                 DelSelectedObj();
