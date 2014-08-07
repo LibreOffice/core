@@ -72,7 +72,7 @@ int main( int argc, char* argv[] )
             "0.1", I18N_NOOP( "kdefilepicker is an implementation of the " THIS_DESKENV_NAME_CAP " file dialog for LibreOffice." ),
             KAboutData::License_LGPL,
             "(c) 2004, Jan Holesovsky" );
-    qAboutData.addAuthor( "Jan Holesovsky", I18N_NOOP("Original author and current maintainer"), "kendy@openoffice.org" );
+    qAboutData.addAuthor( "Jan Holesovsky", I18N_NOOP("Original author"), "kendy@collabora.com" );
 
     // Let the user see that this does something...
     ::std::cerr << "kdefilepicker, an implementation of a " THIS_DESKENV_NAME_CAP " file dialog for OOo." << ::std::endl
