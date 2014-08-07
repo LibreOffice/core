@@ -10556,8 +10556,7 @@ if test "x$enable_opengl" = "xno"; then
 elif test "$_os" = "Darwin"; then
     # We use frameworks on Mac OS X, no need for detail checks
     ENABLE_OPENGL=TRUE
-    ENABLE_OPENGL_CANVAS=
-    add_warning "openGL canvas not adapted for Mac yet - disabling"
+    ENABLE_OPENGL_CANVAS=TRUE
     SYSTEM_MESA_HEADERS=TRUE
     AC_MSG_RESULT([yes])
 elif test $_os = WINNT; then

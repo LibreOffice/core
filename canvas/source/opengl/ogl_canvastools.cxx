@@ -22,10 +22,7 @@
 
 #include <com/sun/star/rendering/ARGBColor.hpp>
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
-
+#include <GL/glew.h>
 
 using namespace ::com::sun::star;
 

@@ -36,9 +36,7 @@
 #include "ogl_texturecache.hxx"
 #include "ogl_tools.hxx"
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
+#include <GL/glew.h>
 
 #include <boost/scoped_array.hpp>
 
