@@ -9,7 +9,6 @@
 
 from __future__ import print_function
 from xml.dom import minidom
-from collections import OrderedDict
 import sys
 
 
@@ -127,7 +126,8 @@ def fastToken(attrNode):
 
 
 def collectAttributeToResource(nsNode, defineNode):
-    ret = OrderedDict()
+    ret_dict = {}
+    ret_order = []
     defineName = defineNode.getAttribute("name")
     for refNode in getChildrenByName(defineNode, "ref"):
         refName = refNode.getAttribute("name")
@@ -135,7 +135,9 @@ def collectAttributeToResource(nsNode, defineNode):
         if parent.localName in ("element", "attribute"):
             continue
         for define in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "define") if i.getAttribute("name") == refName]:
-            ret.update(collectAttributeToResource(nsNode, define))
+            ret = collectAttributeToResource(nsNode, define)
+            ret_dict.update(ret[0])
+            ret_order.extend(ret[1])
 
     attrNodes = defineNode.getElementsByTagName("attribute")
     for attrNode in attrNodes:
@@ -147,16 +149,21 @@ def collectAttributeToResource(nsNode, defineNode):
                 refName = refNode.getAttribute("name")
                 for define in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "define") if i.getAttribute("name") == refName]:
                     refDefine = idForDefine(nsNode, define)
-            ret[attrToken] = "RT_%s, %s" % (resourceName, refDefine)
+            ret_dict[attrToken] = "RT_%s, %s" % (resourceName, refDefine)
+            ret_order.append(attrToken)
 
-    return ret
+    return [ret_dict, ret_order]
 
 
 def factoryAttributeToResourceMapInner(nsNode, defineNode):
     ret = []
     attributes = collectAttributeToResource(nsNode, defineNode)
-    for k in attributes.keys():
-        ret.append("                { %s, %s }," % (k, attributes[k]))
+    already_used = set()
+    for k in attributes[1]:
+        if not (k in already_used):
+            ret.append("                { %s, %s }," % (k, attributes[0][k]))
+            already_used.add(k)
+
     return ret
 
 
