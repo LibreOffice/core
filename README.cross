@@ -220,9 +220,9 @@ TODO:
     others; would be best to avoid that if at all possible (using a free
     cab implementation, part of Wine or something)
   - MSI generation
-  - if at all possible, the make dev-install installation (with links
+  - if at all possible, the make test-install installation (with links
     back to the build) should be done so that it would be directly
-    executable via wine after doing make dev-install :-)
+    executable via wine after doing make test-install :-)
 
 - runtime
   - no idea if the entire thing works after the installation at all; I
