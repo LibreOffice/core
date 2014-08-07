@@ -2664,7 +2664,9 @@ void ChartExport::exportDataLabels(
         break;
         case chart::TYPEID_DOUGHNUT:
         case chart::TYPEID_AREA:
-            // Doughnut and area charts don't support label placement.
+        case chart::TYPEID_RADARLINE:
+        case chart::TYPEID_RADARAREA:
+            // These chart types don't support label placement.
             aParam.mbExport = false;
         break;
         case chart::TYPEID_BAR:
