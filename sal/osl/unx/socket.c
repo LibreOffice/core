@@ -1057,11 +1057,10 @@ oslSocketResult SAL_CALL osl_psz_getLocalHostname (
 
         strncpy(LocalHostname, uts.nodename, sizeof( LocalHostname ));
 #else  /* BSD compatible */
-
         if (gethostname(LocalHostname, sizeof(LocalHostname)-1) != 0)
             return osl_Socket_Error;
-        LocalHostname[sizeof(LocalHostname)-1] = 0;
 #endif /* SYSV */
+        LocalHostname[sizeof(LocalHostname)-1] = 0;
 
         /* check if we have an FQDN */
         if (strchr(LocalHostname, '.') == NULL)
@@ -1256,7 +1255,6 @@ oslSocketResult SAL_CALL osl_psz_getHostnameOfSocketAddr(oslSocketAddr pAddr,
     if (pHostAddr)
     {
         strncpy(pBuffer, pHostAddr->pHostName, BufferSize);
-
         pBuffer[BufferSize - 1] = '\0';
 
         osl_destroyHostAddr(pHostAddr);
