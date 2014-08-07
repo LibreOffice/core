@@ -88,7 +88,6 @@ public class TestResult {
      *
      * @see #tested(String, boolean)
      * @see #tested(String, Status)
-     * @see #assert
      */
     public Status getStatusFor( String method ) {
         return testedMethods.get( method );

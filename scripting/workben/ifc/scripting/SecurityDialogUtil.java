@@ -40,8 +40,6 @@ private boolean checkBox;
 
 /**
  * Constructor.
- * @param xMSF A MultiServiceFactory.
- * @param log The log writer.
  */
 public SecurityDialogUtil(XMultiServiceFactory xMSF, String btnName, boolean checkBox )
 {

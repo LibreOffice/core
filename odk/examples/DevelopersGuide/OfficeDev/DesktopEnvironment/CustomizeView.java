@@ -171,10 +171,6 @@ public class CustomizeView extends    JPanel
      * We use this information to update our check boxes again.
      * But such update doesn't force (hopefully) an action event. Otherwhise
      * we can produce a never ending recursion!
-     *
-     * @param aEvent
-     *          describes the used check box and his current state
-     *          we can use to dispatch the right URL to the office
      */
     class ClickListener implements ActionListener,
                                    com.sun.star.lang.XEventListener

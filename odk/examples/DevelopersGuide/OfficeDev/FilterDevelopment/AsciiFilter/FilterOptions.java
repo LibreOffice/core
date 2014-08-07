@@ -82,7 +82,7 @@ public class FilterOptions
      * which can be used after creation of an object instance
      * to set a new descriptor here.
      *
-     * @param xSMGR
+     * @param xMCF
      *          we need it to create special help service top open
      *          streams in case they are not already a part of given
      *          MediaDescriptor

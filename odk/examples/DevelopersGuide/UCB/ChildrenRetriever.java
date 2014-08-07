@@ -278,8 +278,6 @@ public class ChildrenRetriever {
     /**
      *  Create a new connection with the specific args to a running office and
      *  access the children from a folder.
-     *
-     *@param  String[]   Arguments
      */
     public static void main ( String args[] ) {
 

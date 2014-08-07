@@ -67,13 +67,11 @@ public class FormLayer
             the service name of the form component to create, e.g. "TextField"
         @param nXPos
             the abscissa of the position of the newly inserted shape
-        @param nXPos
-            the ordinate of the position of the newly inserted shape
         @param nWidth
             the width of the newly inserted shape
         @param nHeight
             the height of the newly inserted shape
-        @param xParentForm
+        @param _parentForm
             the form to use as parent for the newly create form component. May be null, in this case
             a default parent is chosen by the implementation
         @return
@@ -139,8 +137,6 @@ public class FormLayer
             the service name of the form component to create, e.g. "TextField"
         @param nXPos
             the abscissa of the position of the newly inserted shape
-        @param nXPos
-            the ordinate of the position of the newly inserted shape
         @param nWidth
             the width of the newly inserted shape
         @param nHeight
@@ -200,7 +196,7 @@ public class FormLayer
             specifies the type of the data input control
         @param sFieldName
             specifies the field name the text field should be bound to
-        @param sControlNamePostfix
+        @param _controlNamePostfix
             specifies a postfix to append to the logical control names
         @param nYPos
             specifies the Y position of the line to start at
@@ -286,7 +282,7 @@ public class FormLayer
      *      the parent form of the radio button model to find
      *  @param name
      *      the name of the radio button
-     *  @param refValue
+     *  @param tag
      *      the tag of the radio button
     */
     public XPropertySet getRadioModelByTag( XPropertySet form, String name, String tag ) throws com.sun.star.uno.Exception, java.lang.Exception

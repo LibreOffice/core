@@ -926,7 +926,6 @@ public class FunctionHelper
      * only, it's enough to check the names of existing child frames on the
      * desktop only.
      *
-     * @return [String]
      *          should represent an unique frame name, which currently isn't
      *          used inside the remote office frame tree
      *          (Couldn't guaranteed for a real multithreaded environment.

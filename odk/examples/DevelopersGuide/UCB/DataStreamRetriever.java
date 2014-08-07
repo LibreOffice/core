@@ -176,8 +176,6 @@ public class DataStreamRetriever {
     /**
      *  Create a new connection with the specific args to a running office and
      *  access (Load) the content data stream of a UCB document content.
-     *
-     *@param  String[]   Arguments
      */
     public static void main ( String args[] ) {
         System.out.println( "\n" );

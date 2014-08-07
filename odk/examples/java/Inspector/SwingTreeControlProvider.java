@@ -174,7 +174,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
 
         /** Inspect the given object for methods, properties, interfaces, and
          * services.
-         * @param a The object to inspect
+         * @param _oUserDefinedObject The object to inspect
          * @throws RuntimeException If
          */
         public Object inspect(java.lang.Object _oUserDefinedObject, String _sTitle) throws com.sun.star.uno.RuntimeException {

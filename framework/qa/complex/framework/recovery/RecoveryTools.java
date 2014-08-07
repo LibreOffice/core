@@ -58,7 +58,6 @@ public class RecoveryTools {
 
     /**
      * get the active dialog from the top of the desktop
-     * @param xToolKit xToolKit the <CODE> XExtendedToolkit</CODE> to get the dialog from the top of the desktop.
      * @return a <CODE>XDialog</CODE> interface of the dialog
      */
     public XDialog getActiveDialog( XMultiServiceFactory xMSF){
@@ -83,7 +82,6 @@ public class RecoveryTools {
      * After a crash the office start with a recovery diaolg. It could be that the office
      * is connectable but not all services to get the dialog a loaded. This function
      * tries to get the dialog until the <CODE>OfficeWatcher</CODE> kills the office.
-     * @param xToolKit the <CODE> XExtendedToolkit</CODE> to get the dialog from the top of the desktop.
      * @return a <CODE>XDialog</CODE> interface of the dialog
      */
     public XDialog getActiveDialogAfterStartup(XMultiServiceFactory xMSF){

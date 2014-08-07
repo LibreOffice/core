@@ -260,7 +260,7 @@ public class FormLayer
      *      the parent form of the radio button model to find
      *  @param name
      *      the name of the radio button
-     *  @param refValue
+     *  @param tag
      *      the tag of the radio button
     */
     public XPropertySet getRadioModelByTag( XPropertySet form, String name, String tag ) throws com.sun.star.uno.Exception, java.lang.Exception

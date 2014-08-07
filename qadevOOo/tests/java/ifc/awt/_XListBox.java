@@ -101,7 +101,6 @@ public class _XListBox extends MultiMethodTest {
 
     /**
     * Retrieves object relations.
-    * @throws StatusException If one of relations not found.
     */
     @Override
     public void before() {

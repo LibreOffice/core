@@ -238,8 +238,6 @@ public class PropertiesComposer {
     /**
      *  Create a new connection with the specific args to a running office and
      *  set properties of a resource.
-     *
-     *@param  String[]   Arguments
      */
     public static void main ( String args[] ) {
         System.out.println( "\n" );

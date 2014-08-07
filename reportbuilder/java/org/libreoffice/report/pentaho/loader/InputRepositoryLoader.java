@@ -88,7 +88,7 @@ public class InputRepositoryLoader implements ResourceLoader
      * @param path        the derived path (can be null).
      * @param factoryKeys the optional factory keys (can be null).
      * @return the derived key.
-     * @throws org.jfree.resourceloader.ResourceKeyCreationException
+     * @throws ResourceKeyCreationException
      *          if the key cannot be derived for any reason.
      */
     @SuppressWarnings("unchecked")

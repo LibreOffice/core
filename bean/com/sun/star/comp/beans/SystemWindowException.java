@@ -21,7 +21,7 @@ package com.sun.star.comp.beans;
 /** indicates that an operation needed a system window,
     but no system window was acquired yet.
 
-    @see com.sun.star.comp.beans.OOoBean.aquireSystemWindow
+    @see com.sun.star.comp.beans.OOoBean#aquireSystemWindow
 
     @since OOo 2.0.0
 */

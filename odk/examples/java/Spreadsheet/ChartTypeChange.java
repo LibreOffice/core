@@ -127,7 +127,6 @@ public class ChartTypeChange {
     }
 
     /** The constructor connects to the OpenOffice.org.
-     * @param args Parameters for this constructor (connection string).
      * @throws Exception All exceptions are thrown from this method.
      */
     public ChartTypeChange()

@@ -68,7 +68,7 @@ public class MinimalComponent {
         private XMultiComponentFactory m_xMCF;
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
-         * @param xmultiservicefactoryInitialization A special service factory
+         * @param xCompContext A special service factory
          * could be introduced while initializing.
          */
         public _MinimalComponent(XComponentContext xCompContext) {
@@ -85,7 +85,7 @@ public class MinimalComponent {
          * directly after its creation.
          * @param object This array of arbitrary objects will be passed to the
          * component after its creation.
-         * @throws Exception Every exception will not be handled, but will be
+         * @throws com.sun.star.uno.Exception Every exception will not be handled, but will be
          * passed to the caller.
          */
         public void initialize( Object[] object )

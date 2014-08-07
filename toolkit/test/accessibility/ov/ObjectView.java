@@ -63,7 +63,7 @@ abstract public class ObjectView
     }
 
     /** Tell the view to display information for a new accessible object.
-        @param xObject
+        @param xContext
             The given object may be null.  A typical behaviour in this case
             would be to display a blank area.  But is also possible to show
             information about the last object.

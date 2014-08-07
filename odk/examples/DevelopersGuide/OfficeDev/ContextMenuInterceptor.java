@@ -140,8 +140,6 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
 
     /**
      *Description of the Method
-     *
-     *@param  args  Description of Parameter
      */
     public ContextMenuInterceptorAction notifyContextMenuExecute(
              com.sun.star.ui.ContextMenuExecuteEvent aEvent ) throws RuntimeException {

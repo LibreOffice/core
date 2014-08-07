@@ -923,9 +923,6 @@ public class OOoBean
 
         @throws NoConnectionException
             if the connection is not established.
-
-        @throws NotDocumentException
-            if no document is loaded an thus no frame is available.
      */
     public Frame getFrame()
 

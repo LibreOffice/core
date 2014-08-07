@@ -189,7 +189,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * But we shouldn't start such action - if it's not really necessary.
      * So we check before, if we are intereested on this event really.
      *
-     * @see impl_frameAction()
+     * @see #impl_frameAction
      *
      * @param aEvent
      *          describes the action, which triggered this event

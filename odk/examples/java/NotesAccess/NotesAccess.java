@@ -74,7 +74,7 @@ public class NotesAccess implements Runnable {
     static String stringDatabase = "";
 
     /** Reading the arguments and constructing the thread.
-     * @param argv Holding values for the host, user, and the password of the user.
+     * @param args Holding values for the host, user, and the password of the user.
      */
     public static void main( String args[] ) {
         Thread thread;

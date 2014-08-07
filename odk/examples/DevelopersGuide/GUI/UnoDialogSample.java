@@ -1185,7 +1185,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
     /** gets the WindowPeer of a frame
-     *  @param _XTextDocument the instance of a textdocument
+     *  @param _xTextDocument the instance of a textdocument
      *  @return the windowpeer of the frame
      */
     public XWindowPeer getWindowPeer(XTextDocument _xTextDocument){

@@ -127,10 +127,9 @@ public class AsciiReplaceFilter
         /**
         * The constructor to initialize every instance
         *
-        * @param xCompContext
+        * @param Context
         *  the component context of the office
         */
-        //ctor
         public _AsciiReplaceFilter(XComponentContext Context )
         {
             measure("ctor started");
@@ -167,7 +166,7 @@ public class AsciiReplaceFilter
         *  This array of arbitrary objects represent our own filter configuration
         *  and may optional given parameters of the createWithArguments() call.
         *
-        * @throws Exception
+        * @throws com.sun.star.uno.Exception
         *  Every exception will not be handled, but will be
         *  passed to the caller.
         */

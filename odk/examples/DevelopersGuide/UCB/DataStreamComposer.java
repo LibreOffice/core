@@ -92,8 +92,8 @@ public class DataStreamComposer {
     /**
      * Write the document data stream of a document content.
      *
-     *@param  String    Source URL
-     *@return boolean   Returns true if data stream successfully seted, false otherwise
+     *@param  sourceURL    Source URL
+     *@return true if data stream successfully seted, false otherwise
      */
     public boolean setDataStream( String sourceURL )
         throws com.sun.star.ucb.CommandAbortedException,
@@ -200,8 +200,6 @@ public class DataStreamComposer {
     /**
      *  Create a new connection with the specific args to a running office and
      *  set the Content Data Stream of a UCB Document Content.
-     *
-     *@param  String[]   Arguments
      */
     public static void main ( String args[] ) {
         System.out.println( "\n" );

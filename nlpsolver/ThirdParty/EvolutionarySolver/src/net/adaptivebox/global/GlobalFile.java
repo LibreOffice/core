@@ -110,7 +110,7 @@ public class GlobalFile {
 
 /**
   * Load curve data from a specified file.
-  * @param      fileStr     the name of the file to be loaded.
+  * @param      fileName     the name of the file to be loaded.
   * @return  An ArrayList that include the curve data.
   */
   public static ArrayList<ArrayList<Double>> getCurveDataFromFile(String fileName) {

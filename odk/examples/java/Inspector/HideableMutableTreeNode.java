@@ -42,7 +42,7 @@ public class HideableMutableTreeNode extends DefaultMutableTreeNode {
      * Creates a tree node with no parent, no children, but which allows
      * children, and initializes it with the specified user object.
      *
-     * @param  userObject - an Object provided by the user that
+     * @param  _userObject - an Object provided by the user that
      *                      constitutes the node's data
      */
     public HideableMutableTreeNode(Object _userObject) {
@@ -72,7 +72,7 @@ public class HideableMutableTreeNode extends DefaultMutableTreeNode {
     /**
      * Sets if the node is visible.
      *
-     * @param  returns true if the node is visible, else false
+     * @param  _bIsVisible true if the node is visible, else false
      */
     public void setVisible(boolean _bIsVisible) {
             this.bIsvisible = _bIsVisible;

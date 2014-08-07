@@ -351,7 +351,6 @@ public class Inspector{
 
         // Implement the interface XServiceInfo
         /** Test, if the given service will be supported.
-         * @param sService Service name.
          * @return Return true, if the service will be supported.
          */
         public boolean supportsService( String sServiceName ) {

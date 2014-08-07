@@ -91,9 +91,7 @@ public class RecoveryTest extends ComplexTestCase {
     /** Create the environment for following tests.
      * Use either a component loader from desktop or
      * from frame
-     * @throws Exception Exception
      */
-
     public void normalCrash(){
         cleanRecoveryData();
         startOffice();

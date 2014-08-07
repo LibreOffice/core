@@ -53,7 +53,7 @@ public class Desk
      *
      * syntax: Desk [mode={inplace|outplace}] [file=<filename>]
      *
-     * @param  args  command line arguments
+     * @param  lArguments  command line arguments
      *                  mode        describe using mode of document view {inplace/outplace}
      *                              default=inplace
      *                  file        name of first file which should be open

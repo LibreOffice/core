@@ -137,7 +137,6 @@ public class ToDo {
 
         /** This method returns true, if the given service will be
          * supported by the component.
-         * @param sService Service name.
          * @return True, if the given service name will be supported.
          */
         public boolean supportsService(String sServiceName) {
@@ -897,7 +896,7 @@ public class ToDo {
         /** Writing the stack trace from an exception to a string and calling
          * the method showMessage() with this string.
          * @param exception The occurred exception.
-         * @see showMessage
+         * @see #showMessage(String)
          */
         public void showExceptionMessage( Exception exception ) {
             java.io.StringWriter swriter = new java.io.StringWriter();

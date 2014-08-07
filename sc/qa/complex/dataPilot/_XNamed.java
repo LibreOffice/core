@@ -48,7 +48,6 @@ public class _XNamed {
     /**
      * Constructor: gets the object to test, a logger and the test parameters
      * @param xObj The test object
-     * @param log A log writer
      * @param param The test parameters
      */
     public _XNamed(XNamed xObj/*, LogWriter log*/, TestParameters param) {

@@ -64,10 +64,6 @@ public class ScriptProxy
      *                                          the method
      * @return                                the Object returned from the method
      *                                          invocation, may be null
-     * @exception  IllegalAccessException     Description of the Exception
-     * @exception  InvocationTargetException  Description of the Exception
-     * @exception  IllegalArgumentException   Description of the Exception
-     * @exception  Exception                  Description of the Exception
      * @see                                   java.lang.reflect.Method for the exceptions
      *                                          that may be thrown
      */

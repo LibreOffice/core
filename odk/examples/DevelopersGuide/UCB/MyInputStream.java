@@ -84,8 +84,6 @@ public class MyInputStream implements XSeekable, XInputStream {
 
     /**
      *  Changes the seek pointer to a new location relative to the beginning of the stream.
-     *
-     *@param  long
      */
     public synchronized void seek(long p0)
         throws IllegalArgumentException, com.sun.star.io.IOException,
@@ -125,10 +123,6 @@ public class MyInputStream implements XSeekable, XInputStream {
 
     /**
      *   Reads the specified number of bytes in the given sequence.
-     *
-     *@param    byte[][]
-     *@param    int
-     *@return   int
      */
     public synchronized int readBytes(byte[][] p0, int p1)
         throws NotConnectedException, BufferSizeExceededException,
@@ -158,10 +152,6 @@ public class MyInputStream implements XSeekable, XInputStream {
     /**
      *  Reads the available number of bytes at maximum  nMaxBytesToRead .
      *  This method blocks the thread until at least one byte is available.
-     *
-     *@param    byte[][]
-     *@param    int
-     *@return   int
      */
     public synchronized int readSomeBytes(byte[][] p0, int p1)
             throws  NotConnectedException,
@@ -174,8 +164,6 @@ public class MyInputStream implements XSeekable, XInputStream {
     /**
      *  Skips the next nBytesToSkip bytes (must be positive).
      *  It is up to the implementation whether this method is blocking the thread or not.
-     *
-     *@param    int
      */
     public synchronized void skipBytes(int p0)
         throws  NotConnectedException, BufferSizeExceededException,

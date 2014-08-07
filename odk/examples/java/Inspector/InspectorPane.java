@@ -59,7 +59,6 @@ import com.sun.star.uno.XComponentContext;
 
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
-         * @param xMultiServiceFactory XMultiServiceFactory
          */
         public InspectorPane(XComponentContext _xComponentContext, XDialogProvider _xDialogProvider, XTreeControlProvider _xTreeControlProvider, int _nLanguage) {
             m_xComponentContext = _xComponentContext;
@@ -72,7 +71,7 @@ import com.sun.star.uno.XComponentContext;
 
         /** Inspect the given object for methods, properties, interfaces, and
          * services.
-         * @param a The object to inspect
+         * @param _oUserDefinedObject The object to inspect
          * @throws RuntimeException If
          */
         public void inspect(java.lang.Object _oUserDefinedObject, String _sTitle) throws com.sun.star.uno.RuntimeException {
