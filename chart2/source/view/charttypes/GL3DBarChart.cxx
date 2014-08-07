@@ -377,16 +377,7 @@ void RenderBenchMarkThread::UpdateFPS()
         osl_getSystemTime(&mafpsRenderStartTime);
     }
     osl_getSystemTime(&mafpsRenderEndTime);
-#if 1
-    opengl3D::ScreenText tFPS(mpChart->mpRenderer.get(), *(mpChart->mpTextCache), mpChart->mTestString, 0);
-    opengl3D::TextCacheItem tmpTextCache = mpChart->mpTextCache->getText(mpChart->mTestString);
-#else
-    opengl3D::ScreenText tFPS(mpChart->mpRenderer.get(), *(mpChart->mpTextCache), maFPS, 0);
-    opengl3D::TextCacheItem tmpTextCache = mpChart->mpTextCache->getText(maFPS);
-#endif
-    float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.05;
-    tFPS.setPosition(glm::vec2(-0.99f, 0.99f), glm::vec2(-0.99f + rectWidth, 0.89f));
-    tFPS.render();
+    //will add the fps render code here later
 }
 
 void RenderBenchMarkThread::UpdateScreenText()
@@ -648,7 +639,6 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), *mpTextCache,
                     aCats[i], nId));
-        mTestString = aCats[i];
         nId += ID_STEP;
         p = static_cast<opengl3D::Text*>(&maShapes.back());
         aTopLeft.x = nXPos + TEXT_HEIGHT + 0.5 * BAR_SIZE_X;

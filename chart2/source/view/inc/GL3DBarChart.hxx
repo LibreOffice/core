@@ -137,7 +137,6 @@ private:
     RenderEventType maRenderEvent;
     sal_uInt32 mSelectBarId;
     Point maClickPos;
-    OUString mTestString;
     sal_uInt32 miScrollRate;
     bool mbScrollFlg;
 };
