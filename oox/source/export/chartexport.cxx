@@ -2615,9 +2615,24 @@ void ChartExport::exportDataLabels(
     uno::Sequence<sal_Int32> aAttrLabelIndices;
     xPropSet->getPropertyValue("AttributedDataPoints") >>= aAttrLabelIndices;
 
+    // We must not export label placement property when the chart type doesn't
+    // support this option in MS Office, else MS Office would think the file
+    // is corrupt & refuse to open it.
     bool bLabelPlacement = !mbIs3DChart;
-    if (eChartType == chart::TYPEID_PIE)
-        bLabelPlacement = true;
+    eChartType = getChartType();
+    switch (eChartType)
+    {
+        case chart::TYPEID_PIE:
+            // All pie charts support label placement.
+            bLabelPlacement = true;
+        break;
+        case chart::TYPEID_DOUGHNUT:
+            // Doughnut charts don't support label placement.
+            bLabelPlacement = false;
+        break;
+        default:
+            ;
+    }
 
     const sal_Int32* p = aAttrLabelIndices.getConstArray();
     const sal_Int32* pEnd = p + aAttrLabelIndices.getLength();
