@@ -119,6 +119,7 @@
 
 #include <wdocsh.hxx>
 #include <prtopt.hxx>
+#include <wrtsh.hxx>
 
 #include <vector>
 #include <map>
@@ -1701,21 +1702,47 @@ bool SwDoc::ConvertFieldsToText()
                         nWhich != RES_REFPAGESETFLD))
                 {
                     OUString sText = pField->ExpandField(true);
-                    //database fields should not convert their command into text
+
+                    // database fields should not convert their command into text
                     if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
                         sText = "";
 
-                    //now remove the field and insert the string
-                    SwPaM aPam1(*pTxtFld->GetpTxtNode(), pTxtFld->GetStart());
-                    aPam1.Move();
-                    //insert first to keep the field's attributes
+                    SwPaM aInsertPam(*pTxtFld->GetpTxtNode(), pTxtFld->GetStart());
+                    aInsertPam.SetMark();
+
+                    // go to the end of the field
+                    const SwTxtFld *pTxtField = GetTxtFldAtPos( *aInsertPam.End() );
+                    if (pTxtField && pTxtField->Which() == RES_TXTATR_INPUTFIELD)
+                    {
+                        SwPosition &rEndPos = *aInsertPam.GetPoint();
+                        rEndPos.nContent = GetDocShell()->GetWrtShell()->EndOfInputFldAtPos( *aInsertPam.End() );
+                    }
+                    else
+                    {
+                        aInsertPam.Move();
+                    }
+
+                    // first insert the text after field to keep the field's attributes,
+                    // then delete the field
                     if (!sText.isEmpty())
-                        getIDocumentContentOperations().InsertString( aPam1, sText );
-                    SwPaM aPam2(*pTxtFld->GetpTxtNode(), pTxtFld->GetStart());
-                    aPam2.SetMark();
-                    aPam2.Move();
-                    getIDocumentContentOperations().DeleteAndJoin(aPam2);//remove the field
-                    bRet=true;
+                    {
+                        // to keep the position after insert
+                        SwPaM aDelPam( *aInsertPam.GetMark(), *aInsertPam.GetPoint() );
+                        aDelPam.Move( fnMoveBackward );
+                        aInsertPam.DeleteMark();
+
+                        getIDocumentContentOperations().InsertString( aInsertPam, sText );
+
+                        aDelPam.Move();
+                        // finally remove the field
+                        getIDocumentContentOperations().DeleteAndJoin( aDelPam );
+                    }
+                    else
+                    {
+                        getIDocumentContentOperations().DeleteAndJoin( aInsertPam );
+                    }
+
+                    bRet = true;
                 }
             }
             ++aBegin;
