@@ -129,7 +129,7 @@ namespace svgio
             void fillCssStyleVectorUsingHierarchyAndSelectors(
                 const OUString& rClassStr,
                 const SvgNode& rCurrent,
-                OUString aConcatenated);
+                const OUString& aConcatenated);
 
         public:
             SvgNode(
