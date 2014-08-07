@@ -192,8 +192,8 @@ uno::Reference< linguistic2::XLanguageGuessing > GlobalEditData::GetLanguageGues
     return xLanguageGuesser;
 }
 
-EditResId::EditResId( sal_uInt16 nId ):
-    ResId( nId, *EE_DLL().GetResMgr() )
+EditResId::EditResId(sal_uInt16 nId)
+    : ResId(nId, *EditDLL::GetResMgr())
 {
 }
 
