@@ -178,6 +178,9 @@ sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference
     * \return <FALSE/> if no error occurred, otherwise <TRUE/>.
     */
     sal_Bool             SetPersistentEntries(const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& _xStorage,bool _bClearModifedFlag = true);
+
+    bool getUserAllowsLinkUpdate() const;
+    void setUserAllowsLinkUpdate(bool bNew);
 };
 
 }

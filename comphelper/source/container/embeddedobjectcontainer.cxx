@@ -92,7 +92,10 @@ struct EmbedImpl
     uno::WeakReference < uno::XInterface > m_xModel;
     //EmbeddedObjectContainerNameMap maTempObjectContainer;
     //uno::Reference < embed::XStorage > mxTempStorage;
-    sal_Bool bOwnsStorage;
+
+    /// bitfield
+    bool mbOwnsStorage : 1;
+    bool mbUserAllowsLinkUpdate : 1;
 
     const uno::Reference < embed::XStorage >& GetReplacements();
 };
@@ -123,7 +126,8 @@ EmbeddedObjectContainer::EmbeddedObjectContainer()
 {
     pImpl = new EmbedImpl;
     pImpl->mxStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-    pImpl->bOwnsStorage = sal_True;
+    pImpl->mbOwnsStorage = true;
+    pImpl->mbUserAllowsLinkUpdate = true;
     pImpl->mpTempObjectContainer = 0;
 }
 
@@ -131,7 +135,8 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
 {
     pImpl = new EmbedImpl;
     pImpl->mxStorage = rStor;
-    pImpl->bOwnsStorage = sal_False;
+    pImpl->mbOwnsStorage = false;
+    pImpl->mbUserAllowsLinkUpdate = true;
     pImpl->mpTempObjectContainer = 0;
 }
 
@@ -139,7 +144,8 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
 {
     pImpl = new EmbedImpl;
     pImpl->mxStorage = rStor;
-    pImpl->bOwnsStorage = sal_False;
+    pImpl->mbOwnsStorage = false;
+    pImpl->mbUserAllowsLinkUpdate = true;
     pImpl->mpTempObjectContainer = 0;
     pImpl->m_xModel = xModel;
 }
@@ -148,11 +154,11 @@ void EmbeddedObjectContainer::SwitchPersistence( const uno::Reference < embed::X
 {
     ReleaseImageSubStorage();
 
-    if ( pImpl->bOwnsStorage )
+    if ( pImpl->mbOwnsStorage )
         pImpl->mxStorage->dispose();
 
     pImpl->mxStorage = rStor;
-    pImpl->bOwnsStorage = sal_False;
+    pImpl->mbOwnsStorage = false;
 }
 
 sal_Bool EmbeddedObjectContainer::CommitImageSubStorage()
@@ -208,7 +214,7 @@ EmbeddedObjectContainer::~EmbeddedObjectContainer()
 {
     ReleaseImageSubStorage();
 
-    if ( pImpl->bOwnsStorage )
+    if ( pImpl->mbOwnsStorage )
         pImpl->mxStorage->dispose();
 
     delete pImpl->mpTempObjectContainer;
@@ -1401,7 +1407,7 @@ sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Boo
                     xStream = GetGraphicStream( xObj, &aMediaType );
                 }
 
-                if ( !xStream.is() )
+                if ( !xStream.is() && getUserAllowsLinkUpdate() )
                 {
                     // the image must be regenerated
                     // TODO/LATER: another aspect could be used
@@ -1685,4 +1691,18 @@ sal_Bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< emb
     }
     return bError;
 }
+
+bool EmbeddedObjectContainer::getUserAllowsLinkUpdate() const
+{
+    return pImpl->mbUserAllowsLinkUpdate;
+}
+
+void EmbeddedObjectContainer::setUserAllowsLinkUpdate(bool bNew)
+{
+    if(pImpl->mbUserAllowsLinkUpdate != bNew)
+    {
+        pImpl->mbUserAllowsLinkUpdate = bNew;
+    }
+}
+
 }
