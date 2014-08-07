@@ -24,12 +24,10 @@
 
 static ResMgr* pResMgr=0;
 
-// struct DialogsResMgr --------------------------------------------------
 ResMgr* DialogsResMgr::GetResMgr()
 {
-    if ( !pResMgr )
-        pResMgr = ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILanguageTag() );
-
+    if (!pResMgr)
+        pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
     return pResMgr;
 }
 

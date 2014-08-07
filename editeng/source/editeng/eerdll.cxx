@@ -200,12 +200,20 @@ EditResId::EditResId( sal_uInt16 nId ):
 EditDLL::EditDLL()
 {
     pGlobalData = new GlobalEditData;
-    pResMgr = ResMgr::CreateResMgr( "editeng", Application::GetSettings().GetUILanguageTag() );
 }
 
 EditDLL::~EditDLL()
 {
     delete pGlobalData;
+}
+
+static ResMgr* pResMgr=0;
+
+ResMgr* EditDLL::GetResMgr()
+{
+    if (!pResMgr)
+        pResMgr = ResMgr::CreateResMgr("editeng", Application::GetSettings().GetUILanguageTag());
+    return pResMgr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

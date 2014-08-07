@@ -34,14 +34,13 @@ public:
 
 class EditDLL
 {
-    ResMgr*         pResMgr;
     GlobalEditData* pGlobalData;
 
 public:
     EditDLL();
     ~EditDLL();
 
-    ResMgr*         GetResMgr() const       { return pResMgr; }
+    static ResMgr* GetResMgr();
     GlobalEditData* GetGlobalData() const   { return pGlobalData; }
     static EditDLL& Get();
 };
