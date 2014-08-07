@@ -2263,7 +2263,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
         if( xStg.Is() && xStg->IsContained( sTemp ) )
             LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
     }
-    catch (const css::ucb::ContentCreationException e)
+    catch (const css::ucb::ContentCreationException &e)
     {
         SAL_WARN("editeng", "SvxAutoCorrectLanguageLists::LoadWrdSttExceptList: Caught exception: " << e.Message);
     }
