@@ -386,7 +386,7 @@
         </attribute>
       </define>
     </grammar>
-    <resource name="ST_LightRigDirection" resource="List" generated="yes">
+    <resource name="ST_LightRigDirection" resource="List">
       <value name="tl" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_tl">tl</value>
       <value name="t" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_t">t</value>
       <value name="tr" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_tr">tr</value>
@@ -396,7 +396,7 @@
       <value name="b" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_b">b</value>
       <value name="br" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_br">br</value>
     </resource>
-    <resource name="ST_LightRigType" resource="List" generated="yes">
+    <resource name="ST_LightRigType" resource="List">
       <value name="legacyFlat1" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat1">legacyFlat1</value>
       <value name="legacyFlat2" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat2">legacyFlat2</value>
       <value name="legacyFlat3" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat3">legacyFlat3</value>
@@ -596,7 +596,7 @@
         </choice>
       </define>
     </grammar>
-    <resource name="ST_BevelPresetType" resource="List" generated="yes">
+    <resource name="ST_BevelPresetType" resource="List">
       <value name="relaxedInset" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_relaxedInset">relaxedInset</value>
       <value name="circle" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_circle">circle</value>
       <value name="slope" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_slope">slope</value>
@@ -610,7 +610,7 @@
       <value name="hardEdge" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_hardEdge">hardEdge</value>
       <value name="artDeco" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_artDeco">artDeco</value>
     </resource>
-    <resource name="ST_PresetMaterialType" resource="List" generated="yes">
+    <resource name="ST_PresetMaterialType" resource="List">
       <value name="legacyMatte" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyMatte">legacyMatte</value>
       <value name="legacyPlastic" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyPlastic">legacyPlastic</value>
       <value name="legacyMetal" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyMetal">legacyMetal</value>
@@ -782,7 +782,7 @@
         </optional>
       </define>
     </grammar>
-    <resource name="ST_PresetCameraType" resource="List" generated="yes">
+    <resource name="ST_PresetCameraType" resource="List">
       <value name="legacyObliqueTopLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueTopLeft">legacyObliqueTopLeft</value>
       <value name="legacyObliqueTop" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueTop">legacyObliqueTop</value>
       <value name="legacyObliqueTopRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueTopRight">legacyObliqueTopRight</value>
@@ -1082,13 +1082,13 @@
         </optional>
       </define>
     </grammar>
-    <resource name="ST_StyleMatrixColumnIndex" resource="Integer" generated="yes"/>
-    <resource name="ST_FontCollectionIndex" resource="List" generated="yes">
+    <resource name="ST_StyleMatrixColumnIndex" resource="Integer"/>
+    <resource name="ST_FontCollectionIndex" resource="List">
       <value name="major" tokenid="ooxml:Value_drawingml_ST_FontCollectionIndex_major">major</value>
       <value name="minor" tokenid="ooxml:Value_drawingml_ST_FontCollectionIndex_minor">minor</value>
       <value name="none" tokenid="ooxml:Value_drawingml_ST_FontCollectionIndex_none">none</value>
     </resource>
-    <resource name="ST_ColorSchemeIndex" resource="List" generated="yes">
+    <resource name="ST_ColorSchemeIndex" resource="List">
       <value name="dk1" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_dk1">dk1</value>
       <value name="lt1" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_lt1">lt1</value>
       <value name="dk2" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_dk2">dk2</value>
@@ -1459,19 +1459,19 @@
         </optional>
       </define>
     </grammar>
-    <resource name="ST_TextPoint" resource="Integer" generated="yes"/>
-    <resource name="ST_TextNonNegativePoint" resource="Integer" generated="yes"/>
-    <resource name="ST_TextFontSize" resource="Integer" generated="yes"/>
-    <resource name="ST_Panose" resource="Hex" generated="yes"/>
-    <resource name="ST_TextTypeface" resource="String" generated="yes"/>
+    <resource name="ST_TextPoint" resource="Integer"/>
+    <resource name="ST_TextNonNegativePoint" resource="Integer"/>
+    <resource name="ST_TextFontSize" resource="Integer"/>
+    <resource name="ST_Panose" resource="Hex"/>
+    <resource name="ST_TextTypeface" resource="String"/>
     <resource name="CT_TextFont" resource="Properties">
       <attribute name="typeface" tokenid="ooxml:CT_TextFont_typeface"/>
       <attribute name="panose" tokenid="ooxml:CT_TextFont_panose"/>
       <attribute name="pitchFamily" tokenid="ooxml:CT_TextFont_pitchFamily"/>
       <attribute name="charset" tokenid="ooxml:CT_TextFont_charset"/>
     </resource>
-    <resource name="ST_TextLanguageID" resource="String" generated="yes"/>
-    <resource name="ST_TextUnderlineType" resource="List" generated="yes">
+    <resource name="ST_TextLanguageID" resource="String"/>
+    <resource name="ST_TextUnderlineType" resource="List">
       <value name="none" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_none">none</value>
       <value name="words" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_words">words</value>
       <value name="sng" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_sng">sng</value>
@@ -1491,12 +1491,12 @@
       <value name="wavyHeavy" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_wavyHeavy">wavyHeavy</value>
       <value name="wavyDbl" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_wavyDbl">wavyDbl</value>
     </resource>
-    <resource name="ST_TextStrikeType" resource="List" generated="yes">
+    <resource name="ST_TextStrikeType" resource="List">
       <value name="noStrike" tokenid="ooxml:Value_drawingml_ST_TextStrikeType_noStrike">noStrike</value>
       <value name="sngStrike" tokenid="ooxml:Value_drawingml_ST_TextStrikeType_sngStrike">sngStrike</value>
       <value name="dblStrike" tokenid="ooxml:Value_drawingml_ST_TextStrikeType_dblStrike">dblStrike</value>
     </resource>
-    <resource name="ST_TextCapsType" resource="List" generated="yes">
+    <resource name="ST_TextCapsType" resource="List">
       <value name="none" tokenid="ooxml:Value_drawingml_ST_TextCapsType_none">none</value>
       <value name="small" tokenid="ooxml:Value_drawingml_ST_TextCapsType_small">small</value>
       <value name="all" tokenid="ooxml:Value_drawingml_ST_TextCapsType_all">all</value>
@@ -2521,7 +2521,7 @@
         </element>
       </define>
     </grammar>
-    <resource name="ST_PresetShadowVal" resource="List" generated="yes">
+    <resource name="ST_PresetShadowVal" resource="List">
       <value name="shdw1" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw1">shdw1</value>
       <value name="shdw2" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw2">shdw2</value>
       <value name="shdw3" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw3">shdw3</value>
@@ -2544,12 +2544,12 @@
       <value name="shdw20" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw20">shdw20</value>
     </resource>
     <resource name="CT_SolidColorFillProperties" resource="Properties"/>
-    <resource name="ST_PathShadeType" resource="List" generated="yes">
+    <resource name="ST_PathShadeType" resource="List">
       <value name="shape" tokenid="ooxml:Value_drawingml_ST_PathShadeType_shape">shape</value>
       <value name="circle" tokenid="ooxml:Value_drawingml_ST_PathShadeType_circle">circle</value>
       <value name="rect" tokenid="ooxml:Value_drawingml_ST_PathShadeType_rect">rect</value>
     </resource>
-    <resource name="ST_TileFlipMode" resource="List" generated="yes">
+    <resource name="ST_TileFlipMode" resource="List">
       <value name="none" tokenid="ooxml:Value_drawingml_ST_TileFlipMode_none">none</value>
       <value name="x" tokenid="ooxml:Value_drawingml_ST_TileFlipMode_x">x</value>
       <value name="y" tokenid="ooxml:Value_drawingml_ST_TileFlipMode_y">y</value>
@@ -2573,7 +2573,7 @@
       <element name="tile" tokenid="ooxml:EG_FillModeProperties_tile"/>
       <element name="stretch" tokenid="ooxml:EG_FillModeProperties_stretch"/>
     </resource>
-    <resource name="ST_BlipCompression" resource="List" generated="yes">
+    <resource name="ST_BlipCompression" resource="List">
       <value name="email" tokenid="ooxml:Value_drawingml_ST_BlipCompression_email">email</value>
       <value name="screen" tokenid="ooxml:Value_drawingml_ST_BlipCompression_screen">screen</value>
       <value name="print" tokenid="ooxml:Value_drawingml_ST_BlipCompression_print">print</value>
@@ -2607,7 +2607,7 @@
       <attribute name="dpi" tokenid="ooxml:CT_BlipFillProperties_dpi"/>
       <attribute name="rotWithShape" tokenid="ooxml:CT_BlipFillProperties_rotWithShape"/>
     </resource>
-    <resource name="ST_PresetPatternVal" resource="List" generated="yes">
+    <resource name="ST_PresetPatternVal" resource="List">
       <value name="pct5" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct5">pct5</value>
       <value name="pct10" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct10">pct10</value>
       <value name="pct20" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct20">pct20</value>
@@ -2663,7 +2663,7 @@
       <value name="trellis" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_trellis">trellis</value>
       <value name="zigZag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_zigZag">zigZag</value>
     </resource>
-    <resource name="ST_BlendMode" resource="List" generated="yes">
+    <resource name="ST_BlendMode" resource="List">
       <value name="over" tokenid="ooxml:Value_drawingml_ST_BlendMode_over">over</value>
       <value name="mult" tokenid="ooxml:Value_drawingml_ST_BlendMode_mult">mult</value>
       <value name="screen" tokenid="ooxml:Value_drawingml_ST_BlendMode_screen">screen</value>
@@ -2702,7 +2702,7 @@
       <element name="tint" tokenid="ooxml:EG_Effect_tint"/>
       <element name="xfrm" tokenid="ooxml:EG_Effect_xfrm"/>
     </resource>
-    <resource name="ST_EffectContainerType" resource="List" generated="yes">
+    <resource name="ST_EffectContainerType" resource="List">
       <value name="sib" tokenid="ooxml:Value_drawingml_ST_EffectContainerType_sib">sib</value>
       <value name="tree" tokenid="ooxml:Value_drawingml_ST_EffectContainerType_tree">tree</value>
     </resource>
@@ -2952,7 +2952,7 @@
         </optional>
       </define>
     </grammar>
-    <resource name="ST_LineEndType" resource="List" generated="yes">
+    <resource name="ST_LineEndType" resource="List">
       <value name="none" tokenid="ooxml:Value_drawingml_ST_LineEndType_none">none</value>
       <value name="triangle" tokenid="ooxml:Value_drawingml_ST_LineEndType_triangle">triangle</value>
       <value name="stealth" tokenid="ooxml:Value_drawingml_ST_LineEndType_stealth">stealth</value>
@@ -2960,12 +2960,12 @@
       <value name="oval" tokenid="ooxml:Value_drawingml_ST_LineEndType_oval">oval</value>
       <value name="arrow" tokenid="ooxml:Value_drawingml_ST_LineEndType_arrow">arrow</value>
     </resource>
-    <resource name="ST_LineEndWidth" resource="List" generated="yes">
+    <resource name="ST_LineEndWidth" resource="List">
       <value name="sm" tokenid="ooxml:Value_drawingml_ST_LineEndWidth_sm">sm</value>
       <value name="med" tokenid="ooxml:Value_drawingml_ST_LineEndWidth_med">med</value>
       <value name="lg" tokenid="ooxml:Value_drawingml_ST_LineEndWidth_lg">lg</value>
     </resource>
-    <resource name="ST_LineEndLength" resource="List" generated="yes">
+    <resource name="ST_LineEndLength" resource="List">
       <value name="sm" tokenid="ooxml:Value_drawingml_ST_LineEndLength_sm">sm</value>
       <value name="med" tokenid="ooxml:Value_drawingml_ST_LineEndLength_med">med</value>
       <value name="lg" tokenid="ooxml:Value_drawingml_ST_LineEndLength_lg">lg</value>
@@ -2981,7 +2981,7 @@
       <element name="gradFill" tokenid="ooxml:EG_LineFillProperties_gradFill"/>
       <element name="pattFill" tokenid="ooxml:EG_LineFillProperties_pattFill"/>
     </resource>
-    <resource name="ST_PresetLineDashVal" resource="List" generated="yes">
+    <resource name="ST_PresetLineDashVal" resource="List">
       <value name="solid" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_solid">solid</value>
       <value name="dot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_dot">dot</value>
       <value name="dash" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_dash">dash</value>
@@ -2994,16 +2994,16 @@
       <value name="sysDashDot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDashDot">sysDashDot</value>
       <value name="sysDashDotDot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDashDotDot">sysDashDotDot</value>
     </resource>
-    <resource name="ST_LineCap" resource="List" generated="yes">
+    <resource name="ST_LineCap" resource="List">
       <value name="rnd" tokenid="ooxml:Value_drawingml_ST_LineCap_rnd">rnd</value>
       <value name="sq" tokenid="ooxml:Value_drawingml_ST_LineCap_sq">sq</value>
       <value name="flat" tokenid="ooxml:Value_drawingml_ST_LineCap_flat">flat</value>
     </resource>
-    <resource name="ST_PenAlignment" resource="List" generated="yes">
+    <resource name="ST_PenAlignment" resource="List">
       <value name="ctr" tokenid="ooxml:Value_drawingml_ST_PenAlignment_ctr">ctr</value>
       <value name="in" tokenid="ooxml:Value_drawingml_ST_PenAlignment_in">in</value>
     </resource>
-    <resource name="ST_CompoundLine" resource="List" generated="yes">
+    <resource name="ST_CompoundLine" resource="List">
       <value name="sng" tokenid="ooxml:Value_drawingml_ST_CompoundLine_sng">sng</value>
       <value name="dbl" tokenid="ooxml:Value_drawingml_ST_CompoundLine_dbl">dbl</value>
       <value name="thickThin" tokenid="ooxml:Value_drawingml_ST_CompoundLine_thickThin">thickThin</value>
@@ -4081,32 +4081,32 @@
         <data type="unsignedInt"/>
       </define>
     </grammar>
-    <resource name="ST_Coordinate" resource="Integer" generated="yes"/>
-    <resource name="ST_Coordinate32" resource="Integer" generated="yes"/>
-    <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
-    <resource name="ST_Angle" resource="Integer" generated="yes"/>
-    <resource name="CT_Angle" resource="Value" generated="yes">
+    <resource name="ST_Coordinate" resource="Integer"/>
+    <resource name="ST_Coordinate32" resource="Integer"/>
+    <resource name="ST_PositiveCoordinate" resource="Integer"/>
+    <resource name="ST_Angle" resource="Integer"/>
+    <resource name="CT_Angle" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Angle_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="CT_PositiveFixedAngle" resource="Value" generated="yes">
+    <resource name="CT_PositiveFixedAngle" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_PositiveFixedAngle_val" action="setValue"/>
     </resource>
-    <resource name="ST_Percentage" resource="Integer" generated="yes"/>
-    <resource name="CT_Percentage" resource="Value" generated="yes">
+    <resource name="ST_Percentage" resource="Integer"/>
+    <resource name="CT_Percentage" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Percentage_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_PositivePercentage" resource="Value">
       <action name="characters" action="positivePercentage"/>
     </resource>
-    <resource name="CT_PositivePercentage" resource="Value" generated="yes">
+    <resource name="CT_PositivePercentage" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_PositivePercentage_val" action="setValue"/>
     </resource>
-    <resource name="CT_FixedPercentage" resource="Value" generated="yes">
+    <resource name="CT_FixedPercentage" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_FixedPercentage_val" action="setValue"/>
     </resource>
-    <resource name="CT_PositiveFixedPercentage" resource="Value" generated="yes">
+    <resource name="CT_PositiveFixedPercentage" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_PositiveFixedPercentage_val" action="setValue"/>
     </resource>
     <resource name="CT_Point2D" resource="Properties">
@@ -4122,7 +4122,7 @@
       <attribute name="g" tokenid="ooxml:CT_ScRgbColor_g"/>
       <attribute name="b" tokenid="ooxml:CT_ScRgbColor_b"/>
     </resource>
-    <resource name="ST_HexBinary3" resource="Hex" generated="yes"/>
+    <resource name="ST_HexBinary3" resource="Hex"/>
     <resource name="CT_SRgbColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SRgbColor_val"/>
     </resource>
@@ -4131,7 +4131,7 @@
       <attribute name="sat" tokenid="ooxml:CT_HslColor_sat"/>
       <attribute name="lum" tokenid="ooxml:CT_HslColor_lum"/>
     </resource>
-    <resource name="ST_SystemColorVal" resource="List" generated="yes">
+    <resource name="ST_SystemColorVal" resource="List">
       <value name="scrollBar" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_scrollBar">scrollBar</value>
       <value name="background" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_background">background</value>
       <value name="activeCaption" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_activeCaption">activeCaption</value>
@@ -4167,7 +4167,7 @@
       <attribute name="val" tokenid="ooxml:CT_SystemColor_val"/>
       <attribute name="lastClr" tokenid="ooxml:CT_SytemColor_lastClr"/>
     </resource>
-    <resource name="ST_SchemeColorVal" resource="List" generated="yes">
+    <resource name="ST_SchemeColorVal" resource="List">
       <value name="bg1" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_bg1">bg1</value>
       <value name="tx1" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_tx1">tx1</value>
       <value name="bg2" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_bg2">bg2</value>
@@ -4341,7 +4341,7 @@
       <attribute name="flipH" tokenid="ooxml:CT_Transform2D_flipH"/>
       <attribute name="flipV" tokenid="ooxml:CT_Transform2D_flipV"/>
     </resource>
-    <resource name="ST_RectAlignment" resource="List" generated="yes">
+    <resource name="ST_RectAlignment" resource="List">
       <value name="tl" tokenid="ooxml:Value_drawingml_ST_RectAlignment_tl">tl</value>
       <value name="t" tokenid="ooxml:Value_drawingml_ST_RectAlignment_t">t</value>
       <value name="tr" tokenid="ooxml:Value_drawingml_ST_RectAlignment_tr">tr</value>
@@ -4352,7 +4352,7 @@
       <value name="b" tokenid="ooxml:Value_drawingml_ST_RectAlignment_b">b</value>
       <value name="br" tokenid="ooxml:Value_drawingml_ST_RectAlignment_br">br</value>
     </resource>
-    <resource name="ST_Guid" resource="String" generated="yes"/>
+    <resource name="ST_Guid" resource="String"/>
     <resource name="EG_ColorChoice" resource="Properties">
       <element name="scrgbClr" tokenid="ooxml:EG_ColorChoice_scrgbClr"/>
       <element name="srgbClr" tokenid="ooxml:EG_ColorChoice_srgbClr"/>
@@ -4363,7 +4363,7 @@
     </resource>
     <resource name="CT_Color" resource="Properties"/>
     <resource name="CT_ColorMRU" resource="Properties"/>
-    <resource name="ST_BlackWhiteMode" resource="List" generated="yes">
+    <resource name="ST_BlackWhiteMode" resource="List">
       <value name="clr" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_clr">clr</value>
       <value name="auto" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_auto">auto</value>
       <value name="gray" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_gray">gray</value>
@@ -4380,7 +4380,7 @@
       <attribute name="r:embed" tokenid="ooxml:AG_Blob_r_embed"/>
       <attribute name="r:link" tokenid="ooxml:AG_Blob_r_link"/>
     </resource>
-    <resource name="ST_DrawingElementId" resource="Integer" generated="yes"/>
+    <resource name="ST_DrawingElementId" resource="Integer"/>
   </namespace>
   <namespace name="dml-documentProperties" file="dml-documentProperties.rng" todo="ignore">
     <grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
@@ -4805,7 +4805,7 @@
         </element>
       </define>
     </grammar>
-    <resource name="ST_SizeRelFromH" resource="List" generated="yes">
+    <resource name="ST_SizeRelFromH" resource="List">
       <value name="margin" tokenid="ooxml:ST_SizeRelFromH_margin">margin</value>
       <value name="page" tokenid="ooxml:ST_SizeRelFromH_page">page</value>
       <value name="leftMargin" tokenid="ooxml:ST_SizeRelFromH_leftMargin">leftMargin</value>
@@ -4813,7 +4813,7 @@
       <value name="insideMargin" tokenid="ooxml:ST_SizeRelFromH_insideMargin">insideMargin</value>
       <value name="outsideMargin" tokenid="ooxml:ST_SizeRelFromH_outsideMargin">outsideMargin</value>
     </resource>
-    <resource name="ST_SizeRelFromV" resource="List" generated="yes">
+    <resource name="ST_SizeRelFromV" resource="List">
       <value name="margin" tokenid="ooxml:ST_SizeRelFromV_margin">margin</value>
       <value name="page" tokenid="ooxml:ST_SizeRelFromV_page">page</value>
       <value name="topMargin" tokenid="ooxml:ST_SizeRelFromV_topMargin">topMargin</value>
@@ -5797,7 +5797,7 @@
       <element name="checkedState" tokenid="ooxml:CT_SdtCheckbox_checkedState">checkedState</element>
       <element name="uncheckedState" tokenid="ooxml:CT_SdtCheckbox_uncheckedState">uncheckedState</element>
     </resource>
-    <resource name="ST_SchemeColorVal" resource="List" generated="yes">
+    <resource name="ST_SchemeColorVal" resource="List">
       <value name="bg1" tokenid="ooxml:ST_SchemeColorVal_bg1">bg1</value>
       <value name="tx1" tokenid="ooxml:ST_SchemeColorVal_tx1">tx1</value>
       <value name="bg2" tokenid="ooxml:ST_SchemeColorVal_bg2">bg2</value>
@@ -5816,7 +5816,7 @@
       <value name="lt2" tokenid="ooxml:ST_SchemeColorVal_lt2">lt2</value>
       <value name="phClr" tokenid="ooxml:ST_SchemeColorVal_phClr">phClr</value>
     </resource>
-    <resource name="ST_RectAlignment" resource="List" generated="yes">
+    <resource name="ST_RectAlignment" resource="List">
       <value name="none" tokenid="ooxml:ST_RectAlignment_none">none</value>
       <value name="tl" tokenid="ooxml:ST_RectAlignment_tl">tl</value>
       <value name="t" tokenid="ooxml:ST_RectAlignment_t">t</value>
@@ -5828,34 +5828,34 @@
       <value name="b" tokenid="ooxml:ST_RectAlignment_b">b</value>
       <value name="br" tokenid="ooxml:ST_RectAlignment_br">br</value>
     </resource>
-    <resource name="ST_LineCap" resource="List" generated="yes">
+    <resource name="ST_LineCap" resource="List">
       <value name="rnd" tokenid="ooxml:ST_LineCap_rnd">rnd</value>
       <value name="sq" tokenid="ooxml:ST_LineCap_sq">sq</value>
       <value name="flat" tokenid="ooxml:ST_LineCap_flat">flat</value>
     </resource>
-    <resource name="ST_CompoundLine" resource="List" generated="yes">
+    <resource name="ST_CompoundLine" resource="List">
       <value name="sng" tokenid="ooxml:ST_CompoundLine_sng">sng</value>
       <value name="dbl" tokenid="ooxml:ST_CompoundLine_dbl">dbl</value>
       <value name="thickThin" tokenid="ooxml:ST_CompoundLine_thickThin">thickThin</value>
       <value name="thinThick" tokenid="ooxml:ST_CompoundLine_thinThick">thinThick</value>
       <value name="tri" tokenid="ooxml:ST_CompoundLine_tri">tri</value>
     </resource>
-    <resource name="ST_PenAlignment" resource="List" generated="yes">
+    <resource name="ST_PenAlignment" resource="List">
       <value name="ctr" tokenid="ooxml:ST_PenAlignment_ctr">ctr</value>
       <value name="in" tokenid="ooxml:ST_PenAlignment_in">in</value>
     </resource>
-    <resource name="ST_OnOff" resource="List" generated="yes">
+    <resource name="ST_OnOff" resource="List">
       <value name="true" tokenid="ooxml:ST_OnOff_true">true</value>
       <value name="false" tokenid="ooxml:ST_OnOff_false">false</value>
       <value name="0" tokenid="ooxml:ST_OnOff_0">0</value>
       <value name="1" tokenid="ooxml:ST_OnOff_1">1</value>
     </resource>
-    <resource name="ST_PathShadeType" resource="List" generated="yes">
+    <resource name="ST_PathShadeType" resource="List">
       <value name="shape" tokenid="ooxml:ST_PathShadeType_shape">shape</value>
       <value name="circle" tokenid="ooxml:ST_PathShadeType_circle">circle</value>
       <value name="rect" tokenid="ooxml:ST_PathShadeType_rect">rect</value>
     </resource>
-    <resource name="ST_PresetLineDashVal" resource="List" generated="yes">
+    <resource name="ST_PresetLineDashVal" resource="List">
       <value name="solid" tokenid="ooxml:ST_PresetLineDashVal_solid">solid</value>
       <value name="dot" tokenid="ooxml:ST_PresetLineDashVal_dot">dot</value>
       <value name="sysDot" tokenid="ooxml:ST_PresetLineDashVal_sysDot">sysDot</value>
@@ -5868,7 +5868,7 @@
       <value name="lgDashDotDot" tokenid="ooxml:ST_PresetLineDashVal_lgDashDotDot">lgDashDotDot</value>
       <value name="sysDashDotDot" tokenid="ooxml:ST_PresetLineDashVal_sysDashDotDot">sysDashDotDot</value>
     </resource>
-    <resource name="ST_PresetCameraType" resource="List" generated="yes">
+    <resource name="ST_PresetCameraType" resource="List">
       <value name="legacyObliqueTopLeft" tokenid="ooxml:ST_PresetCameraType_legacyObliqueTopLeft">legacyObliqueTopLeft</value>
       <value name="legacyObliqueTop" tokenid="ooxml:ST_PresetCameraType_legacyObliqueTop">legacyObliqueTop</value>
       <value name="legacyObliqueTopRight" tokenid="ooxml:ST_PresetCameraType_legacyObliqueTopRight">legacyObliqueTopRight</value>
@@ -5932,7 +5932,7 @@
       <value name="perspectiveRelaxed" tokenid="ooxml:ST_PresetCameraType_perspectiveRelaxed">perspectiveRelaxed</value>
       <value name="perspectiveRelaxedModerately" tokenid="ooxml:ST_PresetCameraType_perspectiveRelaxedModerately">perspectiveRelaxedModerately</value>
     </resource>
-    <resource name="ST_LightRigType" resource="List" generated="yes">
+    <resource name="ST_LightRigType" resource="List">
       <value name="legacyFlat1" tokenid="ooxml:ST_LightRigType_legacyFlat1">legacyFlat1</value>
       <value name="legacyFlat2" tokenid="ooxml:ST_LightRigType_legacyFlat2">legacyFlat2</value>
       <value name="legacyFlat3" tokenid="ooxml:ST_LightRigType_legacyFlat3">legacyFlat3</value>
@@ -5961,7 +5961,7 @@
       <value name="glow" tokenid="ooxml:ST_LightRigType_glow">glow</value>
       <value name="brightRoom" tokenid="ooxml:ST_LightRigType_brightRoom">brightRoom</value>
     </resource>
-    <resource name="ST_LightRigDirection" resource="List" generated="yes">
+    <resource name="ST_LightRigDirection" resource="List">
       <value name="tl" tokenid="ooxml:ST_LightRigDirection_tl">tl</value>
       <value name="t" tokenid="ooxml:ST_LightRigDirection_t">t</value>
       <value name="tr" tokenid="ooxml:ST_LightRigDirection_tr">tr</value>
@@ -5971,7 +5971,7 @@
       <value name="b" tokenid="ooxml:ST_LightRigDirection_b">b</value>
       <value name="br" tokenid="ooxml:ST_LightRigDirection_br">br</value>
     </resource>
-    <resource name="ST_BevelPresetType" resource="List" generated="yes">
+    <resource name="ST_BevelPresetType" resource="List">
       <value name="relaxedInset" tokenid="ooxml:ST_BevelPresetType_relaxedInset">relaxedInset</value>
       <value name="circle" tokenid="ooxml:ST_BevelPresetType_circle">circle</value>
       <value name="slope" tokenid="ooxml:ST_BevelPresetType_slope">slope</value>
@@ -5985,7 +5985,7 @@
       <value name="hardEdge" tokenid="ooxml:ST_BevelPresetType_hardEdge">hardEdge</value>
       <value name="artDeco" tokenid="ooxml:ST_BevelPresetType_artDeco">artDeco</value>
     </resource>
-    <resource name="ST_PresetMaterialType" resource="List" generated="yes">
+    <resource name="ST_PresetMaterialType" resource="List">
       <value name="legacyMatte" tokenid="ooxml:ST_PresetMaterialType_legacyMatte">legacyMatte</value>
       <value name="legacyPlastic" tokenid="ooxml:ST_PresetMaterialType_legacyPlastic">legacyPlastic</value>
       <value name="legacyMetal" tokenid="ooxml:ST_PresetMaterialType_legacyMetal">legacyMetal</value>
@@ -6003,7 +6003,7 @@
       <value name="softmetal" tokenid="ooxml:ST_PresetMaterialType_softmetal">softmetal</value>
       <value name="none" tokenid="ooxml:ST_PresetMaterialType_none">none</value>
     </resource>
-    <resource name="ST_Ligatures" resource="List" generated="yes">
+    <resource name="ST_Ligatures" resource="List">
       <value name="none" tokenid="ooxml:ST_Ligatures_none">none</value>
       <value name="standard" tokenid="ooxml:ST_Ligatures_standard">standard</value>
       <value name="contextual" tokenid="ooxml:ST_Ligatures_contextual">contextual</value>
@@ -6021,26 +6021,26 @@
       <value name="contextualHistoricalDiscretional" tokenid="ooxml:ST_Ligatures_contextualHistoricalDiscretional">contextualHistoricalDiscretional</value>
       <value name="all" tokenid="ooxml:ST_Ligatures_all">all</value>
     </resource>
-    <resource name="ST_NumForm" resource="List" generated="yes">
+    <resource name="ST_NumForm" resource="List">
       <value name="default" tokenid="ooxml:ST_NumForm_default">default</value>
       <value name="lining" tokenid="ooxml:ST_NumForm_lining">lining</value>
       <value name="oldStyle" tokenid="ooxml:ST_NumForm_oldStyle">oldStyle</value>
     </resource>
-    <resource name="ST_NumSpacing" resource="List" generated="yes">
+    <resource name="ST_NumSpacing" resource="List">
       <value name="default" tokenid="ooxml:ST_NumSpacing_default">default</value>
       <value name="proportional" tokenid="ooxml:ST_NumSpacing_proportional">proportional</value>
       <value name="tabular" tokenid="ooxml:ST_NumSpacing_tabular">tabular</value>
     </resource>
 
-    <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
+    <resource name="ST_PositiveCoordinate" resource="Integer"/>
     <resource name="ST_HexColorRGB" resource="Hex"/>
-    <resource name="ST_PositivePercentage" resource="Integer" generated="yes"/>
-    <resource name="ST_PositiveFixedPercentage" resource="Integer" generated="yes"/>
-    <resource name="ST_Percentage" resource="Integer" generated="yes"/>
-    <resource name="ST_PositiveFixedAngle" resource="Integer" generated="yes"/>
-    <resource name="ST_FixedAngle" resource="Integer" generated="yes"/>
-    <resource name="ST_LineWidth" resource="Integer" generated="yes"/>
-    <resource name="ST_UnsignedDecimalNumber" resource="Integer" generated="yes"/>
+    <resource name="ST_PositivePercentage" resource="Integer"/>
+    <resource name="ST_PositiveFixedPercentage" resource="Integer"/>
+    <resource name="ST_Percentage" resource="Integer"/>
+    <resource name="ST_PositiveFixedAngle" resource="Integer"/>
+    <resource name="ST_FixedAngle" resource="Integer"/>
+    <resource name="ST_LineWidth" resource="Integer"/>
+    <resource name="ST_UnsignedDecimalNumber" resource="Integer"/>
 
     <!-- Groups Resource Definitions -->
     <resource name="EG_ColorTransform" resource="Properties">
@@ -7654,7 +7654,7 @@
       <value tokenid="ooxml:Value_ST_ShapeType_chartStar">chartStar</value>
       <value tokenid="ooxml:Value_ST_ShapeType_chartPlus">chartPlus</value>
     </resource>
-    <resource name="ST_TextShapeType" resource="List" generated="yes">
+    <resource name="ST_TextShapeType" resource="List">
       <value name="textNoShape" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textNoShape">textNoShape</value>
       <value name="textPlain" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textPlain">textPlain</value>
       <value name="textStop" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textStop">textStop</value>
@@ -7697,12 +7697,12 @@
       <value name="textCascadeUp" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCascadeUp">textCascadeUp</value>
       <value name="textCascadeDown" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCascadeDown">textCascadeDown</value>
     </resource>
-    <resource name="ST_GeomGuideName" resource="String" generated="yes"/>
-    <resource name="ST_GeomGuideFormula" resource="String" generated="yes"/>
+    <resource name="ST_GeomGuideName" resource="String"/>
+    <resource name="ST_GeomGuideFormula" resource="String"/>
     <resource name="CT_GeomGuideList" resource="Properties">
       <element name="gd" tokenid="ooxml:CT_GeomGuideList_gd"/>
     </resource>
-    <resource name="ST_PathFillMode" resource="List" generated="yes">
+    <resource name="ST_PathFillMode" resource="List">
       <value name="none" tokenid="ooxml:Value_drawingml_ST_PathFillMode_none">none</value>
       <value name="norm" tokenid="ooxml:Value_drawingml_ST_PathFillMode_norm">norm</value>
       <value name="lighten" tokenid="ooxml:Value_drawingml_ST_PathFillMode_lighten">lighten</value>
@@ -8154,7 +8154,7 @@
       <attribute name="r" tokenid="ooxml:CT_EffectExtent_r"/>
       <attribute name="b" tokenid="ooxml:CT_EffectExtent_b"/>
     </resource>
-    <resource name="ST_WrapDistance" resource="Integer" generated="yes"/>
+    <resource name="ST_WrapDistance" resource="Integer"/>
     <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Inline" resource="Properties">
       <element name="extent" tokenid="ooxml:CT_Inline_extent"/>
       <element name="effectExtent" tokenid="ooxml:CT_Inline_effectExtent"/>
@@ -8169,7 +8169,7 @@
       <attribute name="distR" tokenid="ooxml:CT_Inline_distR"/>
       <attribute name="wp14:anchorId" tokenid="ooxml:CT_Inline_wp14_anchorId"/>
     </resource>
-    <resource name="ST_WrapText" resource="List" generated="yes">
+    <resource name="ST_WrapText" resource="List">
       <value name="bothSides" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_bothSides">bothSides</value>
       <value name="left" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_left">left</value>
       <value name="right" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_right">right</value>
@@ -8219,7 +8219,7 @@
     <resource name="ST_AlignH" resource="Value">
       <action name="characters" action="alignH"/>
     </resource>
-    <resource name="ST_RelFromH" resource="List" generated="yes">
+    <resource name="ST_RelFromH" resource="List">
       <value name="margin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_margin">margin</value>
       <value name="page" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_page">page</value>
       <value name="column" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_column">column</value>
@@ -8237,7 +8237,7 @@
     <resource name="ST_AlignV" resource="Value">
       <action name="characters" action="alignV"/>
     </resource>
-    <resource name="ST_RelFromV" resource="List" generated="yes">
+    <resource name="ST_RelFromV" resource="List">
       <value name="margin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_margin">margin</value>
       <value name="page" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_page">page</value>
       <value name="paragraph" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_paragraph">paragraph</value>
@@ -9511,32 +9511,32 @@
         </element>
       </define>
     </grammar>
-    <resource name="ST_Integer255" resource="Integer" generated="yes"/>
-    <resource name="CT_Integer255" resource="Value" generated="yes">
+    <resource name="ST_Integer255" resource="Integer"/>
+    <resource name="CT_Integer255" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Integer255_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_Integer2" resource="Integer" generated="yes"/>
-    <resource name="CT_Integer2" resource="Value" generated="yes">
+    <resource name="ST_Integer2" resource="Integer"/>
+    <resource name="CT_Integer2" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Integer2_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_SpacingRule" resource="Integer" generated="yes"/>
-    <resource name="CT_SpacingRule" resource="Value" generated="yes">
+    <resource name="ST_SpacingRule" resource="Integer"/>
+    <resource name="CT_SpacingRule" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_SpacingRule_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_UnSignedInteger" resource="Integer" generated="yes"/>
-    <resource name="CT_UnSignedInteger" resource="Value" generated="yes">
+    <resource name="ST_UnSignedInteger" resource="Integer"/>
+    <resource name="CT_UnSignedInteger" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_UnSignedInteger_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_Char" resource="String" generated="yes"/>
-    <resource name="CT_Char" resource="Value" generated="yes">
+    <resource name="ST_Char" resource="String"/>
+    <resource name="CT_Char" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Char_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_OnOff" resource="List" generated="yes">
+    <resource name="ST_OnOff" resource="List">
       <value name="on" tokenid="ooxml:Value_math_ST_OnOff_on">on</value>
       <value name="off" tokenid="ooxml:Value_math_ST_OnOff_off">off</value>
     </resource>
@@ -9544,58 +9544,58 @@
       <attribute name="val" tokenid="ooxml:CT_OnOff_val" action="setValue"/>
       <action name="start" action="setDefaultBooleanValue"/>
     </resource>
-    <resource name="ST_String" resource="String" generated="yes"/>
-    <resource name="CT_String" resource="Value" generated="yes">
+    <resource name="ST_String" resource="String"/>
+    <resource name="CT_String" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_String_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_XAlign" resource="List" generated="yes">
+    <resource name="ST_XAlign" resource="List">
       <value name="left" tokenid="ooxml:Value_math_ST_XAlign_left">left</value>
       <value name="center" tokenid="ooxml:Value_math_ST_XAlign_center">center</value>
       <value name="right" tokenid="ooxml:Value_math_ST_XAlign_right">right</value>
     </resource>
-    <resource name="CT_XAlign" resource="Value" generated="yes">
+    <resource name="CT_XAlign" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_XAlign_val" action="setValue"/>
     </resource>
-    <resource name="ST_YAlign" resource="List" generated="yes">
+    <resource name="ST_YAlign" resource="List">
       <value name="top" tokenid="ooxml:Value_math_ST_YAlign_top">top</value>
       <value name="center" tokenid="ooxml:Value_math_ST_YAlign_center">center</value>
       <value name="bot" tokenid="ooxml:Value_math_ST_YAlign_bot">bot</value>
     </resource>
-    <resource name="CT_YAlign" resource="Value" generated="yes">
+    <resource name="CT_YAlign" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_YAlign_val" action="setValue"/>
     </resource>
-    <resource name="ST_Shp" resource="List" generated="yes">
+    <resource name="ST_Shp" resource="List">
       <value name="centered" tokenid="ooxml:Value_math_ST_Shp_centered">centered</value>
       <value name="match" tokenid="ooxml:Value_math_ST_Shp_match">match</value>
     </resource>
-    <resource name="CT_Shp" resource="Value" generated="yes">
+    <resource name="CT_Shp" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Shp_val" action="setValue"/>
     </resource>
-    <resource name="ST_FType" resource="List" generated="yes">
+    <resource name="ST_FType" resource="List">
       <value name="bar" tokenid="ooxml:Value_math_ST_FType_bar">bar</value>
       <value name="skw" tokenid="ooxml:Value_math_ST_FType_skw">skw</value>
       <value name="lin" tokenid="ooxml:Value_math_ST_FType_lin">lin</value>
       <value name="noBar" tokenid="ooxml:Value_math_ST_FType_noBar">noBar</value>
     </resource>
-    <resource name="CT_FType" resource="Value" generated="yes">
+    <resource name="CT_FType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_FType_val" action="setValue"/>
     </resource>
-    <resource name="ST_LimLoc" resource="List" generated="yes">
+    <resource name="ST_LimLoc" resource="List">
       <value name="undOvr" tokenid="ooxml:Value_math_ST_LimLoc_undOvr">undOvr</value>
       <value name="subSup" tokenid="ooxml:Value_math_ST_LimLoc_subSup">subSup</value>
     </resource>
-    <resource name="CT_LimLoc" resource="Value" generated="yes">
+    <resource name="CT_LimLoc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_LimLoc_val" action="setValue"/>
     </resource>
-    <resource name="ST_TopBot" resource="List" generated="yes">
+    <resource name="ST_TopBot" resource="List">
       <value name="top" tokenid="ooxml:Value_math_ST_TopBot_top">top</value>
       <value name="bot" tokenid="ooxml:Value_math_ST_TopBot_bot">bot</value>
     </resource>
-    <resource name="CT_TopBot" resource="Value" generated="yes">
+    <resource name="CT_TopBot" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TopBot_val" action="setValue"/>
     </resource>
-    <resource name="ST_Script" resource="List" generated="yes">
+    <resource name="ST_Script" resource="List">
       <value name="roman" tokenid="ooxml:Value_math_ST_Script_roman">roman</value>
       <value name="script" tokenid="ooxml:Value_math_ST_Script_script">script</value>
       <value name="fraktur" tokenid="ooxml:Value_math_ST_Script_fraktur">fraktur</value>
@@ -9603,7 +9603,7 @@
       <value name="sansmserif" tokenid="ooxml:Value_math_ST_Script_sansmserif">sans-serif</value>
       <value name="monospace" tokenid="ooxml:Value_math_ST_Script_monospace">monospace</value>
     </resource>
-    <resource name="CT_Script" resource="Value" generated="yes">
+    <resource name="CT_Script" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Script_val" action="setValue"/>
     </resource>
     <resource name="ST_Style" resource="List">
@@ -9615,7 +9615,7 @@
     <resource name="CT_Style" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Style_val" action="setValue"/>
     </resource>
-    <resource name="ST_Jc" resource="List" generated="yes">
+    <resource name="ST_Jc" resource="List">
       <value name="start" tokenid="ooxml:Value_math_ST_Jc_start">left</value>
       <value name="end" tokenid="ooxml:Value_math_ST_Jc_end">right</value>
       <value name="left" tokenid="ooxml:Value_math_ST_Jc_left">left</value>
@@ -9623,28 +9623,28 @@
       <value name="center" tokenid="ooxml:Value_math_ST_Jc_center">center</value>
       <value name="centerGroup" tokenid="ooxml:Value_math_ST_Jc_centerGroup">centerGroup</value>
     </resource>
-    <resource name="CT_OMathJc" resource="Value" generated="yes">
+    <resource name="CT_OMathJc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_OMathJc_val" action="setValue"/>
     </resource>
     <resource name="ST_TwipsMeasure" resource="UniversalMeasure"/>
-    <resource name="CT_TwipsMeasure" resource="Value" generated="yes">
+    <resource name="CT_TwipsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_BreakBin" resource="List" generated="yes">
+    <resource name="ST_BreakBin" resource="List">
       <value name="before" tokenid="ooxml:Value_math_ST_BreakBin_before">before</value>
       <value name="after" tokenid="ooxml:Value_math_ST_BreakBin_after">after</value>
       <value name="repeat" tokenid="ooxml:Value_math_ST_BreakBin_repeat">repeat</value>
     </resource>
-    <resource name="CT_BreakBin" resource="Value" generated="yes">
+    <resource name="CT_BreakBin" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_BreakBin_val" action="setValue"/>
     </resource>
-    <resource name="ST_BreakBinSub" resource="List" generated="yes">
+    <resource name="ST_BreakBinSub" resource="List">
       <value name="mm" tokenid="ooxml:Value_math_ST_BreakBinSub_mm">--</value>
       <value name="mp" tokenid="ooxml:Value_math_ST_BreakBinSub_mp">-+</value>
       <value name="pm" tokenid="ooxml:Value_math_ST_BreakBinSub_pm">+-</value>
     </resource>
-    <resource name="CT_BreakBinSub" resource="Value" generated="yes">
+    <resource name="CT_BreakBinSub" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_BreakBinSub_val" action="setValue"/>
     </resource>
   </namespace>
@@ -9691,7 +9691,7 @@
         </attribute>
       </define>
     </grammar>
-    <resource name="ST_RelationshipId" resource="String" generated="yes"/>
+    <resource name="ST_RelationshipId" resource="String"/>
   </namespace>
   <namespace name="dml-chartDrawing" file="dml-chartDrawing.rng">
     <start name="pic"/>
@@ -11166,19 +11166,19 @@
         </zeroOrMore>
       </define>
     </grammar>
-    <resource name="ST_Ext" resource="List" generated="yes">
+    <resource name="ST_Ext" resource="List">
       <value name="view" tokenid="ooxml:Value_vml_ST_Ext_view">view</value>
       <value name="edit" tokenid="ooxml:Value_vml_ST_Ext_edit">edit</value>
       <value name="backwardCompatible" tokenid="ooxml:Value_vml_ST_Ext_backwardCompatible">backwardCompatible</value>
     </resource>
-    <resource name="ST_TrueFalse" resource="List" generated="yes">
+    <resource name="ST_TrueFalse" resource="List">
       <value name="t" tokenid="ooxml:Value_vml_ST_TrueFalse_t">t</value>
       <value name="f" tokenid="ooxml:Value_vml_ST_TrueFalse_f">f</value>
       <value name="true" tokenid="ooxml:Value_vml_ST_TrueFalse_true">true</value>
       <value name="false" tokenid="ooxml:Value_vml_ST_TrueFalse_false">false</value>
     </resource>
-    <resource name="ST_ColorType" resource="String" generated="yes"/>
-    <resource name="ST_FillType" resource="List" generated="yes">
+    <resource name="ST_ColorType" resource="String"/>
+    <resource name="ST_FillType" resource="List">
       <value name="solid" tokenid="ooxml:Value_vml_ST_FillType_solid">solid</value>
       <value name="gradient" tokenid="ooxml:Value_vml_ST_FillType_gradient">gradient</value>
       <value name="gradientRadial" tokenid="ooxml:Value_vml_ST_FillType_gradientRadial">gradientRadial</value>
@@ -11186,47 +11186,47 @@
       <value name="pattern" tokenid="ooxml:Value_vml_ST_FillType_pattern">pattern</value>
       <value name="frame" tokenid="ooxml:Value_vml_ST_FillType_frame">frame</value>
     </resource>
-    <resource name="ST_FillMethod" resource="List" generated="yes">
+    <resource name="ST_FillMethod" resource="List">
       <value name="none" tokenid="ooxml:Value_vml_ST_FillMethod_none">none</value>
       <value name="linear" tokenid="ooxml:Value_vml_ST_FillMethod_linear">linear</value>
       <value name="sigma" tokenid="ooxml:Value_vml_ST_FillMethod_sigma">sigma</value>
       <value name="any" tokenid="ooxml:Value_vml_ST_FillMethod_any">any</value>
       <value name="linear_sigma" tokenid="ooxml:Value_vml_ST_FillMethod_linear_sigma">linear sigma</value>
     </resource>
-    <resource name="ST_ShadowType" resource="List" generated="yes">
+    <resource name="ST_ShadowType" resource="List">
       <value name="single" tokenid="ooxml:Value_vml_ST_ShadowType_single">single</value>
       <value name="double" tokenid="ooxml:Value_vml_ST_ShadowType_double">double</value>
       <value name="emboss" tokenid="ooxml:Value_vml_ST_ShadowType_emboss">emboss</value>
       <value name="perspective" tokenid="ooxml:Value_vml_ST_ShadowType_perspective">perspective</value>
     </resource>
-    <resource name="ST_StrokeLineStyle" resource="List" generated="yes">
+    <resource name="ST_StrokeLineStyle" resource="List">
       <value name="single" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_single">single</value>
       <value name="thinThin" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thinThin">thinThin</value>
       <value name="thinThick" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thinThick">thinThick</value>
       <value name="thickThin" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thickThin">thickThin</value>
       <value name="thickBetweenThin" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thickBetweenThin">thickBetweenThin</value>
     </resource>
-    <resource name="ST_StrokeJoinStyle" resource="List" generated="yes">
+    <resource name="ST_StrokeJoinStyle" resource="List">
       <value name="round" tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_round">round</value>
       <value name="bevel" tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_bevel">bevel</value>
       <value name="miter" tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_miter">miter</value>
     </resource>
-    <resource name="ST_StrokeEndCap" resource="List" generated="yes">
+    <resource name="ST_StrokeEndCap" resource="List">
       <value name="flat" tokenid="ooxml:Value_vml_ST_StrokeEndCap_flat">flat</value>
       <value name="square" tokenid="ooxml:Value_vml_ST_StrokeEndCap_square">square</value>
       <value name="round" tokenid="ooxml:Value_vml_ST_StrokeEndCap_round">round</value>
     </resource>
-    <resource name="ST_StrokeArrowLength" resource="List" generated="yes">
+    <resource name="ST_StrokeArrowLength" resource="List">
       <value name="short" tokenid="ooxml:Value_vml_ST_StrokeArrowLength_short">short</value>
       <value name="medium" tokenid="ooxml:Value_vml_ST_StrokeArrowLength_medium">medium</value>
       <value name="long" tokenid="ooxml:Value_vml_ST_StrokeArrowLength_long">long</value>
     </resource>
-    <resource name="ST_StrokeArrowWidth" resource="List" generated="yes">
+    <resource name="ST_StrokeArrowWidth" resource="List">
       <value name="narrow" tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_narrow">narrow</value>
       <value name="medium" tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_medium">medium</value>
       <value name="wide" tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_wide">wide</value>
     </resource>
-    <resource name="ST_StrokeArrowType" resource="List" generated="yes">
+    <resource name="ST_StrokeArrowType" resource="List">
       <value name="none" tokenid="ooxml:Value_vml_ST_StrokeArrowType_none">none</value>
       <value name="block" tokenid="ooxml:Value_vml_ST_StrokeArrowType_block">block</value>
       <value name="classic" tokenid="ooxml:Value_vml_ST_StrokeArrowType_classic">classic</value>
@@ -11234,19 +11234,19 @@
       <value name="diamond" tokenid="ooxml:Value_vml_ST_StrokeArrowType_diamond">diamond</value>
       <value name="open" tokenid="ooxml:Value_vml_ST_StrokeArrowType_open">open</value>
     </resource>
-    <resource name="ST_ImageAspect" resource="List" generated="yes">
+    <resource name="ST_ImageAspect" resource="List">
       <value name="ignore" tokenid="ooxml:Value_vml_ST_ImageAspect_ignore">ignore</value>
       <value name="atMost" tokenid="ooxml:Value_vml_ST_ImageAspect_atMost">atMost</value>
       <value name="atLeast" tokenid="ooxml:Value_vml_ST_ImageAspect_atLeast">atLeast</value>
     </resource>
-    <resource name="ST_TrueFalseBlank" resource="List" generated="yes">
+    <resource name="ST_TrueFalseBlank" resource="List">
       <value name="t" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_t">t</value>
       <value name="f" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_f">f</value>
       <value name="true" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_true">true</value>
       <value name="false" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_false">false</value>
       <value name="" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_"/>
     </resource>
-    <resource name="ST_EditAs" resource="List" generated="yes">
+    <resource name="ST_EditAs" resource="List">
       <value name="canvas" tokenid="ooxml:Value_vml_ST_EditAs_canvas">canvas</value>
       <value name="orgchart" tokenid="ooxml:Value_vml_ST_EditAs_orgchart">orgchart</value>
       <value name="radial" tokenid="ooxml:Value_vml_ST_EditAs_radial">radial</value>
@@ -12721,13 +12721,13 @@
       <attribute name="UpdateMode" tokenid="ooxml:CT_OLEObject_UpdateMode"/>
       <action name="end" action="handleOLE"/>
     </resource>
-    <resource name="ST_RType" resource="List" generated="yes">
+    <resource name="ST_RType" resource="List">
       <value name="arc" tokenid="ooxml:Value_office_ST_RType_arc">arc</value>
       <value name="callout" tokenid="ooxml:Value_office_ST_RType_callout">callout</value>
       <value name="connector" tokenid="ooxml:Value_office_ST_RType_connector">connector</value>
       <value name="align" tokenid="ooxml:Value_office_ST_RType_align">align</value>
     </resource>
-    <resource name="ST_How" resource="List" generated="yes">
+    <resource name="ST_How" resource="List">
       <value name="top" tokenid="ooxml:Value_office_ST_How_top">top</value>
       <value name="middle" tokenid="ooxml:Value_office_ST_How_middle">middle</value>
       <value name="bottom" tokenid="ooxml:Value_office_ST_How_bottom">bottom</value>
@@ -12735,7 +12735,7 @@
       <value name="center" tokenid="ooxml:Value_office_ST_How_center">center</value>
       <value name="right" tokenid="ooxml:Value_office_ST_How_right">right</value>
     </resource>
-    <resource name="ST_BWMode" resource="List" generated="yes">
+    <resource name="ST_BWMode" resource="List">
       <value name="color" tokenid="ooxml:Value_office_ST_BWMode_color">color</value>
       <value name="auto" tokenid="ooxml:Value_office_ST_BWMode_auto">auto</value>
       <value name="grayScale" tokenid="ooxml:Value_office_ST_BWMode_grayScale">grayScale</value>
@@ -12749,7 +12749,7 @@
       <value name="undrawn" tokenid="ooxml:Value_office_ST_BWMode_undrawn">undrawn</value>
       <value name="blackTextAndLines" tokenid="ooxml:Value_office_ST_BWMode_blackTextAndLines">blackTextAndLines</value>
     </resource>
-    <resource name="ST_ScreenSize" resource="List" generated="yes">
+    <resource name="ST_ScreenSize" resource="List">
       <value name="544_376" tokenid="ooxml:Value_office_ST_ScreenSize_544_376">544,376</value>
       <value name="640_480" tokenid="ooxml:Value_office_ST_ScreenSize_640_480">640,480</value>
       <value name="720_512" tokenid="ooxml:Value_office_ST_ScreenSize_720_512">720,512</value>
@@ -12757,30 +12757,30 @@
       <value name="1024_768" tokenid="ooxml:Value_office_ST_ScreenSize_1024_768">1024,768</value>
       <value name="1152_862" tokenid="ooxml:Value_office_ST_ScreenSize_1152_862">1152,862</value>
     </resource>
-    <resource name="ST_InsetMode" resource="List" generated="yes">
+    <resource name="ST_InsetMode" resource="List">
       <value name="auto" tokenid="ooxml:Value_office_ST_InsetMode_auto">auto</value>
       <value name="custom" tokenid="ooxml:Value_office_ST_InsetMode_custom">custom</value>
     </resource>
-    <resource name="ST_ColorMode" resource="List" generated="yes">
+    <resource name="ST_ColorMode" resource="List">
       <value name="auto" tokenid="ooxml:Value_office_ST_ColorMode_auto">auto</value>
       <value name="custom" tokenid="ooxml:Value_office_ST_ColorMode_custom">custom</value>
     </resource>
-    <resource name="ST_ColorType" resource="String" generated="yes"/>
-    <resource name="ST_ExtrusionType" resource="List" generated="yes">
+    <resource name="ST_ColorType" resource="String"/>
+    <resource name="ST_ExtrusionType" resource="List">
       <value name="perspective" tokenid="ooxml:Value_office_ST_ExtrusionType_perspective">perspective</value>
       <value name="parallel" tokenid="ooxml:Value_office_ST_ExtrusionType_parallel">parallel</value>
     </resource>
-    <resource name="ST_ExtrusionRender" resource="List" generated="yes">
+    <resource name="ST_ExtrusionRender" resource="List">
       <value name="solid" tokenid="ooxml:Value_office_ST_ExtrusionRender_solid">solid</value>
       <value name="wireFrame" tokenid="ooxml:Value_office_ST_ExtrusionRender_wireFrame">wireFrame</value>
       <value name="boundingCube" tokenid="ooxml:Value_office_ST_ExtrusionRender_boundingCube">boundingCube</value>
     </resource>
-    <resource name="ST_ExtrusionPlane" resource="List" generated="yes">
+    <resource name="ST_ExtrusionPlane" resource="List">
       <value name="XY" tokenid="ooxml:Value_office_ST_ExtrusionPlane_XY">XY</value>
       <value name="ZX" tokenid="ooxml:Value_office_ST_ExtrusionPlane_ZX">ZX</value>
       <value name="YZ" tokenid="ooxml:Value_office_ST_ExtrusionPlane_YZ">YZ</value>
     </resource>
-    <resource name="ST_Angle" resource="List" generated="yes">
+    <resource name="ST_Angle" resource="List">
       <value name="any" tokenid="ooxml:Value_office_ST_Angle_any">any</value>
       <value name="30" tokenid="ooxml:Value_office_ST_Angle_30">30</value>
       <value name="45" tokenid="ooxml:Value_office_ST_Angle_45">45</value>
@@ -12788,63 +12788,63 @@
       <value name="90" tokenid="ooxml:Value_office_ST_Angle_90">90</value>
       <value name="auto" tokenid="ooxml:Value_office_ST_Angle_auto">auto</value>
     </resource>
-    <resource name="ST_CalloutDrop" resource="String" generated="yes"/>
-    <resource name="ST_CalloutPlacement" resource="List" generated="yes">
+    <resource name="ST_CalloutDrop" resource="String"/>
+    <resource name="ST_CalloutPlacement" resource="List">
       <value name="top" tokenid="ooxml:Value_office_ST_CalloutPlacement_top">top</value>
       <value name="center" tokenid="ooxml:Value_office_ST_CalloutPlacement_center">center</value>
       <value name="bottom" tokenid="ooxml:Value_office_ST_CalloutPlacement_bottom">bottom</value>
       <value name="user" tokenid="ooxml:Value_office_ST_CalloutPlacement_user">user</value>
     </resource>
-    <resource name="ST_ConnectorType" resource="List" generated="yes">
+    <resource name="ST_ConnectorType" resource="List">
       <value name="none" tokenid="ooxml:Value_office_ST_ConnectorType_none">none</value>
       <value name="straight" tokenid="ooxml:Value_office_ST_ConnectorType_straight">straight</value>
       <value name="elbow" tokenid="ooxml:Value_office_ST_ConnectorType_elbow">elbow</value>
       <value name="curved" tokenid="ooxml:Value_office_ST_ConnectorType_curved">curved</value>
     </resource>
-    <resource name="ST_HrAlign" resource="List" generated="yes">
+    <resource name="ST_HrAlign" resource="List">
       <value name="left" tokenid="ooxml:Value_office_ST_HrAlign_left">left</value>
       <value name="right" tokenid="ooxml:Value_office_ST_HrAlign_right">right</value>
       <value name="center" tokenid="ooxml:Value_office_ST_HrAlign_center">center</value>
     </resource>
-    <resource name="ST_ConnectType" resource="List" generated="yes">
+    <resource name="ST_ConnectType" resource="List">
       <value name="none" tokenid="ooxml:Value_office_ST_ConnectType_none">none</value>
       <value name="rect" tokenid="ooxml:Value_office_ST_ConnectType_rect">rect</value>
       <value name="segments" tokenid="ooxml:Value_office_ST_ConnectType_segments">segments</value>
       <value name="custom" tokenid="ooxml:Value_office_ST_ConnectType_custom">custom</value>
     </resource>
-    <resource name="ST_OLELinkType" resource="List" generated="yes">
+    <resource name="ST_OLELinkType" resource="List">
       <value name="Picture" tokenid="ooxml:Value_office_ST_OLELinkType_Picture">Picture</value>
       <value name="Bitmap" tokenid="ooxml:Value_office_ST_OLELinkType_Bitmap">Bitmap</value>
       <value name="EnhancedMetaFile" tokenid="ooxml:Value_office_ST_OLELinkType_EnhancedMetaFile">EnhancedMetaFile</value>
     </resource>
-    <resource name="ST_OLEType" resource="List" generated="yes">
+    <resource name="ST_OLEType" resource="List">
       <value name="Embed" tokenid="ooxml:Value_office_ST_OLEType_Embed">Embed</value>
       <value name="Link" tokenid="ooxml:Value_office_ST_OLEType_Link">Link</value>
     </resource>
-    <resource name="ST_OLEDrawAspect" resource="List" generated="yes">
+    <resource name="ST_OLEDrawAspect" resource="List">
       <value name="Content" tokenid="ooxml:Value_office_ST_OLEDrawAspect_Content">Content</value>
       <value name="Icon" tokenid="ooxml:Value_office_ST_OLEDrawAspect_Icon">Icon</value>
     </resource>
-    <resource name="ST_OLEUpdateMode" resource="List" generated="yes">
+    <resource name="ST_OLEUpdateMode" resource="List">
       <value name="Always" tokenid="ooxml:Value_office_ST_OLEUpdateMode_Always">Always</value>
       <value name="OnCall" tokenid="ooxml:Value_office_ST_OLEUpdateMode_OnCall">OnCall</value>
     </resource>
-    <resource name="ST_Guid" resource="String" generated="yes"/>
-    <resource name="ST_RelationshipId" resource="String" generated="yes"/>
-    <resource name="ST_TrueFalse" resource="List" generated="yes">
+    <resource name="ST_Guid" resource="String"/>
+    <resource name="ST_RelationshipId" resource="String"/>
+    <resource name="ST_TrueFalse" resource="List">
       <value name="t" tokenid="ooxml:Value_office_ST_TrueFalse_t">t</value>
       <value name="f" tokenid="ooxml:Value_office_ST_TrueFalse_f">f</value>
       <value name="true" tokenid="ooxml:Value_office_ST_TrueFalse_true">true</value>
       <value name="false" tokenid="ooxml:Value_office_ST_TrueFalse_false">false</value>
     </resource>
-    <resource name="ST_TrueFalseBlank" resource="List" generated="yes">
+    <resource name="ST_TrueFalseBlank" resource="List">
       <value name="" tokenid="ooxml:Value_office_ST_TrueFalseBlank_"/>
       <value name="t" tokenid="ooxml:Value_office_ST_TrueFalseBlank_t">t</value>
       <value name="f" tokenid="ooxml:Value_office_ST_TrueFalseBlank_f">f</value>
       <value name="true" tokenid="ooxml:Value_office_ST_TrueFalseBlank_true">true</value>
       <value name="false" tokenid="ooxml:Value_office_ST_TrueFalseBlank_false">false</value>
     </resource>
-    <resource name="ST_FillType" resource="List" generated="yes">
+    <resource name="ST_FillType" resource="List">
       <value name="gradientCenter" tokenid="ooxml:Value_office_ST_FillType_gradientCenter">gradientCenter</value>
       <value name="solid" tokenid="ooxml:Value_office_ST_FillType_solid">solid</value>
       <value name="pattern" tokenid="ooxml:Value_office_ST_FillType_pattern">pattern</value>
@@ -13107,7 +13107,7 @@
       <attribute name="anchorx" tokenid="ooxml:CT_Wrap_anchorx"/>
       <attribute name="anchory" tokenid="ooxml:CT_Wrap_anchory"/>
     </resource>
-    <resource name="ST_BorderType" resource="List" generated="yes">
+    <resource name="ST_BorderType" resource="List">
       <value name="none" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_BorderType_none">none</value>
       <value name="single" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_BorderType_single">single</value>
       <value name="thick" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_BorderType_thick">thick</value>
@@ -13136,32 +13136,32 @@
       <value name="HTMLOutset" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_BorderType_HTMLOutset">HTMLOutset</value>
       <value name="HTMLInset" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_BorderType_HTMLInset">HTMLInset</value>
     </resource>
-    <resource name="ST_BorderShadow" resource="List" generated="yes">
+    <resource name="ST_BorderShadow" resource="List">
       <value name="t" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_BorderShadow_t">t</value>
       <value name="true" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_BorderShadow_true">true</value>
       <value name="f" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_BorderShadow_f">f</value>
       <value name="false" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_BorderShadow_false">false</value>
     </resource>
-    <resource name="ST_WrapType" resource="List" generated="yes">
+    <resource name="ST_WrapType" resource="List">
       <value name="topAndBottom" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_topAndBottom">topAndBottom</value>
       <value name="square" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_square">square</value>
       <value name="none" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_none">none</value>
       <value name="tight" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_tight">tight</value>
       <value name="through" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_through">through</value>
     </resource>
-    <resource name="ST_WrapSide" resource="List" generated="yes">
+    <resource name="ST_WrapSide" resource="List">
       <value name="both" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_both">both</value>
       <value name="left" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_left">left</value>
       <value name="right" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_right">right</value>
       <value name="largest" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_largest">largest</value>
     </resource>
-    <resource name="ST_HorizontalAnchor" resource="List" generated="yes">
+    <resource name="ST_HorizontalAnchor" resource="List">
       <value name="margin" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_margin">margin</value>
       <value name="page" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_page">page</value>
       <value name="text" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_text">text</value>
       <value name="char" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_char">char</value>
     </resource>
-    <resource name="ST_VerticalAnchor" resource="List" generated="yes">
+    <resource name="ST_VerticalAnchor" resource="List">
       <value name="margin" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_margin">margin</value>
       <value name="page" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_page">page</value>
       <value name="text" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_text">text</value>
@@ -21396,7 +21396,7 @@
       <attribute name="val" tokenid="ooxml:CT_DecimalNumber_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_UnsignedDecimalNumber" resource="Integer" generated="yes"/>
+    <resource name="ST_UnsignedDecimalNumber" resource="Integer"/>
     <resource name="ST_TwipsMeasure" resource="UniversalMeasure"/>
     <resource name="CT_TwipsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
@@ -21407,7 +21407,7 @@
       <attribute name="val" tokenid="ooxml:CT_SignedTwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_PixelsMeasure" resource="Integer" generated="yes"/>
+    <resource name="ST_PixelsMeasure" resource="Integer"/>
     <resource name="CT_PixelsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_PixelsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
@@ -21422,9 +21422,9 @@
       <attribute name="val" tokenid="ooxml:CT_SignedHpsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_DateTime" resource="String" generated="yes"/>
-    <resource name="ST_MacroName" resource="String" generated="yes"/>
-    <resource name="CT_MacroName" resource="Value" generated="yes">
+    <resource name="ST_DateTime" resource="String"/>
+    <resource name="ST_MacroName" resource="String"/>
+    <resource name="CT_MacroName" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_MacroName_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -21473,7 +21473,7 @@
       <attribute name="themeTint" tokenid="ooxml:CT_Color_themeTint"/>
       <attribute name="themeShade" tokenid="ooxml:CT_Color_themeShade"/>
     </resource>
-    <resource name="ST_LangCode" resource="Hex" generated="yes"/>
+    <resource name="ST_LangCode" resource="Hex"/>
     <resource name="ST_Lang" resource="String"/>
     <resource name="CT_Lang" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Lang_val" action="setValue"/>
@@ -21780,12 +21780,12 @@
       <attribute name="themeFillTint" tokenid="ooxml:CT_Shd_themeFillTint"/>
       <attribute name="themeFillShade" tokenid="ooxml:CT_Shd_themeFillShade"/>
     </resource>
-    <resource name="ST_VerticalAlignRun" resource="List" generated="yes">
+    <resource name="ST_VerticalAlignRun" resource="List">
       <value name="baseline" tokenid="ooxml:Value_wordprocessingml_ST_VerticalAlignRun_baseline">baseline</value>
       <value name="superscript" tokenid="ooxml:Value_wordprocessingml_ST_VerticalAlignRun_superscript">superscript</value>
       <value name="subscript" tokenid="ooxml:Value_wordprocessingml_ST_VerticalAlignRun_subscript">subscript</value>
     </resource>
-    <resource name="CT_VerticalAlignRun" resource="Value" generated="yes">
+    <resource name="CT_VerticalAlignRun" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_VerticalAlignRun_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -21822,14 +21822,14 @@
       <attribute name="vert" tokenid="ooxml:CT_EastAsianLayout_vert"/>
       <attribute name="vertCompress" tokenid="ooxml:CT_EastAsianLayout_vertCompress"/>
     </resource>
-    <resource name="ST_XAlign" resource="List" generated="yes">
+    <resource name="ST_XAlign" resource="List">
       <value name="left" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_left">left</value>
       <value name="center" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_center">center</value>
       <value name="right" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_right">right</value>
       <value name="inside" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_inside">inside</value>
       <value name="outside" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_outside">outside</value>
     </resource>
-    <resource name="ST_YAlign" resource="List" generated="yes">
+    <resource name="ST_YAlign" resource="List">
       <value name="inline" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_inline">inline</value>
       <value name="top" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_top">top</value>
       <value name="center" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_center">center</value>
@@ -21837,12 +21837,12 @@
       <value name="inside" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_inside">inside</value>
       <value name="outside" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_outside">outside</value>
     </resource>
-    <resource name="ST_HeightRule" resource="List" generated="yes">
+    <resource name="ST_HeightRule" resource="List">
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_auto">auto</value>
       <value name="exact" tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_exact">exact</value>
       <value name="atLeast" tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_atLeast">atLeast</value>
     </resource>
-    <resource name="ST_Wrap" resource="List" generated="yes">
+    <resource name="ST_Wrap" resource="List">
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_auto">auto</value>
       <value name="notBeside" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_notBeside">notBeside</value>
       <value name="around" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_around">around</value>
@@ -21850,17 +21850,17 @@
       <value name="through" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_through">through</value>
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_none">none</value>
     </resource>
-    <resource name="ST_VAnchor" resource="List" generated="yes">
+    <resource name="ST_VAnchor" resource="List">
       <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_text">text</value>
       <value name="margin" tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_margin">margin</value>
       <value name="page" tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_page">page</value>
     </resource>
-    <resource name="ST_HAnchor" resource="List" generated="yes">
+    <resource name="ST_HAnchor" resource="List">
       <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_text">text</value>
       <value name="margin" tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_margin">margin</value>
       <value name="page" tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_page">page</value>
     </resource>
-    <resource name="ST_DropCap" resource="List" generated="yes">
+    <resource name="ST_DropCap" resource="List">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_DropCap_none">none</value>
       <value name="drop" tokenid="ooxml:Value_wordprocessingml_ST_DropCap_drop">drop</value>
       <value name="margin" tokenid="ooxml:Value_wordprocessingml_ST_DropCap_margin">margin</value>
@@ -21906,7 +21906,7 @@
       <attribute name="leader" tokenid="ooxml:CT_TabStop_leader"/>
       <attribute name="pos" tokenid="ooxml:CT_TabStop_pos"/>
     </resource>
-    <resource name="ST_LineSpacingRule" resource="List" generated="yes">
+    <resource name="ST_LineSpacingRule" resource="List">
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_auto">auto</value>
       <value name="exact" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_exact">exact</value>
       <value name="atLeast" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_atLeast">atLeast</value>
@@ -21953,7 +21953,7 @@
     <resource name="CT_Jc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Jc_val" action="setValue"/>
     </resource>
-    <resource name="ST_View" resource="List" generated="yes">
+    <resource name="ST_View" resource="List">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_View_none">none</value>
       <value name="print" tokenid="ooxml:Value_wordprocessingml_ST_View_print">print</value>
       <value name="outline" tokenid="ooxml:Value_wordprocessingml_ST_View_outline">outline</value>
@@ -21964,13 +21964,13 @@
     <resource name="CT_View" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_View_val"/>
     </resource>
-    <resource name="ST_Zoom" resource="List" generated="yes">
+    <resource name="ST_Zoom" resource="List">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_none">none</value>
       <value name="fullPage" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_fullPage">fullPage</value>
       <value name="bestFit" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_bestFit">bestFit</value>
       <value name="textFit" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_textFit">textFit</value>
     </resource>
-    <resource name="ST_Percentage" resource="Integer" generated="yes"/>
+    <resource name="ST_Percentage" resource="Integer"/>
     <resource name="CT_Zoom" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Zoom_val"/>
       <attribute name="percent" tokenid="ooxml:CT_Zoom_percent"/>
@@ -21983,7 +21983,7 @@
       <attribute name="checkStyle" tokenid="ooxml:CT_WritingStyle_checkStyle"/>
       <attribute name="appName" tokenid="ooxml:CT_WritingStyle_appName"/>
     </resource>
-    <resource name="ST_Proof" resource="List" generated="yes">
+    <resource name="ST_Proof" resource="List">
       <value name="clean" tokenid="ooxml:Value_wordprocessingml_ST_Proof_clean">clean</value>
       <value name="dirty" tokenid="ooxml:Value_wordprocessingml_ST_Proof_dirty">dirty</value>
     </resource>
@@ -21991,7 +21991,7 @@
       <attribute name="spelling" tokenid="ooxml:CT_Proof_spelling"/>
       <attribute name="grammar" tokenid="ooxml:CT_Proof_grammar"/>
     </resource>
-    <resource name="ST_DocType" resource="List" generated="yes">
+    <resource name="ST_DocType" resource="List">
       <value name="notSpecified" tokenid="ooxml:Value_wordprocessingml_ST_DocType_notSpecified">notSpecified</value>
       <value name="letter" tokenid="ooxml:Value_wordprocessingml_ST_DocType_letter">letter</value>
       <value name="eMail" tokenid="ooxml:Value_wordprocessingml_ST_DocType_eMail">eMail</value>
@@ -21999,21 +21999,21 @@
     <resource name="CT_DocType" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_DocType_val"/>
     </resource>
-    <resource name="ST_DocProtect" resource="List" generated="yes">
+    <resource name="ST_DocProtect" resource="List">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_none">none</value>
       <value name="readOnly" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_readOnly">readOnly</value>
       <value name="comments" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_comments">comments</value>
       <value name="trackedChanges" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_trackedChanges">trackedChanges</value>
       <value name="forms" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_forms">forms</value>
     </resource>
-    <resource name="ST_CryptProv" resource="List" generated="yes">
+    <resource name="ST_CryptProv" resource="List">
       <value name="rsaAES" tokenid="ooxml:Value_wordprocessingml_ST_CryptProv_rsaAES">rsaAES</value>
       <value name="rsaFull" tokenid="ooxml:Value_wordprocessingml_ST_CryptProv_rsaFull">rsaFull</value>
     </resource>
-    <resource name="ST_AlgClass" resource="List" generated="yes">
+    <resource name="ST_AlgClass" resource="List">
       <value name="hash" tokenid="ooxml:Value_wordprocessingml_ST_AlgClass_hash">hash</value>
     </resource>
-    <resource name="ST_AlgType" resource="List" generated="yes">
+    <resource name="ST_AlgType" resource="List">
       <value name="typeAny" tokenid="ooxml:Value_wordprocessingml_ST_AlgType_typeAny">typeAny</value>
     </resource>
     <resource name="AG_Password" resource="Properties">
@@ -22035,7 +22035,7 @@
       <attribute name="formatting" tokenid="ooxml:CT_DocProtect_formatting"/>
       <attribute name="enforcement" tokenid="ooxml:CT_DocProtect_enforcement"/>
     </resource>
-    <resource name="ST_MailMergeDocType" resource="List" generated="yes">
+    <resource name="ST_MailMergeDocType" resource="List">
       <value name="catalog" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDocType_catalog">catalog</value>
       <value name="envelopes" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDocType_envelopes">envelopes</value>
       <value name="mailingLabels" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDocType_mailingLabels">mailingLabels</value>
@@ -22043,11 +22043,11 @@
       <value name="email" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDocType_email">email</value>
       <value name="fax" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDocType_fax">fax</value>
     </resource>
-    <resource name="CT_MailMergeDocType" resource="Value" generated="yes">
+    <resource name="CT_MailMergeDocType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_MailMergeDocType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_MailMergeDataType" resource="List" generated="yes">
+    <resource name="ST_MailMergeDataType" resource="List">
       <value name="textFile" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_textFile">textFile</value>
       <value name="database" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_database">database</value>
       <value name="spreadsheet" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_spreadsheet">spreadsheet</value>
@@ -22055,25 +22055,25 @@
       <value name="odbc" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_odbc">odbc</value>
       <value name="native" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_native">native</value>
     </resource>
-    <resource name="CT_MailMergeDataType" resource="Value" generated="yes">
+    <resource name="CT_MailMergeDataType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_MailMergeDataType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_MailMergeDest" resource="List" generated="yes">
+    <resource name="ST_MailMergeDest" resource="List">
       <value name="newDocument" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_newDocument">newDocument</value>
       <value name="printer" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_printer">printer</value>
       <value name="email" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_email">email</value>
       <value name="fax" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_fax">fax</value>
     </resource>
-    <resource name="CT_MailMergeDest" resource="Value" generated="yes">
+    <resource name="CT_MailMergeDest" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_MailMergeDest_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_MailMergeOdsoFMDFieldType" resource="List" generated="yes">
+    <resource name="ST_MailMergeOdsoFMDFieldType" resource="List">
       <value name="null" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeOdsoFMDFieldType_null">null</value>
       <value name="dbColumn" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeOdsoFMDFieldType_dbColumn">dbColumn</value>
     </resource>
-    <resource name="CT_MailMergeOdsoFMDFieldType" resource="Value" generated="yes">
+    <resource name="CT_MailMergeOdsoFMDFieldType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_MailMergeOdsoFMDFieldType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -22099,21 +22099,21 @@
     <resource name="CT_TextDirection" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextDirection_val" action="setValue"/>
     </resource>
-    <resource name="ST_TextAlignment" resource="List" generated="yes">
+    <resource name="ST_TextAlignment" resource="List">
       <value name="top" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_top">top</value>
       <value name="center" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_center">center</value>
       <value name="baseline" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_baseline">baseline</value>
       <value name="bottom" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_bottom">bottom</value>
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_auto">auto</value>
     </resource>
-    <resource name="CT_TextAlignment" resource="Value" generated="yes">
+    <resource name="CT_TextAlignment" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextAlignment_val" action="setValue"/>
     </resource>
-    <resource name="ST_DisplacedByCustomXml" resource="List" generated="yes">
+    <resource name="ST_DisplacedByCustomXml" resource="List">
       <value name="next" tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_next">next</value>
       <value name="prev" tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_prev">prev</value>
     </resource>
-    <resource name="ST_AnnotationVMerge" resource="List" generated="yes">
+    <resource name="ST_AnnotationVMerge" resource="List">
       <value name="cont" tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_cont">cont</value>
       <value name="rest" tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_rest">rest</value>
     </resource>
@@ -22236,14 +22236,14 @@
     <resource name="CT_Tabs" resource="Properties">
       <element name="tab" tokenid="ooxml:CT_Tabs_tab"/>
     </resource>
-    <resource name="ST_TextboxTightWrap" resource="List" generated="yes">
+    <resource name="ST_TextboxTightWrap" resource="List">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_TextboxTightWrap_none">none</value>
       <value name="allLines" tokenid="ooxml:Value_wordprocessingml_ST_TextboxTightWrap_allLines">allLines</value>
       <value name="firstAndLastLine" tokenid="ooxml:Value_wordprocessingml_ST_TextboxTightWrap_firstAndLastLine">firstAndLastLine</value>
       <value name="firstLineOnly" tokenid="ooxml:Value_wordprocessingml_ST_TextboxTightWrap_firstLineOnly">firstLineOnly</value>
       <value name="lastLineOnly" tokenid="ooxml:Value_wordprocessingml_ST_TextboxTightWrap_lastLineOnly">lastLineOnly</value>
     </resource>
-    <resource name="CT_TextboxTightWrap" resource="Value" generated="yes">
+    <resource name="CT_TextboxTightWrap" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextboxTightWrap_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -22336,14 +22336,14 @@
       <value name="separate" tokenid="ooxml:Value_ST_FldCharType_separate">separate</value>
       <value name="end" tokenid="ooxml:Value_ST_FldCharType_end">end</value>
     </resource>
-    <resource name="ST_InfoTextType" resource="List" generated="yes">
+    <resource name="ST_InfoTextType" resource="List">
       <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_InfoTextType_text">text</value>
       <value name="autoText" tokenid="ooxml:Value_wordprocessingml_ST_InfoTextType_autoText">autoText</value>
     </resource>
-    <resource name="ST_FFHelpTextVal" resource="String" generated="yes"/>
-    <resource name="ST_FFStatusTextVal" resource="String" generated="yes"/>
-    <resource name="ST_FFName" resource="String" generated="yes"/>
-    <resource name="ST_FFTextType" resource="List" generated="yes">
+    <resource name="ST_FFHelpTextVal" resource="String"/>
+    <resource name="ST_FFStatusTextVal" resource="String"/>
+    <resource name="ST_FFName" resource="String"/>
+    <resource name="ST_FFTextType" resource="List">
       <value name="regular" tokenid="ooxml:Value_wordprocessingml_ST_FFTextType_regular">regular</value>
       <value name="number" tokenid="ooxml:Value_wordprocessingml_ST_FFTextType_number">number</value>
       <value name="date" tokenid="ooxml:Value_wordprocessingml_ST_FFTextType_date">date</value>
@@ -22351,11 +22351,11 @@
       <value name="currentDate" tokenid="ooxml:Value_wordprocessingml_ST_FFTextType_currentDate">currentDate</value>
       <value name="calculated" tokenid="ooxml:Value_wordprocessingml_ST_FFTextType_calculated">calculated</value>
     </resource>
-    <resource name="CT_FFTextType" resource="Value" generated="yes">
+    <resource name="CT_FFTextType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_FFTextType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_FFName" resource="Value" generated="yes">
+    <resource name="CT_FFName" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_FFName_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -22521,16 +22521,16 @@
       <attribute name="footer" tokenid="ooxml:CT_PageMar_footer"/>
       <attribute name="gutter" tokenid="ooxml:CT_PageMar_gutter"/>
     </resource>
-    <resource name="ST_PageBorderZOrder" resource="List" generated="yes">
+    <resource name="ST_PageBorderZOrder" resource="List">
       <value name="front" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderZOrder_front">front</value>
       <value name="back" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderZOrder_back">back</value>
     </resource>
-    <resource name="ST_PageBorderDisplay" resource="List" generated="yes">
+    <resource name="ST_PageBorderDisplay" resource="List">
       <value name="allPages" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_allPages">allPages</value>
       <value name="firstPage" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_firstPage">firstPage</value>
       <value name="notFirstPage" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_notFirstPage">notFirstPage</value>
     </resource>
-    <resource name="ST_PageBorderOffset" resource="List" generated="yes">
+    <resource name="ST_PageBorderOffset" resource="List">
       <value name="page" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_page">page</value>
       <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_text">text</value>
     </resource>
@@ -22587,7 +22587,7 @@
     <resource name="CT_VerticalJc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_VerticalJc_val" action="setValue"/>
     </resource>
-    <resource name="ST_DocGrid" resource="List" generated="yes">
+    <resource name="ST_DocGrid" resource="List">
       <value name="default" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_default">default</value>
       <value name="lines" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_lines">lines</value>
       <value name="linesAndChars" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_linesAndChars">linesAndChars</value>
@@ -22603,7 +22603,7 @@
       <value tokenid="ooxml:Value_ST_HdrFtr_default">default</value>
       <value tokenid="ooxml:Value_ST_HdrFtr_first">first</value>
     </resource>
-    <resource name="ST_FtnEdn" resource="List" generated="yes">
+    <resource name="ST_FtnEdn" resource="List">
       <value name="normal" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_normal">normal</value>
       <value name="separator" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_separator">separator</value>
       <value name="continuationSeparator" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_continuationSeparator">continuationSeparator</value>
@@ -22689,13 +22689,13 @@
       <attribute name="font" tokenid="ooxml:CT_Sym_font"/>
       <attribute name="char" tokenid="ooxml:CT_Sym_char"/>
     </resource>
-    <resource name="ST_ProofErr" resource="List" generated="yes">
+    <resource name="ST_ProofErr" resource="List">
       <value name="spellStart" tokenid="ooxml:Value_wordprocessingml_ST_ProofErr_spellStart">spellStart</value>
       <value name="spellEnd" tokenid="ooxml:Value_wordprocessingml_ST_ProofErr_spellEnd">spellEnd</value>
       <value name="gramStart" tokenid="ooxml:Value_wordprocessingml_ST_ProofErr_gramStart">gramStart</value>
       <value name="gramEnd" tokenid="ooxml:Value_wordprocessingml_ST_ProofErr_gramEnd">gramEnd</value>
     </resource>
-    <resource name="ST_EdGrp" resource="List" generated="yes">
+    <resource name="ST_EdGrp" resource="List">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_EdGrp_none">none</value>
       <value name="everyone" tokenid="ooxml:Value_wordprocessingml_ST_EdGrp_everyone">everyone</value>
       <value name="administrators" tokenid="ooxml:Value_wordprocessingml_ST_EdGrp_administrators">administrators</value>
@@ -22859,7 +22859,7 @@
       <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:paratrackchange"/>
       <action name="start" action="clearProps"/>
     </resource>
-    <resource name="ST_RubyAlign" resource="List" generated="yes">
+    <resource name="ST_RubyAlign" resource="List">
       <value name="center" tokenid="ooxml:Value_wordprocessingml_ST_RubyAlign_center">center</value>
       <value name="distributeLetter" tokenid="ooxml:Value_wordprocessingml_ST_RubyAlign_distributeLetter">distributeLetter</value>
       <value name="distributeSpace" tokenid="ooxml:Value_wordprocessingml_ST_RubyAlign_distributeSpace">distributeSpace</value>
@@ -22867,30 +22867,30 @@
       <value name="right" tokenid="ooxml:Value_wordprocessingml_ST_RubyAlign_right">right</value>
       <value name="rightVertical" tokenid="ooxml:Value_wordprocessingml_ST_RubyAlign_rightVertical">rightVertical</value>
     </resource>
-    <resource name="CT_RubyAlign" resource="Value" generated="yes">
+    <resource name="CT_RubyAlign" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_RubyAlign_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_Lock" resource="List" generated="yes">
+    <resource name="ST_Lock" resource="List">
       <value name="sdtLocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_sdtLocked">sdtLocked</value>
       <value name="contentLocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_contentLocked">contentLocked</value>
       <value name="unlocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_unlocked">unlocked</value>
       <value name="sdtContentLocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_sdtContentLocked">sdtContentLocked</value>
     </resource>
-    <resource name="CT_Lock" resource="Value" generated="yes">
+    <resource name="CT_Lock" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Lock_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_SdtDateMappingType" resource="List" generated="yes">
+    <resource name="ST_SdtDateMappingType" resource="List">
       <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_SdtDateMappingType_text">text</value>
       <value name="date" tokenid="ooxml:Value_wordprocessingml_ST_SdtDateMappingType_date">date</value>
       <value name="dateTime" tokenid="ooxml:Value_wordprocessingml_ST_SdtDateMappingType_dateTime">dateTime</value>
     </resource>
-    <resource name="CT_SdtDateMappingType" resource="Value" generated="yes">
+    <resource name="CT_SdtDateMappingType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_SdtDateMappingType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_CalendarType" resource="List" generated="yes">
+    <resource name="ST_CalendarType" resource="List">
       <value name="gregorian" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_gregorian">gregorian</value>
       <value name="hijri" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_hijri">hijri</value>
       <value name="hebrew" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_hebrew">hebrew</value>
@@ -22902,7 +22902,7 @@
       <value name="gregorianXlitEnglish" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_gregorianXlitEnglish">gregorianXlitEnglish</value>
       <value name="gregorianXlitFrench" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_gregorianXlitFrench">gregorianXlitFrench</value>
     </resource>
-    <resource name="CT_CalendarType" resource="Value" generated="yes">
+    <resource name="CT_CalendarType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_CalendarType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -23124,7 +23124,7 @@
       <action name="end" action="sendCellProperties"/>
       <action name="end" action="endParagraphGroup"/>
     </resource>
-    <resource name="ST_Cnf" resource="String" generated="yes"/>
+    <resource name="ST_Cnf" resource="String"/>
     <resource name="CT_Cnf" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Cnf_val"/>
       <attribute name="firstRow" tokenid="ooxml:CT_Cnf_firstRow"/>
@@ -23296,7 +23296,7 @@
     <resource name="CT_EdnDocProps" resource="Properties">
       <element name="endnote" tokenid="ooxml:CT_EdnDocProps_endnote"/>
     </resource>
-    <resource name="ST_MailMergeSourceType" resource="List" generated="yes">
+    <resource name="ST_MailMergeSourceType" resource="List">
       <value name="database" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_database">database</value>
       <value name="addressBook" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_addressBook">addressBook</value>
       <value name="document1" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_document1">document1</value>
@@ -23307,7 +23307,7 @@
       <value name="legacy" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_legacy">legacy</value>
       <value name="master" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_master">master</value>
     </resource>
-    <resource name="CT_MailMergeSourceType" resource="Value" generated="yes">
+    <resource name="CT_MailMergeSourceType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_MailMergeSourceType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -23329,7 +23329,7 @@
       <element name="checkErrors" tokenid="ooxml:CT_MailMerge_checkErrors"/>
       <element name="odso" tokenid="ooxml:CT_MailMerge_odso"/>
     </resource>
-    <resource name="ST_TargetScreenSz" resource="List" generated="yes">
+    <resource name="ST_TargetScreenSz" resource="List">
       <value name="544x376" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_544x376">544x376</value>
       <value name="640x480" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_640x480">640x480</value>
       <value name="720x512" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_720x512">720x512</value>
@@ -23342,7 +23342,7 @@
       <value name="1800x1440" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_1800x1440">1800x1440</value>
       <value name="1920x1200" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_1920x1200">1920x1200</value>
     </resource>
-    <resource name="CT_TargetScreenSz" resource="Value" generated="yes">
+    <resource name="CT_TargetScreenSz" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TargetScreenSz_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -23427,12 +23427,12 @@
       <element name="rsidRoot" tokenid="ooxml:CT_DocRsids_rsidRoot"/>
       <element name="rsid" tokenid="ooxml:CT_DocRsids_rsid"/>
     </resource>
-    <resource name="ST_CharacterSpacing" resource="List" generated="yes">
+    <resource name="ST_CharacterSpacing" resource="List">
       <value name="doNotCompress" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_doNotCompress">doNotCompress</value>
       <value name="compressPunctuation" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_compressPunctuation">compressPunctuation</value>
       <value name="compressPunctuationAndJapaneseKana" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_compressPunctuationAndJapaneseKana">compressPunctuationAndJapaneseKana</value>
     </resource>
-    <resource name="CT_CharacterSpacing" resource="Value" generated="yes">
+    <resource name="CT_CharacterSpacing" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_CharacterSpacing_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -23467,7 +23467,7 @@
       <attribute name="unhideWhenUsed" tokenid="ooxml:CT_LsdException_unhideWhenUsed"/>
       <attribute name="qFormat" tokenid="ooxml:CT_LsdException_qFormat"/>
     </resource>
-    <resource name="ST_ColorSchemeIndex" resource="List" generated="yes">
+    <resource name="ST_ColorSchemeIndex" resource="List">
       <value name="dark1" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_dark1">dark1</value>
       <value name="light1" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_light1">light1</value>
       <value name="dark2" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_dark2">dark2</value>
@@ -23589,30 +23589,30 @@
       <element name="decimalSymbol" tokenid="ooxml:CT_Settings_decimalSymbol"/>
       <element name="listSeparator" tokenid="ooxml:CT_Settings_listSeparator"/>
     </resource>
-    <resource name="ST_FrameScrollbar" resource="List" generated="yes">
+    <resource name="ST_FrameScrollbar" resource="List">
       <value name="on" tokenid="ooxml:Value_wordprocessingml_ST_FrameScrollbar_on">on</value>
       <value name="off" tokenid="ooxml:Value_wordprocessingml_ST_FrameScrollbar_off">off</value>
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_FrameScrollbar_auto">auto</value>
     </resource>
-    <resource name="CT_FrameScrollbar" resource="Value" generated="yes">
+    <resource name="CT_FrameScrollbar" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_FrameScrollbar_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_FrameLayout" resource="List" generated="yes">
+    <resource name="ST_FrameLayout" resource="List">
       <value name="rows" tokenid="ooxml:Value_wordprocessingml_ST_FrameLayout_rows">rows</value>
       <value name="cols" tokenid="ooxml:Value_wordprocessingml_ST_FrameLayout_cols">cols</value>
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_FrameLayout_none">none</value>
     </resource>
-    <resource name="CT_FrameLayout" resource="Value" generated="yes">
+    <resource name="CT_FrameLayout" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_FrameLayout_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_LevelSuffix" resource="List" generated="yes">
+    <resource name="ST_LevelSuffix" resource="List">
       <value name="tab" tokenid="ooxml:Value_wordprocessingml_ST_LevelSuffix_tab">tab</value>
       <value name="space" tokenid="ooxml:Value_wordprocessingml_ST_LevelSuffix_space">space</value>
       <value name="nothing" tokenid="ooxml:Value_wordprocessingml_ST_LevelSuffix_nothing">nothing</value>
     </resource>
-    <resource name="CT_LevelSuffix" resource="Value" generated="yes">
+    <resource name="CT_LevelSuffix" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_LevelSuffix_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -23866,16 +23866,16 @@
       <value tokenid="ooxml:Value_St_ThemeColor_background2">background2</value>
       <value tokenid="ooxml:Value_St_ThemeColor_text2">text2</value>
     </resource>
-    <resource name="ST_DocPartBehavior" resource="List" generated="yes">
+    <resource name="ST_DocPartBehavior" resource="List">
       <value name="content" tokenid="ooxml:Value_wordprocessingml_ST_DocPartBehavior_content">content</value>
       <value name="p" tokenid="ooxml:Value_wordprocessingml_ST_DocPartBehavior_p">p</value>
       <value name="pg" tokenid="ooxml:Value_wordprocessingml_ST_DocPartBehavior_pg">pg</value>
     </resource>
-    <resource name="CT_DocPartBehavior" resource="Value" generated="yes">
+    <resource name="CT_DocPartBehavior" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_DocPartBehavior_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_DocPartType" resource="List" generated="yes">
+    <resource name="ST_DocPartType" resource="List">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_none">none</value>
       <value name="normal" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_normal">normal</value>
       <value name="autoExp" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_autoExp">autoExp</value>
@@ -23884,11 +23884,11 @@
       <value name="formFld" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_formFld">formFld</value>
       <value name="bbPlcHdr" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_bbPlcHdr">bbPlcHdr</value>
     </resource>
-    <resource name="CT_DocPartType" resource="Value" generated="yes">
+    <resource name="CT_DocPartType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_DocPartType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="ST_DocPartGallery" resource="List" generated="yes">
+    <resource name="ST_DocPartGallery" resource="List">
       <value name="placeholder" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_placeholder">placeholder</value>
       <value name="any" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_any">any</value>
       <value name="default" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_default">default</value>
@@ -23928,7 +23928,7 @@
       <value name="custom4" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_custom4">custom4</value>
       <value name="custom5" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_custom5">custom5</value>
     </resource>
-    <resource name="CT_DocPartGallery" resource="Value" generated="yes">
+    <resource name="CT_DocPartGallery" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_DocPartGallery_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -23948,7 +23948,7 @@
     <resource name="styles" resource="Stream">
       <element name="styles" tokenid="ooxml:STYLESHEET"/>
     </resource>
-    <resource name="ST_CaptionPos" resource="List" generated="yes">
+    <resource name="ST_CaptionPos" resource="List">
       <value name="above" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_above">above</value>
       <value name="below" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_below">below</value>
       <value name="left" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_left">left</value>
