@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/UnoControlDialogModelProvider.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>

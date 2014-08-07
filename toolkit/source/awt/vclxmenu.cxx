@@ -23,6 +23,7 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>

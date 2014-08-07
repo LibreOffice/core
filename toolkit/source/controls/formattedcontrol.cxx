@@ -21,6 +21,7 @@
 #include <toolkit/helper/property.hxx>
 
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 

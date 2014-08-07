@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 
 #include <toolkit/controls/stdtabcontroller.hxx>

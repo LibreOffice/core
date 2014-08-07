@@ -20,6 +20,7 @@
 #include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>

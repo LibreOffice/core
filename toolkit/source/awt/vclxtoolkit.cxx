@@ -36,6 +36,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>

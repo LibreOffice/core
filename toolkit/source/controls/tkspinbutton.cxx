@@ -20,6 +20,7 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/XSpinValue.hpp>
 #include <com/sun/star/awt/XAdjustmentListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase2.hxx>

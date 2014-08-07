@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>

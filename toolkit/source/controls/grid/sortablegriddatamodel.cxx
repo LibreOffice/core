@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
 #include <com/sun/star/awt/grid/XSortableMutableGridDataModel.hpp>
 

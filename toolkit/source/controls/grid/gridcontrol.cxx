@@ -21,6 +21,7 @@
 #include "gridcontrol.hxx"
 #include "grideventforwarder.hxx"
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>

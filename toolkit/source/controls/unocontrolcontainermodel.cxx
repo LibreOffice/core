@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/controls/unocontrolcontainermodel.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>

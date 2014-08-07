@@ -22,6 +22,7 @@
 
 #include <com/sun/star/awt/tree/XTreeControl.hpp>
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <toolkit/helper/property.hxx>
 #include <osl/diagnose.h>
