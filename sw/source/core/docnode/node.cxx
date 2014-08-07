@@ -956,7 +956,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
     case RES_FMT_CHG:
         // If the Format parent was switched, register the Attrset at the new one
         // Skip own Modify!
-        if( GetpSwAttrSet() &&
+        if( GetpSwAttrSet() && pNewValue &&
             ((SwFmtChg*)pNewValue)->pChangedFmt == GetRegisteredIn() )
         {
             // Attach Set to the new parent
