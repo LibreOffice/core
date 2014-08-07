@@ -329,7 +329,17 @@ void LinkManager::UpdateAllLinks(
         {
             int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ).toString() ).Execute();
             if( RET_YES != nRet )
-                return ;         // nothing should be updated
+            {
+                SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
+
+                if(pShell)
+                {
+                    comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
+                    rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+                }
+
+                return ;        // nothing should be updated
+            }
             bAskUpdate = false;  // once is enough
         }
 
