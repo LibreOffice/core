@@ -131,9 +131,7 @@ public class DesignSpace {
 
   public double[] getRealLoc(double[] imageLoc) {
     double[] realLoc = new double[imageLoc.length];
-    for (int i=0; i<imageLoc.length; i++) {
-      realLoc[i] = imageLoc[i];
-    }
+    System.arraycopy(imageLoc, 0, realLoc, 0, imageLoc.length);
     annulusAdjust(realLoc);
     return realLoc;
   }
