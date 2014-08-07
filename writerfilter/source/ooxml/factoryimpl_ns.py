@@ -9,6 +9,7 @@
 
 from __future__ import print_function
 from xml.dom import minidom
+from collections import OrderedDict
 import sys
 
 
@@ -125,8 +126,8 @@ def fastToken(attrNode):
     return "".join(ret)
 
 
-def factoryAttributeToResourceMapInner(nsNode, defineNode):
-    ret = []
+def collectAttributeToResource(nsNode, defineNode):
+    ret = OrderedDict()
     defineName = defineNode.getAttribute("name")
     for refNode in getChildrenByName(defineNode, "ref"):
         refName = refNode.getAttribute("name")
@@ -134,13 +135,11 @@ def factoryAttributeToResourceMapInner(nsNode, defineNode):
         if parent.localName in ("element", "attribute"):
             continue
         for define in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "define") if i.getAttribute("name") == refName]:
-            ret.extend(factoryAttributeToResourceMapInner(nsNode, define))
+            ret.update(collectAttributeToResource(nsNode, define))
 
     attrNodes = defineNode.getElementsByTagName("attribute")
     for attrNode in attrNodes:
         attrToken = fastToken(attrNode)
-        if attrNode == attrNodes[0]:
-            ret.append("      // %s" % defineName)
         resourceName = resourceForAttribute(nsNode, attrNode)
         refDefine = "0"
         if len(resourceName):
@@ -148,32 +147,42 @@ def factoryAttributeToResourceMapInner(nsNode, defineNode):
                 refName = refNode.getAttribute("name")
                 for define in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "define") if i.getAttribute("name") == refName]:
                     refDefine = idForDefine(nsNode, define)
-            ret.append("        (*pMap)[%s] = AttributeInfo(RT_%s, %s);" % (attrToken, resourceName, refDefine))
-        else:
-            ret.append("      // empty resource: %s" % fastToken(attrNode))
+            ret[attrToken] = "RT_%s, %s" % (resourceName, refDefine)
 
     return ret
 
 
-def factoryAttributeToResourceMap(nsNode):
-    print("""AttributeToResourceMapPointer OOXMLFactory_%s::createAttributeToResourceMap(Id nId)
-{
-    AttributeToResourceMapPointer pMap(new AttributeToResourceMap());
+def factoryAttributeToResourceMapInner(nsNode, defineNode):
+    ret = []
+    attributes = collectAttributeToResource(nsNode, defineNode)
+    for k in attributes.keys():
+        ret.append("                { %s, %s }," % (k, attributes[k]))
+    return ret
 
+
+def factoryAttributeToResourceMap(nsNode):
+    print("""const AttributeInfo* OOXMLFactory_%s::getAttributeInfoArray(Id nId)
+{
     switch (nId)
     {""" % nsToLabel(nsNode))
     for defineNode in getChildrenByName(getChildByName(nsNode, "grammar"), "define"):
         inner = "\n".join(factoryAttributeToResourceMapInner(nsNode, defineNode))
         if len(inner):
             print("    case %s:" % idForDefine(nsNode, defineNode))
+            print("        {")
+            print("            const static AttributeInfo info[] = {")
             print(inner)
+            print("                { -1, RT_NoResource, 0 }")
+            print("            };")
+            print("            return info;")
+            print("        }")
             print("        break;")
 
     print("""    default:
         break;
     }
 
-    return pMap;
+    return NULL;
 }""")
     print()
 
@@ -250,7 +259,8 @@ def factoryGetListValue(nsNode):
     }
 
     return false;
-}""")
+}
+""")
 
 
 # factoryCreateElementMap

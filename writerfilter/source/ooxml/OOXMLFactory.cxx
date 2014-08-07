@@ -30,16 +30,6 @@ namespace ooxml {
 
 using namespace com::sun::star;
 
-AttributeInfo::AttributeInfo()
-:m_nResource(RT_NoResource), m_nRef(0)
-{
-}
-
-AttributeInfo::AttributeInfo(ResourceType_t nResource, Id nRef)
- :m_nResource(nResource), m_nRef(nRef)
-{
-}
-
 CreateElement::CreateElement()
 :m_nResource(RT_NoResource), m_nId(0)
 {
@@ -54,14 +44,6 @@ CreateElement::CreateElement(ResourceType_t nResource, Id nId)
 
 OOXMLFactory_ns::~OOXMLFactory_ns()
 {
-}
-
-AttributeToResourceMapPointer OOXMLFactory_ns::getAttributeToResourceMap(Id nId)
-{
-    if (m_AttributesMap.find(nId) == m_AttributesMap.end())
-        m_AttributesMap[nId] = createAttributeToResourceMap(nId);
-
-    return m_AttributesMap[nId];
 }
 
 CreateElementMapPointer OOXMLFactory_ns::getCreateElementMap(Id nId)
@@ -105,23 +87,22 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 
     if (pFactory.get() != NULL)
     {
-        AttributeToResourceMapPointer pMap = pFactory->getAttributeToResourceMap(nDefine);
-
-        AttributeToResourceMap::const_iterator aIt;
-        AttributeToResourceMap::const_iterator aEndIt = pMap->end();
-
         assert( dynamic_cast< sax_fastparser::FastAttributeList *>( Attribs.get() ) != NULL );
         sax_fastparser::FastAttributeList *pAttribs;
         pAttribs = static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
 
-        for (aIt = pMap->begin(); aIt != aEndIt; ++aIt)
+        const AttributeInfo *pAttr = pFactory->getAttributeInfoArray(nDefine);
+        if (!pAttr)
+            return;
+
+        for (; pAttr->m_nToken != -1; ++pAttr)
         {
-            sal_Int32 nToken = aIt->first;
+            sal_Int32 nToken = pAttr->m_nToken;
             if (pAttribs->hasAttribute(nToken))
             {
                 Id nId = pFactory->getResourceId(nDefine, nToken);
 
-                switch (aIt->second.m_nResource)
+                switch (pAttr->m_nResource)
                 {
                 case RT_Boolean:
                     {
@@ -170,7 +151,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 case RT_List:
                     {
                         sal_uInt32 nValue;
-                        if (pFactory->getListValue(aIt->second.m_nRef, Attribs->getValue(nToken), nValue))
+                        if (pFactory->getListValue(pAttr->m_nRef, Attribs->getValue(nToken), nValue))
                         {
                             OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
                             pHandler->newProperty(nId, xValue);
