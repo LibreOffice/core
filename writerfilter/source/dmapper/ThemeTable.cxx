@@ -112,8 +112,10 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     dmapper_logger->chars(rSprm.toString());
 #endif
 
-    sal_uInt32 nSprmId = rSprm.getId();
+    m_pImpl->m_supplementalFontName = "";
+    m_pImpl->m_supplementalFontId = 0;
 
+    sal_uInt32 nSprmId = rSprm.getId();
     switch(nSprmId)
     {
     case NS_ooxml::LN_CT_BaseStyles_fontScheme:
