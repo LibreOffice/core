@@ -134,6 +134,8 @@
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>
 #include <swwait.hxx>
+#include <txtfld.hxx>
+#include <fmtfld.hxx>
 
 #include <IMark.hxx>
 #include <doc.hxx>
@@ -548,19 +550,33 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             if (bCntAtPos || rSh.GetContentAtPos(rLPt, aUrlPos))
             {
                 SwContentAtPos aSwContentAtPos(
-                    SwContentAtPos::SW_CLICKFIELD|
-                    SwContentAtPos::SW_INETATTR|
+                    SwContentAtPos::SW_FIELD |
+                    SwContentAtPos::SW_CLICKFIELD |
+                    SwContentAtPos::SW_INETATTR |
                     SwContentAtPos::SW_FTN |
                     SwContentAtPos::SW_SMARTTAG );
                 if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
                 {
-                    const bool bClickToFollow = SwContentAtPos::SW_INETATTR == aSwContentAtPos.eCntntAtPos ||
-                                                SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eCntntAtPos;
-
-                     if( !bClickToFollow ||
-                         (SwContentAtPos::SW_INETATTR == aSwContentAtPos.eCntntAtPos && bExecHyperlinks) ||
-                         (SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eCntntAtPos && bExecSmarttags) )
-                        eStyle = POINTER_REFHAND;
+                    // Is edit inline input field
+                    if (SwContentAtPos::SW_FIELD == aSwContentAtPos.eCntntAtPos)
+                    {
+                        if ( aSwContentAtPos.pFndTxtAttr != NULL
+                            && aSwContentAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD)
+                        {
+                            const SwField *pCrsrField = rSh.CrsrInsideInputFld() ? rSh.GetCurFld( true ) : NULL;
+                            if (!(pCrsrField && pCrsrField == aSwContentAtPos.pFndTxtAttr->GetFmtFld().GetField()))
+                                eStyle = POINTER_REFHAND;
+                        }
+                    }
+                    else
+                    {
+                        const bool bClickToFollow = SwContentAtPos::SW_INETATTR == aSwContentAtPos.eCntntAtPos ||
+                                                    SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eCntntAtPos;
+                        if( !bClickToFollow ||
+                            (SwContentAtPos::SW_INETATTR == aSwContentAtPos.eCntntAtPos && bExecHyperlinks) ||
+                            (SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eCntntAtPos && bExecSmarttags) )
+                            eStyle = POINTER_REFHAND;
+                    }
                 }
             }
         }
@@ -2766,9 +2782,41 @@ void touch_lo_selection_end_move_impl(const void *documentHandle,
 
 #endif
 
+void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point aDocPos,
+                            const bool bOnlyText, bool bLockView )
+{
+    const bool bTmpNoInterrupt = bNoInterrupt;
+    bNoInterrupt = false;
+
+    int nTmpSetCrsr = 0;
+
+    if( !rSh.IsViewLocked() && bLockView )
+        rSh.LockView( true );
+    else
+        bLockView = false;
+
+    {
+        // only temporary generate move context because otherwise
+        // the query to the content form doesn't work!!!
+        SwMvContext aMvContext( &rSh );
+        nTmpSetCrsr = rSh.SetCursor(&aDocPos, bOnlyText);
+        bValidCrsrPos = !(CRSR_POSCHG & nTmpSetCrsr);
+    }
+
+    // notify the edit window that from now on we do not use the input language
+    if ( !(CRSR_POSOLD & nTmpSetCrsr) )
+        SetUseInputLanguage( false );
+
+    if( bLockView )
+        rSh.LockView( false );
+
+    bNoInterrupt = bTmpNoInterrupt;
+}
+
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
+    const SwField *pCrsrFld = rSh.CrsrInsideInputFld() ? rSh.GetCurFld( true ) : NULL;
 
     // We have to check if a context menu is shown and we have an UI
     // active inplace client. In that case we have to ignore the mouse
@@ -3595,6 +3643,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 }
 
                 SwContentAtPos aFieldAtPos(SwContentAtPos::SW_FIELD);
+                bool bEditableFieldClicked = false;
 
                 // Are we clicking on a field?
                 if (rSh.GetContentAtPos(aDocPos, aFieldAtPos))
@@ -3620,6 +3669,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         // the cursor
                         break;
                     }
+                    else
+                    {
+                        bEditableFieldClicked = true;
+                    }
                 }
 
                 bool bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = false;
@@ -3628,32 +3681,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                 if ( !bOverSelect )
                 {
-                    const bool bTmpNoInterrupt = bNoInterrupt;
-                    bNoInterrupt = false;
-
-                    if( !rSh.IsViewLocked() && bLockView )
-                        rSh.LockView( true );
-                    else
-                        bLockView = false;
-
-                    int nTmpSetCrsr = 0;
-
-                    {   // only temporary generate Move-Kontext because otherwise
-                        // the query to the content form doesn't work!!!
-                        SwMvContext aMvContext( &rSh );
-                        nTmpSetCrsr = rSh.SetCursor(&aDocPos, bOnlyText);
-                        bValidCrsrPos = !(CRSR_POSCHG & nTmpSetCrsr);
-                        bCallBase = false;
-                    }
-
-                    // notify the edit window that from now on we do not use the input language
-                    if ( !(CRSR_POSOLD & nTmpSetCrsr) )
-                        SetUseInputLanguage( false );
-
-                    if( bLockView )
-                        rSh.LockView( false );
-
-                    bNoInterrupt = bTmpNoInterrupt;
+                    MoveCursor( rSh, aDocPos, bOnlyText, bLockView );
+                    bCallBase = false;
                 }
                 if ( !bOverURLGrf && !bOnlyText )
                 {
@@ -3671,6 +3700,15 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bCallBase = false;
                     }
                 }
+                if ( !bOverSelect && bEditableFieldClicked && (!pCrsrFld ||
+                     pCrsrFld != aFieldAtPos.pFndTxtAttr->GetFmtFld().GetField()))
+                {
+                    // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
+                    // and CH_TXT_ATR_INPUTFIELDEND
+                    rSh.SttSelect();
+                    rSh.SelectTxt( aFieldAtPos.pFndTxtAttr->GetStart() + 1,
+                                 *(aFieldAtPos.pFndTxtAttr->End()) - 1 );
+                }
                 // don't reset here any longer so that, in case through MouseMove
                 // with pressed Ctrl key a multiple-selection should happen,
                 // the previous selection is not released in Drag.
@@ -3678,6 +3716,31 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             }
         }
     }
+    else if ( MOUSE_RIGHT == rMEvt.GetButtons() && !rMEvt.GetModifier()
+        && static_cast< sal_uInt8 >(rMEvt.GetClicks() % 4) == 1
+        && !rSh.ChgCurrPam( aDocPos ) )
+    {
+        SwContentAtPos aFieldAtPos(SwContentAtPos::SW_FIELD);
+
+        // Are we clicking on a field?
+        if (bValidCrsrPos
+            && rSh.GetContentAtPos(aDocPos, aFieldAtPos)
+            && aFieldAtPos.pFndTxtAttr != NULL
+            && aFieldAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD
+            && (!pCrsrFld || pCrsrFld != aFieldAtPos.pFndTxtAttr->GetFmtFld().GetField()))
+        {
+            // Move the cursor
+            MoveCursor( rSh, aDocPos, rSh.IsObjSelectable( aDocPos ), m_bWasShdwCrsr );
+            bCallBase = false;
+
+            // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
+            // and CH_TXT_ATR_INPUTFIELDEND
+            rSh.SttSelect();
+            rSh.SelectTxt( aFieldAtPos.pFndTxtAttr->GetStart() + 1,
+                         *(aFieldAtPos.pFndTxtAttr->End()) - 1 );
+        }
+    }
+
     if (bCallBase)
         Window::MouseButtonDown(rMEvt);
 }
@@ -4518,20 +4581,27 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 if ( aCntntAtPos.pFndTxtAttr != NULL
                                      && aCntntAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD )
                                 {
-                                    // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
-                                    // and CH_TXT_ATR_INPUTFIELDEND
-                                    rSh.SttSelect();
-                                    rSh.SelectTxt( aCntntAtPos.pFndTxtAttr->GetStart() + 1,
-                                                   *(aCntntAtPos.pFndTxtAttr->End()) - 1 );
+                                    if (!rSh.IsInSelect())
+                                    {
+                                        // create only temporary move context because otherwise
+                                        // the query to the content form doesn't work!!!
+                                        SwMvContext aMvContext( &rSh );
+                                        const Point aDocPos( PixelToLogic( m_aStartPos ) );
+                                        bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
+                                    }
+                                    else
+                                    {
+                                        bValidCrsrPos = true;
+                                    }
                                 }
                                 else
                                 {
                                     rSh.ClickToField( *aCntntAtPos.aFnd.pFld );
+                                    // a bit of a mystery what this is good for?
+                                    // in this case we assume it's valid since we
+                                    // just selected a field
+                                    bValidCrsrPos = true;
                                 }
-                                // a bit of a mystery what this is good for?
-                                // in this case we assume it's valid since we
-                                // just selected a field
-                                bValidCrsrPos = true;
                                 if (bAddMode)
                                 {
                                     rSh.LeaveAddMode();
