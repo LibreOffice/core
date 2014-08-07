@@ -1449,6 +1449,8 @@ void Test::testSharedFormulaUpdateOnDBChange()
     // Define database range 'MyRange' for A1:A2.
     ScDBData* pData = new ScDBData("MyRange", 0, 0, 0, 0, 1);
     bool bInserted = pDBs->getNamedDBs().insert(pData);
+    if (!bInserted)
+        delete pData;
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new database range.", bInserted);
 
     // Insert in C2:C4 a group of formula cells that reference MyRange.
