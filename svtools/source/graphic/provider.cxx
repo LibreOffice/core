@@ -34,6 +34,7 @@
 #include <vcl/settings.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
