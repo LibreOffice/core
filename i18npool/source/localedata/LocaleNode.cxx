@@ -302,24 +302,10 @@ void LocaleNode::incError( const OUString& rStr ) const
     incError( OSTR( rStr));
 }
 
-char* LocaleNode::prepareErrorFormat( const char* pFormat, const char* pDefaultConversion ) const
-{
-    static char buf[2048];
-    strcpy( buf, "Error: ");
-    strncat( buf, pFormat, 2000);
-    char* p = buf;
-    while (((p = strchr( p, '%')) != 0) && p[1] == '%')
-        p += 2;
-    if (!p)
-        strcat( buf, pDefaultConversion);
-    strcat( buf, "\n");
-    return buf;
-}
-
 void LocaleNode::incErrorInt( const char* pStr, int nVal ) const
 {
     ++nError;
-    fprintf( stderr, prepareErrorFormat( pStr, ": %d"), nVal);
+    fprintf( stderr, pStr, nVal);
 }
 
 void LocaleNode::incErrorStr( const char* pStr, const OUString& rVal ) const
@@ -718,7 +704,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         aFormatIndex = currNodeAttr.getValueByName("formatindex");
         sal_Int16 formatindex = (sal_Int16)aFormatIndex.toInt32();
         if (!aFormatIndexSet.insert( formatindex).second)
-            incErrorInt( "Duplicated formatindex=\"%d\" in FormatElement.", formatindex);
+            incErrorInt( "Error: Duplicated formatindex=\"%d\" in FormatElement.", formatindex);
         of.writeIntParameter("Formatindex", formatCount, formatindex);
 
         // Ensure only one default per usage and type.
@@ -816,7 +802,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         OUString aCode( n->getValue());
                         if (aCode.indexOf( "[CURRENCY]" ) >= 0)
-                            incErrorInt( "[CURRENCY] replaceTo not found for formatindex=\"%d\".", formatindex);
+                            incErrorInt( "Error: [CURRENCY] replaceTo not found for formatindex=\"%d\".", formatindex);
                     }
                     break;
             }
@@ -835,7 +821,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         nDec = aCode.indexOf( pSep->getValue());
                         if (nDec < 0)
-                            incErrorInt( "DecimalSeparator not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: DecimalSeparator not present in FormatCode formatindex=\"%d\".",
                                     formatindex);
                     }
                     pSep = pCtype->findNode( "ThousandSeparator");
@@ -845,11 +831,11 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         nGrp = aCode.indexOf( pSep->getValue());
                         if (nGrp < 0)
-                            incErrorInt( "ThousandSeparator not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: ThousandSeparator not present in FormatCode formatindex=\"%d\".",
                                     formatindex);
                     }
                     if (nDec >= 0 && nGrp >= 0 && nDec <= nGrp)
-                        incErrorInt( "Ordering of ThousandSeparator and DecimalSeparator not correct in formatindex=\"%d\".",
+                        incErrorInt( "Error: Ordering of ThousandSeparator and DecimalSeparator not correct in formatindex=\"%d\".",
                                 formatindex);
                 }
                 if (formatindex == cssi::NumberFormatIndex::TIME_MMSS00 ||
@@ -864,7 +850,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         nTime = aCode.indexOf( pSep->getValue());
                         if (nTime < 0)
-                            incErrorInt( "TimeSeparator not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: TimeSeparator not present in FormatCode formatindex=\"%d\".",
                                     formatindex);
                     }
                     pSep = pCtype->findNode( "Time100SecSeparator");
@@ -874,17 +860,17 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         n100s = aCode.indexOf( pSep->getValue());
                         if (n100s < 0)
-                            incErrorInt( "Time100SecSeparator not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: Time100SecSeparator not present in FormatCode formatindex=\"%d\".",
                                     formatindex);
                         OUStringBuffer a100s( pSep->getValue());
                         a100s.appendAscii( "00");
                         n100s = aCode.indexOf( a100s.makeStringAndClear());
                         if (n100s < 0)
-                            incErrorInt( "Time100SecSeparator+00 not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: Time100SecSeparator+00 not present in FormatCode formatindex=\"%d\".",
                                     formatindex);
                     }
                     if (n100s >= 0 && nTime >= 0 && n100s <= nTime)
-                        incErrorInt( "Ordering of Time100SecSeparator and TimeSeparator not correct in formatindex=\"%d\".",
+                        incErrorInt( "Error: Ordering of Time100SecSeparator and TimeSeparator not correct in formatindex=\"%d\".",
                                 formatindex);
                 }
                 if (nSavErr != nError)
@@ -930,16 +916,16 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         // generated internally
                         break;
                     default:
-                        incErrorInt( "FormatElement formatindex=\"%d\" not present.", nNext);
+                        incErrorInt( "Error: FormatElement formatindex=\"%d\" not present.", nNext);
                 }
             }
             switch (nHere)
             {
                 case cssi::NumberFormatIndex::BOOLEAN :
-                    incErrorInt( "FormatElement formatindex=\"%d\" reserved for internal ``BOOLEAN''.", nNext);
+                    incErrorInt( "Error: FormatElement formatindex=\"%d\" reserved for internal ``BOOLEAN''.", nNext);
                     break;
                 case cssi::NumberFormatIndex::TEXT :
-                    incErrorInt( "FormatElement formatindex=\"%d\" reserved for internal ``@'' (TEXT).", nNext);
+                    incErrorInt( "Error: FormatElement formatindex=\"%d\" reserved for internal ``@'' (TEXT).", nNext);
                     break;
                 default:
                     ;   // nothing
@@ -1620,7 +1606,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 daysNode = calNode -> getChildAt(nChild);
             nbOfDays[i] = sal::static_int_cast<sal_Int16>( daysNode->getNumberOfChildren() );
             if (bGregorian && nbOfDays[i] != 7)
-                incErrorInt( "A Gregorian calendar must have 7 days per week, this one has %d", nbOfDays[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 7 days per week, this one has %d", nbOfDays[i]);
             elementTag = "day";
             for (j = 0; j < nbOfDays[i]; j++) {
                 LocaleNode *currNode = daysNode -> getChildAt(j);
@@ -1653,7 +1639,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 monthsNode = calNode -> getChildAt(nChild);
             nbOfMonths[i] = sal::static_int_cast<sal_Int16>( monthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfMonths[i] != 12)
-                incErrorInt( "A Gregorian calendar must have 12 months, this one has %d", nbOfMonths[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 12 months, this one has %d", nbOfMonths[i]);
             elementTag = "month";
             for (j = 0; j < nbOfMonths[i]; j++) {
                 LocaleNode *currNode = monthsNode -> getChildAt(j);
@@ -1689,7 +1675,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 genitiveMonthsNode = calNode -> getChildAt(nChild);
             nbOfGenitiveMonths[i] = sal::static_int_cast<sal_Int16>( genitiveMonthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfGenitiveMonths[i] != 12)
-                incErrorInt( "A Gregorian calendar must have 12 genitive months, this one has %d", nbOfGenitiveMonths[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 12 genitive months, this one has %d", nbOfGenitiveMonths[i]);
             elementTag = "genitiveMonth";
             for (j = 0; j < nbOfGenitiveMonths[i]; j++) {
                 LocaleNode *currNode = genitiveMonthsNode -> getChildAt(j);
@@ -1726,7 +1712,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 partitiveMonthsNode = calNode -> getChildAt(nChild);
             nbOfPartitiveMonths[i] = sal::static_int_cast<sal_Int16>( partitiveMonthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfPartitiveMonths[i] != 12)
-                incErrorInt( "A Gregorian calendar must have 12 partitive months, this one has %d", nbOfPartitiveMonths[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 12 partitive months, this one has %d", nbOfPartitiveMonths[i]);
             elementTag = "partitiveMonth";
             for (j = 0; j < nbOfPartitiveMonths[i]; j++) {
                 LocaleNode *currNode = partitiveMonthsNode -> getChildAt(j);
@@ -1759,7 +1745,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 erasNode = calNode -> getChildAt(nChild);
             nbOfEras[i] = sal::static_int_cast<sal_Int16>( erasNode->getNumberOfChildren() );
             if (bGregorian && nbOfEras[i] != 2)
-                incErrorInt( "A Gregorian calendar must have 2 eras, this one has %d", nbOfEras[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 2 eras, this one has %d", nbOfEras[i]);
             elementTag = "era";
             for (j = 0; j < nbOfEras[i]; j++) {
                 LocaleNode *currNode = erasNode -> getChildAt(j);
@@ -1795,7 +1781,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         str = calNode ->getChildAt(nChild)-> getValue();
         sal_Int16 nDays = sal::static_int_cast<sal_Int16>( str.toInt32() );
         if (nDays < 1 || (0 < nbOfDays[i] && nbOfDays[i] < nDays))
-            incErrorInt( "Bad value of MinimalDaysInFirstWeek: %d, must be 1 <= value <= days_in_week",  nDays);
+            incErrorInt( "Error: Bad value of MinimalDaysInFirstWeek: %d, must be 1 <= value <= days_in_week",  nDays);
         of.writeIntParameter("minimalDaysInFirstWeek", i, nDays);
     }
     if (!bHasGregorian)

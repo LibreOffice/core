@@ -127,17 +127,12 @@ public:
     void incError( const char* pStr ) const;
     // ++nError with output to stderr
     void incError( const OUString& rStr ) const;
-    // ++nError with output to stderr, pStr should contain "%d", otherwise appended
+    // ++nError with output to stderr, pStr should contain "%d"
     void incErrorInt( const char* pStr, int nVal ) const;
-    // ++nError with output to stderr, pStr should contain "%s", otherwise appended
+    // ++nError with output to stderr, pStr should contain "%s"
     void incErrorStr( const char* pStr, const OUString& rVal ) const;
-    // ++nError with output to stderr, pStr should contain "%s %s", otherwise
-    // appended
+    // ++nError with output to stderr, pStr should contain "%s %s"
     void incErrorStrStr( const char* pStr, const OUString& rVal1, const OUString& rVal2 ) const;
-    // used by incError...(), returns a pointer to a static buffer,
-    // pDefaultConversion is appended if pFormat doesn't contain a %
-    // specification and should be something like ": %d" or ": %s" or similar.
-    char* prepareErrorFormat( const char* pFormat, const char* pDefaultConversion ) const;
     static LocaleNode* createNode (const OUString& name,const Reference< XAttributeList > & attr);
 };
 
