@@ -336,7 +336,7 @@ uno::Type SAL_CALL OZipFileAccess::getElementType()
         throw lang::DisposedException(THROW_WHERE );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException(THROW_WHERE );
+        throw uno::RuntimeException(THROW_WHERE);
 
     return cppu::UnoType<io::XInputStream>::get();
 }
