@@ -2279,7 +2279,7 @@ void SfxViewFrame::ExecView_Impl
 
         case SID_OBJECT:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_OBJECT, false );
+            SFX_REQUEST_ARG( rReq, pItem, SfxInt16Item, SID_OBJECT, false );
 
             SfxViewShell *pViewShell = GetViewShell();
             if ( pViewShell && pItem )

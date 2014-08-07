@@ -4235,7 +4235,7 @@ SfxVoidItem ObjectCatalog SID_BASICIDE_OBJCAT
 
 
 SfxStringItem ObjectMenue SID_OBJECT
-(SfxUInt16Item VerbID SID_OBJECT)
+(SfxInt16Item VerbID SID_OBJECT)
 [
     /* flags: */
     AutoUpdate = FALSE,
