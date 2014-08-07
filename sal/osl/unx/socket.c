@@ -1073,7 +1073,8 @@ oslSocketResult SAL_CALL osl_psz_getLocalHostname (
 
             if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != NULL)
             {
-                strcpy(LocalHostname, pStr);
+                strncpy(LocalHostname, pStr, sizeof( LocalHostname ));
+                LocalHostname[sizeof(LocalHostname)-1] = 0;
             }
             osl_destroyHostAddr(Addr);
         }
