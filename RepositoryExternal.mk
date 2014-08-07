@@ -2605,11 +2605,11 @@ ifneq ($(SYSTEM_CLUCENE),)
 
 define gb_LinkTarget__use_clucene
 $(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I%,$(CLUCENE_CFLAGS)) \
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(CLUCENE_CFLAGS))) \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(filter -I%,$(CLUCENE_CFLAGS)) \
+	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(CLUCENE_CFLAGS)))) \
 	$$(INCLUDE) \
 )
 
@@ -2907,12 +2907,12 @@ ifeq ($(ENABLE_KDE),TRUE)
 
 define gb_LinkTarget__use_kde
 $(call gb_LinkTarget_set_include,$(1),\
-	$(filter -I%,$(KDE_CFLAGS)) \
+	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(KDE_CFLAGS)))) \
 	$$(INCLUDE) \
 )
 
 $(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I%,$(KDE_CFLAGS)) \
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(KDE_CFLAGS))) \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -2940,12 +2940,12 @@ ifeq ($(ENABLE_KDE4),TRUE)
 
 define gb_LinkTarget__use_kde4
 $(call gb_LinkTarget_set_include,$(1),\
-	$(filter -I%,$(KDE4_CFLAGS)) \
+	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(KDE4_CFLAGS)))) \
 	$$(INCLUDE) \
 )
 
 $(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I%,$(KDE4_CFLAGS)) \
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(KDE4_CFLAGS))) \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -2995,12 +2995,12 @@ ifeq ($(ENABLE_GCONF),TRUE)
 
 define gb_LinkTarget__use_gconf
 $(call gb_LinkTarget_set_include,$(1),\
-	$(filter -I%,$(GCONF_CFLAGS)) \
+	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(GCONF_CFLAGS)))) \
 	$$(INCLUDE) \
 )
 
 $(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I%,$(GCONF_CFLAGS)) \
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(GCONF_CFLAGS))) \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -3024,11 +3024,11 @@ ifneq ($(SYSTEM_PYTHON),)
 
 define gb_LinkTarget__use_python_headers
 $(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I%,$(PYTHON_CFLAGS)) \
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(PYHTON_CFLAGS)))) \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(filter -I%,$(PYTHON_CFLAGS)) \
+	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(PYTHON_CFLAGS)))) \
 	$$(INCLUDE) \
 )
 
