@@ -60,12 +60,12 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'UNO_SHARED_PACKAGES_CACHE=$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):UNO_SHARED_PACKAGES_CACHE}' \
 		&& echo 'TMP_EXTENSIONS=$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):TMP_EXTENSIONS}' \
 		&& echo 'UNO_USER_PACKAGES_CACHE=$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):UNO_USER_PACKAGES_CACHE}' \
-		&& echo 'URE_BIN_DIR=$(if $(filter WNT,$(OS)),$${.link:$${BRAND_BASE_DIR}/ure-link}/bin,$${BRAND_BASE_DIR}/ure-link/bin)' \
+		&& echo 'URE_BIN_DIR=$(if $(filter WNT,$(OS)),$${.link:$${BRAND_BASE_DIR}/ure-link}/bin,$${BRAND_BASE_DIR}/$(LIBO_URE_BIN_FOLDER))' \
 		&& echo 'URE_MORE_JAVA_CLASSPATH_URLS=$(if $(SYSTEM_HSQLDB),$(HSQLDB_JAR))' \
 		&& echo 'URE_OVERRIDE_JAVA_JFW_SHARED_DATA=$${BRAND_BASE_DIR}/$(LIBO_SHARE_FOLDER)/config/javasettings_$${_OS}_$${_ARCH}.xml' \
 		&& echo 'URE_OVERRIDE_JAVA_JFW_USER_DATA=$${$${BRAND_BASE_DIR}/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/config/javasettings_$${_OS}_$${_ARCH}.xml' \
 		&& echo 'URE_LIB_DIR=$(if $(filter WNT,$(OS)),$${.link:$${BRAND_BASE_DIR}/ure-link}/bin,$${BRAND_BASE_DIR}/ure-link/lib)' \
-		&& echo 'URE_MORE_JAVA_TYPES=$$ORIGIN/classes/unoil.jar $$ORIGIN/classes/ScriptFramework.jar $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}' \
+		&& echo 'URE_MORE_JAVA_TYPES=$${BRAND_BASE_DIR}/$(LIBO_SHARE_JAVA_FOLDER)/unoil.jar $${BRAND_BASE_DIR}/$(LIBO_SHARE_JAVA_FOLDER)/ScriptFramework.jar $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}' \
 		&& echo 'URE_MORE_SERVICES=$${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_UserUnoFile}:UNO_SERVICES} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_SharedUnoFile}:UNO_SERVICES} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_BundledUnoFile}:UNO_SERVICES} <$$ORIGIN/services>*' \
 		&& echo 'URE_MORE_TYPES=<$$ORIGIN/types>* $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_UserUnoFile}:UNO_TYPES} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_SharedUnoFile}:UNO_TYPES} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):PKG_BundledUnoFile}:UNO_TYPES}' \
 	) > $@
