@@ -40,6 +40,7 @@
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <stocservices.hxx>
 
