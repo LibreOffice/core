@@ -135,7 +135,7 @@ public:
     //Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
     boost::optional<Property> getProperty( PropertyIds eId ) const;
 
-    //Has the property named been set (via Insert or Set)?
+    //Has the property named been set (via Insert)?
     bool isSet( PropertyIds eId ) const;
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const { return m_xFootnote;}
