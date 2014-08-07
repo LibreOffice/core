@@ -488,7 +488,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineEndWidthItem(200));
     pISet->Put(XLineStyleItem(XLINE_SOLID));
-    pISet->Put(SdrMeasureShowUnitItem(true));
+    pISet->Put(makeSdrMeasureShowUnitItem(true));
 
     // Generate presentation templates for default layout.
     OUString aPrefix = SD_RESSTR(STR_LAYOUT_DEFAULT_NAME);

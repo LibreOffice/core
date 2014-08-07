@@ -292,7 +292,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureShowUnitItem
     if( rAttrs->GetItemState( SDRATTR_MEASURESHOWUNIT ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbShowUnit->SetState( ( ( const SdrMeasureShowUnitItem& )rAttrs->Get( SDRATTR_MEASURESHOWUNIT ) ).
+        m_pTsbShowUnit->SetState( ( ( const SdrYesNoItem& )rAttrs->Get( SDRATTR_MEASURESHOWUNIT ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbShowUnit->EnableTriState( false );
     }
@@ -486,7 +486,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
     eState = m_pTsbShowUnit->GetState();
     if( m_pTsbShowUnit->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( SdrMeasureShowUnitItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( makeSdrMeasureShowUnitItem( TRISTATE_TRUE == eState ) );
         bModified = true;
     }
 
@@ -717,7 +717,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
     {
         TriState eState = m_pTsbShowUnit->GetState();
         if( eState != TRISTATE_INDET )
-            aAttrSet.Put( SdrMeasureShowUnitItem( TRISTATE_TRUE == eState ) );
+            aAttrSet.Put( makeSdrMeasureShowUnitItem( TRISTATE_TRUE == eState ) );
     }
 
     if( p == m_pLbUnit )

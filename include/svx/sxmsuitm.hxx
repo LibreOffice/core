@@ -22,12 +22,9 @@
 #include <svx/svddef.hxx>
 #include <svx/sdynitm.hxx>
 
-// Include the unit of measure when displaying
-class SdrMeasureShowUnitItem: public SdrYesNoItem {
-public:
-    SdrMeasureShowUnitItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURESHOWUNIT,bOn) {}
-    SdrMeasureShowUnitItem(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASURESHOWUNIT,rIn) {}
-};
+inline SdrYesNoItem makeSdrMeasureShowUnitItem(bool bOn) {
+    return SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, bOn);
+}
 
 #endif
 
