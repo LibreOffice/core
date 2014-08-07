@@ -83,11 +83,14 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
         // #i73249#
         case RES_TITLE_CHANGED:
         {
-            const OUString& sOldTitle(
-                        dynamic_cast<const SwStringMsgPoolItem&>(*pOld).GetString() );
-            const OUString& sNewTitle(
-                        dynamic_cast<const SwStringMsgPoolItem&>(*pNew).GetString() );
-            if ( sOldTitle == sNewTitle )
+            OUString sOldTitle, sNewTitle;
+            const SwStringMsgPoolItem *pOldItem = dynamic_cast<const SwStringMsgPoolItem*>(pOld);
+            if (pOldItem)
+                sOldTitle = pOldItem->GetString();
+            const SwStringMsgPoolItem *pNewItem = dynamic_cast<const SwStringMsgPoolItem*>(pNew);
+            if (pNewItem)
+                sNewTitle = pNewItem->GetString();
+            if (sOldTitle == sNewTitle)
             {
                 break;
             }
@@ -100,7 +103,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
 
             const SwFlyFrmFmt* pFlyFrmFmt =
                             dynamic_cast<const SwFlyFrmFmt*>( pFlyFrm->GetFmt() );
-            if ( !pFlyFrmFmt->GetObjDescription().isEmpty() )
+            if (!pFlyFrmFmt || !pFlyFrmFmt->GetObjDescription().isEmpty())
             {
                 break;
             }
