@@ -1966,11 +1966,8 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         }
         else if ( GetNextLinkInChain() != NULL &&  pEditStatus->IsPageOverflow())
         {
-            // FIXME(matteocam): should include check that the TextBox has a next chain link
-
             // set the need for chaining
             SetToBeChained( true );
-
             //impDecomposeChainedTextPrimitive();
         }
     }

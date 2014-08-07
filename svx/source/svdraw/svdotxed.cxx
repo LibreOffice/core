@@ -261,7 +261,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 
         // FIXME(matteocam)
         // TODO: move this to one level higher
-        if ( IsToBeChained() )
+        if ( IsToBeChained() && GetNextLinkInChain() != this) // XXX: defensive check
         {
             // set non overflow part of text to current box
             pNewText = rOutl.GetNonOverflowingParaObject();
