@@ -354,20 +354,20 @@ namespace basegfx
             // vertical loop
             for(sal_uInt32 a(0L); a < nVerSeg; a++)
             {
-                const double fVer(fVerStart + (((fVerStop - fVerStart) * a) / nVerSeg));
+                const double fVer1(fVerStart + (((fVerStop - fVerStart) * a) / nVerSeg));
                 const double fVer2(fVerStart + (((fVerStop - fVerStart) * (a + 1)) / nVerSeg));
 
                 // horizontal loop
                 for(sal_uInt32 b(0L); b < nHorSeg; b++)
                 {
-                    const double fHor(fHorStart + (((fHorStop - fHorStart) * b) / nHorSeg));
+                    const double fHor1(fHorStart + (((fHorStop - fHorStart) * b) / nHorSeg));
                     const double fHor2(fHorStart + (((fHorStop - fHorStart) * (b + 1)) / nHorSeg));
                     B3DPolygon aNew;
 
-                    aNew.append(getPointFromCartesian(fHor, fVer));
-                    aNew.append(getPointFromCartesian(fHor2, fVer));
+                    aNew.append(getPointFromCartesian(fHor1, fVer1));
+                    aNew.append(getPointFromCartesian(fHor2, fVer1));
                     aNew.append(getPointFromCartesian(fHor2, fVer2));
-                    aNew.append(getPointFromCartesian(fHor, fVer2));
+                    aNew.append(getPointFromCartesian(fHor1, fVer2));
 
                     if(bNormals)
                     {
