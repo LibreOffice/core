@@ -26,12 +26,13 @@ class GbuildParserState:
         self.defs = {}
         self.cxxobjects = []
         self.linked_libs = []
+        self.include_sys = []
 
 
 class GbuildLinkTarget:
-    def __init__(self, name, location, include, defs, cxxobjects, linked_libs):
-        (self.name, self.location, self.include, self.defs, self.cxxobjects, self.linked_libs) = (
-        name, location, include, defs, cxxobjects, linked_libs)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, linked_libs):
+        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.linked_libs) = (
+        name, location, include, include_sys, defs, cxxobjects, linked_libs)
 
     def short_name(self):
         return self.name
@@ -40,13 +41,13 @@ class GbuildLinkTarget:
         return not self.include and not self.defs and not self.cxxobjects and not self.linked_libs
 
     def __str__(self):
-        return '%s at %s with include path: %s, defines %s, objects: %s and linked libs: %s' % (
-        self.short_name(), self.location, self.include, self.defs, self.cxxobjects, self.linked_libs)
+        return '%s at %s with include path: %s, isystem includes: %s, defines %s, objects: %s and linked libs: %s' % (
+        self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.linked_libs)
 
 
 class GbuildLib(GbuildLinkTarget):
-    def __init__(self, name, library, location, include, defs, cxxobjects, linked_libs):
-        GbuildLinkTarget.__init__(self, name, location, include, defs, cxxobjects, linked_libs)
+    def __init__(self, name, library, location, include, include_sys, defs, cxxobjects, linked_libs):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, linked_libs)
         self.library = library
 
     def short_name(self):
@@ -61,8 +62,8 @@ class GbuildLib(GbuildLinkTarget):
 
 
 class GbuildExe(GbuildLinkTarget):
-    def __init__(self, name, executable, location, include, defs, cxxobjects, linked_libs):
-        GbuildLinkTarget.__init__(self, name, location, include, defs, cxxobjects, linked_libs)
+    def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, linked_libs):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, linked_libs)
         self.executable = executable
 
     def short_name(self):
@@ -84,7 +85,8 @@ class GbuildParser:
     rulepattern = re.compile('^(.+?):( .*)?$')
     libpattern = re.compile('#  [a-z]+ to execute \(from [\'`](.*)/Library_(.*)\.mk\', line [0-9]*\):')
     exepattern = re.compile('#  [a-z]+ to execute \(from [\'`](.*)/Executable_(.*)\.mk\', line [0-9]*\):')
-    includepattern = re.compile('# INCLUDE := (.*)')
+    includepattern = re.compile('-I(\S+)')
+    isystempattern = re.compile('-isystem\s*(\S+)')
     defspattern = re.compile('# DEFS := (.*)')
     cxxpattern = re.compile('# CXXOBJECTS := (.*)')
     linkedlibspattern = re.compile('# LINKED_LIBS := (.*)')
@@ -147,7 +149,7 @@ class GbuildParser:
                 libname = self.libnames.get(state.ilib, None)
                 self.libs.append(
                     GbuildLib(libmatch.group(2), libname, libmatch.group(1),
-                              state.include, state.defs, state.cxxobjects,
+                              state.include, state.include_sys, state.defs, state.cxxobjects,
                               state.linked_libs))
                 state = GbuildParserState()
                 continue
@@ -156,13 +158,16 @@ class GbuildParser:
                 exename = self.exenames.get(state.target, None)
                 self.exes.append(
                     GbuildExe(exematch.group(2), exename, exematch.group(1),
-                              state.include, state.defs, state.cxxobjects,
+                              state.include, state.include_sys, state.defs, state.cxxobjects,
                               state.linked_libs))
                 state = GbuildParserState()
                 continue
             includematch = GbuildParser.includepattern.match(line)
-            if includematch:
-                state.include = [includeswitch.strip()[2:] for includeswitch in includematch.group(1).split(' ') if
+            if line.find('# INCLUDE :=') == 0:
+                isystemmatch = GbuildParser.isystempattern.findall(line)
+                if isystemmatch:
+                    state.include_sys = isystemmatch
+                state.include = [includeswitch.strip() for includeswitch in GbuildParser.includepattern.findall(line) if
                                  len(includeswitch) > 2]
                 continue
             defsmatch = GbuildParser.defspattern.match(line)
