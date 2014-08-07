@@ -260,7 +260,6 @@ SvStream& ReadTextType(SvStream& rInp, TextType& rText)
 }
 SvStream& ReadBmapType(SvStream& rInp, BmapType& rBmap)
 {
-    memset((char*)&rBmap.Last, 0, BmapSize);
     rInp.Read((char*)&rBmap.Last,BmapSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rBmap);

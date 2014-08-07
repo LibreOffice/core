@@ -29,6 +29,11 @@
 struct PointType {
     sal_Int16 x;
     sal_Int16 y;
+    PointType()
+        : x(0)
+        , y(0)
+    {
+    }
 };
 
 #define SgfDpmm 40
@@ -95,6 +100,16 @@ struct ObjAreaType {
     sal_uInt8   FDummy1;
     sal_Int16   FDummy2;
     sal_uInt16  FMuster;   //  [Index] incl. Invers, transparency
+
+    ObjAreaType()
+        : FFarbe(0)
+        , FBFarbe(0)
+        , FIntens(0)
+        , FDummy1(0)
+        , FDummy2(0)
+        , FMuster(0)
+    {
+    }
 };
 
 #define ObjTextTypeSize 64
@@ -138,6 +153,14 @@ public:
     PointType      ObjMax;     // XY maximum of the object
     sal_uInt8      Art;
     sal_uInt8      Layer;
+    ObjkType()
+        : Last(0)
+        , Next(0)
+        , MemSize(0)
+        , Art(0)
+        , Layer(0)
+    {
+    }
     friend SvStream& ReadObjkType(SvStream& rIStream, ObjkType& rObjk);
     friend bool ObjOverSeek(SvStream& rInp, ObjkType& rObjk);
     virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
@@ -270,6 +293,22 @@ public:
     bool    LightOut;     // brighten? (SD20)
     sal_uInt8   GrfFlg;       // (SD20) 0=nSGF 1=Pcx 2=HPGL 4=Raw $FF=Undef (to fix DrawBmp)
     INetURLObject aFltPath;   // for GraphicFilter
+
+    BmapType()
+        : Flags(0)
+        , Reserve(0)
+        , DrehWink(0)
+        , Slant(0)
+        , Format(NoGraf)
+        , nPlanes(0)
+        , RawOut(false)
+        , InvOut(false)
+        , LightOut(false)
+        , GrfFlg(0)
+    {
+        memset(Filename, 0, sizeof(Filename));
+    }
+
     friend SvStream& ReadBmapType(SvStream& rIStream, BmapType& rBmap);
     virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
     void SetPaths( const INetURLObject& rFltPath );
