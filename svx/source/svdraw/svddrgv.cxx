@@ -735,8 +735,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
     bool bRet=false;
     SdrObject* pObj;
     SdrPageView* pPV;
-    size_t nMarkNum;
-    if (PickMarkedObj(rPnt,pObj,pPV,&nMarkNum,SDRSEARCH_PASS2BOUND))
+    if (PickMarkedObj(rPnt,pObj,pPV,SDRSEARCH_PASS2BOUND))
     {
         BrkAction();
         UnmarkAllGluePoints();
