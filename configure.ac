@@ -11498,6 +11498,13 @@ int main(int argc, char **argv) {
             qt4_fix_warning=
 
             AC_LANG_PUSH([C++])
+            # tst_exclude_socket_notifiers.moc:70:28: runtime error: member access within address 0x60d00000bb20 which does not point to an object of type 'QObjectData'
+            # 0x60d00000bb20: note: object is of type 'QObjectPrivate'
+            #  02 00 80 3a  90 8a 4e d2 3a 00 00 00  f0 b4 b9 a7 ff 7f 00 00  00 00 00 00 00 00 00 00  20 d8 4e d2
+            #               ^~~~~~~~~~~~~~~~~~~~~~~
+            #               vptr for 'QObjectPrivate'
+            save_CXX=$CXX
+            CXX=$(printf %s "$CXX" | sed -e s/-fno-sanitize-recover//)
             save_CXXFLAGS=$CXXFLAGS
             CXXFLAGS="$CXXFLAGS $KDE4_CFLAGS"
             save_LIBS=$LIBS
@@ -11574,6 +11581,7 @@ int main(int argc, char *argv[])
 
             LIBS=$save_LIBS
             CXXFLAGS=$save_CXXFLAGS
+            CXX=$save_CXX
             AC_LANG_POP([C++])
         ],
         AC_MSG_WARN([[No Glib found, KDE4 support will not use native file pickers!]]))
