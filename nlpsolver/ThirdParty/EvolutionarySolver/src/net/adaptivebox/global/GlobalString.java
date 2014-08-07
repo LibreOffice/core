@@ -128,12 +128,12 @@ public class GlobalString {
 
   static public int toInteger(Object oVal) throws Exception {
     if(oVal==null) throw new Exception("Null string");
-    return new Integer(oVal.toString()).intValue();
+    return Integer.parseInt(oVal.toString());
   }
 
   static public double toDouble(Object oVal) throws Exception {
     if(oVal==null) throw new Exception("Null string");
-    return new Double(oVal.toString()).doubleValue();
+    return Double.parseDouble(oVal.toString());
   }
 
   public static Object toObject(String key) throws Exception{
