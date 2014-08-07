@@ -604,19 +604,30 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
     if ( !xStream.is() )
     {
         SAL_INFO( "svtools.misc", "getting stream from object" );
-        // update wanted or no stream in container storage available
-        xStream = GetGraphicReplacementStream(mpImpl->nViewAspect, mpImpl->mxObj, &mpImpl->aMediaType);
+        bool bUserAllowsLinkUpdate(true);
+        const comphelper::EmbeddedObjectContainer* pContainer = GetContainer();
 
-        if ( xStream.is() )
+        if(pContainer)
         {
-            if ( mpImpl->pContainer )
-                mpImpl->pContainer->InsertGraphicStream( xStream, mpImpl->aPersistName, mpImpl->aMediaType );
+            bUserAllowsLinkUpdate = pContainer->getUserAllowsLinkUpdate();
+        }
 
-            SvStream* pResult = ::utl::UcbStreamHelper::CreateStream( xStream );
-            if ( pResult && bUpdate )
-                mpImpl->bNeedUpdate = false;
+        if(bUserAllowsLinkUpdate)
+        {
+            // update wanted or no stream in container storage available
+            xStream = GetGraphicReplacementStream(mpImpl->nViewAspect, mpImpl->mxObj, &mpImpl->aMediaType);
 
-            return pResult;
+            if(xStream.is())
+            {
+                if (mpImpl->pContainer)
+                    mpImpl->pContainer->InsertGraphicStream(xStream,mpImpl->aPersistName,mpImpl->aMediaType);
+
+                SvStream* pResult = ::utl::UcbStreamHelper::CreateStream( xStream );
+                if (pResult && bUpdate)
+                    mpImpl->bNeedUpdate = false;
+
+                return pResult;
+            }
         }
     }
 
