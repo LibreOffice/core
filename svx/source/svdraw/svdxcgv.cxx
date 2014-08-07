@@ -454,7 +454,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
             if(bNoVDevIfOneBmpMarked)
             {
                 SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
-                SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
+                SdrGrafObj* pGrafObj = PTR_CAST( SdrGrafObj, pGrafObjTmp );
 
                 if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
                 {
