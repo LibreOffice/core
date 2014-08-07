@@ -25,14 +25,15 @@ class GbuildParserState:
         self.include = []
         self.defs = {}
         self.cxxobjects = []
+        self.cxxflags = []
         self.linked_libs = []
         self.include_sys = []
 
 
 class GbuildLinkTarget:
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, linked_libs):
-        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.linked_libs) = (
-        name, location, include, include_sys, defs, cxxobjects, linked_libs)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.cxxflags, self.linked_libs) = (
+        name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
 
     def short_name(self):
         return self.name
@@ -41,13 +42,14 @@ class GbuildLinkTarget:
         return not self.include and not self.defs and not self.cxxobjects and not self.linked_libs
 
     def __str__(self):
-        return '%s at %s with include path: %s, isystem includes: %s, defines %s, objects: %s and linked libs: %s' % (
-        self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.linked_libs)
+        return '%s at %s with include path: %s, isystem includes: %s, defines: %s, objects: %s, cxxflags: %s and linked libs: %s' % (
+        self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects,
+            self.cxxflags, self.linked_libs)
 
 
 class GbuildLib(GbuildLinkTarget):
-    def __init__(self, name, library, location, include, include_sys, defs, cxxobjects, linked_libs):
-        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, linked_libs)
+    def __init__(self, name, library, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
         self.library = library
 
     def short_name(self):
@@ -62,8 +64,8 @@ class GbuildLib(GbuildLinkTarget):
 
 
 class GbuildExe(GbuildLinkTarget):
-    def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, linked_libs):
-        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, linked_libs)
+    def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
         self.executable = executable
 
     def short_name(self):
@@ -91,6 +93,7 @@ class GbuildParser:
     cxxpattern = re.compile('# CXXOBJECTS := (.*)')
     linkedlibspattern = re.compile('# LINKED_LIBS := (.*)')
     ilibpattern = re.compile('# ILIBTARGET := (.*)')
+    warningpattern = re.compile('-W\S+')
 
     def __init__(self):
         (self.makecmd, self.srcdir, self.builddir, self.instdir, self.libs,
@@ -150,7 +153,7 @@ class GbuildParser:
                 self.libs.append(
                     GbuildLib(libmatch.group(2), libname, libmatch.group(1),
                               state.include, state.include_sys, state.defs, state.cxxobjects,
-                              state.linked_libs))
+                              state.cxxflags, state.linked_libs))
                 state = GbuildParserState()
                 continue
             exematch = GbuildParser.exepattern.match(line)
@@ -159,7 +162,7 @@ class GbuildParser:
                 self.exes.append(
                     GbuildExe(exematch.group(2), exename, exematch.group(1),
                               state.include, state.include_sys, state.defs, state.cxxobjects,
-                              state.linked_libs))
+                              state.cxxflags, state.linked_libs))
                 state = GbuildParserState()
                 continue
             includematch = GbuildParser.includepattern.match(line)
@@ -190,6 +193,10 @@ class GbuildParser:
             ilibmatch = GbuildParser.ilibpattern.match(line)
             if ilibmatch:
                 state.ilib = os.path.basename(ilibmatch.group(1))
+                continue
+            if line.find('# T_CXXFLAGS :=') == 0:
+                state.cxxflags = [cxxflag.strip() for cxxflag in GbuildParser.warningpattern.sub('', line.replace('# T_CXXFLAGS :=','')).split(' ') if len(cxxflag) > 1]
+                continue
             #we could match a lot of other stuff here if needed for integration rpaths etc.
         return self
 
