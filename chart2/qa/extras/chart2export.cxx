@@ -71,6 +71,7 @@ public:
     void testAxisNumberFormatODS();
     void testDataLabelBordersDOCX();
     void testDataLabel3DChartDOCX();
+    void testDataLabelDoughnutChartDOCX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -107,6 +108,7 @@ public:
     CPPUNIT_TEST(testAxisNumberFormatODS);
     CPPUNIT_TEST(testDataLabelBordersDOCX);
     CPPUNIT_TEST(testDataLabel3DChartDOCX);
+    CPPUNIT_TEST(testDataLabelDoughnutChartDOCX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -818,6 +820,21 @@ void Chart2ExportTest::testDataLabel3DChartDOCX()
     // same rule also applies to several other 3D charts, apparently.
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLblPos", 0);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
+}
+
+void Chart2ExportTest::testDataLabelDoughnutChartDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "doughnut-chart-labels.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // We must not export label position attributes for doughnut charts.
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLblPos", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
 void Chart2ExportTest::testBarChartRotation()
