@@ -457,6 +457,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     slots[-2].fn = reinterpret_cast<void *>(-(vtableNumber * sizeof (void *)));
 #if ENABLE_RUNTIME_OPTIMIZATIONS
     slots[-1].fn = 0;
+    (void)type;
 #else
     slots[-1].fn = x86_64::getRtti(type->aBase);
 #endif
