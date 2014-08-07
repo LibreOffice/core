@@ -238,7 +238,7 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
         throw lang::DisposedException(THROW_WHERE );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException(THROW_WHERE );
+        throw uno::RuntimeException(THROW_WHERE);
 
     EntryHash::iterator aIter = m_pZipFile->GetEntryHash().find( aName );
     if ( aIter == m_pZipFile->GetEntryHash().end() )
