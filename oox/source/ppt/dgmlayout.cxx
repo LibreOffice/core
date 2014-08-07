@@ -25,6 +25,7 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/container/XChild.hpp>
