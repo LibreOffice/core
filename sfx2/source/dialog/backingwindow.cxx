@@ -244,6 +244,7 @@ void BackingWindow::initControls()
     mpCreateLabel->SetControlForeground(aButtonsText);
     Font aFont(mpCreateLabel->GetSettings().GetStyleSettings().GetLabelFont());
     aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
+    aFont.SetWeight(WEIGHT_BOLD);
     mpCreateLabel->SetControlFont(aFont);
 
     mpHelpButton->SetControlForeground(aButtonsText);
@@ -276,6 +277,7 @@ void BackingWindow::setupButton( PushButton* pButton )
     // the buttons should have a bit bigger font
     Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
     aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
+    aFont.SetWeight(WEIGHT_BOLD);
     pButton->SetControlFont(aFont);
 
     // color that fits the theme
