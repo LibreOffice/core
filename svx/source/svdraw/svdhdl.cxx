@@ -923,7 +923,7 @@ void SdrHdl::onMouseLeave()
 SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, bool bLum)
 :   SdrHdl(rRef, HDL_COLR),
     aMarkerSize(rSize),
-    bUseLuminance(bLum ? 1 : 0)
+    bUseLuminance(bLum)
 {
     if(IsUseLuminance())
         aCol = GetLuminance(aCol);
@@ -2053,7 +2053,7 @@ void SdrHdlList::SetMoveOutside(bool bOn)
     if(bMoveOutside != bOn)
     {
         // remember new value
-        bMoveOutside = bOn ? 1 : 0;
+        bMoveOutside = bOn;
 
         // propagate change to IAOs
         for(size_t i=0; i<GetHdlCount(); ++i)
@@ -2071,7 +2071,7 @@ void SdrHdlList::SetRotateShear(bool bOn)
 
 void SdrHdlList::SetDistortShear(bool bOn)
 {
-    bDistortShear = bOn ? 1 : 0;
+    bDistortShear = bOn;
 }
 
 SdrHdl* SdrHdlList::RemoveHdl(size_t nNum)
