@@ -402,8 +402,7 @@ static const hwpeq *lookup_eqn(char *str)
 }
 
 /* 첫자만 대문자이거나 전부 대문자면 소문자로 바꾼다. */
-
-static char *make_keyword( char *keyword, const char *token)
+void make_keyword( char *keyword, const char *token)
 {
   assert(keyword);
   char  *ptr;
@@ -415,9 +414,8 @@ static char *make_keyword( char *keyword, const char *token)
   else
     strcpy(keyword, token);
 
-  if( (token[0] & 0x80) || islower(token[0]) ||
-      strlen(token) < 2 )
-    return keyword;
+  if( (token[0] & 0x80) || islower(token[0]) || strlen(token) < 2 )
+    return;
 
   int capital = isupper(keyword[1]);
   for( ptr = keyword + 2; *ptr && result; ptr++ )
@@ -434,7 +432,7 @@ static char *make_keyword( char *keyword, const char *token)
       ptr++;
     }
   }
-  return keyword;
+  return;
 }
 
 // token reading function
