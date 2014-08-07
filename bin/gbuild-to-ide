@@ -15,6 +15,7 @@ import shutil
 import re
 import sys
 import uuid
+import json
 import xml.etree.ElementTree as ET
 
 
@@ -221,6 +222,43 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
         for exe in self.gbuildparser.exes:
             print(exe)
 
+
+class VimIntegrationGenerator(IdeIntegrationGenerator):
+    def __init__(self, gbuildparser):
+        IdeIntegrationGenerator.__init__(self, gbuildparser)
+
+    def emit(self):
+        global_list = []
+        for lib in self.gbuildparser.libs:
+            entries = []
+            for file in lib.cxxobjects:
+                filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
+                entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
+                entries.append(entry)
+            global_list.extend(entries)
+        export_file = open('database.txt','w') 
+        json.dump(global_list, export_file)
+
+    def generateCommand(self, lib, file):
+        command = 'clang++ '
+        for key, value in lib.defs.items():
+            command += ' -D'
+            command += key
+            if value is not None:
+                command += '='
+                command += value
+        for include in lib.include:
+            command += ' -I'
+            command += include
+        for isystem in lib.include_sys:
+            command += ' -isystem '
+            command += isystem
+        for cxxflag in lib.cxxflags:
+            command += ' '
+            command += cxxflag
+        command += ' -c '
+        command += file
+        return command
 
 class KdevelopIntegrationGenerator(IdeIntegrationGenerator):
     def encode_int(self, i):
@@ -838,13 +876,17 @@ if __name__ == '__main__':
         gbuildparser = GbuildParser().parse(open(args.input, 'r'))
     else:
         gbuildparser = GbuildParser().parse(sys.stdin)
-    #DebugIntegrationGenerator(gbuildparser).emit()
+
     if args.ide == 'kdevelop':
         KdevelopIntegrationGenerator(gbuildparser).emit()
     elif args.ide == 'xcode':
         XcodeIntegrationGenerator(gbuildparser).emit()
     elif args.ide == 'vs2012':
         VisualStudioIntegrationGenerator(gbuildparser).emit()
+    elif args.ide == 'vim':
+        VimIntegrationGenerator(gbuildparser).emit()
+    elif args.ide == 'debug':
+        DebugIntegrationGenerator(gbuildparser).emit()
     else:
         parser.print_help()
         sys.exit(1)
