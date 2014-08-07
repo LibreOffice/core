@@ -58,8 +58,11 @@ public:
     void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }
     void setModelId( const OUString& rId ) { msModelId = rId; }
 
-    static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly = false );
-    static oox::drawingml::ShapePtr findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly = false );
+    static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nFirstSubType,
+            const sal_Int32 nSecondSubType, const OptValue< sal_Int32 >& oSubTypeIndex,
+            std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly = false );
+    static oox::drawingml::ShapePtr findPlaceholderByIndex( const sal_Int32 nIdx,
+            std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly = false );
 
     static oox::drawingml::TextListStylePtr getSubTypeTextListStyle( const SlidePersist& rSlidePersist, sal_Int32 nSubType );
 
