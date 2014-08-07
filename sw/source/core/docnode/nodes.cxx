@@ -2213,16 +2213,6 @@ void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
     ForEach( rStart.GetIndex(), rEnd.GetIndex(), fnForEach, pArgs );
 }
 
-namespace {
-
-//TODO: seems to be not/wrongly used
-struct TempBigPtrEntry : public BigPtrEntry
-{
-    TempBigPtrEntry() {}
-};
-
-}
-
 void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
 {
     sal_uLong nEnd = nDelPos + nSz;
@@ -2275,11 +2265,11 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
         }
     }
 
-    std::vector<TempBigPtrEntry> aTempEntries;
+    std::vector<BigPtrEntry> aTempEntries;
     if( bDel )
     {
         sal_uLong nCnt = nSz;
-        SwNode *pDel = (*this)[ nDelPos+nCnt-1 ], *pPrev = (*this)[ nDelPos+nCnt-2 ];
+        BigPtrEntry *pDel = (*this)[ nDelPos+nCnt-1 ], *pPrev = (*this)[ nDelPos+nCnt-2 ];
 
         // set temporary object
         // JP 24.08.98: this should actually be removed because one could
@@ -2292,13 +2282,13 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
         {
             delete pDel;
             pDel = pPrev;
-            sal_uLong nPrevNdIdx = pPrev->GetIndex();
+            sal_uLong nPrevNdIdx = pPrev->GetPos();
             BigPtrEntry* pTempEntry = &aTempEntries[nCnt];
             BigPtrArray::Replace( nPrevNdIdx+1, pTempEntry );
             if( nCnt )
                 pPrev = (*this)[ nPrevNdIdx  - 1 ];
         }
-        nDelPos = pDel->GetIndex() + 1;
+        nDelPos = pDel->GetPos() + 1;
     }
 
     BigPtrArray::Remove( nDelPos, nSz );
