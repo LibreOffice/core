@@ -1382,7 +1382,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     // former consideration
                     if ( pOwn->IsTxtFrm() )
                     {
-                        nAdd = std::max( nAdd, static_cast<SwTxtFrm&>(m_rThis).GetLineSpace() );
+                        nAdd = std::max( nAdd, static_cast<SwTxtFrm*>(pOwn)->GetLineSpace() );
                     }
                     nUpper += nAdd;
                 }
@@ -1404,11 +1404,11 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         // spacing is built.
                         if ( bPrevLineSpacingPorportional )
                         {
-                            nAdd += static_cast<SwTxtFrm&>(m_rThis).GetLineSpace( true );
+                            nAdd += static_cast<SwTxtFrm*>(pOwn)->GetLineSpace( true );
                         }
                         else
                         {
-                            nAdd = std::max( nAdd, static_cast<SwTxtFrm&>(m_rThis).GetLineSpace( true ) );
+                            nAdd = std::max( nAdd, static_cast<SwTxtFrm*>(pOwn)->GetLineSpace( true ) );
                         }
                     }
                     nUpper += nAdd;
@@ -1450,11 +1450,11 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         // spacing is built.
                         if ( bPrevLineSpacingPorportional )
                         {
-                            nAdd += static_cast<SwTxtFrm&>(m_rThis).GetLineSpace( true );
+                            nAdd += static_cast<SwTxtFrm*>(pOwn)->GetLineSpace( true );
                         }
                         else
                         {
-                            nAdd = std::max( nAdd, static_cast<SwTxtFrm&>(m_rThis).GetLineSpace( true ) );
+                            nAdd = std::max( nAdd, static_cast<SwTxtFrm*>(pOwn)->GetLineSpace( true ) );
                         }
                     }
                     nUpper += nAdd;
