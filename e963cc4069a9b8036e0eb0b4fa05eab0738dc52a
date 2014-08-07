@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abe1de1_9d39a344",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 2593,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-07T20:45:42Z",
+      "side": 1,
+      "message": "This does not work the way you think... It filters out words that match either -I% or -isystem or %. In short, it filters out everything.",
+      "revId": "e963cc4069a9b8036e0eb0b4fa05eab0738dc52a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
