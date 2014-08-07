@@ -105,6 +105,7 @@ namespace svx
     };
 
     PseudoRubyText::PseudoRubyText()
+        : m_ePosition(eAbove)
     {
     }
 
