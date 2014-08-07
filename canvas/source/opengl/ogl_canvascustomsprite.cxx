@@ -25,10 +25,7 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
-
+#include <GL/glew.h>
 
 using namespace ::com::sun::star;
 
@@ -161,10 +158,10 @@ namespace oglcanvas
                 // drats. need to render to temp surface before, and then
                 // composite that to screen
 
-                // TODO(P3): buffer pbuffer, maybe even keep content
-                // (in a texture?)
-                pBufferContext=maCanvasHelper.getDeviceHelper()->createBufferContext(aSpriteSizePixel);
-                pBufferContext->startBufferRendering();
+                // TODO(P3): buffer texture
+                // TODO: moggi: reimplement as FBO with rendering to texture
+                pBufferContext = NULL;
+                // pBufferContext->startBufferRendering();
             }
 
             // this ends up in pBufferContext, if that one's "current"

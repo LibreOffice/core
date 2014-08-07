@@ -162,6 +162,9 @@ public:
     void setWinSize(const Size& rSize);
     GLWindow& getOpenGLWindow() { return m_aGLWin;}
 
+    SystemChildWindow* getChildWindow();
+    const SystemChildWindow* getChildWindow() const;
+
     void renderToFile();
 
     bool isInitialized()

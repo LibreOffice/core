@@ -898,4 +898,14 @@ void OpenGLContext::show()
         m_pWindow->Show();
 }
 
+SystemChildWindow* OpenGLContext::getChildWindow()
+{
+    return m_pChildWindow;
+}
+
+const SystemChildWindow* OpenGLContext::getChildWindow() const
+{
+    return m_pChildWindow;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

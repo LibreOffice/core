@@ -10,6 +10,8 @@
 #ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_SPRITEDEVICEHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_SPRITEDEVICEHELPER_HXX
 
+#include <vcl/opengl/OpenGLContext.hxx>
+
 #include <rtl/ref.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
@@ -19,7 +21,6 @@
 #include "ogl_buffercontext.hxx"
 
 #include <set>
-
 
 class Window;
 class SystemChildWindow;
@@ -113,25 +114,10 @@ namespace oglcanvas
         /// Get instance of internal texture cache
         TextureCache& getTextureCache() const;
 
-
-
-        // nobody except IBufferContext implementations are supposed
-        // to use this
-        bool activatePBufferContext(const ::basegfx::B2IVector& rSize,
-                                    unsigned int                PBuffer) const;
-        bool activateWindowContext() const;
-        bool updatePBufferTexture( const ::basegfx::B2IVector&,
-                                   unsigned int ) const;
+        bool activateWindowContext();
 
     private:
         void resize( const ::basegfx::B2IVector& rNewSize );
-
-        void compileShader(unsigned int& o_rShaderHandle,
-                           unsigned int  eShaderType,
-                           const char*   pShaderSourceCode);
-        void linkShaders(unsigned int& o_rProgramHandle,
-                         unsigned int  nVertexProgramId,
-                         unsigned int  nFragmentProgramId);
 
         /** Phyical output device
 
@@ -149,28 +135,16 @@ namespace oglcanvas
         /// For the frame counter timings
         ::canvas::tools::ElapsedTime                       maLastUpdate;
 
-        boost::shared_ptr<SystemChildWindow>               mpChildWindow;
-        void*                                              mpDisplay;
-        void*                                              mpGLContext;
-        void*                                              mpGLPBufContext;
-        void*                                              mpFBConfig;
-
         boost::shared_ptr<TextureCache>                    mpTextureCache;
 
-        unsigned int                                       mnDummyVertexProgram;
-
-        unsigned int                                       mnLinearTwoColorGradientFragmentProgram;
-        unsigned int                                       mnLinearMultiColorGradientFragmentProgram;
-        unsigned int                                       mnRadialTwoColorGradientFragmentProgram;
-        unsigned int                                       mnRadialMultiColorGradientFragmentProgram;
-        unsigned int                                       mnRectangularTwoColorGradientFragmentProgram;
-        unsigned int                                       mnRectangularMultiColorGradientFragmentProgram;
         unsigned int                                       mnLinearTwoColorGradientProgram;
         unsigned int                                       mnLinearMultiColorGradientProgram;
         unsigned int                                       mnRadialTwoColorGradientProgram;
         unsigned int                                       mnRadialMultiColorGradientProgram;
         unsigned int                                       mnRectangularTwoColorGradientProgram;
         unsigned int                                       mnRectangularMultiColorGradientProgram;
+
+        OpenGLContext maContext;
     };
 }
 

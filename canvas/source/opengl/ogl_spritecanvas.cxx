@@ -27,9 +27,6 @@
 
 #include "ogl_canvascustomsprite.hxx"
 
-#include <GL/gl.h>
-#include <GL/glext.h>
-
 #define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas.OGL"
 #define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas.OGL"
 
