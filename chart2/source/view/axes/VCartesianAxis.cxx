@@ -1381,50 +1381,50 @@ void VCartesianAxis::createLabels()
         return;
 
     //create labels
-    if( m_aAxisProperties.m_bDisplayLabels )
+    if (!m_aAxisProperties.m_bDisplayLabels)
+        return;
+
+    boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
+    TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+    if( !pTickFactory2D )
+        return;
+
+    //get the transformed screen values for all tickmarks in aAllTickInfos
+    pTickFactory2D->updateScreenValues( m_aAllTickInfos );
+    //'hide' tickmarks with identical screen values in aAllTickInfos
+    hideIdenticalScreenValues( m_aAllTickInfos );
+
+    removeTextShapesFromTicks();
+
+    //create tick mark text shapes
+    sal_Int32 nTextLevelCount = getTextLevelCount();
+    sal_Int32 nScreenDistanceBetweenTicks = -1;
+    for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
     {
-        boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-        TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
-        if( !pTickFactory2D )
-            return;
-
-        //get the transformed screen values for all tickmarks in aAllTickInfos
-        pTickFactory2D->updateScreenValues( m_aAllTickInfos );
-        //'hide' tickmarks with identical screen values in aAllTickInfos
-        hideIdenticalScreenValues( m_aAllTickInfos );
-
-        removeTextShapesFromTicks();
-
-        //create tick mark text shapes
-        sal_Int32 nTextLevelCount = getTextLevelCount();
-        sal_Int32 nScreenDistanceBetweenTicks = -1;
-        for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
+        boost::scoped_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
+        if(apTickIter)
         {
-            boost::scoped_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
-            if(apTickIter)
+            if(nTextLevel==0)
             {
-                if(nTextLevel==0)
-                {
-                    nScreenDistanceBetweenTicks = TickFactory_2D::getTickScreenDistance( *apTickIter.get() );
-                    if( nTextLevelCount>1 )
-                        nScreenDistanceBetweenTicks*=2; //the above used tick iter does contain also the sub ticks -> thus the given distance is only the half
-                }
-
-                AxisLabelProperties aComplexProps(m_aAxisLabelProperties);
-                if( m_aAxisProperties.m_bComplexCategories )
-                {
-                    aComplexProps.bLineBreakAllowed = true;
-                    aComplexProps.bOverlapAllowed = !::rtl::math::approxEqual( aComplexProps.fRotationAngleDegree, 0.0 );
-
-                }
-                AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
-                while( !createTextShapes( m_xTextTarget, *apTickIter.get(), rAxisLabelProperties, pTickFactory2D, nScreenDistanceBetweenTicks ) )
-                {
-                };
+                nScreenDistanceBetweenTicks = TickFactory_2D::getTickScreenDistance( *apTickIter.get() );
+                if( nTextLevelCount>1 )
+                    nScreenDistanceBetweenTicks*=2; //the above used tick iter does contain also the sub ticks -> thus the given distance is only the half
             }
+
+            AxisLabelProperties aComplexProps(m_aAxisLabelProperties);
+            if( m_aAxisProperties.m_bComplexCategories )
+            {
+                aComplexProps.bLineBreakAllowed = true;
+                aComplexProps.bOverlapAllowed = !::rtl::math::approxEqual( aComplexProps.fRotationAngleDegree, 0.0 );
+
+            }
+            AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
+            while( !createTextShapes( m_xTextTarget, *apTickIter.get(), rAxisLabelProperties, pTickFactory2D, nScreenDistanceBetweenTicks ) )
+            {
+            };
         }
-        doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
     }
+    doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
 }
 
 void VCartesianAxis::createMaximumLabels()
@@ -1435,108 +1435,109 @@ void VCartesianAxis::createMaximumLabels()
         return;
 
     //create labels
-    if( m_aAxisProperties.m_bDisplayLabels )
+    if (!m_aAxisProperties.m_bDisplayLabels)
+        return;
+
+    boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
+    TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+    if( !pTickFactory2D )
+        return;
+
+    //get the transformed screen values for all tickmarks in aAllTickInfos
+    pTickFactory2D->updateScreenValues( m_aAllTickInfos );
+
+    //create tick mark text shapes
+    //@todo: iterate through all tick depth which should be labeled
+
+    AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
+    if( isAutoStaggeringOfLabelsAllowed( aAxisLabelProperties, pTickFactory2D->isHorizontalAxis(), pTickFactory2D->isVerticalAxis() ) )
+        aAxisLabelProperties.eStaggering = STAGGER_EVEN;
+
+    aAxisLabelProperties.bOverlapAllowed = true;
+    aAxisLabelProperties.bLineBreakAllowed = false;
+    sal_Int32 nTextLevelCount = getTextLevelCount();
+    for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
     {
-        boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-        TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
-        if( !pTickFactory2D )
-            return;
-
-        //get the transformed screen values for all tickmarks in aAllTickInfos
-        pTickFactory2D->updateScreenValues( m_aAllTickInfos );
-
-        //create tick mark text shapes
-        //@todo: iterate through all tick depth which should be labeled
-
-        AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
-        if( isAutoStaggeringOfLabelsAllowed( aAxisLabelProperties, pTickFactory2D->isHorizontalAxis(), pTickFactory2D->isVerticalAxis() ) )
-            aAxisLabelProperties.eStaggering = STAGGER_EVEN;
-        aAxisLabelProperties.bOverlapAllowed = true;
-        aAxisLabelProperties.bLineBreakAllowed = false;
-        sal_Int32 nTextLevelCount = getTextLevelCount();
-        for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
+        boost::scoped_ptr< TickIter > apTickIter(createMaximumLabelTickIterator( nTextLevel ));
+        if(apTickIter)
         {
-            boost::scoped_ptr< TickIter > apTickIter(createMaximumLabelTickIterator( nTextLevel ));
-            if(apTickIter)
+            while( !createTextShapes( m_xTextTarget, *apTickIter.get(), aAxisLabelProperties, pTickFactory2D, -1 ) )
             {
-                while( !createTextShapes( m_xTextTarget, *apTickIter.get(), aAxisLabelProperties, pTickFactory2D, -1 ) )
-                {
-                };
-            }
+            };
         }
-        doStaggeringOfLabels( aAxisLabelProperties, pTickFactory2D );
     }
+    doStaggeringOfLabels( aAxisLabelProperties, pTickFactory2D );
 }
 
 void VCartesianAxis::updatePositions()
 {
     //update positions of labels
-    if( m_aAxisProperties.m_bDisplayLabels )
+    if (!m_aAxisProperties.m_bDisplayLabels)
+        return;
+
+    boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
+    TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+    if( !pTickFactory2D )
+        return;
+
+    //update positions of all existing text shapes
+    pTickFactory2D->updateScreenValues( m_aAllTickInfos );
+
+    ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter = m_aAllTickInfos.begin();
+    const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
+    for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; ++aDepthIter, nDepth++ )
     {
-        boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-        TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
-        if( !pTickFactory2D )
-            return;
-
-        //update positions of all existing text shapes
-        pTickFactory2D->updateScreenValues( m_aAllTickInfos );
-
-        ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter = m_aAllTickInfos.begin();
-        const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
-        for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; ++aDepthIter, nDepth++ )
+        ::std::vector< TickInfo >::iterator aTickIter = aDepthIter->begin();
+        const ::std::vector< TickInfo >::const_iterator aTickEnd  = aDepthIter->end();
+        for( ; aTickIter != aTickEnd; ++aTickIter )
         {
-            ::std::vector< TickInfo >::iterator aTickIter = aDepthIter->begin();
-            const ::std::vector< TickInfo >::const_iterator aTickEnd  = aDepthIter->end();
-            for( ; aTickIter != aTickEnd; ++aTickIter )
+            TickInfo& rTickInfo = (*aTickIter);
+            Reference< drawing::XShape > xShape2DText( rTickInfo.xTextShape );
+            if( xShape2DText.is() )
             {
-                TickInfo& rTickInfo = (*aTickIter);
-                Reference< drawing::XShape > xShape2DText( rTickInfo.xTextShape );
-                if( xShape2DText.is() )
+                B2DVector aTextToTickDistance( pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, true ) );
+                B2DVector aTickScreenPos2D( rTickInfo.aTickScreenPosition );
+                aTickScreenPos2D += aTextToTickDistance;
+                awt::Point aAnchorScreenPosition2D(
+                    static_cast<sal_Int32>(aTickScreenPos2D.getX())
+                    ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
+
+                double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                if( nDepth > 0 )
                 {
-                    B2DVector aTextToTickDistance( pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, true ) );
-                    B2DVector aTickScreenPos2D( rTickInfo.aTickScreenPosition );
-                    aTickScreenPos2D += aTextToTickDistance;
-                    awt::Point aAnchorScreenPosition2D(
-                        static_cast<sal_Int32>(aTickScreenPos2D.getX())
-                        ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
-
-                    double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
-                    if( nDepth > 0 )
-                    {
-                        /* Multi-level Labels: default to 0 or 90 */
-                        if( pTickFactory2D->isHorizontalAxis() )
-                            fRotationAngleDegree = 0.0;
-                        else
-                            fRotationAngleDegree = 90;
-                    }
-
-                    // #i78696# use mathematically correct rotation now
-                    const double fRotationAnglePi(fRotationAngleDegree * (F_PI / -180.0));
-                    uno::Any aATransformation = AbstractShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
-
-                    //set new position
-                    uno::Reference< beans::XPropertySet > xProp( xShape2DText, uno::UNO_QUERY );
-                    if( xProp.is() )
-                    {
-                        try
-                        {
-                            xProp->setPropertyValue( "Transformation", aATransformation );
-                        }
-                        catch( const uno::Exception& e )
-                        {
-                            ASSERT_EXCEPTION( e );
-                        }
-                    }
-
-                    //correctPositionForRotation
-                    LabelPositionHelper::correctPositionForRotation( xShape2DText
-                        , m_aAxisProperties.m_aLabelAlignment, fRotationAngleDegree, m_aAxisProperties.m_bComplexCategories );
+                    /* Multi-level Labels: default to 0 or 90 */
+                    if( pTickFactory2D->isHorizontalAxis() )
+                        fRotationAngleDegree = 0.0;
+                    else
+                        fRotationAngleDegree = 90;
                 }
+
+                // #i78696# use mathematically correct rotation now
+                const double fRotationAnglePi(fRotationAngleDegree * (F_PI / -180.0));
+                uno::Any aATransformation = AbstractShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
+
+                //set new position
+                uno::Reference< beans::XPropertySet > xProp( xShape2DText, uno::UNO_QUERY );
+                if( xProp.is() )
+                {
+                    try
+                    {
+                        xProp->setPropertyValue( "Transformation", aATransformation );
+                    }
+                    catch( const uno::Exception& e )
+                    {
+                        ASSERT_EXCEPTION( e );
+                    }
+                }
+
+                //correctPositionForRotation
+                LabelPositionHelper::correctPositionForRotation( xShape2DText
+                    , m_aAxisProperties.m_aLabelAlignment, fRotationAngleDegree, m_aAxisProperties.m_bComplexCategories );
             }
         }
-
-        doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
     }
+
+    doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
 }
 
 void VCartesianAxis::createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory_2D& rTickFactory2D, bool bOnlyAtLabels )
