@@ -113,43 +113,33 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         pDocument->resolve(*pStream);
 
         // Adding some properties to the document's grab bag for interoperability purposes:
-        uno::Sequence<beans::PropertyValue> aGrabBagProperties(10);
+        comphelper::SequenceAsHashMap aGrabBagProperties;
 
         // Adding the saved Theme DOM
-        aGrabBagProperties[0].Name = "OOXTheme";
-        aGrabBagProperties[0].Value = uno::makeAny( pDocument->getThemeDom() );
+        aGrabBagProperties["OOXTheme"] = uno::makeAny( pDocument->getThemeDom() );
 
         // Adding the saved custom xml DOM
-        aGrabBagProperties[1].Name = "OOXCustomXml";
-        aGrabBagProperties[1].Value = uno::makeAny( pDocument->getCustomXmlDomList() );
-        aGrabBagProperties[2].Name = "OOXCustomXmlProps";
-        aGrabBagProperties[2].Value = uno::makeAny( pDocument->getCustomXmlDomPropsList() );
+        aGrabBagProperties["OOXCustomXml"] = uno::makeAny( pDocument->getCustomXmlDomList() );
+        aGrabBagProperties["OOXCustomXmlProps"] = uno::makeAny( pDocument->getCustomXmlDomPropsList() );
 
         // Adding the saved ActiveX DOM
-        aGrabBagProperties[3].Name = "OOXActiveX";
-        aGrabBagProperties[3].Value = uno::makeAny( pDocument->getActiveXDomList() );
-        aGrabBagProperties[4].Name = "OOXActiveXBin";
-        aGrabBagProperties[4].Value = uno::makeAny( pDocument->getActiveXBinList() );
+        aGrabBagProperties["OOXActiveX"] = uno::makeAny( pDocument->getActiveXDomList() );
+        aGrabBagProperties["OOXActiveXBin"] = uno::makeAny( pDocument->getActiveXBinList() );
 
         // Adding the saved w:themeFontLang setting
-        aGrabBagProperties[5].Name = "ThemeFontLangProps";
-        aGrabBagProperties[5].Value = uno::makeAny( aDomainMapper->GetThemeFontLangProperties() );
+        aGrabBagProperties["ThemeFontLangProps"] = uno::makeAny( aDomainMapper->GetThemeFontLangProperties() );
 
         // Adding the saved Glossary Documnet DOM to the document's grab bag
-        aGrabBagProperties[6].Name = "OOXGlossary";
-        aGrabBagProperties[6].Value = uno::makeAny( pDocument->getGlossaryDocDom() );
-        aGrabBagProperties[7].Name = "OOXGlossaryDom";
-        aGrabBagProperties[7].Value = uno::makeAny( pDocument->getGlossaryDomList() );
+        aGrabBagProperties["OOXGlossary"] = uno::makeAny( pDocument->getGlossaryDocDom() );
+        aGrabBagProperties["OOXGlossaryDom"] = uno::makeAny( pDocument->getGlossaryDomList() );
 
         // Adding the saved embedding document to document's grab bag
-        aGrabBagProperties[8].Name = "OOXEmbeddings";
-        aGrabBagProperties[8].Value = uno::makeAny( pDocument->getEmbeddingsList() );
+        aGrabBagProperties["OOXEmbeddings"] = uno::makeAny( pDocument->getEmbeddingsList() );
 
         // Adding the saved compat settings
-        aGrabBagProperties[9].Name = "CompatSettings";
-        aGrabBagProperties[9].Value = uno::makeAny( aDomainMapper->GetCompatSettings() );
+        aGrabBagProperties["CompatSettings"] = uno::makeAny( aDomainMapper->GetCompatSettings() );
 
-        putPropertiesToDocumentGrabBag( aGrabBagProperties );
+        putPropertiesToDocumentGrabBag( aGrabBagProperties.getAsConstPropertyValueList() );
 
         writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream( pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT ));
         oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( m_xContext, pVBAProjectStream->getDocumentStream(), false ) );
