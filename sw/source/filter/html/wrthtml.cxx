@@ -88,12 +88,51 @@ static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
-    : bCfgOutStyles( false )
+    : pHTMLPosFlyFrms(NULL)
+    , pNumRuleInfo(new SwHTMLNumRuleInfo)
+    , pNextNumRuleInfo(NULL)
+    , nHTMLMode(0)
+    , eCSS1Unit(FUNIT_NONE)
+    , pFootEndNotes(NULL)
+    , pxFormComps(NULL)
+    , pTemplate(NULL)
+    , pDfltColor(NULL)
+    , pStartNdIdx(NULL)
+    , pCurrPageDesc(NULL)
+    , pFmtFtn(NULL)
+    , nWarn(0)
+    , nLastLFPos(0)
+    , nLastParaToken(0)
+    , nBkmkTabPos(-1)
+    , nImgMapCnt(1)
+    , nFormCntrlCnt(0)
+    , nEndNote(0)
+    , nFootNote(0)
+    , nLeftMargin(0)
+    , nDfltLeftMargin(0)
+    , nDfltRightMargin(0)
+    , nFirstLineIndent(0)
+    , nDfltFirstLineIndent(0)
+    , nDfltTopMargin(0)
+    , nDfltBottomMargin(0)
+    , nIndentLvl(0)
+    , nWhishLineLen(0)
+    , nDefListLvl(0)
+    , nDefListMargin(0)
+    , nHeaderFooterSpace(0)
+    , nTxtAttrsToIgnore(0)
+    , nExportMode(0)
+    , nCSS1OutMode(0)
+    , nCSS1Script(CSS1_OUTMODE_WESTERN)
+    , nDirection(FRMDIR_HORI_LEFT_TOP)
+    , eDestEnc(RTL_TEXTENCODING_MS_1252)
+    , eLang(LANGUAGE_DONTKNOW)
+    , bCfgOutStyles( false )
     , bCfgPreferStyles( false )
     , bCfgFormFeed( false )
     , bCfgStarBasic( false )
     , bCfgCpyLinkedGrfs( false )
-    , bFirstLine( false )
+    , bFirstLine(true)
     , bTagOn( false )
     , bTxtAttr( false )
     , bOutOpts( false )
@@ -112,21 +151,8 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , bPreserveForm( false )
     , bCfgNetscape4( false )
     , mbSkipImages(false)
-
 {
-    SetBaseURL( rBaseURL );
-    bFirstLine = true;
-    nBkmkTabPos = -1;
-    pDfltColor = 0;
-    nImgMapCnt = 1;
-    pStartNdIdx = 0;
-    pTemplate = 0;
-    pNumRuleInfo = new SwHTMLNumRuleInfo;
-    pNextNumRuleInfo = 0;
-    pFootEndNotes = 0;
-    pFmtFtn = 0;
-    eDestEnc = RTL_TEXTENCODING_MS_1252;
-    nDirection = FRMDIR_HORI_LEFT_TOP;
+    SetBaseURL(rBaseURL);
 }
 
 SwHTMLWriter::~SwHTMLWriter()
