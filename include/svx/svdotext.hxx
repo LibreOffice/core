@@ -25,6 +25,7 @@
 #include <svx/svdoattr.hxx>
 #include <svx/svdtrans.hxx>
 #include <tools/datetime.hxx>
+#include <rsc/rscsfx.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/svdtext.hxx>
 #include <vector>
@@ -40,6 +41,7 @@
 class OutlinerParaObject;
 class SdrOutliner;
 class SdrTextObj;
+class SdrTextObjTest;
 class SvxFieldItem;
 class ImpSdrObjTextLink;
 class EditStatus;
@@ -270,6 +272,12 @@ private:
     SVX_DLLPRIVATE void ImpLinkAbmeldung();
     SVX_DLLPRIVATE ImpSdrObjTextLinkUserData* GetLinkUserData() const;
 //  void ImpCheckItemSetChanges(const SfxItemSet& rAttr);
+
+    /** Appends the style family to a provided style name */
+    static void AppendFamilyToStyleName(OUString& styleName, SfxStyleFamily family);
+
+    /** Reads the style family from a style name to which the family has been appended. */
+    static SfxStyleFamily ReadFamilyFromStyleName(const OUString& styleName);
 
 protected:
     bool ImpCanConvTextToCurve() const;
@@ -591,6 +599,8 @@ public:
         Also checks for one empty paragraph.
     */
     static bool HasTextImpl( SdrOutliner* pOutliner );
+
+    friend class ::SdrTextObjTest;
 };
 
 
