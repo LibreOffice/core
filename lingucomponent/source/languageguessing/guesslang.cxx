@@ -31,7 +31,6 @@
 #include <simpleguesser.hxx>
 #include <guess.hxx>
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <unotools/pathoptions.hxx>
@@ -377,8 +376,8 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL guesslang_component_getFactory(
-    sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
-    registry::XRegistryKey * xRegistry )
+    sal_Char const * implName, void * xMgr,
+    void * xRegistry )
 {
     return ::cppu::component_getFactoryHelper(
         implName, xMgr, xRegistry, s_component_entries );
