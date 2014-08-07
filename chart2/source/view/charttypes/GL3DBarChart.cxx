@@ -432,6 +432,7 @@ GL3DBarChart::GL3DBarChart(
     mbCameraInit(false),
     mbRenderDie(false),
     maRenderEvent(EVENT_NONE),
+    mSelectBarId(0),
     miScrollRate(0),
     mbScrollFlg(false)
 {
