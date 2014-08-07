@@ -227,7 +227,7 @@ void PPTShape::addShape(
             if( mnSubType && getSubTypeIndex().has() && meShapeLocation == Layout ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getShapes()->getChildren(), true );
                 if (!pPlaceholder.get())
-                    pPlaceholder = PPTShape::findPlaceholder( mnSubType, rSlidePersist.getShapes()->getChildren(), true );
+                    pPlaceholder = PPTShape::findPlaceholder( mnSubType, 0, getSubTypeIndex(), rSlidePersist.getShapes()->getChildren(), true );
 
                 if (pPlaceholder.get()) {
                     if( maSize.Width == 0 || maSize.Height == 0 ) {
@@ -386,25 +386,67 @@ namespace
     }
 }
 
-oox::drawingml::ShapePtr PPTShape::findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
+// Function to find placeholder (ph) for a shape. No idea how MSO implements this, but
+// this order seems to work quite well (probably it's unnecessary complicated / wrong):
+// 1. ph with nFirstSubType and the same oSubTypeIndex
+// 2. ph with nFirstSubType
+// 3. ph with nSecondSubType and the same oSubTypeIndex
+// 4. ph with the same oSubTypeIndex
+oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal_Int32 nSecondSubType,
+    const OptValue< sal_Int32 >& oSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
 {
     oox::drawingml::ShapePtr aShapePtr;
+    oox::drawingml::ShapePtr aChoiceShapePtr1;
+    oox::drawingml::ShapePtr aChoiceShapePtr2;
+    oox::drawingml::ShapePtr aChoiceShapePtr3;
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
-    while( aRevIter != rShapes.rend() )
+    while (aRevIter != rShapes.rend())
     {
-        if ( (*aRevIter)->getSubType() == nMasterPlaceholder &&
-             ( !bMasterOnly || ShapeLocationIsMaster((*aRevIter).get()) ) )
+        if (!bMasterOnly || ShapeLocationIsMaster((*aRevIter).get()))
         {
-            aShapePtr = *aRevIter;
-            break;
+            if ((*aRevIter)->getSubTypeIndex() == oSubTypeIndex)
+            {
+                if ((*aRevIter)->getSubType() == nFirstSubType)
+                {
+                    aShapePtr = *aRevIter;
+                    break;
+                }
+                else if ((*aRevIter)->getSubType() == nSecondSubType && !aChoiceShapePtr2.get())
+                    aChoiceShapePtr2 = *aRevIter;
+                else if (!aChoiceShapePtr3.get())
+                    aChoiceShapePtr3 = *aRevIter;
+            }
+            else if ((*aRevIter)->getSubType() == nFirstSubType && !aChoiceShapePtr1.get())
+                aChoiceShapePtr1 = *aRevIter;
         }
         std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
-        aShapePtr = findPlaceholder( nMasterPlaceholder, rChildren, bMasterOnly );
-        if ( aShapePtr.get() )
+        aChoiceShapePtr3 = findPlaceholder( nFirstSubType, nSecondSubType, oSubTypeIndex, rChildren, bMasterOnly );
+        if (aChoiceShapePtr3.get())
+        {
+            if (aChoiceShapePtr3->getSubType() == nFirstSubType)
+            {
+                if (aChoiceShapePtr3->getSubTypeIndex() == oSubTypeIndex)
+                    aShapePtr = aChoiceShapePtr3;
+                else
+                    aChoiceShapePtr1 = aChoiceShapePtr3;
+            }
+            else if (aChoiceShapePtr3->getSubType() == nSecondSubType &&
+                    aChoiceShapePtr3->getSubTypeIndex() == oSubTypeIndex)
+            {
+                aChoiceShapePtr2 = aChoiceShapePtr3;
+            }
+        }
+        if (aShapePtr.get())
             break;
         ++aRevIter;
     }
-    return aShapePtr;
+    if (aShapePtr.get())
+        return aShapePtr;
+    if (aChoiceShapePtr1.get())
+        return aChoiceShapePtr1;
+    if (aChoiceShapePtr2.get())
+        return aChoiceShapePtr2;
+    return aChoiceShapePtr3;
 }
 
 oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
