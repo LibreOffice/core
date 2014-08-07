@@ -591,6 +591,15 @@ DECLARE_OOXMLEXPORT_TEST(testFdo81945, "fdo81945.docx")
     assertXPath(pXmlDoc, "//w:sdt//w:sdt", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo81946, "fdo81946.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+       return;
+    // make sure AlternateContent should not present in sdt
+    assertXPath(pXmlDoc, "/w:hdr[1]/w:p[1]/w:sdt[1]/w:sdtContent[1]/w:r[2]/mc:AlternateContent[1]",0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
