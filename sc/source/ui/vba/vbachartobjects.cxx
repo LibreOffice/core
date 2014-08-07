@@ -43,9 +43,34 @@ public:
     ChartObjectEnumerationImpl( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier, const uno::Reference< XHelperInterface >& _xParent ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( _xParent, xContext, xEnumeration ), xDrawPageSupplier( _xDrawPageSupplier ) {}
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        uno::Reference< table::XTableChart > xTableChart( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        // parent Object is sheet
-        return uno::makeAny(  uno::Reference< excel::XChartObject > ( new ScVbaChartObject(  m_xParent, m_xContext, xTableChart, xDrawPageSupplier ) ) );
+        uno::Any ret;
+
+        try
+        {
+            uno::Reference< table::XTableChart > xTableChart( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
+            // parent Object is sheet
+            ret = uno::makeAny(  uno::Reference< excel::XChartObject > ( new ScVbaChartObject(  m_xParent, m_xContext, xTableChart, xDrawPageSupplier ) ) );
+        }
+        catch (const lang::WrappedTargetException&)
+        {
+            throw;
+        }
+        catch (const container::NoSuchElementException&)
+        {
+            throw;
+        }
+        catch (const uno::RuntimeException&)
+        {
+            throw;
+        }
+        catch (const uno::Exception& e)
+        {
+            throw lang::WrappedTargetException(
+                    "Error creating ScVbaChartObject!",
+                    static_cast < OWeakObject * > ( this ),
+                    makeAny( e ) );
+        }
+        return ret;
     }
 };
 
