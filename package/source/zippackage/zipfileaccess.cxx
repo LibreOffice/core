@@ -320,7 +320,7 @@ sal_Bool SAL_CALL OZipFileAccess::hasByName( const OUString& aName )
         throw lang::DisposedException(THROW_WHERE );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException(THROW_WHERE );
+        throw uno::RuntimeException(THROW_WHERE);
 
     EntryHash::iterator aIter = m_pZipFile->GetEntryHash().find( aName );
 
