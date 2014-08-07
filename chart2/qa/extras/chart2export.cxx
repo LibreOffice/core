@@ -71,6 +71,7 @@ public:
     void testAxisNumberFormatODS();
     void testDataLabelBordersDOCX();
     void testDataLabel3DChartDOCX();
+    void testDataLabelBarChartDOCX();
     void testDataLabelDoughnutChartDOCX();
     void testDataLabelAreaChartDOCX();
     void testDataLabelDefaultLineChartDOCX();
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testAxisNumberFormatODS);
     CPPUNIT_TEST(testDataLabelBordersDOCX);
     CPPUNIT_TEST(testDataLabel3DChartDOCX);
+    CPPUNIT_TEST(testDataLabelBarChartDOCX);
     CPPUNIT_TEST(testDataLabelDoughnutChartDOCX);
     CPPUNIT_TEST(testDataLabelAreaChartDOCX);
     CPPUNIT_TEST(testDataLabelDefaultLineChartDOCX);
@@ -824,6 +826,21 @@ void Chart2ExportTest::testDataLabel3DChartDOCX()
     // same rule also applies to several other 3D charts, apparently.
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser/c:dLbls/c:dLblPos", 0);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
+}
+
+void Chart2ExportTest::testDataLabelBarChartDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "bar-chart-labels.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLblPos", "val", "ctr");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:dLbls/c:dLblPos", "val", "inEnd");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:dLbls/c:dLblPos", "val", "inBase");
 }
 
 void Chart2ExportTest::testDataLabelDoughnutChartDOCX()
