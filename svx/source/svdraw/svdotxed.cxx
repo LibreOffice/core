@@ -268,7 +268,11 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             // set overflowing text for SdrChainedTextPrimitive2D
             pNextText = rOutl.GetOverflowingParaObject();
             mpOverflowingText = pNextText;
-            //SetOverflowingText( pNextText );
+            // we do not need the bookmark at the overflowing check anymore.
+            rOutl.ClearOverflowingParaNum();
+
+            // TODO: factor the lines of code above in a single function
+
         }
         else // standard case
         {

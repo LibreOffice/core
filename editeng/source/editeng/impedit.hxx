@@ -476,7 +476,6 @@ private:
 
     // For Chaining
     sal_Int32 mnOverflowingPara = -1;
-    void SetOverflowingParaNum();
 
     IdleFormattter      aIdleFormatter;
 
@@ -1025,6 +1024,7 @@ public:
 
     sal_Int32 GetOverflowingParaNum() const { return mnOverflowingPara; }
     void SetOverflowingParaNum(sal_Int32 nPara) { mnOverflowingPara = nPara; }
+    void ClearOverflowingParaNum() { mnOverflowingPara = -1; }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )

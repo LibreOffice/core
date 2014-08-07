@@ -753,6 +753,9 @@ public:
     void            SetParaRemovingHdl(const Link<Outliner*,void>& rLink){aParaRemovingHdl=rLink;}
     Link<Outliner*,void> GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
+    OutlinerParaObject *GetNonOverflowingParaObject() const;
+    OutlinerParaObject *GetOverflowingParaObject() const;
+    void ClearOverflowingParaNum();
     void            DepthChangedHdl();
     void            SetDepthChangedHdl(const Link<Outliner*,void>& rLink){aDepthChangedHdl=rLink;}
     Link<Outliner*,void> GetDepthChangedHdl() const { return aDepthChangedHdl; }

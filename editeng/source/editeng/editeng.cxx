@@ -2747,6 +2747,9 @@ sal_Int32 EditEngine::GetOverflowingParaNum() const {
     return pImpEditEngine->GetOverflowingParaNum();
 }
 
+void EditEngine::ClearOverflowingParaNum() {
+    pImpEditEngine->ClearOverflowingParaNum();
+}
 
 EFieldInfo::EFieldInfo()
 {
