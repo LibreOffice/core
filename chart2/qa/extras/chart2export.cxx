@@ -72,6 +72,7 @@ public:
     void testDataLabelBordersDOCX();
     void testDataLabel3DChartDOCX();
     void testDataLabelDoughnutChartDOCX();
+    void testDataLabelAreaChartDOCX();
     void testDataLabelDefaultLineChartDOCX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testDataLabelBordersDOCX);
     CPPUNIT_TEST(testDataLabel3DChartDOCX);
     CPPUNIT_TEST(testDataLabelDoughnutChartDOCX);
+    CPPUNIT_TEST(testDataLabelAreaChartDOCX);
     CPPUNIT_TEST(testDataLabelDefaultLineChartDOCX);
     CPPUNIT_TEST_SUITE_END();
 
@@ -837,6 +839,21 @@ void Chart2ExportTest::testDataLabelDoughnutChartDOCX()
     // We must not export label position attributes for doughnut charts.
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLblPos", 0);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
+}
+
+void Chart2ExportTest::testDataLabelAreaChartDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "area-chart-labels.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // We must not export label position attributes for area charts.
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLblPos", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
 void Chart2ExportTest::testDataLabelDefaultLineChartDOCX()
