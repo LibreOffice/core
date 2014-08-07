@@ -3476,6 +3476,15 @@ DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo81946, "fdo81946.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+       return;
+    // make sure AlternateContent should not present in sdt
+    assertXPath(pXmlDoc, "/w:hdr[1]/w:p[1]/w:sdt[1]/w:sdtContent[1]/w:r[2]/mc:AlternateContent[1]",0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

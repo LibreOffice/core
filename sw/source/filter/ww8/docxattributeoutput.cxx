@@ -450,6 +450,12 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
             if (!TextBoxIsFramePr(rFrmFmt) || m_bWritingHeaderFooter)
             {
+                if (m_bStartedCharSdt)
+                {
+                    // Run-level SDT still open? Close it befor AlternateContent.
+                    EndSdtBlock();
+                    m_bStartedCharSdt = false;
+                }
                 m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
                 m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
                 m_pSerializer->startElementNS(XML_mc, XML_Choice,
