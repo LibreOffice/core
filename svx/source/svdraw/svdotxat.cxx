@@ -50,6 +50,12 @@
 
 #include <set>
 
+namespace {
+// The style family which is appended to the style names is padded to this many characters.
+const short PADDING_LENGTH_FOR_STYLE_FAMILY = 5;
+// this character will be used to pad the style families when they are appended to the style names
+const sal_Char PADDING_CHARACTER_FOR_STYLE_FAMILY = ' ';
+}
 
 bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bWdt) const
 {
@@ -236,18 +242,14 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             SfxStyleFamily eStyleFam;
             sal_Int32 nParaAnz=rTextObj.GetParagraphCount();
 
+
             for(sal_Int32 nParaNum(0); nParaNum < nParaAnz; nParaNum++)
             {
                 rTextObj.GetStyleSheet(nParaNum, aStyleName, eStyleFam);
 
                 if (!aStyleName.isEmpty())
                 {
-                    OUStringBuffer aFam;
-                    aFam.append(static_cast<sal_Int32>(eStyleFam));
-                    comphelper::string::padToLength(aFam, 5, ' ');
-
-                    aStyleName += OUString('|');
-                    aStyleName += aFam.makeStringAndClear();
+                    AppendFamilyToStyleName(aStyleName, eStyleFam);
 
                     bool bFnd(false);
                     sal_uInt32 nNum(aStyleNames.size());
@@ -273,14 +275,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             OUString aName = aStyleNames.back();
             aStyleNames.pop_back();
 
-            OUString aFam = aName.copy(0, aName.getLength() - 6);
-
-            aFam = aFam.copy(1);
-            aFam = comphelper::string::stripEnd(aFam, ' ');
-
-            sal_uInt16 nFam = (sal_uInt16)aFam.toInt32();
-
-            SfxStyleFamily eFam = (SfxStyleFamily)nFam;
+            SfxStyleFamily eFam = ReadFamilyFromStyleName(aName);
             SfxStyleSheetBase* pStyleBase = pStylePool->Find(aName,eFam);
             SfxStyleSheet* pStyle = PTR_CAST(SfxStyleSheet,pStyleBase);
             if (pStyle!=NULL && pStyle!=GetStyleSheet()) {
@@ -371,5 +366,25 @@ bool SdrTextObj::HasText() const
 
     return bHasText;
 }
+
+void SdrTextObj::AppendFamilyToStyleName(OUString& styleName, SfxStyleFamily family)
+{
+    OUStringBuffer aFam;
+    aFam.append(static_cast<sal_Int32>(family));
+    comphelper::string::padToLength(aFam, PADDING_LENGTH_FOR_STYLE_FAMILY , PADDING_CHARACTER_FOR_STYLE_FAMILY);
+
+    styleName += OUString('|');
+    styleName += aFam.makeStringAndClear();
+}
+
+SfxStyleFamily SdrTextObj::ReadFamilyFromStyleName(OUString& styleName)
+{
+    OUString familyString = styleName.copy(styleName.getLength() - PADDING_LENGTH_FOR_STYLE_FAMILY);
+    familyString = comphelper::string::stripEnd(familyString, PADDING_CHARACTER_FOR_STYLE_FAMILY);
+    sal_uInt16 nFam = static_cast<sal_uInt16>(familyString.toInt32());
+    assert(nFam != 0);
+    return static_cast<SfxStyleFamily>(nFam);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
