@@ -919,17 +919,20 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 getRootFrm()->InvalidateBrowseWidth();
             SwRect aNew( GetObjRectWithSpaces() );
             SwRect aOld( maFrm );
-            if ( RES_UL_SPACE == nWhich )
+            if (pNew)
             {
-                const SvxULSpaceItem &rUL = *(SvxULSpaceItem*)pNew;
-                aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
-                aOld.SSize().Height()+= rUL.GetLower();
-            }
-            else
-            {
-                const SvxLRSpaceItem &rLR = *(SvxLRSpaceItem*)pNew;
-                aOld.Left  ( std::max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
-                aOld.SSize().Width() += rLR.GetRight();
+                if ( RES_UL_SPACE == nWhich )
+                {
+                    const SvxULSpaceItem &rUL = *(SvxULSpaceItem*)pNew;
+                    aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
+                    aOld.SSize().Height()+= rUL.GetLower();
+                }
+                else
+                {
+                    const SvxLRSpaceItem &rLR = *(SvxLRSpaceItem*)pNew;
+                    aOld.Left  ( std::max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
+                    aOld.SSize().Width() += rLR.GetRight();
+                }
             }
             aNew.Union( aOld );
             NotifyBackground( FindPageFrm(), aNew, PREP_CLEAR );
