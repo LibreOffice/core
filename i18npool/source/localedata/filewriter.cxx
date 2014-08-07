@@ -73,7 +73,7 @@ void OFileWriter::writeRefFunction(const char *func, const OUString& useLocale) 
 
 void OFileWriter::writeFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const
 {
-    fprintf(m_f, "sal_Unicode **  SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to)\n{\n", func, theLocale);
+    fprintf(m_f, "sal_Unicode const * const * SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to)\n{\n", func, theLocale);
     fprintf(m_f, "\tcount = %s;\n", count);
     fprintf(m_f, "\tfrom = %s;\n", from);
     fprintf(m_f, "\tto = %s;\n", to);
@@ -84,8 +84,8 @@ void OFileWriter::writeRefFunction(const char *func, const OUString& useLocale, 
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
-    fprintf(m_f, "extern sal_Unicode **  SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to);\n", func, locale);
-    fprintf(m_f, "sal_Unicode **  SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to)\n{\n", func, theLocale);
+    fprintf(m_f, "extern sal_Unicode const * const * SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to);\n", func, locale);
+    fprintf(m_f, "sal_Unicode const * const * SAL_CALL %s%s(sal_Int16& count, const sal_Unicode*& from, const sal_Unicode*& to)\n{\n", func, theLocale);
     fprintf(m_f, "\tto = %s;\n", to);
     fprintf(m_f, "\tconst sal_Unicode* tmp;\n");
     fprintf(m_f, "\treturn %s%s(count, from, tmp);\n}\n", func, locale);
