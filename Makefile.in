@@ -354,8 +354,10 @@ $(1)-ide-integration:
 endef
 
 $(foreach ide,\
+	debug \
 	kdevelop \
 	vs2012 \
+	vim \
 	xcode, \
 $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
