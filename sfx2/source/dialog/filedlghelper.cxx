@@ -789,23 +789,20 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 {
     ErrCode nRet = ERRCODE_NONE;
 
-    if ( ! maGraphic )
+    // rhbz#1079672 do not return maGraphic, it need not be the selected file
+
+    OUString aPath;;
+    Sequence<OUString> aPathSeq = mxFileDlg->getFiles();
+
+    if (aPathSeq.getLength() == 1)
     {
-        OUString aPath;;
-        Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
-
-        if ( aPathSeq.getLength() == 1 )
-        {
-            aPath = aPathSeq[0];
-        }
-
-        if ( !aPath.isEmpty() )
-            nRet = getGraphic( aPath, rGraphic );
-        else
-            nRet = ERRCODE_IO_GENERAL;
+        aPath = aPathSeq[0];
     }
+
+    if (!aPath.isEmpty())
+        nRet = getGraphic(aPath, rGraphic);
     else
-        rGraphic = maGraphic;
+        nRet = ERRCODE_IO_GENERAL;
 
     return nRet;
 }
