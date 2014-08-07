@@ -572,8 +572,8 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 TblStylePrHandlerPtr pTblStylePrHandler(new TblStylePrHandler(m_pImpl->m_rDMapper));
                 pProperties->resolve(*pTblStylePrHandler);
                 StyleSheetEntry* pEntry = m_pImpl->m_pCurrentEntry.get();
-                TableStyleSheetEntry* pTableEntry = dynamic_cast<TableStyleSheetEntry*>(pEntry);
-                pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tcPr"));
+                TableStyleSheetEntry& rTableEntry = dynamic_cast<TableStyleSheetEntry&>(*pEntry);
+                rTableEntry.AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tcPr"));
             }
         }
         break;
