@@ -4920,16 +4920,16 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         }
     }
 
-    if ( ( bAttrSetChg &&
+    if ( ( bAttrSetChg && pNew &&
            SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_PROTECT, false ) ) ||
-         RES_PROTECT == pNew->Which() )
+         ( pNew && RES_PROTECT == pNew->Which()) )
     {
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
         if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
             pSh->Imp()->InvalidateAccessibleEditableState( true, this );
     }
 
-    if ( bAttrSetChg &&
+    if ( bAttrSetChg && pNew &&
          SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_FRAMEDIR, false, &pItem ) )
     {
         SetDerivedVert( false );
@@ -4937,7 +4937,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 
     // #i29550#
-    if ( bAttrSetChg &&
+    if ( bAttrSetChg && pNew &&
          SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_BOX, false, &pItem ) )
     {
         SwFrm* pTmpUpper = GetUpper();
