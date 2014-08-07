@@ -19,6 +19,7 @@
 
 #include "IdentityMapping.hxx"
 
+#include "typelib/typedescription.h"
 #include "uno/mapping.h"
 #include "uno/environment.hxx"
 
@@ -67,7 +68,7 @@ static void SAL_CALL s_release(uno_Mapping * pMapping)
 static void SAL_CALL s_mapInterface(uno_Mapping                       * pMapping,
                                     void                             ** ppOut,
                                     void                              * pInterface,
-                                    SAL_UNUSED_PARAMETER struct _typelib_InterfaceTypeDescription * /*pInterfaceTypeDescr*/)
+                                    SAL_UNUSED_PARAMETER typelib_InterfaceTypeDescription * /*pInterfaceTypeDescr*/)
 {
     *ppOut = pInterface;
 
