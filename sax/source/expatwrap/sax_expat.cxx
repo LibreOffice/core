@@ -26,6 +26,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -47,10 +48,6 @@ using namespace ::com::sun::star::io;
 
 #include "attrlistimpl.hxx"
 #include "xml2utf.hxx"
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
 
 namespace {
 

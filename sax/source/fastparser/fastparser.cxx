@@ -22,6 +22,7 @@
 #include "xml2utf.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
@@ -44,10 +45,6 @@
 #include <cassert>
 #include <cstring>
 #include <expat.h>
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
 
 using namespace ::std;
 using namespace ::osl;
