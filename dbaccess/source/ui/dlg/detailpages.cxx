@@ -66,6 +66,7 @@ namespace dbaui
         ,m_pOptionsLabel(NULL)
         ,m_pOptions(NULL)
         ,m_pDataConvertFixedLine(NULL)
+        ,m_pDataConvertLabel(NULL)
         ,m_pCharsetLabel(NULL)
         ,m_pCharset(NULL)
         ,m_pAutoFixedLine(NULL)
