@@ -22,6 +22,7 @@ bool isOpenSymbolFont(const Font &rFont)
 bool isSymbolFont(const Font &rFont)
 {
     return (rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL) ||
+            rFont.GetName().equalsIgnoreAsciiCase("Apple Color Emoji") ||
             rFont.GetName().equalsIgnoreAsciiCase("cmsy10") ||
             rFont.GetName().equalsIgnoreAsciiCase("cmex10") ||
             rFont.GetName().equalsIgnoreAsciiCase("feta26") ||
