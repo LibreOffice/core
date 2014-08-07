@@ -189,7 +189,7 @@ hchar_string DateCode::GetString()
             cbuf[4] = 0;
                 break;
         case '*':
-            strncat(cbuf, en_mon[date[MONTH] - 1], 255);
+            strncat(cbuf, en_mon[date[MONTH] - 1], sizeof(cbuf) - strlen(cbuf) - 1);
             break;
         case '3':                             /* 'D' is day of korean */
             num = date[DAY];
@@ -231,17 +231,17 @@ hchar_string DateCode::GetString()
             cbuf[4] = 0;
             break;
         case '_':
-            strncat(cbuf, en_week[date[WEEK]], 256);
+            strncat(cbuf, en_week[date[WEEK]], sizeof(cbuf) - strlen(cbuf) - 1);
             break;
         case '7':
             ret.push_back(0xB5A1);
             ret.push_back((is_pm) ? 0xD281 : 0xB8E5);
             break;
         case '&':
-            strncat(cbuf, (is_pm) ? "p.m." : "a.m.", 256);
+            strncat(cbuf, (is_pm) ? "p.m." : "a.m.", sizeof(cbuf) - strlen(cbuf) - 1);
             break;
         case '+':
-            strncat(cbuf, (is_pm) ? "P.M." : "A.M.", 256);
+            strncat(cbuf, (is_pm) ? "P.M." : "A.M.", sizeof(cbuf) - strlen(cbuf) - 1);
             break;
         case '8':                             // 2.5 feature
         case '9':
