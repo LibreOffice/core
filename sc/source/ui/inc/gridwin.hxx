@@ -203,6 +203,8 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
     bool                    bAutoMarkVisible:1;
     bool                    bListValButton:1;
 
+    MapMode                 aPaintMapMode;
+
     DECL_LINK( PopupModeEndHdl, void* );
     DECL_LINK( PopupSpellingHdl, SpellCallbackInfo* );
 
@@ -303,6 +305,15 @@ protected:
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+
+private:
+    void            getCellGeometry( Point& rScrPos, Size& rScrSize,
+                                     SCCOL nCol, SCROW nRow ) const;
+    Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY,
+                                bool bAllowNeg = false ) const;
+    void            DrawScenarioFrames( OutputDevice* pContentDev,
+                                        SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
+    void            UpdatePaintMapMode();
 
 public:
     enum AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty, SortAscending, SortDescending };

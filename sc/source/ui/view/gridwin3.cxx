@@ -300,7 +300,7 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
         if(rOpts.GetOption( VOPT_ANCHOR ))
         {
             bool bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
-            Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, true );
+            Point aPos = GetScrPos( rAddress.Col(), rAddress.Row(), true );
             aPos = PixelToLogic(aPos);
             rHdl.AddHdl(new SdrHdl(aPos, bNegativePage ? HDL_ANCHOR_TR : HDL_ANCHOR));
         }
