@@ -90,51 +90,6 @@ namespace dbaui
         return new OConnectionTabPageSetup( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, USHRT_MAX, USHRT_MAX, STR_COMMONURL);
     }
 
-    // OConnectionTabPageSetup
-    OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
-        :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
-        ,m_bUserGrabFocus(true)
-        ,m_pHelpText(new FixedText(this, ModuleRes(FT_AUTOWIZARDHELPTEXT)))
-    {
-
-        if ( USHRT_MAX != _nHelpTextResId )
-        {
-            OUString sHelpText = ModuleRes(_nHelpTextResId);
-            m_pHelpText->SetText(sHelpText);
-        }
-        else
-            m_pHelpText->Hide();
-
-        if ( USHRT_MAX != _nHeaderResId )
-            SetHeaderText(FT_AUTOWIZARDHEADER, _nHeaderResId);
-
-        if ( USHRT_MAX != _nUrlResId )
-        {
-            OUString sLabelText = ModuleRes(_nUrlResId);
-            m_pFT_Connection->SetText(sLabelText);
-            if ( USHRT_MAX == _nHelpTextResId )
-            {
-                Point aPos = m_pHelpText->GetPosPixel();
-                Point aFTPos = m_pFT_Connection->GetPosPixel();
-                Point aEDPos = m_pConnectionURL->GetPosPixel();
-                Point aPBPos = m_pPB_Connection->GetPosPixel();
-
-                aEDPos.Y() = aPos.Y() + aEDPos.Y() - aFTPos.Y();
-                aPBPos.Y() = aPos.Y() + aPBPos.Y() - aFTPos.Y();
-                aFTPos.Y() = aPos.Y();
-                m_pFT_Connection->SetPosPixel(aFTPos);
-                m_pConnectionURL->SetPosPixel(aEDPos);
-                m_pPB_Connection->SetPosPixel(aPBPos);
-            }
-        }
-        else
-            m_pFT_Connection->Hide();
-
-        m_pConnectionURL->SetModifyHdl(LINK(this, OConnectionTabPageSetup, OnEditModified));
-
-        SetRoadmapStateValue(false);
-    }
-
     OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
         :OConnectionHelper(pParent, _rId, _rUIXMLDescription, _rCoreAttrs)
         ,m_bUserGrabFocus(true)
