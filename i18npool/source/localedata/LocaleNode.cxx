@@ -331,7 +331,7 @@ void LocaleNode::incErrorStr( const char* pStr, const OUString& rVal ) const
 void LocaleNode::incErrorStrStr( const char* pStr, const OUString& rVal1, const OUString& rVal2 ) const
 {
     ++nError;
-    fprintf( stderr, prepareErrorFormat( pStr, ": %s %s"), OSTR( rVal1), OSTR( rVal2));
+    fprintf(stderr, pStr, OSTR(rVal1), OSTR(rVal2));
 }
 
 void LCInfoNode::generateCode (const OFileWriter &of) const
@@ -370,7 +370,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
         if (!(aVariant.isEmpty() || (aVariant.getLength() >= 7 && aVariant.indexOf('-') >= 2)))
             incErrorStr( "invalid Variant", aVariant);
         if (!(aVariant.isEmpty() || aLanguage == "qlt"))
-            incErrorStrStr( "Variant '%s' given but Language '%s' is not 'qlt'", aVariant, aLanguage);
+            incErrorStrStr( "Error: Variant '%s' given but Language '%s' is not 'qlt'", aVariant, aLanguage);
         of.writeParameter("Variant", aVariant);
     }
     else
@@ -651,7 +651,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         if (!strFrom.isEmpty() && strFrom != "[CURRENCY]") //???
         {
             incErrorStrStr(
-                "non-empty replaceFrom=\"%s\" with non-empty ref=\"%s\".",
+                "Error: non-empty replaceFrom=\"%s\" with non-empty ref=\"%s\".",
                 strFrom, useLocale);
         }
         useLocale = useLocale.replace( '-', '_');
@@ -1936,7 +1936,7 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
         // couldn't had been determined from the current locale (i.e. is
         // empty), silently assume the referred locale has things right.
         if (bCompatible && !sTheCompatibleCurrency.isEmpty() && sTheCompatibleCurrency != str)
-            incErrorStrStr( "CurrencySymbol \"%s\" flagged as usedInCompatibleFormatCodes doesn't match \"%s\" determined from format codes.", str, sTheCompatibleCurrency);
+            incErrorStrStr( "Error: CurrencySymbol \"%s\" flagged as usedInCompatibleFormatCodes doesn't match \"%s\" determined from format codes.", str, sTheCompatibleCurrency);
         str = currencyNode -> findNode ("BankSymbol") -> getValue();
         of.writeParameter("bankSymbol", str, nbOfCurrencies);
         // BankSymbol currently must be ISO 4217. May change later if
