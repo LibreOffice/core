@@ -55,11 +55,11 @@ namespace sdr
             // take properties which are the model data.
             const ::basegfx::B2DPoint aStart(GetMeasureObj().GetPoint(0).X(), GetMeasureObj().GetPoint(0).Y());
             const ::basegfx::B2DPoint aEnd(GetMeasureObj().GetPoint(1).X(), GetMeasureObj().GetPoint(1).Y());
-            const double fDistance(((SdrMeasureLineDistItem&)rItemSet.Get(SDRATTR_MEASURELINEDIST)).GetValue());
-            const double fUpperDistance(((SdrMeasureHelplineOverhangItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue());
-            const double fLowerDistance(((SdrMeasureHelplineDistItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEDIST)).GetValue());
-            const double fLeftDelta(((SdrMeasureHelpline1LenItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE1LEN)).GetValue());
-            const double fRightDelta(((SdrMeasureHelpline2LenItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE2LEN)).GetValue());
+            const double fDistance(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASURELINEDIST)).GetValue());
+            const double fUpperDistance(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue());
+            const double fLowerDistance(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEDIST)).GetValue());
+            const double fLeftDelta(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE1LEN)).GetValue());
+            const double fRightDelta(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE2LEN)).GetValue());
             const bool bBelow(((SdrMeasureBelowRefEdgeItem&)rItemSet.Get(SDRATTR_MEASUREBELOWREFEDGE)).GetValue());
             const bool bTextRotation(((SdrMeasureTextRota90Item&)rItemSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue());
             const bool bTextAutoAngle(((SdrMeasureTextAutoAngleItem&)rItemSet.Get(SDRATTR_MEASURETEXTAUTOANGLE)).GetValue());

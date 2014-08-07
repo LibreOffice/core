@@ -338,11 +338,11 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
     rRec.eKind            =((SdrMeasureKindItem&            )rSet.Get(SDRATTR_MEASUREKIND            )).GetValue();
     rRec.eWantTextHPos    =((SdrMeasureTextHPosItem&        )rSet.Get(SDRATTR_MEASURETEXTHPOS        )).GetValue();
     rRec.eWantTextVPos    =((SdrMeasureTextVPosItem&        )rSet.Get(SDRATTR_MEASURETEXTVPOS        )).GetValue();
-    rRec.nLineDist        =((SdrMeasureLineDistItem&        )rSet.Get(SDRATTR_MEASURELINEDIST        )).GetValue();
-    rRec.nHelplineOverhang=((SdrMeasureHelplineOverhangItem&)rSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue();
-    rRec.nHelplineDist    =((SdrMeasureHelplineDistItem&    )rSet.Get(SDRATTR_MEASUREHELPLINEDIST    )).GetValue();
-    rRec.nHelpline1Len    =((SdrMeasureHelpline1LenItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE1LEN    )).GetValue();
-    rRec.nHelpline2Len    =((SdrMeasureHelpline2LenItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE2LEN    )).GetValue();
+    rRec.nLineDist        =((SdrMetricItem&        )rSet.Get(SDRATTR_MEASURELINEDIST        )).GetValue();
+    rRec.nHelplineOverhang=((SdrMetricItem&)rSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue();
+    rRec.nHelplineDist    =((SdrMetricItem&    )rSet.Get(SDRATTR_MEASUREHELPLINEDIST    )).GetValue();
+    rRec.nHelpline1Len    =((SdrMetricItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE1LEN    )).GetValue();
+    rRec.nHelpline2Len    =((SdrMetricItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE2LEN    )).GetValue();
     rRec.bBelowRefEdge    =((SdrMeasureBelowRefEdgeItem&    )rSet.Get(SDRATTR_MEASUREBELOWREFEDGE    )).GetValue();
     rRec.bTextRota90      =((SdrMeasureTextRota90Item&      )rSet.Get(SDRATTR_MEASURETEXTROTA90      )).GetValue();
     rRec.bTextUpsideDown  =((SdrMeasureTextUpsideDownItem&  )rSet.Get(SDRATTR_MEASURETEXTUPSIDEDOWN  )).GetValue();
@@ -860,12 +860,12 @@ bool SdrMeasureObj::applySpecialDrag(SdrDragStat& rDrag)
 
                     if(aMeasureRec.nHelpline1Len != aOrigMeasureRec.nHelpline1Len)
                     {
-                        SetObjectItem(SdrMeasureHelpline1LenItem(aMeasureRec.nHelpline1Len));
+                        SetObjectItem(makeSdrMeasureHelpline1LenItem(aMeasureRec.nHelpline1Len));
                     }
 
                     if(aMeasureRec.nHelpline2Len != aOrigMeasureRec.nHelpline2Len)
                     {
-                        SetObjectItem(SdrMeasureHelpline2LenItem(aMeasureRec.nHelpline2Len));
+                        SetObjectItem(makeSdrMeasureHelpline2LenItem(aMeasureRec.nHelpline2Len));
                     }
 
                     break;
@@ -879,7 +879,7 @@ bool SdrMeasureObj::applySpecialDrag(SdrDragStat& rDrag)
 
                     if(aMeasureRec.nLineDist != aOrigMeasureRec.nLineDist)
                     {
-                        SetObjectItem(SdrMeasureLineDistItem(aMeasureRec.nLineDist));
+                        SetObjectItem(makeSdrMeasureLineDistItem(aMeasureRec.nLineDist));
                     }
 
                     if(aMeasureRec.bBelowRefEdge != aOrigMeasureRec.bBelowRefEdge)

@@ -178,7 +178,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASURELINEDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrMeasureLineDistItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldLineDist, nValue, eUnit );
     }
     else
@@ -193,7 +193,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG );
     if( pItem )
     {
-        long nValue = ( ( const SdrMeasureHelplineOverhangItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHelplineOverhang, nValue, eUnit );
     }
     else
@@ -208,7 +208,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrMeasureHelplineDistItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHelplineDist, nValue, eUnit );
     }
     else
@@ -223,7 +223,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE1LEN );
     if( pItem )
     {
-        long nValue = ( ( const SdrMeasureHelpline1LenItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHelpline1Len, nValue, eUnit );
     }
     else
@@ -238,7 +238,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE2LEN );
     if( pItem )
     {
-        long nValue = ( ( const SdrMeasureHelpline2LenItem* )pItem )->GetValue();
+        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHelpline2Len, nValue, eUnit );
     }
     else
@@ -428,35 +428,35 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
     if( m_pMtrFldLineDist->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLineDist, eUnit );
-        rAttrs->Put( SdrMeasureLineDistItem( nValue ) );
+        rAttrs->Put( makeSdrMeasureLineDistItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldHelplineOverhang->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHelplineOverhang, eUnit );
-        rAttrs->Put( SdrMeasureHelplineOverhangItem( nValue ) );
+        rAttrs->Put( makeSdrMeasureHelplineOverhangItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldHelplineDist->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHelplineDist, eUnit );
-        rAttrs->Put( SdrMeasureHelplineDistItem( nValue ) );
+        rAttrs->Put( makeSdrMeasureHelplineDistItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldHelpline1Len->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHelpline1Len, eUnit );
-        rAttrs->Put( SdrMeasureHelpline1LenItem( nValue ) );
+        rAttrs->Put( makeSdrMeasureHelpline1LenItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldHelpline2Len->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHelpline2Len, eUnit );
-        rAttrs->Put( SdrMeasureHelpline2LenItem( nValue ) );
+        rAttrs->Put( makeSdrMeasureHelpline2LenItem( nValue ) );
         bModified = true;
     }
 
@@ -665,31 +665,31 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
     if( p == m_pMtrFldLineDist )
     {
         sal_Int32 nValue = GetCoreValue( *m_pMtrFldLineDist, eUnit );
-        aAttrSet.Put( SdrMeasureLineDistItem( nValue ) );
+        aAttrSet.Put( makeSdrMeasureLineDistItem( nValue ) );
     }
 
     if( p == m_pMtrFldHelplineOverhang )
     {
         sal_Int32 nValue = GetCoreValue( *m_pMtrFldHelplineOverhang, eUnit );
-        aAttrSet.Put( SdrMeasureHelplineOverhangItem( nValue) );
+        aAttrSet.Put( makeSdrMeasureHelplineOverhangItem( nValue) );
     }
 
     if( p == m_pMtrFldHelplineDist )
     {
         sal_Int32 nValue = GetCoreValue( *m_pMtrFldHelplineDist, eUnit );
-        aAttrSet.Put( SdrMeasureHelplineDistItem( nValue) );
+        aAttrSet.Put( makeSdrMeasureHelplineDistItem( nValue) );
     }
 
     if( p == m_pMtrFldHelpline1Len )
     {
         sal_Int32 nValue = GetCoreValue( *m_pMtrFldHelpline1Len, eUnit );
-        aAttrSet.Put( SdrMeasureHelpline1LenItem( nValue ) );
+        aAttrSet.Put( makeSdrMeasureHelpline1LenItem( nValue ) );
     }
 
     if( p == m_pMtrFldHelpline2Len )
     {
         sal_Int32 nValue = GetCoreValue( *m_pMtrFldHelpline2Len, eUnit );
-        aAttrSet.Put( SdrMeasureHelpline2LenItem( nValue ) );
+        aAttrSet.Put( makeSdrMeasureHelpline2LenItem( nValue ) );
     }
 
     if( p == m_pTsbBelowRefEdge )

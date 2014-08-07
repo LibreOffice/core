@@ -39,40 +39,30 @@
 // Abstand der Masslinie zur Bezugskante (Norm=8mm)
 // laesst sich auch draggen an den beiden Handles
 // die auf den Pfeilspitzen liegen
-class SdrMeasureLineDistItem: public SdrMetricItem {
-public:
-    SdrMeasureLineDistItem(long nVal=0): SdrMetricItem(SDRATTR_MEASURELINEDIST,nVal)  {}
-    SdrMeasureLineDistItem(SvStream& rIn): SdrMetricItem(SDRATTR_MEASURELINEDIST,rIn) {}
-};
+inline SdrMetricItem makeSdrMeasureLineDistItem(long nVal) {
+    return SdrMetricItem(SDRATTR_MEASURELINEDIST, nVal);
+}
 
 // Ueberhang der Masshilfslinien an der Masslinie (Norm=2mm)
-class SdrMeasureHelplineOverhangItem: public SdrMetricItem {
-public:
-    SdrMeasureHelplineOverhangItem(long nVal=0): SdrMetricItem(SDRATTR_MEASUREHELPLINEOVERHANG,nVal)  {}
-    SdrMeasureHelplineOverhangItem(SvStream& rIn): SdrMetricItem(SDRATTR_MEASUREHELPLINEOVERHANG,rIn) {}
-};
+inline SdrMetricItem makeSdrMeasureHelplineOverhangItem(long nVal) {
+    return SdrMetricItem(SDRATTR_MEASUREHELPLINEOVERHANG, nVal);
+}
 
 // Abstand der der Masshilfslinienenden zur Bezugskante
 // Damit die Masshilfslinien nicht das Objekt beruehren
-class SdrMeasureHelplineDistItem: public SdrMetricItem {
-public:
-    SdrMeasureHelplineDistItem(long nVal=0): SdrMetricItem(SDRATTR_MEASUREHELPLINEDIST,nVal)  {}
-    SdrMeasureHelplineDistItem(SvStream& rIn): SdrMetricItem(SDRATTR_MEASUREHELPLINEDIST,rIn) {}
-};
+inline SdrMetricItem makeSdrMeasureHelplineDistItem(long nVal) {
+    return SdrMetricItem(SDRATTR_MEASUREHELPLINEDIST, nVal);
+}
 
 // Ueberlaenge der Hilfslinien ueber die Bezugskante
 // laesst sich auch draggen an den beiden runden Handles,
 // die sich default unter den beiden Referenzpunkten befinden
-class SdrMeasureHelpline1LenItem: public SdrMetricItem {
-public:
-    SdrMeasureHelpline1LenItem(long nVal=0): SdrMetricItem(SDRATTR_MEASUREHELPLINE1LEN,nVal)  {}
-    SdrMeasureHelpline1LenItem(SvStream& rIn): SdrMetricItem(SDRATTR_MEASUREHELPLINE1LEN,rIn) {}
-};
-class SdrMeasureHelpline2LenItem: public SdrMetricItem {
-public:
-    SdrMeasureHelpline2LenItem(long nVal=0): SdrMetricItem(SDRATTR_MEASUREHELPLINE2LEN,nVal)  {}
-    SdrMeasureHelpline2LenItem(SvStream& rIn): SdrMetricItem(SDRATTR_MEASUREHELPLINE2LEN,rIn) {}
-};
+inline SdrMetricItem makeSdrMeasureHelpline1LenItem(long nVal) {
+    return SdrMetricItem(SDRATTR_MEASUREHELPLINE1LEN, nVal);
+}
+inline SdrMetricItem makeSdrMeasureHelpline2LenItem(long nVal) {
+    return SdrMetricItem(SDRATTR_MEASUREHELPLINE2LEN, nVal);
+}
 
 #endif
 
