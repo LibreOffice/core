@@ -86,6 +86,7 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
 #include <set>
+#include <boost/unordered_set.hpp>
 
 #include <rtl/math.hxx>
 
@@ -443,6 +444,8 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mbHasCategoryLabels( false )
     , mbHasZAxis( false )
     , mbIs3DChart( false )
+    , mbStacked(false)
+    , mbPercent(false)
 {
 }
 
@@ -2540,9 +2543,24 @@ struct LabelPlacementParam
     bool mbExport;
     sal_Int32 meDefault;
 
+    boost::unordered_set<sal_Int32> maAllowedValues;
+
     LabelPlacementParam() :
         mbExport(true),
         meDefault(css::chart::DataLabelPlacement::OUTSIDE) {}
+
+    void allowAll()
+    {
+        maAllowedValues.insert(css::chart::DataLabelPlacement::OUTSIDE);
+        maAllowedValues.insert(css::chart::DataLabelPlacement::INSIDE);
+        maAllowedValues.insert(css::chart::DataLabelPlacement::CENTER);
+        maAllowedValues.insert(css::chart::DataLabelPlacement::NEAR_ORIGIN);
+        maAllowedValues.insert(css::chart::DataLabelPlacement::TOP);
+        maAllowedValues.insert(css::chart::DataLabelPlacement::BOTTOM);
+        maAllowedValues.insert(css::chart::DataLabelPlacement::LEFT);
+        maAllowedValues.insert(css::chart::DataLabelPlacement::RIGHT);
+        maAllowedValues.insert(css::chart::DataLabelPlacement::AVOID_OVERLAP);
+    }
 };
 
 const char* toOOXMLPlacement( sal_Int32 nPlacement )
@@ -2597,7 +2615,11 @@ void writeLabelProperties(
     {
         sal_Int32 nLabelPlacement = rLabelParam.meDefault;
         if (xPropSet->getPropertyValue("LabelPlacement") >>= nLabelPlacement)
+        {
+            if (!rLabelParam.maAllowedValues.count(nLabelPlacement))
+                nLabelPlacement = rLabelParam.meDefault;
             pFS->singleElement(FSNS(XML_c, XML_dLblPos), XML_val, toOOXMLPlacement(nLabelPlacement), FSEND);
+        }
     }
 
     pFS->singleElement(FSNS(XML_c, XML_showLegendKey), XML_val, BS(aLabel.ShowLegendSymbol), FSEND);
@@ -2633,6 +2655,7 @@ void ChartExport::exportDataLabels(
     LabelPlacementParam aParam;
     aParam.mbExport = !mbIs3DChart;
     aParam.meDefault = rInfo.mnDefLabelPos;
+    aParam.allowAll();
     switch (getChartType()) // diagram chart type
     {
         case chart::TYPEID_PIE:
@@ -2641,9 +2664,18 @@ void ChartExport::exportDataLabels(
         break;
         case chart::TYPEID_DOUGHNUT:
         case chart::TYPEID_AREA:
-            // Doughnut charts don't support label placement.
+            // Doughnut and area charts don't support label placement.
             aParam.mbExport = false;
         break;
+        case chart::TYPEID_BAR:
+            if (mbStacked || mbPercent)
+            {
+                aParam.maAllowedValues.clear();
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::CENTER);
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::INSIDE);
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::NEAR_ORIGIN);
+                aParam.meDefault = css::chart::DataLabelPlacement::CENTER;
+            }
         default:
             ;
     }
@@ -2768,17 +2800,15 @@ void ChartExport::exportGrouping( bool isBar )
     FSHelperPtr pFS = GetFS();
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
     // grouping
-    bool bStacked = false;
     if( GetProperty( xPropSet, "Stacked" ) )
-        mAny >>= bStacked;
-    bool bPercentage = false;
+        mAny >>= mbStacked;
     if( GetProperty( xPropSet, "Percent" ) )
-        mAny >>= bPercentage;
+        mAny >>= mbPercent;
 
     const char* grouping = NULL;
-    if( bStacked )
+    if (mbStacked)
         grouping = "stacked";
-    else if( bPercentage )
+    else if (mbPercent)
         grouping = "percentStacked";
     else
     {
