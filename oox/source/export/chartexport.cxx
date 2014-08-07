@@ -2535,6 +2535,16 @@ void ChartExport::_exportAxis(
 
 namespace {
 
+struct LabelPlacementParam
+{
+    bool mbExport;
+    sal_Int32 meDefault;
+
+    LabelPlacementParam() :
+        mbExport(true),
+        meDefault(css::chart::DataLabelPlacement::OUTSIDE) {}
+};
+
 const char* toOOXMLPlacement( sal_Int32 nPlacement )
 {
     switch (nPlacement)
@@ -2556,7 +2566,7 @@ const char* toOOXMLPlacement( sal_Int32 nPlacement )
 }
 
 void writeLabelProperties(
-    FSHelperPtr pFS, const uno::Reference<beans::XPropertySet>& xPropSet, bool bLabelPlacement )
+    FSHelperPtr pFS, const uno::Reference<beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam )
 {
     if (!xPropSet.is())
         return;
@@ -2583,11 +2593,11 @@ void writeLabelProperties(
         pFS->endElement(FSNS(XML_c, XML_spPr));
     }
 
-    if (bLabelPlacement)
+    if (rLabelParam.mbExport)
     {
-        sal_Int32 nLabelPlacement = css::chart::DataLabelPlacement::OUTSIDE;
-        xPropSet->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
-        pFS->singleElement(FSNS(XML_c, XML_dLblPos), XML_val, toOOXMLPlacement(nLabelPlacement), FSEND);
+        sal_Int32 nLabelPlacement = rLabelParam.meDefault;
+        if (xPropSet->getPropertyValue("LabelPlacement") >>= nLabelPlacement)
+            pFS->singleElement(FSNS(XML_c, XML_dLblPos), XML_val, toOOXMLPlacement(nLabelPlacement), FSEND);
     }
 
     pFS->singleElement(FSNS(XML_c, XML_showLegendKey), XML_val, BS(aLabel.ShowLegendSymbol), FSEND);
@@ -2618,17 +2628,20 @@ void ChartExport::exportDataLabels(
     // We must not export label placement property when the chart type doesn't
     // support this option in MS Office, else MS Office would think the file
     // is corrupt & refuse to open it.
-    bool bLabelPlacement = !mbIs3DChart;
-    eChartType = getChartType();
-    switch (eChartType)
+
+    const chart::TypeGroupInfo& rInfo = chart::GetTypeGroupInfo(static_cast<chart::TypeId>(eChartType));
+    LabelPlacementParam aParam;
+    aParam.mbExport = !mbIs3DChart;
+    aParam.meDefault = rInfo.mnDefLabelPos;
+    switch (getChartType()) // diagram chart type
     {
         case chart::TYPEID_PIE:
             // All pie charts support label placement.
-            bLabelPlacement = true;
+            aParam.mbExport = true;
         break;
         case chart::TYPEID_DOUGHNUT:
             // Doughnut charts don't support label placement.
-            bLabelPlacement = false;
+            aParam.mbExport = false;
         break;
         default:
             ;
@@ -2646,12 +2659,12 @@ void ChartExport::exportDataLabels(
         // Individual label property that overwrites the baseline.
         pFS->startElement(FSNS(XML_c, XML_dLbl), FSEND);
         pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, I32S(nIdx), FSEND);
-        writeLabelProperties(pFS, xLabelPropSet, bLabelPlacement);
+        writeLabelProperties(pFS, xLabelPropSet, aParam);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
     // Baseline label properties for all labels.
-    writeLabelProperties(pFS, xPropSet, bLabelPlacement);
+    writeLabelProperties(pFS, xPropSet, aParam);
 
     pFS->endElement(FSNS(XML_c, XML_dLbls));
 }

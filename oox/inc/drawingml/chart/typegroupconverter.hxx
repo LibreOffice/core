@@ -93,6 +93,8 @@ struct TypeGroupInfo
     bool                mbPictureOptions;       /// True = bitmaps support options from c:pictureOptions.
 };
 
+const TypeGroupInfo& GetTypeGroupInfo( TypeId eType );
+
 struct UpDownBarsModel;
 
 class UpDownBarsConverter : public ConverterBase< UpDownBarsModel >

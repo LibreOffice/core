@@ -96,6 +96,11 @@ const TypeGroupInfo& lclGetTypeInfoFromTypeId( TypeId eTypeId )
 
 } // namespace
 
+const TypeGroupInfo& GetTypeGroupInfo( TypeId eType )
+{
+    return lclGetTypeInfoFromTypeId(eType);
+}
+
 UpDownBarsConverter::UpDownBarsConverter( const ConverterRoot& rParent, UpDownBarsModel& rModel ) :
     ConverterBase< UpDownBarsModel >( rParent, rModel )
 {
