@@ -1506,82 +1506,83 @@ void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Seque
 
 void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, bool andCriteria ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor,sal_Int32 filterOperator)
 {
-    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
-
-    if ( !column.is()
-        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE)
-        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
-        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE))
-        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
-
-    sal_Int32 nType = 0;
-    column->getPropertyValue(PROPERTY_TYPE) >>= nType;
-    sal_Int32 nSearchable = dbtools::getSearchColumnFlag(m_xConnection,nType);
-    if(nSearchable == ColumnSearch::NONE)
-        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_SEARCHABLE),*this,SQLSTATE_GENERAL,1000,Any() );
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    OUString aName;
-    column->getPropertyValue(PROPERTY_NAME) >>= aName;
-
-    Any aValue;
-    column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
-
-    OUStringBuffer aSQL;
-    const OUString aQuote    = m_xMetaData->getIdentifierQuoteString();
-    getColumns();
-
-    // TODO: if this is called for HAVING, check that the column is a GROUP BY column
-    //       or that it is an aggregate function
-
-    if ( m_aCurrentColumns[SelectColumns] && m_aCurrentColumns[SelectColumns]->hasByName(aName) )
+    try
     {
-        Reference<XPropertySet> xColumn;
-        m_aCurrentColumns[SelectColumns]->getByName(aName) >>= xColumn;
-        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
-        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
-        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName("AggregateFunction"),"Property AggregateFunction not available!");
+        ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
-        OUString sRealName,sTableName;
-        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
-        xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
-        if(sTableName.indexOf('.',0) != -1)
+        if ( !column.is()
+             || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE)
+             || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
+             || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE))
+            throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
+
+        sal_Int32 nType = 0;
+        column->getPropertyValue(PROPERTY_TYPE) >>= nType;
+        sal_Int32 nSearchable = dbtools::getSearchColumnFlag(m_xConnection,nType);
+        if(nSearchable == ColumnSearch::NONE)
+            throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_SEARCHABLE),*this,SQLSTATE_GENERAL,1000,Any() );
+
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        OUString aName;
+        column->getPropertyValue(PROPERTY_NAME) >>= aName;
+
+        Any aValue;
+        column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
+
+        OUStringBuffer aSQL;
+        const OUString aQuote    = m_xMetaData->getIdentifierQuoteString();
+        getColumns();
+
+        // TODO: if this is called for HAVING, check that the column is a GROUP BY column
+        //       or that it is an aggregate function
+
+        if ( m_aCurrentColumns[SelectColumns] && m_aCurrentColumns[SelectColumns]->hasByName(aName) )
         {
-            OUString aCatlog,aSchema,aTable;
-            ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
-            sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::eInDataManipulation );
+            Reference<XPropertySet> xColumn;
+            m_aCurrentColumns[SelectColumns]->getByName(aName) >>= xColumn;
+            OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
+            OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
+            OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName("AggregateFunction"),"Property AggregateFunction not available!");
+
+            OUString sRealName,sTableName;
+            xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
+            xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+            if(sTableName.indexOf('.',0) != -1)
+            {
+                OUString aCatlog,aSchema,aTable;
+                ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
+                sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::eInDataManipulation );
+            }
+            else
+                sTableName = ::dbtools::quoteName(aQuote,sTableName);
+
+            if ( !::comphelper::getBOOL(xColumn->getPropertyValue("Function")) )
+            {
+                aSQL =  sTableName + "." + ::dbtools::quoteName( aQuote, sRealName );
+            }
+            else
+                aSQL = sRealName;
         }
         else
-            sTableName = ::dbtools::quoteName(aQuote,sTableName);
-
-        if ( !::comphelper::getBOOL(xColumn->getPropertyValue("Function")) )
         {
-            aSQL =  sTableName + "." + ::dbtools::quoteName( aQuote, sRealName );
-        }
-        else
-            aSQL = sRealName;
-
-    }
-    else
-    {
-        aSQL = getTableAlias( column ) + ::dbtools::quoteName( aQuote, aName );
-    }
-
-    if ( aValue.hasValue() )
-    {
-        if(  !m_xTypeConverter.is() )
-            m_xTypeConverter.set( Converter::create(m_aContext) );
-        OSL_ENSURE(m_xTypeConverter.is(),"NO typeconverter!");
-
-        if ( nType != DataType::BOOLEAN && DataType::BIT != nType )
-        {
-            OUString sEmpty;
-            lcl_addFilterCriteria_throw(filterOperator,sEmpty,aSQL);
+            aSQL = getTableAlias( column ) + ::dbtools::quoteName( aQuote, aName );
         }
 
-        switch(nType)
+        if ( aValue.hasValue() )
         {
+            if(  !m_xTypeConverter.is() )
+                m_xTypeConverter.set( Converter::create(m_aContext) );
+            OSL_ENSURE(m_xTypeConverter.is(),"NO typeconverter!");
+
+            if ( nType != DataType::BOOLEAN && DataType::BIT != nType )
+            {
+                OUString sEmpty;
+                lcl_addFilterCriteria_throw(filterOperator,sEmpty,aSQL);
+            }
+
+            switch(nType)
+            {
             case DataType::VARCHAR:
             case DataType::CHAR:
             case DataType::LONGVARCHAR:
@@ -1642,31 +1643,44 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             default:
                 aSQL.append( DBTypeConversion::toSQLString( nType, aValue, true, m_xTypeConverter ) );
                 break;
+            }
+        }
+        else
+        {
+            sal_Int32 nFilterOp = filterOperator;
+            if ( filterOperator != SQLFilterOperator::SQLNULL && filterOperator != SQLFilterOperator::NOT_SQLNULL )
+                nFilterOp = SQLFilterOperator::SQLNULL;
+            OUString sEmpty;
+            lcl_addFilterCriteria_throw(nFilterOp,sEmpty,aSQL);
+        }
+
+        // Attach filter
+        // Construct SELECT without WHERE and ORDER BY
+        OUString sFilter = getFilter();
+
+        if ( !sFilter.isEmpty() && !aSQL.isEmpty() )
+        {
+            OUString sTemp(L_BRACKET + sFilter + R_BRACKET);
+            sTemp += andCriteria ? OUString(STR_AND) : OUString(STR_OR);
+            sFilter = sTemp;
+        }
+        sFilter += aSQL.makeStringAndClear();
+
+        // add the filter and the sort order
+        _aSetFunctor(this,sFilter);
+    }
+    catch (css::lang::WrappedTargetException & e)
+    {
+        if (e.TargetException.isExtractableTo(
+                cppu::UnoType<css::sdbc::SQLException>::get()))
+        {
+            cppu::throwException(e.TargetException);
+        }
+        else
+        {
+            throw e;
         }
     }
-    else
-    {
-        sal_Int32 nFilterOp = filterOperator;
-        if ( filterOperator != SQLFilterOperator::SQLNULL && filterOperator != SQLFilterOperator::NOT_SQLNULL )
-            nFilterOp = SQLFilterOperator::SQLNULL;
-        OUString sEmpty;
-        lcl_addFilterCriteria_throw(nFilterOp,sEmpty,aSQL);
-    }
-
-    // Attach filter
-    // Construct SELECT without WHERE and ORDER BY
-    OUString sFilter = getFilter();
-
-    if ( !sFilter.isEmpty() && !aSQL.isEmpty() )
-    {
-        OUString sTemp(L_BRACKET + sFilter + R_BRACKET);
-        sTemp += andCriteria ? OUString(STR_AND) : OUString(STR_OR);
-        sFilter = sTemp;
-    }
-    sFilter += aSQL.makeStringAndClear();
-
-    // add the filter and the sort order
-    _aSetFunctor(this,sFilter);
 }
 
 Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredCondition( TGetParseNode& _aGetFunctor )

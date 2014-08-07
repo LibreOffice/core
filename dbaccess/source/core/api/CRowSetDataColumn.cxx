@@ -22,6 +22,7 @@
 #include "dbastrings.hrc"
 #include "apitools.hxx"
 #include <comphelper/types.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/debug.hxx>
@@ -105,7 +106,17 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
 {
     if ( PROPERTY_ID_VALUE == nHandle )
     {
-        rValue = m_pGetValue(m_nPos).makeAny();
+        try
+        {
+            rValue = m_pGetValue(m_nPos).makeAny();
+        }
+        catch (css::sdbc::SQLException & e)
+        {
+            css::uno::Any a(cppu::getCaughtException());
+            throw css::lang::WrappedTargetException(
+                "wrapped css::sdbc::SQLException: " + e.Message,
+                css::uno::Reference<css::uno::XInterface>(), a);
+        }
     }
     else if ( PROPERTY_ID_LABEL == nHandle && !m_sLabel.isEmpty() )
         rValue <<= m_sLabel;
