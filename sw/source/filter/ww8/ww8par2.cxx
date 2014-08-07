@@ -3192,7 +3192,7 @@ void WW8TabDesc::TableCellEnd()
     SetPamInCell(nAktCol, true);
 
     // finish Annotated Level Numbering ?
-    if (pIo->bAnl && !pIo->bAktAND_fNumberAcross)
+    if (pIo->bAnl && !pIo->bAktAND_fNumberAcross && pActBand)
         pIo->StopAllAnl(IsValidCell(nAktCol));
 }
 
