@@ -27,6 +27,7 @@
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include <config_options.h>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
 
@@ -37,6 +38,7 @@
 
 #include "abi.hxx"
 #include "call.hxx"
+#include "rtti.hxx"
 #include "share.hxx"
 
 using namespace ::osl;
@@ -448,11 +450,16 @@ sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(
-    void * block, sal_Int32 slotCount)
+    void * block, sal_Int32 slotCount, sal_Int32 vtableNumber,
+    typelib_InterfaceTypeDescription * type)
 {
     Slot * slots = mapBlockToVtable(block);
-    slots[-2].fn = 0;
+    slots[-2].fn = reinterpret_cast<void *>(-(vtableNumber * sizeof (void *)));
+#if ENABLE_RUNTIME_OPTIMIZATIONS
     slots[-1].fn = 0;
+#else
+    slots[-1].fn = x86_64::getRtti(type->aBase);
+#endif
     return slots + slotCount;
 }
 

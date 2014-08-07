@@ -598,7 +598,7 @@ sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
-bridges::cpp_uno::shared::VtableFactory::Slot* bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block, sal_Int32 slotCount)
+bridges::cpp_uno::shared::VtableFactory::Slot* bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block, sal_Int32 slotCount, sal_Int32, typelib_InterfaceTypeDescription *)
 {
     Slot * slots = mapBlockToVtable(block);
     Slot foo = {0,0};

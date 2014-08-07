@@ -432,7 +432,8 @@ sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(
-    void * block, sal_Int32 slotCount)
+    void * block, sal_Int32 slotCount, sal_Int32,
+    typelib_InterfaceTypeDescription *)
 {
     struct Rtti {
         sal_Int32 n0, n1, n2;

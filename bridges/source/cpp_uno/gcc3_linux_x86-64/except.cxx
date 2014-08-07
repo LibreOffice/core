@@ -20,15 +20,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <dlfcn.h>
 
-#include <boost/unordered_map.hpp>
-
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
@@ -36,6 +30,7 @@
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 
+#include "rtti.hxx"
 #include "share.hxx"
 
 
@@ -86,121 +81,6 @@ static OUString toUNOname( char const * p )
 #endif
 }
 
-class RTTI
-{
-    typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
-
-    Mutex m_mutex;
-    t_rtti_map m_rttis;
-    t_rtti_map m_generatedRttis;
-
-    void * m_hApp;
-
-public:
-    RTTI();
-    ~RTTI();
-
-    type_info * getRTTI( typelib_CompoundTypeDescription * );
-};
-
-RTTI::RTTI()
-#if defined(FREEBSD) && __FreeBSD_version < 702104
-    : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
-#else
-    : m_hApp( dlopen( 0, RTLD_LAZY ) )
-#endif
-{
-}
-
-RTTI::~RTTI()
-{
-    dlclose( m_hApp );
-}
-
-
-type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
-{
-    type_info * rtti;
-
-    OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
-
-    MutexGuard guard( m_mutex );
-    t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
-    if (iFind == m_rttis.end())
-    {
-        // RTTI symbol
-        OStringBuffer buf( 64 );
-        buf.append( "_ZTIN" );
-        sal_Int32 index = 0;
-        do
-        {
-            OUString token( unoName.getToken( 0, '.', index ) );
-            buf.append( token.getLength() );
-            OString c_token( OUStringToOString( token, RTL_TEXTENCODING_ASCII_US ) );
-            buf.append( c_token );
-        }
-        while (index >= 0);
-        buf.append( 'E' );
-
-        OString symName( buf.makeStringAndClear() );
-#if defined(FREEBSD) && __FreeBSD_version < 702104 /* #i22253# */
-        rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
-#else
-        rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
-#endif
-
-        if (rtti)
-        {
-            pair< t_rtti_map::iterator, bool > insertion (
-                m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-            SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in rtti map" );
-        }
-        else
-        {
-            // try to lookup the symbol in the generated rtti map
-            t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
-            if (iFind2 == m_generatedRttis.end())
-            {
-                // we must generate it !
-                // symbol and rtti-name is nearly identical,
-                // the symbol is prefixed with _ZTI
-                char const * rttiName = symName.getStr() +4;
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr,"generated rtti for %s\n", rttiName );
-#endif
-                if (pTypeDescr->pBaseTypeDescription)
-                {
-                    // ensure availability of base
-                    type_info * base_rtti = getRTTI(
-                        (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
-                    rtti = new __si_class_type_info(
-                        strdup( rttiName ), (__class_type_info *)base_rtti );
-                }
-                else
-                {
-                    // this class has no base class
-                    rtti = new __class_type_info( strdup( rttiName ) );
-                }
-
-                pair< t_rtti_map::iterator, bool > insertion (
-                    m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-                SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in generated rtti map" );
-            }
-            else // taking already generated rtti
-            {
-                rtti = iFind2->second;
-            }
-        }
-    }
-    else
-    {
-        rtti = iFind->second;
-    }
-
-    return rtti;
-}
-
-
 extern "C" {
 static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 {
@@ -215,11 +95,6 @@ static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
         ::typelib_typedescription_release( pTD );
     }
 }
-}
-
-namespace
-{
-    struct theRTTI : public rtl::Static<RTTI, theRTTI> {};
 }
 
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
@@ -252,8 +127,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     // destruct uno exception
     ::uno_any_destruct( pUnoExc, 0 );
     // avoiding locked counts
-    static RTTI &rRTTI = theRTTI::get();
-    rtti = rRTTI.getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+    rtti = x86_64::getRtti(*pTypeDescr);
     TYPELIB_DANGER_RELEASE( pTypeDescr );
     OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
     if (! rtti)

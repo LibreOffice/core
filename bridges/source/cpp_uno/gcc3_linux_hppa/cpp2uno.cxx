@@ -642,7 +642,8 @@ sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(
-    void * block, sal_Int32 slotCount)
+    void * block, sal_Int32 slotCount, sal_Int32,
+    typelib_InterfaceTypeDescription *)
 {
     Slot * slots = mapBlockToVtable(block);
     slots[-2].fn = 0;

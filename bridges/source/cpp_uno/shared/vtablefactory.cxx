@@ -207,7 +207,7 @@ VtableFactory::Vtables VtableFactory::getVtables(
     Map::iterator i(m_map.find(name));
     if (i == m_map.end()) {
         GuardedBlocks blocks(*this);
-        createVtables(blocks, BaseOffset(type), type, true);
+        createVtables(blocks, BaseOffset(type), type, 0, type, true);
         Vtables vtables;
         OSL_ASSERT(blocks.size() <= SAL_MAX_INT32);
         vtables.count = static_cast< sal_Int32 >(blocks.size());
@@ -323,9 +323,10 @@ void VtableFactory::freeBlock(Block const & block) const {
 }
 #endif
 
-void VtableFactory::createVtables(
+sal_Int32 VtableFactory::createVtables(
     GuardedBlocks & blocks, BaseOffset const & baseOffset,
-    typelib_InterfaceTypeDescription * type, bool includePrimary) const
+    typelib_InterfaceTypeDescription * type, sal_Int32 vtableNumber,
+    typelib_InterfaceTypeDescription * mostDerived, bool includePrimary) const
 {
     if (includePrimary) {
         sal_Int32 slotCount
@@ -335,7 +336,8 @@ void VtableFactory::createVtables(
             throw std::bad_alloc();
         }
         try {
-            Slot * slots = initializeBlock(block.start, slotCount);
+            Slot * slots = initializeBlock(
+                block.start, slotCount, vtableNumber, mostDerived);
             unsigned char * codeBegin =
                 reinterpret_cast< unsigned char * >(slots);
             unsigned char * code = codeBegin;
@@ -366,8 +368,11 @@ void VtableFactory::createVtables(
         }
     }
     for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
-        createVtables(blocks, baseOffset, type->ppBaseTypes[i], i != 0);
+        vtableNumber = createVtables(
+            blocks, baseOffset, type->ppBaseTypes[i],
+            vtableNumber + (i == 0 ? 0 : 1), mostDerived, i != 0);
     }
+    return vtableNumber;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

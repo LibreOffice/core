@@ -29,6 +29,7 @@
 #endif
 
 #include "config_gcc.h"
+#include "uno/any2.h"
 #include "uno/mapping.h"
 
 #ifdef _LIBCPP_VERSION

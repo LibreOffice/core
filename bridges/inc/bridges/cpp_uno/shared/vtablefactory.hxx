@@ -128,9 +128,11 @@ private:
 
     void freeBlock(Block const & block) const;
 
-    void createVtables(
+    sal_Int32 createVtables(
         GuardedBlocks & blocks, BaseOffset const & baseOffset,
-        typelib_InterfaceTypeDescription * type, bool includePrimary) const;
+        typelib_InterfaceTypeDescription * type, sal_Int32 vtableNumber,
+        typelib_InterfaceTypeDescription * mostDerived, bool includePrimary)
+        const;
 
     // This function is not defined in the generic part, but instead has to be
     // defined individually for each CPP--UNO bridge:
@@ -150,9 +152,15 @@ private:
 
         @param block  the start address of the raw vtable block
         @param slotCount  the number of slots
+        @param vtableNumber  zero-based count across all the most derived type's
+        vtables (for vtable's "offset to top" slot)
+        @param type  non-null most derived type (for vtable's "typeinfo pointer"
+        slot)
         @return  a pointer past the last vtable slot
      */
-    static Slot * initializeBlock(void * block, sal_Int32 slotCount);
+    static Slot * initializeBlock(
+        void * block, sal_Int32 slotCount, sal_Int32 vtableNumber,
+        typelib_InterfaceTypeDescription * type);
 
     // This function is not defined in the generic part, but instead has to be
     // defined individually for each CPP--UNO bridge:
