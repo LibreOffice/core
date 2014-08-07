@@ -822,8 +822,8 @@ void Chart2ExportTest::testDataLabel3DChartDOCX()
 
     // We must not export label position attributes for 3D bar charts. The
     // same rule also applies to several other 3D charts, apparently.
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLblPos", 0);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser/c:dLbls/c:dLblPos", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
 void Chart2ExportTest::testDataLabelDoughnutChartDOCX()
