@@ -53,13 +53,6 @@ PPTGraphicShapeContext::PPTGraphicShapeContext( ContextHandler2Helper& rParent, 
 {
 }
 
-// if nFirstPlaceholder can't be found, it will be searched for nSecondPlaceholder
-static oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
-{
-    oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholder( nFirstPlaceholder, rShapes );
-    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : PPTShape::findPlaceholder( nSecondPlaceholder, rShapes );
-}
-
 ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )
@@ -135,12 +128,14 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                     if ( nFirstPlaceholder )
                     {
                         if ( eShapeLocation == Layout )     // for layout objects the referenced object can be found within the same shape tree
-                            pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, mpSlidePersistPtr->getShapes()->getChildren() );
+                            pPlaceholder = PPTShape::findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
+                                    pPPTShapePtr->getSubTypeIndex(), mpSlidePersistPtr->getShapes()->getChildren(), true );
                         else if ( eShapeLocation == Slide ) // normal slide shapes have to search within the corresponding master tree for referenced objects
                         {
                             SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                             if ( pMasterPersist.get() )
-                                pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, pMasterPersist->getShapes()->getChildren() );
+                                pPlaceholder = PPTShape::findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
+                                        pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
                         }
                     }
                 }
