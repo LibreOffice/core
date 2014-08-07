@@ -92,8 +92,6 @@ class PropertyHelper
 {
     /**
        Create a PropertyValue[] from a ArrayList
-       @param _aArrayList
-       @return a PropertyValue[]
     */
     public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList<PropertyValue> _aPropertyList)
         {

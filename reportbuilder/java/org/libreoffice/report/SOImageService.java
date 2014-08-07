@@ -42,8 +42,6 @@ public class SOImageService implements ImageService
 
     /**
      * Creates a new instance of SOImageService
-     * @param xCompContext
-     * @throws ReportExecutionException
      */
     public SOImageService(final XComponentContext xCompContext)
             throws ReportExecutionException, com.sun.star.uno.Exception

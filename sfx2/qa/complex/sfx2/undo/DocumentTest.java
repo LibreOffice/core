@@ -55,7 +55,6 @@ public interface DocumentTest
 
     /**
      * verifies the document is in the state as expected after {@link #doSingleModification}
-     * @throws com.sun.star.uno.Exception
      */
     public void verifySingleModificationDocumentState() throws com.sun.star.uno.Exception;
 

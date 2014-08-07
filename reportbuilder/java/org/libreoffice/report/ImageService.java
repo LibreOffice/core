@@ -27,23 +27,20 @@ public interface ImageService
     /**
      * @param image
      * @return the mime-type of the image as string.
-     * @throws ReportExecutionException
      */
     String getMimeType(final InputStream image) throws ReportExecutionException;
 
     /**
      * @param image
      * @return the mime-type of the image as string.
-     * @throws ReportExecutionException
      */
     String getMimeType(final byte[] image) throws ReportExecutionException;
 
     /**
      * @param image
      * @returns the dimension in 100th mm.
-     *
      * @throws ReportExecutionException
-     * @return*/
+     **/
     Size getImageSize(final InputStream image) throws ReportExecutionException;
 
     /**
@@ -51,7 +48,7 @@ public interface ImageService
      * @returns the dimension in 100th mm.
      *
      * @throws ReportExecutionException
-     * @return*/
+     **/
     Size getImageSize(final byte[] image) throws ReportExecutionException;
 }
 

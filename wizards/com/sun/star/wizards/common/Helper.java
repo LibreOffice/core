@@ -326,7 +326,6 @@ public class Helper
 
         /**
          * @param format a constant of the enumeration NumberFormatIndex
-         * @return
          */
         public int getFormat(short format)
         {

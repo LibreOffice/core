@@ -49,9 +49,6 @@ public class PentahoReportEngine
      * Open points: How to define scheduling?
      *
      * @return the report job definition for the job description.
-     *
-     * @throws org.libreoffice.report.JobDefinitionException
-     *
      */
     public ReportJob createJob(final ReportJobDefinition definition)
             throws JobDefinitionException

@@ -55,8 +55,6 @@ public class MyActiveDataSink implements XActiveDataSink {
 
     /**
      *   Plugs the input stream.
-     *
-     *@param  XInputStream
      */
     public void setInputStream( XInputStream aStream ) {
         m_aStream = aStream;

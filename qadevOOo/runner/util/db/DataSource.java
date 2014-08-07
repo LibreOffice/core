@@ -63,7 +63,6 @@ public class DataSource
 
     /**
      * retrieves the css.sdb.OfficeDatabaseDocument associated with the data source
-     * @return
      */
     public DatabaseDocument getDatabaseDocument()
     {

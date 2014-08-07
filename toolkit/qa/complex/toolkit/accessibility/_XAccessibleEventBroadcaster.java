@@ -98,11 +98,6 @@ public class _XAccessibleEventBroadcaster {
         public void disposing(EventObject ev) {}
     }
 
-    /**
-     * c'tor
-     * @param object
-     * @param window
-     */
     public _XAccessibleEventBroadcaster(XInterface object, XWindow window) {
         oObj = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, object);
         prod = new EventProducer(window);
@@ -111,7 +106,6 @@ public class _XAccessibleEventBroadcaster {
     /**
      * Adds two listeners and fires event by mean of object relation. <p>
      * Has <b> OK </b> status if both listeners were called
-     * @return
      */
     public boolean _addEventListener() {
         System.out.println("adding two listeners");
@@ -151,7 +145,6 @@ public class _XAccessibleEventBroadcaster {
      * <ul>
      *  <li> <code>addEventListener()</code> : to have added listeners </li>
      * </ul>
-     * @return
      */
     public boolean _removeEventListener() {
 

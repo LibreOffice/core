@@ -53,8 +53,6 @@ public class OfficeProvider implements AppProvider
 
     /**
      * copy the user layer to a safe place, usually to $TMP/user_backup$USER
-     * @param param
-     * @param msf
      */
     public void backupUserLayer(TestParameters param, XMultiServiceFactory msf)
     {
@@ -102,7 +100,6 @@ public class OfficeProvider implements AppProvider
      * Dispose the office.
      * This method can only be used, if the office was connected in the first
      * place: getManager() was called first.
-     * @param param
      * @return return true if desktop is terminates, else false
      */
     public boolean disposeManager(lib.TestParameters param)
@@ -144,8 +141,6 @@ public class OfficeProvider implements AppProvider
 
     /**
      * Method to get the ServiceManager of an Office
-     * @param param
-     * @return
      */
     public Object getManager(lib.TestParameters param)
     {
@@ -645,8 +640,6 @@ public class OfficeProvider implements AppProvider
     /**
      * converts directory without 'file:///' prefix.
      * and System dependent file separator
-     * @param dir
-     * @return
      */
     public static String getDirSys(String dir)
     {

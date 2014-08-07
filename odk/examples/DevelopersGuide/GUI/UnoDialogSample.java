@@ -188,10 +188,6 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    /**
-     * @param _sKeyName
-     * @return
-     */
     public XNameAccess getRegistryKeyContent(String _sKeyName){
         try {
             PropertyValue[] aNodePath = new PropertyValue[1];
@@ -313,9 +309,6 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
      * create a peer for this
      * dialog, using the given
      * peer as a parent.
-     * @param parentPeer
-     * @return
-     * @throws java.lang.Exception
      */
     public XWindowPeer createWindowPeer(XWindowPeer _xWindowParentPeer) {
         try{
@@ -354,8 +347,6 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
      * Creates a peer for this
      * dialog, using the active OO frame
      * as the parent window.
-     * @return
-     * @throws java.lang.Exception
      */
     public XWindowPeer createWindowPeer() {
         return createWindowPeer(null);

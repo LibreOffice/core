@@ -116,8 +116,6 @@ public class IniFile implements Enumeration<String>
 
     /**
      * Check if a given Section and Key exists in the ini file
-     * @param _sSectionName
-     * @param _sKey
      * @return true if the given Section, Key exists, now you can get the value
      */
     public boolean hasValue(String _sSectionName, String _sKey)
@@ -197,7 +195,6 @@ public class IniFile implements Enumeration<String>
 
     /**
      * Checks if a given section exists in the ini file
-     * @param _sSection
      * @return true if the given _sSection was found
      */
     public boolean hasSection(String _sSection)
@@ -330,10 +327,7 @@ public class IniFile implements Enumeration<String>
     /**
      * Returns the value at Section, Key converted to an integer
      * Check with hasValue(Section, Key) to check before you get into trouble.
-     * @param _sSection
-     * @param _sKey
      * @param _nDefault if there is a problem, key not found... this value will return
-     * @return
      */
     public int getIntValue(String _sSection, String _sKey, int _nDefault)
         {
@@ -427,9 +421,6 @@ public class IniFile implements Enumeration<String>
        1. section doesn't exist, goto end and insert a new section, insert a new key value pair
        2. section exist but key not, search section, search key, if key is -1 get last known key position and insert new key value pair there
        3. section exist and key exist, remove the old key and insert the key value pair at the same position
-     * @param _sSection
-     * @param _sKey
-     * @param _sValue
      */
     public void insertValue(String _sSection, String _sKey, String _sValue)
         {

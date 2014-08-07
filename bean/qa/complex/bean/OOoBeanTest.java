@@ -90,7 +90,6 @@ public class OOoBeanTest
      *  2.Add OOoBean (no document loaded yet)
      *  3.Show frame
      *  4.Load document
-     * @throws Exception
      */
     @Test public void test1() throws Exception
     {
@@ -111,7 +110,6 @@ public class OOoBeanTest
     }
 
     /** Sizing, painting
-     * @throws Exception
      */
     @Test public void test2() throws Exception
     {
@@ -265,7 +263,6 @@ public class OOoBeanTest
        3. Create Frame (do not show yet)
        4. Add OOoBean to Frame
        5. Show Frame
-     * @throws Exception
      */
     @Test public void test3() throws Exception
     {
@@ -290,7 +287,6 @@ public class OOoBeanTest
 
     /** Test repeated OOoBean.aquireSystemWindow and OOoBean.releaseSystemWindow
      * calls.
-     * @throws Exception
      */
     @Test public void test4() throws Exception
     {
@@ -324,7 +320,6 @@ public class OOoBeanTest
 
     /** Adding and removing the bean to a Java frame multiple times.
      * Test painting and sizing.
-     * @throws Exception
      */
     @Test public void test5() throws Exception
     {
@@ -380,7 +375,6 @@ public class OOoBeanTest
      * it should still be possible to enter text in the window. This does not
      * work all the time on Windows. This is probably a timing problem. When using
      * Thread.sleep (position #1) then it should work.
-     * @throws Exception
      */
     @Test public void test6() throws Exception
     {
@@ -444,7 +438,6 @@ public class OOoBeanTest
      * different. The bean is added and removed from within the event dispatch
      * thread. Using Thread.sleep at various points (#1, #2, #3) seems to workaround
      * the problem.
-     * @throws Exception
      */
     @Test public void test6a() throws Exception
     {
@@ -561,7 +554,6 @@ public class OOoBeanTest
     }
 
     /** Repeatedly loading a document in one and the same OOoBean instance.
-     * @throws Exception
      */
     @Test public void test7() throws Exception
     {
@@ -596,9 +588,7 @@ public class OOoBeanTest
     }
 
     /** Using multiple instances of OOoBean at the same time
-     * @throws Exception
      */
-
     @Test public void test8() throws Exception
     {
         OOoBean bean1 = new OOoBean(new PrivateLocalOfficeConnection(connection.getComponentContext()));

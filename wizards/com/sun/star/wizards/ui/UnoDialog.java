@@ -612,7 +612,6 @@ public class UnoDialog implements EventNames
     }
 
     /** deselects a Listbox. MultipleMode is not supported
-     * @param _xBasisListBox
      */
     public static void deselectListBox(XInterface _xBasisListBox)
     {
@@ -640,9 +639,7 @@ public class UnoDialog implements EventNames
 
     /**
      *
-     * @param FramePosSize
      * @return 0 for cancel, 1 for ok
-     * @throws com.sun.star.uno.Exception
      */
     public short executeDialog(Rectangle FramePosSize) throws com.sun.star.uno.Exception
     {
@@ -674,9 +671,7 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     * @param parent
      * @return 0 for cancel, 1 for ok.
-     * @throws com.sun.star.uno.Exception
      */
     public short executeDialog(UnoDialog parent)
             throws com.sun.star.uno.Exception
@@ -685,9 +680,7 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     * @param xComponent
      * @return 0 for cancel, 1 for ok.
-     * @throws com.sun.star.uno.Exception
      */
     public short executeDialog(XInterface xComponent) throws com.sun.star.uno.Exception
     {
@@ -735,9 +728,6 @@ public class UnoDialog implements EventNames
      * create a peer for this
      * dialog, using the given
      * peer as a parent.
-     * @param parentPeer
-     * @return
-     * @throws com.sun.star.uno.Exception
      */
     public XWindowPeer createWindowPeer(XWindowPeer parentPeer) throws com.sun.star.uno.Exception
     {
@@ -759,8 +749,6 @@ public class UnoDialog implements EventNames
      * Creates a peer for this
      * dialog, using the active OO frame
      * as the parent window.
-     * @return
-     * @throws com.sun.star.uno.Exception
      */
     public XWindowPeer createWindowPeer() throws com.sun.star.uno.Exception
     {
@@ -897,7 +885,6 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     * @param oControlModel
      * @return the name of the property that contains the value of a controlmodel
      */
     public static String getDisplayProperty(Object oControlModel)

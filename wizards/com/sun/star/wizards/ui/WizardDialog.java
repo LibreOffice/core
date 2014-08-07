@@ -74,8 +74,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * "HID:(hid+3)" - the next button
      * "HID:(hid+4)" - the create button
      * "HID:(hid+5)" - the cancel button
-     * @param xMSF
-     * @param hid_
      */
     public WizardDialog(XMultiServiceFactory xMSF, int hid_)
     {
@@ -87,10 +85,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     //new Resource(xMSF,"Common","com");
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Resource getResource()
     {
@@ -384,23 +378,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#iscompleted(int)
      */
-    /**
-     *
-     * @param _ndialogpage
-     * @return
-     */
     public boolean iscompleted(int _ndialogpage)
     {
         return false;
     }
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#ismodified(int)
-     */
-
-    /**
-     *
-     * @param _ndialogpage
-     * @return
      */
     public boolean ismodified(int _ndialogpage)
     {
@@ -409,24 +392,11 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#setcompleted(int, boolean)
      */
-
-    /**
-     *
-     * @param _ndialogpage
-     * @param _biscompleted
-     */
     public void setcompleted(int _ndialogpage, boolean _biscompleted)
     {
     }
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#setmodified(int, java.lang.Object, java.lang.Object)
-     */
-
-    /**
-     *
-     * @param _ndialogpage
-     * @param ooldValue
-     * @param onewValue
      */
     public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue)
     {
@@ -535,9 +505,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     /** This method also enables and disables the "next" button,
      * if the step currently dis/enabled is the one of the next steps.
-     * @param _nStep
-     * @param bEnabled
-     * @param enableNextButton
      */
     public void setStepEnabled(int _nStep, boolean bEnabled, boolean enableNextButton)
     {

@@ -228,8 +228,6 @@ public class PathSettingsTest
 
     /**
      * Shows the path settings
-     * @throws UnknownPropertyException
-     * @throws WrappedTargetException
      */
     @Test
     public void showPathSettings() throws UnknownPropertyException, WrappedTargetException

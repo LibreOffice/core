@@ -262,8 +262,6 @@ public class TypeInspector
     /**
      * an empty string is returned when no appropriate Typename can be found
      * finds the first TypeName of the passed datatype.
-     * @param _curDataType
-     * @return
      */
     public String getDefaultTypeName(int _curDataType, Integer precision)
     {

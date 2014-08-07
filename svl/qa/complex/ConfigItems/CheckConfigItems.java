@@ -55,7 +55,6 @@ public class CheckConfigItems
 
     /** @short  Create the environment for following tests.
 
-     * @throws java.lang.Exception
      * @descr  Use either a component loader from desktop or
                 from frame
      */
@@ -73,7 +72,6 @@ public class CheckConfigItems
 
 
     /**
-     * @throws java.lang.Exception
      * @short  close the environment.
      */
     @After public void after()
@@ -86,10 +84,6 @@ public class CheckConfigItems
     }
 
 
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
-     */
     @Test public void checkPicklist()
         throws java.lang.Exception
     {
@@ -97,10 +91,6 @@ public class CheckConfigItems
     }
 
 
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
-     */
     @Test public void checkURLHistory()
         throws java.lang.Exception
     {
@@ -108,10 +98,6 @@ public class CheckConfigItems
     }
 
 
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
-     */
     @Test public void checkHelpBookmarks()
         throws java.lang.Exception
     {
@@ -119,10 +105,6 @@ public class CheckConfigItems
     }
 
 
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
-     */
     @Test public void checkAccessibilityOptions()
         throws java.lang.Exception
     {
@@ -130,10 +112,6 @@ public class CheckConfigItems
     }
 
 
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
-     */
     @Test public void checkUserOptions()
         throws java.lang.Exception
     {

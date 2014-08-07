@@ -46,9 +46,6 @@ public class BuildEnvTools {
      * <li> Shell: Fill this parameter with a shell f.e '/bin/tcsh'
      *      or 'c:\\myShell\\myShell.exe'
      * </li>
-     * @param param
-     * @param log
-     * @throws helper.ParameterNotFoundException
      */
     public BuildEnvTools(TestParameters param, LogWriter log) throws ParameterNotFoundException {
         this.param = param;
@@ -95,9 +92,6 @@ public class BuildEnvTools {
 
     /**
      * Executes the given commands in OOo-Environment shell.
-     * @param commands
-     * @param workDir
-     * @param shortWait
      * @return the processHandler of the commands
      * @see helper.ProcessHandler
      */

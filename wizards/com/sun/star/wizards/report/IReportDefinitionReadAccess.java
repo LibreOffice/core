@@ -43,7 +43,6 @@ public interface IReportDefinitionReadAccess
 
     /**
      * Returns the file path to the default report definition, we need this name for early initialisation
-     * @return
      */
     public String getDefaultHeaderLayout();
 }

@@ -95,9 +95,6 @@ public class StringHelper
      * Convert a value to a string with a given length, if the len is greater the len of the value string representation
      * fill it's front with '0'
      * So ("5", 4) will result in a string "0005"
-     * @param _nValue
-     * @param _nLen
-     * @return
      */
     public static String createValueString(int _nValue, int _nLen)
         {

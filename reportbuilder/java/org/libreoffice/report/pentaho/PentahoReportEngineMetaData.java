@@ -111,7 +111,6 @@ public class PentahoReportEngineMetaData
      * Checks, whether a certain output type is available. Feed the mime-type of the output
      * type in and you'll get a true or false back.
      *
-     * @param mimeType
      * @return true, if the output type is supported; false otherwise.
      */
     public boolean isOutputSupported(final String mimeType)
@@ -122,9 +121,6 @@ public class PentahoReportEngineMetaData
     /**
      * Lists all supported output parameters for the given mime-type. This listing can be
      * used to build a generic user interface for configuring a certain output.
-     *
-     * @param mimeType
-     * @return
      */
     public String[] getOutputParameters(final String mimeType)
     {

@@ -53,7 +53,6 @@ public class _XAccessibleComponent {
 
     /**
      * Constructor
-     * @param object
      */
     public _XAccessibleComponent(XInterface object/*, LogWriter log*/) {
         oObj = UnoRuntime.queryInterface(
@@ -73,7 +72,6 @@ public class _XAccessibleComponent {
      * <ul>
      *  <li> <code> getBounds() </code> : to have size of a component.</li>
      * </ul>
-      * @return
       */
     public boolean _containsPoint() {
 
@@ -176,7 +174,6 @@ public class _XAccessibleComponent {
      * Has <b> OK </b> status if in the first cases the right children
      * are returned, and in the second <code>null</code> or
      * another child is returned.
-     * @return
      */
     public boolean _getAccessibleAtPoint() {
 
@@ -272,7 +269,6 @@ public class _XAccessibleComponent {
      *
      * Has <b> OK </b> status if boundary position (x,y) is not negative
      * and size (Width, Height) is greater than 0.
-     * @return
      */
     public boolean _getBounds() {
         boolean result = true ;
@@ -299,7 +295,6 @@ public class _XAccessibleComponent {
      * <ul>
      *  <li> <code> getBounds() </code> : to have bounds </li>
      * </ul>
-     * @return
      */
     public boolean _getLocation() {
 
@@ -324,7 +319,6 @@ public class _XAccessibleComponent {
      *  <li> <code> getBounds() </code> : to have location of the component
      *      relative to its parent</li>
      * </ul>
-     * @return
      */
     public boolean _getLocationOnScreen() {
 
@@ -355,7 +349,6 @@ public class _XAccessibleComponent {
      * <ul>
      *  <li> <code> getBounds() </code>  </li>
      * </ul>
-     * @return
      */
     public boolean _getSize() {
 
@@ -372,7 +365,6 @@ public class _XAccessibleComponent {
      * Just calls the method. <p>
      *
      * Has <b> OK </b> status if no runtime exceptions occurred.
-     * @return
      */
     public boolean _grabFocus() {
 
@@ -453,7 +445,6 @@ public class _XAccessibleComponent {
 
     /**
      * Just calls the method.
-     * @return
      */
     public boolean _getForeground() {
         int forColor = oObj.getForeground();
@@ -463,7 +454,6 @@ public class _XAccessibleComponent {
 
     /**
      * Just calls the method.
-     * @return
      */
     public boolean _getBackground() {
         int backColor = oObj.getBackground();

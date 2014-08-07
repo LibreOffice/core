@@ -55,13 +55,6 @@ public class StorageRepository implements InputRepository, OutputRepository
     private XStorage output;
     private final String rootURL;
 
-    /**
-     *
-     * @param input
-     * @param output
-     * @param rootURL
-     * @throws java.io.IOException
-     */
     public StorageRepository(final XStorage input, final XStorage output, final String rootURL)
     {
         this.input = input;
@@ -104,9 +97,6 @@ public class StorageRepository implements InputRepository, OutputRepository
      * Creates an output stream for writing the data. If there is an entry with
      * that name already contained in the repository, try to overwrite it.
      *
-     * @param name
-     * @param mimeType
-     * @return the outputstream
      * @throws IOException if opening the stream fails
      */
     public OutputStream createOutputStream(final String name, final String mimeType) throws IOException

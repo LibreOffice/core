@@ -27,10 +27,6 @@ public class ReportImplementationHelper
     private XMultiServiceFactory m_xMSF;
     protected int m_nDefaultPageOrientation;
 
-    /**
-     * @param _aMSF
-     * @param _nOrientation
-     */
     public ReportImplementationHelper(XMultiServiceFactory _aMSF, int _nOrientation)
     {
         m_xMSF = _aMSF;

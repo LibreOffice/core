@@ -90,7 +90,6 @@ public class JPEGCreator extends EnhancedComplexTestCase
 /**
  * Create a lot of smaller and nicer Pictures of the big fat pages.
  * Looks better
- * @param _sJPEGSchema
  */
     public void createSmallPictures(String _sJPEGSchema)
     {
@@ -121,7 +120,6 @@ public class JPEGCreator extends EnhancedComplexTestCase
 
 /**
  * convert a picture to a new picture with 340 pixel width.
- * @param _sJPEGFilename
  */
 public static void convertToNearSameFileWithWidth340(String _sJPEGFilename)
 {
@@ -342,7 +340,6 @@ private static void convertToWidth340(String _sFrom, String _To)
          * Return the number of really exists JPEG files
          * Give a JPEG Schema which contains something like '%04d' which will be converted by a number between 0001 and 9999 always
          * with leading '0' (zero)
-         * @param _sJPEGSchema
          * @return number of really existing pages of a given JPEG schema
          */
     public int countPages(String _sJPEGSchema)

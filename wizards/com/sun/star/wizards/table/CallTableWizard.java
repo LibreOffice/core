@@ -62,7 +62,6 @@ public class CallTableWizard
         // </properties>
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
-         * @param i_serviceFactory
          */
         public TableWizardImplementation(com.sun.star.lang.XMultiServiceFactory i_serviceFactory)
         {

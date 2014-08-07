@@ -79,7 +79,6 @@ public class _XDataPilotDescriptor {
     /**
     * Retrieves object relations.
 
-     * @return
      */
     public boolean before() {
         Integer amount = (Integer)param.get("FIELDSAMOUNT");
@@ -99,7 +98,6 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> setSourceRange() </code> : to have current source range </li>
     * </ul>
-     * @return
      */
     public boolean _getSourceRange(){
 //        requiredMethod("setSourceRange()");
@@ -126,7 +124,6 @@ public class _XDataPilotDescriptor {
     *  <li> <code> getHiddenFields() </code> </li>
     *  <li> <code> getPageFields() </code> </li>
     * </ul>
-     * @return
      */
     public boolean _setSourceRange(){
 /*        executeMethod("getColumnFields()") ;
@@ -150,7 +147,6 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> setTag() </code> : to have current tag </li>
     * </ul>
-     * @return
      */
     public boolean _getTag(){
         boolean bResult = true;
@@ -164,7 +160,6 @@ public class _XDataPilotDescriptor {
     /**
     * Test just calls the method. <p>
     * Has <b> OK </b> status if the method successfully returns. <p>
-     * @return
      */
     public boolean _setTag(){
         oObj.setTag(sTag);
@@ -179,7 +174,6 @@ public class _XDataPilotDescriptor {
     * Has <b> OK </b> status if returned value isn't null, number of fields
     * goten from returned value is less than number of fields obtained by relation
     * and no exceptions were thrown. <p>
-     * @return
      */
     public boolean _getDataPilotFields(){
         boolean bResult = true;
@@ -288,7 +282,6 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-     * @return
      */
     public boolean _getColumnFields(){
         System.out.println("getColumnFields") ;
@@ -305,7 +298,6 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-     * @return
      */
     public boolean _getDataFields(){
         System.out.println("getDataFields") ;
@@ -322,7 +314,6 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-     * @return
      */
     public boolean _getHiddenFields(){
         System.out.println("getHiddenFields") ;
@@ -339,7 +330,6 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-     * @return
      */
     public boolean _getRowFields(){
         System.out.println("getRowFields") ;
@@ -356,7 +346,6 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-     * @return
      */
     public boolean _getPageFields(){
         System.out.println("getPageFields") ;
@@ -369,7 +358,6 @@ public class _XDataPilotDescriptor {
     * Test calls the method and checks returned value. <p>
     * Has <b> OK </b> status if returned value isn't null
     * and no exceptions were thrown. <p>
-     * @return
      */
     public boolean _getFilterDescriptor(){
         boolean bResult = oObj.getFilterDescriptor() != null;

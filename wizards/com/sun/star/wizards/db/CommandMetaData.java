@@ -470,8 +470,6 @@ public class CommandMetaData extends DBMetaData
 
     /**
      * the fieldnames passed over are not necessarily the ones that are defined in the class
-     * @param _DisplayFieldNames
-     * @return
      */
     public boolean hasNumericalFields(String[] _DisplayFieldNames)
     {
@@ -572,9 +570,6 @@ public class CommandMetaData extends DBMetaData
 
     /**@deprecated use 'RelationController' class instead
      *
-     * @param _stablename
-     * @param _ncommandtype
-     * @return
      */
     public String[] getReferencedTables(String _stablename, int _ncommandtype)
     {
@@ -617,9 +612,6 @@ public class CommandMetaData extends DBMetaData
     }
 
     /**@deprecated use 'RelationController' class instead
-     *
-     * @param _sreferencedtablename
-     * @return
      */
     public String[][] getKeyColumns(String _sreferencedtablename)
     {

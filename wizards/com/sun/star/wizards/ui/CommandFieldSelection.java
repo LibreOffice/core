@@ -72,15 +72,6 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
 
     /**
      * instantiates a CommandFieldSelection with a preselected command
-     * @param _CurUnoDialog
-     * @param _CurDBMetaData
-     * @param iStep
-     * @param _iHeight
-     * @param _reslblFields
-     * @param _reslblSelFields
-     * @param _reslblTables
-     * @param _bgetQueries
-     * @param _ifirstHID
      */
     public CommandFieldSelection(WizardDialog _CurUnoDialog, CommandMetaData _CurDBMetaData, int iStep, int _iHeight, String _reslblFields, String _reslblSelFields, String _reslblTables, boolean _bgetQueries, int _ifirstHID)
     {
@@ -91,14 +82,6 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
 
     /**
      * instantiates a CommandFieldSelection with a preselected command
-     * @param _CurUnoDialog
-     * @param _CurDBMetaData
-     * @param _iHeight
-     * @param _reslblFields
-     * @param _reslblSelFields
-     * @param _reslblTables
-     * @param _bgetQueries
-     * @param _ifirstHID
      */
     public CommandFieldSelection(UnoDialog _CurUnoDialog, CommandMetaData _CurDBMetaData, int _iHeight, String _reslblFields, String _reslblSelFields, String _reslblTables, boolean _bgetQueries, int _ifirstHID)
     {

@@ -28,9 +28,6 @@ public class OfficeWatcher extends Thread implements share.Watcher {
     private int StoredPing = 0;
     private boolean debug = false;
 
-    /** Creates new OfficeWatcher
-     * @param param
-     */
     public OfficeWatcher(TestParameters param) {
         finish = false;
         this.params = param;

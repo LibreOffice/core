@@ -76,9 +76,6 @@ public class CRMDatabase
 
     /**
      * creates a CRMDatabase from an existing document, given by URL
-     * @param _orb
-     * @param _existingDocumentURL
-     * @throws Exception
      */
     public CRMDatabase( XMultiServiceFactory _orb, final String _existingDocumentURL ) throws Exception
     {

@@ -52,8 +52,6 @@ public abstract class DataAware {
 
     /**
      * creates a DataAware object for the given data object and Value object.
-     * @param dataObject_
-     * @param value_
      */
     protected DataAware(Object dataObject_, Value value_) {
         dataObject = dataObject_;
@@ -62,7 +60,6 @@ public abstract class DataAware {
 
     /**
      * returns the data object.
-     * @return
      */
     public Object getDataObject() {
         return dataObject;

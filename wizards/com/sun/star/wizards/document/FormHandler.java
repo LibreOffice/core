@@ -377,9 +377,6 @@ public class FormHandler
         return xNamedForm;
     }
 
-    /**
-     * @return
-     */
     public int getXPixelFactor()
     {
         if (iXPixelFactor == -1)
@@ -389,9 +386,6 @@ public class FormHandler
         return iXPixelFactor;
     }
 
-    /**
-     * @return
-     */
     public int getYPixelFactor()
     {
         if (iYPixelFactor == -1)
@@ -401,33 +395,20 @@ public class FormHandler
         return iYPixelFactor;
     }
 
-    /**
-     * @param i
-     */
     public void setXPixelFactor(int i)
     {
         iXPixelFactor = i;
     }
-
-    /**
-     * @param i
-     */
     public void setYPixelFactor(int i)
     {
         iYPixelFactor = i;
     }
 
-    /**
-     * @return
-     */
     public int getImageControlHeight()
     {
         return iImageControlHeight;
     }
 
-    /**
-     * @param i
-     */
     public void setImageControlHeight(int i)
     {
         iImageControlHeight = i;
@@ -513,9 +494,6 @@ public class FormHandler
         }
     }
 
-    /**
-     * @return
-     */
     public int getBasicLabelDiffHeight()
     {
         if (this.BasicLabelDiffHeight == -1)
@@ -525,9 +503,6 @@ public class FormHandler
         return BasicLabelDiffHeight;
     }
 
-    /**
-     * @return
-     */
     public int getControlReferenceHeight()
     {
         if (this.nDBRefHeight == -1)
@@ -537,9 +512,6 @@ public class FormHandler
         return nDBRefHeight;
     }
 
-    /**
-     * @return
-     */
     public int getLabelHeight()
     {
         if (this.nLabelHeight == -1)

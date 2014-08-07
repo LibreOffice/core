@@ -87,7 +87,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>setCaretPosition()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getCaretPosition() {
 
@@ -119,7 +118,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _setCaretPosition() {
         boolean res = true;
@@ -168,7 +166,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getCharacter() {
         boolean res = true;
@@ -226,7 +223,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getCharacterAttributes() {
         boolean res = true;
@@ -277,7 +273,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getCharacterBounds() {
         boolean res = true;
@@ -325,7 +320,6 @@ public class _XAccessibleText {
      * Calls the method and stores a returned value to the variable
      * <code>chCount</code>.
      * Has OK status if a returned value is equal to the text length.
-     * @return
      */
     public boolean _getCharacterCount() {
         chCount = oObj.getCharacterCount();
@@ -344,7 +338,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterBounds()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getIndexAtPoint() {
 
@@ -373,7 +366,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>setSelection()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getSelectedText() {
         if (editOnly != null) {
@@ -422,7 +414,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>setSelection()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getSelectionStart() {
         if (editOnly != null) {
@@ -462,7 +453,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>setSelection()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getSelectionEnd() {
         if (editOnly != null) {
@@ -503,7 +493,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _setSelection() {
         boolean res = true;
@@ -576,7 +565,6 @@ public class _XAccessibleText {
      * Calls the method and checks returned value.
      * Has OK status if returned string is not null
      * received from relation.
-     * @return
      */
     public boolean _getText() {
         text = oObj.getText();
@@ -594,7 +582,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getTextRange() {
         boolean res = true;
@@ -687,7 +674,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getTextAtIndex() {
         boolean res = true;
@@ -759,7 +745,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getTextBeforeIndex() {
         boolean res = true;
@@ -847,7 +832,6 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
-     * @return
      */
     public boolean _getTextBehindIndex() {
         boolean res = true;
@@ -932,7 +916,6 @@ public class _XAccessibleText {
      * Has OK status if exception was thrown for invalid parameters,
      * if exception wasn't thrown for valid parameter and if returned value for
      * valid parameter is equal to <code>true</code>.
-     * @return
      */
     public boolean _copyText() {
         boolean res = true;

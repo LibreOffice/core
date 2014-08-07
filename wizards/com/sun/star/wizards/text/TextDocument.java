@@ -432,8 +432,6 @@ public class TextDocument
 
     /**
      * removes an arbitrary Object which supports the  'XTextContent' interface
-     * @param oTextContent
-     * @return
      */
     public boolean removeTextContent(Object oTextContent)
     {

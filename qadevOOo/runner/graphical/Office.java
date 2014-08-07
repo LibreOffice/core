@@ -48,8 +48,6 @@ public class Office implements IOffice
 
     /**
      * Load a document with an already started Office.
-     * @param _sDocumentName
-     * @throws graphical.OfficeException
      */
     public void load(String _sDocumentName) throws OfficeException
     {

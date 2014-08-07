@@ -28,7 +28,6 @@ public interface TaskListener extends EventListener
 
     /**
      * is called when the status of the task has advanced.
-     * @param te
      */
     public void taskStatusChanged(TaskEvent te);
 

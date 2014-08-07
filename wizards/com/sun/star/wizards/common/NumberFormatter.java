@@ -72,14 +72,6 @@ public class NumberFormatter
     }
 
 
-    /**
-     * @param _xMSF
-     * @param _xNumberFormatsSupplier
-     * @return
-     * @throws Exception
-     * @deprecated
-     *
-     */
     public static XNumberFormatter createNumberFormatter(XMultiServiceFactory _xMSF, XNumberFormatsSupplier _xNumberFormatsSupplier) throws Exception
     {
         Object oNumberFormatter = _xMSF.createInstance("com.sun.star.util.NumberFormatter");
@@ -98,7 +90,6 @@ public class NumberFormatter
      * XNumberFormatter nf = Desktop.createNumberFormatter(xmsf, nsf);
      * nf.convertNumberToString( key, 1972 );
      * </pre>
-     * @param numberFormatsSupplier
      * @param type - a constant out of i18n.NumberFormatIndex enumeration.
      * @return a key to use with a util.NumberFormat instance.
      *
@@ -158,10 +149,7 @@ public class NumberFormatter
 
 
     /**
-     * returns a numberformat for a FormatString.
-     * @param _FormatString
-     * @param _aLocale
-     * @return
+     * @return a numberformat for a FormatString.
      */
     public int defineNumberFormat(String _FormatString, Locale _aLocale)
     {

@@ -509,8 +509,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
      * for the call and will call one of the start* methods.
      *
      * @param roAttrs the attribute map for the current element
-     * @throws DataSourceException
-     * @throws ReportProcessingException
      */
     public final void startElement(final AttributeMap roAttrs)
             throws DataSourceException, ReportProcessingException

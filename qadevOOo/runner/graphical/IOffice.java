@@ -22,27 +22,22 @@ public interface IOffice
 {
     /**
      * start an Office, if need
-     * @throws graphical.OfficeException
      */
     public void start() throws OfficeException;
 
     /**
      * Load a document by it's Name
-     * @param Name
-     * @throws graphical.OfficeException
      */
     public void load(String Name) throws OfficeException;
 
     /**
      * Create a postscript file in the DOC_COMPARATOR_OUTPUT_DIR directory from a loaded document
-     * @throws graphical.OfficeException
      */
     public void storeAsPostscript() throws OfficeException;
 
 
     /**
      * Close the background office
-     * @throws graphical.OfficeException
      */
     public void close() throws OfficeException;
 }

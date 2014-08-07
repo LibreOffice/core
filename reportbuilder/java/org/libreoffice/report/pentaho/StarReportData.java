@@ -80,10 +80,6 @@ public class StarReportData implements ReportData
     /**
      * This operation checks, whether a call to next will be likely to succeed. If
      * there is a next data row, this should return true.
-     *
-     * @return
-     * @throws org.jfree.report.DataSourceException
-     *
      */
     public boolean isAdvanceable() throws DataSourceException
     {

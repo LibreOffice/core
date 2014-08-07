@@ -57,13 +57,12 @@ public class PropertiesRetriever {
     /**
      * Constructor.
      *
-     *@param      String[]   This construtor requires the arguments:
+     *@param      args   This construtor requires the arguments:
      *                          -url=...       (optional)
      *                          -propNames=... (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
-     *@exception  java.lang.Exception
      */
     public PropertiesRetriever( String args[] ) throws java.lang.Exception {
 
@@ -82,10 +81,7 @@ public class PropertiesRetriever {
      * This method requires the main and the optional arguments to be set in order to work.
      * See Constructor.
      *
-     *@param  Vector   Properties
-     *@return Vector   Returns Properties values if values successfully retrieved, null otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
+     *@return Properties values if values successfully retrieved, null otherwise
      */
     public ArrayList<Object> getPropertyValues()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -96,10 +92,7 @@ public class PropertiesRetriever {
     /**
      *  Get values of the properties.
      *
-     *@param  Vector   Properties
-     *@return Vector   Returns Properties values if values successfully retrieved, null otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
+     *@return Properties values if values successfully retrieved, null otherwise
      */
     public ArrayList<Object> getPropertyValues( ArrayList<String> properties )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -161,9 +154,6 @@ public class PropertiesRetriever {
 
     /**
      * Parse arguments
-     *
-     *@param      String[]   Arguments
-     *@exception  java.lang.Exception
      */
     public void parseArguments( String[] args ) throws java.lang.Exception {
 
@@ -209,8 +199,6 @@ public class PropertiesRetriever {
     /**
      *  Create a new connection with the specific args to a running office and
      *  get the properties values from a resource.
-     *
-     *@param  String[]   Arguments
      */
     public static void main ( String args[] ) {
         System.out.println( "\n" );

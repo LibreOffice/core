@@ -23,9 +23,6 @@ public class TestHelper
 
     String m_sTestPrefix;
 
-    /** Creates a new instance of TestHelper
-     * @param sTestPrefix
-     */
     public TestHelper (  String sTestPrefix )
     {
 

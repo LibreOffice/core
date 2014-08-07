@@ -64,8 +64,6 @@ public class Helper {
      *  Constructor, create a new instance of the ucb. UNO is bootstrapped and
      *  the remote office service manger is used to create the ucb. If necessary
      *  a new office process is started.
-     *
-     *  @exception  java.lang.Exception
      */
     public Helper(String url) throws java.lang.Exception {
         m_contenturl    = url;
@@ -84,7 +82,6 @@ public class Helper {
      * Returns created identifier object for given URL..
      *
      *@return     XContent       Created identifier object for given URL
-     *@exception  java.lang.Exception
      */
     public XContent createUCBContent() throws java.lang.Exception {
         return createUCBContent( getContentURL() );
@@ -93,9 +90,8 @@ public class Helper {
     /**
      * Returned created identifier object for given URL.
      *
-     *@param      String         Connect URL. Example : -url=file:///
-     *@return     XContent       Created identifier object for given URL
-     *@exception  java.lang.Exception
+     *@param      connectURL         Connect URL. Example : -url=file:///
+     *@return  Created identifier object for given URL
      */
     public XContent createUCBContent( String connectURL ) throws java.lang.Exception {
         XContent content = null;

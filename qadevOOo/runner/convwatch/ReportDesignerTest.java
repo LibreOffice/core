@@ -86,7 +86,6 @@ class PropertyHelper
 {
     /**
        Create a PropertyValue[] from a ArrayList
-       @param _aPropertyList
        @return a PropertyValue[]
     */
     public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList<PropertyValue> _aPropertyList)
@@ -123,7 +122,6 @@ public class ReportDesignerTest extends ComplexTestCase {
 
     /**
      * This method returns a list of Strings, each string must be a function name in this class.
-     * @return
      */
     @Override
     public String[] getTestMethodNames()

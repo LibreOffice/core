@@ -217,11 +217,6 @@ public class MSOfficePostscriptCreator implements IOffice
 
     /**
      * print the given file (_sInputFile) to the file name (_sPrintFile)
-     * @param _aGTA
-     * @param _sInputFile
-     * @param _sPrintFilename
-     * @throws OfficeException
-     * @throws java.io.IOException
      */
     public void printToFileWithMSOffice( ParameterHelper _aGTA,
                                          String _sInputFile,

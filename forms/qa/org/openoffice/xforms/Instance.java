@@ -39,11 +39,8 @@ public class Instance
      *
      * The element will be inserted immediately below the root node of the instance.
      *
-     * @param _elementName
-     *      the name of the to-be-created element
-     * @return
-     *      the node of the newly created element
-     * @throws com.sun.star.xml.dom.DOMException
+     * @param _elementName the name of the to-be-created element
+     * @return the node of the newly created element
      */
     public XNode createElement( String _elementName ) throws DOMException
     {
@@ -54,13 +51,9 @@ public class Instance
      *
      * The element will be inserted immediately below a given XNode.
      *
-     * @param _parentElement
-     *      the node whose child shall be created
-     * @param _elementName
-     *      the name of the to-be-created element
-     * @return
-     *      the node of the newly created element
-     * @throws com.sun.star.xml.dom.DOMException
+     * @param _parentElement the node whose child shall be created
+     * @param _elementName the name of the to-be-created element
+     * @return the node of the newly created element
      */
     public XNode createElement( XNode _parentElement, String _elementName ) throws DOMException
     {
@@ -79,7 +72,6 @@ public class Instance
      *      the initial value to set at the node. Might be null, in this case no value is set.
      * @return
      *      the node of the newly created element
-     * @throws com.sun.star.xml.dom.DOMException
      */
     public XNode createElement( XNode _parentElement, String _elementName, String _initialNodeValue ) throws DOMException
     {
@@ -129,7 +121,6 @@ public class Instance
      *      the name of the to-be-created attribute
      * @return
      *      the DOM node, which has already been inserted into the DOM tree
-     * @throws com.sun.star.xml.dom.DOMException
      */
     public XNode createAttribute( String _attribName ) throws DOMException
     {
@@ -144,7 +135,6 @@ public class Instance
      *      the initial value to set at the node. Might be null, in this case no value is set.
      * @return
      *      the DOM node, which has already been inserted into the DOM tree
-     * @throws com.sun.star.xml.dom.DOMException
      */
     public XNode createAttribute( String _attribName, String _initialNodeValue ) throws DOMException
     {
@@ -159,7 +149,6 @@ public class Instance
      *      the name of the to-be-created attribute
      * @return
      *      the DOM node, which has already been inserted into the DOM tree
-     * @throws com.sun.star.xml.dom.DOMException
      */
     public XNode createAttribute( XNode _parentElement, String _attribName ) throws DOMException
     {
@@ -176,7 +165,6 @@ public class Instance
      *      the initial value to set at the node. Might be null, in this case no value is set.
      * @return
      *      the DOM node, which has already been inserted into the DOM tree
-     * @throws com.sun.star.xml.dom.DOMException
      */
     public XNode createAttribute( XNode _parentElement, String _attribName, String _initialNodeValue ) throws DOMException
     {

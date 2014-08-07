@@ -53,14 +53,13 @@ public class DataStreamComposer {
     /**
      * Constructor.
      *
-     *@param      String[]   This construtor requires the arguments:
+     *@param      args   This construtor requires the arguments:
      *                          -url=...               (optional)
      *                          -srcURL=...            (optional)
      *                          -workdir=...           (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
-     *@exception  java.lang.Exception
      */
     public DataStreamComposer( String args[] ) throws java.lang.Exception {
 
@@ -80,9 +79,6 @@ public class DataStreamComposer {
      * See Constructor.
      *
      *@return boolean   Result
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
-     *@exception  java.lang.Exception
      */
     public boolean setDataStream()
         throws com.sun.star.ucb.CommandAbortedException,
@@ -98,9 +94,6 @@ public class DataStreamComposer {
      *
      *@param  String    Source URL
      *@return boolean   Returns true if data stream successfully seted, false otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
-     *@exception  java.lang.Exception
      */
     public boolean setDataStream( String sourceURL )
         throws com.sun.star.ucb.CommandAbortedException,
@@ -122,10 +115,7 @@ public class DataStreamComposer {
     /**
      * Write the document data stream of a document content...
      *
-     *@param  XInputStream   Stream
      *@return boolean        Returns true if data stream successfully seted, false otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
      */
     public boolean setDataStream( XInputStream stream )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -166,9 +156,6 @@ public class DataStreamComposer {
 
     /**
      * Parse arguments
-     *
-     *@param      String[]   Arguments
-     *@exception  java.lang.Exception
      */
     public void parseArguments( String[] args ) throws java.lang.Exception {
 

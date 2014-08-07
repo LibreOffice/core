@@ -34,9 +34,6 @@ public interface ReportEngineMetaData
      * Lists all supported output parameters for the given mime-type.
      * This listing can be used to build a generic user interface for
      * configuring a certain output.
-     *
-     * @param mimeType
-     * @return
      */
     String[] getOutputParameters(String mimeType);
 

@@ -577,9 +577,6 @@ public class OpenOfficePostscriptCreator implements IOffice
 
 
     /**
-     * @param _aGTA
-     * @param _sAbsoluteOutputPath
-     * @param _sAbsoluteInputFile
      * @return true, if the reference (*.prrn file) based on given output path and given input path exist.
      *               If OVERWRITE_REFERENCE is set, always return false.
      */

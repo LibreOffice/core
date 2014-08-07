@@ -41,11 +41,6 @@ public class LoggingThread extends Thread {
     boolean finished = false;
     boolean debug = false;
 
-    /**
-     *
-     * @param log
-     * @param tParam
-     */
     public LoggingThread(LogWriter log, TestParameters tParam) {
         this.log = log;
         this.param = tParam;

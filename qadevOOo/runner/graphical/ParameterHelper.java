@@ -88,8 +88,7 @@ public class ParameterHelper
         }
 
         /**
-         * return the input path, if given.
-         * @return
+         * @return the input path, if given.
          */
     public String getInputPath()
     {
@@ -185,7 +184,6 @@ public class ParameterHelper
     PerformanceContainer m_aPerformanceContainer = null;
     /**
      * helper class for performance analyser features
-     * @return
      */
     public PerformanceContainer getPerformance()
         {
@@ -199,7 +197,6 @@ public class ParameterHelper
     /**
      * Helper function to get the buildid of the current used OpenOffice.org
      * out of the AppExecutionCommand the build ID
-     * @return
      */
     public String getBuildID()
         {

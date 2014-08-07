@@ -97,7 +97,6 @@ public class CheckModuleAPI extends ComplexTestCase
 
     /**
      * let API tests run.
-     * @param module
      */
     public void checkModule(String module)
     {

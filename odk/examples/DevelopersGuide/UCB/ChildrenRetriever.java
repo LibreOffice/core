@@ -61,13 +61,12 @@ public class ChildrenRetriever {
     /**
      * Constructor. Create a new connection with the specific args to a running office
      *
-     *@param      String[]   This construtor requires the arguments:
+     *@param      args   This construtor requires the arguments:
      *                          -url=...       (optional)
      *                          -propNames=... (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
-     *@exception  java.lang.Exception
      */
     public ChildrenRetriever( String args[] ) throws java.lang.Exception {
 
@@ -88,8 +87,6 @@ public class ChildrenRetriever {
      *
      *@return     Returns children properties values if values successfully retrieved,
      *                     null otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
      */
     public ArrayList<ArrayList<Object>> getChildren()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -100,11 +97,8 @@ public class ChildrenRetriever {
     /**
      * Open a folder content, get properties values for the properties.
      *
-     *@param  properties
      *@return Returns children properties values if values successfully retrieved,
      *                 null otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
      */
     public ArrayList<ArrayList<Object>> getChildren( ArrayList<String> properties )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -193,8 +187,7 @@ public class ChildrenRetriever {
     /**
      * Parse arguments
      *
-     *@param      String[]   Arguments
-     *@exception  java.lang.Exception
+     *@param      args   Arguments
      */
     public void parseArguments( String[] args ) throws java.lang.Exception {
 

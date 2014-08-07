@@ -58,7 +58,6 @@ public class DocumentHandle {
      * @param docName The name of a document as file URL
      * @param hidden If true, the document is loaded hidden.
      * @return The size of the opened/created document.
-     * @throws Exception
      */
     public Rectangle loadDocument(String docName, boolean hidden)
                                                             throws Exception{

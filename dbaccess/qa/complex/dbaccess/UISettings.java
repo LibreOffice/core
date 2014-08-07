@@ -89,7 +89,6 @@ public class UISettings extends TestCase
     /**
      * checks whether query columns use the settings of the underlying table column, if they do not (yet) have own
      * settings
-     * @throws java.lang.Exception
      */
     @Test
     public void checkTransparentQueryColumnSettings() throws java.lang.Exception

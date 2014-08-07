@@ -62,9 +62,6 @@ public class DirectoryHelper
      *     System.out.println(aEntry);
      * }
      *
-     * @param _sDirectory
-     * @param _aFileFilter
-     * @param _bRecursiveIsAllowed
      * @return list of directories
      */
     public static Object[] traverse( String _sDirectory, FileFilter _aFileFilter, boolean _bRecursiveIsAllowed )

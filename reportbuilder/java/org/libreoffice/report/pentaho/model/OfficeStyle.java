@@ -51,8 +51,6 @@ public class OfficeStyle extends Section
      * A parent style name must be a common style (it cannot be an automatic
      * style) and has to exist. If no parent style is given, an implementation
      * specific default style is used.
-     *
-     * @return
      */
     public String getStyleParent()
     {

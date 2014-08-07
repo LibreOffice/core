@@ -52,12 +52,6 @@ import com.sun.star.document.XDocumentProperties;
 public class FileAccess
 {
 
-    /**
-     *
-     * @param xMSF
-     * @param sPath
-     * @param sAddPath
-     */
     public static void addOfficePath(XMultiServiceFactory xMSF, String sPath, String sAddPath)
     {
         XSimpleFileAccess xSimpleFileAccess = null;
@@ -96,9 +90,6 @@ public class FileAccess
     /**
      * Further information on arguments value see in OO Developer Guide,
      * chapter 6.2.7
-     * @param xMSF
-     * @param sPath
-     * @param xSimpleFileAccess
      * @return the respective path of the office application. A probable following "/" at the end is trimmed.
      */
     public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, XSimpleFileAccess xSimpleFileAccess)
@@ -121,13 +112,8 @@ public class FileAccess
     /**
      * Further information on arguments value see in OO Developer Guide,
      * chapter 6.2.7
-     * @param xMSF
-     * @param sPath
      * @param sType use "share" or "user". Set to PropertyNames.EMPTY_STRING if not needed eg for the WorkPath;
      * In the return Officepath a possible slash at the end is cut off
-     * @param sSearchDir
-     * @return
-     * @throws NoValidPathException
      */
     public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, String sType, String sSearchDir) throws NoValidPathException
     {
@@ -494,7 +480,6 @@ public class FileAccess
     /**
      * searches a directory for files which start with a certain
      * prefix, and returns their URLs and document-titles.
-     * @param xMSF
      * @param FilterName the prefix of the filename. a "-" is added to the prefix !
      * @param FolderName the folder (URL) to look for files...
      * @return an array with two array members. The first one, with document titles,
@@ -554,9 +539,6 @@ public class FileAccess
 
     /**
      * We search in all given path for a given file
-     * @param _sPath
-     * @param _sPath2
-     * @return
      */
     public static String addPath(String _sPath, String _sPath2)
     {
@@ -597,14 +579,6 @@ public class FileAccess
         return sFoundFile;
     }
 
-    /**
-     *
-     * @param xMSF
-     * @param _sStartFilterName
-     * @param FolderNames
-     * @return
-     * @throws com.sun.star.wizards.common.NoValidPathException
-     */
     public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String _sStartFilterName, ArrayList<String> FolderNames)
             throws NoValidPathException
     {
@@ -742,7 +716,6 @@ public class FileAccess
     }
 
     /**
-     * @param filename
      * @return the extension of the given filename.
      */
     public static String getExtension(String filename)
@@ -763,10 +736,6 @@ public class FileAccess
         return filename;
     }
 
-    /**
-     * @param s
-     * @return
-     */
     public boolean mkdir(String s)
     {
         try
@@ -786,7 +755,6 @@ public class FileAccess
     }
 
     /**
-     * @param filename
      * @param def what to return in case of an exception
      * @return true if the given file exists or not.
      * if an exception accures, returns the def value.
@@ -807,10 +775,6 @@ public class FileAccess
         return def;
     }
 
-    /**
-     * @param filename
-     * @return
-     */
     public boolean isDirectory(String filename)
     {
         try
@@ -829,9 +793,6 @@ public class FileAccess
 
     /**
      * lists the files in a given directory
-     * @param dir
-     * @param includeFolders
-     * @return
      */
     public String[] listFiles(String dir, boolean includeFolders)
     {
@@ -849,10 +810,6 @@ public class FileAccess
         return new String[0];
     }
 
-    /**
-     * @param file
-     * @return
-     */
     public boolean delete(String file)
     {
         try
@@ -872,10 +829,6 @@ public class FileAccess
         return false;
     }
 
-    /**
-     * @param path
-     * @return
-     */
     public static String getFilename(String path)
     {
         return getFilename(path, "/");
@@ -883,19 +836,12 @@ public class FileAccess
 
     /**
      * return the filename out of a system-dependent path
-     * @param path
-     * @return
      */
     public static String getPathFilename(String path)
     {
         return getFilename(path, File.separator);
     }
 
-    /**
-     * @param path
-     * @param pathSeparator
-     * @return
-     */
     public static String getFilename(String path, String pathSeparator)
     {
         String[] s = JavaTools.ArrayoutofString(path, pathSeparator);
@@ -909,11 +855,6 @@ public class FileAccess
         return filename.substring(0, filename.length() - (sExtension.length() + 1));
     }
 
-    /**
-     * @param source
-     * @param target
-     * @return
-     */
     public boolean copy(String source, String target)
     {
         try
@@ -947,7 +888,6 @@ public class FileAccess
     }
 
     /**
-     * @param url
      * @return the parent dir of the given url.
      * if the path points to file, gives the directory in which the file is.
      */
@@ -1051,9 +991,6 @@ public class FileAccess
 
     /**
      * shortens a filename to a user displayable representation.
-     * @param path
-     * @param maxLength
-     * @return
      */
     public static String getShortFilename(String path, int maxLength)
     {

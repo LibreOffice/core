@@ -53,12 +53,11 @@ public class DataStreamRetriever {
     /**
      * Constructor.
      *
-     *@param      String[]   This construtor requires the arguments:
+     *@param      args   This construtor requires the arguments:
      *                          -url=... (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
-     *@exception  java.lang.Exception
      */
     public DataStreamRetriever( String args[] ) throws java.lang.Exception {
 
@@ -78,8 +77,6 @@ public class DataStreamRetriever {
      *
      *@return     XInputStream  Returns input stream if stream successfully retrieved,
      *                          null otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
      */
     public XInputStream getDataStream()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -118,8 +115,7 @@ public class DataStreamRetriever {
     /**
      * Parse arguments
      *
-     *@param      String[]   Arguments
-     *@exception  java.lang.Exception
+     *@param      args   Arguments
      */
     public void parseArguments( String[] args ) throws java.lang.Exception {
 
@@ -152,9 +148,6 @@ public class DataStreamRetriever {
 
     /**
      *  Print Stream content.
-     *
-     *@param    XInputStream
-     *@exception  com.sun.star.uno.Exception
      */
     public void printStream( XInputStream data )
         throws com.sun.star.uno.Exception {

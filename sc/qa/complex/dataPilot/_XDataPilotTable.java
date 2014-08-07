@@ -85,7 +85,6 @@ public class _XDataPilotTable {
     * Test calls the method and checks returned value using value obtained by
     * object relation <code>'OUTPUTRANGE'</code>. <p>
     * Has <b> OK </b> status if values are equal. <p>
-     * @return
      */
     public boolean _getOutputRange(){
         boolean bResult = true;
@@ -102,7 +101,6 @@ public class _XDataPilotTable {
     * relation 'CELLFORCHECK'.<p>
     * Has <b>OK</b> status if value of the cell obtained by object relation
     * 'CELLFORCHECK' is changed. <p>
-     * @return
      */
     public boolean _refresh(){
         xCellForChange.setValue(changeValue);

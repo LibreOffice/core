@@ -246,8 +246,6 @@ public class Desktop
     /**
      * Checks if the passed Element Name already exists in the  ElementContainer. If yes it appends a
      * suffix to make it unique
-     * @param xElementContainer
-     * @param sElementName
      * @return a unique Name ready to be added to the container.
      */
     public static String getUniqueName(XNameAccess xElementContainer, String sElementName)
@@ -259,8 +257,6 @@ public class Desktop
     /**
      * Checks if the passed Element Name already exists in the  ElementContainer. If yes it appends a
      * suffix to make it unique
-     * @param xElementContainer
-     * @param sElementName
      * @return a unique Name ready to be added to the container.
      */
     public static String getUniqueName(XHierarchicalNameAccess xElementContainer, String sElementName)
@@ -272,9 +268,6 @@ public class Desktop
     /**
      * Checks if the passed Element Name already exists in the list If yes it appends a
      * suffix to make it unique
-     * @param _slist
-     * @param _sElementName
-     * @param _sSuffixSeparator
      * @return a unique Name not being in the passed list.
      */
     public static String getUniqueName(String[] _slist, String _sElementName, String _sSuffixSeparator)
@@ -306,10 +299,6 @@ public class Desktop
 
     /**
      * @deprecated  use Configuration.getConfigurationRoot() with the same parameters instead
-     * @param xMSF
-     * @param KeyName
-     * @param bForUpdate
-     * @return
      */
     public static XInterface getRegistryKeyContent(XMultiServiceFactory xMSF, String KeyName, boolean bForUpdate)
     {
@@ -442,12 +431,6 @@ public class Desktop
      * 2. Go up the tree of frames and search a frame with a component window.
      * 3. Get from the desktop all the components, and give the first one
      * which has a frame.
-     * @param xMSF
-     * @param myFrame
-     * @param desktop
-     * @return
-     * @throws NoSuchElementException
-     * @throws WrappedTargetException
      */
     public static XFrame findAFrame(XMultiServiceFactory xMSF, XFrame myFrame, XFrame desktop)
             throws NoSuchElementException,

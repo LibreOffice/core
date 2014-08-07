@@ -369,15 +369,6 @@ public class FilterComponent
     }
 
     /** Creates a new instance of FilterComponent
-     * @param CurUnoDialog
-     * @param _xMSF
-     * @param iStep
-     * @param iPosX
-     * @param iPosY
-     * @param iWidth
-     * @param FilterCount
-     * @param _oQueryMetaData
-     * @param _firstHelpID
      */
     public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int iWidth, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {

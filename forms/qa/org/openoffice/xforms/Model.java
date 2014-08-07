@@ -55,11 +55,8 @@ public class Model
 
     /** creates a binding for the given DOM node
      *
-     * @param _node
-     *      the DOM node to create a binding for
-     * @param _dataType
-     *      the data type to be used for the binding
-     * @return
+     * @param _node     the DOM node to create a binding for
+     * @param _dataType the data type to be used for the binding
      */
     public XPropertySet createBindingForNode( XNode _node, short _dataTypeClass )
     {

@@ -137,10 +137,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
 
     /**
      * This is the main test Function of current ReportDesignerTest
-     * @param _sDocument
-     * @return
      */
-
     public ArrayList<String> load(String _sDocument /*, int _nType*/)
         {
             // We need to copy the database file to a place where we have write access, NEVER use the docpool for this

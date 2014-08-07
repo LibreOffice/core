@@ -54,7 +54,6 @@ public class _XAccessibleExtendedComponent {
 
     /**
      * Just calls the method.
-     * @return
      */
     public boolean _getFont() {
         XFont font = oObj.getFont();
@@ -65,7 +64,6 @@ public class _XAccessibleExtendedComponent {
     /**
      * Calls the method and checks returned value.
      * Has OK status if returned value isn't null.
-     * @return
      */
     public boolean _getTitledBorderText() {
         String titleBorderText = oObj.getTitledBorderText();
@@ -76,7 +74,6 @@ public class _XAccessibleExtendedComponent {
     /**
      * Calls the method and checks returned value.
      * Has OK status if returned value isn't null.
-     * @return
      */
     public boolean _getToolTipText() {
         String toolTipText = oObj.getToolTipText();

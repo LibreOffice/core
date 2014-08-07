@@ -264,10 +264,6 @@ public class DesignTemplate
     /**
      * create a new DesignTemplate by try to load a otr file from the given path.
      * Internally we store the loaded ReportDefinition.
-     *
-     * @param _xMSF
-     * @param _sPath
-     * @return
      */
     public static DesignTemplate create(XMultiServiceFactory _xMSF, String _sPath)
     {

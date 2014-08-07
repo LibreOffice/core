@@ -183,10 +183,6 @@ public class ImageProducer
 
     /**
      * Image-Data can be one of the following types: String, URL, URI, byte-array, blob.
-     *
-     * @param imageData
-     * @param preserveIRI
-     * @return
      */
     public OfficeImage produceImage(final Object imageData,
             final boolean preserveIRI)

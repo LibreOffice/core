@@ -47,13 +47,12 @@ public class ResourceRemover {
     /**
      * Constructor.
      *
-     *@param      String[]   This construtor requires the arguments:
+     *@param      args   This construtor requires the arguments:
      *                          -url=...     (optional)
      *                          -workdir=... (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
-     *@exception  java.lang.Exception
      */
     public ResourceRemover( String args[] ) throws java.lang.Exception {
 
@@ -70,9 +69,7 @@ public class ResourceRemover {
     /**
      *  Delete resource.
      *
-     *@return     boolean   Returns true if resource successfully deleted, false otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
+     *@return true if resource successfully deleted, false otherwise
      */
     public boolean deleteResource()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -104,9 +101,6 @@ public class ResourceRemover {
 
     /**
      * Parse arguments
-     *
-     *@param      String[]   Arguments
-     *@exception  java.lang.Exception
      */
     public void parseArguments( String[] args ) throws java.lang.Exception {
 
@@ -144,8 +138,6 @@ public class ResourceRemover {
     /**
      *  Create a new connection with the specific args to a running office and
      *  delete a resource.
-     *
-     *@param  String[]   Arguments
      */
     public static void main ( String args[] ) {
 

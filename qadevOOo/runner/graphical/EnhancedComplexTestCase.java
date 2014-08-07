@@ -73,7 +73,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
 /**
  * Run through all documents found in Inputpath.
  * Call the IDocument interface function call(...);
- * @param _aParam
  */
     public void foreachDocumentinInputPath(ParameterHelper _aParam)
     {
@@ -112,7 +111,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
  * Run through a given index.ini or run through a given directory,
  * find all postscript or pdf files.
  * Call the IDocument interface function call(...);
- * @param _aParam
  */
     public void foreachPSorPDFinInputPath(ParameterHelper _aParam)
     {
@@ -296,7 +294,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
  * Run through a given index.ini or run through a given directory,
  * find all postscript or pdf files.
  * Call the IDocument interface function call(...);
- * @param _aParam
  */
     public void foreachJPEGcompareWithJPEG(ParameterHelper _aParam)
     {
@@ -371,7 +368,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
  * Run through a given index.ini or run through a given directory,
  * find all ini files.
  * Call the IDocument interface function call(...);
- * @param _aParam
  */
     public void foreachResultCreateHTML(ParameterHelper _aParam)
     {

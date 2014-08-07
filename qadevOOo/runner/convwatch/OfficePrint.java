@@ -95,9 +95,6 @@ public class OfficePrint {
      * the GraphicalTestArguments must contain a living MultiServiceFactory object
      * or we crash here.
      * Be aware, the ownership of the document gets to you, you have to close it.
-     * @param _aGTA
-     * @param _sInputURL
-     * @return
      */
     public static XComponent loadFromURL(GraphicalTestArguments _aGTA,
                                          String _sInputURL)
@@ -302,10 +299,6 @@ public class OfficePrint {
      * Due to the fact we use a printer to convert the file to postscript, the default printer
      * to create such postscript format must be installed, this is not tested here.
      *
-     * @param _aGTA
-     * @param _sInputURL
-     * @param _sOutputURL
-     * @param _sPrintFileURL
      * @return true, if print has been done.
      *         Be careful, true means only print returns with no errors, to be sure print is really done
      *         check existence of _sPrintFileURL
@@ -624,9 +617,6 @@ public class OfficePrint {
 
 
     /**
-     * @param _aGTA
-     * @param _sAbsoluteOutputPath
-     * @param _sAbsoluteInputFile
      * @return true, if the reference (*.prrn file) based on given output path and given input path exist.
      *               If OVERWRITE_REFERENCE is set, always return false.
      */
@@ -671,12 +661,6 @@ public class OfficePrint {
      * _sAbsoluteOutputPath contains the destination, where the file will store after load with StarOffice/OpenOffice.org
      *                      if is null, print only near the Input file path
      * _sPrintType ".prn" Print input file with StarOffice/OpenOffice.org and the default printer as PostScript
-     *
-     * @param _aGTA
-     * @param _sAbsoluteOutputPath
-     * @param _sAbsoluteInputFile
-     * @return
-     * @throws ConvWatchCancelException
      */
     public static boolean buildReference(GraphicalTestArguments _aGTA,
                                          String _sAbsoluteOutputPath,

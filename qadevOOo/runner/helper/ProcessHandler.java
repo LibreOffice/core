@@ -138,7 +138,6 @@ public class ProcessHandler
      * Creates instance with specified external command.
      * Debug info and output
      * of external command is printed to stdout.
-     * @param cmdLine
      */
     public ProcessHandler(String cmdLine)
     {
@@ -150,7 +149,6 @@ public class ProcessHandler
      * including parameters as an array.
      * Debug info and output
      * of external command is printed to stdout.
-     * @param cmdLines
      */
     public ProcessHandler(String[] cmdLines)
     {
@@ -164,8 +162,6 @@ public class ProcessHandler
      * variables.
      * Debug info and output
      * of external command is printed to stdout.
-     * @param cmdLines
-     * @param envVars
      * @see java.lang.Runtime exec(String[], String[])
      */
     public ProcessHandler(String[] cmdLines, String[] envVars)
@@ -180,8 +176,6 @@ public class ProcessHandler
      * variables. The command will be started in workDir.
      * Debug info and output
      * of external command is printed to stdout.
-     * @param cmdLines
-     * @param workDir
      */
     public ProcessHandler(String[] cmdLines, File workDir)
     {
@@ -194,9 +188,6 @@ public class ProcessHandler
      * Creates instance with specified external command and
      * log stream where debug info and output
      * of external command is printed out.  The command will be started in workDir.
-     * @param cmdLines
-     * @param log
-     * @param workDir
      */
     public ProcessHandler(String[] cmdLines, PrintWriter log, File workDir)
     {
@@ -208,8 +199,6 @@ public class ProcessHandler
      * Creates instance with specified external command and
      * log stream where debug info and output
      * of external command is printed out.
-     * @param cmdLine
-     * @param log
      */
     public ProcessHandler(String cmdLine, PrintWriter log)
     {
@@ -218,8 +207,6 @@ public class ProcessHandler
 
     /**
      * Creates instance with specified external command and set the time out for the command.
-     * @param cmdLine
-     * @param timeOut
      */
     public ProcessHandler(String cmdLine, int timeOut)
     {
@@ -231,8 +218,6 @@ public class ProcessHandler
      * will be executed in the some work directory.
      * Debug info and output
      * of external commandis printed to stdout.
-     * @param cmdLine
-     * @param workDir
      */
     public ProcessHandler(String cmdLine, File workDir)
     {
@@ -243,9 +228,6 @@ public class ProcessHandler
      * Creates instance with specified external command which
      * will be executed in the some work directory.
      * Debug info and output printed in log stream.
-     * @param cmdLine
-     * @param log
-     * @param workDir
      */
     public ProcessHandler(String cmdLine, PrintWriter log, File workDir)
     {
@@ -259,10 +241,6 @@ public class ProcessHandler
      * of external command is printed .
      * The specified environment variables are set for the new process.
      * If log stream is null, logging is printed to stdout.
-     * @param cmdLine
-     * @param log
-     * @param workDir
-     * @param envVars
      */
     public ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars)
     {
@@ -321,9 +299,6 @@ public class ProcessHandler
      * log stream where debug info and output of external command is printed.
      * If log stream is null, logging is printed to stdout.
      * From the <CODE>TestParameters</CODE> the <CODE>OfficeWachter</CODE> get a ping.
-     * @param commands
-     * @param log
-     * @param workDir
      * @param shortWait If this parameter is ture the <CODE>mTimeOut</CODE> is set to 5000 ms, else it is set to
      *        half of time out from parameter timeout.
      * @param param the TestParameters
@@ -349,7 +324,6 @@ public class ProcessHandler
 
     /**
      * If not equal 0, the time to maximal wait.
-     * @param _n
      */
     public void setProcessTimeout(int _n)
     {
@@ -358,7 +332,6 @@ public class ProcessHandler
 
     /**
      * This command will call after ProcessTimeout is arrived.
-     * @param _s
      */
     public void setProcessKiller(String _s)
     {
@@ -506,7 +479,6 @@ public class ProcessHandler
 
     /**
      * Returns the time in seconds since 1st January 1970
-     * @return
      */
     public static long getSystemTime()
     {
@@ -773,7 +745,6 @@ public class ProcessHandler
      * The method can also be called before the command
      * starts its execution. Then the text is buffered
      * and transferred to command when it will be started.
-     * @param str
      */
     public void printInputText(String str)
     {
@@ -825,7 +796,6 @@ public class ProcessHandler
     }
 
     /** Causes the thread to sleep some time.
-     * @param milliseconds
      */
     public static void shortWait(long milliseconds)
     {
@@ -868,7 +838,6 @@ public class ProcessHandler
 
         /**
          * returns true, if the thread should hold on
-         * @return
          */
         public synchronized boolean isInHoldOn()
         {

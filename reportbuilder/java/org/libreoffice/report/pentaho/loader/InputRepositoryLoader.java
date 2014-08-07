@@ -52,9 +52,6 @@ public class InputRepositoryLoader implements ResourceLoader
     /**
      * Checks, whether this resource loader implementation was responsible for
      * creating this key.
-     *
-     * @param key
-     * @return
      */
     public boolean isSupportedKey(final ResourceKey key)
     {
@@ -64,11 +61,8 @@ public class InputRepositoryLoader implements ResourceLoader
     /**
      * Creates a new resource key from the given object and the factory keys.
      *
-     * @param value
-     * @param factoryKeys
      * @return the created key or null, if the format was not recognized.
-     * @throws org.jfree.resourceloader.ResourceKeyCreationException
-     *          if creating the key failed.
+     * @throws ResourceKeyCreationException if creating the key failed.
      */
     public ResourceKey createKey(final Object value,
             final Map factoryKeys)

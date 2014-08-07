@@ -146,7 +146,6 @@ public class ComplexDescGetter extends DescGetter
      * @param testObjectName the name of the object
      * @param className the class name of the class to load
      * @param testMethodNames list of all methods to test
-     * @param log
      * @return filled description entry
      */
     public DescEntry createTestDesc(String testObjectName, String className, String[] testMethodNames, LogWriter log)

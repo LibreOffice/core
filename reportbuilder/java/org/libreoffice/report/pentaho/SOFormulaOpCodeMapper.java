@@ -132,7 +132,6 @@ public final class SOFormulaOpCodeMapper extends WeakBase
     /**
      * This method is a simple helper function to used in the static component initialisation functions as well as
      * in getSupportedServiceNames.
-     * @return
      */
     public static String[] getServiceNames()
     {

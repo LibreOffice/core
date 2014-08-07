@@ -117,7 +117,6 @@ public class ObjectInspectorModelImpl implements XObjectInspectorModel{
     /**
      * retrieves an index in a global property ordering, for a given property name
      * @param UIName the property whose global order index should be retrieved
-     * @throws com.sun.star.beans.UnknownPropertyException if the given property is unknown
      * @return the global order index of PropertyName
      */
     public int getPropertyOrderIndex(String UIName) {

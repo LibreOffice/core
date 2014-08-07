@@ -48,15 +48,7 @@ public class UCB  {
 
     /**
      * target name can be "", in which case the name stays lige the source name
-
-         * @param xContent
-         * @param aCommandName
-         * @param aArgument
-         * @return
-         * @throws com.sun.star.ucb.CommandAbortedException
-         * @throws com.sun.star.uno.Exception
      */
-
     public Object executeCommand(
         Object xContent,
         String aCommandName,

@@ -55,7 +55,7 @@ public class ResourceManager {
     /**
      * Constructor.
      *
-     *@param      String[]   This construtor requires the arguments:
+     *@param      args   This construtor requires the arguments:
      *                          -url=...             (optional)
      *                          -targetFolderURL=... (optional)
      *                          -newTitle=...        (optional)
@@ -64,7 +64,6 @@ public class ResourceManager {
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
-     *@exception  java.lang.Exception
      */
     public ResourceManager( String args[] ) throws java.lang.Exception {
 
@@ -83,9 +82,7 @@ public class ResourceManager {
      *  This method requires the main and the optional arguments to be set in order to work.
      *  See Constructor.
      *
-     *@return boolean  Returns true if resource successfully transferred, false otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
+     *@return true if resource successfully transferred, false otherwise
      */
     public boolean transferResource()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -99,12 +96,10 @@ public class ResourceManager {
     /**
      *  Copy, move or create a link for a resource.
      *
-     *@param  String   Source URL
-     *@param  String   Target folder URL
-     *@param  String   Transferring operation (copy, move, link)
-     *@return boolean  Returns true if resource successfully transferred, false otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
+     *@param  sourceURL   Source URL
+     *@param  targetFolderURL   Target folder URL
+     *@param  transOperation   Transferring operation (copy, move, link)
+     *@return true if resource successfully transferred, false otherwise
      */
     public boolean transferResource(
             String sourceURL, String targetFolderURL,
@@ -185,9 +180,6 @@ public class ResourceManager {
 
     /**
      * Parse arguments
-     *
-     *@param      String[]   Arguments
-     *@exception  java.lang.Exception
      */
     public void parseArguments( String[] args ) throws java.lang.Exception {
 
@@ -243,8 +235,6 @@ public class ResourceManager {
     /**
      *  Create a new connection with the specific args to a running office and
      *  copy, move or create links a resource.
-     *
-     *@param  String[]   Arguments
      */
     public static void main ( String args[] ) {
 

@@ -60,7 +60,6 @@ public class _XAccessibleContext {
     /**
      * Calls the method and stores the number of children. <p>
      * Has <b> OK </b> status if non-negative number rutrned.
-     * @return
      */
     public boolean _getAccessibleChildCount() {
         childCount = oObj.getAccessibleChildCount();
@@ -79,7 +78,6 @@ public class _XAccessibleContext {
      *  <li> <code> getAccessibleChildCount() </code> : to have a number of
      *     children </li>
      * </ul>
-     * @return
      */
     public boolean _getAccessibleChild() {
         boolean bOK = true;
@@ -131,7 +129,6 @@ public class _XAccessibleContext {
      * Just gets the parent. <p>
      *
      * Has <b> OK </b> status if parent is not null.
-     * @return
      */
     public boolean _getAccessibleParent() {
         // assume that the component is not ROOT
@@ -151,7 +148,6 @@ public class _XAccessibleContext {
      * <ul>
      *  <li> <code> getAccessibleParent() </code> : to have a parent </li>
      * </ul>
-     * @return
      */
     public boolean _getAccessibleIndexInParent() {
 
@@ -178,7 +174,6 @@ public class _XAccessibleContext {
      * Get the accessible role of component. <p>
      *
      * Has <b> OK </b> status if non-negative number rutrned.
-     * @return
      */
     public boolean _getAccessibleRole() {
         short role = oObj.getAccessibleRole();
@@ -190,7 +185,6 @@ public class _XAccessibleContext {
      * Get the accessible name of the component. <p>
      *
      * Has <b> OK </b> status if the name has non-zero length.
-     * @return
      */
     public boolean _getAccessibleName() {
         String name = oObj.getAccessibleName();
@@ -202,7 +196,6 @@ public class _XAccessibleContext {
      * Get the accessible description of the component. <p>
      *
      * Has <b> OK </b> status if the description has non-zero length.
-     * @return
      */
     public boolean _getAccessibleDescription() {
         String descr = oObj.getAccessibleDescription();
@@ -214,7 +207,6 @@ public class _XAccessibleContext {
      * Just gets the set. <p>
      *
      * Has <b> OK </b> status if the set is not null.
-     * @return
      */
     public boolean _getAccessibleRelationSet() {
         XAccessibleRelationSet set = oObj.getAccessibleRelationSet();
@@ -225,7 +217,6 @@ public class _XAccessibleContext {
      * Just gets the set. <p>
      *
      * Has <b> OK </b> status if the set is not null.
-     * @return
      */
     public boolean _getAccessibleStateSet() {
         XAccessibleStateSet set = oObj.getAccessibleStateSet();
@@ -238,7 +229,6 @@ public class _XAccessibleContext {
      * Has <b> OK </b> status if <code>Country</code> and
      * <code>Language</code> fields of locale structure
      * are not empty.
-     * @return
      */
     public boolean _getLocale() {
         Locale loc = null ;

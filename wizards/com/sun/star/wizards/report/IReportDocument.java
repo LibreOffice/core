@@ -43,7 +43,6 @@ public interface IReportDocument
 
     /**
      * Gives access to the DB Values
-     * @return
      */
     public com.sun.star.wizards.db.RecordParser getRecordParser();
 
@@ -51,7 +50,6 @@ public interface IReportDocument
      * Give access to the parent document
      * It is a document in the old Wizard
      * It is a Report Builder in the new Wizard
-     * @return
      */
     public com.sun.star.awt.XWindowPeer getWizardParent();
 
@@ -68,9 +66,6 @@ public interface IReportDocument
 
     /**
      * Is called after first step, set Tablename and the fields, which should occur in the Report.
-     * @param _aType
-     * @param TableName
-     * @param FieldNames
      */
     public void initializeFieldColumns(final int _aType, final String TableName, final String[] FieldNames);
 
@@ -89,7 +84,6 @@ public interface IReportDocument
 
     /**
      * Set new names for the titles
-     * @param sFieldTitles
      */
     public void setFieldTitles(final String[] sFieldTitles);
 
@@ -98,8 +92,6 @@ public interface IReportDocument
      * It is possible to give all element names new names which are used as
      * element title of a given element name.
      * This is only used as a preview
-     * @param FieldName
-     * @param TitleName
      */
     public void liveupdate_changeUserFieldContent(final String FieldName, final String TitleName);
 
@@ -109,27 +101,17 @@ public interface IReportDocument
     // Document should not hold the grouping information!
     /**
      * Called by press ('greater then') add a group to the group list
-     * @param GroupNames
-     * @param CurGroupTitle
-     * @param GroupFieldVector
-     * @param ReportPath
-     * @param iSelCount
-     * @return
      */
     public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount);
 
     public void refreshGroupFields(String[] _sNewNames);
     /**
      * Called by press ('less then') Removes an already set Groupname out of the list
-     * @param NewSelGroupNames
-     * @param CurGroupTitle
-     * @param GroupFieldVector
      */
     public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, java.util.ArrayList<String> GroupFieldVector);
 
     /**
      * set the list how to group
-     * @param aGroupList
      */
     public void setGrouping(String[] aGroupList);
 
@@ -137,7 +119,6 @@ public interface IReportDocument
 
     /**
      * Set the list how to sort
-     * @param aSort
      */
     public void setSorting(String[][] aSort);
 
@@ -156,13 +137,11 @@ public interface IReportDocument
 
     /**
      * Called if a new Layout is selected
-     * @param LayoutTemplatePath
      */
     public void liveupdate_changeLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/);
 
     /**
      * Called if a new Template is selected
-     * @param ContentTemplatePath
      */
     public void liveupdate_changeContentTemplate(String ContentTemplatePath);
 
@@ -177,14 +156,11 @@ public interface IReportDocument
     /**
      * Set the Title into the document from the 'Create Report Page'
      * BUG: The Title is empty after create Report.
-     * @param _sTitleName
      */
     public void liveupdate_updateReportTitle(String _sTitleName);
 
     /**
      * Store the document by the given name
-     * @param Name
-     * @param OpenMode
      */
     public void store(String Name, int OpenMode) throws com.sun.star.uno.Exception;
 
@@ -199,9 +175,6 @@ public interface IReportDocument
 
     /**
      * Create the final Report document
-     * @param Name
-     * @param _bAsTemplate
-     * @param _bOpenInDesign
      */
     public void createAndOpenReportDocument(
         final String Name,
@@ -227,13 +200,11 @@ public interface IReportDocument
 
     /**
      * Returns a string list of layouts.
-     * @return
      */
     public String[][] getDataLayout();
 
     /**
      * Returns a string list of header layouts
-     * @return
      */
     public String[][] getHeaderLayout();
 
@@ -243,7 +214,6 @@ public interface IReportDocument
 
     /**
      * check internal invariants
-     * @throws java.lang.Exception
      */
     public void checkInvariants() throws java.lang.Exception;
 }

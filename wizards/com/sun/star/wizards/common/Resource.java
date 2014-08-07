@@ -34,9 +34,6 @@ public class Resource
     XIndexAccess xStringListIndexAccess;
 
     /** Creates a new instance of Resource
-     * @param _xMSF
-     * @param _Unit
-     * @param _Module
      */
     public Resource(XMultiServiceFactory _xMSF, String _Unit /* unused */, String _Module)
     {

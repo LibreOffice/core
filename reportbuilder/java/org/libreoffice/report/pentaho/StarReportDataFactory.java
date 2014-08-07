@@ -43,10 +43,6 @@ public class StarReportDataFactory implements ReportDataFactory, Cloneable
      * Parameterset given here may contain more data than actually needed.
      * <p/>
      * The dataset may change between two calls, do not assume anything!
-     *
-     * @param query
-     * @param parameters
-     * @return
      */
     public ReportData queryData(final String query, final DataSet parameters)
             throws ReportDataFactoryException
@@ -94,8 +90,6 @@ public class StarReportDataFactory implements ReportDataFactory, Cloneable
      * Derives a freshly initialized report data factory, which is independent of
      * the original data factory. Opening or Closing one data factory must not
      * affect the other factories.
-     *
-     * @return
      */
     public ReportDataFactory derive()
     {

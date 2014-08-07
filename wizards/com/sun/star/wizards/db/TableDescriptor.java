@@ -75,9 +75,6 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private String sColumnAlreadyExistsMessage = PropertyNames.EMPTY_STRING;
     private XWindow xWindow;
 
-    /**
-     * @param xMSF
-     */
     public TableDescriptor(XMultiServiceFactory xMSF, XWindow _xWindow, String _sColumnAlreadyExistsMessage)
     {
         super(xMSF);
@@ -228,10 +225,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
 
     /**
      * creates the table under the passed name
-     * @param _catalogname
-     * @param _schemaname
      * @param _tablename is made unique if necessary
-     * @param _fieldnames
      * @return true or false to indicate successful creation or not
      */
     public boolean createTable(String _catalogname, String _schemaname, String _tablename, String[] _fieldnames)
@@ -799,10 +793,6 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
     }
 
-    /**
-     * @param _scomposedtablename
-     * @return
-     */
     public boolean appendTableNameToFilter(String _scomposedtablename)
     {
         boolean bhastoinsert = true;

@@ -168,7 +168,6 @@ public class FormLayer
      *      the height of the control which is not the label control
      * @return
      *      the model of the control which is not the label control
-     * @throws java.lang.Exception
      */
     public XPropertySet createLabeledControl( String _formComponentServiceName, String _label, int _xPos,
             int _yPos, int _height )

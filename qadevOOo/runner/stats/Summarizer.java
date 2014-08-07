@@ -32,7 +32,6 @@ public class Summarizer
     /**
      *
      * gets the state for a SuperEntry according to its subentries
-     * @param entry
      */
     public void summarizeUp(DescEntry entry)
     {

@@ -103,10 +103,6 @@ public class UCB
 
     /**
      * @deprecated
-     * @param sourceDir
-     * @param filename
-     * @param targetDir
-     * @throws Exception
      */
     public void copy(String sourceDir, String filename, String targetDir) throws Exception
     {
@@ -115,11 +111,6 @@ public class UCB
 
     /**
      * target name can be PropertyNames.EMPTY_STRING, in which case the name stays lige the source name
-     * @param sourceDir
-     * @param sourceFilename
-     * @param targetDir
-     * @param targetFilename
-     * @return
      */
     public GlobalTransferCommandArgument copyArg(String sourceDir, String sourceFilename, String targetDir, String targetFilename)
     {

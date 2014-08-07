@@ -73,7 +73,6 @@ public class HTMLResult
 
     /**
      * create the HTML header
-     * @param _sTitle
      */
     public void header(String _sTitle)
         {

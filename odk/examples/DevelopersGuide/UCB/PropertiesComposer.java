@@ -55,7 +55,7 @@ public class PropertiesComposer {
     /**
      * Constructor.
      *
-     *@param      String[]   This construtor requires the arguments:
+     *@param      args   This construtor requires the arguments:
      *                          -url=...        (optional)
      *                          -propNames=...  (optional)
      *                          -propValues=... (optional)
@@ -63,7 +63,6 @@ public class PropertiesComposer {
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
-     *@exception  java.lang.Exception
      */
     public PropertiesComposer( String args[] ) throws java.lang.Exception {
 
@@ -84,8 +83,6 @@ public class PropertiesComposer {
      *
      *@return Object[]  Returns null or instance object of com.sun.star.uno.Any
      *                  if values successfully seted, properties otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
      */
     public Object[] setProperties()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -97,12 +94,8 @@ public class PropertiesComposer {
     /**
      *  Set values of the properties.
      *
-     *@param  properties
-     *@param  propertiesValue
      *@return Object[]  Returns null or instance object of com.sun.star.uno.Any
      *                  if values successfully seted, properties otherwise
-     *@exception  com.sun.star.ucb.CommandAbortedException
-     *@exception  com.sun.star.uno.Exception
      */
     public Object[] setProperties( ArrayList<String> properties, ArrayList<String> propertiesValues )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -185,9 +178,6 @@ public class PropertiesComposer {
 
     /**
      * Parse arguments
-     *
-     *@param      String[]   Arguments
-     *@exception  java.lang.Exception
      */
     public void parseArguments( String[] args ) throws java.lang.Exception {
 
