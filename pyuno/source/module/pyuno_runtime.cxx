@@ -481,7 +481,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     {
         PyRef excClass = getClass( a.getValueType().getTypeName(), *this );
         PyRef value = PyRef( PyUNO_new_UNCHECKED (a, getImpl()->cargo->xInvocation), SAL_NO_ACQUIRE);
-        PyRef argsTuple( PyTuple_New( 1 ) , SAL_NO_ACQUIRE );
+        PyRef argsTuple( PyTuple_New( 1 ) , SAL_NO_ACQUIRE, NOT_NULL );
         PyTuple_SetItem( argsTuple.get() , 0 , value.getAcquired() );
         PyRef ret( PyObject_CallObject( excClass.get() , argsTuple.get() ), SAL_NO_ACQUIRE );
         if( ! ret.is() )
