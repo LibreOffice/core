@@ -38,7 +38,6 @@ public class FileUpdater {
             count = -1;
             for (String s = reader.readLine(); s != null; s = reader.readLine()) { //</oor:node>
                 count = count + 1;
-                s.trim();
                 xmlArray[count] = s;
             }
             reader.close();
@@ -107,7 +106,6 @@ public class FileUpdater {
             count = -1;
             for (String s = reader.readLine(); s != null; s = reader.readLine()) { //</oor:node>
                 count = count + 1;
-                s.trim();
                 xmlArray[count] = s;
             }
             reader.close();
@@ -176,7 +174,6 @@ public class FileUpdater {
             count = -1;
              for (String s = reader.readLine(); s != null; s = reader.readLine()) {
                 count = count + 1;
-                s.trim();
                 xmlArray[count] = s;
             }
              reader.close();

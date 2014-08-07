@@ -296,7 +296,6 @@ public class IniFile implements Enumeration<String>
             int nEqual = sLine.indexOf("=");
             if (nEqual >= 0)
             {
-                sLine.substring(0, nEqual).trim();
                 String sValue = sLine.substring(nEqual + 1).trim();
                 return sValue;
             }

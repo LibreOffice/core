@@ -186,13 +186,11 @@ public class InstUtil {
         BufferedReader reader = new BufferedReader(new FileReader(logFile));
 
         for (String s = reader.readLine(); s != null; s = reader.readLine()) {
-        s.trim();
         if( s.indexOf( "IDE Install" ) != -1 ) {
             int pathStart = s.indexOf( "=" ) + 2;
             installPath = s.substring( pathStart, s.length() );
             int pathEnd = installPath.indexOf( ";");
             installPath = installPath.substring( 0, pathEnd ) +File.separator;
-            installPath.trim();
             break;
         }
         }
@@ -214,19 +212,16 @@ public class InstUtil {
         String version = "";
 
         for (String s = reader.readLine(); s != null; s = reader.readLine()) {
-        s.trim();
         if( s.indexOf( "jEdit home directory is" ) != -1 ) {
             int pathStart = new String( "[message] jEdit: jEdit home directory is " ).length();
             installPath = s.substring( pathStart, s.length() ) +File.separator;
             System.out.println( "installPath 1" + installPath );
-            installPath.trim();
             jeditDetails[0] = installPath;
         }
         if( s.indexOf( "jEdit: jEdit version" ) != -1 ) {
             int versionStart = s.indexOf( "version" ) + 8;
             System.out.println( "versionStart is: " + versionStart );
             version = s.substring( versionStart, s.length() );
-            version.trim();
             System.out.println( "jEdit version is: " + version );
             jeditDetails[1] = version;
         }
@@ -278,7 +273,6 @@ public class InstUtil {
         Properties results = new Properties();
 
         for (String s = reader.readLine(); s != null; s = reader.readLine()) {
-            s.trim();
             if (s.length() == 0)
                 continue;
             if (s.charAt(0) == '[') {
