@@ -325,7 +325,7 @@ void LocaleNode::incErrorInt( const char* pStr, int nVal ) const
 void LocaleNode::incErrorStr( const char* pStr, const OUString& rVal ) const
 {
     ++nError;
-    fprintf( stderr, prepareErrorFormat( pStr, ": %s"), OSTR( rVal));
+    fprintf( stderr, pStr, OSTR( rVal));
 }
 
 void LocaleNode::incErrorStrStr( const char* pStr, const OUString& rVal1, const OUString& rVal2 ) const
@@ -347,7 +347,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     {
         aLanguage = languageNode->getChildAt(0)->getValue();
         if (!(aLanguage.getLength() == 2 || aLanguage.getLength() == 3))
-            incErrorStr( "langID not 2-3 characters", aLanguage);
+            incErrorStr( "Error: langID '%s' not 2-3 characters", aLanguage);
         of.writeParameter("langID", aLanguage);
         of.writeParameter("langDefaultName", languageNode->getChildAt(1)->getValue());
     }
@@ -357,7 +357,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     {
         OUString aCountry( countryNode->getChildAt(0)->getValue());
         if (!(aCountry.isEmpty() || aCountry.getLength() == 2))
-            incErrorStr( "countryID not empty or more than 2 characters", aCountry);
+            incErrorStr( "Error: countryID '%s' not empty or more than 2 characters", aCountry);
         of.writeParameter("countryID", aCountry);
         of.writeParameter("countryDefaultName", countryNode->getChildAt(1)->getValue());
     }
@@ -368,7 +368,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
         // If given Variant must be at least ll-Ssss and language must be 'qlt'
         OUString aVariant( variantNode->getValue());
         if (!(aVariant.isEmpty() || (aVariant.getLength() >= 7 && aVariant.indexOf('-') >= 2)))
-            incErrorStr( "invalid Variant", aVariant);
+            incErrorStr( "Error: invalid Variant '%s'", aVariant);
         if (!(aVariant.isEmpty() || aLanguage == "qlt"))
             incErrorStrStr( "Error: Variant '%s' given but Language '%s' is not 'qlt'", aVariant, aLanguage);
         of.writeParameter("Variant", aVariant);
@@ -688,7 +688,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         }
         if ( currNode->getName() != "FormatElement" )
         {
-            incErrorStr( "Undefined element in LC_FORMAT", currNode->getName());
+            incErrorStr( "Error: Undefined element '%s' in LC_FORMAT", currNode->getName());
             --formatCount;
             continue;   // for
         }
@@ -702,7 +702,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 
         str = currNodeAttr.getValueByName("msgid");
         if (!aMsgIdSet.insert( str).second)
-            incErrorStr( "Duplicated msgid=\"%s\" in FormatElement.", str);
+            incErrorStr( "Error: Duplicated msgid=\"%s\" in FormatElement.", str);
         of.writeParameter("FormatKey", str, formatCount);
 
         str = currNodeAttr.getValueByName("default");
@@ -1194,7 +1194,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         OUString aPattern( aPatternBuf.makeStringAndClear());
         if (((nDetected & 7) != 7) || aPattern.getLength() < 5)
         {
-            incErrorStr( "failed to extract full date acceptance pattern", aPattern);
+            incErrorStr( "Error: failed to extract full date acceptance pattern: %s", aPattern);
             fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
                     OSTR( OUString( cDateSep)), OSTR( sTheDateEditFormat),
                     (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
@@ -1213,7 +1213,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             OUString aPattern2( aPatternBuf2.makeStringAndClear());
             if (aPattern2.getLength() < 5)
             {
-                incErrorStr( "failed to extract  2nd date acceptance pattern", aPattern2);
+                incErrorStr( "Error: failed to extract 2nd date acceptance pattern: %s", aPattern2);
                 fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
                         OSTR( OUString( cDateSep2)), OSTR( sTheDateEditFormat),
                         (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
@@ -1258,7 +1258,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             {
                 if (aIt != aComp && *aIt == *aComp)
                 {
-                    incErrorStr( "Duplicated DateAcceptancePattern", *aComp);
+                    incErrorStr( "Error: Duplicated DateAcceptancePattern: %s", *aComp);
                     aComp = theDateAcceptancePatterns.erase( aComp);
                 }
                 else
@@ -1787,7 +1787,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                     break;  // for
             }
             if (j >= nbOfDays[i])
-                incErrorStr( "<StartDayOfWeek> <DayID> must be one of the <DaysOfWeek>, but is", str);
+                incErrorStr( "Error: <StartDayOfWeek> <DayID> must be one of the <DaysOfWeek>, but is: %s", str);
         }
         of.writeParameter("startDayOfWeek", str, i);
         ++nChild;
