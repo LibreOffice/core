@@ -20,7 +20,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
 
-#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <resourcemodel/WW8ResourceModel.hxx>

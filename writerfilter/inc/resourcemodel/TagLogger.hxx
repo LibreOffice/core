@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <string>
-#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 #include <libxml/xmlwriter.h>
 

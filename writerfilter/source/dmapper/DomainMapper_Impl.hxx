@@ -31,10 +31,10 @@
 #include <stack>
 #include <queue>
 #include <boost/optional.hpp>
+#include <boost/unordered_map.hpp>
 
-#ifndef INCLUDED_RESOURCESIDS
 #include <ooxml/resourceids.hxx>
-#endif
+
 #include <dmapper/DomainMapper.hxx>
 #include "DomainMapperTableManager.hxx"
 #include "PropertyMap.hxx"
