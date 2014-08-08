@@ -68,15 +68,6 @@ const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
-//const char TEMPLATEBAR_SAVE[] = "template_save";
-//const char TEMPLATEBAR_OPEN[] = "open";
-//const char TEMPLATEBAR_EDIT[] = "edit";
-//const char TEMPLATEBAR_PROPERTIES[] = "properties";
-//const char TEMPLATEBAR_DEFAULT[] = "default";
-//const char TEMPLATEBAR_MOVE[] = "move";
-//const char TEMPLATEBAR_EXPORT[] = "export";
-//const char TEMPLATEBAR_DELETE[] = "template_delete";
-
 const int nButtonsFontSize = 15;
 const Color aButtonsBackground(114, 168, 84); // TDF green
 const Color aButtonsText(COL_WHITE);
@@ -120,9 +111,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
     get(mpHelpButton, "help");
     get(mpExtensionsButton, "extensions");
-
-    //get(mpViewBar, "action_view");
-    //get(mpTemplateBar, "action_templates");
 
     //Containers are invisible to cursor traversal
     //So on pressing "right" when in Help the
@@ -265,7 +253,7 @@ void BackingWindow::initControls()
     mpAllRecentThumbnails->Reload();
     mpAllRecentThumbnails->ShowTooltips( true );
 
-    //initialize Template views
+    //initialize Template view
     mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
     mpLocalView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
                         TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
@@ -277,24 +265,11 @@ void BackingWindow::initControls()
 
     mpCurrentView = mpLocalView;
 
-    //mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
-    //mpViewBar->SetItemBits(mpViewBar->GetItemId("repository"), TIB_DROPDOWNONLY);
-    //mpViewBar->SetClickHdl(LINK(this,BackingWindow,TBXViewHdl));
-    //mpViewBar->SetDropdownClickHdl(LINK(this,BackingWindow,TBXDropdownHdl));
-    //mpViewBar->Hide();
-    //mpViewBar->HideItem("import");
-
-    //mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
-    //mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), TIB_DROPDOWNONLY);
-    //mpTemplateBar->SetClickHdl( LINK( this, BackingWindow,TBXTemplateHdl ) );
-    //mpTemplateBar->SetDoubleClickHdl( LINK(this, BackingWindow, OpenTemplateHdl) );
-    //mpTemplateBar->SetDropdownClickHdl(LINK(this, BackingWindow,TBXDropdownHdl));
+    mpTemplateButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
 
     //set handlers
     mpLocalView->setOpenRegionHdl(LINK(this, BackingWindow, OpenRegionHdl));
     mpLocalView->setOpenTemplateHdl(LINK(this,BackingWindow,OpenTemplateHdl));
-
-    /*FIXME: Add other things for Local View*/
 
     setupButton( mpOpenButton );
     setupButton( mpTemplateButton );
@@ -347,7 +322,6 @@ void BackingWindow::setupButton( PushButton* pButton )
 
     // color that fits the theme
     pButton->SetControlForeground(aButtonsText);
-
     pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
 }
 
@@ -358,12 +332,11 @@ void BackingWindow::setupButton( MenuButton* pButton )
     pButton->SetControlFont(aFont);
     pButton->SetControlForeground(aButtonsText);
 
-    //Menubutton implementation
     PopupMenu* pMenu = mpTemplateButton->GetPopupMenu();
     pMenu->SetMenuFlags(
              pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
 
-    //pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
+    pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
     pButton->SetSelectHdl( LINK( this, BackingWindow, MenuSelectHdl ) );
 }
 
@@ -570,18 +543,9 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     }
     else if( pButton == mpTemplateButton )
     {
-/*        Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
-
-        Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
-        PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = "Referer";
-        pArg[0].Value <<= OUString("private:user");
-
-        dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );
-*/
         mpAllRecentThumbnails->Hide();
+        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
         mpLocalView->Show();
-        //mpViewBar->Hide();
     }
     return 0;
 }
@@ -590,11 +554,7 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
 {
     OString sId = pButton->GetCurItemIdent();
 
-    if( sId == "filter_none" )
-    {
-        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
-    }
-    else if( sId == "filter_writer" )
+    if( sId == "filter_writer" )
     {
         mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_WRITER));
     }
@@ -623,7 +583,6 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
 
     }
 
-
     mpAllRecentThumbnails->Hide();
     mpLocalView->Show();
 
@@ -635,13 +594,10 @@ IMPL_LINK_NOARG( BackingWindow, OpenRegionHdl)
 {
     maSelFolders.clear();
     maSelTemplates.clear();
-    //mpTemplateBar->Hide();
-    //mpViewBar->Hide();
 
     return 0;
 }
 
-//FIXME: Cleanup the code
 IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 {
     if (!mbIsSaveMode)
