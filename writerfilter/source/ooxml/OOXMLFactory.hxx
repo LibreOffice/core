@@ -64,19 +64,6 @@ struct AttributeInfo
     Id m_nRef;
 };
 
-struct CreateElement
-{
-    ResourceType_t m_nResource;
-    Id m_nId;
-
-    CreateElement(ResourceType_t nResource, Id nId);
-    CreateElement();
-};
-
-typedef boost::unordered_map<Token_t, CreateElement> CreateElementMap;
-typedef boost::shared_ptr<CreateElementMap> CreateElementMapPointer;
-typedef boost::unordered_map<Id, CreateElementMapPointer> CreateElementsMap;
-
 class OOXMLFactory_ns {
 public:
     typedef boost::shared_ptr<OOXMLFactory_ns> Pointer_t;
@@ -86,19 +73,14 @@ public:
     virtual void endAction(OOXMLFastContextHandler * pHandler);
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
 
-    CreateElementMapPointer getCreateElementMap(Id nId);
-
 protected:
     virtual ~OOXMLFactory_ns();
-
-    CreateElementsMap m_CreateElementsMap;
-
-    virtual CreateElementMapPointer createCreateElementMap(Id nId) = 0;
 
 public:
     virtual bool getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue) = 0;
     virtual Id getResourceId(Id nDefine, sal_Int32 nToken) = 0;
     virtual const AttributeInfo* getAttributeInfoArray(Id nId) = 0;
+    virtual bool getElementId(Id nDefine, Id nId, ResourceType_t& rOutResource, Id& rOutElement) = 0;
 };
 
 class OOXMLFactory

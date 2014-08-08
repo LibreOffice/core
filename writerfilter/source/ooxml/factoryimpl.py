@@ -29,21 +29,20 @@ def createFastChildContextFromFactory(model):
 
     if (pFactory.get() != NULL)
     {
-        CreateElementMapPointer pMap = pFactory->getCreateElementMap(nDefine);
-
-        if (pMap.get() != NULL)
+        ResourceType_t nResource;
+        Id nElementId;
+        if (pFactory->getElementId(nDefine, Element, nResource, nElementId))
         {
             Id nId = pFactory->getResourceId(nDefine, Element);
-            CreateElement aCreateElement = (*pMap)[Element];
 
-            switch (aCreateElement.m_nResource)
+            switch (nResource)
             {""")
     resources = ["List", "Integer", "Hex", "String", "UniversalMeasure", "Boolean"]
     for resource in [r.getAttribute("resource") for r in model.getElementsByTagName("resource")]:
         if resource not in resources:
             resources.append(resource)
             print("""            case RT_%s:
-                aResult.set(OOXMLFastHelper<OOXMLFastContextHandler%s>::createAndSetParentAndDefine(pHandler, Element, nId, aCreateElement.m_nId));
+                aResult.set(OOXMLFastHelper<OOXMLFastContextHandler%s>::createAndSetParentAndDefine(pHandler, Element, nId, nElementId));
                 break;""" % (resource, resource))
     print("""            case RT_Any:
                 aResult.set(createFastChildContextFromStart(pHandler, Element));

@@ -310,28 +310,27 @@ def idForRef(nsNode, refNode):
 def factoryCreateElementMapInner(files, nsNode, defineNode, resourceNamespaceNode=None):
     if not resourceNamespaceNode:
         resourceNamespaceNode = nsNode
-    ret = []
+    ret = {}
     for refNode in defineNode.getElementsByTagName("ref"):
         parent = refNode.parentNode
         if parent.localName in ("element", "attribute"):
             continue
         refName = refNode.getAttribute("name")
 
-        block = []
+        block = {}
         for define in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "define") if i.getAttribute("name") == refName]:
             block = factoryCreateElementMapInner(files, nsNode, define)
 
         if len(block) == 0:
-            block1 = []
+            block1 = {}
             for namespaceNode in getChildrenByName(nsNode.parentNode, "namespace"):
                 for define in [i for i in getChildrenByName(getChildByName(namespaceNode, "grammar"), "define") if i.getAttribute("name") == refName]:
-                    block1.extend(factoryCreateElementMapInner(files, namespaceNode, define, nsNode))
+                    block1.update(factoryCreateElementMapInner(files, namespaceNode, define, nsNode))
         else:
             block1 = block
 
         if len(block1):
-            ret.append("         /* ref: %s*/" % refName)
-            ret.extend(block1)
+            ret.update(block1)
 
     for elementNode in defineNode.getElementsByTagName("element"):
         resource = ""
@@ -341,7 +340,7 @@ def factoryCreateElementMapInner(files, nsNode, defineNode, resourceNamespaceNod
             if len(resource):
                 break
         if len(resource):
-            ret.append("        (*pMap)[%s] = CreateElement(RT_%s, %s);" % (fastToken(elementNode), resource, idForRef(nsNode, getChildByName(elementNode, "ref"))))
+            ret[fastToken(elementNode)] = "        case %s: rOutResource = RT_%s; rOutElement = %s; break;" % (fastToken(elementNode), resource, idForRef(nsNode, getChildByName(elementNode, "ref")))
 
     return ret
 
@@ -354,31 +353,44 @@ def factoryCreateElementMapFromStart(files, nsNode):
             block = factoryCreateElementMapInner(files, nsNode, defineNode)
         print("        /* start: %s*/" % startName)
         if block:
-            print("\n".join(block))
-    print("""        break;
-    }
-
-    return pMap;
-}""")
-    print()
+            for k in block.keys():
+                print(block[k])
 
 
 def factoryCreateElementMap(files, nsNode):
-    print("""CreateElementMapPointer OOXMLFactory_%s::createCreateElementMap(Id nId)
+    print("""bool OOXMLFactory_%s::getElementId(Id nDefine, Id nId, ResourceType_t& rOutResource, Id& rOutElement)
 {
-    CreateElementMapPointer pMap(new CreateElementMap());
+    (void) rOutResource;
+    (void) rOutElement;
 
-    switch (nId)
+    switch (nDefine)
     {""" % nsToLabel(nsNode))
 
     for defineNode in getChildrenByName(getChildByName(nsNode, "grammar"), "define"):
-        inner = "\n".join(factoryCreateElementMapInner(files, nsNode, defineNode))
+        inner = factoryCreateElementMapInner(files, nsNode, defineNode)
         if len(inner):
             print("    case %s:" % idForDefine(nsNode, defineNode))
-            print(inner)
+            print("        switch (nId)")
+            print("        {")
+            for k in inner.keys():
+                print(inner[k])
+            print("        default: return false;")
+            print("        }")
+            print("        return true;")
             print("        break;")
     print("    default:")
+    print("        switch (nId)")
+    print("        {")
     factoryCreateElementMapFromStart(files, nsNode)
+    print("""        default: return false;
+        }
+        return true;
+        break;
+    }
+
+    return false;
+}
+""")
 
 
 # factoryActions

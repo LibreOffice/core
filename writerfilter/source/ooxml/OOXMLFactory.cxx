@@ -30,28 +30,10 @@ namespace ooxml {
 
 using namespace com::sun::star;
 
-CreateElement::CreateElement()
-:m_nResource(RT_NoResource), m_nId(0)
-{
-}
-
-CreateElement::CreateElement(ResourceType_t nResource, Id nId)
-: m_nResource(nResource), m_nId(nId)
-{
-}
-
 // class OOXMLFactory_ns
 
 OOXMLFactory_ns::~OOXMLFactory_ns()
 {
-}
-
-CreateElementMapPointer OOXMLFactory_ns::getCreateElementMap(Id nId)
-{
-    if (m_CreateElementsMap.find(nId) == m_CreateElementsMap.end())
-        m_CreateElementsMap[nId] = createCreateElementMap(nId);
-
-    return m_CreateElementsMap[nId];
 }
 
 // class OOXMLFactory
