@@ -331,8 +331,9 @@ void BackingWindow::setupButton( PushButton* pButton )
 
 void BackingWindow::setupButton( MenuButton* pButton )
 {
-    Font aFont(pButton->GetControlFont());
-    aFont.SetHeight(nButtonsFontSize);
+    Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
+    aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
+    aFont.SetWeight(WEIGHT_BOLD);
     pButton->SetControlFont(aFont);
     pButton->SetControlForeground(aButtonsText);
 
