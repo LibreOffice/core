@@ -31,28 +31,28 @@ public class BlindtextCreator
         String BlindTextString = PropertyNames.EMPTY_STRING;
         if (bIsGroupTable)
         {
-            return getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
+            return getBlindTextString(FieldTitle, FieldWidth);
         }
         int MaxFieldCount = getMaxFieldCount(bIsCurLandscape);
         if (_RecordFieldNames.length <= 2 * MaxFieldCount)
         {
             if (_RecordFieldNames.length <= MaxFieldCount)
             {
-                BlindTextString = getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
+                BlindTextString = getBlindTextString(FieldTitle, FieldWidth);
             }
             else
             {
-                BlindTextString = getBlindTextString(FieldTitle, FieldWidth, (int) (0.5 * FieldWidth));
+                BlindTextString = getBlindTextString(FieldTitle, (int) (0.5 * FieldWidth));
             }
         }
         else
         {
-            BlindTextString = getBlindTextString(FieldTitle, FieldWidth, (int) 1.1 * FieldTitle.length());
+            BlindTextString = getBlindTextString(FieldTitle, (int) 1.1 * FieldTitle.length());
         }
         return BlindTextString;
     }
 
-    public static String getBlindTextString(String FieldTitle, int FieldWidth, int MaxWidth)
+    public static String getBlindTextString(String FieldTitle, int MaxWidth)
     {
         String[] BlindTextArray = JavaTools.ArrayoutofString(BlindText, PropertyNames.SPACE);
         String PartBlindText = BlindTextArray[0];

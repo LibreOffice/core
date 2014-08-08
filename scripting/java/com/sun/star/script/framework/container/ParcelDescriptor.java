@@ -279,7 +279,7 @@ public class ParcelDescriptor {
                     }
                 }
             }
-            ScriptEntry entry = new ScriptEntry(language, languagename, logicalname, "",langProps, description);
+            ScriptEntry entry = new ScriptEntry(language, languagename, "", langProps,description);
             scripts.add(entry);
         }
         return scripts.toArray(new ScriptEntry[scripts.size()]);

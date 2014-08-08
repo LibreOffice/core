@@ -60,7 +60,6 @@ public class ScriptPanel extends JPanel {
             catch (CloneNotSupportedException cnse) {
                 entry = new ScriptEntry(entries[i].getLanguage(),
                                         entries[i].getLanguageName(),
-                                        entries[i].getLogicalName(),
                                         entries[i].getLocation());
             }
 
@@ -91,7 +90,7 @@ public class ScriptPanel extends JPanel {
 
         table.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent evt) {
-                tableFocusLost(evt);
+                tableFocusLost();
             }
         });
 
@@ -106,7 +105,7 @@ public class ScriptPanel extends JPanel {
         add(pane, BorderLayout.CENTER);
     }
 
-    private void tableFocusLost(FocusEvent evt) {
+    private void tableFocusLost() {
         TableCellEditor editor = table.getCellEditor();
         if (editor != null) {
             Object value = editor.getCellEditorValue();

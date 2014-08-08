@@ -230,7 +230,7 @@ public class ParcelBrowseNode extends PropertySet
                     String languageName = newName + "." + provider.getScriptEditor().getExtension();
                     String language = container.getLanguage();
 
-                    ScriptEntry entry = new ScriptEntry( language, languageName, languageName, "", new HashMap<String,String>() );
+                    ScriptEntry entry = new ScriptEntry( language, languageName, "", new HashMap<String,String>() );
 
                     Parcel parcel = (Parcel)container.getByName( getName() );
                     ScriptMetaData data = new ScriptMetaData( parcel, entry, source );

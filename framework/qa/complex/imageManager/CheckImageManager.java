@@ -75,7 +75,7 @@ public class CheckImageManager  {
             fail("Exception. " + e.getMessage());
         }
         XImageManager xImageManager = UnoRuntime.queryInterface(XImageManager.class, xManager.getImageManager());
-        performChecks(xImageManager, "ModuleUIConfig", xManager);
+        performChecks(xImageManager, "ModuleUIConfig");
     }
 
     public void checkImageManager() {
@@ -89,10 +89,10 @@ public class CheckImageManager  {
         }
 
         XImageManager xImageManager = UnoRuntime.queryInterface(XImageManager.class, xManager.getImageManager());
-        performChecks(xImageManager, "UIConfig", xManager);
+        performChecks(xImageManager, "UIConfig");
     }
 
-    private void performChecks(XImageManager xImageManager, String testObjectName, XUIConfigurationManager xManager) {
+    private void performChecks(XImageManager xImageManager, String testObjectName) {
         util.dbg.printInterfaces(xImageManager);
 
         OXUIConfigurationListenerImpl configListener = new OXUIConfigurationListenerImpl();

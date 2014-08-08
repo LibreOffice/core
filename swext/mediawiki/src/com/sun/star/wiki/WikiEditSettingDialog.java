@@ -188,7 +188,7 @@ public class WikiEditSettingDialog extends WikiDialog
         }
     }
 
-    public void DoLogin( XDialog xDialog )
+    public void DoLogin()
     {
         String sRedirectURL = "";
         String sURL = "";
@@ -372,7 +372,7 @@ public class WikiEditSettingDialog extends WikiDialog
                             Thread.yield();
                         } catch( java.lang.Exception e ){}
 
-                        DoLogin( xDialogForThread );
+                        DoLogin();
                         aThis.EnableControls( true );
                         aThis.SetThrobberActive( false );
                         aThis.SetThrobberVisible( false );
@@ -390,7 +390,7 @@ public class WikiEditSettingDialog extends WikiDialog
             {
                 try
                 {
-                    DoLogin( xDialog );
+                    DoLogin();
                 } catch( java.lang.Exception e )
                 {}
                 finally

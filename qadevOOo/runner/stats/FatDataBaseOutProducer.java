@@ -90,11 +90,6 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
         return true;
     }
 
-    // check the database afterwards
-    protected boolean checkDataBase(LogWriter log) {
-        return true;
-    }
-
     protected boolean insertEntry(LogWriter log) {
 
         executeSQLCommand("SELECT id AS \"entry.id\", name AS \"entry.name\" FROM entry WHERE name = \"$EntryLongName\";", true);

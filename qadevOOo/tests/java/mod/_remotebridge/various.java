@@ -135,8 +135,7 @@ public class various extends TestCase {
         * Creates object which can call <code>accept</code> method
         * of the Acceptor object specified.
         */
-        public AcceptorThread(XAcceptor acc, XInstanceProvider xInstProv,
-                XBridgeFactory xBrdgFctr) {
+        public AcceptorThread(XAcceptor acc) {
             this.acc = acc ;
         }
 
@@ -212,7 +211,7 @@ public class various extends TestCase {
             // create own implementation of XInstanceProvider
             XInstanceProvider xInstProv = new MyInstanceProvider(xMSF);
             // create waiting acceptor thread
-            accThread = new AcceptorThread(xAcctr, xInstProv, xBrdgFctr);
+            accThread = new AcceptorThread(xAcctr);
             accThread.start();
             // let the thread sleep
             try {

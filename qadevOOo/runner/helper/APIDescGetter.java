@@ -259,7 +259,7 @@ public class APIDescGetter extends DescGetter
     }
 
     protected static DescEntry[] getSubEntries(BufferedReader cvsFile,
-            DescEntry parent, boolean debug)
+            DescEntry parent)
     {
         String line = "";
         String old_ifc_name = "";
@@ -621,7 +621,7 @@ public class APIDescGetter extends DescGetter
                     theEntry.entryName + "'");
         }
 
-        DescEntry[] subEntries = getSubEntries(csvFile, theEntry, debug);
+        DescEntry[] subEntries = getSubEntries(csvFile, theEntry);
 
         theEntry.SubEntryCount = subEntries.length;
         theEntry.SubEntries = subEntries;
@@ -708,7 +708,7 @@ public class APIDescGetter extends DescGetter
             return setErrorDescription(aEntry, "couldn't find file '" + aUrl + "'");
         }
 
-        DescEntry[] subEntries = getSubEntries(csvFile, aEntry, debug);
+        DescEntry[] subEntries = getSubEntries(csvFile, aEntry);
 
         aEntry.SubEntryCount = subEntries.length;
         aEntry.SubEntries = subEntries;
@@ -759,7 +759,7 @@ public class APIDescGetter extends DescGetter
                 System.out.println("## reading from File " + descPath);
             }
 
-            scenario = getScenarioFromDirectory(descPath, job, debug);
+            scenario = getScenarioFromDirectory(descPath, job);
         }
         else
         {
@@ -768,14 +768,13 @@ public class APIDescGetter extends DescGetter
                 System.out.println("## reading from jar");
             }
 
-            scenario = getScenarioFromClassPath(job, debug);
+            scenario = getScenarioFromClassPath(job);
         }
 
         return scenario;
     }
 
-    protected String[] getScenarioFromDirectory(String descPath, String job,
-            boolean debug)
+    protected String[] getScenarioFromDirectory(String descPath, String job)
     {
         String[] modules = null;
         ArrayList<String> componentList = new ArrayList<String>();
@@ -829,7 +828,7 @@ public class APIDescGetter extends DescGetter
 
     }
 
-    protected String[] getScenarioFromClassPath(String job, boolean debug)
+    protected String[] getScenarioFromClassPath(String job)
     {
         String subdir = "/";
 

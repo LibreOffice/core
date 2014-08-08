@@ -91,7 +91,7 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
         int answer = JOptionPane.showConfirmDialog(wizard, "Are you sure you want to exit?");
         if (answer == JOptionPane.YES_OPTION)
         {
-            wizard.exitForm(null);
+            wizard.exitForm();
         }
         else
         {

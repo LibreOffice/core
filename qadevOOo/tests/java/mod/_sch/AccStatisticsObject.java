@@ -50,7 +50,7 @@ public class AccStatisticsObject extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
         try {
             log.println( "creating a chartdocument" );
-            xChartDoc = SOF.createChartDoc(null);
+            xChartDoc = SOF.createChartDoc();
             log.println("Display MeanValue");
             XPropertySet diagProps = UnoRuntime.queryInterface(XPropertySet.class, xChartDoc.getDiagram());
             diagProps.setPropertyValue("MeanValue",new Boolean(true));
@@ -66,7 +66,7 @@ public class AccStatisticsObject extends TestCase {
 
         new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         XAccessibleContext cont = AccessibilityTools.getAccessibleObjectForRole(

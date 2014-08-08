@@ -416,11 +416,11 @@ public class FieldColumn
                 break;
 
             case DataType.VARCHAR: // ==  12;
-                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
+                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth);
                 break;
 
             case DataType.LONGVARCHAR: // ==  -1;
-                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
+                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth);
                 break;
 
             case DataType.NUMERIC: // ==   2;

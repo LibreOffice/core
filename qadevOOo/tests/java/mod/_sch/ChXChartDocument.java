@@ -113,9 +113,9 @@ public class ChXChartDocument extends TestCase {
 
         try {
             log.println("creating a chartdocument");
-            xChartDoc = SOF.createChartDoc(null);
+            xChartDoc = SOF.createChartDoc();
             log.println("Waiting before opening second document");
-            doc2 = SOF.createChartDoc(null);
+            doc2 = SOF.createChartDoc();
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occurs.FAILED
             e.printStackTrace(log);

@@ -113,7 +113,7 @@ public class TextDocument
     }
 
     // creates an instance of TextDocument from the desktop's current frame
-    public TextDocument(XMultiServiceFactory xMSF, boolean bShowStatusIndicator, XTerminateListener listener)
+    public TextDocument(XMultiServiceFactory xMSF, boolean bShowStatusIndicator)
     {
         this.xMSF = xMSF;
 
@@ -267,7 +267,7 @@ public class TextDocument
         DocSize = getPageSize();
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
 
-        ViewHandler myViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
+        ViewHandler myViewHandler = new ViewHandler(xTextDocument);
         try
         {
             myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));

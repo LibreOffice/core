@@ -1089,7 +1089,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         try
         {
             final StylesWriter inlineStylesWriter = new StylesWriter(rootXmlWriter);
-            inlineStylesWriter.writeContentStyles(predefinedStylesCollection, contentStylesCollection);
+            inlineStylesWriter.writeContentStyles(contentStylesCollection);
 
             final BufferState state = finishBuffering();
             this.rootXmlWriter.writeStream(state.getXmlAsReader());
@@ -1099,7 +1099,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             final OutputStreamWriter osw =
                     new OutputStreamWriter(stylesOutStream, "UTF-8");
             final StylesWriter stylesWriter = new StylesWriter(osw);
-            stylesWriter.writeGlobalStyles(predefinedStylesCollection, globalStylesCollection);
+            stylesWriter.writeGlobalStyles(globalStylesCollection);
             stylesWriter.close();
 
             this.rootXmlWriter.writeCloseTag();

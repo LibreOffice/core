@@ -191,7 +191,7 @@ public final class WikiEditorImpl extends WeakBase
         String urlstring = url.Complete;
         m_statusListeners.put( urlstring, listener );
         // synchroneous callback required!!!
-        callStatusListener( urlstring, listener );
+        callStatusListener( urlstring );
     }
 
     public void callStatusListeners()
@@ -200,18 +200,18 @@ public final class WikiEditorImpl extends WeakBase
         {
             String uristring = iter.next();
             XStatusListener listener = m_statusListeners.get(uristring);
-            callStatusListener( uristring, listener );
+            callStatusListener( uristring );
         }
     }
 
-    public void callStatusListener( String uristring, XStatusListener listener )
+    public void callStatusListener( String uristring )
     {
         try
         {
             URI uri = new URI( uristring );
 
             // check whether any blogs are live...
-            setListenerState( listener, "command", false );
+            setListenerState( "command");
         } catch ( URISyntaxException ex )
         {
             ex.printStackTrace();
@@ -219,12 +219,10 @@ public final class WikiEditorImpl extends WeakBase
     }
 
 
-    private void setListenerState( XStatusListener listener, String urlstring, boolean state )
+    private void setListenerState( String urlstring)
     {
         com.sun.star.util.URL url = new com.sun.star.util.URL();
         url.Complete = urlstring;
-        //listener.statusChanged( new FeatureStateEvent( this, url, "", state, false, null ));
-
     }
 
     public void sendArticle()

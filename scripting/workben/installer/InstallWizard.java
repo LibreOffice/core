@@ -84,7 +84,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
      catch( FileNotFoundException fnfe ) {
          System.err.println("Office Scripting Framework Installer - Error: ");
          System.err.println("Unable to create log file for installation.");
-         exitForm(null);
+         exitForm();
      }
 
     //setBackground(Color.WHITE);
@@ -112,7 +112,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
-                exitForm(evt);
+                exitForm();
             }
         });
 
@@ -180,7 +180,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     }// initComponents
 
     /** Exit the Application */
-    public void exitForm(java.awt.event.WindowEvent evt) {
+    public void exitForm() {
         System.exit(0);
     }
 
@@ -194,7 +194,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
 
     if (e.getSource() == navCancel)
     {
-            exitForm(null);
+            exitForm();
     }
 
     if (e.getSource() == navBack)

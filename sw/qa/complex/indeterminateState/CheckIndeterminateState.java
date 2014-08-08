@@ -70,7 +70,7 @@ public class CheckIndeterminateState {
         XInterface oObj = null;
 
         new AccessibilityTools();
-        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(getFactory(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,

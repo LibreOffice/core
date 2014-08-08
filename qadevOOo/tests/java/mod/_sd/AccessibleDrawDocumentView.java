@@ -100,7 +100,7 @@ public class AccessibleDrawDocumentView extends TestCase {
         new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (
-                            Param.getMSF(),aModel);
+                            aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         //com.sun.star.accessibility.AccessibleRole

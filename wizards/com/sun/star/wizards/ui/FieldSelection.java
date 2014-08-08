@@ -493,7 +493,7 @@ public class FieldSelection
         }
     }
 
-    public void mergeList(String[] AllFieldNames, String[] SecondList)
+    public void mergeList(String[] AllFieldNames)
     {
         xFieldsListBox.addItems(AllFieldNames, (short) 0);
         toggleListboxButtons((short) - 1, (short) - 1);

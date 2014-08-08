@@ -49,7 +49,7 @@ public class AccDataPoint extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
         try {
             log.println( "creating a chartdocument" );
-            xChartDoc = SOF.createChartDoc(null);
+            xChartDoc = SOF.createChartDoc();
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occurs.FAILED
             e.printStackTrace( log );
@@ -62,7 +62,7 @@ public class AccDataPoint extends TestCase {
 
         new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));

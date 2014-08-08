@@ -49,7 +49,7 @@ public class BasicMacroTools {
                            XComponent xDoc) throws java.lang.Exception {
         try {
             mMSF = msf;
-            mDispProv = makeDispatchProvider(mMSF, xModel);
+            mDispProv = makeDispatchProvider(xModel);
             mParser = makeParser(mMSF);
 
             Object DocLibCont = null;
@@ -82,7 +82,7 @@ public class BasicMacroTools {
                     throws java.lang.Exception {
         try {
             mMSF = msf;
-            mDispProv = makeDispatchProvider(mMSF, xModel);
+            mDispProv = makeDispatchProvider(xModel);
             mParser = makeParser(mMSF);
 
             Object ASLC = null;
@@ -107,8 +107,7 @@ public class BasicMacroTools {
         }
     }
 
-    private static XDispatchProvider makeDispatchProvider(XMultiServiceFactory mMSF,
-                                                          XModel aModel)
+    private static XDispatchProvider makeDispatchProvider(XModel aModel)
                                                    throws java.lang.Exception {
         XController xController = aModel.getCurrentController();
         XFrame xFrame = xController.getFrame();

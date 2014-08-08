@@ -64,7 +64,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         CurReportDocument.StopProcess();
     }
 
-    public void showProgressDisplay(XMultiServiceFactory xMSF, boolean bgetConnection)
+    public void showProgressDisplay(boolean bgetConnection)
     {
         try
         {
@@ -166,7 +166,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         PropertyValue[] properties)
     {
         CurReportDocument = ReportTextImplementation.create( xMSF, i_documentUI, _textDocument, m_oResource );
-        showProgressDisplay(xMSF, true);
+        showProgressDisplay(true);
         importReportData(xMSF, this, CurReportDocument, properties);
     }
 }

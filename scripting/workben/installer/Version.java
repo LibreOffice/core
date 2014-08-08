@@ -57,7 +57,7 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
     {
             System.err.println("Cannot find sversion.ini/.sversionrc");
             JOptionPane.showMessageDialog(this, eFnF.getMessage(), "File not Found", JOptionPane.ERROR_MESSAGE);
-            wizard.exitForm(null);
+            wizard.exitForm();
     }
 
         try {
@@ -67,14 +67,14 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
             //Message about no installed versions found
             System.err.println("Failed to parse SVERSION");
             JOptionPane.showMessageDialog(this, "There was a problem reading from the Office settings file.", "Parse Error", JOptionPane.ERROR_MESSAGE);
-            wizard.exitForm(null);
+            wizard.exitForm();
         }
 
-        tableModel = new MyTableModel(props, versions);
+        tableModel = new MyTableModel(props);
     if (tableModel.getRowCount() == 0)
     {
             JOptionPane.showMessageDialog(this, "No compatible versions of Office were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);
-            wizard.exitForm(null);
+            wizard.exitForm();
     }
 
         tableModel.addTableModelListener(this);
@@ -241,7 +241,7 @@ class MyTableModel extends AbstractTableModel {
     String colNames[] = {"", "Name", "Location"};
     Object[] longValues = new Object[] {Boolean.TRUE, "Name", "Location"};
 
-    MyTableModel (Properties properties, String [] validVersions) {
+    MyTableModel (Properties properties) {
         data = new ArrayList<ArrayList<Object>>();
         boolean isWindows =
             (System.getProperty("os.name").indexOf("Windows") != -1);

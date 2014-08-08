@@ -249,7 +249,7 @@ public class ViewForwarder {
 
         new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         XAccessible parent = null;
 
@@ -659,7 +659,7 @@ public class ViewForwarder {
 
         new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         XAccessible parent = null;
 
@@ -865,7 +865,7 @@ public class ViewForwarder {
 
         new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, xModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(xModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         System.out.println("Press any key when the header cell is on top.");
@@ -997,7 +997,7 @@ public class ViewForwarder {
 
         new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         try {

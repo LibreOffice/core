@@ -163,7 +163,7 @@ public class XmlUpdater extends Thread {
         regSchemaOfficePath= regSchemaOfficePath.concat(File.separator+"share"+File.separator+"registry"+File.separator+"schema"+File.separator+"org"+File.separator+"openoffice"+File.separator+"Office"+File.separator);
 
         progressBar.setString("Unzipping Required Files");
-        ZipData zd = new ZipData("SFrameworkInstall.jar");
+        ZipData zd = new ZipData();
 
 
         if( (!netInstall) || bindingsInstall) {

@@ -85,8 +85,7 @@ public class Job {
 
     }
 
-    public static XSingleServiceFactory __getServiceFactory(String implName,
-                                XMultiServiceFactory multiFactory,
+    public static XSingleServiceFactory __getServiceFactory(XMultiServiceFactory multiFactory,
                                 XRegistryKey regKey) {
     XSingleServiceFactory xSingleServiceFactory = null;
     xSingleServiceFactory = FactoryHelper.getServiceFactory(_Implementation.class,

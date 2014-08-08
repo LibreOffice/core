@@ -59,7 +59,7 @@ public class RunnerService implements XJob, XServiceInfo,
      * ct'tor
      * Construct an own office provider for tests
      */
-    public RunnerService(XMultiServiceFactory xMSF) {
+    public RunnerService() {
     }
 
     public Object execute(NamedValue[] args) {

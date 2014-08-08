@@ -199,7 +199,7 @@ public class UnoDataAware extends DataAware
         };
     }
 
-    public static UnoDataAware attachLabel(Object data, String prop, Object label, final Listener listener, boolean field)
+    public static UnoDataAware attachLabel(Object data, String prop, Object label, boolean field)
     {
         return new UnoDataAware(data,
                 field ? DataAwareFields.getFieldValueFor(data, prop, PropertyNames.EMPTY_STRING)

@@ -398,13 +398,13 @@ XInitialization {
         Object objectButton = xControlCont.getControl( _runButtonName );
         XButton xButton = UnoRuntime.queryInterface(
             XButton.class, objectButton );
-        xButton.addActionListener( new ActionListenerImpl( xControlCont, _runButtonName ) );
+        xButton.addActionListener( new ActionListenerImpl( _runButtonName ) );
 
         // add to no button
         objectButton = xControlCont.getControl( _doNotRunButtonName );
         xButton = UnoRuntime.queryInterface(
             XButton.class, objectButton );
-        xButton.addActionListener( new ActionListenerImpl( xControlCont, _doNotRunButtonName ) );
+        xButton.addActionListener( new ActionListenerImpl( _doNotRunButtonName ) );
 
         if ( checkBoxDialog )
         {
@@ -489,7 +489,7 @@ XInitialization {
 
     public class ActionListenerImpl implements com.sun.star.awt.XActionListener {
         private String _buttonName;
-        public ActionListenerImpl( XControlContainer xControlCont, String buttonName ) {
+        public ActionListenerImpl( String buttonName ) {
             _buttonName = buttonName;
         }
 

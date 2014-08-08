@@ -86,7 +86,6 @@ public class ChartInWriter
         // insert a new chart into the "Chart" sheet of the
         // spreadsheet document
         XChartDocument aChartDoc = aChartHelper.insertOLEChartInWriter(
-            "BarChart",
             aPos,
             aExtent,
             "com.sun.star.chart.AreaDiagram" );

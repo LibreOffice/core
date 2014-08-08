@@ -215,11 +215,8 @@ public class SOfficeFactory {
      *
      * @see XChartDocument
      */
-    public XChartDocument createChartDoc(String frameName)
+    public XChartDocument createChartDoc()
         throws com.sun.star.uno.Exception {
-
-//        XComponent oDoc = loadDocument(
-//                            util.utils.getFullTestURL("emptyChart.sds"));
 
         XComponent oDoc = loadDocument("private:factory/schart");
 

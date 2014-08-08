@@ -144,7 +144,7 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
             try {
                 XAccessible xRoot = AccessibilityTools.getAccessibleObject(
                     AccessibilityTools.getCurrentWindow(
-                        Param.getMSF(), xModel));
+                        xModel));
                 if (xRoot != null) {
                     AccessibilityTools.getAccessibleObjectForRole(
                         xRoot, AccessibleRole.TABLE_CELL, true);

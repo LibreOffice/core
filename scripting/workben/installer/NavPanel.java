@@ -85,7 +85,7 @@ public class NavPanel extends JPanel implements ActionListener {
             wizard.show(InstallWizard.IDEWELCOME);
         }
         else {
-            wizard.exitForm(null);
+            wizard.exitForm();
         }
         enableIDE(false);
         }

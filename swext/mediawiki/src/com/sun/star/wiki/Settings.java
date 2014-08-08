@@ -110,7 +110,7 @@ public class Settings
         return m_aWikiDocs;
     }
 
-    public Object[] getWikiDocList( int serverid, int num )
+    public Object[] getWikiDocList( int serverid )
     {
         String wikiserverurl = getWikiConUrlByNumber( serverid );
         List<String> theDocs = new ArrayList<String>();

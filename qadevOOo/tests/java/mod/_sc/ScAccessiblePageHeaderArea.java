@@ -137,7 +137,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
 
         new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow( Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         try {

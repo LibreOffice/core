@@ -357,10 +357,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         return pageStart + i;
     }
 
-    public void contentsChanged(ListDataEvent event)
-    {
-    }
-
     public void intervalAdded(ListDataEvent event)
     {
         if (event.getIndex0() <= m_nCurrentSelection)
@@ -374,10 +370,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         {
             refreshImages();
         }
-    }
-
-    public void intervalRemoved(ListDataEvent event)
-    {
     }
 
     /** Registers ItemListener to receive events.

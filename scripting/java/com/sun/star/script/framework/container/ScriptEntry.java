@@ -30,7 +30,7 @@ public class ScriptEntry implements Cloneable {
     private Map<String,String> languagedepprops;
 
     public ScriptEntry(String language, String languagename,
-                       String logicalname, String location) {
+                       String location) {
         this.language = language;
         this.languagename = languagename;
         // logical name/ function name concept
@@ -53,21 +53,21 @@ public class ScriptEntry implements Cloneable {
     }
 
     public ScriptEntry(String language, String languagename,
-                       String logicalname, String location, Map<String,String> languagedepprops) {
-        this( language, languagename, logicalname, location );
+                       String location, Map<String,String> languagedepprops) {
+        this( language, languagename, location );
         this.languagedepprops = languagedepprops;
     }
 
     public ScriptEntry(String language, String languagename,
-                       String logicalname, String location,
-                       Map<String,String> languagedepprops, String description) {
-        this( language, languagename, logicalname, location );
+                       String location, Map<String,String> languagedepprops,
+                       String description) {
+        this( language, languagename, location );
         this.languagedepprops = languagedepprops;
         this.description = description;
     }
 
     public ScriptEntry(String languagename, String location) {
-        this("Java", languagename, languagename, location);
+        this("Java", languagename, location);
     }
 
     public Object clone() throws CloneNotSupportedException {

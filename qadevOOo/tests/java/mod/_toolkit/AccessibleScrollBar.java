@@ -142,7 +142,6 @@ public class AccessibleScrollBar extends TestCase {
         new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(
-                                  tParam.getMSF(),
                                   aModel);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

@@ -68,12 +68,12 @@ public class FormDocument extends TextDocument
         {
             oFormHandler = new FormHandler(xMSF, xTextDocument);
             oFormHandler.setDrawObjectsCaptureMode(false);
-            oTextStyleHandler = new TextStyleHandler(xMSFDoc, xTextDocument);
-            oViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
+            oTextStyleHandler = new TextStyleHandler(xTextDocument);
+            oViewHandler = new ViewHandler(xTextDocument);
             oMainFormDBMetaData = new CommandMetaData(xMSF);// , CharLocale);
             oSubFormDBMetaData = new CommandMetaData(xMSF);// , CharLocale);
-            ViewHandler oViewHandler = new ViewHandler(xMSF, xTextDocument);
-            TextStyleHandler oTextStyleSupplier = new TextStyleHandler(xMSFDoc, xTextDocument);
+            ViewHandler oViewHandler = new ViewHandler(xTextDocument);
+            TextStyleHandler oTextStyleSupplier = new TextStyleHandler(xTextDocument);
             Helper.setUnoPropertyValue(xTextDocument, "ApplyFormDesignMode", Boolean.FALSE);
             oViewHandler.setViewSetting("ShowTableBoundaries", Boolean.FALSE);
             oViewHandler.setViewSetting("ShowOnlineLayout", Boolean.TRUE);

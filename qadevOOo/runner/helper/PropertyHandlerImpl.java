@@ -18,7 +18,6 @@
 package helper;
 
 import com.sun.star.inspection.LineDescriptor;
-import com.sun.star.inspection.XPropertyControlFactory;
 import com.sun.star.inspection.XPropertyHandler;
 
 /**
@@ -234,12 +233,6 @@ public class PropertyHandlerImpl implements XPropertyHandler{
      */
     public boolean suspend(boolean Suspend) {
         return false;
-    }
-
-    /**
-     * This method currently does nothing
-     */
-    public void describePropertyLine(String string, LineDescriptor[] lineDescriptor, XPropertyControlFactory xPropertyControlFactory) {
     }
 
 }

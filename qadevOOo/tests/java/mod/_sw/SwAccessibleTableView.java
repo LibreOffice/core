@@ -85,7 +85,7 @@ public class SwAccessibleTableView extends TestCase {
 
         new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);

@@ -69,7 +69,7 @@ public class StyleApplier
             this.curFormDocument = _curFormDocument;
             xMSF = curFormDocument.xMSF;
 
-            TextStyleHandler oTextStyleHandler = new TextStyleHandler(xMSF, curFormDocument.xTextDocument);
+            TextStyleHandler oTextStyleHandler = new TextStyleHandler(curFormDocument.xTextDocument);
             xPageStylePropertySet = oTextStyleHandler.getStyleByName("PageStyles", "Standard");
             this.CurUnoDialog = _CurUnoDialog;
             curtabindex = (short) (FormWizard.SOSTYLE_PAGE * 100);
@@ -278,10 +278,6 @@ public class StyleApplier
             e.printStackTrace(System.err);
         }
         curFormDocument.unlockallControllers();
-    }
-
-    public void disposing(EventObject eventObject)
-    {
     }
 
     private int getStyleColor(String[] _sDataList, String _sHeader, String _sPropertyDescription)

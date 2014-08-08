@@ -45,7 +45,7 @@ public class TestExtension {
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
          */
-        public _TestExtension(XComponentContext xCompContext) {
+        public _TestExtension() {
         }
 
         /** This method returns an array of all supported service names.

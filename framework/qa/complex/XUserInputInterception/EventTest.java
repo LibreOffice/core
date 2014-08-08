@@ -487,7 +487,6 @@ public class EventTest {
                 // get the position and the range of a scroll bar
 
                 XWindow xWindow = AccessibilityTools.getCurrentWindow(
-                                          getMSF(),
                                           xModel);
 
                 XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

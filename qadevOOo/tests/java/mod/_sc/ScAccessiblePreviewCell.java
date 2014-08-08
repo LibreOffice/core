@@ -167,7 +167,7 @@ public class ScAccessiblePreviewCell extends TestCase {
             try {
                 XAccessible xRoot = AccessibilityTools.getAccessibleObject(
                     AccessibilityTools.getCurrentWindow(
-                        Param.getMSF(), xModel));
+                        xModel));
                 if (xRoot != null) {
                     oObj = AccessibilityTools.getAccessibleObjectForRole(
                         xRoot, AccessibleRole.TABLE_CELL, true);

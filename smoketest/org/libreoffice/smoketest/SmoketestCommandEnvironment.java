@@ -34,7 +34,7 @@ public class SmoketestCommandEnvironment extends WeakBase
     static private final String __serviceName =
     "com.sun.star.deployment.test.SmoketestCommandEnvironment";
 
-    public SmoketestCommandEnvironment(XComponentContext xCompContext) {
+    public SmoketestCommandEnvironment() {
     }
 
     public static String[] getServiceNames() {

@@ -143,7 +143,7 @@ public class ScAccessiblePageHeader extends TestCase {
                 throw new RuntimeException(e);
             }
             try {
-                XWindow xWindow = AccessibilityTools.getCurrentWindow( Param.getMSF(), aModel);
+                XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
                 XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
                 if (xRoot != null) {
                     oObj = AccessibilityTools.getAccessibleObjectForRole

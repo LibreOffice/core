@@ -75,10 +75,10 @@ public class NestedRegistry extends TestCase {
     /**
     * Creates a temporary copy of file, which is deleted when VM exits.
     * @param src Source file path.
-    * @param dst Destination file path.
+     * @param dst Destination file path.
     * @throws java.io.IOException If any problems occur during copiing.
     */
-    protected void copyFile(String src, String dst, PrintWriter log)
+    protected void copyFile(String src, String dst)
             throws java.io.IOException {
         File srcF = new File(src) ;
         File dstF = new File(dst) ;
@@ -139,8 +139,8 @@ public class NestedRegistry extends TestCase {
         log.println("creating copies of the registry for XSimpleRegistry");
         try {
             String source = utils.getFullTestDocName("XSimpleRegistry.rdb");
-            copyFile(source, openF, log) ;
-            copyFile(source, mergeF, log) ;
+            copyFile(source, openF) ;
+            copyFile(source, mergeF) ;
         } catch (java.io.IOException e) {
             log.println("Exception occurred while copying files");
             e.printStackTrace(log);

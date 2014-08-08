@@ -201,7 +201,7 @@ public class FileAccess
         return ResultPath;
     }
 
-    public static ArrayList<String> getOfficePaths(XMultiServiceFactory xMSF, String _sPath, String sType, String sSearchDir)
+    public static ArrayList<String> getOfficePaths(XMultiServiceFactory xMSF, String _sPath)
     {
         //This method currently only works with sPath="Template"
 

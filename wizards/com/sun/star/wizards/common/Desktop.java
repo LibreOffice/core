@@ -98,7 +98,7 @@ public class Desktop
         return UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
     }
 
-    public static XDispatch getDispatcher(XMultiServiceFactory xMSF, XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL)
+    public static XDispatch getDispatcher(XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL)
     {
         try
         {
@@ -136,7 +136,7 @@ public class Desktop
     public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame, String _stargetframe)
     {
         com.sun.star.util.URL oURL = getDispatchURL(xMSF, sURL);
-        XDispatch xDispatch = getDispatcher(xMSF, xFrame, _stargetframe, oURL);
+        XDispatch xDispatch = getDispatcher(xFrame, _stargetframe, oURL);
         dispatchURL(xDispatch, oURL);
     }
 

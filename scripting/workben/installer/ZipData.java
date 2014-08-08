@@ -22,8 +22,6 @@ import java.io.*;
 import javax.swing.*;
 
 public class ZipData {
-    public ZipData(String file) {
-    }
 
     public boolean extractEntry(String entry, String destination,
             JLabel statusLabel) {

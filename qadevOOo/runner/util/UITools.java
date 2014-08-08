@@ -53,14 +53,14 @@ public class UITools {
     public UITools(XMultiServiceFactory msf, XModel xModel)
     {
         mMSF = msf;
-        mXRoot = makeRoot(mMSF, xModel);
+        mXRoot = makeRoot(xModel);
     }
 
     public UITools(XMultiServiceFactory msf, XTextDocument xTextDoc)
     {
         mMSF = msf;
         XModel xModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
-        mXRoot = makeRoot(mMSF, xModel);
+        mXRoot = makeRoot(xModel);
     }
 
     public UITools(XMultiServiceFactory msf, XWindow xWindow)
@@ -69,9 +69,9 @@ public class UITools {
         mXRoot = makeRoot(xWindow);
     }
 
-    private static XAccessible makeRoot(XMultiServiceFactory msf, XModel aModel)
+    private static XAccessible makeRoot(XModel aModel)
     {
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(msf, aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         return AccessibilityTools.getAccessibleObject(xWindow);
     }
 

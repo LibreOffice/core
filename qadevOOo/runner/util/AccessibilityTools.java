@@ -43,17 +43,15 @@ public class AccessibilityTools {
         return UnoRuntime.queryInterface(XAccessible.class, xObject);
     }
 
-    public static XWindow getCurrentContainerWindow(XMultiServiceFactory msf,
-        XModel xModel) {
-        return getWindow(msf, xModel, true);
+    public static XWindow getCurrentContainerWindow(XModel xModel) {
+        return getWindow(xModel, true);
     }
 
-    public static XWindow getCurrentWindow(XMultiServiceFactory msf,
-        XModel xModel) {
-        return getWindow(msf, xModel, false);
+    public static XWindow getCurrentWindow(XModel xModel) {
+        return getWindow(xModel, false);
     }
 
-    private static XWindow getWindow(XMultiServiceFactory msf, XModel xModel,
+    private static XWindow getWindow(XModel xModel,
         boolean containerWindow) {
         XWindow xWindow = null;
 

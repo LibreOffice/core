@@ -58,7 +58,7 @@ public class LicenseTest {
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
          */
-        public _LicenseTest(XComponentContext xCompContext) {
+        public _LicenseTest() {
         }
 
         /** This method returns an array of all supported service names.

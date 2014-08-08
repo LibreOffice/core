@@ -54,11 +54,11 @@ public class WikiPropDialog extends WikiDialog{
         }
 
         InitStrings( xContext );
-        InitShowBrowser( xContext );
-        InitControls( xContext );
+        InitShowBrowser();
+        InitControls();
     }
 
-    private void InitControls( XComponentContext xContext )
+    private void InitControls()
     {
         try
         {
@@ -90,7 +90,7 @@ public class WikiPropDialog extends WikiDialog{
         }
     }
 
-    private void InitShowBrowser( XComponentContext xContext )
+    private void InitShowBrowser()
     {
         try
         {
@@ -149,7 +149,7 @@ public class WikiPropDialog extends WikiDialog{
         try
         {
             short [] sel = (short[]) GetPropSet("WikiList").getPropertyValue("SelectedItems");
-            xPS.setPropertyValue("StringItemList", m_aSettings.getWikiDocList(sel[0], 5));
+            xPS.setPropertyValue("StringItemList", m_aSettings.getWikiDocList(sel[0]));
         }
         catch (Exception ex)
         {

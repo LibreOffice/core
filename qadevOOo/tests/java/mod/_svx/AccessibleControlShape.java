@@ -80,7 +80,7 @@ public class AccessibleControlShape extends TestCase {
 
         new AccessibilityTools();
         utils.shortWait(5000);
-        XWindow xWindow = AccessibilityTools.getCurrentWindow (tParam.getMSF(),aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);

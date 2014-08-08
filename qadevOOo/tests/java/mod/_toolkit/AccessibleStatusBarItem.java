@@ -144,7 +144,6 @@ public class AccessibleStatusBarItem extends TestCase {
         new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(
-                                  tParam.getMSF(),
                                   aModel);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

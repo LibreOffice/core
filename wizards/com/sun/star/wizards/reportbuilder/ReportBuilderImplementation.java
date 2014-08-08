@@ -504,7 +504,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         if (m_aReportPath == null)
         {
             // Check general availability of office paths
-            m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
+            m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template");
             FileAccess.combinePaths(getMSF(), m_aReportPath, "/wizard/report");
         }
         return m_aReportPath;
@@ -632,7 +632,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         try
         {
             // TODO: check different languages in header layouts
-            ArrayList<String> aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
+            ArrayList<String> aReportPath = FileAccess.getOfficePaths(getMSF(), "Template");
             FileAccess.combinePaths(getMSF(), aReportPath, "/wizard/report");
 
             LayoutFiles = FileAccess.getFolderTitles(getMSF(), null, aReportPath, ".otr");

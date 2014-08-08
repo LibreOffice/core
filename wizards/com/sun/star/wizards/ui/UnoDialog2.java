@@ -343,11 +343,6 @@ public class UnoDialog2 extends UnoDialog
         return UnoRuntime.queryInterface(type, insertControlModel2(serviceName, componentName, sPropNames, oPropValues));
     }
 
-    public String translateURL(String relativeURL)
-    {
-        return PropertyNames.EMPTY_STRING;
-    }
-
     public static Object getControlModel(Object unoControl)
     {
         return UnoRuntime.queryInterface(XControl.class, unoControl).getModel();

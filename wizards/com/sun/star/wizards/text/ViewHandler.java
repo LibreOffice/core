@@ -44,7 +44,7 @@ public class ViewHandler
     private XViewSettingsSupplier xViewSettingsSupplier;
 
     /** Creates a new instance of View */
-    public ViewHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
+    public ViewHandler(XTextDocument xTextDocument)
     {
         xTextViewCursorSupplier = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
         xViewSettingsSupplier = UnoRuntime.queryInterface(XViewSettingsSupplier.class, xTextDocument.getCurrentController());

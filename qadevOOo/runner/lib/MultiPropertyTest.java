@@ -447,7 +447,7 @@ public class MultiPropertyTest extends MultiMethodTest
          * The method produces new value of the property from the oldValue.
          * It returns the result of ValueChanger.changePValue method.
          * Subclasses can override the method to return their own value,
-         * when the changePValue beahviour is not enough, for example,
+         * when the changePValue behavior is not enough, for example,
          * when oldValue is null.
          */
         protected Object getNewValue(String propName, Object oldValue)
@@ -459,7 +459,7 @@ public class MultiPropertyTest extends MultiMethodTest
         /**
          * The method compares obj1 and obj2. It calls
          * MultiPropertyTest.compare, but subclasses can override to change
-         * the behaviour, since normally compare calls Object.equals method
+         * the behavior, since normally compare calls Object.equals method
          * which is not appropriate in some cases(e.g., structs with equals
          * not overridden).
          */
@@ -471,7 +471,7 @@ public class MultiPropertyTest extends MultiMethodTest
         /**
          * The method returns a String representation of the obj. It calls
          * MultipropertyTest.toString(Object), but subclasses can override
-         * to change the behaviour.
+         * to change the behavior.
          */
         protected String toString(Object obj)
         {

@@ -53,7 +53,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
      * ctor
      * It's initialize an object of this class with default values.
      */
-    public StatusIndicator( int nOut)
+    public StatusIndicator()
     {
         m_bWasUsed  = false;
     }

@@ -219,7 +219,7 @@ public class CheckXComponentLoader
     @Test public void checkUsingOfMediaDescriptor()
     {
         InteractionHandler xHandler   = new InteractionHandler();
-        StatusIndicator    xIndicator = new StatusIndicator(StatusIndicator.SHOWSTATUS_LOG);
+        StatusIndicator    xIndicator = new StatusIndicator();
 
         PropertyValue[] lProps = new PropertyValue[3];
 

@@ -69,7 +69,6 @@ public class ChartHelper
     }
 
     public XChartDocument insertOLEChartInWriter(
-        String sChartName,
         Point  aUpperLeft,
         Size   aExtent,
         String sChartServiceName )
@@ -143,7 +142,6 @@ public class ChartHelper
     }
 
     public XChartDocument insertOLEChartInDraw(
-        String sChartName,
         Point  aUpperLeft,
         Size   aExtent,
         String sChartServiceName )

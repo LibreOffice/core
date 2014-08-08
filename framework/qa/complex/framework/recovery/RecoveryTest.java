@@ -102,7 +102,7 @@ public class RecoveryTest extends ComplexTestCase {
         handleRecoveryDialogAfterCrash(expectedDocumentCount);
         startOffice();
         handleRecoveryDialog_QuickExit(expectedDocumentCount);
-        handleCrashReporterDialog(true, true);
+        handleCrashReporterDialog(true);
         checkDocumentCount(expectedDocumentCount);
     }
 
@@ -264,7 +264,7 @@ public class RecoveryTest extends ComplexTestCase {
         }
     }
 
-     private void handleCrashReporterDialog(boolean cancel, boolean YesNo){
+     private void handleCrashReporterDialog(boolean cancel){
         try{
 
             log.println("try to get Crash Reporter Dialog...");

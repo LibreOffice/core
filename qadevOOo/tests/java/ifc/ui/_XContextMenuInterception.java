@@ -156,7 +156,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
         log.println("try to open contex menu...");
         new AccessibilityTools();
 
-        xWindow = AccessibilityTools.getCurrentWindow(xMSF, xModel);
+        xWindow = AccessibilityTools.getCurrentWindow(xModel);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

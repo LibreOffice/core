@@ -477,7 +477,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount)
     {
-        return getDoc().addGroupNametoDocument(GroupNames, CurGroupTitle, GroupFieldVector, ReportPath, iSelCount);
+        return getDoc().addGroupNametoDocument(CurGroupTitle, GroupFieldVector, ReportPath, iSelCount);
     }
 
     public void refreshGroupFields(String[] _sNewNames)
@@ -600,7 +600,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             // Check general availability of office paths
             try
             {
-                m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
+                m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template");
                 FileAccess.combinePaths(getMSF(), m_aReportPath, "/wizard/report");
             }
             catch (Exception e)

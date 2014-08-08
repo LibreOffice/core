@@ -94,8 +94,8 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         oTextTableHandler = new TextTableHandler(xMSFDoc, xTextDocument);
         oTextSectionHandler = new TextSectionHandler(xMSFDoc, xTextDocument);
         oFormHandler = new FormHandler(xMSFDoc, xTextDocument);
-        oTextStyleHandler = new TextStyleHandler(xMSFDoc, xTextDocument);
-        oViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
+        oTextStyleHandler = new TextStyleHandler(xTextDocument);
+        oViewHandler = new ViewHandler(xTextDocument);
         oTextFieldHandler = new TextFieldHandler(xMSFDoc, xTextDocument);
         DBColumnsVector = new java.util.ArrayList<DBColumn>();
         oNumberFormatter = oTextTableHandler.getNumberFormatter();
@@ -283,7 +283,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             }
             for (i = 0; i < GroupCount; i++)
             {
-                CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, CurDBMetaData.GroupFieldNames[i], i, TBLGROUPSECTION + (i + 1));
+                CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, CurDBMetaData.GroupFieldNames[i], TBLGROUPSECTION + (i + 1));
                 CurDBColumn.formatValueCell();
                 DBColumnsVector.set(i, CurDBColumn);
                 replaceFieldValueInGroupTable(CurDBColumn, i);
@@ -336,7 +336,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         }
     }
 
-    public void replaceFieldValueInRecordSection(int RecordCount)
+    public void replaceFieldValueInRecordSection()
     {
         int GroupCount = CurDBMetaData.GroupFieldNames.length;
         int FieldCount = CurDBMetaData.getFieldNames().length;
@@ -357,7 +357,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         {
             TableName = TBLGROUPSECTION + Integer.toString(i + 1);
             OldDBColumn = DBColumnsVector.get(i);
-            CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, SelGroupNames[i], i, TableName, OldDBColumn);
+            CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, SelGroupNames[i], TableName, OldDBColumn);
             CurDBColumn.formatValueCell();
             DBColumnsVector.set(i, CurDBColumn);
             CurDBColumn.insertColumnData(oTextFieldHandler, this.bIsCurLandscape);
@@ -432,7 +432,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         }
     }
 
-    public boolean addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount)
+    public boolean addGroupNametoDocument(String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount)
     {
         DBColumn CurDBColumn = null;
         int GroupCount = GroupFieldVector.size();
@@ -446,7 +446,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             {
                 String sPath = FileAccess.getPathFromList(xMSF, ReportPath, "cnt-default.ott");
                 oTextSectionHandler.insertTextSection(GROUPSECTION + GroupCount, sPath, GroupCount == 1);
-                CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, CurFieldColumn.getFieldName(), GroupCount - 1, TBLGROUPSECTION + (GroupCount));
+                CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, CurFieldColumn.getFieldName(), TBLGROUPSECTION + (GroupCount));
                 CurDBColumn.formatValueCell();
                 DBColumnsVector.add(CurDBColumn);
                 replaceFieldValueInGroupTable(CurDBColumn, GroupCount - 1);
@@ -507,7 +507,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             {
                 if (i < CurDBMetaData.GroupFieldNames.length)
                 {
-                    CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, CurDBMetaData.GroupFieldNames[i], i, COPYOFTBLGROUPSECTION + (i + 1));
+                    CurDBColumn = new DBColumn(oTextTableHandler, CurDBMetaData, CurDBMetaData.GroupFieldNames[i], COPYOFTBLGROUPSECTION + (i + 1));
                 }
                 else
                 {

@@ -67,7 +67,7 @@ public class ExtensionFinder implements MethodFinder {
                 for (int j = 0; j < extensions.length; j++) {
                     if (f.getName().endsWith(extensions[j])) {
                         ScriptEntry entry = new ScriptEntry(language,
-                            f.getName(), f.getName(), parcelName);
+                            f.getName(), parcelName);
                         list.add(entry);
                         break;
                     }

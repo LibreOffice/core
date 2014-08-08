@@ -46,7 +46,6 @@ public class _XRemoteContentProviderAcceptor extends MultiMethodTest {
         public void doneWithRemoteContentProviders
                 (XRemoteContentProviderAcceptor xRCPA) {
         }
-        public void disposing (com.sun.star.lang.EventObject obj) {}
 
     }
 

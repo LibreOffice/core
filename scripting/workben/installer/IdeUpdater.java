@@ -115,7 +115,7 @@ public class IdeUpdater extends Thread {
     internalThread = Thread.currentThread();
 
     progressBar.setString("Unzipping Required Files");
-        ZipData zd = new ZipData("SFrameworkInstall.jar");
+        ZipData zd = new ZipData();
 
     // Adding IDE support
     if( isNetbeansPath ) {

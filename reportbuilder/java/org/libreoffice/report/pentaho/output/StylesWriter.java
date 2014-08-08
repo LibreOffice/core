@@ -79,7 +79,7 @@ public class StylesWriter
         this.writeOpeningTag = false;
     }
 
-    public void writeContentStyles(final OfficeStylesCollection predefined,
+    public void writeContentStyles(
             final OfficeStylesCollection globals)
             throws IOException
     {
@@ -93,7 +93,7 @@ public class StylesWriter
                 });
     }
 
-    public void writeGlobalStyles(final OfficeStylesCollection predefined,
+    public void writeGlobalStyles(
             final OfficeStylesCollection globals)
             throws IOException
     {

@@ -89,7 +89,6 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
         // insert a new chart into the "Chart" sheet of the
         // spreadsheet document
         maChartDocument = aChartHelper.insertOLEChartInDraw(
-            "ChartWithCalcData",
             aPos,
             aExtent,
             "com.sun.star.chart.XYDiagram" );

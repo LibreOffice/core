@@ -157,7 +157,6 @@ public class AccessibleWindow extends TestCase {
         new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(
-                                  tParam.getMSF(),
                                   aModel);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

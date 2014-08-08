@@ -195,8 +195,4 @@ public class TableCellTextBinding
         }
     }
 
-    public void disposing(com.sun.star.lang.EventObject eventObject)
-    {
-        // not interested in
-    }
 }

@@ -34,7 +34,6 @@ public class _XHierarchicalPropertySet extends MultiMethodTest {
         boolean res = true;
 
         if (hpsi != null) {
-            res = checkHPSI(hpsi);
         } else {
             log.println(
                     "The component doesn't provide HierarchicalPropertySetInfo");
@@ -117,13 +116,6 @@ public class _XHierarchicalPropertySet extends MultiMethodTest {
         }
 
         tRes.tested("setHierarchicalPropertyValue()", res);
-    }
-
-    protected boolean checkHPSI(XHierarchicalPropertySetInfo hpsi) {
-        log.println("Checking the resulting HierarchicalPropertySetInfo");
-        log.println("### NOT yet implemented");
-
-        return true;
     }
 
     protected boolean checkType(String name, String type, Object value) {

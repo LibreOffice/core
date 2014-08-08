@@ -157,7 +157,7 @@ public class _XRangeSelection extends MultiMethodTest {
         XModel xModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
         System.out.println("Name: " + xModel.getCurrentController().getFrame().getName());
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(tParam.getMSF(), xModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(xModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         XAccessibleContext ctx = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE  );

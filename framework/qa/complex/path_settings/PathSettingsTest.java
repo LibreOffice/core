@@ -563,7 +563,10 @@ public class PathSettingsTest
                 System.out.println("  FAIL: Did not change value on property " + name + ".");
                 bResult = false;
             }
-            newVal = changeToIncorrectValue(val);
+            /*
+             * Change the given String to an incorrect path URL.
+             */
+            newVal = "fileblablabla";
             System.out.println(" Try to change to incorrect value '" + newVal + "'");
             try
             {
@@ -647,16 +650,6 @@ public class PathSettingsTest
             return sTempDir; // "file:///tmp";
         }
         return graphical.FileHelper.appendPath(path, "tmp");
-    }
-
-    /**
-     * Change the given String to an incorrect path URL.
-     * @return The changed path URL.
-     */
-    private String changeToIncorrectValue(String path)
-    {
-        // return an illegal path
-        return "fileblablabla";
     }
 
     /**

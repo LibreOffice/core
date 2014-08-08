@@ -91,15 +91,10 @@ class graphics_stuff
                 return 0;
         }
 
-    public static void handlesinglepixel(int x, int y, int pixel)
-        {
-        }
-
     public static void countPixel(ImageHelper img, int _x, int _y, int _w, int _h, CountPixel _aPixelCounter)
         {
             for (int y = 0; y < _h; y++) {
                 for (int x = 0; x < _w; x++) {
-                    // handlesinglepixel(x+i, y+j, pixels[j * w + i]);
                     _aPixelCounter.count(img.getPixel(x,y));
                 }
             }

@@ -106,7 +106,7 @@ public class AccessiblePresentationGraphicShape extends TestCase {
 
         new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow (tParam.getMSF(),aModel);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
 //        oObj = at.getAccessibleObjectForRole

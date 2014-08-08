@@ -81,7 +81,7 @@ public class AcceleratorsConfigurationTest
 
         String sConfigPath = "org.openoffice.Office.Accelerators";
         boolean bReadOnly = false;
-        XNameAccess m_xConfig2 = openConfig(m_xSmgr, sConfigPath, bReadOnly);
+        XNameAccess m_xConfig2 = openConfig(sConfigPath, bReadOnly);
         if (m_xConfig2 != null)
         {
             m_xPrimaryKeys = UnoRuntime.queryInterface(XNameAccess.class, m_xConfig2.getByName("PrimaryKeys"));
@@ -694,7 +694,7 @@ public class AcceleratorsConfigurationTest
 
         String sConfigPath = "org.openoffice.Setup";
         boolean bReadOnly = true;
-        XNameAccess xRootConfig = openConfig(m_xSmgr, sConfigPath, bReadOnly);
+        XNameAccess xRootConfig = openConfig(sConfigPath, bReadOnly);
 
         if (xRootConfig != null)
         {
@@ -714,7 +714,7 @@ public class AcceleratorsConfigurationTest
     {
         String sConfigPath = "org.openoffice.Setup";
         boolean bReadOnly = false;
-        XNameAccess xRootConfig = openConfig(m_xSmgr, sConfigPath, bReadOnly);
+        XNameAccess xRootConfig = openConfig(sConfigPath, bReadOnly);
 
         if (xRootConfig != null)
         {
@@ -729,7 +729,7 @@ public class AcceleratorsConfigurationTest
 
     /** @todo document me.
      */
-    private XNameAccess openConfig(XMultiServiceFactory xSMGR,
+    private XNameAccess openConfig(
             String sConfigPath,
             boolean bReadOnly)
             throws java.lang.Exception
