@@ -53,11 +53,11 @@ typedef sal_uInt8 ScRecalcMode;
 
 class FormulaMissingContext;
 
-class FORMULA_DLLPUBLIC MissingConvention
+class FORMULA_DLLPUBLIC MissingConventionPOF
 {
     bool    mbODFF;     /// TRUE: ODFF, FALSE: PODF
 public:
-    explicit    MissingConvention( bool bODFF ) : mbODFF(bODFF) {}
+    explicit    MissingConventionPOF( bool bODFF ) : mbODFF(bODFF) {}
     // Implementation and usage only in token.cxx
     inline  bool    isRewriteNeeded( OpCode eOp ) const;
     inline  bool    isODFF() const { return mbODFF; }
@@ -239,11 +239,18 @@ public:
 
     /** Determines if this formula needs any changes to convert it to something
         previous versions of OOo could consume (Plain Old Formula). */
-            bool                NeedsPofRewrite(const MissingConvention & rConv);
+            bool                NeedsPofRewrite(const MissingConventionPOF & rConv);
 
     /** Rewrites to Plain Old Formula, substituting missing parameters. The
         FormulaTokenArray* returned is new'ed. */
-            FormulaTokenArray*  RewriteMissingToPof(const MissingConvention & rConv);
+            FormulaTokenArray*  RewriteMissingToPof(const MissingConventionPOF & rConv);
+
+    /** Determines if this formula needs any changes to convert it to OOXML */
+            bool                NeedsOOXMLRewrite();
+
+    /** Rewrites to OOXML, substituting missing parameters. The
+        FormulaTokenArray* returned is new'ed. */
+            FormulaTokenArray*  RewriteMissingToOOXML();
 
     /** Determines if this formula may be followed by a reference. */
             bool                MayReferenceFollow();

@@ -934,11 +934,9 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
     return false;
 }
 
-
-
 // --- POF (plain old formula) rewrite of a token array ---------------------
 
-inline bool MissingConvention::isRewriteNeeded( OpCode eOp ) const
+inline bool MissingConventionPOF::isRewriteNeeded( OpCode eOp ) const
 {
     switch (eOp)
     {
@@ -965,11 +963,13 @@ class FormulaMissingContext
                     void    Clear() { mpFunc = NULL; mnCurArg = 0; }
             inline  bool    AddDefaultArg( FormulaTokenArray* pNewArr, int nArg, double f ) const;
                     bool    AddMissingExternal( FormulaTokenArray* pNewArr ) const;
-                    bool    AddMissing( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
-                    void    AddMoreArgs( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
+                    bool    AddMissingPOF( FormulaTokenArray *pNewArr, const MissingConventionPOF & rConv  ) const;
+                    void    AddMoreArgsPOF( FormulaTokenArray *pNewArr, const MissingConventionPOF & rConv  ) const;
+                    bool    AddMissingOOXML( FormulaTokenArray *pNewArr ) const;
+                    void    AddMoreArgsOOXML( FormulaTokenArray *pNewArr ) const;
 };
 
-void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const
+void FormulaMissingContext::AddMoreArgsPOF( FormulaTokenArray *pNewArr, const MissingConventionPOF & rConv  ) const
 {
     if ( !mpFunc )
         return;
@@ -1021,6 +1021,79 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
     }
 }
 
+void FormulaMissingContext::AddMoreArgsOOXML( FormulaTokenArray *pNewArr ) const
+{
+    if ( !mpFunc )
+        return;
+
+    switch (mpFunc->GetOpCode())
+    {
+        case ocIf:
+            if( mnCurArg == 0 )
+            {
+                // Excel needs at least two parameters in IF function
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 2nd, true()
+            }
+            break;
+
+        case ocPoissonDist:
+            if (mnCurArg == 1)
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 3rd, Cumulative=true()
+            }
+            break;
+
+        case ocGammaDist:
+        case ocNormDist:
+            if (mnCurArg == 2)
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=true()
+            }
+            break;
+
+        case ocLogNormDist:
+            if ( mnCurArg == 0 )
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 0.0 );      // 2nd, mean = 0.0
+            }
+            if ( mnCurArg <= 1 )
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 3rd, standard deviation = 1.0
+            }
+            break;
+
+        case ocRound:
+        case ocRoundUp:
+        case ocRoundDown:
+            if( mnCurArg == 0 )
+            {
+                // ROUND, ROUNDUP, ROUNDDOWN functions are fixed to 2 parameters in Excel
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 0.0 );      // 2nd, 0.0
+            }
+        break;
+
+        default:
+            break;
+    }
+/*      81596
+        case ocIndex:
+            if( nParamCount == 1 )
+            {
+                // INDEX function needs at least 2 parameters in Excel
+                PrepareParam( rFuncData );
+                AppendMissingToken();
+                FinishParam( rFuncData );
+            }
+        break;
+*/
+}
+
 inline bool FormulaMissingContext::AddDefaultArg( FormulaTokenArray* pNewArr, int nArg, double f ) const
 {
     if (mnCurArg == nArg)
@@ -1055,7 +1128,7 @@ bool FormulaMissingContext::AddMissingExternal( FormulaTokenArray *pNewArr ) con
     return false;
 }
 
-bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const
+bool FormulaMissingContext::AddMissingPOF( FormulaTokenArray *pNewArr, const MissingConventionPOF & rConv  ) const
 {
     if ( !mpFunc )
         return false;
@@ -1117,7 +1190,76 @@ bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const Missin
     return bRet;
 }
 
-bool FormulaTokenArray::NeedsPofRewrite( const MissingConvention & rConv )
+bool FormulaMissingContext::AddMissingOOXML( FormulaTokenArray *pNewArr ) const
+{
+    if ( !mpFunc )
+        return false;
+
+    bool bRet = false;
+    const OpCode eOp = mpFunc->GetOpCode();
+
+    switch (eOp)
+    {
+/*        case ocFixed:
+              return AddDefaultArg( pNewArr, 1, 2.0 );
+        case ocBetaDist:
+          case ocBetaInv:
+          case ocRMZ:     // PMT
+            return AddDefaultArg( pNewArr, 3, 0.0 );
+        case ocZinsZ:   // IPMT
+        case ocKapz:    // PPMT
+            return AddDefaultArg( pNewArr, 4, 0.0 );
+        case ocBW:      // PV
+        case ocZW:      // FV
+            bRet |= AddDefaultArg( pNewArr, 2, 0.0 );   // pmt
+            bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   // [fp]v
+            break;
+        case ocZins:    // RATE
+            bRet |= AddDefaultArg( pNewArr, 1, 0.0 );   // pmt
+            bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   // fv
+            bRet |= AddDefaultArg( pNewArr, 4, 0.0 );   // type
+            break;
+*/
+        case ocExternal:
+            return AddMissingExternal( pNewArr );
+/*
+            // --- more complex cases ---
+
+        case ocOffset:
+            // FIXME: rather tough.
+            // if arg 3 (height) omitted, export arg1 (rows)
+            break;
+*/
+        default:
+            break;
+    }
+/*      81596
+        case ocIndex:
+            if( nParamCount == 1 )
+            {
+                // INDEX function needs at least 2 parameters in Excel
+                PrepareParam( rFuncData );
+                AppendMissingToken();
+                FinishParam( rFuncData );
+            }
+        break;
+
+        case ocExternal:
+        case ocMacro:
+            // external or macro call without parameters needs the external name reference
+            if( nParamCount == 0 )
+                AppendDefaultParam( rFuncData );
+        break;
+
+        default:
+            // #i108420# function without parameters stored as macro call needs the external name reference
+            if( (nParamCount == 0) && rFuncData.IsMacroFunc() )
+                AppendDefaultParam( rFuncData );
+*/
+    return bRet;
+}
+
+bool FormulaTokenArray::NeedsPofRewrite( const MissingConventionPOF & rConv )
 {
     for ( FormulaToken *pCur = First(); pCur; pCur = Next() )
     {
@@ -1128,7 +1270,7 @@ bool FormulaTokenArray::NeedsPofRewrite( const MissingConvention & rConv )
 }
 
 
-FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvention & rConv )
+FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConventionPOF & rConv )
 {
     const size_t nAlloc = 256;
     FormulaMissingContext aCtx[ nAlloc ];
@@ -1175,7 +1317,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
                     pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
                 break;
             case ocClose:
-                pCtx[ nFn ].AddMoreArgs( pNewArr, rConv );
+                pCtx[ nFn ].AddMoreArgsPOF( pNewArr, rConv );
                 DBG_ASSERT( nFn > 0, "FormulaTokenArray::RewriteMissingToPof: underflow");
                 if (nOcas > 0 && pOcas[ nOcas-1 ] == nFn)
                     --nOcas;                    // leaving ADDRESS()
@@ -1192,7 +1334,128 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
                 break;
             case ocMissing:
                 if (bAdd)
-                    bAdd = !pCtx[ nFn ].AddMissing( pNewArr, rConv );
+                    bAdd = !pCtx[ nFn ].AddMissingPOF( pNewArr, rConv );
+                break;
+            default:
+                break;
+        }
+        if (bAdd)
+            pNewArr->AddToken( *pCur );
+    }
+
+    if (pOcas != &aOpCodeAddressStack[0])
+        delete [] pOcas;
+    if (pCtx != &aCtx[0])
+        delete [] pCtx;
+
+    return pNewArr;
+}
+
+bool FormulaTokenArray::NeedsOOXMLRewrite()
+{
+    for ( FormulaToken *pCur = First(); pCur; pCur = Next() )
+    {
+        switch ( pCur->GetOpCode() )
+        {
+    /*      case ocCosecant:                // for OOXML not rewritten anymore
+            case ocSecant:
+            case ocCot:
+            case ocCosecantHyp:
+            case ocSecantHyp:
+            case ocCotHyp:
+            case ocArcCot:
+    */
+            case ocArcCotHyp:               // simulate ACOTH(x) by ATANH(1/(x))
+
+            case ocIf:
+            case ocChose:
+
+            case ocExternal:
+            case ocEuroConvert:
+            case ocMacro:
+
+            case ocRound:
+            case ocRoundUp:
+            case ocRoundDown:
+
+            case ocIndex:
+
+            case ocGammaDist:
+            case ocPoissonDist:
+            case ocNormDist:
+            case ocLogNormDist:
+    //        case ocFDist:                 // fdo40835, to be implemented
+                return true;
+            default:
+                break;
+        }
+    }
+    return false;
+}
+
+FormulaTokenArray * FormulaTokenArray::RewriteMissingToOOXML()
+{
+    const size_t nAlloc = 256;
+    FormulaMissingContext aCtx[ nAlloc ];
+    int aOpCodeAddressStack[ nAlloc ];  // use of ADDRESS() function
+    const int nOmitAddressArg = 3;      // ADDRESS() 4th parameter A1/R1C1
+    sal_uInt16 nTokens = GetLen() + 1;
+    FormulaMissingContext* pCtx = (nAlloc < nTokens ? new FormulaMissingContext[nTokens] : &aCtx[0]);
+    int* pOcas = (nAlloc < nTokens ? new int[nTokens] : &aOpCodeAddressStack[0]);
+    // Never go below 0, never use 0, mpFunc always NULL.
+    pCtx[0].Clear();
+    int nFn = 0;
+    int nOcas = 0;
+
+    FormulaTokenArray *pNewArr = new FormulaTokenArray;
+    // At least RECALCMODE_ALWAYS needs to be set.
+    pNewArr->AddRecalcMode( GetRecalcMode());
+
+    for ( FormulaToken *pCur = First(); pCur; pCur = Next() )
+    {
+        bool bAdd = true;
+        // Don't write the expression of the new inserted ADDRESS() parameter.
+        // Do NOT omit the new second parameter of INDIRECT() though. If that
+        // was done for both, INDIRECT() actually could calculate different and
+        // valid (but wrong) results with the then changed return value of
+        // ADDRESS(). Better let it generate an error instead.
+        for (int i = nOcas; i-- > 0 && bAdd; )
+        {
+            if (pCtx[ pOcas[ i ] ].mnCurArg == nOmitAddressArg)
+            {
+                // Omit erverything except a trailing separator, the leading
+                // separator is omitted below. The other way around would leave
+                // an extraneous separator if no parameter followed.
+                if (!(pOcas[ i ] == nFn && pCur->GetOpCode() == ocSep))
+                    bAdd = false;
+            }
+        }
+        switch ( pCur->GetOpCode() )
+        {
+            case ocOpen:
+                ++nFn;      // all following operations on _that_ function
+                pCtx[ nFn ].mpFunc = PeekPrevNoSpaces();
+                pCtx[ nFn ].mnCurArg = 0;
+                break;
+            case ocClose:
+                pCtx[ nFn ].AddMoreArgsOOXML( pNewArr );
+                DBG_ASSERT( nFn > 0, "FormulaTokenArray::RewriteMissingToOOXML: underflow");
+                if (nOcas > 0 && pOcas[ nOcas-1 ] == nFn)
+                    --nOcas;                    // leaving ADDRESS()
+                if (nFn > 0)
+                    --nFn;
+                break;
+            case ocSep:
+                pCtx[ nFn ].mnCurArg++;
+                // Omit leading separator of ADDRESS() parameter.
+                if (nOcas && pOcas[ nOcas-1 ] == nFn && pCtx[ nFn ].mnCurArg == nOmitAddressArg)
+                {
+                    bAdd = false;
+                }
+                break;
+            case ocMissing:
+                if (bAdd)
+                    bAdd = !pCtx[ nFn ].AddMissingOOXML( pNewArr );
                 break;
             default:
                 break;
