@@ -378,11 +378,11 @@ BOOST_PP_REPEAT_FROM_TO(1, COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS,
 extern "C" \
 { \
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL compName##_component_getFactory( sal_Char const* pImplName, \
-                                         ::com::sun::star::lang::XMultiServiceFactory*   pServiceManager, \
-                                         ::com::sun::star::registry::XRegistryKey*       pRegistryKey ) \
+                                         void*   pServiceManager, \
+                                         void*       pRegistryKey ) \
     { \
-        return component_getFactoryHelper( pImplName, pServiceManager, \
-                                           pRegistryKey, \
+        return component_getFactoryHelper( pImplName, static_cast<css::lang::XMultiServiceFactory *>(pServiceManager), \
+                                           static_cast<css::registry::XRegistryKey *>(pRegistryKey), \
                                            BOOST_PP_SEQ_ENUM(varargs_) ); \
     } \
 }
