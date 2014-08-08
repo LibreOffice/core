@@ -56,22 +56,6 @@ fi
 
 do_configure()
 {
-  OPTIONS=(
-    --disable-online-update
-    --enable-extension-integration
-    --enable-release-build
-    --enable-ext-nlpsolver
-    --enable-ext-presenter-minimizer
-    --enable-ext-wiki-publisher
-    --with-build-version="${BUILD_NUMBER}"
-    --with-help
-    --with-java
-    --with-lang='en-US de fr es it pt'
-    --with-myspell-dicts
-    --without-junit
-    --with-system-dicts
-    --with-vendor='it@M Landeshauptstadt München'
-  )
   if [ "_$windows" = "_1" ]; then
     JDK_HOME='/cygdrive/c/Program Files (x86)/Java/jdk1.8.0_05'
     ANT_HOME='/opt/apache-ant-1.9.4'
@@ -81,7 +65,7 @@ do_configure()
     if [ ! -e "${ANT_HOME}" ]; then
       error "Kein ANT in ${ANT_HOME} gefunden."
     fi
-    OPTIONS+=(
+    OPTIONS_PLATFORM=(
       --with-ant-home="${ANT_HOME}"
       --with-jdk-home="${JDK_HOME}"
     )
@@ -91,7 +75,7 @@ do_configure()
     else
       JDK_HOME="/usr/lib/jvm/java-6-sun"
     fi
-    OPTIONS+=(
+    OPTIONS_PLATFORM=(
       --disable-dbus
       --disable-"${disable_kde}"
       --disable-gconf
@@ -117,6 +101,23 @@ do_configure()
       --with-system-zlib
     )
   fi
+  OPTIONS=(
+    --disable-online-update
+    --enable-extension-integration
+    --enable-release-build
+    --enable-ext-nlpsolver
+    --enable-ext-presenter-minimizer
+    --enable-ext-wiki-publisher
+    --with-build-version="${BUILD_NUMBER}"
+    --with-help
+    --with-java
+    --with-lang='en-US de fr es it pt'
+    --with-myspell-dicts
+    --without-junit
+    --with-system-dicts
+    --with-vendor='it@M Landeshauptstadt München'
+    "${OPTIONS_PLATFORM[@]}"
+  )
   ./autogen.sh "${OPTIONS[@]}" || error 'autogen.sh fehlgeschlagen.'
 }
 
