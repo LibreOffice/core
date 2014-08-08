@@ -67,7 +67,6 @@ do_configure()
     fi
     OPTIONS_PLATFORM=(
       --with-ant-home="${ANT_HOME}"
-      --with-jdk-home="${JDK_HOME}"
     )
   else
     if [ -f /usr/lib/j2sdk1.5-sun/bin/javac  ]; then
@@ -87,7 +86,6 @@ do_configure()
       --enable-lockdown
       --enable-odk
       --enable-python=internal
-      --with-jdk-home="${JDK_HOME}"
       --without-afms
       --without-doxygen
       --without-fonts
@@ -111,6 +109,7 @@ do_configure()
     --with-build-version="${BUILD_NUMBER}"
     --with-help
     --with-java
+    --with-jdk-home="${JDK_HOME}"
     --with-lang='en-US de fr es it pt'
     --with-myspell-dicts
     --without-junit
