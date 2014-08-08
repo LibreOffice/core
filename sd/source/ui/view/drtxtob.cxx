@@ -32,6 +32,7 @@
 #include <editeng/kernitem.hxx>
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
