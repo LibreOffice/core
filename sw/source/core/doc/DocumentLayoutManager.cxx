@@ -21,6 +21,7 @@
 #include <IDocumentState.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <undobj.hxx>
 #include <viewsh.hxx>
 #include <layouter.hxx>
@@ -134,7 +135,7 @@ SwFrmFmt *DocumentLayoutManager::MakeLayoutFmt( RndStdIds eRequest, const SfxIte
                 m_rSwdoc.GetNodes().MakeTextSection
                 ( aTmpIdx,
                   bHeader ? SwHeaderStartNode : SwFooterStartNode,
-                  m_rSwdoc.GetTxtCollFromPool(static_cast<sal_uInt16>( bHeader
+                  m_rSwdoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(static_cast<sal_uInt16>( bHeader
                                      ? ( eRequest == RND_STD_HEADERL
                                          ? RES_POOLCOLL_HEADERL
                                          : eRequest == RND_STD_HEADERR

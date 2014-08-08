@@ -78,6 +78,7 @@
 #include <swerror.h>
 #include <rtl/strbuf.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <xmloff/odffields.hxx>
 
 #define MAX_INDENT_LEVEL 20
@@ -289,7 +290,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     nLastLFPos = 0;
     nDefListLvl = 0;
     nDefListMargin = ((pTemplate && !bCfgOutStyles) ? pTemplate : pDoc)
-        ->GetTxtCollFromPool( RES_POOLCOLL_HTML_DD, false )
+        ->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_HTML_DD, false )
         ->GetLRSpace().GetTxtLeft();
     nHeaderFooterSpace = 0;
     nTxtAttrsToIgnore = 0;
@@ -823,7 +824,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFmt *pFmt,
 
     if( rHWrt.pTemplate )
         pRefFmt = SwHTMLWriter::GetTemplateFmt( pFmt->GetPoolFmtId(),
-                                                rHWrt.pTemplate );
+                                                &rHWrt.pTemplate->getIDocumentStylePoolAccess() );
 
     const SvxColorItem *pColorItem = 0;
 
@@ -1016,15 +1017,15 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     // Textfarbe ausgeben, wenn sie an der Standard-Vorlage gesetzt ist
     // und sich geaendert hat.
     OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_text,
-                  pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false ),
+                  pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false ),
                   *this );
 
     // Farben fuer (un)besuchte Links
     OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_link,
-                  pDoc->GetCharFmtFromPool( RES_POOLCHR_INET_NORMAL ),
+                  pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_INET_NORMAL ),
                   *this );
     OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_vlink,
-                  pDoc->GetCharFmtFromPool( RES_POOLCHR_INET_VISIT ),
+                  pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_INET_VISIT ),
                   *this );
 
     const SfxItemSet& rItemSet = pPageDesc->GetMaster().GetAttrSet();

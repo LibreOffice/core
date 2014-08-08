@@ -43,6 +43,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
@@ -359,13 +360,13 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     }
 
     // Start with inserting the Nodes and get the AutoFormat for the Table
-    SwTxtFmtColl *pBodyColl = GetTxtCollFromPool( RES_POOLCOLL_TABLE ),
+    SwTxtFmtColl *pBodyColl = getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TABLE ),
                  *pHeadColl = pBodyColl;
 
     bool bDfltBorders = 0 != ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER );
 
     if( (rInsTblOpts.mnInsMode & tabopts::HEADLINE) && (1 != nRows || !bDfltBorders) )
-        pHeadColl = GetTxtCollFromPool( RES_POOLCOLL_TABLE_HDLN );
+        pHeadColl = getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TABLE_HDLN );
 
     const sal_uInt16 nRowsToRepeat =
             tabopts::HEADLINE == (rInsTblOpts.mnInsMode & tabopts::HEADLINE) ?
@@ -719,7 +720,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     SwTableNode* pTblNd = GetNodes().TextToTable(
             aRg, cCh, pTableFmt, pLineFmt, pBoxFmt,
-            GetTxtCollFromPool( RES_POOLCOLL_STANDARD ), pUndo );
+            getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ), pUndo );
 
     SwTable * pNdTbl = &pTblNd->GetTable();
     OSL_ENSURE( pNdTbl, "No Table Node created" );
@@ -1210,7 +1211,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     SwTableNode* pTblNd = GetNodes().TextToTable(
             rTableNodes, pTableFmt, pLineFmt, pBoxFmt,
-            GetTxtCollFromPool( RES_POOLCOLL_STANDARD )/*, pUndo*/ );
+            getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD )/*, pUndo*/ );
 
     SwTable * pNdTbl = &pTblNd->GetTable();
     OSL_ENSURE( pNdTbl, "No Table Node created"  );
@@ -1993,7 +1994,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             {
                 const SwNodeIndex aTmpIdx( *pTblNd->EndOfSectionNode(), 1 );
                 GetNodes().MakeTxtNode( aTmpIdx,
-                            GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
+                            getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
             }
 
             // Save the cursors (UNO and otherwise)
@@ -2045,7 +2046,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             {
                 const SwNodeIndex aTmpIdx( *pTblNd->EndOfSectionNode(), 1 );
                 GetNodes().MakeTxtNode( aTmpIdx,
-                            GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
+                            getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
             }
 
             // Save the cursors (UNO and otherwise)
@@ -3216,7 +3217,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
 
         // Insert a paragraph between the Table
         GetNodes().MakeTxtNode( SwNodeIndex( *pNew ),
-                                GetTxtCollFromPool( RES_POOLCOLL_TEXT ) );
+                                getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT ) );
     }
 
     // Update Layout

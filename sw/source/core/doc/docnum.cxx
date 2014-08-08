@@ -29,6 +29,7 @@
 #include <DocumentRedlineManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <doctxm.hxx>
@@ -231,7 +232,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             n++;
 
             SwTxtFmtColl *aTmpColl =
-                GetTxtCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
+                getIDocumentStylePoolAccess().GetTxtCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
 
             if( aTmpColl->IsAssignedToListLevelOfOutlineStyle() &&
                 aTmpColl->GetAssignedOutlineStyleLevel() == n )
@@ -260,7 +261,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             n--;
 
             SwTxtFmtColl *aTmpColl =
-                GetTxtCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
+                getIDocumentStylePoolAccess().GetTxtCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
 
             if( aTmpColl->IsAssignedToListLevelOfOutlineStyle() &&
                 aTmpColl->GetAssignedOutlineStyleLevel() == n )

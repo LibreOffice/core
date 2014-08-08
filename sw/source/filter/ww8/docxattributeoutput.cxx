@@ -113,6 +113,7 @@
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
 #include <osl/file.hxx>
@@ -3720,7 +3721,7 @@ bool lcl_isDefaultFontSize(const SvxFontHeightItem& rFontHeight, SwDoc* pDoc)
 {
     bool bRet = rFontHeight.GetHeight() != 200; // see StyleSheetTable_Impl::StyleSheetTable_Impl() where we set this default
     // Additionally, if the default para style has the same font size, then don't write it here.
-    SwTxtFmtColl* pDefaultStyle = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+    SwTxtFmtColl* pDefaultStyle = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
     if (pDefaultStyle)
     {
         const SfxPoolItem* pItem = 0;

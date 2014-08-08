@@ -136,8 +136,8 @@ Writer::~Writer()
  */
 IDocumentSettingAccess* Writer::getIDocumentSettingAccess() { return &pDoc->getIDocumentSettingAccess(); }
 const IDocumentSettingAccess* Writer::getIDocumentSettingAccess() const { return &pDoc->getIDocumentSettingAccess(); }
-IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() { return pDoc; }
-const IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() const { return pDoc; }
+IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() { return &pDoc->getIDocumentStylePoolAccess(); }
+const IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() const { return &pDoc->getIDocumentStylePoolAccess(); }
 
 void Writer::ResetWriter()
 {

@@ -28,6 +28,7 @@
 #include <paratr.hxx>
 #include <doc.hxx>
 #include "docary.hxx"
+#include <IDocumentStylePoolAccess.hxx>
 #include "unostyle.hxx"
 #include "fmtpdsc.hxx"
 #include "pagedesc.hxx"
@@ -639,7 +640,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
         // first if it hasn't been used by now.
         const sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId )
-            pPageDesc = pDoc->GetPageDescFromPool( nPoolId, false );
+            pPageDesc = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId, false );
     }
 
     if( !pPageDesc )

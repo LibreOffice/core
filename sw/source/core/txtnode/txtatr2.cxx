@@ -33,6 +33,7 @@
 #include <fmtruby.hxx>
 #include <fmtmeta.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 
 TYPEINIT1(SwTxtINetFmt,SwClient);
 TYPEINIT1(SwTxtRuby,SwClient);
@@ -146,7 +147,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 
         pRet = IsPoolUserFmt( nId )
                ? ( (SwDoc*) pDoc )->FindCharFmtByName( rStr )
-               : ( (SwDoc*) pDoc )->GetCharFmtFromPool( nId );
+               : ( (SwDoc*) pDoc )->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
 
         if ( bResetMod )
         {
@@ -267,7 +268,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
 
         pRet = IsPoolUserFmt( nId )
                 ? ((SwDoc*)pDoc)->FindCharFmtByName( rStr )
-                : ((SwDoc*)pDoc)->GetCharFmtFromPool( nId );
+                : ((SwDoc*)pDoc)->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
 
         if( bResetMod )
         {

@@ -32,6 +32,7 @@
 #include <DocumentFieldsManager.hxx>
 #include <DocumentStatisticsManager.hxx>
 #include <DocumentStateManager.hxx>
+#include <DocumentStylePoolManager.hxx>
 #include <DocumentLayoutManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
@@ -470,6 +471,17 @@ IDocumentLayoutAccess & SwDoc::getIDocumentLayoutAccess()
 ::sw::DocumentLayoutManager & SwDoc::GetDocumentLayoutManager()
 {
     return *m_pDocumentLayoutManager;
+}
+
+//IDocumentStylePoolAccess
+IDocumentStylePoolAccess const & SwDoc::getIDocumentStylePoolAccess() const
+{
+    return *m_pDocumentStylePoolManager;
+}
+
+IDocumentStylePoolAccess & SwDoc::getIDocumentStylePoolAccess()
+{
+    return *m_pDocumentStylePoolManager;
 }
 
 /* Implementations the next Interface here */
@@ -1229,7 +1241,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
                                 !pMyColl->IsAssignedToListLevelOfOutlineStyle()
                                 ? RES_POOLCOLL_HEADLINE2
                                 : RES_POOLCOLL_HEADLINE1 );
-                    pMyColl = pExtDoc->GetTxtCollFromPool( nHeadLine );
+                    pMyColl = pExtDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( nHeadLine );
                     pNd->ChgFmtColl( pMyColl );
                 }
                 if( !pNd->Len() &&

@@ -43,6 +43,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
 #include <undobj.hxx>
@@ -627,7 +628,7 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
     };
     for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(s_ids); ++i)
     {
-        SwFrmFmt *const pFrmFmt = rDoc.GetFrmFmtFromPool( s_ids[i] );
+        SwFrmFmt *const pFrmFmt = rDoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( s_ids[i] );
 
         pFrmFmt->ResetFmtAttr( RES_LR_SPACE );
         pFrmFmt->ResetFmtAttr( RES_UL_SPACE );
@@ -921,8 +922,8 @@ bool SetHTMLTemplate( SwDoc & rDoc )
     if( pCNd )
     {
         pCNd->SetAttr
-            ( SwFmtPageDesc(rDoc.GetPageDescFromPool(RES_POOLPAGE_HTML, false) ) );
-        pCNd->ChgFmtColl( rDoc.GetTxtCollFromPool( RES_POOLCOLL_TEXT, false ));
+            ( SwFmtPageDesc(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_HTML, false) ) );
+        pCNd->ChgFmtColl( rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT, false ));
     }
 
     return bRet;

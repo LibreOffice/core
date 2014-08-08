@@ -22,7 +22,6 @@
 // SwDoc interfaces
 #include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentExternalData.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -191,6 +190,7 @@ class IDocumentRedlineAccess;
 class IDocumentStatistics;
 class IDocumentState;
 class IDocumentLayoutAccess;
+class IDocumentStylePoolAccess;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -215,6 +215,7 @@ namespace sw {
     class DocumentStatisticsManager;
     class DocumentStateManager;
     class DocumentLayoutManager;
+    class DocumentStylePoolManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -252,7 +253,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 // Represents the model of a Writer document.
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
-    public IDocumentStylePoolAccess,
     public IDocumentExternalData
 {
     friend class ::sw::DocumentContentOperationsManager;
@@ -294,6 +294,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentFieldsManager > m_pDocumentFieldsManager;
     const ::boost::scoped_ptr< ::sw::DocumentStatisticsManager > m_pDocumentStatisticsManager;
     const ::boost::scoped_ptr< ::sw::DocumentLayoutManager > m_pDocumentLayoutManager;
+    const ::boost::scoped_ptr< ::sw::DocumentStylePoolManager > m_pDocumentStylePoolManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -451,8 +452,11 @@ private:
     void DoUpdateAllCharts();
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
 
+public:
     SwFmt *_MakeCharFmt(const OUString &, SwFmt *, bool, bool );
     SwFmt *_MakeFrmFmt(const OUString &, SwFmt *, bool, bool );
+
+private:
     SwFmt *_MakeTxtFmtColl(const OUString &, SwFmt *, bool, bool );
 
 private:
@@ -542,15 +546,8 @@ public:
     virtual bool UpdateRsid( const SwPaM &rRg, sal_Int32 nLen );
 
     // IDocumentStylePoolAccess
-    virtual SwTxtFmtColl* GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) SAL_OVERRIDE;
-    virtual SwFmt* GetFmtFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual SwCharFmt* GetCharFmtFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual SwPageDesc* GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) SAL_OVERRIDE;
-    virtual SwNumRule* GetNumRuleFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual bool IsPoolTxtCollUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
-    virtual bool IsPoolFmtUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
-    virtual bool IsPoolPageDescUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
+    IDocumentStylePoolAccess const & getIDocumentStylePoolAccess() const;
+    IDocumentStylePoolAccess & getIDocumentStylePoolAccess();
 
     // SwLineNumberInfo
     virtual const SwLineNumberInfo& GetLineNumberInfo() const;
@@ -806,6 +803,7 @@ public:
     const SwFrmFmts* GetFrmFmts() const     { return mpFrmFmtTbl; }
           SwFrmFmts* GetFrmFmts()           { return mpFrmFmtTbl; }
     const SwCharFmts* GetCharFmts() const   { return mpCharFmtTbl;}
+          SwCharFmts* GetCharFmts()         { return mpCharFmtTbl;}
 
     // LayoutFormats (frames, DrawObjects), sometimes const sometimes not
     const SwFrmFmts* GetSpzFrmFmts() const   { return mpSpzFrmFmtTbl; }
@@ -843,7 +841,9 @@ public:
     // Formatcollections (styles)
     // TXT
     const SwTxtFmtColl* GetDfltTxtFmtColl() const { return mpDfltTxtFmtColl; }
+    SwTxtFmtColl* GetDfltTxtFmtColl() { return mpDfltTxtFmtColl; }
     const SwTxtFmtColls *GetTxtFmtColls() const { return mpTxtFmtCollTbl; }
+    SwTxtFmtColls *GetTxtFmtColls() { return mpTxtFmtCollTbl; }
     SwTxtFmtColl *MakeTxtFmtColl( const OUString &rFmtName,
                                   SwTxtFmtColl *pDerivedFrom,
                                   bool bBroadcast = false,

@@ -19,6 +19,7 @@
 
 #include <doc.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
 #include <fmtftn.hxx>
@@ -403,7 +404,7 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
     }
 
     if( 0 == (pFmtColl = pInfo->GetFtnTxtColl() ) )
-        pFmtColl = rNodes.GetDoc()->GetTxtCollFromPool( nPoolId );
+        pFmtColl = rNodes.GetDoc()->getIDocumentStylePoolAccess().GetTxtCollFromPool( nPoolId );
 
     SwStartNode* pSttNd = rNodes.MakeTextSection( SwNodeIndex( rNodes.GetEndOfInserts() ),
                                         SwFootnoteStartNode, pFmtColl );

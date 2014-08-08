@@ -82,6 +82,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentState.hxx>
 #include <pam.hxx>
@@ -202,7 +203,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
         if( !rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
         {
             rDoc.getIDocumentContentOperations().InsertPoolItem( rPam, SwFmtPageDesc(
-                rDoc.GetPageDescFromPool( RES_POOLPAGE_HTML, false )), 0 );
+                rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )), 0 );
         }
     }
 

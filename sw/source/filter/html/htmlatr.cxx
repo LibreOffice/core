@@ -60,6 +60,7 @@
 #include <charfmt.hxx>
 #include <fmtfld.hxx>
 #include <doc.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
@@ -269,7 +270,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                 // fuer HTML-Tag-Vorlagen die Unterscheide zum Original
                 // (sofern verfuegbar)
                 pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
-                                                        pTemplate );
+                                                        &pTemplate->getIDocumentStylePoolAccess() );
                 break;
 
             default:
@@ -277,7 +278,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                 // aktuellen Doks, wenn die nicht verfuegbar ist
                 if( pTemplate )
                     pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
-                                                            pTemplate );
+                                                            &pTemplate->getIDocumentStylePoolAccess() );
                 else
                     pReferenceFmt = SwHTMLWriter::GetParentFmt( *pFmt, nDeep );
                 break;
@@ -291,9 +292,9 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         // exportiert werden. Fuer Nicht-Styles-Export sollte die der
         // HTML-Vorlage als Referenz dienen
         if( !bOutStyles && pTemplate )
-            pReferenceFmt = pTemplate->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
+            pReferenceFmt = pTemplate->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
         else
-            pReferenceFmt = pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
+            pReferenceFmt = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
     }
 
     if( pReferenceFmt || nDeep==0 )
@@ -382,7 +383,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                 bool bPut = true;
                 if( pTemplate )
                 {
-                    pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
+                    pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
                     const SfxPoolItem *pRefItem;
                     bool bRefItemSet =
                         SFX_ITEM_SET==pReferenceFmt->GetAttrSet().GetItemState(
@@ -1817,9 +1818,9 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
         break;
     case RES_TXTATR_INETFMT:
         {
-            if( GetFmtInfo( *pDoc->GetCharFmtFromPool(
+            if( GetFmtInfo( *pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
                      RES_POOLCHR_INET_NORMAL), rFmtInfos )->bScriptDependent ||
-                GetFmtInfo( *pDoc->GetCharFmtFromPool(
+                GetFmtInfo( *pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
                      RES_POOLCHR_INET_VISIT), rFmtInfos )->bScriptDependent )
             {
                 bDependsOnScript = true;
@@ -2091,7 +2092,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( nLeft || nRight )
             {
                 const SwFrmFmt& rPgFmt =
-                    rHTMLWrt.pDoc->GetPageDescFromPool
+                    rHTMLWrt.pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool
                     ( RES_POOLPAGE_HTML, false )->GetMaster();
                 const SwFmtFrmSize& rSz   = rPgFmt.GetFrmSize();
                 const SvxLRSpaceItem& rLR = rPgFmt.GetLRSpace();
@@ -2942,7 +2943,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, bool bOn )
 
     bool bScriptDependent = false;
     {
-        const SwCharFmt* pFmt = rWrt.pDoc->GetCharFmtFromPool(
+        const SwCharFmt* pFmt = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
                  RES_POOLCHR_INET_NORMAL );
         SwHTMLFmtInfo aFmtInfo( pFmt );
         SwHTMLFmtInfos::const_iterator it = rHTMLWrt.aChrFmtInfos.find( aFmtInfo );
@@ -2953,7 +2954,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, bool bOn )
     }
     if( !bScriptDependent )
     {
-        const SwCharFmt* pFmt = rWrt.pDoc->GetCharFmtFromPool(
+        const SwCharFmt* pFmt = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
                  RES_POOLCHR_INET_VISIT );
         SwHTMLFmtInfo aFmtInfo( pFmt );
         SwHTMLFmtInfos::const_iterator it = rHTMLWrt.aChrFmtInfos.find( aFmtInfo );

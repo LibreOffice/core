@@ -30,6 +30,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>
 #include <breakit.hxx>
@@ -347,7 +348,7 @@ SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType
     //mnStartNode = mnCurrentNode = get node from current cursor TODO!
 
     // register as listener and get notified when document is closed
-    mpDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD )->Add(this);
+    mpDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD )->Add(this);
 }
 
 SwXFlatParagraphIterator::~SwXFlatParagraphIterator()

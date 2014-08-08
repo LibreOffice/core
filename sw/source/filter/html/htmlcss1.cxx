@@ -48,6 +48,7 @@
 #include <svx/svxids.hrc>
 
 #include "doc.hxx"
+#include <IDocumentStylePoolAccess.hxx>
 #include "pam.hxx"
 #include "ndtxt.hxx"
 #include "poolfmt.hxx"
@@ -562,7 +563,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
 
 const SvxBrushItem& SwCSS1Parser::GetPageDescBackground() const
 {
-    return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false )
+    return pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )
         ->GetMaster().GetBackground();
 }
 
@@ -1227,7 +1228,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtCollFromPool( sal_uInt16 nPoolId ) const
 {
     sal_uInt16 nOldArrLen = pDoc->GetTxtFmtColls()->size();
 
-    SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool( nPoolId, false );
+    SwTxtFmtColl *pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( nPoolId, false );
 
     if( bIsNewDoc )
     {
@@ -1244,7 +1245,7 @@ SwCharFmt *SwCSS1Parser::GetCharFmtFromPool( sal_uInt16 nPoolId ) const
 {
     sal_uInt16 nOldArrLen = pDoc->GetCharFmts()->size();
 
-    SwCharFmt *pCharFmt = pDoc->GetCharFmtFromPool( nPoolId );
+    SwCharFmt *pCharFmt = pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( nPoolId );
 
     if( bIsNewDoc )
     {
@@ -1342,7 +1343,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
 
 SwPageDesc *SwCSS1Parser::GetMasterPageDesc()
 {
-    return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
+    return pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 }
 
 static SwPageDesc *FindPageDesc(SwDoc *pDoc, sal_uInt16 nPoolId)
@@ -1359,7 +1360,7 @@ static SwPageDesc *FindPageDesc(SwDoc *pDoc, sal_uInt16 nPoolId)
 const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
 {
     if( RES_POOLPAGE_HTML == nPoolId )
-        return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
+        return pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
     const SwPageDesc *pPageDesc = FindPageDesc(pDoc, nPoolId);
     if( !pPageDesc && bCreate )
@@ -1370,11 +1371,11 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
         if( RES_POOLPAGE_FIRST == nPoolId )
             pMasterPageDesc = FindPageDesc(pDoc, RES_POOLPAGE_RIGHT);
         if( !pMasterPageDesc )
-            pMasterPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
+            pMasterPageDesc = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
         // Die neue Seitenvorlage entsteht aus dem Master durch kopieren.
         SwPageDesc *pNewPageDesc = pDoc->
-            GetPageDescFromPool( nPoolId, false );
+            getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId, false );
 
         // dazu brauchen wir auch die Nummer der neuen Vorlage
         OSL_ENSURE(pNewPageDesc == FindPageDesc(pDoc, nPoolId), "Seitenvorlage nicht gefunden");
@@ -1823,7 +1824,7 @@ bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
         return false;
 
     SwPageDesc *pMasterPageDesc =
-        pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
+        pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
     SvxCSS1MapEntry *pPageEntry = GetPage( aEmptyOUStr, false );
     if( pPageEntry )

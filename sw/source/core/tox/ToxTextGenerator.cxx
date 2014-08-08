@@ -24,6 +24,8 @@
 #include "fchrfmt.hxx"
 #include "doc.hxx"
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include "fmtinfmt.hxx"
 #include "ndtxt.hxx"
 #include "pagedesc.hxx"
@@ -244,7 +246,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
             {
                 SwCharFmt* pCharFmt;
                 if( USHRT_MAX != aToken.nPoolId )
-                    pCharFmt = pDoc->GetCharFmtFromPool( aToken.nPoolId );
+                    pCharFmt = pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( aToken.nPoolId );
                 else
                     pCharFmt = pDoc->FindCharFmtByName( aToken.sCharStyleName);
 

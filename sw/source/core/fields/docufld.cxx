@@ -74,6 +74,7 @@
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
@@ -2339,7 +2340,7 @@ SwFieldType* SwJumpEditFieldType::Copy() const
 
 SwCharFmt* SwJumpEditFieldType::GetCharFmt()
 {
-    SwCharFmt* pFmt = pDoc->GetCharFmtFromPool( RES_POOLCHR_JUMPEDIT );
+    SwCharFmt* pFmt = pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_JUMPEDIT );
 
     // not registered yet?
     if( !aDep.GetRegisteredIn() )

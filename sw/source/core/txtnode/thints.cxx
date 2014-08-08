@@ -55,6 +55,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -210,7 +211,7 @@ void SwTxtINetFmt::InitINetFmt(SwTxtNode & rNode)
 {
     ChgTxtNode(&rNode);
     SwCharFmt * const pFmt(
-         rNode.GetDoc()->GetCharFmtFromPool(RES_POOLCHR_INET_NORMAL) );
+         rNode.GetDoc()->getIDocumentStylePoolAccess().GetCharFmtFromPool(RES_POOLCHR_INET_NORMAL) );
     pFmt->Add( this );
 }
 
@@ -218,7 +219,7 @@ void SwTxtRuby::InitRuby(SwTxtNode & rNode)
 {
     ChgTxtNode(&rNode);
     SwCharFmt * const pFmt(
-        rNode.GetDoc()->GetCharFmtFromPool(RES_POOLCHR_RUBYTEXT) );
+        rNode.GetDoc()->getIDocumentStylePoolAccess().GetCharFmtFromPool(RES_POOLCHR_RUBYTEXT) );
     pFmt->Add( this );
 }
 

@@ -32,6 +32,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
@@ -121,7 +122,7 @@ SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
 {
     if ( !aPageDescDep.GetRegisteredIn() )
     {
-        SwPageDesc *pDesc = rDoc.GetPageDescFromPool( static_cast<sal_uInt16>(
+        SwPageDesc *pDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(
             m_bEndNote ? RES_POOLPAGE_ENDNOTE   : RES_POOLPAGE_FOOTNOTE ) );
         pDesc->Add( &((SwClient&)aPageDescDep) );
     }
@@ -153,7 +154,7 @@ SwCharFmt* SwEndNoteInfo::GetCharFmt(SwDoc &rDoc) const
 {
     if ( !aCharFmtDep.GetRegisteredIn() )
     {
-        SwCharFmt* pFmt = rDoc.GetCharFmtFromPool( static_cast<sal_uInt16>(
+        SwCharFmt* pFmt = rDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool( static_cast<sal_uInt16>(
             m_bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE ) );
         pFmt->Add( &((SwClient&)aCharFmtDep) );
     }
@@ -170,7 +171,7 @@ SwCharFmt* SwEndNoteInfo::GetAnchorCharFmt(SwDoc &rDoc) const
 {
     if( !aAnchorCharFmtDep.GetRegisteredIn() )
     {
-        SwCharFmt* pFmt = rDoc.GetCharFmtFromPool( static_cast<sal_uInt16>(
+        SwCharFmt* pFmt = rDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool( static_cast<sal_uInt16>(
             m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
         pFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
     }

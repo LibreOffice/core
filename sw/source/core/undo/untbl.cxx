@@ -38,6 +38,7 @@
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <editsh.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
@@ -1970,7 +1971,7 @@ void SwUndoTblMerge::UndoImpl(::sw::UndoRedoContext & rContext)
 CHECKTABLE(pTblNd->GetTable())
 
     SwSelBoxes aSelBoxes;
-    SwTxtFmtColl* pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+    SwTxtFmtColl* pColl = rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
     std::set<sal_uLong>::iterator it;
     for (it = m_Boxes.begin(); it != m_Boxes.end(); ++it)

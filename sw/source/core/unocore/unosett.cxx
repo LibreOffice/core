@@ -32,6 +32,7 @@
 #include <ftninfo.hxx>
 #include <doc.hxx>
 #include <pagedesc.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <charfmt.hxx>
 #include <lineinfo.hxx>
 #include <docsh.hxx>
@@ -212,7 +213,7 @@ static SwCharFmt* lcl_getCharFmt(SwDoc* pDoc, const uno::Any& aValue)
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sCharFmt, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
         if(USHRT_MAX != nId)
-            pRet = pDoc->GetCharFmtFromPool( nId );
+            pRet = pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
     }
     return pRet;
 }
@@ -228,7 +229,7 @@ static SwTxtFmtColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sParaStyle, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
         if( USHRT_MAX != nId  )
-            pRet = pDoc->GetTxtCollFromPool( nId );
+            pRet = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( nId );
     }
     return pRet;
 }
@@ -254,7 +255,7 @@ static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sPageDesc, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC);
         if(USHRT_MAX != nId)
-            pRet = pDoc->GetPageDescFromPool( nId );
+            pRet = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( nId );
     }
     return pRet;
 }
@@ -994,7 +995,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                     if(rInfo.HasCharFormat())
                     {
                         SwStyleNameMapper::FillProgName(
-                                    rInfo.GetCharFmt(*pDoc)->GetName(),
+                                    rInfo.GetCharFmt(pDoc->getIDocumentStylePoolAccess())->GetName(),
                                     aString,
                                     nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,
                                     true);
@@ -1159,7 +1160,7 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
         }
     }
     if(pDoc)
-        pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+        pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         m_sNewCharStyleNames[i] = aInvalidStyle;
@@ -1174,7 +1175,7 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(false)
 {
-    pDocShell->GetDoc()->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDocShell->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
 SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
@@ -1184,7 +1185,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(false)
 {
-    rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     m_sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
 #if OSL_DEBUG_LEVEL > 1
     const sal_uInt16 nIndex =

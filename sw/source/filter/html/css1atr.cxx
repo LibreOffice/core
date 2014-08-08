@@ -564,7 +564,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
         sal_uInt16 nPoolId = pColl->GetPoolFmtId();
         if( !bUsed || nPoolId == RES_POOLCOLL_TEXT ||
             pDoc->IsUsed( *pColl ) )
-            OutCSS1_SwFmt( *this, *pColl, pDoc, pTemplate );
+            OutCSS1_SwFmt( *this, *pColl, &pDoc->getIDocumentStylePoolAccess(), pTemplate );
     }
 
     // the Default-TextStyle is not also exported !!
@@ -576,7 +576,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
         if( !bUsed || nPoolId == RES_POOLCHR_INET_NORMAL ||
             nPoolId == RES_POOLCHR_INET_VISIT ||
             pDoc->IsUsed( *pCFmt ) )
-            OutCSS1_SwFmt( *this, *pCFmt, pDoc, pTemplate );
+            OutCSS1_SwFmt( *this, *pCFmt, &pDoc->getIDocumentStylePoolAccess(), pTemplate );
     }
 
     const SwFtnIdxs& rIdxs = pDoc->GetFtnIdxs();
@@ -1512,16 +1512,16 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     switch( nDeep )
     {
     case CSS1_FMT_ISTAG:
-        pRefFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
+        pRefFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
         break;
     case CSS1_FMT_CMPREF:
         pRefFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pDoc );
-        pRefFmtScript = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
+        pRefFmtScript = SwHTMLWriter::GetTemplateFmt( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
         bClearSame = false;
         break;
     default:
         pRefFmt = SwHTMLWriter::GetParentFmt( rFmt, nDeep );
-        pRefFmtScript = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
+        pRefFmtScript = SwHTMLWriter::GetTemplateFmt( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
         bSetDefaults = false;
         break;
     }
@@ -1639,7 +1639,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     if( !bExtRef )
         pRefPageDesc = pDoc->GetPageDescFromPool( nRefPoolId, false );
     else if( pTemplate )
-        pRefPageDesc = pTemplate->GetPageDescFromPool( nRefPoolId, false );
+        pRefPageDesc = pTemplate->getIDocumentStylePoolAccess().GetPageDescFromPool( nRefPoolId, false );
 
     OUString aSelector = "@" + OStringToOUString( sCSS1_page, RTL_TEXTENCODING_ASCII_US );
 
@@ -1764,7 +1764,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         // footnote and endnote template.
         if( nNotes == 0 && rHTMLWrt.pTemplate )
         {
-            SwFmt *pRefFmt = rHTMLWrt.pTemplate->GetCharFmtFromPool(
+            SwFmt *pRefFmt = rHTMLWrt.pTemplate->getIDocumentStylePoolAccess().GetCharFmtFromPool(
                         static_cast< sal_uInt16 >(bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE) );
             if( pRefFmt )
                 SwHTMLWriter::SubtractItemSet( aItemSet, pRefFmt->GetAttrSet(),

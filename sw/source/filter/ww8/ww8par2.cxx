@@ -43,6 +43,7 @@
 #include <msfilter.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
@@ -4367,7 +4368,7 @@ void WW8RStyle::Import()
 {
     pIo->pDfltTxtFmtColl  = pIo->rDoc.GetDfltTxtFmtColl();
     pIo->pStandardFmtColl =
-        pIo->rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false);
+        pIo->rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false);
 
     if( pIo->nIniFlags & WW8FL_NO_STYLES )
         return;

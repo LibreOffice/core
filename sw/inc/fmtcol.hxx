@@ -26,6 +26,7 @@
 #include <rtl/ustring.hxx>
 
 class SwDoc;
+namespace sw{ class DocumentStylePoolManager; }
 
 class SwFmtColl : public SwFmt
 {
@@ -53,6 +54,7 @@ private:
 class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
 {
     friend class SwDoc;
+    friend class ::sw::DocumentStylePoolManager;
 
     SwTxtFmtColl(const SwTxtFmtColl & rRef);
 
@@ -236,6 +238,7 @@ class SwFmtCollConditions : public boost::ptr_vector<SwCollCondition> {};
 class SW_DLLPUBLIC SwConditionTxtFmtColl : public SwTxtFmtColl
 {
     friend class SwDoc;
+    friend class ::sw::DocumentStylePoolManager;
 protected:
     SwFmtCollConditions aCondColls;
 

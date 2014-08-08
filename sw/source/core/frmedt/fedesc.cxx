@@ -22,6 +22,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -130,7 +131,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
     {
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId &&
-            0 != (pDesc = GetDoc()->GetPageDescFromPool( nPoolId ))
+            0 != (pDesc = GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId ))
             && pPos )
                 // appended always
             *pPos = GetDoc()->GetPageDescCnt() - 1 ;

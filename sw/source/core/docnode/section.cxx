@@ -37,6 +37,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
 #include <node.hxx>
 #include <pam.hxx>
@@ -1202,7 +1203,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         SwNodeIndex aIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
         SwTxtNode* pNewNd = pDoc->GetNodes().MakeTxtNode( aIdx,
-                        pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT ) );
+                        pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT ) );
 
         if( pESh )
             pESh->StartAllAction();

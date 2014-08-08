@@ -27,6 +27,7 @@
 #include <svl/stritem.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/app.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <editeng/pmdlitem.hxx>
@@ -383,7 +384,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
                 const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
                     rColl, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if( USHRT_MAX != nId )
-                    pColl = rDoc.GetTxtCollFromPool( nId );
+                    pColl = rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( nId );
                 else
                     pColl = rDoc.MakeTxtFmtColl( rColl,
                                 (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl() );

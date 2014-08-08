@@ -29,6 +29,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docsh.hxx>
 #include <pam.hxx>
 #include <swblocks.hxx>
@@ -599,7 +600,7 @@ void SwXMLTextBlocks::MakeBlockText( const OUString& rText )
     SwTxtNode* pTxtNode = pDoc->GetNodes()[ pDoc->GetNodes().GetEndOfContent().
                                         GetIndex() - 1 ]->GetTxtNode();
     if( pTxtNode->GetTxtColl() == pDoc->GetDfltTxtFmtColl() )
-        pTxtNode->ChgFmtColl( pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
+        pTxtNode->ChgFmtColl( pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
     sal_Int32 nPos = 0;
     do

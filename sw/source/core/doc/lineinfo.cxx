@@ -19,6 +19,7 @@
 
 #include "doc.hxx"
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
 #include "lineinfo.hxx"
 #include "charfmt.hxx"

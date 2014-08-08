@@ -39,6 +39,7 @@
 #include <unoport.hxx>
 #include <unoredline.hxx>
 #include <doc.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 
 using namespace ::com::sun::star;
@@ -385,7 +386,7 @@ SwXRedline::SwXRedline(SwRangeRedline& rRedline, SwDoc& rDoc) :
     pDoc(&rDoc),
     pRedline(&rRedline)
 {
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
 SwXRedline::~SwXRedline()

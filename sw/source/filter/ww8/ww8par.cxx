@@ -75,6 +75,7 @@
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docufld.hxx>
 #include <swfltopt.hxx>
 #include <viewsh.hxx>
@@ -4376,7 +4377,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     if (IsNewDoc() && rIter == rStart)
     {
         rIter->mpPage =
-            mrReader.rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+            mrReader.rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
     }
     else
     {
@@ -4532,7 +4533,7 @@ void wwSectionManager::InsertSegments()
             {
                 pTxtNd =
                     mrReader.rDoc.GetNodes().MakeTxtNode(aAnchor,
-                    mrReader.rDoc.GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
+                    mrReader.rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
 
                 aSectPaM.GetPoint()->nNode = SwNodeIndex(*pTxtNd);
                 aSectPaM.GetPoint()->nContent.Assign(
@@ -5095,7 +5096,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         {
             SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
             SwTxtFmtColl* pColl =
-                rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD,
+                rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD,
                 false);
             SwStartNode *pNode =
                 rDoc.GetNodes().MakeTextSection(aIdx,

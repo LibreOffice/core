@@ -23,6 +23,7 @@
 #include <DocumentRedlineManager.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <UndoManager.hxx>
 #include <docary.hxx>
 #include <textboxhelper.hxx>
@@ -1279,7 +1280,7 @@ namespace //local functions originally from docfmt.cxx
                     !pDoc->FindNumRulePtr( pRule->GetValue() ) &&
                     USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
                                     nsSwGetPoolIdFromName::GET_POOLID_NUMRULE )) )
-                    pDoc->GetNumRuleFromPool( nPoolId );
+                    pDoc->getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId );
             }
         }
 
@@ -2572,7 +2573,7 @@ SwFlyFrmFmt* DocumentContentOperationsManager::Insert( const SwPaM &rRg,
                             SwFrmFmt* pFrmFmt )
 {
     if( !pFrmFmt )
-        pFrmFmt = m_rSwdoc.GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
+        pFrmFmt = m_rSwdoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = m_rSwdoc.GetNodes().MakeGrfNode(
                             SwNodeIndex( m_rSwdoc.GetNodes().GetEndOfAutotext() ),
                             rGrfName, rFltName, pGraphic,
@@ -2588,7 +2589,7 @@ SwFlyFrmFmt* DocumentContentOperationsManager::Insert( const SwPaM &rRg, const G
                             SwFrmFmt* pFrmFmt )
 {
     if( !pFrmFmt )
-        pFrmFmt = m_rSwdoc.GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
+        pFrmFmt = m_rSwdoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = m_rSwdoc.GetNodes().MakeGrfNode(
                             SwNodeIndex( m_rSwdoc.GetNodes().GetEndOfAutotext() ),
                             rGrfObj, m_rSwdoc.GetDfltGrfFmtColl() );
@@ -2609,7 +2610,7 @@ SwFlyFrmFmt* DocumentContentOperationsManager::Insert(const SwPaM &rRg, const sv
         if (SotExchange::IsMath(aClassName))
             nId = RES_POOLFRM_FORMEL;
 
-        pFrmFmt = m_rSwdoc.GetFrmFmtFromPool( nId );
+        pFrmFmt = m_rSwdoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( nId );
     }
     return _InsNoTxtNode( *rRg.GetPoint(), m_rSwdoc.GetNodes().MakeOLENode(
                             SwNodeIndex( m_rSwdoc.GetNodes().GetEndOfAutotext() ),
@@ -2626,7 +2627,7 @@ SwFlyFrmFmt* DocumentContentOperationsManager::InsertOLE(const SwPaM &rRg, const
                         SwFrmFmt* pFrmFmt )
 {
     if( !pFrmFmt )
-        pFrmFmt = m_rSwdoc.GetFrmFmtFromPool( RES_POOLFRM_OLE );
+        pFrmFmt = m_rSwdoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_OLE );
 
     return _InsNoTxtNode( *rRg.GetPoint(),
                             m_rSwdoc.GetNodes().MakeOLENode(
@@ -2844,7 +2845,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
             {
                 SwTxtNode* pTxtNd = m_rSwdoc.GetNodes().MakeTxtNode(
                                         SwNodeIndex( *pTblNd ),
-                                        m_rSwdoc.GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
+                                        m_rSwdoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
                 if( pTxtNd )
                 {
                     ((SwPosition&)rPos).nNode = pTblNd->GetIndex()-1;
@@ -2915,7 +2916,7 @@ bool DocumentContentOperationsManager::AppendTxtNode( SwPosition& rPos )
         // so then one can be created!
         SwNodeIndex aIdx( rPos.nNode, 1 );
         pCurNode = m_rSwdoc.GetNodes().MakeTxtNode( aIdx,
-                        m_rSwdoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
+                        m_rSwdoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
     }
     else
         pCurNode = (SwTxtNode*)pCurNode->AppendNode( rPos );
@@ -4098,7 +4099,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 {
                     if( pStt->nContent.GetIndex() || bOneNode )
                         pDestTxtNd = pDoc->GetNodes().MakeTxtNode( aInsPos,
-                            pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
+                            pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
                     else
                     {
                         pDestTxtNd = static_cast<SwTxtNode*>(pSttTxtNd->MakeCopy( pDoc, aInsPos ));
@@ -4281,7 +4282,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( !pDestTxtNd )
             {
                 pDestTxtNd = pDoc->GetNodes().MakeTxtNode( aInsPos,
-                            pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
+                            pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
                 aDestIdx.Assign( pDestTxtNd, 0  );
                 aInsPos--;
 

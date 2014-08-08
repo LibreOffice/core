@@ -38,6 +38,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <charfmt.hxx>
 #include <cmdid.h>
@@ -1197,7 +1198,7 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, bool bConditional) :
     bIsConditional(bConditional)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     // get the property set for the default style data
     // First get the model
     uno::Reference < frame::XModel > xModel = pDoc->GetDocShell()->GetBaseModel();
@@ -1616,7 +1617,7 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
             {
                 if(SW_RESSTR(i) == mrStyleName)
                 {
-                    mpOldPageDesc = mrDoc.GetPageDescFromPool( static_cast< sal_uInt16 >(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN) );
+                    mpOldPageDesc = mrDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast< sal_uInt16 >(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN) );
                     break;
                 }
             }
@@ -3131,7 +3132,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     aUL.SetLower(static_cast <sal_uInt16> (nSize));
                     pTargetFmt->SetFmtAttr(aLR);
                     pTargetFmt->SetFmtAttr(aUL);
-                    SwPageDesc* pStdPgDsc = m_pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+                    SwPageDesc* pStdPgDsc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
                     SwFmtFrmSize aFrmSz(ATT_FIX_SIZE);
 
                     if(RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFmtId())
@@ -4101,7 +4102,7 @@ SwXAutoStyleFamily::SwXAutoStyleFamily(SwDocShell* pDocSh, IStyleAccess::SwAutoS
     pDocShell( pDocSh ), eFamily(nFamily)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    pDocSh->GetDoc()->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDocSh->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
 SwXAutoStyleFamily::~SwXAutoStyleFamily()
@@ -4404,7 +4405,7 @@ SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwA
 : pImpl( new SwAutoStylesEnumImpl( pDoc, eFam ) )
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
 SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator()
@@ -4462,7 +4463,7 @@ SwXAutoStyle::SwXAutoStyle(
     mrDoc(*pDoc)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    mrDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    mrDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
 SwXAutoStyle::~SwXAutoStyle()

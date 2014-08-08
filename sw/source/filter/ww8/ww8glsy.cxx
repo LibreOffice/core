@@ -28,6 +28,7 @@
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include "ww8glsy.hxx"
 #include "ww8par.hxx"
@@ -105,7 +106,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 
     if( aStart < aDocEnd )
     {
-        SwTxtFmtColl* pColl = pD->GetTxtCollFromPool
+        SwTxtFmtColl* pColl = pD->getIDocumentStylePoolAccess().GetTxtCollFromPool
             (RES_POOLCOLL_STANDARD, false);
         sal_uInt16 nGlosEntry = 0;
         SwCntntNode* pCNd = 0;

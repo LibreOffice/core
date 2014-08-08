@@ -41,6 +41,7 @@
 #include "doc.hxx"
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include "swtable.hxx"
 #include "swtblfmt.hxx"
 #include "pam.hxx"
@@ -2866,7 +2867,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
         SwNodeIndex aIdx( *pEndNd, nOffset );
         SwTxtFmtColl *pColl =
-            pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+            pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                  pColl );
         // Consider the case that a table is defined without a row.

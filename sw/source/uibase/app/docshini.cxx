@@ -62,6 +62,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentState.hxx>
 #include <docfac.hxx>
@@ -210,7 +211,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             mpDoc->SetDefault(*pFontItem);
             if( !bHTMLTemplSet )
             {
-                SwTxtFmtColl *pColl = mpDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+                SwTxtFmtColl *pColl = mpDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
                 pColl->ResetFmtAttr(nFontWhich);
             }
             pFontItem.reset();
@@ -220,7 +221,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             mpDoc->SetDefault(SvxFontHeightItem( nFontHeight, 100, aFontHeightWhich[i] ));
             if( !bHTMLTemplSet )
             {
-                SwTxtFmtColl *pColl = mpDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+                SwTxtFmtColl *pColl = mpDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
                 pColl->ResetFmtAttr(aFontHeightWhich[i]);
             }
 
@@ -267,7 +268,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 if( pPrt )
                     aFont = pPrt->GetFontMetric( aFont );
 
-                pColl = mpDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
+                pColl = mpDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
                 if( !bHTMLTemplSet ||
                     SFX_ITEM_SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, false ) )
@@ -280,7 +281,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             if(nFontHeight <= 0)
                 nFontHeight = SwStdFontConfig::GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
             if(!pColl)
-                pColl = mpDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
+                pColl = mpDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
             SvxFontHeightItem aFontHeight( (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, true ));
             if(aFontHeight.GetHeight() != sal::static_int_cast<sal_uInt32, sal_Int32>(nFontHeight))
             {

@@ -41,6 +41,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <hints.hxx>
@@ -1770,7 +1771,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
         getIDocumentRedlineAccess().AppendRedline( pRedl, true );
     }
 
-    SetTxtFmtColl( aPam, GetTxtCollFromPool( nPoolId ) );
+    SetTxtFmtColl( aPam, getIDocumentStylePoolAccess().GetTxtCollFromPool( nPoolId ) );
 
     if (pSet && pSet->Count())
     {

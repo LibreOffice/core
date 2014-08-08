@@ -41,6 +41,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentRedlineManager.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <index.hxx>
@@ -1401,7 +1402,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         {
             if( m_aFlags.bSetNumRule )
             {
-                SwCharFmt* pCFmt = m_pDoc->GetCharFmtFromPool(
+                SwCharFmt* pCFmt = m_pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
                                             RES_POOLCHR_BUL_LEVEL );
                 bChgBullet = true;
                 // Was the format already somewhere adjusted?
@@ -1489,7 +1490,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         {
             if( !pCur )         // adjust NumRule if it is new
             {
-                SwCharFmt* pCFmt = m_pDoc->GetCharFmtFromPool(
+                SwCharFmt* pCFmt = m_pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
                                             RES_POOLCHR_NUM_LEVEL );
                 if( !nDigitLevel )
                 {

@@ -102,6 +102,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
@@ -203,7 +204,7 @@ static SwTxtFmtColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc* pDoc)
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
             rCollName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
         if( USHRT_MAX != nId )
-            pColl = pDoc->GetTxtCollFromPool( nId );
+            pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( nId );
     }
     return pColl;
 }

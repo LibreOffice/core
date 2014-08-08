@@ -37,6 +37,7 @@
 #include <drawdoc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <unofreg.hxx>
 #include <TextCursorHelper.hxx>
@@ -664,7 +665,7 @@ void SwXMLImport::startDocument()
             // Insert all content into the new node
             pPaM->Move( fnMoveBackward );
             pDoc->SetTxtFmtColl
-                ( *pPaM, pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ) );
+                ( *pPaM, pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ) );
         }
     }
 

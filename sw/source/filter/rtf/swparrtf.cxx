@@ -23,6 +23,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <pam.hxx>
 #include <swerror.h>
 
@@ -68,7 +69,7 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& r
     // Step 4: Insert all content into the new node
     rPam.Move( fnMoveBackward );
     rDoc.SetTxtFmtColl
-        ( rPam, rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ) );
+        ( rPam, rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ) );
 
     SwDocShell *pDocShell(rDoc.GetDocShell());
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());

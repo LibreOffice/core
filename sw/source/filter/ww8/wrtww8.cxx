@@ -58,7 +58,9 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <viewopt.hxx>
 #include <docary.hxx>
@@ -3215,7 +3217,7 @@ void WW8Export::ExportDocument_Impl()
     // set AutoHyphenation flag if found in default para style
     const SfxPoolItem* pItem;
     SwTxtFmtColl* pStdTxtFmtColl =
-        pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false);
+        pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false);
     if (pStdTxtFmtColl && SFX_ITEM_SET == pStdTxtFmtColl->GetItemState(
         RES_PARATR_HYPHENZONE, false, &pItem))
     {

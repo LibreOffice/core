@@ -33,6 +33,7 @@
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>
@@ -2138,8 +2139,8 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     SwDoc* pSrcDoc = GetFrmFmt()->GetDoc();
     if( pSrcDoc != pInsDoc )
     {
-        pInsDoc->CopyTxtColl( *pSrcDoc->GetTxtCollFromPool( RES_POOLCOLL_TABLE ) );
-        pInsDoc->CopyTxtColl( *pSrcDoc->GetTxtCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
+        pInsDoc->CopyTxtColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TABLE ) );
+        pInsDoc->CopyTxtColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
     }
 
     SwTable* pNewTbl = (SwTable*)pInsDoc->InsertTable(

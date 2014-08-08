@@ -50,6 +50,7 @@
 #include <unotools/saveopt.hxx>
 
 #include <IDocumentListsAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
 
 using namespace ::com::sun::star;
@@ -208,7 +209,7 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc)
             sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharStyleName,
                                             nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             pCFmt = nId != USHRT_MAX
-                        ? pDoc->GetCharFmtFromPool( nId )
+                        ? pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId )
                         : pDoc->MakeCharFmt( rCharStyleName, 0 );
         }
         pCFmt->Add( this );

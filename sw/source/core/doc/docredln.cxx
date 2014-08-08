@@ -32,6 +32,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <redline.hxx>
@@ -608,7 +609,7 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
     // What about Undo? Is it turned off?
     SwTxtFmtColl* pColl = USHRT_MAX == nPoolId
                             ? pDoc->FindTxtFmtCollByName( sFmtNm )
-                            : pDoc->GetTxtCollFromPool( nPoolId );
+                            : pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( nPoolId );
     if( pColl )
         pDoc->SetTxtFmtColl( rPam, pColl, false );
 
@@ -1128,7 +1129,7 @@ void SwRangeRedline::MoveToSection()
                                     ? ((SwTxtNode*)pCSttNd)->GetTxtColl()
                                     : (pCEndNd && pCEndNd->IsTxtNode() )
                                         ? ((SwTxtNode*)pCEndNd)->GetTxtColl()
-                                        : pDoc->GetTxtCollFromPool(
+                                        : pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(
                                                 RES_POOLCOLL_STANDARD );
 
             pSttNd = rNds.MakeTextSection( SwNodeIndex( rNds.GetEndOfRedlines() ),
@@ -1196,7 +1197,7 @@ void SwRangeRedline::CopyToSection()
         {
             SwTxtFmtColl* pColl = (pCSttNd && pCSttNd->IsTxtNode() )
                                     ? ((SwTxtNode*)pCSttNd)->GetTxtColl()
-                                    : pDoc->GetTxtCollFromPool(
+                                    : pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(
                                                 RES_POOLCOLL_STANDARD );
 
             pSttNd = rNds.MakeTextSection( SwNodeIndex( rNds.GetEndOfRedlines() ),

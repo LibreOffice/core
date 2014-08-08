@@ -31,6 +31,7 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <calbck.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <editeng/svxacorr.hxx>
 
 #include <editeng/acorrcfg.hxx>
@@ -103,7 +104,7 @@ SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& r
         pAutoCompleteWord(&rToTell),
         pDoc(&rSwDoc)
 {
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 #if OSL_DEBUG_LEVEL > 0
     ++nSwAutoCompleteClientCount;
 #endif
@@ -114,7 +115,7 @@ SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) 
     pAutoCompleteWord(rClient.pAutoCompleteWord),
     pDoc(rClient.pDoc)
 {
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 #if OSL_DEBUG_LEVEL > 0
     ++nSwAutoCompleteClientCount;
 #endif

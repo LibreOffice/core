@@ -44,6 +44,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <swcli.hxx>
@@ -967,7 +968,7 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
     }
     else
     {
-        const :: SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
+        const :: SfxItemSet *pItemSet = &pDoc->getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
            bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
         lcl_FillCol ( rSet, *pItemSet, pColumns );
     }
@@ -1046,7 +1047,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     }
     else
     {
-        const :: SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC )->GetAttrSet();
+        const :: SfxItemSet *pItemSet = &pDoc->getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC )->GetAttrSet();
         bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
@@ -1167,7 +1168,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pD
     , m_pCopySource(0)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     // get the property set for the default style data
     // First get the model
     uno::Reference < XModel > xModel = pDoc->GetDocShell()->GetBaseModel();

@@ -47,6 +47,7 @@
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <ndtxt.hxx>
@@ -1541,7 +1542,7 @@ void SwFltOutDoc::NextTableCell()
          GetDoc().IsIdxInTbl(pPaM->GetPoint()->nNode),
          pTableLine,
          (SwTableBoxFmt*)pTableBox->GetFrmFmt(),
-         GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ),
+         GetDoc().getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ),
          0,
          pTableBoxes->size());
     SeekCell(usTableY, usTableX, true);
@@ -1563,7 +1564,7 @@ void SwFltOutDoc::NextTableRow()
         usTableX = 0;
         SeekCell(++usTableY, usTableX, true);
         GetDoc().SetTxtFmtColl(*pPaM,
-            GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ));
+            GetDoc().getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ));
     }
 }
 
@@ -1750,7 +1751,7 @@ bool SwFltOutDoc::SeekCell(short nRow, short nCol, bool bPam)
         pPaM->GetPoint()->nNode = pTableBox->GetSttIdx() + 1;
         pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
         GetDoc().SetTxtFmtColl(*pPaM,
-            GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ));
+            GetDoc().getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ));
     }
     return true;
 }
@@ -2107,7 +2108,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 SwFltFormatCollection::SwFltFormatCollection(
     SwDoc& _rDoc, RES_POOL_COLLFMT_TYPE nType ) :
     SwFltOutBase(_rDoc),
-    pColl(_rDoc.GetTxtCollFromPool( static_cast< sal_uInt16 >(nType), false )),
+    pColl(_rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( static_cast< sal_uInt16 >(nType), false )),
     pFlyAttrs( 0 ),
     bHasFly( false )
 {

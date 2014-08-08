@@ -93,6 +93,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <paratr.hxx>
@@ -1710,7 +1711,7 @@ void WW8AttributeOutput::TextINetFormat( const SwFmtINetFmt& rINet )
 
         const SwCharFmt* pFmt = IsPoolUserFmt( nId )
                         ? m_rWW8Export.pDoc->FindCharFmtByName( rStr )
-                        : m_rWW8Export.pDoc->GetCharFmtFromPool( nId );
+                        : m_rWW8Export.pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
 
         if ( m_rWW8Export.bWrtWW8 )
             m_rWW8Export.InsUInt16( NS_sprm::LN_CIstd );

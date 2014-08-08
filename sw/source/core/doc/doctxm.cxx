@@ -41,6 +41,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <pagefrm.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -355,7 +356,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
             SwNodeIndex aIdx( *pSectNd, +1 );
 
             SwTxtNode* pHeadNd = GetNodes().MakeTxtNode( aIdx,
-                            GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
+                            getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
             OUString sNm( pNewSection->GetTOXName() );
             // ??Resource
@@ -850,7 +851,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         SwNodeIndex aSttIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
         pFirstEmptyNd = pDoc->GetNodes().MakeTxtNode( aEndIdx,
-                        pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT ) );
+                        pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT ) );
 
         {
             // Task 70995 - save and restore PageDesc and Break Attributes
@@ -1118,7 +1119,7 @@ SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( sal_uInt16 nLevel )
         }
         else
             nPoolFmt = nPoolFmt + nLevel;
-        pColl = pDoc->GetTxtCollFromPool( nPoolFmt );
+        pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( nPoolFmt );
     }
     return pColl;
 }
@@ -1806,7 +1807,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
         SwCharFmt* pCharFmt = 0;
         if(USHRT_MAX != nPoolId)
-            pCharFmt = pDoc->GetCharFmtFromPool(nPoolId);
+            pCharFmt = pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(nPoolId);
         else
             pCharFmt = pDoc->FindCharFmtByName( GetMainEntryCharStyle() );
         if(!pCharFmt)

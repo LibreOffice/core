@@ -29,6 +29,7 @@
 #include <shellio.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <swtypes.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -155,9 +156,9 @@ sal_uLong SwASCIIParser::CallParser()
 
     if (bNewDoc)
     {
-        pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_HTML_PRE, false);
+        pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_HTML_PRE, false);
         if (!pColl)
-            pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD,false);
+            pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD,false);
         if (pColl)
             pDoc->SetTxtFmtColl(*pPam, pColl);
     }

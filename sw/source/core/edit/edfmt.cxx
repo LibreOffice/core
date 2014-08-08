@@ -18,6 +18,7 @@
  */
 
 #include "doc.hxx"
+#include <IDocumentStylePoolAccess.hxx>
 #include "editsh.hxx"
 #include "swtable.hxx"
 #include "pam.hxx"
@@ -130,18 +131,18 @@ SwCharFmt* SwEditShell::MakeCharFmt( const OUString& rName,
 
 SwTxtFmtColl* SwEditShell::GetTxtCollFromPool( sal_uInt16 nId )
 {
-    return GetDoc()->GetTxtCollFromPool( nId );
+    return GetDoc()->getIDocumentStylePoolAccess().GetTxtCollFromPool( nId );
 }
 
 /// return the requested automatic format - base-class !
 SwFmt* SwEditShell::GetFmtFromPool( sal_uInt16 nId )
 {
-    return GetDoc()->GetFmtFromPool( nId );
+    return GetDoc()->getIDocumentStylePoolAccess().GetFmtFromPool( nId );
 }
 
 SwPageDesc* SwEditShell::GetPageDescFromPool( sal_uInt16 nId )
 {
-    return GetDoc()->GetPageDescFromPool( nId );
+    return GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool( nId );
 }
 
 bool SwEditShell::IsUsed( const SwModify& rModify ) const

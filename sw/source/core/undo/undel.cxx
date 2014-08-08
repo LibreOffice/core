@@ -27,6 +27,7 @@
 #include <doc.hxx>
 #include <UndoManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <swtable.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
@@ -1020,7 +1021,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
                 // than add again a Node at the end
                 const SwNodeIndex aTmpIdx( *pTblNd->EndOfSectionNode(), 1 );
                 rDoc.GetNodes().MakeTxtNode( aTmpIdx,
-                        rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
+                        rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
             }
 
             SwCntntNode* pNextNd = rDoc.GetNodes()[

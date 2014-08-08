@@ -44,6 +44,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <poolfmt.hxx>
@@ -562,7 +563,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             else
                 nChrFmt = RES_POOLCHR_INET_NORMAL;
 
-            SwFmt *pFmt = GetCharFmtFromPool(nChrFmt);
+            SwFmt *pFmt = getIDocumentStylePoolAccess().GetCharFmtFromPool(nChrFmt);
 
             Color aColor(COL_LIGHTBLUE);
             if (pFmt)

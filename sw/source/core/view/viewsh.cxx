@@ -2536,7 +2536,7 @@ IDocumentRedlineAccess* SwViewShell::getIDocumentRedlineAccess() { return &mpDoc
 const IDocumentLayoutAccess* SwViewShell::getIDocumentLayoutAccess() const { return &mpDoc->getIDocumentLayoutAccess(); }
 IDocumentLayoutAccess* SwViewShell::getIDocumentLayoutAccess() { return &mpDoc->getIDocumentLayoutAccess(); }
 IDocumentContentOperations* SwViewShell::getIDocumentContentOperations() { return &mpDoc->getIDocumentContentOperations(); }
-IDocumentStylePoolAccess* SwViewShell::getIDocumentStylePoolAccess() { return mpDoc; }
+IDocumentStylePoolAccess* SwViewShell::getIDocumentStylePoolAccess() { return &mpDoc->getIDocumentStylePoolAccess(); }
 const IDocumentStatistics* SwViewShell::getIDocumentStatistics() const { return &mpDoc->getIDocumentStatistics(); }
 
 IDocumentUndoRedo      & SwViewShell::GetIDocumentUndoRedo()

@@ -31,6 +31,7 @@
 #include <frmtool.hxx>
 #include <doc.hxx>
 #include <poolfmt.hrc>
+#include <IDocumentStylePoolAccess.hxx>
 #include <poolfmt.hxx>
 #include <switerator.hxx>
 
@@ -346,7 +347,7 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
     {
         if (rName==SW_RESSTR(i))
         {
-            return rDoc.GetPageDescFromPool( static_cast< sal_uInt16 >(
+            return rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast< sal_uInt16 >(
                         i - RC_POOLPAGEDESC_BEGIN + RES_POOLPAGE_BEGIN) );
         }
     }

@@ -29,6 +29,7 @@
 #include <pagedesc.hxx>
 #include "poolfmt.hxx"
 #include <doc.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
 #include <switerator.hxx>
@@ -114,7 +115,7 @@ uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
 
 beans::XPropertySet*    SwXRedlines::GetObject( SwRangeRedline& rRedline, SwDoc& rDoc )
 {
-    SwPageDesc* pStdDesc = rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+    SwPageDesc* pStdDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
     SwIterator<SwXRedline,SwPageDesc> aIter(*pStdDesc);
     SwXRedline* pxRedline = aIter.First();
     while(pxRedline)
@@ -132,7 +133,7 @@ SwXRedlineEnumeration::SwXRedlineEnumeration(SwDoc& rDoc) :
     pDoc(&rDoc),
     nCurrentIndex(0)
 {
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
 SwXRedlineEnumeration::~SwXRedlineEnumeration()

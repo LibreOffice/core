@@ -40,6 +40,7 @@
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
@@ -128,7 +129,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
         else if ( !rURL.GetURL().isEmpty() )
             bVisited = rSh.GetDoc()->IsVisitedURL( rURL.GetURL() );
 
-        SwFmt *pFmt = rSh.GetDoc()->GetFmtFromPool( static_cast<sal_uInt16>
+        SwFmt *pFmt = rSh.GetDoc()->getIDocumentStylePoolAccess().GetFmtFromPool( static_cast<sal_uInt16>
             (bVisited ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL ) );
         aCol = pFmt->GetColor().GetValue();
         eUnderline = pFmt->GetUnderline().GetLineStyle();

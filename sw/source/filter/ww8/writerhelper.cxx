@@ -51,6 +51,7 @@
 #include <vcl/svapp.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;
@@ -487,7 +488,7 @@ namespace sw
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
                 if (n != SAL_MAX_UINT16)       // found or standard
-                    pColl = rDoc.GetTxtCollFromPool(n, false);
+                    pColl = rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(n, false);
             }
             return pColl;
         }
@@ -501,7 +502,7 @@ namespace sw
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                 if (n != SAL_MAX_UINT16)       // found or standard
-                    pFmt = rDoc.GetCharFmtFromPool(n);
+                    pFmt = rDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool(n);
             }
             return pFmt;
         }

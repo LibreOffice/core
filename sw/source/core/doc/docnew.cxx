@@ -102,6 +102,7 @@
 #include <DocumentStatisticsManager.hxx>
 #include <DocumentStateManager.hxx>
 #include <DocumentLayoutManager.hxx>
+#include <DocumentStylePoolManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -219,6 +220,7 @@ SwDoc::SwDoc()
     m_pDocumentFieldsManager( new ::sw::DocumentFieldsManager( *this ) ),
     m_pDocumentStatisticsManager( new ::sw::DocumentStatisticsManager( *this ) ),
     m_pDocumentLayoutManager( new ::sw::DocumentLayoutManager( *this ) ),
+    m_pDocumentStylePoolManager( new ::sw::DocumentStylePoolManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -308,7 +310,7 @@ SwDoc::SwDoc()
 
     // Create PageDesc, EmptyPageFmt and ColumnFmt
     if ( maPageDescs.empty() )
-        GetPageDescFromPool( RES_POOLPAGE_STANDARD );
+        getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
 
     // Set to "Empty Page"
     mpEmptyPageFmt->SetFmtAttr( SwFmtFrmSize( ATT_FIX_SIZE ) );
@@ -330,7 +332,7 @@ SwDoc::SwDoc()
             SwNodeIndex(GetUndoManager().GetUndoNodes().GetEndOfContent()),
             mpDfltTxtFmtColl );
     new SwTxtNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
-                    GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
+                    getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
     maOLEModifiedTimer.SetTimeout( 1000 );
     maOLEModifiedTimer.SetTimeoutHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
@@ -761,8 +763,8 @@ void SwDoc::ClearDoc()
 
     delete mpNumberFormatter, mpNumberFormatter = 0;
 
-    GetPageDescFromPool( RES_POOLPAGE_STANDARD );
-    pFirstNd->ChgFmtColl( GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
+    getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
+    pFirstNd->ChgFmtColl( getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
     nDummyPgDsc = maPageDescs.size();
     maPageDescs.push_back( pDummyPgDsc );
     // set the layout back to the new standard pagedesc

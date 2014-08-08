@@ -23,6 +23,7 @@
 #include <unocrsr.hxx>
 #include "doc.hxx"
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <tools/datetime.hxx>
 #include "poolfmt.hxx"
 #include "unoredline.hxx"
@@ -469,7 +470,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
         }
 
         // create text section for redline
-        SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool
+        SwTxtFmtColl *pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool
             (RES_POOLCOLL_STANDARD, false );
         SwStartNode* pRedlineNode = pDoc->GetNodes().MakeTextSection(
             pDoc->GetNodes().GetEndOfRedlines(),

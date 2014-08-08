@@ -21,6 +21,7 @@
 #include "writerwordglue.hxx"
 #include <doc.hxx>
 #include "writerhelper.hxx"
+#include <IDocumentStylePoolAccess.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -160,7 +161,7 @@ namespace myImplHelpers
         //equivalent, then map it to one of our built in styles regardless
         //of its name
         if (sal::static_int_cast< size_t >(eSti) < SAL_N_ELEMENTS(aArr) && aArr[eSti] != RES_NONE)
-            pRet = mrDoc.GetTxtCollFromPool( static_cast< sal_uInt16 >(aArr[eSti]), false);
+            pRet = mrDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( static_cast< sal_uInt16 >(aArr[eSti]), false);
         return pRet;
     }
 
@@ -221,7 +222,7 @@ namespace myImplHelpers
         }
         SwCharFmt *pRet = 0;
         if (eLookup != RES_POOLCHR_NORMAL_END)
-            pRet = mrDoc.GetCharFmtFromPool( static_cast< sal_uInt16 >(eLookup) );
+            pRet = mrDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool( static_cast< sal_uInt16 >(eLookup) );
         return pRet;
     }
 

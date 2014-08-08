@@ -30,6 +30,7 @@
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
 #include <hints.hxx>
 #include <fmtfld.hxx>
@@ -524,7 +525,7 @@ SwXFieldMaster::getSupportedServiceNames() throw (uno::RuntimeException, std::ex
 }
 
 SwXFieldMaster::SwXFieldMaster(SwDoc *const pDoc, sal_uInt16 const nResId)
-    : m_pImpl(new Impl(*this, pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD),
+    : m_pImpl(new Impl(*this, pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD),
                 *pDoc, nResId, true))
 {
 }
@@ -2926,7 +2927,7 @@ public:
     sal_Int32       m_nNextIndex;  ///< index of next element to be returned
 
     Impl(SwDoc & rDoc)
-        : SwClient(rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD))
+        : SwClient(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD))
         , m_pDoc(& rDoc)
         , m_nNextIndex(0)
     { }

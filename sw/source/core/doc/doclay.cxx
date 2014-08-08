@@ -69,6 +69,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -166,7 +167,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
                                     SwFrmFmt* pFrmFmt )
 {
     if( !pFrmFmt )
-        pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_FRAME );
+        pFrmFmt = getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_FRAME );
 
     OUString sName;
     if( !mbInReading )
@@ -326,7 +327,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
     if( bCallMake )
     {
         if( !pFrmFmt )
-            pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_FRAME );
+            pFrmFmt = getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_FRAME );
 
         sal_uInt16 nCollId = static_cast<sal_uInt16>(
             GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
@@ -335,7 +336,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
            propagate an existing adjust item at the anchor to the new content node. */
         SwCntntNode * pNewTxtNd = GetNodes().MakeTxtNode
             (SwNodeIndex( GetNodes().GetEndOfAutotext()),
-             GetTxtCollFromPool( nCollId ));
+             getIDocumentStylePoolAccess().GetTxtCollFromPool( nCollId ));
         SwCntntNode * pAnchorNode = pAnchorPos->nNode.GetNode().GetCntntNode();
         assert(pAnchorNode); // pAnchorNode from cursor, must be valid
 
@@ -674,7 +675,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
     if( !pColl )
     {
-        pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_LABEL );
+        pColl = rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_LABEL );
     }
 
     SwTxtNode *pNew = NULL;
@@ -738,7 +739,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 pOldFmt->DelFrms();
 
                 pNewFmt = rDoc.MakeFlyFrmFmt( rDoc.GetUniqueFrameName(),
-                                rDoc.GetFrmFmtFromPool(RES_POOLFRM_FRAME) );
+                                rDoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool(RES_POOLFRM_FRAME) );
 
                 /* #i6447#: Only the selected items are copied from the old
                    format. */
@@ -921,7 +922,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 if( !pCharFmt )
                 {
                     const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
-                    pCharFmt = rDoc.GetCharFmtFromPool( nMyId );
+                    pCharFmt = rDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool( nMyId );
                 }
                 if (pCharFmt)
                 {
@@ -1023,7 +1024,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
     if( !pColl )
     {
-        pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_LABEL );
+        pColl = rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_LABEL );
     }
 
     SwTxtNode* pNew = NULL;
@@ -1095,7 +1096,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                                     SwFlyStartNode, pColl );
 
     pNewFmt = rDoc.MakeFlyFrmFmt( rDoc.GetUniqueFrameName(),
-                 rDoc.GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
+                 rDoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
 
     // Set border and shadow to default if the template contains any.
     if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState( RES_BOX, true ))
@@ -1213,7 +1214,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 if ( !pCharFmt )
                 {
                     const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
-                    pCharFmt = rDoc.GetCharFmtFromPool( nMyId );
+                    pCharFmt = rDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool( nMyId );
                 }
                 if ( pCharFmt )
                 {
