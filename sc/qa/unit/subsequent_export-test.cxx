@@ -32,6 +32,7 @@
 #include "editutil.hxx"
 #include "scopetools.hxx"
 #include "cellvalue.hxx"
+#include "docfunc.hxx"
 #include <postit.hxx>
 #include <tokenstringcontext.hxx>
 #include <chgtrack.hxx>
@@ -49,6 +50,8 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <formula/grammar.hxx>
+#include <unotools/useroptions.hxx>
+#include <tools/datetime.hxx>
 
 #include <test/xmltesttools.hxx>
 
@@ -1481,7 +1484,63 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             return true;
         }
 
+        bool checkRevisionUserAndTime( ScDocument& rDoc, const OUString& rOwnerName )
+        {
+            ScChangeTrack* pCT = rDoc.GetChangeTrack();
+            if (!pCT)
+            {
+                cerr << "Change track instance doesn't exist." << endl;
+                return false;
+            }
+
+            ScChangeAction* pAction = pCT->GetLast();
+            if (pAction->GetUser() != "Kohei Yoshida")
+            {
+                cerr << "Wrong user name." << endl;
+                return false;
+            }
+
+            DateTime aDT = pAction->GetDateTimeUTC();
+            if (aDT.GetYear() != 2014 || aDT.GetMonth() != 7 || aDT.GetDay() != 11)
+            {
+                cerr << "Wrong time stamp." << endl;
+                return false;
+            }
+
+            // Insert a new record to make sure the user and date-time are correct.
+            rDoc.SetString(ScAddress(1,8,0), "New String");
+            ScCellValue aEmpty;
+            pCT->AppendContent(ScAddress(1,8,0), aEmpty);
+            pAction = pCT->GetLast();
+            if (!pAction)
+            {
+                cerr << "Failed to retrieve last revision." << endl;
+                return false;
+            }
+
+            if (rOwnerName != pAction->GetUser())
+            {
+                cerr << "Wrong user name." << endl;
+                return false;
+            }
+
+            DateTime aDTNew = pAction->GetDateTimeUTC();
+            if (aDTNew <= aDT)
+            {
+                cerr << "Time stamp of the new revision should be more recent than that of the last revision." << endl;
+                return false;
+            }
+
+            return true;
+        }
+
     } aTest;
+
+    SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
+    rUserOpt.SetToken(USER_OPT_FIRSTNAME, "Export");
+    rUserOpt.SetToken(USER_OPT_LASTNAME, "Test");
+
+    OUString aOwnerName = rUserOpt.GetFirstName() + " " + rUserOpt.GetLastName();
 
     // First, test the xls variant.
 
@@ -1506,6 +1565,9 @@ void ScExportTest::testTrackChangesSimpleXLSX()
     pAction->GetDescription(aDesc, pDoc);
     CPPUNIT_ASSERT_EQUAL(OUString("Cell B2 changed from '<empty>' to '1'"), aDesc);
 
+    bGood = aTest.checkRevisionUserAndTime(*pDoc, aOwnerName);
+    CPPUNIT_ASSERT_MESSAGE("Check revision and time failed after reload (xls).", bGood);
+
     xDocSh2->DoClose();
 
     // Now, test the xlsx variant the same way.
@@ -1521,6 +1583,9 @@ void ScExportTest::testTrackChangesSimpleXLSX()
     pDoc = &xDocSh2->GetDocument();
     bGood = aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Check after reload failed (xlsx).", bGood);
+
+    bGood = aTest.checkRevisionUserAndTime(*pDoc, aOwnerName);
+    CPPUNIT_ASSERT_MESSAGE("Check revision and time failed after reload (xlsx).", bGood);
 
     xDocSh2->DoClose();
 }

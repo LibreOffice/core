@@ -198,7 +198,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions& GetAccessOptions();
     SvtCTLOptions&      GetCTLOptions();
-    SvtUserOptions&     GetUserOptions();
+    SC_DLLPUBLIC SvtUserOptions& GetUserOptions();
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
 
