@@ -2138,20 +2138,15 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
     if (pFSPA)
     {
-        /*
-        #i15718# #i19008#
-        Strangely in this case the FSPA value seems to be considered before
-        the newer escher nXRelTo record.
-        */
-        // #i52565# - correct condition checking:
-        // first check, if <nXRelTo> and <nYRelTo> have default values.  This
-        // is a hint that these values aren't set by the escher import - see
-        // method <SwMSDffManager::ProcessObj(..)>. Then, check if for each
-        // values, if it differs from the one in the FSPA.
+        // #i52565# - try to handle special case for objects in tables regarding its X Rel
 
-        if ( *(pRecord->pXRelTo) == 2 && *(pRecord->pYRelTo) == 2 && !bCurSectionVertical)
+        // if X and Y Rel values are on default take it as a hint, that they have not been set
+        // by <SwMSDffManager::ProcessObj(..)>
+        const bool bXYRelHaveDefaultValues = *(pRecord->pXRelTo) == 2 && *(pRecord->pYRelTo) == 2;
+        if ( bXYRelHaveDefaultValues
+             && nInTable > 0
+             && !bCurSectionVertical )
         {
-            // if <nYRelTo> differs from <FSPA.nby> overwrite <nYRelTo>
             if ( pFSPA->nby != *(pRecord->pYRelTo) )
             {
                 *(pRecord->pYRelTo) = pFSPA->nby;
