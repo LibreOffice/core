@@ -12,14 +12,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
 #include <com/sun/star/style/XStyleLoader.hpp>
 #include <com/sun/star/style/XStyleLoader2.hpp>
 
 #include <com/sun/star/style/XStyle.hpp>
-
 
 #include <rtl/ustring.hxx>
 #include "cppunit/extensions/HelperMacros.h"
@@ -44,22 +42,7 @@ void XStyleLoader::testLoadStylesFromURL()
 
   xTargetStyleLoader->loadStylesFromURL(aFileURL, aOptions);
 
-  // check if targetDocument has myStyle
-  uno::Reference< container::XNameAccess > xFamilies(xFamilySupplier->getStyleFamilies(), UNO_QUERY_THROW);
-  uno::Reference< container::XNameContainer > xCellStyles(xFamilies->getByName("CellStyles"), UNO_QUERY_THROW);
-
-  CPPUNIT_ASSERT_MESSAGE("Style not imported", xCellStyles->hasByName("myStyle"));
-
-  // test the backgroundcolor is correctly imported
-
-  uno::Reference< style::XStyle > xMyStyle (xCellStyles->getByName("myStyle"), UNO_QUERY_THROW);
-  uno::Reference< beans::XPropertySet > xPropSet (xMyStyle, UNO_QUERY_THROW);
-
-  OUString aCellStyleName("CellBackColor");
-  uno::Any aBackColor = xPropSet->getPropertyValue(aCellStyleName);
-  uno::Any expectedBackColor(sal_Int32(16724787));
-
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong CellBackColor" , expectedBackColor, aBackColor);
+  checkStyleProperties(xFamilySupplier);
 
 }
 
@@ -77,7 +60,13 @@ void XStyleLoader::testLoadStylesFromDocument()
 
   xTargetStyleLoader->loadStylesFromDocument(xSourceDoc, aOptions);
 
-  // check if targetDocument has myStyle
+  checkStyleProperties(xFamilySupplier);
+
+}
+
+void XStyleLoader::checkStyleProperties( uno::Reference< style::XStyleFamiliesSupplier > xFamilySupplier)
+{
+    // check if targetDocument has myStyle
   uno::Reference< container::XNameAccess > xFamilies(xFamilySupplier->getStyleFamilies(), UNO_QUERY_THROW);
   uno::Reference< container::XNameContainer > xCellStyles(xFamilies->getByName("CellStyles"), UNO_QUERY_THROW);
 
@@ -93,6 +82,15 @@ void XStyleLoader::testLoadStylesFromDocument()
 
   CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong CellBackColor" , expectedBackColor, aBackColor);
 
+  // test default pageStyle
+
+  uno::Reference< container::XNameContainer > xPageStyles(xFamilies->getByName("PageStyles"), UNO_QUERY_THROW);
+  uno::Reference<beans::XPropertySet> xPagePropSet(xPageStyles->getByName("Default"), UNO_QUERY_THROW);
+
+  uno::Any aPageBackColor = xPagePropSet->getPropertyValue("BackColor");
+  uno::Any expectedPageBackColor(sal_Int32(13434879));
+
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong page style BackColor" , expectedPageBackColor, aPageBackColor);
 }
 
 }

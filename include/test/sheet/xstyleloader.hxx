@@ -12,6 +12,8 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/style/XStyleLoader2.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+
 #include <test/testdllapi.hxx>
 
 namespace apitest {
@@ -29,6 +31,9 @@ public:
     void testLoadStylesFromURL();
     // XStyleLoader2
     void testLoadStylesFromDocument();
+
+private:
+    void checkStyleProperties(css::uno::Reference< css::style::XStyleFamiliesSupplier > xFamilySupplier);
 
 protected:
     ~XStyleLoader() {}
