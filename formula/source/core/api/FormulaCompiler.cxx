@@ -1740,9 +1740,16 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     if (bODFF || FormulaGrammar::isPODF( meGrammar) )
     {
         // Scan token array for missing args and re-write if present.
-        MissingConvention aConv( bODFF);
-        if (pArr->NeedsPofRewrite( aConv))
-            pArr = pArr->RewriteMissingToPof( aConv);
+        MissingConventionODF aConv( bODFF);
+        if (pArr->NeedsPodfRewrite( aConv))
+            pArr = pArr->RewriteMissing( aConv );
+    }
+    else if ( FormulaGrammar::isOOXML( meGrammar ) )
+    {
+        // Scan token array for missing args and rewrite if present.
+        MissingConventionOOXML aConv;
+        if (pArr->NeedsOoxmlRewrite( aConv))
+            pArr = pArr->RewriteMissing( aConv );
     }
 
     // At least one character per token, plus some are references, some are
