@@ -114,7 +114,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    Point aScrPos  = GetScrPos(nCol, nRow );
+    Point aScrPos  = GetScrPosPix(nCol, nRow );
     Point aDiffPix = rMEvt.GetPosPixel();
 
     aDiffPix -= aScrPos;
@@ -354,7 +354,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
     bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 
     // Get the geometry of the cell.
-    Point aScrPos = GetScrPos(rPos.Col(), rPos.Row() );
+    Point aScrPos = GetScrPosPix(rPos.Col(), rPos.Row() );
     long nSizeX, nSizeY;
     pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
     Size aScrSize(nSizeX-1, nSizeY-1);
@@ -669,8 +669,8 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
         SCsCOL nPosX;
         SCsROW nPosY;
         pViewData->GetPosFromPixel( nMouseX, nMouseY, eWhich, nPosX, nPosY );
-        Point aTL = GetScrPos( nPosX, nPosY );
-        Point aBR = GetScrPos( nPosX+1, nPosY+1 );
+        Point aTL = GetScrPosPix( nPosX, nPosY );
+        Point aBR = GetScrPosPix( nPosX+1, nPosY+1 );
 
         //  Horizontal mehr Toleranz als vertikal, weil mehr Platz ist
         if ( nMouseX <= aTL.X() + 4 )

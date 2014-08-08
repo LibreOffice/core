@@ -686,7 +686,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     std::auto_ptr<AutoFilterData> pData(new AutoFilterData);
     pData->maPos = ScAddress(nCol, nRow, nTab);
 
-    Point aPos = GetScrPos( nCol, nRow );
+    Point aPos = GetScrPosPix( nCol, nRow );
     long nSizeX  = 0;
     long nSizeY  = 0;
     pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
@@ -895,7 +895,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 void ScGridWindow::getCellGeometry( Point& rScrPos, Size& rScrSize, SCCOL nCol, SCROW nRow ) const
 {
     // Get the screen position of the cell.
-    rScrPos = GetScrPos(nCol, nRow );
+    rScrPos = GetScrPosPix(nCol, nRow );
 
     // Get the screen size of the cell.
     long nSizeX, nSizeY;
@@ -957,7 +957,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     // The button height should not use the merged cell height, should still use single row height
     nSizeY = ScViewData::ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
-    Point aPos = GetScrPos( nCol, nRow );
+    Point aPos = GetScrPosPix( nCol, nRow );
     if ( bLayoutRTL )
         aPos.X() -= nSizeX;
     Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
@@ -1078,7 +1078,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     long nSizeY  = 0;
     long nHeight = 0;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
-    Point aPos = GetScrPos( nCol, nRow );
+    Point aPos = GetScrPosPix( nCol, nRow );
     if ( bLayoutRTL )
         aPos.X() -= nSizeX;
 
@@ -1592,8 +1592,8 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
             pDoc->GetEmbedded( aRange );
             if ( pViewData->GetTabNo() == aRange.aStart.Tab() )
             {
-                Point aStartPos = GetScrPos( aRange.aStart.Col(), aRange.aStart.Row() );
-                Point aEndPos   = GetScrPos( aRange.aEnd.Col()+1, aRange.aEnd.Row()+1 );
+                Point aStartPos = GetScrPosPix( aRange.aStart.Col(), aRange.aStart.Row() );
+                Point aEndPos   = GetScrPosPix( aRange.aEnd.Col()+1, aRange.aEnd.Row()+1 );
                 Point aMousePos = rMEvt.GetPosPixel();
                 if ( bLayoutRTL )
                 {
@@ -3079,7 +3079,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
             SCCOL nCurX = pViewData->GetCurX();
             SCROW nCurY = pViewData->GetCurY();
-            aMenuPos = GetScrPos( nCurX, nCurY, eWhich );
+            aMenuPos = GetScrPosPix( nCurX, nCurY, eWhich );
             long nSizeXPix;
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nCurX, nCurY, nSizeXPix, nSizeYPix );
@@ -4632,12 +4632,12 @@ void ScGridWindow::UpdateFormulas()
 
     rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
 
-    Point aScrPos = GetScrPos( nX1, nY1 );
+    Point aScrPos = GetScrPosPix( nX1, nY1 );
     long nMirrorWidth = GetSizePixel().Width();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     if ( bLayoutRTL )
     {
-        long nEndPixel = GetScrPos( nX2+1, nPosY ).X();
+        long nEndPixel = GetScrPosPix( nX2+1, nPosY ).X();
         nMirrorWidth = aScrPos.X() - nEndPixel;
         aScrPos.X() = nEndPixel + 1;
     }
@@ -4774,7 +4774,7 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
             //  zusammengefasste (einzeln/Bereich) ???
             ScAddress aAddr( nPosX, nPosY, nTab );
 
-            Point aCellStart = GetScrPos( nPosX, nPosY, eWhich );
+            Point aCellStart = GetScrPosPix( nPosX, nPosY, eWhich );
             Point aCellEnd = aCellStart;
             long nSizeXPix;
             long nSizeYPix;
@@ -5422,12 +5422,12 @@ bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
             Point aButtonPos;
             if ( bTextBelow )
             {
-                aButtonPos = GetScrPos( aRange.aEnd.Col()+1, aRange.aEnd.Row()+1,
+                aButtonPos = GetScrPosPix( aRange.aEnd.Col()+1, aRange.aEnd.Row()+1,
                                                     true );
             }
             else
             {
-                aButtonPos = GetScrPos( aRange.aEnd.Col()+1, aRange.aStart.Row(),
+                aButtonPos = GetScrPosPix( aRange.aEnd.Col()+1, aRange.aStart.Row(),
                                                     true );
                 aButtonPos.Y() -= nBHeight;
             }
@@ -5728,8 +5728,8 @@ void ScGridWindow::UpdateCopySourceOverlay()
         SCCOL nClipEndX   = p->aEnd.Col();
         SCROW nClipEndY   = p->aEnd.Row();
 
-        Point aClipStartScrPos = GetScrPos( nClipStartX, nClipStartY);
-        Point aClipEndScrPos   = GetScrPos( nClipEndX + 1, nClipEndY + 1 );
+        Point aClipStartScrPos = GetScrPosPix( nClipStartX, nClipStartY);
+        Point aClipEndScrPos   = GetScrPosPix( nClipEndX + 1, nClipEndY + 1 );
         aClipStartScrPos -= Point(1, 1);
         long nSizeXPix = aClipEndScrPos.X() - aClipStartScrPos.X();
         long nSizeYPix = aClipEndScrPos.Y() - aClipStartScrPos.Y();
@@ -5796,7 +5796,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
     if ( bVis && !bOverlapped && !pViewData->HasEditView(eWhich) && pViewData->IsActive() )
     {
-        Point aScrPos = GetScrPos( nX, nY, true );
+        Point aScrPos = GetScrPosPix( nX, nY, true );
         bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
         //  completely right of/below the screen?
@@ -5954,7 +5954,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
         ScDocument* pDoc = pViewData->GetDocument();
         bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-        Point aFillPos = GetScrPos( nX, nY, true );
+        Point aFillPos = GetScrPosPix( nX, nY, true );
         long nSizeXPix;
         long nSizeYPix;
         pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
@@ -6033,7 +6033,7 @@ void ScGridWindow::UpdateDragRectOverlay()
         if (nY1 < nPosY) nY1 = nPosY;
         if (nY2 < nPosY) nY2 = nPosY;
 
-        Point aScrPos( GetScrPos( nX1, nY1 ) );
+        Point aScrPos( GetScrPosPix( nX1, nY1 ) );
 
         long nSizeXPix=0;
         long nSizeYPix=0;
@@ -6199,9 +6199,9 @@ void ScGridWindow::UpdateShrinkOverlay()
         if ( aRange.aStart.Col() <= aRange.aEnd.Col() &&
              aRange.aStart.Row() <= aRange.aEnd.Row() )
         {
-            Point aStart = GetScrPos( aRange.aStart.Col(),
+            Point aStart = GetScrPosPix( aRange.aStart.Col(),
                                                  aRange.aStart.Row() );
-            Point aEnd = GetScrPos( aRange.aEnd.Col()+1,
+            Point aEnd = GetScrPosPix( aRange.aEnd.Col()+1,
                                                aRange.aEnd.Row()+1 );
             aEnd.X() -= 1;
             aEnd.Y() -= 1;
@@ -6278,7 +6278,12 @@ void ScGridWindow::SetInRefMode( bool bInRefMode )
     SetStyle( nBits );
 }
 
-Point ScGridWindow::GetScrPos( SCCOL nWhereX, SCROW nWhereY, bool bAllowNeg ) const
+Point ScGridWindow::GetScrPosPix( SCCOL nWhereX, SCROW nWhereY, bool bAllowNeg ) const
+{
+    return LogicToPixel( GetScrPosLogic( nWhereX, nWhereY, bAllowNeg ), aPaintMapMode );
+}
+
+Point ScGridWindow::GetScrPosLogic( SCCOL nWhereX, SCROW nWhereY, bool bAllowNeg ) const
 {
     ScHSplitPos eWhichX = SC_SPLIT_LEFT;
     ScVSplitPos eWhichY = SC_SPLIT_BOTTOM;
@@ -6374,7 +6379,7 @@ Point ScGridWindow::GetScrPos( SCCOL nWhereX, SCROW nWhereY, bool bAllowNeg ) co
         nScrPosX = aScrSize.Width() - 1 - nScrPosX;
     }
 
-    return LogicToPixel( Point( nScrPosX, nScrPosY ), aPaintMapMode );
+    return Point( nScrPosX, nScrPosY );
 }
 
 

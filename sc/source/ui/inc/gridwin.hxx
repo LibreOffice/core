@@ -309,8 +309,11 @@ protected:
 private:
     void            getCellGeometry( Point& rScrPos, Size& rScrSize,
                                      SCCOL nCol, SCROW nRow ) const;
-    Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY,
+    Point           GetScrPosPix( SCCOL nWhereX, SCROW nWhereY,
+                               bool bAllowNeg = false ) const;
+    Point           GetScrPosLogic( SCCOL nWhereX, SCROW nWhereY,
                                 bool bAllowNeg = false ) const;
+
     void            DrawScenarioFrames( OutputDevice* pContentDev,
                                         SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     void            UpdatePaintMapMode();

@@ -215,9 +215,9 @@ void ScGridWindow::DrawScenarioFrames( OutputDevice* pContentDev, SCCOL nX1, SCR
 
             if ( aRange.Intersects( aViewRange ) )          //! Platz fuer Text/Button?
             {
-                Point aStartPos = GetScrPos(
+                Point aStartPos = GetScrPosLogic(
                                     aRange.aStart.Col(), aRange.aStart.Row(), true );
-                Point aEndPos = GetScrPos(
+                Point aEndPos = GetScrPosLogic(
                                     aRange.aEnd.Col()+1, aRange.aEnd.Row()+1, true );
                 //  on the grid:
                 aStartPos.X() -= nLayoutSign;
@@ -512,13 +512,13 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
 
-    Point aScrPos = GetScrPos( nX1, nY1 );
+    Point aScrPos = GetScrPosLogic( nX1, nY1 );
     long nMirrorWidth = GetSizePixel().Width();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     if ( bLayoutRTL )
     {
-        long nEndPixel = GetScrPos( nX2+1, maVisibleRange.mnRow1 ).X();
+        long nEndPixel = GetScrPosLogic( nX2+1, maVisibleRange.mnRow1 ).X();
         nMirrorWidth = aScrPos.X() - nEndPixel;
         aScrPos.X() = nEndPixel + 1;
     }
@@ -929,8 +929,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         SCROW nRow2 = pViewData->GetEditEndRow();
         SetLineColor();
         SetFillColor( pEditView->GetBackgroundColor() );
-        Point aStart = GetScrPos( nCol1, nRow1 );
-        Point aEnd = GetScrPos( nCol2+1, nRow2+1 );
+        Point aStart = GetScrPosPix( nCol1, nRow1 );
+        Point aEnd = GetScrPosPix( nCol2+1, nRow2+1 );
         aEnd.X() -= 2 * nLayoutSign;        // don't overwrite grid
         aEnd.Y() -= 2;
         DrawRect( Rectangle( aStart,aEnd ) );
@@ -1088,9 +1088,9 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 else
                     pContentDev->SetFillColor( aManual );
 
-                Point aStart = GetScrPos(
+                Point aStart = GetScrPosLogic(
                                     aRange.aStart.Col(), aRange.aStart.Row(), true );
-                Point aEnd = GetScrPos(
+                Point aEnd = GetScrPosLogic(
                                     aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, true );
                 aStart.X() -= 2;
                 aStart.Y() -= 2;
@@ -1124,7 +1124,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             pContentDev->SetFillColor( aManual );
                         else
                             pContentDev->SetFillColor( aAutomatic );
-                        Point aBreak = GetScrPos(
+                        Point aBreak = GetScrPosLogic(
                                         nBreak, aRange.aStart.Row(), true );
                         pContentDev->DrawRect( Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
                     }
@@ -1143,7 +1143,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             pContentDev->SetFillColor( aManual );
                         else
                             pContentDev->SetFillColor( aAutomatic );
-                        Point aBreak = GetScrPos(
+                        Point aBreak = GetScrPosLogic(
                                         aRange.aStart.Col(), nBreak, true );
                         pContentDev->DrawRect( Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
                     }
@@ -1163,9 +1163,9 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             SCCOL nPrEndX = pColEnd[nColPos];
                             if ( nPrEndX >= nX1 && nPrStartX <= nX2 )
                             {
-                                Point aPageStart = GetScrPos(
+                                Point aPageStart = GetScrPosLogic(
                                                         nPrStartX, nPrStartY, true );
-                                Point aPageEnd = GetScrPos(
+                                Point aPageEnd = GetScrPosLogic(
                                                         nPrEndX+1,nPrEndY+1, true );
 
                                 long nPageNo = rData.GetFirstPage();
@@ -1326,7 +1326,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
                     pDoc->ExtendOverlapped(nStartCol, nStartRow,nCol, nRow, nTab);//get nStartCol,nStartRow
                     pViewData->GetMergeSizePixel( nStartCol, nStartRow, nSizeX, nSizeY );//get nSizeX
                     nSizeY = ScViewData::ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
-                    Point aScrPos = GetScrPos( nCol, nRow );
+                    Point aScrPos = GetScrPosLogic( nCol, nRow );
 
                     aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
                     aCellBtn.setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
@@ -1348,7 +1348,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
                 if (pInfo->bHOverlapped || pInfo->bVOverlapped)
                     continue;
 
-                Point aScrPos = GetScrPos( nCol, nRow );
+                Point aScrPos = GetScrPosLogic( nCol, nRow );
                 long nSizeX;
                 long nSizeY;
                 pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
@@ -1421,7 +1421,7 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
     if ( nCellSizeY < aBtnSize.Height() )
         aBtnSize.Height() = nCellSizeY;
 
-    Point aPos = GetScrPos( nCol, nRow, true );
+    Point aPos = GetScrPosPix( nCol, nRow, true );
     aPos.X() += nCellSizeX * nLayoutSign;               // start of next cell
     if (!bNextCell)
         aPos.X() -= aBtnSize.Width() * nLayoutSign;     // right edge of cell if next cell not available
@@ -1526,7 +1526,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
 
     ScInvertMerger aInvert( &rPixelRects );
 
-    Point aScrPos = GetScrPos( nX1, nY1 );
+    Point aScrPos = GetScrPosPix( nX1, nY1 );
     long nScrY = aScrPos.Y();
     bool bWasHidden = false;
     for (SCROW nY=nY1; nY<=nY2; nY++)
@@ -1611,7 +1611,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                                 ScMergeAttr* pMerge = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
                                 if (pMerge->GetColMerge() > 0 || pMerge->GetRowMerge() > 0)
                                 {
-                                    Point aEndPos = GetScrPos(
+                                    Point aEndPos = GetScrPosPix(
                                             nThisX + pMerge->GetColMerge(),
                                             nThisY + pMerge->GetRowMerge() );
                                     if ( aEndPos.X() * nLayoutSign > nScrX * nLayoutSign && aEndPos.Y() > nScrY )
