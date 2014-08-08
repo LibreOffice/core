@@ -995,11 +995,9 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
     return false;
 }
 
-
-
 // --- POF (plain old formula) rewrite of a token array ---------------------
 
-inline bool MissingConvention::isRewriteNeeded( OpCode eOp ) const
+inline bool MissingConventionPOF::isRewriteNeeded( OpCode eOp ) const
 {
     switch (eOp)
     {
@@ -1026,11 +1024,13 @@ class FormulaMissingContext
                     void    Clear() { mpFunc = NULL; mnCurArg = 0; }
             inline  bool    AddDefaultArg( FormulaTokenArray* pNewArr, int nArg, double f ) const;
                     bool    AddMissingExternal( FormulaTokenArray* pNewArr ) const;
-                    bool    AddMissing( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
-                    void    AddMoreArgs( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
+                    bool    AddMissingPOF( FormulaTokenArray *pNewArr, const MissingConventionPOF & rConv  ) const;
+                    void    AddMoreArgsPOF( FormulaTokenArray *pNewArr, const MissingConventionPOF & rConv  ) const;
+                    bool    AddMissingOOXML( FormulaTokenArray *pNewArr ) const;
+                    void    AddMoreArgsOOXML( FormulaTokenArray *pNewArr ) const;
 };
 
-void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const
+void FormulaMissingContext::AddMoreArgsPOF( FormulaTokenArray *pNewArr, const MissingConventionPOF & rConv  ) const
 {
     if ( !mpFunc )
         return;
@@ -1082,6 +1082,76 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
     }
 }
 
+void FormulaMissingContext::AddMoreArgsOOXML( FormulaTokenArray *pNewArr ) const
+{
+    if ( !mpFunc )
+        return;
+
+    switch (mpFunc->GetOpCode())
+    {
+        case ocIf:
+            if( mnCurArg == 0 )
+            {
+                // Excel needs at least two parameters in IF function
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 2nd, true()
+            }
+            break;
+
+        case ocEuroConvert:
+            if ( mnCurArg == 2 )
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 0.0 );      // 4th, FullPrecision = false()
+            }
+            break;
+
+        case ocPoissonDist:
+            if (mnCurArg == 1)
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 3rd, Cumulative=true()
+            }
+            break;
+
+        case ocGammaDist:
+        case ocNormDist:
+            if (mnCurArg == 2)
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=true()
+            }
+            break;
+
+        case ocLogNormDist:
+            if ( mnCurArg == 0 )
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 0.0 );      // 2nd, mean = 0.0
+            }
+            if ( mnCurArg <= 1 )
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 3rd, standard deviation = 1.0
+            }
+            break;
+
+        case ocRound:
+        case ocRoundUp:
+        case ocRoundDown:
+            if( mnCurArg == 0 )
+            {
+                // ROUND, ROUNDUP, ROUNDDOWN functions are fixed to 2 parameters in Excel
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 0.0 );      // 2nd, 0.0
+            }
+            break;
+
+        default:
+            break;
+    }
+}
+
 inline bool FormulaMissingContext::AddDefaultArg( FormulaTokenArray* pNewArr, int nArg, double f ) const
 {
     if (mnCurArg == nArg)
@@ -1116,7 +1186,7 @@ bool FormulaMissingContext::AddMissingExternal( FormulaTokenArray *pNewArr ) con
     return false;
 }
 
-bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const
+bool FormulaMissingContext::AddMissingPOF( FormulaTokenArray *pNewArr, const MissingConventionPOF & rConv  ) const
 {
     if ( !mpFunc )
         return false;
@@ -1178,7 +1248,27 @@ bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const Missin
     return bRet;
 }
 
-bool FormulaTokenArray::NeedsPofRewrite( const MissingConvention & rConv )
+bool FormulaMissingContext::AddMissingOOXML( FormulaTokenArray *pNewArr ) const
+{
+    if ( !mpFunc )
+        return false;
+
+    bool bRet = false;
+    const OpCode eOp = mpFunc->GetOpCode();
+
+    switch (eOp)
+    {
+        case ocExternal:
+            return AddMissingExternal( pNewArr );
+            break;
+
+        default:
+            break;
+    }
+    return bRet;
+}
+
+bool FormulaTokenArray::NeedsPofRewrite( const MissingConventionPOF & rConv )
 {
     for ( FormulaToken *pCur = First(); pCur; pCur = Next() )
     {
@@ -1189,7 +1279,7 @@ bool FormulaTokenArray::NeedsPofRewrite( const MissingConvention & rConv )
 }
 
 
-FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvention & rConv )
+FormulaTokenArray * FormulaTokenArray::RewriteMissing( bool bIsOOXML, const MissingConventionPOF & rConv )
 {
     const size_t nAlloc = 256;
     FormulaMissingContext aCtx[ nAlloc ];
@@ -1232,12 +1322,18 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
                 ++nFn;      // all following operations on _that_ function
                 pCtx[ nFn ].mpFunc = PeekPrevNoSpaces();
                 pCtx[ nFn ].mnCurArg = 0;
-                if (pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress && !rConv.isODFF())
-                    pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
+                if ( !bIsOOXML )
+                {
+                    if (pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress && !rConv.isODFF())
+                        pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
+                }
                 break;
             case ocClose:
-                pCtx[ nFn ].AddMoreArgs( pNewArr, rConv );
-                DBG_ASSERT( nFn > 0, "FormulaTokenArray::RewriteMissingToPof: underflow");
+                if ( bIsOOXML )
+                    pCtx[ nFn ].AddMoreArgsOOXML( pNewArr );
+                else
+                    pCtx[ nFn ].AddMoreArgsPOF( pNewArr, rConv );
+                DBG_ASSERT( nFn > 0, "FormulaTokenArray::RewriteMissing: underflow");
                 if (nOcas > 0 && pOcas[ nOcas-1 ] == nFn)
                     --nOcas;                    // leaving ADDRESS()
                 if (nFn > 0)
@@ -1252,8 +1348,13 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
                 }
                 break;
             case ocMissing:
-                if (bAdd)
-                    bAdd = !pCtx[ nFn ].AddMissing( pNewArr, rConv );
+                if ( bAdd )
+                {
+                    if ( bIsOOXML )
+                        bAdd = !pCtx[ nFn ].AddMissingOOXML( pNewArr );
+                    else
+                        bAdd = !pCtx[ nFn ].AddMissingPOF( pNewArr, rConv );
+                }
                 break;
             default:
                 break;
@@ -1268,6 +1369,65 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
         delete [] pCtx;
 
     return pNewArr;
+}
+
+/*
+ * fdo 81596
+Test status ( . : in progress , v : tested , - not applicable )
+finished:
+- ocCosecant:          // for OOXML not rewritten anymore
+- ocSecant:            // for OOXML not rewritten anymore
+- ocCot:               // for OOXML not rewritten anymore
+- ocCosecantHyp:       // for OOXML not rewritten anymore
+- ocSecantHyp:         // for OOXML not rewritten anymore
+- ocCotHyp:            // for OOXML not rewritten anymore
+- ocArcCot:            // for OOXML not rewritten anymore
+- ocArcCotHyp:         // ACOTH(x), not needed for Excel2013 and later
+- ocChose:             // CHOOSE() - no rewrite needed, it seems
+v ocEuroConvert:
+v ocIf:
+v ocRound:
+v ocRoundUp:
+v ocRoundDown:
+v ocGammaDist:
+v ocPoissonDist:
+v ocNormDist:
+v ocLogNormDist:
+
+To be implemented yet:
+  ocExternal:    ?
+  ocMacro:       ?
+  ocIndex:       INDEX() ?
+  ocFDist:             // later, fdo40835
+*/
+bool FormulaTokenArray::NeedsOOXMLRewrite()
+{
+    for ( FormulaToken *pCur = First(); pCur; pCur = Next() )
+    {
+        switch ( pCur->GetOpCode() )
+        {
+            case ocIf:
+
+            case ocExternal:
+            case ocEuroConvert:
+            case ocMacro:
+
+            case ocRound:
+            case ocRoundUp:
+            case ocRoundDown:
+
+            case ocIndex:
+
+            case ocGammaDist:
+            case ocPoissonDist:
+            case ocNormDist:
+            case ocLogNormDist:
+                return true;
+            default:
+                break;
+        }
+    }
+    return false;
 }
 
 bool FormulaTokenArray::MayReferenceFollow()
