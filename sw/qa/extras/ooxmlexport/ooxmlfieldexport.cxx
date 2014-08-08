@@ -600,6 +600,14 @@ DECLARE_OOXMLEXPORT_TEST(testfdo81946, "fdo81946.docx")
     assertXPath(pXmlDoc, "/w:hdr[1]/w:p[1]/w:sdt[1]/w:sdtContent[1]/w:r[2]/mc:AlternateContent[1]",0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSdtHeader, "sdt-header.docx")
+{
+    // Problem was that w:sdt elements in headers were lost on import.
+    if (xmlDocPtr pXmlDoc = parseExport("word/header1.xml"))
+        // This was 0, w:sdt (and then w:date) was missing.
+        assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", 1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

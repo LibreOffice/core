@@ -549,7 +549,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_pSerializer->endElementNS( XML_w, XML_p );
     // on export sdt blocks are never nested ATM
     if( !m_bAnchorLinkedToNode && !m_bStartedParaSdt )
-        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, m_aParagraphSdtPrAlias, /*bPara=*/true );
+        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrTokenAttributes, m_pParagraphSdtPrDataBindingAttrs, m_aParagraphSdtPrAlias, /*bPara=*/true );
     else
     {
         //These should be written out to the actual Node and not to the anchor.
@@ -591,6 +591,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
 void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                                          ::sax_fastparser::FastAttributeList*& pSdtPrTokenChildren,
+                                         ::sax_fastparser::FastAttributeList*& pSdtPrTokenAttributes,
                                          ::sax_fastparser::FastAttributeList*& pSdtPrDataBindingAttrs,
                                          OUString& rSdtPrAlias,
                                          bool bPara )
@@ -607,7 +608,14 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
         if( nSdtPrToken > 0 && pSdtPrTokenChildren )
         {
-            m_pSerializer->startElement( nSdtPrToken, FSEND );
+            if (!pSdtPrTokenAttributes)
+                m_pSerializer->startElement( nSdtPrToken, FSEND );
+            else
+            {
+                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes);
+                m_pSerializer->startElement(nSdtPrToken, xAttrList);
+                pSdtPrTokenAttributes = 0;
+            }
 
             uno::Sequence<xml::FastAttribute> aChildren = pSdtPrTokenChildren->getFastAttributes();
             for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
@@ -619,7 +627,16 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
             m_pSerializer->endElement( nSdtPrToken );
         }
         else if( (nSdtPrToken > 0) && nSdtPrToken != FSNS( XML_w, XML_id ) && !(m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing()))
-            m_pSerializer->singleElement( nSdtPrToken, FSEND );
+        {
+            if (!pSdtPrTokenAttributes)
+                m_pSerializer->singleElement( nSdtPrToken, FSEND );
+            else
+            {
+                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes);
+                m_pSerializer->singleElement(nSdtPrToken, xAttrList);
+                pSdtPrTokenAttributes = 0;
+            }
+        }
 
         if( nSdtPrToken == FSNS( XML_w, XML_id ) || ( bPara && m_bParagraphSdtHasId ) )
             //Word won't open a document with an empty id tag, we fill it with a random number
@@ -1136,7 +1153,10 @@ void DocxAttributeOutput::EndRun()
     // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
     // (so on export sdt blocks are never nested ATM)
     if ( !m_bAnchorLinkedToNode && !m_bStartedCharSdt )
-        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias, /*bPara=*/false );
+    {
+        ::sax_fastparser::FastAttributeList* pRunSdtPrTokenAttributes = 0;
+        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, pRunSdtPrTokenAttributes, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias, /*bPara=*/false );
+    }
     else
     {
         //These should be written out to the actual Node and not to the anchor.
@@ -7854,8 +7874,30 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
                     m_bParagraphSdtHasId = true;
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_date")
+                {
+                    m_nParagraphSdtPrToken = FSNS(XML_w, XML_date);
+                    uno::Sequence<beans::PropertyValue> aGrabBag = aPropertyValue.Value.get< uno::Sequence<beans::PropertyValue> >();
+                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    {
+                        OString sValue = OUStringToOString(aGrabBag[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
+
+                        if (aGrabBag[j].Name == "ooxml:CT_SdtDate_fullDate")
+                            AddToAttrList(m_pParagraphSdtPrTokenAttributes, FSNS(XML_w, XML_fullDate), sValue.getStr());
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_dateFormat")
+                            AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_dateFormat), sValue.getStr());
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_lid")
+                            AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_lid), sValue.getStr());
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_storeMappedDataAs")
+                            AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_storeMappedDataAs), sValue.getStr());
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDate_calendar")
+                            AddToAttrList(m_pParagraphSdtPrTokenChildren, FSNS(XML_w, XML_calendar), sValue.getStr());
+                        else
+                            SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr / ooxml:CT_SdtPr_date grab bag property " << aGrabBag[j].Name);
+                    }
+                }
                 else
-                    SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr grab bag property " << aPropertyValue.Name);
+                    SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr grab bag property " << aPropertyValue.Name);
             }
         }
         else if (i->first == "ParaCnfStyle")
@@ -8122,6 +8164,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_setFootnote(false)
     , m_nParagraphSdtPrToken(0)
     , m_pParagraphSdtPrTokenChildren(NULL)
+    , m_pParagraphSdtPrTokenAttributes(NULL)
     , m_pParagraphSdtPrDataBindingAttrs(NULL)
     , m_nRunSdtPrToken(0)
     , m_pRunSdtPrTokenChildren(NULL)
@@ -8146,6 +8189,7 @@ DocxAttributeOutput::~DocxAttributeOutput()
 
     delete m_pTableWrt, m_pTableWrt = NULL;
     delete m_pParagraphSdtPrTokenChildren; m_pParagraphSdtPrTokenChildren = NULL;
+    delete m_pParagraphSdtPrTokenAttributes; m_pParagraphSdtPrTokenAttributes = NULL;
     delete m_pParagraphSdtPrDataBindingAttrs; m_pParagraphSdtPrDataBindingAttrs = NULL;
     delete m_pRunSdtPrTokenChildren; m_pRunSdtPrTokenChildren = NULL;
     delete m_pRunSdtPrDataBindingAttrs; m_pRunSdtPrDataBindingAttrs = NULL;

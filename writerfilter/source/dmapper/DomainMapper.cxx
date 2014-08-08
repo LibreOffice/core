@@ -2358,7 +2358,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             resourcemodel::resolveSprmProps(*this, rSprm);
         else
         {
-            OUString sName = "ooxml::CT_SdtPr_date";
+            OUString sName = "ooxml:CT_SdtPr_date";
             enableInteropGrabBag(sName);
             resourcemodel::resolveSprmProps(*this, rSprm);
             m_pImpl->m_pSdtHelper->appendToInteropGrabBag(getInteropGrabBag());
