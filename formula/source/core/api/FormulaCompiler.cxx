@@ -1737,12 +1737,22 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 
     FormulaTokenArray* pSaveArr = pArr;
     bool bODFF = FormulaGrammar::isODFF( meGrammar);
+    MissingConventionPOF aConv( bODFF);
     if (bODFF || FormulaGrammar::isPODF( meGrammar) )
     {
         // Scan token array for missing args and re-write if present.
-        MissingConvention aConv( bODFF);
         if (pArr->NeedsPofRewrite( aConv))
-            pArr = pArr->RewriteMissingToPof( aConv);
+            pArr = pArr->RewriteMissing( false, aConv );
+    }
+    else
+    {
+        // fdo#81596
+        if ( FormulaGrammar::isOOXML( meGrammar ) )
+        {
+        // Scan token array for missing args and rewrite if present.
+        if ( pArr->NeedsOOXMLRewrite() )
+            pArr = pArr->RewriteMissing( true, aConv );
+        }
     }
 
     // At least one character per token, plus some are references, some are
