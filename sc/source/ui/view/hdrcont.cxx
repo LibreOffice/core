@@ -196,7 +196,7 @@ long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
 {
     long nScrPos;
 
-    long nMax = ( bVertical ? GetOutputSizePixel().Height() : GetOutputSizePixel().Width() ) + 1;
+    long nMax = ( bVertical ? GetOutputSize().Height() : GetOutputSize().Width() ) + 1;
     if (nEntryNo >= nSize)
         nScrPos = nMax;
     else
@@ -278,6 +278,8 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     aMapMode.SetScaleY( rViewData.GetZoomY() * Fraction(0.96) );
     SetMapMode( aMapMode );
 
+    Rectangle aOurRect = PixelToLogic( rRect );
+
     // We occasionally need to be able to measure 1 pixel
     // e.g. for column/row subdivision, but we're working
     // in logic units nowadays, hence we can grab the correct
@@ -318,8 +320,8 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
 
     SCCOLROW    nPos = GetPos();
 
-    long nPStart = bVertical ? rRect.Top() : rRect.Left();
-    long nPEnd = bVertical ? rRect.Bottom() : rRect.Right();
+    long nPStart = bVertical ? aOurRect.Top() : aOurRect.Left();
+    long nPEnd = bVertical ? aOurRect.Bottom() : aOurRect.Right();
 
     long nTransStart = nPEnd + (bVertical ? aOnePixel.Width() : aOnePixel.Height());
     long nTransEnd = 0;
