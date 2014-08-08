@@ -111,12 +111,13 @@ public:
     ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId);
 
     virtual void render() SAL_OVERRIDE;
-    void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight);
+    void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight, glm::vec3 r3DPos = glm::vec3(0.0, 0.0, 0.0));
 
 private:
     TextCacheItem maText;
     glm::vec2 maTopLeft;
     glm::vec2 maBottomRight;
+    glm::vec3 ma3DPos;
 };
 
 class Rectangle : public Renderable3DObject

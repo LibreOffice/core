@@ -134,16 +134,17 @@ ScreenText::ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const
 {
 }
 
-void ScreenText::setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight)
+void ScreenText::setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight, glm::vec3 r3DPos)
 {
     maTopLeft = rTopLeft;
     maBottomRight = rBottomRight;
+    ma3DPos = r3DPos;
 }
 
 void ScreenText::render()
 {
     mpRenderer->CreateScreenTextTexture(maText.maPixels, maText.maSize,
-                                        maTopLeft, maBottomRight,
+                                        maTopLeft, maBottomRight, ma3DPos,
                                         mnUniqueId);
 }
 

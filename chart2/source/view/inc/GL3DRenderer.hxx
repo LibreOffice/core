@@ -138,8 +138,10 @@ struct PackedVertex{
 struct TextInfo
 {
     glm::vec4 id;
+    sal_uInt32 uniqueId;
     GLuint texture;
     float vertex[12];
+    glm::vec3 pos;
 };
 
 struct TextureArrayInfo
@@ -197,7 +199,7 @@ public:
                            sal_uInt32 nUniqueId);
     void CreateScreenTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
                                  ::Size maSizePixels, const glm::vec2& vTopLeft,
-                                 const glm::vec2& vBottomRight, sal_uInt32 nUniqueId);
+                                 const glm::vec2& vBottomRight, glm::vec3 vPos, sal_uInt32 nUniqueId);
     void ProcessUnrenderedShape(bool bNewScene);
 
     void SetPickingMode(bool bPickingMode);

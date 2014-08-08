@@ -25,6 +25,8 @@
 #endif
 
 #define BENCH_MARK_MODE false
+#define CLICK_EVENT_ID 1
+#define SHAPE_START_ID 10
 
 using namespace com::sun::star;
 
@@ -489,7 +491,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     // Each series of data flows from left to right, and multiple series are
     // stacked vertically along y axis.
 
-    sal_uInt32 nId = 1;
+    sal_uInt32 nId = SHAPE_START_ID;
     float nXEnd = 0.0;
     float nYPos = 0.0;
 
@@ -805,11 +807,13 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
         return;
 
     const BarInformation& rBarInfo = itr->second;
-
+    glm::vec3 textPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
+                                  rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
+                                  rBarInfo.maPos.z);
     maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
-                OUString("Value: ") + OUString::number(rBarInfo.mnVal), 0));
+                OUString("Value: ") + OUString::number(rBarInfo.mnVal), CLICK_EVENT_ID));
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
-    pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f));
+    pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f), textPos);
     pScreenText->render();
 
     glm::vec3 maTargetPosition = rBarInfo.maPos;

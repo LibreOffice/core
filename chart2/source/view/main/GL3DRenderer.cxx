@@ -1666,13 +1666,14 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
 void OpenGL3DRenderer::CreateScreenTextTexture(
         const boost::shared_array<sal_uInt8> &bitmapBuf,
         ::Size maSizePixels, const glm::vec2& vTopLeft,
-        const glm::vec2& vBottomRight, sal_uInt32 nUniqueId)
+        const glm::vec2& vBottomRight, glm::vec3 vPos, sal_uInt32 nUniqueId)
 {
     long bmpWidth = maSizePixels.Width();
     long bmpHeight = maSizePixels.Height();
 
     TextInfo aTextInfo;
     aTextInfo.id = getColorAsVector(nUniqueId);
+    aTextInfo.uniqueId = nUniqueId;
     aTextInfo.vertex[0] = vBottomRight.x;
     aTextInfo.vertex[1] = vBottomRight.y;
     aTextInfo.vertex[2] = 0;
@@ -1688,6 +1689,7 @@ void OpenGL3DRenderer::CreateScreenTextTexture(
     aTextInfo.vertex[9] = vTopLeft.x;
     aTextInfo.vertex[10] = vBottomRight.y;
     aTextInfo.vertex[11] = 0;
+    aTextInfo.pos = vPos;
 
     CHECK_GL_ERROR();
     glGenTextures(1, &aTextInfo.texture);
@@ -1868,16 +1870,37 @@ void OpenGL3DRenderer::ReleaseScreenTextShapes()
 
 void OpenGL3DRenderer::RenderScreenTextShape()
 {
+    glUseProgram(maResources.m_ScreenTextProID);
     CHECK_GL_ERROR();
     for (size_t i = 0; i < m_ScreenTextInfoList.size(); i++)
     {
         TextInfo &textInfo = m_ScreenTextInfoList[i];
+        //calc the postition and check whether it can be displayed
+        float xTrans = 0.0f;
+        float yTrans = 0.0f;
+        if (textInfo.uniqueId)
+        {
+            glm::vec3 worldPos = glm::vec3(m_ScrollMoveMatrix * m_GlobalScaleMatrix * glm::vec4(textInfo.pos, 1));
+            if (worldPos.x < m_fMinCoordX)
+                continue;
+            glm::vec4 pos = m_3DProjection * m_3DView * glm::vec4(worldPos, 1);
+            xTrans = pos.x / pos.w;
+            yTrans = pos.y / pos.w;
+            for (int j = 0; j < 12; j++)
+            {
+                if (j % 3 == 0)
+                {
+                    textInfo.vertex[j] += xTrans;
+                }
+                if (j % 3 == 1)
+                {
+                    textInfo.vertex[j] += yTrans;
+                }
+            }
+        }
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
         glBufferData(GL_ARRAY_BUFFER, sizeof(textInfo.vertex), textInfo.vertex, GL_STATIC_DRAW);
-        CHECK_GL_ERROR();
-        glUseProgram(maResources.m_ScreenTextProID);
-
         CHECK_GL_ERROR();
 
         // 1rst attribute buffer : vertices
@@ -1912,13 +1935,13 @@ void OpenGL3DRenderer::RenderScreenTextShape()
         //TODO: moggi: get rid fo GL_QUADS
         glDrawArrays(GL_QUADS, 0, 4);
         CHECK_GL_ERROR();
-        glDisableVertexAttribArray(maResources.m_ScreenTextTexCoordID);
-        CHECK_GL_ERROR();
-        glDisableVertexAttribArray(maResources.m_ScreenTextVertexID);
-        CHECK_GL_ERROR();
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glUseProgram(0);
     }
+    glDisableVertexAttribArray(maResources.m_ScreenTextTexCoordID);
+    CHECK_GL_ERROR();
+    glDisableVertexAttribArray(maResources.m_ScreenTextVertexID);
+    CHECK_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glUseProgram(0);
     CHECK_GL_ERROR();
 }
 void OpenGL3DRenderer::ReleaseTextShapesBatch()
