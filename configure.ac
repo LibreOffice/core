@@ -2711,32 +2711,6 @@ else
     AC_MSG_RESULT([no])
 fi
 
-dnl ===================================================================
-dnl  Test the Solaris compiler version
-dnl ===================================================================
-if test "$_os" = "SunOS"; then
-    if test "$CC" = "cc"; then
-        AC_PATH_PROGS(_cc, cc)
-        COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
-        AC_MSG_CHECKING([the SunStudio C/C++ compiler version])
-        dnl cc -V outputs to standard error!!!!
-        _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | $SED -e 's/.* C //'`
-        _sunstudio_version=`echo $_sunstudio_string | $AWK '{ print $1 }'`
-        _sunstudio_major=`echo $_sunstudio_version | $AWK -F. '{ print $1 }'`
-        if test "$_sunstudio_major" != "5"; then
-            AC_MSG_ERROR([found version "$_sunstudio_version", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler])
-        else
-            _sunstudio_minor=`echo $_sunstudio_version | $AWK -F. '{ if ($2 == 5) print "true"; else if ($2 == 7) print "true"; else if ($2 == 8) print "true"; else if ($2 == 9) print "true"; else print "false" }'`
-            if test "$_sunstudio_minor" = "false"; then
-                AC_MSG_ERROR([found version "$_sunstudio_version", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler])
-            else
-                dnl compiler will do
-                AC_MSG_RESULT([checked])
-            fi
-        fi
-    fi
-fi
-
 
 dnl ===================================================================
 dnl Check OS X SDK and compiler
@@ -5596,16 +5570,7 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     AC_PROG_CXXCPP
 
     dnl Check whether there's a C pre-processor.
-    dnl ===================================================================
-    dnl When using SunStudio compiler, there is a bug with the cc
-    dnl preprocessor, so use CC preprocessor as the cc preprocessor
-    dnl See Issuezilla #445.
-    dnl ===================================================================
-    if test "$_os" = "SunOS"; then
-        CPP=$CXXCPP
-    else
-        AC_PROG_CPP
-    fi
+    AC_PROG_CPP
 fi
 
 
@@ -5904,22 +5869,6 @@ if test "$WITH_MINGW" = "yes"; then
     AC_DEFINE(HAVE_FMERGENEUTRALITEMS)
     ],
     [AC_MSG_RESULT(no)])
-fi
-
-dnl ===================================================================
-dnl Extra checking for the SunOS compiler
-dnl ===================================================================
-if test "$_os" = "SunOS"; then
-    dnl SunStudio C++ compiler packaged with SunStudio C compiler
-    if test "$CC" = "cc"; then
-    AC_MSG_CHECKING([SunStudio C++ Compiler])
-        if test "$CXX" != "CC"; then
-            AC_MSG_WARN([SunStudio C++ was not found])
-            add_warning "SunStudio C++ was not found"
-        else
-            AC_MSG_RESULT([checked])
-        fi
-    fi
 fi
 
 dnl *************************************************************
