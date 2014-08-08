@@ -131,13 +131,6 @@
 #   include <netinet/tcp.h>
 #   define  IORESOURCE_TRANSFER_BSD
 #   include <machine/endian.h>
-#if __FreeBSD_version < 500000
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
-#   endif
-#endif
 #   define  NO_PTHREAD_RTL
 #endif
 
@@ -395,7 +388,7 @@ typedef struct sockaddr_ipx {
 /* END HACK */
 
 #ifdef NO_PTHREAD_RTL
-#if !defined FREEBSD || (__FreeBSD_version < 500112)
+#if !defined FREEBSD
 #if !defined NETBSD
 struct passwd *getpwent_r(struct passwd *pwd, char *buffer,  int buflen);
 #endif
@@ -406,11 +399,9 @@ extern struct spwd *getspnam_r(const char *name, struct spwd *result,
 struct tm *localtime_r(const time_t *timep, struct tm *buffer);
 struct tm *gmtime_r(const time_t *timep, struct tm *buffer);
 #endif
-#endif /* !defined FREEBSD || (__FreeBSD_version < 500112) */
-#if !defined(FREEBSD) || (__FreeBSD_version < 601103)
 struct hostent *gethostbyname_r(const char *name, struct hostent *result,
                                 char *buffer, size_t buflen, int *h_errnop);
-#endif /* !defined(FREEBSD) || (__FreeBSD_version < 601103) */
+#endif /* !defined(FREEBSD) */
 #endif
 
 #endif // INCLUDED_SAL_OSL_UNX_SYSTEM_H

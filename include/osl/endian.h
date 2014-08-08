@@ -80,13 +80,6 @@ extern "C" {
 #ifdef FREEBSD
 #   include <sys/param.h>
 #   include <machine/endian.h>
-#if __FreeBSD_version < 500000
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
-#   endif
-#endif
 #endif
 
 #ifdef AIX
