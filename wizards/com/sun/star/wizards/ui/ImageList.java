@@ -789,7 +789,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                 };
     }
 
-    public static interface IImageRenderer extends IRenderer
+    private static interface IImageRenderer extends IRenderer
     {
 
         /**
