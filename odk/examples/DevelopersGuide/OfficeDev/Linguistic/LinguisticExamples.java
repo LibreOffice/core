@@ -333,7 +333,7 @@ public class LinguisticExamples
     /** simple sample implementation of a clients XLinguServiceEventListener
      *  interface implementation
      */
-    public class Client
+    private class Client
             implements XLinguServiceEventListener
     {
         public void disposing ( EventObject aEventObj )

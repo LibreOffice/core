@@ -48,7 +48,7 @@ public class _XComponent {
     * Listener which added but not removed, and its method must be called
     * on <code>dispose</code> call.
     */
-    public class MyEventListener implements XEventListener {
+    private class MyEventListener implements XEventListener {
         private int number = 0;
         private String message = null;
         private MyEventListener(int number, String message) {

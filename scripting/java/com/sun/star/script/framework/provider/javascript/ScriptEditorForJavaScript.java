@@ -323,7 +323,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
         return scope;
     }
 
-    class closeHandler implements Runnable
+    private class closeHandler implements Runnable
     {
         private URL url;
         private closeHandler( URL url )

@@ -58,7 +58,7 @@ public class _XAccessibleEventBroadcaster {
     /**
      * An event producer
      */
-    public static class EventProducer {
+    private static class EventProducer {
         private XWindow xWindow;
         private EventProducer(XWindow window) {
             xWindow = window;

@@ -62,7 +62,7 @@ import static org.junit.Assert.*;
 public class AutoSave
 {
 
-    class AutoSaveListener implements XStatusListener
+    private class AutoSaveListener implements XStatusListener
     {
         private XDispatch m_xAutoSave;
         private URL m_aRegistration;
@@ -356,7 +356,7 @@ public class AutoSave
         m_aLog.log(Protocol.TYPE_SCOPE_CLOSE, "closeDoc() finished.");
     }
 
-    class DocThread extends Thread
+    private class DocThread extends Thread
     {
         DocThread()
         {}

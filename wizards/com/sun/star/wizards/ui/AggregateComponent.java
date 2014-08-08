@@ -159,7 +159,7 @@ public class AggregateComponent extends ControlScroller
         }
     }
 
-    class ActionListenerImpl implements com.sun.star.awt.XActionListener
+    private class ActionListenerImpl implements com.sun.star.awt.XActionListener
     {
 
         public void disposing(EventObject eventObject)
@@ -507,7 +507,7 @@ public class AggregateComponent extends ControlScroller
         }
     }
 
-    protected class ControlRow
+    private class ControlRow
     {
 
         private XListBox xFieldListBox;
@@ -570,7 +570,7 @@ public class AggregateComponent extends ControlScroller
             UnoDialog.deselectListBox(xFunctionListBox);
         }
 
-        protected class ItemListenerImpl implements com.sun.star.awt.XItemListener
+        private class ItemListenerImpl implements com.sun.star.awt.XItemListener
         {
 
             public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)

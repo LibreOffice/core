@@ -393,7 +393,7 @@ public class QueryWizard extends DatabaseObjectWizard
         enableRoadmapItems(bEnabled); // Note: Performancewise this could be improved
     }
 
-    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
         private int ID;

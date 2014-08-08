@@ -59,7 +59,7 @@ public class FieldSelection
     private final static int SOSELFLDSLST = 8;
 
 
-    class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
@@ -87,7 +87,7 @@ public class FieldSelection
         }
     }
 
-    class ActionListenerImpl implements com.sun.star.awt.XActionListener
+    private class ActionListenerImpl implements com.sun.star.awt.XActionListener
     {
 
         public void disposing(com.sun.star.lang.EventObject eventObject)

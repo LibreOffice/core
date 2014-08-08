@@ -543,7 +543,7 @@ public class SourceCodeGenerator {
     }
 
 
-class UnoObjectDefinition{
+private class UnoObjectDefinition{
         private Object m_oUnoObject = null;
         Type aType = null;
         private String sVariableStemName = "";
@@ -838,7 +838,7 @@ class UnoObjectDefinition{
     }
 
 
-    public class JavaCodeGenerator implements XLanguageSourceCodeGenerator{
+    private class JavaCodeGenerator implements XLanguageSourceCodeGenerator{
         String sStatementsCode = "";
         private boolean bAddAnyConverter = false;
         private boolean bIsPropertyUnoObjectDefined = false;
@@ -1185,7 +1185,7 @@ class UnoObjectDefinition{
     }
 
 
-    public class BasicCodeGenerator implements XLanguageSourceCodeGenerator{
+    private class BasicCodeGenerator implements XLanguageSourceCodeGenerator{
         String sStatementsCode = "";
 
         public BasicCodeGenerator(){
@@ -1389,7 +1389,7 @@ class UnoObjectDefinition{
 
     }
 
-    public class CPlusPlusCodeGenerator implements XLanguageSourceCodeGenerator{
+    private class CPlusPlusCodeGenerator implements XLanguageSourceCodeGenerator{
         String sStatementsCode = "";
         private boolean bIncludeStringHeader = false;
         private boolean bIncludeAny = false;

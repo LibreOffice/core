@@ -645,7 +645,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         super.setStepEnabled(SOSORTPAGE, bdoenable);
     }
 
-    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
         private int m_nID;

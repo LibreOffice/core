@@ -44,7 +44,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     private WizardDialog oWizardDialog;
     private Collator aCollator = null;
 
-    class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)

@@ -86,7 +86,7 @@ public class TitlesComponent extends ControlScroller
         }
     }
 
-    class ControlRow
+    private class ControlRow
     {
 
         PropertyValue[] regproperties;

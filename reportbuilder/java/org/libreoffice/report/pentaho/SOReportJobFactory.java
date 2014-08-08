@@ -76,7 +76,7 @@ public class SOReportJobFactory
     {
     }
 
-    public static class _SOReportJobFactory extends WeakBase implements XInitialization, XServiceInfo, XJob, XPropertySet, ReportJobFactory
+    private static class _SOReportJobFactory extends WeakBase implements XInitialization, XServiceInfo, XJob, XPropertySet, ReportJobFactory
     {
 
         private static final Log LOGGER = LogFactory.getLog(_SOReportJobFactory.class);

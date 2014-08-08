@@ -487,7 +487,7 @@ XInitialization {
        xComponent.removeEventListener( aListener );
    }
 
-    public class ActionListenerImpl implements com.sun.star.awt.XActionListener {
+    private class ActionListenerImpl implements com.sun.star.awt.XActionListener {
         private String _buttonName;
         private ActionListenerImpl( String buttonName ) {
             _buttonName = buttonName;
@@ -506,7 +506,7 @@ XInitialization {
         }
     }
 
-    public class ItemListenerImpl implements com.sun.star.awt.XItemListener {
+    private class ItemListenerImpl implements com.sun.star.awt.XItemListener {
         private XCheckBox _xCheckBox;
         private ItemListenerImpl( XControlContainer xControlCont ) {
             Object objectCheckBox = xControlCont.getControl( _checkBoxName );

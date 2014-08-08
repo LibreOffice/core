@@ -108,7 +108,7 @@ class ExampleAddInThread extends Thread
 
 public class ExampleAddIn
 {
-    static public class _ExampleAddIn extends com.sun.star.lib.uno.helper.WeakBase
+    static private class _ExampleAddIn extends com.sun.star.lib.uno.helper.WeakBase
            implements org.openoffice.sheet.addin.XExampleAddIn,
                       com.sun.star.sheet.XAddIn,
                       com.sun.star.lang.XServiceName,

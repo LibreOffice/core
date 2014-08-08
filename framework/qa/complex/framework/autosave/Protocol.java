@@ -156,7 +156,7 @@ public class Protocol extends JComponent
      * Such line can be specified as a special one (ERROR, WARNING ...).
      * That makes it possible to analyze the whole protocol using tools.
      */
-    class ProtocolLine
+    private class ProtocolLine
     {
         /// the line number of this protocol line (size of the vector of all protocol lines cn be used to count such lines!)
         private long m_nLine;

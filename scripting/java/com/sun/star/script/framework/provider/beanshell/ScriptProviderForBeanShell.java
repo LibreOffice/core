@@ -49,7 +49,7 @@ import com.sun.star.script.framework.container.ScriptMetaData;
 
 public class ScriptProviderForBeanShell
 {
-    public static class ScriptProviderForBeanShell_2 extends ScriptProvider
+    private static class ScriptProviderForBeanShell_2 extends ScriptProvider
     {
         public ScriptProviderForBeanShell_2(XComponentContext ctx)
         {

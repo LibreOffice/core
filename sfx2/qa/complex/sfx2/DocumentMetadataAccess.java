@@ -969,7 +969,7 @@ public class DocumentMetadataAccess
         return ret;
     }
 
-    static class BindingComp implements java.util.Comparator<XNode[]>
+    private static class BindingComp implements java.util.Comparator<XNode[]>
     {
         public int compare(XNode[] left, XNode[] right)
         {
@@ -989,7 +989,7 @@ public class DocumentMetadataAccess
         }
     }
 
-    static class StmtComp implements java.util.Comparator<Statement>
+    private static class StmtComp implements java.util.Comparator<Statement>
     {
         public int compare(Statement left, Statement right)
         {

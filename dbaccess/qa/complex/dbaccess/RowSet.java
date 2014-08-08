@@ -70,7 +70,7 @@ public class RowSet extends TestCase
     XParametersSupplier m_paramsSupplier;
 
 
-    class ResultSetMovementStress implements Runnable
+    private class ResultSetMovementStress implements Runnable
     {
 
         private XResultSet m_resultSet;

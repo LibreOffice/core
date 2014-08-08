@@ -75,7 +75,7 @@ public class ToDo {
      * XInterface, XTypeProvider, and XWeak implemented by the helper class
      * WeakBase and XServiceInfo should be provided by the service.
      */
-    public static class ToDoImpl extends WeakBase implements XServiceInfo, XToDo {
+    private static class ToDoImpl extends WeakBase implements XServiceInfo, XToDo {
 
         /** The service name, that must be used to get an instance of this service.
          */

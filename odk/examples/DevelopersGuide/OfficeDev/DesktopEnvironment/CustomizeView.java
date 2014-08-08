@@ -172,7 +172,7 @@ public class CustomizeView extends    JPanel
      * But such update doesn't force (hopefully) an action event. Otherwhise
      * we can produce a never ending recursion!
      */
-    class ClickListener implements ActionListener,
+    private class ClickListener implements ActionListener,
                                    com.sun.star.lang.XEventListener
     {
         /// URL, to toogle the requested UI item

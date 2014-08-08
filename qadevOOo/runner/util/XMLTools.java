@@ -170,7 +170,7 @@ public class XMLTools {
     * This class writes all XML data handled into a stream specified
     * in the constructor.
     */
-    public static class XMLWriter implements XDocumentHandler {
+    private static class XMLWriter implements XDocumentHandler {
         private PrintWriter _log = null ;
         private String align = "" ;
 
@@ -251,7 +251,7 @@ public class XMLTools {
     * After document is completed there is a way to cehck
     * if the XML data and structure was valid.
     */
-    public static class XMLWellFormChecker extends XMLWriter {
+    private static class XMLWellFormChecker extends XMLWriter {
         private boolean docStarted = false ;
         private boolean docEnded = false ;
         ArrayList<String> tagStack = new ArrayList<String>() ;

@@ -47,7 +47,7 @@ public class _XComponent {
     * Listener which added but not removed, and its method must be called
     * on <code>dispose</code> call.
     */
-    public class MyEventListener implements XEventListener {
+    private class MyEventListener implements XEventListener {
         public void disposing ( EventObject oEvent ) {
             Loutput[0] = Thread.currentThread() + " is DISPOSING EV1" + this;
             listenerDisposed[0] = true;
@@ -58,7 +58,7 @@ public class _XComponent {
     * Listener which added and then removed, and its method must <b>not</b>
     * be called on <code>dispose</code> call.
     */
-    public class MyEventListener2 implements XEventListener {
+    private class MyEventListener2 implements XEventListener {
         public void disposing ( EventObject oEvent ) {
             Loutput[0] = Thread.currentThread() + " is DISPOSING EV2" + this;
             listenerDisposed[1] = true;

@@ -99,7 +99,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         this.imageSize = imageSize;
     }
 
-    class OMouseListener implements XMouseListener
+    private class OMouseListener implements XMouseListener
     {
         public OMouseListener()
         {}
@@ -808,7 +808,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         }
     }
 
-    public static class Counter
+    private static class Counter
     {
 
         private int start,  end,  max;

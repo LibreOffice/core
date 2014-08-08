@@ -385,7 +385,7 @@ public class FormWizard extends DatabaseObjectWizard
         return true;
     }
 
-    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
         private int ID;

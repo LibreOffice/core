@@ -72,7 +72,7 @@ public class _XPropertySet {
     /**
     * Listener that must be called on bound property changing.
     */
-    public class MyChangeListener implements XPropertyChangeListener {
+    private class MyChangeListener implements XPropertyChangeListener {
          /**
          * Just set <code>propertyChanged</code> flag to true.
          */
@@ -96,7 +96,7 @@ public class _XPropertySet {
     /**
     * Listener that must be called on constrained property changing.
     */
-    public class MyVetoListener implements XVetoableChangeListener {
+    private class MyVetoListener implements XVetoableChangeListener {
          /**
          * Just set <code>vetoableChanged</code> flag to true.
          */

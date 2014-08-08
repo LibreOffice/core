@@ -56,7 +56,7 @@ public abstract class ControlScroller
     protected ArrayList<Object> ControlGroupVector = new ArrayList<Object>();
     protected PeerConfig oTitlePeerConfig;
 
-    class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
+    private class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
     {
 
         public void disposing(com.sun.star.lang.EventObject eventObject)

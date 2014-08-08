@@ -154,7 +154,7 @@ public class LocalOfficeWindow
 
        /// callback handler to get to know when we become visible
         //@deprecated
-       class ComponentEventHandler
+       private class ComponentEventHandler
                extends java.awt.event.ComponentAdapter
        {
         @Override
@@ -258,7 +258,7 @@ public class LocalOfficeWindow
         /** Helper class to watch calls into OOo with a timeout.
          * @deprecated
          */
-        class CallWatchThread extends Thread
+        private class CallWatchThread extends Thread
         {
                 private Thread aWatchedThread;
                 private long nTimeout;

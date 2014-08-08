@@ -112,7 +112,7 @@ public class FilterComponent
     private int SOI_MATCHANY = 1;
     private int curHelpID;
 
-    class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
@@ -167,7 +167,7 @@ public class FilterComponent
         }
     }
 
-    class TextListenerImpl implements com.sun.star.awt.XTextListener
+    private class TextListenerImpl implements com.sun.star.awt.XTextListener
     {
 
         public void textChanged(TextEvent EventObject)
@@ -508,7 +508,7 @@ public class FilterComponent
 
 
 
-    final class ControlRow
+    private final class ControlRow
     {
 
         private final static int SOLSTFIELDNAME = 3;

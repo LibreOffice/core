@@ -619,7 +619,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
     }
 
-    public static class Counter
+    private static class Counter
     {
 
         private int start,  end,  max;

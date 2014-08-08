@@ -355,7 +355,7 @@ public class ConfigExamples
 
 // READ example
     /// class to hold information about grid settings
-    public static class GridOptions
+    private static class GridOptions
     {
         private boolean visible;
         private int resolution_x;

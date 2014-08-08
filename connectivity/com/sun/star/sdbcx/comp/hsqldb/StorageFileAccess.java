@@ -70,7 +70,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
        }
     }
 
-    public class FileSync implements FileAccess.FileSync
+    private class FileSync implements FileAccess.FileSync
     {
         private NativeOutputStreamHelper os;
         private FileSync(NativeOutputStreamHelper _os)

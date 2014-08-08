@@ -282,7 +282,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         CurUnoDialog.setStepEnabled(IStep.intValue(), _bdoenable);
     }
 
-    class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(ItemEvent EventObject)

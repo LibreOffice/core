@@ -164,7 +164,7 @@ public abstract class BaseNLPSolver extends WeakBase
         return m_variables;
     }
 
-    protected class RowInfo {
+    private class RowInfo {
         private short Sheet;
         private int Row;
         private int StartCol;

@@ -47,7 +47,7 @@ public class SortingComponent
     };
     private XListBox[] xSortListBox = new XListBox[4];
 
-    class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(ItemEvent EventObject)

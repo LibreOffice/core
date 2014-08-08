@@ -89,7 +89,7 @@ public class CopyTableWizard extends CRMBasedTestCase
     }
 
 
-    class CopyThread implements Runnable
+    private class CopyThread implements Runnable
     {
 
         private final XCopyTableWizard copyWizard;

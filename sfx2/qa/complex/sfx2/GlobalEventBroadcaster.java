@@ -230,7 +230,7 @@ public class GlobalEventBroadcaster {
         return !failure;
     }
 
-    public class EventListenerImpl implements XEventListener {
+    private class EventListenerImpl implements XEventListener {
         public void disposing(com.sun.star.lang.EventObject eventObject) {
             System.out.println("disposing: " + eventObject.Source.toString());
         }

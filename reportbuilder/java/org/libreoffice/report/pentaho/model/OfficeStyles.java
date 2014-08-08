@@ -42,7 +42,7 @@ import org.jfree.report.structure.Element;
 public class OfficeStyles extends Element
 {
 
-    public static class StyleKey implements Serializable
+    private static class StyleKey implements Serializable
     {
 
         private static final long serialVersionUID = 4931878927362887477L;

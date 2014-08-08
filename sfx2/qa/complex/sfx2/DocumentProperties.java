@@ -63,7 +63,7 @@ public class DocumentProperties
     }
 
     // for testing modifications
-    class Listener implements XModifyListener {
+    private class Listener implements XModifyListener {
         private boolean m_Called;
 
         Listener() {

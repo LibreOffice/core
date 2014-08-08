@@ -38,14 +38,14 @@ public class PathSelection
     public XPathSelectionListener xAction;
     public XTextComponent xSaveTextBox;
 
-    public static class DialogTypes
+    private static class DialogTypes
     {
 
         private static final int FOLDER = 0;
         private static final int FILE = 1;
     }
 
-    public static class TransferMode
+    private static class TransferMode
     {
 
         private static final int SAVE = 0;

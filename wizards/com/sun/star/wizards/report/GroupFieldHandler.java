@@ -137,7 +137,7 @@ public class GroupFieldHandler extends FieldSelection
 
     }
 
-    /* protected */ class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    /* protected */ private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
         public void moveItemDown(String Selitem)

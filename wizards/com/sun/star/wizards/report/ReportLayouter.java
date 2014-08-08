@@ -217,7 +217,7 @@ public class ReportLayouter
         CurUnoDialog.setFocus("lblContent");
     }
 
-    class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
@@ -302,7 +302,7 @@ public class ReportLayouter
         }
     }
 
-    class ActionListenerImpl implements com.sun.star.awt.XActionListener
+    private class ActionListenerImpl implements com.sun.star.awt.XActionListener
     {
 
         public void disposing(EventObject eventObject)

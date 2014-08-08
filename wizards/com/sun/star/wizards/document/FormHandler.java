@@ -92,7 +92,7 @@ public class FormHandler
     XShapeGrouper xShapeGrouper;
     private XNameContainer xNamedFormContainer;
 
-    public class ControlData
+    class ControlData
     {
 
         int DataType;
