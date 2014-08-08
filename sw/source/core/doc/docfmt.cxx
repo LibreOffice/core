@@ -1577,13 +1577,21 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
         for( sal_uInt16 n = 0; n < nCnt; ++n )
         {
             const SwNumRule& rR = *rArr[ n ];
-            if( !rR.IsAutoRule() )
+            SwNumRule* pNew = FindNumRulePtr( rR.GetName());
+            if( pNew )
+                pNew->CopyNumRule( this, rR );
+            else
             {
-                SwNumRule* pNew = FindNumRulePtr( rR.GetName());
-                if( pNew )
-                    pNew->CopyNumRule( this, rR );
-                else
+                if( !rR.IsAutoRule() )
                     MakeNumRule( rR.GetName(), &rR );
+                else
+                {
+                    // as we reset all styles, there shouldn't be any unknown
+                    // automatic SwNumRules, because all should have been
+                    // created by the style copying!
+                    // So just warn and ignore.
+                    SAL_WARN( "sw.styles", "Found unknown auto SwNumRule during reset!" );
+                }
             }
         }
     }
