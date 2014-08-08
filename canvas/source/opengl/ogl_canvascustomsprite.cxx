@@ -159,9 +159,8 @@ namespace oglcanvas
                 // composite that to screen
 
                 // TODO(P3): buffer texture
-                // TODO: moggi: reimplement as FBO with rendering to texture
-                pBufferContext = NULL;
-                // pBufferContext->startBufferRendering();
+                pBufferContext = maCanvasHelper.getDeviceHelper()->createBufferContext(aSpriteSizePixel);
+                pBufferContext->startBufferRendering();
             }
 
             // this ends up in pBufferContext, if that one's "current"
@@ -174,6 +173,8 @@ namespace oglcanvas
                 // screen now. Calls below switches us back to window
                 // context, and binds to generated, dynamic texture
                 pBufferContext->endBufferRendering();
+                GLuint nTexture = pBufferContext->getTextureId();
+                glBindTexture(GL_TEXTURE_2D, nTexture);
 
                 glEnable(GL_TEXTURE_2D);
                 glTexParameteri(GL_TEXTURE_2D,
