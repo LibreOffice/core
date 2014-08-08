@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,ure_install,$(SRCDIR)/ure/source))
 
-ifneq (WNT,$(OS))
+ifneq (,$(filter-out MACOSX WNT,$(OS)))
 $(eval $(call gb_Package_add_file,ure_install,$(LIBO_URE_BIN_FOLDER)/startup.sh,startup.sh))
 $(eval $(call gb_Package_add_symbolic_link,ure_install,$(LIBO_URE_BIN_FOLDER)/uno,startup.sh))
 endif
