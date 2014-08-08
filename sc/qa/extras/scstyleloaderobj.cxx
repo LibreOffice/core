@@ -25,13 +25,13 @@ class ScStyleLoaderObj : public CalcUnoApiTest, apitest::XStyleLoader
 public:
     ScStyleLoaderObj();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
-    virtual uno::Reference< uno::XInterface > init();
-    virtual uno::Reference< lang::XComponent  > getTargetComponent();
-    virtual uno::Reference< lang::XComponent > getSourceComponent();
-    virtual OUString getTestURL();
+    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
+    virtual uno::Reference< lang::XComponent  > getTargetComponent() SAL_OVERRIDE;
+    virtual uno::Reference< lang::XComponent > getSourceComponent() SAL_OVERRIDE;
+    virtual OUString getTestURL() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScStyleLoaderObj);
     CPPUNIT_TEST(testLoadStylesFromURL);
