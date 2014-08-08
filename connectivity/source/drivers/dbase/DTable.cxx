@@ -322,12 +322,19 @@ void ODbaseTable::fillColumns()
     for (; i < nFieldCount; i++)
     {
         DBFColumn aDBFColumn;
-        m_pFileStream->Read((char*)&aDBFColumn, sizeof(aDBFColumn));
+        sal_Size nRead = m_pFileStream->Read(&aDBFColumn, sizeof(aDBFColumn));
+        if (nRead != sizeof(aDBFColumn))
+        {
+            SAL_WARN("connectivity.drivers", "ODbaseTable::fillColumns: short read!");
+            break;
+        }
         if ( FIELD_DESCRIPTOR_TERMINATOR == aDBFColumn.db_fnm[0] ) // 0x0D stored as the Field Descriptor terminator.
             break;
 
-        bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01;
+        aDBFColumn.db_fnm[sizeof(aDBFColumn.db_fnm)-1] = 0; //ensure null termination for broken input
         const OUString aColumnName((const char *)aDBFColumn.db_fnm, strlen((const char *)aDBFColumn.db_fnm), m_eEncoding);
+
+        bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01;
 
         m_aRealFieldLengths.push_back(aDBFColumn.db_flng);
         sal_Int32 nPrecision = aDBFColumn.db_flng;
@@ -2605,7 +2612,12 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
         if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
 
-        m_pFileStream->Read((char*)m_pBuffer, nEntryLen);
+        sal_Size nRead = m_pFileStream->Read((char*)m_pBuffer, nEntryLen);
+        if (nRead != nEntryLen)
+        {
+            SAL_WARN("connectivity.drivers", "ODbaseTable::seekRow: short read!");
+            goto Error;
+        }
         if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
     }
@@ -2728,7 +2740,7 @@ void ODbaseTable::AllocBuffer()
     if (m_pBuffer == NULL && nSize > 0)
     {
         m_nBufferSize = nSize;
-        m_pBuffer       = new sal_uInt8[m_nBufferSize+1];
+        m_pBuffer = new sal_uInt8[m_nBufferSize+1];
     }
 }
 
