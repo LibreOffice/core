@@ -57,11 +57,11 @@ class BackingWindow
     com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
     com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
     com::sun::star::uno::Reference< com::sun::star::frame::XDesktop2 >               mxDesktop;
+
     /** helper for drag&drop. */
     com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
 
     PushButton*                     mpOpenButton;
-    //PushButton*                     mpTemplateButton;
     MenuButton*                     mpTemplateButton;
 
     FixedText*                      mpCreateLabel;
@@ -87,9 +87,6 @@ class BackingWindow
     RecentDocsView*                 mpAllRecentThumbnails;
     TemplateLocalView*              mpLocalView;
     TemplateAbstractView*           mpCurrentView;
-
-    //ToolBox*                        mpViewBar;
-    //ToolBox*                        mpTemplateBar;
 
     std::vector<Window*>            maDndWindows;
 
