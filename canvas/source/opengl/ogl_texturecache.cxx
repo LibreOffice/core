@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define GL_GLEXT_PROTOTYPES
-
 #include "ogl_texturecache.hxx"
 
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
