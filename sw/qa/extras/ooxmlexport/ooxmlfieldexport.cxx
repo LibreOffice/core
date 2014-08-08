@@ -591,6 +591,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo81945, "fdo81945.docx")
     assertXPath(pXmlDoc, "//w:sdt//w:sdt", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo82123, "fdo82123.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    // make sure there is only one run inside first SDT after RT as in the Original file.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:p/w:sdt[1]/w:sdtContent/w:r",1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo81946, "fdo81946.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
