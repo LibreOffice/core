@@ -57,7 +57,7 @@ void XStyleLoader::testLoadStylesFromURL()
 
   OUString aCellStyleName("CellBackColor");
   uno::Any aBackColor = xPropSet->getPropertyValue(aCellStyleName);
-  uno::Any expectedBackColor(16724787);
+  uno::Any expectedBackColor(sal_Int32(16724787));
 
   CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong CellBackColor" , expectedBackColor, aBackColor);
 
@@ -89,7 +89,7 @@ void XStyleLoader::testLoadStylesFromDocument()
 
   OUString aCellStyleName("CellBackColor");
   uno::Any aBackColor = xPropSet->getPropertyValue(aCellStyleName);
-  uno::Any expectedBackColor(16724787);
+  uno::Any expectedBackColor(sal_Int32(16724787));
 
   CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong CellBackColor" , expectedBackColor, aBackColor);
 
