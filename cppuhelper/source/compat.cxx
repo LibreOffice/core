@@ -148,6 +148,7 @@ void ClassData::writeTypeOffset(css::uno::Type const &, sal_Int32) {
     std::abort();
 }
 
+SAL_WNOUNREACHABLE_CODE_PUSH
 struct SAL_DLLPUBLIC_EXPORT ClassDataBase {
     ClassDataBase();
 
@@ -167,6 +168,7 @@ ClassDataBase::ClassDataBase(sal_Int32) {
 ClassDataBase::~ClassDataBase() {
     std::abort();
 }
+SAL_WNOUNREACHABLE_CODE_POP
 
 }
 
