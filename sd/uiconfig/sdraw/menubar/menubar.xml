@@ -35,6 +35,7 @@
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuitem menu:id=".uno:Save"/>
       <menu:menuitem menu:id=".uno:SaveAs"/>
+      <menu:menuitem menu:id=".uno:SaveACopy"/>
       <menu:menuitem menu:id=".uno:SaveAll"/>
       <menu:menuitem menu:id=".uno:CheckOut"/>
       <menu:menuitem menu:id=".uno:CancelCheckOut"/>
