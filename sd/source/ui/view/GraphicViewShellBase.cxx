@@ -26,6 +26,8 @@
 #include "framework/DrawModule.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
 
 namespace sd {
 
