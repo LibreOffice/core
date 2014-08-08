@@ -139,7 +139,7 @@ public class QueryWizard extends DatabaseObjectWizard
         return m_createdQuery;
     }
 
-    public void enableRoadmapItems(boolean _bEnabled)
+    private void enableRoadmapItems(boolean _bEnabled)
     {
         try
         {
@@ -190,7 +190,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
     }
 
-    public void insertQueryRelatedSteps()
+    private void insertQueryRelatedSteps()
     {
         try
         {
@@ -221,7 +221,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
     }
 
-    public void buildSteps()
+    private void buildSteps()
     {
         try
         {

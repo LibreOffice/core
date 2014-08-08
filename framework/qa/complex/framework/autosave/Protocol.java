@@ -272,7 +272,7 @@ public class Protocol extends JComponent
          * format this line as a string for writing log files
          * using the html format
          */
-        public synchronized String toHTML()
+        private synchronized String toHTML()
         {
             StringBuffer sLine = new StringBuffer(1000);
             sLine.append("<tr>");
@@ -716,7 +716,7 @@ public class Protocol extends JComponent
         resetStatistics();
     }
 
-    public synchronized void resetStatistics()
+    private synchronized void resetStatistics()
     {
         m_nTestMarks = 0;
         m_nWarnings  = 0;

@@ -174,7 +174,7 @@ public class CheckOGroupBoxModel
         {
         }
 
-        public boolean wasListenerCalled()
+        private boolean wasListenerCalled()
         {
             return propertiesChanged;
         }

@@ -217,7 +217,7 @@ public class StorageRepository implements InputRepository, OutputRepository
         throw new IOException();
     }
 
-    final String shortenName(final String name)
+    private final String shortenName(final String name)
     {
         final String temp;
         if (name.startsWith("./"))

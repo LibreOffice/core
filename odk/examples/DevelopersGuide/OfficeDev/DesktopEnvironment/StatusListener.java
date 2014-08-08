@@ -316,7 +316,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * @param aEvent
      *          describes the action
      */
-    public void impl_frameAction(/*IN*/ com.sun.star.frame.FrameActionEvent aEvent)
+    private void impl_frameAction(/*IN*/ com.sun.star.frame.FrameActionEvent aEvent)
     {
         synchronized(this)
         {

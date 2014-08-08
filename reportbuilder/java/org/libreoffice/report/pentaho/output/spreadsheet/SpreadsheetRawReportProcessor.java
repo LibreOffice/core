@@ -78,7 +78,7 @@ public class SpreadsheetRawReportProcessor extends AbstractReportProcessor
         this.dataSourceFactory = dataSourceFactory;
     }
 
-    protected ReportTarget createReportTarget(final ReportJob job) throws ReportProcessingException
+    private ReportTarget createReportTarget(final ReportJob job) throws ReportProcessingException
     {
         final ReportStructureRoot report = job.getReportStructureRoot();
         final ResourceManager resourceManager = report.getResourceManager();

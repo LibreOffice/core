@@ -54,7 +54,7 @@ public class dbg {
      * @param extendedInfo Should extended information be printed?
      * @see com.sun.star.uno.XInterface
      */
-    public static void printInterfaces(XInterface xTarget,
+    private static void printInterfaces(XInterface xTarget,
                                                     boolean extendedInfo){
         Type[] types = getInterfaceTypes(xTarget);
         if( null != types ) {
@@ -75,7 +75,7 @@ public class dbg {
      * @return An array with all interface types; null if there are none.
      * @see com.sun.star.uno.XInterface
      */
-    public static Type[] getInterfaceTypes(XInterface xTarget) {
+    private static Type[] getInterfaceTypes(XInterface xTarget) {
         Type[] types = null;
         XTypeProvider xTypeProvider = UnoRuntime.queryInterface( XTypeProvider.class, xTarget);
         if( xTypeProvider != null )
@@ -113,7 +113,7 @@ public class dbg {
      * @param aType The type of the given interface.
      * @see com.sun.star.uno.Type
      */
-    public static void printInterfaceInfo(Type aType) {
+    private static void printInterfaceInfo(Type aType) {
         try {
             Class<?> zClass = aType.getZClass();
             Method[] methods = zClass.getDeclaredMethods();
@@ -223,7 +223,7 @@ public class dbg {
      * @param out The print writer which is used as output.
      * @see com.sun.star.beans.PropertyValue
      */
-    public static void printProperyValueSequenzePairs(PropertyValue[] ps, PrintWriter out){
+    private static void printProperyValueSequenzePairs(PropertyValue[] ps, PrintWriter out){
         for( int i = 0; i < ps.length; i++){
             printProperyValuePairs(ps[i], out);
         }
@@ -244,7 +244,7 @@ public class dbg {
      * @param out The print writer which is used as output.
      * @see com.sun.star.beans.PropertyValue
      */
-    public static void printProperyValuePairs(PropertyValue ps, PrintWriter out){
+    private static void printProperyValuePairs(PropertyValue ps, PrintWriter out){
 
         if (ps.Value instanceof String[] ){
             String[] values = (String[]) ps.Value;

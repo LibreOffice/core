@@ -118,7 +118,7 @@ public class ProtocolHandlerAddon {
             return getServiceNames();
         }
 
-        public static String[] getServiceNames() {
+        private static String[] getServiceNames() {
             return m_serviceNames;
         }
 
@@ -202,7 +202,7 @@ public class ProtocolHandlerAddon {
                                           /*IN*/com.sun.star.util.URL aURL ) {
         }
 
-        public void showMessageBox(String sTitle, String sMessage) {
+        private void showMessageBox(String sTitle, String sMessage) {
             if ( null != m_xFrame && null != m_xToolkit ) {
 
                 // describe window properties.

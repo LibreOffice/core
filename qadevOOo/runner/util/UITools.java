@@ -457,7 +457,7 @@ public class UITools {
       * @throws java.lang.Exception if something fail
       * @return the value of the named numeric filed
       */
-     public String getNumericFieldValue(String NumericFieldName)
+     private String getNumericFieldValue(String NumericFieldName)
         throws java.lang.Exception
      {
          try{

@@ -86,7 +86,7 @@ public class DEPSAgent implements ILibEngine {
     pbest_t = pbest;
   }
 
-  protected AbsGTBehavior getGTBehavior() {
+  private AbsGTBehavior getGTBehavior() {
     if (Math.random()<switchP) {
       return deGTBehavior;
     } else {

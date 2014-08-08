@@ -154,7 +154,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
     }
 
 
-    final protected void createDBDocument(final String _docURL) throws Exception
+    final private void createDBDocument(final String _docURL) throws Exception
     {
         m_databaseDocumentFile = _docURL;
 

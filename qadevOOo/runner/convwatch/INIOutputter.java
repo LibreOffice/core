@@ -158,7 +158,7 @@ public class INIOutputter
             }
         }
 
-    void writeResult(boolean _bCurrentResult) throws java.io.IOException
+    private void writeResult(boolean _bCurrentResult) throws java.io.IOException
         {
             // is the check positiv, in a defined range
             if (_bCurrentResult)

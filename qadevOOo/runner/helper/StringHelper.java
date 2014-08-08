@@ -21,12 +21,12 @@ package helper;
 public class StringHelper
 {
 
-    public static String doubleQuote(String _sStr)
+    private static String doubleQuote(String _sStr)
         {
             return "\"" + _sStr + "\"";
         }
 
-    public static String singleQuote(String _sStr)
+    private static String singleQuote(String _sStr)
         {
             return "'" + _sStr + "'";
         }

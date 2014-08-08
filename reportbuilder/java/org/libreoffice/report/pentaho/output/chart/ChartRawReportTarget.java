@@ -68,7 +68,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
         return "application/vnd.oasis.opendocument.chart";
     }
 
-    protected String getStartContent()
+    private String getStartContent()
     {
         return "chart";
     }

@@ -372,7 +372,7 @@ public class JavaTools
         }
     }
 
-    public static String getFilenameOutOfPath(String sPath)
+    private static String getFilenameOutOfPath(String sPath)
     {
         String[] Hierarchy = ArrayoutofString(sPath, "/");
         return Hierarchy[Hierarchy.length - 1];
@@ -421,7 +421,7 @@ public class JavaTools
         return dt;
     }
 
-    public static long getTimeInMillis(Calendar _calendar)
+    private static long getTimeInMillis(Calendar _calendar)
     {
         java.util.Date dDate = _calendar.getTime();
         return dDate.getTime();
@@ -591,7 +591,7 @@ public class JavaTools
         return -1;
     }
 
-    public static boolean isEqual(PropertyValue firstPropValue, PropertyValue secPropValue)
+    private static boolean isEqual(PropertyValue firstPropValue, PropertyValue secPropValue)
     {
         if (!firstPropValue.Name.equals(secPropValue.Name))
         {

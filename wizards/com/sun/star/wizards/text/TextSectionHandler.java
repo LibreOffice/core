@@ -88,7 +88,7 @@ public class TextSectionHandler
         }
     }
 
-    public void removeTextSection(Object _oTextSection)
+    private void removeTextSection(Object _oTextSection)
     {
         try
         {
@@ -196,7 +196,7 @@ public class TextSectionHandler
         }
     }
 
-    public void linkSectiontoTemplate(Object oTextSection, String TemplateName, String SectionName)
+    private void linkSectiontoTemplate(Object oTextSection, String TemplateName, String SectionName)
     {
         SectionFileLink oSectionLink = new SectionFileLink();
         oSectionLink.FileURL = TemplateName;
@@ -236,7 +236,7 @@ public class TextSectionHandler
         }
     }
 
-    public void insertTextSection(String sectionName, String templateName, XTextCursor position)
+    private void insertTextSection(String sectionName, String templateName, XTextCursor position)
     {
         try
         {

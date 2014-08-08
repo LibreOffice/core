@@ -51,7 +51,7 @@ public class WriterTools {
         return WriterDoc;
     } // finish createTextDoc
 
-    public static XTextDocument loadTextDoc(XMultiServiceFactory xMSF,
+    private static XTextDocument loadTextDoc(XMultiServiceFactory xMSF,
                                             String url, PropertyValue[] Args) {
         XComponent comp = DesktopTools.loadDoc(xMSF, url, Args);
         XTextDocument WriterDoc = UnoRuntime.queryInterface(

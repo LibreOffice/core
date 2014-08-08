@@ -188,7 +188,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public XNameAccess getRegistryKeyContent(String _sKeyName){
+    private XNameAccess getRegistryKeyContent(String _sKeyName){
         try {
             PropertyValue[] aNodePath = new PropertyValue[1];
             XMultiServiceFactory xMSFConfig = theDefaultProvider.get(m_xContext);
@@ -310,7 +310,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
      * dialog, using the given
      * peer as a parent.
      */
-    public XWindowPeer createWindowPeer(XWindowPeer _xWindowParentPeer) {
+    private XWindowPeer createWindowPeer(XWindowPeer _xWindowParentPeer) {
         try{
             if (_xWindowParentPeer == null){
                 XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, m_xDlgContainer);
@@ -371,7 +371,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public XFixedText insertFixedText(XMouseListener _xMouseListener, int _nPosX, int _nPosY, int _nWidth, int _nStep, String _sLabel){
+    private XFixedText insertFixedText(XMouseListener _xMouseListener, int _nPosX, int _nPosY, int _nWidth, int _nStep, String _sLabel){
         XFixedText xFixedText = null;
         try{
             // create a unique name by means of an own implementation...
@@ -414,7 +414,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public XTextComponent insertCurrencyField(XTextListener _xTextListener, int _nPositionX, int _nPositionY, int _nWidth){
+    private XTextComponent insertCurrencyField(XTextListener _xTextListener, int _nPositionX, int _nPositionY, int _nWidth){
         XTextComponent xTextComponent = null;
         try{
             // create a unique name by means of an own implementation...
@@ -460,7 +460,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
 
-    public XPropertySet insertProgressBar(int _nPosX, int _nPosY, int _nWidth, int _nProgressMax){
+    private XPropertySet insertProgressBar(int _nPosX, int _nPosY, int _nWidth, int _nProgressMax){
         XPropertySet xPBModelPSet = null;
         try{
             // create a unique name by means of an own implementation...
@@ -537,7 +537,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
 
-    public void insertGroupBox(int _nPosX, int _nPosY, int _nHeight, int _nWidth){
+    private void insertGroupBox(int _nPosX, int _nPosY, int _nHeight, int _nWidth){
         try{
             // create a unique name by means of an own implementation...
             String sName = createUniqueName(m_xDlgModelNameContainer, "FrameControl");
@@ -574,7 +574,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
 
-    public XTextComponent insertEditField(XTextListener _xTextListener, XFocusListener _xFocusListener, int _nPosX, int _nPosY, int _nWidth){
+    private XTextComponent insertEditField(XTextListener _xTextListener, XFocusListener _xFocusListener, int _nPosX, int _nPosY, int _nWidth){
         XTextComponent xTextComponent = null;
         try{
             // create a unique name by means of an own implementation...
@@ -619,7 +619,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
         return xTextComponent;
     }
 
-    public XPropertySet insertTimeField(int _nPosX, int _nPosY, int _nWidth, Time _aTime, Time _aTimeMin, Time _aTimeMax){
+    private XPropertySet insertTimeField(int _nPosX, int _nPosY, int _nWidth, Time _aTime, Time _aTimeMin, Time _aTimeMax){
         XPropertySet xTFModelPSet = null;
         try{
             // create a unique name by means of an own implementation...
@@ -661,7 +661,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
 
-    public XPropertySet insertDateField(XSpinListener _xSpinListener, int _nPosX, int _nPosY, int _nWidth){
+    private XPropertySet insertDateField(XSpinListener _xSpinListener, int _nPosX, int _nPosY, int _nWidth){
         XPropertySet xDFModelPSet = null;
         try{
             // create a unique name by means of an own implementation...
@@ -707,7 +707,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public XPropertySet insertPatternField(int _nPosX, int _nPosY, int _nWidth){
+    private XPropertySet insertPatternField(int _nPosX, int _nPosY, int _nWidth){
         XPropertySet xPFModelPSet = null;
         try{
             // create a unique name by means of an own implementation...
@@ -749,7 +749,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public XPropertySet insertNumericField( int _nPosX, int _nPosY, int _nWidth,
+    private XPropertySet insertNumericField( int _nPosX, int _nPosY, int _nWidth,
             double _fValueMin, double _fValueMax, double _fValue,
             double _fValueStep, short _nDecimalAccuracy){
         XPropertySet xNFModelPSet = null;
@@ -793,7 +793,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
 
-    public XPropertySet insertVerticalScrollBar(XAdjustmentListener _xAdjustmentListener, int _nPosX, int _nPosY, int _nHeight){
+    private XPropertySet insertVerticalScrollBar(XAdjustmentListener _xAdjustmentListener, int _nPosX, int _nPosY, int _nHeight){
         XPropertySet xSBModelPSet = null;
         try{
             // create a unique name by means of an own implementation...
@@ -861,7 +861,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public XCheckBox insertCheckBox(XItemListener _xItemListener, int _nPosX, int _nPosY, int _nWidth){
+    private XCheckBox insertCheckBox(XItemListener _xItemListener, int _nPosX, int _nPosY, int _nWidth){
         XCheckBox xCheckBox = null;
         try{
             // create a unique name by means of an own implementation...
@@ -906,7 +906,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
 
-    public void insertRadioButtonGroup(short _nTabIndex, int _nPosX, int _nPosY, int _nWidth){
+    private void insertRadioButtonGroup(short _nTabIndex, int _nPosX, int _nPosY, int _nWidth){
         try{
             // create a unique name by means of an own implementation...
             String sName = createUniqueName(m_xDlgModelNameContainer, "OptionButton");
@@ -947,7 +947,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public XListBox insertListBox(int _nPosX, int _nPosY, int _nWidth, int _nStep, String[] _sStringItemList){
+    private XListBox insertListBox(int _nPosX, int _nPosY, int _nWidth, int _nStep, String[] _sStringItemList){
         XListBox xListBox = null;
         try{
             // create a unique name by means of an own implementation...
@@ -987,7 +987,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public XComboBox insertComboBox(int _nPosX, int _nPosY, int _nWidth){
+    private XComboBox insertComboBox(int _nPosX, int _nPosY, int _nWidth){
         XComboBox xComboBox = null;
         try{
             // create a unique name by means of an own implementation...
@@ -1032,7 +1032,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
 
-    public XPropertySet insertFormattedField(XSpinListener _xSpinListener, int _nPosX, int _nPosY, int _nWidth){
+    private XPropertySet insertFormattedField(XSpinListener _xSpinListener, int _nPosX, int _nPosY, int _nWidth){
         XPropertySet xFFModelPSet = null;
         try{
             // create a unique name by means of an own implementation...
@@ -1099,7 +1099,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public XTextComponent insertFileControl(XTextListener _xTextListener, int _nPosX, int _nPosY, int _nWidth){
+    private XTextComponent insertFileControl(XTextListener _xTextListener, int _nPosX, int _nPosY, int _nWidth){
         XTextComponent xTextComponent = null;
         try{
             // create a unique name by means of an own implementation...

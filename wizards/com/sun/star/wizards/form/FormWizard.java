@@ -220,7 +220,7 @@ public class FormWizard extends DatabaseObjectWizard
         }
     }
 
-    public void buildSteps()
+    private void buildSteps()
     {
         curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields, slblTables, true, 34411);
         curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
@@ -321,7 +321,7 @@ public class FormWizard extends DatabaseObjectWizard
         xDialog.endExecute();
     }
 
-    public void insertFormRelatedSteps()
+    private void insertFormRelatedSteps()
     {
         addRoadmap();
         int i = 0;

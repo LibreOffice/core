@@ -218,7 +218,7 @@ public class MSOfficePostscriptCreator implements IOffice
     /**
      * print the given file (_sInputFile) to the file name (_sPrintFile)
      */
-    public void printToFileWithMSOffice( ParameterHelper _aGTA,
+    private void printToFileWithMSOffice( ParameterHelper _aGTA,
                                          String _sInputFile,
                                          String _sPrintFilename) throws OfficeException, java.io.IOException
         {
@@ -285,7 +285,7 @@ public class MSOfficePostscriptCreator implements IOffice
             TimeHelper.waitInSeconds(2, "Give Microsoft Office some time to print.");
         }
 
-    public void realStartCommand(ArrayList<String> _aStartCommand) throws OfficeException
+    private void realStartCommand(ArrayList<String> _aStartCommand) throws OfficeException
         {
             if (_aStartCommand.isEmpty())
             {
@@ -335,7 +335,7 @@ public class MSOfficePostscriptCreator implements IOffice
         return sPerlExe;
     }
 
-    ArrayList<String> createWordPrintHelper() throws java.io.IOException
+    private ArrayList<String> createWordPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -439,7 +439,7 @@ public class MSOfficePostscriptCreator implements IOffice
 
     // TODO: Maybe give a possibility to say where search the script from outside
 
-    ArrayList<String> searchLocalFile(String _sScriptName)
+    private ArrayList<String> searchLocalFile(String _sScriptName)
         {
             String userdir = System.getProperty("user.dir");
 
@@ -466,7 +466,7 @@ public class MSOfficePostscriptCreator implements IOffice
             return aList;
         }
 
-    ArrayList<String> createWordStoreHelper() throws java.io.IOException
+    private ArrayList<String> createWordStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -548,7 +548,7 @@ public class MSOfficePostscriptCreator implements IOffice
         }
 
 
-    ArrayList<String> createExcelPrintHelper() throws java.io.IOException
+    private ArrayList<String> createExcelPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -651,7 +651,7 @@ public class MSOfficePostscriptCreator implements IOffice
             return aList;
         }
 
-    ArrayList<String> createExcelStoreHelper() throws java.io.IOException
+    private ArrayList<String> createExcelStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -740,7 +740,7 @@ public class MSOfficePostscriptCreator implements IOffice
             return aList;
         }
 
-    ArrayList<String> createPowerPointPrintHelper() throws java.io.IOException
+    private ArrayList<String> createPowerPointPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -845,7 +845,7 @@ public class MSOfficePostscriptCreator implements IOffice
        @param _sFilename a name to a ms office xml file
        @return 'word' or 'excel' or '' if type not known
     */
-    public String getOfficeType(String _sFilename)
+    private String getOfficeType(String _sFilename)
         {
             File aFile = new File(_sFilename);
             if (! aFile.exists())

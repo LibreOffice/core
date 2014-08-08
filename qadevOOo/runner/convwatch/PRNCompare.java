@@ -51,7 +51,7 @@ public class PRNCompare
         }
 
 
-    int getMaxNumOfFileEntry(String _sDirectory, String _sBasename)
+    private int getMaxNumOfFileEntry(String _sDirectory, String _sBasename)
         {
 //  TODO: check if directory exist should be done earlier
             File aDirectory = new File(_sDirectory);
@@ -117,10 +117,10 @@ public class PRNCompare
     public void setBorderMove(TriState _b) {m_tUseBorderMove = _b;}
     public TriState getBorderMove() {return m_tUseBorderMove;}
     public void setMaxPages(int _n) {m_nMaxPages = _n;}
-    int getMaxPages() {return m_nMaxPages;}
+    private int getMaxPages() {return m_nMaxPages;}
 
     public void setResolutionInDPI(int _n) {m_nResolutionInDPI = _n;}
-    int getResolutionInDPI() {return m_nResolutionInDPI;}
+    private int getResolutionInDPI() {return m_nResolutionInDPI;}
 
     public void setDocumentType(String _sTypeName)
         {
@@ -157,7 +157,7 @@ public class PRNCompare
             return aList;
         }
 
-    static String getJPEGName(String _sOutputPath, String _sBasename, String _sGS_PageOutput)
+    private static String getJPEGName(String _sOutputPath, String _sBasename, String _sGS_PageOutput)
         {
             String fs = System.getProperty("file.separator");
 
@@ -233,7 +233,7 @@ public class PRNCompare
      * m_sReferenceFile
      * m_sOutputPath
      */
-    public StatusHelper[] createDiffs(String _sOutputPath, String _sSourcePath1, String _sSourceFile1, String _sSourcePath2, String _sSourceFile2, int _nMaxDiffs, TriState _tUseBorderMove)
+    private StatusHelper[] createDiffs(String _sOutputPath, String _sSourcePath1, String _sSourceFile1, String _sSourcePath2, String _sSourceFile2, int _nMaxDiffs, TriState _tUseBorderMove)
         {
             if (_nMaxDiffs < 1)
             {
@@ -342,7 +342,7 @@ public class PRNCompare
         }
 
 
-    public StatusHelper[] createDiffs(String[] _aRefList, String[] _aPSList, int _nMaxDiffs, TriState _tUseBorderMove)
+    private StatusHelper[] createDiffs(String[] _aRefList, String[] _aPSList, int _nMaxDiffs, TriState _tUseBorderMove)
         {
             if (_nMaxDiffs < 1)
             {
@@ -466,7 +466,7 @@ public class PRNCompare
             return compareJPEGs(_sOldGfx, _sNewGfx, sDiffName);
         }
 
-    public static String compareJPEGs(String _sOldGfx, String _sNewGfx, String _sDiffGfx)
+    private static String compareJPEGs(String _sOldGfx, String _sNewGfx, String _sDiffGfx)
         {
             String sComposite = "composite";
             if (OSHelper.isWindows())
@@ -502,7 +502,7 @@ public class PRNCompare
      * function checks how many different colors a picture contains.
      * if it's only one color (nResult==1), like background color, there is no difference.
      */
-    int identify(String _sDiffGfx)
+    private int identify(String _sDiffGfx)
         {
             int nResult = 0;
             // would like to know what the meaning of %k is for ImageMagick's 'identify'
@@ -614,7 +614,7 @@ public class PRNCompare
      *       so the pixel count between old graphics and new graphics is twice the more.
      *
      */
-    public int estimateGfx(String _sOldGfx, String _sNewGfx, String _sDiffGfx)
+    private int estimateGfx(String _sOldGfx, String _sNewGfx, String _sDiffGfx)
         throws java.io.IOException
         {
             // new count pixels

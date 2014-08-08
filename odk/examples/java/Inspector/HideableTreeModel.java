@@ -44,12 +44,12 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-        protected void setRoot(Object r) {
+        private void setRoot(Object r) {
             this.root = r;
     }
 
 
-        public Object[] getPathToRoot(Object node) {
+        private Object[] getPathToRoot(Object node) {
             return getPathToRoot(node, 0);
     }
 
@@ -89,7 +89,7 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-        public void reload(Object node) {
+        private void reload(Object node) {
             if(node != null) {
                 TreePath tp = new TreePath(getPathToRoot(node));
                 fireTreeStructureChanged(new TreeModelEvent(this, tp));
@@ -119,7 +119,7 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-        public void nodeRemoved(Object node, Object child, int index) {
+        private void nodeRemoved(Object node, Object child, int index) {
             if(node != null && child != null && index >= 0) {
                 TreePath tp = new TreePath(getPathToRoot(node));
                 int[] ai = { index };
@@ -137,27 +137,27 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-        protected void fireTreeNodesChanged(TreeModelEvent event) {
+        private void fireTreeNodesChanged(TreeModelEvent event) {
             for(TreeModelListener l : modelListeners) {
                 l.treeNodesChanged(event);
             }
     }
 
 
-        protected void fireTreeNodesInserted(TreeModelEvent event) {
+        private void fireTreeNodesInserted(TreeModelEvent event) {
             for(TreeModelListener l : modelListeners) {
                 l.treeNodesInserted(event);
             }
     }
 
 
-        protected void fireTreeNodesRemoved(TreeModelEvent event) {
+        private void fireTreeNodesRemoved(TreeModelEvent event) {
             for(TreeModelListener l : modelListeners) {
                 l.treeNodesRemoved(event);
             }
     }
 
-    protected void fireTreeStructureChanged(TreeModelEvent event) {
+    private void fireTreeStructureChanged(TreeModelEvent event) {
             for(TreeModelListener l : modelListeners) {
                 l.treeStructureChanged(event);
             }
@@ -197,7 +197,7 @@ public class HideableTreeModel implements TreeModel {
 
 
 
-    public Object getParent(Object node) {
+    private Object getParent(Object node) {
             if(node != getRoot() && (node instanceof TreeNode)) {
                 return ((TreeNode)node).getParent();
             }
@@ -205,7 +205,7 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-        public boolean isNodeVisible(Object node) {
+        private boolean isNodeVisible(Object node) {
             if(node != getRoot()) {
                 if(node instanceof HideableMutableTreeNode) {
                         return ((HideableMutableTreeNode)node).isVisible();

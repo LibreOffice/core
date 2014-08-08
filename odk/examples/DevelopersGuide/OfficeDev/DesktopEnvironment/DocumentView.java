@@ -271,7 +271,7 @@ public class DocumentView extends    JFrame
 
 
 
-    public void save()
+    private void save()
     {
         com.sun.star.frame.XController xController = mxFrame.getController();
         if (xController==null)
@@ -284,7 +284,7 @@ public class DocumentView extends    JFrame
 
 
 
-    public void exportHTML(String sURL)
+    private void exportHTML(String sURL)
     {
         com.sun.star.frame.XController xController = mxFrame.getController();
         if (xController==null)

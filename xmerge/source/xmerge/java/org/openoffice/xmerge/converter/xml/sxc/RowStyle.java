@@ -252,7 +252,7 @@ public class RowStyle extends Style implements Cloneable {
      *  @param  node  The <code>Node</code> to add <code>Style</code>
      *                attributes.
      */
-    public void writeAttributes(Element node) {
+    private void writeAttributes(Element node) {
 
         if(rowHeight!=0) {
             String height = TwipsConverter.twips2cm(rowHeight) + "cm";

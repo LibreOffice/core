@@ -137,7 +137,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
-    public boolean createPrimaryKeys(String[] _fieldnames, boolean _bAutoincrementation)
+    private boolean createPrimaryKeys(String[] _fieldnames, boolean _bAutoincrementation)
     {
         try
         {
@@ -203,7 +203,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         return false;
     }
 
-    public boolean isColunnNameDuplicate(XNameAccess _xColumns, XPropertySet _xToBeAppendedPropertySet)
+    private boolean isColunnNameDuplicate(XNameAccess _xColumns, XPropertySet _xToBeAppendedPropertySet)
     {
         try
         {
@@ -384,7 +384,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
-    public boolean modifyColumn(String _sname, String _spropname, Object _oValue)
+    private boolean modifyColumn(String _sname, String _spropname, Object _oValue)
     {
         try
         {
@@ -667,7 +667,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         return false;
     }
 
-    public XPropertySet addPrimaryKeyColumn(String _columnname)
+    private XPropertySet addPrimaryKeyColumn(String _columnname)
     {
         try
         {
@@ -793,7 +793,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
     }
 
-    public boolean appendTableNameToFilter(String _scomposedtablename)
+    private boolean appendTableNameToFilter(String _scomposedtablename)
     {
         boolean bhastoinsert = true;
         for (int i = 0; i < sTableFilters.length; i++)

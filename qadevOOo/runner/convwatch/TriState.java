@@ -41,7 +41,7 @@ public class TriState
        Returns the value of this TriState object as an int
      * @return the primitive <code>int</code> value of this object.
     */
-    public int intValue()
+    private int intValue()
         {
             return m_nValue;
         }

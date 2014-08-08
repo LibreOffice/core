@@ -901,13 +901,13 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
 
-    int impl_waitForEvent(ArrayList<String> _eventQueue, String _expectedEvent, int _maxMilliseconds)
+    private int impl_waitForEvent(ArrayList<String> _eventQueue, String _expectedEvent, int _maxMilliseconds)
     {
         return impl_waitForEvent(_eventQueue, _expectedEvent, _maxMilliseconds, 0);
     }
 
 
-    int impl_waitForEvent(ArrayList<String> _eventQueue, String _expectedEvent, int _maxMilliseconds, int _firstQueueElementToCheck)
+    private int impl_waitForEvent(ArrayList<String> _eventQueue, String _expectedEvent, int _maxMilliseconds, int _firstQueueElementToCheck)
     {
         synchronized (_eventQueue)
         {
@@ -941,7 +941,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
 
-    void onDocumentEvent(DocumentEvent _Event)
+    private void onDocumentEvent(DocumentEvent _Event)
     {
         if ("OnTitleChanged".equals(_Event.EventName))
         // OnTitleChanged events are notified too often. This is known, and accepted.

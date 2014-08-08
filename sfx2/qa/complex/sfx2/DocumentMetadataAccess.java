@@ -1001,7 +1001,7 @@ public class DocumentMetadataAccess
             return 0;
         }
 
-        public int cmp(XNode i_Left, XNode i_Right)
+        private int cmp(XNode i_Left, XNode i_Right)
         {
             if (isBlank(i_Left)) {
                 return isBlank(i_Right) ? 0 : 1;

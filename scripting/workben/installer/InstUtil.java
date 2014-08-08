@@ -150,7 +150,7 @@ public class InstUtil {
 
 
 
-    public static Properties getJeditLocation() {
+    private static Properties getJeditLocation() {
 
     Properties results = new Properties();
 
@@ -236,7 +236,7 @@ public class InstUtil {
 
 
 
-    public static File findVersionFile(File start)
+    private static File findVersionFile(File start)
     {
         File versionFile = null;
 
@@ -261,7 +261,7 @@ public class InstUtil {
         return versionFile;
     }
 
-    public static boolean verifySversionExists(File sversionFile) {
+    private static boolean verifySversionExists(File sversionFile) {
         if (!sversionFile.exists())
             return false;
         return true;
@@ -329,11 +329,11 @@ public class InstUtil {
         return results;
     }
 
-    public static String getJavaVersion() {
+    private static String getJavaVersion() {
         return System.getProperty("java.version");
     }
 
-    public static boolean isCorrectJavaVersion() {
+    private static boolean isCorrectJavaVersion() {
         if (System.getProperty("java.version").startsWith("1.4"))
             return true;
         return false;

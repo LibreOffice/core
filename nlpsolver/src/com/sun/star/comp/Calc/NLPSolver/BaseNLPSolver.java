@@ -175,7 +175,7 @@ public abstract class BaseNLPSolver extends WeakBase
             Row = row;
         }
 
-        public CellRangeAddress getCellRangeAddress(int lastRow) {
+        private CellRangeAddress getCellRangeAddress(int lastRow) {
             CellRangeAddress result = new CellRangeAddress();
             result.Sheet = Sheet;
             result.StartColumn = StartCol;
@@ -341,11 +341,11 @@ public abstract class BaseNLPSolver extends WeakBase
         return m_currentParameters;
     }
 
-    protected XCell getCell(CellAddress cellAddress) {
+    private XCell getCell(CellAddress cellAddress) {
         return getCell(cellAddress.Column, cellAddress.Row, cellAddress.Sheet);
     }
 
-    protected XCell getCell(int col, int row, int sheet) {
+    private XCell getCell(int col, int row, int sheet) {
         try {
             XSpreadsheets xSpreadsheets = m_document.getSheets();
             XIndexAccess xSheetIndex = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
@@ -365,7 +365,7 @@ public abstract class BaseNLPSolver extends WeakBase
                 cellRangeAddress.StartRow, cellRangeAddress.EndColumn, cellRangeAddress.EndRow);
     }
 
-    protected XCellRangeData getCellRangeData(int sheet, int startCol, int startRow, int endCol, int endRow) {
+    private XCellRangeData getCellRangeData(int sheet, int startCol, int startRow, int endCol, int endRow) {
         try {
             XSpreadsheets xSpreadsheets = m_document.getSheets();
             XIndexAccess xSheetIndex = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
@@ -380,12 +380,12 @@ public abstract class BaseNLPSolver extends WeakBase
         return null;
     }
 
-    protected XChartDataArray getChartDataArray(CellRangeAddress cellRangeAddress) {
+    private XChartDataArray getChartDataArray(CellRangeAddress cellRangeAddress) {
         return getChartDataArray(cellRangeAddress.Sheet, cellRangeAddress.StartColumn,
                 cellRangeAddress.StartRow, cellRangeAddress.EndColumn, cellRangeAddress.EndRow);
     }
 
-    protected XChartDataArray getChartDataArray(int sheet, int startCol, int startRow, int endCol, int endRow) {
+    private XChartDataArray getChartDataArray(int sheet, int startCol, int startRow, int endCol, int endRow) {
         try {
             XSpreadsheets xSpreadsheets = m_document.getSheets();
             XIndexAccess xSheetIndex = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
@@ -487,7 +487,7 @@ public abstract class BaseNLPSolver extends WeakBase
     }
 
     // <editor-fold defaultstate="collapsed" desc="Helper functions">
-    protected void lockDocument(boolean lock) {
+    private void lockDocument(boolean lock) {
         if (lock)
             m_xModel.lockControllers();
         else

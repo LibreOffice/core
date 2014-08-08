@@ -122,7 +122,7 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
         SetTitle( m_xDialog, sTitle );
     }
 
-    public static void SetTitle( XDialog xDialog, String sTitle )
+    private static void SetTitle( XDialog xDialog, String sTitle )
         throws Exception
     {
         if ( xDialog != null && sTitle != null )
@@ -142,7 +142,7 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
         return GetPropSet( m_xControlContainer, sControl );
     }
 
-    protected static XPropertySet GetPropSet( XControlContainer xControlContainer, String sControl )
+    private static XPropertySet GetPropSet( XControlContainer xControlContainer, String sControl )
     {
         XPropertySet xPS = null;
 

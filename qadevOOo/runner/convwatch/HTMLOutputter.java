@@ -103,7 +103,7 @@ public class HTMLOutputter
             }
         }
 
-    String getHREF(String _sHREF, String _sPathInfo)
+    private String getHREF(String _sHREF, String _sPathInfo)
         {
             StringBuffer a = new StringBuffer();
             if (! OSHelper.isWindows())
@@ -128,7 +128,7 @@ public class HTMLOutputter
             return a.toString();
         }
 
-    String tableDataCell(String _sValue)
+    private String tableDataCell(String _sValue)
         {
             StringBuffer a = new StringBuffer();
             a.append("<TD>");
@@ -137,7 +137,7 @@ public class HTMLOutputter
             return a.toString();
         }
 
-    String tableHeaderCell(String _sValue)
+    private String tableHeaderCell(String _sValue)
         {
             StringBuffer a = new StringBuffer();
             a.append("<TH>");
@@ -187,7 +187,7 @@ public class HTMLOutputter
         }
 
 
-    String stronghtml(String _sValue)
+    private String stronghtml(String _sValue)
         {
             StringBuffer a = new StringBuffer();
             a.append("<STRONG>");

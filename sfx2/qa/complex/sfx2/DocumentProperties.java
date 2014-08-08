@@ -70,7 +70,7 @@ public class DocumentProperties
             m_Called = false;
         }
 
-        public boolean reset() {
+        private boolean reset() {
             boolean oldCalled = m_Called;
             m_Called = false;
             return oldCalled;

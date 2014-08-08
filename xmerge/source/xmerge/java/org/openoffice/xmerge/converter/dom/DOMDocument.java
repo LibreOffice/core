@@ -76,7 +76,7 @@ public class DOMDocument
      *
      *  @return  file extension of the <code>Document</code>.
      */
-    protected String getFileExtension() {
+    private String getFileExtension() {
         return fileExt;
     }
 

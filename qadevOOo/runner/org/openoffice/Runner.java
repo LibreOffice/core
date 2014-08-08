@@ -39,7 +39,7 @@ public class Runner
 
     private static long m_nStartTime;
 
-    public static long getRunnerStartTime()
+    private static long getRunnerStartTime()
     {
         return m_nStartTime;
     }
@@ -60,7 +60,7 @@ public class Runner
     /*
     return the time, which is done until last startTime()
      */
-    public static long meanTime(long _nCurrentTimer)
+    private static long meanTime(long _nCurrentTimer)
     {
         if (_nCurrentTimer == 0)
         {

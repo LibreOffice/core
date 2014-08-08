@@ -480,7 +480,7 @@ public class ProcessHandler
     /**
      * Returns the time in seconds since 1st January 1970
      */
-    public static long getSystemTime()
+    private static long getSystemTime()
     {
         final long nTime = System.currentTimeMillis();
         return nTime;
@@ -512,7 +512,7 @@ public class ProcessHandler
         }
     }
 
-    protected void execute()
+    private void execute()
     {
         if (isStarted())
         {
@@ -607,7 +607,7 @@ public class ProcessHandler
      * @return <code>true</code> if process correctly exited
      * (exit code doesn't affect to this result).
      */
-    public boolean waitFor(long timeout)
+    private boolean waitFor(long timeout)
     {
         return waitFor(timeout, true);
     }
@@ -690,7 +690,7 @@ public class ProcessHandler
         return isFinished();
     }
 
-    protected void flushInput()
+    private void flushInput()
     {
         if (stdIn == null)
         {
@@ -797,7 +797,7 @@ public class ProcessHandler
 
     /** Causes the thread to sleep some time.
      */
-    public static void shortWait(long milliseconds)
+    private static void shortWait(long milliseconds)
     {
         try
         {
@@ -849,7 +849,7 @@ public class ProcessHandler
          *
          * Reason: interrupt() seems not to work as expected.
          */
-        public synchronized void holdOn()
+        private synchronized void holdOn()
         {
             m_bInterrupt = true;
             interrupt();

@@ -204,7 +204,7 @@ public final class WikiEditorImpl extends WeakBase
         }
     }
 
-    public void callStatusListener( String uristring )
+    private void callStatusListener( String uristring )
     {
         try
         {
@@ -225,7 +225,7 @@ public final class WikiEditorImpl extends WeakBase
         url.Complete = urlstring;
     }
 
-    public void sendArticle()
+    private void sendArticle()
     {
         if ( m_xFrame != null )
         {

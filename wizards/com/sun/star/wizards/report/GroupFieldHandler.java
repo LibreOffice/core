@@ -65,7 +65,7 @@ public class GroupFieldHandler extends FieldSelection
         }
     }
 
-    public boolean isGroupField(String _FieldName)
+    private boolean isGroupField(String _FieldName)
     {
         return (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, _FieldName) != -1);
     }

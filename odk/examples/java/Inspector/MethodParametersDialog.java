@@ -335,7 +335,7 @@ public class MethodParametersDialog extends JDialog{
     }
 
 
-    public void invokeParameterMethod(){
+    private void invokeParameterMethod(){
     try{
         Object[] oParameters = getParameterValues();
         m_oUnoReturnObject = m_xUnoMethodNode.invoke(m_oUnoObject, oParameters);

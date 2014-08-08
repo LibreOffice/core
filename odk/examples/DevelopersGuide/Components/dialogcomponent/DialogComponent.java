@@ -218,7 +218,7 @@ public class DialogComponent {
          * static component initialisation functions as well as in
          * getSupportedServiceNames.
          */
-        public static String[] getServiceNames() {
+        private static String[] getServiceNames() {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }
@@ -239,7 +239,7 @@ public class DialogComponent {
             return  _DialogComponent.class.getName();
         }
 
-        public void showMessageBox(String sTitle, String sMessage) {
+        private void showMessageBox(String sTitle, String sMessage) {
             if ( null != m_xFrame && null != m_xToolkit ) {
 
                 // describe window properties.

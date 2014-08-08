@@ -107,7 +107,7 @@ public class MinimalComponent {
          * static component initialisation functions as well as in
          * getSupportedServiceNames.
          */
-        public static String[] getServiceNames() {
+        private static String[] getServiceNames() {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }

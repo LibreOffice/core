@@ -345,7 +345,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
 
 
-    public boolean storeAsPDF(ParameterHelper _aGTA,
+    private boolean storeAsPDF(ParameterHelper _aGTA,
                                      XComponent _aDoc,
                                      String _sOutputURL) throws OfficeException
         {
@@ -647,7 +647,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
 
 
-    public String getInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
+    private String getInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
         {
             if (_sFilterName.length() == 0)
             {
@@ -720,7 +720,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
 
 
-    String getServiceNameFromFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
+    private String getServiceNameFromFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
         {
             if (_sFilterName.length() == 0)
             {
@@ -792,7 +792,7 @@ public class OpenOfficePostscriptCreator implements IOffice
         }
 
 
-    public static String getFileExtension(String _sInternalFilterName, XMultiServiceFactory _xMSF)
+    private static String getFileExtension(String _sInternalFilterName, XMultiServiceFactory _xMSF)
         {
             if (_sInternalFilterName.length() == 0)
             {

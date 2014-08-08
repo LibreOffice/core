@@ -177,7 +177,7 @@ public class FormHandler
         }
     }
 
-    public void initializeBasicControlValues()
+    private void initializeBasicControlValues()
     {
         Control oLabelControl = new Control(this, SOLABEL, new Point(), new Size());
         XDevice xDevice = UnoRuntime.queryInterface(XDevice.class, oLabelControl.xWindowPeer);
@@ -192,7 +192,7 @@ public class FormHandler
         xDrawPage.remove(oTextControl.xShape);
     }
 
-    public ControlData createControlData(int _datatype, int _controltype, String _scontrolservicename, String _gridcolumnname, boolean _bIsTextControl)
+    private ControlData createControlData(int _datatype, int _controltype, String _scontrolservicename, String _gridcolumnname, boolean _bIsTextControl)
     {
         ControlData curControlData = new ControlData();
         curControlData.DataType = _datatype;
@@ -247,7 +247,7 @@ public class FormHandler
         }
     }
 
-    public boolean hasFormByName(String _FormName)
+    private boolean hasFormByName(String _FormName)
     {
         xNamedFormContainer = getDocumentForms();
         xNamedForms = UnoRuntime.queryInterface(XNameAccess.class, xNamedFormContainer);
@@ -305,7 +305,7 @@ public class FormHandler
         }
     }
 
-    public boolean belongsToForm(Object _oDrawPageElement, String _FormName)
+    private boolean belongsToForm(Object _oDrawPageElement, String _FormName)
     {
         XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, _oDrawPageElement);
         if (xServiceInfo.supportsService("com.sun.star.drawing.ControlShape"))
@@ -359,7 +359,7 @@ public class FormHandler
         return insertFormbyName(_FormName, getDocumentForms());
     }
 
-    public XNameContainer getFormByName(String _sname)
+    private XNameContainer getFormByName(String _sname)
     {
         XNameContainer xNamedForm = null;
         try

@@ -60,7 +60,7 @@ class BorderRemover
      * @param _nTolerance is a percentage value how strong the colors could be differ
 
      */
-    boolean compareColorWithTolerance(int _nColor1, int _nColor2, int _nTolerance)
+    private boolean compareColorWithTolerance(int _nColor1, int _nColor2, int _nTolerance)
         {
             // int alpha1 = (_nColor1 >> 24) & 0xff;
             int red1   = (_nColor1 >> 16) & 0xff;
@@ -179,7 +179,7 @@ class BorderRemover
      * as result it fills the m_nXMin, m_nXMax, m_nYMin, m_nYMax values.
      */
 
-    Rect findBorder(ImageHelper _aImage, int _nBorderColor)
+    private Rect findBorder(ImageHelper _aImage, int _nBorderColor)
         {
             int h = _aImage.getHeight();
             int w = _aImage.getWidth();
@@ -233,7 +233,7 @@ class BorderRemover
             return aRect;
         }
 
-    RenderedImage createImage(ImageHelper _aImage, Rect _aRect) throws IllegalArgumentException
+    private RenderedImage createImage(ImageHelper _aImage, Rect _aRect) throws IllegalArgumentException
         {
 // TODO: throw if w or h < 0
             int w = _aRect.getWidth();

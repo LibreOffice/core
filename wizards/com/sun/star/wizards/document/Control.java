@@ -83,7 +83,7 @@ public class Control extends Shape
         createControl(_icontroltype, null, null);
     }
 
-    public void createControl(int _icontroltype, XShapes _xGroupShapes, String _FieldName)
+    private void createControl(int _icontroltype, XShapes _xGroupShapes, String _FieldName)
     {
         try
         {
@@ -117,7 +117,7 @@ public class Control extends Shape
         }
     }
 
-    public void insertControlInContainer(String _fieldname)
+    private void insertControlInContainer(String _fieldname)
     {
         try
         {
@@ -135,7 +135,7 @@ public class Control extends Shape
         }
     }
 
-    public String getControlName(String _fieldname)
+    private String getControlName(String _fieldname)
     {
         String controlname = PropertyNames.EMPTY_STRING;
         switch (getControlType())
@@ -227,7 +227,7 @@ public class Control extends Shape
         }
     }
 
-    public Size getPreferredSize(String sText)
+    private Size getPreferredSize(String sText)
     {
         try
         {

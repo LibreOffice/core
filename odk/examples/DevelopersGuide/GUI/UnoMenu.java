@@ -90,7 +90,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
     }
 
 
-    public void addMenuBar(XTopWindow _xTopWindow, XMenuListener _xMenuListener){
+    private void addMenuBar(XTopWindow _xTopWindow, XMenuListener _xMenuListener){
     try{
         // create a menubar at the global MultiComponentFactory...
         Object oMenuBar = m_xMCF.createInstanceWithContext("com.sun.star.awt.MenuBar", m_xContext);
@@ -115,7 +115,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         System.exit( 0 );
     }
 
-    public XTopWindow showTopWindow( Rectangle _aRectangle){
+    private XTopWindow showTopWindow( Rectangle _aRectangle){
     XTopWindow xTopWindow = null;
     try {
         // The Toolkit is the creator of all windows...

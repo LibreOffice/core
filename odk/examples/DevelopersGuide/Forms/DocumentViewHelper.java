@@ -69,7 +69,7 @@ class DocumentViewHelper
         @param aInterfaceClass
                 the class of the interface which shall be returned
     */
-    public <T> T get( Class<T> aInterfaceClass )
+    private <T> T get( Class<T> aInterfaceClass )
     {
         return UnoRuntime.queryInterface( aInterfaceClass, m_controller );
     }
@@ -83,7 +83,7 @@ class DocumentViewHelper
         @return
             the dispatcher for the URL in question
     */
-    public XDispatch getDispatcher( URL[] aURL ) throws java.lang.Exception
+    private XDispatch getDispatcher( URL[] aURL ) throws java.lang.Exception
     {
         XDispatch xReturn = null;
 
@@ -130,7 +130,7 @@ class DocumentViewHelper
         @return
             the control tied to the model
     */
-    public XControl getFormControl( XControlModel xModel ) throws com.sun.star.uno.Exception
+    private XControl getFormControl( XControlModel xModel ) throws com.sun.star.uno.Exception
     {
         // the current view of the document
         XControlAccess xCtrlAcc = get( XControlAccess.class );

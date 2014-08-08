@@ -73,7 +73,7 @@ public class Settings
         return m_WikiConnections;
     }
 
-    public String getWikiConUrlByNumber( int num )
+    private String getWikiConUrlByNumber( int num )
     {
         String url = "";
         if ( num >=0 && num < m_WikiConnections.size() )
@@ -181,7 +181,7 @@ public class Settings
         return ht;
     }
 
-    public Map<String,Object> getDocByCompleteUrl( String curl )
+    private Map<String,Object> getDocByCompleteUrl( String curl )
     {
         Map<String,Object> ht = null;
         for( int i=0;i<m_aWikiDocs.size();i++ )

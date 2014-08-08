@@ -47,7 +47,7 @@ public class MSOfficePrint
     public void setPrinterName(String _s) {m_sPrinterName = _s;}
 
 
-    static boolean isWordDocument(String _sSuffix)
+    private static boolean isWordDocument(String _sSuffix)
         {
             if (_sSuffix.toLowerCase().endsWith(".doc") ||
                 _sSuffix.toLowerCase().endsWith(".rtf") ||
@@ -58,7 +58,7 @@ public class MSOfficePrint
             return false;
         }
 
-    static boolean isExcelDocument(String _sSuffix)
+    private static boolean isExcelDocument(String _sSuffix)
         {
             // xlt templates
             // xlw
@@ -75,7 +75,7 @@ public class MSOfficePrint
             return false;
         }
 
-    static boolean isPowerPointDocument(String _sSuffix)
+    private static boolean isPowerPointDocument(String _sSuffix)
         {
             if (_sSuffix.toLowerCase().endsWith(".pps") ||
                 _sSuffix.toLowerCase().endsWith(".ppt"))
@@ -223,7 +223,7 @@ public class MSOfficePrint
             TimeHelper.waitInSeconds(2, "Give Microsoft Office some time to print.");
         }
 
-    public void realStartCommand(ArrayList<String> _aStartCommand) throws ConvWatchCancelException
+    private void realStartCommand(ArrayList<String> _aStartCommand) throws ConvWatchCancelException
         {
             if (_aStartCommand.isEmpty())
             {
@@ -269,7 +269,7 @@ public class MSOfficePrint
         }
 
 
-    ArrayList<String> createWordPrintHelper() throws java.io.IOException
+    private ArrayList<String> createWordPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -374,7 +374,7 @@ public class MSOfficePrint
 
     // TODO: Maybe give a possibility to say where search the script from outside
 
-    ArrayList<String> searchLocalFile(String _sScriptName)
+    private ArrayList<String> searchLocalFile(String _sScriptName)
         {
             String userdir = System.getProperty("user.dir");
             String fs = System.getProperty("file.separator");
@@ -401,7 +401,7 @@ public class MSOfficePrint
             return aList;
         }
 
-    ArrayList<String> createWordStoreHelper() throws java.io.IOException
+    private ArrayList<String> createWordStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -483,7 +483,7 @@ public class MSOfficePrint
         }
 
 
-    ArrayList<String> createExcelPrintHelper() throws java.io.IOException
+    private ArrayList<String> createExcelPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -578,7 +578,7 @@ public class MSOfficePrint
             return aList;
         }
 
-    ArrayList<String> createExcelStoreHelper() throws java.io.IOException
+    private ArrayList<String> createExcelStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -668,7 +668,7 @@ public class MSOfficePrint
             return aList;
         }
 
-    ArrayList<String> createPowerPointPrintHelper() throws java.io.IOException
+    private ArrayList<String> createPowerPointPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -771,7 +771,7 @@ public class MSOfficePrint
        @param _sFilename a name to a ms office xml file
        @return 'word' or 'excel' or '' if type not known
     */
-    public String getOfficeType(String _sFilename)
+    private String getOfficeType(String _sFilename)
         {
             File aFile = new File(_sFilename);
             if (! aFile.exists())

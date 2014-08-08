@@ -44,7 +44,7 @@ public final class ConverterInfoMgr {
     *  @throws  RegistryException  If the <code>ConverterInfo</code>
     *                              is not valid.
     */
-    public static void addPlugIn(ConverterInfo ci) throws RegistryException {
+    private static void addPlugIn(ConverterInfo ci) throws RegistryException {
 
         // Validate
 
@@ -115,7 +115,7 @@ public final class ConverterInfoMgr {
     *           <code>ConverterInfo</code> objects, an empty
     *           <code>Vector</code> if none exist.
     */
-   public static Iterator<ConverterInfo> getConverterInfoEnumeration() {
+   private static Iterator<ConverterInfo> getConverterInfoEnumeration() {
       return (converterInfoList.iterator());
    }
 
@@ -151,7 +151,7 @@ public final class ConverterInfoMgr {
     *  @return  True if a <code>ConverterInfo</code> object was
     *           removed, false otherwise.
     */
-   public static boolean removeByName(String name) {
+   private static boolean removeByName(String name) {
 
         boolean       rc = false;
 
@@ -215,7 +215,7 @@ public final class ConverterInfoMgr {
     *           that can be chained to perform the specified
     *           conversion.
     */
-    public static ConverterInfo[] findConverterInfoChain(String deviceFromMime, String deviceToMime) {
+    private static ConverterInfo[] findConverterInfoChain(String deviceFromMime, String deviceToMime) {
 
         if (deviceFromMime == null || deviceToMime == null) {
             return null;

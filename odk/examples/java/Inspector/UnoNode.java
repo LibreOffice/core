@@ -79,12 +79,12 @@ public class UnoNode{
     }
 
 
-    protected XComponentContext getXComponentContext(){
+    private XComponentContext getXComponentContext(){
         return m_xComponentContext;
     }
 
 
-    protected XMultiComponentFactory getXMultiComponentFactory(){
+    private XMultiComponentFactory getXMultiComponentFactory(){
         return m_xMultiComponentFactory;
     }
 

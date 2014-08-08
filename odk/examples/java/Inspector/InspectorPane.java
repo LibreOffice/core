@@ -234,7 +234,7 @@ import com.sun.star.uno.XComponentContext;
 
 
 
-        public void addMethodsToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoParentObject, XIdlMethod[] _xIdlMethods){
+        private void addMethodsToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoParentObject, XIdlMethod[] _xIdlMethods){
             if (Introspector.isValid(_xIdlMethods)){
                 for ( int n = 0; n < _xIdlMethods.length; n++ ) {
                     XIdlMethod xIdlMethod = _xIdlMethods[n];
@@ -335,7 +335,7 @@ import com.sun.star.uno.XComponentContext;
     }}
 
 
-    public void addContainerElementsToTreeNode(XUnoNode _oParentNode, Object _oUnoParentObject){
+    private void addContainerElementsToTreeNode(XUnoNode _oParentNode, Object _oUnoParentObject){
         Object[] oUnoContainerElements = m_oIntrospector.getUnoObjectsOfContainer(_oUnoParentObject);
         if (Introspector.isValid(oUnoContainerElements)){
             if (oUnoContainerElements.length > 0){

@@ -209,7 +209,7 @@ public class DB extends DBHelper
             System.out.println("UUID: " + sUUID);
         }
 
-    public ArrayList<String> QuerySQL(Connection _aCon, String _sSQL)
+    private ArrayList<String> QuerySQL(Connection _aCon, String _sSQL)
         {
             java.sql.Statement oStmt = null;
             ArrayList<String> aResultList = new ArrayList<String>();

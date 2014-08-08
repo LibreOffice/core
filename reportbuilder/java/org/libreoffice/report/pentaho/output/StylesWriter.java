@@ -284,7 +284,7 @@ public class StylesWriter
         }
     }
 
-    protected AttributeList buildAttributeList(final AttributeMap attrs)
+    private AttributeList buildAttributeList(final AttributeMap attrs)
     {
         final AttributeList attrList = new AttributeList();
         final String[] namespaces = attrs.getNameSpaces();
@@ -308,7 +308,7 @@ public class StylesWriter
         return attrList;
     }
 
-    protected boolean isFilteredNamespace(final String namespace)
+    private boolean isFilteredNamespace(final String namespace)
     {
         if (Namespaces.LIBLAYOUT_NAMESPACE.equals(namespace))
         {

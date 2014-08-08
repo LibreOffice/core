@@ -66,7 +66,7 @@ public final class OwnEmbeddedObject extends WeakBase
     private Dimension m_aObjSize;
 
 
-    protected ArrayList<Object> GetListeners()
+    private ArrayList<Object> GetListeners()
     {
         if ( m_aListeners == null )
             m_aListeners = new ArrayList<Object>(10);
@@ -75,7 +75,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
 
-    protected Dimension UpdateSizeAndGetFromActive()
+    private Dimension UpdateSizeAndGetFromActive()
     {
         if ( m_nObjectState == com.sun.star.embed.EmbedStates.ACTIVE )
             m_aObjSize = m_aEditorFrame.getAppSize();
@@ -87,7 +87,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
 
-    protected void SwitchOwnPersistence( XStorage xParentStorage, XStorage xOwnStorage, String aEntryName )
+    private void SwitchOwnPersistence( XStorage xParentStorage, XStorage xOwnStorage, String aEntryName )
     {
         if ( xOwnStorage != m_xOwnStorage )
         {
@@ -100,7 +100,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
 
-    protected void SwitchOwnPersistence( XStorage xParentStorage, String aEntryName ) throws com.sun.star.io.IOException
+    private void SwitchOwnPersistence( XStorage xParentStorage, String aEntryName ) throws com.sun.star.io.IOException
     {
         if ( xParentStorage != m_xParentStorage || !aEntryName.equals( m_aEntryName ) )
         {
@@ -125,7 +125,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
 
-    protected static void SaveDataToStorage( XStorage xStorage, String aString, Dimension aDimension ) throws com.sun.star.io.IOException
+    private static void SaveDataToStorage( XStorage xStorage, String aString, Dimension aDimension ) throws com.sun.star.io.IOException
     {
         try
         {
@@ -185,7 +185,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
 
-    protected void PostEvent( String aEvEntryName )
+    private void PostEvent( String aEvEntryName )
     {
         if ( m_aListeners != null )
         {
@@ -208,7 +208,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
 
-    protected void StateChangeNotification( boolean bBeforeChange, int nOldState, int nNewState )
+    private void StateChangeNotification( boolean bBeforeChange, int nOldState, int nNewState )
     {
         if ( m_aListeners != null )
         {
@@ -236,7 +236,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
 
-    protected String ReadStringFromStream( XStorage xStorage, String aStreamName ) throws com.sun.star.io.IOException
+    private String ReadStringFromStream( XStorage xStorage, String aStreamName ) throws com.sun.star.io.IOException
     {
         if ( xStorage == null )
             throw new com.sun.star.uno.RuntimeException();
@@ -281,7 +281,7 @@ public final class OwnEmbeddedObject extends WeakBase
     }
 
 
-    protected void ReadSizeFromOwnStorage() throws com.sun.star.io.IOException
+    private void ReadSizeFromOwnStorage() throws com.sun.star.io.IOException
     {
         String aSize = ReadStringFromStream( m_xOwnStorage, "properties.txt" );
 

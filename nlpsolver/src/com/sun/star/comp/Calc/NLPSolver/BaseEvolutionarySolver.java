@@ -168,7 +168,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
 
     protected IEvolutionarySolverStatusDialog m_solverStatusDialog;
 
-    protected void prepareVariables(double[][] variableBounds) {
+    private void prepareVariables(double[][] variableBounds) {
         m_variables.clear();
         for (int i = 0; i < m_variableCount; i++) {
             Variable var = new Variable(m_variableMap[i], i);
@@ -342,7 +342,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
         super.finalizeSolve();
     }
 
-    protected boolean checkConstraints() {
+    private boolean checkConstraints() {
         boolean result = true;
         for (int i = 0; i < m_constraintCount && result; i++) {
             if (m_extConstraints[i].Left.getError() == 0) {

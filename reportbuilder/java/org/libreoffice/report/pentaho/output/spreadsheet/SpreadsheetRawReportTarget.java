@@ -719,7 +719,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
     }
 
-    protected String getStartContent()
+    private String getStartContent()
     {
         return "spreadsheet";
     }

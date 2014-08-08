@@ -244,7 +244,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         return false;
     }
 
-    public void togglePrimeKeyFields()
+    private void togglePrimeKeyFields()
     {
         boolean bdoEnable = (this.chkcreatePrimaryKey.getState() == 1);
         Helper.setUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable));

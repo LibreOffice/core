@@ -113,7 +113,7 @@ public class CalcTools {
      * @return calc sheet
      * @see com.sun.star.sheet.XSpreadsheet
      */
-    public static XSpreadsheet getSpreadSheetFromSheetDoc(XComponent xSheetDoc, int sheetNumber)
+    private static XSpreadsheet getSpreadSheetFromSheetDoc(XComponent xSheetDoc, int sheetNumber)
                   throws java.lang.Exception {
 
         XSpreadsheet xSheet = null;

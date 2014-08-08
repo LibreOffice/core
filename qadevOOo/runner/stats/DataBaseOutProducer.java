@@ -87,7 +87,7 @@ public abstract class DataBaseOutProducer implements LogWriter {
      * @param entry The description entry that is take as root
      * @param log The log writer
      */
-    protected boolean findTypeInEntryTree(DescEntry entry, LogWriter log) {
+    private boolean findTypeInEntryTree(DescEntry entry, LogWriter log) {
         boolean returnVal = true;
         if (isWriteableEntryType(entry)) {
             returnVal &= insertEntry(entry, log);
@@ -108,7 +108,7 @@ public abstract class DataBaseOutProducer implements LogWriter {
      * @param entry The entry to write.
      * @param log The log writer.
      */
-    protected boolean insertEntry(DescEntry entry, LogWriter log) {
+    private boolean insertEntry(DescEntry entry, LogWriter log) {
         // copy the swlInput HashMap, so it can be reset easily for the next run
         HashMap<String,Object> copySqlInput = new HashMap<String,Object>();
         copySqlInput.putAll(mSqlInput);
@@ -138,7 +138,7 @@ public abstract class DataBaseOutProducer implements LogWriter {
      * @param entry The entry that is checked
      * @return True, if it is indeed a writeable entry.
      */
-    protected boolean isWriteableEntryType(DescEntry entry) {
+    private boolean isWriteableEntryType(DescEntry entry) {
         boolean result = false;
         for (int i=0; i<mWriteableEntryTypes.length; i++) {
             if (entry.EntryType.equals(mWriteableEntryTypes[i])) {

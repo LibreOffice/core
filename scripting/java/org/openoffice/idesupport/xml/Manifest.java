@@ -118,7 +118,7 @@ public class Manifest {
         return result;
     }
 
-    public void write(OutputStream out) throws IOException {
+    private void write(OutputStream out) throws IOException {
         XMLParserFactory.getParser().write(document, out);
     }
 }

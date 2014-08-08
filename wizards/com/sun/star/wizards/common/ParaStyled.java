@@ -32,7 +32,7 @@ class ParaStyled implements TemplateElement
         paraStyle = paraStyle_;
     }
 
-    void format(Object textRange)
+    private void format(Object textRange)
     {
         XText o;
         o = UnoRuntime.queryInterface(XText.class, textRange);

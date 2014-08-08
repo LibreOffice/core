@@ -58,7 +58,7 @@ public class Task
         fireTaskStatusChanged();
     }
 
-    public void advance(boolean success_)
+    private void advance(boolean success_)
     {
         if (success_)
         {
@@ -96,7 +96,7 @@ public class Task
         listeners.remove(tl);
     }
 
-    protected void fireTaskStatusChanged()
+    private void fireTaskStatusChanged()
     {
         TaskEvent te = new TaskEvent(this, TaskEvent.TASK_STATUS_CHANGED);
 
@@ -106,7 +106,7 @@ public class Task
         }
     }
 
-    protected void fireTaskStarted()
+    private void fireTaskStarted()
     {
         TaskEvent te = new TaskEvent(this, TaskEvent.TASK_STARTED);
 
@@ -116,7 +116,7 @@ public class Task
         }
     }
 
-    protected void fireTaskFailed()
+    private void fireTaskFailed()
     {
         TaskEvent te = new TaskEvent(this, TaskEvent.TASK_FAILED);
 
@@ -126,7 +126,7 @@ public class Task
         }
     }
 
-    protected void fireTaskFinished()
+    private void fireTaskFinished()
     {
         TaskEvent te = new TaskEvent(this, TaskEvent.TASK_FINISHED);
 
@@ -136,7 +136,7 @@ public class Task
         }
     }
 
-    protected void fireSubtaskNameChanged()
+    private void fireSubtaskNameChanged()
     {
         TaskEvent te = new TaskEvent(this, TaskEvent.SUBTASK_NAME_CHANGED);
 

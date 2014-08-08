@@ -164,7 +164,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected void fillupControls(boolean binitialize)
+    private void fillupControls(boolean binitialize)
     {
         for (int a = 0; a < this.nblockincrement; a++)
         {
@@ -183,7 +183,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected void fillupControls(int guiRow)
+    private void fillupControls(int guiRow)
     {
         PropertyValue[] nameProps = scrollfields.get(guiRow);
         PropertyValue[] valueProps = scrollfields.get(guiRow + nscrollvalue);
@@ -200,7 +200,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected void setScrollValue(int _nscrollvalue)
+    private void setScrollValue(int _nscrollvalue)
     {
         if (_nscrollvalue >= 0)
         {
@@ -329,7 +329,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected void scrollRowsInfo()
+    private void scrollRowsInfo()
     {
         int cols =
                 scrollfields.size() > 0
@@ -352,7 +352,7 @@ public abstract class ControlScroller
      * @return the propertyValue object corresponding to
      * this control.
      */
-    protected PropertyValue fieldInfo(int guiRow, int column)
+    private PropertyValue fieldInfo(int guiRow, int column)
     {
         if (guiRow + nscrollvalue < scrollfields.size())
         {
@@ -366,7 +366,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected PropertyValue fieldInfo(PropertyValue valueProp, PropertyValue nameProp)
+    private PropertyValue fieldInfo(PropertyValue valueProp, PropertyValue nameProp)
     {
         if (CurUnoDialog.getDlgNameAccess().hasByName(nameProp.Name))
         {
@@ -405,7 +405,7 @@ public abstract class ControlScroller
         return scrollfields.get(_i);
     }
 
-    protected void setControlData(String controlname, Object newvalue)
+    private void setControlData(String controlname, Object newvalue)
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);
@@ -415,7 +415,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected Object getControlData(String controlname)
+    private Object getControlData(String controlname)
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);

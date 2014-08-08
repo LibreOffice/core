@@ -99,14 +99,14 @@ public class OfficeWatcher extends Thread implements share.Watcher {
         dbg("finished");
     }
 
-    protected void shortWait(int timeOut) {
+    private void shortWait(int timeOut) {
         try {
             OfficeWatcher.sleep(timeOut);
         } catch (java.lang.InterruptedException ie) {
         }
     }
 
-    protected void dbg(String message) {
+    private void dbg(String message) {
         if (debug) {
             System.out.println(utils.getDateTime() + "OfficeWatcher: " + message);
         }

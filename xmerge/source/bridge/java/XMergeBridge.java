@@ -114,7 +114,7 @@ public class XMergeBridge {
             return( typeReturn );
         }
 
-    String getFileName(String origName)
+    private String getFileName(String origName)
     {
         String name;
         if (origName !=null)
@@ -300,7 +300,7 @@ public class XMergeBridge {
            return tmp;
     }
 
-    public String needsMask(String origString){
+    private String needsMask(String origString){
         if (origString.contains("&")) {
             origString = origString.replace("&","&amp;");
         }
@@ -411,7 +411,7 @@ public class XMergeBridge {
 
 
 
-    public void convert (com.sun.star.io.XInputStream xml,com.sun.star.io.XOutputStream device,
+    private void convert (com.sun.star.io.XInputStream xml,com.sun.star.io.XOutputStream device,
              boolean convertFromOffice,String pluginUrl,String FileName,String offMime,String sdMime) throws com.sun.star.uno.RuntimeException, IOException {
 
          String jarName = pluginUrl;

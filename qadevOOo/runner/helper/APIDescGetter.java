@@ -260,7 +260,7 @@ public class APIDescGetter extends DescGetter
         return entry;
     }
 
-    protected static DescEntry[] getSubEntries(BufferedReader cvsFile,
+    private static DescEntry[] getSubEntries(BufferedReader cvsFile,
             DescEntry parent)
     {
         String line = "";
@@ -463,7 +463,7 @@ public class APIDescGetter extends DescGetter
     /**
      * This method ensures that XComponent will be the last in the list of interfaces
      */
-    protected static Object[] makeArray(ArrayList<DescEntry> entries)
+    private static Object[] makeArray(ArrayList<DescEntry> entries)
     {
         Object[] entriesArray = entries.toArray();
         ArrayList<Object> returnArray = new ArrayList<Object>();
@@ -491,7 +491,7 @@ public class APIDescGetter extends DescGetter
         return returnArray.toArray();
     }
 
-    protected static DescEntry setErrorDescription(DescEntry entry,
+    private static DescEntry setErrorDescription(DescEntry entry,
             String ErrorMsg)
     {
         if (entry == null)
@@ -505,7 +505,7 @@ public class APIDescGetter extends DescGetter
         return entry;
     }
 
-    protected static DescEntry[] getDescArray(Object[] list)
+    private static DescEntry[] getDescArray(Object[] list)
     {
         DescEntry[] entries = new DescEntry[list.length];
 
@@ -517,7 +517,7 @@ public class APIDescGetter extends DescGetter
         return entries;
     }
 
-    protected DescEntry getFromClassPath(String aEntry)
+    private DescEntry getFromClassPath(String aEntry)
     {
         int dotindex = aEntry.indexOf('.');
 
@@ -631,7 +631,7 @@ public class APIDescGetter extends DescGetter
         return theEntry;
     }
 
-    protected static DescEntry getFromDirectory(String descPath, String entry,
+    private static DescEntry getFromDirectory(String descPath, String entry,
             boolean debug)
     {
         int dotindex = entry.indexOf('.');
@@ -737,7 +737,7 @@ public class APIDescGetter extends DescGetter
         return namesList;
     }
 
-    protected ArrayList<String> getSubObjects(String job)
+    private ArrayList<String> getSubObjects(String job)
     {
         ArrayList<String> namesList = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(job, ",");
@@ -778,7 +778,7 @@ public class APIDescGetter extends DescGetter
         return scenario;
     }
 
-    protected String[] getScenarioFromDirectory(String descPath, String job)
+    private String[] getScenarioFromDirectory(String descPath, String job)
     {
         String[] modules = null;
         ArrayList<String> componentList = new ArrayList<String>();
@@ -832,7 +832,7 @@ public class APIDescGetter extends DescGetter
 
     }
 
-    protected String[] getScenarioFromClassPath(String job)
+    private String[] getScenarioFromClassPath(String job)
     {
         String subdir = "/";
 
@@ -903,7 +903,7 @@ public class APIDescGetter extends DescGetter
         return scenario;
     }
 
-    protected String getComponentForString(String full, String module)
+    private String getComponentForString(String full, String module)
     {
         String component = "";
 
@@ -927,7 +927,7 @@ public class APIDescGetter extends DescGetter
         return component;
     }
 
-    protected boolean isUnusedModule(String moduleName)
+    private boolean isUnusedModule(String moduleName)
     {
         ArrayList<String> removed = new ArrayList<String>();
         removed.add("acceptor");

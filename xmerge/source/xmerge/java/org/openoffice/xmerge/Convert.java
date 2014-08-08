@@ -147,7 +147,7 @@ public class Convert implements Cloneable {
      *  <code>addInputStream</code> method to accept input for the next
      *  conversion.
      */
-    public void reset() {
+    private void reset() {
         inputCD.reset();
     }
 

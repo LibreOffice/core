@@ -286,7 +286,7 @@ public class utils {
      * @see com.sun.star.util.PathSettings
      * @return the value as String
      */
-    public static String getOfficeSettingsValue(XMultiServiceFactory msf, String setting) {
+    private static String getOfficeSettingsValue(XMultiServiceFactory msf, String setting) {
 
         String settingPath = null;
         try {
@@ -813,7 +813,7 @@ public class utils {
      * @param checkAppExecutionCommand If the AppExecutionCommand is checked, the error messages willbe different.
      * @return The error message, or OK, if no error was detected.
      */
-    public static String validateConnectString(String connectString, boolean checkAppExecutionCommand) {
+    private static String validateConnectString(String connectString, boolean checkAppExecutionCommand) {
         String acceptPrefix = "";
         if (checkAppExecutionCommand) {
             acceptPrefix = "--accept=";
@@ -926,7 +926,7 @@ public class utils {
      * @param URL the <CODE>URL</CODE> to dispatch
      * @throws java.lang.Exception throws <CODE>java.lang.Exception</CODE> on any error
      */
-    public static void dispatchURL(XMultiServiceFactory xMSF, XController xCont, String URL) throws java.lang.Exception {
+    private static void dispatchURL(XMultiServiceFactory xMSF, XController xCont, String URL) throws java.lang.Exception {
         try {
 
             XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xCont);

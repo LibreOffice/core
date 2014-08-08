@@ -72,7 +72,7 @@ public class PropertySetHelper
     @param _sName name of the property to set
     @param _aValue property value as object
      */
-    public void setPropertyValue(String _sName, Object _aValue) throws java.lang.Exception
+    private void setPropertyValue(String _sName, Object _aValue) throws java.lang.Exception
     {
         if (m_xPropertySet != null)
         {
@@ -351,7 +351,7 @@ public class PropertySetHelper
     /**
     Debug helper, to show all properties which are available in the current object.
      */
-    public void showProperties()
+    private void showProperties()
     {
         String sName = PropertyNames.EMPTY_STRING;
 

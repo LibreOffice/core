@@ -120,7 +120,7 @@ public class DocumentHelper
             The initial name of the form. May be null, in this case the default (which
             is an implementation detail) applies.
     */
-    protected XIndexContainer createSubForm( XIndexContainer xParentContainer, String sInitialName )
+    private XIndexContainer createSubForm( XIndexContainer xParentContainer, String sInitialName )
             throws com.sun.star.uno.Exception
     {
         // create a new form
@@ -196,7 +196,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** returns a URL which can be used to create a document of a certain type
     */
-    public static String getDocumentFactoryURL( DocumentType eType )
+    private static String getDocumentFactoryURL( DocumentType eType )
     {
         if ( eType == DocumentType.WRITER )
             return "private:factory/swriter";

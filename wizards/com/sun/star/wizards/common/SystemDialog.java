@@ -128,7 +128,7 @@ public class SystemDialog
      *
      * given url to a local path.
      */
-    public String callStoreDialog(String displayDir, String defaultName)
+    private String callStoreDialog(String displayDir, String defaultName)
     {
         sStorePath = null;
         try
@@ -197,7 +197,7 @@ public class SystemDialog
     }
 
     //("writer_StarOffice_XML_Writer_Template")    'StarOffice XML (Writer)
-    public void addFilterToDialog(String sExtension, String filterName, boolean setToDefault)
+    private void addFilterToDialog(String sExtension, String filterName, boolean setToDefault)
     {
         try
         {
@@ -214,7 +214,7 @@ public class SystemDialog
         }
     }
 
-    public void addFilter(String uiName, String pattern, boolean setToDefault)
+    private void addFilter(String uiName, String pattern, boolean setToDefault)
     {
         try
         {
@@ -373,7 +373,7 @@ public class SystemDialog
         return iMessage;
     }
 
-    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
+    private static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
     {
         Object xPathSubst = null;
         try

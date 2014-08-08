@@ -151,7 +151,7 @@ public class FormConfiguration
         Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bsupportsRelations && (chkcreateSubForm.getState() == 1)));
     }
 
-    public void toggleSteps()
+    private void toggleSteps()
     {
         if (chkcreateSubForm.getState() == 1)
         {
@@ -190,7 +190,7 @@ public class FormConfiguration
         return PropertyNames.EMPTY_STRING;
     }
 
-    public void onexistingRelationSelection()
+    private void onexistingRelationSelection()
     {
         String scurreferencedTableName = getreferencedTableName();
         if (scurreferencedTableName.length() > 0)

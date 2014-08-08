@@ -344,7 +344,7 @@ public class Finalizer
         return (txtTableName.getText().length() > 0);
     }
 
-    public void setCompletionFlag()
+    private void setCompletionFlag()
     {
         CurUnoDialog.setcompleted(TableWizard.SOFINALPAGE, iscompleted());
     }

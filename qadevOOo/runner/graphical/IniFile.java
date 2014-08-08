@@ -357,7 +357,7 @@ public class IniFile implements Enumeration<String>
        */
 
     // TODO: make private
-    public void store()
+    private void store()
         {
             if (m_bListContainUnsavedChanges == false)
             {

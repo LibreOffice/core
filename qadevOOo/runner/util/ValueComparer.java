@@ -69,7 +69,7 @@ public class ValueComparer {
         return eq;
     } // end of equalValue
 
-    static boolean compareArrayOfPropertyValue(PropertyValue[] pv1, PropertyValue[] pv2){
+    private static boolean compareArrayOfPropertyValue(PropertyValue[] pv1, PropertyValue[] pv2){
         if ( pv1.length != pv2.length) {
             return  false;
         }
@@ -89,7 +89,7 @@ public class ValueComparer {
         return result;
     }
 
-    static boolean compareArrays(Object op1, Object op2) throws Exception {
+    private static boolean compareArrays(Object op1, Object op2) throws Exception {
 
         if (op1 instanceof PropertyValue[] && op2 instanceof PropertyValue[]) {
            return compareArrayOfPropertyValue((PropertyValue[])op1,(PropertyValue[])op2);
@@ -109,11 +109,11 @@ public class ValueComparer {
         return result;
     }
 
-    static boolean compareInterfaces(XInterface op1, XInterface op2) {
+    private static boolean compareInterfaces(XInterface op1, XInterface op2) {
         return op1 == op2;
     }
 
-    static boolean compareUntil(Class<?> zClass, Class<?> untilClass, Object op1, Object op2) throws Exception {
+    private static boolean compareUntil(Class<?> zClass, Class<?> untilClass, Object op1, Object op2) throws Exception {
         boolean result = true;
 
         // write inherited members first
@@ -156,7 +156,7 @@ public class ValueComparer {
         return result;
     }
 
-    static boolean compareStructs(Object op1, Object op2) throws Exception {
+    private static boolean compareStructs(Object op1, Object op2) throws Exception {
         boolean result = true;
 
         if(op1.getClass() != op2.getClass())
@@ -168,7 +168,7 @@ public class ValueComparer {
         return result;
     }
 
-    static boolean compareThrowable(Throwable op1, Throwable op2) throws Exception {
+    private static boolean compareThrowable(Throwable op1, Throwable op2) throws Exception {
         boolean result = true;
 
         if(op1.getClass() != op2.getClass())
@@ -182,11 +182,11 @@ public class ValueComparer {
         return result;
     }
 
-    static boolean compareEnums(Enum en1, Enum en2) {
+    private static boolean compareEnums(Enum en1, Enum en2) {
         return en1.getValue() == en2.getValue();
     }
 
-    static boolean compareObjects(Object op1, Object op2) throws Exception {
+    private static boolean compareObjects(Object op1, Object op2) throws Exception {
         boolean result = false;
 
         if(op1 == op2)

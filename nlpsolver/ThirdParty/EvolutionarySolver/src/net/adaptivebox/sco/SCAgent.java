@@ -81,7 +81,7 @@ public class SCAgent {
     return trailPoint;
   }
 
-  protected void generatePoint(ILocationEngine tempPoint) {
+  private void generatePoint(ILocationEngine tempPoint) {
     SearchPoint Xmodel, Xrefer, libBPoint;
 
     // choose Selects a better point (libBPoint) from externalLib (L) based
@@ -115,7 +115,7 @@ public class SCAgent {
    }
 
   //  1---model point, 2---refer point
-   public boolean inferPoint(ILocationEngine newPoint, ILocationEngine point1,ILocationEngine point2, DesignSpace space){
+   private boolean inferPoint(ILocationEngine newPoint, ILocationEngine point1,ILocationEngine point2, DesignSpace space){
      double[] newLoc = newPoint.getLocation();
      double[] real1 = point1.getLocation();
      double[] real2 = point2.getLocation();

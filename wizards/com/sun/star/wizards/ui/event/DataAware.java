@@ -71,7 +71,7 @@ public abstract class DataAware {
      * @param obj the new data object.
      * @param updateUI if true updateUI() will be called.
      */
-    public void setDataObject(Object obj, boolean updateUI) {
+    private void setDataObject(Object obj, boolean updateUI) {
 
         if (obj != null && !value.isAssignable(obj.getClass()))
             throw new ClassCastException("can not cast new DataObject to original Class");
@@ -90,7 +90,7 @@ public abstract class DataAware {
      * another kind of Data is needed.
      * @param newValue the new value to set to the DataObject.
      */
-    protected void setToData(Object newValue) {
+    private void setToData(Object newValue) {
         value.set(newValue,getDataObject());
     }
 
@@ -100,7 +100,7 @@ public abstract class DataAware {
      * the value object.
      * @return the current value of the data object.
      */
-    protected Object getFromData() {
+    private Object getFromData() {
         return value.get(getDataObject());
     }
 
@@ -120,7 +120,7 @@ public abstract class DataAware {
      * updates the UI control according to the
      * current state of the data object.
      */
-    public void updateUI() {
+    private void updateUI() {
         Object data = getFromData();
         Object ui = getFromUI();
         if (!equals(data, ui))
@@ -164,7 +164,7 @@ public abstract class DataAware {
      * @param b second object to compare.
      * @return true if both are null or both are equal.
      */
-    protected boolean equals(Object a, Object b) {
+    private boolean equals(Object a, Object b) {
         if (a == null && b == null)
             return true;
         if (a == null || b == null)
@@ -273,7 +273,7 @@ public abstract class DataAware {
          * @param obj the object which contains the property.
          * @return the get method reflection object.
          */
-        protected Method createGetMethod(String propName, Object obj)
+        private Method createGetMethod(String propName, Object obj)
         {
             Method m = null;
             try
@@ -311,7 +311,7 @@ public abstract class DataAware {
             return null;
         }
 
-        protected Method createSetMethod(String propName, Object obj, Class<?> paramClass) {
+        private Method createSetMethod(String propName, Object obj, Class<?> paramClass) {
             Method m = null;
             try {
                 m = obj.getClass().getMethod("set" + propName, paramClass);

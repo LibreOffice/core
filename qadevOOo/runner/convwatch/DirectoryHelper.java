@@ -30,7 +30,7 @@ public class DirectoryHelper
     private ArrayList<String> m_aFileList = new ArrayList<String>();
     private boolean m_bRecursiveIsAllowed = true;
 
-    void setRecursiveIsAllowed(boolean _bValue)
+    private void setRecursiveIsAllowed(boolean _bValue)
         {
             m_bRecursiveIsAllowed = _bValue;
         }
@@ -79,7 +79,7 @@ public class DirectoryHelper
             return a.m_aFileList.toArray();
         }
 
-    void traverse_impl( String afileDirectory, FileFilter _aFileFilter )
+    private void traverse_impl( String afileDirectory, FileFilter _aFileFilter )
         {
             File fileDirectory = new File(afileDirectory);
             // Testing, if the file is a directory, and if so, it throws an exception

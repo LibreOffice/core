@@ -75,7 +75,7 @@ class GraphicalComparator implements DocComparator
      * replacing the path equals to _sInputPath with _sReferencePath and replace it's suffix by _sNewSuffix.
      *  If _sInputPath is empty, replace the whole path by _sReferencePath.
      */
-    protected String createSpecialFile(String _sEntry, String _sInputPath, String _sReferencePath, String _sNewSuffix)
+    private String createSpecialFile(String _sEntry, String _sInputPath, String _sReferencePath, String _sNewSuffix)
         {
             String fs = System.getProperty("file.separator");
             String sNewSubDir = "";
@@ -100,7 +100,7 @@ class GraphicalComparator implements DocComparator
             return sNewReferencePath;
         }
 
-    boolean isReferenceOrDiffExistent(String _sNewSuffix)
+    private boolean isReferenceOrDiffExistent(String _sNewSuffix)
         {
             boolean isExistent = false;
 

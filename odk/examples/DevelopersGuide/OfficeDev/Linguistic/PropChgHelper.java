@@ -114,7 +114,7 @@ public class PropChgHelper implements
         }
     }
 
-    public void RemoveAsListener()
+    private void RemoveAsListener()
     {
         if (xPropSet != null)
         {

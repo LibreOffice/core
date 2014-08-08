@@ -47,7 +47,7 @@ class IniFile
             m_aList = loadLines();
         }
 
-    ArrayList<String> loadLines()
+    private ArrayList<String> loadLines()
         {
             File aFile = new File(m_sFilename);
             ArrayList<String> aLines = new ArrayList<String>();
@@ -102,7 +102,7 @@ class IniFile
 
 
 
-    boolean isRemark(String _sLine)
+    private boolean isRemark(String _sLine)
         {
             if ( ((_sLine.length() < 2) ) ||
                  ( _sLine.startsWith("#")) ||
@@ -113,23 +113,23 @@ class IniFile
             return false;
         }
 
-    String getItem(int i)
+    private String getItem(int i)
         {
             return m_aList.get(i);
         }
 
-    String buildSectionName(String _sSectionName)
+    private String buildSectionName(String _sSectionName)
         {
             String sFindSection = "[" + _sSectionName + "]";
             return sFindSection;
         }
-    String toLowerIfNeed(String _sName)
+    private String toLowerIfNeed(String _sName)
         {
             return _sName.toLowerCase();
         }
 
     // return the number where this section starts
-    int findSection(String _sSection)
+    private int findSection(String _sSection)
         {
             String sFindSection = toLowerIfNeed(buildSectionName(_sSection));
             // ----------- find _sSection ---------------
@@ -155,7 +155,7 @@ class IniFile
         }
 
     // return the line number, where the key is found.
-    int findKey(String _sSection, String _sKey)
+    private int findKey(String _sSection, String _sKey)
         {
             int i = findSection(_sSection);
             if (i == -1)
@@ -167,7 +167,7 @@ class IniFile
         }
 
     // i must be the index in the list, where the well known section starts
-    int findKeyFromKnownSection(int _nSectionIndex, String _sKey)
+    private int findKeyFromKnownSection(int _nSectionIndex, String _sKey)
         {
             _sKey = toLowerIfNeed(_sKey);
             for (int j=_nSectionIndex + 1; j<m_aList.size();j++)
@@ -199,7 +199,7 @@ class IniFile
         }
 
     // i must be the index in the list, where the well known section starts
-    int findLastKnownKeyIndex(int _nSectionIndex, String _sKey)
+    private int findLastKnownKeyIndex(int _nSectionIndex, String _sKey)
         {
             _sKey = toLowerIfNeed(_sKey);
             int i = _nSectionIndex + 1;
@@ -231,7 +231,7 @@ class IniFile
             return i;
         }
 
-    String getValue(int _nIndex)
+    private String getValue(int _nIndex)
         {
             String sLine = getItem(_nIndex).trim();
             if (isRemark(sLine))

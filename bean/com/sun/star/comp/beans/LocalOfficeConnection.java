@@ -635,7 +635,7 @@ public class LocalOfficeConnection
 
     /** creates a unique pipe name.
     */
-    static String getPipeName()
+    private static String getPipeName()
     {
         // turn user name into a URL and file system safe name (% chars will not work)
         String aPipeName = System.getProperty("user.name") + OFFICE_ID_SUFFIX;

@@ -191,7 +191,7 @@ public class DBTools {
         * Prints datasource info.
         * @param out Stream to which information is printed.
         */
-        public void printInfo(PrintWriter out) {
+        private void printInfo(PrintWriter out) {
             out.println("Name = '" + Name + "'") ;
             out.println("  URL = '" + URL + "'") ;
             out.print("  Info = ") ;
@@ -294,7 +294,7 @@ public class DBTools {
     * @param dataSource <code>DataSource</code> object which is to
     * be registered.
     */
-    public void registerDB(String name, Object dataSource)
+    private void registerDB(String name, Object dataSource)
         throws com.sun.star.uno.Exception {
 
         dbContext.registerObject(name, dataSource) ;
@@ -424,7 +424,7 @@ public class DBTools {
     * @return <code>com.sun.star.sdb.DataSource</code> service
     * implementation which represents TestDB.
     */
-    public Object registerTestDB(String docPath)
+    private Object registerTestDB(String docPath)
         throws com.sun.star.uno.Exception {
 
         String testURL = null ;
@@ -490,7 +490,7 @@ public class DBTools {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // Currently doesn't work because of bugs 85509, 85510
 
-    public int deleteAllRows(XConnection con, String table)
+    private int deleteAllRows(XConnection con, String table)
         throws com.sun.star.sdbc.SQLException {
 
         XStatement stat = con.createStatement() ;
@@ -535,7 +535,7 @@ public class DBTools {
     * </code> types specified. In this case the parameter specifies
     * the length of the stream for inserting.
     */
-    public void addRowToTestTable(XConnection con, String table, Object[] values,
+    private void addRowToTestTable(XConnection con, String table, Object[] values,
         int streamLength)
         throws com.sun.star.sdbc.SQLException {
 
@@ -698,7 +698,7 @@ public class DBTools {
     * statement and obtaining the results produced by it.
     * @param tbl_name Test table name.
     */
-    protected void insertContentMySQLTable(Statement statement, String tbl_name)
+    private void insertContentMySQLTable(Statement statement, String tbl_name)
         throws java.sql.SQLException {
 
 
@@ -746,7 +746,7 @@ public class DBTools {
      * statement and obtaining the results produced by it.
      * @param tbl_name Test table name.
      */
-    protected void createMySQLTable(Statement statement, String tbl_name)
+    private void createMySQLTable(Statement statement, String tbl_name)
         throws java.sql.SQLException {
 
         final String empty_col_name = "Column";
@@ -794,7 +794,7 @@ public class DBTools {
      * statement and obtaining the results produced by it.
      * @param tbl_name Test table name.
      */
-    protected void dropMySQLTable(Statement statement, String tbl_name)
+    private void dropMySQLTable(Statement statement, String tbl_name)
         throws java.sql.SQLException {
         statement.executeUpdate("drop table if exists " + tbl_name);
     }

@@ -256,7 +256,7 @@ public abstract class NodeIterator implements Iterator {
      *
      *  @return  true if attributes are equal, false otherwise.
      */
-    protected boolean attributesEqual(Node node1, Node node2) {
+    private boolean attributesEqual(Node node1, Node node2) {
 
         boolean equal = false;
         String nodeName = node1.getNodeName();

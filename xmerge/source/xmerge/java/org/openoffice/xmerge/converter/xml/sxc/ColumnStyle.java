@@ -252,7 +252,7 @@ public class ColumnStyle extends Style implements Cloneable {
      *  @param  node  The <code>Node</code> to add <code>Style</code>
      *                attributes.
      */
-    public void writeAttributes(Element node) {
+    private void writeAttributes(Element node) {
 
         if(colWidth!=0) {
             String width = TwipsConverter.twips2cm(colWidth) + "cm";

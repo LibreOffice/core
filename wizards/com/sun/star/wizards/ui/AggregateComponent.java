@@ -232,7 +232,7 @@ public class AggregateComponent extends ControlScroller
         }
     }
 
-    protected void addRow()
+    private void addRow()
     {
         int fieldcount = super.getTotalFieldCount();
         registerControlGroupAtIndex(fieldcount);
@@ -254,7 +254,7 @@ public class AggregateComponent extends ControlScroller
         CurUnoDialog.repaintDialogStep();
     }
 
-    protected void removeRow()
+    private void removeRow()
     {
         int fieldcount = super.getTotalFieldCount();
         if (fieldcount > 0)
@@ -274,7 +274,7 @@ public class AggregateComponent extends ControlScroller
         CurUnoDialog.repaintDialogStep();
     }
 
-    protected void toggleButtons()
+    private void toggleButtons()
     {
         ControlRow curcontrolrow = null;
         boolean biscomplete = true;
@@ -290,7 +290,7 @@ public class AggregateComponent extends ControlScroller
         togglefollowingDialogSteps();
     }
 
-    public void toggleComponent()
+    private void toggleComponent()
     {
         CurDBMetaData.Type = getQueryType();
         boolean benableComponent = isAggregateComponentEnabled();

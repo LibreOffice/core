@@ -93,7 +93,7 @@ class graphics_stuff
                 return 0;
         }
 
-    public static void countPixel(ImageHelper img, int _w, int _h, CountPixel _aPixelCounter)
+    private static void countPixel(ImageHelper img, int _w, int _h, CountPixel _aPixelCounter)
         {
             for (int y = 0; y < _h; y++) {
                 for (int x = 0; x < _w; x++) {
@@ -128,7 +128,7 @@ public class PixelCounter {
     private ImageHelper m_aImage;
 
 
-    public int countNotWhitePixel(String _sFile)
+    private int countNotWhitePixel(String _sFile)
         throws java.io.IOException
         {
             m_aImage = ImageHelper.createImageHelper(_sFile);
@@ -136,7 +136,7 @@ public class PixelCounter {
             return nw;
         }
 
-    public int countNotBlackPixel(String _sFile)
+    private int countNotBlackPixel(String _sFile)
         throws java.io.IOException
         {
             m_aImage = ImageHelper.createImageHelper(_sFile);

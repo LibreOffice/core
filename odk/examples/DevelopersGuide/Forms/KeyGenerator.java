@@ -54,7 +54,7 @@ class UniqueColumnValue
         themself are based on one table.<br/>
         Everything else (especially forms based on queries) is not yet implemented.</p>
     */
-    protected String extractTableName( XPropertySet xForm ) throws com.sun.star.uno.Exception
+    private String extractTableName( XPropertySet xForm ) throws com.sun.star.uno.Exception
     {
         String sReturn;
 
@@ -99,7 +99,7 @@ class UniqueColumnValue
             a String which can be used as statement to retrieve a unique value for the given column.
             The result set resulting from such a execution contains the value in it's first column.
     */
-    protected String composeUniqueyKeyStatement( XPropertySet xForm, String sFieldName ) throws com.sun.star.uno.Exception
+    private String composeUniqueyKeyStatement( XPropertySet xForm, String sFieldName ) throws com.sun.star.uno.Exception
     {
         String sStatement = new String( "SELECT MAX( " );
         sStatement += sFieldName;
@@ -123,7 +123,7 @@ class UniqueColumnValue
         @param sFieldName
             the name of the column
     */
-    protected int generatePrimaryKey( XPropertySet xForm, String sFieldName ) throws com.sun.star.uno.Exception
+    private int generatePrimaryKey( XPropertySet xForm, String sFieldName ) throws com.sun.star.uno.Exception
     {
         // get the current connection of the form
         XConnection xConn = UnoRuntime.queryInterface(
@@ -202,7 +202,7 @@ class KeyGeneratorForReset extends UniqueColumnValue implements XResetListener
     /** sets the focus to the first control which is no fixed text, and not the
         one we're defaulting
     */
-    public void defaultNewRecordFocus( XPropertySet xForm ) throws com.sun.star.uno.Exception
+    private void defaultNewRecordFocus( XPropertySet xForm ) throws com.sun.star.uno.Exception
     {
         XIndexAccess xFormAsContainer = UnoRuntime.queryInterface(
             XIndexAccess.class, xForm );

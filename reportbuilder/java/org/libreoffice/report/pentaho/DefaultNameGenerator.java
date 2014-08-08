@@ -126,7 +126,7 @@ public class DefaultNameGenerator
         return newName;
     }
 
-    protected String getSuffixForType(final String mimeType)
+    private String getSuffixForType(final String mimeType)
     {
         if ("image/png".equals(mimeType))
         {

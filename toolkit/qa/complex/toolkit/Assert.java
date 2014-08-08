@@ -187,7 +187,7 @@ public class Assert
      * @param i_expectedExceptionClass is the class of the exception to be caught. If this is null,
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
-    public static void assertException( final Object i_object, final String i_methodName, final Object[] i_methodArgs,
+    private static void assertException( final Object i_object, final String i_methodName, final Object[] i_methodArgs,
         final Class<?> i_expectedExceptionClass )
     {
         assertException(

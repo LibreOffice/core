@@ -148,7 +148,7 @@ public class ClParser
     /*
      * This method maps commandline Parameters to TestParameters
      */
-    protected Properties getMapping()
+    private Properties getMapping()
     {
         Properties map = new Properties();
         map.setProperty("-cs", "ConnectionString");
@@ -169,7 +169,7 @@ public class ClParser
         return map;
     }
 
-    protected String getParameterFor(Properties map, String name)
+    private String getParameterFor(Properties map, String name)
     {
         String ret = map.getProperty(name);
 

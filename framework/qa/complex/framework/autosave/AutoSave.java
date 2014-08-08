@@ -97,7 +97,7 @@ public class AutoSave
             m_aLog.log(Protocol.TYPE_SCOPE_CLOSE, "");
         }
 
-        public void disableListener()
+        private void disableListener()
         {
             m_aLog.log(Protocol.TYPE_SCOPE_OPEN, "stop listening for AutoSave notifications ...");
 

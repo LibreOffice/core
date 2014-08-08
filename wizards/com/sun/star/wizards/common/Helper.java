@@ -270,7 +270,7 @@ public class Helper
      * @param oValue the parameter that has to represent an object
      * @return a null reference if the array is empty
      */
-    public static Object getArrayValue(Object oValue)
+    private static Object getArrayValue(Object oValue)
     {
         try
         {
@@ -347,7 +347,7 @@ public class Helper
          * @param date a VCL date in form of 20041231
          * @return a document relative date
          */
-        public synchronized double getDocumentDateAsDouble(int date)
+        private synchronized double getDocumentDateAsDouble(int date)
         {
             calendar.clear();
             calendar.set(date / 10000,
@@ -362,12 +362,12 @@ public class Helper
             return (date1 - docNullTime) / DAY_IN_MILLIS + 1;
         }
 
-        public double getDocumentDateAsDouble(DateTime date)
+        private double getDocumentDateAsDouble(DateTime date)
         {
             return getDocumentDateAsDouble(date.Year * 10000 + date.Month * 100 + date.Day);
         }
 
-        public synchronized double getDocumentDateAsDouble(long javaTimeInMillis)
+        private synchronized double getDocumentDateAsDouble(long javaTimeInMillis)
         {
             calendar.clear();
             JavaTools.setTimeInMillis(calendar, javaTimeInMillis);

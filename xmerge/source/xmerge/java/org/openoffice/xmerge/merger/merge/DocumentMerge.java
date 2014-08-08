@@ -188,7 +188,7 @@ public class DocumentMerge implements MergeAlgorithm {
      *  @param  oldNode  <code>Node</code> to append after.
      *  @param  newNode  <code>Node</code> to append.
      */
-    protected void appendNode(Node oldNode, Node newNode) {
+    private void appendNode(Node oldNode, Node newNode) {
         Node clonedNode = XmlUtil.deepClone(oldNode, newNode);
         Node parent = oldNode.getParentNode();
         parent.appendChild(clonedNode);
@@ -201,7 +201,7 @@ public class DocumentMerge implements MergeAlgorithm {
      *  @param  oldNode  <code>Node</code> to insert before.
      *  @param  newNode  <code>Node</code> to insert.
      */
-    protected void insertNode(Node oldNode, Node newNode) {
+    private void insertNode(Node oldNode, Node newNode) {
         Node clonedNode = XmlUtil.deepClone(oldNode, newNode);
         Node parent = oldNode.getParentNode();
         parent.insertBefore(clonedNode, oldNode);
@@ -214,7 +214,7 @@ public class DocumentMerge implements MergeAlgorithm {
      *  @param  currElem  <code>Element</code> to be replaced.
      *  @param  newElem   <code>Element</code> to replace.
      */
-    protected void replaceElement(Element currElem, Element newElem) {
+    private void replaceElement(Element currElem, Element newElem) {
 
         Node clonedNode = XmlUtil.deepClone(currElem, newElem);
         Node parent = currElem.getParentNode();

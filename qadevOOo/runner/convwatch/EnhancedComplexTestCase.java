@@ -28,7 +28,7 @@ import convwatch.GraphicalTestArguments;
 
 public abstract class EnhancedComplexTestCase extends ComplexTestCase
 {
-    void checkExistance(String _sScriptFile, String _sName)
+    private void checkExistance(String _sScriptFile, String _sName)
         {
             // Process testshl = Runtime.getRuntime().exec(scriptFile);
             ProcessHandler aHandler = new ProcessHandler(_sScriptFile);
@@ -71,7 +71,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
 
 
     protected abstract Object[] mustInstalledSoftware();
-    public boolean needCheckForInstalledSoftware()
+    private boolean needCheckForInstalledSoftware()
         {
             String sNEEDCHECK = (String)param.get( PropertyName.CHECK_NEED_TOOLS );
 // TODO: I need to get the boolean value with get("name") because, if it is not given getBool() returns

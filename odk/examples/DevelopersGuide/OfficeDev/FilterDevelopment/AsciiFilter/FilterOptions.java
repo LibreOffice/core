@@ -114,7 +114,7 @@ public class FilterOptions
      * @param lDescriptor
      *          the new MediaDescriptor to set internal member from it
      */
-    public void analyze( boolean                            bImport     ,
+    private void analyze( boolean                            bImport     ,
                          com.sun.star.beans.PropertyValue[] lDescriptor )
     {
         m_xInput       = null        ;

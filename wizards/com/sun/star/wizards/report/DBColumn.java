@@ -241,7 +241,7 @@ public class DBColumn
         replaceValueCellofTable(_bIsLandscape);
     }
 
-    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler)
+    private void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler)
     {
         XTextCursor xTextCursor = TextDocument.createTextCursor(xNameCell);
         xTextCursor.gotoStart(false);
@@ -293,7 +293,7 @@ public class DBColumn
         }
     }
 
-    public void modifyCellContent(Object CurGroupValue)
+    private void modifyCellContent(Object CurGroupValue)
     {
         double dblValue = 0;
         try
@@ -345,7 +345,7 @@ public class DBColumn
         }
     }
     // If the parameter CurGroupValue is null the placeholders are inserted
-    public void replaceValueCellofTable(boolean _bIsLandscape)
+    private void replaceValueCellofTable(boolean _bIsLandscape)
     {
         try
         {

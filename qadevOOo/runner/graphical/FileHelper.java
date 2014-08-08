@@ -163,7 +163,7 @@ public class FileHelper
             makeDirectories(first, path, "0777");
         }
 
-    public static void makeDirectories(String first, String path, String _sMode)
+    private static void makeDirectories(String first, String path, String _sMode)
         {
             String fs = System.getProperty("file.separator");
             if (path.startsWith(fs + fs)) // starts with UNC Path
@@ -200,7 +200,7 @@ public class FileHelper
             // return;
         }
 
-    public static void chmod(File file, String mode) throws java.io.IOException
+    private static void chmod(File file, String mode) throws java.io.IOException
         {
             Runtime.getRuntime().exec
                 (new String[]
@@ -597,7 +597,7 @@ public class FileHelper
 
         }
 
-        public static void addBasenameToFile(String _sIndexFilename, String _sBasename, String _sCreator, String _sType, String _sSource)
+        private static void addBasenameToFile(String _sIndexFilename, String _sBasename, String _sCreator, String _sType, String _sSource)
         {
             String sPath;
             if (_sIndexFilename.startsWith("file:"))

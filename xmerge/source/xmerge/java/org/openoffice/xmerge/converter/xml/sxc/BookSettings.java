@@ -152,7 +152,7 @@ public class BookSettings implements OfficeConstants {
      * @param name xml name of the attribute to set
      * @param value String value fo the attribute
      */
-    public void addAttribute(String name, String value) {
+    private void addAttribute(String name, String value) {
 
         if(name.equals("ActiveTable")) {
             activeSheet = value;
@@ -167,7 +167,7 @@ public class BookSettings implements OfficeConstants {
      *
      * @param root XML Node to read from
      */
-    public void readNode(Node root) {
+    private void readNode(Node root) {
 
         if (root.hasChildNodes()) {
 

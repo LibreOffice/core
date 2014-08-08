@@ -42,7 +42,7 @@ public class UnoDialog2 extends UnoDialog
      * Override this method to return another listener.
      * @return
      */
-    protected AbstractListener createListener()
+    private AbstractListener createListener()
     {
         return new CommonListener();
     }
@@ -105,7 +105,7 @@ public class UnoDialog2 extends UnoDialog
         return insertCheckBox(sName, itemChanged, this, sPropNames, oPropValues);
     }
 
-    public XComboBox insertComboBox(String sName, String actionPerformed, String itemChanged, String textChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    private XComboBox insertComboBox(String sName, String actionPerformed, String itemChanged, String textChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         XComboBox xComboBox = (XComboBox) insertControlModel2("com.sun.star.awt.UnoControlComboBoxModel", sName, sPropNames, oPropValues, XComboBox.class);
         if (actionPerformed != null)
@@ -220,7 +220,7 @@ public class UnoDialog2 extends UnoDialog
         return UnoRuntime.queryInterface(type, xField);
     }
 
-    public XControl insertFileControl(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    private XControl insertFileControl(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XControl) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFileControlModel", sPropNames, oPropValues, XControl.class);
     }
@@ -230,7 +230,7 @@ public class UnoDialog2 extends UnoDialog
         return insertFileControl(sName, sTextChanged, this, sPropNames, oPropValues);
     }
 
-    public XCurrencyField insertCurrencyField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    private XCurrencyField insertCurrencyField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XCurrencyField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlCurrencyFieldModel", sPropNames, oPropValues, XCurrencyField.class);
     }
@@ -240,7 +240,7 @@ public class UnoDialog2 extends UnoDialog
         return insertCurrencyField(sName, sTextChanged, this, sPropNames, oPropValues);
     }
 
-    public XDateField insertDateField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    private XDateField insertDateField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XDateField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlDateFieldModel", sPropNames, oPropValues, XDateField.class);
     }
@@ -250,7 +250,7 @@ public class UnoDialog2 extends UnoDialog
         return insertDateField(sName, sTextChanged, this, sPropNames, oPropValues);
     }
 
-    public XNumericField insertNumericField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    private XNumericField insertNumericField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XNumericField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlNumericFieldModel", sPropNames, oPropValues, XNumericField.class);
     }
@@ -260,7 +260,7 @@ public class UnoDialog2 extends UnoDialog
         return insertNumericField(sName, sTextChanged, this, sPropNames, oPropValues);
     }
 
-    public XTimeField insertTimeField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    private XTimeField insertTimeField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XTimeField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlTimeFieldModel", sPropNames, oPropValues, XTimeField.class);
     }
@@ -270,7 +270,7 @@ public class UnoDialog2 extends UnoDialog
         return insertTimeField(sName, sTextChanged, this, sPropNames, oPropValues);
     }
 
-    public XPatternField insertPatternField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    private XPatternField insertPatternField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XPatternField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlPatternFieldModel", sPropNames, oPropValues, XPatternField.class);
     }
@@ -280,7 +280,7 @@ public class UnoDialog2 extends UnoDialog
         return insertPatternField(sName, sTextChanged, this, sPropNames, oPropValues);
     }
 
-    public XTextComponent insertFormattedField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    private XTextComponent insertFormattedField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XTextComponent) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFormattedFieldModel", sPropNames, oPropValues, XTextComponent.class);
     }
@@ -314,7 +314,7 @@ public class UnoDialog2 extends UnoDialog
         return UnoRuntime.queryInterface(XControl.class, oGroupBox);
     }
 
-    public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues)
+    private Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues)
     {
         try
         {
@@ -333,7 +333,7 @@ public class UnoDialog2 extends UnoDialog
         return xDlgContainer.getControl(componentName);
     }
 
-    public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
+    private Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
     {
         return UnoRuntime.queryInterface(type, insertControlModel2(serviceName, componentName, sPropNames, oPropValues));
     }

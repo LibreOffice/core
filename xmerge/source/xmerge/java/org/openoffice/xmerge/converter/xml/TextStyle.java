@@ -571,7 +571,7 @@ public class TextStyle extends Style implements Cloneable {
      *  @param  node  The <code>Node</code> to add <code>Style</code>
      *                attributes.
      */
-    public void writeAttributes(Element node) {
+    private void writeAttributes(Element node) {
 
         if ((mask & BOLD) != 0)
             if ((values & BOLD) != 0)

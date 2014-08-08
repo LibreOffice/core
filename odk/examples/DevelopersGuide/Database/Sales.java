@@ -142,7 +142,7 @@ public class Sales
     }
 
     // inserts a row programmatically.
-    public void insertRow() throws com.sun.star.uno.Exception
+    private void insertRow() throws com.sun.star.uno.Exception
     {
         // example for a programmatic way to do updates.
         XStatement stmt = con.createStatement();
@@ -170,7 +170,7 @@ public class Sales
     }
 
     // deletes a row programmatically.
-    public void deleteRow() throws com.sun.star.uno.Exception
+    private void deleteRow() throws com.sun.star.uno.Exception
     {
         // example for a programmatic way to do updates.
         XStatement stmt = con.createStatement();

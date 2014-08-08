@@ -75,7 +75,7 @@ public class FileAccess
         ResultPath += PropertyNames.SEMI_COLON + sAddPath;
         }
 
-    public static String deleteLastSlashfromUrl(String _sPath)
+    private static String deleteLastSlashfromUrl(String _sPath)
     {
         if (_sPath.endsWith("/"))
         {
@@ -361,7 +361,7 @@ public class FileAccess
         return ReturnPath;
     }
 
-    public static boolean createSubDirectory(XMultiServiceFactory xMSF, XSimpleFileAccess xSimpleFileAccess, String Path)
+    private static boolean createSubDirectory(XMultiServiceFactory xMSF, XSimpleFileAccess xSimpleFileAccess, String Path)
     {
         String sNoDirCreation = PropertyNames.EMPTY_STRING;
         try
@@ -540,7 +540,7 @@ public class FileAccess
     /**
      * We search in all given path for a given file
      */
-    public static String addPath(String _sPath, String _sPath2)
+    private static String addPath(String _sPath, String _sPath2)
     {
         String sNewPath;
         if (!_sPath.endsWith("/"))
@@ -718,7 +718,7 @@ public class FileAccess
     /**
      * @return the extension of the given filename.
      */
-    public static String getExtension(String filename)
+    private static String getExtension(String filename)
     {
         int p = filename.indexOf(".");
         if (p == -1)
@@ -736,7 +736,7 @@ public class FileAccess
         return filename;
     }
 
-    public boolean mkdir(String s)
+    private boolean mkdir(String s)
     {
         try
         {
@@ -842,7 +842,7 @@ public class FileAccess
         return getFilename(path, File.separator);
     }
 
-    public static String getFilename(String path, String pathSeparator)
+    private static String getFilename(String path, String pathSeparator)
     {
         String[] s = JavaTools.ArrayoutofString(path, pathSeparator);
         return s[s.length - 1];
@@ -919,7 +919,7 @@ public class FileAccess
         }
     }
 
-    public String getNewFile(String parentDir, String name, String extension)
+    private String getNewFile(String parentDir, String name, String extension)
     {
 
         int i = 0;

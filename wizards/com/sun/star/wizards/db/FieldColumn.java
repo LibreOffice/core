@@ -386,7 +386,7 @@ public class FieldColumn
         }
     }
 
-    public void initDefaultValue()
+    private void initDefaultValue()
     {
         switch (getFieldType())
         {

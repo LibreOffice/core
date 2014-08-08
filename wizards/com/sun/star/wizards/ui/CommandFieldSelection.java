@@ -192,7 +192,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         }
     }
 
-    public void fillUpFieldsListbox()
+    private void fillUpFieldsListbox()
     {
         try
         {
@@ -330,7 +330,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         toggleCommandListBox(bdoenable);
     }
 
-    public void toggleCommandListBox(boolean _bdoenable)
+    private void toggleCommandListBox(boolean _bdoenable)
     {
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bdoenable));
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlblTable), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bdoenable));
@@ -386,7 +386,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         }
     }
 
-    public void preselectCommand(String _selitem, int _nCommandType, boolean _bReadOnly)
+    private void preselectCommand(String _selitem, int _nCommandType, boolean _bReadOnly)
     {
         if (_selitem.length() > 0)
         {

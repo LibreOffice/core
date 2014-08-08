@@ -120,7 +120,7 @@ public class CfgParser
         }
     }
 
-    protected Properties getProperties(String name)
+    private Properties getProperties(String name)
     {
         // get the resource file
         Properties prop = new Properties();
@@ -158,7 +158,7 @@ public class CfgParser
         return prop;
     }
 
-    protected String getDefaultFileName(boolean home)
+    private String getDefaultFileName(boolean home)
     {
         String fileSeparator = System.getProperty("file.separator");
         String path = "";

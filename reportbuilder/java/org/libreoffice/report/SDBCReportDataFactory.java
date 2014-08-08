@@ -484,7 +484,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         return paramDef;
     }
 
-    void fillOrderStatement(final String command,
+    private void fillOrderStatement(final String command,
             final int commandType, final Map parameters,
             final XConnectionTools tools,
             final XPropertySet rowSetProp)

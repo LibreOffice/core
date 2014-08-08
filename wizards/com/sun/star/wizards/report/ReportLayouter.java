@@ -366,7 +366,7 @@ public class ReportLayouter
             }
     }
 
-    public void clearConstants()
+    private void clearConstants()
     {
         constRangeList.clear();
         trTitleconst = null;
@@ -385,7 +385,7 @@ public class ReportLayouter
         te.write(tr);
     }
 
-    public List<XTextRange> searchFillInItems(int type)
+    private List<XTextRange> searchFillInItems(int type)
     {
       try
       {

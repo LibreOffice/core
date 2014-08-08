@@ -251,7 +251,7 @@ public class SourceCodeGenerator {
     }
 
 
-    public String getPropertyStatementSourceCode(XUnoPropertyNode _oUnoPropertyNode, String _sVariableName, UnoObjectDefinition _oUnoReturnObjectDefinition){
+    private String getPropertyStatementSourceCode(XUnoPropertyNode _oUnoPropertyNode, String _sVariableName, UnoObjectDefinition _oUnoReturnObjectDefinition){
         String sReturnObjectVariableDefinition = "";
         String sStatement = "";
         String sPropertyName = _oUnoPropertyNode.getProperty().Name;
@@ -274,7 +274,7 @@ public class SourceCodeGenerator {
     }
 
 
-    public String getMethodStatementSourceCode(XUnoMethodNode _oUnoMethodNode, String _sVariableName, UnoObjectDefinition _oUnoReturnObjectDefinition){
+    private String getMethodStatementSourceCode(XUnoMethodNode _oUnoMethodNode, String _sVariableName, UnoObjectDefinition _oUnoReturnObjectDefinition){
         String sReturnObjectVariableDefinition = "";
         String sStatement = "";
         XIdlMethod xIdlMethod = _oUnoMethodNode.getXIdlMethod();
@@ -519,7 +519,7 @@ public class SourceCodeGenerator {
     }
 
 
-    public String getVariableInitialization(UnoObjectDefinition _oUnoObjectDefinition, boolean _bInitialize){
+    private String getVariableInitialization(UnoObjectDefinition _oUnoObjectDefinition, boolean _bInitialize){
         String sObjectVariableDeclaration = "";
         String sVariableName = _oUnoObjectDefinition.getVariableName();
         if (isVariableDeclared(_oUnoObjectDefinition, "")){
@@ -649,7 +649,7 @@ private class UnoObjectDefinition{
         }
 
 
-        public void addParameterObjects(Object[] _oParameterObjects){
+        private void addParameterObjects(Object[] _oParameterObjects){
             m_oParameterObjects = _oParameterObjects;
         }
 
@@ -668,7 +668,7 @@ private class UnoObjectDefinition{
         }
 
 
-        public String getVariableStemName(TypeClass _aTypeClass){
+        private String getVariableStemName(TypeClass _aTypeClass){
             int nTypeClass = _aTypeClass.getValue();
             switch(nTypeClass){
                 case TypeClass.BOOLEAN_value:

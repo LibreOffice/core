@@ -373,7 +373,7 @@ public class CellStyle extends Style implements Cloneable {
      *  @param  node  The <code>Node</code> to add <code>Style</code>
      *                attributes.
      */
-    public void writeAttributes(Element node) {
+    private void writeAttributes(Element node) {
 
         if (fmt.getAlign()==Format.RIGHT_ALIGN)
             node.setAttribute("fo:text-align", "end");

@@ -31,7 +31,7 @@ public class DynamicClassLoader {
     * @param className The name of the class to create.
     * @return The created class.
     */
-    public static Class<?> forName(String className)
+    private static Class<?> forName(String className)
         throws ClassNotFoundException {
 
         return Class.forName(className) ;

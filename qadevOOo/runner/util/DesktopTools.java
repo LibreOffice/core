@@ -56,7 +56,7 @@ public class DesktopTools
      * @param xMSF the MultiServiceFactory
      * @return the gained XComponentLoader
      */
-    public static XComponentLoader getCLoader(XMultiServiceFactory xMSF)
+    private static XComponentLoader getCLoader(XMultiServiceFactory xMSF)
     {
         XDesktop oDesktop = UnoRuntime.queryInterface(
                 XDesktop.class, createDesktop(xMSF));
@@ -178,7 +178,7 @@ public class DesktopTools
      * </ul>
      * or <CODE>null</CODE>
      */
-    public static String getDocumentType(XComponent xComponent)
+    private static String getDocumentType(XComponent xComponent)
     {
         XServiceInfo sInfo = UnoRuntime.queryInterface(
                 XServiceInfo.class, xComponent);

@@ -104,7 +104,7 @@ public class AccessibilityTools {
         }
     }
 
-    public static XAccessibleContext getAccessibleObjectForRoleIgnoreShowing_(XAccessible xacc,
+    private static XAccessibleContext getAccessibleObjectForRoleIgnoreShowing_(XAccessible xacc,
         short role) {
         XAccessibleContext ac = xacc.getAccessibleContext();
         if (ac == null) {
@@ -136,7 +136,7 @@ public class AccessibilityTools {
         }
     }
 
-    public static XAccessibleContext getAccessibleObjectForRole_(XAccessible xacc,
+    private static XAccessibleContext getAccessibleObjectForRole_(XAccessible xacc,
         short role) {
         XAccessibleContext ac = xacc.getAccessibleContext();
         boolean isShowing = ac.getAccessibleStateSet()
@@ -318,7 +318,7 @@ public class AccessibilityTools {
         printAccessibleTree(log, xacc, "");
     }
 
-    protected static void printAccessibleTree(PrintWriter log,
+    private static void printAccessibleTree(PrintWriter log,
         XAccessible xacc, String indent) {
 
         XAccessibleContext ac = xacc.getAccessibleContext();

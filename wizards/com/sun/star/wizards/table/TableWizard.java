@@ -238,7 +238,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 */
-    public void buildSteps()
+    private void buildSteps()
     {
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);
         curFieldFormatter = new FieldFormatter(this);
@@ -250,7 +250,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         enableNavigationButtons(false, false, false);
     }
 
-    public boolean createTable()
+    private boolean createTable()
     {
         boolean bIsSuccessfull = true;
         boolean bTableCreated = false;
@@ -343,7 +343,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         xDialog.endExecute();
     }
 
-    public void insertFormRelatedSteps()
+    private void insertFormRelatedSteps()
     {
         addRoadmap();
         int i = 0;

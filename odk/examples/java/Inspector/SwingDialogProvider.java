@@ -91,12 +91,12 @@ public class SwingDialogProvider implements XDialogProvider{
         }
 
 
-        public void addMenuBar(JMenuBar _jMenuBar){
+        private void addMenuBar(JMenuBar _jMenuBar){
             getDialog().setJMenuBar(_jMenuBar);
         }
 
 
-        public void  removeTabPaneByIndex(int _nIndex){
+        private void  removeTabPaneByIndex(int _nIndex){
             if (_nIndex > -1){
                 String sSelInspectorPanelTitle = m_jTabbedPane1.getTitleAt(_nIndex);
                 m_jTabbedPane1.remove(_nIndex);
@@ -136,7 +136,7 @@ public class SwingDialogProvider implements XDialogProvider{
         }
 
 
-        public void removeTabPanes(){
+        private void removeTabPanes(){
             int nCount = m_jTabbedPane1.getTabCount();
             if (nCount > 0){
                 for (int i = nCount-1; i >= 0; i--){
@@ -145,7 +145,7 @@ public class SwingDialogProvider implements XDialogProvider{
             }
         }
 
-        public void removeSelectedTabPane(){
+        private void removeSelectedTabPane(){
             int nIndex = getTabbedPane().getSelectedIndex();
             removeTabPaneByIndex(nIndex);
         }

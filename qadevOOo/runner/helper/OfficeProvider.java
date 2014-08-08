@@ -54,7 +54,7 @@ public class OfficeProvider implements AppProvider
     /**
      * copy the user layer to a safe place, usually to $TMP/user_backup$USER
      */
-    public void backupUserLayer(TestParameters param, XMultiServiceFactory msf)
+    private void backupUserLayer(TestParameters param, XMultiServiceFactory msf)
     {
         try
         {
@@ -316,7 +316,7 @@ public class OfficeProvider implements AppProvider
      * @throws com.sun.star.connection.NoConnectException
      * @throws Exception
      */
-    protected static XMultiServiceFactory connect(String connectStr)
+    private static XMultiServiceFactory connect(String connectStr)
             throws com.sun.star.uno.Exception,
             com.sun.star.uno.RuntimeException,
             com.sun.star.connection.NoConnectException,
@@ -579,7 +579,7 @@ public class OfficeProvider implements AppProvider
         return result;
     }
 
-    protected boolean closeAllWindows(XDesktop desk)
+    private boolean closeAllWindows(XDesktop desk)
     {
         final XEnumerationAccess compEnumAccess = desk.getComponents();
         final XEnumeration compEnum = compEnumAccess.createEnumeration();
@@ -613,7 +613,7 @@ public class OfficeProvider implements AppProvider
         return res;
     }
 
-    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
+    private static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
     {
         Object xPathSubst = null;
 
@@ -641,7 +641,7 @@ public class OfficeProvider implements AppProvider
      * converts directory without 'file:///' prefix.
      * and System dependent file separator
      */
-    public static String getDirSys(String dir)
+    private static String getDirSys(String dir)
     {
         String sysDir = "";
 

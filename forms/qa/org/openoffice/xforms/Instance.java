@@ -73,7 +73,7 @@ public class Instance
      * @return
      *      the node of the newly created element
      */
-    public XNode createElement( XNode _parentElement, String _elementName, String _initialNodeValue ) throws DOMException
+    private XNode createElement( XNode _parentElement, String _elementName, String _initialNodeValue ) throws DOMException
     {
         XNode node = _parentElement.appendChild(
             m_model.getUIHelper().createElement( _parentElement, _elementName )
@@ -100,7 +100,7 @@ public class Instance
      * @param _elementName
      *  the name of the to-be-removed child
      */
-    public XNode removeNode( XNode _parentElement, String _elementName ) throws DOMException
+    private XNode removeNode( XNode _parentElement, String _elementName ) throws DOMException
     {
         XNodeList nodes = _parentElement.getChildNodes();
         for ( int i=0; i<nodes.getLength(); ++i )

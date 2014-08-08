@@ -306,7 +306,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         return bQueryCreated;
     }
 
-    public void buildSteps()
+    private void buildSteps()
     {
         // CurReportDocument.getDoc().xProgressBar.setValue(30);
         CurDBCommandFieldSelection = new CommandFieldSelection(this, m_reportDocument.getRecordParser(), 100, slblFields, slblSelFields, slblTables, true, 34330);
@@ -359,7 +359,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         xDialog.endExecute();
     }
 
-    public void insertQueryRelatedSteps()
+    private void insertQueryRelatedSteps()
     {
         setRMItemLabels(m_oResource, UIConsts.RID_QUERY + 80);
         addRoadmap();
@@ -529,7 +529,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         m_reportDocument.getRecordParser().dispose();
     }
 
-    public boolean getReportResources(boolean bgetProgressResourcesOnly)
+    private boolean getReportResources(boolean bgetProgressResourcesOnly)
     {
         sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_REPORT);
         if (!bgetProgressResourcesOnly)
@@ -561,7 +561,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         return sBlindTextNote;
     }
 
-    public void enableRoadmapItems(boolean _bEnabled)
+    private void enableRoadmapItems(boolean _bEnabled)
     {
         try
         {

@@ -84,7 +84,7 @@ public class UnoDataAware extends DataAware
      * @param value
      * @return
      */
-    protected Boolean getBoolean(Object value)
+    private Boolean getBoolean(Object value)
     {
         if (value == null)
         {
@@ -232,7 +232,7 @@ public class UnoDataAware extends DataAware
         setEnabled(control, enabled ? Boolean.TRUE : Boolean.FALSE);
     }
 
-    public static void setEnabled(Object control, Boolean enabled)
+    private static void setEnabled(Object control, Boolean enabled)
     {
         Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enabled);
     }

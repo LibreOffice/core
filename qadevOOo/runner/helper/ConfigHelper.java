@@ -125,7 +125,7 @@ public class ConfigHelper
     }
 
 
-    public Object readRelativeKey(String sRelPath,
+    private Object readRelativeKey(String sRelPath,
                                   String sKey    )
         throws com.sun.star.container.NoSuchElementException
     {
@@ -143,7 +143,7 @@ public class ConfigHelper
     }
 
 
-    public void writeRelativeKey(String sRelPath,
+    private void writeRelativeKey(String sRelPath,
                                  String sKey    ,
                                  Object aValue  )
         throws com.sun.star.container.NoSuchElementException
@@ -344,7 +344,7 @@ public class ConfigHelper
      * @throws com.sun.star.uno.Exception on any error
      * @return A XNameContainer of the Set
      */
-    public XNameContainer getSet(String setName)
+    private XNameContainer getSet(String setName)
         throws com.sun.star.uno.Exception
     {
         XNameReplace xCont = UnoRuntime.queryInterface(XNameReplace.class, m_xConfig);

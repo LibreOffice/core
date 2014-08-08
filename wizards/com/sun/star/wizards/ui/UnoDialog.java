@@ -109,7 +109,7 @@ public class UnoDialog implements EventNames
         return iKey;
     }
 
-    public void createPeerConfiguration()
+    private void createPeerConfiguration()
     {
         m_oPeerConfig = new PeerConfig(this);
     }
@@ -387,7 +387,7 @@ public class UnoDialog implements EventNames
         return insertEditField("com.sun.star.awt.UnoControlFormattedFieldModel", sName, iControlKey, xTextListener, sProperties, sValues);
     }
 
-    public XTextComponent insertEditField(String ServiceName, String sName, int iControlKey, XTextListener xTextListener, String[] sProperties, Object[] sValues)
+    private XTextComponent insertEditField(String ServiceName, String sName, int iControlKey, XTextListener xTextListener, String[] sProperties, Object[] sValues)
     {
         try
         {
@@ -794,7 +794,7 @@ public class UnoDialog implements EventNames
         setEnabled(control, enabled ? Boolean.TRUE : Boolean.FALSE);
     }
 
-    public static void setEnabled(Object control, Boolean enabled)
+    private static void setEnabled(Object control, Boolean enabled)
     {
         Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enabled);
     }
@@ -803,7 +803,7 @@ public class UnoDialog implements EventNames
      * @param oControlModel the model of a control
      * @return the LabelType according to UIConsts.CONTROLTYPE
      */
-    public static int getControlModelType(Object oControlModel)
+    private static int getControlModelType(Object oControlModel)
     {
         XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, oControlModel);
         if (xServiceInfo.supportsService("com.sun.star.awt.UnoControlFixedTextModel"))
@@ -898,7 +898,7 @@ public class UnoDialog implements EventNames
      * @param itype The type of the control conforming to UIConst.ControlType
      * @return the name of the property that contains the value of a controlmodel
      */
-    public static String getDisplayProperty(int itype)
+    private static String getDisplayProperty(int itype)
     {
         switch (itype)
         {
@@ -988,20 +988,20 @@ public class UnoDialog implements EventNames
         }
     }
 
-    public static int getRedColorShare(int _nColor)
+    private static int getRedColorShare(int _nColor)
     {
         int nRed = _nColor / 65536;
         return nRed;
     }
 
-    public static int getGreenColorShare(int _nColor)
+    private static int getGreenColorShare(int _nColor)
     {
         int nRedModulo = _nColor % 65536;
         int nGreen = nRedModulo / 256;
         return nGreen;
     }
 
-    public static int getBlueColorShare(int _nColor)
+    private static int getBlueColorShare(int _nColor)
     {
         int nRedModulo = _nColor % 65536;
         int nGreenModulo = (nRedModulo % 256);

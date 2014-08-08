@@ -165,7 +165,7 @@ public class NameDefinition implements OfficeConstants {
      *
      * @param root XML Node to read from
      */
-    public void readNode(Node root) {
+    private void readNode(Node root) {
 
         String nodeName = root.getNodeName();
         NamedNodeMap cellAtt = root.getAttributes();

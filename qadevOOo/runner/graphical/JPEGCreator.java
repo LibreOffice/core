@@ -91,7 +91,7 @@ public class JPEGCreator extends EnhancedComplexTestCase
  * Create a lot of smaller and nicer Pictures of the big fat pages.
  * Looks better
  */
-    public void createSmallPictures(String _sJPEGSchema)
+    private void createSmallPictures(String _sJPEGSchema)
     {
         ParameterHelper aParam = new ParameterHelper(param);
         if (! aParam.createSmallPictures())
@@ -193,7 +193,7 @@ private static void convertToWidth340(String _sFrom, String _To)
  * @param _aParam
  * @return the schema of the first jpeg name
  */
-    String createJPEG(String _sFile, String _sAdditional, ParameterHelper _aParam)
+    private String createJPEG(String _sFile, String _sAdditional, ParameterHelper _aParam)
         {
             if (_sFile.startsWith("file:///"))
             {
@@ -342,7 +342,7 @@ private static void convertToWidth340(String _sFrom, String _To)
          * with leading '0' (zero)
          * @return number of really existing pages of a given JPEG schema
          */
-    public int countPages(String _sJPEGSchema)
+    private int countPages(String _sJPEGSchema)
     {
         int nPages = 0;
         if (_sJPEGSchema.length() > 0)

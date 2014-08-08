@@ -266,7 +266,7 @@ public class FormDocument extends TextDocument
         }
     }
 
-    public ControlForm getControlFormByName(String _sname)
+    private ControlForm getControlFormByName(String _sname)
     {
         for (int i = 0; i < oControlForms.size(); i++)
         {
@@ -539,7 +539,7 @@ public class FormDocument extends TextDocument
             }
         }
 
-        public void finalizeControls()
+        private void finalizeControls()
         {
             Control[] oLabelControls = getLabelControls();
             Control[] oDBControls = getDatabaseControls();

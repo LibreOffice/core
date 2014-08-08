@@ -122,7 +122,7 @@ public class PlainSourceView extends JScrollPane
 
     /* If the number of lines in the JTextArea has changed then update the
        GlyphGutter */
-    public void doChanged() {
+    private void doChanged() {
         isModified = true;
 
         if (linecount != ta.getLineCount()) {

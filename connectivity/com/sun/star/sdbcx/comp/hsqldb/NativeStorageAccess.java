@@ -45,7 +45,7 @@ public class NativeStorageAccess {
             throw new java.io.IOException();
         }
     }
-    public native void openStream(String name,String key, int mode);
+    private native void openStream(String name,String key, int mode);
     public native void close(String name,String key) throws java.io.IOException;
 
     public native long getFilePointer(String name,String key) throws java.io.IOException;

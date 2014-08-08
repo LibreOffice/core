@@ -359,7 +359,7 @@ public class CommandMetaData extends DBMetaData
         CommandType = _commandType;
     }
 
-    public boolean isnumeric(FieldColumn _oFieldColumn)
+    private boolean isnumeric(FieldColumn _oFieldColumn)
     {
         try
         {
@@ -652,7 +652,7 @@ public class CommandMetaData extends DBMetaData
         return skeycolumnnames;
     }
 
-    public void setCommandComposingAttributes()
+    private void setCommandComposingAttributes()
     {
         try
         {

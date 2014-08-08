@@ -193,7 +193,7 @@ abstract class FilenameHelper_impl implements Filenamer
     /**
      * @return the complete name. Without convert the path separator!
      */
-    String createAbsoluteFilename()
+    private String createAbsoluteFilename()
         {
             return m_sPath + fs + getFilename();
         }
@@ -201,7 +201,7 @@ abstract class FilenameHelper_impl implements Filenamer
     /*
      * remove follows 'file separators'
      */
-    String checkPath(String _sPath)
+    private String checkPath(String _sPath)
         {
             String sPath;
             if (_sPath.endsWith("/") || _sPath.endsWith("\\"))
@@ -215,7 +215,7 @@ abstract class FilenameHelper_impl implements Filenamer
             return sPath;
         }
 
-    String checkFilename(String _sFilename)
+    private String checkFilename(String _sFilename)
         {
             String sFilename;
             if (_sFilename.startsWith("/") || _sFilename.startsWith("\\"))
@@ -229,7 +229,7 @@ abstract class FilenameHelper_impl implements Filenamer
             return sFilename;
         }
 
-    String checkSuffix(String _sSuffix)
+    private String checkSuffix(String _sSuffix)
         {
             String sSuffix;
             if (_sSuffix.startsWith("."))
@@ -243,7 +243,7 @@ abstract class FilenameHelper_impl implements Filenamer
             return sSuffix;
         }
 
-    String splitSuffix(String _sName)
+    private String splitSuffix(String _sName)
         {
             String sSuffix = FileHelper.getSuffix(_sName);
             return checkSuffix(sSuffix);

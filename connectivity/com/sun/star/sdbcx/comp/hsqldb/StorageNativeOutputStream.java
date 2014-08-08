@@ -37,7 +37,7 @@ public class StorageNativeOutputStream {
         openStream(name, (String)key, NativeStorageAccess.WRITE | NativeStorageAccess.TRUNCATE);
     }
 
-    public native void openStream(String name,String key, int mode);
+    private native void openStream(String name,String key, int mode);
     /**
      * Writes <code>len</code> bytes from the specified byte array
      * starting at offset <code>off</code> to this output stream.

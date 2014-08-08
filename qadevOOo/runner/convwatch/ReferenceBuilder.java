@@ -79,7 +79,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
     // The test method itself.
     private String m_sInputPath = "";
     private String m_sReferencePath = "";
-    void initMember()
+    private void initMember()
         {
             // MUST PARAMETER
             // INPUT_PATH ----------
@@ -192,7 +192,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             }
         }
 
-    void runGDC(String _sInputPath, String _sReferencePath)
+    private void runGDC(String _sInputPath, String _sReferencePath)
         {
             // first do a check if the reference not already exist, this is a big speedup, due to the fact,
             // we don't need to start a new office.

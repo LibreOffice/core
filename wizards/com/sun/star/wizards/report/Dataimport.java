@@ -64,7 +64,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         CurReportDocument.StopProcess();
     }
 
-    public void showProgressDisplay(boolean bgetConnection)
+    private void showProgressDisplay(boolean bgetConnection)
     {
         try
         {
@@ -149,7 +149,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         }
     }
 
-    public void importReportData(final XMultiServiceFactory _xMSF, PropertyValue[] _properties)
+    private void importReportData(final XMultiServiceFactory _xMSF, PropertyValue[] _properties)
     {
         if (CurReportDocument.reconnectToDatabase(_xMSF, _properties))
         {

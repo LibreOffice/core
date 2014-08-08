@@ -211,7 +211,7 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.setFocus("lstfieldnames");
     }
 
-    public void toggleButtons()
+    private void toggleButtons()
     {
         boolean benableShiftUpButton = false;
         boolean benableShiftDownButton = false;
@@ -355,7 +355,7 @@ public class FieldFormatter implements XItemListener
         toggleButtons();
     }
 
-    public String[] shiftArrayItem(String[] _slist, int _oldindex, int _shiftcount)
+    private String[] shiftArrayItem(String[] _slist, int _oldindex, int _shiftcount)
     {
         int newindex = _oldindex + _shiftcount;
         if ((newindex >= 0) && (newindex < _slist.length))

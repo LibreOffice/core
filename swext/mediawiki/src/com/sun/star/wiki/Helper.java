@@ -180,7 +180,7 @@ public class Helper
         return m_pConfigStrings[nID];
     }
 
-    synchronized protected static HttpClient GetHttpClient()
+    synchronized private static HttpClient GetHttpClient()
         throws WikiCancelException
     {
         if ( !m_bAllowConnection )
@@ -288,7 +288,7 @@ public class Helper
         return m_xInteractionHandler;
     }
 
-    protected static Protocol GetOwnHttps( int nPort )
+    private static Protocol GetOwnHttps( int nPort )
     {
         return new Protocol( "https", new WikiProtocolSocketFactory(), ( ( nPort < 0 ) ? 443 : nPort ) );
     }
@@ -553,7 +553,7 @@ public class Helper
         return aFilterName;
     }
 
-    protected static XMultiServiceFactory GetConfigurationProvider( XComponentContext xContext )
+    private static XMultiServiceFactory GetConfigurationProvider( XComponentContext xContext )
         throws com.sun.star.uno.Exception
     {
         XMultiServiceFactory xConfigurationProvider = null;
@@ -570,7 +570,7 @@ public class Helper
         return xConfigurationProvider;
     }
 
-    protected static Object GetConfig( XComponentContext xContext, String sNodepath, boolean bWriteAccess )
+    private static Object GetConfig( XComponentContext xContext, String sNodepath, boolean bWriteAccess )
         throws com.sun.star.uno.Exception
     {
         if ( xContext == null || sNodepath == null )
@@ -588,7 +588,7 @@ public class Helper
                                     aArgs );
     }
 
-    protected static XPropertySet GetConfigProps( XComponentContext xContext, String sNodepath )
+    private static XPropertySet GetConfigProps( XComponentContext xContext, String sNodepath )
         throws com.sun.star.uno.Exception
     {
         XPropertySet xProps = UnoRuntime.queryInterface( XPropertySet.class, GetConfig( xContext, sNodepath, true ) );
@@ -619,7 +619,7 @@ public class Helper
         return xNameAccess;
     }
 
-    protected static void SetConfigurationProxy( HostConfiguration aHostConfig, XComponentContext xContext )
+    private static void SetConfigurationProxy( HostConfiguration aHostConfig, XComponentContext xContext )
     {
         if ( aHostConfig == null || xContext == null )
             return;
@@ -733,7 +733,7 @@ public class Helper
         return new HTMLParse().getParser();
     }
 
-    static protected boolean LoginReportsError( String sRespond )
+    static private boolean LoginReportsError( String sRespond )
     {
         boolean bResult = true;
         if ( sRespond != null )
@@ -756,7 +756,7 @@ public class Helper
         return bResult;
     }
 
-    static protected String GetLoginToken( String sLoginPage )
+    static private String GetLoginToken( String sLoginPage )
     {
         String sResult = "";
         if ( sLoginPage != null && sLoginPage.length() > 0 )

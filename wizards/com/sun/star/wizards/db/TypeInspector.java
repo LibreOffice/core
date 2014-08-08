@@ -242,7 +242,7 @@ public class TypeInspector
         return -1;
     }
 
-    public boolean supportsDataType(int _curDataType)
+    private boolean supportsDataType(int _curDataType)
     {
         return (JavaTools.FieldInIntTable(nDataTypeInfos, _curDataType) > -1);
     }

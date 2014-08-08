@@ -237,7 +237,7 @@ public class WikiArticle
         return bResult;
     }
 
-    protected boolean Login()
+    private boolean Login()
         throws java.io.IOException, WikiCancelException
     {
         m_aHostConfig = Helper.Login( m_aMainURI, m_sWikiUser, m_sWikiPass, m_xContext );

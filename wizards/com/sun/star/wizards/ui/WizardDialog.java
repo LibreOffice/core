@@ -91,7 +91,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         return oWizardResource;
     }
 
-    public void activate()
+    private void activate()
     {
         try
         {
@@ -366,7 +366,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     abstract protected void enterStep(int nOldStep, int nNewStep);
 
-    protected void changeToStep(int nNewStep)
+    private void changeToStep(int nNewStep)
     {
         Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, new Integer(nNewStep));
         setCurrentRoadmapItemID((short) (nNewStep));
@@ -522,7 +522,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         enableFinishButton(_bEnableFinish);
     }
 
-    public void enableBackButton(boolean enabled)
+    private void enableBackButton(boolean enabled)
     {
         setControlProperty("btnWizardBack", PropertyNames.PROPERTY_ENABLED, enabled ? Boolean.TRUE : Boolean.FALSE);
     }
@@ -566,7 +566,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    public boolean isStepEnabled(int _nStep)
+    private boolean isStepEnabled(int _nStep)
     {
         try
         {
@@ -612,7 +612,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     }
 
     //TODO discuss with rp
-    protected int getNextAvailableStep()
+    private int getNextAvailableStep()
     {
         if (isRoadmapComplete())
         {
@@ -721,7 +721,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         //should be overwritten by extending class
     }
 
-    public void removeTerminateListener()
+    private void removeTerminateListener()
     {
         if (bTerminateListenermustberemoved)
         {
@@ -736,7 +736,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * if this method was not called before,
      * perform a cancel.
      */
-    public void cancelWizard_1()
+    private void cancelWizard_1()
     {
         cancelWizard();
         removeTerminateListener();

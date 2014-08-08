@@ -65,7 +65,7 @@ public class DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
-    protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
+    private static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
     {
         XComponentLoader aLoader = UnoRuntime.queryInterface(
             XComponentLoader.class,
@@ -205,7 +205,7 @@ public class DocumentHelper
             The initial name of the form. May be null, in this case the default (which
             is an implementation detail) applies.
     */
-    protected XIndexContainer createSubForm( XIndexContainer xParentContainer, String sInitialName )
+    private XIndexContainer createSubForm( XIndexContainer xParentContainer, String sInitialName )
             throws com.sun.star.uno.Exception
     {
         // create a new form
@@ -296,7 +296,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** classifies a document
     */
-    public DocumentType classify( )
+    private DocumentType classify( )
     {
         XServiceInfo xSI = UnoRuntime.queryInterface(
             XServiceInfo.class, m_documentComponent );

@@ -125,7 +125,7 @@ public class RecordParser extends QueryMetaData
         return Any.VOID;
     }
 
-    public Object getColumnValue(int ColIndex, int iType)
+    private Object getColumnValue(int ColIndex, int iType)
     {
         Object oAny = Any.VOID;
         switch (iType)

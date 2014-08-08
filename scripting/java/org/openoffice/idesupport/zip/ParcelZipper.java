@@ -81,7 +81,7 @@ public class ParcelZipper
         return zipParcel(basedir, targetfile, filter);
     }
 
-    public String zipParcel(File basedir, File targetfile, FileFilter filter)
+    private String zipParcel(File basedir, File targetfile, FileFilter filter)
         throws IOException {
         String realpath, tmppath;
 
@@ -557,7 +557,7 @@ public class ParcelZipper
         return result;
     }
 
-    public String getParcelLanguage(File file) throws IOException {
+    private String getParcelLanguage(File file) throws IOException {
         ZipFile zf = null;
         ZipEntry ze = null;
         InputStream is = null;

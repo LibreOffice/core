@@ -143,7 +143,7 @@ public class DocumentHandle {
      * @param newPosSize The new position and size of the window.
      * @return True if resize worked.
      */
-    public boolean resizeDocument(Rectangle newPosSize){
+    private boolean resizeDocument(Rectangle newPosSize){
         wl.resetTrigger();
         xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
                                     newPosSize.Height, PosSize.POSSIZE);

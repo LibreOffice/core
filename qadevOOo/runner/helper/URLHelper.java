@@ -123,7 +123,7 @@ public class URLHelper
      *          an url which represent the given system path
      *          and uses the given protocol
      */
-    public static String getURLWithProtocolFromSystemPath( File aSystemPath, File aBasePath, String sServerURL )
+    private static String getURLWithProtocolFromSystemPath( File aSystemPath, File aBasePath, String sServerURL )
     {
         String sFileURL = URLHelper.getFileURLFromSystemPath(aSystemPath);
         String sBaseURL = URLHelper.getFileURLFromSystemPath(aBasePath  );

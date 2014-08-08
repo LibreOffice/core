@@ -89,7 +89,7 @@ public static double doubleRangeRandom(double lowLimit,double upLimit){
     return realV;
   }
 
-  public static int[] randomSelection(int[] totalIndices, int times) {
+  private static int[] randomSelection(int[] totalIndices, int times) {
     if (times>=totalIndices.length) {
       return totalIndices;
     }

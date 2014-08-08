@@ -30,7 +30,7 @@ import java.io.File;
 public class ConvWatch
 {
 
-    String getBuildID_FromFile(String _sInfoFile)
+    private String getBuildID_FromFile(String _sInfoFile)
     {
         String sBuildID = "";
         IniFile aIniFile = new IniFile(_sInfoFile);
@@ -57,7 +57,7 @@ public class ConvWatch
      * It's also absolutlly impossible to say, how much time this functions consume.
      */
 
-    StatusHelper[] createPostscriptStartCheck(GraphicalTestArguments _aGTA,
+    private StatusHelper[] createPostscriptStartCheck(GraphicalTestArguments _aGTA,
                                               String _sOutputPath, String _sAbsoluteInputFile, String _sAbsoluteReferenceFile)
         throws ConvWatchCancelException
         {
@@ -200,7 +200,7 @@ public class ConvWatch
 
 
     // This creates a status for exact on document
-    static boolean createINIStatus(StatusHelper[] aList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID, String _sRefBuildID)
+    private static boolean createINIStatus(StatusHelper[] aList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID, String _sRefBuildID)
         {
             System.getProperty("file.separator");
             String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
@@ -265,7 +265,7 @@ public class ConvWatch
 
 
 
-    static void createINIStatus_DiffDiff(StatusHelper[] aDiffDiffList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID)
+    private static void createINIStatus_DiffDiff(StatusHelper[] aDiffDiffList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID)
         {
             System.getProperty("file.separator");
             String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);

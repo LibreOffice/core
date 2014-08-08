@@ -150,7 +150,7 @@ public class InspectorAddon {
         }
 
 
-        public static String[] getServiceNames() {
+        private static String[] getServiceNames() {
             return m_serviceNames;
         }
 

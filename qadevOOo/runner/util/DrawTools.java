@@ -119,7 +119,7 @@ public class DrawTools {
      * @return the created XShape
     */
 
-    public XShape createShape( XComponent oDoc, int height, int width, int x,
+    private XShape createShape( XComponent oDoc, int height, int width, int x,
                                                      int y, String kind ) {
         //possible values for kind are 'Ellipse', 'Line' and 'Rectangle'
 

@@ -120,7 +120,7 @@ public class UnoPropertyNode extends UnoNode{
 
 
 
-    protected boolean doesServiceSupportProperty(String _sServiceName, String _sPropertyName){
+    private boolean doesServiceSupportProperty(String _sServiceName, String _sPropertyName){
     try {
         XPropertyTypeDescription[] xPropertyTypeDescriptions = Introspector.getIntrospector().getPropertyDescriptionsOfService(_sServiceName);
         for (int i = 0; i < xPropertyTypeDescriptions.length; i++){
@@ -188,7 +188,7 @@ public class UnoPropertyNode extends UnoNode{
         return aProperty;
     }
 
-    protected  static String getPropertyTypeDescription(Property _aProperty, Object _oUnoObject){
+    private  static String getPropertyTypeDescription(Property _aProperty, Object _oUnoObject){
         return _aProperty.Type.getTypeName() + " " + _aProperty.Name + " = " + _oUnoObject.toString();
     }
 

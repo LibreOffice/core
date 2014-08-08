@@ -120,7 +120,7 @@ class CountNotBlack extends CountPixel
 
 class graphics_stuff
 {
-    public static void countPixel(ImageHelper img, int _w, int _h, CountPixel _aPixelCounter)
+    private static void countPixel(ImageHelper img, int _w, int _h, CountPixel _aPixelCounter)
         {
             for (int y = 0; y < _h; y++) {
                 for (int x = 0; x < _w; x++) {
@@ -153,7 +153,7 @@ class graphics_stuff
 
 public class PixelCounter {
 
-    public int countNotWhitePixel(String _sFile)
+    private int countNotWhitePixel(String _sFile)
         throws java.io.IOException
         {
             ImageHelper aImage = ImageHelper.createImageHelper(_sFile);
@@ -161,7 +161,7 @@ public class PixelCounter {
             return nw;
         }
 
-    public int countNotBlackPixel(String _sFile)
+    private int countNotBlackPixel(String _sFile)
         throws java.io.IOException
         {
             ImageHelper aImage = ImageHelper.createImageHelper(_sFile);

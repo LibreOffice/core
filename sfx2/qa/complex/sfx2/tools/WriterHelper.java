@@ -255,7 +255,7 @@ public class WriterHelper {
     /** creates an instance of com.sun.star.frame.Desktop to query the XDesktop interface
      * @return returns the gained XDesktop interface
      */
-    protected XDesktop getDesktop() {
+    private XDesktop getDesktop() {
         Object desk = null;
 
         try {

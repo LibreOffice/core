@@ -310,7 +310,7 @@ public class GraphicalTestArguments
             return true;
         }
 
-    static void showInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
+    private static void showInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
         {
             if (_sFilterName.length() == 0)
             {
@@ -366,8 +366,8 @@ public class GraphicalTestArguments
         }
     public void setTargetFrameName(String _sTargetFrameName) {m_sTargetFrameName = _sTargetFrameName;}
     public void setPrinterName(String _sName) {m_sPrinterName = _sName;}
-    public void setHidden() { m_bHidden = true;}
-    public void setViewable() {m_bHidden = false;}
+    private void setHidden() { m_bHidden = true;}
+    private void setViewable() {m_bHidden = false;}
     public void setDefaultXMLFormatApp(String _sNameOfApp) {m_sDefaultXMLFormatApplication = _sNameOfApp;}
 
     // get methods
@@ -434,7 +434,7 @@ public class GraphicalTestArguments
      */
     public int getResolutionInDPI() {return m_nResolutionInDPI;}
 
-    public static void checkIfMSWindowsConformPath(String _sPath)
+    private static void checkIfMSWindowsConformPath(String _sPath)
         {
             if (_sPath != null  && _sPath.length() > 1)
             {

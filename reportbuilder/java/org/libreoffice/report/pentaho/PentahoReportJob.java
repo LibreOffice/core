@@ -413,7 +413,7 @@ public class PentahoReportJob implements ReportJob
 
     }
 
-    protected ReportProcessor getProcessorForContentType(final String mimeType)
+    private ReportProcessor getProcessorForContentType(final String mimeType)
             throws ReportExecutionException
     {
         final ReportProcessor ret;

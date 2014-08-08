@@ -70,7 +70,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
      * We have to remove this!!!
      * @return
      */
-    ReportTextDocument getDoc()
+    private ReportTextDocument getDoc()
     {
         if (m_aDoc == null)
         {
@@ -142,7 +142,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         sMsgNoConnection = m_resource.getResText(UIConsts.RID_DB_COMMON + 14);
     }
 
-    public void addTextSectionCopies()
+    private void addTextSectionCopies()
     {
         m_aDoc.setLayoutSectionsVisible(false);
         XTextCursor xTextCursor = ReportTextDocument.createTextCursor(m_aDoc.xTextDocument.getText());

@@ -182,7 +182,7 @@ public class OfficeDocument
         return xFrame;
     }
 
-    public static XFrame createNewPreviewFrame(XMultiServiceFactory xMSF, XTerminateListener listener)
+    private static XFrame createNewPreviewFrame(XMultiServiceFactory xMSF, XTerminateListener listener)
     {
         XToolkit xToolkit = null;
         try

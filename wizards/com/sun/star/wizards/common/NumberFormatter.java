@@ -151,7 +151,7 @@ public class NumberFormatter
     /**
      * @return a numberformat for a FormatString.
      */
-    public int defineNumberFormat(String _FormatString, Locale _aLocale)
+    private int defineNumberFormat(String _FormatString, Locale _aLocale)
     {
         try
         {

@@ -121,7 +121,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
        = helper
        ================================================================== */
     /* ------------------------------------------------------------------ */
-    protected void initFilterDates()
+    private void initFilterDates()
     {
         m_aFilterDates.clear();
         java.util.Date aNowAndHere = new java.util.Date();
@@ -162,7 +162,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     /** translates a date from the AWT Toolkit format to a java.util.date, or
         vice versa.
     */
-    protected Object translateDate( Object aDate ) throws java.lang.Exception
+    private Object translateDate( Object aDate ) throws java.lang.Exception
     {
         Object aReturn = null;
 
@@ -201,7 +201,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     /** translates the given date into the ODBC date notation, which then can be used
         for setting a filter at a row set
     */
-    protected String getOdbcDate( Object aDate ) throws java.lang.Exception
+    private String getOdbcDate( Object aDate ) throws java.lang.Exception
     {
         String sOdbcDate = "";
         if ( null != aDate )
@@ -235,7 +235,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     }
 
     /* ------------------------------------------------------------------ */
-    protected void updateApplyButton()
+    private void updateApplyButton()
     {
         try
         {
@@ -251,7 +251,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     /* ------------------------------------------------------------------ */
     /** creates a normalized calendar object from the given java.util.Date
     */
-    protected GregorianCalendar getCalendarObject( java.util.Date aDate )
+    private GregorianCalendar getCalendarObject( java.util.Date aDate )
     {
         // the date part
         GregorianCalendar aReturn = null;
@@ -270,7 +270,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     }
 
     /* ------------------------------------------------------------------ */
-    final protected short getCurrentSelectedFilter( ) throws com.sun.star.uno.Exception
+    final private short getCurrentSelectedFilter( ) throws com.sun.star.uno.Exception
     {
         short[] aSelected = (short[])m_xFilterList.getPropertyValue( "SelectedItems" );
         if ( 0 < aSelected.length )
@@ -282,13 +282,13 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     /** checks if the given filter index referes to the "<other>" entry which
         allows the user to manually enter a date
     */
-    final protected boolean isManualFilter( short nFilterIndex )
+    final private boolean isManualFilter( short nFilterIndex )
     {
         return ( 5 == nFilterIndex );
     }
 
     /* ------------------------------------------------------------------ */
-    protected void updateFilterControl()
+    private void updateFilterControl()
     {
         try
         {
@@ -336,7 +336,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         seems to always return false, as well as . Thus here is a method which compare two calendars,
         restricted to their date part</p>
     */
-    protected boolean equalDate( Calendar aLHS, Calendar aRHS )
+    private boolean equalDate( Calendar aLHS, Calendar aRHS )
     {
         if ( ( null == aLHS ) != ( null == aRHS ) )
             // only one of them is null
@@ -356,7 +356,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         @return
             the index of the newly added date filter in the filter list
     */
-    protected short addCurrentFilter( ) throws java.lang.Exception
+    private short addCurrentFilter( ) throws java.lang.Exception
     {
         // the current string items
         String[] aOldFilterItems = (String[])m_xFilterList.getPropertyValue( "StringItemList" );
@@ -405,7 +405,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     }
 
     /* ------------------------------------------------------------------ */
-    protected void executeCurrentFilter()
+    private void executeCurrentFilter()
     {
         try
         {

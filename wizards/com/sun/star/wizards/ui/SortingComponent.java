@@ -194,7 +194,7 @@ public class SortingComponent
      * sets the controls of a Sorting criterion to readonly or not.
      * @param _index index of the Sorting criterion
      */
-    public void setReadOnly(int _index, boolean _breadonly)
+    private void setReadOnly(int _index, boolean _breadonly)
     {
         CurUnoDialog.setControlProperty("lstSort" + Integer.toString(_index + 1), PropertyNames.READ_ONLY, Boolean.valueOf(_breadonly));
     }

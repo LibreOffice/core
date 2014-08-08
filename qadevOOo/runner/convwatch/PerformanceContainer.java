@@ -116,7 +116,7 @@ public class PerformanceContainer /* extends *//* implements */ {
             out.write("storeaspdftime="  + String.valueOf(m_nTime[ StoreAsPDF ]) + ls);
         }
 
-    public static double stringToDouble(String _sStr)
+    private static double stringToDouble(String _sStr)
         {
             double nValue = 0;
             try
@@ -130,7 +130,7 @@ public class PerformanceContainer /* extends *//* implements */ {
             return nValue;
         }
 
-    public static long secondsToMilliSeconds(double _nSeconds)
+    private static long secondsToMilliSeconds(double _nSeconds)
         {
             return (long)(_nSeconds * 1000.0);
         }

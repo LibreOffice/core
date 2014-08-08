@@ -84,7 +84,7 @@ public class NumericalHelper
      * @return a byte
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
-    public static byte toByte(Object aValue)
+    private static byte toByte(Object aValue)
             throws com.sun.star.lang.IllegalArgumentException
     {
 
@@ -295,7 +295,7 @@ public class NumericalHelper
     @return true, if the parameter aValue is type of real numbers
     @deprecate, use isRealNumber() instead.
      */
-    public static boolean isNumerical(Object aValue)
+    private static boolean isNumerical(Object aValue)
     {
         try
         {
@@ -335,7 +335,7 @@ public class NumericalHelper
     @param aValue a object this can contain anything
      * @return true, if the value is type of any integer values. double / float are not(!) integer values
      */
-    public static boolean isInteger(Object aValue) throws com.sun.star.lang.IllegalArgumentException
+    private static boolean isInteger(Object aValue) throws com.sun.star.lang.IllegalArgumentException
     {
         TypeObject aTypeObject = getTypeObject(aValue);
         switch (aTypeObject.iType)
@@ -449,7 +449,7 @@ public class NumericalHelper
      * @return a long
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
-    public static long toLong(Object aValue)
+    private static long toLong(Object aValue)
             throws com.sun.star.lang.IllegalArgumentException
     {
         long retValue = 0;
@@ -504,7 +504,7 @@ public class NumericalHelper
      * @return a float
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
-    public static float toFloat(Object aValue)
+    private static float toFloat(Object aValue)
             throws com.sun.star.lang.IllegalArgumentException
     {
         float retValue = (float) 0.0;
@@ -614,7 +614,7 @@ public class NumericalHelper
      * @return a String
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
-    public static String toString(Object aValue)
+    private static String toString(Object aValue)
             throws com.sun.star.lang.IllegalArgumentException
     {
         String retValue = null;
@@ -718,7 +718,7 @@ public class NumericalHelper
      * @param anArrayValue a value that is constructed into an array
      * @return an integer array
      */
-    public static int[] toIntArray(Object anArrayValue)
+    private static int[] toIntArray(Object anArrayValue)
             throws com.sun.star.lang.IllegalArgumentException
     {
         int[] retValue = null;
@@ -747,7 +747,7 @@ public class NumericalHelper
      * @param anArrayValue a value that is constructed into an array
      * @return a byte array
      */
-    public static byte[] toByteArray(Object anArrayValue)
+    private static byte[] toByteArray(Object anArrayValue)
             throws com.sun.star.lang.IllegalArgumentException
     {
         byte[] retValue = null;
@@ -776,7 +776,7 @@ public class NumericalHelper
      * @param anArrayValue a value that is constructed into an array
      * @return a short array
      */
-    public static short[] toShortArray(Object anArrayValue)
+    private static short[] toShortArray(Object anArrayValue)
             throws com.sun.star.lang.IllegalArgumentException
     {
         short[] retValue = null;
@@ -805,7 +805,7 @@ public class NumericalHelper
      * @param anArrayValue a value that is constructed into an array
      * @return a short array
      */
-    public static String[] toStringArray(Object anArrayValue)
+    private static String[] toStringArray(Object anArrayValue)
             throws com.sun.star.lang.IllegalArgumentException
     {
         String[] retValue = null;
@@ -1134,7 +1134,7 @@ public class NumericalHelper
      * @return
      * @throws com.sun.star.lang.IllegalArgumentException
      */
-    static int getInt(TypeObject typeObject)
+    private static int getInt(TypeObject typeObject)
             throws com.sun.star.lang.IllegalArgumentException
     {
         if (typeObject.iType != INT_TYPE)
@@ -1149,7 +1149,7 @@ public class NumericalHelper
      * get the simple float type
      * @throws com.sun.star.lang.IllegalArgumentException
      */
-    static float getFloat(TypeObject typeObject)
+    private static float getFloat(TypeObject typeObject)
             throws com.sun.star.lang.IllegalArgumentException
     {
         if (typeObject.iType != FLOAT_TYPE)
@@ -1348,7 +1348,7 @@ public class NumericalHelper
         return roundDouble(_Dblvalue.doubleValue(), _ndecimals);
     }
 
-    public static double roundDouble(double _dblvalue, int _ndecimals)
+    private static double roundDouble(double _dblvalue, int _ndecimals)
     {
         double dblfactor = java.lang.Math.pow(10.0, _ndecimals);
         return ((int) (_dblvalue * dblfactor)) / dblfactor;

@@ -116,7 +116,7 @@ public class RecoveryTools {
     /**
      * halt the thread for some time
      */
-    public void pause(int sleepTime){
+    private void pause(int sleepTime){
         sleep(sleepTime);
     }
 

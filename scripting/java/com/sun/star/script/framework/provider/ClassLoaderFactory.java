@@ -41,7 +41,7 @@ public class ClassLoaderFactory
         }
         return getURLClassLoader( parent, classPath );
     }
-    public static ClassLoader getURLClassLoader( ClassLoader parent, URL[] classpath)
+    private static ClassLoader getURLClassLoader( ClassLoader parent, URL[] classpath)
     {
         return new URLClassLoader( classpath, parent);
     }

@@ -76,7 +76,7 @@ public class FLTools
     /* ------------------------------------------------------------------ */
     /** returns the name of the given form component
     */
-    public static String getName( Object aFormComponent )
+    private static String getName( Object aFormComponent )
     {
         XNamed xNamed = UnoRuntime.queryInterface( XNamed.class,
             aFormComponent );
@@ -159,7 +159,7 @@ public class FLTools
     /* ------------------------------------------------------------------ */
     /** retrieves the parent of the given object
     */
-    static <T> T getParent( Object aComponent, Class<T> aInterfaceClass )
+    private static <T> T getParent( Object aComponent, Class<T> aInterfaceClass )
     {
         XChild xAsChild = UnoRuntime.queryInterface( XChild.class, aComponent );
 

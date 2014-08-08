@@ -68,7 +68,7 @@ public class OfficePrint {
     /**
      * shows the FilterName and MediaType from the given XComponent
      */
-    static String getDocumentType( XComponent _aDoc )
+    private static String getDocumentType( XComponent _aDoc )
         {
             XModel xModel =  UnoRuntime.queryInterface( XModel.class, _aDoc);
             PropertyValue[] aArgs = xModel.getArgs();
@@ -85,7 +85,7 @@ public class OfficePrint {
             return "";
         }
 
-    static void showDocumentType( XComponent _aDoc )
+    private static void showDocumentType( XComponent _aDoc )
         {
             String sNameValue = getDocumentType(_aDoc);
             GlobalLogWriter.get().println("  Property: '" + sNameValue);
@@ -96,7 +96,7 @@ public class OfficePrint {
      * or we crash here.
      * Be aware, the ownership of the document gets to you, you have to close it.
      */
-    public static XComponent loadFromURL(GraphicalTestArguments _aGTA,
+    private static XComponent loadFromURL(GraphicalTestArguments _aGTA,
                                          String _sInputURL)
         {
             XComponent aDoc = null;
@@ -176,7 +176,7 @@ public class OfficePrint {
             return aDoc;
         }
 
-    static boolean exportToPDF(XComponent _xComponent, String _sDestinationName)
+    private static boolean exportToPDF(XComponent _xComponent, String _sDestinationName)
         {
             XServiceInfo xServiceInfo =
                  UnoRuntime.queryInterface(
@@ -209,7 +209,7 @@ public class OfficePrint {
             return bWorked;
         }
 
-    static String getFilterName_forPDF(XServiceInfo xServiceInfo)
+    private static String getFilterName_forPDF(XServiceInfo xServiceInfo)
         {
             String filterName = "";
 
@@ -254,7 +254,7 @@ public class OfficePrint {
 
 
 
-    public static boolean storeAsPDF(GraphicalTestArguments _aGTA,
+    private static boolean storeAsPDF(GraphicalTestArguments _aGTA,
                                      String _sInputURL,
                                      String _sOutputURL)
         {
@@ -274,7 +274,7 @@ public class OfficePrint {
             return bBack;
         }
 
-    public static boolean storeAsPDF(GraphicalTestArguments _aGTA,
+    private static boolean storeAsPDF(GraphicalTestArguments _aGTA,
                                      XComponent _aDoc,
                                      String _sOutputURL)
         {
@@ -304,7 +304,7 @@ public class OfficePrint {
      *         check existence of _sPrintFileURL
      */
 
-    public static boolean printToFileWithOOo(GraphicalTestArguments _aGTA,
+    private static boolean printToFileWithOOo(GraphicalTestArguments _aGTA,
                                              String _sInputURL,
                                              String _sOutputURL,
                                              String _sPrintFileURL)
@@ -335,7 +335,7 @@ public class OfficePrint {
         }
 
 
-    public static void createInfoFile(String _sFile, GraphicalTestArguments _aGTA)
+    private static void createInfoFile(String _sFile, GraphicalTestArguments _aGTA)
         {
             createInfoFile(_sFile, _aGTA, "");
         }
@@ -819,7 +819,7 @@ public class OfficePrint {
 
 
 
-    public static String getInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
+    private static String getInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
         {
             if (_sFilterName.length() == 0)
             {
@@ -892,7 +892,7 @@ public class OfficePrint {
 
 
 
-    static String getServiceNameFromFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
+    private static String getServiceNameFromFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
         {
             if (_sFilterName.length() == 0)
             {
@@ -965,7 +965,7 @@ public class OfficePrint {
         }
 
 
-    public static String getFileExtension(String _sInternalFilterName, XMultiServiceFactory _xMSF)
+    private static String getFileExtension(String _sInternalFilterName, XMultiServiceFactory _xMSF)
         {
             if (_sInternalFilterName.length() == 0)
             {

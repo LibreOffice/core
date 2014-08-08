@@ -93,7 +93,7 @@ public class Helper {
      *@param      connectURL         Connect URL. Example : -url=file:///
      *@return  Created identifier object for given URL
      */
-    public XContent createUCBContent( String connectURL ) throws java.lang.Exception {
+    private XContent createUCBContent( String connectURL ) throws java.lang.Exception {
         XContent content = null;
         if ( connectURL != null && !connectURL.equals( "" )) {
 

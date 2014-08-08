@@ -71,7 +71,7 @@ public class RegistryTools {
     * return <code>true</code> if key names, value types
     * and values are equal, else returns <code>false</code>.
     */
-    public static boolean compareKeys
+    private static boolean compareKeys
         (XRegistryKey key1, XRegistryKey key2) {
 
         if (key1 == null || key2 == null ||
@@ -152,7 +152,7 @@ public class RegistryTools {
     * @param keyName Full key name.
     * @return Short key name.
     */
-    public static String getShortKeyName(String keyName) {
+    private static String getShortKeyName(String keyName) {
         if (keyName == null) return null ;
         int idx = keyName.lastIndexOf("/") ;
         if (idx < 0) return keyName ;
@@ -166,7 +166,7 @@ public class RegistryTools {
     * comparing from children of root keys.
     * @return <code>true</code> if keys and their sub keys are equal.
     */
-    protected static boolean compareKeyTrees
+    private static boolean compareKeyTrees
         (XRegistryKey tree1, XRegistryKey tree2, boolean compareRoot) {
 
         if (compareRoot && !compareKeys(tree1, tree2)) return false ;

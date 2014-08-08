@@ -87,7 +87,7 @@ public class DocumentViewHelper
         @return
             the dispatcher for the URL in question
     */
-    public XDispatch getDispatcher( URL[] aURL ) throws java.lang.Exception
+    private XDispatch getDispatcher( URL[] aURL ) throws java.lang.Exception
     {
         XDispatch xReturn = null;
 
@@ -169,7 +169,7 @@ public class DocumentViewHelper
     /* ------------------------------------------------------------------ */
     /** retrieves the form controller for a given logical form
      */
-    public XFormController getFormController( XForm _form )
+    private XFormController getFormController( XForm _form )
     {
         XFormLayerAccess formLayerAccess = query( XFormLayerAccess.class );
         return formLayerAccess.getFormController( _form );

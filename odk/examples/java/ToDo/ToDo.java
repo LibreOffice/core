@@ -130,7 +130,7 @@ public class ToDo {
             return getServiceNames();
         }
 
-        public static String[] getServiceNames() {
+        private static String[] getServiceNames() {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }
@@ -578,7 +578,7 @@ public class ToDo {
          * @param gregCal Date to be converted.
          * @return string (converted gregorian calendar).
          */
-        public String getStringFromGregorianCalendar( GregorianCalendar gregCal ) {
+        private String getStringFromGregorianCalendar( GregorianCalendar gregCal ) {
             String sDate = ( gregCal.get( Calendar.MONTH ) + 1 )
                 + STRING_SEPARATOR + gregCal.get( Calendar.DATE )
 //                + STRING_SEPARATOR + ( gregCal.get( Calendar.MONTH ) + 1 )
@@ -591,7 +591,7 @@ public class ToDo {
          * @param sDate String to be converted.
          * @return The result of the converting of the string.
          */
-        public GregorianCalendar getGregorianCalendarFromString( String sDate ) {
+        private GregorianCalendar getGregorianCalendarFromString( String sDate ) {
             int []intDateValue = this.getDateValuesFromString( sDate );
 
             return( new GregorianCalendar( intDateValue[ 2 ], intDateValue[ 0 ],
@@ -602,7 +602,7 @@ public class ToDo {
          * @param sDate String to be parsed.
          * @return Returns an array of integer variables.
          */
-        public int[] getDateValuesFromString( String sDate) {
+        private int[] getDateValuesFromString( String sDate) {
             int[] intDateValues = new int[ 3 ];
 
             int intPositionFirstTag = sDate.indexOf( STRING_SEPARATOR );
@@ -628,7 +628,7 @@ public class ToDo {
          * @param intColumn Number of column.
          * @return String from the specified cell.
          */
-        public String getStringFromCell( XCellRange xcellrange, int intRow,
+        private String getStringFromCell( XCellRange xcellrange, int intRow,
                                          int intColumn ) {
             XTextRange xtextrangeStartDate = null;
 
@@ -653,7 +653,7 @@ public class ToDo {
          * @param intColumn Number of column.
          * @param sDate Date to write to the cell.
          */
-        public void setStringToCell( XCellRange xcellrange, int intRow,
+        private void setStringToCell( XCellRange xcellrange, int intRow,
                                      int intColumn, String sDate ) {
             try {
                 // Getting the cell holding the information on the day to start
@@ -675,7 +675,7 @@ public class ToDo {
          * @param intRow Number of row.
          * @param intColumn Number of column.
          */
-        public void setDayOfWeek( GregorianCalendar gregCal,
+        private void setDayOfWeek( GregorianCalendar gregCal,
                                   XCellRange xcellrange, int intRow,
                                   int intColumn) {
             int intDayOfWeek = gregCal.get( Calendar.DAY_OF_WEEK );
@@ -703,7 +703,7 @@ public class ToDo {
          * @param xfunctionaccess Provides access to functions of the Calc.
          * @param intYear Year to calculate the official holidays.
          */
-        public void getOfficialHolidays(
+        private void getOfficialHolidays(
         ArrayList<Object> vectorHolidays,
         XCellRange xcellrange,
         XFunctionAccess xfunctionaccess,
@@ -795,7 +795,7 @@ public class ToDo {
          * @return The gregorian date before or after a specified number of
          *         workdays.
          */
-        public GregorianCalendar getWorkday(
+        private GregorianCalendar getWorkday(
             GregorianCalendar gregCalStartDate,
             int intDays, Object[][] objectHolidays,
             XFunctionAccess xfunctionaccess ) {
@@ -839,7 +839,7 @@ public class ToDo {
          * @param xcellrange Providing the cells.
          * @param xfunctionaccess Provides the access to functions of the Calc.
          */
-        public void getPrivateHolidays( ArrayList<Object> vectorHolidays,
+        private void getPrivateHolidays( ArrayList<Object> vectorHolidays,
                                         XCellRange xcellrange,
                                         XFunctionAccess xfunctionaccess ) {
             try {
@@ -882,7 +882,7 @@ public class ToDo {
         /** Showing the stack trace in a JOptionPane.
          * @param sMessage The message to show.
          */
-        public void showMessage( String sMessage ) {
+        private void showMessage( String sMessage ) {
             javax.swing.JFrame jframe = new javax.swing.JFrame();
             jframe.setLocation(100, 100);
             jframe.setSize(300, 200);
@@ -898,7 +898,7 @@ public class ToDo {
          * @param exception The occurred exception.
          * @see #showMessage(String)
          */
-        public void showExceptionMessage( Exception exception ) {
+        private void showExceptionMessage( Exception exception ) {
             java.io.StringWriter swriter = new java.io.StringWriter();
             java.io.PrintWriter printwriter =
                 new java.io.PrintWriter( swriter );

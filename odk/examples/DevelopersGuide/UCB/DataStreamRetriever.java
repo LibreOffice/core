@@ -117,7 +117,7 @@ public class DataStreamRetriever {
      *
      *@param      args   Arguments
      */
-    public void parseArguments( String[] args ) throws java.lang.Exception {
+    private void parseArguments( String[] args ) throws java.lang.Exception {
 
         for ( int i = 0; i < args.length; i++ ) {
             if ( args[i].startsWith( "-url=" )) {
@@ -137,7 +137,7 @@ public class DataStreamRetriever {
     /**
      * Print the commands options
      */
-    public void printCmdLineUsage() {
+    private void printCmdLineUsage() {
         System.out.println(
             "Usage   : DataStreamRetriever -url=..." );
         System.out.println(
@@ -149,7 +149,7 @@ public class DataStreamRetriever {
     /**
      *  Print Stream content.
      */
-    public void printStream( XInputStream data )
+    private void printStream( XInputStream data )
         throws com.sun.star.uno.Exception {
 
 

@@ -65,7 +65,7 @@ public class OutProducerFactory {
      * @param param The test parameters
      * @return The database out producer, or null if it couldn't be created.
      */
-    public static LogWriter createDataBaseOutProducer(HashMap<String,Object> param) {
+    private static LogWriter createDataBaseOutProducer(HashMap<String,Object> param) {
         String dataProducerName = (String)param.get("DataBaseOutProducer");
         if (dataProducerName == null) {
             String testBaseName = (String)param.get("TestBase");
@@ -89,7 +89,7 @@ public class OutProducerFactory {
      * As a fallback, create a simple out producer, if all else failed.
      * @return A simple out producer, writing to the screen.
      */
-    public static LogWriter createSimpleOutProducer() {
+    private static LogWriter createSimpleOutProducer() {
         return new SimpleOutProducer();
     }
 

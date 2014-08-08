@@ -177,7 +177,7 @@ public final class PalmDB {
      *  @param  version    The PDB header version.
      *  @param  attribute  The PDB header attribute.
      */
-    public void setAttributes (int creatorID, int typeID, int version, short attribute) {
+    private void setAttributes (int creatorID, int typeID, int version, short attribute) {
         this.creatorID = creatorID;
         this.typeID = typeID;
         this.version = version;

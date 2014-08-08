@@ -65,7 +65,7 @@ public class AbstractListener
         mHashtable.put(componentName + eventName, mi);
     }
 
-    public MethodInvocation get(String componentName, String eventName)
+    private MethodInvocation get(String componentName, String eventName)
     {
         return mHashtable.get(componentName + eventName);
     }

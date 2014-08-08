@@ -130,7 +130,7 @@ class ControlLock implements XRowSetListener
     /* ------------------------------------------------------------------ */
     /** updates the locks on the affected controls
     */
-    protected void updateLocks( )
+    private void updateLocks( )
     {
         try
         {

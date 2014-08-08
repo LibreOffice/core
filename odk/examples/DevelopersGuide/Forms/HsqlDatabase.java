@@ -98,7 +98,7 @@ public class HsqlDatabase
      * the ownership of the connection, so you don't need to (and should not) dispose/close it.
      *
      */
-    public XConnection defaultConnection() throws SQLException
+    private XConnection defaultConnection() throws SQLException
     {
         if ( m_connection != null )
             return m_connection;
@@ -131,7 +131,7 @@ public class HsqlDatabase
      *  Any CloseVetoExceptions fired by third parties are ignored, and any reference to the
      *  database document is released.
      */
-    public void close()
+    private void close()
     {
         // close connection
         XCloseable closeConn = UnoRuntime.queryInterface( XCloseable.class,
@@ -166,7 +166,7 @@ public class HsqlDatabase
 
     /** closes the document, and deletes the underlying file
      */
-    public void closeAndDelete()
+    private void closeAndDelete()
     {
         close();
 

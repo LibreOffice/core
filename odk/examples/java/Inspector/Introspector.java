@@ -119,7 +119,7 @@ public class Introspector extends WeakBase{
     }
 
 
-    protected XMultiComponentFactory getXMultiComponentFactory(){
+    private XMultiComponentFactory getXMultiComponentFactory(){
         return m_xMultiComponentFactory;
     }
 
@@ -357,7 +357,7 @@ public class Introspector extends WeakBase{
     }
 
 
-    protected void initTypeDescriptionManager() {
+    private void initTypeDescriptionManager() {
     try {
         Object oTypeDescriptionManager = getXComponentContext().getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
         m_xTDEnumerationAccess = UnoRuntime.queryInterface(XTypeDescriptionEnumerationAccess.class, oTypeDescriptionManager);
@@ -366,7 +366,7 @@ public class Introspector extends WeakBase{
     }}
 
 
-    protected XTypeDescriptionEnumerationAccess getXTypeDescriptionEnumerationAccess(){
+    private XTypeDescriptionEnumerationAccess getXTypeDescriptionEnumerationAccess(){
         return m_xTDEnumerationAccess;
     }
 
@@ -447,7 +447,7 @@ public class Introspector extends WeakBase{
     }
 
 
-    public XInterfaceTypeDescription[] getInterfaceDescriptionsOfService(String _sServiceName){
+    private XInterfaceTypeDescription[] getInterfaceDescriptionsOfService(String _sServiceName){
     try {
         XServiceTypeDescription xServiceTypeDescription = getServiceTypeDescription(_sServiceName, com.sun.star.uno.TypeClass.INTERFACE);
         if (xServiceTypeDescription != null){
@@ -461,7 +461,7 @@ public class Introspector extends WeakBase{
     }
 
 
-    static boolean hasByName(XTypeDescription[] _xTypeDescriptions, String _sTypeName){
+    private static boolean hasByName(XTypeDescription[] _xTypeDescriptions, String _sTypeName){
         for (int i = 0; i < _xTypeDescriptions.length; i++){
             if (_xTypeDescriptions[i].getName().equals(_sTypeName)){
                 return true;
@@ -508,7 +508,7 @@ public class Introspector extends WeakBase{
     }
 
 
-    public static boolean isOfUnoType(Object _oUnoObject, String _sTypeName){
+    private static boolean isOfUnoType(Object _oUnoObject, String _sTypeName){
         boolean bIsUnoObject = false;
         if (_oUnoObject != null){
             if (_oUnoObject.getClass().isArray()){

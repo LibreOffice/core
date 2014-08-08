@@ -590,7 +590,7 @@ public class SOfficeFactory {
 
     } // finished openDoc
 
-    public XComponent openDoc(String kind, String frameName, PropertyValue[] mediaDescriptor)
+    private XComponent openDoc(String kind, String frameName, PropertyValue[] mediaDescriptor)
         throws com.sun.star.lang.IllegalArgumentException,
         com.sun.star.io.IOException,
         com.sun.star.uno.Exception {

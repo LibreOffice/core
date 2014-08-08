@@ -145,7 +145,7 @@ public class WikiPropDialog extends WikiDialog{
         }
     }
 
-    public void fillDocList()
+    private void fillDocList()
     {
         XPropertySet xPS = GetPropSet("ArticleText");
         try
@@ -180,7 +180,7 @@ public class WikiPropDialog extends WikiDialog{
     }
 
 
-    public void switchSendButtonIfNecessary()
+    private void switchSendButtonIfNecessary()
     {
         XPropertySet xSendButton = GetPropSet( "SendButton" );
         if ( xSendButton != null )
@@ -206,7 +206,7 @@ public class WikiPropDialog extends WikiDialog{
         }
     }
 
-    public void EnableControls( boolean bEnable )
+    private void EnableControls( boolean bEnable )
     {
         try
         {

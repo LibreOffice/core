@@ -308,7 +308,7 @@ class FrameNode extends TreeNode
         return super.toString()
             + "\tname: " + m_Name + "\tanchor: " + toString(m_Anchor);
     }
-    static String toString(TextContentAnchorType anchor) {
+    private static String toString(TextContentAnchorType anchor) {
         switch (anchor.getValue()) {
             case AS_CHARACTER_value: return "AS_CHARACTER";
             case AT_CHARACTER_value: return "AT_CHARACTER";
@@ -633,25 +633,25 @@ class FuzzyTester
         m_BufferActual.clear();
     }
 
-    void printDiff(String prefix, String expected, String actual)
+    private void printDiff(String prefix, String expected, String actual)
     {
         System.out.println(prefix +
                 ":\texpected: " + expected + "\tactual: " + actual);
     }
 
-    void printNesting(TreeNode node, TreeNode nesting)
+    private void printNesting(TreeNode node, TreeNode nesting)
     {
         System.out.println("node: " + node.toString()
                 + " possibly moved across nesting " + nesting.toString());
     }
 
-    void printMissing(TreeNode node)
+    private void printMissing(TreeNode node)
     {
         System.out.println("   missing node: " + node.toString());
 
     }
 
-    void printUnexpected(TreeNode node)
+    private void printUnexpected(TreeNode node)
     {
         System.out.println("unexpected node: " + node.toString());
 
@@ -675,7 +675,7 @@ class EnumConverter
         return ret;
     }
 
-    TreeNode convertChildren(XEnumeration xEnum) throws Exception
+    private TreeNode convertChildren(XEnumeration xEnum) throws Exception
     {
         while (xEnum.hasMoreElements()) {
             TreeNode node;
@@ -890,7 +890,7 @@ abstract class Inserter
         xContent.attach(xCursor);
     }
 
-    XTextContent makeFrame(String name, TextContentAnchorType anchor)
+    private XTextContent makeFrame(String name, TextContentAnchorType anchor)
         throws Exception
     {
         Object xFrame =
@@ -931,7 +931,7 @@ abstract class Inserter
         }
     }
 
-    XTextContent makeBookmark(String name) throws Exception
+    private XTextContent makeBookmark(String name) throws Exception
     {
         Object xBookmark =
             m_xDocFactory.createInstance("com.sun.star.text.Bookmark");
@@ -1052,7 +1052,7 @@ class TreeInserter extends Inserter
         }
     }
 
-    void insertChildren(TreeNodeEnum children) throws Exception
+    private void insertChildren(TreeNodeEnum children) throws Exception
     {
         while (children.hasNext()) {
             m_xCursor.gotoEndOfParagraph(false);
@@ -1147,7 +1147,7 @@ class TreeInserter extends Inserter
         }
     }
 
-    XParagraphCursor mkCursor(XTextRange xRange)
+    private XParagraphCursor mkCursor(XTextRange xRange)
     {
         XTextCursor xCursor = m_xText.createTextCursorByRange(xRange);
         XParagraphCursor xParaCursor = UnoRuntime.queryInterface(XParagraphCursor.class, xCursor);
@@ -1179,7 +1179,7 @@ class RangeInserter extends Inserter
         return insertNode(m_xCursor, range.getNode());
     }
 
-    XTextContent insertNode(XParagraphCursor xCursor, TreeNode node)
+    private XTextContent insertNode(XParagraphCursor xCursor, TreeNode node)
         throws Exception
     {
         String type = node.getType();

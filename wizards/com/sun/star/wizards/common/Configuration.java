@@ -196,7 +196,7 @@ public abstract class Configuration
         }
     }
 
-    public static String getLocaleString(XMultiServiceFactory xMSF, String root, String key)
+    private static String getLocaleString(XMultiServiceFactory xMSF, String root, String key)
     {
         String sLocale = PropertyNames.EMPTY_STRING;
         try
@@ -215,7 +215,7 @@ public abstract class Configuration
         return sLocale;
     }
 
-    public static Locale getLocale(XMultiServiceFactory xMSF, String root, String key)
+    private static Locale getLocale(XMultiServiceFactory xMSF, String root, String key)
     {
         Locale aLocLocale = new Locale();
         String sLocale = getLocaleString(xMSF, root, key);
@@ -382,7 +382,7 @@ public abstract class Configuration
         return getChildNodebyDisplayName(_xNameAccessNode, _displayname, PropertyNames.PROPERTY_NAME);
     }
 
-    public static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname, String _nodename)
+    private static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname, String _nodename)
     {
         String[] snames = null;
         try

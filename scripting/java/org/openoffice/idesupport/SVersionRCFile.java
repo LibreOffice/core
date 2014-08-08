@@ -77,7 +77,7 @@ public class SVersionRCFile {
         return(createInstance(DEFAULT_NAME));
     }
 
-    public static SVersionRCFile createInstance(String name) {
+    private static SVersionRCFile createInstance(String name) {
         SVersionRCFile result = null;
 
         synchronized(SVersionRCFile.class) {

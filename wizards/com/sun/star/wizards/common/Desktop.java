@@ -80,7 +80,7 @@ public class Desktop
         return xFrameSuppl.getActiveFrame();
     }
 
-    public static XComponent getActiveComponent(XMultiServiceFactory _xMSF)
+    private static XComponent getActiveComponent(XMultiServiceFactory _xMSF)
     {
         XFrame xFrame = getActiveFrame(_xMSF);
         return UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
@@ -98,7 +98,7 @@ public class Desktop
         return UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
     }
 
-    public static XDispatch getDispatcher(XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL)
+    private static XDispatch getDispatcher(XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL)
     {
         try
         {
@@ -114,7 +114,7 @@ public class Desktop
         return null;
     }
 
-    public static com.sun.star.util.URL getDispatchURL(XMultiServiceFactory xMSF, String _sURL)
+    private static com.sun.star.util.URL getDispatchURL(XMultiServiceFactory xMSF, String _sURL)
     {
         try
         {
@@ -133,7 +133,7 @@ public class Desktop
         return null;
     }
 
-    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame, String _stargetframe)
+    private static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame, String _stargetframe)
     {
         com.sun.star.util.URL oURL = getDispatchURL(xMSF, sURL);
         XDispatch xDispatch = getDispatcher(xFrame, _stargetframe, oURL);
@@ -145,13 +145,13 @@ public class Desktop
         dispatchURL(xMSF, sURL, xFrame, PropertyNames.EMPTY_STRING);
     }
 
-    public static void dispatchURL(XDispatch _xDispatch, com.sun.star.util.URL oURL)
+    private static void dispatchURL(XDispatch _xDispatch, com.sun.star.util.URL oURL)
     {
         PropertyValue[] oArg = new PropertyValue[0];
         _xDispatch.dispatch(oURL, oArg);
     }
 
-    public static XMultiComponentFactory getMultiComponentFactory() throws com.sun.star.uno.Exception, RuntimeException, java.lang.Exception
+    private static XMultiComponentFactory getMultiComponentFactory() throws com.sun.star.uno.Exception, RuntimeException, java.lang.Exception
     {
         XComponentContext xcomponentcontext = Bootstrap.createInitialComponentContext(null);
         // initial serviceManager
@@ -188,7 +188,7 @@ public class Desktop
         return sIncSuffix;
     }
 
-    public static String getIncrementSuffix(XHierarchicalNameAccess xElementContainer, String ElementName)
+    private static String getIncrementSuffix(XHierarchicalNameAccess xElementContainer, String ElementName)
     {
         boolean bElementexists = true;
         int i = 1;
@@ -210,7 +210,7 @@ public class Desktop
         return sIncSuffix;
     }
 
-    public static int checkforfirstSpecialCharacter(XMultiServiceFactory _xMSF, String _sString, Locale _aLocale)
+    private static int checkforfirstSpecialCharacter(XMultiServiceFactory _xMSF, String _sString, Locale _aLocale)
     {
         try
         {
@@ -353,7 +353,7 @@ public class Desktop
         }
     }
 
-    public static String getTemplatePath(XMultiServiceFactory _xMSF)
+    private static String getTemplatePath(XMultiServiceFactory _xMSF)
     {
         try
         {

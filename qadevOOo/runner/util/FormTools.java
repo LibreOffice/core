@@ -184,7 +184,7 @@ public class FormTools {
         return oFS.getForms();
     } //finish getForms
 
-    public static XIndexContainer getIndexedForms ( XDrawPage oDP )
+    private static XIndexContainer getIndexedForms ( XDrawPage oDP )
     {
         XFormsSupplier oFS = UnoRuntime.queryInterface(
                                                     XFormsSupplier.class,oDP);

@@ -275,7 +275,7 @@ public class XMLTools {
          * Reset all values. This is important e.g. for test of XFilter
          * interface, where 'filter()' method istbstarted twice.
          */
-        public void reset() {
+        void reset() {
             docStarted = false ;
             docEnded = false ;
             tagStack = new ArrayList<String>() ;
@@ -352,7 +352,7 @@ public class XMLTools {
         * Also prints "Tag trace" in case if the full XML data isn't
         * printed.
         */
-        public void printError(String msg) {
+        void printError(String msg) {
             log.println("!!! Error: " + msg) ;
             if (printXMLData) return ;
             log.println("   Tag trace :") ;
@@ -586,7 +586,7 @@ public class XMLTools {
             return ret ;
         }
 
-        protected boolean checkAttr(int attrListIdx, XAttributeList list) {
+        private boolean checkAttr(int attrListIdx, XAttributeList list) {
             short j  = 0 ;
             int listLen = list.getLength();
             while(j < listLen) {
@@ -609,7 +609,7 @@ public class XMLTools {
          * with values method checks if these attributes exist and
          * have appropriate values.
          */
-        public boolean isMatchTo(String tagName, XAttributeList list) {
+        private boolean isMatchTo(String tagName, XAttributeList list) {
             if (!name.equals(tagName)) return false;
             boolean result = true ;
             for (int i = 0; i < attrList.length; i++) {
@@ -813,7 +813,7 @@ public class XMLTools {
      * XML data is written.
      * @return SAX handler to which XML data has to be written.
      */
-    public static XDocumentHandler getFileXMLWriter(XMultiServiceFactory xMSF, String fileURL)
+    private static XDocumentHandler getFileXMLWriter(XMultiServiceFactory xMSF, String fileURL)
         throws com.sun.star.uno.Exception
     {
         XInterface oFacc = (XInterface)xMSF.createInstance(
@@ -842,7 +842,7 @@ public class XMLTools {
      * @param handler SAX handler to which XML data from file will
      * be transferred.
      */
-    public static void parseXMLFile(XMultiServiceFactory xMSF,
+    private static void parseXMLFile(XMultiServiceFactory xMSF,
         String fileURL, XDocumentHandler handler) throws com.sun.star.uno.Exception
     {
         XInterface oFacc = (XInterface)xMSF.createInstance(

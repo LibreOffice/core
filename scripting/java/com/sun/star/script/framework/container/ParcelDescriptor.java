@@ -75,7 +75,7 @@ public class ParcelDescriptor {
 
     // returns the ParcelDescriptor in the corresponding directory
     // returns null if no ParcelDescriptor is found in the directory
-    public static synchronized ParcelDescriptor
+    private static synchronized ParcelDescriptor
         getParcelDescriptor(File parent) {
 
         File path = new File(parent, PARCEL_DESCRIPTOR_NAME);
@@ -166,7 +166,7 @@ public class ParcelDescriptor {
         initLanguageProperties();
     }
 
-    public void write(File file) throws IOException {
+    private void write(File file) throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
         XMLParserFactory.getParser().write(document, fos);
         fos.close();
@@ -297,7 +297,7 @@ public class ParcelDescriptor {
             addScriptEntry(scripts.next());
     }
 
-    public String getLanguageProperty(String name) {
+    private String getLanguageProperty(String name) {
         return languagedepprops.get(name);
     }
 

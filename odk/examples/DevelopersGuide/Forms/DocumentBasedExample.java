@@ -115,7 +115,7 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
     /* ------------------------------------------------------------------ */
     /** collect the RuntimeArguments
     */
-    protected void collectParameters(String argv[])
+    private void collectParameters(String argv[])
     {
         // not interested in. Derived classes may want to use it.
     }

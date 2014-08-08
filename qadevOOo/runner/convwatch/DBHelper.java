@@ -182,7 +182,7 @@ public class DBHelper
             return null;
         }
 
-    protected synchronized void ExecSQL(Connection _aCon, String _sSQL)
+    private synchronized void ExecSQL(Connection _aCon, String _sSQL)
             {
                 MySQLThread aSQLThread = new MySQLThread(_aCon, _sSQL);
                 aSQLThread.start();

@@ -330,7 +330,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         return outputRepository;
     }
 
-    protected InputRepository getInputRepository()
+    private InputRepository getInputRepository()
     {
         return inputRepository;
     }
@@ -494,7 +494,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
      *
      * @return the processing state.
      */
-    protected int getCurrentState()
+    private int getCurrentState()
     {
         if (states.isEmpty())
         {
@@ -779,7 +779,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
     }
 
-    protected void startBody(final AttributeMap attrs)
+    private void startBody(final AttributeMap attrs)
             throws IOException
     {
         getXmlWriter().writeTag(OfficeNamespaces.OFFICE_NS, "body", XmlWriterSupport.OPEN);
@@ -822,7 +822,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     {
     }
 
-    protected void startGroupBody(final AttributeMap attrs)
+    private void startGroupBody(final AttributeMap attrs)
     {
     }
 
@@ -993,7 +993,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     {
     }
 
-    protected void endGroupInstance(final AttributeMap attrs)
+    private void endGroupInstance(final AttributeMap attrs)
     {
     }
 
@@ -1023,7 +1023,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     protected abstract void endContent(final AttributeMap attrs)
             throws IOException, DataSourceException, ReportProcessingException;
 
-    protected void endBody(final AttributeMap attrs)
+    private void endBody(final AttributeMap attrs)
             throws IOException
     {
         getXmlWriter().writeCloseTag();
@@ -1230,7 +1230,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         return attrList;
     }
 
-    protected String sanitizeName(final String name)
+    private String sanitizeName(final String name)
     {
         // A table name cannot contain spaces and should only contain
         // ascii-characters.
@@ -1574,7 +1574,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         return null;
     }
 
-    protected CSSNumericValue computeColumnWidth(final String colStyle)
+    private CSSNumericValue computeColumnWidth(final String colStyle)
     {
         final OfficeStylesCollection contentStyles = getContentStylesCollection();
         final OfficeStyle style = contentStyles.getStyle(OfficeToken.TABLE_COLUMN, colStyle);

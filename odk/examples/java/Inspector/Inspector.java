@@ -111,7 +111,7 @@ public class Inspector{
         }
 
 
-        protected String getSDKPath(){
+        private String getSDKPath(){
         String sRetPath = "";
         try{
             XNameAccess xNameAccess  = getConfigurationAccess("org.openoffice.inspector.ObjectInspector", true);
@@ -184,7 +184,7 @@ public class Inspector{
         }}
 
 
-        public void showErrorMessageBox(XWindowPeer _xWindowPeer, String _sTitle, String _sMessage){
+        private void showErrorMessageBox(XWindowPeer _xWindowPeer, String _sTitle, String _sMessage){
         try {
             Object oToolkit = m_xComponentContext.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit", m_xComponentContext);
             XMessageBoxFactory xMessageBoxFactory = UnoRuntime.queryInterface(XMessageBoxFactory.class, oToolkit);
@@ -336,7 +336,7 @@ public class Inspector{
         }
 
 
-        public static String[] getServiceNames() {
+        private static String[] getServiceNames() {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }
@@ -391,12 +391,12 @@ public class Inspector{
         }
 
 
-        public XNameAccess getConfigurationAccess(boolean _bUpdate){
+        private XNameAccess getConfigurationAccess(boolean _bUpdate){
             return getConfigurationAccess("org.openoffice.inspector.ObjectInspector", _bUpdate);
         }
 
 
-        public XNameAccess getConfigurationAccess(String _sNodePath, boolean update) {
+        private XNameAccess getConfigurationAccess(String _sNodePath, boolean update) {
         XNameAccess xNameAccess = null;
         try {
             String sAccess = "";

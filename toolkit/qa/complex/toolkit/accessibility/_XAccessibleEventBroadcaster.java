@@ -64,7 +64,7 @@ public class _XAccessibleEventBroadcaster {
             xWindow = window;
         }
 
-       public void fireEvent() {
+       private void fireEvent() {
             Rectangle newPosSize = xWindow.getPosSize();
             newPosSize.Width = newPosSize.Width - 20;
             newPosSize.Height = newPosSize.Height - 20;
@@ -170,7 +170,7 @@ public class _XAccessibleEventBroadcaster {
 
     }
 
-    protected static boolean chkTransient(Object Testcase) {
+    private static boolean chkTransient(Object Testcase) {
         XAccessibleContext accCon = UnoRuntime.queryInterface(XAccessibleContext.class, Testcase);
         if (accCon.getAccessibleStateSet().contains(
             com.sun.star.accessibility.AccessibleStateType.TRANSIENT)){

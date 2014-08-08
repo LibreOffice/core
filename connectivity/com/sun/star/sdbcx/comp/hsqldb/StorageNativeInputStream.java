@@ -30,7 +30,7 @@ public class StorageNativeInputStream {
     public StorageNativeInputStream(String key,String _file) {
         openStream(key,_file, NativeStorageAccess.READ);
     }
-    public native void openStream(String key,String name, int mode);
+    private native void openStream(String key,String name, int mode);
     public native int read(String key,String name) throws java.io.IOException;
     public native int read(String key,String name,byte[] b, int off, int len) throws java.io.IOException;
     public native void close(String key,String name) throws java.io.IOException;

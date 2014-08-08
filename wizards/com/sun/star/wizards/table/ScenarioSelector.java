@@ -164,7 +164,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         }
     }
 
-    public void initializeCategory(int _iCategory)
+    private void initializeCategory(int _iCategory)
     {
         try
         {
@@ -180,7 +180,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         }
     }
 
-    public void initializeTable(int _iTable)
+    private void initializeTable(int _iTable)
     {
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, new short[]
                 {

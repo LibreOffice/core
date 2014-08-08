@@ -60,7 +60,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
         m_xContext = xContext;
     }
 
-    protected XPropertySet GetPropSet( String sControl )
+    private XPropertySet GetPropSet( String sControl )
     {
         if ( m_xControlContainer != null )
         {

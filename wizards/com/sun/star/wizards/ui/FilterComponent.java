@@ -181,7 +181,7 @@ public class FilterComponent
         }
     }
 
-    public static String getIndexNumber(String _sStr)
+    private static String getIndexNumber(String _sStr)
     {
         return _sStr.substring(_sStr.length() - 1, _sStr.length());
     }
@@ -702,7 +702,7 @@ public class FilterComponent
          * @returns true if the current condition is complete, all needed fields are filled with values.
          * So we can enable the next.
          */
-        boolean isConditionComplete()
+        private boolean isConditionComplete()
         {
             try
             {
@@ -746,7 +746,7 @@ public class FilterComponent
             }
         }
 
-        protected void setCondition(PropertyValue _filtercondition)
+        private void setCondition(PropertyValue _filtercondition)
         {
             try
             {
@@ -816,13 +816,13 @@ public class FilterComponent
             }
         }
 
-        protected void setFieldNames(String[] _FieldNames)
+        private void setFieldNames(String[] _FieldNames)
         {
             Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), PropertyNames.STRING_ITEM_LIST, _FieldNames);
             FieldNames = _FieldNames;
         }
 
-        protected boolean isEnabled()
+        private boolean isEnabled()
         {
             return m_bEnabled;
         }
@@ -869,7 +869,7 @@ public class FilterComponent
             }
         }
 
-        protected String getSelectedFieldName()
+        private String getSelectedFieldName()
         {
             try
             {
@@ -885,7 +885,7 @@ public class FilterComponent
 
         // TODO: check if it is really useful to match the indices of the listbox the API constants
         // =, <>, <, >, <=, >=, like, !like, is null, !is null
-        protected short getSelectedOperator()
+        private short getSelectedOperator()
         {
             try
             {
@@ -924,7 +924,7 @@ public class FilterComponent
         }
 
         // TODO make a difference between Text and Numbers
-        protected Object getValue()
+        private Object getValue()
         {
             return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue"));
         }

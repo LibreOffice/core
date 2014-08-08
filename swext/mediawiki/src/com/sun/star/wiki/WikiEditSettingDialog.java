@@ -123,7 +123,7 @@ public class WikiEditSettingDialog extends WikiDialog
         return bResult;
     }
 
-    public void EnableControls( boolean bEnable )
+    private void EnableControls( boolean bEnable )
     {
         if ( !bEnable )
             SetFocusTo( "CancelButton" );
@@ -189,7 +189,7 @@ public class WikiEditSettingDialog extends WikiDialog
         }
     }
 
-    public void DoLogin()
+    private void DoLogin()
     {
         String sRedirectURL = "";
         String sURL = "";

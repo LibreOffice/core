@@ -174,7 +174,7 @@ public class ViewContainer extends Thread
 
 
 
-    public void removeListener( IShutdownListener rListener )
+    private void removeListener( IShutdownListener rListener )
     {
         synchronized(mlListener)
         {

@@ -567,7 +567,7 @@ public class DBMetaData
         }
     }
 
-    public void getDataSourceInterfaces() throws Exception
+    private void getDataSourceInterfaces() throws Exception
     {
         xDataSourcePropertySet = UnoRuntime.queryInterface( XPropertySet.class, getDataSource() );
         bPasswordIsRequired = ((Boolean) xDataSourcePropertySet.getPropertyValue("IsPasswordRequired")).booleanValue();
@@ -785,7 +785,7 @@ public class DBMetaData
         return supportsPrimaryKeys;
     }
 
-    public boolean supportsCoreSQLGrammar()
+    private boolean supportsCoreSQLGrammar()
     {
         try
         {
@@ -909,7 +909,7 @@ public class DBMetaData
      * the document may not be open
      * @param i_createTemplate  describes the type of the document: "form" or "report"
      */
-    public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)
+    private void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)
     {
         try
         {

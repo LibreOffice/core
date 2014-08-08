@@ -54,7 +54,7 @@ public class DesignSpace {
     return dimProps[dim].paramBound.boundAdjust(val);
   }
 
-  public void annulusAdjust (double[] location){
+  private void annulusAdjust (double[] location){
     for (int i=0; i<getDimension(); i++) {
       location[i] = dimProps[i].paramBound.annulusAdjust(location[i]);
     }

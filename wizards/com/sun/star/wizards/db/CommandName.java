@@ -131,7 +131,7 @@ public class CommandName
         }
     }
 
-    public void setComposedCommandName()
+    private void setComposedCommandName()
     {
         if (this.setMetaDataAttributes())
         {
@@ -186,7 +186,7 @@ public class CommandName
         }
     }
 
-    public String quoteName(String _sName)
+    private String quoteName(String _sName)
     {
         if (baddQuotation)
         {

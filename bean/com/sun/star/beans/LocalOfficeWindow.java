@@ -270,7 +270,7 @@ public class LocalOfficeWindow
                         start();
                 }
 
-                void cancel()
+                private void cancel()
                         throws java.lang.InterruptedException
                 {
                         aWatchedThread = null;

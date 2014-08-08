@@ -102,7 +102,7 @@ public class Helper
 
 
 
-    public XModel createDocument( String sDocType )
+    private XModel createDocument( String sDocType )
     {
         XModel aResult = null;
         try

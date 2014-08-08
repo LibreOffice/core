@@ -55,7 +55,7 @@ public class ScriptingUtils {
         return storageManager.getScriptStorage(id);
     }
 
-    public int getStorageId(XMultiServiceFactory xMSF, String location) {
+    private int getStorageId(XMultiServiceFactory xMSF, String location) {
 
         if (location.equals("share"))
             return 0;
@@ -94,7 +94,7 @@ public class ScriptingUtils {
         return id;
     }
 
-    public XSimpleFileAccess getXSimpleFileAccess(XMultiServiceFactory xMSF) {
+    private XSimpleFileAccess getXSimpleFileAccess(XMultiServiceFactory xMSF) {
         XSimpleFileAccess access = null;
 
         try {

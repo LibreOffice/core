@@ -53,13 +53,13 @@ public class GlobalString {
     return getMeaningfulLine(outReader, NEGLECT_TAG);
   }
 
-  public static int getCharLoc(char data, String str) {
+  private static int getCharLoc(char data, String str) {
     for(int i=0; i<str.length(); i++) {
       if(str.charAt(i)==data) return i;
     }
     return -1;
   }
-  public static String trim(String origStr, String discardStr) {
+  private static String trim(String origStr, String discardStr) {
     String str = origStr;
     do {
       if(str.length()==0) return str;
@@ -69,7 +69,7 @@ public class GlobalString {
     } while(true);
   }
 
-  public static boolean getFirstCharExist(String str, String chars) throws Exception {
+  private static boolean getFirstCharExist(String str, String chars) throws Exception {
     int neglectFirstCharLength = chars.length();
     for(int i=0; i<neglectFirstCharLength; i++) {
       if(str.startsWith(chars.substring(i, i+1))) {
@@ -79,7 +79,7 @@ public class GlobalString {
     return false;
   }
 
-  public static String getMeaningfulLine(BufferedReader outReader, String neglectFirstChars) throws Exception {
+  private static String getMeaningfulLine(BufferedReader outReader, String neglectFirstChars) throws Exception {
     String str;
     boolean isNeglect = true;
     do {
@@ -95,7 +95,7 @@ public class GlobalString {
     return str;
   }
 
-   public static String[] getMeaningfulLines(String srcStr, String neglectFirstChars) throws Exception {
+   private static String[] getMeaningfulLines(String srcStr, String neglectFirstChars) throws Exception {
     StringReader outStringReader = new StringReader(srcStr);
     BufferedReader outReader = new BufferedReader(outStringReader);
     ArrayList<String> origData = new ArrayList<String>();
@@ -112,7 +112,7 @@ public class GlobalString {
   /**
    * convert vector to 1D String array
    */
-  public static String[] convert1DVectorToStringArray(ArrayList<String> toToConvert) {
+  private static String[] convert1DVectorToStringArray(ArrayList<String> toToConvert) {
     if (toToConvert==null) return null;
     String[] objs = new String[toToConvert.size()];
     for (int i=0; i<toToConvert.size(); i++) {
@@ -121,7 +121,7 @@ public class GlobalString {
     return(objs);
   }
 
-  public static String getObjString(Object nObj) {
+  private static String getObjString(Object nObj) {
     if(nObj instanceof String) return (String)nObj;
     return nObj.toString();
   }

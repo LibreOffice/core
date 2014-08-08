@@ -549,7 +549,7 @@ public class _XPropertySet {
     * Retrieves one random property name from list (property names separated
     * by ';') of property names.
     */
-    public String getRandomString(String str) {
+    private String getRandomString(String str) {
 
         String gRS = "none";
         Random rnd = new Random();
@@ -564,7 +564,7 @@ public class _XPropertySet {
 
     }
 
-    public boolean isChangeable(String name) {
+    private boolean isChangeable(String name) {
         boolean hasChanged = false;
         try {
             Object getProp = oObj.getPropertyValue(name);

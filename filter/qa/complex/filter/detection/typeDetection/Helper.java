@@ -176,7 +176,7 @@ public class Helper  {
       * cannot be read
       */
 
-    public ArrayList<String> getCSVFileContent(String csvFileName) {
+    private ArrayList<String> getCSVFileContent(String csvFileName) {
         try {
             ArrayList<String> content = new ArrayList<String>();
             BufferedReader br;
@@ -283,7 +283,7 @@ public class Helper  {
      * @param content content of a csv file
      * @return a stripped Vector
      */
-    public ArrayList<String> removeSuperfluousContent(ArrayList<String> content){
+    private ArrayList<String> removeSuperfluousContent(ArrayList<String> content){
         ArrayList<String> newContent = new ArrayList<String>();
         Iterator<String> cont = content.iterator();
         while( cont.hasNext() ) {
@@ -366,7 +366,7 @@ public class Helper  {
      *  type name. This information are extracted from "files.csv"
      *  This is for faster access to get fileURL and fileType of fileAlias
      */
-    public void createFilesList(){
+    private void createFilesList(){
         for (int i = 0; i < m_vFiles.size();i++){
             ArrayList<String> toDo = m_vFiles.get(i);
                 m_hFileURLs.put(toDo.get(0), toDo.get(1));
@@ -405,7 +405,7 @@ public class Helper  {
         return dummy;
     }
 
-    public URL getClassURL(String fileName){
+    private URL getClassURL(String fileName){
         String PackagePath = this.getClass().getPackage().getName().replace('.','/');
         return this.getClass().getResource("/" + PackagePath +"/" + fileName);
     }

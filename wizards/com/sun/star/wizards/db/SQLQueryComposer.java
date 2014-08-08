@@ -109,7 +109,7 @@ public class SQLQueryComposer
         return sSelectClause;
     }
 
-    public String getAliasFieldNameClause(String _FieldName)
+    private String getAliasFieldNameClause(String _FieldName)
     {
         String FieldTitle = CurDBMetaData.getFieldTitle(_FieldName);
         if (!FieldTitle.equals(_FieldName))
@@ -142,7 +142,7 @@ public class SQLQueryComposer
         prependSortingCriteria(false);
     }
 
-    public void prependSortingCriteria(boolean _baddAliasFieldNames) throws SQLException
+    private void prependSortingCriteria(boolean _baddAliasFieldNames) throws SQLException
     {
         XIndexAccess xColumnIndexAccess = m_xQueryAnalyzer.getOrderColumns();
         m_queryComposer.setOrder("");
@@ -183,7 +183,7 @@ public class SQLQueryComposer
         m_queryComposer.appendOrderByColumn(xColumn, bascend);
     }
 
-    public void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException
+    private void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException
     {
         String sOrder = "";
         m_queryComposer.setOrder("");
@@ -212,7 +212,7 @@ public class SQLQueryComposer
         sOrder = m_queryComposer.getOrder();
     }
 
-    public void appendGroupByColumns(boolean _baddAliasFieldNames) throws SQLException
+    private void appendGroupByColumns(boolean _baddAliasFieldNames) throws SQLException
     {
         for (int i = 0; i < CurDBMetaData.GroupFieldNames.length; i++)
         {
@@ -280,12 +280,12 @@ public class SQLQueryComposer
         return setQueryCommand(_xParentWindow, _bincludeGrouping, _baddAliasFieldNames, true);
     }
 
-    public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery)
+    private boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery)
     {
         return setQueryCommand(_xParentWindow, _bincludeGrouping, _baddAliasFieldNames, addQuery, false);
     }
 
-    public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery, boolean prependSortingCriteria)
+    private boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery, boolean prependSortingCriteria)
     {
         try
         {
@@ -362,7 +362,7 @@ public class SQLQueryComposer
         return null;
     }
 
-    public CommandName getComposedCommandByDisplayName(String _DisplayName)
+    private CommandName getComposedCommandByDisplayName(String _DisplayName)
     {
         if (composedCommandNames != null)
         {
@@ -377,7 +377,7 @@ public class SQLQueryComposer
         return null;
     }
 
-    public String getuniqueAliasName(String _TableName)
+    private String getuniqueAliasName(String _TableName)
     {
         int a = 0;
         String AliasName = "";
@@ -404,7 +404,7 @@ public class SQLQueryComposer
         return CommandName.quoteName(_sname, CurDBMetaData.getIdentifierQuote());
     }
 
-    public void displaySQLErrorDialog(Exception _exception, XWindow _xParentWindow)
+    private void displaySQLErrorDialog(Exception _exception, XWindow _xParentWindow)
     {
         try
         {

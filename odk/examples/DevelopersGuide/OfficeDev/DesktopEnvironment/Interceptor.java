@@ -291,7 +291,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * @param aEvent
      *          describes the action
      */
-    public void impl_frameAction(/*IN*/ com.sun.star.frame.FrameActionEvent aEvent)
+    private void impl_frameAction(/*IN*/ com.sun.star.frame.FrameActionEvent aEvent)
     {
         synchronized(this)
         {
@@ -491,7 +491,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * @param lArguments
      *          optional arguments for loading
      */
-    public void impl_dispatch(/*IN*/ com.sun.star.util.URL aURL,/*IN*/ com.sun.star.beans.PropertyValue[] lArguments)
+    private void impl_dispatch(/*IN*/ com.sun.star.util.URL aURL,/*IN*/ com.sun.star.beans.PropertyValue[] lArguments)
     {
         synchronized(this)
         {

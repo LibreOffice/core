@@ -324,7 +324,7 @@ public class ParaStyle extends Style implements Cloneable {
      *  @param  attr   The attribute to set.
      *  @param  value  The attribute value to set.
      */
-    public void setAttribute(String attr, String value) {
+    private void setAttribute(String attr, String value) {
         for (int i = 0; i < NR_PROPERTIES; i++) {
             if (attr.equals(attrName[i])) {
                 setAttribute(i, value);
@@ -369,7 +369,7 @@ public class ParaStyle extends Style implements Cloneable {
      *  @param  attr   The attribute index to set.
      *  @param  value  The attribute value to set.
      */
-    public void setAttribute(int attr, String value) {
+    private void setAttribute(int attr, String value) {
         isSet[attr] = true;
         try {
             this.value[attr] = (((conversionAlgorithm)algor[attr].newInstance())).I(value);
@@ -556,7 +556,7 @@ public class ParaStyle extends Style implements Cloneable {
      *  @param  node  The <code>Node</code> to add <code>Style</code>
      *                attributes.
      */
-    public void writeAttributes(Element node) {
+    private void writeAttributes(Element node) {
         for (int i = 0; i <= TEXT_INDENT; i++) {
             if (isSet[i]) {
                 double temp = value[i] / 100.0;

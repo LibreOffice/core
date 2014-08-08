@@ -30,7 +30,7 @@ public class BCHComparator implements IGoodnessCompareEngine {
 
 /* check the magnitude of two array, the frontial is more important
  **/
-  public static int compareArray(double[] fit1, double[] fit2) {
+  private static int compareArray(double[] fit1, double[] fit2) {
     for (int i=0; i<fit1.length; i++) {
       if (fit1[i]>fit2[i]) {
         return LARGER_THAN; //Large than

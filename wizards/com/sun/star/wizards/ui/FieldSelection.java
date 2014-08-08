@@ -585,7 +585,7 @@ public class FieldSelection
         }
     }
 
-    public void deselectFields(boolean bMoveAll)
+    private void deselectFields(boolean bMoveAll)
     {
         String SearchString;
         short iOldFieldSelected = xFieldsListBox.getSelectedItemPos();

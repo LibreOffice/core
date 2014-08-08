@@ -159,7 +159,7 @@ public class TextTableHandler
         }
     }
 
-    public void removeTextTable(Object oTextTable)
+    private void removeTextTable(Object oTextTable)
     {
         try
         {

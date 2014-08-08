@@ -35,7 +35,7 @@ public class DateHelper
             return getDateString("[yyyy/MM/dd HH:mm:ss]");
         }
 
-    public static String getDateString(String _sFormat)
+    private static String getDateString(String _sFormat)
         {
             GregorianCalendar aCalendar = new GregorianCalendar();
             StringBuffer aBuf = new StringBuffer();

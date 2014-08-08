@@ -86,7 +86,7 @@ public class RowSet
             System.out.println(aNames[i]);
     }
 
-    public static void useRowSet() throws com.sun.star.uno.Exception
+    private static void useRowSet() throws com.sun.star.uno.Exception
     {
         // first we create our RowSet object
         XRowSet xRowRes = UnoRuntime.queryInterface(
@@ -109,7 +109,7 @@ public class RowSet
         System.out.println("RowSet destroyed!");
     }
 
-    public static void showRowSetPrivileges() throws com.sun.star.uno.Exception
+    private static void showRowSetPrivileges() throws com.sun.star.uno.Exception
     {
         // first we create our RowSet object
         XRowSet xRowRes = UnoRuntime.queryInterface(
@@ -143,7 +143,7 @@ public class RowSet
         System.out.println("RowSet destroyed!");
     }
 
-    public static void showRowSetRowCount() throws com.sun.star.uno.Exception
+    private static void showRowSetRowCount() throws com.sun.star.uno.Exception
     {
         // first we create our RowSet object
         XRowSet xRowRes = UnoRuntime.queryInterface(
@@ -175,7 +175,7 @@ public class RowSet
         System.out.println("RowSet destroyed!");
     }
 
-    public static void showRowSetEvents() throws com.sun.star.uno.Exception
+    private static void showRowSetEvents() throws com.sun.star.uno.Exception
     {
         // first we create our RowSet object
         XRowSet xRowRes = UnoRuntime.queryInterface(
