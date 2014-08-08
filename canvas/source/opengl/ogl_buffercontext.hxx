@@ -10,8 +10,11 @@
 #ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_BUFFERCONTEXT_HXX
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_BUFFERCONTEXT_HXX
 
+#include <GL/glew.h>
+
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>
+
 
 namespace oglcanvas
 {
@@ -19,11 +22,13 @@ namespace oglcanvas
     {
         virtual ~IBufferContext() {}
 
-        /// start render to buffer. changes gl current context
+        /// start render to buffer. changes current framebuffer
         virtual bool startBufferRendering() = 0;
 
-        /// end render to buffer. switches to window context, and selects rendered texture
+        /// end render to buffer. switches to default framebuffer
         virtual bool endBufferRendering() = 0;
+
+        virtual GLuint getTextureId() = 0;
     };
 
     typedef ::boost::shared_ptr<IBufferContext> IBufferContextSharedPtr;

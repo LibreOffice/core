@@ -537,21 +537,29 @@ namespace oglcanvas
     namespace
     {
 
-        /*
-         * TODO: mogg: reimplement through FBO with texture as backend
         class BufferContextImpl : public IBufferContext
         {
             ::basegfx::B2IVector       maSize;
             const SpriteDeviceHelper&  mrDeviceHelper;
+            GLuint mnFrambufferId;
+            GLuint mnDepthId;
+            GLuint mnTextureId;
 
             virtual bool startBufferRendering() SAL_OVERRIDE
             {
-                return false;
+                glBindFramebuffer(GL_FRAMEBUFFER, mnFrambufferId);
+                return true;
             }
 
             virtual bool endBufferRendering() SAL_OVERRIDE
             {
-                return false;
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                return true;
+            }
+
+            virtual GLuint getTextureId() SAL_OVERRIDE
+            {
+                return mnTextureId;
             }
 
         public:
@@ -559,20 +567,26 @@ namespace oglcanvas
                               const ::basegfx::B2IVector& rSize) :
                 maSize(rSize),
                 mrDeviceHelper(rDeviceHelper),
-                mnTexture(0)
+                mnFrambufferId(0),
+                mnDepthId(0),
+                mnTextureId(0)
             {
+                OpenGLHelper::createFramebuffer(maSize.getX(), maSize.getY(), mnFrambufferId,
+                        mnDepthId, mnTextureId, false);
             }
 
             virtual ~BufferContextImpl()
             {
+                glDeleteTextures(1, &mnTextureId);
+                glDeleteRenderbuffers(1, &mnDepthId);
+                glDeleteFramebuffers(1, &mnFrambufferId);
             }
         };
-        */
     }
 
-    IBufferContextSharedPtr SpriteDeviceHelper::createBufferContext(const ::basegfx::B2IVector& ) const
+    IBufferContextSharedPtr SpriteDeviceHelper::createBufferContext(const ::basegfx::B2IVector& rSize) const
     {
-        return NULL;
+        return IBufferContextSharedPtr(new BufferContextImpl(*this, rSize));
     }
 
     TextureCache& SpriteDeviceHelper::getTextureCache() const
