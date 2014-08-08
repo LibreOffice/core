@@ -34,6 +34,24 @@
       "revId": "02e9031ebf5dbd2e9e2a7c699f2d0ebf24a08713",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abe1de1_5d6aeb1b",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000572
+      },
+      "writtenOn": "2014-08-08T09:05:01Z",
+      "side": 1,
+      "message": "Hi,\n- In order to understand the behavior of the section break [continuous] I debugged a sample file with a continuous section break.\n- In this case this condition http://opengrok.libreoffice.org/xref/core/sw/source/filter/ww8/wrtw8nds.cxx#2742 is satisfied.\n- GetItemState() returns SFX_ITEM_DEFAULT\n- I debugged GetItemState() for the issue file, http://opengrok.libreoffice.org/xref/core/svl/source/items/itemset.cxx#467 the condition fails.\n- For the issue file, it seems that it is able to find some object in \u0027ppFnd\u0027 and thus it does not returns SFX_ITEM_DEFAULT\n- Please can you give me some hint here ?\n- Thanks :)",
+      "parentUuid": "9abe1de1_da4e0196",
+      "revId": "02e9031ebf5dbd2e9e2a7c699f2d0ebf24a08713",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
