@@ -4391,6 +4391,53 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
     uno::Reference<text::XTextContent> xTextContent
         (m_pGraphicImport->GetGraphicObject());
 
+    /* Set "SdtEndBefore" property on Drawing.
+     * It is required in a case when Drawing appears immediately after first run i.e.
+     * there is no text/space/tab in between two runs.
+     * In this case "SdtEndBefore" property needs to be set on Drawing.
+     */
+    PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
+    if(pContext)
+    {
+        uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
+        for (int i =0; i< currentCharProps.getLength(); i++)
+        {
+            if (currentCharProps[i].Name == "CharInteropGrabBag")
+            {
+                uno::Sequence<beans::PropertyValue> aCharGrabBag;
+                currentCharProps[i].Value >>= aCharGrabBag;
+                for (int j=0; j < aCharGrabBag.getLength();j++)
+                {
+                    if(aCharGrabBag[j].Name == "SdtEndBefore")
+                    {
+                        bool bIsSdtEndBefore;
+                        aCharGrabBag[j].Value >>= bIsSdtEndBefore;
+                        if (bIsSdtEndBefore)
+                        {
+                            uno::Reference< beans::XPropertySet > xGraphicObjectProperties(xTextContent,
+                                        uno::UNO_QUERY_THROW);
+                            uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+                            if(xGraphicObjectProperties.is())
+                            {
+                                xPropSetInfo = xGraphicObjectProperties->getPropertySetInfo();
+                                if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+                                {
+                                    uno::Sequence<beans::PropertyValue> aFrameGrabBag(1);
+                                    beans::PropertyValue aRet;
+                                    aRet.Name = "SdtEndBefore";
+                                    aRet.Value <<= uno::makeAny(true);
+                                    aFrameGrabBag[0] = aRet;
+                                    xGraphicObjectProperties->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aFrameGrabBag));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     // Update the shape properties if it is embedded object.
     if(m_xEmbedded.is()){
         UpdateEmbeddedShapeProps(m_pGraphicImport->GetXShapeObject());
