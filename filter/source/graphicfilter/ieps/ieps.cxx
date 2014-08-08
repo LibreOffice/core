@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
 #include <tools/solar.h>
@@ -36,6 +35,7 @@
 #include <unotools/tempfile.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
+#include <osl/thread.h>
 #include <boost/scoped_array.hpp>
 
 class FilterConfigItem;
@@ -265,6 +265,26 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     return bRet;
 }
 
+struct WriteData
+{
+    oslFileHandle   m_pFile;
+    const sal_uInt8 *m_pBuf;
+    sal_uInt32      m_nBytesToWrite;
+};
+
+static void WriteFileInThread(void *wData)
+{
+    WriteData *wdata;
+    sal_uInt64 nCount;
+    wdata = (WriteData *)wData;
+    osl_writeFile(wdata->m_pFile, wdata->m_pBuf, wdata->m_nBytesToWrite, &nCount);
+    // File must be closed here.
+    // Otherwise, the helper process may wait for the next input,
+    // then its stdout is not closed and osl_readFile() blocks.
+    if (wdata->m_pFile)
+        osl_closeFile(wdata->m_pFile);
+}
+
 static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Graphic &rGraphic, OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
 {
@@ -278,11 +298,15 @@ static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
     if (eErr!=osl_Process_E_None)
         return false;
 
+    WriteData Data;
+    oslThread hThread;
+    Data.m_pFile = pIn;
+    Data.m_pBuf = pBuf;
+    Data.m_nBytesToWrite = nBytesRead;
+    hThread = osl_createThread(WriteFileInThread, &Data);
+
     bool bRet = false;
     sal_uInt64 nCount;
-    osl_writeFile(pIn, pBuf, nBytesRead, &nCount);
-    if (pIn) osl_closeFile(pIn);
-    if (nCount == nBytesRead)
     {
         SvMemoryStream aMemStm;
         sal_uInt8 aBuf[32000];
