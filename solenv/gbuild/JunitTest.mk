@@ -54,7 +54,7 @@ $(call gb_JunitTest_get_target,%) :
 	$(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
-$(call gb_JunitTest_get_target,$(1)) : T_CP := $(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)
+$(call gb_JunitTest_get_target,$(1)) : T_CP := $(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$$(gb_CLASSPATHSEP)$(subst /lo/,/lo-4.2/,$(INSTROOT))/$(LIBO_URE_LIB_FOLDER)
 $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
 $(eval $(call gb_JunitTest_JunitTest_platform,$(1)))
 

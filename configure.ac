@@ -1021,9 +1021,8 @@ AC_ARG_ENABLE(runtime-optimizations,
         [Statically disable certain runtime optimizations (like rtl/alloc.h or
          JVM JIT) that are known to interact badly with certain dynamic analysis
          tools (like -fsanitize=address or Valgrind).  By default, disabled iff
-         CC contains "-fsanitize=address".  (For Valgrind, those runtime
-         optimizations are typcially disabled dynamically via
-         RUNNING_ON_VALGRIND.)]))
+         CC contains "-fsanitize=*".  (For Valgrind, those runtime optimizations
+         are typcially disabled dynamically via RUNNING_ON_VALGRIND.)]))
 
 AC_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
@@ -5680,7 +5679,7 @@ AC_MSG_CHECKING([whether to enable runtime optimizations])
 if test -z "$enable_runtime_optimizations"; then
     for i in $CC; do
         case $i in
-        -fsanitize=address)
+        -fsanitize=*)
             enable_runtime_optimizations=no
             break
             ;;
@@ -6566,13 +6565,14 @@ _ACEOF
         if ! $CXX $CXXFLAGS $CPPFLAGS $LINKFLAGSSHL -fPIC -fvisibility-inlines-hidden conftestlib1.cc -o libconftest1$DLLPOST >/dev/null 2>&5; then
             gccvisinlineshiddenok=no
         else
-            dnl At least Clang -fsanitize=address is known to not work with
-            dnl -z defs (unsetting which makes the test moot, though):
+            dnl At least Clang -fsanitize=address and -fsanitize=undefined are
+            dnl known to not work with -z defs (unsetting which makes the test
+            dnl moot, though):
             my_linkflagsnoundefs=$LINKFLAGSNOUNDEFS
             if test "$COM_GCC_IS_CLANG" = TRUE; then
                 for i in $CXX; do
                     case $i in
-                    -fsanitize=address)
+                    -fsanitize=*)
                         my_linkflagsnoundefs=
                         break
                         ;;

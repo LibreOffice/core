@@ -33,10 +33,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 ))
 endif
 
-ifeq ($(COM_GCC_IS_CLANG)$(filter -fsanitize=address,$(CC)),TRUE-fsanitize=address)
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	external/nss/asan.patch.1 \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
