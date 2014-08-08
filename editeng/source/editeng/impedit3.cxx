@@ -412,13 +412,6 @@ void ImpEditEngine::FormatDoc()
                 if ( IsCallParaInsertedOrDeleted() )
                     GetEditEnginePtr()->ParagraphHeightChanged( nPara );
                 pParaPortion->SetMustRepaint( false );
-
-                // FIXME(matteocam)
-                // set possible point for chaining
-
-                // XXX: This may not work all the time: imp. edit engine is a shared resource!!
-                        // Can it be that two boxes modify it before it's used?
-                UpdateOverflowingParaNum( nPara );
             }
 
             // InvalidRect set only once...
@@ -461,6 +454,10 @@ void ImpEditEngine::FormatDoc()
                 aInvalidRect.Left() = 0;
                 aInvalidRect.Right() = !IsVertical() ? aPaperSize.Width() : aPaperSize.Height();
             }
+        } else if ( nNewHeight > nCurTextHeight ) // possible page overflow // FIXME(matteocam)
+        {
+            // which paragraph is the first to cause higher size of the box?
+            UpdateOverflowingParaNum();
         }
 
         nCurTextHeight = nNewHeight;
@@ -4601,14 +4598,23 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
     }
 }
 
-void ImpEditEngine::UpdateOverflowingParaNum(sal_Int32 nPara)
+void ImpEditEngine::UpdateOverflowingParaNum()
 {
-    // update if not already updated
-    if ( mnOverflowingPara == -1 ) {
-        mnOverflowingPara = nPara;
-        fprintf(stderr, "[CHAINING] Setting first overflowing para: %d\n", nPara);
+    sal_uInt32 nY = 0;
+    sal_uInt32 nPH;
+
+    for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ ) {
+        ParaPortion* pPara = GetParaPortions()[nPara];
+        nPH = pPara->GetHeight();
+        nY += nPH;
+        if ( nY > nCurTextHeight ) // found first paragraph overflowing
+        {
+            SetOverflowingParaNum( nPara );
+            fprintf(stderr, "[CHAINING] Setting first overflowing para: %d\n", nPara);
+            return;
+        }
     }
-    // XXX: where is this reset?
+    fprintf(stderr, "[CHAINING] Warning: Overflowing paragraph not found\n");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1025,7 +1025,7 @@ public:
     sal_Int32 GetOverflowingParaNum() const { return mnOverflowingPara; }
     void SetOverflowingParaNum(sal_Int32 nPara) { mnOverflowingPara = nPara; }
     void ClearOverflowingParaNum() { mnOverflowingPara = -1; }
-    void UpdateOverflowingParaNum(sal_Int32);
+    void UpdateOverflowingParaNum();
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
