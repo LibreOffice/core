@@ -263,7 +263,7 @@ public class LocalOfficeWindow
                 Thread aWatchedThread;
                 long nTimeout;
 
-                CallWatchThread( long nTimeout )
+                private CallWatchThread( long nTimeout )
                 {
                         this.aWatchedThread = Thread.currentThread();
                         this.nTimeout = nTimeout;

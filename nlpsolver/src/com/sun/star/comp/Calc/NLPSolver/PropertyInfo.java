@@ -69,7 +69,7 @@ public class PropertyInfo<PropType> {
         this(name, value, (short)0, description);
     }
 
-    public PropertyInfo(String name, PropType value, short attributes,
+    private PropertyInfo(String name, PropType value, short attributes,
             String description) {
         m_property = new Property();
         m_property.Name = name;

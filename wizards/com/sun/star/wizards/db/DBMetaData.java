@@ -289,7 +289,7 @@ public class DBMetaData
         private String Name;
         private int CommandType;
 
-        public CommandObject(String _CommandName, int _CommandType)
+        private CommandObject(String _CommandName, int _CommandType)
         {
             try
             {

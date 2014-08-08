@@ -518,7 +518,7 @@ public class FilterComponent
         private boolean m_bEnabled;
         String[] FieldNames;
 
-        protected ControlRow(int iCompPosX, int iCompPosY, int Index, boolean _bEnabled, int _firstRowHelpID)
+        private ControlRow(int iCompPosX, int iCompPosY, int Index, boolean _bEnabled, int _firstRowHelpID)
         {
             int nFieldWidth = 71;
             int nOperatorWidth = 70;

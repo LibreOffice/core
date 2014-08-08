@@ -51,7 +51,7 @@ public class _XComponent {
     public class MyEventListener implements XEventListener {
         int number = 0;
         String message = null;
-        public MyEventListener(int number, String message) {
+        private MyEventListener(int number, String message) {
             this.message = message;
             this.number = number;
         }

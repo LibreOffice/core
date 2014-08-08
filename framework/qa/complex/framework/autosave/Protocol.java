@@ -170,7 +170,7 @@ public class Protocol extends JComponent
         private Timestamp m_aStamp;
 
         /** ctor for fast initializing of such line */
-        public ProtocolLine( long   nLine    ,
+        private ProtocolLine( long   nLine    ,
                              long   nScope   ,
                              int    nType    ,
                              String sMessage )

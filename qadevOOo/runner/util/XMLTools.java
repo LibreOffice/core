@@ -75,7 +75,7 @@ public class XMLTools {
             this.log = log ;
         }
 
-        public AttributeList(XAttributeList list) {
+        private AttributeList(XAttributeList list) {
             if (list == null) return ;
             for (short i = 0; i < list.getLength(); i++) {
                 add(list.getNameByIndex(i), list.getTypeByIndex(i),
@@ -178,7 +178,7 @@ public class XMLTools {
         * Creates a SAX handler which writes all XML data
         * handled into a <code>log</code> stream specified.
         */
-        public XMLWriter(PrintWriter log) {
+        private XMLWriter(PrintWriter log) {
             _log = log ;
         }
 
@@ -260,12 +260,12 @@ public class XMLTools {
         protected PrintWriter log = null ;
         protected boolean printXMLData = false ;
 
-        public XMLWellFormChecker(PrintWriter log) {
+        private XMLWellFormChecker(PrintWriter log) {
             super() ;
             this.log = log ;
         }
 
-        public XMLWellFormChecker(PrintWriter log_, boolean printXMLData) {
+        private XMLWellFormChecker(PrintWriter log_, boolean printXMLData) {
             super(printXMLData ? log_ : null) ;
             this.printXMLData = printXMLData ;
             this.log = log_ ;

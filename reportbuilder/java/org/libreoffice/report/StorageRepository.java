@@ -63,7 +63,7 @@ public class StorageRepository implements InputRepository, OutputRepository
 
     }
 
-    public StorageRepository(final XStorage storage, final boolean isOutput, final String rootURL)
+    private StorageRepository(final XStorage storage, final boolean isOutput, final String rootURL)
     {
         this.rootURL = rootURL;
         if (isOutput)

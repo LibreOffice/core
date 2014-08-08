@@ -275,7 +275,7 @@ public class ProcessHandler
      *
      *
      */
-    public ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars, long timeOut)
+    private ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars, long timeOut)
     {
         this.cmdLine = cmdLine;
         this.workDir = workDir;
@@ -829,7 +829,7 @@ public class ProcessHandler
         private String m_sProcessToStart;
         private boolean m_bInterrupt;
 
-        public ProcessWatcher(int _nTimeOut, String _sProcess)
+        private ProcessWatcher(int _nTimeOut, String _sProcess)
         {
             m_nTimeoutInSec = _nTimeOut;
             m_sProcessToStart = _sProcess;

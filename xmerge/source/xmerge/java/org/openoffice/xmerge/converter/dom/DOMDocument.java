@@ -91,7 +91,7 @@ public class DOMDocument
      *  @param  namespaceAware  Value for <code>namespaceAware</code> flag.
      *  @param  validating      Value for <code>validating</code> flag.
      */
-    public DOMDocument(String name, String ext,boolean namespaceAware, boolean validating) {
+    private DOMDocument(String name, String ext,boolean namespaceAware, boolean validating) {
 
         factory.setValidating(validating);
         factory.setNamespaceAware(namespaceAware);

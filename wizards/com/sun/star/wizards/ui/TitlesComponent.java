@@ -92,7 +92,7 @@ public class TitlesComponent extends ControlScroller
         PropertyValue[] regproperties;
         XTextComponent xTextComponent;
 
-        public ControlRow(int _index, int _iCompPosY)
+        private ControlRow(int _index, int _iCompPosY)
         {
             String slabelname = getColumnName(_index);
             String stextfieldname = getTitleName(_index);

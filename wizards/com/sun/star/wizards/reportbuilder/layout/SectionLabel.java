@@ -23,7 +23,7 @@ import com.sun.star.report.XFixedText;
 public class SectionLabel extends SectionObject
 {
 
-    protected SectionLabel(XFixedText _aFixedText)
+    private SectionLabel(XFixedText _aFixedText)
     {
         m_aParentObject = _aFixedText;
     }

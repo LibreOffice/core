@@ -347,7 +347,7 @@ public class FormDocument extends TextDocument
         CommandMetaData oDBMetaData;
         XPropertySet xPropertySet;
 
-        public ControlForm(FormDocument _oFormDocument, String _sname, Point _astartPoint, Size _aFormSize)
+        private ControlForm(FormDocument _oFormDocument, String _sname, Point _astartPoint, Size _aFormSize)
         {
             aStartPoint = _astartPoint;
             aFormSize = _aFormSize;

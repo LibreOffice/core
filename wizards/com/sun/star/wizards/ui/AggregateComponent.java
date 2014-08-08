@@ -514,7 +514,7 @@ public class AggregateComponent extends ControlScroller
         private XListBox xFunctionListBox;
         private int index;
 
-        protected ControlRow(int _index, int ypos, int _curHelpID)
+        private ControlRow(int _index, int ypos, int _curHelpID)
         {
             try
             {

@@ -40,7 +40,7 @@ public class Parcel implements XNameContainer
        this.m_xSFA = xSFA;
     }
 
-    public Parcel( ParcelContainer parent, ParcelDescriptor desc, String parcelName )
+    private Parcel( ParcelContainer parent, ParcelDescriptor desc, String parcelName )
     {
         this.parent = parent;
         this.m_descriptor = desc;

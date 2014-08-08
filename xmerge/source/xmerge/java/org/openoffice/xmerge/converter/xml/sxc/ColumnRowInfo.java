@@ -54,7 +54,7 @@ public class ColumnRowInfo {
      * @param repeated how many times it is repeated.
      * @param type whether ROW or COLUMN record.
      */
-    public ColumnRowInfo(int dimension, int repeated, int type) {
+    private ColumnRowInfo(int dimension, int repeated, int type) {
 
         this.dimension = dimension;
         this.repeated = repeated;

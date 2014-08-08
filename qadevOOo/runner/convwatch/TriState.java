@@ -32,7 +32,7 @@ public class TriState
 
        @param   value   the value of the <code>TriState</code>.
     */
-    public TriState(int value)
+    private TriState(int value)
         {
             m_nValue = value;
         }

@@ -38,7 +38,7 @@ public class ConfigurationRead {
      *      "com.sun.star.configuration.ConfigurationProvider"
      * @param rootnode The root of the configuration nodes.
      */
-    public ConfigurationRead(XMultiServiceFactory xMSF, String rootnode) {
+    private ConfigurationRead(XMultiServiceFactory xMSF, String rootnode) {
 
         PropertyValue [] nodeArgs = new PropertyValue [1];
         PropertyValue nodepath = new PropertyValue();

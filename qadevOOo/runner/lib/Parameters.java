@@ -45,7 +45,7 @@ public class Parameters implements XPropertySet {
         this (params, null);
     }
 
-    public Parameters(Map<String, Object> params, Parameters defaultParams) {
+    private Parameters(Map<String, Object> params, Parameters defaultParams) {
         parameters = params;
         defaults = defaultParams;
         checkParameters(parameters);

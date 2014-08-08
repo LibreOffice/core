@@ -77,7 +77,7 @@ public class RowSet extends TestCase
         XRow m_row;
         int m_id;
 
-        ResultSetMovementStress(XResultSet _resultSet, int _id) throws java.lang.Exception
+        private ResultSetMovementStress(XResultSet _resultSet, int _id) throws java.lang.Exception
         {
             m_resultSet = _resultSet;
             m_row = UnoRuntime.queryInterface( XRow.class, m_resultSet );

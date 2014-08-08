@@ -46,7 +46,7 @@ public class VariablesCollection
         this(namePrefix, null);
     }
 
-    public VariablesCollection(final String namePrefix, final VariablesCollection parent)
+    private VariablesCollection(final String namePrefix, final VariablesCollection parent)
     {
         if (namePrefix == null)
         {

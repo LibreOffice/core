@@ -32,7 +32,7 @@ class ImageHelper
     int m_h = 0;
     boolean m_bGrabbed = false;
 
-    public ImageHelper(Image _aImage)
+    private ImageHelper(Image _aImage)
     {
          m_aImage = _aImage;
 

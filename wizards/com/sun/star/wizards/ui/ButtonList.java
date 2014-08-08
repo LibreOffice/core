@@ -624,7 +624,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
         public int start,  end,  max;
 
-        public Counter(int start_, int end_, int max_)
+        private Counter(int start_, int end_, int max_)
         {
             start = start_;
             end = end_;

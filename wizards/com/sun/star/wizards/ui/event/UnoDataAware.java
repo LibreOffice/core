@@ -41,7 +41,7 @@ public class UnoDataAware extends DataAware
     protected Object[] disableObjects = new Object[0];
     protected boolean inverse = false;
 
-    protected UnoDataAware(Object dataObject, Value value, Object unoObject_, String unoPropName_)
+    private UnoDataAware(Object dataObject, Value value, Object unoObject_, String unoPropName_)
     {
         super(dataObject, value);
         unoControl = unoObject_;

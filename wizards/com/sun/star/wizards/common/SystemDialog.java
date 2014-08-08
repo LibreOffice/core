@@ -50,7 +50,7 @@ public class SystemDialog
      *
      * @param type  according to com.sun.star.ui.dialogs.TemplateDescription
      */
-    public SystemDialog(XMultiServiceFactory xMSF, String ServiceName, short type)
+    private SystemDialog(XMultiServiceFactory xMSF, String ServiceName, short type)
     {
         try
         {

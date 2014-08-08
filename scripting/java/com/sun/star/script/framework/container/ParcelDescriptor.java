@@ -124,7 +124,7 @@ public class ParcelDescriptor {
         }
     }
 
-    public ParcelDescriptor(Document document) {
+    private ParcelDescriptor(Document document) {
         this.document = document;
         initLanguageProperties();
     }
@@ -137,7 +137,7 @@ public class ParcelDescriptor {
         this(file, "Java");
     }
 
-    public ParcelDescriptor(File file, String language) throws IOException {
+    private ParcelDescriptor(File file, String language) throws IOException {
         this.file = file;
 
         if (file.exists()) {

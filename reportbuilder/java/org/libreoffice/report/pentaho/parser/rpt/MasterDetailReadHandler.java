@@ -40,7 +40,7 @@ public class MasterDetailReadHandler extends ElementReadHandler
         parseMasterDetail = false;
     }
 
-    public MasterDetailReadHandler(final ObjectOleElement element, final boolean parseMasterDetail)
+    private MasterDetailReadHandler(final ObjectOleElement element, final boolean parseMasterDetail)
     {
         this.element = element;
         this.parseMasterDetail = parseMasterDetail;

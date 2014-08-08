@@ -67,7 +67,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
         protected double MaxValue;
         protected double Granularity;
 
-        protected Variable(CellMap cellMap, int originalVariable) {
+        private Variable(CellMap cellMap, int originalVariable) {
             this.CellMap = cellMap;
             this.OriginalVariable = originalVariable;
             this.MinValue = BasicBound.MINDOUBLE;
@@ -81,7 +81,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
         private ArrayList<Variable> m_variables;
         private ArrayList<ExtSolverConstraint> m_constraints;
 
-        protected CalcProblemEncoder(ArrayList<Variable> variables,
+        private CalcProblemEncoder(ArrayList<Variable> variables,
                 ArrayList<ExtSolverConstraint> constraints) throws Exception {
             //m_variableCount variables to solve, target function + constraints to match
             super(variables.size(), 1 + constraints.size());

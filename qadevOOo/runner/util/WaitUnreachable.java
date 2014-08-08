@@ -97,7 +97,7 @@ public final class WaitUnreachable {
      */
     public static void ensureFinalization(final Object obj) {
         final class WaitThread extends Thread {
-            public WaitThread(Object obj) {
+            private WaitThread(Object obj) {
                 super("ensureFinalization");
                 unreachable = new WaitUnreachable(obj);
             }

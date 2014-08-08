@@ -68,7 +68,7 @@ public class SVersionRCFile {
         this(DEFAULT_NAME);
     }
 
-    public SVersionRCFile(String name) {
+    private SVersionRCFile(String name) {
         sversionrc = new File(name);
         versions = new ArrayList<OfficeInstallation>(5);
     }

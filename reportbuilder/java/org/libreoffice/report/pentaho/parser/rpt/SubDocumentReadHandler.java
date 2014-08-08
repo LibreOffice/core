@@ -42,7 +42,7 @@ public class SubDocumentReadHandler extends NoCDATATextContentReadHandler
         this.element = element;
     }
 
-    public SubDocumentReadHandler(final Section section, final ObjectOleElement element)
+    private SubDocumentReadHandler(final Section section, final ObjectOleElement element)
     {
         super(section);
         this.element = element;

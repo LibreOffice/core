@@ -489,7 +489,7 @@ XInitialization {
 
     public class ActionListenerImpl implements com.sun.star.awt.XActionListener {
         private String _buttonName;
-        public ActionListenerImpl( String buttonName ) {
+        private ActionListenerImpl( String buttonName ) {
             _buttonName = buttonName;
         }
 
@@ -508,7 +508,7 @@ XInitialization {
 
     public class ItemListenerImpl implements com.sun.star.awt.XItemListener {
         private XCheckBox _xCheckBox;
-        public ItemListenerImpl( XControlContainer xControlCont ) {
+        private ItemListenerImpl( XControlContainer xControlCont ) {
             Object objectCheckBox = xControlCont.getControl( _checkBoxName );
             _xCheckBox = UnoRuntime.queryInterface(
                 XCheckBox.class, objectCheckBox );

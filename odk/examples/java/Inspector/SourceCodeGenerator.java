@@ -554,7 +554,7 @@ class UnoObjectDefinition{
         Object[] m_oParameterObjects = null;
 
 
-        public UnoObjectDefinition(Any _oUnoObject){
+        private UnoObjectDefinition(Any _oUnoObject){
             m_sTypeName = _oUnoObject.getType().getTypeName();
             m_aTypeClass = _oUnoObject.getType().getTypeClass();
             m_oUnoObject = _oUnoObject;
@@ -562,7 +562,7 @@ class UnoObjectDefinition{
         }
 
 
-        public UnoObjectDefinition(Object _oUnoObject, String _sTypeName, TypeClass _aTypeClass){
+        private UnoObjectDefinition(Object _oUnoObject, String _sTypeName, TypeClass _aTypeClass){
             m_oUnoObject = _oUnoObject;
             m_sTypeName = _sTypeName;
             m_aTypeClass = _aTypeClass;
@@ -570,7 +570,7 @@ class UnoObjectDefinition{
         }
 
 
-        public UnoObjectDefinition(Object _oUnoObject, String _sTypeName){
+        private UnoObjectDefinition(Object _oUnoObject, String _sTypeName){
             m_oUnoObject = _oUnoObject;
             m_sTypeName = _sTypeName;
             m_aTypeClass = AnyConverter.getType(_oUnoObject).getTypeClass();

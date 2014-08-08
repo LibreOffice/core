@@ -55,7 +55,7 @@ public class MethodInvocation
         this(paramClass == null ? obj.getClass().getMethod(methodName) : obj.getClass().getMethod(methodName, paramClass), obj, paramClass);
     }
 
-    public MethodInvocation(Method method, Object obj, Class<?> paramClass)
+    private MethodInvocation(Method method, Object obj, Class<?> paramClass)
     {
         mMethod = method;
         mObject = obj;

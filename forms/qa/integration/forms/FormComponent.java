@@ -61,7 +61,7 @@ public class FormComponent
     }
 
     /* ------------------------------------------------------------------ */
-    public FormComponent( Object element )
+    private FormComponent( Object element )
     {
         m_component = element;
         m_nameAccess = UnoRuntime.queryInterface(

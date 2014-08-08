@@ -49,7 +49,7 @@ public class OfficeStyles extends Element
         private final String family;
         private final String name;
 
-        public StyleKey(final String family, final String name)
+        private StyleKey(final String family, final String name)
         {
             if (family == null)
             {

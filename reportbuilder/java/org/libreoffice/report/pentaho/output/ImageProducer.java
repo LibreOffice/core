@@ -76,7 +76,7 @@ public class ImageProducer
         private final CSSNumericValue height;
         private final String embeddableLink;
 
-        public OfficeImage(final String embeddableLink, final CSSNumericValue width, final CSSNumericValue height)
+        private OfficeImage(final String embeddableLink, final CSSNumericValue width, final CSSNumericValue height)
         {
             this.embeddableLink = embeddableLink;
             this.width = width;

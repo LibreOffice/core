@@ -170,7 +170,7 @@ public abstract class BaseNLPSolver extends WeakBase
         protected int StartCol;
         protected int EndCol;
 
-        public RowInfo(short sheet, int row) {
+        private RowInfo(short sheet, int row) {
             Sheet = sheet;
             Row = row;
         }
@@ -199,7 +199,7 @@ public abstract class BaseNLPSolver extends WeakBase
         public XCell Right;
         public double Data;
 
-        public ExtSolverConstraint(XCell left, SolverConstraintOperator operator, Object right) {
+        private ExtSolverConstraint(XCell left, SolverConstraintOperator operator, Object right) {
             this.Left = left;
             this.Operator = operator;
             this.Right = null;

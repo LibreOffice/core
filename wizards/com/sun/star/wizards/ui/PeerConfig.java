@@ -50,7 +50,7 @@ public class PeerConfig implements XWindowListener
         String[] propnames;
         Object[] propvalues;
 
-        public PeerTask(XControl _xControl, String[] propNames_, Object[] propValues_)
+        private PeerTask(XControl _xControl, String[] propNames_, Object[] propValues_)
         {
             propnames = propNames_;
             propvalues = propValues_;
@@ -65,7 +65,7 @@ public class PeerConfig implements XWindowListener
         String propname;
         Object propvalue;
 
-        public ControlTask(Object _oModel, String _propName, Object _propValue)
+        private ControlTask(Object _oModel, String _propName, Object _propValue)
         {
             propname = _propName;
             propvalue = _propValue;
@@ -80,7 +80,7 @@ public class PeerConfig implements XWindowListener
         Object oResource;
         Object oHCResource;
 
-        public ImageUrlTask(Object _oModel, Object _oResource, Object _oHCResource)
+        private ImageUrlTask(Object _oModel, Object _oResource, Object _oHCResource)
         {
             oResource = _oResource;
             oHCResource = _oHCResource;

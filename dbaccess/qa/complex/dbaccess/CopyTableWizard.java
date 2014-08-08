@@ -94,7 +94,7 @@ public class CopyTableWizard extends CRMBasedTestCase
 
         final XCopyTableWizard copyWizard;
 
-        CopyThread(final XCopyTableWizard copyWizard)
+        private CopyThread(final XCopyTableWizard copyWizard)
         {
             this.copyWizard = copyWizard;
         }

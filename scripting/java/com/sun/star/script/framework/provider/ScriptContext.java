@@ -47,7 +47,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
     public Integer m_iStorageID = null;
     public XComponentContext m_xComponentContext = null;
 
-    public ScriptContext( XComponentContext xmComponentContext,
+    private ScriptContext( XComponentContext xmComponentContext,
         XDesktop xDesktop, XModel xModel, XScriptInvocationContext xInvocContext)
     {
         this.m_xDeskTop = xDesktop;

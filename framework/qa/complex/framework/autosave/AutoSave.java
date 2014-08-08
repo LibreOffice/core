@@ -68,7 +68,7 @@ public class AutoSave
         private URL m_aRegistration;
         private Protocol m_aLog;
 
-        public AutoSaveListener(XMultiServiceFactory xSMGR    ,
+        private AutoSaveListener(XMultiServiceFactory xSMGR    ,
                                 XDispatch            xAutoSave,
                                 Protocol             aLog     )
         {

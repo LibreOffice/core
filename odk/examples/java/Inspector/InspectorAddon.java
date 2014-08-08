@@ -100,7 +100,7 @@ public class InspectorAddon {
             private XFrame m_xFrame = null;
             private XModel xModel = null;
 
-            public Dispatcher(XFrame _xFrame){
+            private Dispatcher(XFrame _xFrame){
                 m_xFrame = _xFrame;
                 if (m_xFrame != null){
                     XController xController = m_xFrame.getController();

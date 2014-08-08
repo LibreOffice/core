@@ -163,7 +163,7 @@ public class DBTools {
         * @param dataSource All source properties are copied into
         * class fields.
         */
-        public DataSourceInfo(Object dataSource) {
+        private DataSourceInfo(Object dataSource) {
             XPropertySet xProps = UnoRuntime.queryInterface(XPropertySet.class, dataSource) ;
 
             try {

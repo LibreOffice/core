@@ -50,7 +50,7 @@ public class DeployedUnoPackagesDB {
         }
     }
 
-    public DeployedUnoPackagesDB(Document document) {
+    private DeployedUnoPackagesDB(Document document) {
         this.document = document;
     }
 

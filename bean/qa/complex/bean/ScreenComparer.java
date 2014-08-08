@@ -39,7 +39,7 @@ class ScreenComparer
         this(new Rectangle(x, y, width, height));
     }
 
-    public ScreenComparer(Rectangle location)
+    private ScreenComparer(Rectangle location)
     {
         m_rect = location;
         int red = 0xff;

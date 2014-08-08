@@ -152,7 +152,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         private final MemoryByteArrayOutputStream xmlBuffer;
         private final OfficeStylesCollection stylesCollection;
 
-        protected BufferState(final XmlWriter xmlWriter,
+        private BufferState(final XmlWriter xmlWriter,
                 final MemoryByteArrayOutputStream xmlBuffer,
                 final OfficeStylesCollection stylesCollection)
         {
@@ -208,7 +208,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         private int iterationCount;
         private boolean groupWithRepeatingSection;
 
-        protected GroupContext(final GroupContext parent)
+        private GroupContext(final GroupContext parent)
         {
             this.parent = parent;
         }
