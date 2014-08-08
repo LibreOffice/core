@@ -204,11 +204,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                    !GetAnchoredObj().GetLastCharRect().Width() ) ||
                  !GetAnchoredObj().GetLastTopOfLine() )
             {
-                // #i111886#
-                // Check existence of paragraph portion information in order
-                // to avoid formatting which could cause deletion of follow frames.
-                GetAnchoredObj().CheckCharRectAndTopOfLine();
-
+                GetAnchoredObj().CheckCharRectAndTopOfLine( false );
                 // Due to table break algorithm the character
                 // rectangle can have no height. Thus, check also the width
                 if ( ( !GetAnchoredObj().GetLastCharRect().Height() &&
