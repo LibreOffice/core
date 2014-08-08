@@ -540,7 +540,6 @@ namespace oglcanvas
         class BufferContextImpl : public IBufferContext
         {
             ::basegfx::B2IVector       maSize;
-            const SpriteDeviceHelper&  mrDeviceHelper;
             GLuint mnFrambufferId;
             GLuint mnDepthId;
             GLuint mnTextureId;
@@ -563,10 +562,8 @@ namespace oglcanvas
             }
 
         public:
-            BufferContextImpl(const SpriteDeviceHelper&   rDeviceHelper,
-                              const ::basegfx::B2IVector& rSize) :
+            BufferContextImpl(const ::basegfx::B2IVector& rSize) :
                 maSize(rSize),
-                mrDeviceHelper(rDeviceHelper),
                 mnFrambufferId(0),
                 mnDepthId(0),
                 mnTextureId(0)
@@ -586,7 +583,7 @@ namespace oglcanvas
 
     IBufferContextSharedPtr SpriteDeviceHelper::createBufferContext(const ::basegfx::B2IVector& rSize) const
     {
-        return IBufferContextSharedPtr(new BufferContextImpl(*this, rSize));
+        return IBufferContextSharedPtr(new BufferContextImpl(rSize));
     }
 
     TextureCache& SpriteDeviceHelper::getTextureCache() const
