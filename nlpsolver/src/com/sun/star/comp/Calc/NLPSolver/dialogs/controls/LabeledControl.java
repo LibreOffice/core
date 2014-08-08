@@ -39,10 +39,6 @@ public abstract class LabeledControl extends BaseControl {
         setProperty("Label", label);
     }
 
-    public void setAlign(TextAlign align) {
-        setProperty("Align", new Short(align.getUnoValue()));
-    }
-
     public void setMultiLine(boolean multiLine) {
         setProperty("MultiLine", new Boolean(multiLine));
     }

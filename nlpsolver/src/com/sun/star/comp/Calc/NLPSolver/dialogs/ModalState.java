@@ -34,6 +34,5 @@ package com.sun.star.comp.Calc.NLPSolver.dialogs;
  * user pressed the OK button.
  */
 public enum ModalState {
-    Exit,
-    OK
+    Exit
 }
