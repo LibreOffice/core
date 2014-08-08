@@ -40,6 +40,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 

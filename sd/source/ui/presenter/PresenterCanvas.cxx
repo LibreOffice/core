@@ -27,6 +27,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <canvas/canvastools.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <rtl/ref.hxx>
