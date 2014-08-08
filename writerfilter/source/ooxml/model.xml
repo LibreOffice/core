@@ -1163,27 +1163,16 @@
       <include href="dml-shapeEffects.rng"/>
       <include href="dml-shapeLineProperties.rng"/>
       <define name="ST_TextPoint">
-        <data type="int">
-          <param name="minInclusive">-400000</param>
-          <param name="maxInclusive">400000</param>
-        </data>
+        <data type="int"/>
       </define>
       <define name="ST_TextNonNegativePoint">
-        <data type="int">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">400000</param>
-        </data>
+        <data type="int"/>
       </define>
       <define name="ST_TextFontSize">
-        <data type="int">
-          <param name="minInclusive">100</param>
-          <param name="maxInclusive">400000</param>
-        </data>
+        <data type="int"/>
       </define>
       <define name="ST_Panose">
-        <data type="hexBinary">
-          <param name="length">10</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="ST_TextTypeface">
         <data type="string"/>
@@ -3125,19 +3114,13 @@
         </attribute>
       </define>
       <define name="ST_Coordinate">
-        <data type="long">
-          <param name="minInclusive">-27273042329600</param>
-          <param name="maxInclusive">27273042316900</param>
-        </data>
+        <data type="long"/>
       </define>
       <define name="ST_Coordinate32">
         <data type="int"/>
       </define>
       <define name="ST_PositiveCoordinate">
-        <data type="long">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">27273042316900</param>
-        </data>
+        <data type="long"/>
       </define>
       <define name="ST_PositiveCoordinate32">
         <empty/>
@@ -3335,9 +3318,7 @@
         </attribute>
       </define>
       <define name="ST_HexBinary3">
-        <data type="hexBinary">
-          <param name="length">3</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="CT_SRgbColor">
         <zeroOrMore>
@@ -3940,9 +3921,7 @@
           </choice>
       </define>
       <define name="ST_Guid">
-        <data type="token">
-          <param name="pattern">\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}</param>
-        </data>
+        <data type="token"/>
       </define>
       <define name="EG_ColorChoice">
         <choice>
@@ -5118,51 +5097,28 @@
       </define>
 
       <define name="ST_PositiveCoordinate">
-        <data type="long">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">27273042316900</param>
-        </data>
+        <data type="long"/>
       </define>
       <define name="ST_HexColorRGB">
-        <data type="hexBinary">
-          <param name="length">3</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="ST_PositiveFixedPercentage">
-        <data type="long">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">27273042316900</param>
-        </data>
+        <data type="long"/>
       </define>
       <define name="ST_PositivePercentage">
-        <data type="long">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">27273042316900</param>
-        </data>
+        <data type="long"/>
       </define>
       <define name="ST_Percentage">
-        <data type="long">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">27273042316900</param>
-        </data>
+        <data type="long"/>
       </define>
       <define name="ST_PositiveFixedAngle">
-        <data type="int">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">21600000</param>
-        </data>
+        <data type="int"/>
       </define>
       <define name="ST_FixedAngle">
-        <data type="int">
-          <param name="minInclusive">-5400000</param>
-          <param name="maxInclusive">5400000</param>
-        </data>
+        <data type="int"/>
       </define>
       <define name="ST_LineWidth">
-        <data type="int">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">20116800</param>
-        </data>
+        <data type="int"/>
       </define>
       <define name="ST_UnsignedDecimalNumber">
         <data type="unsignedLong"/>
@@ -6254,46 +6210,25 @@
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawingml/2010/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- Simple types -->
       <define name="ST_ArtisticEffectParam10">
-        <data type="integer">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">10</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="ST_ArtisticEffectParam100">
-        <data type="integer">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">100</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="ST_ArtisticEffectParam4">
-        <data type="integer">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">4</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="ST_ArtisticEffectParam6">
-        <data type="integer">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">6</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="ST_ColorTemperature">
-        <data type="integer">
-          <param name="minInclusive">1500</param>
-          <param name="maxInclusive">11500</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="ST_LegacySpreadsheetColorIndex">
-        <data type="integer">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">80</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="ST_SaturationAmount">
-        <data type="integer">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">400000</param>
-        </data>
+        <data type="integer"/>
       </define>
 
       <!-- Complex types for effects -->
@@ -7753,9 +7688,7 @@
         <data type="unsignedInt"/>
       </define>
       <define name="ST_EditId">
-        <data type="hexBinary">
-          <param name="length">4</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="CT_Inline">
         <group>
@@ -8322,10 +8255,7 @@
       <include href="wml.rng"/>
       <!-- start = mathPr | oMathPara | oMath -->
       <define name="ST_Integer255">
-        <data type="integer">
-          <param name="minInclusive">1</param>
-          <param name="maxInclusive">255</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="CT_Integer255">
         <attribute name="val">
@@ -8333,10 +8263,7 @@
         </attribute>
       </define>
       <define name="ST_Integer2">
-        <data type="integer">
-          <param name="minInclusive">-2</param>
-          <param name="maxInclusive">2</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="CT_Integer2">
         <attribute name="val">
@@ -8344,10 +8271,7 @@
         </attribute>
       </define>
       <define name="ST_SpacingRule">
-        <data type="integer">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">4</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="CT_SpacingRule">
         <attribute name="val">
@@ -8363,9 +8287,7 @@
         </attribute>
       </define>
       <define name="ST_Char">
-        <data type="string">
-          <param name="maxLength">1</param>
-        </data>
+        <data type="string"/>
       </define>
       <define name="CT_Char">
         <attribute name="val">
@@ -12635,9 +12557,7 @@
           </choice>
       </define>
       <define name="ST_Guid">
-        <data type="token">
-          <param name="pattern">\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}</param>
-        </data>
+        <data type="token"/>
       </define>
       <define name="ST_RelationshipId">
         <data type="string"/>
@@ -13213,9 +13133,7 @@
         </attribute>
       </define>
       <define name="ST_LongHexNumber">
-        <data type="hexBinary">
-          <param name="length">4</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="CT_LongHexNumber">
         <attribute name="val">
@@ -13223,9 +13141,7 @@
         </attribute>
       </define>
       <define name="ST_ShortHexNumber">
-        <data type="hexBinary">
-          <param name="length">2</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="CT_ShortHexNumber">
         <attribute name="val">
@@ -13233,9 +13149,7 @@
         </attribute>
       </define>
       <define name="ST_UcharHexNumber">
-        <data type="hexBinary">
-          <param name="length">1</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="CT_UcharHexNumber">
         <attribute name="val">
@@ -13297,9 +13211,7 @@
         <data type="dateTime"/>
       </define>
       <define name="ST_MacroName">
-        <data type="string">
-          <param name="maxLength">33</param>
-        </data>
+        <data type="string"/>
       </define>
       <define name="CT_MacroName">
         <attribute name="val">
@@ -13321,10 +13233,7 @@
         </attribute>
       </define>
       <define name="ST_TextScale">
-        <data type="integer">
-          <param name="minInclusive">0</param>
-          <param name="maxInclusive">600</param>
-        </data>
+        <data type="integer"/>
       </define>
       <define name="CT_TextScale">
         <attribute name="val">
@@ -13381,9 +13290,7 @@
         </list>
       </define>
       <define name="ST_HexColorRGB">
-        <data type="hexBinary">
-          <param name="length">3</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="ST_HexColor">
         <choice>
@@ -13413,9 +13320,7 @@
         </optional>
       </define>
       <define name="ST_LangCode">
-        <data type="hexBinary">
-          <param name="length">2</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="ST_Lang">
         <choice>
@@ -13430,9 +13335,7 @@
         </attribute>
       </define>
       <define name="ST_Guid">
-        <data type="token">
-          <param name="pattern">\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}</param>
-        </data>
+        <data type="token"/>
       </define>
       <define name="CT_Guid">
         <attribute name="val">
@@ -15557,19 +15460,13 @@
           </choice>
       </define>
       <define name="ST_FFHelpTextVal">
-        <data type="string">
-          <param name="maxLength">256</param>
-        </data>
+        <data type="string"/>
       </define>
       <define name="ST_FFStatusTextVal">
-        <data type="string">
-          <param name="maxLength">140</param>
-        </data>
+        <data type="string"/>
       </define>
       <define name="ST_FFName">
-        <data type="string">
-          <param name="maxLength">65</param>
-        </data>
+        <data type="string"/>
       </define>
       <define name="ST_FFTextType">
           <choice>
@@ -18026,10 +17923,7 @@
         </oneOrMore>
       </define>
       <define name="ST_Cnf">
-        <data type="string">
-          <param name="length">12</param>
-          <param name="pattern">[01]*</param>
-        </data>
+        <data type="string"/>
       </define>
       <define name="CT_Cnf">
         <attribute name="val">
@@ -20596,9 +20490,7 @@
         </zeroOrMore>
       </define>
       <define name="ST_Panose">
-        <data type="hexBinary">
-          <param name="length">10</param>
-        </data>
+        <data type="hexBinary"/>
       </define>
       <define name="CT_Panose">
         <attribute name="val">
