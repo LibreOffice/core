@@ -944,7 +944,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->m_pSdtHelper->getDropDownItems().push_back(sStringValue);
         break;
         case NS_ooxml::LN_CT_SdtDate_fullDate:
-            m_pImpl->m_pSdtHelper->getDate().append(sStringValue);
+            if (!IsInHeaderFooter())
+                m_pImpl->m_pSdtHelper->getDate().append(sStringValue);
+            else
+                m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_fullDate", sStringValue);
         break;
         case NS_ooxml::LN_CT_Background_color:
             m_pImpl->m_oBackgroundColor.reset(nIntValue);
@@ -2351,19 +2354,44 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     break;
     case NS_ooxml::LN_CT_SdtPr_date:
     {
-        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != NULL)
-            pProperties->resolve(*this);
+        if (!IsInHeaderFooter())
+            resourcemodel::resolveSprmProps(*this, rSprm);
+        else
+        {
+            OUString sName = "ooxml::CT_SdtPr_date";
+            enableInteropGrabBag(sName);
+            resourcemodel::resolveSprmProps(*this, rSprm);
+            m_pImpl->m_pSdtHelper->appendToInteropGrabBag(getInteropGrabBag());
+            m_pImpl->disableInteropGrabBag();
+        }
     }
     break;
     case NS_ooxml::LN_CT_SdtDate_dateFormat:
     {
-        m_pImpl->m_pSdtHelper->getDateFormat().append(sStringValue);
+        if (!IsInHeaderFooter())
+            m_pImpl->m_pSdtHelper->getDateFormat().append(sStringValue);
+        else
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_dateFormat", sStringValue);
+    }
+    break;
+    case NS_ooxml::LN_CT_SdtDate_storeMappedDataAs:
+    {
+        if (IsInHeaderFooter())
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_storeMappedDataAs", sStringValue);
+    }
+    break;
+    case NS_ooxml::LN_CT_SdtDate_calendar:
+    {
+        if (IsInHeaderFooter())
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_calendar", sStringValue);
     }
     break;
     case NS_ooxml::LN_CT_SdtDate_lid:
     {
-        m_pImpl->m_pSdtHelper->getLocale().append(sStringValue);
+        if (!IsInHeaderFooter())
+            m_pImpl->m_pSdtHelper->getLocale().append(sStringValue);
+        else
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_lid", sStringValue);
     }
     break;
     case NS_ooxml::LN_CT_SdtPr_dataBinding:
@@ -2914,7 +2942,8 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         m_pImpl->m_pSdtHelper->getSdtTexts().append(sText);
         return;
     }
-    else if (!m_pImpl->m_pSdtHelper->getDateFormat().isEmpty())
+    // Form controls are not allowed in headers / footers; see sw::DocumentContentOperationsManager::InsertDrawObj()
+    else if (!m_pImpl->m_pSdtHelper->getDateFormat().isEmpty() && !IsInHeaderFooter())
     {
         /*
          * Here we assume w:sdt only contains a single text token. We need to
