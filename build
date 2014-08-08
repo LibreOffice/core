@@ -67,6 +67,7 @@ do_configure()
     fi
     OPTIONS_PLATFORM=(
       --with-ant-home="${ANT_HOME}"
+      --with-lang='de'
     )
   else
     if [ -f /usr/lib/j2sdk1.5-sun/bin/javac  ]; then
@@ -90,6 +91,7 @@ do_configure()
       --without-doxygen
       --without-fonts
       --without-ppds
+      --with-lang='en-US de fr es it pt'
       --with-package-format=deb
       --with-system-curl
       --with-system-expat
@@ -110,7 +112,6 @@ do_configure()
     --with-help
     --with-java
     --with-jdk-home="${JDK_HOME}"
-    --with-lang='en-US de fr es it pt'
     --with-myspell-dicts
     --without-junit
     --with-system-dicts
