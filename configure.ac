@@ -1351,7 +1351,7 @@ AC_ARG_ENABLE(macosx-sandbox,
 AC_ARG_ENABLE(canonical-installation-tree-structure,
     AS_HELP_STRING([--enable-canonical-installation-tree-structure],
         [Make the installation tree structure be more canonical for
-         the platform. Implemented only for OS X. Experimental and currently broken.]),
+         the platform. Implemented only for OS X. Experimental.]),
 ,)
 
 
