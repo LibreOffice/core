@@ -35,20 +35,23 @@
 #include <sfx2/objsh.hxx>
 #include <rtl/strbuf.hxx>
 
-extern "C"
-#ifdef WNT
-int _cdecl
-#else
-int
-#endif
+extern "C" {
 
-SfxCompareSlots_Impl( const void* pSmaller, const void* pBigger )
+static int SAL_CALL
+SfxCompareSlots_qsort( const void* pSmaller, const void* pBigger )
 {
     return ( (int) ((SfxSlot*)pSmaller)->GetSlotId() ) -
            ( (int) ((SfxSlot*)pBigger)->GetSlotId() );
 }
 
+static int SAL_CALL
+SfxCompareSlots_bsearch( const void* pSmaller, const void* pBigger )
+{
+    return ( (int) *((sal_uInt16*)pSmaller) ) -
+           ( (int) ((SfxSlot*)pBigger)->GetSlotId() );
+}
 
+}
 
 struct SfxObjectUI_Impl
 {
@@ -148,7 +151,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
     if ( !pIter->pNextSlot )
     {
         // sort the SfxSlots by id
-        qsort( pSlots, nCount, sizeof(SfxSlot), SfxCompareSlots_Impl );
+        qsort( pSlots, nCount, sizeof(SfxSlot), SfxCompareSlots_qsort );
 
         // link masters and slaves
         sal_uInt16 nIter = 1;
@@ -311,7 +314,7 @@ const SfxSlot* SfxInterface::GetSlot( sal_uInt16 nFuncId ) const
 
     // find the id using binary search
     void* p = bsearch( &nFuncId, pSlots, nCount, sizeof(SfxSlot),
-                       SfxCompareSlots_Impl );
+                       SfxCompareSlots_bsearch );
     if ( !p && pGenoType )
         return pGenoType->GetSlot( nFuncId );
 
