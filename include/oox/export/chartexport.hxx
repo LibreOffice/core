@@ -100,7 +100,8 @@ private:
     AxisVector          maAxes;
     bool                mbHasZAxis;
     bool                mbIs3DChart;
-
+    bool                mbStacked;
+    bool                mbPercent;
 
 private:
     sal_Int32 getChartType();
