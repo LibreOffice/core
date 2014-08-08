@@ -34,7 +34,7 @@ public:
      *          This also affects whether to free with glDeleteRenderbuffers or glDeleteTextures
      */
     static void createFramebuffer(long nWidth, long nHeight, GLuint& nFramebufferId,
-            GLuint& nRenderbufferTextId, GLuint& nRenderbufferColorId, bool bRenderbuffer = true);
+            GLuint& nRenderbufferDepthId, GLuint& nRenderbufferColorId, bool bRenderbuffer = true);
 
     // Get OpenGL version (needs a context)
     static float getGLVersion();
