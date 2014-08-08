@@ -182,7 +182,8 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
     Point                   aCurMousePos;
 
     sal_uInt16              nPaintCount;
-    Rectangle               aRepaintPixel;
+    // The area to be repainted, in logic coordinates.
+    Rectangle               aRepaintRect;
 
     ScAddress               aAutoMarkPos;
     ScAddress               aListValPos;

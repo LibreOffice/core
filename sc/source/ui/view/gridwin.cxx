@@ -4608,7 +4608,7 @@ void ScGridWindow::UpdateFormulas()
         //  (dann wuerde zumindest der MapMode nicht mehr stimmen)
 
         bNeedsRepaint = true;           // -> am Ende vom Paint nochmal Invalidate auf alles
-        aRepaintPixel = Rectangle();    // alles
+        aRepaintRect = Rectangle();    // alles
         return;
     }
 
@@ -4696,7 +4696,7 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
         if ( !bOldButton || aListValPos != aOldPos )
         {
             // paint area of new button
-            Invalidate( PixelToLogic( GetListValButtonRect( aListValPos ) ) );
+            Invalidate( GetListValButtonRect( aListValPos ) );
         }
     }
     if ( bOldButton )
@@ -4704,7 +4704,7 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
         if ( !bListValButton || aListValPos != aOldPos )
         {
             // paint area of old button
-            Invalidate( PixelToLogic( GetListValButtonRect( aOldPos ) ) );
+            Invalidate( GetListValButtonRect( aOldPos ) );
         }
     }
 }

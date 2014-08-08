@@ -322,9 +322,14 @@ void ScGridWindow::Paint( const Rectangle& rRect )
     EnableMapMode( false );
 }
 
-void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
+void ScGridWindow::Paint( const Rectangle& rPixRect, OutputDevice* pOutDev )
 {
+    // Convert Pix to logic
+    const Rectangle aLogicRect = PixelToLogic( rPixRect );
+
+//    const Rectangle aLogicRect = rPixRect;
     ScDocument* pDoc = pViewData->GetDocument();
+
     if ( pDoc->IsInInterpreter() )
     {
         //  via Reschedule, interpretierende Zellen nicht nochmal anstossen
@@ -334,12 +339,14 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
         if ( bNeedsRepaint )
         {
             //! Rechtecke zusammenfassen?
-            aRepaintPixel = Rectangle();            // mehrfach -> alles painten
+            aRepaintRect = Rectangle();            // mehrfach -> alles painten
         }
         else
         {
             bNeedsRepaint = true;
-            aRepaintPixel = LogicToPixel(rRect);    // nur betroffenen Bereich
+            // Yes -- this is reused for another paint call, hence we need
+            // to keep pixel coordinates.
+            aRepaintRect = rPixRect;
         }
         return;
     }
@@ -366,13 +373,13 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
 
     SCTAB nTab = pViewData->GetTabNo();
 
-    Rectangle aMirroredRect = rRect;
+    Rectangle aMirroredRect = aLogicRect;
     if ( pDoc->IsLayoutRTL( nTab ) )
     {
         //  mirror and swap
-        long nWidth = PixelToLogic(GetSizePixel()).Width();
-        aMirroredRect.Left()  = nWidth - 1 - rRect.Right();
-        aMirroredRect.Right() = nWidth - 1 - rRect.Left();
+        long nWidth = GetSizePixel().Width();
+        aMirroredRect.Left()  = nWidth - 1 - aLogicRect.Right();
+        aMirroredRect.Right() = nWidth - 1 - aLogicRect.Left();
     }
 
     long nScrX = pDoc->GetColWidth( nX1, nTab );
@@ -389,13 +396,13 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
     }
 
     long nScrY = 0;
-    while ( nScrY < rRect.Top() && nY1 < MAXROW )
+    while ( nScrY < aLogicRect.Top() && nY1 < MAXROW )
     {
         ++nY1;
         nScrY += pDoc->GetRowHeight( nY1, nTab );
     }
     SCROW nY2 = nY1;
-    while ( nScrY <= rRect.Bottom() && nY2 < MAXROW )
+    while ( nScrY <= aLogicRect.Bottom() && nY2 < MAXROW )
     {
         ++nY2;
         nScrY += pDoc->GetRowHeight( nY2, nTab );
@@ -413,6 +420,7 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
     // set in UpdateVisibleRange which however uses the viewdata, which is
     // completely irrelevant for tiled rendering.
     maVisibleRange.set( nX1, nY1, nX2, nY2 );
+
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS, pOutDev );           // nicht weiterzeichnen
     bIsInPaint = false;
 }
@@ -481,7 +489,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     OSL_ENSURE( ValidCol(nX2) && ValidRow(nY2), "GridWin Draw Bereich zu gross" );
 
-    UpdateVisibleRange();
+//    UpdateVisibleRange();
 
     if (nX2 < maVisibleRange.mnCol1 || nY2 < maVisibleRange.mnRow1)
         return;
@@ -492,7 +500,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         nY1 = maVisibleRange.mnRow1;
 
     if (nX1 > maVisibleRange.mnCol2 || nY1 > maVisibleRange.mnRow2)
+    {
         return;
+    }
 
     if (nX2 > maVisibleRange.mnCol2)
         nX2 = maVisibleRange.mnCol2;
@@ -1015,11 +1025,11 @@ void ScGridWindow::CheckNeedsRepaint()
     if (bNeedsRepaint)
     {
         bNeedsRepaint = false;
-        if (aRepaintPixel.IsEmpty())
+        if (aRepaintRect.IsEmpty())
             Invalidate();
         else
-            Invalidate(PixelToLogic(aRepaintPixel));
-        aRepaintPixel = Rectangle();
+            Invalidate(aRepaintRect);
+        aRepaintRect = Rectangle();
 
         // selection function in status bar might also be invalid
         SfxBindings& rBindings = pViewData->GetBindings();
