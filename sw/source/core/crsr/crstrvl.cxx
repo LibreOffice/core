@@ -670,6 +670,8 @@ bool SwCrsrShell::MoveFldType(
 
         SwTxtFld * pTxtFld = pTNd->GetFldTxtAttrAt( rPos.nContent.GetIndex(), true );
         const bool bDelFld = ( pTxtFld == NULL );
+        sal_Int32 nContentOffset = -1;
+
         if( bDelFld )
         {
             // create dummy for the search
@@ -680,23 +682,47 @@ bool SwCrsrShell::MoveFldType(
                         mpDoc->IsClipBoard() );
             pTxtFld->ChgTxtNode( pTNd );
         }
+        else
+        {
+            // the cursor might be anywhere inside the input field,
+            // but we will be searching for the field start
+            if (pTxtFld->Which() == RES_TXTATR_INPUTFIELD
+                    && rPos.nContent.GetIndex() != pTxtFld->GetStart())
+                nContentOffset = pTxtFld->GetStart();
+        }
 
-        _SetGetExpFld aSrch( rPos.nNode, pTxtFld, &rPos.nContent );
+        _SetGetExpFld *pSrch = NULL;
+        SwIndex *pIndex = NULL;
+        if( -1 == nContentOffset )
+        {
+            pSrch = new _SetGetExpFld( rPos.nNode, pTxtFld, &rPos.nContent );
+        }
+        else
+        {
+            pIndex = new SwIndex( rPos.nNode.GetNode().GetCntntNode(), nContentOffset );
+            pSrch = new _SetGetExpFld( rPos.nNode, pTxtFld, pIndex );
+        }
+
         if( rPos.nNode.GetIndex() < mpDoc->GetNodes().GetEndOfExtras().GetIndex() )
         {
             // also at collection use only the first frame
             Point aPt;
-            aSrch.SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, false ) );
+            pSrch->SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, false ) );
         }
 
-        it = aSrtLst.lower_bound( &aSrch );
+        it = aSrtLst.lower_bound( pSrch );
+
+        bool isSrch = (**it == *pSrch);
+        delete pIndex;
+        delete pSrch;
+
         if( bDelFld )
         {
             delete (SwFmtFld*)&pTxtFld->GetAttr();
             delete pTxtFld;
         }
 
-        if( it != aSrtLst.end() && **it == aSrch ) // found
+        if( it != aSrtLst.end() && isSrch ) // found
         {
             if( bNext )
             {
