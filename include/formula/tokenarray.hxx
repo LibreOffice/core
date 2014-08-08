@@ -55,12 +55,39 @@ class FormulaMissingContext;
 
 class FORMULA_DLLPUBLIC MissingConvention
 {
-    bool    mbODFF;     /// TRUE: ODFF, FALSE: PODF
 public:
-    explicit    MissingConvention( bool bODFF ) : mbODFF(bODFF) {}
+    enum Convention
+    {
+        FORMULA_MISSING_CONVENTION_PODF,
+        FORMULA_MISSING_CONVENTION_ODFF,
+        FORMULA_MISSING_CONVENTION_OOXML
+    };
+    explicit            MissingConvention( Convention eConvention ) : meConvention(eConvention) {}
+    inline  bool        isPODF() const  { return meConvention == FORMULA_MISSING_CONVENTION_PODF; }
+    inline  Convention  getConvention() const { return meConvention; }
+private:
+    Convention meConvention;
+};
+
+class FORMULA_DLLPUBLIC MissingConventionODF : public MissingConvention
+{
+public:
+    explicit    MissingConventionODF( bool bODFF ) :
+        MissingConvention( bODFF ?
+                MissingConvention::FORMULA_MISSING_CONVENTION_ODFF :
+                MissingConvention::FORMULA_MISSING_CONVENTION_PODF)
+        {
+        }
     // Implementation and usage only in token.cxx
     inline  bool    isRewriteNeeded( OpCode eOp ) const;
-    inline  bool    isODFF() const { return mbODFF; }
+};
+
+class FORMULA_DLLPUBLIC MissingConventionOOXML : public MissingConvention
+{
+public:
+    explicit    MissingConventionOOXML() : MissingConvention( MissingConvention::FORMULA_MISSING_CONVENTION_OOXML) {}
+    // Implementation and usage only in token.cxx
+    inline  bool    isRewriteNeeded( OpCode eOp ) const;
 };
 
 class FORMULA_DLLPUBLIC FormulaTokenArray
@@ -238,15 +265,19 @@ public:
     FormulaTokenArray& operator=( const FormulaTokenArray& );
 
     /** Determines if this formula needs any changes to convert it to something
-        previous versions of OOo could consume (Plain Old Formula). */
-            bool                NeedsPofRewrite(const MissingConvention & rConv);
+        previous versions of OOo could consume (Plain Old Formula, pre-ODFF, or
+        also ODFF) */
+    bool                NeedsPodfRewrite( const MissingConventionODF & rConv );
 
-    /** Rewrites to Plain Old Formula, substituting missing parameters. The
+    /** Determines if this formula needs any changes to convert it to OOXML. */
+    bool                NeedsOoxmlRewrite( const MissingConventionOOXML & rConv );
+
+    /** Rewrites to Plain Old Formula or OOXML, substituting missing parameters. The
         FormulaTokenArray* returned is new'ed. */
-            FormulaTokenArray*  RewriteMissingToPof(const MissingConvention & rConv);
+    FormulaTokenArray*  RewriteMissing( const MissingConvention & rConv );
 
     /** Determines if this formula may be followed by a reference. */
-            bool                MayReferenceFollow();
+    bool                MayReferenceFollow();
 };
 
 inline OpCode FormulaTokenArray::GetOuterFuncOpCode()
