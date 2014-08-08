@@ -2260,27 +2260,22 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     sal_uInt32 nXAlign = nCntXAlign > pRecord->nXAlign ? pRecord->nXAlign : 1;
     sal_uInt32 nYAlign = nCntYAlign > pRecord->nYAlign ? pRecord->nYAlign : 1;
 
-    if (pFSPA)
+    if ( pFSPA != NULL )
     {
-        /*
-        #74188# #i15718# #i19008#
-        Strangely in this case the FSPA value seems to be considered before
-        the newer escher nXRelTo record.
-        */
-        // --> OD 2005-08-04 #i52565# - correct condition checking:
-        // first check, if <nXRelTo> and <nYRelTo> have default values.  This
-        // is a hint that these values aren't set by the escher import - see
-        // method <SwMSDffManager::ProcessObj(..)>. Then, check if for each
-        // values, if it differs from the one in the FSPA.
-        if ( pRecord->nXRelTo == 2 && pRecord->nYRelTo == 2 && !bCurSectionVertical)
+        // #52565# - try to handle special case for objects in tables regarding its X Rel
+
+        // if X and Y Rel values are on default take it as a hint, that they have not been set
+        // by <SwMSDffManager::ProcessObj(..)>
+        const bool bXYRelHaveDefaultValues = pRecord->nXRelTo == 2 && pRecord->nYRelTo == 2;
+        if ( bXYRelHaveDefaultValues
+             && nInTable > 0
+             && !bCurSectionVertical )
         {
-            // if <nYRelTo> differs from <FSPA.nby> overwrite <nYRelTo>
             if ( pFSPA->nby != pRecord->nYRelTo )
             {
                 pRecord->nYRelTo = pFSPA->nby;
             }
         }
-        // <--
     }
 
     sal_uInt32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
