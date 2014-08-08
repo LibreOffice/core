@@ -113,6 +113,7 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
         }
         catch(const SQLException &e)
         {
+            SAL_INFO("dbaccess", "exception caught: " << e.Message);
             // TODO: doing nothing matches the previous behaviour,
             //       (and keeps dbaccess unoapi test working...)
             //       but should be investigated... If the value could not be
