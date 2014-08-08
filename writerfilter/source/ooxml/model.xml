@@ -22866,6 +22866,8 @@
       <attribute name="fullDate" tokenid="ooxml:CT_SdtDate_fullDate"/>
       <element name="dateFormat" tokenid="ooxml:CT_SdtDate_dateFormat"/>
       <element name="lid" tokenid="ooxml:CT_SdtDate_lid"/>
+      <element name="storeMappedDataAs" tokenid="ooxml:CT_SdtDate_storeMappedDataAs"/>
+      <element name="calendar" tokenid="ooxml:CT_SdtDate_calendar"/>
     </resource>
     <resource name="CT_SdtDocPart" resource="Properties">
       <element name="docPartGallery" tokenid="ooxml:CT_SdtDocPart_docPartGallery"/>
