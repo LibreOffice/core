@@ -238,7 +238,7 @@ public:
     /**
      * Only necessary for stateless implementations
      */
-    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xRootShape) = 0;
+    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xRootShape, bool bInitOpenGL = true) = 0;
 
     virtual bool preRender(OpenGLWindow* pWindow) = 0;
     virtual void postRender(OpenGLWindow* pWindow) = 0;

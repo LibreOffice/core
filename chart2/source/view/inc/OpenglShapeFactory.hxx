@@ -184,7 +184,7 @@ public:
 
     virtual void setPageSize( com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > xChartShapes, const com::sun::star::awt::Size& rSize ) SAL_OVERRIDE;
 
-    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xDrawPage) SAL_OVERRIDE;
+    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xDrawPage, bool bInitOpenGL = true) SAL_OVERRIDE;
 
     virtual bool preRender(OpenGLWindow* pWindow) SAL_OVERRIDE;
     virtual void postRender(OpenGLWindow* pWindow) SAL_OVERRIDE;
