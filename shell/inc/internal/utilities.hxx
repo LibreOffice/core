@@ -120,6 +120,7 @@ inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
 
     va_start( args, pFormat );
     StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
+    va_end( args );
     OutputDebugStringA( buffer );
 }
 #else
