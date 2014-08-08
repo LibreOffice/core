@@ -2678,6 +2678,7 @@ void ChartExport::exportDataLabels(
                 aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::NEAR_ORIGIN);
                 aParam.meDefault = css::chart::DataLabelPlacement::CENTER;
             }
+        break;
         default:
             ;
     }
