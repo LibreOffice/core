@@ -57,7 +57,7 @@ fi
 do_configure()
 {
   if [ "_$windows" = "_1" ]; then
-    JDK_HOME='/cygdrive/c/Program Files (x86)/Java/jdk1.8.0_05'
+    JDK_HOME='/cygdrive/c/Program Files (x86)/Java/jdk1.7.0_67'
     ANT_HOME='/opt/apache-ant-1.9.4'
     if [ ! -e "${JDK_HOME}" ]; then
       error "Kein JDK in ${JDK_HOME} gefunden."
