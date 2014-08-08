@@ -57,7 +57,7 @@ public final class WikiEditorImpl extends WeakBase
     public static final String[] supportedServiceNames = {"com.sun.star.frame.ProtocolHandler"};
     public static final Class implementationClass = WikiEditorImpl.class;
     // protocol name that this protocol handler handles
-    public static final String protocolName = "vnd.com.sun.star.wiki:";
+    private static final String protocolName = "vnd.com.sun.star.wiki:";
 
     private final XComponentContext m_xContext;
     private Map<String, com.sun.star.frame.XStatusListener> m_statusListeners = new HashMap<String, com.sun.star.frame.XStatusListener>();

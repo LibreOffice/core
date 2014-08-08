@@ -78,12 +78,12 @@ public class AsciiReplaceFilter
 
 
         // the supported service names, the first one being the service name of the component itself
-        public static final String[] m_serviceNames = { "com.sun.star.comp.ansifilter.AsciiReplaceFilter" , "com.sun.star.document.ImportFilter", "com.sun.star.document.ExportFilter" };
+        private static final String[] m_serviceNames = { "com.sun.star.comp.ansifilter.AsciiReplaceFilter" , "com.sun.star.document.ImportFilter", "com.sun.star.document.ExportFilter" };
 
         // filterprocess states
-        public static final int    FILTERPROC_RUNS          = 0;
-        public static final int    FILTERPROC_BREAK         = 1;
-        public static final int    FILTERPROC_STOPPED       = 2;
+        private static final int    FILTERPROC_RUNS          = 0;
+        private static final int    FILTERPROC_BREAK         = 1;
+        private static final int    FILTERPROC_STOPPED       = 2;
 
 
         // member

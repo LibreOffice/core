@@ -27,10 +27,10 @@ public class NativeStorageAccess {
     static { NativeLibraries.load(); }
 
     public static final int READ            = 1;
-    public static final int SEEKABLE        = 2;
-    public static final int SEEKABLEREAD    = 3;
+    private static final int SEEKABLE        = 2;
+    private static final int SEEKABLEREAD    = 3;
     public static final int WRITE           = 4;
-    public static final int READWRITE       = 7;
+    private static final int READWRITE       = 7;
     public static final int TRUNCATE        = 8;
 
     /** Creates a new instance of StorageAccess */

@@ -67,11 +67,11 @@ public class StatusView extends    JPanel
      * const
      * These URL's describe available feature states.
      */
-    public static final String FEATUREURL_FONT      = "slot:10007";
-    public static final String FEATUREURL_SIZE      = "slot:10015";
-    public static final String FEATUREURL_BOLD      = "slot:10009";
-    public static final String FEATUREURL_ITALIC    = "slot:10008";
-    public static final String FEATUREURL_UNDERLINE = "slot:10014";
+    private static final String FEATUREURL_FONT      = "slot:10007";
+    private static final String FEATUREURL_SIZE      = "slot:10015";
+    private static final String FEATUREURL_BOLD      = "slot:10009";
+    private static final String FEATUREURL_ITALIC    = "slot:10008";
+    private static final String FEATUREURL_UNDERLINE = "slot:10014";
 
 
 
@@ -79,17 +79,17 @@ public class StatusView extends    JPanel
      * const
      * These values are used to show current state of showed feature.
      */
-    public static final String FONT_OFF         = "unknown" ;
-    public static final String SIZE_OFF         = "0.0"     ;
-    public static final String BOLD_OFF         = "-"       ;
-    public static final String ITALIC_OFF       = "-"       ;
-    public static final String UNDERLINE_OFF    = "-"       ;
+    private static final String FONT_OFF         = "unknown" ;
+    private static final String SIZE_OFF         = "0.0"     ;
+    private static final String BOLD_OFF         = "-"       ;
+    private static final String ITALIC_OFF       = "-"       ;
+    private static final String UNDERLINE_OFF    = "-"       ;
 
-    public static final String FONT_ON          = ""        ;
-    public static final String SIZE_ON          = ""        ;
-    public static final String BOLD_ON          = "X"       ;
-    public static final String ITALIC_ON        = "X"       ;
-    public static final String UNDERLINE_ON     = "X"       ;
+    private static final String FONT_ON          = ""        ;
+    private static final String SIZE_ON          = ""        ;
+    private static final String BOLD_ON          = "X"       ;
+    private static final String ITALIC_ON        = "X"       ;
+    private static final String UNDERLINE_ON     = "X"       ;
 
 
 

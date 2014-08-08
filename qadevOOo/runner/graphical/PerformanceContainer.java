@@ -69,7 +69,7 @@ public class PerformanceContainer /* extends *//* implements */ {
     final static int StoreAsPDF = 4;
     final static int OfficeStop = 5;
     final static int AllTime = 6;
-    final static int LAST_VALUE = 7; // THIS MUST BE ALWAYS THE LAST AND THE BIGGEST VALUE!
+    private final static int LAST_VALUE = 7; // THIS MUST BE ALWAYS THE LAST AND THE BIGGEST VALUE!
 
     private long m_nTime[];
     private String m_sMSOfficeVersion;

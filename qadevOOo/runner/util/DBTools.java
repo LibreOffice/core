@@ -64,19 +64,19 @@ public class DBTools {
     // constants for TestDB table column indexes
     public final static int TST_STRING = 1 ;
     public final static int TST_INT = 2 ;
-    public final static int TST_DOUBLE = 5 ;
-    public final static int TST_DATE = 6 ;
-    public final static int TST_BOOLEAN = 10 ;
-    public final static int TST_CHARACTER_STREAM = 11 ;
-    public final static int TST_BINARY_STREAM = 12 ;
+    private final static int TST_DOUBLE = 5 ;
+    private final static int TST_DATE = 6 ;
+    private final static int TST_BOOLEAN = 10 ;
+    private final static int TST_CHARACTER_STREAM = 11 ;
+    private final static int TST_BINARY_STREAM = 12 ;
 
     // constants for TestDB columns names
     public final static String TST_STRING_F = "_TEXT" ;
     public final static String TST_INT_F = "_INT" ;
     public final static String TST_DOUBLE_F = "_DOUBLE" ;
     public final static String TST_DATE_F = "_DATE" ;
-    public final static String TST_BOOLEAN_F = "_BOOL" ;
-    public final static String TST_CHARACTER_STREAM_F = "_MEMO1" ;
+    private final static String TST_BOOLEAN_F = "_BOOL" ;
+    private final static String TST_CHARACTER_STREAM_F = "_MEMO1" ;
     public final static String TST_BINARY_STREAM_F = "_MEMO2" ;
 
     /**
@@ -98,7 +98,7 @@ public class DBTools {
     * Array of lengths of streams for each row in of the
     * <code>TST_TABLE_VALUES</code> constants.
     */
-    public final static int[] TST_STREAM_LENGTHS = {0, 0, 0} ;
+    private final static int[] TST_STREAM_LENGTHS = {0, 0, 0} ;
 
     /**
     * It's just a structure with some useful methods for representing

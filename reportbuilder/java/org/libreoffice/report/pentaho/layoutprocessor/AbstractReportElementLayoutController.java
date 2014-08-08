@@ -38,7 +38,7 @@ public abstract class AbstractReportElementLayoutController
         extends AbstractLayoutController
 {
 
-    public static final int NOT_STARTED = 0;
+    private static final int NOT_STARTED = 0;
     public static final int FINISHED = 2;
     private int state;
 

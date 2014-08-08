@@ -86,10 +86,10 @@ public class HTMLResult
                 flush();
         }
 
-    final static String TEST_TABLETITLE = "Document";
-    final static String VISUAL_STATUS_TABLETITLE = "Visual status";
-    final static String VISUAL_STATUS_MESSAGE_TABLETITLE = "Message";
-    final static String FIRSTGFX_TABLETITLE = "Original print file as jpeg";
+    private final static String TEST_TABLETITLE = "Document";
+    private final static String VISUAL_STATUS_TABLETITLE = "Visual status";
+    private final static String VISUAL_STATUS_MESSAGE_TABLETITLE = "Message";
+    private final static String FIRSTGFX_TABLETITLE = "Original print file as jpeg";
 
     public void indexSection(String _sOfficeInfo)
         {

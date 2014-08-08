@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
 
 public class SVersionRCFile {
 
-    public static final String DEFAULT_NAME =
+    private static final String DEFAULT_NAME =
         System.getProperty("os.name").startsWith("Windows") == true ?
             System.getProperty("user.home") + File.separator +
             "Application Data" + File.separator + "sversion.ini" :

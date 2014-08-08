@@ -107,7 +107,7 @@ public class Helper
     public final static int DLG_MEDIAWIKIEXTENSION_STRING = 31;
     public final static int DLG_WIKIPAGEEXISTS_LABEL1 = 32;
 
-    public final static int STRINGS_NUM = 33;
+    private final static int STRINGS_NUM = 33;
 
     private final static String[] m_pEntryNames = { "GeneralSendError",
                                                     "NoWikiFilter",

@@ -42,8 +42,8 @@ public class OfficeGroupLayoutController extends SectionLayoutController
         implements OfficeRepeatingStructureLayoutController
 {
 
-    public static final int STATE_PROCESS_REPEATING_HEADER = 0;
-    public static final int STATE_PROCESS_REPEATING_FOOTER = 1;
+    private static final int STATE_PROCESS_REPEATING_HEADER = 0;
+    private static final int STATE_PROCESS_REPEATING_FOOTER = 1;
     public static final int STATE_PROCESS_NORMAL_FLOW = 3;
     private boolean waitForJoin;
     private int state;

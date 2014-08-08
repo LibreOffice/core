@@ -151,14 +151,14 @@ public class ParaStyle extends Style implements Cloneable {
     /**  The bottom margin property. */
     public static final int MARGIN_BOTTOM    = 3;
     /**  Indent left property. */
-    public static final int TEXT_INDENT      = 4;
+    private static final int TEXT_INDENT      = 4;
     /**  Indent right property. */
-    public static final int LINE_HEIGHT      = 5;
+    private static final int LINE_HEIGHT      = 5;
     /**  Align text property. */
-    public static final int TEXT_ALIGN       = 6;
+    private static final int TEXT_ALIGN       = 6;
     // This must always be one more than highest property
     /**  Total number of properties. */
-    protected static final int NR_PROPERTIES    = 7;
+    private static final int NR_PROPERTIES    = 7;
 
     /**
      *  Array of flags indicating which attributes are set for this
@@ -203,7 +203,7 @@ public class ParaStyle extends Style implements Cloneable {
     /**  Line height minimum value.  */
     public static final int LH_ATLEAST    = 0x20000000;
     /**  Line height mask.  */
-    public static final int LH_VALUEMASK  = 0x00FFFFFF;
+    private static final int LH_VALUEMASK  = 0x00FFFFFF;
 
     /**  Ignored tags. */
     private static String[] ignored = {

@@ -41,15 +41,15 @@ public class PathSelection
     public static class DialogTypes
     {
 
-        public static final int FOLDER = 0;
-        public static final int FILE = 1;
+        private static final int FOLDER = 0;
+        private static final int FILE = 1;
     }
 
     public static class TransferMode
     {
 
-        public static final int SAVE = 0;
-        public static final int LOAD = 1;
+        private static final int SAVE = 0;
+        private static final int LOAD = 1;
     }
 
     public PathSelection(XMultiServiceFactory xMSF, UnoDialog2 CurUnoDialog, int TransferMode, int DialogType)

@@ -29,7 +29,7 @@ import org.openoffice.idesupport.xml.Manifest;
 public class ParcelZipper
 {
     public static final String PARCEL_PREFIX_DIR = "Scripts/";
-    public static final String PARCEL_EXTENSION = "sxp";
+    private static final String PARCEL_EXTENSION = "sxp";
     public static final String CONTENTS_DIRNAME = "Contents";
     public static final String PARCEL_DESCRIPTOR_XML = "parcel-descriptor.xml";
 

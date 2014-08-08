@@ -41,7 +41,7 @@ public class PentahoReportEngineMetaData
     public static final String OPENDOCUMENT_TEXT = "application/vnd.oasis.opendocument.text";
     public static final String OPENDOCUMENT_SPREADSHEET = "application/vnd.oasis.opendocument.spreadsheet";
     public static final String OPENDOCUMENT_CHART = "application/vnd.oasis.opendocument.chart";
-    public final static String CONTENT_TYPE = "content-type";
+    private final static String CONTENT_TYPE = "content-type";
     public static final String DEBUG = "raw/text+xml";
     private final Set<String> mandatoryParameters;
     private final Map<String,Class<?>> parameterTypes;

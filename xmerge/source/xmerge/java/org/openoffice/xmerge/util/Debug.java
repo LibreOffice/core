@@ -50,7 +50,7 @@ public final class Debug {
     public final static int TRACE = 0x0004;
 
     /**  To set a flag. */
-    public final static boolean SET = true;
+    private final static boolean SET = true;
     /**  To unset a flag. */
     public final static boolean UNSET = false;
 

@@ -77,9 +77,9 @@ public class HTMLOutputter
             }
         }
 
-    final static String TEST_TABLETITLE = "Test";
-    final static String VISUAL_STATUS_TABLETITLE = "Visual status";
-    final static String VISUAL_STATUS_MESSAGE_TABLETITLE = "Message";
+    private final static String TEST_TABLETITLE = "Test";
+    private final static String VISUAL_STATUS_TABLETITLE = "Visual status";
+    private final static String VISUAL_STATUS_MESSAGE_TABLETITLE = "Message";
 
     public void indexSection(String _sOfficeInfo)
         {
@@ -196,16 +196,16 @@ public class HTMLOutputter
             return a.toString();
         }
 
-    final static String FIRSTGFX_TABLETITLE = "Original print file as jpeg";
-    final static String SECONDGFX_TABLETITLE = "New print file as jpeg";
-    final static String DIFFER_TABLETITLE = "Difference file";
-    final static String STATUS_TABLETITLE = "Status";
-    final static String PIXELDIFF_TABLETITLE = "Pixel difference in %";
+    private final static String FIRSTGFX_TABLETITLE = "Original print file as jpeg";
+    private final static String SECONDGFX_TABLETITLE = "New print file as jpeg";
+    private final static String DIFFER_TABLETITLE = "Difference file";
+    private final static String STATUS_TABLETITLE = "Status";
+    private final static String PIXELDIFF_TABLETITLE = "Pixel difference in %";
 
-    final static String PIXELDIFF_BM_TABLETITLE = "P.diff. in % after remove border";
-    final static String DIFFER_BM_TABLETITLE = "Diff file (RB)";
+    private final static String PIXELDIFF_BM_TABLETITLE = "P.diff. in % after remove border";
+    private final static String DIFFER_BM_TABLETITLE = "Diff file (RB)";
 
-    final static String OK_TABLETITLE = "OK?";
+    private final static String OK_TABLETITLE = "OK?";
     public void checkSection(String _sDocumentName)
         {
             try

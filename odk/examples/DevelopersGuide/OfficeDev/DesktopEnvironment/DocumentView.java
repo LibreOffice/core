@@ -68,10 +68,10 @@ public class DocumentView extends    JFrame
      * These command strings are used to identify a received action
      * of buttons on which we listen for action events.
      */
-    public static final String COMMAND_OPEN   = "open"   ;
-    public static final String COMMAND_SAVE   = "save"   ;
-    public static final String COMMAND_EXPORT = "export" ;
-    public static final String COMMAND_EXIT   = "exit"   ;
+    private static final String COMMAND_OPEN   = "open"   ;
+    private static final String COMMAND_SAVE   = "save"   ;
+    private static final String COMMAND_EXPORT = "export" ;
+    private static final String COMMAND_EXIT   = "exit"   ;
 
 
 

@@ -68,7 +68,7 @@ public class DialogComponent {
     public static class _DialogComponent
         implements XTypeProvider, XServiceInfo, XTestDialogHandler, XDialogEventHandler {
 
-        static final String __serviceName= "com.sun.star.test.TestDialogHandler";
+        private static final String __serviceName= "com.sun.star.test.TestDialogHandler";
 
            static byte[] _implementationId;
         private XComponentContext m_xCmpCtx;

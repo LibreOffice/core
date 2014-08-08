@@ -47,7 +47,7 @@ public class FormWizard extends DatabaseObjectWizard
     private static String slblSelFields;
     private String sShowBinaryFields = PropertyNames.EMPTY_STRING;
     private String serrFormNameexists = PropertyNames.EMPTY_STRING;
-    public static final int SOMAIN_PAGE = 1;
+    private static final int SOMAIN_PAGE = 1;
     public static final int SOSUBFORM_PAGE = 2;
     public static final int SOSUBFORMFIELDS_PAGE = 3;
     public static final int SOFIELDLINKER_PAGE = 4;

@@ -55,8 +55,8 @@ public class Protocol extends JComponent
      * @const   TYPE_INFO               this protocol line represent some debug data for analyzing
      */
     public  static final int    MODE_STDOUT             = 1;
-    public  static final int    MODE_STDERR             = 2;
-    public  static final int    MODE_ASCII              = 4;
+    private  static final int    MODE_STDERR             = 2;
+    private  static final int    MODE_ASCII              = 4;
     public  static final int    MODE_HTML               = 8;
 
     public  static final int    TYPE_OK                 =    1;
@@ -66,10 +66,10 @@ public class Protocol extends JComponent
     public  static final int    TYPE_SCOPE_OPEN         =   16;
     public  static final int    TYPE_SCOPE_CLOSE        =   32;
     public  static final int    TYPE_TESTMARK           =   64;
-    public  static final int    TYPE_ERROR_INFO         =  128;
+    private  static final int    TYPE_ERROR_INFO         =  128;
     public  static final int    TYPE_WARNING_INFO       =  256;
-    public  static final int    TYPE_STATISTIC          =  512;
-    public  static final int    TYPE_LINK               = 1024;
+    private  static final int    TYPE_STATISTIC          =  512;
+    private  static final int    TYPE_LINK               = 1024;
 
     public  static final int    FILTER_NONE             = 0;
     public  static final int    FILTER_OK               = TYPE_OK;

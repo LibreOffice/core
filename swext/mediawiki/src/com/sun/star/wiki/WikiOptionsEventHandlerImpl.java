@@ -39,15 +39,15 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     static final String[] m_pServiceNames = { "com.sun.star.wiki.WikiOptionsEventHandler" };
     static final String m_sImplementationName = WikiOptionsEventHandlerImpl.class.getName();
 
-    static final String sExternalEvent = "external_event";
-    static final String sAdd = "Add";
-    static final String sEdit = "Edit";
-    static final String sRemove = "Remove";
-    static final String sListStatus = "ListStatus";
-    static final String sListEdit = "ListEdit";
-    static final String sInitialize = "initialize";
-    static final String sOk = "ok";
-    static final String sBack = "back";
+    private static final String sExternalEvent = "external_event";
+    private static final String sAdd = "Add";
+    private static final String sEdit = "Edit";
+    private static final String sRemove = "Remove";
+    private static final String sListStatus = "ListStatus";
+    private static final String sListEdit = "ListEdit";
+    private static final String sInitialize = "initialize";
+    private static final String sOk = "ok";
+    private static final String sBack = "back";
 
     private XComponentContext m_xContext;
     private XDialog m_xDialog;

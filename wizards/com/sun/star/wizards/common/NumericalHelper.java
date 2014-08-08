@@ -33,17 +33,17 @@ import com.sun.star.uno.TypeClass;
 public class NumericalHelper
 {
 
-    public static final int UNKNOWN_TYPE = -32768;
-    public static final int BYTE_TYPE = 0;
-    public static final int SHORT_TYPE = 1;
-    public static final int INT_TYPE = 2;
-    public static final int LONG_TYPE = 3;
-    public static final int FLOAT_TYPE = 4;
-    public static final int DOUBLE_TYPE = 5;
-    public static final int CHAR_TYPE = 6;
-    public static final int STRING_TYPE = -1;
-    public static final int BOOLEAN_TYPE = -2;
-    public static final int SEQUENCE_TYPE = -3;
+    private static final int UNKNOWN_TYPE = -32768;
+    private static final int BYTE_TYPE = 0;
+    private static final int SHORT_TYPE = 1;
+    private static final int INT_TYPE = 2;
+    private static final int LONG_TYPE = 3;
+    private static final int FLOAT_TYPE = 4;
+    private static final int DOUBLE_TYPE = 5;
+    private static final int CHAR_TYPE = 6;
+    private static final int STRING_TYPE = -1;
+    private static final int BOOLEAN_TYPE = -2;
+    private static final int SEQUENCE_TYPE = -3;
     public static final int ASCII_VALUE_0 = 48;
     public static final int ASCII_VALUE_A = 65;
     public static final int COUNT_CHARS_IN_ALPHABET = 26;

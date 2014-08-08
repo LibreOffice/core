@@ -33,9 +33,9 @@ import com.sun.star.script.framework.log.LogUtils;
 
 public class ScriptContext extends PropertySet implements XScriptContext
 {
-    public final static String HM_DOC_REF = "DocumentReference";
-    public final static String HM_DESKTOP = "Desktop";
-    public final static String HM_COMPONENT_CONTEXT = "ComponentContext";
+    private final static String HM_DOC_REF = "DocumentReference";
+    private final static String HM_DESKTOP = "Desktop";
+    private final static String HM_COMPONENT_CONTEXT = "ComponentContext";
 
     private final static String DOC_URI = "SCRIPTING_DOC_URI";
 

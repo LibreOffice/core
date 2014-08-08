@@ -47,8 +47,8 @@ public class SheetSettings implements OfficeConstants {
     private int     paneNumber  = 2;
 
     final public static int NONE    = 0x00;
-    final public static int SPLIT   = 0x01;
-    final public static int FREEZE  = 0x02;
+    final private static int SPLIT   = 0x01;
+    final private static int FREEZE  = 0x02;
 
     /**
      * Default Constructor for a <code>SheetSettings</code>

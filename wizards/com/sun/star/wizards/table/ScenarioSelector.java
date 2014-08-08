@@ -44,8 +44,8 @@ import com.sun.star.wizards.ui.XFieldSelectionListener;
  */
 public class ScenarioSelector extends FieldSelection implements XItemListener, XFieldSelectionListener
 {
-    final static int PRIVATE = 0;
-    final static int BUSINESS = 1;
+    private final static int PRIVATE = 0;
+    private final static int BUSINESS = 1;
 
     private XFixedText lblExplanation;
     private XFixedText lblCategories;

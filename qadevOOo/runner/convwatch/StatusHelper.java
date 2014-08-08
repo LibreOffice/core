@@ -20,7 +20,7 @@ package convwatch;
 
 public class StatusHelper
 {
-    final static public int DIFF_NOT_REALLY_INITIALISED =            1;
+    final static private int DIFF_NOT_REALLY_INITIALISED =            1;
     final static public int DIFF_NO_DIFFERENCES =                    2;
     final static public int DIFF_DIFFERENCES_FOUND =                 3;
     final static public int DIFF_AFTER_MOVE_DONE_NO_PROBLEMS =       4;

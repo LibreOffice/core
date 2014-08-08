@@ -27,7 +27,7 @@ import java.io.*;
 import java.util.*;
 
 public class GlobalString {
-  public static final String NEGLECT_TAG = "#$@";
+  private static final String NEGLECT_TAG = "#$@";
   public static final String EQUAL_TAG = "=";
 
 /**

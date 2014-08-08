@@ -37,17 +37,17 @@ public class TextStyle extends Style implements Cloneable {
 
     final protected static int FIRST_ATTR = 0x01;
     /** Indicates <i>bold</i> text. */
-    final public static int BOLD        = 0x01;
+    final private static int BOLD        = 0x01;
     /** Indicates <i>italic</i> text. */
-    final public static int ITALIC      = 0x02;
+    final private static int ITALIC      = 0x02;
     /** Indicates <i>underlined</i> text. */
-    final public static int UNDERLINE   = 0x04;
+    final private static int UNDERLINE   = 0x04;
     /** Indicates <i>strike-through</i> in the text. */
-    final public static int STRIKETHRU  = 0x08;
+    final private static int STRIKETHRU  = 0x08;
     /** Indicates <i>superscripted</i> text. */
-    final public static int SUPERSCRIPT = 0x10;
+    final private static int SUPERSCRIPT = 0x10;
     /** Indicates <i>subscripted</i> text. */
-    final public static int SUBSCRIPT   = 0x20;
+    final private static int SUBSCRIPT   = 0x20;
     /** Indicates the last attribute. */
     final protected static int LAST_ATTR = 0x20;
 

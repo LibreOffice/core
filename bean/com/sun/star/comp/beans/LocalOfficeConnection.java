@@ -45,9 +45,9 @@ import com.sun.star.lib.util.NativeLibraryLoader;
 public class LocalOfficeConnection
     implements OfficeConnection
 {
-    public static final String      OFFICE_APP_NAME     = "soffice";
+    private static final String      OFFICE_APP_NAME     = "soffice";
     public static final String      OFFICE_LIB_NAME     = "officebean";
-    public static final String      OFFICE_ID_SUFFIX    = "_Office";
+    private static final String      OFFICE_ID_SUFFIX    = "_Office";
 
     private Process                 mProcess;
     private XComponentContext       mContext;
