@@ -40,7 +40,7 @@ public class UnoDialog implements EventNames
 
     public XMultiServiceFactory xMSF;
     public XMultiServiceFactory MSFDialogModel;
-    public XNameContainer xDlgNames;
+    private XNameContainer xDlgNames;
     public XControlContainer xDlgContainer;
     private XNameAccess m_xDlgNameAccess;
     public XControl xControl;
@@ -49,9 +49,9 @@ public class UnoDialog implements EventNames
     public XWindow xWindow;
     public XComponent xComponent;
     public XInterface xDialogModel;
-    public XInterface xUnoDialog;
-    public XPropertySet xPSetDlg;
-    public XVclWindowPeer xVclWindowPeer;
+    private XInterface xUnoDialog;
+    private XPropertySet xPSetDlg;
+    private XVclWindowPeer xVclWindowPeer;
     public HashMap<String, Integer> ControlList;
     public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;

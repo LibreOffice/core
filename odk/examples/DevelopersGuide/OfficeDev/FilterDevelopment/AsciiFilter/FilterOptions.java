@@ -61,7 +61,7 @@ public class FilterOptions
     public  com.sun.star.io.XInputStream            m_xInput        ;
     public  com.sun.star.io.XOutputStream           m_xOutput       ;
     public  boolean                                 m_bStreamOwner  ;
-    public  String                                  m_sURL          ;
+    private  String                                  m_sURL          ;
     public  String                                  m_sOld          ;
     public  String                                  m_sNew          ;
     public  boolean                                 m_bCaseChange   ;

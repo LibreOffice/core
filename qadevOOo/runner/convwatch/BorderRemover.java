@@ -27,10 +27,10 @@ import java.lang.reflect.Method;
 
 class Rect
 {
-    int x;
-    int y;
-    int w;
-    int h;
+    private int x;
+    private int y;
+    private int w;
+    private int h;
 
     public Rect(int _x, int _y, int _w, int _h)
         {
@@ -47,7 +47,7 @@ class Rect
 
 class BorderRemover
 {
-    ImageHelper m_aImage;
+    private ImageHelper m_aImage;
 
     // Helper values, filled after find Border
 

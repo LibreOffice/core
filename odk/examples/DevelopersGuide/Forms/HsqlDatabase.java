@@ -37,14 +37,14 @@ import com.sun.star.util.CloseVetoException;
 
 public class HsqlDatabase
 {
-    XComponentContext       m_context;
+    private XComponentContext       m_context;
     // the URL of the temporary file used for the database document
-    String                  m_databaseDocumentFile;
+    private String                  m_databaseDocumentFile;
     // the database document
-    XOfficeDatabaseDocument m_databaseDocument;
+    private XOfficeDatabaseDocument m_databaseDocument;
     // the data source belonging to the database document
     // the default connection
-    XConnection             m_connection;
+    private XConnection             m_connection;
 
 
     public HsqlDatabase( XComponentContext _context ) throws Exception

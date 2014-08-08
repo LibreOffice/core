@@ -30,7 +30,7 @@ import net.adaptivebox.problem.*;
 
 public class Library {
   private SearchPoint[] libPoints = new SearchPoint[0];
-  protected int gIndex = -1;
+  private int gIndex = -1;
 
   public Library(SearchPoint[] points){
     this.libPoints = points;

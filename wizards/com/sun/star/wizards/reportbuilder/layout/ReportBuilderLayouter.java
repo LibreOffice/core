@@ -232,7 +232,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return nIndent;
     }
 
-    int m_nLeftIndent = -1;
+    private int m_nLeftIndent = -1;
 
     /**
      * Get left page indent.
@@ -249,7 +249,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return m_nLeftIndent;
     }
 
-    int m_nRightIndent = -1;
+    private int m_nRightIndent = -1;
 
     /**
      * Get right page indent.
@@ -320,7 +320,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
 
-    int m_nPageWidth = -1;
+    private int m_nPageWidth = -1;
 
     /**
      * Get page width. The default is 21000 1/100mm what is 21cm of DIN A4.
@@ -831,7 +831,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         getReportDefinition().setCommandType(_aType);
         getReportDefinition().setCommand(_sTableName);
     }
-    protected XMultiServiceFactory m_xMSF;
+    private XMultiServiceFactory m_xMSF;
 
     protected XMultiServiceFactory getMSFofReportDefinition()
     {
@@ -1397,13 +1397,13 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     {
         return m_aResource;
     }
-    protected int m_aCommandType; // Table or Query
-    protected String m_sTableName;
-    protected String[] m_aGroupNames;
-    protected String[] m_aFieldNames;
-    protected String[] m_aFieldTitleNames;
-    protected int[] m_aFieldWidths;
-    protected int[] m_aFieldTypes;
+    private int m_aCommandType; // Table or Query
+    private String m_sTableName;
+    private String[] m_aGroupNames;
+    private String[] m_aFieldNames;
+    private String[] m_aFieldTitleNames;
+    private int[] m_aFieldWidths;
+    private int[] m_aFieldTypes;
     private DesignTemplate m_xDesignTemplate = null;
 
     public void initializeData(IReportBuilderLayouter _aOther)
@@ -1466,8 +1466,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     {
         return getLabelWidth(_sLabel, 0.0f, 0.0f);
     }
-    XFixedText m_aFixedTextHelper = null;
-    HashMap<String, Integer> m_aLabelWidthMap;
+    private XFixedText m_aFixedTextHelper = null;
+    private HashMap<String, Integer> m_aLabelWidthMap;
 
     protected int getLabelWidth(String _sLabel, FontDescriptor _aFD)
     {

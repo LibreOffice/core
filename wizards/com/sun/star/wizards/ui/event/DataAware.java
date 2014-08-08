@@ -43,12 +43,12 @@ public abstract class DataAware {
     /**
      * this is the data object.
      */
-    protected Object dataObject;
+    private Object dataObject;
     /**
      * A Value Object knows how to get/set a value
      * from/to the data object.
      */
-    protected Value value;
+    private Value value;
 
     /**
      * creates a DataAware object for the given data object and Value object.

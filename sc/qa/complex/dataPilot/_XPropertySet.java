@@ -61,13 +61,13 @@ public class _XPropertySet {
     /**
     * Flag that indicates change listener was called.
     */
-    boolean propertyChanged = false;
+    private boolean propertyChanged = false;
 
 
     /**
      * The own property change listener
      */
-    XPropertyChangeListener PClistener = new MyChangeListener();
+    private XPropertyChangeListener PClistener = new MyChangeListener();
 
     /**
     * Listener that must be called on bound property changing.
@@ -86,12 +86,12 @@ public class _XPropertySet {
     /**
     * Flag that indicates veto listener was called.
     */
-    boolean vetoableChanged = false;
+    private boolean vetoableChanged = false;
 
     /**
      * The own vetoable change listener
      */
-    XVetoableChangeListener VClistener = new MyVetoListener();
+    private XVetoableChangeListener VClistener = new MyVetoListener();
 
     /**
     * Listener that must be called on constrained property changing.
@@ -110,7 +110,7 @@ public class _XPropertySet {
     /**
      * Properties to test
      */
-    PropsToTest PTT = new PropsToTest();
+    private PropsToTest PTT = new PropsToTest();
 
     /**
     * Structure that collects three properties of each type to test :

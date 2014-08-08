@@ -65,7 +65,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     public int helpURL = 0;
     private IImageRenderer renderer;
     private ListModel listModel;
-    public IRenderer counterRenderer = new SimpleCounterRenderer();
+    private IRenderer counterRenderer = new SimpleCounterRenderer();
     private final static int LINE_HEIGHT = 8;
 
     /** Getter for property m_aButtonSize.
@@ -622,7 +622,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     public static class Counter
     {
 
-        public int start,  end,  max;
+        private int start,  end,  max;
 
         private Counter(int start_, int end_, int max_)
         {

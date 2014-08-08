@@ -27,7 +27,7 @@ package net.adaptivebox.encode;
 
 public class EvalStruct {
   // The information for evaluating all the responses
-  public EvalElement[] evalElems = null;
+  private EvalElement[] evalElems = null;
 
   public EvalStruct(int elemsNum) {
     evalElems = new EvalElement[elemsNum];

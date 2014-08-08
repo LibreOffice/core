@@ -125,7 +125,7 @@ class graphics_stuff
 
 
 public class PixelCounter {
-    ImageHelper m_aImage;
+    private ImageHelper m_aImage;
 
 
     public int countNotWhitePixel(String _sFile)

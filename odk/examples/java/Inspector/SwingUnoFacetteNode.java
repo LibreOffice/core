@@ -35,7 +35,7 @@
 
 
 public class SwingUnoFacetteNode extends SwingUnoNode implements XUnoFacetteNode{
-    String m_sFilter = "";
+    private String m_sFilter = "";
 
     /** Creates a new instance of UnoMethodNode */
     public SwingUnoFacetteNode(Object _oUnoObject){

@@ -44,7 +44,7 @@ public class MyActiveDataSink implements XActiveDataSink {
     /**
      * Member properties
      */
-    XInputStream m_aStream = null;
+    private XInputStream m_aStream = null;
 
     /**
      * Constructor

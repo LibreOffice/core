@@ -27,8 +27,8 @@ package com.sun.star.sdbcx.comp.hsqldb;
 public class StorageNativeOutputStream {
     static { NativeLibraries.load(); }
 
-    String name;
-    Object key;
+    private String name;
+    private Object key;
 
     /** Creates a new instance of StorageNativeOutputStream */
     public StorageNativeOutputStream(String _name,Object _key) {

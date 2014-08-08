@@ -33,7 +33,7 @@ import convwatch.ConvWatchException;
 
 class GraphicalComparator implements DocComparator
 {
-    GraphicalTestArguments m_aArguments;
+    private GraphicalTestArguments m_aArguments;
 
     protected GraphicalComparator(TestParameters aParams)
         {

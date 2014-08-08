@@ -47,10 +47,10 @@ public class PropChgHelper implements
         XPropertyChangeListener,
         XLinguServiceEventBroadcaster
 {
-    XInterface          xEvtSource;
-    String[]            aPropNames;
-    XPropertySet        xPropSet;
-    ArrayList<XLinguServiceEventListener>           aLngSvcEvtListeners;
+    private XInterface          xEvtSource;
+    private String[]            aPropNames;
+    private XPropertySet        xPropSet;
+    private ArrayList<XLinguServiceEventListener>           aLngSvcEvtListeners;
 
     public PropChgHelper(
             XInterface      xEvtSource,

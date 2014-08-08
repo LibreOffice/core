@@ -52,10 +52,10 @@ public class OneInstanceFactory implements
         XSingleComponentFactory,
         XServiceInfo
 {
-    Class       aMyClass;
-    String      aSvcImplName;
-    String[]    aSupportedSvcNames;
-    XInterface  xInstantiatedService;
+    private Class       aMyClass;
+    private String      aSvcImplName;
+    private String[]    aSupportedSvcNames;
+    private XInterface  xInstantiatedService;
 
     public OneInstanceFactory(
             Class       aMyClass,

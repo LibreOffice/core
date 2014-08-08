@@ -252,13 +252,13 @@ public class XMLTools {
     * if the XML data and structure was valid.
     */
     public static class XMLWellFormChecker extends XMLWriter {
-        protected boolean docStarted = false ;
-        protected boolean docEnded = false ;
-        protected ArrayList<String> tagStack = new ArrayList<String>() ;
-        protected boolean wellFormed = true ;
-        protected boolean noOtherErrors = true ;
-        protected PrintWriter log = null ;
-        protected boolean printXMLData = false ;
+        private boolean docStarted = false ;
+        private boolean docEnded = false ;
+        ArrayList<String> tagStack = new ArrayList<String>() ;
+        private boolean wellFormed = true ;
+        private boolean noOtherErrors = true ;
+        PrintWriter log = null ;
+        private boolean printXMLData = false ;
 
         private XMLWellFormChecker(PrintWriter log) {
             super() ;
@@ -371,9 +371,9 @@ public class XMLTools {
     * appropriate message is output.
     */
     public static class XMLTagsChecker extends XMLWellFormChecker {
-        protected HashMap<String,String> tags = new HashMap<String,String>() ;
-        protected HashMap<String,String> chars = new HashMap<String,String>() ;
-        protected boolean allOK = true ;
+        private HashMap<String,String> tags = new HashMap<String,String>() ;
+        private HashMap<String,String> chars = new HashMap<String,String>() ;
+        private boolean allOK = true ;
 
         public XMLTagsChecker(PrintWriter log) {
             super(log) ;
@@ -627,11 +627,11 @@ public class XMLTools {
      * character data exists inside any tag specified.
      */
     public static class XMLChecker extends XMLWellFormChecker {
-        protected HashSet<String> tagSet = new HashSet<String>() ;
-        protected ArrayList<Tag[]> tags = new ArrayList<Tag[]>() ;
-        protected ArrayList<Object[]> chars = new ArrayList<Object[]>() ;
-        protected ArrayList<String> tagStack = new ArrayList<String>() ;
-        protected ArrayList<AttributeList> attrStack = new ArrayList<AttributeList>() ;
+        private HashSet<String> tagSet = new HashSet<String>() ;
+        private ArrayList<Tag[]> tags = new ArrayList<Tag[]>() ;
+        private ArrayList<Object[]> chars = new ArrayList<Object[]>() ;
+        private ArrayList<String> tagStack = new ArrayList<String>() ;
+        private ArrayList<AttributeList> attrStack = new ArrayList<AttributeList>() ;
 
         public XMLChecker(PrintWriter log, boolean writeXML) {
             super(log, writeXML) ;

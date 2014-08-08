@@ -30,17 +30,17 @@ import com.sun.star.wizards.ui.*;
 public class Finalizer
 {
 
-    TableWizard CurUnoDialog;
-    short curtabindex;
-    XRadioButton optModifyTable;
-    XRadioButton optWorkWithTable;
-    XRadioButton optStartFormWizard;
-    XTextComponent txtTableName;
-    XListBox xCatalogListBox;
-    XListBox xSchemaListBox;
-    TableDescriptor curtabledescriptor;
-    public String SETCOMPLETIONFLAG = "setCompletionFlag";
-    public static int WORKWITHTABLEMODE = 0;
+    private TableWizard CurUnoDialog;
+    private short curtabindex;
+    private XRadioButton optModifyTable;
+    private XRadioButton optWorkWithTable;
+    private XRadioButton optStartFormWizard;
+    private XTextComponent txtTableName;
+    private XListBox xCatalogListBox;
+    private XListBox xSchemaListBox;
+    private TableDescriptor curtabledescriptor;
+    private String SETCOMPLETIONFLAG = "setCompletionFlag";
+    private static int WORKWITHTABLEMODE = 0;
     public static int MODIFYTABLEMODE = 1;
     public static int STARTFORMWIZARDMODE = 2;
 

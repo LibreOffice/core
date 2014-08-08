@@ -23,13 +23,13 @@ import java.io.FileWriter;
 
 public class LISTOutputter
 {
-    FileWriter m_aOut;
-    String m_sFilename;
+    private FileWriter m_aOut;
+    private String m_sFilename;
 
     /**
      * ls is the current line separator (carridge return)
      */
-    String ls;
+    private String ls;
 
     public static LISTOutputter create( String _sOutputPath, String _sFilename)
         {

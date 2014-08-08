@@ -33,9 +33,9 @@ import com.sun.star.util.XURLTransformer;
  *
  */
 public class DialogThread extends Thread {
-    public XComponent m_xDoc = null;
-    public XMultiServiceFactory m_xMSF = null;
-    public String m_url = "";
+    private XComponent m_xDoc = null;
+    private XMultiServiceFactory m_xMSF = null;
+    private String m_url = "";
 
     public DialogThread(XComponent xDoc, XMultiServiceFactory msf, String url) {
         this.m_xDoc = xDoc;

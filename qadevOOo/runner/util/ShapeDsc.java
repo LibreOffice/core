@@ -32,9 +32,9 @@ public class ShapeDsc extends InstDescr {
     private int y = 0;
     private int height = 0;
     private int width = 0;
-     private String name = null;
-    final String ifcName = "com.sun.star.drawing.XShape";
-    String service = "com.sun.star.drawing.RectangleShape";
+    private String name = null;
+    private final String ifcName = "com.sun.star.drawing.XShape";
+    private String service = "com.sun.star.drawing.RectangleShape";
 
     public ShapeDsc( int nheight, int nwidth, int nx, int ny, String kind ) {
         x=nx;

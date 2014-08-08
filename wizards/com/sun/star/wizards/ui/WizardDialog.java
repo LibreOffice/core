@@ -55,14 +55,14 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private int nOldStep = 1;
     private int nMaxStep = 1;
     protected XItemListener RoadmapItemListener;
-    protected XControl xRoadmapControl;
-    XItemEventBroadcaster xRoadmapBroadcaster;
-    String[] sRMItemLabels;
+    private XControl xRoadmapControl;
+    private XItemEventBroadcaster xRoadmapBroadcaster;
+    private String[] sRMItemLabels;
     private Object oRoadmap;
     private XSingleServiceFactory xSSFRoadmap;
     public XIndexContainer xIndexContRoadmap;
     private Resource oWizardResource;
-    public String sMsgEndAutopilot;
+    private String sMsgEndAutopilot;
     private int hid;
     private boolean bTerminateListenermustberemoved = true;
 

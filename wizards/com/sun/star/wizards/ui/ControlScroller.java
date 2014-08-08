@@ -28,31 +28,31 @@ public abstract class ControlScroller
 {
 
     protected WizardDialog CurUnoDialog;
-    protected XMultiServiceFactory xMSF;
+    private XMultiServiceFactory xMSF;
     protected int ncurfieldcount;
-    protected int nblockincrement;
+    private int nblockincrement;
     private int nlineincrement;
-    protected int nscrollvalue = 0;
-    protected int ntotfieldcount;
-    XScrollBar xScrollBar;
-    protected ArrayList<PropertyValue[]> scrollfields;
-    protected Integer ICompPosX;
+    private int nscrollvalue = 0;
+    private int ntotfieldcount;
+    private XScrollBar xScrollBar;
+    private ArrayList<PropertyValue[]> scrollfields;
+    private Integer ICompPosX;
     protected int iCompPosX;
-    protected Integer ICompPosY;
+    private Integer ICompPosY;
     protected int iCompPosY;
-    protected Integer ICompWidth;
+    private Integer ICompWidth;
     protected int iCompWidth;
     protected Integer ICompHeight;
     protected int iCompHeight;
-    protected int iStartPosY;
+    private int iStartPosY;
     protected short curtabindex;
-    int iStep;
+    private int iStep;
     protected Integer IStep;
-    protected int linedistance;
+    private int linedistance;
     int iScrollBarWidth = 10;
-    int SORELFIRSTPOSY = 3;
+    private int SORELFIRSTPOSY = 3;
     protected int curHelpIndex;
-    String sIncSuffix;
+    private String sIncSuffix;
     protected ArrayList<Object> ControlGroupVector = new ArrayList<Object>();
     protected PeerConfig oTitlePeerConfig;
 

@@ -33,7 +33,7 @@ import org.openoffice.xmerge.util.Resources;
 
 public final class OfficeDocumentException extends IOException {
 
-    StringBuffer message = null;
+    private StringBuffer message = null;
 
 
    /**

@@ -32,14 +32,14 @@ import java.util.StringTokenizer;
  */
 public class SQLExecution {
 
-    protected Connection mConnection = null;
-    protected Statement mStatement = null;
-    protected String mJdbcClass = null;
-    protected String mDbURL = null;
-    protected String mUser = null;
-    protected String mPassword = null;
-    protected boolean m_bConnectionOpen = false;
-    protected boolean m_bDebug = false;
+    private Connection mConnection = null;
+    private Statement mStatement = null;
+    private String mJdbcClass = null;
+    private String mDbURL = null;
+    private String mUser = null;
+    private String mPassword = null;
+    private boolean m_bConnectionOpen = false;
+    private boolean m_bDebug = false;
 
 
     /** Creates a new instance of SQLExecution

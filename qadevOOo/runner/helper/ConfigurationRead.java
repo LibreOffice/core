@@ -30,7 +30,7 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class ConfigurationRead {
 
-    XHierarchicalNameAccess root = null;
+    private XHierarchicalNameAccess root = null;
 
     /**
      * Creates new ConfigurationRead

@@ -35,19 +35,19 @@ import com.sun.star.drawing.XShapes;
 public class TimeStampControl extends DatabaseControl
 {
 
-    DatabaseControl oDateControl;
-    DatabaseControl oTimeControl;
+    private DatabaseControl oDateControl;
+    private DatabaseControl oTimeControl;
 //  XShape xGroupShape;
-    Resource oResource;
+    private Resource oResource;
     private String sDateAppendix; // = GetResText(RID_FORM + 4)
     private String sTimeAppendix; // = GetResText(RID_FORM + 5)
     XShapes xGroupShapes = null;
-    double nreldatewidth;
-    double nreltimewidth;
-    int nTimeWidth;
-    int nDBWidth;
-    int nDateWidth;
-    XShape xShapeGroup;
+    private double nreldatewidth;
+    private double nreltimewidth;
+    private int nTimeWidth;
+    private int nDBWidth;
+    private int nDateWidth;
+    private XShape xShapeGroup;
 
     public TimeStampControl(Resource _oResource, FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, Point _aPoint)
     {

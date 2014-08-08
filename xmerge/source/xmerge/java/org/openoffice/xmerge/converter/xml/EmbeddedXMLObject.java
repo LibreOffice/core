@@ -49,9 +49,9 @@ import org.xml.sax.SAXException;
 public class EmbeddedXMLObject extends EmbeddedObject {
 
     // Entries for the subdocuments that constitute this object;
-    protected Document contentDOM  = null;
-    protected Document settingsDOM = null;
-    protected Document stylesDOM   = null;
+    private Document contentDOM  = null;
+    private Document settingsDOM = null;
+    private Document stylesDOM   = null;
 
     private DocumentBuilder builder = null;
 

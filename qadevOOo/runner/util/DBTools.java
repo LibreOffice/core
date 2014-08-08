@@ -137,19 +137,19 @@ public class DBTools {
         /**
         * Representation of <code>'SuppressVersionColumns'</code> property.
         */
-        public Boolean SuppressVersionColumns = null ;
+        private Boolean SuppressVersionColumns = null ;
         /**
         * Representation of <code>'IsReadOnly'</code> property.
         */
-        public Boolean IsReadOnly = null ;
+        private Boolean IsReadOnly = null ;
         /**
         * Representation of <code>'TableFilter'</code> property.
         */
-        public String[] TableFilter = null ;
+        private String[] TableFilter = null ;
         /**
         * Representation of <code>'TableTypeFilter'</code> property.
         */
-        public String[] TableTypeFilter = null ;
+        private String[] TableTypeFilter = null ;
 
         /**
         * Creates an empty instance.

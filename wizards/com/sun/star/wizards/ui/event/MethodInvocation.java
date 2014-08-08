@@ -33,11 +33,11 @@ import java.lang.reflect.Method;
 public class MethodInvocation
 {
     //the method to invoke.
-    Method mMethod;
+    private Method mMethod;
     //the object to invoke the method on.
-    Object mObject;
+    private Object mObject;
     //with one Parameter / without
-    boolean mWithParam;
+    private boolean mWithParam;
 
     /** Creates a new instance of MethodInvokation */
     public MethodInvocation(String methodName, Object obj) throws NoSuchMethodException

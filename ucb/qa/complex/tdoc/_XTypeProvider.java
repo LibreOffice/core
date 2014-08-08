@@ -35,8 +35,8 @@ import share.LogWriter;
 public class _XTypeProvider {
 
     public static XTypeProvider oObj = null;
-    public static Type[] types = null;
-    public LogWriter log = null;
+    private static Type[] types = null;
+    private LogWriter log = null;
 
     /**
     * Just calls the method.<p>

@@ -26,7 +26,7 @@ public class HideableMutableTreeNode extends DefaultMutableTreeNode {
     /**
      * The node is visible flag.
      */
-    public boolean bIsvisible = true;
+    private boolean bIsvisible = true;
         private static final String SDUMMY = "Dummy";
 
 

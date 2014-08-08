@@ -40,30 +40,30 @@ public final class OwnEmbeddedObject extends WeakBase
    implements com.sun.star.embed.XEmbedPersist,
               com.sun.star.embed.XEmbeddedObject
 {
-    protected final XComponentContext m_xContext;
-    protected final byte[] m_aClassID;
+    private final XComponentContext m_xContext;
+    private final byte[] m_aClassID;
 
-    protected boolean m_bDisposed = false;
-    protected int m_nObjectState = -1;
+    private boolean m_bDisposed = false;
+    private int m_nObjectState = -1;
 
-    protected com.sun.star.embed.XStorage m_xParentStorage;
-    protected com.sun.star.embed.XStorage m_xOwnStorage;
-    protected String m_aEntryName;
+    private com.sun.star.embed.XStorage m_xParentStorage;
+    private com.sun.star.embed.XStorage m_xOwnStorage;
+    private String m_aEntryName;
 
-    protected com.sun.star.embed.XStorage m_xNewParentStorage;
-    protected com.sun.star.embed.XStorage m_xNewOwnStorage;
-    protected String m_aNewEntryName;
-    protected boolean m_bWaitSaveCompleted = false;
+    private com.sun.star.embed.XStorage m_xNewParentStorage;
+    private com.sun.star.embed.XStorage m_xNewOwnStorage;
+    private String m_aNewEntryName;
+    private boolean m_bWaitSaveCompleted = false;
 
-    protected EditorFrame m_aEditorFrame;
+    private EditorFrame m_aEditorFrame;
 
-    protected ArrayList<Object> m_aListeners;
+    private ArrayList<Object> m_aListeners;
 
-    com.sun.star.embed.VerbDescriptor[] m_pOwnVerbs;
+    private com.sun.star.embed.VerbDescriptor[] m_pOwnVerbs;
 
-    com.sun.star.embed.XEmbeddedClient m_xClient;
+    private com.sun.star.embed.XEmbeddedClient m_xClient;
 
-    Dimension m_aObjSize;
+    private Dimension m_aObjSize;
 
 
     protected ArrayList<Object> GetListeners()

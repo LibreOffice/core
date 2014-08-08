@@ -26,7 +26,7 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
     /// our current test document
     protected DocumentHelper          m_document;
     protected FormLayer               m_formLayer;
-    protected DocumentType            m_documentType;
+    private DocumentType            m_documentType;
 
     /** Creates a new instance of DocumentBasedExample */
     public DocumentBasedExample( DocumentType documentType )

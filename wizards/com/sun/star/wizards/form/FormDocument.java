@@ -336,16 +336,16 @@ public class FormDocument extends TextDocument
     public class ControlForm
     {
 
-        XNameContainer xFormContainer;
+        private XNameContainer xFormContainer;
         GridControl oGridControl;
-        FormControlArranger oFormController;
-        int curArrangement;
-        FormDocument oFormDocument;
-        String Name;
-        Point aStartPoint;
+        private FormControlArranger oFormController;
+        private int curArrangement;
+        private FormDocument oFormDocument;
+        private String Name;
+        private Point aStartPoint;
         private Size aFormSize;
-        CommandMetaData oDBMetaData;
-        XPropertySet xPropertySet;
+        private CommandMetaData oDBMetaData;
+        private XPropertySet xPropertySet;
 
         private ControlForm(FormDocument _oFormDocument, String _sname, Point _astartPoint, Size _aFormSize)
         {

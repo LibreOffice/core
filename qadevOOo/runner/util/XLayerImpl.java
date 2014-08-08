@@ -20,7 +20,7 @@ package util;
 
 public class XLayerImpl implements com.sun.star.configuration.backend.XLayer {
 
-    protected boolean wasCalled = false;
+    private boolean wasCalled = false;
 
     public XLayerImpl() {
     }

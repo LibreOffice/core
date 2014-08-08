@@ -24,7 +24,7 @@ public class TriState
     public static final TriState FALSE = new TriState(0);
     public static final TriState UNSET = new TriState(-1);
 
-    int m_nValue;
+    private int m_nValue;
 
     /**
        Allocates a <code>TriState</code> object representing the

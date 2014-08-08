@@ -55,7 +55,7 @@ import java.util.Map;
 public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 {
 
-    protected FieldSelection CurGroupFieldSelection;
+    private FieldSelection CurGroupFieldSelection;
     private SortingComponent CurSortingComponent;
     private TitlesComponent CurTitlesComponent;
     private CommandFieldSelection CurDBCommandFieldSelection;
@@ -648,7 +648,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
     public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
-        protected int m_nID;
+        private int m_nID;
 
         public int getID()
         {

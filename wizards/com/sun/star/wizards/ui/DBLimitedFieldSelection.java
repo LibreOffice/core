@@ -30,19 +30,19 @@ import com.sun.star.wizards.common.PropertyNames;
 public abstract class DBLimitedFieldSelection
 {
 
-    protected XMultiServiceFactory xMSF;
+    private XMultiServiceFactory xMSF;
     protected WizardDialog CurUnoDialog;
-    protected String sNoField;
+    private String sNoField;
     protected Integer IStep;
-    protected Integer ICompPosX;
-    protected Integer ICompPosY;
-    protected Integer ICompWidth;
+    private Integer ICompPosX;
+    private Integer ICompPosY;
+    private Integer ICompWidth;
     protected final int rowcount = 4;
-    protected final int MAXSELINDEX = rowcount - 1;
+    private final int MAXSELINDEX = rowcount - 1;
     protected short curtabindex;
     protected int iCurPosY;
     protected int FirstHelpIndex;
-    protected int iCompPosX;
+    private int iCompPosX;
 
     public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int _iCompPosX, int iCompPosY, int iCompWidth, int _FirstHelpIndex)
     {

@@ -30,8 +30,8 @@ public class TableDsc extends InstDescr {
     private int rows = 0;
     private int columns = 0;
     private String name = null;
-    final String ifcName = "com.sun.star.text.XTextTable";
-    final String service = "com.sun.star.text.TextTable";
+    private final String ifcName = "com.sun.star.text.XTextTable";
+    private final String service = "com.sun.star.text.TextTable";
 
     public TableDsc() {
         initTable();

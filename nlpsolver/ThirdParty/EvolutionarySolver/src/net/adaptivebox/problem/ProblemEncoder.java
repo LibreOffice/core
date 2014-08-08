@@ -33,14 +33,14 @@ import net.adaptivebox.knowledge.*;
 
 public abstract class ProblemEncoder {
   //Store the calculated results for the responses
-  double[] tempResponseSet;  //temp values
-  double[] tempLocation;  //temp values
+  private double[] tempResponseSet;  //temp values
+  private double[] tempLocation;  //temp values
 
   //the search space (S)
-  protected DesignSpace designSpace = null;
+  private DesignSpace designSpace = null;
 
   // For evaluate the response vector into encoded vector double[2]
-  protected EvalStruct evalStruct = null;
+  private EvalStruct evalStruct = null;
 
   protected ProblemEncoder(int paramNum, int targetNum) throws Exception {
     designSpace = new DesignSpace(paramNum);

@@ -24,7 +24,7 @@ import java.net.URISyntaxException;
 
 public class FileURL
 {
-    String m_sFileURL;
+    private String m_sFileURL;
 
     public FileURL(String _sFileURL)
     {

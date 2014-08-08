@@ -203,5 +203,5 @@ public abstract class AbstractDatabase implements DatabaseAccess
     // the data source belonging to the database document
     protected DataSource m_dataSource;
     // the default connection
-    protected Connection    m_connection;
+    private Connection    m_connection;
 }

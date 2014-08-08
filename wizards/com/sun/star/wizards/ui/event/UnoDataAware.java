@@ -35,11 +35,11 @@ import com.sun.star.wizards.common.PropertyNames;
 public class UnoDataAware extends DataAware
 {
 
-    protected Object unoControl;
-    protected Object unoModel;
-    protected String unoPropName;
-    protected Object[] disableObjects = new Object[0];
-    protected boolean inverse = false;
+    private Object unoControl;
+    private Object unoModel;
+    private String unoPropName;
+    private Object[] disableObjects = new Object[0];
+    private boolean inverse = false;
 
     private UnoDataAware(Object dataObject, Value value, Object unoObject_, String unoPropName_)
     {

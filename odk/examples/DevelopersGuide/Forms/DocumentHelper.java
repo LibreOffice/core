@@ -31,9 +31,9 @@ import com.sun.star.container.*;
 public class DocumentHelper
 {
     /// the remote office context
-    protected XComponentContext         m_remoteContext;
+    private XComponentContext         m_remoteContext;
     /// the remote service manager
-    protected XMultiServiceFactory      m_orb;
+    private XMultiServiceFactory      m_orb;
     protected XComponent                m_documentComponent;
 
     /* ------------------------------------------------------------------ */

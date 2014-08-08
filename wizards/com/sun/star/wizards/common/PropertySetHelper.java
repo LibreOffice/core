@@ -29,7 +29,7 @@ import java.util.HashMap;
 public class PropertySetHelper
 {
 
-    protected XPropertySet m_xPropertySet;
+    private XPropertySet m_xPropertySet;
     private HashMap<String, Object> m_aHashMap;
 
     public PropertySetHelper(Object _aObj)

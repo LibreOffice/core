@@ -29,9 +29,9 @@ import com.sun.star.wizards.common.PlaceholderTextElement;
 public class PlaceholderTextElement extends TextElement
 {
 
-    String hint;
-    String placeHolderText;
-    XMultiServiceFactory xmsf;
+    private String hint;
+    private String placeHolderText;
+    private XMultiServiceFactory xmsf;
     TextDocument templateDocument;
 
     public PlaceholderTextElement(XTextRange textRange, String placeHolderText_, String hint_, XMultiServiceFactory xmsf_)

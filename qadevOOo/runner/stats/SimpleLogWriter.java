@@ -26,9 +26,9 @@ import java.util.GregorianCalendar;
 
 public class SimpleLogWriter extends PrintWriter implements LogWriter {
 
-    boolean m_bLogging = false;
-    share.DescEntry entry = null;
-    share.Watcher ow = null;
+    private boolean m_bLogging = false;
+    private share.DescEntry entry = null;
+    private share.Watcher ow = null;
 
     public SimpleLogWriter() {
         super(System.out);

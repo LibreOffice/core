@@ -40,8 +40,8 @@ public class UnoPkgContainer extends ParcelContainer
 {
 
     private Map<String,ParcelContainer> registeredPackages = new HashMap<String,ParcelContainer>();
-    protected String extensionDb;
-    protected String extensionRepository;
+    private String extensionDb;
+    private String extensionRepository;
 
     public UnoPkgContainer(  XComponentContext xCtx, String locationURL,
             String _extensionDb, String _extensionRepository, String language ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException

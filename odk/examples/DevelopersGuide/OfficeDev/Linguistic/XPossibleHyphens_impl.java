@@ -37,10 +37,10 @@ import com.sun.star.lang.Locale;
 public class XPossibleHyphens_impl implements
     com.sun.star.linguistic2.XPossibleHyphens
 {
-    String              aWord;
-    String              aHyphWord;
-    short[]             aOrigHyphenPos;
-    Locale              aLang;
+    private String              aWord;
+    private String              aHyphWord;
+    private short[]             aOrigHyphenPos;
+    private Locale              aLang;
 
     public XPossibleHyphens_impl(
             String      aWord,

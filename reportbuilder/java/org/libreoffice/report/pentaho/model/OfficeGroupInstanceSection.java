@@ -27,7 +27,7 @@ import org.jfree.report.structure.Group;
 public class OfficeGroupInstanceSection extends Group
 {
 
-    String sortingExpression;
+    private String sortingExpression;
 
     public OfficeGroupInstanceSection()
     {

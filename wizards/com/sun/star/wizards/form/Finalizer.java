@@ -31,12 +31,12 @@ import com.sun.star.wizards.ui.*;
 public class Finalizer
 {
 
-    WizardDialog CurUnoDialog;
-    short curtabindex;
-    XRadioButton optModifyForm;
+    private WizardDialog CurUnoDialog;
+    private short curtabindex;
+    private XRadioButton optModifyForm;
     XRadioButton optWorkWithForm;
-    XTextComponent txtFormName;
-    FormDocument oFormDocument;
+    private XTextComponent txtFormName;
+    private FormDocument oFormDocument;
 
     public Finalizer(WizardDialog _CurUnoDialog)
     {

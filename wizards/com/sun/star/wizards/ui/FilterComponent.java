@@ -59,48 +59,48 @@ public class FilterComponent
     private String slblFieldNames;
     private String slblOperators;
     private String slblValue;
-    WizardDialog CurUnoDialog;
+    private WizardDialog CurUnoDialog;
     private int BaseID = 2300;
     private String sIncSuffix;
     private ControlRow[] oControlRows;
     private String sDuplicateCondition;
-    final int SOOPTORMODE = 100;
-    final int SOOPTANDMODE = 101;
-    QueryMetaData oQueryMetaData;
-    int iDateTimeFormat;
-    int iDateFormat;
-    int iTimeFormat;
+    private final int SOOPTORMODE = 100;
+    private final int SOOPTANDMODE = 101;
+    private QueryMetaData oQueryMetaData;
+    private int iDateTimeFormat;
+    private int iDateFormat;
+    private int iTimeFormat;
     private PropertyValue[][] filterconditions;
     private short curtabindex;
-    XMultiServiceFactory xMSF;
-    final int SO_FIRSTFIELDNAME = 1;
-    final int SO_SECONDFIELDNAME = 2;
-    final int SO_THIRDFIELDNAME = 3;
-    final int SO_FOURTHFIELDNAME = 4;
-    int[] SO_FIELDNAMELIST = new int[]
+    private XMultiServiceFactory xMSF;
+    private final int SO_FIRSTFIELDNAME = 1;
+    private final int SO_SECONDFIELDNAME = 2;
+    private final int SO_THIRDFIELDNAME = 3;
+    private final int SO_FOURTHFIELDNAME = 4;
+    private int[] SO_FIELDNAMELIST = new int[]
     {
         SO_FIRSTFIELDNAME, SO_SECONDFIELDNAME, SO_THIRDFIELDNAME, SO_FOURTHFIELDNAME
     };
-    final int SO_FIRSTCONDITION = 5;
-    final int SO_SECONDCONDITION = 6;
-    final int SO_THIRDCONDITION = 7;
-    final int SO_FOURTHCONDITION = 8;
-    int[] SO_CONDITIONLIST = new int[]
+    private final int SO_FIRSTCONDITION = 5;
+    private final int SO_SECONDCONDITION = 6;
+    private final int SO_THIRDCONDITION = 7;
+    private final int SO_FOURTHCONDITION = 8;
+    private int[] SO_CONDITIONLIST = new int[]
     {
         SO_FIRSTCONDITION, SO_SECONDCONDITION, SO_THIRDCONDITION, SO_FOURTHCONDITION
     };
-    final int SO_FIRSTTEXTFIELD = 1;
-    final int SO_SECONDTEXTFIELD = 2;
-    final int SO_THIRDTEXTFIELD = 3;
-    final int SO_FOURTHTEXTFIELD = 4;
-    int[] SO_TEXTFIELDLIST = new int[]
+    private final int SO_FIRSTTEXTFIELD = 1;
+    private final int SO_SECONDTEXTFIELD = 2;
+    private final int SO_THIRDTEXTFIELD = 3;
+    private final int SO_FOURTHTEXTFIELD = 4;
+    private int[] SO_TEXTFIELDLIST = new int[]
     {
         SO_FIRSTTEXTFIELD, SO_SECONDTEXTFIELD, SO_THIRDTEXTFIELD, SO_FOURTHTEXTFIELD
     };
-    final int SO_FIRSTBOOLFIELDNAME = 256 + 1;
-    final int SO_SECONDBOOLFIELDNAME = 256 + 2;
-    final int SO_THIRDBOOLFIELDNAME = 256 + 3;
-    final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
+    private final int SO_FIRSTBOOLFIELDNAME = 256 + 1;
+    private final int SO_SECONDBOOLFIELDNAME = 256 + 2;
+    private final int SO_THIRDBOOLFIELDNAME = 256 + 3;
+    private final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
     int SO_BOOLEANLIST[] =
 
 
@@ -108,9 +108,9 @@ public class FilterComponent
         SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
     };
     final int SO_OPTQUERYMODE = 5;
-    int SOI_MATCHALL = 0;
-    int SOI_MATCHANY = 1;
-    int curHelpID;
+    private int SOI_MATCHALL = 0;
+    private int SOI_MATCHANY = 1;
+    private int curHelpID;
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
@@ -514,9 +514,9 @@ public class FilterComponent
         private final static int SOLSTFIELDNAME = 3;
         private final static int SOLSTOPERATOR = 4;
         private final static int SOTXTVALUE = 5;
-        protected XInterface[] ControlElements = new XInterface[6];
+        private XInterface[] ControlElements = new XInterface[6];
         private boolean m_bEnabled;
-        String[] FieldNames;
+        private String[] FieldNames;
 
         private ControlRow(int iCompPosX, int iCompPosY, int Index, boolean _bEnabled, int _firstRowHelpID)
         {

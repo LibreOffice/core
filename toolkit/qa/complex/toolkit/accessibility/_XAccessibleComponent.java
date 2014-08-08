@@ -47,7 +47,7 @@ import com.sun.star.uno.XInterface;
  */
 public class _XAccessibleComponent {
 
-    public XAccessibleComponent oObj = null;
+    private XAccessibleComponent oObj = null;
 
     private Rectangle bounds = null ;
 

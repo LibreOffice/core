@@ -260,8 +260,8 @@ public class LocalOfficeWindow
          */
         class CallWatchThread extends Thread
         {
-                Thread aWatchedThread;
-                long nTimeout;
+                private Thread aWatchedThread;
+                private long nTimeout;
 
                 private CallWatchThread( long nTimeout )
                 {

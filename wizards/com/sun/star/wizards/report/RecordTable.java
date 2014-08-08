@@ -40,7 +40,7 @@ public class RecordTable
     public XTextTable xTextTable;
     private TextTableHandler oTextTableHandler;
     public XTableColumns xTableColumns;
-    public XTableRows xTableRows;
+    private XTableRows xTableRows;
 
     public RecordTable(TextTableHandler _oTextTableHandler)
     {

@@ -80,14 +80,14 @@ public class TextDocument
     public XText xText;
     public XMultiServiceFactory xMSFDoc;
     public XMultiServiceFactory xMSF;
-    public com.sun.star.util.XNumberFormatsSupplier xNumberFormatsSupplier;
+    private com.sun.star.util.XNumberFormatsSupplier xNumberFormatsSupplier;
     public com.sun.star.awt.XWindowPeer xWindowPeer;
     public int PageWidth;
     public int ScaleWidth;
-    public Size DocSize;
+    private Size DocSize;
     public com.sun.star.awt.Rectangle PosSize;
-    public com.sun.star.lang.Locale CharLocale;
-    public XStorable xStorable;
+    private com.sun.star.lang.Locale CharLocale;
+    private XStorable xStorable;
 
     // creates an instance of TextDocument and creates a named frame. No document is actually loaded into this frame.
     public TextDocument(XMultiServiceFactory xMSF, XTerminateListener listener, String FrameName)

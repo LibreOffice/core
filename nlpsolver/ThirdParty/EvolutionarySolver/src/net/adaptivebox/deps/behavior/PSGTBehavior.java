@@ -71,11 +71,11 @@ public class PSGTBehavior extends AbsGTBehavior {
   public double CL=0;  //See ref[4], normally be 0.001~0.005
 
   //the own memory: store the point that generated in old learning cycle
-  protected BasicPoint pold_t;
+  private BasicPoint pold_t;
   //the own memory: store the point that generated in last learning cycle
-  protected BasicPoint pcurrent_t;
+  private BasicPoint pcurrent_t;
   //the own memory: store the personal best point
-  protected SearchPoint pbest_t;
+  private SearchPoint pbest_t;
 
   public void setMemPoints(SearchPoint pbest, BasicPoint pcurrent, BasicPoint pold) {
     pcurrent_t = pcurrent;

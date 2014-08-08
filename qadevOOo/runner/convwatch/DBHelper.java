@@ -53,8 +53,8 @@ class ShareConnection
 
     class MySQLThread extends Thread
     {
-        Connection m_aCon = null;
-        String m_sSQL;
+        private Connection m_aCon = null;
+        private String m_sSQL;
         public MySQLThread(Connection _aCon, String _sSQL)
             {
                 m_aCon = _aCon;

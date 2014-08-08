@@ -27,8 +27,8 @@ import lib.TestParameters;
 public class _XUIConfigurationPersistence {
 
 
-    TestParameters tEnv = null;
-    public XUIConfigurationPersistence oObj;
+    private TestParameters tEnv = null;
+    private XUIConfigurationPersistence oObj;
     private XStorage xStore = null;
 
     public _XUIConfigurationPersistence(TestParameters tEnv, XUIConfigurationPersistence oObj) {

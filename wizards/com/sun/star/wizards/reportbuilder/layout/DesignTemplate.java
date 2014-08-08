@@ -33,8 +33,8 @@ public class DesignTemplate
 {
 
     private XReportDefinition m_xReportDefinition;
-    XMultiServiceFactory m_xGlobalMSF;
-    String m_sFilename;
+    private XMultiServiceFactory m_xGlobalMSF;
+    private String m_sFilename;
 
     private DesignTemplate()
     {

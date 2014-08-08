@@ -51,15 +51,15 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class _XAccessibleEventBroadcaster {
 
-    public XAccessibleEventBroadcaster oObj = null;
-    EventProducer prod = null ;
-    EvListener list = new EvListener();
+    private XAccessibleEventBroadcaster oObj = null;
+    private EventProducer prod = null ;
+    private EvListener list = new EvListener();
 
     /**
      * An event producer
      */
     public static class EventProducer {
-        XWindow xWindow;
+        private XWindow xWindow;
         private EventProducer(XWindow window) {
             xWindow = window;
         }

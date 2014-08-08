@@ -66,10 +66,10 @@ public class CommandMetaData extends DBMetaData
     public String[] NonAggregateFieldNames;
     private int CommandType;
     private String Command;
-    boolean bCatalogAtStart = true;
-    String sCatalogSep = PropertyNames.EMPTY_STRING;
-    String sIdentifierQuote = PropertyNames.EMPTY_STRING;
-    boolean bCommandComposerAttributesalreadyRetrieved = false;
+    private boolean bCatalogAtStart = true;
+    private String sCatalogSep = PropertyNames.EMPTY_STRING;
+    private String sIdentifierQuote = PropertyNames.EMPTY_STRING;
+    private boolean bCommandComposerAttributesalreadyRetrieved = false;
     private XIndexAccess xIndexKeys;
 
     public CommandMetaData(XMultiServiceFactory xMSF, Locale _aLocale, NumberFormatter oNumberFormatter)

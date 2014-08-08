@@ -38,25 +38,25 @@ import com.sun.star.wizards.db.QueryMetaData;
 public class AggregateComponent extends ControlScroller
 {
 
-    String[] sFunctions;
-    String[] sFunctionOperators = new String[]
+    private String[] sFunctions;
+    private String[] sFunctionOperators = new String[]
     {
         "SUM", "AVG", "MIN", "MAX"
     };
-    QueryMetaData CurDBMetaData;
-    XButton optDetailQuery;
-    XButton optSummaryQuery;
-    String soptDetailQuery;
-    String soptSummaryQuery;
-    String slblAggregate;
-    String slblFieldNames;
-    String sDuplicateAggregateFunction;
-    int Count;
+    private QueryMetaData CurDBMetaData;
+    private XButton optDetailQuery;
+    private XButton optSummaryQuery;
+    private String soptDetailQuery;
+    private String soptSummaryQuery;
+    private String slblAggregate;
+    private String slblFieldNames;
+    private String sDuplicateAggregateFunction;
+    private int Count;
     int iQueryType;
-    final int SOADDROW = 1;
-    final int SOREMOVEROW = 2;
+    private final int SOADDROW = 1;
+    private final int SOREMOVEROW = 2;
     final int CONTROLROWDIST = 18;
-    ArrayList<ControlRow> ControlRowVector;
+    private ArrayList<ControlRow> ControlRowVector;
     String OPTIONBUTTONDETAILQUERY_ITEM_CHANGED = "toggleComponent";
     String OPTIONBUTTONSUMMARYQUERY_ITEM_CHANGED = "toggleComponent";
     String LISTBOXFUNCTIONS_ACTION_PERFORMED;
@@ -66,8 +66,8 @@ public class AggregateComponent extends ControlScroller
     String COMMANDBUTTONPLUS_ACTION_PERFORMED = "addRow";
     String COMMANDBUTTONMINUS_ACTION_PERFORMED = "removeRow";
     ArrayList<String> ControlRows;
-    int curHelpID;
-    int lastHelpIndex;
+    private int curHelpID;
+    private int lastHelpIndex;
 
     /** Creates a new instance of AggrgateComponent */
     public AggregateComponent(WizardDialog _CurUnoDialog, QueryMetaData _CurDBMetaData, int _iStep, int _iPosX, int _iPosY, int _iWidth, int _uitextfieldcount, int _firstHelpID)

@@ -35,10 +35,10 @@ public class FieldSelection
     protected boolean AppendMode = false;
     protected Integer IStep;
 
-    protected int CompPosX;
-    protected int CompPosY;
-    protected int CompHeight;
-    protected int CompWidth;
+    private int CompPosX;
+    private int CompPosY;
+    private int CompHeight;
+    private int CompWidth;
 
     private XFieldSelectionListener xFieldSelection;
     private int maxfieldcount = 10000000;

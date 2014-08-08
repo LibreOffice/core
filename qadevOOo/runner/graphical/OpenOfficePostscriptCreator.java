@@ -1003,7 +1003,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
         }
 
-    OfficeProvider m_aProvider = null;
+    private OfficeProvider m_aProvider = null;
     private void startOffice()
     {
             m_aParameterHelper.getTestParameters().put(util.PropertyName.DONT_BACKUP_USERLAYER, Boolean.TRUE);

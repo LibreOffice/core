@@ -35,7 +35,7 @@ public class IniFile implements Enumeration<String>
      */
     private String m_sFilename;
     private ArrayList<String> m_aList;
-    boolean m_bListContainUnsavedChanges = false;
+    private boolean m_bListContainUnsavedChanges = false;
     private int m_aEnumerationPos = 0;
 
     /**

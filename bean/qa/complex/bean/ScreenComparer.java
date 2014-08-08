@@ -28,12 +28,12 @@ import javax.imageio.ImageIO;
 
 class ScreenComparer
 {
-    Rectangle m_rect;
-    BufferedImage m_img1;
-    BufferedImage m_img2;
-    BufferedImage m_imgDiff;
+    private Rectangle m_rect;
+    private BufferedImage m_img1;
+    private BufferedImage m_img2;
+    private BufferedImage m_imgDiff;
 
-    int m_diffColor;
+    private int m_diffColor;
     public ScreenComparer(int x, int y, int width, int height)
     {
         this(new Rectangle(x, y, width, height));

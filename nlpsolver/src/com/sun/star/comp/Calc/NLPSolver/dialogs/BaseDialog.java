@@ -61,8 +61,8 @@ public abstract class BaseDialog extends BaseControl {
     private XMultiServiceFactory xMSF;
     protected XWindow xWindow;
     protected XDialog xDialog;
-    protected XWindowPeer xWindowPeer;
-    protected ModalState modalState;
+    private XWindowPeer xWindowPeer;
+    private ModalState modalState;
 
     @Override
     public String getName() {

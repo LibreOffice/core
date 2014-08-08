@@ -729,8 +729,8 @@ public class LocalOfficeConnection
 
     class StreamProcessor extends Thread
     {
-        java.io.InputStream m_in;
-        java.io.PrintStream m_print;
+        private java.io.InputStream m_in;
+        private java.io.PrintStream m_print;
 
         private StreamProcessor(final java.io.InputStream in, final java.io.PrintStream out)
         {

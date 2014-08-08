@@ -19,8 +19,8 @@ package util;
 
 public class XLayerHandlerImpl
     implements com.sun.star.configuration.backend.XLayerHandler {
-    protected String calls = "";
-    protected String ls = System.getProperty("line.separator");
+    private String calls = "";
+    private String ls = System.getProperty("line.separator");
 
     public void addOrReplaceNode(String str, short param)
         throws com.sun.star.configuration.backend.MalformedDataException,

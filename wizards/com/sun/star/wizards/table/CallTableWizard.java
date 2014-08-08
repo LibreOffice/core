@@ -57,7 +57,7 @@ public class CallTableWizard
 
         private PropertyValue[] m_wizardContext;
         // <properties>
-        public String           Command;
+        private String           Command;
         public final Integer    CommandType = com.sun.star.sdb.CommandType.TABLE;
         // </properties>
 

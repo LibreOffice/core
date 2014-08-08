@@ -48,16 +48,16 @@ public class SCAgent {
   private IGoodnessCompareEngine specComparator;
 
   //the coefficients of SCAgent
-  protected int TaoB = 2;
+  private int TaoB = 2;
   //The early version set TaoW as the size of external library (NL), but 4 is often enough
-  protected int TaoW = 4;
+  private int TaoW = 4;
 
   //The referred external library
-  protected Library externalLib;
+  private Library externalLib;
   //store the point that generated in current learning cycle
-  protected SearchPoint trailPoint;
+  private SearchPoint trailPoint;
   //the own memory: store the point that generated in last learning cycle
-  protected SearchPoint pcurrent_t;
+  private SearchPoint pcurrent_t;
 
   public void setExternalLib(Library lib) {
     externalLib = lib;

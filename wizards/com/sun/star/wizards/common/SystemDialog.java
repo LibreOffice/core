@@ -34,16 +34,16 @@ import com.sun.star.beans.PropertyValue;
 public class SystemDialog
 {
 
-    Object systemDialog;
-    XFilePicker xFilePicker;
-    XFolderPicker2 xFolderPicker;
-    XFilterManager xFilterManager;
-    XInitialization xInitialize;
-    XExecutableDialog xExecutable;
-    XComponent xComponent;
-    XFilePickerControlAccess xFilePickerControlAccess;
-    XMultiServiceFactory xMSF;
-    public XStringSubstitution xStringSubstitution;
+    private Object systemDialog;
+    private XFilePicker xFilePicker;
+    private XFolderPicker2 xFolderPicker;
+    private XFilterManager xFilterManager;
+    private XInitialization xInitialize;
+    private XExecutableDialog xExecutable;
+    private XComponent xComponent;
+    private XFilePickerControlAccess xFilePickerControlAccess;
+    private XMultiServiceFactory xMSF;
+    private XStringSubstitution xStringSubstitution;
     public String sStorePath;
 
     /**

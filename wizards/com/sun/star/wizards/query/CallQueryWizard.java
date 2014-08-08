@@ -56,7 +56,7 @@ public class CallQueryWizard
     public static class QueryWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
     {
         private PropertyValue[] m_wizardContext;
-        public String           Command;
+        private String           Command;
         public final Integer    CommandType = com.sun.star.sdb.CommandType.QUERY;
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.

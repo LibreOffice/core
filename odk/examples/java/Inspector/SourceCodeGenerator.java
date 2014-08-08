@@ -48,7 +48,7 @@ import com.sun.star.uno.TypeClass;
 
 public class SourceCodeGenerator {
     private ArrayList<String> sExceptions = new ArrayList<String>();
-    ArrayList<String> sHeaderStatements = new HeaderStatements();
+    private ArrayList<String> sHeaderStatements = new HeaderStatements();
     private XLanguageSourceCodeGenerator m_xLanguageSourceCodeGenerator;
     private String sStatementCode = "";
     private String sMainMethodSignature = "";
@@ -544,14 +544,14 @@ public class SourceCodeGenerator {
 
 
 class UnoObjectDefinition{
-        Object m_oUnoObject = null;
+        private Object m_oUnoObject = null;
         Type aType = null;
-        String sVariableStemName = "";
-        String m_sCentralVariableStemName = "";
-        String sVariableName = "";
-        String m_sTypeName = "";
-        TypeClass m_aTypeClass = null;
-        Object[] m_oParameterObjects = null;
+        private String sVariableStemName = "";
+        private String m_sCentralVariableStemName = "";
+        private String sVariableName = "";
+        private String m_sTypeName = "";
+        private TypeClass m_aTypeClass = null;
+        private Object[] m_oParameterObjects = null;
 
 
         private UnoObjectDefinition(Any _oUnoObject){
@@ -840,8 +840,8 @@ class UnoObjectDefinition{
 
     public class JavaCodeGenerator implements XLanguageSourceCodeGenerator{
         String sStatementsCode = "";
-        boolean bAddAnyConverter = false;
-        boolean bIsPropertyUnoObjectDefined = false;
+        private boolean bAddAnyConverter = false;
+        private boolean bIsPropertyUnoObjectDefined = false;
 
         public JavaCodeGenerator(){
         }
@@ -1391,9 +1391,9 @@ class UnoObjectDefinition{
 
     public class CPlusPlusCodeGenerator implements XLanguageSourceCodeGenerator{
         String sStatementsCode = "";
-        boolean bIncludeStringHeader = false;
-        boolean bIncludeAny = false;
-        boolean bIncludeSequenceHeader = false;
+        private boolean bIncludeStringHeader = false;
+        private boolean bIncludeAny = false;
+        private boolean bIncludeSequenceHeader = false;
 
         public CPlusPlusCodeGenerator(){
         }

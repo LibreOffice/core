@@ -42,11 +42,11 @@ interface Filenamer
 
 abstract class FilenameHelper_impl implements Filenamer
 {
-    String fs;                                   // file separator like '/'
-    String m_sPath;
-    String m_sFilename;
-    String m_sSuffix;
-    int    m_nNumber = 0;
+    private String fs;                                   // file separator like '/'
+    private String m_sPath;
+    private String m_sFilename;
+    private String m_sSuffix;
+    private int    m_nNumber = 0;
 
     public String getNumber()
         {

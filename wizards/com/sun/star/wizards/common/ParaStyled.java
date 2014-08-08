@@ -25,7 +25,7 @@ import com.sun.star.text.*;
 class ParaStyled implements TemplateElement
 {
 
-    String paraStyle;
+    private String paraStyle;
 
     ParaStyled(String paraStyle_)
     {

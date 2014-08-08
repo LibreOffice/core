@@ -40,15 +40,15 @@ import com.sun.star.wizards.common.PropertyNames;
 public class RecordParser extends QueryMetaData
 {
 
-    XNameAccess xColumns;
+    private XNameAccess xColumns;
     com.sun.star.sdbc.XRow xRow;
-    com.sun.star.sdbc.XRow xResultSetRow;
+    private com.sun.star.sdbc.XRow xResultSetRow;
     public XResultSet ResultSet;
-    XInterface xRowSet;
-    XCompletedExecution xExecute;
-    XColumnsSupplier xRowSetColumnsSupplier;
-    XComponent xRowSetComponent;
-    XInteractionHandler xInteraction;
+    private XInterface xRowSet;
+    private XCompletedExecution xExecute;
+    private XColumnsSupplier xRowSetColumnsSupplier;
+    private XComponent xRowSetComponent;
+    private XInteractionHandler xInteraction;
     public FieldColumn[] GroupFieldColumns;
     public FieldColumn[] RecordFieldColumns;
 

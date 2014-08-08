@@ -105,7 +105,7 @@ abstract class MarkNode extends TreeNode
 {
     boolean m_isPoint;
     boolean m_isStart = false;
-    String m_Name;
+    private String m_Name;
     boolean isPoint() { return m_isPoint; }
     boolean isStart() { return m_isStart; }
     String getName() { return m_Name; }

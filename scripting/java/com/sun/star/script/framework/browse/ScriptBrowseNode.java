@@ -52,11 +52,11 @@ public class ScriptBrowseNode extends PropertySet
 
     private Parcel parent;
     private String name;
-    public String uri;
-    public String description;
-    public boolean editable  = false;
-    public boolean deletable = false;
-    public boolean renamable = false;
+    private String uri;
+    private String description;
+    private boolean editable  = false;
+    private boolean deletable = false;
+    private boolean renamable = false;
 
     public ScriptBrowseNode( ScriptProvider provider, Parcel parent,
         String name )

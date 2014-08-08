@@ -41,12 +41,12 @@ public class SQLQueryComposer
 {
 
     public XColumnsSupplier xColSuppl;
-    QueryMetaData CurDBMetaData;
+    private QueryMetaData CurDBMetaData;
     public XSingleSelectQueryAnalyzer m_xQueryAnalyzer;
-    ArrayList<CommandName> composedCommandNames = new ArrayList<CommandName>(1);
+    private ArrayList<CommandName> composedCommandNames = new ArrayList<CommandName>(1);
     private XSingleSelectQueryComposer m_queryComposer;
-    XMultiServiceFactory xMSF;
-    boolean bincludeGrouping = true;
+    private XMultiServiceFactory xMSF;
+    private boolean bincludeGrouping = true;
 
     public SQLQueryComposer(QueryMetaData _CurDBMetaData)
     {

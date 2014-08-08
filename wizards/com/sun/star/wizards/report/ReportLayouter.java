@@ -36,20 +36,20 @@ import java.util.ArrayList;
 public class ReportLayouter
 {
 
-    UnoDialog CurUnoDialog;
+    private UnoDialog CurUnoDialog;
     final int SOTXTTITLE = 28;
-    final int SOCONTENTLST = 29;
+    private final int SOCONTENTLST = 29;
     final static public int SOOPTLANDSCAPE = 30;
     final static public int SOOPTPORTRAIT = 31;
-    final int SOLAYOUTLST = 32;
-    XListBox xContentListBox;
-    XListBox xLayoutListBox;
-    int iOldContentPos;
-    int iOldLayoutPos;
-    IReportDocument CurReportDocument;
-    public String[][] LayoutFiles;
-    public String[][] ContentFiles;
-    Object aOrientationImage;
+    private final int SOLAYOUTLST = 32;
+    private XListBox xContentListBox;
+    private XListBox xLayoutListBox;
+    private int iOldContentPos;
+    private int iOldLayoutPos;
+    private IReportDocument CurReportDocument;
+    private String[][] LayoutFiles;
+    private String[][] ContentFiles;
+    private Object aOrientationImage;
     private XMultiServiceFactory m_xMSF;
     private XTextRange          trTitleconst, trAuthorconst, trDateconst, trPageconst;
     private TextElement         teTitleconst, teAuthorconst, teDateconst, tePageconst;

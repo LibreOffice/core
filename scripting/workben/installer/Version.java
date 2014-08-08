@@ -241,7 +241,7 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
 
 class MyTableModel extends AbstractTableModel {
     ArrayList<ArrayList<Object>> data;
-    String colNames[] = {"", "Name", "Location"};
+    private String colNames[] = {"", "Name", "Location"};
     Object[] longValues = new Object[] {Boolean.TRUE, "Name", "Location"};
 
     MyTableModel (Properties properties) {

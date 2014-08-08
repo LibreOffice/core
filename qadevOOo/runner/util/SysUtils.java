@@ -41,7 +41,7 @@ public class SysUtils {
         return jh;
     }
 
-  static ArrayList<String> files = new ArrayList<String>();
+  private static ArrayList<String> files = new ArrayList<String>();
 
   public static Object[] traverse( String afileDirectory ) {
 

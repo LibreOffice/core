@@ -685,7 +685,7 @@ public class FileAccess
         return LocLayoutFiles;
     }
     public XSimpleFileAccess2 fileAccess;
-    public XFileIdentifierConverter filenameConverter;
+    private XFileIdentifierConverter filenameConverter;
 
     public FileAccess(XMultiServiceFactory xmsf) throws com.sun.star.uno.Exception
     {

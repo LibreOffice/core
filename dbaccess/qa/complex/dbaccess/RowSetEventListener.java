@@ -36,8 +36,8 @@ public final class RowSetEventListener implements XRowSetApproveListener,XRowSet
     public static final int ROW_COUNT           = 7;
     public static final int IS_ROW_COUNT_FINAL  = 8;
 
-    int callPos = 1;
-    int calling [];
+    private int callPos = 1;
+    private int calling [];
 
     RowSetEventListener(){
         calling = new int [9];

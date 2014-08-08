@@ -107,15 +107,15 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     protected XComponentContext m_xContext = null;
     protected com.sun.star.lang.XMultiComponentFactory m_xMCF;
     protected XMultiServiceFactory m_xMSFDialogModel;
-    protected XModel m_xModel;
+    private XModel m_xModel;
     protected XNameContainer m_xDlgModelNameContainer;
     protected XControlContainer m_xDlgContainer;
 //    protected XNameAccess m_xDlgModelNameAccess;
     protected XControl m_xDialogControl;
     protected XDialog xDialog;
-    protected XReschedule mxReschedule;
+    private XReschedule mxReschedule;
     protected XWindowPeer m_xWindowPeer = null;
-    protected XTopWindow m_xTopWindow = null;
+    private XTopWindow m_xTopWindow = null;
     protected XFrame m_xFrame = null;
     protected XComponent m_xComponent = null;
 
@@ -1399,8 +1399,8 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 // Globally available object variables of the roadmapmodel
     XPropertySet m_xRMPSet;
-    XSingleServiceFactory m_xSSFRoadmap;
-    XIndexContainer m_xRMIndexCont;
+    private XSingleServiceFactory m_xSSFRoadmap;
+    private XIndexContainer m_xRMIndexCont;
 
     public void addRoadmap() {
         XPropertySet xDialogModelPropertySet = null;

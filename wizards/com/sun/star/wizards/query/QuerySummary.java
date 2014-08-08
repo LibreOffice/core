@@ -29,10 +29,10 @@ import com.sun.star.wizards.ui.FilterComponent;
 public class QuerySummary extends QueryMetaData
 {
 
-    final protected int RID_QUERY = 2300;
+    final private int RID_QUERY = 2300;
     final protected int RID_REPORT = 2400;
-    String sSummary;
-    Resource oResource;
+    private String sSummary;
+    private Resource oResource;
     private String sSeparator;
     private String sReturnChar;
     private String sAnd;

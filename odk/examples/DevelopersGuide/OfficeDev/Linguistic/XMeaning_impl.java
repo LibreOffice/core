@@ -37,8 +37,8 @@
 public class XMeaning_impl implements
     com.sun.star.linguistic2.XMeaning
 {
-    String      aMeaning;
-    String[]    aSynonyms;
+    private String      aMeaning;
+    private String[]    aSynonyms;
 
     public XMeaning_impl ( String aMeaning, String[] aSynonyms )
     {

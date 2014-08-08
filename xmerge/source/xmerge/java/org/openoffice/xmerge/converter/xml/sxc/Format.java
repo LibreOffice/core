@@ -67,14 +67,14 @@ public class Format implements Cloneable {
     /** Font name. */
     private String fontName;
     /** Font size in points. */
-    protected int sizeInPoints;
+    private int sizeInPoints;
 
     private Color foreground, background;
 
     /** Values of text attributes. */
-    protected int attributes = 0;
+    private int attributes = 0;
     /** Bitwise mask of text attributes. */
-    protected int mask = 0;
+    private int mask = 0;
 
     /**
      *  Constructor for creating a new <code>Format</code>.

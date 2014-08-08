@@ -388,7 +388,7 @@ public class FormWizard extends DatabaseObjectWizard
     public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
-        protected int ID;
+        private int ID;
 
         // @Override
         public int getID()

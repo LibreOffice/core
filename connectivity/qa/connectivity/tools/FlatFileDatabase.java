@@ -88,6 +88,6 @@ class FlatFileDatabase extends AbstractDatabase
         storable.storeAsURL( m_databaseDocumentFile, new PropertyValue[] { } );
     }
 
-    final String    m_urlSubScheme;
-    File            m_tableFileLocation = null;
+    private final String    m_urlSubScheme;
+    private File            m_tableFileLocation = null;
 }

@@ -28,8 +28,8 @@ public class _XPropertiesChangeNotifier {
     public XPropertiesChangeNotifier oObj = null;
     public LogWriter log = null;
 
-    PropertiesChangeListener listener = new PropertiesChangeListener();
-    String[] args = null;
+    private PropertiesChangeListener listener = new PropertiesChangeListener();
+    private String[] args = null;
 
 
     public boolean _addPropertiesChangeListener() {

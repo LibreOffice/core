@@ -61,11 +61,11 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
     }
 
     protected class Variable {
-        protected CellMap CellMap;
-        protected int OriginalVariable;
-        protected double MinValue;
-        protected double MaxValue;
-        protected double Granularity;
+        private CellMap CellMap;
+        private int OriginalVariable;
+        private double MinValue;
+        private double MaxValue;
+        private double Granularity;
 
         private Variable(CellMap cellMap, int originalVariable) {
             this.CellMap = cellMap;
@@ -152,19 +152,19 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
     protected double m_toleratedMin;
     protected double m_toleratedMax;
 
-    protected ArrayList<Variable> m_variables = new ArrayList<Variable>();
+    private ArrayList<Variable> m_variables = new ArrayList<Variable>();
 
     //properties
     protected PropertyInfo<Integer> m_swarmSize = new PropertyInfo<Integer>("SwarmSize", 70, "Size of Swam");
     protected PropertyInfo<Integer> m_librarySize = new PropertyInfo<Integer>("LibrarySize", 210, "Size of Library");
     protected PropertyInfo<Integer> m_learningCycles = new PropertyInfo<Integer>("LearningCycles", 2000, "Learning Cycles");
-    protected PropertyInfo<Boolean> m_guessVariableRange = new PropertyInfo<Boolean>("GuessVariableRange", true, "Variable Bounds Guessing");
-    protected PropertyInfo<Double> m_variableRangeThreshold = new PropertyInfo<Double>("VariableRangeThreshold", 3.0, "Variable Bounds Threshold (when guessing)"); //to approximate the variable bounds
-    protected PropertyInfo<Boolean> m_useACRComperator = new PropertyInfo<Boolean>("UseACRComparator", false, "Use ACR Comparator (instead of BCH)");
-    protected PropertyInfo<Boolean> m_useRandomStartingPoint = new PropertyInfo<Boolean>("UseRandomStartingPoint", false, "Use Random starting point");
+    private PropertyInfo<Boolean> m_guessVariableRange = new PropertyInfo<Boolean>("GuessVariableRange", true, "Variable Bounds Guessing");
+    private PropertyInfo<Double> m_variableRangeThreshold = new PropertyInfo<Double>("VariableRangeThreshold", 3.0, "Variable Bounds Threshold (when guessing)"); //to approximate the variable bounds
+    private PropertyInfo<Boolean> m_useACRComperator = new PropertyInfo<Boolean>("UseACRComparator", false, "Use ACR Comparator (instead of BCH)");
+    private PropertyInfo<Boolean> m_useRandomStartingPoint = new PropertyInfo<Boolean>("UseRandomStartingPoint", false, "Use Random starting point");
     protected PropertyInfo<Integer> m_required = new PropertyInfo<Integer>("StagnationLimit", 70, "Stagnation Limit");
     protected PropertyInfo<Double> m_tolerance = new PropertyInfo<Double>("Tolerance", 1e-6, "Stagnation Tolerance");
-    protected PropertyInfo<Boolean> m_enhancedSolverStatus = new PropertyInfo<Boolean>("EnhancedSolverStatus", true, "Show enhanced solver status");
+    private PropertyInfo<Boolean> m_enhancedSolverStatus = new PropertyInfo<Boolean>("EnhancedSolverStatus", true, "Show enhanced solver status");
 
     protected IEvolutionarySolverStatusDialog m_solverStatusDialog;
 

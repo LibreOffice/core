@@ -47,7 +47,7 @@ public class ParcelContainer implements XNameAccess
 {
     protected String language;
     protected String containerUrl;
-    protected Collection<Parcel> parcels = new ArrayList<Parcel>(10);
+    private Collection<Parcel> parcels = new ArrayList<Parcel>(10);
     static protected XSimpleFileAccess m_xSFA;
     protected XComponentContext m_xCtx;
     private ParcelContainer parent = null;

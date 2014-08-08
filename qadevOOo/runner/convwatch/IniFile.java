@@ -32,9 +32,9 @@ class IniFile
      * internal representation of the ini file content.
      * Problem, if ini file changed why other write something difference, we don't realise this.
      */
-    String m_sFilename;
-    ArrayList<String> m_aList;
-    boolean m_bListContainUnsavedChanges = false;
+    private String m_sFilename;
+    private ArrayList<String> m_aList;
+    private boolean m_bListContainUnsavedChanges = false;
 
     /**
        open a ini file by its name

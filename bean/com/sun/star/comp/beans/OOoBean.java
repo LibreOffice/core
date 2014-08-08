@@ -40,9 +40,9 @@ public class OOoBean
         java.io.Externalizable
 {
     // timeout values (milli secs)
-    int nOOoStartTimeOut = 60000;
-    int nOOoCallTimeOut =   3000;
-    int nOOoCheckCycle =    1000;
+    private int nOOoStartTimeOut = 60000;
+    private int nOOoCallTimeOut =   3000;
+    private int nOOoCheckCycle =    1000;
 
     // This member contains the connection to an OOo instance if established.
     private transient OfficeConnection      iConnection;

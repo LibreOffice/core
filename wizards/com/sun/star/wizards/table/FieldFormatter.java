@@ -37,23 +37,23 @@ import com.sun.star.wizards.ui.UnoDialog;
 public class FieldFormatter implements XItemListener
 {
 
-    TableWizard CurUnoDialog;
-    TableDescriptor curTableDescriptor;
-    Object oColumnDescriptorModel;
-    XTextComponent txtfieldname;
-    XListBox xlstFieldNames;
-    XButton btnplus;
-    XButton btnminus;
-    XButton btnShiftUp;
-    XButton btnShiftDown;
-    short curtabindex;
+    private TableWizard CurUnoDialog;
+    private TableDescriptor curTableDescriptor;
+    private Object oColumnDescriptorModel;
+    private XTextComponent txtfieldname;
+    private XListBox xlstFieldNames;
+    private XButton btnplus;
+    private XButton btnminus;
+    private XButton btnShiftUp;
+    private XButton btnShiftDown;
+    private short curtabindex;
     String TOGGLEBUTTONS = "toggleButtons";
     String ADDFIELDNAME = "addFieldName";
     String REMOVEFIELDNAME = "removeFieldName";
-    String MODIFYFIELDNAME = "modifyFieldName";
+    private String MODIFYFIELDNAME = "modifyFieldName";
     String[] fieldnames;
-    String suntitled;
-    Integer IFieldFormatStep;
+    private String suntitled;
+    private Integer IFieldFormatStep;
 
     public FieldFormatter(TableWizard _CurUnoDialog)
     {

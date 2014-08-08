@@ -118,7 +118,7 @@ public class NavPanel extends JPanel implements ActionListener {
         navCancel.removeActionListener(listener);
     }
 
-    public JButton navBack;
+    private JButton navBack;
     public JButton navNext;
     public JButton navCancel;
     private GridBagConstraints gridBagConstraints1;

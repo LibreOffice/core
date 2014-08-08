@@ -26,11 +26,11 @@ import javax.imageio.ImageIO;
 
 public class EditorFrame extends JFrame
 {
-    OwnEmbeddedObject m_aEmbObj;
-    JTextArea m_aTextArea;
-    BufferedImage m_aBufImage;
+    private OwnEmbeddedObject m_aEmbObj;
+    private JTextArea m_aTextArea;
+    private BufferedImage m_aBufImage;
 
-    WindowListener m_aCloser = new WindowAdapter()
+    private WindowListener m_aCloser = new WindowAdapter()
     {
         @Override
         public void windowClosing( WindowEvent e )

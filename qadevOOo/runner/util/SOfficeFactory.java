@@ -45,7 +45,7 @@ import com.sun.star.awt.*;
 public class SOfficeFactory {
 
     private static HashMap<String, SOfficeFactory> lookup = new HashMap<String, SOfficeFactory>(10);
-    protected XComponentLoader oCLoader;
+    private XComponentLoader oCLoader;
 
     private SOfficeFactory(XMultiServiceFactory xMSF) {
         // get XInterface of Desktop service

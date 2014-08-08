@@ -37,9 +37,9 @@ import com.sun.star.uno.Type;
  * Parameters is a container of String parameters.
  */
 public class Parameters implements XPropertySet {
-    final protected Map<String, Object> parameters;
-    final Parameters defaults;
-    Property[] props;
+    final private Map<String, Object> parameters;
+    private final Parameters defaults;
+    private Property[] props;
 
     public Parameters(Map<String, Object> params) {
         this (params, null);

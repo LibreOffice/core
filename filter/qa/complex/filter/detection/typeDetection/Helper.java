@@ -50,17 +50,17 @@ public class Helper  {
      * @member m_param          the test parameters
      */
 
-    LogWriter m_log = null;
+    private LogWriter m_log = null;
 
-    String m_sTestDocPath = null;
+    private String m_sTestDocPath = null;
 
-    ArrayList<ArrayList<String>>  m_vFiles = null;
+    private ArrayList<ArrayList<String>>  m_vFiles = null;
 
-    HashMap<String,String> m_hFileURLs = new HashMap<String,String>();
+    private HashMap<String,String> m_hFileURLs = new HashMap<String,String>();
 
-    HashMap<String,String> m_hFileTypes = new HashMap<String,String>();
+    private HashMap<String,String> m_hFileTypes = new HashMap<String,String>();
 
-    TestParameters m_param = null;
+    private TestParameters m_param = null;
 
     /**
      * construct a new instance of this class

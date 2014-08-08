@@ -41,18 +41,18 @@ public class Control extends Shape
 {
 
     XControlModel xControlModel;
-    XControl xControl;
+    private XControl xControl;
     public XPropertySet xPropertySet;
-    XPropertySet xControlPropertySet;
+    private XPropertySet xControlPropertySet;
     XWindowPeer xWindowPeer;
     Object oDefaultValue;
     GridControl oGridControl;
-    String sServiceName;
+    private String sServiceName;
     XNamed xNamed;
-    final int SOMAXTEXTSIZE = 50;
+    private final int SOMAXTEXTSIZE = 50;
     private int icontroltype;
-    protected XNameContainer xFormName;
-    protected final int IIMGFIELDWIDTH = 3000;
+    private XNameContainer xFormName;
+    private final int IIMGFIELDWIDTH = 3000;
 
     public Control()
     {

@@ -28,9 +28,9 @@ import lib.TestParameters;
 public class _XUIConfiguration {
 
 
-    TestParameters tEnv = null;
-    public XUIConfiguration oObj;
-    XUIConfigurationListenerImpl xListener = null;
+    private TestParameters tEnv = null;
+    private XUIConfiguration oObj;
+    private XUIConfigurationListenerImpl xListener = null;
 
     public static interface XUIConfigurationListenerImpl
                                     extends XUIConfigurationListener {

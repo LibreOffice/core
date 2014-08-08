@@ -52,13 +52,13 @@ import lib.TestParameters;
 */
 public class _XDataPilotDescriptor {
 
-    public XDataPilotDescriptor oObj = null;
-    CellRangeAddress CRA = new CellRangeAddress((short)1, 0, 0, 5, 5);
-    CellRangeAddress oldCRA = null ;
-    String sTag = new String ("XDataPilotDescriptor_Tag");
-    String fieldsNames[];
-    int fieldsAmount = 0;
-    int tEnvFieldsAmount = 0;
+    private XDataPilotDescriptor oObj = null;
+    private CellRangeAddress CRA = new CellRangeAddress((short)1, 0, 0, 5, 5);
+    private CellRangeAddress oldCRA = null ;
+    private String sTag = new String ("XDataPilotDescriptor_Tag");
+    private String fieldsNames[];
+    private int fieldsAmount = 0;
+    private int tEnvFieldsAmount = 0;
 
     /**
      * The test parameters

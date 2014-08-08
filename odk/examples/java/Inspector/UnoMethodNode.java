@@ -39,11 +39,11 @@ import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.uno.TypeClass;
 
 public class UnoMethodNode extends UnoNode{
-    XIdlMethod m_xIdlMethod = null;
-    Object[] m_oParamObjects = null;
-    Object m_oUnoReturnObject = null;
-    boolean m_bisInvoked = false;
-    XUnoMethodNode m_xUnoMethodNode = null;
+    private XIdlMethod m_xIdlMethod = null;
+    private Object[] m_oParamObjects = null;
+    private Object m_oUnoReturnObject = null;
+    private boolean m_bisInvoked = false;
+    private XUnoMethodNode m_xUnoMethodNode = null;
 
 
     /** Creates a new instance of UnoMethodNode */

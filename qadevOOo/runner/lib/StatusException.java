@@ -27,7 +27,7 @@ public class StatusException extends RuntimeException {
     /**
      * The Status contained in the StatusException.
      */
-    protected Status status;
+    private Status status;
 
     /**
      * Constructs a StatusException containing an exception Status.

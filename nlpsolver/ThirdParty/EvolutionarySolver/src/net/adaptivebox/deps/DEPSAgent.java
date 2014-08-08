@@ -41,28 +41,28 @@ import net.adaptivebox.space.*;
 public class DEPSAgent implements ILibEngine {
 
   //Describes the problem to be solved
-  protected ProblemEncoder problemEncoder;
+  private ProblemEncoder problemEncoder;
   //Forms the goodness landscape
-  protected IGoodnessCompareEngine qualityComparator;
+  private IGoodnessCompareEngine qualityComparator;
 
   //store the point that generated in current learning cycle
-  protected SearchPoint trailPoint;
+  private SearchPoint trailPoint;
 
   //temp variable
   private AbsGTBehavior selectGTBehavior;
 
   //The referred library
-  protected Library socialLib;
+  private Library socialLib;
   //the own memory: store the point that generated in old learning cycle
-  protected BasicPoint pold_t;
+  private BasicPoint pold_t;
   //the own memory: store the point that generated in last learning cycle
-  protected BasicPoint pcurrent_t;
+  private BasicPoint pcurrent_t;
   //the own memory: store the personal best point
-  protected SearchPoint pbest_t;
+  private SearchPoint pbest_t;
 
   //Generate-and-test Behaviors
-  protected DEGTBehavior deGTBehavior;
-  protected PSGTBehavior psGTBehavior;
+  private DEGTBehavior deGTBehavior;
+  private PSGTBehavior psGTBehavior;
   public double switchP = 0.5;
 
   public void setLibrary(Library lib) {

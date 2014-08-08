@@ -181,7 +181,7 @@ public class ParameterHelper
             return m_sPrinterName;
         }
 
-    PerformanceContainer m_aPerformanceContainer = null;
+    private PerformanceContainer m_aPerformanceContainer = null;
     /**
      * helper class for performance analyser features
      */
@@ -261,8 +261,8 @@ public class ParameterHelper
     // get the right Filtername (internal Name) from
     // http://framework.openoffice.org/files/documents/25/897/filter_description.html
 
-    String m_sImportFilterName = "";
-    String m_sExportFilterName = "";
+    private String m_sImportFilterName = "";
+    private String m_sExportFilterName = "";
     public void setImportFilterName(String _sImportFilterName)
         {
             m_sImportFilterName = _sImportFilterName;
@@ -279,7 +279,7 @@ public class ParameterHelper
         {
             return m_sExportFilterName;
         }
-    String m_sDocumentType = "";
+    private String m_sDocumentType = "";
     public void setDocumentType(String _sName)
         {
             m_sDocumentType = _sName;

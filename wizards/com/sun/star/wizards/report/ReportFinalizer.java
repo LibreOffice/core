@@ -30,18 +30,18 @@ import com.sun.star.wizards.db.RecordParser;
 public class ReportFinalizer
 {
 
-    WizardDialog CurUnoDialog;
-    XTextComponent xTitleTextBox;
+    private WizardDialog CurUnoDialog;
+    private XTextComponent xTitleTextBox;
     XTextComponent[] xSaveTextBox = new XTextComponent[2];
     Object chkTemplate;
-    String CHANGEREPORTTITLE_FUNCNAME = "changeReportTitle";
-    String TOGGLESUBTEMPLATECONTROLS_FUNCNAME = "toggleSubTemplateControls";
+    private String CHANGEREPORTTITLE_FUNCNAME = "changeReportTitle";
+    private String TOGGLESUBTEMPLATECONTROLS_FUNCNAME = "toggleSubTemplateControls";
     String TemplatePath;
-    String StoreName;
+    private String StoreName;
     boolean bfinalaskbeforeOverwrite;
-    String DefaultName;
-    String OldDefaultName;
-    IReportDocument CurReportDocument;
+    private String DefaultName;
+    private String OldDefaultName;
+    private IReportDocument CurReportDocument;
     public static final int SOCREATEDOCUMENT = 1;
     public static final int SOCREATETEMPLATE = 2;
     public static final int SOUSETEMPLATE = 3;

@@ -31,15 +31,15 @@ package helper;
 public class WindowListener implements com.sun.star.awt.XWindowListener {
 
     // hidden called
-    public boolean hiddenTrigger;
+    private boolean hiddenTrigger;
     // move called
-    public boolean movedTrigger;
+    private boolean movedTrigger;
     // resize called
     public boolean resizedTrigger;
     // show called
-    public boolean shownTrigger;
+    private boolean shownTrigger;
     // dispose called
-    public boolean disposeTrigger;
+    private boolean disposeTrigger;
 
     /**
      * Creates a new WindowListener

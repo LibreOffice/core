@@ -35,8 +35,8 @@ import share.LogWriter;
 public class _XChild {
 
     public XChild oObj = null;
-    public Object gotten = null;
-    public LogWriter log = null;
+    private Object gotten = null;
+    private LogWriter log = null;
 
 
     /**

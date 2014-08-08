@@ -811,7 +811,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     public static class Counter
     {
 
-        public int start,  end,  max;
+        private int start,  end,  max;
 
         private Counter(int start_, int end_, int max_)
         {

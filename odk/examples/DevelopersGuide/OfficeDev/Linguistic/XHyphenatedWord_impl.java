@@ -37,12 +37,12 @@ import com.sun.star.lang.Locale;
 public class XHyphenatedWord_impl implements
     com.sun.star.linguistic2.XHyphenatedWord
 {
-    String     aWord;
-    String     aHyphenatedWord;
-    short      nHyphenPos;
-    short      nHyphenationPos;
-    Locale     aLang;
-    boolean    bIsAltSpelling;
+    private String     aWord;
+    private String     aHyphenatedWord;
+    private short      nHyphenPos;
+    private short      nHyphenationPos;
+    private Locale     aLang;
+    private boolean    bIsAltSpelling;
 
     public XHyphenatedWord_impl(
             String      aWord,

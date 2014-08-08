@@ -38,11 +38,11 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
     /**
      * The method name which will be written into f.e. the data base
      **/
-    protected String mTestMethodName = null;
+    private String mTestMethodName = null;
     /** Maximal time one method is allowed to execute
      * Can be set with parameter 'ThreadTimeOut'
      **/
-    protected int m_nThreadTimeOut = 0;
+    private int m_nThreadTimeOut = 0;
 
     /** End a test if it did fail **/
     public static final boolean BREAK = true;

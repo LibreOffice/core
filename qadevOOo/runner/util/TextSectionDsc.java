@@ -27,8 +27,8 @@ import com.sun.star.text.XTextContent;
  */
 public class TextSectionDsc extends InstDescr {
 
-    final String service = "com.sun.star.text.TextSection";
-    String ifcName = "com.sun.star.text.XTextContent";
+    private final String service = "com.sun.star.text.TextSection";
+    private String ifcName = "com.sun.star.text.XTextContent";
     private String name = null;
 
 

@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class XInputStreamImpl implements XInputStream
 {
-    InputStream is;
+    private InputStream is;
     public XInputStreamImpl( InputStream is )
     {
         this.is = is;

@@ -85,16 +85,16 @@ public class DBMetaData
     private XPropertySet m_dataSourceSettings;
     private XOfficeDatabaseDocument xModel;
     private XPropertySet xDataSourcePropertySet;
-    public String[] DataSourceNames;
+    private String[] DataSourceNames;
     public String[] CommandNames;
-    public java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
-    public Locale aLocale;
-    public int[] CommandTypes;
+    private java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
+    private Locale aLocale;
+    private int[] CommandTypes;
     public String DataSourceName;
     public com.sun.star.sdbc.XConnection DBConnection;
     private com.sun.star.sdb.tools.XConnectionTools m_connectionTools;
     public com.sun.star.lang.XMultiServiceFactory xMSF;
-    public XComponent xConnectionComponent;
+    private XComponent xConnectionComponent;
 
     private XNameAccess xNameAccess;
     private XInterface xDatabaseContext;

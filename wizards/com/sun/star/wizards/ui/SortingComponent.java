@@ -26,26 +26,26 @@ import java.util.ArrayList;
 public class SortingComponent
 {
 
-    com.sun.star.lang.XMultiServiceFactory xMSF;
-    WizardDialog CurUnoDialog;
-    int MaxSortIndex = -1;
+    private com.sun.star.lang.XMultiServiceFactory xMSF;
+    private WizardDialog CurUnoDialog;
+    private int MaxSortIndex = -1;
     public String[][] FieldNames;
-    static String sNoSorting;
-    static String sSortCriteriaisduplicate;
-    static String[] sSortHeader = new String[4];
-    static String[] sSortAscend = new String[4];
-    static String[] sSortDescend = new String[4];
+    private static String sNoSorting;
+    private static String sSortCriteriaisduplicate;
+    private static String[] sSortHeader = new String[4];
+    private static String[] sSortAscend = new String[4];
+    private static String[] sSortDescend = new String[4];
     static short[] bOldSortValues = new short[4];
-    public int MAXSORTCRITERIAINDEX = 3;
-    final int SOFIRSTSORTLST = 0;
-    final int SOSECSORTLST = 1;
-    final int SOTHIRDSORTLST = 2;
-    final int SOFOURTHSORTLST = 3;
-    final int[] SOSORTLST = new int[]
+    private int MAXSORTCRITERIAINDEX = 3;
+    private final int SOFIRSTSORTLST = 0;
+    private final int SOSECSORTLST = 1;
+    private final int SOTHIRDSORTLST = 2;
+    private final int SOFOURTHSORTLST = 3;
+    private final int[] SOSORTLST = new int[]
     {
         SOFIRSTSORTLST, SOSECSORTLST, SOTHIRDSORTLST, SOFOURTHSORTLST
     };
-    XListBox[] xSortListBox = new XListBox[4];
+    private XListBox[] xSortListBox = new XListBox[4];
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {

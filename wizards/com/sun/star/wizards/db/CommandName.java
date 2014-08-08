@@ -25,17 +25,17 @@ import com.sun.star.wizards.common.PropertyNames;
 public class CommandName
 {
 
-    protected CommandMetaData oCommandMetaData;
-    protected String CatalogName = PropertyNames.EMPTY_STRING;
-    protected String SchemaName = PropertyNames.EMPTY_STRING;
-    protected String TableName = PropertyNames.EMPTY_STRING;
-    protected String DisplayName = PropertyNames.EMPTY_STRING;
-    protected String ComposedName = PropertyNames.EMPTY_STRING;
-    protected String AliasName = PropertyNames.EMPTY_STRING;
-    protected boolean bCatalogAtStart;
-    protected String sCatalogSep;
-    protected String sIdentifierQuote;
-    protected boolean baddQuotation = true;
+    private CommandMetaData oCommandMetaData;
+    private String CatalogName = PropertyNames.EMPTY_STRING;
+    private String SchemaName = PropertyNames.EMPTY_STRING;
+    private String TableName = PropertyNames.EMPTY_STRING;
+    private String DisplayName = PropertyNames.EMPTY_STRING;
+    private String ComposedName = PropertyNames.EMPTY_STRING;
+    private String AliasName = PropertyNames.EMPTY_STRING;
+    private boolean bCatalogAtStart;
+    private String sCatalogSep;
+    private String sIdentifierQuote;
+    private boolean baddQuotation = true;
 
     public CommandName(CommandMetaData _CommandMetaData, String _DisplayName)
     {

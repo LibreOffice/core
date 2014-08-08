@@ -33,11 +33,11 @@ import com.sun.star.container.XIndexAccess;
 
 
 public class InstCreator implements XInstCreator {
-    XInterface xParent;
-    XMultiServiceFactory xMSF;
-    XInterface xInstance;
-    XIndexAccess xIA;
-    InstDescr iDsc;
+    private XInterface xParent;
+    private XMultiServiceFactory xMSF;
+    private XInterface xInstance;
+    private XIndexAccess xIA;
+    private InstDescr iDsc;
 
     public InstCreator( XInterface xParent, InstDescr iDsc ) {
         this.xParent = xParent;

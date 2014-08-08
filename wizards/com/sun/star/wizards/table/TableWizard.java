@@ -38,20 +38,20 @@ import com.sun.star.wizards.ui.*;
 public class TableWizard extends DatabaseObjectWizard implements XTextListener
 {
 
-    static String slblFields;
-    static String slblSelFields;
-    Finalizer curFinalizer;
-    ScenarioSelector curScenarioSelector;
-    FieldFormatter curFieldFormatter;
-    PrimaryKeyHandler curPrimaryKeyHandler;
-    String sMsgWizardName = PropertyNames.EMPTY_STRING;
+    private static String slblFields;
+    private static String slblSelFields;
+    private Finalizer curFinalizer;
+    private ScenarioSelector curScenarioSelector;
+    private FieldFormatter curFieldFormatter;
+    private PrimaryKeyHandler curPrimaryKeyHandler;
+    private String sMsgWizardName = PropertyNames.EMPTY_STRING;
     public HashMap<String, FieldDescription> fielditems;
-    int wizardmode;
-    String tablename;
-    String serrToManyFields;
-    String serrTableNameexists;
-    String scomposedtablename;
-    TableDescriptor curTableDescriptor;
+    private int wizardmode;
+    private String tablename;
+    private String serrToManyFields;
+    private String serrTableNameexists;
+    private String scomposedtablename;
+    private TableDescriptor curTableDescriptor;
     public static final int SONULLPAGE = 0;
     public static final int SOMAINPAGE = 1;
     public static final int SOFIELDSFORMATPAGE = 2;

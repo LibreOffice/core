@@ -33,8 +33,8 @@ import com.sun.star.util.XURLTransformer;
  * is nopt longer available.
  */
 public class CrashThread extends Thread {
-    public XComponent xDoc = null;
-    public XMultiServiceFactory msf = null;
+    private XComponent xDoc = null;
+    private XMultiServiceFactory msf = null;
 
     public CrashThread(XComponent xDoc, XMultiServiceFactory msf) {
         this.xDoc = xDoc;

@@ -38,19 +38,19 @@ import lib.TestParameters;
 */
 public class _XComponent {
 
-    public static XComponent oObj = null;
+    private static XComponent oObj = null;
     private XComponent altDispose = null;
-    TestParameters tEnv = null;
-    boolean listenerDisposed[] = new boolean[2];
-    String[] Loutput = new String[2];
+    private TestParameters tEnv = null;
+    private boolean listenerDisposed[] = new boolean[2];
+    private String[] Loutput = new String[2];
 
     /**
     * Listener which added but not removed, and its method must be called
     * on <code>dispose</code> call.
     */
     public class MyEventListener implements XEventListener {
-        int number = 0;
-        String message = null;
+        private int number = 0;
+        private String message = null;
         private MyEventListener(int number, String message) {
             this.message = message;
             this.number = number;
@@ -61,8 +61,8 @@ public class _XComponent {
         }
     }
 
-    XEventListener listener1 = new MyEventListener(0, "EV1");
-    XEventListener listener2 = new MyEventListener(1, "EV2");
+    private XEventListener listener1 = new MyEventListener(0, "EV1");
+    private XEventListener listener2 = new MyEventListener(1, "EV2");
 
     public _XComponent(TestParameters tEnv, XComponent oObj) {
         this.tEnv = tEnv;
@@ -115,7 +115,7 @@ public class _XComponent {
         return true;
     } // finished _removeEventListener()
 
-    static boolean disposed = false;
+    private static boolean disposed = false;
 
     /**
     * Disposes the object and then check appropriate listeners were

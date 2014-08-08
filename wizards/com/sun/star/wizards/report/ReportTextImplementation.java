@@ -125,12 +125,12 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     {
         return getDoc().xWindowPeer;
     }
-    static String sMsgQueryCreationImpossible;
-    static String sReportFormNotExisting;
-    static String sMsgHiddenControlMissing;
-    static String sMsgEndAutopilot;
+    private static String sMsgQueryCreationImpossible;
+    private static String sReportFormNotExisting;
+    private static String sMsgHiddenControlMissing;
+    private static String sMsgEndAutopilot;
     static String sMsgConnectionImpossible;
-    static String sMsgNoConnection;
+    private static String sMsgNoConnection;
     static String[] ReportMessages = new String[4];
 
     private void initialResources()

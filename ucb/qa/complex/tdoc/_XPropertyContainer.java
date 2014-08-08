@@ -22,7 +22,7 @@ import share.LogWriter;
 
 public class _XPropertyContainer {
     public XPropertyContainer oObj = null;
-    public LogWriter log = null;
+    private LogWriter log = null;
 
     public boolean _addProperty() {
         boolean result = true;

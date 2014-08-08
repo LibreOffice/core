@@ -60,19 +60,19 @@ final class PdbHeader {
     long modificationDate = 0;
 
     /**  Date last backup. Palm UInt32. */
-    long lastBackupDate = 0;
+    private long lastBackupDate = 0;
 
     /**
      *  Incremented every time a <code>Record</code> is
      *  added, deleted or modified.  Palm UInt32.
      */
-    long modificationNumber = 0;
+    private long modificationNumber = 0;
 
     /**  Optional field. Palm UInt32. Unsignedness should be irrelevant. */
-    int appInfoID = 0;
+    private int appInfoID = 0;
 
     /**  Optional field. Palm UInt32. Unsignedness should be irrelevant. */
-    int sortInfoID = 0;
+    private int sortInfoID = 0;
 
     /**  Database type ID. Palm UInt32. Unsignedness should be irrelevant. */
     int typeID = 0;
@@ -81,10 +81,10 @@ final class PdbHeader {
     int creatorID = 0;
 
     /**  ??? */
-    int uniqueIDSeed = 0;
+    private int uniqueIDSeed = 0;
 
     /**  See numRecords.  4 bytes. */
-    int nextRecordListID = 0;
+    private int nextRecordListID = 0;
 
     /**
      *  Number of Records stored in the database header.

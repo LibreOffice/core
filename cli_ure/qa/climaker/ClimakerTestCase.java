@@ -69,7 +69,7 @@ public class ClimakerTestCase extends ComplexTestCase
  */
 class Reader extends Thread
 {
-    java.io.InputStream is;
+    private java.io.InputStream is;
     public Reader(java.io.InputStream stream)
     {
         is = stream;

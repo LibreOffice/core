@@ -44,19 +44,19 @@ import com.sun.star.wizards.text.TextFieldHandler;
 public class DBColumn
 {
 
-    public XCell xValCell;
-    public XTextRange xValTextCell;
-    public XTextCursor xValCellCursor;
+    private XCell xValCell;
+    private XTextRange xValTextCell;
+    private XTextCursor xValCellCursor;
     public XNumberFormats xValCellNumberFormats;
     public XCell xNameCell;
-    public XTextRange xNameTextCell;
-    public boolean bAlignLeft;
+    private XTextRange xNameTextCell;
+    private boolean bAlignLeft;
     public Object DefaultValue;
-    public String CharFontName;
+    private String CharFontName;
     public int FormatKey;
-    public PropertyState PropertyState;
+    private PropertyState PropertyState;
     public int ValColumn = 1;
-    public int ValRow = 0;
+    private int ValRow = 0;
     public FieldColumn CurDBField;
     private XTextTable xTextTable;
     private XTableColumns xTableColumns;
@@ -64,9 +64,9 @@ public class DBColumn
     public XNamed xTableName;
     private boolean bIsGroupColumn;
     TextDocument oTextDocument;
-    RecordParser CurDBMetaData;
-    RecordTable CurRecordTable;
-    TextTableHandler oTextTableHandler;
+    private RecordParser CurDBMetaData;
+    private RecordTable CurRecordTable;
+    private TextTableHandler oTextTableHandler;
 
     public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i)
     {

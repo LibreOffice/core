@@ -71,13 +71,13 @@ public abstract class BaseNLPSolver extends WeakBase
 {
 
     protected final XComponentContext m_xContext;
-    protected final String m_name;
+    private final String m_name;
 
-    protected final ArrayList<PropertyInfo> m_properties = new ArrayList<PropertyInfo>();
-    protected final HashMap<String, PropertyInfo> m_propertyMap = new HashMap<String, PropertyInfo>();
+    private final ArrayList<PropertyInfo> m_properties = new ArrayList<PropertyInfo>();
+    private final HashMap<String, PropertyInfo> m_propertyMap = new HashMap<String, PropertyInfo>();
 
-    protected com.sun.star.lang.Locale m_locale = new com.sun.star.lang.Locale();
-    protected final ResourceManager resourceManager;
+    private com.sun.star.lang.Locale m_locale = new com.sun.star.lang.Locale();
+    private final ResourceManager resourceManager;
 
     public BaseNLPSolver(XComponentContext xContext, String name) {
         m_xContext = xContext;
@@ -115,11 +115,11 @@ public abstract class BaseNLPSolver extends WeakBase
 
     // com.sun.star.sheet.XSolver:
 
-    protected XSpreadsheetDocument m_document;
-    protected XMultiComponentFactory m_componentFactory;
-    protected XModel m_xModel;
+    private XSpreadsheetDocument m_document;
+    private XMultiComponentFactory m_componentFactory;
+    private XModel m_xModel;
     protected XReschedule m_xReschedule;
-    protected CellAddress m_objective;
+    private CellAddress m_objective;
     protected CellAddress[] m_variables;
     protected SolverConstraint[] m_constraints;
     protected ExtSolverConstraint[] m_extConstraints;
@@ -130,7 +130,7 @@ public abstract class BaseNLPSolver extends WeakBase
     protected int m_cellRangeCount;
     protected XCell m_objectiveCell;
     protected XCell[] m_variableCells;
-    protected CellRangeAddress[] m_cellRanges;
+    private CellRangeAddress[] m_cellRanges;
     protected XChartDataArray[] m_cellRangeData;
     protected CellMap[] m_variableMap;
     protected double[][][] m_variableData;
@@ -165,10 +165,10 @@ public abstract class BaseNLPSolver extends WeakBase
     }
 
     protected class RowInfo {
-        protected short Sheet;
-        protected int Row;
-        protected int StartCol;
-        protected int EndCol;
+        private short Sheet;
+        private int Row;
+        private int StartCol;
+        private int EndCol;
 
         private RowInfo(short sheet, int row) {
             Sheet = sheet;

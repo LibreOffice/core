@@ -46,7 +46,7 @@ class BookmarkHashes {
     public BigInteger m_nDeleteRandomHash;
     public BigInteger m_nLinebreakHash;
     public BigInteger m_nOdfReloadHash;
-    public BigInteger m_nMsWordReloadHash;
+    private BigInteger m_nMsWordReloadHash;
 
     public void assertExpectation(BookmarkHashes aExpectation) {
         assertEquals(aExpectation.m_nSetupHash, m_nSetupHash);

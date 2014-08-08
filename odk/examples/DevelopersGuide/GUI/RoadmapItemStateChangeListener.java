@@ -39,7 +39,7 @@ import com.sun.star.uno.UnoRuntime;
 
 
 public class RoadmapItemStateChangeListener implements XItemListener {
-    protected com.sun.star.lang.XMultiServiceFactory m_xMSFDialogModel;
+    private com.sun.star.lang.XMultiServiceFactory m_xMSFDialogModel;
 
     public RoadmapItemStateChangeListener(com.sun.star.lang.XMultiServiceFactory xMSFDialogModel) {
         m_xMSFDialogModel = xMSFDialogModel;

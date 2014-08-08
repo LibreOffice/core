@@ -58,14 +58,14 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     private String sMsgCommonReportError;
     private String ContentTemplatePath;
     private String sMsgEndAutopilot;
-    public boolean bIsCurLandscape;
+    private boolean bIsCurLandscape;
     public TextTableHandler oTextTableHandler;
     public TextSectionHandler oTextSectionHandler;
     public FormHandler oFormHandler;
-    public TextStyleHandler oTextStyleHandler;
+    private TextStyleHandler oTextStyleHandler;
     public TextFieldHandler oTextFieldHandler;
     public ViewHandler oViewHandler;
-    public NumberFormatter oNumberFormatter;
+    private NumberFormatter oNumberFormatter;
     public static final String TBLRECORDSECTION = "Tbl_RecordSection";
     public static final String TBLGROUPSECTION = "Tbl_GroupField";
     public static final String RECORDSECTION = "RecordSection";

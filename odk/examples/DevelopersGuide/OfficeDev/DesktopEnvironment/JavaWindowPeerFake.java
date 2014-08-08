@@ -40,7 +40,7 @@
 class JavaWindowPeerFake implements com.sun.star.awt.XSystemDependentWindowPeer,
                                     com.sun.star.awt.XWindowPeer
 {
-    NativeView maView;
+    private NativeView maView;
 
     public JavaWindowPeerFake(NativeView aNative)
     {

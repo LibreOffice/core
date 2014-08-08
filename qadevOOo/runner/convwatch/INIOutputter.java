@@ -23,14 +23,14 @@ import java.io.FileWriter;
 
 public class INIOutputter
 {
-    FileWriter m_aOut;
-    String m_sFilename;
-    String m_sNamePrefix;              // the HTML files used a suffix to build it's right name
+    private FileWriter m_aOut;
+    private String m_sFilename;
+    private String m_sNamePrefix;              // the HTML files used a suffix to build it's right name
 
     /**
      * ls is the current line separator (carridge return)
      */
-    String ls;
+    private String ls;
 
     public static INIOutputter create( String _sOutputPath, String _sHTMLFilename, String _sNamePrefix )
         {

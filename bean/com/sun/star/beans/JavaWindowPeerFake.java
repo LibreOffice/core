@@ -27,8 +27,8 @@ import com.sun.star.awt.*;
     implements XSystemDependentWindowPeer, XWindowPeer
 {
 
-    protected long hWindow;
-    protected int localSystemType;
+    private long hWindow;
+    private int localSystemType;
 
     /** Create the faked window peer.
      * @param _hWindow the system handle to the window.

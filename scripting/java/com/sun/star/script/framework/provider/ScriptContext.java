@@ -40,12 +40,12 @@ public class ScriptContext extends PropertySet implements XScriptContext
     private final static String DOC_URI = "SCRIPTING_DOC_URI";
 
 
-    public XModel m_xModel = null;
-    public XScriptInvocationContext m_xInvocationContext = null;
+    private XModel m_xModel = null;
+    private XScriptInvocationContext m_xInvocationContext = null;
     public String m_sDocURI = null;
-    public XDesktop m_xDeskTop = null;
+    private XDesktop m_xDeskTop = null;
     public Integer m_iStorageID = null;
-    public XComponentContext m_xComponentContext = null;
+    private XComponentContext m_xComponentContext = null;
 
     private ScriptContext( XComponentContext xmComponentContext,
         XDesktop xDesktop, XModel xModel, XScriptInvocationContext xInvocContext)

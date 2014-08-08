@@ -45,7 +45,7 @@ import com.sun.star.wizards.common.PropertyNames;
 public class TextFieldHandler
 {
 
-    public XTextFieldsSupplier xTextFieldsSupplier;
+    private XTextFieldsSupplier xTextFieldsSupplier;
     private XMultiServiceFactory xMSFDoc;
 
     /**

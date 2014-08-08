@@ -357,11 +357,11 @@ public class ConfigExamples
     /// class to hold information about grid settings
     public static class GridOptions
     {
-        public boolean visible;
-        public int resolution_x;
-        public int resolution_y;
-        public int subdivision_x;
-        public int subdivision_y;
+        private boolean visible;
+        private int resolution_x;
+        private int resolution_y;
+        private int subdivision_x;
+        private int subdivision_y;
 
         @Override
         public String toString() {

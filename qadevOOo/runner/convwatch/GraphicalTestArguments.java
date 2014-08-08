@@ -67,37 +67,37 @@ public class GraphicalTestArguments
     // pdf
     // msoffice
     */
-    String m_sReferenceType = "OOo";
+    private String m_sReferenceType = "OOo";
 
-    String m_sTargetFrameName = "_blank";
+    private String m_sTargetFrameName = "_blank";
 
-    String m_sPrinterName = null;
+    private String m_sPrinterName = null;
 
     // Hidden = true hiddes a used OpenOffice.org, all code is executed in the background
     // This parameter is not used for RefType: msoffice
-    boolean m_bHidden = true;
+    private boolean m_bHidden = true;
 
-    String m_sDefaultXMLFormatApplication = null;
+    private String m_sDefaultXMLFormatApplication = null;
 
-    boolean m_bIncludeSubdirectories;
+    private boolean m_bIncludeSubdirectories;
 
-    TestParameters m_aCurrentParams;
+    private TestParameters m_aCurrentParams;
 
-    int m_nMaxPages = 0;                           // default is 0 (print all pages)
+    private int m_nMaxPages = 0;                           // default is 0 (print all pages)
     String m_sOnlyPage = "";                       // default is "", there is no page which we want to print only.
 
-    int m_nResolutionInDPI = 0;
+    private int m_nResolutionInDPI = 0;
 
-    boolean m_bStoreFile = true;
-    boolean m_bResuseOffice = false;
+    private boolean m_bStoreFile = true;
+    private boolean m_bResuseOffice = false;
 
     boolean m_bDebugMode = false;
 
-    String m_sLeaveOutNames = null;
+    private String m_sLeaveOutNames = null;
 
-    String m_sDistinct = null;
+    private String m_sDistinct = null;
 
-    boolean m_bCreateDefaultReference = false;
+    private boolean m_bCreateDefaultReference = false;
 
     public GraphicalTestArguments(TestParameters param)
         {
@@ -563,8 +563,8 @@ public class GraphicalTestArguments
     // get the right Filtername (internal Name) from
     // http://framework.openoffice.org/files/documents/25/897/filter_description.html
 
-    String m_sImportFilterName = "";
-    String m_sExportFilterName = "";
+    private String m_sImportFilterName = "";
+    private String m_sExportFilterName = "";
     public void setImportFilterName(String _sImportFilterName)
         {
             m_sImportFilterName = _sImportFilterName;
@@ -582,7 +582,7 @@ public class GraphicalTestArguments
             return m_sExportFilterName;
         }
 
-    String m_sOfficeProgram = "";
+    private String m_sOfficeProgram = "";
     public void setOfficeProgram(String _sName)
         {
             m_sOfficeProgram = _sName;
@@ -601,13 +601,13 @@ public class GraphicalTestArguments
             return false;
         }
 
-    String m_sHTMLOutputPrefix = "";
+    private String m_sHTMLOutputPrefix = "";
     public String getHTMLOutputPrefix()
         {
             return m_sHTMLOutputPrefix;
         }
 
-    TriState m_tWithBorderMove = TriState.UNSET;
+    private TriState m_tWithBorderMove = TriState.UNSET;
     public TriState getBorderMove()
         {
             return m_tWithBorderMove;
@@ -617,7 +617,7 @@ public class GraphicalTestArguments
             m_tWithBorderMove = _tBorderMove;
         }
 
-    String m_sDocumentType = "";
+    private String m_sDocumentType = "";
     public void setDocumentType(String _sName)
         {
             m_sDocumentType = _sName;
@@ -630,7 +630,7 @@ public class GraphicalTestArguments
     /*
       helper class for performance analyser features
      */
-    PerformanceContainer m_aPerformanceContainer = null;
+    private PerformanceContainer m_aPerformanceContainer = null;
     public PerformanceContainer getPerformance()
         {
             if (m_aPerformanceContainer == null)

@@ -66,12 +66,12 @@ class SimpleStatus {
     /**
      * The field is holding state of the status.
      */
-    protected final boolean state;
+    private final boolean state;
 
     /**
      * The field is holding reason of the status.
      */
-    protected final int runState;
+    private final int runState;
 
     /**
      * This is the run state: either SKIPPED, PASSED, etc.

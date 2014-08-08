@@ -29,8 +29,8 @@ import com.sun.star.uno.UnoRuntime;
 public class DefaultDsc extends InstDescr {
 
     private String name = null;
-        String ifcName = null;
-        String service = null;
+        private String ifcName = null;
+        private String service = null;
 
     public DefaultDsc( String Interface, String kind ) {
         service = kind;

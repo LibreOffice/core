@@ -243,7 +243,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
 
 class MyTableModelIDE extends AbstractTableModel {
     ArrayList<ArrayList<Object>> data;
-    String colNames[] = {"", "IDE Name", "IDE Location"};
+    private String colNames[] = {"", "IDE Name", "IDE Location"};
     Object[] longValues = new Object[] {Boolean.TRUE, "Name", "Location"};
 
     MyTableModelIDE (Properties properties, String [] validVersions) {

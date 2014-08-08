@@ -27,8 +27,8 @@ import com.sun.star.text.XTextContent;
  */
 public class BookmarkDsc extends InstDescr {
 
-    final String service = "com.sun.star.text.Bookmark";
-    String ifcName = "com.sun.star.text.XTextContent";
+    private final String service = "com.sun.star.text.Bookmark";
+    private String ifcName = "com.sun.star.text.XTextContent";
     private String name = null;
 
 

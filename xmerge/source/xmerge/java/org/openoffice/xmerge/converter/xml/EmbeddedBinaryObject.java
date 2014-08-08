@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
 public class EmbeddedBinaryObject extends EmbeddedObject {
 
     /** The object's binary representation. */
-    protected byte[] objData = null;
+    private byte[] objData = null;
 
     /**
      * Constructor for an embedded object stored using an XML representation.

@@ -47,13 +47,13 @@ public class TypeInspector
         DataType.INTEGER, DataType.FLOAT, DataType.REAL, DataType.DOUBLE, DataType.NUMERIC, DataType.DECIMAL
     };
     final int INVALID = 999999;
-    XResultSet xResultSet;
+    private XResultSet xResultSet;
 
     public class TypeInfo
     {
 
-        public int nDataType;
-        public String sDataTypeName;
+        private int nDataType;
+        private String sDataTypeName;
         public boolean bisAutoIncrementable;
 
         private TypeInfo(int _nDataType, String _sDataTypeName, boolean _bisAutoIncrementable)

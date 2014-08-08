@@ -50,18 +50,18 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
             NativeLibraryLoader.loadLibrary(JNI_proxy.class.getClassLoader(),
                                             "java_uno");
     }
-    protected static ClassLoader s_classloader =
+    private static ClassLoader s_classloader =
         JNI_proxy.class.getClassLoader();
-    protected static Class s_InvocationHandler [] =
+    private static Class s_InvocationHandler [] =
         new Class [] { java.lang.reflect.InvocationHandler.class };
 
-    protected long m_bridge_handle;
-    protected IEnvironment m_java_env;
-    protected long m_receiver_handle;
-    protected long m_td_handle;
-    protected Type m_type;
-    protected String m_oid;
-    protected Class m_class;
+    private long m_bridge_handle;
+    private IEnvironment m_java_env;
+    private long m_receiver_handle;
+    private long m_td_handle;
+    private Type m_type;
+    private String m_oid;
+    private Class m_class;
 
 
     public static String get_stack_trace( Throwable throwable )

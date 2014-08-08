@@ -26,11 +26,11 @@ import java.lang.reflect.Method;
 
 class ImageHelper
 {
-    Image m_aImage;
-    int[] m_aPixels;
-    int m_w = 0;
-    int m_h = 0;
-    boolean m_bGrabbed = false;
+    private Image m_aImage;
+    private int[] m_aPixels;
+    private int m_w = 0;
+    private int m_h = 0;
+    private boolean m_bGrabbed = false;
 
     private ImageHelper(Image _aImage)
     {

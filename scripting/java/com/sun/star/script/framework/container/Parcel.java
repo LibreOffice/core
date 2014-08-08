@@ -30,8 +30,8 @@ import java.io.*;
 
 public class Parcel implements XNameContainer
 {
-    protected ParcelDescriptor m_descriptor;
-    protected String name;
+    private ParcelDescriptor m_descriptor;
+    private String name;
     protected ParcelContainer parent;
     protected XSimpleFileAccess m_xSFA;
     public Parcel( XSimpleFileAccess xSFA, ParcelContainer parent, ParcelDescriptor desc, String parcelName )

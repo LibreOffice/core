@@ -28,7 +28,7 @@ public class _XPropertySetInfoChangeNotifier {
     public XPropertySetInfoChangeNotifier oObj = null;
     public LogWriter log = null;
 
-    PropertySetInfoChangeListener listener = new PropertySetInfoChangeListener();
+    private PropertySetInfoChangeListener listener = new PropertySetInfoChangeListener();
     String[] args = null;
 
 

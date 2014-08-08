@@ -52,18 +52,18 @@ public class TextStyle extends Style implements Cloneable {
     final protected static int LAST_ATTR = 0x20;
 
     /** Values of text attributes. */
-    protected int values = 0;
+    private int values = 0;
     /** Bitwise mask of text attributes. */
-    protected int mask = 0;
+    private int mask = 0;
 
     /** Font size in points. */
-    protected int sizeInPoints = 0;
+    private int sizeInPoints = 0;
     /** Font name. */
-    protected String fontName = null;
+    private String fontName = null;
     /** Font <code>Color</code>. */
-    protected Color fontColor = null;
+    private Color fontColor = null;
     /** Background <code>Color</code>. */
-    protected Color bgColor = null;
+    private Color bgColor = null;
 
     /**
      *  Constructor for use when going from DOM to client device format.

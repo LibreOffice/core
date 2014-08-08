@@ -57,10 +57,10 @@ public class ParcelBrowseNode extends PropertySet
     private Collection<XBrowseNode> browsenodes;
     private ParcelContainer container;
     private Parcel parcel;
-    public boolean deletable = true;
-    public boolean editable  = false;
-    public boolean creatable = false;
-    public boolean renamable = true;
+    private boolean deletable = true;
+    private boolean editable  = false;
+    private boolean creatable = false;
+    private boolean renamable = true;
 
     public ParcelBrowseNode( ScriptProvider provider, ParcelContainer container, String parcelName ) {
         this.provider = provider;

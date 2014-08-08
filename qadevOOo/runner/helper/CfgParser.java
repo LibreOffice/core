@@ -33,8 +33,8 @@ import util.PropertyName;
 public class CfgParser
 {
 
-    protected boolean debug = false;
-    protected String iniFile = "";
+    private boolean debug = false;
+    private String iniFile = "";
 
     public CfgParser(String ini)
     {

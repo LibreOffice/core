@@ -396,7 +396,7 @@ public class QueryWizard extends DatabaseObjectWizard
     public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
-        protected int ID;
+        private int ID;
 
         public int getID()
         {

@@ -46,8 +46,8 @@ public abstract class BaseControl {
     protected XComponentContext context;
     private Object unoModel;
     protected Object unoControl;
-    protected XPropertySet properties;
-    protected BaseControl parentControl;
+    private XPropertySet properties;
+    private BaseControl parentControl;
 
     public abstract String getName();
 

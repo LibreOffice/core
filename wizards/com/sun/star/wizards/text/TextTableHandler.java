@@ -44,9 +44,9 @@ public class TextTableHandler
 {
 
     public XTextTablesSupplier xTextTablesSupplier;
-    public XMultiServiceFactory xMSFDoc;
-    public XTextDocument xTextDocument;
-    public XSimpleText xSimpleText;
+    private XMultiServiceFactory xMSFDoc;
+    private XTextDocument xTextDocument;
+    private XSimpleText xSimpleText;
     private NumberFormatter oNumberFormatter;
     private Locale aCharLocale;
 

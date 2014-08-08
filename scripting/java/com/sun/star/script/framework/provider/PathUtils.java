@@ -27,7 +27,7 @@ import com.sun.star.uno.IQueryInterface;
 
 public class PathUtils {
 
-    public static String FILE_URL_PREFIX;
+    private static String FILE_URL_PREFIX;
     public static String BOOTSTRAP_NAME;
     private static boolean m_windows = false;
 

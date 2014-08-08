@@ -34,8 +34,8 @@ public class FrameDsc extends InstDescr {
     private int height = 2000;
     private int width = 2000;
     private String name = null;
-    final String ifcName = "com.sun.star.text.XTextFrame";
-    final String service = "com.sun.star.text.TextFrame";
+    private final String ifcName = "com.sun.star.text.XTextFrame";
+    private final String service = "com.sun.star.text.TextFrame";
 
     public FrameDsc() {
         initFrame();

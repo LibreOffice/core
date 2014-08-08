@@ -40,8 +40,8 @@ import lib.TestParameters;
 public class _XInitialization {
 
 
-    TestParameters tEnv = null;
-    public static XInitialization oObj = null;
+    private TestParameters tEnv = null;
+    private static XInitialization oObj = null;
 
     public _XInitialization(TestParameters tEnv, XInitialization oObj) {
 

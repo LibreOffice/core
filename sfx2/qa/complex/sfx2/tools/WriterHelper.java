@@ -42,7 +42,7 @@ import util.WriterTools;
  *
  */
 public class WriterHelper {
-    XMultiServiceFactory m_xMSF = null;
+    private XMultiServiceFactory m_xMSF = null;
 
     /** Creates a new instance of WriterHelper
      * @param m_xMSF The MultiServiceFactory gained from the office

@@ -92,10 +92,10 @@ public abstract class ScriptProvider
     protected String language;
 
     protected XComponentContext m_xContext;
-    protected XMultiComponentFactory m_xMultiComponentFactory;
+    private XMultiComponentFactory m_xMultiComponentFactory;
     protected XModel m_xModel;
     protected XScriptInvocationContext m_xInvocContext;
-    protected ParcelContainer m_container;
+    private ParcelContainer m_container;
 
     // proxies to helper objects which implement interfaces
     private XPropertySet m_xPropertySetProxy;

@@ -51,8 +51,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     private com.sun.star.io.XOutputStream   m_xOutStream    ;
     private com.sun.star.io.XSeekable       m_xSeek         ;
 
-    public  boolean                         m_bInWasUsed    ;
-    public  boolean                         m_bOutWasUsed   ;
+    private  boolean                         m_bInWasUsed    ;
+    private  boolean                         m_bOutWasUsed   ;
 
 
     /**

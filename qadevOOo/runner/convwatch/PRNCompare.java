@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 public class PRNCompare
 {
-    String fs;
+    private String fs;
 
     public PRNCompare()
         {
@@ -91,16 +91,16 @@ public class PRNCompare
             return nMaxNumber;
         }
 
-    String m_sInputPath;
-    String m_sReferencePath;
-    String m_sOutputPath;
-    String m_sDocFile;
-    String m_sReferenceFile;
-    String m_sPostScriptFile;
-    int m_nMaxPages = 0;
-    int m_nResolutionInDPI = 0;
-    TriState m_tUseBorderMove;
-    String m_sDocumentType;
+    private String m_sInputPath;
+    private String m_sReferencePath;
+    private String m_sOutputPath;
+    private String m_sDocFile;
+    private String m_sReferenceFile;
+    private String m_sPostScriptFile;
+    private int m_nMaxPages = 0;
+    private int m_nResolutionInDPI = 0;
+    private TriState m_tUseBorderMove;
+    private String m_sDocumentType;
 
     public void setInputPath(String _sInputPath) { m_sInputPath = _sInputPath; }
 

@@ -27,8 +27,8 @@ import com.sun.star.text.XTextContent;
  */
 public class FootnoteDsc extends InstDescr {
 
-    final String service = "com.sun.star.text.Footnote";
-    String ifcName = "com.sun.star.text.XTextContent";
+    private final String service = "com.sun.star.text.Footnote";
+    private String ifcName = "com.sun.star.text.XTextContent";
     private String name = null;
 
 

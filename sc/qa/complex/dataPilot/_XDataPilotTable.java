@@ -45,11 +45,11 @@ import lib.TestParameters;
 */
 public class _XDataPilotTable {
 
-    public XDataPilotTable oObj = null;
-    XCell xCellForChange = null;
-    XCell xCellForCheck = null;
-    CellAddress OutputRange = null;
-    int changeValue = 0;
+    private XDataPilotTable oObj = null;
+    private XCell xCellForChange = null;
+    private XCell xCellForCheck = null;
+    private CellAddress OutputRange = null;
+    private int changeValue = 0;
 
     /**
      * The test parameters

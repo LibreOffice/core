@@ -19,7 +19,7 @@
 import javax.swing.tree.TreePath;
 
 public class SwingTreePathProvider implements XTreePathProvider {
-    TreePath m_aTreePath;
+    private TreePath m_aTreePath;
 
     /** Creates a new instance of TreePathProvider */
     public SwingTreePathProvider(TreePath _aTreePath) {

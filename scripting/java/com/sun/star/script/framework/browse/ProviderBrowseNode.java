@@ -46,12 +46,12 @@ import javax.swing.JOptionPane;
 public class ProviderBrowseNode extends PropertySet
     implements XBrowseNode, XInvocation
 {
-    protected ScriptProvider provider;
-    protected Collection<XBrowseNode> browsenodes;
-    protected String name;
+    private ScriptProvider provider;
+    private Collection<XBrowseNode> browsenodes;
+    private String name;
     protected ParcelContainer container;
     protected Parcel parcel;
-    protected XComponentContext m_xCtx;
+    private XComponentContext m_xCtx;
 
     public boolean deletable = true;
     public boolean creatable = true;

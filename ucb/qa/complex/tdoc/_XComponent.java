@@ -38,10 +38,10 @@ import share.LogWriter;
 public class _XComponent {
 
     public static XComponent oObj = null;
-    public LogWriter log = null;
+    private LogWriter log = null;
 
-    boolean listenerDisposed[] = new boolean[2];
-    String[] Loutput = new String[2];
+    private boolean listenerDisposed[] = new boolean[2];
+    private String[] Loutput = new String[2];
 
     /**
     * Listener which added but not removed, and its method must be called
@@ -65,8 +65,8 @@ public class _XComponent {
         }
     }
 
-    XEventListener listener1 = new MyEventListener();
-    XEventListener listener2 = new MyEventListener2();
+    private XEventListener listener1 = new MyEventListener();
+    private XEventListener listener2 = new MyEventListener2();
 
     /**
      * For the cfgmgr2.OSetElement tests: dispose the owner element.
@@ -110,7 +110,7 @@ public class _XComponent {
         return true;
     } // finished _removeEventListener()
 
-    static boolean disposed = false;
+    private static boolean disposed = false;
 
     /**
     * Disposes the object and then check appropriate listeners were

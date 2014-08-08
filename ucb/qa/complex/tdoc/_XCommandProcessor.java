@@ -71,14 +71,14 @@ public class _XCommandProcessor {
      * Conatins the tested object.
      */
     public XCommandProcessor oObj;
-    public LogWriter log = null;
+    private LogWriter log = null;
     private XMultiServiceFactory xMSF = null;
 
     /**
      * Contains the command id returned by <code>createCommandIdentifier()
      * </code>. It is used in <code>abort()</code> test.
      */
-    int cmdId;
+    private int cmdId;
 
     public void before(XMultiServiceFactory _xMSF) {
         xMSF = _xMSF;

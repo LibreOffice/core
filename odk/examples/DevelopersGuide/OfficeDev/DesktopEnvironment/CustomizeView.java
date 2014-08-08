@@ -176,11 +176,11 @@ public class CustomizeView extends    JPanel
                                    com.sun.star.lang.XEventListener
     {
         /// URL, to toogle the requested UI item
-        String m_sURL;
+        private String m_sURL;
         /// name of the property which must be used in combination with the URL
-        String m_sProp;
+        private String m_sProp;
         /// we must use this frame to dispatch a request
-        com.sun.star.frame.XFrame m_xFrame;
+        private com.sun.star.frame.XFrame m_xFrame;
 
 
 

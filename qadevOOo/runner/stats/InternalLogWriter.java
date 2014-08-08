@@ -27,9 +27,9 @@ import java.io.StringWriter;
 public class InternalLogWriter extends PrintWriter
                                             implements share.LogWriter {
     /** log active **/
-    boolean active;
+    private boolean active;
     /** write all output to a StringBuffer **/
-    static StringWriter writer = new StringWriter();
+    private static StringWriter writer = new StringWriter();
 
     /**
      * c'*tor

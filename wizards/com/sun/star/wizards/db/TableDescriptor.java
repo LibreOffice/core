@@ -52,14 +52,14 @@ import com.sun.star.wizards.common.PropertyNames;
 public class TableDescriptor extends CommandMetaData implements XContainerListener
 {
 
-    XDataDescriptorFactory xTableDataDescriptorFactory;
-    XPropertySet xPropTableDataDescriptor;
+    private XDataDescriptorFactory xTableDataDescriptorFactory;
+    private XPropertySet xPropTableDataDescriptor;
     private XNameAccess xNameAccessColumns;
     private XIndexAccess xIndexAccessKeys;
-    public XDataDescriptorFactory xColumnDataDescriptorFactory;
-    XContainer xTableContainer;
-    XAppend xTableAppend;
-    XDrop xTableDrop;
+    private XDataDescriptorFactory xColumnDataDescriptorFactory;
+    private XContainer xTableContainer;
+    private XAppend xTableAppend;
+    private XDrop xTableDrop;
     private XAppend xKeyAppend;
     private XDrop xKeyDrop;
     private String[] sTableFilters = null;

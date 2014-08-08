@@ -40,10 +40,10 @@ import com.sun.star.uno.UnoRuntime;
 
 public class UnoPropertyNode extends UnoNode{
 
-    Property aProperty;
-    PropertyValue aPropertyValue;
-    String m_sPropertyName;
-    Object m_oUnoReturnObject;
+    private Property aProperty;
+    private PropertyValue aPropertyValue;
+    private String m_sPropertyName;
+    private Object m_oUnoReturnObject;
     private int m_nPropertyType = XUnoPropertyNode.nDEFAULT;
     private String sLabel = "";
 

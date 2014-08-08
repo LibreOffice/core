@@ -163,7 +163,7 @@ public class CheckOGroupBoxModel
     public class MyChangeListener implements XPropertiesChangeListener
     {
 
-        boolean propertiesChanged = false;
+        private boolean propertiesChanged = false;
 
         public void propertiesChange(PropertyChangeEvent[] e)
         {

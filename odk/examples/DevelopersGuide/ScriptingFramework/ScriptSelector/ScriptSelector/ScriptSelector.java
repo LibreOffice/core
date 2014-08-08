@@ -203,7 +203,7 @@ class ScriptSelectorPanel extends JPanel {
     private XBrowseNode myrootnode = null;
     public JTextField textField;
     public JTree tree;
-    public DefaultTreeModel treeModel;
+    private DefaultTreeModel treeModel;
 
     public ScriptSelectorPanel(XBrowseNode root)
     {

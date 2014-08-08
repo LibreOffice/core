@@ -53,7 +53,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     private XDialog m_xDialog;
     private XControlContainer m_xControlContainer;
 
-    Settings m_aSettings;
+    private Settings m_aSettings;
 
     public WikiOptionsEventHandlerImpl( XComponentContext xContext )
     {

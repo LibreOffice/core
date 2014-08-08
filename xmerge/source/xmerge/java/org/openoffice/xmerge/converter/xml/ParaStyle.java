@@ -164,11 +164,11 @@ public class ParaStyle extends Style implements Cloneable {
      *  Array of flags indicating which attributes are set for this
      *  paragraph <code>Style</code>.
      */
-    protected boolean isSet[] = new boolean[NR_PROPERTIES];
+    private boolean isSet[] = new boolean[NR_PROPERTIES];
     /**  Array of attribute values for this paragraph <code>tyle</code>. */
-    protected int  value[] = new int[NR_PROPERTIES];
+    private int  value[] = new int[NR_PROPERTIES];
     /**  Array of attribute names for this paragraph <code>Style</code>. */
-    protected String attrName[] = {
+    private String attrName[] = {
         "fo:margin-left",
         "fo:margin-right",
         "fo:margin-top",
@@ -179,7 +179,7 @@ public class ParaStyle extends Style implements Cloneable {
     };
 
     /**  Array of attribute structures for this paragraph <code>Style</code>. */
-    protected Class<?> algor[] = {
+    private Class<?> algor[] = {
         horizSize.class,
         horizSize.class,
         horizSize.class,

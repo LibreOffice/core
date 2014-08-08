@@ -36,21 +36,21 @@ import com.sun.star.wizards.db.RelationController;
 public class FormConfiguration
 {
 
-    WizardDialog CurUnoDialog;
-    short curtabindex;
-    XRadioButton optOnExistingRelation;
-    XCheckBox chkcreateSubForm;
-    XRadioButton optSelectManually;
-    XFixedText lblSubFormDescription;
-    XFixedText lblRelations;
-    XListBox lstRelations;
-    String[] sreferencedTables;
-    CommandFieldSelection CurSubFormFieldSelection;
-    String SSUBFORMMODE = "toggleSubFormMode";
-    String STOGGLESTEPS = "toggleSteps";
-    String SONEXISTINGRELATIONSELECTION = "onexistingRelationSelection";
-    boolean bsupportsRelations;
-    RelationController oRelationController = null;
+    private WizardDialog CurUnoDialog;
+    private short curtabindex;
+    private XRadioButton optOnExistingRelation;
+    private XCheckBox chkcreateSubForm;
+    private XRadioButton optSelectManually;
+    private XFixedText lblSubFormDescription;
+    private XFixedText lblRelations;
+    private XListBox lstRelations;
+    private String[] sreferencedTables;
+    private CommandFieldSelection CurSubFormFieldSelection;
+    private String SSUBFORMMODE = "toggleSubFormMode";
+    private String STOGGLESTEPS = "toggleSteps";
+    private String SONEXISTINGRELATIONSELECTION = "onexistingRelationSelection";
+    private boolean bsupportsRelations;
+    private RelationController oRelationController = null;
 
     public FormConfiguration(WizardDialog _CurUnoDialog)
     {

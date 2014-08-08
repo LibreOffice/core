@@ -19,8 +19,8 @@ package util;
 
 public class XSchemaHandlerImpl
     implements com.sun.star.configuration.backend.XSchemaHandler {
-    protected String calls = "";
-    protected String ls = System.getProperty("line.separator");
+    private String calls = "";
+    private String ls = System.getProperty("line.separator");
 
     public void addInstance(String str,
                             com.sun.star.configuration.backend.TemplateIdentifier templateIdentifier)

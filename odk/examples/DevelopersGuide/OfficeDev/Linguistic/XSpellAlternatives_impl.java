@@ -38,10 +38,10 @@ import com.sun.star.lang.Locale;
 public class XSpellAlternatives_impl implements
     com.sun.star.linguistic2.XSpellAlternatives
 {
-    String      aWord;
-    Locale      aLanguage;
-    String[]    aAlt;           // list of alternatives, may be empty.
-    short       nType;          // type of failure
+    private String      aWord;
+    private Locale      aLanguage;
+    private String[]    aAlt;           // list of alternatives, may be empty.
+    private short       nType;          // type of failure
 
     public XSpellAlternatives_impl(
             String      aWord,

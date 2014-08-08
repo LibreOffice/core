@@ -21,7 +21,7 @@ import com.sun.star.io.XOutputStream;
 
 
 public class XOutputStreamWrapper extends OutputStream {
-        XOutputStream m_xOutputStream;
+        private XOutputStream m_xOutputStream;
         public XOutputStreamWrapper(XOutputStream xOs ) {
             this.m_xOutputStream = xOs;
         }

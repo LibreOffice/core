@@ -61,7 +61,7 @@ public class FormHandler
     private static final String TEXTFIELD = "TextField";
     private static final String TIMEFIELD = "TimeField";
 
-    public XFormsSupplier xFormsSupplier;
+    private XFormsSupplier xFormsSupplier;
     public XMultiServiceFactory xMSFDoc;
     public XMultiServiceFactory xMSF;
     public XDrawPage xDrawPage;
@@ -78,28 +78,28 @@ public class FormHandler
     public final static int SOGRIDCONTROL = 6;
     public final static int SOIMAGECONTROL = 7;
     public final static int SODATETIMECONTROL = 8;
-    int iImageControlHeight = 2000;
+    private int iImageControlHeight = 2000;
     public static String SOSIZETEXT = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
-    int iXPixelFactor = -1;
-    int iYPixelFactor = -1;
-    int iXNirwanaPos = 50000;
-    int iYNirwanaPos = 50000;
-    public int nLabelHeight = -1;
-    public int nDBRefHeight = -1;
-    public int BasicLabelDiffHeight = -1;
-    XNameAccess xNamedForms;
+    private int iXPixelFactor = -1;
+    private int iYPixelFactor = -1;
+    private int iXNirwanaPos = 50000;
+    private int iYNirwanaPos = 50000;
+    private int nLabelHeight = -1;
+    private int nDBRefHeight = -1;
+    private int BasicLabelDiffHeight = -1;
+    private XNameAccess xNamedForms;
     XControlAccess xControlAccess;
     XShapeGrouper xShapeGrouper;
-    XNameContainer xNamedFormContainer;
+    private XNameContainer xNamedFormContainer;
 
     public class ControlData
     {
 
         int DataType;
-        int ControlType;
-        String ControlService;
+        private int ControlType;
+        private String ControlService;
         String GridColumnName;
-        boolean bIsText;
+        private boolean bIsText;
     }
 
     /** Creates a new instance of FormHandler */
