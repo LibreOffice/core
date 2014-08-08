@@ -44,7 +44,10 @@ OUString convert_to_absolute_path(const OUString& path)
     osl::FileBase::RC rc = resolver.fetchFileStatus(path);
     if (rc != osl::FileBase::E_None) {
         SAL_WARN("vcl.app", "Could not resolve path '" << path << "' to search for icon themes.");
-        throw std::runtime_error("Provided a recursive symlink to a icon theme directory that could not be resolved.");
+        if (rc == osl::FileBase::E_MULTIHOP)
+        {
+            throw std::runtime_error("Provided a recursive symlink to a icon theme directory that could not be resolved.");
+        }
     }
     return resolver.m_aStatus.getFileURL();
 }
