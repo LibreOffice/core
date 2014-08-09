@@ -12,6 +12,7 @@ $(eval $(call gb_UIConfig_UIConfig,xmlsec))
 $(eval $(call gb_UIConfig_add_uifiles,xmlsec,\
 	xmlsecurity/uiconfig/ui/certpage \
 	xmlsecurity/uiconfig/ui/certdetails \
+	xmlsecurity/uiconfig/ui/certgeneral \
 	xmlsecurity/uiconfig/ui/digitalsignaturesdialog \
 	xmlsecurity/uiconfig/ui/securitylevelpage \
 	xmlsecurity/uiconfig/ui/securitytrustpage \

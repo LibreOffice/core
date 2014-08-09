@@ -88,21 +88,16 @@ CertificateViewerTP::CertificateViewerTP( Window* _pParent, const OString& rID,
 }
 
 CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, CertificateViewer* _pDlg )
-    :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_GENERAL ), _pDlg )
-    ,maFrameWin             ( this, XMLSEC_RES( WIN_FRAME ) )
-    ,maCertImg              ( this, XMLSEC_RES( IMG_CERT ) )
-    ,maCertInfoFI           ( this, XMLSEC_RES( FI_CERTINFO ) )
-    ,maSep1FL               ( this, XMLSEC_RES( FL_SEP1 ) )
-    ,maHintNotTrustedFI     ( this, XMLSEC_RES( FI_HINTNOTTRUST ) )
-    ,maSep2FL               ( this, XMLSEC_RES( FL_SEP2 ) )
-    ,maIssuedToLabelFI      ( this, XMLSEC_RES( FI_ISSTOLABEL ) )
-    ,maIssuedToFI           ( this, XMLSEC_RES( FI_ISSTO ) )
-    ,maIssuedByLabelFI      ( this, XMLSEC_RES( FI_ISSBYLABEL ) )
-    ,maIssuedByFI           ( this, XMLSEC_RES( FI_ISSBY ) )
-    ,maValidDateFI          ( this, XMLSEC_RES( FI_VALIDDATE ) )
-    ,maKeyImg               ( this, XMLSEC_RES( IMG_KEY ) )
-    ,maHintCorrespPrivKeyFI ( this, XMLSEC_RES( FI_CORRPRIVKEY ) )
+    :CertificateViewerTP    ( _pParent, "CertGeneral", "xmlsec/ui/certgeneral.ui", _pDlg )
 {
+    get( m_pCertImg, "certimage" );
+    get( m_pHintNotTrustedFI, "hintnotrust" );
+    get( m_pIssuedToFI, "issuedto" );
+    get( m_pIssuedByFI, "issuedby" );
+    get( m_pValidDateFI, "validdate" );
+    get( m_pKeyImg, "keyimage" );
+    get( m_pHintCorrespPrivKeyFI, "privatekey" );
+
     //Verify the certificate
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
          Sequence<Reference<css::security::XCertificate> >());
@@ -111,80 +106,27 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
 
     if ( !bCertValid )
     {
-        maCertImg.SetImage(
+        m_pCertImg->SetImage(
             Image( XMLSEC_RES( IMG_STATE_NOT_VALIDATED ) ) );
-        maHintNotTrustedFI.SetText( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) );
+        m_pHintNotTrustedFI->SetText( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) );
     }
-
-    FreeResource();
-
-    Wallpaper aBack( GetSettings().GetStyleSettings().GetWindowColor() );
-    maFrameWin.SetBackground( aBack );
-    maCertImg.SetBackground( aBack );
-    maCertInfoFI.SetBackground( aBack );
-    maSep1FL.SetBackground( aBack );
-    maHintNotTrustedFI.SetBackground( aBack );
-    maSep2FL.SetBackground( aBack );
-    maIssuedToLabelFI.SetBackground( aBack );
-    maIssuedToFI.SetBackground( aBack );
-    maIssuedByLabelFI.SetBackground( aBack );
-    maIssuedByFI.SetBackground( aBack );
-    maValidDateFI.SetBackground( aBack );
-    maKeyImg.SetBackground( aBack );
-    maHintCorrespPrivKeyFI.SetBackground( aBack );
-
-    // make some bold
-    Font    aFnt( maCertInfoFI.GetFont() );
-    aFnt.SetWeight( WEIGHT_BOLD );
-    maCertInfoFI.SetFont( aFnt );
-    maHintNotTrustedFI.SetFont( aFnt );
-    maIssuedToLabelFI.SetFont( aFnt );
-    maIssuedByLabelFI.SetFont( aFnt );
-    maValidDateFI.SetFont( aFnt );
 
     // insert data
     css::uno::Reference< css::security::XCertificate > xCert = mpDlg->mxCert;
 
-    maIssuedToFI.SetText( XmlSec::GetContentPart( xCert->getSubjectName() ) );
-    maIssuedByFI.SetText( XmlSec::GetContentPart( xCert->getIssuerName() ) );
-
-    // dynamic length because of the different languages
-    long nWidth1 = maIssuedToLabelFI.GetTextWidth( maIssuedToLabelFI.GetText() );
-    long nWidth2 = maIssuedByLabelFI.GetTextWidth( maIssuedByLabelFI.GetText() );
-    long nNewWidth = std::max( nWidth1, nWidth2 ) + 5;
-    Size aNewSize = maIssuedToLabelFI.GetSizePixel();
-    aNewSize.Width() = nNewWidth;
-    maIssuedToLabelFI.SetSizePixel( aNewSize );
-    maIssuedByLabelFI.SetSizePixel( aNewSize );
-    long nNewX = maIssuedToLabelFI.GetPosPixel().X() + nNewWidth + 1;
-    Point aNewPos = maIssuedToFI.GetPosPixel();
-    aNewPos.X() = nNewX;
-    maIssuedToFI.SetPosPixel( aNewPos );
-    aNewPos = maIssuedByFI.GetPosPixel();
-    aNewPos.X() = nNewX;
-    maIssuedByFI.SetPosPixel( aNewPos );
-    nNewWidth = maValidDateFI.GetSizePixel().Width() - nNewX;
-    aNewSize = maIssuedToFI.GetSizePixel();
-    aNewSize.Width() = nNewWidth;
-    maIssuedToFI.SetSizePixel( aNewSize );
-    maIssuedByFI.SetSizePixel( aNewSize );
+    m_pIssuedToFI->SetText( XmlSec::GetContentPart( xCert->getSubjectName() ) );
+    m_pIssuedByFI->SetText( XmlSec::GetContentPart( xCert->getIssuerName() ) );
 
     DateTime aDateTimeStart( DateTime::EMPTY );
     DateTime aDateTimeEnd( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTimeStart );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTimeEnd );
-    OUString sText = maValidDateFI.GetText();
+    OUString sText = m_pValidDateFI->GetText();
     sText = sText.replaceFirst( "%SDATE%",
         GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() ) );
     sText = sText.replaceFirst( "%EDATE%",
         GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() ) );
-    maValidDateFI.SetText( sText );
-
-    // adjust position of fixed text depending on image sizes
-    ShrinkToFit( maCertImg );
-    ShrinkToFit( maKeyImg );
-    XmlSec::AlignAfterImage( maCertImg, maCertInfoFI, 12 );
-    XmlSec::AlignAfterImage( maKeyImg, maHintCorrespPrivKeyFI, 12 );
+    m_pValidDateFI->SetText( sText );
 
     // Check if we have the private key...
     bool bHasPrivateKey = false;
@@ -196,8 +138,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     }
     if ( !bHasPrivateKey )
     {
-        maKeyImg.Hide();
-        maHintCorrespPrivKeyFI.Hide();
+        m_pKeyImg->Hide();
+        m_pHintCorrespPrivKeyFI->Hide();
     }
 }
 
