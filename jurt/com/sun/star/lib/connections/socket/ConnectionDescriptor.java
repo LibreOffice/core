@@ -43,7 +43,7 @@ final class ConnectionDescriptor {
                 host = value;
             } else if (key.equalsIgnoreCase("port")) {
                 try {
-                    port = Integer.valueOf(value).intValue();
+                    port = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
                     throw new com.sun.star.lang.IllegalArgumentException(
                         e.toString());
@@ -55,7 +55,7 @@ final class ConnectionDescriptor {
                 }
             } else if (key.equalsIgnoreCase("backlog")) {
                 try {
-                    backlog = Integer.valueOf(value).intValue();
+                    backlog = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
                     throw new com.sun.star.lang.IllegalArgumentException(
                         e.toString());
