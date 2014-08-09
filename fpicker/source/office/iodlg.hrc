@@ -23,8 +23,6 @@
 #include "svtools/helpid.hrc"
 #include <vcl/fpicker.hrc>
 
-// ModalDialog DLG_SVT_EXPLORERFILE
-
 #define IMG_FILEDLG_BTN_UP                  10
 #define IMG_FILEDLG_BTN_STD                 11
 #define IMG_FILEDLG_CREATEFOLDER            14
