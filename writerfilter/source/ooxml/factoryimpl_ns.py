@@ -372,7 +372,7 @@ def factoryCreateElementMap(files, nsNode):
             print("    case %s:" % idForDefine(nsNode, defineNode))
             print("        switch (nId)")
             print("        {")
-            for k in inner.keys():
+            for k in sorted(inner.keys()):
                 print(inner[k])
             print("        default: return false;")
             print("        }")
@@ -574,7 +574,7 @@ def collectTokenToId(nsNode, defineNode):
 def factoryTokenToIdMapInner(nsNode, defineNode):
     ids = collectTokenToId(nsNode, defineNode)
     ret = []
-    for i in ids.keys():
+    for i in sorted(ids.keys()):
         ret.append("        case %s: return %s;" % (i, ids[i]))
 
     return ret
