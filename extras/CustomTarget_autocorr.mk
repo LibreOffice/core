@@ -298,8 +298,7 @@ $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%/mimetype : $(SRCDIR
 	$(call gb_Output_announce,$*/mimetype,$(true),CPY,1)
 	cp $< $@
 
-$(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%.xml : $(SRCDIR)/extras/source/autocorr/lang/%.xml \
-		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+$(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%.xml : $(SRCDIR)/extras/source/autocorr/lang/%.xml
 	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
 	$(call gb_ExternalExecutable_get_command,xsltproc) -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 

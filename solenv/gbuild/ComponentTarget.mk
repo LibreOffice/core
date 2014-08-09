@@ -47,8 +47,7 @@ $(call gb_ComponentTarget_get_clean_target,%) :
 $(call gb_ComponentTarget_get_target,%) : \
 		$(call gb_ComponentTarget_get_source,%) \
 		$(SRCDIR)/Repository.mk \
-		$(SRCDIR)/RepositoryFixes.mk \
-		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+		$(SRCDIR)/RepositoryFixes.mk
 	$(call gb_ComponentTarget__command,$@,$<,$*)
 
 define gb_ComponentTarget_ComponentTarget

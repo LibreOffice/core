@@ -568,8 +568,7 @@ postprocess_main_SED := \
 	-e 's,$${STARTCENTER_HIDE_EXTERNAL_LINKS},0,g' \
 	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \
 
-$(call gb_XcdTarget_get_target,main.xcd) : \
-        | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+$(call gb_XcdTarget_get_target,main.xcd) :
 	$(call gb_Output_announce,main,$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $(dir $@) && \
@@ -578,8 +577,7 @@ $(call gb_XcdTarget_get_target,main.xcd) : \
 		|  sed $(postprocess_main_SED) > $@ \
 	)
 
-$(call gb_XcdTarget_get_target,%.xcd) : \
-        | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+$(call gb_XcdTarget_get_target,%.xcd) :
 	$(call gb_Output_announce,$*,$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $(dir $@) && \
