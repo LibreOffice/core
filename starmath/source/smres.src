@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sfx.hrc>
-#include <sfx2/tabpage.hrc>
 #include <svx/globlmn.hrc>
 #include "starmath.hrc"
 #include "toolbox.hrc"

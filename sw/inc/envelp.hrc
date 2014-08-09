@@ -20,8 +20,6 @@
 #ifndef _ENVELP_HRC
 #define _ENVELP_HRC
 
-#include <sfx2/tabpage.hrc>
-
 #include "rcid.hrc"
 
 // Dialoge --------------------------------------------------------------------
