@@ -36,7 +36,6 @@
 #include <sfx2/itemconnect.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/languageoptions.hxx>
-#include <svtools/localresaccess.hxx>
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
@@ -317,7 +316,6 @@ void AlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     SfxTabPage::DataChanged( rDCEvt );
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        svt::OLocalResourceAccess aLocalResAcc( CUI_RES( RID_SVXPAGE_ALIGNMENT ), RSC_TABPAGE );
         InitVsRefEgde();
     }
 }
