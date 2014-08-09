@@ -78,19 +78,13 @@ public:
 class CertificateViewerGeneralTP : public CertificateViewerTP
 {
 private:
-    Window              maFrameWin;
-    FixedImage          maCertImg;
-    FixedInfo           maCertInfoFI;
-    FixedLine           maSep1FL;
-    FixedInfo           maHintNotTrustedFI;
-    FixedLine           maSep2FL;
-    FixedInfo           maIssuedToLabelFI;
-    FixedInfo           maIssuedToFI;
-    FixedInfo           maIssuedByLabelFI;
-    FixedInfo           maIssuedByFI;
-    FixedInfo           maValidDateFI;
-    FixedImage          maKeyImg;
-    FixedInfo           maHintCorrespPrivKeyFI;
+    FixedImage*         m_pCertImg;
+    FixedText*          m_pHintNotTrustedFI;
+    FixedText*          m_pIssuedToFI;
+    FixedText*          m_pIssuedByFI;
+    FixedText*          m_pValidDateFI;
+    FixedImage*         m_pKeyImg;
+    FixedText*          m_pHintCorrespPrivKeyFI;
 public:
                         CertificateViewerGeneralTP( Window* pParent, CertificateViewer* _pDlg );
 

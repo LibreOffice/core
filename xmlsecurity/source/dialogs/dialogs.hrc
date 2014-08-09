@@ -74,21 +74,8 @@
 #define CV_ROW_2                        (CV_ROW_1+RSC_SP_CTRL_GROUP_Y)
 
 // --------- tab page Certificate viewer - General ---------
-#define WIN_FRAME                       2
-#define IMG_CERT                        3
-#define FI_CERTINFO                     4
-#define FL_SEP1                         5
-#define FI_HINTNOTTRUST                 6
-#define FL_SEP2                         7
-#define FI_ISSTOLABEL                   8
-#define FI_ISSTO                        9
-#define FI_ISSBYLABEL                   10
-#define FI_ISSBY                        11
-#define FI_VALIDDATE                    12
-#define IMG_KEY                         13
-#define FI_CORRPRIVKEY                  14
-#define STR_CERTIFICATE_NOT_VALIDATED   15
-#define IMG_STATE_NOT_VALIDATED         16
+#define STR_CERTIFICATE_NOT_VALIDATED   269
+#define IMG_STATE_NOT_VALIDATED         270
 
 #define IMG1_WIDTH                      33
 #define IMG1_HEIGHT                     22
