@@ -61,7 +61,10 @@ def check(model):
     defines = [i.getAttribute("name") for i in model.getElementsByTagName("define")]
     for reference in [i.getAttribute("name") for i in model.getElementsByTagName("ref")]:
         if not reference in defines:
-            raise Exception("Unknown define with name '%s'" % reference)
+            raise Exception("Unknown define element with name '%s'" % reference)
+    for start in [i.getAttribute("name") for i in model.getElementsByTagName("start")]:
+        if not start in defines:
+            raise Exception("Unknown start element with name '%s'" % start)
 
 
 def preprocess(model):

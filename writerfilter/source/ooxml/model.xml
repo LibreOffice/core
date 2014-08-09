@@ -7309,7 +7309,6 @@
     </grammar>
   </namespace>
   <namespace name="shared-math" file="shared-math.rng">
-    <start name="mathPar"/>
     <start name="oMathPara"/>
     <start name="oMath"/>
     <grammar xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
