@@ -22,12 +22,10 @@
 
 #include <svl/solar.hrc>
 
-#define RID_FWK_START                       260
-
-#define RID_FWK_DIALOG_START_CORRECT        (RID_FWK_START + 2048)
+#define RID_FWK_START                       2409
 
 // Ids of TabWindow
-#define WIN_TABWINDOW                       (RID_FWK_DIALOG_START_CORRECT+101)
+#define WIN_TABWINDOW                       (RID_FWK_START+0)
 #define TC_TABCONTROL                        1
 
 #endif
