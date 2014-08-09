@@ -1880,7 +1880,7 @@ void OpenGL3DRenderer::RenderScreenTextShape()
     CHECK_GL_ERROR();
     for (size_t i = 0; i < m_ScreenTextInfoList.size(); i++)
     {
-        TextInfo &textInfo = m_ScreenTextInfoList[i];
+        TextInfo textInfo = m_ScreenTextInfoList[i];
         //calc the postition and check whether it can be displayed
         float xTrans = 0.0f;
         float yTrans = 0.0f;

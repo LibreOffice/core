@@ -28,6 +28,9 @@
 #define CLICK_EVENT_ID 1
 #define SHAPE_START_ID 10
 #define DATA_UPDATE_TIME 15
+#define FPS_TIME 500
+#define DATAUPDATE_FPS_TIME 500
+#define HISTORY_NUM 5
 
 using namespace com::sun::star;
 
@@ -541,7 +544,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             maBarMap.insert(std::pair<sal_uInt32, BarInformation>(nId,
                         BarInformation(glm::vec3(nXPos, nYPos, float(nVal/nMaxVal)),
                             nVal, nIndex, nSeriesIndex)));
-
+            recordBarHistory(nId, nVal);
             maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId));
             nId += ID_STEP;
         }
@@ -929,7 +932,7 @@ void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float 
 void GL3DBarChart::updateRenderFPS()
 {
     int aDeltaMs = calcTimeInterval(maFPSRenderStartTime, maFPSRenderEndTime);
-    if(aDeltaMs >= 500)
+    if(aDeltaMs >= FPS_TIME)
     {
         osl_getSystemTime(&maFPSRenderEndTime);
         aDeltaMs = calcTimeInterval(maFPSRenderStartTime, maFPSRenderEndTime);
@@ -939,7 +942,7 @@ void GL3DBarChart::updateRenderFPS()
         osl_getSystemTime(&maFPSRenderStartTime);
     }
     osl_getSystemTime(&maFPSRenderEndTime);
-    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.1f, glm::vec3(0.0, 0.0, 0.0));
+    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.1f);
 }
 
 int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
@@ -959,13 +962,14 @@ void GL3DBarChart::updateScreenText()
     mpRenderer->ReleaseScreenTextShapes();
     updateRenderFPS();
     updateDataUpdateFPS();
+    updateClickEvent();
     mbScreenTextNewRender = true;
 }
 
 void GL3DBarChart::updateDataUpdateFPS()
 {
     int aDeltaMs = calcTimeInterval(maDataUpdateStartTime, maDataUpdateEndTime);
-    if(aDeltaMs >= 500)
+    if(aDeltaMs >= DATAUPDATE_FPS_TIME)
     {
         int iFPS = miDataUpdateCounter * 1000 / aDeltaMs;
         if (iFPS)
@@ -981,7 +985,48 @@ void GL3DBarChart::updateDataUpdateFPS()
         osl_getSystemTime(&maDataUpdateStartTime);
     }
     osl_getSystemTime(&maDataUpdateEndTime);
-    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.69f, 0.99f), 0.1f, glm::vec3(0.0, 0.0, 0.0));
+    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.69f, 0.99f), 0.1f);
+}
+
+void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
+{
+    std::list<float> &alist = maBarHistory[nBarID];
+    if(alist.size() == HISTORY_NUM)
+        alist.pop_front();
+    alist.push_back(nVal);
+}
+
+void GL3DBarChart::updateClickEvent()
+{
+    if (maRenderEvent == EVENT_CLICK)
+    {
+        std::list<float> &alist = maBarHistory[mSelectBarId];
+        sal_uInt32 idex = 0;
+        for (std::list<float>::iterator it = alist.begin();it != alist.end();it++)
+        {
+            OUString barValue;
+            if (idex + 1 == alist.size())
+            {
+                barValue = OUString("Value: ") + OUString::number(*it);
+                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, barValue, CLICK_EVENT_ID));
+                opengl3D::TextCacheItem tmpTextCache = mpTextCache->getText(barValue);
+                float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.03;
+                std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(mSelectBarId);
+                const BarInformation& rBarInfo = itr->second;
+                glm::vec3 textPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
+                                              rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
+                                              rBarInfo.maPos.z);
+                opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
+                pScreenText->setPosition(glm::vec2(-rectWidth / 2, 0.03f), glm::vec2(rectWidth / 2, -0.03f), textPos);
+            }
+            else
+            {
+                barValue = OUString("History_") + OUString::number(idex) + OUString(": ") + OUString::number(*it);
+                addScreenTextShape(barValue, glm::vec2(0.65f, 0.99f - (idex * 0.1f)), 0.1f);
+            }
+            idex++;
+        }
+    }
 }
 
 IMPL_LINK_NOARG(GL3DBarChart, updateTimer)
@@ -992,7 +1037,6 @@ IMPL_LINK_NOARG(GL3DBarChart, updateTimer)
     maTimer.Start();
     return 0;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

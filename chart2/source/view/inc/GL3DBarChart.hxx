@@ -91,7 +91,9 @@ private:
     void updateDataUpdateFPS();
     DECL_LINK(updateTimer, void*);
     int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
-    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos, sal_uInt32 nEvent = 0);
+    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos = glm::vec3(0.0f, 0.0f, 0.0f), sal_uInt32 nEvent = 0);
+    void recordBarHistory(sal_uInt32 &nBarID, float &nVal);
+    void updateClickEvent();
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
@@ -156,6 +158,7 @@ private:
     TimeValue maFPSRenderEndTime;
     TimeValue maDataUpdateStartTime;
     TimeValue maDataUpdateEndTime;
+    std::map<sal_uInt32, std::list<float>> maBarHistory;
 };
 
 }
