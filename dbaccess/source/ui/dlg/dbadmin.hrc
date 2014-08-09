@@ -31,8 +31,6 @@
 
 #define CB_USECATALOG           4
 
-#define TLB_ACTIONS             1
-
 #define NF_PORTNUMBER           1
 
 #endif // _DBAUI_DBADMIN_HRC_
