@@ -1887,7 +1887,7 @@ void OpenGL3DRenderer::RenderScreenTextShape()
         if (textInfo.uniqueId)
         {
             glm::vec3 worldPos = glm::vec3(m_ScrollMoveMatrix * m_GlobalScaleMatrix * glm::vec4(textInfo.pos, 1));
-            if (worldPos.x < m_fMinCoordX)
+            if ((worldPos.x < m_fMinCoordX) || (worldPos.x > m_fMaxCoordX))
                 continue;
             glm::vec4 pos = m_3DProjection * m_3DView * glm::vec4(worldPos, 1);
             xTrans = pos.x / pos.w;
@@ -2370,6 +2370,21 @@ void OpenGL3DRenderer::CalcScrollMoveMatrix(bool bNewScene)
     m_fCurDistance += m_fCurDistance >= m_fScrollDistance ? 0.0f : m_fScrollSpeed;
     m_ScrollMoveMatrix = glm::translate(glm::vec3(-m_fCurDistance * 0.01, 0.0f, 0.0f));
     m_bUndrawFlag = m_fCurDistance >= m_fScrollDistance ? true : false;
+}
+
+glm::mat4 OpenGL3DRenderer::GetProjectionMatrix()
+{
+    return m_3DProjection;
+}
+
+glm::mat4 OpenGL3DRenderer::GetViewMatrix()
+{
+    return m_3DView;
+}
+
+glm::mat4 OpenGL3DRenderer::GetGlobalScaleMatrix()
+{
+    return m_GlobalScaleMatrix;
 }
 
 void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)

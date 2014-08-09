@@ -216,6 +216,9 @@ public:
     void SetScrollSpeed(float scrollSpeed);
     void SetScrollDistance(float scrollDistance);
     void SetSceneEdge(float minCoordX, float maxCoordX);
+    glm::mat4 GetProjectionMatrix();
+    glm::mat4 GetViewMatrix();
+    glm::mat4 GetGlobalScaleMatrix();
 private:
     void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 

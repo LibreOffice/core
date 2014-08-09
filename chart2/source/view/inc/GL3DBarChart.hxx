@@ -94,6 +94,13 @@ private:
     void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos = glm::vec3(0.0f, 0.0f, 0.0f), sal_uInt32 nEvent = 0);
     void recordBarHistory(sal_uInt32 &nBarID, float &nVal);
     void updateClickEvent();
+    void calcDistance(std::vector<sal_uInt32> &vectorNearest);
+    float calcScrollDistance(glm::mat4 &mvp, glm::vec3 pos);
+    void initDistanceHeap(std::vector<sal_uInt32> &vectorNearest);
+    void keepHeap(std::vector<sal_uInt32> &vectorNearest, int index);
+    void swapVector(int i, int j, std::vector<sal_uInt32> &vectorNearest);
+    void getNearestBars(std::vector<sal_uInt32> &vectorNearest);
+    void updateScroll();
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
@@ -159,6 +166,8 @@ private:
     TimeValue maDataUpdateStartTime;
     TimeValue maDataUpdateEndTime;
     std::map<sal_uInt32, std::list<float>> maBarHistory;
+    std::vector<sal_uInt32> maVectorNearest;
+    std::map<sal_uInt32, float> maDistanceMap;
 };
 
 }
