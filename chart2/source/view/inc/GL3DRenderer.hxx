@@ -323,6 +323,7 @@ private:
         GLint m_ScreenTextVertexID;
         GLint m_ScreenTextTexCoordID;
         GLint m_ScreenTextTexID;
+        GLint m_ScreenTextColorID;
 
         // CommonProID
         GLint m_CommonProID;

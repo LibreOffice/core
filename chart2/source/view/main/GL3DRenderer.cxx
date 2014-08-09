@@ -190,6 +190,7 @@ OpenGL3DRenderer::ShaderResources::ShaderResources()
     , m_ScreenTextVertexID(0)
     , m_ScreenTextTexCoordID(0)
     , m_ScreenTextTexID(0)
+    , m_ScreenTextColorID(0)
     , m_CommonProID(0)
     , m_2DVertexID(0)
     , m_2DColorID(0)
@@ -305,6 +306,7 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
     m_ScreenTextVertexID = glGetAttribLocation(m_ScreenTextProID, "vPosition");
     m_ScreenTextTexCoordID = glGetAttribLocation(m_ScreenTextProID, "texCoord");
     m_ScreenTextTexID = glGetUniformLocation(m_ScreenTextProID, "TextTex");
+    m_ScreenTextColorID = glGetUniformLocation(m_ScreenTextProID, "textColor");
 
     m_CommonProID = OpenGLHelper::LoadShaders("commonVertexShader", "commonFragmentShader");
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
@@ -1877,6 +1879,8 @@ void OpenGL3DRenderer::ReleaseScreenTextTexture()
 void OpenGL3DRenderer::RenderScreenTextShape()
 {
     glUseProgram(maResources.m_ScreenTextProID);
+    glm::vec4 textColor = glm::vec4(0.0, 0.0, 1.0, 1.0);
+    glUniform4fv(maResources.m_ScreenTextColorID, 1, &textColor[0]);
     CHECK_GL_ERROR();
     for (size_t i = 0; i < m_ScreenTextInfoList.size(); i++)
     {

@@ -9,10 +9,11 @@
 
 varying vec2 vTexCoord;
 uniform sampler2D TextTex;
+uniform vec4 textColor;
 void main()
 {
     vec3 color = texture2D(TextTex, vTexCoord).rgb;
-    gl_FragColor = vec4(color, 1.0 - color.r);
+    gl_FragColor = vec4(textColor.rgb, 1.0 - color.r);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
