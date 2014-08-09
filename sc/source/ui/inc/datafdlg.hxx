@@ -24,13 +24,6 @@
 
 #define MAX_DATAFORM_COLS   256
 #define MAX_DATAFORM_ROWS   32000
-#define FIXED_WIDTH         54
-#define EDIT_WIDTH          86
-#define FIXED_HEIGHT        10
-#define EDIT_HEIGHT         12
-#define FIXED_LEFT          6
-#define EDIT_LEFT           62
-#define LINE_HEIGHT         16
 
 class ScDataFormDlg : public ModalDialog
 {
