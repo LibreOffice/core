@@ -90,6 +90,7 @@ private:
     void updateRenderFPS();
     DECL_LINK(updateTimer, void*);
     int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
+    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos);
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 

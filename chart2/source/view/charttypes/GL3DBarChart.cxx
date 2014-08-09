@@ -912,6 +912,15 @@ void GL3DBarChart::contextDestroyed()
     mbValidContext = false;
 }
 
+void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos)
+{
+    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, 0));
+    opengl3D::TextCacheItem tmpTextCache = mpTextCache->getText(nStr);
+    float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.05;
+    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
+    pScreenText->setPosition(rLeftTop, glm::vec2(rLeftTop.x + rectWidth, rLeftTop.y - nTextHeight), rPos);
+}
+
 void GL3DBarChart::updateRenderFPS()
 {
     int aDeltaMs = calcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
@@ -925,11 +934,7 @@ void GL3DBarChart::updateRenderFPS()
         osl_getSystemTime(&mafpsRenderStartTime);
     }
     osl_getSystemTime(&mafpsRenderEndTime);
-    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, maFPS, 0));
-    opengl3D::TextCacheItem tmpTextCache = mpTextCache->getText(maFPS);
-    float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.05;
-    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
-    pScreenText->setPosition(glm::vec2(-0.99f, 0.99f), glm::vec2(-0.99f + rectWidth, 0.89f));
+    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.1f, glm::vec3(0.0, 0.0, 0.0));
 }
 
 int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
