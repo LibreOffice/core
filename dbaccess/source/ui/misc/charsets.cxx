@@ -22,7 +22,7 @@
 #include "dbu_misc.hrc"
 #include <rtl/tencinfo.h>
 #include <tools/rcid.h>
-#include "localresaccess.hxx"
+#include "moduledbu.hxx"
 
 namespace dbaui
 {
@@ -32,11 +32,8 @@ namespace dbaui
     OCharsetDisplay::OCharsetDisplay()
         :OCharsetMap()
         ,SvxTextEncodingTable()
+        , m_aSystemDisplayName(ModuleRes( STR_RSC_CHARSETS ))
     {
-        {
-            LocalResourceAccess aCharsetStrings( RSC_CHARSETS, RSC_RESOURCE );
-            m_aSystemDisplayName = ModuleRes( 1 ).toString();
-        }
     }
 
     bool OCharsetDisplay::approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const

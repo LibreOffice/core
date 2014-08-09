@@ -19,12 +19,9 @@
 
 #include "dbu_misc.hrc"
 
-Resource RSC_CHARSETS
+String STR_RSC_CHARSETS
 {
-    String 1
-    {
-        Text [ en-US ] = "System";
-    };
+    Text [ en-US ] = "System";
 };
 
 String STR_ERROR_DURING_CREATION
