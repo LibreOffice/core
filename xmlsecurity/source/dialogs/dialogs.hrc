@@ -25,9 +25,6 @@
 
 #define STD_MASKCOLOR                   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
 
-#define FL_BOTTOM_SEP                   50
-#define BTN_HELP                        53
-
 #define STR_HEADERBAR                   256
 #define STR_VERSION                     257
 #define STR_SERIALNUM                   258
@@ -44,64 +41,17 @@
 
 // --------- general metrics ---------
 #define DLGS_WIDTH                      287
-#define DLGS_HEIGHT                     195
-// --------- ... for tab dialogs -----
-#define TP_WIDTH                        260
-#define TP_HEIGHT                       185
-#define TD_SP_INNERBORDER_LEFT          3
-
-#define SEP_FL_SPACE_Y                  6
-#define DLGS_BOTTOM_BTN_L(dlgh)         (dlgh-RSC_SP_DLG_INNERBORDER_BOTTOM)
-#define DLGS_BOTTOM_BTN_Y(dlgh)         (DLGS_BOTTOM_BTN_L(dlgh)-RSC_CD_PUSHBUTTON_HEIGHT)
-#define DLGS_BOTTOM_FL_Y(dlgh)          (DLGS_BOTTOM_BTN_Y(dlgh)-SEP_FL_SPACE_Y-5)
-#define DLGS_BOTTOM_HELP_X(dlgw)        (dlgw-RSC_SP_DLG_INNERBORDER_RIGHT-RSC_CD_PUSHBUTTON_WIDTH)
-#define DLGS_BOTTOM_CANCEL_X(dlgw)      (DLGS_BOTTOM_HELP_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
-#define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_DESC_X-RSC_CD_PUSHBUTTON_WIDTH)
 
 // --------- tab dialog Certificate viewer ---------
 
+// still used by certificateviewer.cxx
 #define CS_COL_0                        RSC_SP_DLG_INNERBORDER_LEFT
 #define CS_COL_2                        (DLGS_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
 #define CS_LB_WIDTH                     (CS_COL_2-CS_COL_0)
 
-#define CV_COL_0                        TD_SP_INNERBORDER_LEFT
-#define CV_COL_1                        (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
-#define CV_ROW_0                        RSC_SP_TBPG_INNERBORDER_TOP
-#define CV_ROW_3                        (TP_HEIGHT-RSC_SP_TBPG_INNERBORDER_BOTTOM)
-#define CV_CONT_WIDTH                   (CV_COL_1-CV_COL_0)
-#define CV_CONT_HEIGHT                  (CV_ROW_3-CV_ROW_0)
-#define CV_ROW_1                        (CV_ROW_0+2*CV_CONT_HEIGHT/3)
-#define CV_ROW_2                        (CV_ROW_1+RSC_SP_CTRL_GROUP_Y)
-
 // --------- tab page Certificate viewer - General ---------
 #define STR_CERTIFICATE_NOT_VALIDATED   269
 #define IMG_STATE_NOT_VALIDATED         270
-
-#define IMG1_WIDTH                      33
-#define IMG1_HEIGHT                     22
-#define IMG2_WIDTH                      20
-#define IMG2_HEIGHT                     20
-#define CW_COL_0                        (CV_COL_0+RSC_SP_GRP_INNERBORDER_LEFT)
-#define CW_COL_1                        (CW_COL_0+RSC_SP_FLGR_SPACE_X)
-#define CW_COL_1a                       (CW_COL_0+IMG2_WIDTH+1)
-#define CW_COL_2                        (CW_COL_0+IMG1_WIDTH)
-#define CW_COL_3                        (CW_COL_2+RSC_SP_CTRL_GROUP_X)
-#define CW_COL_4                        (CW_COL_1+40)
-#define CW_COL_5                        (CV_CONT_WIDTH-RSC_SP_GRP_INNERBORDER_RIGHT)
-#define CW_COL_5a                       (CW_COL_5-RSC_SP_GRP_INNERBORDER_RIGHT)
-#define CW_ROW_0                        (CV_ROW_0+RSC_SP_GRP_INNERBORDER_TOP)
-#define CW_ROW_1                        (CW_ROW_0+RSC_SP_GRP_INNERBORDER_TOP)
-#define CW_ROW_2                        (CW_ROW_0+IMG1_HEIGHT)
-#define CW_ROW_3                        (CW_ROW_2+3)
-#define CW_ROW_4                        (CW_ROW_3+RSC_SP_CTRL_Y+RSC_CD_FIXEDLINE_HEIGHT)
-#define CW_ROW_4a                       (CW_ROW_4+35)
-#define CW_ROW_5                        (CW_ROW_4a+3)
-#define CW_ROW_6                        (CW_ROW_5+RSC_SP_CTRL_Y+RSC_CD_FIXEDLINE_HEIGHT)
-#define CW_ROW_7                        (CW_ROW_6+RSC_SP_CTRL_Y+RSC_CD_FIXEDTEXT_HEIGHT)
-#define CW_ROW_8                        (CW_ROW_7+RSC_SP_CTRL_Y+RSC_CD_FIXEDTEXT_HEIGHT)
-#define CW_ROW_9                        (CW_ROW_8+RSC_SP_CTRL_Y+RSC_CD_FIXEDTEXT_HEIGHT)
-#define CW_ROW_10                       (CW_ROW_9+2)
-
 
 // --------- tab page Certificate viewer - Certification Path ---------
 
