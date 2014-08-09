@@ -27,6 +27,7 @@
 #define BENCH_MARK_MODE false
 #define CLICK_EVENT_ID 1
 #define SHAPE_START_ID 10
+#define DATA_UPDATE_TIME 15
 
 using namespace com::sun::star;
 
@@ -185,12 +186,7 @@ public:
         , mbNeedFlyBack(false)
         , mnStep(0)
         , mnStepsTotal(0)
-        , miFrameCount(0)
     {
-        osl_getSystemTime(&mafpsRenderStartTime);
-        osl_getSystemTime(&mafpsRenderEndTime);
-        osl_getSystemTime(&maScreenTextUpdateStartTime);
-        osl_getSystemTime(&maScreenTextUpdateEndTime);
         osl_getSystemTime(&maClickFlyBackStartTime);
         osl_getSystemTime(&maClickFlyBackEndTime);
     }
@@ -204,8 +200,6 @@ private:
     void MoveToCorner();
     void ProcessScroll();
     void UpdateScreenText();
-    void UpdateFPS();
-    int CalcTimeInterval(TimeValue &startTime, TimeValue &endTime);
     void ProcessClickFlyBack();
 private:
     glm::vec3 maStartPos;
@@ -216,13 +210,8 @@ private:
     glm::vec3 maStepDirection;
     size_t mnStep;
     size_t mnStepsTotal;
-    TimeValue mafpsRenderStartTime;
-    TimeValue mafpsRenderEndTime;
-    TimeValue maScreenTextUpdateStartTime;
-    TimeValue maScreenTextUpdateEndTime;
     TimeValue maClickFlyBackStartTime;
     TimeValue maClickFlyBackEndTime;
-    int miFrameCount;
     OUString maFPS;
 };
 
@@ -329,7 +318,7 @@ void RenderBenchMarkThread::ProcessClickFlyBack()
     if (!mbNeedFlyBack)
         return;
     osl_getSystemTime(&maClickFlyBackEndTime);
-    int aDeltaMs = CalcTimeInterval(maClickFlyBackStartTime, maClickFlyBackEndTime);
+    int aDeltaMs = mpChart->calcTimeInterval(maClickFlyBackStartTime, maClickFlyBackEndTime);
     if(aDeltaMs >= 10000)
     {
         mpChart->maRenderEvent = EVENT_MOVE_TO_DEFAULT;
@@ -357,42 +346,18 @@ void RenderBenchMarkThread::ProcessMouseEvent()
     }
 }
 
-int RenderBenchMarkThread::CalcTimeInterval(TimeValue &startTime, TimeValue &endTime)
-{
-    TimeValue aTime;
-    aTime.Seconds = endTime.Seconds - startTime.Seconds - 1;
-    aTime.Nanosec = 1000000000 + endTime.Nanosec - startTime.Nanosec;
-    aTime.Seconds += aTime.Nanosec / 1000000000;
-    aTime.Nanosec %= 1000000000;
-    return aTime.Seconds * 1000+aTime.Nanosec / 1000000;
-}
-
-void RenderBenchMarkThread::UpdateFPS()
-{
-    int aDeltaMs = CalcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
-    if(aDeltaMs >= 500)
-    {
-        osl_getSystemTime(&mafpsRenderEndTime);
-        aDeltaMs = CalcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
-        int iFPS = miFrameCount * 1000 / aDeltaMs;
-        maFPS = OUString("Render FPS: ") + OUString::number(iFPS);
-        miFrameCount = 0;
-        osl_getSystemTime(&mafpsRenderStartTime);
-    }
-    osl_getSystemTime(&mafpsRenderEndTime);
-    //will add the fps render code here later
-}
-
 void RenderBenchMarkThread::UpdateScreenText()
 {
-    int aDeltaMs = CalcTimeInterval(maScreenTextUpdateStartTime, maScreenTextUpdateEndTime);
-    if (aDeltaMs >= 20)
+    if (mpChart->mbScreenTextNewRender)
     {
-        mpChart->mpRenderer->ReleaseScreenTextShapes();
-        UpdateFPS();
-        osl_getSystemTime(&maScreenTextUpdateStartTime);
+        mpChart->mpRenderer->ReleaseScreenTextTexture();
+        for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = mpChart->maScreenTextShapes.begin(),
+                itrEnd = mpChart->maScreenTextShapes.end(); itr != itrEnd; ++itr)
+        {
+            itr->render();
+        }
+        mpChart->mbScreenTextNewRender = false;
     }
-    osl_getSystemTime(&maScreenTextUpdateEndTime);
 }
 
 void RenderBenchMarkThread::execute()
@@ -406,6 +371,7 @@ void RenderBenchMarkThread::execute()
             UpdateScreenText();
             ProcessMouseEvent();
             renderFrame();
+            mpChart->miFrameCount++;
         }
         #ifdef WNT
             Sleep(1);
@@ -415,7 +381,6 @@ void RenderBenchMarkThread::execute()
             nTV.Nanosec = 1000000;
             osl_waitThread(&nTV);
         #endif
-        miFrameCount++;
     }
 }
 
@@ -438,7 +403,10 @@ GL3DBarChart::GL3DBarChart(
     maRenderEvent(EVENT_NONE),
     mSelectBarId(0),
     miScrollRate(0),
-    mbScrollFlg(false)
+    miFrameCount(0),
+    mbScrollFlg(false),
+    mbScreenTextNewRender(false),
+    maFPS(OUString("Render FPS: 0"))
 {
     if (BENCH_MARK_MODE)
     {
@@ -452,6 +420,11 @@ GL3DBarChart::GL3DBarChart(
                 mpRenderer->SetScroll();
             }
         }
+        maTimer.SetTimeout(DATA_UPDATE_TIME);
+        maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, updateTimer));
+        maTimer.Start();
+        osl_getSystemTime(&mafpsRenderStartTime);
+        osl_getSystemTime(&mafpsRenderEndTime);
     }
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -937,6 +910,54 @@ void GL3DBarChart::contextDestroyed()
 {
     osl::MutexGuard aGuard(maMutex);
     mbValidContext = false;
+}
+
+void GL3DBarChart::updateRenderFPS()
+{
+    int aDeltaMs = calcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
+    if(aDeltaMs >= 500)
+    {
+        osl_getSystemTime(&mafpsRenderEndTime);
+        aDeltaMs = calcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
+        int iFPS = miFrameCount * 1000 / aDeltaMs;
+        maFPS = OUString("Render FPS: ") + OUString::number(iFPS);
+        miFrameCount = 0;
+        osl_getSystemTime(&mafpsRenderStartTime);
+    }
+    osl_getSystemTime(&mafpsRenderEndTime);
+    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, maFPS, 0));
+    opengl3D::TextCacheItem tmpTextCache = mpTextCache->getText(maFPS);
+    float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.05;
+    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
+    pScreenText->setPosition(glm::vec2(-0.99f, 0.99f), glm::vec2(-0.99f + rectWidth, 0.89f));
+}
+
+int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
+{
+    TimeValue aTime;
+    aTime.Seconds = endTime.Seconds - startTime.Seconds - 1;
+    aTime.Nanosec = 1000000000 + endTime.Nanosec - startTime.Nanosec;
+    aTime.Seconds += aTime.Nanosec / 1000000000;
+    aTime.Nanosec %= 1000000000;
+    return aTime.Seconds * 1000+aTime.Nanosec / 1000000;
+}
+
+void GL3DBarChart::updateScreenText()
+{
+    osl::MutexGuard aGuard(maMutex);
+    maScreenTextShapes.clear();
+    mpRenderer->ReleaseScreenTextShapes();
+    updateRenderFPS();
+    mbScreenTextNewRender = true;
+}
+
+IMPL_LINK_NOARG(GL3DBarChart, updateTimer)
+{
+    maTimer.Stop();
+    updateScreenText();
+    maTimer.SetTimeout(DATA_UPDATE_TIME);
+    maTimer.Start();
+    return 0;
 }
 
 }

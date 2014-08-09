@@ -1709,6 +1709,7 @@ void OpenGL3DRenderer::CreateScreenTextTexture(
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();
     m_ScreenTextInfoList.push_back(aTextInfo);
+    m_ScreenTexturelist.push_back(aTextInfo.texture);
 }
 
 void OpenGL3DRenderer::CreateTextTextureSingle(const boost::shared_array<sal_uInt8> &bitmapBuf,
@@ -1860,13 +1861,18 @@ void OpenGL3DRenderer::ReleaseTextTexture()
 
 void OpenGL3DRenderer::ReleaseScreenTextShapes()
 {
-    for (size_t i = 0; i < m_ScreenTextInfoList.size(); i++)
-    {
-        TextInfo &textInfo = m_ScreenTextInfoList[i];
-        glDeleteTextures(1, &textInfo.texture);
-    }
     m_ScreenTextInfoList.clear();
 }
+
+void OpenGL3DRenderer::ReleaseScreenTextTexture()
+{
+    for (size_t i = 0; i < m_ScreenTexturelist.size(); i++)
+    {
+        glDeleteTextures(1, &m_ScreenTexturelist[i]);
+    }
+    m_ScreenTexturelist.clear();
+}
+
 
 void OpenGL3DRenderer::RenderScreenTextShape()
 {

@@ -85,7 +85,11 @@ private:
     void moveToCorner();
     void moveToDefault();
     glm::vec3 getCornerPosition(sal_Int8 nCornerId);
-
+    void updateTimer();
+    void updateScreenText();
+    void updateRenderFPS();
+    DECL_LINK(updateTimer, void*);
+    int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
@@ -139,6 +143,13 @@ private:
     Point maClickPos;
     sal_uInt32 miScrollRate;
     bool mbScrollFlg;
+    Timer maTimer;
+    bool mbScreenTextNewRender;
+    boost::ptr_vector<opengl3D::Renderable3DObject> maScreenTextShapes;
+    OUString maFPS;
+    sal_uInt32 miFrameCount;
+    TimeValue mafpsRenderStartTime;
+    TimeValue mafpsRenderEndTime;
 };
 
 }

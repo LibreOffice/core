@@ -209,6 +209,7 @@ public:
     void ReleaseShapes();
     void ReleaseScreenTextShapes();
     void ReleaseTextTexture();
+    void ReleaseScreenTextTexture();
     void StartClick(sal_uInt32 &selectID);
     void EndClick();
     void SetScroll();
@@ -462,6 +463,7 @@ private:
     float m_fLightPower[MAX_LIGHT_NUM];
     //for 3.0 end
     std::vector<GLuint> m_Texturelist;
+    std::vector<GLuint> m_ScreenTexturelist;
     bool m_bHighLighting;
     sal_uInt32 m_uiSelectID;
     float m_fScrollSpeed;
