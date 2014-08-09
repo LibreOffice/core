@@ -146,11 +146,9 @@
           </element>
       </define>
       <define name="CT_ColorSchemeList">
-        <zeroOrMore>
           <element name="extraClrScheme">
             <ref name="CT_ColorSchemeAndMapping"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_OfficeStyleSheet">
         <group>
@@ -890,11 +888,9 @@
         </attribute>
       </define>
       <define name="CT_CustomColorList">
-        <zeroOrMore>
           <element name="custClr">
             <ref name="CT_CustomColor"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_FontCollection">
         <element name="latin">
@@ -906,11 +902,9 @@
         <element name="cs">
           <ref name="CT_TextFont"/>
         </element>
-        <zeroOrMore>
           <element name="font">
             <ref name="CT_SupplementalFont"/>
           </element>
-        </zeroOrMore>
           <element name="extLst">
             <ref name="CT_OfficeArtExtensionList"/>
           </element>
@@ -941,28 +935,20 @@
         </attribute>
       </define>
       <define name="CT_FillStyleList">
-        <oneOrMore>
           <ref name="EG_FillProperties"/>
-        </oneOrMore>
       </define>
       <define name="CT_LineStyleList">
-        <oneOrMore>
           <element name="ln">
             <ref name="CT_LineProperties"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_EffectStyleList">
-        <oneOrMore>
           <element name="effectStyle">
             <ref name="CT_EffectStyleItem"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_BackgroundFillStyleList">
-        <oneOrMore>
           <ref name="EG_FillProperties"/>
-        </oneOrMore>
       </define>
       <define name="CT_StyleMatrix">
         <group>
@@ -1397,9 +1383,7 @@
         <ref name="EG_ColorChoice"/>
       </define>
       <define name="CT_DuotoneEffect">
-        <oneOrMore>
           <ref name="EG_ColorChoice"/>
-        </oneOrMore>
       </define>
       <define name="CT_GlowEffect">
         <ref name="EG_ColorChoice"/>
@@ -1673,11 +1657,9 @@
         </attribute>
       </define>
       <define name="CT_GradientStopList">
-        <oneOrMore>
           <element name="gs">
             <ref name="CT_GradientStop"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_GradientFillProperties">
         <group>
@@ -1747,7 +1729,6 @@
       </define>
       <define name="CT_Blip">
         <group>
-          <zeroOrMore>
             <choice>
               <element name="alphaBiLevel">
                 <ref name="CT_AlphaBiLevelEffect"/>
@@ -1801,7 +1782,6 @@
                 <ref name="CT_TintEffect"/>
               </element>
             </choice>
-          </zeroOrMore>
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
@@ -2112,9 +2092,7 @@
           </choice>
       </define>
       <define name="CT_EffectContainer">
-        <zeroOrMore>
           <ref name="EG_Effect"/>
-        </zeroOrMore>
           <attribute name="type">
             <ref name="ST_EffectContainerType"/>
           </attribute>
@@ -2501,11 +2479,9 @@
         </attribute>
       </define>
       <define name="CT_DashStopList">
-        <zeroOrMore>
           <element name="ds">
             <ref name="CT_DashStop"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="EG_LineDashProperties">
         <choice>
@@ -2914,9 +2890,7 @@
         </choice>
       </define>
       <define name="CT_ScRgbColor">
-        <zeroOrMore>
           <ref name="EG_ColorTransform"/>
-        </zeroOrMore>
         <attribute name="r">
           <ref name="ST_Percentage"/>
         </attribute>
@@ -2931,17 +2905,13 @@
         <data type="hexBinary"/>
       </define>
       <define name="CT_SRgbColor">
-        <zeroOrMore>
           <ref name="EG_ColorTransform"/>
-        </zeroOrMore>
         <attribute name="val">
           <ref name="ST_HexBinary3"/>
         </attribute>
       </define>
       <define name="CT_HslColor">
-        <zeroOrMore>
           <ref name="EG_ColorTransform"/>
-        </zeroOrMore>
         <attribute name="hue">
           <ref name="ST_PositiveFixedAngle"/>
         </attribute>
@@ -3017,9 +2987,7 @@
           </choice>
       </define>
       <define name="CT_SystemColor">
-        <zeroOrMore>
           <ref name="EG_ColorTransform"/>
-        </zeroOrMore>
         <attribute name="val">
           <ref name="ST_SystemColorVal"/>
         </attribute>
@@ -3066,9 +3034,7 @@
           </choice>
       </define>
       <define name="CT_SchemeColor">
-        <zeroOrMore>
           <ref name="EG_ColorTransform"/>
-        </zeroOrMore>
         <attribute name="val">
           <ref name="ST_SchemeColorVal"/>
         </attribute>
@@ -3358,19 +3324,15 @@
           </choice>
       </define>
       <define name="CT_PresetColor">
-        <zeroOrMore>
           <ref name="EG_ColorTransform"/>
-        </zeroOrMore>
         <attribute name="val">
           <ref name="ST_PresetColorVal"/>
         </attribute>
       </define>
       <define name="EG_OfficeArtExtensionList">
-        <zeroOrMore>
           <element name="ext">
             <ref name="CT_OfficeArtExtension"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_OfficeArtExtensionList">
         <ref name="EG_OfficeArtExtensionList"/>
@@ -3525,9 +3487,7 @@
         <ref name="EG_ColorChoice"/>
       </define>
       <define name="CT_ColorMRU">
-        <zeroOrMore>
           <ref name="EG_ColorChoice"/>
-        </zeroOrMore>
       </define>
       <define name="ST_BlackWhiteMode">
           <choice>
@@ -4138,7 +4098,6 @@
       <!-- ISO RELAX NG Schema -->
       <!-- start = graphic -->
       <define name="CT_GraphicalObjectData">
-        <zeroOrMore>
           <ref name="pic"/>
           <ref name="relIds"/>
           <ref name="lockedCanvas"/>
@@ -4149,7 +4108,6 @@
             <anyName/>
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
-        </zeroOrMore>
         <attribute name="uri">
           <data type="token"/>
         </attribute>
@@ -4716,11 +4674,9 @@
           </attribute>
       </define>
       <define name="CT_GradientStopList">
-        <oneOrMore>
           <element name="gs">
             <ref name="CT_GradientStop"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_GradientStop">
         <ref name="EG_ColorChoice"/>
@@ -4950,11 +4906,9 @@
         </attribute>
       </define>
       <define name="CT_StylisticSets">
-        <zeroOrMore>
           <element name="styleSet">
             <ref name="CT_StyleSet"/>
           </element>
-        </zeroOrMore>
       </define>
 
       <define name="glow">
@@ -5812,21 +5766,17 @@
           </attribute>
       </define>
       <define name="CT_PictureLayer">
-        <zeroOrMore>
           <element name="imgEffect">
             <ref name="CT_PictureEffect"/>
           </element>
-        </zeroOrMore>
         <attribute name="r:embed">
           <text/>
         </attribute>
       </define>
       <define name="CT_Photo">
-        <zeroOrMore>
           <element name="imgLayer">
             <ref name="CT_PictureLayer"/>
           </element>
-        </zeroOrMore>
       </define>
     </grammar>
   </namespace>
@@ -6311,11 +6261,9 @@
         </attribute>
       </define>
       <define name="CT_GeomGuideList">
-        <zeroOrMore>
           <element name="gd">
             <ref name="CT_GeomGuide"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="ST_AdjCoordinate">
         <choice>
@@ -6408,7 +6356,6 @@
         </attribute>
       </define>
       <define name="CT_AdjustHandleList">
-        <zeroOrMore>
           <choice>
             <element name="ahXY">
               <ref name="CT_XYAdjustHandle"/>
@@ -6417,14 +6364,11 @@
               <ref name="CT_PolarAdjustHandle"/>
             </element>
           </choice>
-        </zeroOrMore>
       </define>
       <define name="CT_ConnectionSiteList">
-        <zeroOrMore>
           <element name="cxn">
             <ref name="CT_ConnectionSite"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_Connection">
         <attribute name="id">
@@ -6459,18 +6403,14 @@
         </attribute>
       </define>
       <define name="CT_Path2DQuadBezierTo">
-        <oneOrMore>
           <element name="pt">
             <ref name="CT_AdjPoint2D"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_Path2DCubicBezierTo">
-        <oneOrMore>
           <element name="pt">
             <ref name="CT_AdjPoint2D"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_Path2DClose">
         <empty/>
@@ -6492,7 +6432,6 @@
           </choice>
       </define>
       <define name="CT_Path2D">
-        <zeroOrMore>
           <choice>
             <element name="close">
               <ref name="CT_Path2DClose"/>
@@ -6513,7 +6452,6 @@
               <ref name="CT_Path2DCubicBezierTo"/>
             </element>
           </choice>
-        </zeroOrMore>
           <attribute name="w">
             <ref name="ST_PositiveCoordinate"/>
           </attribute>
@@ -6531,11 +6469,9 @@
           </attribute>
       </define>
       <define name="CT_Path2DList">
-        <zeroOrMore>
           <element name="path">
             <ref name="CT_Path2D"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_PresetGeometry2D">
           <element name="avLst">
@@ -6941,11 +6877,9 @@
           <element name="start">
             <ref name="CT_Point2D"/>
           </element>
-          <oneOrMore>
             <element name="lineTo">
               <ref name="CT_Point2D"/>
             </element>
-          </oneOrMore>
         </group>
           <attribute name="edited">
             <data type="boolean"/>
@@ -7363,11 +7297,9 @@
         </attribute>
       </define>
       <define name="CT_SchemaLibrary">
-        <zeroOrMore>
           <element name="schema">
             <ref name="CT_Schema"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="schemaLibrary">
         <element name="schemaLibrary">
@@ -7610,14 +7542,12 @@
             <ref name="CT_RPR"/>
           </element>
           <ref name="EG_RPr"/>
-        <zeroOrMore>
           <choice>
             <ref name="EG_RunInnerContent"/>
               <element name="t">
                 <ref name="CT_Text"/>
               </element>
           </choice>
-        </zeroOrMore>
       </define>
       <define name="CT_CtrlPr">
           <ref name="EG_RPrMath"/>
@@ -7743,11 +7673,9 @@
           <element name="dPr">
             <ref name="CT_DPr"/>
           </element>
-        <oneOrMore>
           <element name="e">
             <ref name="CT_OMathArg"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_EqArrPr">
           <element name="baseJc">
@@ -7773,11 +7701,9 @@
           <element name="eqArrPr">
             <ref name="CT_EqArrPr"/>
           </element>
-        <oneOrMore>
           <element name="e">
             <ref name="CT_OMathArg"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_FPr">
           <element name="type">
@@ -7882,11 +7808,9 @@
           </element>
       </define>
       <define name="CT_MCS">
-        <oneOrMore>
           <element name="mc">
             <ref name="CT_MC"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_MPr">
           <element name="baseJc">
@@ -7918,21 +7842,17 @@
           </element>
       </define>
       <define name="CT_MR">
-        <oneOrMore>
           <element name="e">
             <ref name="CT_OMathArg"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_M">
           <element name="mPr">
             <ref name="CT_MPr"/>
           </element>
-        <oneOrMore>
           <element name="mr">
             <ref name="CT_MR"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_NaryPr">
           <element name="chr">
@@ -8167,9 +8087,7 @@
           <element name="argPr">
             <ref name="CT_OMathArgPr"/>
           </element>
-        <zeroOrMore>
           <ref name="EG_OMathElements"/>
-        </zeroOrMore>
           <element name="ctrlPr">
             <ref name="CT_CtrlPr"/>
           </element>
@@ -8299,16 +8217,12 @@
           <element name="oMathParaPr">
             <ref name="CT_OMathParaPr"/>
           </element>
-        <oneOrMore>
           <element name="oMath">
             <ref name="CT_OMath"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_OMath">
-        <zeroOrMore>
           <ref name="EG_OMathElements"/>
-        </zeroOrMore>
       </define>
       <define name="oMathPara">
         <element name="oMathPara">
@@ -9002,7 +8916,6 @@
         </element>
       </define>
       <define name="CT_Shape">
-        <oneOrMore>
           <choice>
             <ref name="EG_ShapeElements"/>
             <element name="o:ink">
@@ -9012,7 +8925,6 @@
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
           </choice>
-        </oneOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
         <ref name="AG_Type"/>
@@ -9025,9 +8937,7 @@
       </define>
       <define name="CT_Shapetype">
         <group>
-          <zeroOrMore>
             <ref name="EG_ShapeElements"/>
-          </zeroOrMore>
             <element name="o:complex">
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
@@ -9039,7 +8949,6 @@
         <attribute name="o:master"/>
       </define>
       <define name="CT_Group">
-        <oneOrMore>
           <choice>
             <ref name="EG_ShapeElements"/>
             <ref name="group"/>
@@ -9057,7 +8966,6 @@
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
           </choice>
-        </oneOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_Fill"/>
           <attribute name="editas">
@@ -9191,11 +9099,9 @@
           <attribute name="o:relid"/>
       </define>
       <define name="CT_Formulas">
-        <zeroOrMore>
           <element name="f">
             <ref name="CT_F"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_F">
         <attribute name="eqn">
@@ -9203,11 +9109,9 @@
         </attribute>
       </define>
       <define name="CT_Handles">
-        <zeroOrMore>
           <element name="h">
             <ref name="CT_H"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_H">
         <attribute name="position">
@@ -9431,9 +9335,7 @@
         </element>
       </define>
       <define name="CT_Arc">
-        <zeroOrMore>
           <ref name="EG_ShapeElements"/>
-        </zeroOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
           <attribute name="startAngle">
@@ -9444,9 +9346,7 @@
           </attribute>
       </define>
       <define name="CT_Curve">
-        <zeroOrMore>
           <ref name="EG_ShapeElements"/>
-        </zeroOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
           <attribute name="from">
@@ -9463,17 +9363,13 @@
           </attribute>
       </define>
       <define name="CT_Image">
-        <zeroOrMore>
           <ref name="EG_ShapeElements"/>
-        </zeroOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
         <ref name="AG_ImageAttributes"/>
       </define>
       <define name="CT_Line">
-        <zeroOrMore>
           <ref name="EG_ShapeElements"/>
-        </zeroOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
           <attribute name="from">
@@ -9484,23 +9380,17 @@
           </attribute>
       </define>
       <define name="CT_Oval">
-        <oneOrMore>
-          <zeroOrMore>
             <ref name="EG_ShapeElements"/>
-          </zeroOrMore>
-        </oneOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
       </define>
       <define name="CT_PolyLine">
-        <zeroOrMore>
           <choice>
             <ref name="EG_ShapeElements"/>
             <element name="o:ink">
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
           </choice>
-        </zeroOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
           <attribute name="points">
@@ -9508,20 +9398,12 @@
           </attribute>
       </define>
       <define name="CT_Rect">
-        <oneOrMore>
-          <zeroOrMore>
             <ref name="EG_ShapeElements"/>
-          </zeroOrMore>
-        </oneOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
       </define>
       <define name="CT_RoundRect">
-        <oneOrMore>
-          <zeroOrMore>
             <ref name="EG_ShapeElements"/>
-          </zeroOrMore>
-        </oneOrMore>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
           <attribute name="arcsize">
@@ -9708,7 +9590,6 @@
           </choice>
       </define>
       <define name="BUILT_IN_ANY_TYPE">
-        <zeroOrMore>
           <choice>
             <element>
               <anyName/>
@@ -9719,7 +9600,6 @@
             </attribute>
             <text/>
           </choice>
-        </zeroOrMore>
       </define>
     </grammar>
     <resource name="ST_Ext" resource="List">
@@ -10191,11 +10071,9 @@
           </attribute>
       </define>
       <define name="CT_RegroupTable">
-        <zeroOrMore>
           <element name="entry">
             <ref name="CT_Entry"/>
           </element>
-        </zeroOrMore>
         <ref name="BUILT_IN_ANY_TYPE"/>
       </define>
       <define name="CT_Entry">
@@ -10207,19 +10085,15 @@
           </attribute>
       </define>
       <define name="CT_Rules">
-        <zeroOrMore>
           <element name="r">
             <ref name="CT_R"/>
           </element>
-        </zeroOrMore>
         <ref name="BUILT_IN_ANY_TYPE"/>
       </define>
       <define name="CT_R">
-        <zeroOrMore>
           <element name="proxy">
             <ref name="CT_Proxy"/>
           </element>
-        </zeroOrMore>
         <attribute name="id">
           <data type="string"/>
         </attribute>
@@ -10281,11 +10155,9 @@
           </attribute>
       </define>
       <define name="CT_RelationTable">
-        <zeroOrMore>
           <element name="rel">
             <ref name="CT_Relation"/>
           </element>
-        </zeroOrMore>
         <ref name="BUILT_IN_ANY_TYPE"/>
       </define>
       <define name="CT_Relation">
@@ -10975,7 +10847,6 @@
           </choice>
       </define>
       <define name="BUILT_IN_ANY_TYPE">
-        <zeroOrMore>
           <choice>
             <element>
               <anyName/>
@@ -10986,7 +10857,6 @@
             </attribute>
             <text/>
           </choice>
-        </zeroOrMore>
       </define>
     </grammar>
     <resource name="OLEObject" resource="Properties">
@@ -11145,16 +11015,12 @@
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/markup-compatibility/2006" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <define name="nsList">
         <list>
-          <zeroOrMore>
             <data type="NCName"/>
-          </zeroOrMore>
         </list>
       </define>
       <define name="AlternateContent">
         <element name="AlternateContent">
-          <oneOrMore>
             <ref name="Choice"/>
-          </oneOrMore>
         </element>
       </define>
       <define name="Choice">
@@ -13063,9 +12929,7 @@
           <ref name="ST_DecimalNumber"/>
         </attribute>
         <ref name="CT_TrackChange"/>
-        <zeroOrMore>
           <ref name="EG_BlockLevelElts"/>
-        </zeroOrMore>
           <attribute name="initials">
             <ref name="ST_String"/>
           </attribute>
@@ -13132,12 +12996,10 @@
       </define>
       <define name="CT_RunTrackChange">
         <ref name="CT_TrackChange"/>
-        <zeroOrMore>
           <choice>
             <ref name="EG_ContentRunContent"/>
             <ref name="EG_OMathMathElements"/>
           </choice>
-        </zeroOrMore>
       </define>
       <define name="EG_CellMarkupElements">
         <choice>
@@ -13239,11 +13101,9 @@
           </element>
       </define>
       <define name="CT_Tabs">
-        <oneOrMore>
           <element name="tab">
             <ref name="CT_TabStop"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="ST_TextboxTightWrap">
           <choice>
@@ -13414,12 +13274,10 @@
         </attribute>
       </define>
       <define name="CT_PictureBase">
-        <oneOrMore>
             <element>
               <anyName/>
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
-        </oneOrMore>
       </define>
       <define name="CT_Object">
         <ref name="CT_PictureBase"/>
@@ -13445,21 +13303,17 @@
         </group>
       </define>
       <define name="CT_Drawing">
-        <oneOrMore>
           <choice>
               <ref name="anchor"/>
               <ref name="inline"/>
           </choice>
-        </oneOrMore>
       </define>
       <define name="CT_SimpleField">
         <group>
             <element name="fldData">
               <ref name="CT_FLDData"/>
             </element>
-          <zeroOrMore>
             <ref name="EG_PContent"/>
-          </zeroOrMore>
         </group>
         <attribute name="instr">
           <text/>
@@ -13547,9 +13401,7 @@
         </attribute>
       </define>
       <define name="CT_Hyperlink">
-        <zeroOrMore>
           <ref name="EG_PContent"/>
-        </zeroOrMore>
           <attribute name="tgtFrame">
             <text/>
           </attribute>
@@ -13573,7 +13425,6 @@
         <ref name="ST_String"/>
       </define>
       <define name="CT_FFData">
-        <oneOrMore>
           <choice>
             <element name="name">
               <ref name="CT_FFName"/>
@@ -13608,7 +13459,6 @@
               </element>
             </choice>
           </choice>
-        </oneOrMore>
       </define>
       <define name="CT_FFHelpText">
         <attribute name="type">
@@ -13649,11 +13499,9 @@
           <element name="default">
             <ref name="CT_DecimalNumber"/>
           </element>
-        <zeroOrMore>
           <element name="listEntry">
             <ref name="CT_String"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_FFTextInput">
           <element name="type">
@@ -13977,11 +13825,9 @@
           </attribute>
       </define>
       <define name="CT_Columns">
-        <zeroOrMore>
           <element name="col">
             <ref name="CT_Column"/>
           </element>
-        </zeroOrMore>
           <attribute name="equalWidth">
             <ref name="ST_OnOff"/>
           </attribute>
@@ -14076,9 +13922,7 @@
         </choice>
       </define>
       <define name="CT_HdrFtr">
-        <oneOrMore>
           <ref name="EG_BlockLevelElts"/>
-        </oneOrMore>
       </define>
       <define name="EG_SectPrContents">
           <element name="footnotePr">
@@ -14159,9 +14003,7 @@
       </define>
       <define name="CT_SectPr">
         <group>
-          <zeroOrMore>
             <ref name="EG_HdrFtrReferences"/>
-          </zeroOrMore>
             <ref name="EG_SectPrContents"/>
             <element name="sectPrChange">
               <ref name="CT_SectPrChange"/>
@@ -14435,9 +14277,7 @@
       <define name="CT_R">
         <group>
             <ref name="EG_RPr"/>
-          <zeroOrMore>
             <ref name="EG_RunInnerContent"/>
-          </zeroOrMore>
         </group>
         <attribute name="rsidRPr">
           <text/>
@@ -14689,15 +14529,11 @@
         </choice>
       </define>
       <define name="CT_RPrOriginal">
-        <zeroOrMore>
           <ref name="EG_RPrBase"/>
-        </zeroOrMore>
       </define>
       <define name="CT_ParaRPrOriginal">
           <ref name="EG_ParaRPrTrackChanges"/>
-        <zeroOrMore>
           <ref name="EG_RPrBase"/>
-        </zeroOrMore>
       </define>
       <define name="CT_ParaRPr">
           <ref name="EG_ParaRPrTrackChanges"/>
@@ -14782,15 +14618,11 @@
           <element name="r">
             <ref name="CT_R"/>
           </element>
-          <zeroOrMore>
             <ref name="EG_RunLevelElts"/>
-          </zeroOrMore>
         </choice>
       </define>
       <define name="CT_RubyContent">
-        <zeroOrMore>
           <ref name="EG_RubyContent"/>
-        </zeroOrMore>
       </define>
       <define name="CT_Ruby">
         <element name="rubyPr">
@@ -14903,11 +14735,9 @@
           </element>
       </define>
       <define name="CT_SdtDropDownList">
-        <zeroOrMore>
           <element name="listItem">
             <ref name="CT_SdtListItem"/>
           </element>
-        </zeroOrMore>
           <attribute name="lastValue">
             <text/>
           </attribute>
@@ -14934,7 +14764,6 @@
         </attribute>
       </define>
       <define name="CT_SdtPr">
-        <oneOrMore>
           <choice>
               <element name="rPr">
                 <ref name="CT_RPr"/>
@@ -15005,14 +14834,11 @@
                 </element>
               </choice>
           </choice>
-        </oneOrMore>
       </define>
       <define name="CT_SdtEndPr">
-        <oneOrMore>
             <element name="rPr">
               <ref name="CT_RPr"/>
             </element>
-        </oneOrMore>
       </define>
       <define name="EG_ContentRunContent">
         <choice>
@@ -15028,15 +14854,11 @@
           <element name="r">
             <ref name="CT_R"/>
           </element>
-          <zeroOrMore>
             <ref name="EG_RunLevelElts"/>
-          </zeroOrMore>
         </choice>
       </define>
       <define name="CT_SdtContentRun">
-        <zeroOrMore>
           <ref name="EG_PContent"/>
-        </zeroOrMore>
       </define>
       <define name="EG_ContentBlockContent">
         <choice>
@@ -15046,71 +14868,51 @@
           <element name="sdt">
             <ref name="CT_SdtBlock"/>
           </element>
-          <zeroOrMore>
             <element name="p">
               <ref name="CT_P"/>
             </element>
-          </zeroOrMore>
-          <zeroOrMore>
             <element name="tbl">
               <ref name="CT_Tbl"/>
             </element>
-          </zeroOrMore>
-          <zeroOrMore>
             <ref name="EG_RunLevelElts"/>
-          </zeroOrMore>
         </choice>
       </define>
       <define name="CT_SdtContentBlock">
-        <zeroOrMore>
           <ref name="EG_ContentBlockContent"/>
-        </zeroOrMore>
       </define>
       <define name="EG_ContentRowContent">
         <choice>
-          <zeroOrMore>
             <element name="tr">
               <ref name="CT_Row"/>
             </element>
-          </zeroOrMore>
           <element name="customXml">
             <ref name="CT_CustomXmlRow"/>
           </element>
           <element name="sdt">
             <ref name="CT_SdtRow"/>
           </element>
-          <zeroOrMore>
             <ref name="EG_RunLevelElts"/>
-          </zeroOrMore>
         </choice>
       </define>
       <define name="CT_SdtContentRow">
-        <zeroOrMore>
           <ref name="EG_ContentRowContent"/>
-        </zeroOrMore>
       </define>
       <define name="EG_ContentCellContent">
         <choice>
-          <zeroOrMore>
             <element name="tc">
               <ref name="CT_Tc"/>
             </element>
-          </zeroOrMore>
           <element name="customXml">
             <ref name="CT_CustomXmlCell"/>
           </element>
           <element name="sdt">
             <ref name="CT_SdtCell"/>
           </element>
-          <zeroOrMore>
             <ref name="EG_RunLevelElts"/>
-          </zeroOrMore>
         </choice>
       </define>
       <define name="CT_SdtContentCell">
-        <zeroOrMore>
           <ref name="EG_ContentCellContent"/>
-        </zeroOrMore>
       </define>
       <define name="CT_SdtBlock">
           <element name="sdtPr">
@@ -15172,9 +14974,7 @@
             <element name="customXmlPr">
               <ref name="CT_CustomXmlPr"/>
             </element>
-          <zeroOrMore>
             <ref name="EG_PContent"/>
-          </zeroOrMore>
         </group>
         <attribute name="uri">
           <text/>
@@ -15188,9 +14988,7 @@
             <element name="smartTagPr">
               <ref name="CT_SmartTagPr"/>
             </element>
-          <zeroOrMore>
             <ref name="EG_PContent"/>
-          </zeroOrMore>
         </group>
         <attribute name="uri">
           <text/>
@@ -15204,9 +15002,7 @@
             <element name="customXmlPr">
               <ref name="CT_CustomXmlPr"/>
             </element>
-          <zeroOrMore>
             <ref name="EG_ContentBlockContent"/>
-          </zeroOrMore>
         </group>
         <attribute name="uri">
           <text/>
@@ -15219,20 +15015,16 @@
           <element name="placeholder">
             <ref name="CT_String"/>
           </element>
-        <zeroOrMore>
           <element name="attr">
             <ref name="CT_Attr"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_CustomXmlRow">
         <group>
             <element name="customXmlPr">
               <ref name="CT_CustomXmlPr"/>
             </element>
-          <zeroOrMore>
             <ref name="EG_ContentRowContent"/>
-          </zeroOrMore>
         </group>
         <attribute name="uri">
           <text/>
@@ -15246,9 +15038,7 @@
             <element name="customXmlPr">
               <ref name="CT_CustomXmlPr"/>
             </element>
-          <zeroOrMore>
             <ref name="EG_ContentCellContent"/>
-          </zeroOrMore>
         </group>
         <attribute name="uri">
           <text/>
@@ -15258,22 +15048,16 @@
         </attribute>
       </define>
       <define name="CT_SmartTagPr">
-        <zeroOrMore>
           <element name="attr">
             <ref name="CT_Attr"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="EG_PContent">
         <choice>
-          <zeroOrMore>
             <ref name="EG_ContentRunContent"/>
-          </zeroOrMore>
-          <zeroOrMore>
             <element name="fldSimple">
               <ref name="CT_SimpleField"/>
             </element>
-          </zeroOrMore>
           <element name="hyperlink">
             <ref name="CT_Hyperlink"/>
           </element>
@@ -15287,9 +15071,7 @@
             <element name="pPr">
               <ref name="CT_PPr"/>
             </element>
-          <zeroOrMore>
             <ref name="EG_PContent"/>
-          </zeroOrMore>
         </group>
         <attribute name="rsidRPr">
           <text/>
@@ -15341,11 +15123,9 @@
         </attribute>
       </define>
       <define name="CT_TblGridBase">
-        <zeroOrMore>
           <element name="gridCol">
             <ref name="CT_TblGridCol"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_TblGrid">
         <ref name="CT_TblGridBase"/>
@@ -15478,9 +15258,7 @@
           <element name="tcPr">
             <ref name="CT_TcPr"/>
           </element>
-        <oneOrMore>
           <ref name="EG_BlockLevelElts"/>
-        </oneOrMore>
       </define>
       <define name="ST_Cnf">
         <data type="string"/>
@@ -15527,7 +15305,6 @@
         </attribute>
       </define>
       <define name="CT_TrPrBase">
-        <oneOrMore>
           <choice>
               <element name="cnfStyle">
                 <ref name="CT_Cnf"/>
@@ -15566,7 +15343,6 @@
                 <ref name="CT_OnOff"/>
               </element>
           </choice>
-        </oneOrMore>
       </define>
       <define name="CT_TrPrBaseGridBefore">
         <attribute name="val">
@@ -15595,9 +15371,7 @@
             <element name="trPr">
               <ref name="CT_TrPr"/>
             </element>
-          <zeroOrMore>
             <ref name="EG_ContentCellContent"/>
-          </zeroOrMore>
         </group>
         <attribute name="rsidRPr">
           <text/>
@@ -15805,18 +15579,14 @@
           </element>
       </define>
       <define name="CT_Tbl">
-        <zeroOrMore>
           <ref name="EG_RangeMarkupElements"/>
-        </zeroOrMore>
         <element name="tblPr">
           <ref name="CT_TblPr"/>
         </element>
         <element name="tblGrid">
           <ref name="CT_TblGrid"/>
         </element>
-        <zeroOrMore>
           <ref name="EG_ContentRowContent"/>
-        </zeroOrMore>
       </define>
       <define name="CT_TblLook">
         <attribute name="firstRow">
@@ -15905,9 +15675,7 @@
         </attribute>
       </define>
       <define name="CT_FtnEdn">
-        <oneOrMore>
           <ref name="EG_BlockLevelElts"/>
-        </oneOrMore>
           <attribute name="type">
             <ref name="ST_FtnEdn"/>
           </attribute>
@@ -15946,19 +15714,15 @@
       </define>
       <define name="CT_FtnDocProps">
         <ref name="CT_FtnProps"/>
-        <zeroOrMore>
           <element name="footnote">
             <ref name="CT_FtnEdnSepRef"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_EdnDocProps">
         <ref name="CT_EdnProps"/>
-        <zeroOrMore>
           <element name="endnote">
             <ref name="CT_FtnEdnSepRef"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_RecipientData">
           <element name="active">
@@ -15972,11 +15736,9 @@
         </element>
       </define>
       <define name="CT_Recipients">
-        <oneOrMore>
           <element name="recipientData">
             <ref name="CT_RecipientData"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="recipients">
         <element name="recipients">
@@ -16049,16 +15811,12 @@
           <element name="fHdr">
             <ref name="CT_OnOff"/>
           </element>
-        <zeroOrMore>
           <element name="fieldMapData">
             <ref name="CT_OdsoFieldMapData"/>
           </element>
-        </zeroOrMore>
-        <zeroOrMore>
           <element name="recipientData">
             <ref name="CT_Rel"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_MailMerge">
         <element name="mainDocumentType">
@@ -16361,21 +16119,17 @@
         </attribute>
       </define>
       <define name="CT_DocVars">
-        <zeroOrMore>
           <element name="docVar">
             <ref name="CT_DocVar"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_DocRsids">
           <element name="rsidRoot">
             <ref name="CT_LongHexNumber"/>
           </element>
-        <zeroOrMore>
           <element name="rsid">
             <ref name="CT_LongHexNumber"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="ST_CharacterSpacing">
           <choice>
@@ -16571,11 +16325,9 @@
           <element name="hideGrammaticalErrors">
             <ref name="CT_OnOff"/>
           </element>
-        <zeroOrMore>
           <element name="activeWritingStyle">
             <ref name="CT_WritingStyle"/>
           </element>
-        </zeroOrMore>
           <element name="proofState">
             <ref name="CT_Proof"/>
           </element>
@@ -16763,11 +16515,9 @@
           <element name="uiCompat97To2003">
             <ref name="CT_OnOff"/>
           </element>
-        <zeroOrMore>
           <element name="attachedSchema">
             <ref name="CT_String"/>
           </element>
-        </zeroOrMore>
           <element name="themeFontLang">
             <ref name="CT_Language"/>
           </element>
@@ -16789,11 +16539,9 @@
           <element name="readModeInkLockDown">
             <ref name="CT_ReadingModeInkLockDown"/>
           </element>
-        <zeroOrMore>
           <element name="smartTagType">
             <ref name="CT_SmartTagType"/>
           </element>
-        </zeroOrMore>
           <ref name="schemaLibrary"/>
           <element name="shapeDefaults">
             <ref name="CT_ShapeDefaults"/>
@@ -16929,20 +16677,14 @@
           <element name="frameLayout">
             <ref name="CT_FrameLayout"/>
           </element>
-        <zeroOrMore>
           <choice>
-            <zeroOrMore>
               <element name="frameset">
                 <ref name="CT_Frameset"/>
               </element>
-            </zeroOrMore>
-            <zeroOrMore>
               <element name="frame">
                 <ref name="CT_Frame"/>
               </element>
-            </zeroOrMore>
           </choice>
-        </zeroOrMore>
       </define>
       <define name="CT_NumPicBullet">
         <element name="pict">
@@ -17070,11 +16812,9 @@
             <element name="numStyleLink">
               <ref name="CT_String"/>
             </element>
-          <zeroOrMore>
             <element name="lvl">
               <ref name="CT_Lvl"/>
             </element>
-          </zeroOrMore>
         </group>
         <attribute name="abstractNumId">
           <text/>
@@ -17098,32 +16838,24 @@
           <element name="abstractNumId">
             <ref name="CT_DecimalNumber"/>
           </element>
-          <zeroOrMore>
             <element name="lvlOverride">
               <ref name="CT_NumLvl"/>
             </element>
-          </zeroOrMore>
         </group>
         <attribute name="numId">
           <text/>
         </attribute>
       </define>
       <define name="CT_Numbering">
-        <zeroOrMore>
           <element name="numPicBullet">
             <ref name="CT_NumPicBullet"/>
           </element>
-        </zeroOrMore>
-        <zeroOrMore>
           <element name="abstractNum">
             <ref name="CT_AbstractNum"/>
           </element>
-        </zeroOrMore>
-        <zeroOrMore>
           <element name="num">
             <ref name="CT_Num"/>
           </element>
-        </zeroOrMore>
           <element name="numIdMacAtCleanup">
             <ref name="CT_DecimalNumber"/>
           </element>
@@ -17266,11 +16998,9 @@
             <element name="tcPr">
               <ref name="CT_TcPrBase"/>
             </element>
-          <zeroOrMore>
             <element name="tblStylePr">
               <ref name="CT_Style_tblStylePr"/>
             </element>
-          </zeroOrMore>
         </group>
           <attribute name="type">
             <ref name="ST_StyleType"/>
@@ -17306,11 +17036,9 @@
         </attribute>
       </define>
       <define name="CT_LatentStyles">
-        <zeroOrMore>
           <element name="lsdException">
             <ref name="CT_LsdException"/>
           </element>
-        </zeroOrMore>
         <attribute name="defLockedState">
           <text/>
         </attribute>
@@ -17337,11 +17065,9 @@
           <element name="latentStyles">
             <ref name="CT_LatentStyles"/>
           </element>
-        <zeroOrMore>
           <element name="style">
             <ref name="CT_Style"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="ST_Panose">
         <data type="hexBinary"/>
@@ -17460,11 +17186,9 @@
         </attribute>
       </define>
       <define name="CT_FontsList">
-        <zeroOrMore>
           <element name="font">
             <ref name="CT_Font"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="CT_Charset">
           <attribute name="val">
@@ -17511,27 +17235,21 @@
             <element name="divBdr">
               <ref name="CT_DivBdr"/>
             </element>
-          <zeroOrMore>
             <element name="divsChild">
               <ref name="CT_Divs"/>
             </element>
-          </zeroOrMore>
         </group>
         <attribute name="id">
           <text/>
         </attribute>
       </define>
       <define name="CT_Divs">
-        <oneOrMore>
           <element name="div">
             <ref name="CT_Div"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_TxbxContent">
-        <oneOrMore>
           <ref name="EG_BlockLevelElts"/>
-        </oneOrMore>
       </define>
       <define name="txbxContent">
         <element name="txbxContent">
@@ -17545,20 +17263,14 @@
         </choice>
       </define>
       <define name="EG_BlockLevelChunkElts">
-        <zeroOrMore>
           <ref name="EG_ContentBlockContent"/>
-        </zeroOrMore>
       </define>
       <define name="EG_BlockLevelElts">
         <choice>
-          <zeroOrMore>
             <ref name="EG_BlockLevelChunkElts"/>
-          </zeroOrMore>
-          <zeroOrMore>
             <element name="altChunk">
               <ref name="CT_AltChunk"/>
             </element>
-          </zeroOrMore>
         </choice>
       </define>
       <define name="EG_RunLevelElts">
@@ -17572,9 +17284,7 @@
             <element name="permEnd">
               <ref name="CT_Perm"/>
             </element>
-          <zeroOrMore>
             <ref name="EG_RangeMarkupElements"/>
-          </zeroOrMore>
             <element name="ins">
               <ref name="CT_RunTrackChange"/>
             </element>
@@ -17587,35 +17297,25 @@
           <element name="moveTo">
             <ref name="CT_RunTrackChange"/>
           </element>
-          <zeroOrMore>
             <ref name="EG_MathContent"/>
-          </zeroOrMore>
         </choice>
       </define>
       <define name="CT_Body">
-        <zeroOrMore>
           <ref name="EG_BlockLevelElts"/>
-        </zeroOrMore>
           <element name="sectPr">
             <ref name="CT_SectPr"/>
           </element>
       </define>
       <define name="CT_ShapeDefaults">
-        <oneOrMore>
-          <zeroOrMore>
             <element>
               <anyName/>
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
-          </zeroOrMore>
-        </oneOrMore>
       </define>
       <define name="CT_Comments">
-        <zeroOrMore>
           <element name="comment">
             <ref name="CT_Comment"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="comments">
         <element name="comments">
@@ -17623,11 +17323,9 @@
         </element>
       </define>
       <define name="CT_Footnotes">
-        <zeroOrMore>
           <element name="footnote">
             <ref name="CT_FtnEdn"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="footnotes">
         <element name="footnotes">
@@ -17635,11 +17333,9 @@
         </element>
       </define>
       <define name="CT_Endnotes">
-        <zeroOrMore>
           <element name="endnote">
             <ref name="CT_FtnEdn"/>
           </element>
-        </zeroOrMore>
       </define>
       <define name="endnotes">
         <element name="endnotes">
@@ -17721,11 +17417,9 @@
         </attribute>
       </define>
       <define name="CT_DocPartBehaviors">
-        <oneOrMore>
           <element name="behavior">
             <ref name="CT_DocPartBehavior"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="ST_DocPartType">
           <choice>
@@ -17751,11 +17445,9 @@
         </attribute>
       </define>
       <define name="CT_DocPartTypes">
-        <oneOrMore>
           <element name="type">
             <ref name="CT_DocPartType"/>
           </element>
-        </oneOrMore>
           <attribute name="all">
             <text/>
           </attribute>
@@ -17862,7 +17554,6 @@
           </attribute>
       </define>
       <define name="CT_DocPartPr">
-        <oneOrMore>
           <choice>
             <element name="name">
               <ref name="CT_DocPartName"/>
@@ -17886,7 +17577,6 @@
               <ref name="CT_Guid"/>
             </element>
           </choice>
-        </oneOrMore>
       </define>
       <define name="CT_DocPart">
           <element name="docPartPr">
@@ -17897,11 +17587,9 @@
           </element>
       </define>
       <define name="CT_DocParts">
-        <oneOrMore>
           <element name="docPart">
             <ref name="CT_DocPart"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="settings">
         <element name="settings">
@@ -17972,18 +17660,14 @@
         </attribute>
       </define>
       <define name="CT_AutoCaptions">
-        <oneOrMore>
           <element name="autoCaption">
             <ref name="CT_AutoCaption"/>
           </element>
-        </oneOrMore>
       </define>
       <define name="CT_Captions">
-        <oneOrMore>
           <element name="caption">
             <ref name="CT_Caption"/>
           </element>
-        </oneOrMore>
           <element name="autoCaptions">
             <ref name="CT_AutoCaptions"/>
           </element>
@@ -18016,7 +17700,6 @@
         </element>
       </define>
       <define name="BUILT_IN_ANY_TYPE">
-        <zeroOrMore>
           <choice>
             <element>
               <anyName/>
@@ -18027,7 +17710,6 @@
             </attribute>
             <text/>
           </choice>
-        </zeroOrMore>
       </define>
     </grammar>
     <resource name="CT_Empty" resource="Stream">
