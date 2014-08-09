@@ -25,7 +25,6 @@ $(eval $(call gb_SrsTarget_set_include,deploymentgui/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,deploymentgui/res,\
-    desktop/source/deployment/gui/dp_gui_dependencydialog.src \
     desktop/source/deployment/gui/dp_gui_dialog2.src \
     desktop/source/deployment/gui/dp_gui_dialog.src \
     desktop/source/deployment/gui/dp_gui_updatedialog.src \
