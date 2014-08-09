@@ -22,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-buffer-overflow.patch \
 	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch \
 	external/icu/icu-ubsan.patch.0 \
+	external/icu/icu4c-icu11054.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

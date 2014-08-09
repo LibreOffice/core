@@ -1,0 +1,44 @@
+--- icu/source/common/ubidi.c.orig	2014-08-09 20:54:39.338833533 +0100
++++ icu/source/common/ubidi.c	2014-08-09 20:55:48.625469055 +0100
+@@ -679,10 +679,10 @@
+     bd->isoRuns[0].contextPos=0;
+     if(pBiDi->openingsMemory) {
+         bd->openings=pBiDi->openingsMemory;
+-        bd->openingsSize=pBiDi->openingsSize;
++        bd->openingsCount=pBiDi->openingsSize / sizeof(Opening);
+     } else {
+         bd->openings=bd->simpleOpenings;
+-        bd->openingsSize=SIMPLE_OPENINGS_SIZE;
++        bd->openingsCount=SIMPLE_OPENINGS_SIZE;
+     }
+     bd->isNumbersSpecial=bd->pBiDi->reorderingMode==UBIDI_REORDER_NUMBERS_SPECIAL ||
+                          bd->pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL;
+@@ -743,7 +743,7 @@
+ bracketAddOpening(BracketData *bd, UChar match, int32_t position) {
+     IsoRun *pLastIsoRun=&bd->isoRuns[bd->isoRunLast];
+     Opening *pOpening;
+-    if(pLastIsoRun->limit>=bd->openingsSize) {  /* no available new entry */
++    if(pLastIsoRun->limit>=bd->openingsCount) {  /* no available new entry */
+         UBiDi *pBiDi=bd->pBiDi;
+         if(!getInitialOpeningsMemory(pBiDi, pLastIsoRun->limit * 2))
+             return FALSE;
+@@ -751,7 +751,7 @@
+             uprv_memcpy(pBiDi->openingsMemory, bd->simpleOpenings,
+                         SIMPLE_OPENINGS_SIZE * sizeof(Opening));
+         bd->openings=pBiDi->openingsMemory;     /* may have changed */
+-        bd->openingsSize=pBiDi->openingsSize;
++        bd->openingsCount=pBiDi->openingsSize / sizeof(Opening);
+     }
+     pOpening=&bd->openings[pLastIsoRun->limit];
+     pOpening->position=position;
+--- icu/source/common/ubidiimp.h.orig	2014-08-09 20:55:15.053161192 +0100
++++ icu/source/common/ubidiimp.h	2014-08-09 20:56:07.028637725 +0100
+@@ -173,7 +173,7 @@
+     /* array of opening entries which should be enough in most cases; no malloc() */
+     Opening simpleOpenings[SIMPLE_OPENINGS_SIZE];
+     Opening *openings;                  /* pointer to current array of entries */
+-    int32_t openingsSize;               /* number of allocated entries */
++    int32_t openingsCount;               /* number of allocated entries */
+     int32_t isoRunLast;                 /* index of last used entry */
+     /* array of nested isolated sequence entries; can never excess UBIDI_MAX_EXPLICIT_LEVEL
+        + 1 for index 0, + 1 for before the first isolated sequence */
