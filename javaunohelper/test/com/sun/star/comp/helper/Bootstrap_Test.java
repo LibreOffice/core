@@ -92,13 +92,16 @@ public class Bootstrap_Test {
             usage();
 
         java.util.HashMap<String,String> bootstrap_parameters = new java.util.HashMap<String,String>();
-        for ( int nPos = 1; nPos < args.length; ++nPos )
-        {
-            String arg = args[ nPos ];
-            int n = arg.indexOf( '=' );
-            if (n > 0)
-            {
-                bootstrap_parameters.put( arg.substring( 0, n ), arg.substring( n +1 ) );
+        for ( int nPos = 1; nPos < args.length; ++nPos ) {
+            if (args[nPos].contains("=")) {
+                String bootstrap_parameter[] = args[nPos].split("=");
+                if (bootstrap_parameter.length == 2){
+                    bootstrap_parameters.put( bootstrap_parameter[0], bootstrap_parameter[1] );
+                } else{
+                    usage();
+                }
+            } else{
+                usage();
             }
         }
 
