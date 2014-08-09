@@ -29,7 +29,6 @@ import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.EventObject;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.ArrayList;
 
 
@@ -230,23 +229,20 @@ public class ComponentContext implements XComponentContext, XComponent
 
         // fire events
         EventObject evt = new EventObject( this );
-        Iterator<XEventListener> eventListener = m_eventListener.iterator();
-        while (eventListener.hasNext())
+        for (XEventListener listener : m_eventListener)
         {
-            XEventListener listener = eventListener.next();
             listener.disposing( evt );
         }
         m_eventListener.clear();
 
         XComponent tdmgr = null;
         // dispose values, then service manager, then typdescription manager
-        Iterator<String> keys = m_table.keySet().iterator();
-        while (keys.hasNext())
+        for (java.util.Map.Entry<String, Object> entry : m_table.entrySet())
         {
-            String name = keys.next();
+            String name = entry.getKey();
             if (! name.equals( SMGR_NAME ))
             {
-                Object o = m_table.get( name );
+                Object o = entry.getValue();
                 if (o instanceof ComponentContextEntry)
                 {
                     o = ((ComponentContextEntry)o).m_value;
