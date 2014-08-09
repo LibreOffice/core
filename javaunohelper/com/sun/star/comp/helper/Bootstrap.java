@@ -38,7 +38,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -184,16 +183,13 @@ public class Bootstrap {
     {
         // jni convenience: easier to iterate over array than calling Hashtable
         String pairs [] = null;
-        if (null != bootstrap_parameters)
+        if (bootstrap_parameters != null)
         {
             pairs = new String [ 2 * bootstrap_parameters.size() ];
-            Iterator<String> keys = bootstrap_parameters.keySet().iterator();
             int n = 0;
-            while (keys.hasNext())
-            {
-                String name = keys.next();
-                pairs[ n++ ] = name;
-                pairs[ n++ ] = bootstrap_parameters.get( name );
+            for (java.util.Map.Entry<String, String> bootstrap_parameter : bootstrap_parameters.entrySet()) {
+                pairs[ n++ ] = bootstrap_parameter.getKey();
+                pairs[ n++ ] = bootstrap_parameter.getValue();
             }
         }
 
