@@ -999,7 +999,9 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
                 if (m_nRowPos < (sal_Int32)m_pFileSet->get().size())
                 {
                     // Fetch via Index
-                    ExecuteRow(IResultSetHelper::BOOKMARK,(m_pFileSet->get())[m_nRowPos],false,bRetrieveData);
+                    bool bOK = ExecuteRow(IResultSetHelper::BOOKMARK,(m_pFileSet->get())[m_nRowPos],false,bRetrieveData);
+                    if (!bOK)
+                        goto Error;
 
                     // now set the bookmark for outside
                     *(*m_aRow->get().begin()) = sal_Int32(m_nRowPos + 1);
