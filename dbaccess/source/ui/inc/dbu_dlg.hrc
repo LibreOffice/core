@@ -152,9 +152,11 @@
 
 #define STR_DATABASE_TYPE_CHANGE            RID_STR_DLG_START + 101
 
+#define STR_COULD_NOT_CONVERT_PARAM         RID_STR_DLG_START + 102
+
 // please adjust checking before insert new strings
 
-#define LAST_STR_HERE                       RID_STR_DLG_START + 102
+#define LAST_STR_HERE                       RID_STR_DLG_START + 103
 
 #if LAST_STR_HERE > RID_STR_DLG_END
 #error Resource-Id Overflow in #file, #line

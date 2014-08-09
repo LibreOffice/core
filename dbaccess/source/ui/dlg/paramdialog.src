@@ -17,76 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "paramdialog.hrc"
 #include "dbu_dlg.hrc"
 
-#define LIST_WIDTH      100
-#define LIST_HEIGHT     50
-
-ModalDialog DLG_PARAMETERS
+String STR_COULD_NOT_CONVERT_PARAM
 {
-    HelpID = "dbaccess:ModalDialog:DLG_PARAMETERS";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 6 + LIST_WIDTH + 3 + 6 + BUTTON_WIDTH + 6, 98 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-
-    FixedLine FL_PARAMS
-    {
-        Pos = MAP_APPFONT ( 4 , 3 ) ;
-        Size = MAP_APPFONT ( 3 + LIST_WIDTH + 3 , 8 ) ;
-        Text [ en-US ] = "~Parameters";
-    };
-    ListBox LB_ALLPARAMS
-    {
-        HelpID = "dbaccess:ListBox:DLG_PARAMETERS:LB_ALLPARAMS";
-        Pos = MAP_APPFONT ( 7 , 12 ) ;
-        Size = MAP_APPFONT ( LIST_WIDTH , LIST_HEIGHT ) ;
-        Border = TRUE;
-        SVLook = TRUE;
-    };
-    FixedText FT_VALUE
-    {
-        Pos = MAP_APPFONT ( 7 , 12 + LIST_HEIGHT + 4 ) ;
-        Size = MAP_APPFONT ( LIST_WIDTH , 8 ) ;
-        Text [ en-US ] = "~Value";
-    };
-    Edit ET_PARAM
-    {
-        HelpID = "dbaccess:Edit:DLG_PARAMETERS:ET_PARAM";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 7 , 12 + LIST_HEIGHT + 4 + 8 + 3 ) ;
-        Size = MAP_APPFONT ( LIST_WIDTH , 12 ) ;
-        TabStop = TRUE ;
-    };
-    PushButton BT_TRAVELNEXT
-    {
-        HelpID = "dbaccess:PushButton:DLG_PARAMETERS:BT_TRAVELNEXT";
-        Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 12 + LIST_HEIGHT + 4 + 8 + 3 + ( 12 - BUTTON_HEIGHT ) / 2) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Next";
-    };
-    OKButton BT_OK
-    {
-        Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 3 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BT_CANCEL
-    {
-        Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 3 + BUTTON_HEIGHT + 3 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    Text [ en-US ] = "Parameter Input" ;
-
-    String STR_COULD_NOT_CONVERT_PARAM
-    {
-        Text [ en-US ] = "The entry could not be converted to a valid value for the \"$name$\"column";
-    };
+    Text [ en-US ] = "The entry could not be converted to a valid value for the \"$name$\"column";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

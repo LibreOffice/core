@@ -18,7 +18,6 @@
  */
 
 #include "paramdialog.hxx"
-#include "paramdialog.hrc"
 #include "dbu_dlg.hrc"
 #include "commontypes.hxx"
 #include "moduledbu.hxx"
@@ -195,11 +194,7 @@ namespace dbaui
                         DBG_UNHANDLED_EXCEPTION();
                     }
 
-                    OUString sMessage;
-                    {
-                        LocalResourceAccess aDummy(DLG_PARAMETERS, RSC_MODALDIALOG);
-                        sMessage = ModuleRes(STR_COULD_NOT_CONVERT_PARAM);
-                    }
+                    OUString sMessage(ModuleRes(STR_COULD_NOT_CONVERT_PARAM));
                     sMessage = sMessage.replaceAll( "$name$", sName );
                     ErrorBox(NULL, WB_OK, sMessage).Execute();
                     m_pParam->GrabFocus();
