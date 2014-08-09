@@ -22,7 +22,6 @@
 #include "helpid.hrc"
 
 #define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
-#define HYPERDLG_IMGBUTTON_HEIGHT RSC_CD_PUSHBUTTON_HEIGHT+2
 
 String RID_SVXSTR_HYPDLG_APPLYBUT
 {
