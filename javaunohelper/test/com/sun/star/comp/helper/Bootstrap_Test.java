@@ -88,7 +88,7 @@ public class Bootstrap_Test {
     }
 
     static public void main(String args[]) throws java.lang.Exception {
-        if ( args.length == 0 )
+        if ( args.length <= 1 )
             usage();
 
         java.util.HashMap<String,String> bootstrap_parameters = new java.util.HashMap<String,String>();
