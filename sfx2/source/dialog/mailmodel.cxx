@@ -423,7 +423,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 ( aTypeName.isEmpty()  && !bHasLocation ))
                 return eRet;
 
-            // Determine filen name and extension
+            // Determine file name and extension
             if ( bHasLocation && !bStoreTo )
             {
                 INetURLObject aFileObj( xStorable->getLocation() );
