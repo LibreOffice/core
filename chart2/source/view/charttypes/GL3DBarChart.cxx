@@ -404,9 +404,11 @@ GL3DBarChart::GL3DBarChart(
     mSelectBarId(0),
     miScrollRate(0),
     miFrameCount(0),
+    miDataUpdateCounter(0),
     mbScrollFlg(false),
     mbScreenTextNewRender(false),
-    maFPS(OUString("Render FPS: 0"))
+    maFPS(OUString("Render FPS: 0")),
+    maDataUpdateFPS(OUString("Data Update FPS: 0"))
 {
     if (BENCH_MARK_MODE)
     {
@@ -423,8 +425,10 @@ GL3DBarChart::GL3DBarChart(
         maTimer.SetTimeout(DATA_UPDATE_TIME);
         maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, updateTimer));
         maTimer.Start();
-        osl_getSystemTime(&mafpsRenderStartTime);
-        osl_getSystemTime(&mafpsRenderEndTime);
+        osl_getSystemTime(&maFPSRenderStartTime);
+        osl_getSystemTime(&maFPSRenderEndTime);
+        osl_getSystemTime(&maDataUpdateStartTime);
+        osl_getSystemTime(&maDataUpdateEndTime);
     }
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -665,6 +669,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         mrWindow.getContext().resetCurrent();
         mpRenderThread->launch();
     }
+    miDataUpdateCounter++;
     mbNeedsNewRender = true;
 }
 
@@ -912,9 +917,9 @@ void GL3DBarChart::contextDestroyed()
     mbValidContext = false;
 }
 
-void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos)
+void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos, sal_uInt32 nEvent)
 {
-    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, 0));
+    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, nEvent));
     opengl3D::TextCacheItem tmpTextCache = mpTextCache->getText(nStr);
     float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.05;
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
@@ -923,17 +928,17 @@ void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float 
 
 void GL3DBarChart::updateRenderFPS()
 {
-    int aDeltaMs = calcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
+    int aDeltaMs = calcTimeInterval(maFPSRenderStartTime, maFPSRenderEndTime);
     if(aDeltaMs >= 500)
     {
-        osl_getSystemTime(&mafpsRenderEndTime);
-        aDeltaMs = calcTimeInterval(mafpsRenderStartTime, mafpsRenderEndTime);
+        osl_getSystemTime(&maFPSRenderEndTime);
+        aDeltaMs = calcTimeInterval(maFPSRenderStartTime, maFPSRenderEndTime);
         int iFPS = miFrameCount * 1000 / aDeltaMs;
         maFPS = OUString("Render FPS: ") + OUString::number(iFPS);
         miFrameCount = 0;
-        osl_getSystemTime(&mafpsRenderStartTime);
+        osl_getSystemTime(&maFPSRenderStartTime);
     }
-    osl_getSystemTime(&mafpsRenderEndTime);
+    osl_getSystemTime(&maFPSRenderEndTime);
     addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.1f, glm::vec3(0.0, 0.0, 0.0));
 }
 
@@ -953,7 +958,30 @@ void GL3DBarChart::updateScreenText()
     maScreenTextShapes.clear();
     mpRenderer->ReleaseScreenTextShapes();
     updateRenderFPS();
+    updateDataUpdateFPS();
     mbScreenTextNewRender = true;
+}
+
+void GL3DBarChart::updateDataUpdateFPS()
+{
+    int aDeltaMs = calcTimeInterval(maDataUpdateStartTime, maDataUpdateEndTime);
+    if(aDeltaMs >= 500)
+    {
+        int iFPS = miDataUpdateCounter * 1000 / aDeltaMs;
+        if (iFPS)
+        {
+            maDataUpdateFPS = OUString("Data Update FPS: ") + OUString::number(iFPS);
+        }
+        else
+        {
+            float fFPS = (float)miDataUpdateCounter * 1000 / (float)aDeltaMs;
+            maDataUpdateFPS = OUString("Data Update FPS: ") + OUString::number(fFPS);
+        }
+        miDataUpdateCounter = 0;
+        osl_getSystemTime(&maDataUpdateStartTime);
+    }
+    osl_getSystemTime(&maDataUpdateEndTime);
+    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.69f, 0.99f), 0.1f, glm::vec3(0.0, 0.0, 0.0));
 }
 
 IMPL_LINK_NOARG(GL3DBarChart, updateTimer)

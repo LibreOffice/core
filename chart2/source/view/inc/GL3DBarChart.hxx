@@ -88,9 +88,10 @@ private:
     void updateTimer();
     void updateScreenText();
     void updateRenderFPS();
+    void updateDataUpdateFPS();
     DECL_LINK(updateTimer, void*);
     int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
-    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos);
+    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos, sal_uInt32 nEvent = 0);
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
@@ -148,9 +149,13 @@ private:
     bool mbScreenTextNewRender;
     boost::ptr_vector<opengl3D::Renderable3DObject> maScreenTextShapes;
     OUString maFPS;
+    OUString maDataUpdateFPS;
     sal_uInt32 miFrameCount;
-    TimeValue mafpsRenderStartTime;
-    TimeValue mafpsRenderEndTime;
+    sal_uInt32 miDataUpdateCounter;
+    TimeValue maFPSRenderStartTime;
+    TimeValue maFPSRenderEndTime;
+    TimeValue maDataUpdateStartTime;
+    TimeValue maDataUpdateEndTime;
 };
 
 }
