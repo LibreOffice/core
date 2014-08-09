@@ -128,7 +128,6 @@ def fastToken(attrNode):
 def collectAttributeToResource(nsNode, defineNode):
     ret_dict = {}
     ret_order = []
-    defineName = defineNode.getAttribute("name")
     for refNode in getChildrenByName(defineNode, "ref"):
         refName = refNode.getAttribute("name")
         parent = refNode.parentNode
@@ -571,6 +570,7 @@ def collectTokenToId(nsNode, defineNode):
 
     return ret
 
+
 def factoryTokenToIdMapInner(nsNode, defineNode):
     ids = collectTokenToId(nsNode, defineNode)
     ret = []
@@ -578,6 +578,7 @@ def factoryTokenToIdMapInner(nsNode, defineNode):
         ret.append("        case %s: return %s;" % (i, ids[i]))
 
     return ret
+
 
 def factoryGetResourceId(nsNode):
     print("""Id OOXMLFactory_%s::getResourceId(Id nDefine, sal_Int32 nToken)

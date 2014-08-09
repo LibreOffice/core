@@ -74,9 +74,6 @@ def preprocess(model):
         namespaceAliases[name] = i.getAttribute("alias")
 
     for i in model.getElementsByTagName("namespace"):
-        # Start elements in this namespace.
-        startElements = [s.getAttribute("name") for s in i.getElementsByTagName("start")]
-
         ns = i.getElementsByTagName("grammar")[0].getAttribute("ns")
         if ns in list(namespaceAliases.keys()):
             i.setAttribute("namespacealias", namespaceAliases[ns])
