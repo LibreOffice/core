@@ -19,7 +19,7 @@
 
 #include "tp_LegendPosition.hxx"
 #include "ResId.hxx"
-#include "TabPages.hrc"
+#include "ResourceIds.hrc"
 #include "res_LegendPosition.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
 #include <svx/chrtitem.hxx>

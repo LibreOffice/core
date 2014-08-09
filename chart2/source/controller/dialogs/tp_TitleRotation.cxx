@@ -20,7 +20,7 @@
 #include "tp_TitleRotation.hxx"
 
 #include "ResId.hxx"
-#include "TabPages.hrc"
+#include "ResourceIds.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "HelpIds.hrc"
 

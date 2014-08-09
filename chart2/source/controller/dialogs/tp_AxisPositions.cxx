@@ -20,7 +20,7 @@
 #include "tp_AxisPositions.hxx"
 
 #include "ResId.hxx"
-#include "TabPages.hrc"
+#include "ResourceIds.hrc"
 #include "Strings.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "AxisHelper.hxx"

@@ -19,7 +19,7 @@
 
 #include "tp_DataLabel.hxx"
 
-#include "TabPages.hrc"
+#include "ResourceIds.hrc"
 #include "ResId.hxx"
 
 namespace chart

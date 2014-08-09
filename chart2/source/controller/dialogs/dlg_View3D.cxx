@@ -19,7 +19,7 @@
 
 #include "dlg_View3D.hxx"
 #include "Strings.hrc"
-#include "TabPages.hrc"
+#include "ResourceIds.hrc"
 #include "ResId.hxx"
 #include "tp_3D_SceneGeometry.hxx"
 #include "tp_3D_SceneAppearance.hxx"

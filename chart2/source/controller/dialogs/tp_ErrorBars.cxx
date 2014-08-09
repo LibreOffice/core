@@ -19,7 +19,7 @@
 
 #include "tp_ErrorBars.hxx"
 #include "ResId.hxx"
-#include "TabPages.hrc"
+#include "ResourceIds.hrc"
 #include "TabPageNotifiable.hxx"
 #include <vcl/settings.hxx>
 

@@ -19,7 +19,7 @@
 
 #include "tp_Trendline.hxx"
 #include "ResId.hxx"
-#include "TabPages.hrc"
+#include "ResourceIds.hrc"
 #include <vcl/settings.hxx>
 
 namespace chart
