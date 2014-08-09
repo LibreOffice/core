@@ -36,14 +36,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace
-{
-    void ShrinkToFit( FixedImage& _rImg )
-    {
-        _rImg.SetSizePixel( _rImg.GetImage().GetSizePixel() );
-    }
-}
-
 CertificateViewer::CertificateViewer(
         Window* _pParent,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
