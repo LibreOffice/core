@@ -20,7 +20,6 @@
 #include "sc.hrc"
 #include "dwfunctr.hrc"
 
- // RID_SVXDLG_CALCFUNC --------------------------------------------------
 DockingWindow FID_FUNCTION_BOX
 {
     Border = TRUE ;

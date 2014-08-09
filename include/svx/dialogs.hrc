@@ -186,9 +186,6 @@
 
 #define RID_SVXDLG_COMPRESSGRAPHICS         (RID_SVX_START + 142)
 
-// Dialog for functions
-#define RID_SVXDLG_CALCFUNC                 (RID_SVX_START + 206)
-
 // QueryBox for Exit Recovery Wizard
 #define RID_SVXQB_EXIT_RECOVERY             (RID_SVX_START + 215)
 
