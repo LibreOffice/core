@@ -22,7 +22,6 @@
 
 #include <svl/solar.hrc>
 
-#define RID_DIALOG_START                RID_FORMULA_START
 #define RID_PAGE_START                  RID_FORMULA_START
 #define RID_ERRORBOX_START              RID_FORMULA_START
 #define RID_QUERYBOX_START              RID_FORMULA_START

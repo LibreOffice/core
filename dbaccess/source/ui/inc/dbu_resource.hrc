@@ -22,7 +22,6 @@
 
 #include <svl/solar.hrc>
 
-#define RID_DIALOG_START                RID_DBACCESS_START
 #define RID_PAGE_START                  RID_DBACCESS_START
 #define RID_ERRORBOX_START              RID_DBACCESS_START
 #define RID_QUERYBOX_START              RID_DBACCESS_START
@@ -71,18 +70,6 @@
 #if RID_STR_GEN_END > RID_DBACCESS_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
-
-// dialog ids
-#define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
-    // FREE
-    // FREE
-    // FREE
-#define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-#define DLG_COLLECTION_VIEW             RID_DIALOG_START + 27
 
 // tab pages
 
