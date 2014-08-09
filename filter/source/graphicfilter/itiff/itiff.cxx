@@ -176,6 +176,19 @@ public:
         delete pAlphaMask;
     }
 
+    sal_uLong GetRowsPerStrip() const
+    {
+        //Rows Per Strip:
+        //
+        //(TIFF format only) The number of rows of pixels per strip to use for
+        //encoding the TIFF image. A value greater than zero specifies the
+        //number of rows per strip. A value of 0 sets the rows per strip equal
+        //to the image length, resulting in a single strip. A value of -1 (the
+        //default) sets the rows per strip equal to infinity, resulting in a
+        //single strip.
+        return nRowsPerStrip == 0 ? nImageLength : nRowsPerStrip;
+    }
+
     bool ReadTIFF( SvStream & rTIFF, Graphic & rGraphic );
 };
 
@@ -539,10 +552,10 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
         {
             for ( np = 0; np < nPlanes; np++ )
             {
-                nStrip = ny / nRowsPerStrip + np * nStripsPerPlane;
+                nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
                 if ( nStrip >= nNumStripOffsets )
                     return false;
-                pTIFF->Seek( pStripOffsets[ nStrip ] + ( ny % nRowsPerStrip ) * nStripBytesPerRow );
+                pTIFF->Seek( pStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
                 pTIFF->Read( pMap[ np ], nBytesPerRow );
                 if ( pTIFF->GetError() )
                     return false;
@@ -593,9 +606,9 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
         {
             for ( np = 0; np < nPlanes; np++ )
             {
-                if ( ny / nRowsPerStrip + np * nStripsPerPlane > nStrip )
+                if ( ny / GetRowsPerStrip() + np * nStripsPerPlane > nStrip )
                 {
-                    nStrip=ny/nRowsPerStrip+np*nStripsPerPlane;
+                    nStrip=ny/GetRowsPerStrip()+np*nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
                         return false;
                     pTIFF->Seek( pStripOffsets[ nStrip ] );
@@ -624,9 +637,9 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
         {
             for ( np = 0; np < nPlanes; np++ )
             {
-                if ( ny / nRowsPerStrip + np * nStripsPerPlane > nStrip )
+                if ( ny / GetRowsPerStrip() + np * nStripsPerPlane > nStrip )
                 {
-                    nStrip = ny / nRowsPerStrip + np * nStripsPerPlane;
+                    nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
                         return false;
                     pTIFF->Seek(pStripOffsets[nStrip]);
@@ -652,9 +665,9 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
         {
             for ( np = 0; np < nPlanes; np++ )
             {
-                if ( ny / nRowsPerStrip + np * nStripsPerPlane > nStrip )
+                if ( ny / GetRowsPerStrip() + np * nStripsPerPlane > nStrip )
                 {
-                    nStrip=ny/nRowsPerStrip+np*nStripsPerPlane;
+                    nStrip=ny/GetRowsPerStrip()+np*nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
                         return false;
                     pTIFF->Seek(pStripOffsets[nStrip]);
@@ -1310,7 +1323,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     if ( ( nFillOrder == 2 ) && ( nCompression != 5 ) )     // in the LZW mode bits are already being inverted
                         bByteSwap = true;
 
-                    nStripsPerPlane = ( nImageLength - 1 ) / nRowsPerStrip + 1;
+                    nStripsPerPlane = ( nImageLength - 1 ) / GetRowsPerStrip() + 1;
                     nBytesPerRow = ( nImageWidth * nSamplesPerPixel / nPlanes * nBitsPerSample + 7 ) >> 3;
 
                     for ( sal_uLong j = 0; j < 4; j++ )
