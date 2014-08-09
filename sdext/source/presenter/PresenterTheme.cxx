@@ -142,8 +142,11 @@ public:
 
 typedef ::boost::shared_ptr<PaneStyle> SharedPaneStyle;
 
-class PaneStyleContainer : vector<SharedPaneStyle>
+class PaneStyleContainer
 {
+private:
+    ::std::vector<SharedPaneStyle> mStyles;
+
 public:
     void Read (
         ReadContext& rReadContext,
@@ -179,8 +182,11 @@ public:
 
 typedef ::boost::shared_ptr<ViewStyle> SharedViewStyle;
 
-class ViewStyleContainer : vector<SharedViewStyle>
+class ViewStyleContainer
 {
+private:
+    ::std::vector<SharedViewStyle> mStyles;
+
 public:
     void Read (
         ReadContext& rReadContext,
@@ -882,8 +888,8 @@ void PaneStyleContainer::ProcessPaneStyle(
     if (rValues[1] >>= sParentStyleName)
     {
         // Find parent style.
-        PaneStyleContainer::const_iterator iStyle;
-        for (iStyle=begin(); iStyle!=end(); ++iStyle)
+        ::std::vector<SharedPaneStyle>::const_iterator iStyle;
+        for (iStyle=mStyles.begin(); iStyle!=mStyles.end(); ++iStyle)
             if ((*iStyle)->msStyleName.equals(sParentStyleName))
             {
                 pStyle->mpParentStyle = *iStyle;
@@ -919,13 +925,13 @@ void PaneStyleContainer::ProcessPaneStyle(
             rReadContext.mxPresenterHelper));
     }
 
-    push_back(pStyle);
+    mStyles.push_back(pStyle);
 }
 
 SharedPaneStyle PaneStyleContainer::GetPaneStyle (const OUString& rsStyleName) const
 {
-    const_iterator iEnd (end());
-    for (const_iterator iStyle=begin(); iStyle!=iEnd; ++iStyle)
+    ::std::vector<SharedPaneStyle>::const_iterator iEnd (mStyles.end());
+    for (::std::vector<SharedPaneStyle>::const_iterator iStyle=mStyles.begin(); iStyle!=iEnd; ++iStyle)
         if ((*iStyle)->msStyleName == rsStyleName)
             return *iStyle;
     return SharedPaneStyle();
@@ -1008,8 +1014,8 @@ void ViewStyleContainer::ProcessViewStyle(
         >>= sParentStyleName)
     {
         // Find parent style.
-        ViewStyleContainer::const_iterator iStyle;
-        for (iStyle=begin(); iStyle!=end(); ++iStyle)
+        ::std::vector<SharedViewStyle>::const_iterator iStyle;
+        for (iStyle=mStyles.begin(); iStyle!=mStyles.end(); ++iStyle)
             if ((*iStyle)->msStyleName.equals(sParentStyleName))
             {
                 pStyle->mpParentStyle = *iStyle;
@@ -1039,13 +1045,13 @@ void ViewStyleContainer::ProcessViewStyle(
     if (pBackground.get() != NULL && pBackground->GetNormalBitmap().is())
         pStyle->mpBackground = pBackground;
 
-    push_back(pStyle);
+    mStyles.push_back(pStyle);
 }
 
 SharedViewStyle ViewStyleContainer::GetViewStyle (const OUString& rsStyleName) const
 {
-    const_iterator iEnd (end());
-    for (const_iterator iStyle=begin(); iStyle!=iEnd; ++iStyle)
+    ::std::vector<SharedViewStyle>::const_iterator iEnd (mStyles.end());
+    for (::std::vector<SharedViewStyle>::const_iterator iStyle=mStyles.begin(); iStyle!=iEnd; ++iStyle)
         if ((*iStyle)->msStyleName == rsStyleName)
             return *iStyle;
     return SharedViewStyle();
