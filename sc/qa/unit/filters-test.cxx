@@ -128,6 +128,9 @@ void ScFiltersTest::testCVEs()
 
     testDir(OUString("MS Excel 97"),
         getURLFromSrc("/sc/qa/unit/data/xls/"), OUString());
+
+    testDir(OUString("dBase"),
+        getURLFromSrc("/sc/qa/unit/data/dbf/"), OUString());
 #endif
 }
 

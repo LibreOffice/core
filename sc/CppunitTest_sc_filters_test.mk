@@ -80,6 +80,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     chart2/source/controller/chartcontroller \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    connectivity/source/manager/sdbc2 \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
     eventattacher/source/evtatt \
