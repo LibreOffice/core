@@ -81,7 +81,8 @@ private:
     FixedText*          m_pHintNotTrustedFI;
     FixedText*          m_pIssuedToFI;
     FixedText*          m_pIssuedByFI;
-    FixedText*          m_pValidDateFI;
+    FixedText*          m_pValidFromDateFI;
+    FixedText*          m_pValidToDateFI;
     FixedImage*         m_pKeyImg;
     FixedText*          m_pHintCorrespPrivKeyFI;
 public:

@@ -78,9 +78,10 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
 {
     get( m_pCertImg, "certimage" );
     get( m_pHintNotTrustedFI, "hintnotrust" );
-    get( m_pIssuedToFI, "issuedto" );
-    get( m_pIssuedByFI, "issuedby" );
-    get( m_pValidDateFI, "validdate" );
+    get( m_pIssuedToFI, "issued_to_value" );
+    get( m_pIssuedByFI, "issued_by_value" );
+    get( m_pValidFromDateFI, "valid_from_value" );
+    get( m_pValidToDateFI, "valid_to_value" );
     get( m_pKeyImg, "keyimage" );
     get( m_pHintCorrespPrivKeyFI, "privatekey" );
 
@@ -107,12 +108,12 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     DateTime aDateTimeEnd( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTimeStart );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTimeEnd );
-    OUString sText = m_pValidDateFI->GetText();
-    sText = sText.replaceFirst( "%SDATE%",
-        GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() ) );
-    sText = sText.replaceFirst( "%EDATE%",
-        GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() ) );
-    m_pValidDateFI->SetText( sText );
+
+    OUString sValidFromDate = GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() );
+    OUString sValidToDate = GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() );
+
+    m_pValidFromDateFI->SetText(sValidFromDate);
+    m_pValidToDateFI->SetText(sValidToDate);
 
     // Check if we have the private key...
     bool bHasPrivateKey = false;
@@ -120,7 +121,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     if ( _pDlg->mbCheckForPrivateKey )
     {
         long nCertificateCharacters = _pDlg->mxSecurityEnvironment->getCertificateCharacters( xCert );
-        bHasPrivateKey = ( nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY ) ? sal_True : sal_False;
+        bHasPrivateKey = ( nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY );
     }
     if ( !bHasPrivateKey )
     {
