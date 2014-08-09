@@ -24,12 +24,7 @@
 
 #define RID_FWK_START                       260
 
-#define RID_GROUPS_OFFSET                   32000
-#define RID_GROUPS_END                      32767
-
 #define RID_FWK_DIALOG_START_CORRECT        (RID_FWK_START + 2048)
-
-#define DLG_FILTER_SELECT                   (RID_FWK_DIALOG_START_CORRECT + 0)
 
 // Ids of TabWindow
 #define WIN_TABWINDOW                       (RID_FWK_DIALOG_START_CORRECT+101)

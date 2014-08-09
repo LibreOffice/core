@@ -23,9 +23,7 @@
 #include <svl/solar.hrc>
 #include <svl/memberid.hrc>
 
-#define RID_GROUPS_OFFSET           32000
 #define RID_GROUPS_SFXOFFSET        32700
-#define RID_GROUPS_END              32767
 
 #define EVENT_SFX_START              5000
 //      EVENT_SFX_END                9999
