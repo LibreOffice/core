@@ -29,7 +29,6 @@
 #define ED_GROUPINTERVALLST (8)
 #define FT_KEEPTOGETHER     (9)
 #define LST_KEEPTOGETHERLST (10)
-#define PB_OK               (11)
 #define WND_CONTROL         (14)
 #define HELP_FIELD          (15)
 #define FT_ORDER            (16)
@@ -40,7 +39,6 @@
 #define FL_SEPARATOR3       (23)
 #define TB_TOOLBOX                      (27)
 
-#define CHECKBOX_HEIGHT      8
 #define FIXEDTEXT_HEIGHT     8
 #define FIXEDTEXT_WIDTH     60
 #define RELATED_CONTROLS     4

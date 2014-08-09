@@ -23,7 +23,6 @@
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
 
-#define CHECKBOX_HEIGHT     8
 #define FIXEDTEXT_HEIGHT    8
 #define RELATED_CONTROLS    4
 #define UNRELATED_CONTROLS  7
@@ -43,7 +42,6 @@
 #define FT_SOCKET                   96
 
 #define FL_DATACONVERT              81
-#define FL_SEPARATOR1               82
 
 #define PB_AUTOTESTDRIVERCLASS      80
 #define PB_AUTOBROWSEURL            81

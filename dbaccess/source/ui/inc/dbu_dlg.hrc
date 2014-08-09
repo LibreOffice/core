@@ -27,7 +27,6 @@
 #define WIZARD_PAGE_Y       240
 #define START_X             6
 
-#define CHECKBOX_HEIGHT      8
 #define LISTBOX_HEIGHT      12
 #define FIXEDTEXT_HEIGHT     8
 #define RELATED_CONTROLS     4
