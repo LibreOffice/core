@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad32947_b6f24805",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-09T15:01:08Z",
+      "side": 1,
+      "message": "Please do not make unrelated changes.",
+      "revId": "37520c0d766d0c661d2ae166a37dd11574e8000e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
