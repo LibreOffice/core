@@ -151,7 +151,6 @@
           </element>
       </define>
       <define name="CT_OfficeStyleSheet">
-        <group>
           <element name="themeElements">
             <ref name="CT_BaseStyles"/>
           </element>
@@ -167,7 +166,6 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
           <attribute name="name">
             <data type="string"/>
           </attribute>
@@ -486,7 +484,6 @@
           </choice>
       </define>
       <define name="CT_Shape3D">
-        <group>
             <element name="bevelT">
               <ref name="CT_Bevel"/>
             </element>
@@ -502,7 +499,6 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
           <attribute name="z">
             <ref name="ST_Coordinate"/>
           </attribute>
@@ -809,7 +805,6 @@
           </choice>
       </define>
       <define name="CT_ColorScheme">
-        <group>
           <element name="dk1">
             <ref name="CT_Color"/>
           </element>
@@ -849,7 +844,6 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
         <attribute name="name">
           <data type="string">
           </data>
@@ -905,7 +899,6 @@
           </element>
       </define>
       <define name="CT_FontScheme">
-        <group>
           <element name="majorFont">
             <ref name="CT_FontCollection"/>
           </element>
@@ -915,7 +908,6 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
         <attribute name="name">
           <data type="string"/>
         </attribute>
@@ -937,7 +929,6 @@
           <ref name="EG_FillProperties"/>
       </define>
       <define name="CT_StyleMatrix">
-        <group>
           <element name="fillStyleLst">
             <ref name="CT_FillStyleList"/>
           </element>
@@ -950,7 +941,6 @@
           <element name="bgFillStyleLst">
             <ref name="CT_BackgroundFillStyleList"/>
           </element>
-        </group>
           <attribute name="name">
             <data type="string"/>
           </attribute>
@@ -1166,7 +1156,6 @@
           </choice>
       </define>
       <define name="CT_TextCharacterProperties">
-        <group>
             <element name="ln">
               <ref name="CT_LineProperties"/>
             </element>
@@ -1198,7 +1187,6 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
           <attribute name="kumimoji">
             <data type="boolean"/>
           </attribute>
@@ -1347,14 +1335,12 @@
           </attribute>
       </define>
       <define name="CT_ColorChangeEffect">
-        <group>
           <element name="clrFrom">
             <ref name="CT_Color"/>
           </element>
           <element name="clrTo">
             <ref name="CT_Color"/>
           </element>
-        </group>
           <attribute name="useA">
             <data type="boolean"/>
           </attribute>
@@ -1642,7 +1628,6 @@
           </element>
       </define>
       <define name="CT_GradientFillProperties">
-        <group>
             <element name="gsLst">
               <ref name="CT_GradientStopList"/>
             </element>
@@ -1650,7 +1635,6 @@
             <element name="tileRect">
               <ref name="CT_RelativeRect"/>
             </element>
-        </group>
           <attribute name="flip">
             <ref name="ST_TileFlipMode"/>
           </attribute>
@@ -1708,7 +1692,6 @@
           </choice>
       </define>
       <define name="CT_Blip">
-        <group>
             <choice>
               <element name="alphaBiLevel">
                 <ref name="CT_AlphaBiLevelEffect"/>
@@ -1765,14 +1748,12 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
         <ref name="AG_Blob"/>
           <attribute name="cstate">
             <ref name="ST_BlipCompression"/>
           </attribute>
       </define>
       <define name="CT_BlipFillProperties">
-        <group>
             <element name="blip">
               <ref name="CT_Blip"/>
             </element>
@@ -1780,7 +1761,6 @@
               <ref name="CT_RelativeRect"/>
             </element>
             <ref name="EG_FillModeProperties"/>
-        </group>
           <attribute name="dpi">
             <data type="unsignedInt"/>
           </attribute>
@@ -1901,14 +1881,12 @@
           </choice>
       </define>
       <define name="CT_PatternFillProperties">
-        <group>
             <element name="fgClr">
               <ref name="CT_Color"/>
             </element>
             <element name="bgClr">
               <ref name="CT_Color"/>
             </element>
-        </group>
           <attribute name="prst">
             <ref name="ST_PresetPatternVal"/>
           </attribute>
@@ -2509,7 +2487,6 @@
           </choice>
       </define>
       <define name="CT_LineProperties">
-        <group>
             <ref name="EG_LineFillProperties"/>
             <ref name="EG_LineDashProperties"/>
             <ref name="EG_LineJoinProperties"/>
@@ -2522,7 +2499,6 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
           <attribute name="w">
             <ref name="ST_LineWidth"/>
           </attribute>
@@ -2614,7 +2590,6 @@
       <include href="dml-shapeEffects.rng"/>
       <include href="dml-shapeLineProperties.rng"/>
       <define name="CT_ShapeProperties">
-        <group>
             <element name="xfrm">
               <ref name="CT_Transform2D"/>
             </element>
@@ -2633,13 +2608,11 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
           <attribute name="bwMode">
             <ref name="ST_BlackWhiteMode"/>
           </attribute>
       </define>
       <define name="CT_GroupShapeProperties">
-        <group>
             <element name="xfrm">
               <ref name="CT_GroupTransform2D"/>
             </element>
@@ -2651,7 +2624,6 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
           <attribute name="bwMode">
             <ref name="ST_BlackWhiteMode"/>
           </attribute>
@@ -3320,14 +3292,12 @@
         </element>
       </define>
       <define name="CT_Transform2D">
-        <group>
             <element name="off">
               <ref name="CT_Point2D"/>
             </element>
             <element name="ext">
               <ref name="CT_PositiveSize2D"/>
             </element>
-        </group>
           <attribute name="rot">
             <ref name="ST_Angle"/>
           </attribute>
@@ -3339,7 +3309,6 @@
           </attribute>
       </define>
       <define name="CT_GroupTransform2D">
-        <group>
             <element name="off">
               <ref name="CT_Point2D"/>
             </element>
@@ -3352,7 +3321,6 @@
             <element name="chExt">
               <ref name="CT_PositiveSize2D"/>
             </element>
-        </group>
           <attribute name="rot">
             <ref name="ST_Angle"/>
           </attribute>
@@ -3504,14 +3472,12 @@
           </attribute>
       </define>
       <define name="CT_Hyperlink">
-        <group>
             <element name="snd">
               <ref name="CT_EmbeddedWAVAudioFile"/>
             </element>
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
           <attribute name="r:id"/>
           <attribute name="invalidUrl">
             <data type="string"/>
@@ -3948,7 +3914,6 @@
           </attribute>
       </define>
       <define name="CT_NonVisualDrawingProps">
-        <group>
             <element name="a:hlinkClick">
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
@@ -3958,7 +3923,6 @@
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
         <attribute name="id">
           <ref name="ST_DrawingElementId"/>
         </attribute>
@@ -3976,14 +3940,12 @@
           </attribute>
       </define>
       <define name="CT_NonVisualDrawingShapeProps">
-        <group>
             <element name="spLocks">
               <ref name="CT_ShapeLocking"/>
             </element>
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
           <attribute name="txBox">
             <data type="boolean"/>
           </attribute>
@@ -4003,14 +3965,12 @@
           </element>
       </define>
       <define name="CT_NonVisualPictureProperties">
-        <group>
             <element name="picLocks">
               <ref name="CT_PictureLocking"/>
             </element>
             <element name="extLst">
               <ref name="CT_OfficeArtExtensionList"/>
             </element>
-        </group>
           <attribute name="preferRelativeResize">
             <data type="boolean"/>
           </attribute>
@@ -6787,7 +6747,6 @@
         <data type="hexBinary"/>
       </define>
       <define name="CT_Inline">
-        <group>
           <element name="extent">
             <ref name="CT_PositiveSize2D"/>
           </element>
@@ -6809,7 +6768,6 @@
             <element name="wp14:sizeRelV">
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
-        </group>
           <attribute name="distT">
             <ref name="ST_WrapDistance"/>
           </attribute>
@@ -6839,14 +6797,12 @@
           </choice>
       </define>
       <define name="CT_WrapPath">
-        <group>
           <element name="start">
             <ref name="CT_Point2D"/>
           </element>
             <element name="lineTo">
               <ref name="CT_Point2D"/>
             </element>
-        </group>
           <attribute name="edited">
             <data type="boolean"/>
           </attribute>
@@ -7030,7 +6986,6 @@
         </attribute>
       </define>
       <define name="CT_Anchor">
-        <group>
           <element name="simplePos">
             <ref name="CT_Point2D"/>
           </element>
@@ -7062,7 +7017,6 @@
             <element name="wp14:sizeRelV">
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
-        </group>
           <attribute name="distT">
             <ref name="ST_WrapDistance"/>
           </attribute>
@@ -8897,12 +8851,10 @@
           </attribute>
       </define>
       <define name="CT_Shapetype">
-        <group>
             <ref name="EG_ShapeElements"/>
             <element name="o:complex">
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
-        </group>
         <ref name="AG_AllCoreAttributes"/>
         <ref name="AG_AllShapeAttributes"/>
         <ref name="AG_Adj"/>
@@ -9195,7 +9147,6 @@
           </attribute>
       </define>
       <define name="CT_Stroke">
-        <group>
             <element name="o:left">
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
@@ -9211,7 +9162,6 @@
             <element name="o:column">
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
-        </group>
         <ref name="AG_Id"/>
         <ref name="AG_StrokeAttributes"/>
       </define>
@@ -10308,7 +10258,6 @@
           </attribute>
       </define>
       <define name="CT_OLEObject">
-        <group>
             <element name="LinkType">
               <ref name="ST_OLELinkType"/>
             </element>
@@ -10318,7 +10267,6 @@
             <element name="FieldCodes">
               <data type="string"/>
             </element>
-        </group>
           <attribute name="Type">
             <text/>
           </attribute>
@@ -12573,7 +12521,6 @@
       </define>
       <define name="CT_PPr">
         <ref name="CT_PPrBase"/>
-        <group>
             <element name="rPr">
               <ref name="CT_ParaRPr"/>
             </element>
@@ -12583,7 +12530,6 @@
             <element name="pPrChange">
               <ref name="CT_PPrChange"/>
             </element>
-        </group>
       </define>
       <define name="CT_Control">
           <attribute name="name">
@@ -12639,14 +12585,12 @@
       </define>
       <define name="CT_Picture">
         <ref name="CT_PictureBase"/>
-        <group>
             <element name="movie">
               <ref name="CT_Rel"/>
             </element>
             <element name="control">
               <ref name="CT_Control"/>
             </element>
-        </group>
       </define>
       <define name="CT_Drawing">
           <choice>
@@ -12655,12 +12599,10 @@
           </choice>
       </define>
       <define name="CT_SimpleField">
-        <group>
             <element name="fldData">
               <ref name="CT_FLDData"/>
             </element>
             <ref name="EG_PContent"/>
-        </group>
         <attribute name="instr">
           <text/>
         </attribute>
@@ -13062,7 +13004,6 @@
           </choice>
       </define>
       <define name="CT_PageBorders">
-        <group>
             <element name="top">
               <ref name="CT_Border"/>
             </element>
@@ -13075,7 +13016,6 @@
             <element name="right">
               <ref name="CT_Border"/>
             </element>
-        </group>
           <attribute name="zOrder">
             <ref name="ST_PageBorderZOrder"/>
           </attribute>
@@ -13324,13 +13264,11 @@
         <ref name="AG_SectPrAttributes"/>
       </define>
       <define name="CT_SectPr">
-        <group>
             <ref name="EG_HdrFtrReferences"/>
             <ref name="EG_SectPrContents"/>
             <element name="sectPrChange">
               <ref name="CT_SectPrChange"/>
             </element>
-        </group>
         <ref name="AG_SectPrAttributes"/>
       </define>
       <define name="ST_BrType">
@@ -13567,10 +13505,8 @@
         </choice>
       </define>
       <define name="CT_R">
-        <group>
             <ref name="EG_RPr"/>
             <ref name="EG_RunInnerContent"/>
-        </group>
         <attribute name="rsidRPr">
           <text/>
         </attribute>
@@ -13935,7 +13871,6 @@
         </attribute>
       </define>
       <define name="CT_SdtDate">
-        <group>
             <element name="dateFormat">
               <ref name="CT_String"/>
             </element>
@@ -13948,7 +13883,6 @@
             <element name="calendar">
               <ref name="CT_CalendarType"/>
             </element>
-        </group>
           <attribute name="fullDate">
             <text/>
           </attribute>
@@ -14198,12 +14132,10 @@
         </attribute>
       </define>
       <define name="CT_CustomXmlRun">
-        <group>
             <element name="customXmlPr">
               <ref name="CT_CustomXmlPr"/>
             </element>
             <ref name="EG_PContent"/>
-        </group>
         <attribute name="uri">
           <text/>
         </attribute>
@@ -14212,12 +14144,10 @@
         </attribute>
       </define>
       <define name="CT_SmartTagRun">
-        <group>
             <element name="smartTagPr">
               <ref name="CT_SmartTagPr"/>
             </element>
             <ref name="EG_PContent"/>
-        </group>
         <attribute name="uri">
           <text/>
         </attribute>
@@ -14226,12 +14156,10 @@
         </attribute>
       </define>
       <define name="CT_CustomXmlBlock">
-        <group>
             <element name="customXmlPr">
               <ref name="CT_CustomXmlPr"/>
             </element>
             <ref name="EG_ContentBlockContent"/>
-        </group>
         <attribute name="uri">
           <text/>
         </attribute>
@@ -14248,12 +14176,10 @@
           </element>
       </define>
       <define name="CT_CustomXmlRow">
-        <group>
             <element name="customXmlPr">
               <ref name="CT_CustomXmlPr"/>
             </element>
             <ref name="EG_ContentRowContent"/>
-        </group>
         <attribute name="uri">
           <text/>
         </attribute>
@@ -14262,12 +14188,10 @@
         </attribute>
       </define>
       <define name="CT_CustomXmlCell">
-        <group>
             <element name="customXmlPr">
               <ref name="CT_CustomXmlPr"/>
             </element>
             <ref name="EG_ContentCellContent"/>
-        </group>
         <attribute name="uri">
           <text/>
         </attribute>
@@ -14295,12 +14219,10 @@
         </choice>
       </define>
       <define name="CT_P">
-        <group>
             <element name="pPr">
               <ref name="CT_PPr"/>
             </element>
             <ref name="EG_PContent"/>
-        </group>
         <attribute name="rsidRPr">
           <text/>
         </attribute>
@@ -14579,7 +14501,6 @@
       </define>
       <define name="CT_TrPr">
         <ref name="CT_TrPrBase"/>
-        <group>
             <element name="ins">
               <ref name="CT_TrackChange"/>
             </element>
@@ -14589,10 +14510,8 @@
             <element name="trPrChange">
               <ref name="CT_TrPrChange"/>
             </element>
-        </group>
       </define>
       <define name="CT_Row">
-        <group>
             <element name="tblPrEx">
               <ref name="CT_TblPrEx"/>
             </element>
@@ -14600,7 +14519,6 @@
               <ref name="CT_TrPr"/>
             </element>
             <ref name="EG_ContentCellContent"/>
-        </group>
         <attribute name="rsidRPr">
           <text/>
         </attribute>
@@ -15869,7 +15787,6 @@
           </attribute>
       </define>
       <define name="CT_Lvl">
-        <group>
             <element name="start">
               <ref name="CT_DecimalNumber"/>
             </element>
@@ -15906,7 +15823,6 @@
             <element name="rPr">
               <ref name="CT_RPr"/>
             </element>
-        </group>
         <attribute name="ilvl">
           <text/>
         </attribute>
@@ -15933,7 +15849,6 @@
         </attribute>
       </define>
       <define name="CT_AbstractNum">
-        <group>
             <element name="nsid">
               <ref name="CT_LongHexNumber"/>
             </element>
@@ -15955,33 +15870,28 @@
             <element name="lvl">
               <ref name="CT_Lvl"/>
             </element>
-        </group>
         <attribute name="abstractNumId">
           <text/>
         </attribute>
       </define>
       <define name="CT_NumLvl">
-        <group>
             <element name="startOverride">
               <ref name="CT_DecimalNumber"/>
             </element>
             <element name="lvl">
               <ref name="CT_Lvl"/>
             </element>
-        </group>
         <attribute name="ilvl">
           <text/>
         </attribute>
       </define>
       <define name="CT_Num">
-        <group>
           <element name="abstractNumId">
             <ref name="CT_DecimalNumber"/>
           </element>
             <element name="lvlOverride">
               <ref name="CT_NumLvl"/>
             </element>
-        </group>
         <attribute name="numId">
           <text/>
         </attribute>
@@ -16031,7 +15941,6 @@
           </choice>
       </define>
       <define name="CT_Style_tblStylePr">
-        <group>
             <element name="pPr">
               <ref name="CT_PPrBase"/>
             </element>
@@ -16047,7 +15956,6 @@
             <element name="tcPr">
               <ref name="CT_TcPrBase"/>
             </element>
-        </group>
         <attribute name="type">
           <ref name="ST_TblStyleOverrideType"/>
         </attribute>
@@ -16074,7 +15982,6 @@
           </choice>
       </define>
       <define name="CT_Style">
-        <group>
             <element name="name">
               <ref name="CT_String"/>
             </element>
@@ -16141,7 +16048,6 @@
             <element name="tblStylePr">
               <ref name="CT_Style_tblStylePr"/>
             </element>
-        </group>
           <attribute name="type">
             <ref name="ST_StyleType"/>
           </attribute>
@@ -16283,7 +16189,6 @@
         </attribute>
       </define>
       <define name="CT_Font">
-        <group>
             <element name="altName">
               <ref name="CT_String"/>
             </element>
@@ -16320,7 +16225,6 @@
             <element name="embedBoldItalic">
               <ref name="CT_FontRel"/>
             </element>
-        </group>
         <attribute name="name">
           <text/>
         </attribute>
@@ -16353,7 +16257,6 @@
           </element>
       </define>
       <define name="CT_Div">
-        <group>
             <element name="blockQuote">
               <ref name="CT_OnOff"/>
             </element>
@@ -16378,7 +16281,6 @@
             <element name="divsChild">
               <ref name="CT_Divs"/>
             </element>
-        </group>
         <attribute name="id">
           <text/>
         </attribute>
