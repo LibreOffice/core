@@ -777,7 +777,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
     Reference< ::com::sun::star::container::XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
     sal_uInt16 nPos = GetModelColumnPos(nColId);
 
-    // remove and delet the menu we inserted in PreExecuteColumnContextMenu
+    // remove and delete the menu we inserted in PreExecuteColumnContextMenu
     PopupMenu* pControlMenu = rMenu.GetPopupMenu(SID_FM_CHANGECOL);
     delete pControlMenu;
 
