@@ -9813,7 +9813,6 @@
         </element>
       </define>
       <define name="CT_ShapeDefaults">
-          <interleave>
               <element name="v:fill">
                 <ref name="BUILT_IN_ANY_TYPE"/>
               </element>
@@ -9836,7 +9835,6 @@
               <element name="colormenu">
                 <ref name="CT_ColorMenu"/>
               </element>
-          </interleave>
         <ref name="BUILT_IN_ANY_TYPE"/>
           <attribute name="spidmax">
             <data type="integer"/>
@@ -9909,7 +9907,6 @@
         </attribute>
       </define>
       <define name="CT_ShapeLayout">
-        <interleave>
             <element name="idmap">
               <ref name="CT_IdMap"/>
             </element>
@@ -9919,7 +9916,6 @@
             <element name="rules">
               <ref name="CT_Rules"/>
             </element>
-        </interleave>
         <ref name="BUILT_IN_ANY_TYPE"/>
       </define>
       <define name="CT_IdMap">
