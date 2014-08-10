@@ -2303,12 +2303,18 @@ void SdXImpressDocument::setPartMode( LibreOfficeKitPartMode ePartMode )
 
 Size SdXImpressDocument::getDocumentSize()
 {
-    SdrPageView* pCurPageView = mpDoc->GetDocSh()->GetViewShell()->GetView()->GetSdrPageView();
+    DrawViewShell* pViewSh = dynamic_cast<DrawViewShell*>(mpDoc->GetDocSh()->GetViewShell());
+    if (!pViewSh)
+    {
+        SAL_WARN("sd", "DrawViewShell not available!");
+        return Size();
+    }
+
+    SdrPageView* pCurPageView = pViewSh->GetView()->GetSdrPageView();
     Size aSize = pCurPageView->GetPageRect().GetSize();
     // Convert the size in 100th mm to TWIP
     // See paintTile above for further info.
-    return Size( convertMm100ToTwip( aSize.getWidth() ),
-                 convertMm100ToTwip( aSize.getHeight() ) );
+    return Size(convertMm100ToTwip(aSize.getWidth()), convertMm100ToTwip(aSize.getHeight()));
 }
 
 
