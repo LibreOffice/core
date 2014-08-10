@@ -27,19 +27,9 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-
-// predeclarations
-
-namespace svt { class EmbeddedObjectRef; }
-
-
-
 class SVX_DLLPUBLIC ChartHelper
 {
 public:
-    // test if given reference is a chart
-    static bool IsChart(const svt::EmbeddedObjectRef& xObjRef);
-
     // try to access rXModel in case of a chart to to get the chart content
     // as sequence of primitives. Return range of primitives (chart size) in rRange;
     // it will be used to embed the chart to the SdrObject transformation. This

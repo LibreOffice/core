@@ -18,7 +18,6 @@
  */
 
 #include <svx/charthelper.hxx>
-#include <svtools/embedhlp.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -34,26 +33,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 using namespace ::com::sun::star;
-
-bool ChartHelper::IsChart(const svt::EmbeddedObjectRef& xObjRef)
-{
-    if(!xObjRef.is())
-    {
-        return false;
-    }
-
-    const SvGlobalName aObjClsId(xObjRef->getClassID());
-
-    if(SvGlobalName(SO3_SCH_CLASSID_30) == aObjClsId
-        || SvGlobalName(SO3_SCH_CLASSID_40) == aObjClsId
-        || SvGlobalName(SO3_SCH_CLASSID_50) == aObjClsId
-        || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId)
-    {
-        return true;
-    }
-
-    return false;
-}
 
 drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
     const uno::Reference< ::frame::XModel >& rXModel,

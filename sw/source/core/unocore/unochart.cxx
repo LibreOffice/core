@@ -26,7 +26,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
-#include <svx/charthelper.hxx>
 
 #include <XMLRangeHelper.hxx>
 #include <unochart.hxx>
@@ -64,7 +63,7 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
     {
         ++aIdx;
         if (0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
-            ChartHelper::IsChart( pONd->GetOLEObj().GetObject() ) )
+            pONd->GetOLEObj().GetObject().IsChart() )
         {
             // Load the object and set modified
 

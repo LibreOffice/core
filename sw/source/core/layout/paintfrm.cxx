@@ -74,7 +74,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 
 #include <ndole.hxx>
-#include <svx/charthelper.hxx>
 #include <PostItMgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -4102,7 +4101,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if( pNoTNd )
         {
             SwOLENode* pOLENd = const_cast<SwOLENode*>(pNoTNd->GetOLENode());
-            if( pOLENd && ChartHelper::IsChart( pOLENd->GetOLEObj().GetObject() ) )
+            if( pOLENd && pOLENd->GetOLEObj().GetObject().IsChart() )
                 bIsChart = true;
         }
     }

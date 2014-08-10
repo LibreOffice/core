@@ -72,7 +72,6 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"
-#include <svx/charthelper.hxx>
 #include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
 #include <sdr/properties/oleproperties.hxx>
@@ -2148,7 +2147,7 @@ bool SdrOle2Obj::IsChart() const
 {
     if (!mpImpl->mbTypeAsked)
     {
-        mpImpl->mbIsChart = ChartHelper::IsChart(mpImpl->mxObjRef);
+        mpImpl->mbIsChart = mpImpl->mxObjRef.IsChart();
         mpImpl->mbTypeAsked = true;
     }
     return mpImpl->mbIsChart;

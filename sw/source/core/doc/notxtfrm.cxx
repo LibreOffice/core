@@ -845,7 +845,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     const bool bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
                           pOut->GetConnectMetaFile();
 
-    const bool bIsChart = pOLENd && ChartHelper::IsChart( pOLENd->GetOLEObj().GetObject() );
+    const bool bIsChart = pOLENd && pOLENd->GetOLEObj().GetObject().IsChart();
 
     // calculate aligned rectangle from parameter <rGrfArea>.
     //     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
