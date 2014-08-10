@@ -351,43 +351,43 @@
       </define>
     </grammar>
     <resource name="ST_LightRigDirection" resource="List">
-      <value name="tl" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_tl">tl</value>
-      <value name="t" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_t">t</value>
-      <value name="tr" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_tr">tr</value>
-      <value name="l" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_l">l</value>
-      <value name="r" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_r">r</value>
-      <value name="bl" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_bl">bl</value>
-      <value name="b" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_b">b</value>
-      <value name="br" tokenid="ooxml:Value_drawingml_ST_LightRigDirection_br">br</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigDirection_tl">tl</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigDirection_t">t</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigDirection_tr">tr</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigDirection_l">l</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigDirection_r">r</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigDirection_bl">bl</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigDirection_b">b</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigDirection_br">br</value>
     </resource>
     <resource name="ST_LightRigType" resource="List">
-      <value name="legacyFlat1" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat1">legacyFlat1</value>
-      <value name="legacyFlat2" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat2">legacyFlat2</value>
-      <value name="legacyFlat3" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat3">legacyFlat3</value>
-      <value name="legacyFlat4" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat4">legacyFlat4</value>
-      <value name="legacyNormal1" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyNormal1">legacyNormal1</value>
-      <value name="legacyNormal2" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyNormal2">legacyNormal2</value>
-      <value name="legacyNormal3" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyNormal3">legacyNormal3</value>
-      <value name="legacyNormal4" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyNormal4">legacyNormal4</value>
-      <value name="legacyHarsh1" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyHarsh1">legacyHarsh1</value>
-      <value name="legacyHarsh2" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyHarsh2">legacyHarsh2</value>
-      <value name="legacyHarsh3" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyHarsh3">legacyHarsh3</value>
-      <value name="legacyHarsh4" tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyHarsh4">legacyHarsh4</value>
-      <value name="threePt" tokenid="ooxml:Value_drawingml_ST_LightRigType_threePt">threePt</value>
-      <value name="balanced" tokenid="ooxml:Value_drawingml_ST_LightRigType_balanced">balanced</value>
-      <value name="soft" tokenid="ooxml:Value_drawingml_ST_LightRigType_soft">soft</value>
-      <value name="harsh" tokenid="ooxml:Value_drawingml_ST_LightRigType_harsh">harsh</value>
-      <value name="flood" tokenid="ooxml:Value_drawingml_ST_LightRigType_flood">flood</value>
-      <value name="contrasting" tokenid="ooxml:Value_drawingml_ST_LightRigType_contrasting">contrasting</value>
-      <value name="morning" tokenid="ooxml:Value_drawingml_ST_LightRigType_morning">morning</value>
-      <value name="sunrise" tokenid="ooxml:Value_drawingml_ST_LightRigType_sunrise">sunrise</value>
-      <value name="sunset" tokenid="ooxml:Value_drawingml_ST_LightRigType_sunset">sunset</value>
-      <value name="chilly" tokenid="ooxml:Value_drawingml_ST_LightRigType_chilly">chilly</value>
-      <value name="freezing" tokenid="ooxml:Value_drawingml_ST_LightRigType_freezing">freezing</value>
-      <value name="flat" tokenid="ooxml:Value_drawingml_ST_LightRigType_flat">flat</value>
-      <value name="twoPt" tokenid="ooxml:Value_drawingml_ST_LightRigType_twoPt">twoPt</value>
-      <value name="glow" tokenid="ooxml:Value_drawingml_ST_LightRigType_glow">glow</value>
-      <value name="brightRoom" tokenid="ooxml:Value_drawingml_ST_LightRigType_brightRoom">brightRoom</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat1">legacyFlat1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat2">legacyFlat2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat3">legacyFlat3</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyFlat4">legacyFlat4</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyNormal1">legacyNormal1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyNormal2">legacyNormal2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyNormal3">legacyNormal3</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyNormal4">legacyNormal4</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyHarsh1">legacyHarsh1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyHarsh2">legacyHarsh2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyHarsh3">legacyHarsh3</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_legacyHarsh4">legacyHarsh4</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_threePt">threePt</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_balanced">balanced</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_soft">soft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_harsh">harsh</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_flood">flood</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_contrasting">contrasting</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_morning">morning</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_sunrise">sunrise</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_sunset">sunset</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_chilly">chilly</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_freezing">freezing</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_flat">flat</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_twoPt">twoPt</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_glow">glow</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LightRigType_brightRoom">brightRoom</value>
     </resource>
   </namespace>
   <namespace name="dml-shape3DScene" file="dml-shape3DScene.rng">
@@ -533,35 +533,35 @@
       </define>
     </grammar>
     <resource name="ST_BevelPresetType" resource="List">
-      <value name="relaxedInset" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_relaxedInset">relaxedInset</value>
-      <value name="circle" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_circle">circle</value>
-      <value name="slope" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_slope">slope</value>
-      <value name="cross" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_cross">cross</value>
-      <value name="angle" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_angle">angle</value>
-      <value name="softRound" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_softRound">softRound</value>
-      <value name="convex" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_convex">convex</value>
-      <value name="coolSlant" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_coolSlant">coolSlant</value>
-      <value name="divot" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_divot">divot</value>
-      <value name="riblet" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_riblet">riblet</value>
-      <value name="hardEdge" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_hardEdge">hardEdge</value>
-      <value name="artDeco" tokenid="ooxml:Value_drawingml_ST_BevelPresetType_artDeco">artDeco</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_relaxedInset">relaxedInset</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_circle">circle</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_slope">slope</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_cross">cross</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_angle">angle</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_softRound">softRound</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_convex">convex</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_coolSlant">coolSlant</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_divot">divot</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_riblet">riblet</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_hardEdge">hardEdge</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BevelPresetType_artDeco">artDeco</value>
     </resource>
     <resource name="ST_PresetMaterialType" resource="List">
-      <value name="legacyMatte" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyMatte">legacyMatte</value>
-      <value name="legacyPlastic" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyPlastic">legacyPlastic</value>
-      <value name="legacyMetal" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyMetal">legacyMetal</value>
-      <value name="legacyWireframe" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyWireframe">legacyWireframe</value>
-      <value name="matte" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_matte">matte</value>
-      <value name="plastic" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_plastic">plastic</value>
-      <value name="metal" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_metal">metal</value>
-      <value name="warmMatte" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_warmMatte">warmMatte</value>
-      <value name="translucentPowder" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_translucentPowder">translucentPowder</value>
-      <value name="powder" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_powder">powder</value>
-      <value name="dkEdge" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_dkEdge">dkEdge</value>
-      <value name="softEdge" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_softEdge">softEdge</value>
-      <value name="clear" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_clear">clear</value>
-      <value name="flat" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_flat">flat</value>
-      <value name="softmetal" tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_softmetal">softmetal</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyMatte">legacyMatte</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyPlastic">legacyPlastic</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyMetal">legacyMetal</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_legacyWireframe">legacyWireframe</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_matte">matte</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_plastic">plastic</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_metal">metal</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_warmMatte">warmMatte</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_translucentPowder">translucentPowder</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_powder">powder</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_dkEdge">dkEdge</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_softEdge">softEdge</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_clear">clear</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_flat">flat</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_softmetal">softmetal</value>
     </resource>
   </namespace>
   <namespace name="dml-shape3DCamera" file="dml-shape3DCamera.rng">
@@ -713,68 +713,68 @@
       </define>
     </grammar>
     <resource name="ST_PresetCameraType" resource="List">
-      <value name="legacyObliqueTopLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueTopLeft">legacyObliqueTopLeft</value>
-      <value name="legacyObliqueTop" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueTop">legacyObliqueTop</value>
-      <value name="legacyObliqueTopRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueTopRight">legacyObliqueTopRight</value>
-      <value name="legacyObliqueLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueLeft">legacyObliqueLeft</value>
-      <value name="legacyObliqueFront" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueFront">legacyObliqueFront</value>
-      <value name="legacyObliqueRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueRight">legacyObliqueRight</value>
-      <value name="legacyObliqueBottomLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueBottomLeft">legacyObliqueBottomLeft</value>
-      <value name="legacyObliqueBottom" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueBottom">legacyObliqueBottom</value>
-      <value name="legacyObliqueBottomRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueBottomRight">legacyObliqueBottomRight</value>
-      <value name="legacyPerspectiveTopLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveTopLeft">legacyPerspectiveTopLeft</value>
-      <value name="legacyPerspectiveTop" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveTop">legacyPerspectiveTop</value>
-      <value name="legacyPerspectiveTopRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveTopRight">legacyPerspectiveTopRight</value>
-      <value name="legacyPerspectiveLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveLeft">legacyPerspectiveLeft</value>
-      <value name="legacyPerspectiveFront" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveFront">legacyPerspectiveFront</value>
-      <value name="legacyPerspectiveRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveRight">legacyPerspectiveRight</value>
-      <value name="legacyPerspectiveBottomLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveBottomLeft">legacyPerspectiveBottomLeft</value>
-      <value name="legacyPerspectiveBottom" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveBottom">legacyPerspectiveBottom</value>
-      <value name="legacyPerspectiveBottomRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveBottomRight">legacyPerspectiveBottomRight</value>
-      <value name="orthographicFront" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_orthographicFront">orthographicFront</value>
-      <value name="isometricTopUp" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricTopUp">isometricTopUp</value>
-      <value name="isometricTopDown" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricTopDown">isometricTopDown</value>
-      <value name="isometricBottomUp" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricBottomUp">isometricBottomUp</value>
-      <value name="isometricBottomDown" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricBottomDown">isometricBottomDown</value>
-      <value name="isometricLeftUp" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricLeftUp">isometricLeftUp</value>
-      <value name="isometricLeftDown" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricLeftDown">isometricLeftDown</value>
-      <value name="isometricRightUp" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricRightUp">isometricRightUp</value>
-      <value name="isometricRightDown" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricRightDown">isometricRightDown</value>
-      <value name="isometricOffAxis1Left" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis1Left">isometricOffAxis1Left</value>
-      <value name="isometricOffAxis1Right" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis1Right">isometricOffAxis1Right</value>
-      <value name="isometricOffAxis1Top" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis1Top">isometricOffAxis1Top</value>
-      <value name="isometricOffAxis2Left" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis2Left">isometricOffAxis2Left</value>
-      <value name="isometricOffAxis2Right" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis2Right">isometricOffAxis2Right</value>
-      <value name="isometricOffAxis2Top" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis2Top">isometricOffAxis2Top</value>
-      <value name="isometricOffAxis3Left" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis3Left">isometricOffAxis3Left</value>
-      <value name="isometricOffAxis3Right" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis3Right">isometricOffAxis3Right</value>
-      <value name="isometricOffAxis3Bottom" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis3Bottom">isometricOffAxis3Bottom</value>
-      <value name="isometricOffAxis4Left" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis4Left">isometricOffAxis4Left</value>
-      <value name="isometricOffAxis4Right" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis4Right">isometricOffAxis4Right</value>
-      <value name="isometricOffAxis4Bottom" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis4Bottom">isometricOffAxis4Bottom</value>
-      <value name="obliqueTopLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueTopLeft">obliqueTopLeft</value>
-      <value name="obliqueTop" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueTop">obliqueTop</value>
-      <value name="obliqueTopRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueTopRight">obliqueTopRight</value>
-      <value name="obliqueLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueLeft">obliqueLeft</value>
-      <value name="obliqueRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueRight">obliqueRight</value>
-      <value name="obliqueBottomLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueBottomLeft">obliqueBottomLeft</value>
-      <value name="obliqueBottom" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueBottom">obliqueBottom</value>
-      <value name="obliqueBottomRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueBottomRight">obliqueBottomRight</value>
-      <value name="perspectiveFront" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveFront">perspectiveFront</value>
-      <value name="perspectiveLeft" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveLeft">perspectiveLeft</value>
-      <value name="perspectiveRight" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveRight">perspectiveRight</value>
-      <value name="perspectiveAbove" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveAbove">perspectiveAbove</value>
-      <value name="perspectiveBelow" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveBelow">perspectiveBelow</value>
-      <value name="perspectiveAboveLeftFacing" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveAboveLeftFacing">perspectiveAboveLeftFacing</value>
-      <value name="perspectiveAboveRightFacing" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveAboveRightFacing">perspectiveAboveRightFacing</value>
-      <value name="perspectiveContrastingLeftFacing" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveContrastingLeftFacing">perspectiveContrastingLeftFacing</value>
-      <value name="perspectiveContrastingRightFacing" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveContrastingRightFacing">perspectiveContrastingRightFacing</value>
-      <value name="perspectiveHeroicLeftFacing" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveHeroicLeftFacing">perspectiveHeroicLeftFacing</value>
-      <value name="perspectiveHeroicRightFacing" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveHeroicRightFacing">perspectiveHeroicRightFacing</value>
-      <value name="perspectiveHeroicExtremeLeftFacing" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveHeroicExtremeLeftFacing">perspectiveHeroicExtremeLeftFacing</value>
-      <value name="perspectiveHeroicExtremeRightFacing" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveHeroicExtremeRightFacing">perspectiveHeroicExtremeRightFacing</value>
-      <value name="perspectiveRelaxed" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveRelaxed">perspectiveRelaxed</value>
-      <value name="perspectiveRelaxedModerately" tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveRelaxedModerately">perspectiveRelaxedModerately</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueTopLeft">legacyObliqueTopLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueTop">legacyObliqueTop</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueTopRight">legacyObliqueTopRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueLeft">legacyObliqueLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueFront">legacyObliqueFront</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueRight">legacyObliqueRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueBottomLeft">legacyObliqueBottomLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueBottom">legacyObliqueBottom</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyObliqueBottomRight">legacyObliqueBottomRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveTopLeft">legacyPerspectiveTopLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveTop">legacyPerspectiveTop</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveTopRight">legacyPerspectiveTopRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveLeft">legacyPerspectiveLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveFront">legacyPerspectiveFront</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveRight">legacyPerspectiveRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveBottomLeft">legacyPerspectiveBottomLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveBottom">legacyPerspectiveBottom</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_legacyPerspectiveBottomRight">legacyPerspectiveBottomRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_orthographicFront">orthographicFront</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricTopUp">isometricTopUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricTopDown">isometricTopDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricBottomUp">isometricBottomUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricBottomDown">isometricBottomDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricLeftUp">isometricLeftUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricLeftDown">isometricLeftDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricRightUp">isometricRightUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricRightDown">isometricRightDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis1Left">isometricOffAxis1Left</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis1Right">isometricOffAxis1Right</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis1Top">isometricOffAxis1Top</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis2Left">isometricOffAxis2Left</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis2Right">isometricOffAxis2Right</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis2Top">isometricOffAxis2Top</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis3Left">isometricOffAxis3Left</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis3Right">isometricOffAxis3Right</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis3Bottom">isometricOffAxis3Bottom</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis4Left">isometricOffAxis4Left</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis4Right">isometricOffAxis4Right</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_isometricOffAxis4Bottom">isometricOffAxis4Bottom</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueTopLeft">obliqueTopLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueTop">obliqueTop</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueTopRight">obliqueTopRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueLeft">obliqueLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueRight">obliqueRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueBottomLeft">obliqueBottomLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueBottom">obliqueBottom</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_obliqueBottomRight">obliqueBottomRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveFront">perspectiveFront</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveLeft">perspectiveLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveRight">perspectiveRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveAbove">perspectiveAbove</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveBelow">perspectiveBelow</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveAboveLeftFacing">perspectiveAboveLeftFacing</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveAboveRightFacing">perspectiveAboveRightFacing</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveContrastingLeftFacing">perspectiveContrastingLeftFacing</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveContrastingRightFacing">perspectiveContrastingRightFacing</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveHeroicLeftFacing">perspectiveHeroicLeftFacing</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveHeroicRightFacing">perspectiveHeroicRightFacing</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveHeroicExtremeLeftFacing">perspectiveHeroicExtremeLeftFacing</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveHeroicExtremeRightFacing">perspectiveHeroicExtremeRightFacing</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveRelaxed">perspectiveRelaxed</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveRelaxedModerately">perspectiveRelaxedModerately</value>
     </resource>
   </namespace>
   <namespace name="dml-baseStylesheet" file="dml-baseStylesheet.rng">
@@ -971,18 +971,18 @@
       </define>
     </grammar>
     <resource name="ST_ColorSchemeIndex" resource="List">
-      <value name="dk1" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_dk1">dk1</value>
-      <value name="lt1" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_lt1">lt1</value>
-      <value name="dk2" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_dk2">dk2</value>
-      <value name="lt2" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_lt2">lt2</value>
-      <value name="accent1" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent1">accent1</value>
-      <value name="accent2" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent2">accent2</value>
-      <value name="accent3" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent3">accent3</value>
-      <value name="accent4" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent4">accent4</value>
-      <value name="accent5" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent5">accent5</value>
-      <value name="accent6" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent6">accent6</value>
-      <value name="hlink" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_hlink">hlink</value>
-      <value name="folHlink" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_folHlink">folHlink</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_dk1">dk1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_lt1">lt1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_dk2">dk2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_lt2">lt2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent1">accent1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent2">accent2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent3">accent3</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent4">accent4</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent5">accent5</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_accent6">accent6</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_hlink">hlink</value>
+      <value tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_folHlink">folHlink</value>
     </resource>
     <resource name="CT_ColorScheme" resource="Properties">
       <element name="dk1" tokenid="ooxml:CT_ColorScheme_dk1"/>
@@ -1271,34 +1271,34 @@
     </resource>
     <resource name="ST_TextLanguageID" resource="String"/>
     <resource name="ST_TextUnderlineType" resource="List">
-      <value name="none" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_none">none</value>
-      <value name="words" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_words">words</value>
-      <value name="sng" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_sng">sng</value>
-      <value name="dbl" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dbl">dbl</value>
-      <value name="heavy" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_heavy">heavy</value>
-      <value name="dotted" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotted">dotted</value>
-      <value name="dottedHeavy" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dottedHeavy">dottedHeavy</value>
-      <value name="dash" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dash">dash</value>
-      <value name="dashHeavy" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dashHeavy">dashHeavy</value>
-      <value name="dashLong" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dashLong">dashLong</value>
-      <value name="dashLongHeavy" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dashLongHeavy">dashLongHeavy</value>
-      <value name="dotDash" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotDash">dotDash</value>
-      <value name="dotDashHeavy" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotDashHeavy">dotDashHeavy</value>
-      <value name="dotDotDash" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotDotDash">dotDotDash</value>
-      <value name="dotDotDashHeavy" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotDotDashHeavy">dotDotDashHeavy</value>
-      <value name="wavy" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_wavy">wavy</value>
-      <value name="wavyHeavy" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_wavyHeavy">wavyHeavy</value>
-      <value name="wavyDbl" tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_wavyDbl">wavyDbl</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_none">none</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_words">words</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_sng">sng</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dbl">dbl</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_heavy">heavy</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotted">dotted</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dottedHeavy">dottedHeavy</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dash">dash</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dashHeavy">dashHeavy</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dashLong">dashLong</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dashLongHeavy">dashLongHeavy</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotDash">dotDash</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotDashHeavy">dotDashHeavy</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotDotDash">dotDotDash</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_dotDotDashHeavy">dotDotDashHeavy</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_wavy">wavy</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_wavyHeavy">wavyHeavy</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextUnderlineType_wavyDbl">wavyDbl</value>
     </resource>
     <resource name="ST_TextStrikeType" resource="List">
-      <value name="noStrike" tokenid="ooxml:Value_drawingml_ST_TextStrikeType_noStrike">noStrike</value>
-      <value name="sngStrike" tokenid="ooxml:Value_drawingml_ST_TextStrikeType_sngStrike">sngStrike</value>
-      <value name="dblStrike" tokenid="ooxml:Value_drawingml_ST_TextStrikeType_dblStrike">dblStrike</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextStrikeType_noStrike">noStrike</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextStrikeType_sngStrike">sngStrike</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextStrikeType_dblStrike">dblStrike</value>
     </resource>
     <resource name="ST_TextCapsType" resource="List">
-      <value name="none" tokenid="ooxml:Value_drawingml_ST_TextCapsType_none">none</value>
-      <value name="small" tokenid="ooxml:Value_drawingml_ST_TextCapsType_small">small</value>
-      <value name="all" tokenid="ooxml:Value_drawingml_ST_TextCapsType_all">all</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextCapsType_none">none</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextCapsType_small">small</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextCapsType_all">all</value>
     </resource>
   </namespace>
   <namespace name="dml-shapeEffects" file="dml-shapeEffects.rng">
@@ -2139,38 +2139,38 @@
       </define>
     </grammar>
     <resource name="ST_PresetShadowVal" resource="List">
-      <value name="shdw1" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw1">shdw1</value>
-      <value name="shdw2" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw2">shdw2</value>
-      <value name="shdw3" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw3">shdw3</value>
-      <value name="shdw4" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw4">shdw4</value>
-      <value name="shdw5" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw5">shdw5</value>
-      <value name="shdw6" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw6">shdw6</value>
-      <value name="shdw7" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw7">shdw7</value>
-      <value name="shdw8" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw8">shdw8</value>
-      <value name="shdw9" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw9">shdw9</value>
-      <value name="shdw10" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw10">shdw10</value>
-      <value name="shdw11" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw11">shdw11</value>
-      <value name="shdw12" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw12">shdw12</value>
-      <value name="shdw13" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw13">shdw13</value>
-      <value name="shdw14" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw14">shdw14</value>
-      <value name="shdw15" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw15">shdw15</value>
-      <value name="shdw16" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw16">shdw16</value>
-      <value name="shdw17" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw17">shdw17</value>
-      <value name="shdw18" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw18">shdw18</value>
-      <value name="shdw19" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw19">shdw19</value>
-      <value name="shdw20" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw20">shdw20</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw1">shdw1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw2">shdw2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw3">shdw3</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw4">shdw4</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw5">shdw5</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw6">shdw6</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw7">shdw7</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw8">shdw8</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw9">shdw9</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw10">shdw10</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw11">shdw11</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw12">shdw12</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw13">shdw13</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw14">shdw14</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw15">shdw15</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw16">shdw16</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw17">shdw17</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw18">shdw18</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw19">shdw19</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw20">shdw20</value>
     </resource>
     <resource name="CT_SolidColorFillProperties" resource="Properties"/>
     <resource name="ST_PathShadeType" resource="List">
-      <value name="shape" tokenid="ooxml:Value_drawingml_ST_PathShadeType_shape">shape</value>
-      <value name="circle" tokenid="ooxml:Value_drawingml_ST_PathShadeType_circle">circle</value>
-      <value name="rect" tokenid="ooxml:Value_drawingml_ST_PathShadeType_rect">rect</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PathShadeType_shape">shape</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PathShadeType_circle">circle</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PathShadeType_rect">rect</value>
     </resource>
     <resource name="ST_TileFlipMode" resource="List">
-      <value name="none" tokenid="ooxml:Value_drawingml_ST_TileFlipMode_none">none</value>
-      <value name="x" tokenid="ooxml:Value_drawingml_ST_TileFlipMode_x">x</value>
-      <value name="y" tokenid="ooxml:Value_drawingml_ST_TileFlipMode_y">y</value>
-      <value name="xy" tokenid="ooxml:Value_drawingml_ST_TileFlipMode_xy">xy</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TileFlipMode_none">none</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TileFlipMode_x">x</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TileFlipMode_y">y</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TileFlipMode_xy">xy</value>
     </resource>
     <resource name="CT_GradientStop" resource="Properties">
       <attribute name="pos" tokenid="ooxml:CT_GradientStop_pos"/>
@@ -2191,11 +2191,11 @@
       <element name="stretch" tokenid="ooxml:EG_FillModeProperties_stretch"/>
     </resource>
     <resource name="ST_BlipCompression" resource="List">
-      <value name="email" tokenid="ooxml:Value_drawingml_ST_BlipCompression_email">email</value>
-      <value name="screen" tokenid="ooxml:Value_drawingml_ST_BlipCompression_screen">screen</value>
-      <value name="print" tokenid="ooxml:Value_drawingml_ST_BlipCompression_print">print</value>
-      <value name="hqprint" tokenid="ooxml:Value_drawingml_ST_BlipCompression_hqprint">hqprint</value>
-      <value name="none" tokenid="ooxml:Value_drawingml_ST_BlipCompression_none">none</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlipCompression_email">email</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlipCompression_screen">screen</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlipCompression_print">print</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlipCompression_hqprint">hqprint</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlipCompression_none">none</value>
     </resource>
     <resource name="CT_Blip" resource="Properties">
       <element name="alphaBiLevel" tokenid="ooxml:CT_Blip_alphaBiLevel"/>
@@ -2225,67 +2225,67 @@
       <attribute name="rotWithShape" tokenid="ooxml:CT_BlipFillProperties_rotWithShape"/>
     </resource>
     <resource name="ST_PresetPatternVal" resource="List">
-      <value name="pct5" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct5">pct5</value>
-      <value name="pct10" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct10">pct10</value>
-      <value name="pct20" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct20">pct20</value>
-      <value name="pct25" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct25">pct25</value>
-      <value name="pct30" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct30">pct30</value>
-      <value name="pct40" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct40">pct40</value>
-      <value name="pct50" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct50">pct50</value>
-      <value name="pct60" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct60">pct60</value>
-      <value name="pct70" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct70">pct70</value>
-      <value name="pct75" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct75">pct75</value>
-      <value name="pct80" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct80">pct80</value>
-      <value name="pct90" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct90">pct90</value>
-      <value name="horz" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_horz">horz</value>
-      <value name="vert" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_vert">vert</value>
-      <value name="ltHorz" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_ltHorz">ltHorz</value>
-      <value name="ltVert" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_ltVert">ltVert</value>
-      <value name="dkHorz" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dkHorz">dkHorz</value>
-      <value name="dkVert" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dkVert">dkVert</value>
-      <value name="narHorz" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_narHorz">narHorz</value>
-      <value name="narVert" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_narVert">narVert</value>
-      <value name="dashHorz" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dashHorz">dashHorz</value>
-      <value name="dashVert" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dashVert">dashVert</value>
-      <value name="cross" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_cross">cross</value>
-      <value name="dnDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dnDiag">dnDiag</value>
-      <value name="upDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_upDiag">upDiag</value>
-      <value name="ltDnDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_ltDnDiag">ltDnDiag</value>
-      <value name="ltUpDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_ltUpDiag">ltUpDiag</value>
-      <value name="dkDnDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dkDnDiag">dkDnDiag</value>
-      <value name="dkUpDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dkUpDiag">dkUpDiag</value>
-      <value name="wdDnDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_wdDnDiag">wdDnDiag</value>
-      <value name="wdUpDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_wdUpDiag">wdUpDiag</value>
-      <value name="dashDnDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dashDnDiag">dashDnDiag</value>
-      <value name="dashUpDiag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dashUpDiag">dashUpDiag</value>
-      <value name="diagCross" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_diagCross">diagCross</value>
-      <value name="smCheck" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_smCheck">smCheck</value>
-      <value name="lgCheck" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_lgCheck">lgCheck</value>
-      <value name="smGrid" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_smGrid">smGrid</value>
-      <value name="lgGrid" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_lgGrid">lgGrid</value>
-      <value name="dotGrid" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dotGrid">dotGrid</value>
-      <value name="smConfetti" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_smConfetti">smConfetti</value>
-      <value name="lgConfetti" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_lgConfetti">lgConfetti</value>
-      <value name="horzBrick" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_horzBrick">horzBrick</value>
-      <value name="diagBrick" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_diagBrick">diagBrick</value>
-      <value name="solidDmnd" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_solidDmnd">solidDmnd</value>
-      <value name="openDmnd" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_openDmnd">openDmnd</value>
-      <value name="dotDmnd" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dotDmnd">dotDmnd</value>
-      <value name="plaid" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_plaid">plaid</value>
-      <value name="sphere" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_sphere">sphere</value>
-      <value name="weave" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_weave">weave</value>
-      <value name="divot" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_divot">divot</value>
-      <value name="shingle" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_shingle">shingle</value>
-      <value name="wave" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_wave">wave</value>
-      <value name="trellis" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_trellis">trellis</value>
-      <value name="zigZag" tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_zigZag">zigZag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct5">pct5</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct10">pct10</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct20">pct20</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct25">pct25</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct30">pct30</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct40">pct40</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct50">pct50</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct60">pct60</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct70">pct70</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct75">pct75</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct80">pct80</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_pct90">pct90</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_horz">horz</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_vert">vert</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_ltHorz">ltHorz</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_ltVert">ltVert</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dkHorz">dkHorz</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dkVert">dkVert</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_narHorz">narHorz</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_narVert">narVert</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dashHorz">dashHorz</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dashVert">dashVert</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_cross">cross</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dnDiag">dnDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_upDiag">upDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_ltDnDiag">ltDnDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_ltUpDiag">ltUpDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dkDnDiag">dkDnDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dkUpDiag">dkUpDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_wdDnDiag">wdDnDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_wdUpDiag">wdUpDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dashDnDiag">dashDnDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dashUpDiag">dashUpDiag</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_diagCross">diagCross</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_smCheck">smCheck</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_lgCheck">lgCheck</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_smGrid">smGrid</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_lgGrid">lgGrid</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dotGrid">dotGrid</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_smConfetti">smConfetti</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_lgConfetti">lgConfetti</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_horzBrick">horzBrick</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_diagBrick">diagBrick</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_solidDmnd">solidDmnd</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_openDmnd">openDmnd</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_dotDmnd">dotDmnd</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_plaid">plaid</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_sphere">sphere</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_weave">weave</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_divot">divot</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_shingle">shingle</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_wave">wave</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_trellis">trellis</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetPatternVal_zigZag">zigZag</value>
     </resource>
     <resource name="ST_BlendMode" resource="List">
-      <value name="over" tokenid="ooxml:Value_drawingml_ST_BlendMode_over">over</value>
-      <value name="mult" tokenid="ooxml:Value_drawingml_ST_BlendMode_mult">mult</value>
-      <value name="screen" tokenid="ooxml:Value_drawingml_ST_BlendMode_screen">screen</value>
-      <value name="darken" tokenid="ooxml:Value_drawingml_ST_BlendMode_darken">darken</value>
-      <value name="lighten" tokenid="ooxml:Value_drawingml_ST_BlendMode_lighten">lighten</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlendMode_over">over</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlendMode_mult">mult</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlendMode_screen">screen</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlendMode_darken">darken</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlendMode_lighten">lighten</value>
     </resource>
     <resource name="EG_Effect" resource="Properties">
       <element name="cont" tokenid="ooxml:EG_Effect_cont"/>
@@ -2320,8 +2320,8 @@
       <element name="xfrm" tokenid="ooxml:EG_Effect_xfrm"/>
     </resource>
     <resource name="ST_EffectContainerType" resource="List">
-      <value name="sib" tokenid="ooxml:Value_drawingml_ST_EffectContainerType_sib">sib</value>
-      <value name="tree" tokenid="ooxml:Value_drawingml_ST_EffectContainerType_tree">tree</value>
+      <value tokenid="ooxml:Value_drawingml_ST_EffectContainerType_sib">sib</value>
+      <value tokenid="ooxml:Value_drawingml_ST_EffectContainerType_tree">tree</value>
     </resource>
     <resource name="CT_EffectContainer" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_EffectContainer_type"/>
@@ -2538,22 +2538,22 @@
       </define>
     </grammar>
     <resource name="ST_LineEndType" resource="List">
-      <value name="none" tokenid="ooxml:Value_drawingml_ST_LineEndType_none">none</value>
-      <value name="triangle" tokenid="ooxml:Value_drawingml_ST_LineEndType_triangle">triangle</value>
-      <value name="stealth" tokenid="ooxml:Value_drawingml_ST_LineEndType_stealth">stealth</value>
-      <value name="diamond" tokenid="ooxml:Value_drawingml_ST_LineEndType_diamond">diamond</value>
-      <value name="oval" tokenid="ooxml:Value_drawingml_ST_LineEndType_oval">oval</value>
-      <value name="arrow" tokenid="ooxml:Value_drawingml_ST_LineEndType_arrow">arrow</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndType_none">none</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndType_triangle">triangle</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndType_stealth">stealth</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndType_diamond">diamond</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndType_oval">oval</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndType_arrow">arrow</value>
     </resource>
     <resource name="ST_LineEndWidth" resource="List">
-      <value name="sm" tokenid="ooxml:Value_drawingml_ST_LineEndWidth_sm">sm</value>
-      <value name="med" tokenid="ooxml:Value_drawingml_ST_LineEndWidth_med">med</value>
-      <value name="lg" tokenid="ooxml:Value_drawingml_ST_LineEndWidth_lg">lg</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndWidth_sm">sm</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndWidth_med">med</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndWidth_lg">lg</value>
     </resource>
     <resource name="ST_LineEndLength" resource="List">
-      <value name="sm" tokenid="ooxml:Value_drawingml_ST_LineEndLength_sm">sm</value>
-      <value name="med" tokenid="ooxml:Value_drawingml_ST_LineEndLength_med">med</value>
-      <value name="lg" tokenid="ooxml:Value_drawingml_ST_LineEndLength_lg">lg</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndLength_sm">sm</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndLength_med">med</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineEndLength_lg">lg</value>
     </resource>
     <resource name="CT_LineEndProperties" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_LineEndProperties_type"/>
@@ -2567,33 +2567,33 @@
       <element name="pattFill" tokenid="ooxml:EG_LineFillProperties_pattFill"/>
     </resource>
     <resource name="ST_PresetLineDashVal" resource="List">
-      <value name="solid" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_solid">solid</value>
-      <value name="dot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_dot">dot</value>
-      <value name="dash" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_dash">dash</value>
-      <value name="lgDash" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_lgDash">lgDash</value>
-      <value name="dashDot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_dashDot">dashDot</value>
-      <value name="lgDashDot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_lgDashDot">lgDashDot</value>
-      <value name="lgDashDotDot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_lgDashDotDot">lgDashDotDot</value>
-      <value name="sysDash" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDash">sysDash</value>
-      <value name="sysDot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDot">sysDot</value>
-      <value name="sysDashDot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDashDot">sysDashDot</value>
-      <value name="sysDashDotDot" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDashDotDot">sysDashDotDot</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_solid">solid</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_dot">dot</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_dash">dash</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_lgDash">lgDash</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_dashDot">dashDot</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_lgDashDot">lgDashDot</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_lgDashDotDot">lgDashDotDot</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDash">sysDash</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDot">sysDot</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDashDot">sysDashDot</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_sysDashDotDot">sysDashDotDot</value>
     </resource>
     <resource name="ST_LineCap" resource="List">
-      <value name="rnd" tokenid="ooxml:Value_drawingml_ST_LineCap_rnd">rnd</value>
-      <value name="sq" tokenid="ooxml:Value_drawingml_ST_LineCap_sq">sq</value>
-      <value name="flat" tokenid="ooxml:Value_drawingml_ST_LineCap_flat">flat</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineCap_rnd">rnd</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineCap_sq">sq</value>
+      <value tokenid="ooxml:Value_drawingml_ST_LineCap_flat">flat</value>
     </resource>
     <resource name="ST_PenAlignment" resource="List">
-      <value name="ctr" tokenid="ooxml:Value_drawingml_ST_PenAlignment_ctr">ctr</value>
-      <value name="in" tokenid="ooxml:Value_drawingml_ST_PenAlignment_in">in</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PenAlignment_ctr">ctr</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PenAlignment_in">in</value>
     </resource>
     <resource name="ST_CompoundLine" resource="List">
-      <value name="sng" tokenid="ooxml:Value_drawingml_ST_CompoundLine_sng">sng</value>
-      <value name="dbl" tokenid="ooxml:Value_drawingml_ST_CompoundLine_dbl">dbl</value>
-      <value name="thickThin" tokenid="ooxml:Value_drawingml_ST_CompoundLine_thickThin">thickThin</value>
-      <value name="thinThick" tokenid="ooxml:Value_drawingml_ST_CompoundLine_thinThick">thinThick</value>
-      <value name="tri" tokenid="ooxml:Value_drawingml_ST_CompoundLine_tri">tri</value>
+      <value tokenid="ooxml:Value_drawingml_ST_CompoundLine_sng">sng</value>
+      <value tokenid="ooxml:Value_drawingml_ST_CompoundLine_dbl">dbl</value>
+      <value tokenid="ooxml:Value_drawingml_ST_CompoundLine_thickThin">thickThin</value>
+      <value tokenid="ooxml:Value_drawingml_ST_CompoundLine_thinThick">thinThick</value>
+      <value tokenid="ooxml:Value_drawingml_ST_CompoundLine_tri">tri</value>
     </resource>
     <resource name="CT_LineProperties" resource="Properties">
       <element name="headEnd" tokenid="ooxml:CT_LineProperties_headEnd"/>
@@ -3589,59 +3589,59 @@
       <attribute name="lum" tokenid="ooxml:CT_HslColor_lum"/>
     </resource>
     <resource name="ST_SystemColorVal" resource="List">
-      <value name="scrollBar" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_scrollBar">scrollBar</value>
-      <value name="background" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_background">background</value>
-      <value name="activeCaption" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_activeCaption">activeCaption</value>
-      <value name="inactiveCaption" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_inactiveCaption">inactiveCaption</value>
-      <value name="menu" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menu">menu</value>
-      <value name="window" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_window">window</value>
-      <value name="windowFrame" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_windowFrame">windowFrame</value>
-      <value name="menuText" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menuText">menuText</value>
-      <value name="windowText" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_windowText">windowText</value>
-      <value name="captionText" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_captionText">captionText</value>
-      <value name="activeBorder" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_activeBorder">activeBorder</value>
-      <value name="inactiveBorder" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_inactiveBorder">inactiveBorder</value>
-      <value name="appWorkspace" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_appWorkspace">appWorkspace</value>
-      <value name="highlight" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_highlight">highlight</value>
-      <value name="highlightText" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_highlightText">highlightText</value>
-      <value name="btnFace" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_btnFace">btnFace</value>
-      <value name="btnShadow" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_btnShadow">btnShadow</value>
-      <value name="grayText" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_grayText">grayText</value>
-      <value name="btnText" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_btnText">btnText</value>
-      <value name="inactiveCaptionText" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_inactiveCaptionText">inactiveCaptionText</value>
-      <value name="btnHighlight" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_btnHighlight">btnHighlight</value>
-      <value name="3dDkShadow" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_3dDkShadow">3dDkShadow</value>
-      <value name="3dLight" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_3dLight">3dLight</value>
-      <value name="infoText" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_infoText">infoText</value>
-      <value name="infoBk" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_infoBk">infoBk</value>
-      <value name="hotLight" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_hotLight">hotLight</value>
-      <value name="gradientActiveCaption" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_gradientActiveCaption">gradientActiveCaption</value>
-      <value name="gradientInactiveCaption" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_gradientInactiveCaption">gradientInactiveCaption</value>
-      <value name="menuHighlight" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menuHighlight">menuHighlight</value>
-      <value name="menuBar" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menuBar">menuBar</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_scrollBar">scrollBar</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_background">background</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_activeCaption">activeCaption</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_inactiveCaption">inactiveCaption</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menu">menu</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_window">window</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_windowFrame">windowFrame</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menuText">menuText</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_windowText">windowText</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_captionText">captionText</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_activeBorder">activeBorder</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_inactiveBorder">inactiveBorder</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_appWorkspace">appWorkspace</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_highlight">highlight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_highlightText">highlightText</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_btnFace">btnFace</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_btnShadow">btnShadow</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_grayText">grayText</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_btnText">btnText</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_inactiveCaptionText">inactiveCaptionText</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_btnHighlight">btnHighlight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_3dDkShadow">3dDkShadow</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_3dLight">3dLight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_infoText">infoText</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_infoBk">infoBk</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_hotLight">hotLight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_gradientActiveCaption">gradientActiveCaption</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_gradientInactiveCaption">gradientInactiveCaption</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menuHighlight">menuHighlight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menuBar">menuBar</value>
     </resource>
     <resource name="CT_SystemColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SystemColor_val"/>
       <attribute name="lastClr" tokenid="ooxml:CT_SytemColor_lastClr"/>
     </resource>
     <resource name="ST_SchemeColorVal" resource="List">
-      <value name="bg1" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_bg1">bg1</value>
-      <value name="tx1" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_tx1">tx1</value>
-      <value name="bg2" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_bg2">bg2</value>
-      <value name="tx2" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_tx2">tx2</value>
-      <value name="accent1" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent1">accent1</value>
-      <value name="accent2" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent2">accent2</value>
-      <value name="accent3" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent3">accent3</value>
-      <value name="accent4" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent4">accent4</value>
-      <value name="accent5" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent5">accent5</value>
-      <value name="accent6" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent6">accent6</value>
-      <value name="hlink" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_hlink">hlink</value>
-      <value name="folHlink" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_folHlink">folHlink</value>
-      <value name="phClr" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_phClr">phClr</value>
-      <value name="dk1" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_dk1">dk1</value>
-      <value name="lt1" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_lt1">lt1</value>
-      <value name="dk2" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_dk2">dk2</value>
-      <value name="lt2" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_lt2">lt2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_bg1">bg1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_tx1">tx1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_bg2">bg2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_tx2">tx2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent1">accent1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent2">accent2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent3">accent3</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent4">accent4</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent5">accent5</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_accent6">accent6</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_hlink">hlink</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_folHlink">folHlink</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_phClr">phClr</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_dk1">dk1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_lt1">lt1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_dk2">dk2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_lt2">lt2</value>
     </resource>
     <resource name="CT_SchemeColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SchemeColor_val"/>
@@ -3799,15 +3799,15 @@
       <attribute name="flipV" tokenid="ooxml:CT_Transform2D_flipV"/>
     </resource>
     <resource name="ST_RectAlignment" resource="List">
-      <value name="tl" tokenid="ooxml:Value_drawingml_ST_RectAlignment_tl">tl</value>
-      <value name="t" tokenid="ooxml:Value_drawingml_ST_RectAlignment_t">t</value>
-      <value name="tr" tokenid="ooxml:Value_drawingml_ST_RectAlignment_tr">tr</value>
-      <value name="l" tokenid="ooxml:Value_drawingml_ST_RectAlignment_l">l</value>
-      <value name="ctr" tokenid="ooxml:Value_drawingml_ST_RectAlignment_ctr">ctr</value>
-      <value name="r" tokenid="ooxml:Value_drawingml_ST_RectAlignment_r">r</value>
-      <value name="bl" tokenid="ooxml:Value_drawingml_ST_RectAlignment_bl">bl</value>
-      <value name="b" tokenid="ooxml:Value_drawingml_ST_RectAlignment_b">b</value>
-      <value name="br" tokenid="ooxml:Value_drawingml_ST_RectAlignment_br">br</value>
+      <value tokenid="ooxml:Value_drawingml_ST_RectAlignment_tl">tl</value>
+      <value tokenid="ooxml:Value_drawingml_ST_RectAlignment_t">t</value>
+      <value tokenid="ooxml:Value_drawingml_ST_RectAlignment_tr">tr</value>
+      <value tokenid="ooxml:Value_drawingml_ST_RectAlignment_l">l</value>
+      <value tokenid="ooxml:Value_drawingml_ST_RectAlignment_ctr">ctr</value>
+      <value tokenid="ooxml:Value_drawingml_ST_RectAlignment_r">r</value>
+      <value tokenid="ooxml:Value_drawingml_ST_RectAlignment_bl">bl</value>
+      <value tokenid="ooxml:Value_drawingml_ST_RectAlignment_b">b</value>
+      <value tokenid="ooxml:Value_drawingml_ST_RectAlignment_br">br</value>
     </resource>
     <resource name="EG_ColorChoice" resource="Properties">
       <element name="scrgbClr" tokenid="ooxml:EG_ColorChoice_scrgbClr"/>
@@ -3820,17 +3820,17 @@
     <resource name="CT_Color" resource="Properties"/>
     <resource name="CT_ColorMRU" resource="Properties"/>
     <resource name="ST_BlackWhiteMode" resource="List">
-      <value name="clr" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_clr">clr</value>
-      <value name="auto" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_auto">auto</value>
-      <value name="gray" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_gray">gray</value>
-      <value name="ltGray" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_ltGray">ltGray</value>
-      <value name="invGray" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_invGray">invGray</value>
-      <value name="grayWhite" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_grayWhite">grayWhite</value>
-      <value name="blackGray" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_blackGray">blackGray</value>
-      <value name="blackWhite" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_blackWhite">blackWhite</value>
-      <value name="black" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_black">black</value>
-      <value name="white" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_white">white</value>
-      <value name="hidden" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_hidden">hidden</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_clr">clr</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_auto">auto</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_gray">gray</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_ltGray">ltGray</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_invGray">invGray</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_grayWhite">grayWhite</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_blackGray">blackGray</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_blackWhite">blackWhite</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_black">black</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_white">white</value>
+      <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_hidden">hidden</value>
     </resource>
     <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="AG_Blob" resource="Properties">
       <attribute name="r:embed" tokenid="ooxml:AG_Blob_r_embed"/>
@@ -4160,20 +4160,20 @@
       </define>
     </grammar>
     <resource name="ST_SizeRelFromH" resource="List">
-      <value name="margin" tokenid="ooxml:ST_SizeRelFromH_margin">margin</value>
-      <value name="page" tokenid="ooxml:ST_SizeRelFromH_page">page</value>
-      <value name="leftMargin" tokenid="ooxml:ST_SizeRelFromH_leftMargin">leftMargin</value>
-      <value name="rightMargin" tokenid="ooxml:ST_SizeRelFromH_rightMargin">rightMargin</value>
-      <value name="insideMargin" tokenid="ooxml:ST_SizeRelFromH_insideMargin">insideMargin</value>
-      <value name="outsideMargin" tokenid="ooxml:ST_SizeRelFromH_outsideMargin">outsideMargin</value>
+      <value tokenid="ooxml:ST_SizeRelFromH_margin">margin</value>
+      <value tokenid="ooxml:ST_SizeRelFromH_page">page</value>
+      <value tokenid="ooxml:ST_SizeRelFromH_leftMargin">leftMargin</value>
+      <value tokenid="ooxml:ST_SizeRelFromH_rightMargin">rightMargin</value>
+      <value tokenid="ooxml:ST_SizeRelFromH_insideMargin">insideMargin</value>
+      <value tokenid="ooxml:ST_SizeRelFromH_outsideMargin">outsideMargin</value>
     </resource>
     <resource name="ST_SizeRelFromV" resource="List">
-      <value name="margin" tokenid="ooxml:ST_SizeRelFromV_margin">margin</value>
-      <value name="page" tokenid="ooxml:ST_SizeRelFromV_page">page</value>
-      <value name="topMargin" tokenid="ooxml:ST_SizeRelFromV_topMargin">topMargin</value>
-      <value name="bottomMargin" tokenid="ooxml:ST_SizeRelFromV_bottomMargin">bottomMargin</value>
-      <value name="insideMargin" tokenid="ooxml:ST_SizeRelFromV_insideMargin">insideMargin</value>
-      <value name="outsideMargin" tokenid="ooxml:ST_SizeRelFromV_outsideMargin">outsideMargin</value>
+      <value tokenid="ooxml:ST_SizeRelFromV_margin">margin</value>
+      <value tokenid="ooxml:ST_SizeRelFromV_page">page</value>
+      <value tokenid="ooxml:ST_SizeRelFromV_topMargin">topMargin</value>
+      <value tokenid="ooxml:ST_SizeRelFromV_bottomMargin">bottomMargin</value>
+      <value tokenid="ooxml:ST_SizeRelFromV_insideMargin">insideMargin</value>
+      <value tokenid="ooxml:ST_SizeRelFromV_outsideMargin">outsideMargin</value>
     </resource>
     <resource name="CT_SizeRelH" resource="Properties">
       <element name="pctWidth" tokenid="ooxml:CT_SizeRelH_pctWidth"/>
@@ -4973,238 +4973,238 @@
       <element name="uncheckedState" tokenid="ooxml:CT_SdtCheckbox_uncheckedState">uncheckedState</element>
     </resource>
     <resource name="ST_SchemeColorVal" resource="List">
-      <value name="bg1" tokenid="ooxml:ST_SchemeColorVal_bg1">bg1</value>
-      <value name="tx1" tokenid="ooxml:ST_SchemeColorVal_tx1">tx1</value>
-      <value name="bg2" tokenid="ooxml:ST_SchemeColorVal_bg2">bg2</value>
-      <value name="tx2" tokenid="ooxml:ST_SchemeColorVal_tx2">tx2</value>
-      <value name="accent1" tokenid="ooxml:ST_SchemeColorVal_accent1">accent1</value>
-      <value name="accent2" tokenid="ooxml:ST_SchemeColorVal_accent2">accent2</value>
-      <value name="accent3" tokenid="ooxml:ST_SchemeColorVal_accent3">accent3</value>
-      <value name="accent4" tokenid="ooxml:ST_SchemeColorVal_accent4">accent4</value>
-      <value name="accent5" tokenid="ooxml:ST_SchemeColorVal_accent5">accent5</value>
-      <value name="accent6" tokenid="ooxml:ST_SchemeColorVal_accent6">accent6</value>
-      <value name="hlink" tokenid="ooxml:ST_SchemeColorVal_hlink">hlink</value>
-      <value name="folHlink" tokenid="ooxml:ST_SchemeColorVal_folHlink">folHlink</value>
-      <value name="dk1" tokenid="ooxml:ST_SchemeColorVal_dk1">dk1</value>
-      <value name="lt1" tokenid="ooxml:ST_SchemeColorVal_lt1">lt1</value>
-      <value name="dk2" tokenid="ooxml:ST_SchemeColorVal_dk2">dk2</value>
-      <value name="lt2" tokenid="ooxml:ST_SchemeColorVal_lt2">lt2</value>
-      <value name="phClr" tokenid="ooxml:ST_SchemeColorVal_phClr">phClr</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_bg1">bg1</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_tx1">tx1</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_bg2">bg2</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_tx2">tx2</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_accent1">accent1</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_accent2">accent2</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_accent3">accent3</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_accent4">accent4</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_accent5">accent5</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_accent6">accent6</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_hlink">hlink</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_folHlink">folHlink</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_dk1">dk1</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_lt1">lt1</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_dk2">dk2</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_lt2">lt2</value>
+      <value tokenid="ooxml:ST_SchemeColorVal_phClr">phClr</value>
     </resource>
     <resource name="ST_RectAlignment" resource="List">
-      <value name="none" tokenid="ooxml:ST_RectAlignment_none">none</value>
-      <value name="tl" tokenid="ooxml:ST_RectAlignment_tl">tl</value>
-      <value name="t" tokenid="ooxml:ST_RectAlignment_t">t</value>
-      <value name="tr" tokenid="ooxml:ST_RectAlignment_tr">tr</value>
-      <value name="l" tokenid="ooxml:ST_RectAlignment_l">l</value>
-      <value name="ctr" tokenid="ooxml:ST_RectAlignment_ctr">ctr</value>
-      <value name="r" tokenid="ooxml:ST_RectAlignment_r">r</value>
-      <value name="bl" tokenid="ooxml:ST_RectAlignment_bl">bl</value>
-      <value name="b" tokenid="ooxml:ST_RectAlignment_b">b</value>
-      <value name="br" tokenid="ooxml:ST_RectAlignment_br">br</value>
+      <value tokenid="ooxml:ST_RectAlignment_none">none</value>
+      <value tokenid="ooxml:ST_RectAlignment_tl">tl</value>
+      <value tokenid="ooxml:ST_RectAlignment_t">t</value>
+      <value tokenid="ooxml:ST_RectAlignment_tr">tr</value>
+      <value tokenid="ooxml:ST_RectAlignment_l">l</value>
+      <value tokenid="ooxml:ST_RectAlignment_ctr">ctr</value>
+      <value tokenid="ooxml:ST_RectAlignment_r">r</value>
+      <value tokenid="ooxml:ST_RectAlignment_bl">bl</value>
+      <value tokenid="ooxml:ST_RectAlignment_b">b</value>
+      <value tokenid="ooxml:ST_RectAlignment_br">br</value>
     </resource>
     <resource name="ST_LineCap" resource="List">
-      <value name="rnd" tokenid="ooxml:ST_LineCap_rnd">rnd</value>
-      <value name="sq" tokenid="ooxml:ST_LineCap_sq">sq</value>
-      <value name="flat" tokenid="ooxml:ST_LineCap_flat">flat</value>
+      <value tokenid="ooxml:ST_LineCap_rnd">rnd</value>
+      <value tokenid="ooxml:ST_LineCap_sq">sq</value>
+      <value tokenid="ooxml:ST_LineCap_flat">flat</value>
     </resource>
     <resource name="ST_CompoundLine" resource="List">
-      <value name="sng" tokenid="ooxml:ST_CompoundLine_sng">sng</value>
-      <value name="dbl" tokenid="ooxml:ST_CompoundLine_dbl">dbl</value>
-      <value name="thickThin" tokenid="ooxml:ST_CompoundLine_thickThin">thickThin</value>
-      <value name="thinThick" tokenid="ooxml:ST_CompoundLine_thinThick">thinThick</value>
-      <value name="tri" tokenid="ooxml:ST_CompoundLine_tri">tri</value>
+      <value tokenid="ooxml:ST_CompoundLine_sng">sng</value>
+      <value tokenid="ooxml:ST_CompoundLine_dbl">dbl</value>
+      <value tokenid="ooxml:ST_CompoundLine_thickThin">thickThin</value>
+      <value tokenid="ooxml:ST_CompoundLine_thinThick">thinThick</value>
+      <value tokenid="ooxml:ST_CompoundLine_tri">tri</value>
     </resource>
     <resource name="ST_PenAlignment" resource="List">
-      <value name="ctr" tokenid="ooxml:ST_PenAlignment_ctr">ctr</value>
-      <value name="in" tokenid="ooxml:ST_PenAlignment_in">in</value>
+      <value tokenid="ooxml:ST_PenAlignment_ctr">ctr</value>
+      <value tokenid="ooxml:ST_PenAlignment_in">in</value>
     </resource>
     <resource name="ST_OnOff" resource="List">
-      <value name="true" tokenid="ooxml:ST_OnOff_true">true</value>
-      <value name="false" tokenid="ooxml:ST_OnOff_false">false</value>
-      <value name="0" tokenid="ooxml:ST_OnOff_0">0</value>
-      <value name="1" tokenid="ooxml:ST_OnOff_1">1</value>
+      <value tokenid="ooxml:ST_OnOff_true">true</value>
+      <value tokenid="ooxml:ST_OnOff_false">false</value>
+      <value tokenid="ooxml:ST_OnOff_0">0</value>
+      <value tokenid="ooxml:ST_OnOff_1">1</value>
     </resource>
     <resource name="ST_PathShadeType" resource="List">
-      <value name="shape" tokenid="ooxml:ST_PathShadeType_shape">shape</value>
-      <value name="circle" tokenid="ooxml:ST_PathShadeType_circle">circle</value>
-      <value name="rect" tokenid="ooxml:ST_PathShadeType_rect">rect</value>
+      <value tokenid="ooxml:ST_PathShadeType_shape">shape</value>
+      <value tokenid="ooxml:ST_PathShadeType_circle">circle</value>
+      <value tokenid="ooxml:ST_PathShadeType_rect">rect</value>
     </resource>
     <resource name="ST_PresetLineDashVal" resource="List">
-      <value name="solid" tokenid="ooxml:ST_PresetLineDashVal_solid">solid</value>
-      <value name="dot" tokenid="ooxml:ST_PresetLineDashVal_dot">dot</value>
-      <value name="sysDot" tokenid="ooxml:ST_PresetLineDashVal_sysDot">sysDot</value>
-      <value name="dash" tokenid="ooxml:ST_PresetLineDashVal_dash">dash</value>
-      <value name="sysDash" tokenid="ooxml:ST_PresetLineDashVal_sysDash">sysDash</value>
-      <value name="lgDash" tokenid="ooxml:ST_PresetLineDashVal_lgDash">lgDash</value>
-      <value name="dashDot" tokenid="ooxml:ST_PresetLineDashVal_dashDot">dashDot</value>
-      <value name="sysDashDot" tokenid="ooxml:ST_PresetLineDashVal_sysDashDot">sysDashDot</value>
-      <value name="lgDashDot" tokenid="ooxml:ST_PresetLineDashVal_lgDashDot">lgDashDot</value>
-      <value name="lgDashDotDot" tokenid="ooxml:ST_PresetLineDashVal_lgDashDotDot">lgDashDotDot</value>
-      <value name="sysDashDotDot" tokenid="ooxml:ST_PresetLineDashVal_sysDashDotDot">sysDashDotDot</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_solid">solid</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_dot">dot</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_sysDot">sysDot</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_dash">dash</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_sysDash">sysDash</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_lgDash">lgDash</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_dashDot">dashDot</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_sysDashDot">sysDashDot</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_lgDashDot">lgDashDot</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_lgDashDotDot">lgDashDotDot</value>
+      <value tokenid="ooxml:ST_PresetLineDashVal_sysDashDotDot">sysDashDotDot</value>
     </resource>
     <resource name="ST_PresetCameraType" resource="List">
-      <value name="legacyObliqueTopLeft" tokenid="ooxml:ST_PresetCameraType_legacyObliqueTopLeft">legacyObliqueTopLeft</value>
-      <value name="legacyObliqueTop" tokenid="ooxml:ST_PresetCameraType_legacyObliqueTop">legacyObliqueTop</value>
-      <value name="legacyObliqueTopRight" tokenid="ooxml:ST_PresetCameraType_legacyObliqueTopRight">legacyObliqueTopRight</value>
-      <value name="legacyObliqueLeft" tokenid="ooxml:ST_PresetCameraType_legacyObliqueLeft">legacyObliqueLeft</value>
-      <value name="legacyObliqueFront" tokenid="ooxml:ST_PresetCameraType_legacyObliqueFront">legacyObliqueFront</value>
-      <value name="legacyObliqueRight" tokenid="ooxml:ST_PresetCameraType_legacyObliqueRight">legacyObliqueRight</value>
-      <value name="legacyObliqueBottomLeft" tokenid="ooxml:ST_PresetCameraType_legacyObliqueBottomLeft">legacyObliqueBottomLeft</value>
-      <value name="legacyObliqueBottom" tokenid="ooxml:ST_PresetCameraType_legacyObliqueBottom">legacyObliqueBottom</value>
-      <value name="legacyObliqueBottomRight" tokenid="ooxml:ST_PresetCameraType_legacyObliqueBottomRight">legacyObliqueBottomRight</value>
-      <value name="legacyPerspectiveTopLeft" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveTopLeft">legacyPerspectiveTopLeft</value>
-      <value name="legacyPerspectiveTop" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveTop">legacyPerspectiveTop</value>
-      <value name="legacyPerspectiveTopRight" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveTopRight">legacyPerspectiveTopRight</value>
-      <value name="legacyPerspectiveLeft" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveLeft">legacyPerspectiveLeft</value>
-      <value name="legacyPerspectiveFront" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveFront">legacyPerspectiveFront</value>
-      <value name="legacyPerspectiveRight" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveRight">legacyPerspectiveRight</value>
-      <value name="legacyPerspectiveBottomLeft" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveBottomLeft">legacyPerspectiveBottomLeft</value>
-      <value name="legacyPerspectiveBottom" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveBottom">legacyPerspectiveBottom</value>
-      <value name="legacyPerspectiveBottomRight" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveBottomRight">legacyPerspectiveBottomRight</value>
-      <value name="orthographicFront" tokenid="ooxml:ST_PresetCameraType_orthographicFront">orthographicFront</value>
-      <value name="isometricTopUp" tokenid="ooxml:ST_PresetCameraType_isometricTopUp">isometricTopUp</value>
-      <value name="isometricTopDown" tokenid="ooxml:ST_PresetCameraType_isometricTopDown">isometricTopDown</value>
-      <value name="isometricBottomUp" tokenid="ooxml:ST_PresetCameraType_isometricBottomUp">isometricBottomUp</value>
-      <value name="isometricBottomDown" tokenid="ooxml:ST_PresetCameraType_isometricBottomDown">isometricBottomDown</value>
-      <value name="isometricLeftUp" tokenid="ooxml:ST_PresetCameraType_isometricLeftUp">isometricLeftUp</value>
-      <value name="isometricLeftDown" tokenid="ooxml:ST_PresetCameraType_isometricLeftDown">isometricLeftDown</value>
-      <value name="isometricRightUp" tokenid="ooxml:ST_PresetCameraType_isometricRightUp">isometricRightUp</value>
-      <value name="isometricRightDown" tokenid="ooxml:ST_PresetCameraType_isometricRightDown">isometricRightDown</value>
-      <value name="isometricOffAxis1Left" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis1Left">isometricOffAxis1Left</value>
-      <value name="isometricOffAxis1Right" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis1Right">isometricOffAxis1Right</value>
-      <value name="isometricOffAxis1Top" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis1Top">isometricOffAxis1Top</value>
-      <value name="isometricOffAxis2Left" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis2Left">isometricOffAxis2Left</value>
-      <value name="isometricOffAxis2Right" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis2Right">isometricOffAxis2Right</value>
-      <value name="isometricOffAxis2Top" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis2Top">isometricOffAxis2Top</value>
-      <value name="isometricOffAxis3Left" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis3Left">isometricOffAxis3Left</value>
-      <value name="isometricOffAxis3Right" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis3Right">isometricOffAxis3Right</value>
-      <value name="isometricOffAxis3Bottom" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis3Bottom">isometricOffAxis3Bottom</value>
-      <value name="isometricOffAxis4Left" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis4Left">isometricOffAxis4Left</value>
-      <value name="isometricOffAxis4Right" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis4Right">isometricOffAxis4Right</value>
-      <value name="isometricOffAxis4Bottom" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis4Bottom">isometricOffAxis4Bottom</value>
-      <value name="obliqueTopLeft" tokenid="ooxml:ST_PresetCameraType_obliqueTopLeft">obliqueTopLeft</value>
-      <value name="obliqueTop" tokenid="ooxml:ST_PresetCameraType_obliqueTop">obliqueTop</value>
-      <value name="obliqueTopRight" tokenid="ooxml:ST_PresetCameraType_obliqueTopRight">obliqueTopRight</value>
-      <value name="obliqueLeft" tokenid="ooxml:ST_PresetCameraType_obliqueLeft">obliqueLeft</value>
-      <value name="obliqueRight" tokenid="ooxml:ST_PresetCameraType_obliqueRight">obliqueRight</value>
-      <value name="obliqueBottomLeft" tokenid="ooxml:ST_PresetCameraType_obliqueBottomLeft">obliqueBottomLeft</value>
-      <value name="obliqueBottom" tokenid="ooxml:ST_PresetCameraType_obliqueBottom">obliqueBottom</value>
-      <value name="obliqueBottomRight" tokenid="ooxml:ST_PresetCameraType_obliqueBottomRight">obliqueBottomRight</value>
-      <value name="perspectiveFront" tokenid="ooxml:ST_PresetCameraType_perspectiveFront">perspectiveFront</value>
-      <value name="perspectiveLeft" tokenid="ooxml:ST_PresetCameraType_perspectiveLeft">perspectiveLeft</value>
-      <value name="perspectiveRight" tokenid="ooxml:ST_PresetCameraType_perspectiveRight">perspectiveRight</value>
-      <value name="perspectiveAbove" tokenid="ooxml:ST_PresetCameraType_perspectiveAbove">perspectiveAbove</value>
-      <value name="perspectiveBelow" tokenid="ooxml:ST_PresetCameraType_perspectiveBelow">perspectiveBelow</value>
-      <value name="perspectiveAboveLeftFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveAboveLeftFacing">perspectiveAboveLeftFacing</value>
-      <value name="perspectiveAboveRightFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveAboveRightFacing">perspectiveAboveRightFacing</value>
-      <value name="perspectiveContrastingLeftFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveContrastingLeftFacing">perspectiveContrastingLeftFacing</value>
-      <value name="perspectiveContrastingRightFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveContrastingRightFacing">perspectiveContrastingRightFacing</value>
-      <value name="perspectiveHeroicLeftFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicLeftFacing">perspectiveHeroicLeftFacing</value>
-      <value name="perspectiveHeroicRightFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicRightFacing">perspectiveHeroicRightFacing</value>
-      <value name="perspectiveHeroicExtremeLeftFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicExtremeLeftFacing">perspectiveHeroicExtremeLeftFacing</value>
-      <value name="perspectiveHeroicExtremeRightFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicExtremeRightFacing">perspectiveHeroicExtremeRightFacing</value>
-      <value name="perspectiveRelaxed" tokenid="ooxml:ST_PresetCameraType_perspectiveRelaxed">perspectiveRelaxed</value>
-      <value name="perspectiveRelaxedModerately" tokenid="ooxml:ST_PresetCameraType_perspectiveRelaxedModerately">perspectiveRelaxedModerately</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyObliqueTopLeft">legacyObliqueTopLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyObliqueTop">legacyObliqueTop</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyObliqueTopRight">legacyObliqueTopRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyObliqueLeft">legacyObliqueLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyObliqueFront">legacyObliqueFront</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyObliqueRight">legacyObliqueRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyObliqueBottomLeft">legacyObliqueBottomLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyObliqueBottom">legacyObliqueBottom</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyObliqueBottomRight">legacyObliqueBottomRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveTopLeft">legacyPerspectiveTopLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveTop">legacyPerspectiveTop</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveTopRight">legacyPerspectiveTopRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveLeft">legacyPerspectiveLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveFront">legacyPerspectiveFront</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveRight">legacyPerspectiveRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveBottomLeft">legacyPerspectiveBottomLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveBottom">legacyPerspectiveBottom</value>
+      <value tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveBottomRight">legacyPerspectiveBottomRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_orthographicFront">orthographicFront</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricTopUp">isometricTopUp</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricTopDown">isometricTopDown</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricBottomUp">isometricBottomUp</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricBottomDown">isometricBottomDown</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricLeftUp">isometricLeftUp</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricLeftDown">isometricLeftDown</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricRightUp">isometricRightUp</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricRightDown">isometricRightDown</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis1Left">isometricOffAxis1Left</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis1Right">isometricOffAxis1Right</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis1Top">isometricOffAxis1Top</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis2Left">isometricOffAxis2Left</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis2Right">isometricOffAxis2Right</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis2Top">isometricOffAxis2Top</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis3Left">isometricOffAxis3Left</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis3Right">isometricOffAxis3Right</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis3Bottom">isometricOffAxis3Bottom</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis4Left">isometricOffAxis4Left</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis4Right">isometricOffAxis4Right</value>
+      <value tokenid="ooxml:ST_PresetCameraType_isometricOffAxis4Bottom">isometricOffAxis4Bottom</value>
+      <value tokenid="ooxml:ST_PresetCameraType_obliqueTopLeft">obliqueTopLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_obliqueTop">obliqueTop</value>
+      <value tokenid="ooxml:ST_PresetCameraType_obliqueTopRight">obliqueTopRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_obliqueLeft">obliqueLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_obliqueRight">obliqueRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_obliqueBottomLeft">obliqueBottomLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_obliqueBottom">obliqueBottom</value>
+      <value tokenid="ooxml:ST_PresetCameraType_obliqueBottomRight">obliqueBottomRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveFront">perspectiveFront</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveLeft">perspectiveLeft</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveRight">perspectiveRight</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveAbove">perspectiveAbove</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveBelow">perspectiveBelow</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveAboveLeftFacing">perspectiveAboveLeftFacing</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveAboveRightFacing">perspectiveAboveRightFacing</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveContrastingLeftFacing">perspectiveContrastingLeftFacing</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveContrastingRightFacing">perspectiveContrastingRightFacing</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicLeftFacing">perspectiveHeroicLeftFacing</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicRightFacing">perspectiveHeroicRightFacing</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicExtremeLeftFacing">perspectiveHeroicExtremeLeftFacing</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicExtremeRightFacing">perspectiveHeroicExtremeRightFacing</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveRelaxed">perspectiveRelaxed</value>
+      <value tokenid="ooxml:ST_PresetCameraType_perspectiveRelaxedModerately">perspectiveRelaxedModerately</value>
     </resource>
     <resource name="ST_LightRigType" resource="List">
-      <value name="legacyFlat1" tokenid="ooxml:ST_LightRigType_legacyFlat1">legacyFlat1</value>
-      <value name="legacyFlat2" tokenid="ooxml:ST_LightRigType_legacyFlat2">legacyFlat2</value>
-      <value name="legacyFlat3" tokenid="ooxml:ST_LightRigType_legacyFlat3">legacyFlat3</value>
-      <value name="legacyFlat4" tokenid="ooxml:ST_LightRigType_legacyFlat4">legacyFlat4</value>
-      <value name="legacyNormal1" tokenid="ooxml:ST_LightRigType_legacyNormal1">legacyNormal1</value>
-      <value name="legacyNormal2" tokenid="ooxml:ST_LightRigType_legacyNormal2">legacyNormal2</value>
-      <value name="legacyNormal3" tokenid="ooxml:ST_LightRigType_legacyNormal3">legacyNormal3</value>
-      <value name="legacyNormal4" tokenid="ooxml:ST_LightRigType_legacyNormal4">legacyNormal4</value>
-      <value name="legacyHarsh1" tokenid="ooxml:ST_LightRigType_legacyHarsh1">legacyHarsh1</value>
-      <value name="legacyHarsh2" tokenid="ooxml:ST_LightRigType_legacyHarsh2">legacyHarsh2</value>
-      <value name="legacyHarsh3" tokenid="ooxml:ST_LightRigType_legacyHarsh3">legacyHarsh3</value>
-      <value name="legacyHarsh4" tokenid="ooxml:ST_LightRigType_legacyHarsh4">legacyHarsh4</value>
-      <value name="threePt" tokenid="ooxml:ST_LightRigType_threePt">threePt</value>
-      <value name="balanced" tokenid="ooxml:ST_LightRigType_balanced">balanced</value>
-      <value name="soft" tokenid="ooxml:ST_LightRigType_soft">soft</value>
-      <value name="harsh" tokenid="ooxml:ST_LightRigType_harsh">harsh</value>
-      <value name="flood" tokenid="ooxml:ST_LightRigType_flood">flood</value>
-      <value name="contrasting" tokenid="ooxml:ST_LightRigType_contrasting">contrasting</value>
-      <value name="morning" tokenid="ooxml:ST_LightRigType_morning">morning</value>
-      <value name="sunrise" tokenid="ooxml:ST_LightRigType_sunrise">sunrise</value>
-      <value name="sunset" tokenid="ooxml:ST_LightRigType_sunset">sunset</value>
-      <value name="chilly" tokenid="ooxml:ST_LightRigType_chilly">chilly</value>
-      <value name="freezing" tokenid="ooxml:ST_LightRigType_freezing">freezing</value>
-      <value name="flat" tokenid="ooxml:ST_LightRigType_flat">flat</value>
-      <value name="twoPt" tokenid="ooxml:ST_LightRigType_twoPt">twoPt</value>
-      <value name="glow" tokenid="ooxml:ST_LightRigType_glow">glow</value>
-      <value name="brightRoom" tokenid="ooxml:ST_LightRigType_brightRoom">brightRoom</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyFlat1">legacyFlat1</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyFlat2">legacyFlat2</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyFlat3">legacyFlat3</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyFlat4">legacyFlat4</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyNormal1">legacyNormal1</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyNormal2">legacyNormal2</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyNormal3">legacyNormal3</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyNormal4">legacyNormal4</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyHarsh1">legacyHarsh1</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyHarsh2">legacyHarsh2</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyHarsh3">legacyHarsh3</value>
+      <value tokenid="ooxml:ST_LightRigType_legacyHarsh4">legacyHarsh4</value>
+      <value tokenid="ooxml:ST_LightRigType_threePt">threePt</value>
+      <value tokenid="ooxml:ST_LightRigType_balanced">balanced</value>
+      <value tokenid="ooxml:ST_LightRigType_soft">soft</value>
+      <value tokenid="ooxml:ST_LightRigType_harsh">harsh</value>
+      <value tokenid="ooxml:ST_LightRigType_flood">flood</value>
+      <value tokenid="ooxml:ST_LightRigType_contrasting">contrasting</value>
+      <value tokenid="ooxml:ST_LightRigType_morning">morning</value>
+      <value tokenid="ooxml:ST_LightRigType_sunrise">sunrise</value>
+      <value tokenid="ooxml:ST_LightRigType_sunset">sunset</value>
+      <value tokenid="ooxml:ST_LightRigType_chilly">chilly</value>
+      <value tokenid="ooxml:ST_LightRigType_freezing">freezing</value>
+      <value tokenid="ooxml:ST_LightRigType_flat">flat</value>
+      <value tokenid="ooxml:ST_LightRigType_twoPt">twoPt</value>
+      <value tokenid="ooxml:ST_LightRigType_glow">glow</value>
+      <value tokenid="ooxml:ST_LightRigType_brightRoom">brightRoom</value>
     </resource>
     <resource name="ST_LightRigDirection" resource="List">
-      <value name="tl" tokenid="ooxml:ST_LightRigDirection_tl">tl</value>
-      <value name="t" tokenid="ooxml:ST_LightRigDirection_t">t</value>
-      <value name="tr" tokenid="ooxml:ST_LightRigDirection_tr">tr</value>
-      <value name="l" tokenid="ooxml:ST_LightRigDirection_l">l</value>
-      <value name="r" tokenid="ooxml:ST_LightRigDirection_r">r</value>
-      <value name="bl" tokenid="ooxml:ST_LightRigDirection_bl">bl</value>
-      <value name="b" tokenid="ooxml:ST_LightRigDirection_b">b</value>
-      <value name="br" tokenid="ooxml:ST_LightRigDirection_br">br</value>
+      <value tokenid="ooxml:ST_LightRigDirection_tl">tl</value>
+      <value tokenid="ooxml:ST_LightRigDirection_t">t</value>
+      <value tokenid="ooxml:ST_LightRigDirection_tr">tr</value>
+      <value tokenid="ooxml:ST_LightRigDirection_l">l</value>
+      <value tokenid="ooxml:ST_LightRigDirection_r">r</value>
+      <value tokenid="ooxml:ST_LightRigDirection_bl">bl</value>
+      <value tokenid="ooxml:ST_LightRigDirection_b">b</value>
+      <value tokenid="ooxml:ST_LightRigDirection_br">br</value>
     </resource>
     <resource name="ST_BevelPresetType" resource="List">
-      <value name="relaxedInset" tokenid="ooxml:ST_BevelPresetType_relaxedInset">relaxedInset</value>
-      <value name="circle" tokenid="ooxml:ST_BevelPresetType_circle">circle</value>
-      <value name="slope" tokenid="ooxml:ST_BevelPresetType_slope">slope</value>
-      <value name="cross" tokenid="ooxml:ST_BevelPresetType_cross">cross</value>
-      <value name="angle" tokenid="ooxml:ST_BevelPresetType_angle">angle</value>
-      <value name="softRound" tokenid="ooxml:ST_BevelPresetType_softRound">softRound</value>
-      <value name="convex" tokenid="ooxml:ST_BevelPresetType_convex">convex</value>
-      <value name="coolSlant" tokenid="ooxml:ST_BevelPresetType_coolSlant">coolSlant</value>
-      <value name="divot" tokenid="ooxml:ST_BevelPresetType_divot">divot</value>
-      <value name="riblet" tokenid="ooxml:ST_BevelPresetType_riblet">riblet</value>
-      <value name="hardEdge" tokenid="ooxml:ST_BevelPresetType_hardEdge">hardEdge</value>
-      <value name="artDeco" tokenid="ooxml:ST_BevelPresetType_artDeco">artDeco</value>
+      <value tokenid="ooxml:ST_BevelPresetType_relaxedInset">relaxedInset</value>
+      <value tokenid="ooxml:ST_BevelPresetType_circle">circle</value>
+      <value tokenid="ooxml:ST_BevelPresetType_slope">slope</value>
+      <value tokenid="ooxml:ST_BevelPresetType_cross">cross</value>
+      <value tokenid="ooxml:ST_BevelPresetType_angle">angle</value>
+      <value tokenid="ooxml:ST_BevelPresetType_softRound">softRound</value>
+      <value tokenid="ooxml:ST_BevelPresetType_convex">convex</value>
+      <value tokenid="ooxml:ST_BevelPresetType_coolSlant">coolSlant</value>
+      <value tokenid="ooxml:ST_BevelPresetType_divot">divot</value>
+      <value tokenid="ooxml:ST_BevelPresetType_riblet">riblet</value>
+      <value tokenid="ooxml:ST_BevelPresetType_hardEdge">hardEdge</value>
+      <value tokenid="ooxml:ST_BevelPresetType_artDeco">artDeco</value>
     </resource>
     <resource name="ST_PresetMaterialType" resource="List">
-      <value name="legacyMatte" tokenid="ooxml:ST_PresetMaterialType_legacyMatte">legacyMatte</value>
-      <value name="legacyPlastic" tokenid="ooxml:ST_PresetMaterialType_legacyPlastic">legacyPlastic</value>
-      <value name="legacyMetal" tokenid="ooxml:ST_PresetMaterialType_legacyMetal">legacyMetal</value>
-      <value name="legacyWireframe" tokenid="ooxml:ST_PresetMaterialType_legacyWireframe">legacyWireframe</value>
-      <value name="matte" tokenid="ooxml:ST_PresetMaterialType_matte">matte</value>
-      <value name="plastic" tokenid="ooxml:ST_PresetMaterialType_plastic">plastic</value>
-      <value name="metal" tokenid="ooxml:ST_PresetMaterialType_metal">metal</value>
-      <value name="warmMatte" tokenid="ooxml:ST_PresetMaterialType_warmMatte">warmMatte</value>
-      <value name="translucentPowder" tokenid="ooxml:ST_PresetMaterialType_translucentPowder">translucentPowder</value>
-      <value name="powder" tokenid="ooxml:ST_PresetMaterialType_powder">powder</value>
-      <value name="dkEdge" tokenid="ooxml:ST_PresetMaterialType_dkEdge">dkEdge</value>
-      <value name="softEdge" tokenid="ooxml:ST_PresetMaterialType_softEdge">softEdge</value>
-      <value name="clear" tokenid="ooxml:ST_PresetMaterialType_clear">clear</value>
-      <value name="flat" tokenid="ooxml:ST_PresetMaterialType_flat">flat</value>
-      <value name="softmetal" tokenid="ooxml:ST_PresetMaterialType_softmetal">softmetal</value>
-      <value name="none" tokenid="ooxml:ST_PresetMaterialType_none">none</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_legacyMatte">legacyMatte</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_legacyPlastic">legacyPlastic</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_legacyMetal">legacyMetal</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_legacyWireframe">legacyWireframe</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_matte">matte</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_plastic">plastic</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_metal">metal</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_warmMatte">warmMatte</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_translucentPowder">translucentPowder</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_powder">powder</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_dkEdge">dkEdge</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_softEdge">softEdge</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_clear">clear</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_flat">flat</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_softmetal">softmetal</value>
+      <value tokenid="ooxml:ST_PresetMaterialType_none">none</value>
     </resource>
     <resource name="ST_Ligatures" resource="List">
-      <value name="none" tokenid="ooxml:ST_Ligatures_none">none</value>
-      <value name="standard" tokenid="ooxml:ST_Ligatures_standard">standard</value>
-      <value name="contextual" tokenid="ooxml:ST_Ligatures_contextual">contextual</value>
-      <value name="historical" tokenid="ooxml:ST_Ligatures_historical">historical</value>
-      <value name="discretional" tokenid="ooxml:ST_Ligatures_discretional">discretional</value>
-      <value name="standardContextual" tokenid="ooxml:ST_Ligatures_standardContextual">standardContextual</value>
-      <value name="standardHistorical" tokenid="ooxml:ST_Ligatures_standardHistorical">standardHistorical</value>
-      <value name="contextualHistorical" tokenid="ooxml:ST_Ligatures_contextualHistorical">contextualHistorical</value>
-      <value name="standardDiscretional" tokenid="ooxml:ST_Ligatures_standardDiscretional">standardDiscretional</value>
-      <value name="contextualDiscretional" tokenid="ooxml:ST_Ligatures_contextualDiscretional">contextualDiscretional</value>
-      <value name="historicalDiscretional" tokenid="ooxml:ST_Ligatures_historicalDiscretional">historicalDiscretional</value>
-      <value name="standardContextualHistorical" tokenid="ooxml:ST_Ligatures_standardContextualHistorical">standardContextualHistorical</value>
-      <value name="standardContextualDiscretional" tokenid="ooxml:ST_Ligatures_standardContextualDiscretional">standardContextualDiscretional</value>
-      <value name="standardHistoricalDiscretional" tokenid="ooxml:ST_Ligatures_standardHistoricalDiscretional">standardHistoricalDiscretional</value>
-      <value name="contextualHistoricalDiscretional" tokenid="ooxml:ST_Ligatures_contextualHistoricalDiscretional">contextualHistoricalDiscretional</value>
-      <value name="all" tokenid="ooxml:ST_Ligatures_all">all</value>
+      <value tokenid="ooxml:ST_Ligatures_none">none</value>
+      <value tokenid="ooxml:ST_Ligatures_standard">standard</value>
+      <value tokenid="ooxml:ST_Ligatures_contextual">contextual</value>
+      <value tokenid="ooxml:ST_Ligatures_historical">historical</value>
+      <value tokenid="ooxml:ST_Ligatures_discretional">discretional</value>
+      <value tokenid="ooxml:ST_Ligatures_standardContextual">standardContextual</value>
+      <value tokenid="ooxml:ST_Ligatures_standardHistorical">standardHistorical</value>
+      <value tokenid="ooxml:ST_Ligatures_contextualHistorical">contextualHistorical</value>
+      <value tokenid="ooxml:ST_Ligatures_standardDiscretional">standardDiscretional</value>
+      <value tokenid="ooxml:ST_Ligatures_contextualDiscretional">contextualDiscretional</value>
+      <value tokenid="ooxml:ST_Ligatures_historicalDiscretional">historicalDiscretional</value>
+      <value tokenid="ooxml:ST_Ligatures_standardContextualHistorical">standardContextualHistorical</value>
+      <value tokenid="ooxml:ST_Ligatures_standardContextualDiscretional">standardContextualDiscretional</value>
+      <value tokenid="ooxml:ST_Ligatures_standardHistoricalDiscretional">standardHistoricalDiscretional</value>
+      <value tokenid="ooxml:ST_Ligatures_contextualHistoricalDiscretional">contextualHistoricalDiscretional</value>
+      <value tokenid="ooxml:ST_Ligatures_all">all</value>
     </resource>
     <resource name="ST_NumForm" resource="List">
-      <value name="default" tokenid="ooxml:ST_NumForm_default">default</value>
-      <value name="lining" tokenid="ooxml:ST_NumForm_lining">lining</value>
-      <value name="oldStyle" tokenid="ooxml:ST_NumForm_oldStyle">oldStyle</value>
+      <value tokenid="ooxml:ST_NumForm_default">default</value>
+      <value tokenid="ooxml:ST_NumForm_lining">lining</value>
+      <value tokenid="ooxml:ST_NumForm_oldStyle">oldStyle</value>
     </resource>
     <resource name="ST_NumSpacing" resource="List">
-      <value name="default" tokenid="ooxml:ST_NumSpacing_default">default</value>
-      <value name="proportional" tokenid="ooxml:ST_NumSpacing_proportional">proportional</value>
-      <value name="tabular" tokenid="ooxml:ST_NumSpacing_tabular">tabular</value>
+      <value tokenid="ooxml:ST_NumSpacing_default">default</value>
+      <value tokenid="ooxml:ST_NumSpacing_proportional">proportional</value>
+      <value tokenid="ooxml:ST_NumSpacing_tabular">tabular</value>
     </resource>
 
     <resource name="ST_PositiveCoordinate" resource="Integer"/>
@@ -6686,47 +6686,47 @@
       <value tokenid="ooxml:Value_ST_ShapeType_chartPlus">chartPlus</value>
     </resource>
     <resource name="ST_TextShapeType" resource="List">
-      <value name="textNoShape" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textNoShape">textNoShape</value>
-      <value name="textPlain" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textPlain">textPlain</value>
-      <value name="textStop" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textStop">textStop</value>
-      <value name="textTriangle" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textTriangle">textTriangle</value>
-      <value name="textTriangleInverted" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textTriangleInverted">textTriangleInverted</value>
-      <value name="textChevron" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textChevron">textChevron</value>
-      <value name="textChevronInverted" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textChevronInverted">textChevronInverted</value>
-      <value name="textRingInside" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textRingInside">textRingInside</value>
-      <value name="textRingOutside" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textRingOutside">textRingOutside</value>
-      <value name="textArchUp" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textArchUp">textArchUp</value>
-      <value name="textArchDown" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textArchDown">textArchDown</value>
-      <value name="textCircle" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCircle">textCircle</value>
-      <value name="textButton" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textButton">textButton</value>
-      <value name="textArchUpPour" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textArchUpPour">textArchUpPour</value>
-      <value name="textArchDownPour" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textArchDownPour">textArchDownPour</value>
-      <value name="textCirclePour" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCirclePour">textCirclePour</value>
-      <value name="textButtonPour" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textButtonPour">textButtonPour</value>
-      <value name="textCurveUp" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCurveUp">textCurveUp</value>
-      <value name="textCurveDown" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCurveDown">textCurveDown</value>
-      <value name="textCanUp" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCanUp">textCanUp</value>
-      <value name="textCanDown" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCanDown">textCanDown</value>
-      <value name="textWave1" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textWave1">textWave1</value>
-      <value name="textWave2" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textWave2">textWave2</value>
-      <value name="textDoubleWave1" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDoubleWave1">textDoubleWave1</value>
-      <value name="textWave4" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textWave4">textWave4</value>
-      <value name="textInflate" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textInflate">textInflate</value>
-      <value name="textDeflate" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflate">textDeflate</value>
-      <value name="textInflateBottom" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textInflateBottom">textInflateBottom</value>
-      <value name="textDeflateBottom" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflateBottom">textDeflateBottom</value>
-      <value name="textInflateTop" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textInflateTop">textInflateTop</value>
-      <value name="textDeflateTop" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflateTop">textDeflateTop</value>
-      <value name="textDeflateInflate" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflateInflate">textDeflateInflate</value>
-      <value name="textDeflateInflateDeflate" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflateInflateDeflate">textDeflateInflateDeflate</value>
-      <value name="textFadeRight" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textFadeRight">textFadeRight</value>
-      <value name="textFadeLeft" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textFadeLeft">textFadeLeft</value>
-      <value name="textFadeUp" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textFadeUp">textFadeUp</value>
-      <value name="textFadeDown" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textFadeDown">textFadeDown</value>
-      <value name="textSlantUp" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textSlantUp">textSlantUp</value>
-      <value name="textSlantDown" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textSlantDown">textSlantDown</value>
-      <value name="textCascadeUp" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCascadeUp">textCascadeUp</value>
-      <value name="textCascadeDown" tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCascadeDown">textCascadeDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textNoShape">textNoShape</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textPlain">textPlain</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textStop">textStop</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textTriangle">textTriangle</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textTriangleInverted">textTriangleInverted</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textChevron">textChevron</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textChevronInverted">textChevronInverted</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textRingInside">textRingInside</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textRingOutside">textRingOutside</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textArchUp">textArchUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textArchDown">textArchDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCircle">textCircle</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textButton">textButton</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textArchUpPour">textArchUpPour</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textArchDownPour">textArchDownPour</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCirclePour">textCirclePour</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textButtonPour">textButtonPour</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCurveUp">textCurveUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCurveDown">textCurveDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCanUp">textCanUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCanDown">textCanDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textWave1">textWave1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textWave2">textWave2</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDoubleWave1">textDoubleWave1</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textWave4">textWave4</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textInflate">textInflate</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflate">textDeflate</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textInflateBottom">textInflateBottom</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflateBottom">textDeflateBottom</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textInflateTop">textInflateTop</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflateTop">textDeflateTop</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflateInflate">textDeflateInflate</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textDeflateInflateDeflate">textDeflateInflateDeflate</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textFadeRight">textFadeRight</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textFadeLeft">textFadeLeft</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textFadeUp">textFadeUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textFadeDown">textFadeDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textSlantUp">textSlantUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textSlantDown">textSlantDown</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCascadeUp">textCascadeUp</value>
+      <value tokenid="ooxml:Value_drawingml_ST_TextShapeType_textCascadeDown">textCascadeDown</value>
     </resource>
     <resource name="ST_GeomGuideName" resource="String"/>
     <resource name="ST_GeomGuideFormula" resource="String"/>
@@ -6734,12 +6734,12 @@
       <element name="gd" tokenid="ooxml:CT_GeomGuideList_gd"/>
     </resource>
     <resource name="ST_PathFillMode" resource="List">
-      <value name="none" tokenid="ooxml:Value_drawingml_ST_PathFillMode_none">none</value>
-      <value name="norm" tokenid="ooxml:Value_drawingml_ST_PathFillMode_norm">norm</value>
-      <value name="lighten" tokenid="ooxml:Value_drawingml_ST_PathFillMode_lighten">lighten</value>
-      <value name="lightenLess" tokenid="ooxml:Value_drawingml_ST_PathFillMode_lightenLess">lightenLess</value>
-      <value name="darken" tokenid="ooxml:Value_drawingml_ST_PathFillMode_darken">darken</value>
-      <value name="darkenLess" tokenid="ooxml:Value_drawingml_ST_PathFillMode_darkenLess">darkenLess</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PathFillMode_none">none</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PathFillMode_norm">norm</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PathFillMode_lighten">lighten</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PathFillMode_lightenLess">lightenLess</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PathFillMode_darken">darken</value>
+      <value tokenid="ooxml:Value_drawingml_ST_PathFillMode_darkenLess">darkenLess</value>
     </resource>
     <resource name="CT_PresetGeometry2D" resource="Properties">
       <element name="avLst" tokenid="ooxml:CT_PresetGeometry2D_avLst"/>
@@ -7133,10 +7133,10 @@
       <attribute name="wp14:anchorId" tokenid="ooxml:CT_Inline_wp14_anchorId"/>
     </resource>
     <resource name="ST_WrapText" resource="List">
-      <value name="bothSides" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_bothSides">bothSides</value>
-      <value name="left" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_left">left</value>
-      <value name="right" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_right">right</value>
-      <value name="largest" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_largest">largest</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_bothSides">bothSides</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_left">left</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_right">right</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_largest">largest</value>
     </resource>
     <resource name="CT_WrapPath" resource="Properties">
       <element name="start" tokenid="ooxml:CT_WrapPath_start"/>
@@ -7183,14 +7183,14 @@
       <action name="characters" action="alignH"/>
     </resource>
     <resource name="ST_RelFromH" resource="List">
-      <value name="margin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_margin">margin</value>
-      <value name="page" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_page">page</value>
-      <value name="column" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_column">column</value>
-      <value name="character" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_character">character</value>
-      <value name="leftMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_leftMargin">leftMargin</value>
-      <value name="rightMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_rightMargin">rightMargin</value>
-      <value name="insideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_insideMargin">insideMargin</value>
-      <value name="outsideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_outsideMargin">outsideMargin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_margin">margin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_page">page</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_column">column</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_character">character</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_leftMargin">leftMargin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_rightMargin">rightMargin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_insideMargin">insideMargin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_outsideMargin">outsideMargin</value>
     </resource>
     <resource name="CT_PosH" resource="Properties">
       <element name="align" tokenid="ooxml:CT_PosH_align"/>
@@ -7201,14 +7201,14 @@
       <action name="characters" action="alignV"/>
     </resource>
     <resource name="ST_RelFromV" resource="List">
-      <value name="margin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_margin">margin</value>
-      <value name="page" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_page">page</value>
-      <value name="paragraph" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_paragraph">paragraph</value>
-      <value name="line" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_line">line</value>
-      <value name="topMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_topMargin">topMargin</value>
-      <value name="bottomMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_bottomMargin">bottomMargin</value>
-      <value name="insideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_insideMargin">insideMargin</value>
-      <value name="outsideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_outsideMargin">outsideMargin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_margin">margin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_page">page</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_paragraph">paragraph</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_line">line</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_topMargin">topMargin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_bottomMargin">bottomMargin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_insideMargin">insideMargin</value>
+      <value tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_outsideMargin">outsideMargin</value>
     </resource>
     <resource name="CT_PosV" resource="Properties">
       <element name="align" tokenid="ooxml:CT_PosV_align"/>
@@ -8226,8 +8226,8 @@
       <action name="start" action="setDefaultStringValue"/>
     </resource>
     <resource name="ST_OnOff" resource="List">
-      <value name="on" tokenid="ooxml:Value_math_ST_OnOff_on">on</value>
-      <value name="off" tokenid="ooxml:Value_math_ST_OnOff_off">off</value>
+      <value tokenid="ooxml:Value_math_ST_OnOff_on">on</value>
+      <value tokenid="ooxml:Value_math_ST_OnOff_off">off</value>
     </resource>
     <resource name="CT_OnOff" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_OnOff_val" action="setValue"/>
@@ -8239,58 +8239,58 @@
       <action name="start" action="setDefaultStringValue"/>
     </resource>
     <resource name="ST_XAlign" resource="List">
-      <value name="left" tokenid="ooxml:Value_math_ST_XAlign_left">left</value>
-      <value name="center" tokenid="ooxml:Value_math_ST_XAlign_center">center</value>
-      <value name="right" tokenid="ooxml:Value_math_ST_XAlign_right">right</value>
+      <value tokenid="ooxml:Value_math_ST_XAlign_left">left</value>
+      <value tokenid="ooxml:Value_math_ST_XAlign_center">center</value>
+      <value tokenid="ooxml:Value_math_ST_XAlign_right">right</value>
     </resource>
     <resource name="CT_XAlign" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_XAlign_val" action="setValue"/>
     </resource>
     <resource name="ST_YAlign" resource="List">
-      <value name="top" tokenid="ooxml:Value_math_ST_YAlign_top">top</value>
-      <value name="center" tokenid="ooxml:Value_math_ST_YAlign_center">center</value>
-      <value name="bot" tokenid="ooxml:Value_math_ST_YAlign_bot">bot</value>
+      <value tokenid="ooxml:Value_math_ST_YAlign_top">top</value>
+      <value tokenid="ooxml:Value_math_ST_YAlign_center">center</value>
+      <value tokenid="ooxml:Value_math_ST_YAlign_bot">bot</value>
     </resource>
     <resource name="CT_YAlign" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_YAlign_val" action="setValue"/>
     </resource>
     <resource name="ST_Shp" resource="List">
-      <value name="centered" tokenid="ooxml:Value_math_ST_Shp_centered">centered</value>
-      <value name="match" tokenid="ooxml:Value_math_ST_Shp_match">match</value>
+      <value tokenid="ooxml:Value_math_ST_Shp_centered">centered</value>
+      <value tokenid="ooxml:Value_math_ST_Shp_match">match</value>
     </resource>
     <resource name="CT_Shp" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Shp_val" action="setValue"/>
     </resource>
     <resource name="ST_FType" resource="List">
-      <value name="bar" tokenid="ooxml:Value_math_ST_FType_bar">bar</value>
-      <value name="skw" tokenid="ooxml:Value_math_ST_FType_skw">skw</value>
-      <value name="lin" tokenid="ooxml:Value_math_ST_FType_lin">lin</value>
-      <value name="noBar" tokenid="ooxml:Value_math_ST_FType_noBar">noBar</value>
+      <value tokenid="ooxml:Value_math_ST_FType_bar">bar</value>
+      <value tokenid="ooxml:Value_math_ST_FType_skw">skw</value>
+      <value tokenid="ooxml:Value_math_ST_FType_lin">lin</value>
+      <value tokenid="ooxml:Value_math_ST_FType_noBar">noBar</value>
     </resource>
     <resource name="CT_FType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_FType_val" action="setValue"/>
     </resource>
     <resource name="ST_LimLoc" resource="List">
-      <value name="undOvr" tokenid="ooxml:Value_math_ST_LimLoc_undOvr">undOvr</value>
-      <value name="subSup" tokenid="ooxml:Value_math_ST_LimLoc_subSup">subSup</value>
+      <value tokenid="ooxml:Value_math_ST_LimLoc_undOvr">undOvr</value>
+      <value tokenid="ooxml:Value_math_ST_LimLoc_subSup">subSup</value>
     </resource>
     <resource name="CT_LimLoc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_LimLoc_val" action="setValue"/>
     </resource>
     <resource name="ST_TopBot" resource="List">
-      <value name="top" tokenid="ooxml:Value_math_ST_TopBot_top">top</value>
-      <value name="bot" tokenid="ooxml:Value_math_ST_TopBot_bot">bot</value>
+      <value tokenid="ooxml:Value_math_ST_TopBot_top">top</value>
+      <value tokenid="ooxml:Value_math_ST_TopBot_bot">bot</value>
     </resource>
     <resource name="CT_TopBot" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TopBot_val" action="setValue"/>
     </resource>
     <resource name="ST_Script" resource="List">
-      <value name="roman" tokenid="ooxml:Value_math_ST_Script_roman">roman</value>
-      <value name="script" tokenid="ooxml:Value_math_ST_Script_script">script</value>
-      <value name="fraktur" tokenid="ooxml:Value_math_ST_Script_fraktur">fraktur</value>
-      <value name="doublemstruck" tokenid="ooxml:Value_math_ST_Script_doublemstruck">double-struck</value>
-      <value name="sansmserif" tokenid="ooxml:Value_math_ST_Script_sansmserif">sans-serif</value>
-      <value name="monospace" tokenid="ooxml:Value_math_ST_Script_monospace">monospace</value>
+      <value tokenid="ooxml:Value_math_ST_Script_roman">roman</value>
+      <value tokenid="ooxml:Value_math_ST_Script_script">script</value>
+      <value tokenid="ooxml:Value_math_ST_Script_fraktur">fraktur</value>
+      <value tokenid="ooxml:Value_math_ST_Script_doublemstruck">double-struck</value>
+      <value tokenid="ooxml:Value_math_ST_Script_sansmserif">sans-serif</value>
+      <value tokenid="ooxml:Value_math_ST_Script_monospace">monospace</value>
     </resource>
     <resource name="CT_Script" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Script_val" action="setValue"/>
@@ -8305,12 +8305,12 @@
       <attribute name="val" tokenid="ooxml:CT_Style_val" action="setValue"/>
     </resource>
     <resource name="ST_Jc" resource="List">
-      <value name="start" tokenid="ooxml:Value_math_ST_Jc_start">left</value>
-      <value name="end" tokenid="ooxml:Value_math_ST_Jc_end">right</value>
-      <value name="left" tokenid="ooxml:Value_math_ST_Jc_left">left</value>
-      <value name="right" tokenid="ooxml:Value_math_ST_Jc_right">right</value>
-      <value name="center" tokenid="ooxml:Value_math_ST_Jc_center">center</value>
-      <value name="centerGroup" tokenid="ooxml:Value_math_ST_Jc_centerGroup">centerGroup</value>
+      <value tokenid="ooxml:Value_math_ST_Jc_start">left</value>
+      <value tokenid="ooxml:Value_math_ST_Jc_end">right</value>
+      <value tokenid="ooxml:Value_math_ST_Jc_left">left</value>
+      <value tokenid="ooxml:Value_math_ST_Jc_right">right</value>
+      <value tokenid="ooxml:Value_math_ST_Jc_center">center</value>
+      <value tokenid="ooxml:Value_math_ST_Jc_centerGroup">centerGroup</value>
     </resource>
     <resource name="CT_OMathJc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_OMathJc_val" action="setValue"/>
@@ -8321,17 +8321,17 @@
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_BreakBin" resource="List">
-      <value name="before" tokenid="ooxml:Value_math_ST_BreakBin_before">before</value>
-      <value name="after" tokenid="ooxml:Value_math_ST_BreakBin_after">after</value>
-      <value name="repeat" tokenid="ooxml:Value_math_ST_BreakBin_repeat">repeat</value>
+      <value tokenid="ooxml:Value_math_ST_BreakBin_before">before</value>
+      <value tokenid="ooxml:Value_math_ST_BreakBin_after">after</value>
+      <value tokenid="ooxml:Value_math_ST_BreakBin_repeat">repeat</value>
     </resource>
     <resource name="CT_BreakBin" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_BreakBin_val" action="setValue"/>
     </resource>
     <resource name="ST_BreakBinSub" resource="List">
-      <value name="mm" tokenid="ooxml:Value_math_ST_BreakBinSub_mm">--</value>
-      <value name="mp" tokenid="ooxml:Value_math_ST_BreakBinSub_mp">-+</value>
-      <value name="pm" tokenid="ooxml:Value_math_ST_BreakBinSub_pm">+-</value>
+      <value tokenid="ooxml:Value_math_ST_BreakBinSub_mm">--</value>
+      <value tokenid="ooxml:Value_math_ST_BreakBinSub_mp">-+</value>
+      <value tokenid="ooxml:Value_math_ST_BreakBinSub_pm">+-</value>
     </resource>
     <resource name="CT_BreakBinSub" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_BreakBinSub_val" action="setValue"/>
@@ -9495,59 +9495,59 @@
       </define>
     </grammar>
     <resource name="ST_FillType" resource="List">
-      <value name="solid" tokenid="ooxml:Value_vml_ST_FillType_solid">solid</value>
-      <value name="gradient" tokenid="ooxml:Value_vml_ST_FillType_gradient">gradient</value>
-      <value name="gradientRadial" tokenid="ooxml:Value_vml_ST_FillType_gradientRadial">gradientRadial</value>
-      <value name="tile" tokenid="ooxml:Value_vml_ST_FillType_tile">tile</value>
-      <value name="pattern" tokenid="ooxml:Value_vml_ST_FillType_pattern">pattern</value>
-      <value name="frame" tokenid="ooxml:Value_vml_ST_FillType_frame">frame</value>
+      <value tokenid="ooxml:Value_vml_ST_FillType_solid">solid</value>
+      <value tokenid="ooxml:Value_vml_ST_FillType_gradient">gradient</value>
+      <value tokenid="ooxml:Value_vml_ST_FillType_gradientRadial">gradientRadial</value>
+      <value tokenid="ooxml:Value_vml_ST_FillType_tile">tile</value>
+      <value tokenid="ooxml:Value_vml_ST_FillType_pattern">pattern</value>
+      <value tokenid="ooxml:Value_vml_ST_FillType_frame">frame</value>
     </resource>
     <resource name="ST_StrokeLineStyle" resource="List">
-      <value name="single" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_single">single</value>
-      <value name="thinThin" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thinThin">thinThin</value>
-      <value name="thinThick" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thinThick">thinThick</value>
-      <value name="thickThin" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thickThin">thickThin</value>
-      <value name="thickBetweenThin" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thickBetweenThin">thickBetweenThin</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeLineStyle_single">single</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thinThin">thinThin</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thinThick">thinThick</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thickThin">thickThin</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thickBetweenThin">thickBetweenThin</value>
     </resource>
     <resource name="ST_StrokeJoinStyle" resource="List">
-      <value name="round" tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_round">round</value>
-      <value name="bevel" tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_bevel">bevel</value>
-      <value name="miter" tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_miter">miter</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_round">round</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_bevel">bevel</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_miter">miter</value>
     </resource>
     <resource name="ST_StrokeEndCap" resource="List">
-      <value name="flat" tokenid="ooxml:Value_vml_ST_StrokeEndCap_flat">flat</value>
-      <value name="square" tokenid="ooxml:Value_vml_ST_StrokeEndCap_square">square</value>
-      <value name="round" tokenid="ooxml:Value_vml_ST_StrokeEndCap_round">round</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeEndCap_flat">flat</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeEndCap_square">square</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeEndCap_round">round</value>
     </resource>
     <resource name="ST_StrokeArrowLength" resource="List">
-      <value name="short" tokenid="ooxml:Value_vml_ST_StrokeArrowLength_short">short</value>
-      <value name="medium" tokenid="ooxml:Value_vml_ST_StrokeArrowLength_medium">medium</value>
-      <value name="long" tokenid="ooxml:Value_vml_ST_StrokeArrowLength_long">long</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowLength_short">short</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowLength_medium">medium</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowLength_long">long</value>
     </resource>
     <resource name="ST_StrokeArrowWidth" resource="List">
-      <value name="narrow" tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_narrow">narrow</value>
-      <value name="medium" tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_medium">medium</value>
-      <value name="wide" tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_wide">wide</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_narrow">narrow</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_medium">medium</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_wide">wide</value>
     </resource>
     <resource name="ST_StrokeArrowType" resource="List">
-      <value name="none" tokenid="ooxml:Value_vml_ST_StrokeArrowType_none">none</value>
-      <value name="block" tokenid="ooxml:Value_vml_ST_StrokeArrowType_block">block</value>
-      <value name="classic" tokenid="ooxml:Value_vml_ST_StrokeArrowType_classic">classic</value>
-      <value name="oval" tokenid="ooxml:Value_vml_ST_StrokeArrowType_oval">oval</value>
-      <value name="diamond" tokenid="ooxml:Value_vml_ST_StrokeArrowType_diamond">diamond</value>
-      <value name="open" tokenid="ooxml:Value_vml_ST_StrokeArrowType_open">open</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowType_none">none</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowType_block">block</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowType_classic">classic</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowType_oval">oval</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowType_diamond">diamond</value>
+      <value tokenid="ooxml:Value_vml_ST_StrokeArrowType_open">open</value>
     </resource>
     <resource name="ST_ImageAspect" resource="List">
-      <value name="ignore" tokenid="ooxml:Value_vml_ST_ImageAspect_ignore">ignore</value>
-      <value name="atMost" tokenid="ooxml:Value_vml_ST_ImageAspect_atMost">atMost</value>
-      <value name="atLeast" tokenid="ooxml:Value_vml_ST_ImageAspect_atLeast">atLeast</value>
+      <value tokenid="ooxml:Value_vml_ST_ImageAspect_ignore">ignore</value>
+      <value tokenid="ooxml:Value_vml_ST_ImageAspect_atMost">atMost</value>
+      <value tokenid="ooxml:Value_vml_ST_ImageAspect_atLeast">atLeast</value>
     </resource>
     <resource name="ST_TrueFalseBlank" resource="List">
-      <value name="t" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_t">t</value>
-      <value name="f" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_f">f</value>
-      <value name="true" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_true">true</value>
-      <value name="false" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_false">false</value>
-      <value name="" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_"/>
+      <value tokenid="ooxml:Value_vml_ST_TrueFalseBlank_t">t</value>
+      <value tokenid="ooxml:Value_vml_ST_TrueFalseBlank_f">f</value>
+      <value tokenid="ooxml:Value_vml_ST_TrueFalseBlank_true">true</value>
+      <value tokenid="ooxml:Value_vml_ST_TrueFalseBlank_false">false</value>
+      <value tokenid="ooxml:Value_vml_ST_TrueFalseBlank_"/>
     </resource>
     <resource name="CT_Background" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_Background_id"/>
@@ -10520,35 +10520,35 @@
       <action name="end" action="handleOLE"/>
     </resource>
     <resource name="ST_Angle" resource="List">
-      <value name="any" tokenid="ooxml:Value_office_ST_Angle_any">any</value>
-      <value name="30" tokenid="ooxml:Value_office_ST_Angle_30">30</value>
-      <value name="45" tokenid="ooxml:Value_office_ST_Angle_45">45</value>
-      <value name="60" tokenid="ooxml:Value_office_ST_Angle_60">60</value>
-      <value name="90" tokenid="ooxml:Value_office_ST_Angle_90">90</value>
-      <value name="auto" tokenid="ooxml:Value_office_ST_Angle_auto">auto</value>
+      <value tokenid="ooxml:Value_office_ST_Angle_any">any</value>
+      <value tokenid="ooxml:Value_office_ST_Angle_30">30</value>
+      <value tokenid="ooxml:Value_office_ST_Angle_45">45</value>
+      <value tokenid="ooxml:Value_office_ST_Angle_60">60</value>
+      <value tokenid="ooxml:Value_office_ST_Angle_90">90</value>
+      <value tokenid="ooxml:Value_office_ST_Angle_auto">auto</value>
     </resource>
     <resource name="ST_OLELinkType" resource="List">
-      <value name="Picture" tokenid="ooxml:Value_office_ST_OLELinkType_Picture">Picture</value>
-      <value name="Bitmap" tokenid="ooxml:Value_office_ST_OLELinkType_Bitmap">Bitmap</value>
-      <value name="EnhancedMetaFile" tokenid="ooxml:Value_office_ST_OLELinkType_EnhancedMetaFile">EnhancedMetaFile</value>
+      <value tokenid="ooxml:Value_office_ST_OLELinkType_Picture">Picture</value>
+      <value tokenid="ooxml:Value_office_ST_OLELinkType_Bitmap">Bitmap</value>
+      <value tokenid="ooxml:Value_office_ST_OLELinkType_EnhancedMetaFile">EnhancedMetaFile</value>
     </resource>
     <resource name="ST_TrueFalseBlank" resource="List">
-      <value name="" tokenid="ooxml:Value_office_ST_TrueFalseBlank_"/>
-      <value name="t" tokenid="ooxml:Value_office_ST_TrueFalseBlank_t">t</value>
-      <value name="f" tokenid="ooxml:Value_office_ST_TrueFalseBlank_f">f</value>
-      <value name="true" tokenid="ooxml:Value_office_ST_TrueFalseBlank_true">true</value>
-      <value name="false" tokenid="ooxml:Value_office_ST_TrueFalseBlank_false">false</value>
+      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_"/>
+      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_t">t</value>
+      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_f">f</value>
+      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_true">true</value>
+      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_false">false</value>
     </resource>
     <resource name="ST_FillType" resource="List">
-      <value name="gradientCenter" tokenid="ooxml:Value_office_ST_FillType_gradientCenter">gradientCenter</value>
-      <value name="solid" tokenid="ooxml:Value_office_ST_FillType_solid">solid</value>
-      <value name="pattern" tokenid="ooxml:Value_office_ST_FillType_pattern">pattern</value>
-      <value name="tile" tokenid="ooxml:Value_office_ST_FillType_tile">tile</value>
-      <value name="frame" tokenid="ooxml:Value_office_ST_FillType_frame">frame</value>
-      <value name="gradientUnscaled" tokenid="ooxml:Value_office_ST_FillType_gradientUnscaled">gradientUnscaled</value>
-      <value name="gradientRadial" tokenid="ooxml:Value_office_ST_FillType_gradientRadial">gradientRadial</value>
-      <value name="gradient" tokenid="ooxml:Value_office_ST_FillType_gradient">gradient</value>
-      <value name="background" tokenid="ooxml:Value_office_ST_FillType_background">background</value>
+      <value tokenid="ooxml:Value_office_ST_FillType_gradientCenter">gradientCenter</value>
+      <value tokenid="ooxml:Value_office_ST_FillType_solid">solid</value>
+      <value tokenid="ooxml:Value_office_ST_FillType_pattern">pattern</value>
+      <value tokenid="ooxml:Value_office_ST_FillType_tile">tile</value>
+      <value tokenid="ooxml:Value_office_ST_FillType_frame">frame</value>
+      <value tokenid="ooxml:Value_office_ST_FillType_gradientUnscaled">gradientUnscaled</value>
+      <value tokenid="ooxml:Value_office_ST_FillType_gradientRadial">gradientRadial</value>
+      <value tokenid="ooxml:Value_office_ST_FillType_gradient">gradient</value>
+      <value tokenid="ooxml:Value_office_ST_FillType_background">background</value>
     </resource>
   </namespace>
   <namespace name="mce">
@@ -10707,29 +10707,29 @@
       <attribute name="anchory" tokenid="ooxml:CT_Wrap_anchory"/>
     </resource>
     <resource name="ST_WrapType" resource="List">
-      <value name="topAndBottom" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_topAndBottom">topAndBottom</value>
-      <value name="square" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_square">square</value>
-      <value name="none" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_none">none</value>
-      <value name="tight" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_tight">tight</value>
-      <value name="through" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_through">through</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_topAndBottom">topAndBottom</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_square">square</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_none">none</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_tight">tight</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapType_through">through</value>
     </resource>
     <resource name="ST_WrapSide" resource="List">
-      <value name="both" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_both">both</value>
-      <value name="left" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_left">left</value>
-      <value name="right" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_right">right</value>
-      <value name="largest" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_largest">largest</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_both">both</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_left">left</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_right">right</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_WrapSide_largest">largest</value>
     </resource>
     <resource name="ST_HorizontalAnchor" resource="List">
-      <value name="margin" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_margin">margin</value>
-      <value name="page" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_page">page</value>
-      <value name="text" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_text">text</value>
-      <value name="char" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_char">char</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_margin">margin</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_page">page</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_text">text</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_HorizontalAnchor_char">char</value>
     </resource>
     <resource name="ST_VerticalAnchor" resource="List">
-      <value name="margin" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_margin">margin</value>
-      <value name="page" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_page">page</value>
-      <value name="text" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_text">text</value>
-      <value name="line" tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_line">line</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_margin">margin</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_page">page</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_text">text</value>
+      <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_line">line</value>
     </resource>
   </namespace>
   <namespace name="wml" file="wml.rng">
@@ -17198,47 +17198,47 @@
       <attribute name="vertCompress" tokenid="ooxml:CT_EastAsianLayout_vertCompress"/>
     </resource>
     <resource name="ST_XAlign" resource="List">
-      <value name="left" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_left">left</value>
-      <value name="center" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_center">center</value>
-      <value name="right" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_right">right</value>
-      <value name="inside" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_inside">inside</value>
-      <value name="outside" tokenid="ooxml:Value_wordprocessingml_ST_XAlign_outside">outside</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_left">left</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_center">center</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_right">right</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_inside">inside</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_outside">outside</value>
     </resource>
     <resource name="ST_YAlign" resource="List">
-      <value name="inline" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_inline">inline</value>
-      <value name="top" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_top">top</value>
-      <value name="center" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_center">center</value>
-      <value name="bottom" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_bottom">bottom</value>
-      <value name="inside" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_inside">inside</value>
-      <value name="outside" tokenid="ooxml:Value_wordprocessingml_ST_YAlign_outside">outside</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_inline">inline</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_top">top</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_center">center</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_bottom">bottom</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_inside">inside</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_outside">outside</value>
     </resource>
     <resource name="ST_HeightRule" resource="List">
-      <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_auto">auto</value>
-      <value name="exact" tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_exact">exact</value>
-      <value name="atLeast" tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_atLeast">atLeast</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_auto">auto</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_exact">exact</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_atLeast">atLeast</value>
     </resource>
     <resource name="ST_Wrap" resource="List">
-      <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_auto">auto</value>
-      <value name="notBeside" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_notBeside">notBeside</value>
-      <value name="around" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_around">around</value>
-      <value name="tight" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_tight">tight</value>
-      <value name="through" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_through">through</value>
-      <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_Wrap_none">none</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_auto">auto</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_notBeside">notBeside</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_around">around</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_tight">tight</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_through">through</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_none">none</value>
     </resource>
     <resource name="ST_VAnchor" resource="List">
-      <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_text">text</value>
-      <value name="margin" tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_margin">margin</value>
-      <value name="page" tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_page">page</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_text">text</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_margin">margin</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_page">page</value>
     </resource>
     <resource name="ST_HAnchor" resource="List">
-      <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_text">text</value>
-      <value name="margin" tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_margin">margin</value>
-      <value name="page" tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_page">page</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_text">text</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_margin">margin</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_page">page</value>
     </resource>
     <resource name="ST_DropCap" resource="List">
-      <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_DropCap_none">none</value>
-      <value name="drop" tokenid="ooxml:Value_wordprocessingml_ST_DropCap_drop">drop</value>
-      <value name="margin" tokenid="ooxml:Value_wordprocessingml_ST_DropCap_margin">margin</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DropCap_none">none</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DropCap_drop">drop</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DropCap_margin">margin</value>
     </resource>
     <resource name="CT_FramePr" resource="Properties">
       <attribute name="dropCap" tokenid="ooxml:CT_FramePr_dropCap"/>
@@ -17282,9 +17282,9 @@
       <attribute name="pos" tokenid="ooxml:CT_TabStop_pos"/>
     </resource>
     <resource name="ST_LineSpacingRule" resource="List">
-      <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_auto">auto</value>
-      <value name="exact" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_exact">exact</value>
-      <value name="atLeast" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_atLeast">atLeast</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_auto">auto</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_exact">exact</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_atLeast">atLeast</value>
     </resource>
     <resource name="CT_Spacing" resource="Properties">
       <attribute name="before" tokenid="ooxml:CT_Spacing_before"/>
@@ -17329,21 +17329,21 @@
       <attribute name="val" tokenid="ooxml:CT_Jc_val" action="setValue"/>
     </resource>
     <resource name="ST_View" resource="List">
-      <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_View_none">none</value>
-      <value name="print" tokenid="ooxml:Value_wordprocessingml_ST_View_print">print</value>
-      <value name="outline" tokenid="ooxml:Value_wordprocessingml_ST_View_outline">outline</value>
-      <value name="masterPages" tokenid="ooxml:Value_wordprocessingml_ST_View_masterPages">masterPages</value>
-      <value name="normal" tokenid="ooxml:Value_wordprocessingml_ST_View_normal">normal</value>
-      <value name="web" tokenid="ooxml:Value_wordprocessingml_ST_View_web">web</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_View_none">none</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_View_print">print</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_View_outline">outline</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_View_masterPages">masterPages</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_View_normal">normal</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_View_web">web</value>
     </resource>
     <resource name="CT_View" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_View_val"/>
     </resource>
     <resource name="ST_Zoom" resource="List">
-      <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_none">none</value>
-      <value name="fullPage" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_fullPage">fullPage</value>
-      <value name="bestFit" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_bestFit">bestFit</value>
-      <value name="textFit" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_textFit">textFit</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Zoom_none">none</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Zoom_fullPage">fullPage</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Zoom_bestFit">bestFit</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_Zoom_textFit">textFit</value>
     </resource>
     <resource name="ST_Percentage" resource="Integer"/>
     <resource name="CT_Zoom" resource="Properties">
@@ -17363,29 +17363,29 @@
       <attribute name="grammar" tokenid="ooxml:CT_Proof_grammar"/>
     </resource>
     <resource name="ST_DocType" resource="List">
-      <value name="notSpecified" tokenid="ooxml:Value_wordprocessingml_ST_DocType_notSpecified">notSpecified</value>
-      <value name="letter" tokenid="ooxml:Value_wordprocessingml_ST_DocType_letter">letter</value>
-      <value name="eMail" tokenid="ooxml:Value_wordprocessingml_ST_DocType_eMail">eMail</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocType_notSpecified">notSpecified</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocType_letter">letter</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocType_eMail">eMail</value>
     </resource>
     <resource name="CT_DocType" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_DocType_val"/>
     </resource>
     <resource name="ST_DocProtect" resource="List">
-      <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_none">none</value>
-      <value name="readOnly" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_readOnly">readOnly</value>
-      <value name="comments" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_comments">comments</value>
-      <value name="trackedChanges" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_trackedChanges">trackedChanges</value>
-      <value name="forms" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_forms">forms</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_none">none</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_readOnly">readOnly</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_comments">comments</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_trackedChanges">trackedChanges</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_forms">forms</value>
     </resource>
     <resource name="ST_CryptProv" resource="List">
-      <value name="rsaAES" tokenid="ooxml:Value_wordprocessingml_ST_CryptProv_rsaAES">rsaAES</value>
-      <value name="rsaFull" tokenid="ooxml:Value_wordprocessingml_ST_CryptProv_rsaFull">rsaFull</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_CryptProv_rsaAES">rsaAES</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_CryptProv_rsaFull">rsaFull</value>
     </resource>
     <resource name="ST_AlgClass" resource="List">
-      <value name="hash" tokenid="ooxml:Value_wordprocessingml_ST_AlgClass_hash">hash</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_AlgClass_hash">hash</value>
     </resource>
     <resource name="ST_AlgType" resource="List">
-      <value name="typeAny" tokenid="ooxml:Value_wordprocessingml_ST_AlgType_typeAny">typeAny</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_AlgType_typeAny">typeAny</value>
     </resource>
     <resource name="AG_Password" resource="Properties">
       <attribute name="cryptProviderType" tokenid="ooxml:AG_Password_cryptProviderType"/>
@@ -17445,22 +17445,22 @@
       <attribute name="val" tokenid="ooxml:CT_TextDirection_val" action="setValue"/>
     </resource>
     <resource name="ST_TextAlignment" resource="List">
-      <value name="top" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_top">top</value>
-      <value name="center" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_center">center</value>
-      <value name="baseline" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_baseline">baseline</value>
-      <value name="bottom" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_bottom">bottom</value>
-      <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_auto">auto</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_top">top</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_center">center</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_baseline">baseline</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_bottom">bottom</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_auto">auto</value>
     </resource>
     <resource name="CT_TextAlignment" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextAlignment_val" action="setValue"/>
     </resource>
     <resource name="ST_DisplacedByCustomXml" resource="List">
-      <value name="next" tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_next">next</value>
-      <value name="prev" tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_prev">prev</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_next">next</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_prev">prev</value>
     </resource>
     <resource name="ST_AnnotationVMerge" resource="List">
-      <value name="cont" tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_cont">cont</value>
-      <value name="rest" tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_rest">rest</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_cont">cont</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_rest">rest</value>
     </resource>
     <resource name="CT_Markup" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_Markup_id"/>
@@ -17670,13 +17670,13 @@
       <action name="end" action="fieldend"/>
     </resource>
     <resource name="ST_FldCharType" resource="List">
-      <value name="begin" tokenid="ooxml:Value_ST_FldCharType_begin">begin</value>
-      <value name="separate" tokenid="ooxml:Value_ST_FldCharType_separate">separate</value>
-      <value name="end" tokenid="ooxml:Value_ST_FldCharType_end">end</value>
+      <value tokenid="ooxml:Value_ST_FldCharType_begin">begin</value>
+      <value tokenid="ooxml:Value_ST_FldCharType_separate">separate</value>
+      <value tokenid="ooxml:Value_ST_FldCharType_end">end</value>
     </resource>
     <resource name="ST_InfoTextType" resource="List">
-      <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_InfoTextType_text">text</value>
-      <value name="autoText" tokenid="ooxml:Value_wordprocessingml_ST_InfoTextType_autoText">autoText</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_InfoTextType_text">text</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_InfoTextType_autoText">autoText</value>
     </resource>
     <resource name="ST_FFName" resource="String"/>
     <resource name="CT_FFTextType" resource="Value">
@@ -17850,17 +17850,17 @@
       <attribute name="gutter" tokenid="ooxml:CT_PageMar_gutter"/>
     </resource>
     <resource name="ST_PageBorderZOrder" resource="List">
-      <value name="front" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderZOrder_front">front</value>
-      <value name="back" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderZOrder_back">back</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderZOrder_front">front</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderZOrder_back">back</value>
     </resource>
     <resource name="ST_PageBorderDisplay" resource="List">
-      <value name="allPages" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_allPages">allPages</value>
-      <value name="firstPage" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_firstPage">firstPage</value>
-      <value name="notFirstPage" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_notFirstPage">notFirstPage</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_allPages">allPages</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_firstPage">firstPage</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_notFirstPage">notFirstPage</value>
     </resource>
     <resource name="ST_PageBorderOffset" resource="List">
-      <value name="page" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_page">page</value>
-      <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_text">text</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_page">page</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_text">text</value>
     </resource>
     <resource name="CT_PageBorders" resource="Properties">
       <element name="top" tokenid="ooxml:CT_PageBorders_top"/>
@@ -17916,10 +17916,10 @@
       <attribute name="val" tokenid="ooxml:CT_VerticalJc_val" action="setValue"/>
     </resource>
     <resource name="ST_DocGrid" resource="List">
-      <value name="default" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_default">default</value>
-      <value name="lines" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_lines">lines</value>
-      <value name="linesAndChars" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_linesAndChars">linesAndChars</value>
-      <value name="snapToChars" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_snapToChars">snapToChars</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_default">default</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_lines">lines</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_linesAndChars">linesAndChars</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_snapToChars">snapToChars</value>
     </resource>
     <resource name="CT_DocGrid" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_DocGrid_type"/>
@@ -17932,10 +17932,10 @@
       <value tokenid="ooxml:Value_ST_HdrFtr_first">first</value>
     </resource>
     <resource name="ST_FtnEdn" resource="List">
-      <value name="normal" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_normal">normal</value>
-      <value name="separator" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_separator">separator</value>
-      <value name="continuationSeparator" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_continuationSeparator">continuationSeparator</value>
-      <value name="continuationNotice" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_continuationNotice">continuationNotice</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_normal">normal</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_separator">separator</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_continuationSeparator">continuationSeparator</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_continuationNotice">continuationNotice</value>
     </resource>
     <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_HdrFtrRef" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_HdrFtrRef_type"/>
@@ -18723,18 +18723,18 @@
       <attribute name="qFormat" tokenid="ooxml:CT_LsdException_qFormat"/>
     </resource>
     <resource name="ST_ColorSchemeIndex" resource="List">
-      <value name="dark1" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_dark1">dark1</value>
-      <value name="light1" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_light1">light1</value>
-      <value name="dark2" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_dark2">dark2</value>
-      <value name="light2" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_light2">light2</value>
-      <value name="accent1" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent1">accent1</value>
-      <value name="accent2" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent2">accent2</value>
-      <value name="accent3" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent3">accent3</value>
-      <value name="accent4" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent4">accent4</value>
-      <value name="accent5" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent5">accent5</value>
-      <value name="accent6" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent6">accent6</value>
-      <value name="hyperlink" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_hyperlink">hyperlink</value>
-      <value name="followedHyperlink" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_followedHyperlink">followedHyperlink</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_dark1">dark1</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_light1">light1</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_dark2">dark2</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_light2">light2</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent1">accent1</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent2">accent2</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent3">accent3</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent4">accent4</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent5">accent5</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent6">accent6</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_hyperlink">hyperlink</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_followedHyperlink">followedHyperlink</value>
     </resource>
     <resource name="CT_ReadingModeInkLockDown" resource="Properties">
       <attribute name="actualPg" tokenid="ooxml:CT_ReadingModeInkLockDown_actualPg"/>
@@ -19135,10 +19135,10 @@
       <element name="styles" tokenid="ooxml:STYLESHEET"/>
     </resource>
     <resource name="ST_CaptionPos" resource="List">
-      <value name="above" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_above">above</value>
-      <value name="below" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_below">below</value>
-      <value name="left" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_left">left</value>
-      <value name="right" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_right">right</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_above">above</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_below">below</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_left">left</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_right">right</value>
     </resource>
     <resource name="CT_Caption" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_Caption_name"/>
