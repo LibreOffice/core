@@ -19,6 +19,8 @@ build-ant: android_version_setup copy-stuff link-so properties
 #
 # Copy jar files we need
 #
+	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar libs
+
 	for F in java_uno \
 		 juh \
 		 jurt \
