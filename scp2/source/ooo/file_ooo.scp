@@ -498,6 +498,7 @@ UI_FILELIST(dbtdata, "UIConfig/modules/dbtdata.filelist")
 #endif
 UI_FILELIST(desktop, "UIConfig/desktop.filelist")
 UI_FILELIST(filter, "UIConfig/filter.filelist")
+UI_FILELIST(fps, "UIConfig/fps.filelist")
 UI_FILELIST(sabpilot, "UIConfig/modules/sabpilot.filelist")
 #ifdef DBCONNECTIVITY
 UI_FILELIST(sbibliography, "UIConfig/modules/sbibliography.filelist")
@@ -535,6 +536,7 @@ UI_FILELIST_ALL_LANG(spropctrlr, modules/spropctrlr)
 #endif
 UI_FILELIST_ALL_LANG(desktop, desktop)
 UI_FILELIST_ALL_LANG(filter, filter)
+UI_FILELIST_ALL_LANG(fps, fps)
 UI_FILELIST_ALL_LANG(sabpilot, modules/sabpilot)
 UI_FILELIST_ALL_LANG(scalc, modules/scalc)
 UI_FILELIST_ALL_LANG(schart, modules/schart)

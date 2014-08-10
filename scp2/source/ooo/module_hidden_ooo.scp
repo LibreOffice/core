@@ -240,6 +240,7 @@ Module gid_Module_Root_Files_6
 #endif
         gid_File_Share_Config_Sofficecfg_uiconfig_desktop,
         gid_File_Share_Config_Sofficecfg_uiconfig_filter,
+        gid_File_Share_Config_Sofficecfg_uiconfig_fps,
 #ifdef DBCONNECTIVITY
         gid_File_Share_Config_Sofficecfg_uiconfig_sbibliography,
 #endif
