@@ -84,7 +84,6 @@
       <include href="dml-baseStylesheet.rng"/>
       <!-- start = theme | themeOverride | themeManager | hlinkClick -->
       <define name="CT_EmptyElement">
-        <empty/>
       </define>
       <define name="CT_ColorMapping">
           <element name="extLst">
@@ -691,7 +690,6 @@
           </choice>
       </define>
       <define name="ST_FOVAngle">
-        <empty/>
       </define>
       <define name="CT_Camera">
           <element name="rot">
@@ -1107,10 +1105,8 @@
           </choice>
       </define>
       <define name="CT_TextUnderlineLineFollowText">
-        <empty/>
       </define>
       <define name="CT_TextUnderlineFillFollowText">
-        <empty/>
       </define>
       <define name="CT_TextUnderlineFillGroupWrapper">
         <ref name="EG_FillProperties"/>
@@ -1298,10 +1294,8 @@
         </attribute>
       </define>
       <define name="CT_AlphaCeilingEffect">
-        <empty/>
       </define>
       <define name="CT_AlphaFloorEffect">
-        <empty/>
       </define>
       <define name="CT_AlphaInverseEffect">
           <ref name="EG_ColorChoice"/>
@@ -1358,7 +1352,6 @@
           </attribute>
       </define>
       <define name="CT_GrayscaleEffect">
-        <empty/>
       </define>
       <define name="CT_HSLEffect">
           <attribute name="hue">
@@ -1563,7 +1556,6 @@
           </attribute>
       </define>
       <define name="CT_NoFillProperties">
-        <empty/>
       </define>
       <define name="CT_SolidColorFillProperties">
           <ref name="EG_ColorChoice"/>
@@ -1892,7 +1884,6 @@
           </attribute>
       </define>
       <define name="CT_GroupFillProperties">
-        <empty/>
       </define>
       <define name="EG_FillProperties">
         <choice>
@@ -2374,10 +2365,8 @@
         </choice>
       </define>
       <define name="CT_LineJoinBevel">
-        <empty/>
       </define>
       <define name="CT_LineJoinRound">
-        <empty/>
       </define>
       <define name="CT_LineJoinMiterProperties">
           <attribute name="lim">
@@ -2462,7 +2451,6 @@
           </choice>
       </define>
       <define name="ST_LineWidth">
-        <empty/>
       </define>
       <define name="ST_PenAlignment">
           <choice>
@@ -2666,10 +2654,8 @@
         </attribute>
       </define>
       <define name="ST_FixedAngle">
-        <empty/>
       </define>
       <define name="ST_PositiveFixedAngle">
-        <empty/>
       </define>
       <define name="CT_PositiveFixedAngle">
         <attribute name="val">
@@ -2685,7 +2671,6 @@
         </attribute>
       </define>
       <define name="ST_PositivePercentage">
-        <empty/>
       </define>
       <define name="CT_PositivePercentage">
         <attribute name="val">
@@ -2693,7 +2678,6 @@
         </attribute>
       </define>
       <define name="ST_FixedPercentage">
-        <empty/>
       </define>
       <define name="CT_FixedPercentage">
         <attribute name="val">
@@ -2701,7 +2685,6 @@
         </attribute>
       </define>
       <define name="ST_PositiveFixedPercentage">
-        <empty/>
       </define>
       <define name="CT_PositiveFixedPercentage">
         <attribute name="val">
@@ -2733,19 +2716,14 @@
         </attribute>
       </define>
       <define name="CT_ComplementTransform">
-        <empty/>
       </define>
       <define name="CT_InverseTransform">
-        <empty/>
       </define>
       <define name="CT_GrayscaleTransform">
-        <empty/>
       </define>
       <define name="CT_GammaTransform">
-        <empty/>
       </define>
       <define name="CT_InverseGammaTransform">
-        <empty/>
       </define>
       <define name="EG_ColorTransform">
         <choice>
@@ -4575,7 +4553,6 @@
         </attribute>
       </define>
       <define name="CT_Empty">
-        <empty/>
       </define>
       <define name="CT_SolidColorFillProperties">
         <ref name="EG_ColorChoice"/>
@@ -6339,7 +6316,6 @@
           </element>
       </define>
       <define name="CT_Path2DClose">
-        <empty/>
       </define>
       <define name="ST_PathFillMode">
           <choice>
@@ -6808,7 +6784,6 @@
           </attribute>
       </define>
       <define name="CT_WrapNone">
-        <empty/>
       </define>
       <define name="CT_WrapSquare">
           <element name="effectExtent">
@@ -9809,7 +9784,6 @@
         </attribute>
       </define>
       <define name="CT_Ink">
-        <empty/>
         <attribute name="i">
           <data type="base64Binary"/>
         </attribute>
@@ -10592,7 +10566,6 @@
         </element>
       </define>
       <define name="CT_AnchorLock">
-        <empty/>
       </define>
       <define name="ST_WrapType">
           <choice>
@@ -10701,7 +10674,6 @@
       <include href="shared-relationshipReference.rng"/>
       <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
       <define name="CT_Empty">
-        <empty/>
       </define>
       <define name="ST_OnOff">
           <choice>
@@ -13387,22 +13359,16 @@
           </attribute>
       </define>
       <define name="CT_FtnEdnRefChar">
-        <empty/>
       </define>
       <define name="CT_FtnEdnSep">
-        <empty/>
       </define>
       <define name="CT_FtnEdnCont">
-        <empty/>
       </define>
       <define name="CT_PgNum">
-        <empty/>
       </define>
       <define name="CT_Cr">
-        <empty/>
       </define>
       <define name="CT_Tab">
-        <empty/>
       </define>
       <define name="EG_RunInnerContent">
         <choice>
