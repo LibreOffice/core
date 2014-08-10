@@ -18,8 +18,8 @@
 
 package com.sun.star.lib.uno.helper;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.ArrayList;
 
 /**
  * Object representation and parsing of Uno Urls,
@@ -203,50 +203,6 @@ public class UnoUrl {
         return connection.getUninterpretedString();
     }
 
-    private static int hexToInt(int ch)
-        throws com.sun.star.lang.IllegalArgumentException {
-        int c = Character.toLowerCase((char) ch);
-        boolean isDigit = ('0' <= c && c <= '9');
-        boolean isValidChar = ('a' <= c && c <= 'f') || isDigit;
-
-        if (!isValidChar)
-            throw new com.sun.star.lang.IllegalArgumentException(
-                "Invalid UTF-8 hex byte '" + c + "'.");
-
-        return isDigit ? ch - '0' : 10 + ((char) c - 'a') & 0xF;
-    }
-
-    private static String decodeUTF8(String s)
-        throws com.sun.star.lang.IllegalArgumentException {
-        ArrayList<Integer> v = new ArrayList<Integer>();
-
-        for (int i = 0; i < s.length(); i++) {
-            int ch = s.charAt(i);
-
-            if (ch == '%') {
-                int hb = hexToInt(s.charAt(++i));
-                int lb = hexToInt(s.charAt(++i));
-                ch = (hb << 4) | lb;
-            }
-
-            v.add(new Integer(ch));
-        }
-
-        int size = v.size();
-        byte[] bytes = new byte[size];
-        for (int i = 0; i < size; i++) {
-            Integer anInt = v.get(i);
-            bytes[i] = (byte) (anInt.intValue() & 0xFF);
-        }
-
-        try {
-            return new String(bytes, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new com.sun.star.lang.IllegalArgumentException(
-                "Couldn't convert parameter string to UTF-8 string:" + e.getMessage());
-        }
-    }
-
     private static HashMap<String,String> buildParamHashMap(String paramString)
         throws com.sun.star.lang.IllegalArgumentException {
         HashMap<String,String> params = new HashMap<String,String>();
@@ -283,7 +239,12 @@ public class UnoUrl {
                         "The parameter value for key '" + aKey + "' contains illegal characters.");
                 }
 
-                params.put(aKey, decodeUTF8(aValue));
+                try {
+                    params.put(aKey, URLDecoder.decode(aValue,"UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    throw new com.sun.star.lang.IllegalArgumentException(
+                        "Couldn't convert parameter string to UTF-8 string:" + e.getMessage());
+                }
             }
 
             if ((pos >= paramString.length()) || (c != ','))
