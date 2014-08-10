@@ -3,5 +3,6 @@
 
     <string name="app_name">LibreOffice</string>
     <string name="action_settings">Settings</string>
+    <string name="action_list">Parts</string>
 
 </resources>

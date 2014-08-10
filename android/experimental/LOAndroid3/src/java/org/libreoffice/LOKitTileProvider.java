@@ -55,6 +55,22 @@ public class LOKitTileProvider implements TileProvider {
             if (parts >= 1) {
                 mDocument.setPart(0);
             }
+            for (int i = 0; i < parts; i++) {
+                String partName = mDocument.getPartName(i);
+                if (partName.isEmpty()) {
+                    partName = "Part " + (i + 1);
+                }
+                Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
+                final DocumentPartView partView = new DocumentPartView(partName);
+                LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
+            }
+
+            LibreOfficeMainActivity.mAppContext.mMainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdpater().notifyDataSetChanged();
+                }
+            });
         }
     }
 

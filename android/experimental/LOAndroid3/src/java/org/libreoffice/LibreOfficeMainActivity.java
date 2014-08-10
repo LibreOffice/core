@@ -2,35 +2,53 @@ package org.libreoffice;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LibreOfficeMainActivity extends Activity {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
     private static final String DEFAULT_DOC_PATH = "/assets/test1.odt";
 
-    private LinearLayout mMainLayout;
-    private RelativeLayout mGeckoLayout;
+    public static LibreOfficeMainActivity mAppContext;
+
     private static LayerController mLayerController;
     private static GeckoLayerClient mLayerClient;
     private static LOKitThread sLOKitThread;
 
-    public static LibreOfficeMainActivity mAppContext;
+    public Handler mMainHandler;
+
+    private DrawerLayout mDrawerLayout;
+    private RelativeLayout mGeckoLayout;
+    private ListView mDrawerList;
+    private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
+    private DocumentPartViewListAdpater mDocumentPartViewListAdpater;
+
+    public static GeckoLayerClient getLayerClient() {
+        return mLayerClient;
+    }
+
+    public static LayerController getLayerController() {
+        return mLayerController;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -45,36 +63,47 @@ public class LibreOfficeMainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        menu.findItem(R.id.action_list).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     public DisplayMetrics getDisplayMetrics() {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         return metrics;
     }
 
-    /**
-     * Called when the activity is first created.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mAppContext = this;
 
+        mMainHandler = new Handler();
+
         super.onCreate(savedInstanceState);
 
-        Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - onCreate");
+        String inputFile;
 
-        String inputFile = new String();
         if (getIntent().getData() != null) {
             inputFile = getIntent().getData().getEncodedPath();
-        }
-        else {
+        } else {
             inputFile = DEFAULT_DOC_PATH;
         }
 
         setContentView(R.layout.activity_main);
 
-        // setup gecko layout
+        getActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setHomeButtonEnabled(false);
+
         mGeckoLayout = (RelativeLayout) findViewById(R.id.gecko_layout);
-        mMainLayout = (LinearLayout) findViewById(R.id.main_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        mDocumentPartViewListAdpater = new DocumentPartViewListAdpater(this, R.layout.document_part_list_layout, mDocumentPartView);
+        mDrawerList.setAdapter(mDocumentPartViewListAdpater);
 
         if (mLayerController == null) {
             mLayerController = new LayerController(this);
@@ -90,19 +119,28 @@ public class LibreOfficeMainActivity extends Activity {
         sLOKitThread = new LOKitThread(inputFile);
         sLOKitThread.start();
 
-        Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - UI almost up");
+        Log.w(LOGTAG, "UI almost up");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     public LOKitThread getLOKitThread() {
         return sLOKitThread;
     }
 
-    public static GeckoLayerClient getLayerClient() {
-        return mLayerClient;
+    public List<DocumentPartView> getDocumentPartView() {
+        return mDocumentPartView;
     }
-
-    public static LayerController getLayerController() {
-        return mLayerController;
+    public DocumentPartViewListAdpater getDocumentPartViewListAdpater() {
+        return mDocumentPartViewListAdpater;
     }
 }
 

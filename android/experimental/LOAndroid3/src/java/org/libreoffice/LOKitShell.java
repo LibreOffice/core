@@ -1,6 +1,7 @@
 package org.libreoffice;
 
 
+import android.os.Handler;
 import android.util.DisplayMetrics;
 
 public class LOKitShell {
@@ -31,5 +32,10 @@ public class LOKitShell {
 
     public static void scheduleResumeComposition() {
 
+    }
+
+    // Get a Handler for the main java thread
+    public static Handler getMainHandler() {
+        return LibreOfficeMainActivity.mAppContext.mMainHandler;
     }
 }
