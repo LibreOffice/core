@@ -45,6 +45,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	$(if $(filter LINUX FREEBSD ANDROID,$(OS)),external/openssl/openssllnx.patch) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),external/openssl/opensslmingw.patch) \
 	$(if $(filter MSC,$(COM)),external/openssl/opensslwnt.patch) \
+	$(if $(filter MSC,$(COM)),external/openssl/openssl-1.0.1g-msvc2012-winxp.patch.1) \
+	$(if $(filter MSC,$(COM)),external/openssl/openssl-1.0.1h-win64.patch.1) \
 	$(if $(filter SOLARIS,$(OS)),external/openssl/opensslsol.patch) \
 	$(if $(filter IOS,$(OS)),external/openssl/opensslios.patch) \
 ))
