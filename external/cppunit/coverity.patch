@@ -1,6 +1,6 @@
 --- misc/cppunit-1.13.1/src/cppunit/Asserter.cpp
 +++ misc/build/cppunit-1.13.1/src/cppunit/Asserter.cpp
-@@ -13,7 +13,7 @@
+@@ -13,7 +13,7 @@ Asserter::fail( std::string message,
    fail( Message( "assertion failed", message ), sourceLine );
  }
  
