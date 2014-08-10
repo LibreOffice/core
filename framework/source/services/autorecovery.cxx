@@ -3114,6 +3114,23 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     rInfo.DocumentState |= AutoRecovery::E_TRY_SAVE;
     implts_flushConfigItem(rInfo);
 
+    // If userautosave is enabled, first try to save the original file.
+    // Note that we must do it *before* calling storeToRecoveryFile, so in case of failure here
+    // we won't remain with the modified flag set to true, even though the autorecovery save succeeded.
+    try
+    {
+        // We must check here for an empty URL to avoid a "This operation is not supported on this operating system."
+        // message during autosave.
+        if ((m_eJob & AutoRecovery::E_USER_AUTO_SAVE) == AutoRecovery::E_USER_AUTO_SAVE && !rInfo.OrgURL.isEmpty())
+        {
+            Reference< XStorable > xDocSave(rInfo.Document, css::uno::UNO_QUERY_THROW);
+            xDocSave->store();
+        }
+    }
+    catch(const css::uno::Exception&)
+    {
+    }
+
     sal_Int32 nRetry = RETRY_STORE_ON_FULL_DISC_FOREVER;
     bool  bError = false;
     do
@@ -3121,13 +3138,6 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
         try
         {
             xDocRecover->storeToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
-
-            // if userautosave is enabled, also save to the original file
-            if((m_eJob & AutoRecovery::E_USER_AUTO_SAVE) == AutoRecovery::E_USER_AUTO_SAVE)
-            {
-                Reference< XStorable > xDocSave(rInfo.Document, css::uno::UNO_QUERY_THROW);
-                xDocSave->store();
-            }
 
 #ifdef TRIGGER_FULL_DISC_CHECK
             throw css::uno::Exception();
