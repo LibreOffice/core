@@ -188,15 +188,12 @@ public class ServiceManager implements XMultiServiceFactory,
     public String[] getAvailableServiceNames()
             throws com.sun.star.uno.RuntimeException
     {
-        int i = 0;
-        String[] availableServiceNames = new String[factoriesByServiceNames.size()];
-
-        java.util.Iterator<String> keys = factoriesByServiceNames.keySet().iterator();
-
-        while (keys.hasNext())
-            availableServiceNames[i++] = keys.next();
-
-        return availableServiceNames;
+        try{
+            return factoriesByServiceNames.keySet().toArray(
+                new String[ factoriesByServiceNames.size() ] );
+        } catch(Exception ex) {
+            throw new com.sun.star.uno.RuntimeException(ex.getMessage());
+        }
     }
 
     // XMultiComponentFactory implementation
