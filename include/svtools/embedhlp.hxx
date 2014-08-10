@@ -67,6 +67,8 @@ public:
                                         OUString* pMediaType )
                             throw();
 
+    static bool IsChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj);
+
     const com::sun::star::uno::Reference <com::sun::star::embed::XEmbeddedObject>& operator->() const;
     const com::sun::star::uno::Reference <com::sun::star::embed::XEmbeddedObject>& GetObject() const;
 

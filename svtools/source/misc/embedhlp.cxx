@@ -786,6 +786,21 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
     return ::comphelper::EmbeddedObjectContainer::GetGraphicReplacementStream(nViewAspect,xObj,pMediaType);
 }
 
+bool EmbeddedObjectRef::IsChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj)
+{
+    SvGlobalName aObjClsId(xObj->getClassID());
+    if(
+        SvGlobalName(SO3_SCH_CLASSID_30) == aObjClsId
+        || SvGlobalName(SO3_SCH_CLASSID_40) == aObjClsId
+        || SvGlobalName(SO3_SCH_CLASSID_50) == aObjClsId
+        || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void EmbeddedObjectRef::UpdateReplacement()
 {
     GetReplacement( true );
@@ -816,17 +831,7 @@ bool EmbeddedObjectRef::IsChart() const
     if (!mpImpl->mxObj.is())
         return false;
 
-    SvGlobalName aObjClsId(mpImpl->mxObj->getClassID());
-    if(
-        SvGlobalName(SO3_SCH_CLASSID_30) == aObjClsId
-        || SvGlobalName(SO3_SCH_CLASSID_40) == aObjClsId
-        || SvGlobalName(SO3_SCH_CLASSID_50) == aObjClsId
-        || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId)
-    {
-        return true;
-    }
-
-    return false;
+    return EmbeddedObjectRef::IsChart(mpImpl->mxObj);
 }
 
 // MT: Only used for getting accessible attributes, which are not localized
