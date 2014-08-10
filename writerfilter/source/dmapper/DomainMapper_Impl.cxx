@@ -1042,7 +1042,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 
             bool bIsDropCap =
                 pParaContext->IsFrameMode() &&
-                sal::static_int_cast<Id>(pParaContext->GetDropCap()) != NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none;
+                sal::static_int_cast<Id>(pParaContext->GetDropCap()) != NS_ooxml::LN_Value_doc_ST_DropCap_none;
 
             style::DropCapFormat aDrop;
             ParagraphPropertiesPtr pToBeSavedProperties;
@@ -1063,7 +1063,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
             }
             if( rAppendContext.pLastParagraphProperties.get() )
             {
-                if( sal::static_int_cast<Id>(rAppendContext.pLastParagraphProperties->GetDropCap()) != NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none)
+                if( sal::static_int_cast<Id>(rAppendContext.pLastParagraphProperties->GetDropCap()) != NS_ooxml::LN_Value_doc_ST_DropCap_none)
                 {
                     //handles (4) and part of (5)
                     //create a DropCap property, add it to the property sequence of finishParagraph

@@ -1943,7 +1943,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         break;
         case RTF_FTNSEP:
             m_aStates.top().nDestinationState = DESTINATION_FOOTNOTESEPARATOR;
-            m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdn_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)));
+            m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdn_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_doc_ST_FtnEdn_separator)));
             break;
         default:
         {
@@ -2435,19 +2435,19 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
     case RTF_FAFIXED:
     case RTF_FAAUTO:
-        nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_auto;
+        nParam = NS_ooxml::LN_Value_doc_ST_TextAlignment_auto;
         break;
     case RTF_FAHANG:
-        nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_top;
+        nParam = NS_ooxml::LN_Value_doc_ST_TextAlignment_top;
         break;
     case RTF_FACENTER:
-        nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_center;
+        nParam = NS_ooxml::LN_Value_doc_ST_TextAlignment_center;
         break;
     case RTF_FAROMAN:
-        nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_baseline;
+        nParam = NS_ooxml::LN_Value_doc_ST_TextAlignment_baseline;
         break;
     case RTF_FAVAR:
-        nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_bottom;
+        nParam = NS_ooxml::LN_Value_doc_ST_TextAlignment_bottom;
         break;
     default:
         break;
@@ -3143,57 +3143,57 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         m_aStates.top().aPicture.nStyle = BMPSTYLE_JPEG;
         break;
     case RTF_POSYT:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_top);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_doc_ST_YAlign_top);
         break;
     case RTF_POSYB:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_bottom);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_doc_ST_YAlign_bottom);
         break;
     case RTF_POSYC:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_center);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_doc_ST_YAlign_center);
         break;
     case RTF_POSYIN:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_inside);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_doc_ST_YAlign_inside);
         break;
     case RTF_POSYOUT:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_outside);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_doc_ST_YAlign_outside);
         break;
     case RTF_POSYIL:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_inline);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_doc_ST_YAlign_inline);
         break;
 
     case RTF_PHMRG:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_margin);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, NS_ooxml::LN_Value_doc_ST_HAnchor_margin);
         break;
     case RTF_PVMRG:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_margin);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, NS_ooxml::LN_Value_doc_ST_VAnchor_margin);
         break;
     case RTF_PHPG:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_page);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, NS_ooxml::LN_Value_doc_ST_HAnchor_page);
         break;
     case RTF_PVPG:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_page);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, NS_ooxml::LN_Value_doc_ST_VAnchor_page);
         break;
     case RTF_PHCOL:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_text);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, NS_ooxml::LN_Value_doc_ST_HAnchor_text);
         break;
     case RTF_PVPARA:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_text);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, NS_ooxml::LN_Value_doc_ST_VAnchor_text);
         break;
 
     case RTF_POSXC:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_center);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_doc_ST_XAlign_center);
         break;
     case RTF_POSXI:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_inside);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_doc_ST_XAlign_inside);
         break;
     case RTF_POSXO:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_outside);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_doc_ST_XAlign_outside);
         break;
     case RTF_POSXL:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_left);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_doc_ST_XAlign_left);
         break;
     case RTF_POSXR:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_doc_ST_XAlign_right);
         break;
 
     case RTF_DPLINE:
@@ -3335,7 +3335,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue("CornerRadius", uno::makeAny(sal_Int32(83)));
         break;
     case RTF_NOWRAP:
-        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_wrap, NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_notBeside);
+        m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_wrap, NS_ooxml::LN_Value_doc_ST_Wrap_notBeside);
         break;
     case RTF_MNOR:
         m_bMathNor = true;
@@ -3766,10 +3766,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_SL:
     {
         // This is similar to RTF_ABSH, negative value means 'exact', positive means 'at least'.
-        RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_atLeast));
+        RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast));
         if (nParam < 0)
         {
-            pValue.reset(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_exact));
+            pValue.reset(new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact));
             pIntValue.reset(new RTFValue(-nParam));
         }
         m_aStates.top().aParagraphAttributes.set(NS_ooxml::LN_CT_Spacing_lineRule, pValue);
@@ -3779,7 +3779,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_SLMULT:
         if (nParam > 0)
         {
-            RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_auto));
+            RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto));
             m_aStates.top().aParagraphAttributes.set(NS_ooxml::LN_CT_Spacing_lineRule, pValue);
         }
         break;
@@ -5966,7 +5966,7 @@ RTFFrame::RTFFrame(RTFParserState* pParserState)
       nHoriAnchor(0),
       nVertAlign(0),
       nVertAnchor(0),
-      nHRule(NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_auto),
+      nHRule(NS_ooxml::LN_Value_doc_ST_HeightRule_auto),
       nAnchorType(0)
 {
 }
@@ -6058,7 +6058,7 @@ RTFSprms RTFFrame::getSprms()
         case NS_ooxml::LN_CT_FramePr_h:
             if (nH != 0)
             {
-                if (nHRule == NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_exact)
+                if (nHRule == NS_ooxml::LN_Value_doc_ST_HeightRule_exact)
                     pValue.reset(new RTFValue(-nH)); // The negative value just sets nHRule
                 else
                     pValue.reset(new RTFValue(nH));
@@ -6079,14 +6079,14 @@ RTFSprms RTFFrame::getSprms()
         case NS_ooxml::LN_CT_FramePr_hAnchor:
         {
             if (nHoriAnchor == 0)
-                nHoriAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_margin;
+                nHoriAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_margin;
             pValue.reset(new RTFValue(nHoriAnchor));
         }
         break;
         case NS_ooxml::LN_CT_FramePr_vAnchor:
         {
             if (nVertAnchor == 0)
-                nVertAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_margin;
+                nVertAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_margin;
             pValue.reset(new RTFValue(nVertAnchor));
         }
         break;
@@ -6099,9 +6099,9 @@ RTFSprms RTFFrame::getSprms()
         case NS_ooxml::LN_CT_FramePr_hRule:
         {
             if (nH < 0)
-                nHRule = NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_exact;
+                nHRule = NS_ooxml::LN_Value_doc_ST_HeightRule_exact;
             else if (nH > 0)
-                nHRule = NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_atLeast;
+                nHRule = NS_ooxml::LN_Value_doc_ST_HeightRule_atLeast;
             pValue.reset(new RTFValue(nHRule));
         }
         break;

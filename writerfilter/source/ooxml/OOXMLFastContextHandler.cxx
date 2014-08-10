@@ -1143,13 +1143,13 @@ void OOXMLFastContextHandlerProperties::handleXNotes()
 {
     switch (mnToken)
     {
-    case NS_wordprocessingml|XML_footnoteReference:
+    case NS_doc|XML_footnoteReference:
         {
             OOXMLFootnoteHandler aFootnoteHandler(this);
             mpPropertySet->resolve(aFootnoteHandler);
         }
         break;
-    case NS_wordprocessingml|XML_endnoteReference:
+    case NS_doc|XML_endnoteReference:
         {
             OOXMLEndnoteHandler aEndnoteHandler(this);
             mpPropertySet->resolve(aEndnoteHandler);
@@ -1164,13 +1164,13 @@ void OOXMLFastContextHandlerProperties::handleHdrFtr()
 {
     switch (mnToken)
     {
-    case NS_wordprocessingml|XML_footerReference:
+    case NS_doc|XML_footerReference:
         {
             OOXMLFooterHandler aFooterHandler(this);
             mpPropertySet->resolve(aFooterHandler);
         }
         break;
-    case NS_wordprocessingml|XML_headerReference:
+    case NS_doc|XML_headerReference:
         {
             OOXMLHeaderHandler aHeaderHandler(this);
             mpPropertySet->resolve(aHeaderHandler);
@@ -1418,7 +1418,7 @@ void OOXMLFastContextHandlerXNote::lcl_startFastElement
     mbForwardEventsSaved = isForwardEvents();
 
     // If this is the note we're looking for or this is the footnote separator one.
-    if (mnMyXNoteId == getXNoteId() || static_cast<sal_uInt32>(mnMyXNoteType) == NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)
+    if (mnMyXNoteId == getXNoteId() || static_cast<sal_uInt32>(mnMyXNoteType) == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator)
         setForwardEvents(true);
     else
         setForwardEvents(false);
@@ -1802,7 +1802,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 
     switch (nNamespace)
     {
-        case NS_wordprocessingml:
+        case NS_doc:
         case NS_vml_wordprocessingDrawing:
         case NS_office:
             if (!bGroupShape)
@@ -1821,7 +1821,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 
                     if (!bGroupShape)
                     {
-                        pWrapper->addNamespace(NS_wordprocessingml);
+                        pWrapper->addNamespace(NS_doc);
                         pWrapper->addNamespace(NS_vml_wordprocessingDrawing);
                         pWrapper->addNamespace(NS_office);
                         pWrapper->addToken( NS_vml|XML_textbox );

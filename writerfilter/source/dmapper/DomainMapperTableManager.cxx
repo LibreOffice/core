@@ -753,7 +753,7 @@ void DomainMapperTableManager::endOfRowAction()
         insertRowProps(pPropMap);
     }
     else if ( pCellWidths->size() > 0 &&
-               ( m_nLayoutType == NS_ooxml::LN_Value_wordprocessingml_ST_TblLayout_fixed
+               ( m_nLayoutType == NS_ooxml::LN_Value_doc_ST_TblLayout_fixed
                  || pCellWidths->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) )
              )
     {

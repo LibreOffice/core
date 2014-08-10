@@ -38,8 +38,8 @@
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/chart" alias="chart"/>
   <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/chart" alias="chart"/>
   <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml"/>
-  <namespace-alias name="http://purl.oclc.org/ooxml/wordprocessingml/main" alias="wordprocessingml"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="doc"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/wordprocessingml/main" alias="doc"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math"/>
   <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/math" alias="math"/>
   <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary"/>
@@ -17062,47 +17062,47 @@
       <attribute name="vertCompress" tokenid="ooxml:CT_EastAsianLayout_vertCompress"/>
     </resource>
     <resource name="ST_XAlign" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_left">left</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_center">center</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_right">right</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_inside">inside</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_XAlign_outside">outside</value>
+      <value tokenid="ooxml:Value_doc_ST_XAlign_left">left</value>
+      <value tokenid="ooxml:Value_doc_ST_XAlign_center">center</value>
+      <value tokenid="ooxml:Value_doc_ST_XAlign_right">right</value>
+      <value tokenid="ooxml:Value_doc_ST_XAlign_inside">inside</value>
+      <value tokenid="ooxml:Value_doc_ST_XAlign_outside">outside</value>
     </resource>
     <resource name="ST_YAlign" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_inline">inline</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_top">top</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_center">center</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_bottom">bottom</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_inside">inside</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_YAlign_outside">outside</value>
+      <value tokenid="ooxml:Value_doc_ST_YAlign_inline">inline</value>
+      <value tokenid="ooxml:Value_doc_ST_YAlign_top">top</value>
+      <value tokenid="ooxml:Value_doc_ST_YAlign_center">center</value>
+      <value tokenid="ooxml:Value_doc_ST_YAlign_bottom">bottom</value>
+      <value tokenid="ooxml:Value_doc_ST_YAlign_inside">inside</value>
+      <value tokenid="ooxml:Value_doc_ST_YAlign_outside">outside</value>
     </resource>
     <resource name="ST_HeightRule" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_auto">auto</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_exact">exact</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_HeightRule_atLeast">atLeast</value>
+      <value tokenid="ooxml:Value_doc_ST_HeightRule_auto">auto</value>
+      <value tokenid="ooxml:Value_doc_ST_HeightRule_exact">exact</value>
+      <value tokenid="ooxml:Value_doc_ST_HeightRule_atLeast">atLeast</value>
     </resource>
     <resource name="ST_Wrap" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_auto">auto</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_notBeside">notBeside</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_around">around</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_tight">tight</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_through">through</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Wrap_none">none</value>
+      <value tokenid="ooxml:Value_doc_ST_Wrap_auto">auto</value>
+      <value tokenid="ooxml:Value_doc_ST_Wrap_notBeside">notBeside</value>
+      <value tokenid="ooxml:Value_doc_ST_Wrap_around">around</value>
+      <value tokenid="ooxml:Value_doc_ST_Wrap_tight">tight</value>
+      <value tokenid="ooxml:Value_doc_ST_Wrap_through">through</value>
+      <value tokenid="ooxml:Value_doc_ST_Wrap_none">none</value>
     </resource>
     <resource name="ST_VAnchor" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_text">text</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_margin">margin</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_VAnchor_page">page</value>
+      <value tokenid="ooxml:Value_doc_ST_VAnchor_text">text</value>
+      <value tokenid="ooxml:Value_doc_ST_VAnchor_margin">margin</value>
+      <value tokenid="ooxml:Value_doc_ST_VAnchor_page">page</value>
     </resource>
     <resource name="ST_HAnchor" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_text">text</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_margin">margin</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_HAnchor_page">page</value>
+      <value tokenid="ooxml:Value_doc_ST_HAnchor_text">text</value>
+      <value tokenid="ooxml:Value_doc_ST_HAnchor_margin">margin</value>
+      <value tokenid="ooxml:Value_doc_ST_HAnchor_page">page</value>
     </resource>
     <resource name="ST_DropCap" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DropCap_none">none</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DropCap_drop">drop</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DropCap_margin">margin</value>
+      <value tokenid="ooxml:Value_doc_ST_DropCap_none">none</value>
+      <value tokenid="ooxml:Value_doc_ST_DropCap_drop">drop</value>
+      <value tokenid="ooxml:Value_doc_ST_DropCap_margin">margin</value>
     </resource>
     <resource name="CT_FramePr" resource="Properties">
       <attribute name="dropCap" tokenid="ooxml:CT_FramePr_dropCap"/>
@@ -17146,9 +17146,9 @@
       <attribute name="pos" tokenid="ooxml:CT_TabStop_pos"/>
     </resource>
     <resource name="ST_LineSpacingRule" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_auto">auto</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_exact">exact</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_atLeast">atLeast</value>
+      <value tokenid="ooxml:Value_doc_ST_LineSpacingRule_auto">auto</value>
+      <value tokenid="ooxml:Value_doc_ST_LineSpacingRule_exact">exact</value>
+      <value tokenid="ooxml:Value_doc_ST_LineSpacingRule_atLeast">atLeast</value>
     </resource>
     <resource name="CT_Spacing" resource="Properties">
       <attribute name="before" tokenid="ooxml:CT_Spacing_before"/>
@@ -17193,21 +17193,21 @@
       <attribute name="val" tokenid="ooxml:CT_Jc_val" action="setValue"/>
     </resource>
     <resource name="ST_View" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_View_none">none</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_View_print">print</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_View_outline">outline</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_View_masterPages">masterPages</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_View_normal">normal</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_View_web">web</value>
+      <value tokenid="ooxml:Value_doc_ST_View_none">none</value>
+      <value tokenid="ooxml:Value_doc_ST_View_print">print</value>
+      <value tokenid="ooxml:Value_doc_ST_View_outline">outline</value>
+      <value tokenid="ooxml:Value_doc_ST_View_masterPages">masterPages</value>
+      <value tokenid="ooxml:Value_doc_ST_View_normal">normal</value>
+      <value tokenid="ooxml:Value_doc_ST_View_web">web</value>
     </resource>
     <resource name="CT_View" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_View_val"/>
     </resource>
     <resource name="ST_Zoom" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Zoom_none">none</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Zoom_fullPage">fullPage</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Zoom_bestFit">bestFit</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_Zoom_textFit">textFit</value>
+      <value tokenid="ooxml:Value_doc_ST_Zoom_none">none</value>
+      <value tokenid="ooxml:Value_doc_ST_Zoom_fullPage">fullPage</value>
+      <value tokenid="ooxml:Value_doc_ST_Zoom_bestFit">bestFit</value>
+      <value tokenid="ooxml:Value_doc_ST_Zoom_textFit">textFit</value>
     </resource>
     <resource name="ST_Percentage" resource="Integer"/>
     <resource name="CT_Zoom" resource="Properties">
@@ -17227,29 +17227,29 @@
       <attribute name="grammar" tokenid="ooxml:CT_Proof_grammar"/>
     </resource>
     <resource name="ST_DocType" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocType_notSpecified">notSpecified</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocType_letter">letter</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocType_eMail">eMail</value>
+      <value tokenid="ooxml:Value_doc_ST_DocType_notSpecified">notSpecified</value>
+      <value tokenid="ooxml:Value_doc_ST_DocType_letter">letter</value>
+      <value tokenid="ooxml:Value_doc_ST_DocType_eMail">eMail</value>
     </resource>
     <resource name="CT_DocType" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_DocType_val"/>
     </resource>
     <resource name="ST_DocProtect" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_none">none</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_readOnly">readOnly</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_comments">comments</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_trackedChanges">trackedChanges</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_forms">forms</value>
+      <value tokenid="ooxml:Value_doc_ST_DocProtect_none">none</value>
+      <value tokenid="ooxml:Value_doc_ST_DocProtect_readOnly">readOnly</value>
+      <value tokenid="ooxml:Value_doc_ST_DocProtect_comments">comments</value>
+      <value tokenid="ooxml:Value_doc_ST_DocProtect_trackedChanges">trackedChanges</value>
+      <value tokenid="ooxml:Value_doc_ST_DocProtect_forms">forms</value>
     </resource>
     <resource name="ST_CryptProv" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_CryptProv_rsaAES">rsaAES</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_CryptProv_rsaFull">rsaFull</value>
+      <value tokenid="ooxml:Value_doc_ST_CryptProv_rsaAES">rsaAES</value>
+      <value tokenid="ooxml:Value_doc_ST_CryptProv_rsaFull">rsaFull</value>
     </resource>
     <resource name="ST_AlgClass" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_AlgClass_hash">hash</value>
+      <value tokenid="ooxml:Value_doc_ST_AlgClass_hash">hash</value>
     </resource>
     <resource name="ST_AlgType" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_AlgType_typeAny">typeAny</value>
+      <value tokenid="ooxml:Value_doc_ST_AlgType_typeAny">typeAny</value>
     </resource>
     <resource name="AG_Password" resource="Properties">
       <attribute name="cryptProviderType" tokenid="ooxml:AG_Password_cryptProviderType"/>
@@ -17309,22 +17309,22 @@
       <attribute name="val" tokenid="ooxml:CT_TextDirection_val" action="setValue"/>
     </resource>
     <resource name="ST_TextAlignment" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_top">top</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_center">center</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_baseline">baseline</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_bottom">bottom</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_auto">auto</value>
+      <value tokenid="ooxml:Value_doc_ST_TextAlignment_top">top</value>
+      <value tokenid="ooxml:Value_doc_ST_TextAlignment_center">center</value>
+      <value tokenid="ooxml:Value_doc_ST_TextAlignment_baseline">baseline</value>
+      <value tokenid="ooxml:Value_doc_ST_TextAlignment_bottom">bottom</value>
+      <value tokenid="ooxml:Value_doc_ST_TextAlignment_auto">auto</value>
     </resource>
     <resource name="CT_TextAlignment" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextAlignment_val" action="setValue"/>
     </resource>
     <resource name="ST_DisplacedByCustomXml" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_next">next</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_prev">prev</value>
+      <value tokenid="ooxml:Value_doc_ST_DisplacedByCustomXml_next">next</value>
+      <value tokenid="ooxml:Value_doc_ST_DisplacedByCustomXml_prev">prev</value>
     </resource>
     <resource name="ST_AnnotationVMerge" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_cont">cont</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_rest">rest</value>
+      <value tokenid="ooxml:Value_doc_ST_AnnotationVMerge_cont">cont</value>
+      <value tokenid="ooxml:Value_doc_ST_AnnotationVMerge_rest">rest</value>
     </resource>
     <resource name="CT_Markup" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_Markup_id"/>
@@ -17539,8 +17539,8 @@
       <value tokenid="ooxml:Value_ST_FldCharType_end">end</value>
     </resource>
     <resource name="ST_InfoTextType" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_InfoTextType_text">text</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_InfoTextType_autoText">autoText</value>
+      <value tokenid="ooxml:Value_doc_ST_InfoTextType_text">text</value>
+      <value tokenid="ooxml:Value_doc_ST_InfoTextType_autoText">autoText</value>
     </resource>
     <resource name="ST_FFName" resource="String"/>
     <resource name="CT_FFTextType" resource="Value">
@@ -17714,17 +17714,17 @@
       <attribute name="gutter" tokenid="ooxml:CT_PageMar_gutter"/>
     </resource>
     <resource name="ST_PageBorderZOrder" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderZOrder_front">front</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderZOrder_back">back</value>
+      <value tokenid="ooxml:Value_doc_ST_PageBorderZOrder_front">front</value>
+      <value tokenid="ooxml:Value_doc_ST_PageBorderZOrder_back">back</value>
     </resource>
     <resource name="ST_PageBorderDisplay" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_allPages">allPages</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_firstPage">firstPage</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderDisplay_notFirstPage">notFirstPage</value>
+      <value tokenid="ooxml:Value_doc_ST_PageBorderDisplay_allPages">allPages</value>
+      <value tokenid="ooxml:Value_doc_ST_PageBorderDisplay_firstPage">firstPage</value>
+      <value tokenid="ooxml:Value_doc_ST_PageBorderDisplay_notFirstPage">notFirstPage</value>
     </resource>
     <resource name="ST_PageBorderOffset" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_page">page</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_text">text</value>
+      <value tokenid="ooxml:Value_doc_ST_PageBorderOffset_page">page</value>
+      <value tokenid="ooxml:Value_doc_ST_PageBorderOffset_text">text</value>
     </resource>
     <resource name="CT_PageBorders" resource="Properties">
       <element name="top" tokenid="ooxml:CT_PageBorders_top"/>
@@ -17780,10 +17780,10 @@
       <attribute name="val" tokenid="ooxml:CT_VerticalJc_val" action="setValue"/>
     </resource>
     <resource name="ST_DocGrid" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_default">default</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_lines">lines</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_linesAndChars">linesAndChars</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_snapToChars">snapToChars</value>
+      <value tokenid="ooxml:Value_doc_ST_DocGrid_default">default</value>
+      <value tokenid="ooxml:Value_doc_ST_DocGrid_lines">lines</value>
+      <value tokenid="ooxml:Value_doc_ST_DocGrid_linesAndChars">linesAndChars</value>
+      <value tokenid="ooxml:Value_doc_ST_DocGrid_snapToChars">snapToChars</value>
     </resource>
     <resource name="CT_DocGrid" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_DocGrid_type"/>
@@ -17796,10 +17796,10 @@
       <value tokenid="ooxml:Value_ST_HdrFtr_first">first</value>
     </resource>
     <resource name="ST_FtnEdn" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_normal">normal</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_separator">separator</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_continuationSeparator">continuationSeparator</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_continuationNotice">continuationNotice</value>
+      <value tokenid="ooxml:Value_doc_ST_FtnEdn_normal">normal</value>
+      <value tokenid="ooxml:Value_doc_ST_FtnEdn_separator">separator</value>
+      <value tokenid="ooxml:Value_doc_ST_FtnEdn_continuationSeparator">continuationSeparator</value>
+      <value tokenid="ooxml:Value_doc_ST_FtnEdn_continuationNotice">continuationNotice</value>
     </resource>
     <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_HdrFtrRef" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_HdrFtrRef_type"/>
@@ -18319,8 +18319,8 @@
       <action name="end" action="endRow"/>
     </resource>
     <resource name="ST_TblLayout" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_TblLayout_fixed">fixed</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_TblLayout_autofit">autofit</value>
+      <value tokenid="ooxml:Value_doc_ST_TblLayout_fixed">fixed</value>
+      <value tokenid="ooxml:Value_doc_ST_TblLayout_autofit">autofit</value>
     </resource>
     <resource name="CT_TblLayoutType" resource="Value">
       <attribute name="type" tokenid="ooxml:CT_TblLayoutType_type" action="setValue"/>
@@ -18587,18 +18587,18 @@
       <attribute name="qFormat" tokenid="ooxml:CT_LsdException_qFormat"/>
     </resource>
     <resource name="ST_ColorSchemeIndex" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_dark1">dark1</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_light1">light1</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_dark2">dark2</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_light2">light2</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent1">accent1</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent2">accent2</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent3">accent3</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent4">accent4</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent5">accent5</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_accent6">accent6</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_hyperlink">hyperlink</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_followedHyperlink">followedHyperlink</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_dark1">dark1</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_light1">light1</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_dark2">dark2</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_light2">light2</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_accent1">accent1</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_accent2">accent2</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_accent3">accent3</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_accent4">accent4</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_accent5">accent5</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_accent6">accent6</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_hyperlink">hyperlink</value>
+      <value tokenid="ooxml:Value_doc_ST_ColorSchemeIndex_followedHyperlink">followedHyperlink</value>
     </resource>
     <resource name="CT_ReadingModeInkLockDown" resource="Properties">
       <attribute name="actualPg" tokenid="ooxml:CT_ReadingModeInkLockDown_actualPg"/>
@@ -18999,10 +18999,10 @@
       <element name="styles" tokenid="ooxml:STYLESHEET"/>
     </resource>
     <resource name="ST_CaptionPos" resource="List">
-      <value tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_above">above</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_below">below</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_left">left</value>
-      <value tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_right">right</value>
+      <value tokenid="ooxml:Value_doc_ST_CaptionPos_above">above</value>
+      <value tokenid="ooxml:Value_doc_ST_CaptionPos_below">below</value>
+      <value tokenid="ooxml:Value_doc_ST_CaptionPos_left">left</value>
+      <value tokenid="ooxml:Value_doc_ST_CaptionPos_right">right</value>
     </resource>
     <resource name="CT_Caption" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_Caption_name"/>

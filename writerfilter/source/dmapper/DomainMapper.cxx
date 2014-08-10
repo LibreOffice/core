@@ -408,19 +408,19 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             else //NS_ooxml::LN_CT_Spacing_lineRule:
             {
                     // exactly, atLeast, auto
-                    if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_auto)
+                    if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto)
                     {
                         m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "lineRule", "auto");
                         aSpacing.Mode = style::LineSpacingMode::PROP;
                         //reinterpret the already set value
                         aSpacing.Height = sal_Int16( aSpacing.Height * 100 /  ConversionHelper::convertTwipToMM100( SINGLE_LINE_SPACING ));
                     }
-                    else if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_atLeast)
+                    else if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast)
                     {
                         m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "lineRule", "atLeast");
                         aSpacing.Mode = style::LineSpacingMode::MINIMUM;
                     }
-                    else // NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_exact
+                    else // NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact
                     {
                         m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "lineRule", "exact");
                         aSpacing.Mode = style::LineSpacingMode::FIX;
@@ -583,7 +583,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             {
                 // 49 is just the old value that should be removed, once the
                 // root cause in SwTabFrm::MakeAll() is fixed.
-                if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_wordprocessingml_ST_View_web)
+                if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_doc_ST_View_web)
                     default_spacing = 49;
                 else
                     default_spacing = 280;
@@ -605,7 +605,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
             {
-                if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_wordprocessingml_ST_View_web)
+                if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_doc_ST_View_web)
                     default_spacing = 49;
                 else
                     default_spacing = 280;
@@ -684,10 +684,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case NS_ooxml::LN_CT_FramePr_hAnchor:
                         switch(nIntValue)
                         {
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_text:   //relative to column
+                            case  NS_ooxml::LN_Value_doc_ST_HAnchor_text:   //relative to column
                                 nIntValue = text::RelOrientation::FRAME; break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_margin: nIntValue = text::RelOrientation::PAGE_PRINT_AREA; break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_page:   nIntValue = text::RelOrientation::PAGE_FRAME; break;
+                            case  NS_ooxml::LN_Value_doc_ST_HAnchor_margin: nIntValue = text::RelOrientation::PAGE_PRINT_AREA; break;
+                            case  NS_ooxml::LN_Value_doc_ST_HAnchor_page:   nIntValue = text::RelOrientation::PAGE_FRAME; break;
                             default:;
                         }
                         pParaProperties->SethAnchor( nIntValue );
@@ -695,10 +695,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case NS_ooxml::LN_CT_FramePr_vAnchor:
                         switch(nIntValue)
                         {
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_text:  //relative to paragraph
+                            case  NS_ooxml::LN_Value_doc_ST_VAnchor_text:  //relative to paragraph
                                     nIntValue = text::RelOrientation::FRAME; break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_margin:nIntValue = text::RelOrientation::PAGE_PRINT_AREA ; break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_page: nIntValue = text::RelOrientation::PAGE_FRAME; break;
+                            case  NS_ooxml::LN_Value_doc_ST_VAnchor_margin:nIntValue = text::RelOrientation::PAGE_PRINT_AREA ; break;
+                            case  NS_ooxml::LN_Value_doc_ST_VAnchor_page: nIntValue = text::RelOrientation::PAGE_FRAME; break;
                             default:;
                         }
                         pParaProperties->SetvAnchor( nIntValue );
@@ -709,11 +709,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case NS_ooxml::LN_CT_FramePr_xAlign:
                         switch( nIntValue )
                         {
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_center  : nIntValue = text::HoriOrientation::CENTER; break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right   : nIntValue = text::HoriOrientation::RIGHT; break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_inside  : nIntValue = text::HoriOrientation::INSIDE; break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_outside : nIntValue = text::HoriOrientation::OUTSIDE; break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_left    : nIntValue = text::HoriOrientation::LEFT; break;
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_center  : nIntValue = text::HoriOrientation::CENTER; break;
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_right   : nIntValue = text::HoriOrientation::RIGHT; break;
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_inside  : nIntValue = text::HoriOrientation::INSIDE; break;
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_outside : nIntValue = text::HoriOrientation::OUTSIDE; break;
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_left    : nIntValue = text::HoriOrientation::LEFT; break;
                             default:    nIntValue = text::HoriOrientation::NONE;
                         }
                         pParaProperties->SetxAlign( nIntValue );
@@ -724,12 +724,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case NS_ooxml::LN_CT_FramePr_yAlign:
                         switch( nIntValue )
                         {
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_top     :
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_inside  :nIntValue = text::VertOrientation::TOP; break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_center  :nIntValue = text::VertOrientation::CENTER;break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_bottom  :
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_outside :nIntValue = text::VertOrientation::BOTTOM;break;
-                            case  NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_inline  :
+                            case  NS_ooxml::LN_Value_doc_ST_YAlign_top     :
+                            case  NS_ooxml::LN_Value_doc_ST_YAlign_inside  :nIntValue = text::VertOrientation::TOP; break;
+                            case  NS_ooxml::LN_Value_doc_ST_YAlign_center  :nIntValue = text::VertOrientation::CENTER;break;
+                            case  NS_ooxml::LN_Value_doc_ST_YAlign_bottom  :
+                            case  NS_ooxml::LN_Value_doc_ST_YAlign_outside :nIntValue = text::VertOrientation::BOTTOM;break;
+                            case  NS_ooxml::LN_Value_doc_ST_YAlign_inline  :
                             {
                             // HACK: This is for bnc#780851, where a table has one cell that has w:framePr,
                             // which causes that paragraph to be converted to a text frame, and the original
@@ -756,13 +756,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case NS_ooxml::LN_CT_FramePr_hRule:
                          switch( nIntValue )
                          {
-                            case NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_exact:
+                            case NS_ooxml::LN_Value_doc_ST_HeightRule_exact:
                                 nIntValue = text::SizeType::FIX;
                             break;
-                            case NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_atLeast:
+                            case NS_ooxml::LN_Value_doc_ST_HeightRule_atLeast:
                                 nIntValue = text::SizeType::MIN;
                             break;
-                            case NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_auto:
+                            case NS_ooxml::LN_Value_doc_ST_HeightRule_auto:
                             //no break;
                             default:;
                                 nIntValue = text::SizeType::VARIABLE;
@@ -771,13 +771,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     break;
                     case NS_ooxml::LN_CT_FramePr_wrap:
                     {
-                        //should be either LN_Value_wordprocessingml_ST_Wrap_notBeside or LN_Value_wordprocessingml_ST_Wrap_around or LN_Value_wordprocessingml_ST_Wrap_auto
-                        OSL_ENSURE( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_around ||
-                                    sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_notBeside ||
-                                    sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_auto,
+                        //should be either LN_Value_doc_ST_Wrap_notBeside or LN_Value_doc_ST_Wrap_around or LN_Value_doc_ST_Wrap_auto
+                        OSL_ENSURE( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_Wrap_around ||
+                                    sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_Wrap_notBeside ||
+                                    sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_Wrap_auto,
                             "wrap not around, not_Beside or auto?");
-                        if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_around ||
-                            sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_auto )
+                        if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_Wrap_around ||
+                            sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_Wrap_auto )
                             pParaProperties->SetWrap ( text::WrapTextMode_DYNAMIC ) ;
                         else
                             pParaProperties->SetWrap ( text::WrapTextMode_NONE ) ;
@@ -905,14 +905,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             {
                 switch( nIntValue )
                 {
-                    case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_default:
-                    case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_snapToChars:
+                    case NS_ooxml::LN_Value_doc_ST_DocGrid_default:
+                    case NS_ooxml::LN_Value_doc_ST_DocGrid_snapToChars:
                         pSectionContext->SetGridType( 0 );
                         break;
-                    case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_lines:
+                    case NS_ooxml::LN_Value_doc_ST_DocGrid_lines:
                         pSectionContext->SetGridType( 1 );
                         break;
-                    case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_linesAndChars:
+                    case NS_ooxml::LN_Value_doc_ST_DocGrid_linesAndChars:
                         pSectionContext->SetGridType( 2 );
                         break;
                     default :
@@ -958,7 +958,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_FtnEdn_type:
             // This is the "separator" footnote, ignore its linebreak.
-            if (static_cast<sal_uInt32>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)
+            if (static_cast<sal_uInt32>(nIntValue) == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator)
                 m_pImpl->m_bIgnoreNextPara = true;
         break;
         case NS_ooxml::LN_CT_DataBinding_prefixMappings:
@@ -1352,19 +1352,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             sal_Int16 nAlignment = 0;
             switch (nIntValue)
             {
-                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_top:
+                case NS_ooxml::LN_Value_doc_ST_TextAlignment_top:
                     nAlignment = 2;
                     break;
-                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_center:
+                case NS_ooxml::LN_Value_doc_ST_TextAlignment_center:
                     nAlignment = 3;
                     break;
-                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_baseline:
+                case NS_ooxml::LN_Value_doc_ST_TextAlignment_baseline:
                     nAlignment = 1;
                     break;
-                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_bottom:
+                case NS_ooxml::LN_Value_doc_ST_TextAlignment_bottom:
                     nAlignment = 4;
                     break;
-                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_auto:
+                case NS_ooxml::LN_Value_doc_ST_TextAlignment_auto:
                 default:
                     break;
             }

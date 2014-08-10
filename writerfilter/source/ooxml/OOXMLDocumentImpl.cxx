@@ -298,8 +298,8 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
     Id nId;
     switch (rType)
     {
-    case NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator:
-    case NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_continuationSeparator:
+    case NS_ooxml::LN_Value_doc_ST_FtnEdn_separator:
+    case NS_ooxml::LN_Value_doc_ST_FtnEdn_continuationSeparator:
         nId = rType;
         break;
     default:
@@ -320,8 +320,8 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
     Id nId;
     switch (rType)
     {
-    case NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator:
-    case NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_continuationSeparator:
+    case NS_ooxml::LN_Value_doc_ST_FtnEdn_separator:
+    case NS_ooxml::LN_Value_doc_ST_FtnEdn_continuationSeparator:
         nId = rType;
         break;
     default:

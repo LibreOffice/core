@@ -1407,7 +1407,7 @@ StyleSheetPropertyMap::~StyleSheetPropertyMap()
 
 ParagraphProperties::ParagraphProperties() :
     m_bFrameMode( false ),
-    m_nDropCap(NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none),
+    m_nDropCap(NS_ooxml::LN_Value_doc_ST_DropCap_none),
     m_nLines(0),
     m_w(-1),
     m_h(-1),
@@ -1487,7 +1487,7 @@ bool ParagraphProperties::operator==(const ParagraphProperties& rCompare)
 void ParagraphProperties::ResetFrameProperties()
 {
     m_bFrameMode = false;
-    m_nDropCap = NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none;
+    m_nDropCap = NS_ooxml::LN_Value_doc_ST_DropCap_none;
     m_nLines = 0;
     m_w = -1;
     m_h = -1;

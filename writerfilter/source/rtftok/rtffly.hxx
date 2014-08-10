@@ -39,13 +39,13 @@ public:
         switch (GetOrient())
         {
         case css::text::VertOrientation::CENTER:
-            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_center;
+            nAlign = NS_ooxml::LN_Value_doc_ST_YAlign_center;
             break;
         case css::text::VertOrientation::TOP:
-            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_top;
+            nAlign = NS_ooxml::LN_Value_doc_ST_YAlign_top;
             break;
         case css::text::VertOrientation::BOTTOM:
-            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_bottom;
+            nAlign = NS_ooxml::LN_Value_doc_ST_YAlign_bottom;
             break;
         }
 
@@ -58,13 +58,13 @@ public:
         switch (GetRelation())
         {
         case css::text::RelOrientation::FRAME:
-            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_text;
+            nAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_text;
             break;
         case css::text::RelOrientation::PAGE_FRAME:
-            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_page;
+            nAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_page;
             break;
         case css::text::RelOrientation::PAGE_PRINT_AREA:
-            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_margin;
+            nAnchor = NS_ooxml::LN_Value_doc_ST_VAnchor_margin;
             break;
         }
 
@@ -110,19 +110,19 @@ public:
         switch (GetOrient())
         {
         case css::text::HoriOrientation::CENTER:
-            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_center;
+            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_center;
             break;
         case css::text::HoriOrientation::RIGHT:
-            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right;
+            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_right;
             break;
         case css::text::HoriOrientation::LEFT:
-            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_left;
+            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_left;
             break;
         case css::text::HoriOrientation::INSIDE:
-            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_inside;
+            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_inside;
             break;
         case css::text::HoriOrientation::OUTSIDE:
-            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_outside;
+            nAlign = NS_ooxml::LN_Value_doc_ST_XAlign_outside;
             break;
         }
 
@@ -135,13 +135,13 @@ public:
         switch (GetRelation())
         {
         case css::text::RelOrientation::FRAME:
-            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_text;
+            nAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_text;
             break;
         case css::text::RelOrientation::PAGE_FRAME:
-            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_page;
+            nAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_page;
             break;
         case css::text::RelOrientation::PAGE_PRINT_AREA:
-            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_margin;
+            nAnchor = NS_ooxml::LN_Value_doc_ST_HAnchor_margin;
             break;
         }
 

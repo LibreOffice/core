@@ -58,13 +58,13 @@ void PageBordersHandler::lcl_attribute( Id eName, Value& rVal )
             switch ( nIntValue )
             {
                 default:
-                case NS_ooxml::LN_Value_wordprocessingml_ST_PageBorderDisplay_allPages:
+                case NS_ooxml::LN_Value_doc_ST_PageBorderDisplay_allPages:
                     m_nDisplay = 0;
                     break;
-                case NS_ooxml::LN_Value_wordprocessingml_ST_PageBorderDisplay_firstPage:
+                case NS_ooxml::LN_Value_doc_ST_PageBorderDisplay_firstPage:
                     m_nDisplay = 1;
                     break;
-                case NS_ooxml::LN_Value_wordprocessingml_ST_PageBorderDisplay_notFirstPage:
+                case NS_ooxml::LN_Value_doc_ST_PageBorderDisplay_notFirstPage:
                     m_nDisplay = 2;
                     break;
             }
@@ -75,10 +75,10 @@ void PageBordersHandler::lcl_attribute( Id eName, Value& rVal )
             switch ( nIntValue )
             {
                 default:
-                case NS_ooxml::LN_Value_wordprocessingml_ST_PageBorderOffset_page:
+                case NS_ooxml::LN_Value_doc_ST_PageBorderOffset_page:
                     m_nOffset = 1;
                     break;
-                case NS_ooxml::LN_Value_wordprocessingml_ST_PageBorderOffset_text:
+                case NS_ooxml::LN_Value_doc_ST_PageBorderOffset_text:
                     m_nOffset = 0;
                     break;
             }
