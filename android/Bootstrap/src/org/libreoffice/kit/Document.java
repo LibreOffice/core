@@ -12,21 +12,35 @@ package org.libreoffice.kit;
 import java.nio.ByteBuffer;
 
 public class Document {
+    public static final int PART_MODE_DEFAULT = 0;
+    public static final int PART_MODE_SLIDE = 1;
+    public static final int PART_MODE_NOTES = 2;
+    public static final int PART_MODE_SLIDENOTES = 3;
+    public static final int PART_MODE_EMBEDDEDOBJ = 4;
 
     private final long handle;
-
-    public native void setPart(int part);
-    public native int getPart();
-    public native int getParts();
-    public native long getDocumentHeight();
-    public native long getDocumentWidth();
-
-    private native int getDocumentTypeNative();
-    private native void paintTileNative(ByteBuffer buffer, int canvasWidth, int canvasHeight, int tilePositionX, int tilePositionY, int tileWidth, int tileHeight);
 
     public Document(long handle) {
         this.handle = handle;
     }
+
+    public native int getPart();
+
+    public native void setPart(int partIndex);
+
+    public native int getParts();
+
+    public native String getPartName(int partIndex);
+
+    public native void setPartMode(int partMode);
+
+    public native long getDocumentHeight();
+
+    public native long getDocumentWidth();
+
+    private native int getDocumentTypeNative();
+
+    private native void paintTileNative(ByteBuffer buffer, int canvasWidth, int canvasHeight, int tilePositionX, int tilePositionY, int tileWidth, int tileHeight);
 
     public int getDocumentType() {
         return getDocumentTypeNative();

@@ -89,6 +89,22 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getPart
     return (jint) pDocument->pClass->getParts(pDocument);
 }
 
+extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getPartName
+    (JNIEnv* pEnv, jobject aObject, jint nPartIndex)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    char* pPartName = pDocument->pClass->getPartName(pDocument, nPartIndex);
+    return pEnv->NewStringUTF(pPartName);
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPartMode
+    (JNIEnv* pEnv, jobject aObject, jint nPartMode)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+
+    pDocument->pClass->setPartMode(pDocument, (LibreOfficeKitPartMode) nPartMode);
+}
+
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getDocumentTypeNative
     (JNIEnv* pEnv, jobject aObject)
 {
