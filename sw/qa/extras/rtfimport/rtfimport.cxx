@@ -1887,6 +1887,12 @@ DECLARE_RTFIMPORT_TEST(testFdo80742, "fdo80742.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xPropertySet, "OutlineLevel"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo82106, "fdo82106.rtf")
+{
+    // Tab was missing after footnote not containing a tab.
+    getParagraph(2, "before\tafter");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1691,6 +1691,9 @@ void DomainMapper_Impl::PushAnnotation()
 
 void DomainMapper_Impl::PopFootOrEndnote()
 {
+    // In case the foot or endnote did not contain a tab.
+    m_bIgnoreNextTab = false;
+
     if (!m_aTextAppendStack.empty())
         m_aTextAppendStack.pop();
 
