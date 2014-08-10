@@ -14,7 +14,7 @@ import org.mozilla.gecko.gfx.SubTile;
 import java.nio.ByteBuffer;
 
 public class LOKitTileProvider implements TileProvider {
-    private static final String LOGTAG = LOKitShell.class.getSimpleName();
+    private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
 
     private final LayerController mLayerController;
 
@@ -49,15 +49,28 @@ public class LOKitTileProvider implements TileProvider {
 
         mDocument = mOffice.documentLoad(input);
 
-        if(mDocument == null) {
-            Log.e(LOGTAG, "Error: " + mOffice.getError());
-        } else {
-            Log.i(LOGTAG, "Document parts: " + mDocument.getParts());
-            if (mDocument.getParts() >= 1) {
+        if (checkDocument()) {
+            int parts = mDocument.getParts();
+            Log.i(LOGTAG, "Document parts: " + parts);
+            if (parts >= 1) {
                 mDocument.setPart(0);
             }
+        }
+    }
+
+    private boolean checkDocument() {
+        if(mDocument == null || !mOffice.getError().isEmpty()) {
+            Log.e(LOGTAG, "Error at loading: " + mOffice.getError());
+            return false;
+        }
+
+        if (mDocument.getDocumentWidth() == 0 && mDocument.getDocumentHeight() == 0) {
+            Log.e(LOGTAG, "Document size zero - last error: " + mOffice.getError());
+        } else {
             Log.i(LOGTAG, "Document size: " + mDocument.getDocumentWidth() + " x " + mDocument.getDocumentHeight());
         }
+
+        return true;
     }
 
     @Override
