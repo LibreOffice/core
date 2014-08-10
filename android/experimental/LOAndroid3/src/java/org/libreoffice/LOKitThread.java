@@ -21,6 +21,7 @@ public class LOKitThread extends Thread {
     private TileProvider mTileProvider;
     private ViewportMetrics mViewportMetrics;
     private String mInputFile;
+    private Rect mOldRect;
 
     LOKitThread(String inputFile) {
         mInputFile = inputFile;
@@ -40,7 +41,22 @@ public class LOKitThread extends Thread {
         return new Rect(minX, minY, maxX, maxY);
     }
 
+    Rect inflate(Rect rect, int inflateSize) {
+        Rect newRect = new Rect(rect);
+        newRect.left -= inflateSize;
+        newRect.left = newRect.left < 0 ? 0 : newRect.left;
+
+        newRect.top -= inflateSize;
+        newRect.top = newRect.top < 0 ? 0 : newRect.top;
+
+        newRect.right += inflateSize;
+        newRect.bottom += inflateSize;
+
+        return newRect;
+    }
+
     private boolean draw() throws InterruptedException {
+        Log.i(LOGTAG, "tilerender draw");
         int pageWidth = mTileProvider.getPageWidth();
         int pageHeight = mTileProvider.getPageHeight();
 
@@ -56,18 +72,25 @@ public class LOKitThread extends Thread {
 
         ViewportMetrics metrics = mApplication.getLayerController().getViewportMetrics();
         RectF viewport = normlizeRect(metrics);
-        Rect rect = roundToTileSize(viewport, TILE_SIZE);
+        Rect rect = inflate(roundToTileSize(viewport, TILE_SIZE), TILE_SIZE);
+
+        mOldRect = rect;
+
+        Log.i(LOGTAG, "tilerender rect: " + rect);
 
         ArrayList<SubTile> removeTiles = new ArrayList<SubTile>();
         for (SubTile tile : layerClient.getTiles()) {
-            if (!rect.intersects(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE)) {
+            Rect tileRect = new Rect(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
+            if (!Rect.intersects(rect, tileRect)) {
+                Log.i(LOGTAG, "tilerender delete " + tileRect);
                 removeTiles.add(tile);
             }
         }
+
         layerClient.getTiles().removeAll(removeTiles);
 
-        for (int y = rect.top; y <= rect.bottom; y += TILE_SIZE) {
-            for (int x = rect.left; x <= rect.right; x += TILE_SIZE) {
+        for (int y = rect.top; y < rect.bottom; y += TILE_SIZE) {
+            for (int x = rect.left; x < rect.right; x += TILE_SIZE) {
                 if (x > pageWidth) {
                     continue;
                 }
@@ -88,7 +111,7 @@ public class LOKitThread extends Thread {
         }
 
         layerClient.endDrawing();
-
+        Log.i(LOGTAG, "tilerender end draw");
         return true;
     }
 
