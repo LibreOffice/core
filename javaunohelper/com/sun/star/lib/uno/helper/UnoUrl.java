@@ -203,47 +203,37 @@ public class UnoUrl {
         return connection.getUninterpretedString();
     }
 
-    private static int hexToInt(int ch)
-        throws com.sun.star.lang.IllegalArgumentException {
-        int c = Character.toLowerCase((char) ch);
-        boolean isDigit = ('0' <= c && c <= '9');
-        boolean isValidChar = ('a' <= c && c <= 'f') || isDigit;
-
-        if (!isValidChar)
-            throw new com.sun.star.lang.IllegalArgumentException(
-                "Invalid UTF-8 hex byte '" + c + "'.");
-
-        return isDigit ? ch - '0' : 10 + ((char) c - 'a') & 0xF;
-    }
-
     private static String decodeUTF8(String s)
         throws com.sun.star.lang.IllegalArgumentException {
         ArrayList<Integer> v = new ArrayList<Integer>();
 
-        for (int i = 0; i < s.length(); i++) {
-            int ch = s.charAt(i);
+        try {
+            for (int i = 0; i < s.length(); i++) {
+                int ch = s.charAt(i);
 
-            if (ch == '%') {
-                int hb = hexToInt(s.charAt(++i));
-                int lb = hexToInt(s.charAt(++i));
-                ch = (hb << 4) | lb;
+                if (ch == '%') {
+                    ch = Integer.parseInt(s.substring(i+1,i+3),16);
+                    if (ch<0)
+                        throw new com.sun.star.lang.IllegalArgumentException(
+                            "Illegal hex characters in escape (%) pattern - negative value");
+                    i+=2;
+                }
+                v.add(new Integer(ch));
             }
 
-            v.add(new Integer(ch));
-        }
+            int size = v.size();
+            byte[] bytes = new byte[size];
+            for (int i = 0; i < size; i++) {
+                Integer anInt = v.get(i);
+                bytes[i] = (byte) (anInt.intValue() & 0xFF);
+            }
 
-        int size = v.size();
-        byte[] bytes = new byte[size];
-        for (int i = 0; i < size; i++) {
-            Integer anInt = v.get(i);
-            bytes[i] = (byte) (anInt.intValue() & 0xFF);
-        }
-
-        try {
             return new String(bytes, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new com.sun.star.lang.IllegalArgumentException(
                 "Couldn't convert parameter string to UTF-8 string:" + e.getMessage());
+        } catch (NumberFormatException e) {
+            throw new com.sun.star.lang.IllegalArgumentException(e.toString());
         }
     }
 
