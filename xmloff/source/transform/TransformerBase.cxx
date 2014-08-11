@@ -167,7 +167,7 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
             return new XMLMergeElemTransformerContext( *this, rQName,
                        static_cast< sal_uInt16 >( (*aIter).second.m_nParam1 ) );
         default:
-            OSL_ENSURE( !this, "unknown action" );
+            OSL_ENSURE( false, "unknown action" );
             break;
         }
     }
@@ -879,7 +879,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                 }
 
                 default:
-                    OSL_ENSURE( !this, "unknown action" );
+                    OSL_ENSURE( false, "unknown action" );
                     break;
                 }
 

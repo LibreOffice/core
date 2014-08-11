@@ -90,7 +90,7 @@ void XMLFrameOOoTransformerContext::StartElement(
                 --nAttrCount;
                 break;
             default:
-                OSL_ENSURE( !this, "unknown action" );
+                OSL_ENSURE( false, "unknown action" );
                 break;
             }
         }
@@ -128,7 +128,7 @@ XMLTransformerContext *XMLFrameOOoTransformerContext::CreateChildContext(
                            nPrefix, rLocalName, rQName, rAttrList );
             break;
         default:
-            OSL_ENSURE( !this, "unknown action" );
+            OSL_ENSURE( false, "unknown action" );
             break;
         }
     }

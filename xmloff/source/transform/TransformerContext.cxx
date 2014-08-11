@@ -89,12 +89,12 @@ bool XMLTransformerContext::IsPersistent() const
 
 void XMLTransformerContext::Export()
 {
-    OSL_ENSURE( !this, "context is not persistent" );
+    OSL_ENSURE( false, "context is not persistent" );
 }
 
 void XMLTransformerContext::ExportContent()
 {
-    OSL_ENSURE( !this, "context is not persistent" );
+    OSL_ENSURE( false, "context is not persistent" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

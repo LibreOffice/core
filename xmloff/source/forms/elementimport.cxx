@@ -1940,7 +1940,7 @@ namespace xmloff
 
     SvXMLImportContext* OFormImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const OUString& _rLocalName)
     {
-        OSL_ENSURE( !this, "illegal call to OFormImport::implCreateControlWrapper" );
+        OSL_ENSURE( false, "illegal call to OFormImport::implCreateControlWrapper" );
         return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName );
     }
 

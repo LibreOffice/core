@@ -554,7 +554,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                     }
                     break;
                 default:
-                    OSL_ENSURE( !this, "unknown action" );
+                    OSL_ENSURE( false, "unknown action" );
                     break;
                 }
             }
@@ -896,7 +896,7 @@ void XMLStyleOASISTContext::StartElement(
                 }
                 break;
             default:
-                OSL_ENSURE( !this, "unknown action" );
+                OSL_ENSURE( false, "unknown action" );
                 break;
             }
         }

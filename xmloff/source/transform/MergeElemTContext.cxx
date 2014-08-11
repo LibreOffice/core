@@ -267,7 +267,7 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
                     }
                     break;
                 default:
-                    OSL_ENSURE( !this, "unknown action" );
+                    OSL_ENSURE( false, "unknown action" );
                     break;
                 }
             }
@@ -299,7 +299,7 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
                     }
                     break;
                 default:
-                    OSL_ENSURE( !this, "unknown action" );
+                    OSL_ENSURE( false, "unknown action" );
                     break;
                 }
             }

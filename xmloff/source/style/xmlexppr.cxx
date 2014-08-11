@@ -490,7 +490,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                             catch( UnknownPropertyException& )
                             {
                                 // might be a problem of getImplemenetationId
-                                OSL_ENSURE( !this, "unknown property in getPropertyValue" );
+                                OSL_ENSURE( false, "unknown property in getPropertyValue" );
                             }
 
                         }
@@ -649,7 +649,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::_Filter(
         catch( UnknownPropertyException& )
         {
             // might be a problem of getImplemenetationId
-            OSL_ENSURE( !this, "unknown property in getPropertyStates" );
+            OSL_ENSURE( false, "unknown property in getPropertyStates" );
         }
     }
 
