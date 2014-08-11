@@ -14681,7 +14681,7 @@
             <ref name="CT_TblCellMar"/>
           </element>
           <element name="tblLook">
-            <ref name="CT_ShortHexNumber"/>
+            <ref name="CT_TblLook"/>
           </element>
       </define>
       <define name="CT_TblPrEx">
