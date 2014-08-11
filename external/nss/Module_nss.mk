@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,nss))
 
 ifeq ($(SYSTEM_NSS),)
-ifeq ($(filter ANDROID IOS,$(OS)),)
+ifeq ($(filter ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,nss,\
 	UnpackedTarball_nss \
 	ExternalPackage_nss \

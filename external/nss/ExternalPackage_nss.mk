@@ -11,7 +11,9 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,nss,nss))
 
 $(eval $(call gb_ExternalPackage_use_external_project,nss,nss))
 
-ifeq ($(OS),MACOSX)
+ifeq ($(OS),IOS)
+# nothing...
+else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libfreebl3.dylib \
 		dist/out/lib/libnspr4.dylib \
@@ -59,7 +61,9 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 endif
 
 ifeq ($(SYSTEM_CURL),)
-ifeq ($(OS),MACOSX)
+ifeq ($(OS),IOS)
+# nothing
+else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libnsspem.dylib \
 ))

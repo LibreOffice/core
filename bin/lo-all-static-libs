@@ -42,6 +42,7 @@ ANDROID)
     ;;
 IOS)
     oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
+    nsslibs=`find $WORKDIR/UnpackedTarball/nss -name 'lib*.a'`
     ;;
 *)
     oslibs=
@@ -52,6 +53,7 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $foolibs \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
      $oslibs \
+     $nsslibs \
      $WORKDIR/UnpackedTarball/coinmp/Cbc/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/coinmp/Cgl/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/coinmp/Clp/src/.libs/*.a \
