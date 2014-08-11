@@ -111,16 +111,6 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
     bool bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    if ( nStart == nEnd )
-    {
-        // No point in painting 0 items...
-        // This happens e.g. during the construction, and can actually cause
-        // problems at that point as we don't yet have a viewshell, hence
-        // we can't populate the tab info, hence we get segfaults when trying
-        // to access inexistent data in the tabinfo.
-        return;
-    }
-
     SCROW nY1 = 0, nY2 = 1;
     SCCOL nX1 = 0, nX2 = 1;
     if ( bVertical )
