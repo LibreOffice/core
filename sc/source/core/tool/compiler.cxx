@@ -1313,8 +1313,13 @@ struct ConventionXL_OOX : public ConventionXL_A1
     virtual OUString makeExternalNameStr( sal_uInt16 nFileId, const OUString& /*rFile*/,
             const OUString& rName ) const SAL_OVERRIDE
     {
-        /* TODO: is this really what Excel writes to OOXML? */
+        // [N]!DefinedName is a workbook global name.
         return OUString( "[" + OUString::number(nFileId+1) + "]!" + rName );
+
+        /* TODO: add support for sheet local names, would be
+         * [N]'Sheet Name'!DefinedName
+         * Similar to makeExternalRefStr() but with DefinedName instead of
+         * CellStr. */
     }
 
     virtual void makeExternalRefStr(
