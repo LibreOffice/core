@@ -88,11 +88,11 @@ static OUString impl_GetFilterFromExt( const OUString& aUrl, SfxFilterFlags nFla
     const SfxFilter *pSfxFilter = NULL;
     if( nFlags == SFX_FILTER_EXPORT )
     {
-        SfxFilterMatcher( aAppl ).GuessFilterIgnoringContent( *pMedium, &pSfxFilter, nFlags, 0 );
+        SfxFilterMatcher( aAppl ).GuessFilterIgnoringContent( *pMedium, &pSfxFilter, nFlags );
     }
     else
     {
-        SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pSfxFilter, nFlags, 0 );
+        SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pSfxFilter, nFlags );
     }
 
     if( pSfxFilter )
