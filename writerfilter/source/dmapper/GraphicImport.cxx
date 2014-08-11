@@ -783,6 +783,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         }
                         m_pImpl->applyRelativePosition(xShapeProps);
 
+                        xShapeProps->setPropertyValue("SurroundContour", uno::makeAny(m_pImpl->bContour));
                         m_pImpl->applyMargins(xShapeProps);
                         bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
                         xShapeProps->setPropertyValue("Opaque", uno::makeAny(bOpaque));
