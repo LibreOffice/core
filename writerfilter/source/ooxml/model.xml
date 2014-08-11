@@ -17353,12 +17353,10 @@
       <attribute name="id" tokenid="ooxml:EG_RangeMarkupElements_commentRangeEnd"/>
     </resource>
     <resource name="CT_BookmarkRange" resource="Properties">
-      <type name="Bookmark"/>
       <attribute name="colFirst" tokenid="ooxml:CT_BookmarkRange_colFirst"/>
       <attribute name="colLast" tokenid="ooxml:CT_BookmarkRange_colLast"/>
     </resource>
     <resource name="CT_Bookmark" resource="Properties">
-      <type name="Bookmark"/>
       <attribute name="name" tokenid="ooxml:CT_Bookmark_name"/>
     </resource>
     <resource name="CT_MoveBookmark" resource="Properties">
