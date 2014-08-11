@@ -276,7 +276,6 @@ namespace pcr
         {
             if ( m_sDetailLabel.isEmpty() )
             {
-                ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
                 m_sDetailLabel = PcrRes(STR_DETAIL_FORM).toString();
             }
             sDetailType = m_sDetailLabel;
@@ -289,7 +288,6 @@ namespace pcr
         {
             if ( m_sMasterLabel.isEmpty() )
             {
-                ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
                 m_sMasterLabel = PcrRes(STR_MASTER_FORM).toString();
             }
             sMasterType = m_sMasterLabel;
@@ -431,7 +429,6 @@ namespace pcr
         {
             OUString sErrorMessage;
             {
-                ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
                 sErrorMessage = PcrRes(STR_ERROR_RETRIEVING_COLUMNS).toString();
                 sErrorMessage = sErrorMessage.replaceFirst("#", sCommand);
             }

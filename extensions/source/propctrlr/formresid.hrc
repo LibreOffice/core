@@ -277,7 +277,6 @@
 // - dialogs
 
 #define RID_DLG_TABORDER                    ( RID_PROPCONTROLLER_START +  1 )
-#define RID_DLG_FORMLINKS                   ( RID_PROPCONTROLLER_START +  2 )
 #define RID_DLG_SELECTION                   ( RID_PROPCONTROLLER_START +  3 )
 
 // - ImageLists
