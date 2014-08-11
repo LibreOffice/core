@@ -172,7 +172,7 @@ void MRCListenerMultiplexerHelper::disposing(const ::com::sun::star::lang::Event
 
 #define MULTIPLEX( InterfaceName, MethodName, EventName )                   \
 ::cppu::OInterfaceContainerHelper * pCont;                                          \
-pCont = aListenerHolder.getContainer( cppu::UnoType<InterfaceName>::get());        \
+pCont = aListenerHolder.getContainer( cppu::UnoType< InterfaceName >::get());        \
 if( pCont )                                                                 \
 {                                                                           \
     ::cppu::OInterfaceIteratorHelper    aIt( *pCont );                              \
