@@ -43,10 +43,10 @@ public class Runner
     {
         return m_nStartTime;
     }
-    /*
-    simple helper functions to start/stop a timer, to know how long a process need in milliseconds
-     */
 
+    /**
+     *  simple helper functions to start/stop a timer, to know how long a process need in milliseconds
+     */
     private static long getTime()
     {
         return System.currentTimeMillis();
@@ -57,8 +57,8 @@ public class Runner
         m_nStartTime = _nStartTime;
     }
 
-    /*
-    return the time, which is done until last startTime()
+    /**
+     * @return the time, which is done until last startTime()
      */
     private static long meanTime(long _nCurrentTimer)
     {
@@ -86,7 +86,7 @@ public class Runner
     }
 
     /**
-     Helper to check if there are problems with Cygwin Path variables.
+     * Helper to check if there are problems with Cygwin Path variables.
      */
     private static boolean checkVariableForCygwin(String _sVariable)
     {
