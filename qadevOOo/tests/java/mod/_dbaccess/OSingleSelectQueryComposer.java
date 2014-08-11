@@ -35,6 +35,7 @@ import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDataSource;
+import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
@@ -158,6 +159,8 @@ public class OSingleSelectQueryComposer extends TestCase {
     *      {@link ifc.sdb._XSingleSelectQueryComposer} interface
     * <li> <code>'colName'</code> for
     *      {@link ifc.sdb._XSingleSelectQueryComposer} interface
+    * <li> <code>'xResultSet'</code> for
+    *      {@link ifc.sdb._XSingleSelectQueryComposer} interface
     * </ul>
     *
     */
@@ -241,6 +244,9 @@ public class OSingleSelectQueryComposer extends TestCase {
 
             tEnv.addObjRelation("xProp", xCol);
             tEnv.addObjRelation("colName", xCols.getElementNames()[0]);
+
+            XResultSet xResultSet = UnoRuntime.queryInterface(XResultSet.class, oRowSet);
+            tEnv.addObjRelation("xResultSet", xResultSet);
 
           return tEnv;
 

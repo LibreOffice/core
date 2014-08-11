@@ -113,17 +113,9 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
         }
         catch(const SQLException &e)
         {
-            SAL_INFO("dbaccess", "exception caught: " << e.Message);
-            // TODO: doing nothing matches the previous behaviour,
-            //       (and keeps dbaccess unoapi test working...)
-            //       but should be investigated... If the value could not be
-            //       fetched, that's a different result than "value is null",
-            //       which corresponds to an empty Any.
-            //throw WrappedTargetRuntimeException("Could not retrieve column value", *const_cast<ORowSetDataColumn*>(this), Any(e));
-            // css::uno::Any a(cppu::getCaughtException());
-            // throw css::lang::WrappedTargetException(
-            //     "wrapped css::sdbc::SQLException: " + e.Message,
-            //     css::uno::Reference<css::uno::XInterface>(), a);
+            throw WrappedTargetRuntimeException("Could not retrieve column value: " + e.Message,
+                                                *const_cast<ORowSetDataColumn*>(this),
+                                                Any(e));
         }
     }
     else if ( PROPERTY_ID_LABEL == nHandle && !m_sLabel.isEmpty() )

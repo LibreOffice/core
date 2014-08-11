@@ -1180,15 +1180,17 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     SAL_INFO("dbaccess", "ORowSetBase::firePropertyChange() Clone = " << m_bClone);
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
     sal_Int32 i=0;
-    try
+    TDataColumns::iterator aEnd = m_aDataColumns.end();
+    for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i)
     {
-        TDataColumns::iterator aEnd = m_aDataColumns.end();
-        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i)
+        try
+        {
             (*aIter)->fireValueChange(_rOldRow.is() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
-    }
-    catch (const Exception&)
-    {
-        SAL_WARN("dbaccess", "firePropertyChange: Exception");
+        }
+        catch (const Exception&)
+        {
+            SAL_WARN("dbaccess", "firePropertyChange: Exception on column " << i);
+        }
     }
     SAL_INFO("dbaccess", "ORowSetBase::firePropertyChange() Clone = " << m_bClone);
 }
