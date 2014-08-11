@@ -30,6 +30,7 @@
 #define STR_DOC_COLOR_PREFIX    "Document Color "
 
 PaletteManager::PaletteManager() :
+    mnMaxRecentColors(10),
     mnNumOfPalettes(2),
     mnCurrentPalette(0),
     mnColorCount(0),
@@ -115,6 +116,18 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
 }
 
+void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
+{
+    rColorSet.Clear();
+    int nIx = 1;
+    for(std::deque<Color>::const_iterator it = maRecentColors.begin();
+        it != maRecentColors.end(); ++it)
+    {
+        rColorSet.InsertItem(nIx, *it, "");
+        ++nIx;
+    }
+}
+
 std::vector<OUString> PaletteManager::GetPaletteList()
 {
     std::vector<OUString> aPaletteNames;
@@ -148,6 +161,11 @@ long PaletteManager::GetColorCount()
     return mnColorCount;
 }
 
+long PaletteManager::GetRecentColorCount()
+{
+    return maRecentColors.size();
+}
+
 OUString PaletteManager::GetPaletteName()
 {
     if( mnCurrentPalette == 0 )
@@ -168,6 +186,19 @@ void PaletteManager::SetLastColor(const Color& rLastColor)
     mLastColor = rLastColor;
 }
 
+void PaletteManager::AddRecentColor(const Color& rRecentColor)
+{
+    std::deque<Color>::iterator itColor =
+        std::find(maRecentColors.begin(), maRecentColors.end(), rRecentColor);
+    // if recent color to be added is already in list, remove it
+    if( itColor != maRecentColors.end() )
+        maRecentColors.erase( itColor );
+
+    maRecentColors.push_front( rRecentColor );
+    if( maRecentColors.size() > mnMaxRecentColors )
+        maRecentColors.pop_back();
+}
+
 void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
 {
     mpBtnUpdater = pBtnUpdater;
@@ -182,6 +213,7 @@ void PaletteManager::PopupColorPicker(const OUString aCommand)
     {
         mpBtnUpdater->Update( aColorDlg.GetColor() );
         mLastColor = aColorDlg.GetColor();
+        AddRecentColor( mLastColor );
         DispatchColorCommand(aCommand, mLastColor);
     }
 }

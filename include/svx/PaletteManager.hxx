@@ -23,6 +23,7 @@
 #include <svx/Palette.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/tbxcolorupdate.hxx>
+#include <deque>
 
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -36,27 +37,35 @@
 
 class PaletteManager
 {
-    sal_uInt16  mnNumOfPalettes;
-    sal_uInt16  mnCurrentPalette;
+    const sal_uInt16        mnMaxRecentColors;
 
-    long        mnColorCount;
+    sal_uInt16              mnNumOfPalettes;
+    sal_uInt16              mnCurrentPalette;
+
+    long                    mnColorCount;
     svx::ToolboxButtonColorUpdater* mpBtnUpdater;
 
-    Color       mLastColor;
+    Color                   mLastColor;
+    std::deque<Color>       maRecentColors;
     boost::ptr_vector<Palette> maPalettes;
 public:
     PaletteManager();
     ~PaletteManager();
     void        LoadPalettes();
     void        ReloadColorSet(SvxColorValueSet& rColorSet);
+    void        ReloadRecentColorSet(SvxColorValueSet& rColorSet);
     std::vector<OUString> GetPaletteList();
     void        SetPalette( sal_Int32 nPos );
     sal_Int32   GetPalette();
 
     long        GetColorCount();
+    long        GetRecentColorCount();
     OUString    GetPaletteName();
+
     const Color& GetLastColor();
     void        SetLastColor(const Color& rLastColor);
+    void        AddRecentColor(const Color& rRecentColor);
+
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
     void        PopupColorPicker(const OUString aCommand);
     static void DispatchColorCommand(const OUString aCommand, const Color aColor);

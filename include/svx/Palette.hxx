@@ -29,7 +29,6 @@
 typedef std::pair<Color, OUString> NamedColor;
 typedef std::vector< NamedColor > ColorList;
 
-
 class Palette
 {
 public:
