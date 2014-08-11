@@ -24,54 +24,59 @@
 
 class SdCustomShow;
 
-class SdCustomShowList : private std::vector<SdCustomShow*>
+class SdCustomShowList
 {
 private:
+    std::vector<SdCustomShow*> mShows;
    sal_uInt16 mnCurPos;
 public:
-    using std::vector<SdCustomShow*>::operator[];
-    using std::vector<SdCustomShow*>::size;
-    using std::vector<SdCustomShow*>::empty;
-    using std::vector<SdCustomShow*>::push_back;
-    using std::vector<SdCustomShow*>::erase;
-    using std::vector<SdCustomShow*>::begin;
-    using std::vector<SdCustomShow*>::iterator;
-
     SdCustomShowList()
-        : mnCurPos(0)
+        : mShows(), mnCurPos(0)
     {
     }
+
+    bool empty() const {return mShows.empty();}
+
+    size_t size() const {return mShows.size();}
+
+    SdCustomShow* &operator[](size_t i) {return mShows[i];}
+
+    std::vector<SdCustomShow*>::iterator begin() {return mShows.begin();}
+
+    void erase(std::vector<SdCustomShow*>::iterator it) {mShows.erase(it);}
+
+    void push_back(SdCustomShow* p) {mShows.push_back(p);}
 
     sal_uInt16 GetCurPos() const { return mnCurPos; }
     void Seek(sal_uInt16 nNewPos) { mnCurPos = nNewPos; }
 
     SdCustomShow* First()
     {
-        if( empty() )
+        if( mShows.empty() )
             return NULL;
         mnCurPos = 0;
-        return operator[](mnCurPos);
+        return mShows[mnCurPos];
     }
     SdCustomShow* Next()
     {
         ++mnCurPos;
-        return mnCurPos >= size() ? NULL : operator[](mnCurPos);
+        return mnCurPos >= mShows.size() ? NULL : mShows[mnCurPos];
     }
     void Last()
     {
-        if( !empty() )
-            mnCurPos = size() - 1;
+        if( !mShows.empty() )
+            mnCurPos = mShows.size() - 1;
     }
     SdCustomShow* GetCurObject()
     {
-        return empty() ? NULL : operator[](mnCurPos);
+        return mShows.empty() ? NULL : mShows[mnCurPos];
     }
     SdCustomShow* Remove(SdCustomShow* p)
     {
-        iterator it = std::find(begin(), end(), p);
-        if( it == end() )
+        std::vector<SdCustomShow*>::iterator it = std::find(mShows.begin(), mShows.end(), p);
+        if( it == mShows.end() )
             return NULL;
-        erase(it);
+        mShows.erase(it);
         return p;
     }
 };
