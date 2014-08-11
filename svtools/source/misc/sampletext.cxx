@@ -141,6 +141,15 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
             sSampleText = OUString(aArab, SAL_N_ELEMENTS(aArab));
             break;
         }
+        case USCRIPT_ARMENIAN:
+        {
+            const sal_Unicode aArmenian[] = {
+                0x0561, 0x0575, 0x0562, 0x0578, 0x0582, 0x0562, 0x0565,
+                0x0576
+            };
+            sSampleText = OUString(aArmenian, SAL_N_ELEMENTS(aArmenian));
+            break;
+        }
         case USCRIPT_DEVANAGARI:
         {
             const sal_Unicode aDeva[] = {
@@ -504,6 +513,9 @@ OUString makeRepresentativeTextForLanguage(LanguageType eLang)
     OUString sRet;
     switch( eLang & LANGUAGE_MASK_PRIMARY )
     {
+        case LANGUAGE_ARMENIAN & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_ARMENIAN);
+            break;
         case LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_HAN);
             break;
