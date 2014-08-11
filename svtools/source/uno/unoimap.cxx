@@ -567,8 +567,8 @@ SvUnoImageMap::SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pS
 {
     maName = rMap.GetName();
 
-    const sal_uInt16 nCount = rMap.GetIMapObjectCount();
-    for( sal_uInt16 nPos = 0; nPos < nCount; nPos++ )
+    const std::size_t nCount = rMap.GetIMapObjectCount();
+    for( std::size_t nPos = 0; nPos < nCount; nPos++ )
     {
         IMapObject* pMapObject = rMap.GetIMapObject( nPos );
         SvUnoImageMapObject* pUnoObj = new SvUnoImageMapObject( *pMapObject, pSupportedMacroItems );
