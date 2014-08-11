@@ -32,6 +32,7 @@
 namespace writerfilter {
 namespace dmapper {
 
+class DomainMapper;
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > Handle_t;
 typedef TableManager<Handle_t , TablePropertyMapPtr > DomainMapperTableManager_Base_t;
@@ -44,9 +45,10 @@ private:
     std::vector<css::beans::PropertyValue>* m_pCurrentInteropGrabBag;
     DomainMapperTableManager_Base_t *m_pTableManager;
     bool m_bOOXML;
+    DomainMapper& m_rDMapper;
 
 public:
-    TablePropertiesHandler( bool bOOXML );
+    TablePropertiesHandler( bool bOOXML, DomainMapper& rDMapper );
     virtual ~TablePropertiesHandler( );
 
     bool sprm(Sprm & sprm);

@@ -32,6 +32,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <ooxml/resourceids.hxx>
 #include <dmapperLoggers.hxx>
+#include <dmapper/DomainMapper.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -40,7 +41,7 @@ using namespace ::com::sun::star;
 using namespace ::std;
 
 
-DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
+DomainMapperTableManager::DomainMapperTableManager(bool bOOXML, DomainMapper& rDMapper) :
     m_nRow(0),
     m_nCell(),
     m_nGridSpan(1),
@@ -50,6 +51,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
     m_bOOXML( bOOXML ),
+    m_rDMapper( rDMapper ),
     m_aTmpPosition(),
     m_aTmpTableProperties(),
     m_bPushCurrentWidth(false),
@@ -58,7 +60,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
     m_nMaxFixedWidth(0),
-    m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
+    m_pTablePropsHandler( new TablePropertiesHandler( bOOXML, rDMapper ) )
 {
     m_pTablePropsHandler->SetTableManager( this );
 

@@ -3450,6 +3450,11 @@ bool DomainMapper::IsInHeaderFooter() const
     return m_pImpl->IsInHeaderFooter();
 }
 
+bool DomainMapper::IsStyleSheetImport() const
+{
+    return m_pImpl->IsStyleSheetImport();
+}
+
 void DomainMapper::enableInteropGrabBag(const OUString& aName)
 {
     m_pImpl->m_aInteropGrabBagName = aName;

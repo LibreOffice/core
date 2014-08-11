@@ -115,6 +115,7 @@ public:
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> PopPendingShape();
 
     bool IsInHeaderFooter() const;
+    bool IsStyleSheetImport() const;
     /**
      @see DomainMapper_Impl::processDeferredCharacterProperties()
     */
