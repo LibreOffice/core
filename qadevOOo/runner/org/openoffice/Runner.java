@@ -37,26 +37,6 @@ import base.TestBase;
 public class Runner
 {
 
-    private static long m_nStartTime;
-
-    private static long getRunnerStartTime()
-    {
-        return m_nStartTime;
-    }
-
-    /**
-     *  simple helper functions to start/stop a timer, to know how long a process need in milliseconds
-     */
-    private static long getTime()
-    {
-        return System.currentTimeMillis();
-    }
-
-    private static void setStartTime(long _nStartTime)
-    {
-        m_nStartTime = _nStartTime;
-    }
-
     /**
      * @return the time, which is done until last startTime()
      */
@@ -67,7 +47,7 @@ public class Runner
             System.out.println("Forgotten to initialise a start timer?");
             return 0;
         }
-        long nMeanTime = getTime();
+        long nMeanTime = System.currentTimeMillis();
         return nMeanTime - _nCurrentTimer;
     }
 
@@ -180,7 +160,7 @@ public class Runner
     {
         System.out.println("OOoRunner Main() version from 20101118 (yyyymmdd)");
 
-        setStartTime(getTime());
+        final long nStartTime = System.currentTimeMillis();
 
         DynamicClassLoader dcl = new DynamicClassLoader();
 
@@ -232,8 +212,8 @@ public class Runner
         checkAllVariablesForCygwinPath(param);
 
         boolean worked = toExecute.executeTest(param);
-        long nTime = meanTime(getRunnerStartTime());
-        String sBeautifyTime = beautifyTime(nTime);
+        final long nTime = System.currentTimeMillis() - nStartTime;
+        final String sBeautifyTime = beautifyTime(nTime);
 
         System.out.println("Job run took: " + nTime + "ms " + " [" + sBeautifyTime + "]");
 
