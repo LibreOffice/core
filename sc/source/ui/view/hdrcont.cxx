@@ -624,7 +624,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                                 aString = GetEntryText( nEntryNo );
                                 aTextSize.Width() = GetTextWidth( aString );
                                 aTextSize.Height() = GetTextHeight();
-                                aTextSize = PixelToLogic( aTextSize );
+                                aTextSize = PixelToLogic( aTextSize, maPaintMapMode );
 
                                 Point aTxtPos(aScrPos);
                                 if (bVertical)
@@ -639,13 +639,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                                     aTxtPos.X() += (nSizePix*nLayoutSign-aTextSize.Width()+aOnePixel.Width())/2;
                                     aTxtPos.Y() += (nBarSize-aTextSize.Height())/2;
                                 }
-                                aTxtPos = LogicToPixel( aTxtPos );
-                                // Text is in pixels, so easiest just to map that way
-                                // only here.
-                                const MapMode aOriginalMapMode( GetMapMode() );
-                                SetMapMode( MapMode( MAP_PIXEL ) );
-                                DrawText( aTxtPos, aString );
-                                SetMapMode( aOriginalMapMode );
+                                DrawText( LogicToPixel( aTxtPos, maPaintMapMode ), aString );
                             }
                             break;
                     }
