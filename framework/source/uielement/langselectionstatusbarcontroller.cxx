@@ -254,7 +254,7 @@ throw (css::uno::RuntimeException)
         else if (nId == MID_LANG_SEL_MORE)
         {
             //open the dialog "format/character" for current selection
-            aBuff.append( ".uno:FontDialog?Language:string=*" );
+            aBuff.append( ".uno:FontDialog?Page:string=font" );
         }
         else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
         {

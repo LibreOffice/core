@@ -188,6 +188,13 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         pDlg->SetCurPageId("font");
     }
 
+    if (pReq)
+    {
+        SFX_REQUEST_ARG((*pReq), pItem, SfxStringItem, FN_PARAM_1, false);
+        if (pItem)
+            pDlg->SetCurPageId(OUStringToOString(pItem->GetValue(), RTL_TEXTENCODING_UTF8));
+    }
+
     const SfxItemSet* pSet = NULL;
     if ( !bUseDialog )
         pSet = pArgs;

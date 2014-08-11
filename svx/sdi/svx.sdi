@@ -3961,7 +3961,7 @@ SfxObjectItem FmFilterNavigatorController SID_FM_FILTER_NAVIGATOR_CONTROL
 
 
 SfxVoidItem FontDialog SID_CHAR_DLG
-()
+(SfxStringItem Page FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
