@@ -34,6 +34,24 @@
       "revId": "aa0e3701aad1a8a955773e869d9a6b59eac51e72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad32947_563c142f",
+        "filename": "javaunohelper/test/com/sun/star/comp/helper/Bootstrap_Test.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-08-11T10:01:58Z",
+      "side": 1,
+      "message": "fix:\n...\n                String bootstrap_parameter[] \u003d args[nPos].split(\"\u003d\",2);\n                if ((bootstrap_parameter.length \u003d\u003d 2) \u0026\u0026 (bootstrap_parameter[0].length() \u003e 0)){\n...",
+      "parentUuid": "7ad32947_16efbcb1",
+      "revId": "aa0e3701aad1a8a955773e869d9a6b59eac51e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
