@@ -74,7 +74,7 @@ public class TextDocument
     public XComponent xComponent;
     public com.sun.star.text.XTextDocument xTextDocument;
 
-    public com.sun.star.document.XDocumentProperties m_xDocProps;
+    private com.sun.star.document.XDocumentProperties m_xDocProps;
     public com.sun.star.task.XStatusIndicator xProgressBar;
     public com.sun.star.frame.XFrame xFrame;
     public XText xText;

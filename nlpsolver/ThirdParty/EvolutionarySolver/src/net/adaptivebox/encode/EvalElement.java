@@ -25,7 +25,7 @@ import net.adaptivebox.global.*;
 public class EvalElement {
 
   //The weight for each response (target)
-  public double weight = 1;
+  private double weight = 1;
   /**
    * The expected range of the response value, forms the following objective:
    *

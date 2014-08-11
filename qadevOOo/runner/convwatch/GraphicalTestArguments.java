@@ -84,7 +84,7 @@ public class GraphicalTestArguments
     private TestParameters m_aCurrentParams;
 
     private int m_nMaxPages = 0;                           // default is 0 (print all pages)
-    String m_sOnlyPage = "";                       // default is "", there is no page which we want to print only.
+    private String m_sOnlyPage = "";                       // default is "", there is no page which we want to print only.
 
     private int m_nResolutionInDPI = 0;
 
