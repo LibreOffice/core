@@ -58,16 +58,7 @@ final class NativeLibraries {
                 URL url = ((URLClassLoader) cl).findResource(sysname);
                 if (url != null) {
                     try {
-                        System.load(
-                            File.class.getConstructor(
-                                new Class[] {
-                                    ClassLoader.getSystemClassLoader().
-                                    loadClass("java.net.URI") }).
-                             newInstance(
-                                 new Object[] {
-                                     URL.class.getMethod("toURI", new Class[0]).
-                                     invoke(url, (java.lang.Object[])null) }).
-                            getAbsolutePath());
+                        System.load(new File(url.toURI()).getAbsolutePath());
                     } catch (Throwable t) {
                         throw new UnsatisfiedLinkError(
                             e.toString()+ " - " + t.toString());
