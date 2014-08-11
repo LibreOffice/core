@@ -133,9 +133,6 @@ namespace dbaui
 
     private:
         // dialog controls
-        FixedText*              m_pFT_HeaderText;
-        FixedText*              m_pFT_HelpText;
-
         RadioButton*            m_pRB_CreateDatabase;
         RadioButton*            m_pRB_OpenExistingDatabase;
         RadioButton*            m_pRB_ConnectDatabase;

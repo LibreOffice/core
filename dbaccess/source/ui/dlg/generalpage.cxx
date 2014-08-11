@@ -485,8 +485,6 @@ namespace dbaui
     // OGeneralPageWizard
     OGeneralPageWizard::OGeneralPageWizard( Window* pParent, const SfxItemSet& _rItems )
         :OGeneralPage( pParent, "dbaccess/ui/generalpagewizard.ui", _rItems )
-        ,m_pFT_HeaderText               ( NULL )
-        ,m_pFT_HelpText                 ( NULL )
         ,m_pRB_CreateDatabase           ( NULL )
         ,m_pRB_OpenExistingDatabase     ( NULL )
         ,m_pRB_ConnectDatabase          ( NULL )
@@ -498,8 +496,6 @@ namespace dbaui
         ,m_eOriginalCreationMode        ( eCreateNew )
         ,m_bInitEmbeddedDBList          ( true )
     {
-        get( m_pFT_HeaderText, "headerText" );
-        get( m_pFT_HelpText, "helpText" );
         get( m_pRB_CreateDatabase, "createDatabase" );
         get( m_pRB_OpenExistingDatabase, "openExistingDatabase" );
         get( m_pRB_ConnectDatabase, "connectDatabase" );
