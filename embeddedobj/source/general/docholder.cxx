@@ -73,8 +73,7 @@
 #include "commonembobj.hxx"
 #include "intercept.hxx"
 
-#define HATCH_BORDER_WIDTH ((((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) || \
-                            (svt::EmbeddedObjectRef::IsGLChart(m_pEmbedObj)) ) && \
+#define HATCH_BORDER_WIDTH (((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
                             m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
 
 using namespace ::com::sun::star;
