@@ -262,7 +262,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	chartcore \
 	chartcontroller \
 	chartopengl \
-	$(if $(filter $(OS),MACOSX WNT),,cmdmail) \
+	$(if $(filter $(OS),WNT),,cmdmail) \
 	cppcanvas \
 	configmgr \
 	ctl \
