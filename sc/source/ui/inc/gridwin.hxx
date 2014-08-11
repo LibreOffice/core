@@ -129,6 +129,8 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
 
     VisibleRange maVisibleRange;
 
+    MapMode maPaintMapMode;
+
     boost::scoped_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
     boost::ptr_vector<Window> maChildWindows;
 

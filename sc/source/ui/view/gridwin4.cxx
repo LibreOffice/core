@@ -461,13 +461,14 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
 
-    Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
+    Point aScrPos = LogicToPixel(pViewData->GetScrPos( nX1, nY1, eWhich ), maPaintMapMode);
     long nMirrorWidth = GetSizePixel().Width();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     if ( bLayoutRTL )
     {
-        long nEndPixel = pViewData->GetScrPos( nX2+1, maVisibleRange.mnRow1, eWhich ).X();
+        long nEndPixel = LogicToPixel(pViewData->GetScrPos( nX2+1, maVisibleRange.mnRow1, eWhich ),
+                                      maPaintMapMode).X();
         nMirrorWidth = aScrPos.X() - nEndPixel;
         aScrPos.X() = nEndPixel + 1;
     }
@@ -876,8 +877,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         SCROW nRow2 = pViewData->GetEditEndRow();
         SetLineColor();
         SetFillColor( pEditView->GetBackgroundColor() );
-        Point aStart = pViewData->GetScrPos( nCol1, nRow1, eWhich );
-        Point aEnd = pViewData->GetScrPos( nCol2+1, nRow2+1, eWhich );
+        Point aStart = LogicToPixel(pViewData->GetScrPos( nCol1, nRow1, eWhich ), maPaintMapMode);
+        Point aEnd = LogicToPixel(pViewData->GetScrPos( nCol2+1, nRow2+1, eWhich ), maPaintMapMode);
         aEnd.X() -= 2 * nLayoutSign;        // don't overwrite grid
         aEnd.Y() -= 2;
         DrawRect( Rectangle( aStart,aEnd ) );
@@ -920,21 +921,25 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nTilePosX, int nTilePosY,
                               long nTileWidth, long nTileHeight )
 {
+    // Scaling. Must convert from pixels to TWIPs. We know
+    // that VirtualDevices use a DPI of 96. We might as well do this
+    // calculation now, rather than after another dimension conversion,
+    // to minimise errors.
+    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
+                                Fraction( nTileWidth);
+    Fraction scaleY =  Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
+                                 Fraction( nTileHeight);
+
     rDevice.SetOutputSizePixel( Size( nOutputWidth, nOutputHeight ) );
-    // setup the output device to draw the tile
     MapMode aMapMode( rDevice.GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
     aMapMode.SetOrigin( Point( -nTilePosX, -nTilePosY ) );
 
-    // Scaling. Must convert from pixels to twips. We know
-    // that VirtualDevises use a DPI of 96.
-    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
-                                Fraction( nTileWidth);
-    Fraction scaleY = Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
-                                Fraction( nTileHeight);
     aMapMode.SetScaleX( scaleX );
     aMapMode.SetScaleY( scaleY );
-    rDevice.SetMapMode( aMapMode );
+
+    maPaintMapMode = aMapMode;
+//    rDevice.SetMapMode( aMapMode );
 
     ScTabViewShell* pTabViewSh = pViewData->GetViewShell();
     SdrView* pDrawView = pTabViewSh->GetScDrawView();
@@ -1033,10 +1038,12 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 else
                     pContentDev->SetFillColor( aManual );
 
-                Point aStart = pViewData->GetScrPos(
-                                    aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
-                Point aEnd = pViewData->GetScrPos(
-                                    aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, eWhich, true );
+                Point aStart = LogicToPixel(pViewData->GetScrPos(
+                                                aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true ),
+                                            maPaintMapMode);
+                Point aEnd = LogicToPixel(pViewData->GetScrPos(
+                                              aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, eWhich, true ),
+                                          maPaintMapMode);
                 aStart.X() -= 2;
                 aStart.Y() -= 2;
 
@@ -1069,8 +1076,9 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             pContentDev->SetFillColor( aManual );
                         else
                             pContentDev->SetFillColor( aAutomatic );
-                        Point aBreak = pViewData->GetScrPos(
-                                        nBreak, aRange.aStart.Row(), eWhich, true );
+                        Point aBreak = LogicToPixel(pViewData->GetScrPos(
+                                                        nBreak, aRange.aStart.Row(), eWhich, true ),
+                                                    maPaintMapMode);
                         pContentDev->DrawRect( Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
                     }
                 }
@@ -1088,8 +1096,9 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             pContentDev->SetFillColor( aManual );
                         else
                             pContentDev->SetFillColor( aAutomatic );
-                        Point aBreak = pViewData->GetScrPos(
-                                        aRange.aStart.Col(), nBreak, eWhich, true );
+                        Point aBreak = LogicToPixel(pViewData->GetScrPos(
+                                                        aRange.aStart.Col(), nBreak, eWhich, true ),
+                                                    maPaintMapMode);
                         pContentDev->DrawRect( Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
                     }
                 }
@@ -1108,10 +1117,12 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             SCCOL nPrEndX = pColEnd[nColPos];
                             if ( nPrEndX >= nX1 && nPrStartX <= nX2 )
                             {
-                                Point aPageStart = pViewData->GetScrPos(
-                                                        nPrStartX, nPrStartY, eWhich, true );
-                                Point aPageEnd = pViewData->GetScrPos(
-                                                        nPrEndX+1,nPrEndY+1, eWhich, true );
+                                Point aPageStart = LogicToPixel(pViewData->GetScrPos(
+                                                                    nPrStartX, nPrStartY, eWhich, true ),
+                                                                maPaintMapMode);
+                                Point aPageEnd = LogicToPixel(pViewData->GetScrPos(
+                                                                  nPrEndX+1,nPrEndY+1, eWhich, true ),
+                                                              maPaintMapMode);
 
                                 long nPageNo = rData.GetFirstPage();
                                 if ( rData.IsTopDown() )
