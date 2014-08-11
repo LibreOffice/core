@@ -739,6 +739,7 @@ endif
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	ure_install \
+	ure_builddir_install \
 	$(if $(ENABLE_JAVA),\
 		jvmfwk_javavendors \
 		jvmfwk_jreproperties \

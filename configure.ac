@@ -4659,7 +4659,8 @@ if test "$cross_compiling" = "yes"; then
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in \
-        ios/lo.xcconfig.in) \
+        ios/lo.xcconfig.in \
+        ure/source/unorc.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
     cp configure CONF-FOR-BUILD
     test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host 2>/dev/null
