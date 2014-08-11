@@ -18,6 +18,7 @@
 
 package com.sun.star.lib.uno.helper;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -208,8 +209,8 @@ public class UnoUrl {
 
         try {
             if (s.contains("%")) {
-                ArrayList<Integer> v = new ArrayList<Integer>();
                 int length = s.length();
+                ByteBuffer bb = ByteBuffer.allocate(length);
                 for (int i = 0; i < length; i++) {
                     int ch = s.charAt(i);
 
@@ -228,16 +229,11 @@ public class UnoUrl {
                         i+=2;
                     }
 
-                    v.add(new Integer(ch));
+                    bb.put((byte) (ch & 0xFF));
                 }
 
-                int size = v.size();
-                byte[] bytes = new byte[size];
-                for (int i = 0; i < size; i++) {
-                    Integer anInt = v.get(i);
-                    bytes[i] = (byte) (anInt.intValue() & 0xFF);
-                }
-
+                byte[] bytes = new byte[bb.position()];
+                System.arraycopy(bb.array(), 0, bytes, 0, bytes.length);
                 return new String(bytes, "UTF-8");
 
             } else {
