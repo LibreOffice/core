@@ -124,7 +124,7 @@ public class NumericalHelper
      * @return a short
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
-    public static short toShort(Object aValue)
+    private static short toShort(Object aValue)
             throws com.sun.star.lang.IllegalArgumentException
     {
         short retValue = 0;

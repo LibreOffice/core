@@ -56,7 +56,7 @@ abstract class FilenameHelper_impl implements Filenamer
         {
             m_nNumber = _n;
         }
-    void initMember()
+    private void initMember()
         {
             fs = System.getProperty("file.separator");
         }
