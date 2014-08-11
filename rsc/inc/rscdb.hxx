@@ -173,7 +173,6 @@ class RscTypCont
     RscTop *    InitClassSystemWindow( RscTop * pSuper );
     RscTop *    InitClassWorkWindow( RscTop * pSuper );
     RscTop *    InitClassModalDialog( RscTop * pSuper );
-    RscTop *    InitClassModelessDialog( RscTop * pSuper );
     RscTop *    InitClassControl( RscTop * pSuper );
     RscTop *    InitClassCheckBox( RscTop * pSuper );
     RscTop *    InitClassPushButton( RscTop * pSuper );
@@ -185,7 +184,6 @@ class RscTypCont
     RscTop *    InitClassMultiLineEdit( RscTop * pSuper );
     RscTop *    InitClassScrollBar( RscTop * pSuper );
     RscTop *    InitClassListBox( RscTop * pSuper, RscArray * pStrLst );
-    RscTop *    InitClassMultiListBox( RscTop * pSuper );
     RscTop *    InitClassComboBox( RscTop * pSuper, RscArray * pStrLst );
     RscTop *    InitClassFixedText( RscTop * pSuper );
     RscTop *    InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage );

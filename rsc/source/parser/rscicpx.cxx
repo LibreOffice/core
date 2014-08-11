@@ -373,20 +373,6 @@ RscTop * RscTypCont::InitClassModalDialog( RscTop * pSuper )
     return pClassDialog;
 }
 
-RscTop * RscTypCont::InitClassModelessDialog( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassDialog;
-
-    // Klasse anlegen
-    nId = pHS->getID( "ModelessDialog" );
-    pClassDialog = new RscClass( nId, RSC_MODELESSDIALOG, pSuper );
-    pClassDialog->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassDialog );
-
-    return pClassDialog;
-}
-
 RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
 {
     Atom        nId;
@@ -596,61 +582,6 @@ RscTop * RscTypCont::InitClassMultiLineEdit( RscTop * pSuper )
     return pClassMultiLineEdit;
 }
 
-RscTop * RscTypCont::InitClassScrollBar( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassScrollBar;
-
-    // Klasse anlegen
-    nId = pHS->getID( "ScrollBar" );
-    pClassScrollBar = new RscClass( nId, RSC_SCROLLBAR, pSuper );
-    pClassScrollBar->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassScrollBar );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "MinPos", VARNAME );
-    pClassScrollBar->SetVariable( nId, &aShort );
-    {
-        RSCINST     aDfltI;
-
-        aDfltI = aShort.Create( NULL, RSCINST(), false );
-        aDfltI.pClass->SetNumber( aDfltI, 100 );
-//      aDfltI.pClass->MakeDefault( aDfltI );
-
-        nId = aNmTb.Put( "MaxPos", VARNAME );
-        pClassScrollBar->SetVariable( nId, &aShort, &aDfltI );
-    }
-    nId = aNmTb.Put( "ThumbPos", VARNAME );
-    pClassScrollBar->SetVariable( nId, &aShort );
-    {
-        RSCINST     aDfltI;
-
-        aDfltI = aShort.Create( NULL, RSCINST(), false );
-        aDfltI.pClass->SetNumber( aDfltI, 1 );
-//      aDfltI.pClass->MakeDefault( aDfltI );
-
-        nId = aNmTb.Put( "PageSize", VARNAME);
-        pClassScrollBar->SetVariable( nId, &aShort, &aDfltI  );
-    }
-    {
-        RSCINST     aDfltI;
-
-        aDfltI = aShort.Create( NULL, RSCINST(), false );
-        aDfltI.pClass->SetNumber( aDfltI, 1 );
-//      aDfltI.pClass->MakeDefault( aDfltI );
-        nId = aNmTb.Put( "LineSize", VARNAME );
-        pClassScrollBar->SetVariable( nId, &aShort, &aDfltI );
-    }
-    nId = aNmTb.Put( "VisibleSize", VARNAME );
-    pClassScrollBar->SetVariable( nId, &aShort );
-
-    INS_WINBIT( pClassScrollBar, HScroll );
-    INS_WINBIT( pClassScrollBar, VScroll );
-    INS_WINBIT( pClassScrollBar, Drag )
-
-    return pClassScrollBar;
-}
-
 RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
 {
     Atom        nId;
@@ -681,22 +612,6 @@ RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
     pClassListBox->SetVariable( nId, pStrLst );
 
     return pClassListBox;
-}
-
-RscTop * RscTypCont::InitClassMultiListBox( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassMultiListBox;
-
-    // Klasse anlegen
-    nId = pHS->getID( "MultiListBox" );
-    pClassMultiListBox = new RscClass( nId, RSC_MULTILISTBOX, pSuper );
-    pClassMultiListBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassMultiListBox );
-
-    INS_WINBIT(pClassMultiListBox,SimpleMode)
-
-    return pClassMultiListBox;
 }
 
 RscTop * RscTypCont::InitClassComboBox( RscTop * pSuper, RscArray * pStrLst )

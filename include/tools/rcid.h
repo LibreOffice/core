@@ -58,7 +58,7 @@
 
 #define RSC_FLOATINGWINDOW      (RSC_NOTYPE + 0x39)
 #define RSC_DIALOG              (RSC_NOTYPE + 0x3a)
-#define RSC_MODELESSDIALOG      (RSC_NOTYPE + 0x3b)
+
 #define RSC_MODALDIALOG         (RSC_NOTYPE + 0x3c)
 #define RSC_CONTROL             (RSC_NOTYPE + 0x44)
 #define RSC_BUTTON              (RSC_NOTYPE + 0x45)
@@ -78,13 +78,11 @@
 #define RSC_MULTILINEEDIT       (RSC_NOTYPE + 0x53)
 #define RSC_COMBOBOX            (RSC_NOTYPE + 0x54)
 #define RSC_LISTBOX             (RSC_NOTYPE + 0x55)
-#define RSC_MULTILISTBOX        (RSC_NOTYPE + 0x56)
+
 #define RSC_TEXT                (RSC_NOTYPE + 0x57)
 #define RSC_FIXEDLINE           (RSC_NOTYPE + 0x58)
 
 #define RSC_FIXEDIMAGE          (RSC_NOTYPE + 0x5a)
-#define RSC_GROUPBOX            (RSC_NOTYPE + 0x5c)
-#define RSC_SCROLLBAR           (RSC_NOTYPE + 0x5d)
 
 #define RSC_SPLITTER            (RSC_NOTYPE + 0x5f)
 #define RSC_SPLITWINDOW         (RSC_NOTYPE + 0x60)

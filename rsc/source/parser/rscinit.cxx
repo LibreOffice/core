@@ -73,7 +73,6 @@ void RscTypCont::Init()
     RscTop   *  pClassWorkWindow;
     RscTop   *  pClassDialog;
     RscTop   *  pClassModalDialog;
-    RscTop   *  pClassModelessDialog;
     RscTop   *  pClassControl;
     RscTop   *  pClassButton;
     RscTop   *  pClassCheckBox;
@@ -86,13 +85,10 @@ void RscTypCont::Init()
     RscTop   *  pClassTriStateBox;
     RscTop   *  pClassEdit;
     RscTop   *  pClassMultiLineEdit;
-    RscTop   *  pClassScrollBar;
     RscTop   *  pClassListBox;
-    RscTop   *  pClassMultiListBox;
     RscTop   *  pClassComboBox;
     RscTop   *  pClassFixedText;
     RscTop   *  pClassFixedImage;
-    RscTop   *  pClassGroupBox;
     RscTop   *  pClassKeyCode;
     RscTop   *  pLangClassKeyCode;
     RscTop   *  pClassAccelItem;
@@ -378,10 +374,6 @@ void RscTypCont::Init()
     // Klasse anlegen
     pClassModalDialog = InitClassModalDialog( pClassDialog );
     pRoot->Insert( pClassModalDialog );
-
-    // Klasse anlegen
-    pClassModelessDialog = InitClassModelessDialog( pClassDialog );
-    pRoot->Insert( pClassModelessDialog );
 }
 {
     pClassControl = InitClassControl( pClassWindow );
@@ -441,17 +433,10 @@ void RscTypCont::Init()
 
     pClassMultiLineEdit = InitClassMultiLineEdit( pClassEdit );
     pRoot->Insert( pClassMultiLineEdit );
-
-    pClassScrollBar = InitClassScrollBar( pClassControl );
-    pRoot->Insert( pClassScrollBar );
-
 }
 {
     pClassListBox = InitClassListBox( pClassControl, pLangStringLongTupelList );
     pRoot->Insert( pClassListBox );
-
-    pClassMultiListBox = InitClassMultiListBox( pClassListBox);
-    pRoot->Insert( pClassMultiListBox );
 
     pClassComboBox = InitClassComboBox( pClassEdit, pLangStringList );
     pRoot->Insert( pClassComboBox );
@@ -461,13 +446,6 @@ void RscTypCont::Init()
 
     pClassFixedImage = InitClassFixedImage( pClassControl, pClassImage );
     pRoot->Insert( pClassFixedImage );
-
-    // Klasse anlegen
-    nId = pHS->getID( "GroupBox" );
-    pClassGroupBox = new RscClass( nId, RSC_GROUPBOX, pClassControl );
-    pClassGroupBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassGroupBox );
-    pRoot->Insert( pClassGroupBox );
 
     pClassKeyCode = InitClassKeyCode( pClassMgr, pKey );
     pRoot->Insert( pClassKeyCode );

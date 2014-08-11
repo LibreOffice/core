@@ -1460,7 +1460,6 @@ OString ResMgr::GetAutoHelpId()
         switch( pRC->pResource->GetRT() ) {
             case RSC_DOCKINGWINDOW:     aHID.append( "DockingWindow" );    break;
             case RSC_WORKWIN:           aHID.append( "WorkWindow" );       break;
-            case RSC_MODELESSDIALOG:    aHID.append( "ModelessDialog" );   break;
             case RSC_FLOATINGWINDOW:    aHID.append( "FloatingWindow" );   break;
             case RSC_MODALDIALOG:       aHID.append( "ModalDialog" );      break;
             case RSC_TABPAGE:           aHID.append( "TabPage" );          break;
@@ -1474,7 +1473,6 @@ OString ResMgr::GetAutoHelpId()
         switch( pRC1->pResource->GetRT() ) {
             case RSC_DOCKINGWINDOW:
             case RSC_WORKWIN:
-            case RSC_MODELESSDIALOG:
             case RSC_FLOATINGWINDOW:
             case RSC_MODALDIALOG:
             case RSC_TABPAGE:
@@ -1487,7 +1485,6 @@ OString ResMgr::GetAutoHelpId()
                     case RSC_TRISTATEBOX:       aHID.append( "TriStateBox" );      break;
                     case RSC_EDIT:              aHID.append( "Edit" );             break;
                     case RSC_MULTILINEEDIT:     aHID.append( "MultiLineEdit" );    break;
-                    case RSC_MULTILISTBOX:      aHID.append( "MultiListBox" );     break;
                     case RSC_LISTBOX:           aHID.append( "ListBox" );          break;
                     case RSC_COMBOBOX:          aHID.append( "ComboBox" );         break;
                     case RSC_PUSHBUTTON:        aHID.append( "PushButton" );       break;
