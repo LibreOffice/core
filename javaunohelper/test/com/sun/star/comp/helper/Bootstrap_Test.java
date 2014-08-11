@@ -94,13 +94,17 @@ public class Bootstrap_Test {
         java.util.HashMap<String,String> bootstrap_parameters = new java.util.HashMap<String,String>();
         for ( int nPos = 1; nPos < args.length; ++nPos ) {
             if (args[nPos].contains("=")) {
-                String bootstrap_parameter[] = args[nPos].split("=");
-                if (bootstrap_parameter.length == 2){
+                String bootstrap_parameter[] = args[nPos].split("=",2);
+                if (bootstrap_parameter[0].length() > 0) {
                     bootstrap_parameters.put( bootstrap_parameter[0], bootstrap_parameter[1] );
-                } else{
+                } else {
+                    System.out.println();
+                    System.out.println("The 1st argument in a bootstrap parameter is the key of a HashMap element and can't be null : '" + args[nPos] + "'");
                     usage();
                 }
-            } else{
+            } else {
+                System.out.println();
+                System.out.println("Missing '=' in bootstrap parameter : '" + args[nPos] + "'");
                 usage();
             }
         }
