@@ -1055,8 +1055,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
 
             sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
-            if ( !bPrn && pShell->ISA( SwCrsrShell ) &&
-                    nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+            if ( !bPrn && pShell->ISA( SwCrsrShell ) && (
+                    (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
+                    pOLENd->GetOLEObj().GetObject().IsGLChart()))
             {
                 const SwFlyFrm *pFly = FindFlyFrm();
                 assert( pFly != NULL );

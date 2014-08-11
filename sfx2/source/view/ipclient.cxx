@@ -1048,7 +1048,8 @@ void SfxInPlaceClient::DeactivateObject()
 
             m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(true);
 
-            if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+            if ( (m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
+                 svt::EmbeddedObjectRef::IsGLChart(m_pImp->m_xObject) )
             {
                 m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
                 if (bHasFocus)
@@ -1081,7 +1082,8 @@ void SfxInPlaceClient::ResetObject()
         try
         {
             m_pImp->m_bUIActive = false;
-            if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+            if ( (m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
+                svt::EmbeddedObjectRef::IsGLChart(m_pImp->m_xObject) )
                 m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
             else
             {

@@ -396,7 +396,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
                 uno::Reference< embed::XEmbeddedObject > xObject = pObj->GetObjRef();
                 try
                 {
-                    if ( xObject->getStatus( pObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+                    if ( (xObject->getStatus( pObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
+                         svt::EmbeddedObjectRef::IsGLChart(xObject) )
                         xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
                     else
                     {

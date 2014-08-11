@@ -44,6 +44,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/soerr.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
@@ -1735,7 +1736,8 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
     bool bAlwaysActive =
         ( ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) != 0 );
     bool bActiveWhenVisible =
-        ( ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0 );
+        ( (( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0 ) ||
+         svt::EmbeddedObjectRef::IsGLChart(pIPClient->GetObject()));
 
     // this method is called when either a client is created or the "Edit/Plugins" checkbox is checked
     if ( !pIPClient->IsObjectInPlaceActive() && pImp->m_bPlugInsActive )

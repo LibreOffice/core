@@ -64,6 +64,7 @@
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 #include <vcl/svapp.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -72,9 +73,9 @@
 #include "commonembobj.hxx"
 #include "intercept.hxx"
 
-
-#define HATCH_BORDER_WIDTH (((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
-                             m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
+#define HATCH_BORDER_WIDTH ((((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) || \
+                            (svt::EmbeddedObjectRef::IsGLChart(m_pEmbedObj)) ) && \
+                            m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
 
 using namespace ::com::sun::star;
 
@@ -1256,7 +1257,8 @@ awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectan
 
 void SAL_CALL DocumentHolder::activated(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    if ( (m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) )
+    if ( (m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
+        svt::EmbeddedObjectRef::IsGLChart(m_pEmbedObj) )
     {
         if ( m_pEmbedObj->getCurrentState() != embed::EmbedStates::UI_ACTIVE &&
         !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )

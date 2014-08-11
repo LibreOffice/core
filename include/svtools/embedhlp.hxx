@@ -68,6 +68,7 @@ public:
                             throw();
 
     static bool IsChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj);
+    static bool IsGLChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj);
 
     const com::sun::star::uno::Reference <com::sun::star::embed::XEmbeddedObject>& operator->() const;
     const com::sun::star::uno::Reference <com::sun::star::embed::XEmbeddedObject>& GetObject() const;
@@ -109,6 +110,7 @@ public:
 
     bool IsLocked() const;
     bool IsChart() const;
+    bool IsGLChart() const;
 
     OUString GetChartType();
 

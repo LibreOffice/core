@@ -98,7 +98,8 @@ namespace sdr
                         }
 
                         SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-                        if(pPageView && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
+                        if(pPageView && ((nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
+                            xObjRef.IsGLChart()))
                         {
                             // connect plugin object
                             pPageView->GetView().DoConnect(const_cast< SdrOle2Obj* >(&rSdrOle2));
