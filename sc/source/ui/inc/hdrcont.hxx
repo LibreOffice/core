@@ -57,6 +57,8 @@ private:
 
     bool            bIgnoreMove;
 
+    MapMode         maPaintMapMode;
+
     long            GetScrPos( SCCOLROW nEntryNo ) const;
     SCCOLROW        GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) const;
     bool            IsSelectionAllowed(SCCOLROW nPos) const;

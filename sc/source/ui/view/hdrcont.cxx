@@ -185,7 +185,9 @@ long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
 {
     long nScrPos;
 
-    long nMax = ( bVertical ? GetOutputSizePixel().Height() : GetOutputSizePixel().Width() ) + 1;
+    const Size aOutputSizeLogic = PixelToLogic( GetOutputSizePixel(), maPaintMapMode );
+
+    const long nMax = ( bVertical ? aOutputSizeLogic.Height() : aOutputSizeLogic.Width() ) + 1;
     if (nEntryNo >= nSize)
         nScrPos = nMax;
     else
@@ -203,6 +205,15 @@ long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
                     i += nHidden - 1;
             }
         }
+    }
+
+    if (bVertical)
+    {
+        nScrPos = LogicToPixel( Point( 0, nScrPos ), maPaintMapMode ).Y();
+    }
+    else
+    {
+        nScrPos = LogicToPixel( Point( nScrPos, 0 ), maPaintMapMode ).X();
     }
 
     if ( IsLayoutRTL() )
@@ -226,9 +237,20 @@ void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBase
     if ( IsMirrored() )
         std::swap( aInner, aOuter );        // just swap colors instead of positions
 
-    Size aWinSize = PixelToLogic(GetSizePixel());
+    Size aWinSize = PixelToLogic( GetSizePixel(), maPaintMapMode );
     long nBarSize = bVertical ? aWinSize.Width() : aWinSize.Height();
     long nCenterPos = (nBarSize / 2) - 1;
+
+    if (bVertical)
+    {
+        nStart = LogicToPixel( Point(0, nStart), maPaintMapMode ).Y();
+        nEnd = LogicToPixel( Point(0, nEnd), maPaintMapMode ).Y();
+    }
+    else
+    {
+        nStart = LogicToPixel( Point( nStart, 0 ), maPaintMapMode ).X();
+        nEnd = LogicToPixel( Point( nEnd, 0 ), maPaintMapMode ).X();
+    }
 
     SetLineColor();
     SetFillColor( aOuter );
@@ -264,13 +286,13 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     aMapMode.SetMapUnit( MAP_TWIP );
     aMapMode.SetScaleX( rViewData.GetZoomX() * Fraction(0.96) );
     aMapMode.SetScaleY( rViewData.GetZoomY() * Fraction(0.96) );
-    SetMapMode( aMapMode );
+    maPaintMapMode = aMapMode;
 
     // We occasionally need to be able to measure 1 pixel
     // e.g. for column/row subdivision, but we're working
     // in logic units nowadays, hence we can grab the correct
     // size from here.
-    const Size aOnePixel = PixelToLogic( Size( 1, 1 ) );
+    const Size aOnePixel = PixelToLogic( Size( 1, 1 ), maPaintMapMode );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     bool bHighContrast = rStyleSettings.GetHighContrastMode();
@@ -299,15 +321,19 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     Point               aScrPos;
     Size                aTextSize;
 
+    Size aLogicSize = PixelToLogic( GetSizePixel(), maPaintMapMode );
+
     if (bVertical)
-        nBarSize = (sal_uInt16) PixelToLogic(GetSizePixel()).Width();
+        nBarSize = (sal_uInt16) aLogicSize.Width();
     else
-        nBarSize = (sal_uInt16) PixelToLogic(GetSizePixel()).Height();
+        nBarSize = (sal_uInt16) aLogicSize.Height();
 
     SCCOLROW    nPos = GetPos();
 
-    long nPStart = bVertical ? rRect.Top() : rRect.Left();
-    long nPEnd = bVertical ? rRect.Bottom() : rRect.Right();
+    const Rectangle aLogicRect = PixelToLogic( rRect, maPaintMapMode );
+
+    long nPStart = bVertical ? aLogicRect.Top() : aLogicRect.Left();
+    long nPEnd = bVertical ? aLogicRect.Bottom() : aLogicRect.Right();
 
     long nTransStart = nPEnd + (bVertical ? aOnePixel.Width() : aOnePixel.Height());
     long nTransEnd = 0;
@@ -322,9 +348,9 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
         nTransStart = nTransEnd;
         nTransEnd = nTemp;
         if ( bVertical )            // start loops from the end
-            nInitScrPos = PixelToLogic(GetSizePixel()).Height() - aOnePixel.Height();
+            nInitScrPos = PixelToLogic(GetSizePixel(), maPaintMapMode).Height() - aOnePixel.Height();
         else
-            nInitScrPos = PixelToLogic(GetSizePixel()).Width() - aOnePixel.Width();
+            nInitScrPos = PixelToLogic(GetSizePixel(), maPaintMapMode).Width() - aOnePixel.Width();
     }
 
     //  aeussere Linien komplett durchzeichnen
@@ -377,7 +403,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                 aFillRect = Rectangle( 0, nInitScrPos, nBarSize-aOnePixel.Width(), nLineEnd );
             else
                 aFillRect = Rectangle( nInitScrPos, 0, nLineEnd, nBarSize-aOnePixel.Height() );
-            DrawRect( aFillRect );
+            DrawRect( LogicToPixel( aFillRect, maPaintMapMode ) );
         }
         else
         {
@@ -393,7 +419,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
             aFillRect = Rectangle( 0, nLineEnd+nLayoutSign, nBarSize-aOnePixel.Width(), nPEnd );
         else
             aFillRect = Rectangle( nLineEnd+nLayoutSign, 0, nPEnd, nBarSize-aOnePixel.Height() );
-        DrawRect( aFillRect );
+        DrawRect( LogicToPixel( aFillRect, maPaintMapMode ) );
     }
 
     if ( nLineEnd * nLayoutSign >= nPStart * nLayoutSign )
@@ -408,16 +434,23 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
 
                     SetLineColor();
                     SetFillColor( COL_LIGHTGRAY );
+
+                    Rectangle aRect;
                     if (bVertical)
-                        DrawRect( Rectangle( 0, nTransStart, nBarSize-aOnePixel.Width(), nTransEnd ) );
+                    {
+                        aRect = Rectangle( 0, nTransStart, nBarSize-aOnePixel.Width(), nTransEnd );
+                    }
                     else
-                        DrawRect( Rectangle( nTransStart, 0, nTransEnd, nBarSize-aOnePixel.Height() ) );
+                    {
+                        aRect = Rectangle( nTransStart, 0, nTransEnd, nBarSize-aOnePixel.Height() );
+                    }
+
+                    DrawRect( LogicToPixel( aRect, maPaintMapMode ) );
                 }
             }
             else
             {
                 // background for selection
-
                 DrawShadedRect( nTransStart, nTransEnd, rStyleSettings.GetHighlightColor() );
             }
         }
@@ -426,10 +459,14 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
         if (bVertical)
         {
             long nDarkPos = bMirrored ? 0 : nBarSize - aOnePixel.Width();
-            DrawLine( Point( nDarkPos, nPStart ), Point( nDarkPos, nLineEnd ) );
+            DrawLine( LogicToPixel( Point( nDarkPos, nPStart ), maPaintMapMode ),
+                      LogicToPixel( Point( nDarkPos, nLineEnd ), maPaintMapMode ) );
         }
         else
-            DrawLine( Point( nPStart, nBarSize-aOnePixel.Height() ), Point( nLineEnd, nBarSize-aOnePixel.Height() ) );
+        {
+            DrawLine( LogicToPixel( Point( nPStart, nBarSize-aOnePixel.Height() ), maPaintMapMode ),
+                      LogicToPixel( Point( nLineEnd, nBarSize-aOnePixel.Height() ), maPaintMapMode ) );
+        }
 
         // line in different color for selection
         if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && !bHighContrast )
@@ -438,10 +475,14 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
             if (bVertical)
             {
                 long nDarkPos = bMirrored ? 0 : nBarSize-aOnePixel.Width();
-                DrawLine( Point( nDarkPos, nTransStart ), Point( nDarkPos, nTransEnd ) );
+                DrawLine( LogicToPixel( Point( nDarkPos, nTransStart ), maPaintMapMode ),
+                          LogicToPixel( Point( nDarkPos, nTransEnd ), maPaintMapMode ) );
             }
             else
-                DrawLine( Point( nTransStart, nBarSize-aOnePixel.Height() ), Point( nTransEnd, nBarSize-aOnePixel.Height() ) );
+            {
+                DrawLine( LogicToPixel( Point( nTransStart, nBarSize-aOnePixel.Height() ), maPaintMapMode ),
+                          LogicToPixel( Point( nTransEnd, nBarSize-aOnePixel.Height() ), maPaintMapMode ) );
+            }
         }
     }
 
@@ -483,8 +524,10 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                         aTransRect = Rectangle( 0, nTransStart, nBarSize-aOnePixel.Width(), nTransEnd );
                     else
                         aTransRect = Rectangle( nTransStart, 0, nTransEnd, nBarSize-aOnePixel.Height() );
+
                     SetBackground( Color( rStyleSettings.GetFaceColor() ) );
-                    DrawSelectionBackground( aTransRect, 0, true, false, false );
+                    DrawSelectionBackground( LogicToPixel( aTransRect, maPaintMapMode ),
+                                             0, true, false, false );
                     SetBackground();
                 }
                 break;
@@ -530,9 +573,15 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                             if ( nPass == ( bNextToMark ? SC_HDRPAINT_SEL_BOTTOM : SC_HDRPAINT_BOTTOM ) )
                             {
                                 if (bVertical)
-                                    aGrid.AddHorLine( aScrPos, aEndPos );
+                                {
+                                    aGrid.AddHorLine( LogicToPixel( aScrPos, maPaintMapMode ),
+                                                      LogicToPixel( aEndPos, maPaintMapMode ) );
+                                }
                                 else
-                                    aGrid.AddVerLine( aScrPos, aEndPos );
+                                {
+                                    aGrid.AddVerLine( LogicToPixel( aScrPos, maPaintMapMode ),
+                                                      LogicToPixel( aEndPos, maPaintMapMode ) );
+                                }
 
                                 //  thick bottom for hidden rows
                                 //  (drawn directly, without aGrid)
@@ -540,11 +589,23 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                                     if ( GetEntrySize(nEntryNo+1)==0 )
                                     {
                                         if (bVertical)
-                                            DrawLine( Point(aScrPos.X(),aEndPos.Y()-nLayoutSign),
-                                                      Point(aEndPos.X(),aEndPos.Y()-nLayoutSign) );
+                                        {
+                                            DrawLine( LogicToPixel(
+                                                          Point(aScrPos.X(),aEndPos.Y()-nLayoutSign),
+                                                          maPaintMapMode ),
+                                                      LogicToPixel(
+                                                          Point(aEndPos.X(),aEndPos.Y()-nLayoutSign),
+                                                          maPaintMapMode ) );
+                                        }
                                         else
-                                            DrawLine( Point(aEndPos.X()-nLayoutSign,aScrPos.Y()),
-                                                      Point(aEndPos.X()-nLayoutSign,aEndPos.Y()) );
+                                        {
+                                            DrawLine( LogicToPixel(
+                                                          Point(aEndPos.X()-nLayoutSign,aScrPos.Y()),
+                                                          maPaintMapMode ),
+                                                      LogicToPixel(
+                                                          Point(aEndPos.X()-nLayoutSign,aEndPos.Y()),
+                                                          maPaintMapMode ) );
+                                        }
                                     }
                             }
                             break;
@@ -618,13 +679,36 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) 
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     long nEndPos = bLayoutRTL ? -1 : nWinSize;
 
-    nScrPos = GetScrPos( nPos ) - nLayoutSign;
+    long nRawPos;
+    if (bVertical)
+    {
+        nRawPos = LogicToPixel( Point( 0, GetScrPos( nPos ) ) ).Y();
+    }
+    else
+    {
+        nRawPos = LogicToPixel( Point( GetScrPos( nPos ), 0 ) ).X();
+    }
+
+    nScrPos = nRawPos - nLayoutSign;
     do
     {
         if (nEntryNo > nSize)
+        {
             nScrPos = nEndPos + nLayoutSign;
+        }
         else
-            nScrPos += GetEntrySize( nEntryNo - 1 ) * nLayoutSign;      //! GetHiddenCount() ??
+        {
+            long nRawPosPrevious;
+            if (bVertical)
+            {
+                nRawPosPrevious = LogicToPixel( Point( 0, GetScrPos( nPos - 1 ) ) ).Y();
+            }
+            else
+            {
+                nRawPosPrevious = LogicToPixel( Point( GetScrPos( nPos - 1 ), 0 ) ).X();
+            }
+            nScrPos += nRawPosPrevious * nLayoutSign;      //! GetHiddenCount() ??
+        }
 
         nDif = nMousePos - nScrPos;
         if (nDif >= -2 && nDif <= 2)
