@@ -21,7 +21,6 @@ package integration.forms;
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexContainer;
-import java.lang.reflect.Method;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -156,15 +155,13 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             loadDetail.addLoadListener( this );
 
             // wait until the detail form is loaded
-            operateMasterAndWaitForDetailForm( loadMaster.getClass().getMethod( "load", new Class[] {} ), loadMaster, new Object[] { } );
+            loadMaster.load();
+            impl_waitForLoadedEvent();
 
             // okay, now the master form should be on the first record
             assure( "wrong form state after loading (ID1)", m_masterResult.getInt(1) == 1 );
             assure( "wrong form state after loading (ID2)", m_masterResult.getInt(2) == 1 );
             assure( "wrong form state after loading (value)", m_masterResult.getString(3).equals( "First Record" ) );
-
-            // the "XResultSet.next" method
-            Method methodNext = m_masterResult.getClass().getMethod( "next" , new Class[] {} );
 
             // the values in the linked fields should be identical
             int expectedDetailRowCounts[] = { 2, 1 };
@@ -178,7 +175,9 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
                 assure( "wrong number of records in detail form, for master form at pos " + masterPos,
                         ((Integer)m_detailForm.getPropertyValue( "RowCount" )).intValue() == expectedDetailRowCounts[ masterPos - 1 ] );
 
-                operateMasterAndWaitForDetailForm( methodNext, m_masterResult, new Object[] {} );
+                if (!m_masterResult.next())
+                    return;
+                impl_waitForLoadedEvent();
             }
             while ( !m_masterResult.isAfterLast() );
             assure( "wrong number of records in master form", 2 == ((Integer)m_masterForm.getPropertyValue( "RowCount" )).intValue() );
@@ -339,28 +338,6 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
         column.setPropertyValue( "Label", _boundField );
         _gridModel.insertByIndex( _gridModel.getCount(), column );
         return column;
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** executes an operation on the master, and waits until the detail form has been (re)loaded aferwards
-     */
-    private void operateMasterAndWaitForDetailForm( Method _masterMethod, Object _masterInterface, Object[] _methodParameters ) throws SQLException
-    {
-        Object result;
-        try
-        {
-            result = _masterMethod.invoke( _masterInterface, _methodParameters );
-        }
-        catch( java.lang.Exception e )
-        {
-            throw new SQLException( "invoking " + _masterMethod.getName() + " failed",new Object(), "", 0, new Object() );
-        }
-
-        if ( _masterMethod.getReturnType().getName().equals( "boolean" ) )
-            if ( !((Boolean)result).booleanValue() )
-                return;
-
-        impl_waitForLoadedEvent();
     }
 
     private void impl_waitForLoadedEvent()
