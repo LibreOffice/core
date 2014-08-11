@@ -32,6 +32,8 @@
 namespace writerfilter {
 namespace dmapper {
 
+class DomainMapper;
+
 class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 {
     typedef boost::shared_ptr< std::vector<sal_Int32> > IntVectorPtr;
@@ -45,6 +47,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
+    DomainMapper&   m_rDMapper;
     OUString m_sTableStyleName;
     /// Grab-bag of table look attributes for preserving.
     comphelper::SequenceAsHashMap m_aTableLook;
@@ -76,7 +79,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 
 public:
 
-    DomainMapperTableManager(bool bOOXML);
+    DomainMapperTableManager(bool bOOXML, DomainMapper& rDMapper);
     virtual ~DomainMapperTableManager();
 
     // use this method to avoid adding the properties for the table

@@ -382,7 +382,8 @@ StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper,
         bool const bIsNewDoc)
 : LoggedProperties(dmapper_logger, "StyleSheetTable")
 , LoggedTable(dmapper_logger, "StyleSheetTable")
-, m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument, bIsNewDoc) )
+, m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument, bIsNewDoc) ),
+m_rDMapper( rDMapper )
 {
 }
 
@@ -747,7 +748,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 if (!m_pImpl->m_pCurrentEntry)
                     break;
 
-                TablePropertiesHandlerPtr pTblHandler( new TablePropertiesHandler( true ) );
+                TablePropertiesHandlerPtr pTblHandler( new TablePropertiesHandler( true, m_rDMapper ) );
                 pTblHandler->SetProperties( m_pImpl->m_pCurrentEntry->pProperties );
                 if ( !pTblHandler->sprm( rSprm ) )
                 {

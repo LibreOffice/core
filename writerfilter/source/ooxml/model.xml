@@ -14682,6 +14682,12 @@
           <element name="tblLook">
             <ref name="CT_TblLook"/>
           </element>
+          <element name="tblCaption">
+            <ref name="CT_String"/>
+          </element>
+          <element name="tblDescription">
+            <ref name="CT_String"/>
+          </element>
       </define>
       <define name="CT_TblPr">
         <ref name="CT_TblPrBase"/>
@@ -14716,6 +14722,12 @@
           </element>
           <element name="tblLook">
             <ref name="CT_ShortHexNumber"/>
+          </element>
+          <element name="tblCaption">
+            <ref name="CT_String"/>
+          </element>
+          <element name="tblDescription">
+            <ref name="CT_String"/>
           </element>
       </define>
       <define name="CT_TblPrEx">
@@ -18400,6 +18412,8 @@
       <element name="tblLayout" tokenid="ooxml:CT_TblPrBase_tblLayout"/>
       <element name="tblCellMar" tokenid="ooxml:CT_TblPrBase_tblCellMar"/>
       <element name="tblLook" tokenid="ooxml:CT_TblPrBase_tblLook"/>
+      <element name="tblCaption" tokenid="ooxml:CT_TblPrBase_tblCaption"/>
+      <element name="tblDescription" tokenid="ooxml:CT_TblPrBase_tblDescription"/>
     </resource>
     <resource name="CT_TblPr" resource="Properties">
       <element name="tblPrChange" tokenid="ooxml:CT_TblPr_tblPrChange"/>

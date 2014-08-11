@@ -33,6 +33,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <dmapperLoggers.hxx>
 #include <oox/token/tokens.hxx>
+#include <dmapper/DomainMapper.hxx>
 
 using namespace com::sun::star;
 using namespace oox;
@@ -40,10 +41,11 @@ using namespace oox;
 namespace writerfilter {
 namespace dmapper {
 
-    TablePropertiesHandler::TablePropertiesHandler( bool bOOXML ) :
+    TablePropertiesHandler::TablePropertiesHandler( bool bOOXML, DomainMapper& rDMapper ) :
         m_pCurrentInteropGrabBag(0),
         m_pTableManager( NULL ),
-        m_bOOXML( bOOXML )
+        m_bOOXML( bOOXML ),
+        m_rDMapper( rDMapper )
     {
     }
 
