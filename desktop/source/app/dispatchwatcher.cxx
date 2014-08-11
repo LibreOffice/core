@@ -35,6 +35,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -45,6 +46,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
@@ -65,6 +67,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::task;
 
+namespace document = ::com::sun::star::document;
+
 namespace desktop
 {
 
@@ -78,6 +82,73 @@ struct DispatchHolder
     Reference< XDispatch > xDispatch;
 };
 
+namespace
+{
+
+const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const rtl::OUString& rFactory )
+{
+    // create the list of filters
+    OUStringBuffer sQuery(256);
+    sQuery.append("getSortedFilterList()");
+    sQuery.append(":module=");
+    sQuery.append(rFactory); // use long name here !
+    sQuery.append(":iflags=");
+    sQuery.append(OUString::number(SFX_FILTER_EXPORT));
+    sQuery.append(":eflags=");
+    sQuery.append(OUString::number(SFX_FILTER_NOTINSTALLED));
+
+    const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const Reference< XContainerQuery > xFilterFactory(
+            xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", xContext ),
+            UNO_QUERY_THROW );
+
+    const SfxFilter* pBestMatch = 0;
+
+    const Reference< XEnumeration > xFilterEnum(
+            xFilterFactory->createSubSetEnumerationByQuery( sQuery.makeStringAndClear() ), UNO_QUERY_THROW );
+    while ( xFilterEnum->hasMoreElements() )
+    {
+        comphelper::SequenceAsHashMap aFilterProps( xFilterEnum->nextElement() );
+        const rtl::OUString aName( aFilterProps.getUnpackedValueOrDefault( "Name", rtl::OUString() ) );
+        if ( !aName.isEmpty() )
+        {
+            const SfxFilter* const pFilter( SfxFilter::GetFilterByName( aName ) );
+            if ( pFilter && pFilter->CanExport() && pFilter->GetWildcard().Matches( rUrl ) )
+            {
+                if ( !pBestMatch || ( SFX_FILTER_PREFERED & pFilter->GetFilterFlags() ) )
+                    pBestMatch = pFilter;
+            }
+        }
+    }
+
+    return pBestMatch;
+}
+
+const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const rtl::OUString& rFactory ) try
+{
+    const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const Reference< document::XTypeDetection > xTypeDetector(
+            xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", xContext ),
+            UNO_QUERY_THROW );
+    const rtl::OUString aFilterName( xTypeDetector->queryTypeByURL( rUrl ) );
+
+    const SfxFilter* pFilter( SfxFilter::GetFilterByName( aFilterName ) );
+    if ( !pFilter || !pFilter->CanExport() )
+        pFilter = impl_lookupExportFilterForUrl( rUrl, rFactory );
+    if ( !pFilter )
+    {
+        SAL_INFO( "desktop.app", "no export filter for " << rUrl << "found, using the default filter for " << rFactory );
+        pFilter = SfxFilter::GetDefaultFilterFromFactory( rFactory );
+    }
+
+    return pFilter;
+}
+catch ( const Exception& )
+{
+    return 0;
+}
+
+
 static OUString impl_GetFilterFromExt( const OUString& aUrl, SfxFilterFlags nFlags,
                                         const OUString& aAppl )
 {
@@ -88,7 +159,7 @@ static OUString impl_GetFilterFromExt( const OUString& aUrl, SfxFilterFlags nFla
     const SfxFilter *pSfxFilter = NULL;
     if( nFlags == SFX_FILTER_EXPORT )
     {
-        SfxFilterMatcher( aAppl ).GuessFilterIgnoringContent( *pMedium, &pSfxFilter, nFlags );
+        pSfxFilter = impl_getExportFilterFromUrl( aUrl, aAppl );
     }
     else
     {
@@ -112,6 +183,8 @@ static OUString impl_GuessFilter( const OUString& aUrlIn, const OUString& aUrlOu
     OUString aAppl;
     aAppl = impl_GetFilterFromExt( aUrlIn, SFX_FILTER_IMPORT, aAppl );
     return  impl_GetFilterFromExt( aUrlOut, SFX_FILTER_EXPORT, aAppl );
+}
+
 }
 
 namespace
