@@ -1877,7 +1877,7 @@ public:
 
     inline static RC create(
         const ::rtl::OUString& ustrDirectoryURL,
-        sal_Int32 flags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write )
+        sal_uInt32 flags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write )
     {
         return static_cast< RC >(
             osl_createDirectoryWithFlags( ustrDirectoryURL.pData, flags ) );
