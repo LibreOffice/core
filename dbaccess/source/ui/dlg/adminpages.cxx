@@ -63,7 +63,6 @@ namespace dbaui
         ,m_abEnableRoadmap(false)
         ,m_pAdminDialog(NULL)
         ,m_pItemSetHelper(NULL)
-        ,m_pFT_HeaderText(NULL)
     {
 
         SetExchangeSupport(true);
@@ -74,16 +73,9 @@ namespace dbaui
         ,m_abEnableRoadmap(false)
         ,m_pAdminDialog(NULL)
         ,m_pItemSetHelper(NULL)
-        ,m_pFT_HeaderText(NULL)
     {
 
         SetExchangeSupport(true);
-    }
-
-    OGenericAdministrationPage::~OGenericAdministrationPage()
-    {
-        DELETEZ(m_pFT_HeaderText);
-
     }
 
     int OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)

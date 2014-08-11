@@ -98,15 +98,12 @@ namespace dbaui
     protected:
         IDatabaseSettingsDialog*   m_pAdminDialog;
         IItemSetHelper* m_pItemSetHelper;
-        FixedText*      m_pFT_HeaderText;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                             m_xORB;
     public:
         OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet);
         OGenericAdministrationPage(Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet);
-        virtual ~OGenericAdministrationPage();
-
         /// set a handler which gets called every time something on the page has been modified
         void SetModifiedHandler(const Link& _rHandler) { m_aModifiedHandler = _rHandler; }
 
