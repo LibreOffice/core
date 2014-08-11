@@ -546,7 +546,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             break;
         default:
             aData.eType = SbxNULL;
-            DBG_ASSERT( !this, "Loaded a non-supported data type" );
+            DBG_ASSERT( false, "Loaded a non-supported data type" );
             return false;
         }
         // putt value

@@ -75,7 +75,7 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
                     aData.pDecimal->addRef();
                 break;
             default:
-                DBG_ASSERT( !this, "Improper pointer argument" );
+                DBG_ASSERT( false, "Improper pointer argument" );
                 n = SbxNULL;
         }
     }
@@ -1546,7 +1546,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 memset (&aData,0,sizeof(aData));
                 ResetFlag(SBX_FIXED);
                 aData.eType = SbxNULL;
-                DBG_ASSERT( !this, "Loaded a non-supported data type" );
+                DBG_ASSERT( false, "Loaded a non-supported data type" );
 
                 return false;
         }
@@ -1648,7 +1648,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxWCHAR:
             break;
         default:
-            DBG_ASSERT( !this, "Saving a non-supported data type" );
+            DBG_ASSERT( false, "Saving a non-supported data type" );
             return false;
     }
     return true;
