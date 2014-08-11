@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -46,6 +47,7 @@
 #include <docxexportfilter.hxx>
 #include <writerhelper.hxx>
 #include <comphelper/seqstream.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 
 #include <IDocumentDrawModelAccess.hxx>
@@ -636,7 +638,52 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
                                             XML_b, aBottomExt,
                                             FSEND);
 
-    if (isAnchor)
+    // See if we know the exact wrap type from grab-bag.
+    sal_Int32 nWrapToken = 0;
+    if (const SdrObject* pObject = pFrmFmt->FindRealSdrObject())
+    {
+        uno::Any aAny;
+        pObject->GetGrabBagItem(aAny);
+        comphelper::SequenceAsHashMap aGrabBag(aAny);
+        comphelper::SequenceAsHashMap::iterator it = aGrabBag.find("EG_WrapType");
+        if (it != aGrabBag.end())
+        {
+            OUString sType = it->second.get<OUString>();
+            if (sType == "wrapTight")
+                nWrapToken = XML_wrapTight;
+            else if (sType == "wrapThrough")
+                nWrapToken = XML_wrapThrough;
+            else
+                SAL_WARN("sw.ww8", "DocxSdrExport::startDMLAnchorInline: unexpected EG_WrapType value");
+
+            m_pImpl->m_pSerializer->startElementNS(XML_wp, nWrapToken,
+                                                   XML_wrapText, "bothSides", FSEND);
+
+            it = aGrabBag.find("CT_WrapPath");
+            if (it != aGrabBag.end())
+            {
+                m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_wrapPolygon,
+                                                       XML_edited, "0",
+                                                       FSEND);
+                drawing::PointSequenceSequence aSeqSeq = it->second.get< drawing::PointSequenceSequence >();
+                comphelper::SequenceAsVector<awt::Point> aPoints(aSeqSeq[0]);
+                for (comphelper::SequenceAsVector<awt::Point>::iterator i = aPoints.begin(); i != aPoints.end(); ++i)
+                {
+                    awt::Point& rPoint = *i;
+                    m_pImpl->m_pSerializer->singleElementNS(XML_wp, (i == aPoints.begin() ? XML_start : XML_lineTo),
+                                                            XML_x, OString::number(rPoint.X),
+                                                            XML_y, OString::number(rPoint.Y),
+                                                            FSEND);
+                }
+                m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_wrapPolygon);
+            }
+
+            m_pImpl->m_pSerializer->endElementNS(XML_wp, nWrapToken);
+        }
+    }
+
+    // No? Then just approximate based on what we have.
+    if (isAnchor && !nWrapToken)
     {
         switch (pFrmFmt->GetSurround().GetValue())
         {

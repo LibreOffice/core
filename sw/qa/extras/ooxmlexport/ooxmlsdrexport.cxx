@@ -1780,6 +1780,18 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80895, "fdo80895.docx")
     assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:fill", "type", "solid");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testWrapTightThrough, "wrap-tight-through.docx")
+{
+    // These were wrapSquare without a wrap polygon before.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // The first shape should be wrapThrough with a wrap polygon (was wrapSquare).
+        assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapThrough/wp:wrapPolygon/wp:start", "x", "-1104");
+        // The second shape should be wrapTight with a wrap polygon (was wrapSquare).
+        assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapTight/wp:wrapPolygon/wp:start", "y", "792");
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
