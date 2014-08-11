@@ -5102,8 +5102,10 @@ tbRlV
 tbl
 tblBg
 tblBorders
+tblCaption
 tblCellMar
 tblCellSpacing
+tblDescription
 tblGrid
 tblGridChange
 tblHeader
