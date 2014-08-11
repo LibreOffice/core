@@ -523,8 +523,6 @@ namespace drawinglayer
             // FIXME(matteocam)
             bool bToBeChained = rTextObj.IsToBeChained();
 
-
-
             if(rText.GetOutlinerParaObject() && rText.GetModel())
             {
                 // added TextEdit text suppression
@@ -587,7 +585,7 @@ namespace drawinglayer
                     bToBeChained);
             }
 
-            return attribute::SdrTextAttribute();
+            return attribute::SdrTextAttribute(bToBeChained);
         }
 
         attribute::FillGradientAttribute createNewTransparenceGradientAttribute(const SfxItemSet& rSet)

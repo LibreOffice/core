@@ -276,6 +276,13 @@ namespace drawinglayer
         {
         }
 
+        SdrTextAttribute::SdrTextAttribute(bool bIsToBeChained)
+        :   mpSdrTextAttribute(ImpSdrTextAttribute::get_global_default())
+        {
+            mpSdrTextAttribute->mbToBeChained = bIsToBeChained;
+            mpSdrTextAttribute->mnRefCount++;
+        }
+
         SdrTextAttribute::SdrTextAttribute(const SdrTextAttribute& rCandidate)
         :   mpSdrTextAttribute(rCandidate.mpSdrTextAttribute)
         {
