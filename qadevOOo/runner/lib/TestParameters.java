@@ -38,29 +38,25 @@ public class TestParameters extends HashMap<String,Object> {
      * The ConnectionString for Office Connection<br>
      * default is 'socket,host=localhost,port=8100'
      */
-
-    public String ConnectionString="socket,host=localhost,port=8100";
+    public String ConnectionString = "socket,host=localhost,port=8100";
 
     /**
      * The AppProvider contains the Application Provider<br>
      * to control the ServiceFactory.
      */
-
-    public Object AppProvider=null;
+    public Object AppProvider = null;
 
     /**
      * The Process contains the Process handler<br>
      * to control the Application.
      */
-
-    public Object ProcessHandler=null;
+    public Object ProcessHandler = null;
 
     /**
      * The AppExecutionCmd contains the full qualified<br>
      * command to an Application to be started.
      */
-
-    public String AppExecutionCommand="";
+    public String AppExecutionCommand = "";
 
     /**
      * If this parameter is <CODE>true</CODE> the <CODE>OfficeProvider</CODE> tries
@@ -70,42 +66,36 @@ public class TestParameters extends HashMap<String,Object> {
     public boolean AutoRestart = false;
 
     /**
-     * Shoert wait time for the Office: default is 500 milliseconds
+     * Short wait time for the Office: default is 500 milliseconds
      */
     public int ShortWait = 500;
-
 
     /**
      * The OfficeProvider contains the full qualified
      * class that provides a connection to StarOffice<br>
      * default is helper.OfficeProvider
      */
-
     public String OfficeProvider = "helper.OfficeProvider";
 
     /**
      * The Testbase to be executed by the runner<br>
      * default is 'java_fat'
      */
-
-    public String TestBase="java_fat";
+    public String TestBase = "java_fat";
 
     /**
      * The ServiceFactory to create instances
      */
-
     public Object ServiceFactory;
 
     /**
      * The Path to the component description
      */
-
     public String DescriptionPath;
 
     /**
      * The Path to the test documents that are loaded during the test <br>
      */
-
     public String TestDocumentPath="unknown";
 
     /**
@@ -113,8 +103,7 @@ public class TestParameters extends HashMap<String,Object> {
      * these will be provided by the testcases<br>
      * default is true
      */
-
-    public boolean LoggingIsActive=true;
+    public boolean LoggingIsActive = true;
 
     /**
      * 'true' is a debug information should be written, 'false' elsewhere
@@ -122,50 +111,46 @@ public class TestParameters extends HashMap<String,Object> {
      * Debug information will always be written on standard out.<br>
      * default is true
      */
+    public boolean DebugIsActive = false;
 
-    public boolean DebugIsActive=false;
-
-    /*
-     * This parameter contains the testjob to be executed<br>
+    /**
+     * This parameter contains the test job to be executed<br>
      * by the framework
      */
-
     public Object TestJob;
 
-    /*
+    /**
      * This parameter contains the class used<br>
      * for Logging
      */
-
     public String LogWriter="stats.SimpleLogWriter";
 
-    /*
+    /**
      * This parameter contains the class used<br>
      * for Logging
      */
-
     public String OutProducer="stats.SimpleOutProducer";
 
-    /*
+    /**
      * This parameter contains the timeout used<br>
      * by the watcher
      */
     public Integer TimeOut = new Integer(3000000);
 
-    /*
+    /**
      * This parameter contains the timeout used<br>
      * by the complex tests
      */
     public Integer ThreadTimeOut = new Integer(3000000);
 
-    /*
+    /**
      * This parameter contains the time which the office could use to close for
-     * itself before its destroyed. Default is 15000 ms
+     * itself before it is destroyed. Default is 15000 ms
      */
     public Integer OfficeCloseTimeOut = new Integer(15000);
 
     /**
-     * Wraper around "get()" with some debug output
+     * Wrapper around "get()" with some debug output
      * @param key A key of this table.
      * @return The value of this key.
      * @see java.util.HashMap
@@ -184,7 +169,7 @@ public class TestParameters extends HashMap<String,Object> {
      * Special get method for boolean values: for convenience.
      * Will return 'false' if the value is not of "Boolean" type.
      * @param key A key of this table.
-     * @return The value of this key, castet to a boolean type.
+     * @return The value of this key, cast to a boolean type.
      */
     public boolean getBool(Object key) {
         Object val = super.get(key);
@@ -210,7 +195,7 @@ public class TestParameters extends HashMap<String,Object> {
      * Special get method for integer values: for convenience.
      * Will return 0 if the value cannot be interpreted as Integer.
      * @param key A key of this table.
-     * @return The value of this key, castet to an int type.
+     * @return The value of this key, cast to an int type.
      */
     public int getInt(Object key) {
         Object val = super.get(key);
