@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad32947_f6dc401a",
+        "filename": "jurt/com/sun/star/comp/servicemanager/ServiceManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-11T07:37:34Z",
+      "side": 1,
+      "message": "why translate from java.lang.Exception to com.sun.star.uno.RuntimeException here at all?  java.util.Set.toArray(T[]) doesn\u0027t throw any non-RuntimeExceptions",
+      "revId": "85ab4a14c541f3d6c30300d102b97f8564a1c7ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
