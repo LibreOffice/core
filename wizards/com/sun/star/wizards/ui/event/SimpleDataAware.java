@@ -31,44 +31,12 @@ public class SimpleDataAware extends DataAware
         controlValue = controlValue_;
     }
 
-    /*
-    protected void enableControls(Object value) {
-    Boolean b = getBoolean(value);
-    for (int i = 0; i<disableObjects.length; i++)
-    UIHelper.setEnabled(disableObjects[i],b);
-    }
-     */
     @Override
     protected void setToUI(Object value)
     {
         controlValue.set(value, control);
     }
 
-    /**
-     * Try to get from an arbitrary object a boolean value.
-     * Null returns Boolean.FALSE;
-     * A Boolean object returns itself.
-     * An Array returns true if it not empty.
-     * An Empty String returns Boolean.FALSE.
-     * everything else returns a Boolean.TRUE.
-     * @param value
-     * @return
-     */
-    /*protected Boolean getBoolean(Object value) {
-    if (value==null)
-    return Boolean.FALSE;
-    if (value instanceof Boolean)
-    return (Boolean)value;
-    else if (value.getClass().isArray())
-    return ((short[])value).length != 0 ? Boolean.TRUE : Boolean.FALSE;
-    else if (value.equals(PropertyNames.EMPTY_STRING)) return Boolean.FALSE;
-    else return Boolean.TRUE;
-    }
-
-    public void disableControls(Object[] controls) {
-    disableObjects = controls;
-    }
-     */
     @Override
     protected Object getFromUI()
     {

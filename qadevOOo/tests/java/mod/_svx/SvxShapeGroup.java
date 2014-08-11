@@ -167,8 +167,6 @@ public class SvxShapeGroup extends TestCase {
         ShapeDsc sDsc = new ShapeDsc(5000,3500,7500,10000,"Rectangle");
           log.println( "adding Shape as mod relation to environment" );
         tEnv.addObjRelation("Shape", new InstCreator( xDrawDoc, sDsc));
-        //tEnv.addObjRelation("DrawPage", oObj);
-        //tEnv.addObjRelation("MasterPageSupplier",oGroup);
 
         tEnv.addObjRelation("Style1",aStyle1);
         tEnv.addObjRelation("Style2",aStyle2);

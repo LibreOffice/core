@@ -84,18 +84,6 @@ public class ScAccessibleCsvGrid extends TestCase {
 
         accAction = UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
 
-        /*int count = accAction.getAccessibleActionCount();
-
-        for (int i = 0; i<count; i++) {
-            try {
-                System.out.println(i+": "+accAction.getAccessibleActionDescription(i));
-            } catch (com.sun.star.lang.IndexOutOfBoundsException iae) {}
-        }*/
-
-        //util.dbg.printInterfaces(oObj);
-
-        //AccessibilityTools.printAccessibleTree(log, xRoot);
-
         oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.TABLE, true);
 

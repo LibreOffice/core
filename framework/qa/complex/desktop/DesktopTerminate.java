@@ -150,7 +150,6 @@ public class DesktopTerminate
     {
         System.out.println("tearDownConnection()");
         // don't do a tearDown here, desktop is already terminated.
-        // connection.tearDown();
     }
 
     private static final OfficeConnection connection = new OfficeConnection();

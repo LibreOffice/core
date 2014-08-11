@@ -290,7 +290,6 @@ public class CellBinding extends complexlib.ComplexTestCase
         setCellText( sourceCol, (short)( row + 0 ), "Oranges" );
         setCellText( sourceCol, (short)( row + 1 ), "Peaches" );
 
-        //setListSource( listBox, sourceCol, row, (short)( row + 2 ) );
             // TODO: this is currently prone to deadlocks
 
 
@@ -332,7 +331,6 @@ public class CellBinding extends complexlib.ComplexTestCase
         setCellText( sourceCol, (short)( row + 0 ), "Bananas" );
         setCellText( sourceCol, (short)( row + 1 ), "Strawberries" );
 
-        //setListSource( listBox, sourceCol, row, (short)( row + 2 ) );
             // TODO: this is currently prone to deadlocks
 
 

@@ -260,9 +260,6 @@ public class EmbedContApp extends Applet
         m_aNativeView.resize( 800, 600 );
         this.add( m_aNativeView );
 
-        // Handle mouse clicks in our window.
-//      addMouseListener( this );
-    }
 
     public void actionPerformed( ActionEvent evt )
     {
@@ -844,8 +841,6 @@ public class EmbedContApp extends Applet
     public void paint( Graphics g )
     {
         super.paint( g );
-
-        // m_aNativeView.paint( g );
 
         createVclWindow();
     }

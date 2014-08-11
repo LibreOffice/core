@@ -137,7 +137,6 @@ final class CustomURLClassLoader extends URLClassLoader {
         // this.findClass, after this.loadClass has already called
         // super.findClass, so no need to call super.findClass again:
         throw new ClassNotFoundException( name );
-//        return super.findClass(name);
     }
 
 

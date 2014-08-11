@@ -70,12 +70,6 @@ class AccessibleContextHandler
                 case 2:
                     XAccessible xParent = xContext.getAccessibleParent();
                     sChild = "Has parent: " + (xParent!=null ? "yes" : "no");
-                    /*                    if (xParent != ((AccTreeNode)aParent).getAccessible())
-                    {
-                        sChild += " but that is inconsistent"
-                            + "#" + xParent + " # " + ((AccTreeNode)aParent).getAccessible();
-                    }
-                    */
                     break;
                 case 3:
                     sChild = "";
@@ -96,10 +90,6 @@ class AccessibleContextHandler
                     else
                         sChild += "no state set";
                     sChild = "State set: " + sChild;
-
-                    /*                case 3:
-                    sChild = "Child count: " + xContext.getAccessibleChildCount();
-                    break;*/
             }
         }
         return new StringNode (sChild, aParent);

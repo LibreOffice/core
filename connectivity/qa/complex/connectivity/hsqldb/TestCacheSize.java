@@ -136,8 +136,6 @@ public class TestCacheSize {
             sStatement  = null;
             cConnection = null;
 
-            //Class.forName("org.hsqldb.jdbcDriver");
-
             if (filedb) {
 
                 cConnection = drv.connect(url,info);
@@ -147,9 +145,6 @@ public class TestCacheSize {
                 sStatement.execute("SET LOGSIZE " + 0);
                 sStatement.execute("SHUTDOWN");
                 cConnection.close();
-//                props.setProperty("hsqldb.cache_scale", "" + cacheScale);
-//                props.setProperty("hsqldb.cache_size_scale",
-                                  //"" + cacheSizeScale);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -255,7 +250,6 @@ public class TestCacheSize {
                 System.out.println("multi key table");
             }
 
-//            sStatement.execute("CREATE INDEX idx3 ON tempTEST (zip);");
             System.out.println("Setup time: " + sw.elapsedTime());
             fillUpBigTable(filler, randomgen);
 
@@ -339,9 +333,6 @@ public class TestCacheSize {
             }
         }
 
-//            sStatement.execute("INSERT INTO test SELECT * FROM temptest;");
-//            sStatement.execute("DROP TABLE temptest;");
-//            sStatement.execute(ddl7);
         System.out.println("Total insert: " + i);
         System.out.println("Insert time: " + sw.elapsedTime() + " rps: "
                            + (i * 1000 / (sw.elapsedTime() + 1)));

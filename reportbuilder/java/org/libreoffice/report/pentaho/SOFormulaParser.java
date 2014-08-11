@@ -125,7 +125,6 @@ public final class SOFormulaParser extends ComponentBase
                 parserAllOpCodes.put(opCode.Token.OpCode, opCode);
                 specialOpCodes.add(opCode);
             }
-            // addOpCodes(names, opCodes,SPECIAL,false);
         }
         catch (Exception ex)
         {

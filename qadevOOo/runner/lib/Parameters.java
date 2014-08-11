@@ -160,13 +160,6 @@ public class Parameters implements XPropertySet {
                 throw new IllegalArgumentException(
                         "Wrong key " + key + ", it should be of String type");
             }
-
-/*            Object value = params.get(key);
-
-            if (!(value instanceof String)) {
-                throw new IllegalArgumentException(
-                        "Wrong value " + value + ", it should be of String type");
-            } */
         }
     }
 

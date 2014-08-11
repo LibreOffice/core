@@ -139,7 +139,6 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
         }
 
         // get the temp dir for creating the command scripts.
-        // sTempDir = System.getProperty("java.io.tmpdir");
         m_aTempDir = new TempDir(util.utils.getOfficeTemp/*Dir*/(xMsf));
 
         // get the file extension, export filter connection
@@ -436,7 +435,6 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
             final String sMemoryMonitor = "pmap <processID> |tee <pmapoutputfile> | grep total";
             String sOfficeMemoryCommand = null;
             sOfficeMemoryCommand = FileHelper.appendPath(m_aTempDir.getTempDir(), "getPmap");
-            // sOfficeMemoryCommand = FileHelper.getJavaCompatibleFilename(sOfficeMemoryCommand);
             String command = sMemoryMonitor.replaceAll("<processID>", getOfficeProcessID());
             String sPmapOutputFile = FileHelper.appendPath(m_aTempDir.getTempDir(), "pmap_" + _sMode + ".txt");
             command = command.replaceAll("<pmapoutputfile>", sPmapOutputFile);

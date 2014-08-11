@@ -78,8 +78,6 @@ public class _XText extends MultiMethodTest {
         }
         catch( com.sun.star.lang.IllegalArgumentException iaE ){
             throw new StatusException("Couldn't insert textcontent",iaE);
-            //Status.failed(iaE.toString());
-            //return;
         }
 
         // get indexaccess to the tablecollection
@@ -144,7 +142,6 @@ public class _XText extends MultiMethodTest {
         log.println( "test for  removeTextContent" );
         try {
             oObj.removeTextContent( (XTextContent)oInt );
-            //oObj.removeTextContent( (XTextContent)oInt );
         }
         catch( com.sun.star.container.NoSuchElementException nseE ){
             // Some exception.FAILED

@@ -1317,9 +1317,7 @@ public class TextPortionEnumerationTest
     {
         String name = mkName("frame");
         TreeNode root = new TreeNode();
-//        TreeNode text = new TextNode(""); // necessary?
         TreeNode fram = new FrameNode(name, AT_CHARACTER);
-//        root.appendChild(text);
         root.appendChild(fram);
         doTest(root);
     }
@@ -1482,8 +1480,6 @@ public class TextPortionEnumerationTest
         StringPair id = new StringPair("content.xml", mkName("id"));
         TreeNode root = new TreeNode();
         TreeNode meta = new MetaNode(id);
-//        TreeNode text = new TextNode("");
-//        meta.appendChild(text);
         root.appendChild(meta);
         doTest(root);
     }
@@ -1505,8 +1501,6 @@ public class TextPortionEnumerationTest
         StringPair id = new StringPair("content.xml", mkName("id"));
         TreeNode root = new TreeNode();
         TreeNode meta = new MetaFieldNode(id);
-//        TreeNode text = new TextNode("");
-//        meta.appendChild(text);
         root.appendChild(meta);
         doTest(root);
     }
@@ -2971,7 +2965,6 @@ public class TextPortionEnumerationTest
         TreeNode text = new TextNode("12AB6789");
         inserter.insertRange( new Range(0, 0, text) );
         MetaNode meta = new MetaNode( mkId("id") );
-//        inserter.insertRange( new Range(3, 5, met2) );
         XTextContent xMeta = inserter.makeMeta();
 
         XText xDocText = m_xDoc.getText();
@@ -2979,7 +2972,6 @@ public class TextPortionEnumerationTest
         xDocTextCursor.goRight((short)3, false);
         xDocTextCursor.goRight((short)2, true);
         xDocText.insertTextContent(xDocTextCursor, xMeta, true);
-//        xMeta.attach(xDocTextCursor);
 
         XMetadatable xMetadatable = UnoRuntime.queryInterface(XMetadatable.class, xMeta);
         xMetadatable.setMetadataReference(meta.getXmlId());
@@ -3599,7 +3591,6 @@ public class TextPortionEnumerationTest
         }
         if (!helper.isAttribute())
         {
-//            xText.setString("AB");
             xStart = xText.getStart();
             xEnd = xText.getEnd();
 
@@ -3809,7 +3800,6 @@ public class TextPortionEnumerationTest
         loadProps[0].Value = new Boolean(true);
 
         xComp = util.DesktopTools.loadDoc(m_xMSF, file, loadProps);
-//        xComp =  util.DesktopTools.getCLoader(m_xMSF).loadComponentFromURL(file, "_blank", 0, loadProps);
 
         XTextDocument xTextDoc = UnoRuntime.queryInterface(XTextDocument.class, xComp);
 
@@ -4089,8 +4079,6 @@ public class TextPortionEnumerationTest
         if (insert) {
             new TreeInserter(xDoc).insertTree(intree);
         }
-
-//Thread.sleep(10000);
 
         XText xText = xDoc.getText();
         XEnumerationAccess xTextEA = UnoRuntime.queryInterface(XEnumerationAccess.class, xText);

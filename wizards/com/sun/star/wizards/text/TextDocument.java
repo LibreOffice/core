@@ -197,7 +197,6 @@ public class TextDocument
         xFrame = _textDocument.getCurrentController().getFrame();
         xComponent = UnoRuntime.queryInterface(XComponent.class, _textDocument);
         xTextDocument = UnoRuntime.queryInterface(XTextDocument.class, xComponent);
-        //PosSize = xFrame.getComponentWindow().getPosSize();
         if (bshowStatusIndicator)
         {
             XStatusIndicatorFactory xStatusIndicatorFactory = UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);

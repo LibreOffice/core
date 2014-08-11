@@ -83,9 +83,7 @@ public class _LineShapeDescriptor extends MultiMethodTest {
         Object ValueToSet = null;
 
         try {
-            //waitForAllThreads();
             gValue = oObj.getPropertyValue(name);
-            //waitForAllThreads();
             if ( (name.equals("LineEnd")) || (name.equals("LineStart")) ) {
                 if (gValue == null) gValue = newPoints(null);
                 ValueToSet = newPoints( (Point[]) gValue);
@@ -93,7 +91,6 @@ public class _LineShapeDescriptor extends MultiMethodTest {
             else {
                 ValueToSet = ValueChanger.changePValue(gValue);
             }
-            //waitForAllThreads();
             oObj.setPropertyValue(name,ValueToSet);
             sValue = oObj.getPropertyValue(name);
 

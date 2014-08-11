@@ -100,7 +100,6 @@ public class ParcelBrowseNode extends PropertySet
         catch ( com.sun.star.uno.Exception e )
         {
             // TODO propagate potential errors
-            // Pthrow new com.sun.star.uno.RuntimeException( e.toString() );
             LogUtils.DEBUG( "Caught exception creating ParcelBrowseNode " + e );
             LogUtils.DEBUG( LogUtils.getTrace( e ) );
         }

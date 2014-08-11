@@ -75,15 +75,12 @@ public class _ShapeDescriptor extends MultiMethodTest {
 
 
         try {
-            //waitForAllThreads();
             gValue = oObj.getPropertyValue(name);
-            //waitForAllThreads();
             if (!ro) {
                 ValueToSet = ValueChanger.changePValue(gValue);
                 if ( name.equals("Style") ) {
                     ValueToSet = newStyle(gValue);
                 }
-                //waitForAllThreads();
                 oObj.setPropertyValue(name,ValueToSet);
                 sValue = oObj.getPropertyValue(name);
             }

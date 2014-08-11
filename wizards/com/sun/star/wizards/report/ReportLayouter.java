@@ -260,7 +260,6 @@ public class ReportLayouter
                         break;
 
                     case SOOPTLANDSCAPE:
-                        // CurReportDocument.getDoc().changePageOrientation(true);
                         try
                         {
                             CurReportDocument.setPageOrientation(SOOPTLANDSCAPE);

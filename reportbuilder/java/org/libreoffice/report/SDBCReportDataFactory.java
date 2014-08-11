@@ -444,8 +444,6 @@ public class SDBCReportDataFactory implements DataSourceFactory
             final ArrayList<?> masterValues = (ArrayList<?>) parameters.get(MASTER_VALUES);
             if (masterValues != null && !masterValues.isEmpty() && paramDef.parameterIndex.size() != detailColumns.size())
             {
-                // Vector masterColumns = (Vector) parameters.get("master-columns");
-
                 // create the new filter
                 final String quote = connection.getMetaData().getIdentifierQuoteString();
                 final StringBuffer oldFilter = new StringBuffer();

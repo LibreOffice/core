@@ -301,7 +301,6 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             GlobalLogWriter.get().println("Set office watcher");
             OfficeWatcher aWatcher = (OfficeWatcher)param.get("Watcher");
             GlobalLogWriter.get().setWatcher(aWatcher);
-            // initializeWatcher(param);
 
             String sStatusRunThrough = "";
             String sStatusMessage = "";

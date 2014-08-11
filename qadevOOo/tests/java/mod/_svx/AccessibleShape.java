@@ -93,8 +93,6 @@ public class AccessibleShape extends TestCase {
 
         AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-//        oObj = at.getAccessibleObjectForRole
-//            (xRoot, AccessibleRole.SHAPE, "Rectangle");
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "Rectangle");
 
         // create test environment here

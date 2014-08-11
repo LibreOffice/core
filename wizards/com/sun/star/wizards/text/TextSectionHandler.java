@@ -208,7 +208,6 @@ public class TextSectionHandler
             {
                 XTextCursor xTextCursor = xText.createTextCursor();
                 xText.insertControlCharacter(xTextCursor, ControlCharacter.PARAGRAPH_BREAK, false);
-                //		Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
                 xTextCursor.collapseToEnd();
             }
             XTextCursor xSecondTextCursor = xText.createTextCursor();

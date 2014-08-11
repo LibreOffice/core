@@ -1186,8 +1186,6 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                         // but there seems some problems, we have to control.
                         copyProperties(aComponent, aClone);
 
-                        // aShape.setPosition(aComponent.getPosition());
-                        // aShape.setSize(aComponent.getSize());
                         _xToSection.add(aShape);
                     }
                 }

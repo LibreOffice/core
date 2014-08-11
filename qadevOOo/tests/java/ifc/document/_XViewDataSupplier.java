@@ -40,7 +40,6 @@ public class _XViewDataSupplier extends MultiMethodTest {
 
     public void _getViewData() {
         xAccess = oObj.getViewData();
-//        util.dbg.printInterfaces(xAccess);
         if (xAccess != null) {
             setViewID(xAccess, myview);
         }

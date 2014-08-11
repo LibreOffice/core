@@ -113,10 +113,6 @@ public class Sales
     {
         // example for a programmatic way to do updates.
         XStatement stmt = con.createStatement();
-//      stmt.executeUpdate("INSERT INTO SALES " +
-//                   "VALUES (4, 102, 5, 'FTOP Darjeeling tea', '2002-01-02',150)");
-//
-//      stmt = con.createStatement();
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
         xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
         xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.UPDATABLE));

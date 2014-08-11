@@ -89,17 +89,11 @@ public class AccessiblePageShape extends TestCase {
 
         AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-//        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE,
-//            "PageShape");
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "PageShape");
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        //at.getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLLBAR);
-        //final XAccessibleValue xAccVal = (XAccessibleValue)
-        //  UnoRuntime.queryInterface
-        //    (XAccessibleValue.class, at.SearchedContext) ;
         oPage = DrawTools.getDrawPage(xDrawDoc,0);
         final XPropertySet PageProps = UnoRuntime.queryInterface(XPropertySet.class, oPage);
 

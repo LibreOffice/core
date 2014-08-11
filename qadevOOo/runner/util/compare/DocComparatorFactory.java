@@ -33,15 +33,8 @@ public class DocComparatorFactory
             {
                 return GraphicalComparator.getInstance(aParams);
             }
-/*
-            else if (s.toLowerCase().equals("xml"))
-            {
-                return new XMLCompare.create(aParams);
-            }
-*/
             else if (s.toLowerCase().equals("pdf"))
             {
-                // return new PDFComparator.create(aParams);
                 throw new IllegalArgumentException("PDF not implemented yet.");
             }
             else

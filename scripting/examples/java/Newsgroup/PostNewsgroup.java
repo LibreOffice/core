@@ -381,7 +381,6 @@ public class PostNewsgroup extends JFrame
         }
 
         JPanel optionPanel = new JPanel();
-        //optionPanel.setLayout( new GridLayout( 1, 3, 20, 0 ) );
         optionPanel.setBorder( new TitledBorder( new EtchedBorder(), "Document Format" ) );
         optionPanel.setLayout( new GridBagLayout() );
         GridBagConstraints constraints = new GridBagConstraints();
@@ -423,7 +422,6 @@ public class PostNewsgroup extends JFrame
                 StatusWindow statusWindow = new StatusWindow( window,  "Posting to Newsgroup", FRAMEX, FRAMEY );
 
                 statusWindow.setVisible( true );
-                //statusWindow.requestFocusInWindow();
                 statusLine = "Ready to send...";
                 statusWindow.setStatus( 0, statusLine );
 
@@ -456,7 +454,6 @@ public class PostNewsgroup extends JFrame
                 }
                 else
                 {
-                    //int position = newsgroupComboBox.getSelectedIndex();
                     host = subscribedNewsgroups[ position ].getHostName();
                     group = subscribedNewsgroups[ position ].getNewsgroupName();
                 }
@@ -585,7 +582,6 @@ public class PostNewsgroup extends JFrame
         }
         else
         {
-            //int position = newsgroupComboBox.getSelectedIndex();
             newsgroupString = subscribedNewsgroups[ position ].getNewsgroupName();
         }
         if( newsgroupString.length() == 0 )

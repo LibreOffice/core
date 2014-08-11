@@ -177,9 +177,6 @@ public class _XScrollBar extends MultiMethodTest {
                                             acc.getAccessibleContext());
 
         Point location = aCom.getLocationOnScreen();
-        //Point location = (Point) tEnv.getObjRelation("Location");
-        //XAccessibleComponent aCom = (XAccessibleComponent) tEnv.getObjRelation("Location");
-        //Point location = aCom.getLocationOnScreen();
         try {
             Robot rob = new Robot();
             rob.mouseMove(location.X + 50, location.Y + 75);

@@ -108,8 +108,6 @@ public class AccessiblePresentationShape extends TestCase {
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-//        oObj = at.getAccessibleObjectForRole
-//            (xRoot, AccessibleRole.SHAPE, "ImpressHandout");
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "ImpressHandout");
 
         log.println("Implementation Name: "+utils.getImplName(oObj));

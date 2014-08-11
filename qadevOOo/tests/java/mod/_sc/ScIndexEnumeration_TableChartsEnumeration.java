@@ -187,9 +187,6 @@ public class ScIndexEnumeration_TableChartsEnumeration extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-//        tEnv.addObjRelation("RECT", oRect);
-//        tEnv.addObjRelation("ADDR", oAddr);
-
         return tEnv;
     }
 

@@ -532,8 +532,6 @@ public class ODatabaseForm extends TestCase {
         // INSTANCEn : _XNameContainer; _XNameReplace
         log.println("adding INSTANCEn as obj relation to environment");
 
-        //XComponent xComp = (XComponent)
-        //    UnoRuntime.queryInterface(XComponent.class, xDrawDoc);
         String tc = (String) Param.get("THRCNT");
         int THRCNT = 1;
 

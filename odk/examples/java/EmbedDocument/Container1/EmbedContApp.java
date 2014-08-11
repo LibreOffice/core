@@ -124,7 +124,6 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         m_aObjectMenu.add( aItem );
 
         // Handle mouse clicks in our window.
-//      addMouseListener( new MouseWatcher() );
         addMouseListener( this );
     }
 

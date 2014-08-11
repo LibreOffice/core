@@ -179,7 +179,7 @@ class IniFile
                     continue;
                 }
 
-                if (sLine.startsWith("[") /* && sLine.endsWith("]") */)
+                if (sLine.startsWith("["))
                 {
                     // found end.
                     break;
@@ -212,7 +212,7 @@ class IniFile
                     continue;
                 }
 
-                if (sLine.startsWith("[") /* && sLine.endsWith("]") */)
+                if (sLine.startsWith("["))
                 {
                     // found end.
                     return j;

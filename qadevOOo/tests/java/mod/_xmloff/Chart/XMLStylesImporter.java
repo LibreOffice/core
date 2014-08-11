@@ -165,12 +165,7 @@ public class XMLStylesImporter extends TestCase {
                         logF.println("No ways to check styles import were not found.");
                         logF.println(" TRUE returned.");
                         return true ;
-/*                    } catch (com.sun.star.uno.Exception e) {
-                        logF.println("Exception occurred while checking filter :") ;
-                        e.printStackTrace(logF) ;
-                        return false ;
-                    }
-*/                }
+                }
             }) ;
 
 

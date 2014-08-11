@@ -60,7 +60,6 @@ public class OfficeAttachment
                 String firstPart = templocationURL.substring( 0, sepPos );
                 String lastPart = templocationURL.substring( sepPos + 1, templocationURL.length() );
                 templocationURL = firstPart + "/" + lastPart;
-                //JOptionPane.showMessageDialog( null, "Temp Location URL is: " + templocationURL + "\nfirstPart is: " + firstPart + "\nlastPart is: " + lastPart );
             }
         }
 
@@ -86,7 +85,6 @@ public class OfficeAttachment
         }
         else
         {
-            //int lastSep = attachmentName.lastIndexOf( System.getProperty( "file.separator" ) );
             int lastSep = attachmentName.lastIndexOf( "/" );
             attachmentName = attachmentName.substring( lastSep + 1, attachmentName.length() );
             int dot = attachmentName.indexOf( "." );
@@ -147,17 +145,11 @@ public class OfficeAttachment
                                 {
                                         if( homefiles[i].getName().equals( attachmentName + ".sxw" ) )
                                         {
-                                                //officeFile = new File( homefiles[i].getAbsolutePath() );
-                        //JOptionPane.showMessageDialog( null, "Found .sxw" );
                         file = homefiles[i].getAbsolutePath();
                                         }
                                 }
                 officeFile = new File( file );
-                //officeFile = new File( filename + ".sxw" );
-                //officeFile = new File (storedDoc.getLocation() );
             }
-
-            //status.setStatus( 10, "Attachments successfully created" );
 
         }
         catch( SecurityException se )
@@ -255,14 +247,6 @@ public class OfficeAttachment
 
     public File[] getAttachments()
     {
-        /*
-        if( htmlFile == null && officeFile == null )
-        {
-            System.out.println( "Error: Document(s) have not been saved." );
-            return null;
-        }
-        */
-        //(officeDoc) ? (number = 2) : (number = 1);
 
         statusLine = "Retrieving temp docs";
         status.setStatus( 8, statusLine );

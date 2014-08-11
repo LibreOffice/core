@@ -342,7 +342,6 @@ public class _XDataPilotDescriptor extends MultiMethodTest {
         requiredMethod("getDataPilotFields()");
         XIndexAccess IA = oObj.getPageFields();
         boolean bResult = (IA != null);
-        //        boolean bResult = CheckNames(IA, 4);
         tRes.tested("getPageFields()", bResult);
     }
 

@@ -93,8 +93,6 @@ public class AccessibleGraphicShape extends TestCase {
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
 
-//        oObj = at.getAccessibleObjectForRole
-//            (xRoot, AccessibleRole.SHAPE, "GraphicObject");
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "GraphicObject");
 
         // create test environment here

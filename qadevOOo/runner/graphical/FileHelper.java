@@ -130,7 +130,6 @@ public class FileHelper
         }
 
 
-    // makeDirectories("", "/tmp/a/b");
     // creates all directories /tmp/a/b
 
     public static void makeDirectories(String first, String path)
@@ -260,7 +259,6 @@ public class FileHelper
         {
             boolean bDebug = false;
             String sTmpPath = util.utils.getUsersTempDir();
-            //util.utils.getUsersTempDir();
             String fs = System.getProperty("file.separator");
             String sName = sTmpPath + fs + "DOC_COMPARATOR_DEBUG";
             File aFile = new File(sName);

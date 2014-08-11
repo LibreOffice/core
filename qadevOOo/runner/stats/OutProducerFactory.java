@@ -118,11 +118,4 @@ public class OutProducerFactory {
         return name.substring(0,1).toUpperCase() + name.substring(1);
     }
 
-/*    public static void main(String[] args) {
-        Hashtable p = new Hashtable();
-        p.put("DataBaseOut", "yes");
-        p.put("TestBase", "java_complex");
-        p.put("Version", "srx645gggg");
-        createDataBaseOutProducer(p);
-    } */
 }

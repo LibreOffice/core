@@ -523,7 +523,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     public void intervalRemoved(ListDataEvent event)
     {
-        //contentsChanged(event);
     }
 
     /** Registers ItemListener to receive events.

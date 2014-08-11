@@ -73,7 +73,6 @@ class FlatFileDatabase extends AbstractDatabase
             documentFile.delete();
         m_tableFileLocation = new File(documentFile.getParent() + File.separator + documentFile.getName().replace(".odb", "") + File.separator );
         m_tableFileLocation.mkdir();
-        //subPath.deleteOnExit();
         m_databaseDocumentFile = URLHelper.getFileURLFromSystemPath(documentFile);
         final String path = URLHelper.getFileURLFromSystemPath( m_tableFileLocation.getPath() );
 

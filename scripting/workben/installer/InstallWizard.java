@@ -87,10 +87,8 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
          exitForm();
      }
 
-    //setBackground(Color.WHITE);
     setBackground(new Color(0,0,0));
     locations = new ArrayList<String>();
-    //Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
     Point center = new Point( 400, 400 );
     int windowWidth=200;
     int windowHeight=300;
@@ -133,9 +131,6 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints1 = new java.awt.GridBagConstraints();
         gridBagConstraints1.gridx = 6;
         gridBagConstraints1.gridy = 0;
-        //navigation.add(navNext, gridBagConstraints1);
-        //navigation.add(navBack, gridBagConstraints1);
-        //navigation.add(navCancel, gridBagConstraints1);
 
         getContentPane().add(navigation, java.awt.BorderLayout.SOUTH);
         screens.setLayout(new java.awt.CardLayout());
@@ -145,7 +140,6 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     _final = new Final(this);
         screens.add(FINAL, _final);
 
-    //boolean hasIDEInstallation = (InstUtil.hasNetbeansInstallation() || InstUtil.hasJeditInstallation()) ;
     boolean hasIDEInstallation = ( InstUtil.hasNetbeansInstallation() ) ;
 
     if( hasIDEInstallation )

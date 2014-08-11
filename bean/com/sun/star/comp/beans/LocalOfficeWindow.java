@@ -186,7 +186,6 @@ public class LocalOfficeWindow
             if ( isShowing() )
             {
                 // create direct parent relationship
-                //setVisible( true );
                 parentPeer = new JavaWindowPeerFake(getWrappedWindowHandle(), type);
                 bPeer = true;
                         }

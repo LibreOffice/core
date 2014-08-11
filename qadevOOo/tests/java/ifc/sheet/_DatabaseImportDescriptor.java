@@ -68,11 +68,8 @@ public class _DatabaseImportDescriptor extends MultiMethodTest {
 
 
         try {
-            //waitForAllThreads();
             gValue = props[nr].Value;
-            //waitForAllThreads();
             ValueToSet = ValueChanger.changePValue(gValue);
-            //waitForAllThreads();
             props[nr].Value=ValueToSet;
             sValue = props[nr].Value;
 

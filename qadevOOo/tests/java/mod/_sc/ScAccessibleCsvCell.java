@@ -87,8 +87,6 @@ public class ScAccessibleCsvCell extends TestCase {
         oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.TABLE, true);
 
-        //util.dbg.printInterfaces(oObj);
-
         XAccessibleContext cont = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
 
         String name = "";

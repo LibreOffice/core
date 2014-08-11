@@ -115,8 +115,6 @@ public class AccessibleOLEShape extends TestCase {
 
         AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-//        oObj = at.getAccessibleObjectForRole
-//            (xRoot, AccessibleRole.SHAPE, "OLEShape");
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "OLEShape");
 
         // create test environment here

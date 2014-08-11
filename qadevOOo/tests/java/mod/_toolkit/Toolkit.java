@@ -101,8 +101,6 @@ public class Toolkit extends TestCase {
         try {
             win = cntrlr.getFrame().getContainerWindow();
 
-
-            //win = (XWindow) UnoRuntime.queryInterface(XWindow.class, ctrl) ;
             the_win = the_access.getControl(the_Model).getPeer();
             oObj = (XInterface) Param.getMSF().createInstance(
                            "com.sun.star.awt.Toolkit");

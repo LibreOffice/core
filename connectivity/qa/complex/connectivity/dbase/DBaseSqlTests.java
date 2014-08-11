@@ -55,9 +55,6 @@ public class DBaseSqlTests extends SubTestCase
         execute(xRowRes,"1 FROM \"biblio\" \"biblio\" where 0 < 1");
         execute(xRowRes,"1 FROM \"biblio\" \"biblio\" where 2 > 1");
         execute(xRowRes,"1,1+1,'a' + 'b' FROM \"biblio\" \"biblio\" where 2 > 1");
-        // execute(xRowRes,"1 FROM \"biblio\" \"biblio\" where (0 = 0) is true");
-        // execute(xRowRes,"1 FROM \"biblio\" \"biblio\" where not (0 = 0) is not true");
-        // execute(xRowRes,"1 FROM \"biblio\" \"biblio\" where 1 between 0 and 2");
         execute(xRowRes,"1 FROM \"biblio\" \"biblio\" where not \"Identifier\" is NULL");
         execute(xRowRes,"1 FROM \"biblio\" \"biblio\" where \"Identifier\" is not NULL");
         execute(xRowRes,"1 FROM \"biblio\" \"biblio\" where \"Identifier\" = \"Identifier\"");

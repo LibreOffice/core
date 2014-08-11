@@ -1054,7 +1054,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                 DOMSource source = new DOMSource(document);
                 transformer.transform(source, result);
 
-                //IOUtils.getInstance().copyStreams(inputStream, outputMetaStream);
                 outputMetaStream.flush();
                 outputMetaStream.close();
             }

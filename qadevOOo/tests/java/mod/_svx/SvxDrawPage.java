@@ -207,10 +207,6 @@ public class SvxDrawPage extends TestCase {
 
         // adding relation for XMasterPageTarget
 
-        /*XMasterPagesSupplier oMPS = (XMasterPagesSupplier)
-            UnoRuntime.queryInterface(XMasterPagesSupplier.class, xDoc);
-        XDrawPages oGroup = oMPS.getMasterPages();
-        tEnv.addObjRelation("MasterPageSupplier",oGroup); */
         return tEnv;
     } // finish method getTestEnvironment
 } // finish class SvxDrawPage

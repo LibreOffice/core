@@ -119,8 +119,6 @@ public final class PropertySetMixin {
         XComponentContext context, XInterface object, Type type,
         String[] absentOptional)
     {
-        // assert context != null && object != null && type != null
-        //     && type.getTypeClass() == TypeClass.INTERFACE;
         this.context = context;
         this.object = object;
         this.type = type;
@@ -881,8 +879,6 @@ public final class PropertySetMixin {
         boolean isAmbiguous, boolean wrapDefaulted, boolean isDefaulted,
         boolean wrapOptional)
     {
-        // assert (wrapAmbiguous || !isAmbiguous)
-        //     && (wrapDefaulted || !isDefaulted);
         if (wrapAmbiguous
             && type.getName().startsWith("com.sun.star.beans.Ambiguous<"))
         {

@@ -97,8 +97,6 @@ public class WikiArticle
         // in case of loading the html contents are used
         // in case of saving the contents should be checked whether they are empty
         InitArticleHTML();
-
-        // getArticleWiki();
     }
 
     public String GetMainURL()
@@ -207,8 +205,6 @@ public class WikiArticle
             PostMethod aPost = new PostMethod();
             aPost.setPath( aURI.getEscapedPathQuery() );
 
-            // aPost.addParameter( "title", m_sTitle );
-            // aPost.addParameter( "action", "submit" );
             aPost.addParameter( "wpTextbox1", sWikiCode );
             aPost.addParameter( "wpSummary", sWikiComment );
             aPost.addParameter( "wpSection", "" );

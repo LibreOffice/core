@@ -454,11 +454,9 @@ public class FilterComponent
         for (i = 0; i < RowCount; i++)
         {
             oControlRows[i].setFieldNames(_fieldnames);
-            // oControlRows[i].setFieldNames(aFieldNamesWithAdditionalEmpty);
         }
         this.filterconditions = _filterconditions;
         PropertyValue[] curfilterconditions;
-        // int a;
         if (_filterconditions.length == 1)
         {
             curfilterconditions = filterconditions[0];
@@ -759,7 +757,6 @@ public class FilterComponent
                         sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "' }");
                         try
                         {
-                            //Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", );
                             oQueryMetaData.getNumberFormatter().convertStringToNumber(iDateFormat, sValue);
                         }
                         catch (java.lang.Exception ex)
@@ -774,7 +771,6 @@ public class FilterComponent
                         sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "' }");
                         try
                         {
-                            //Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", );
                             oQueryMetaData.getNumberFormatter().convertStringToNumber(iTimeFormat, sValue);
                         }
                         catch (java.lang.Exception ex)
@@ -786,7 +782,6 @@ public class FilterComponent
                     //TODO: other datetime formats?
                     else
                     {
-                        //Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", sValue);
                     }
                 }
                 else if (AnyConverter.isBoolean(_filtercondition.Value))

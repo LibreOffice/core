@@ -80,8 +80,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         super(xMSF);
         hid = hid_;
         oWizardResource = new Resource(xMSF, "Common", "dbw");
-
-    //new Resource(xMSF,"Common","com");
     }
 
     @Override
@@ -258,13 +256,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         return sRMItemLabels;
     }
 
-    /*    public void insertRoadmapItems(int StartIndex, int RMCount)
-    {
-    Object oRoadmapItem;
-    boolean bEnabled;
-    for (int i = StartIndex; i < (StartIndex + RMCount); i++)
-    insertSingleRoadmapItem(i, true, sRMItemLabels[i], i);
-    }*/
     public int insertRoadmapItem(int _Index, boolean _bEnabled, int _LabelID, int _CurItemID)
     {
         return insertRoadmapItem(_Index, _bEnabled, sRMItemLabels[_LabelID], _CurItemID);

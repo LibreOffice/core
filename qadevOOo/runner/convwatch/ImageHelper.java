@@ -94,7 +94,6 @@ class ImageHelper
                     "Cannot construct object with current Java version " +
                     javaVersion + ": " + ex.getMessage());
             }
-//            aImage = ImageIO.read(aFile);
             return new ImageHelper(aImage);
         }
 }

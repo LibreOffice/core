@@ -231,10 +231,6 @@ public class RunnerService implements XJob, XServiceInfo,
 
                     int startIndex = entry.indexOf("objdsc/") + 7;
                     int endIndex = entry.lastIndexOf('/');
-/*                    int endIndex = entry.indexOf('.');
-                    module = entry.substring(startIndex, endIndex);
-                    startIndex = 0;
-                    endIndex = module.lastIndexOf('/'); */
                     module = entry.substring(startIndex, endIndex);
 
                     // special cases
@@ -249,14 +245,6 @@ public class RunnerService implements XJob, XServiceInfo,
                             endIndex = object.lastIndexOf('.');
                         }
                     }
-/*                    else if (entry.indexOf("/xmloff/") != -1) {
-                        endIndex = entry.indexOf(".csv");
-                        object = entry.substring(0, endIndex);
-                        endIndex = entry.lastIndexOf('.');
-                        while (object.indexOf('.') != endIndex) {
-                            object = object.substring(object.indexOf('.')+1);
-                        }
-                    } */
                     else {
                         startIndex = 0;
                         endIndex = entry.indexOf(".csv");

@@ -241,22 +241,16 @@ public class CheckXComponentLoader
             File   aSysFile = new File(m_sTestDocPath, aSnapshot.next());
             String sURL     = URLHelper.getFileURLFromSystemPath(aSysFile);
 
-            if (/*! (sURL.endsWith(".jpg") ||
-                   sURL.endsWith(".gif"))*/
-                    true
-                  )
+            loadURL(m_xLoader, RESULT_VALID_DOC, sURL, "_blank", 0, lProps);
+            // Its not needed to reset this using states!
+            // Its done internally ...
+            if (!xIndicator.wasUsed())
             {
-                loadURL(m_xLoader, RESULT_VALID_DOC, sURL, "_blank", 0, lProps);
-                // Its not needed to reset this using states!
-                // Its done internally ...
-                if (!xIndicator.wasUsed())
-                {
-                    System.out.println("External progress was not used for loading.");
-                }
-                if (xHandler.wasUsed())
-                {
-                    System.out.println("External interaction handler was not used for loading.");
-                }
+                System.out.println("External progress was not used for loading.");
+            }
+            if (xHandler.wasUsed())
+            {
+                System.out.println("External interaction handler was not used for loading.");
             }
         }
     }

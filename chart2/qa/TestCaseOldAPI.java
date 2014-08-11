@@ -347,7 +347,6 @@ public class TestCaseOldAPI extends ComplexTestCase {
             fMax1 = AnyConverter.toDouble( oMax );
             log.println( "Maximum retrieved: " + fMax1 );
             //todo: the view has to be built before there is an explicit value
-//             assure( "Max is 0.0", fMax1 > 0.0 );
             xProp.setPropertyValue( "AutoMax", new Boolean( false ));
             oMax = xProp.getPropertyValue( "Max" );
             assure( "No Maximum set", AnyConverter.isDouble( oMax ));
@@ -546,13 +545,6 @@ public class TestCaseOldAPI extends ComplexTestCase {
                             xDiaProp.getPropertyValue( "Vertical" )));
             }
 
-            // reset to bar-chart
-//             aMyServiceName = new String( "com.sun.star.chart.BarDiagram" );
-//             XDiagram xDia = (XDiagram) UnoRuntime.queryInterface(
-//                 XDiagram.class, xFact.createInstance( aMyServiceName ));
-//             assure( aMyServiceName + " could not be created", xDia != null );
-
-//             mxOldDoc.setDiagram( xDia );
         }
         catch( Exception ex )
         {

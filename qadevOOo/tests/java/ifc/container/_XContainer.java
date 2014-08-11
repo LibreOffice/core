@@ -131,15 +131,12 @@ public class _XContainer extends MultiMethodTest {
     */
     public class MyListener implements XContainerListener {
          public void elementInserted(ContainerEvent e) {
-            //_log.println("Element was inserted");
             bElementInserted = true;
          }
          public void elementRemoved(ContainerEvent e) {
-            //_log.println("Element was removed");
             bElementRemoved = true;
          }
          public void elementReplaced(ContainerEvent e) {
-            //_log.println("Element was replaced");
             bElementReplaced = true;
          }
          public void disposing (EventObject obj) {}

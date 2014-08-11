@@ -92,8 +92,6 @@ public class AccessiblePresentationOLEShape extends TestCase {
         }
 
 
-        //DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
-
         XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oShape);
         try {
             oShapeProps.setPropertyValue("IsEmptyPresentationObject", new Boolean(false));
@@ -121,8 +119,6 @@ public class AccessiblePresentationOLEShape extends TestCase {
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-//        oObj = at.getAccessibleObjectForRole
-//            (xRoot, AccessibleRole.SHAPE, "ImpressOLE");
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "ImpressOLE");
 
         // create test environment here

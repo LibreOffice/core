@@ -2750,7 +2750,6 @@ public class DOMTest
         MockNode[] m_children;
         String m_localname;
 
-//        MockNode() { ; }
         void init(MockDoc doc, MockNode parent, MockNode prev, MockNode next,
                 MockNode[] children)
         {

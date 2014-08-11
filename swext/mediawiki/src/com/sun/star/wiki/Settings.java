@@ -57,7 +57,6 @@ public class Settings
     {
         if ( m_instance == null )
             m_instance = new Settings( ctx );
-        // m_instance.loadSettings();
         return m_instance;
     }
 

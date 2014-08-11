@@ -277,7 +277,6 @@ public class ScDataPilotFieldGroupObj extends TestCase
         {
             XDataPilotDescriptor xDPT = UnoRuntime.queryInterface (XDataPilotDescriptor.class,xIA.getByIndex (0));
             IA = xDPT.getRowFields ();
-            //getSRange(IA);
             System.out.println ("COUNT: "+IA.getCount ());
             datapilotfield = (XInterface) AnyConverter.toObject (
                 new Type (XInterface.class), IA.getByIndex (0));

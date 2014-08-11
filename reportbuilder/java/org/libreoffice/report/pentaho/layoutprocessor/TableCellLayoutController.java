@@ -127,7 +127,6 @@ public class TableCellLayoutController extends SectionLayoutController
         }
         catch (final ParseException e)
         {
-            //LOGGER.debug("Parse Exception", e);
             return false;
         }
     }

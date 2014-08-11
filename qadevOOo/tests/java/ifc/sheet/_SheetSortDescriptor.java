@@ -69,7 +69,6 @@ public class _SheetSortDescriptor extends MultiMethodTest {
     }
 
     public void _SortAscending() {
-        //changeProp("SortAscending",3);
         log.println("Property 'SortAscending' is not part of the "+
             "property array");
         log.println("Available properties:");
@@ -98,14 +97,11 @@ public class _SheetSortDescriptor extends MultiMethodTest {
 
 
         try {
-            //waitForAllThreads();
             gValue = props[nr].Value;
             if ( name.equals("OutputPosition")) {
                 gInt = ((CellAddress) gValue).Row;
             }
-            //waitForAllThreads();
             ValueToSet = ValueChanger.changePValue(gValue);
-            //waitForAllThreads();
             props[nr].Value=ValueToSet;
             sValue = props[nr].Value;
             if ( name.equals("OutputPosition")) {

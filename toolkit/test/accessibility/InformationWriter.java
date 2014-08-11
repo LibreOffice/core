@@ -310,9 +310,6 @@ public class InformationWriter
             else
                 MessageArea.println ("object has no accessible context.");
 
-            //            showInfo (xContext);
-            //            showServices (xContext);
-            //            showInterfaces (xContext);
         }
         catch (Exception e)
         {

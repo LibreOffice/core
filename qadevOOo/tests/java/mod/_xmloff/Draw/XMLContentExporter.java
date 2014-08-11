@@ -136,7 +136,6 @@ public class XMLContentExporter extends TestCase {
                 "com.sun.star.comp.Draw.XMLContentExporter",
                 new Object[] {arg});
             XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
-            //xEx.setSourceDocument(xDrawDoc);
 
             XDrawPagesSupplier supp = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
             XDrawPages set = supp.getDrawPages();

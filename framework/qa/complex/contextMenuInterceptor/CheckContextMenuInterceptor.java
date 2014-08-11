@@ -199,12 +199,10 @@ public class CheckContextMenuInterceptor
         }
         catch (com.sun.star.uno.RuntimeException ex)
         {
-            // ex.printStackTrace();
             fail("Runtime exception caught!" + ex.getMessage());
         }
         catch (java.lang.Exception ex)
         {
-            // ex.printStackTrace();
             fail("Java lang exception caught!" + ex.getMessage());
         }
     }

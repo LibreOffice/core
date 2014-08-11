@@ -491,7 +491,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     public void setPageOrientation(int nOrientation) throws com.sun.star.lang.IllegalArgumentException
     {
         // LLA: should we lock controllers here?
-        // CurReportDocument.getDoc().xTextDocument.lockControllers();
         if (nOrientation == ReportLayouter.SOOPTLANDSCAPE)
         {
             getDoc().changePageOrientation(true);

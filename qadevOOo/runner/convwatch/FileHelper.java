@@ -120,42 +120,6 @@ public class FileHelper
             return "";
         }
 
-/*
-    static ArrayList files = new ArrayList();
-    public static Object[] traverse( String afileDirectory )
-        {
-
-            File fileDirectory = new File(afileDirectory);
-            // Testing, if the file is a directory, and if so, it throws an exception
-            if ( !fileDirectory.isDirectory() )
-            {
-                throw new IllegalArgumentException( "not a directory: " + fileDirectory.getName() );
-            }
-
-            // Getting all files and directories in the current directory
-            File[] entries = fileDirectory.listFiles();
-
-            // Iterating for each file and directory
-            for ( int i = 0; i < entries.length; ++i )
-            {
-                // adding file to List
-                try
-                {
-                    // Composing the URL by replacing all backslashs
-                    String stringUrl = "file:///"
-                        + entries[ i ].getAbsolutePath().replace( '\\', '/' );
-                    files.add(stringUrl);
-                }
-                catch( Exception exception )
-                {
-                    exception.printStackTrace();
-                }
-            }
-            return files.toArray();
-        }
-*/
-
-    // makeDirectories("", "/tmp/a/b");
     // creates all directories /tmp/a/b
 
     public static void makeDirectories(String first, String path)
@@ -285,7 +249,6 @@ public class FileHelper
         {
             boolean bDebug = false;
             String sTmpPath = util.utils.getUsersTempDir();
-            //util.utils.getUsersTempDir();
             String fs = System.getProperty("file.separator");
             String sName = sTmpPath + fs + "DOC_COMPARATOR_DEBUG";
             File aFile = new File(sName);

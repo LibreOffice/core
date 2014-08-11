@@ -231,9 +231,6 @@ public class SdUnoPresView extends TestCase {
         tEnv.addObjRelation("FirstPage", oDrawPage);
         tEnv.addObjRelation("SecondPage", secondDrawPage);
 
-        //tEnv.addObjRelation("First", shape1);
-        //tEnv.addObjRelation("Second", shape2);
-
         tEnv.addObjRelation("Pages", the_pages);
 
         //Adding ObjRelations for XController

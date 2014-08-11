@@ -103,7 +103,6 @@ public class _XSheetAuditing extends MultiMethodTest {
 
     public void _hidePrecedents() {
         requiredMethod("showPrecedents()");
-//        requiredMethod("showPrecedents()");
         oObj.hidePrecedents(address);
         tRes.tested("hidePrecedents()", hasRightAmountOfShapes(0));
     }

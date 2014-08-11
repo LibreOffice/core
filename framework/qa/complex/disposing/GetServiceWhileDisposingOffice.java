@@ -90,7 +90,6 @@ public class GetServiceWhileDisposingOffice
     {
         System.out.println("tearDownConnection()");
         // Office is already terminated.
-        // connection.tearDown();
     }
     private static final OfficeConnection connection = new OfficeConnection();
 

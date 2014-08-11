@@ -186,7 +186,6 @@ public class various extends TestCase {
             int idx = cncstr.indexOf("host=") + 5 ;
 
             // select the port
-//            curPort; //utils.getNextFreePort(basePort);
             log.println("Choose Port nr: " + curPort);
 
             connectString = "socket,host=" +

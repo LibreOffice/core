@@ -67,7 +67,6 @@ public class CheckAPI  {
     @Test public void checkAPI() {
         System.out.println("Start with test");
         // if test is idle for 5 minutes, assume that it hangs and kill it.
-        // param.put("TimeOut", new Integer("300000"));
         XMultiServiceFactory xMSF = getMSF();
         Object oObj = null;
         try {

@@ -70,7 +70,6 @@ public class Test02 implements TempFileTest {
             m_aTestHelper.CloseTempFile( xTempFile );
 
             //check that the file is still available.
-            //xTempFile.seek(0);
             m_aTestHelper.ReadDirectlyFromTempFile( pBytesOut, pBytesIn.length + 1, m_xSFA, sFileURL );
             for ( int i = 0; i < pBytesIn.length; i++ ) {
                 if ( pBytesOut[0][i] != pBytesIn[i] ) {

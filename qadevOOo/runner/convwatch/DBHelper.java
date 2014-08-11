@@ -141,7 +141,6 @@ public class DBHelper
                 if (sPart.startsWith("db:"))
                 {
                     m_sDBName = sPart.substring(3);
-                    // GlobalLogWriter.get().println("DB: source version: " + m_sSourceVersion);
                 }
                 else if (sPart.startsWith("user:"))
                 {

@@ -182,8 +182,6 @@ public class ReportDesignerTest
 
     @Test public void firsttest()
         {
-            // convwatch.GlobalLogWriter.set(log);
-
             // -------------------- preconditions, try to find an office --------------------
 
             String sUser = System.getProperty("user.name");
@@ -216,7 +214,7 @@ public class ReportDesignerTest
             FileURL aFileURL = new FileURL(_sDocument);
             assertTrue("Test File doesn't '" + _sDocument + "'exist.", aFileURL.exists());
 
-            String sFileURL = _sDocument; // URLHelper.getFileURLFromSystemPath(_sDocument);
+            String sFileURL = _sDocument;
             System.out.println("File URL: " + sFileURL);
 
             XComponent xDocComponent = loadComponent(sFileURL, getXDesktop(), null);

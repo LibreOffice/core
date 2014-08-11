@@ -177,7 +177,6 @@ public class MSOfficePrint
                 String sOfficeType = getOfficeType(_sInputFile);
 
                 // special case, if xml we prefer word, but with DEFAULT_XML_FORMAT_APP=excel it's changeable.
-                // if (_aGTA.getDefaultXMLFormatApp().toLowerCase().equals("excel"))
                 if (sOfficeType.equals("excel"))
                 {
                     aStartCommand = createExcelPrintHelper();

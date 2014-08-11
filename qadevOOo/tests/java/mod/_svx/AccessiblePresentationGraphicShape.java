@@ -105,15 +105,11 @@ public class AccessiblePresentationGraphicShape extends TestCase {
         } catch (com.sun.star.beans.UnknownPropertyException e) {
         }
 
-        //DrawTools.getShapes(DrawTools.getDrawPage(xDoc,0)).add(oShape);
-
         new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-//        oObj = at.getAccessibleObjectForRole
-//            (xRoot, AccessibleRole.SHAPE, "GraphicObject");
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "GraphicObject");
 
         // create test environment here

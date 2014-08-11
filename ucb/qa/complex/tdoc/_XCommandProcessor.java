@@ -174,22 +174,6 @@ public class _XCommandProcessor {
                 log.println("Command '" + commandName + "' was not executed correctly.");
             }
         }
-/*        log.println("testing execute with wrong command");
-
-        Command badCommand = new Command("bad command", -1, null);
-
-        try {
-            oObj.execute(badCommand, 0, null);
-        } catch (CommandAbortedException e) {
-            log.println("CommandAbortedException thrown - OK");
-        } catch (UnsupportedCommandException e) {
-            log.println("UnsupportedCommandException thrown - OK");
-        } catch (Exception e) {
-            log.println("Wrong exception thrown " + e.getMessage());
-            e.printStackTrace((java.io.PrintWriter)log);
-            throw new StatusException("Unexpected exception", e);
-        }
-*/
         return returnVal;
     }
 

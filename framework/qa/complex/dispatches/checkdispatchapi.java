@@ -398,7 +398,6 @@ public class checkdispatchapi
         catch (java.lang.Throwable ex)
         {
             fail("Exception caught during using XDispatchInformationProvider.");
-            // ex.printStackTrace();
         }
     }
 

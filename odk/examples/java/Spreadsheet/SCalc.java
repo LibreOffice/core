@@ -315,7 +315,6 @@ public class SCalc  {
             XPropertySet oTPS = UnoRuntime.queryInterface(
                 XPropertySet.class, xChart.getTitle() );
             oTPS.setPropertyValue("String","The new title");
-            //oDiag.Dim3D();
         } catch (Exception e){
             System.err.println("Changin Properties failed "+e);
             e.printStackTrace(System.err);

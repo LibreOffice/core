@@ -309,7 +309,6 @@ public class OfficePrint {
                                              String _sOutputURL,
                                              String _sPrintFileURL)
         {
-            // waitInSeconds(1);
             boolean bBack = false;
 
             XComponent aDoc = loadFromURL(_aGTA, _sInputURL);

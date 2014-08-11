@@ -352,7 +352,6 @@ public class _CharacterProperties extends MultiPropertyTest {
         Object ValueToSet = null;
 
         try {
-            //waitForAllThreads();
             gValue = oProps.getPropertyValue(name);
 
             if ( (gValue == null) || (utils.isVoid(gValue)) ) {
@@ -360,7 +359,6 @@ public class _CharacterProperties extends MultiPropertyTest {
                 gValue = newVal;
             }
 
-            //waitForAllThreads();
             if (name.equals("CharRotation")) {
                 Short s1 = new Short((short) 0);
                 Short s2 = new Short((short) 900);
@@ -381,7 +379,6 @@ public class _CharacterProperties extends MultiPropertyTest {
                 }
             }
 
-            //waitForAllThreads();
             oProps.setPropertyValue(name,ValueToSet);
             sValue = get.getPropertyValue(name);
             if (sValue == null) {

@@ -224,7 +224,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                     showProperty(ReadOnly);
 
                     GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Load document");
-                    // GlobalLogWriter.flush();
 
                     XComponentLoader aCompLoader = UnoRuntime.queryInterface( XComponentLoader.class, aDesktop);
 

@@ -543,7 +543,6 @@ public class OOoBeanTest
                 }
                 else
                 {
-                    //                   Thread.sleep(2000);
                 }
 
             } finally {

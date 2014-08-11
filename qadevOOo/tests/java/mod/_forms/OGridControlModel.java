@@ -245,12 +245,6 @@ public class OGridControlModel extends GenericModelTest {
         });
 
 
-//        HashSet exclude = new HashSet();
-
-//        exclude.add("FormatKey");
-
-//        tEnv.addObjRelation("XUpdateBroadcaster.Checker",
-//                            new Checker(m_XFormLoader, m_XPS, m_XCtrl, m_ChangePropertyName, m_ChangePropertyValue));
         return tEnv;
     }
 
@@ -404,16 +398,10 @@ class OGridControlModelold extends TestCase {
         // adding relation for XNameContainer
         tEnv.addObjRelation("XNameContainer.AllowDuplicateNames", new Object());
 
-       // OK tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." + objName);
-
-
         // adding relation for XContainer
         tEnv.addObjRelation("INSTANCE", aControl3);
         tEnv.addObjRelation("INSTANCE2", aControl4);
 
-
-        //adding ObjRelation for XPersistObject
-        // OK tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true)); // OK
 
         return tEnv;
     } // finish method getTestEnvironment

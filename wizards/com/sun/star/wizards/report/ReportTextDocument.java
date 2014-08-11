@@ -99,12 +99,10 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         oTextFieldHandler = new TextFieldHandler(xMSFDoc, xTextDocument);
         DBColumnsVector = new java.util.ArrayList<DBColumn>();
         oNumberFormatter = oTextTableHandler.getNumberFormatter();
-        // CurDBMetaData = new RecordParser(xMSF); //, CharLocale, oNumberFormatter);
         CurDBMetaData = _aRecordParser;
         long lDateCorrection = oNumberFormatter.getNullDateCorrection();
         oNumberFormatter.setBooleanReportDisplayNumberFormat();
         oNumberFormatter.setNullDateCorrection(lDateCorrection);
-        // sMsgInvalidTextField = oResource.getResText(UIConsts.RID_REPORT + 73);
         sMsgTableNotExisting = oResource.getResText(UIConsts.RID_REPORT + 61);
         sMsgCommonReportError = oResource.getResText(UIConsts.RID_REPORT + 72);
         sMsgCommonReportError = JavaTools.replaceSubString(sMsgCommonReportError, String.valueOf((char) 13), "<BR>");
@@ -157,8 +155,6 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         if (CurDBMetaData.getCommandType() == CommandType.QUERY)
         {
             oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND, "");
-            //DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(CurDBMetaData.getCommandName());
-            //oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, COMMAND, CurDBMetaData.Command);
         }
         else
         {

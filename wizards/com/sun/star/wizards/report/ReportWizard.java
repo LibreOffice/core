@@ -188,7 +188,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             case SOTITLEPAGE:
                 String[] sFieldTitles = CurTitlesComponent.getFieldTitles();
                 // set new field name titles
-                // CurReportDocument.getRecordParser().setFieldTitles(sFieldTitles);
                 m_reportDocument.setFieldTitles(sFieldTitles);
                 break;
 
@@ -196,13 +195,11 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                 // TODO: DESIGN!!! a getter should return a value!!!
                 CurGroupFieldHandler.getGroupFieldNames(m_reportDocument.getRecordParser());
                 String[] aGroupFieldNames = m_reportDocument.getRecordParser().GroupFieldNames;
-                // CurReportDocument.getRecordParser().prependSortFieldNames(aGroupFieldNames);
                 m_reportDocument.setGrouping(aGroupFieldNames);
                 break;
 
             case SOSORTPAGE:
                 String[][] aSortFieldNames = CurSortingComponent.getSortFieldNames();
-                // CurReportDocument.getRecordParser().SortFieldNames = aSortFieldNames;
                 m_reportDocument.setSorting(aSortFieldNames);
                 // TODO: why do we make a switch here
                 super.enablefromStep(SOTEMPLATEPAGE, true);
@@ -308,7 +305,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 
     private void buildSteps()
     {
-        // CurReportDocument.getDoc().xProgressBar.setValue(30);
         CurDBCommandFieldSelection = new CommandFieldSelection(this, m_reportDocument.getRecordParser(), 100, slblFields, slblSelFields, slblTables, true, 34330);
         CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
         if (!isReportBuilderInstalled())
@@ -509,7 +505,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             }
             if (bexecute)
             {
-                // CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
                 m_reportDocument.insertDatabaseDatatoReportDocument(xMSF);
             }
 
@@ -596,7 +591,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         boolean bEnabled = NewItems.length > 0;
         setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
         setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
-        enableRoadmapItems(bEnabled);   // Note: Performancewise this could be improved
+        enableRoadmapItems(bEnabled);   // Note: Performance-wise this could be improved
     }
 
     public void textChanged(TextEvent xTextEvent)
@@ -606,7 +601,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             Object oModel = UnoDialog.getModel(xTextEvent.Source);
             String sContent = (String) Helper.getUnoPropertyValue(oModel, "Text");
             String fieldname = this.CurTitlesComponent.getFieldNameByTitleControl(oModel);
-            // CurReportDocument.getDoc().oTextFieldHandler.changeUserFieldContent(fieldname, sfieldtitle);
             m_reportDocument.liveupdate_changeUserFieldContent(fieldname, sContent);
         }
         catch (Exception exception)

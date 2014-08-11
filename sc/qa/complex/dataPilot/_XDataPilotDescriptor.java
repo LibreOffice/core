@@ -126,11 +126,6 @@ public class _XDataPilotDescriptor {
     * </ul>
      */
     public boolean _setSourceRange(){
-/*        executeMethod("getColumnFields()") ;
-        executeMethod("getRowFields()") ;
-        executeMethod("getDataFields()") ;
-        executeMethod("getHiddenFields()") ;
-        executeMethod("getPageFields()") ; */
 
         oObj.setSourceRange(CRA);
 

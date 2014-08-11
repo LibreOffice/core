@@ -134,7 +134,6 @@ public class CheckDataPilot {
                     new _XDataPilotTable(xDataPilotTable/*, log*/, param);
         assertTrue("before failed.", _xDataPilotTable.before());
         assertTrue("_getOutputRange failed.", _xDataPilotTable._getOutputRange()) ;
-//        assertTrue("_refresh failed.", _xDataPilotTable._refresh()) ;
 
         // _XDataPilotDescriptor
         XDataPilotDescriptor xDataPilotDescriptor =

@@ -27,8 +27,7 @@ class TextLogger
     public TextLogger ()
         throws java.io.IOException
     {
-//        maDocument = getEditorKit().createDefaultDocument();
-            super ("http://localhost");
+        super ("http://localhost");
         try
         {
             //            setPage (new URL ("http://www.spiegel.de"));

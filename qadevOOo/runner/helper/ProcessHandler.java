@@ -380,7 +380,6 @@ public class ProcessHandler
                     if (sOutputText.length() == memText.length())
                     {
                         changedText = false;
-                        // dbg("runCommand Could not detect changes in output stream!!!");
                     }
                     hangcheck = 10;
                     memText = this.getOutputText();
@@ -670,11 +669,6 @@ public class ProcessHandler
                 log.println("Process has been destroyed!");
             }
         }
-//  Removed as hung up in SDK test 'PathSettings'
-//        try {
-//            stdout.join();
-//            stderr.join();
-//        } catch (InterruptedException e) {}
 
         return isFinished();
     }

@@ -581,7 +581,6 @@ public class ToDo {
         private String getStringFromGregorianCalendar( GregorianCalendar gregCal ) {
             String sDate = ( gregCal.get( Calendar.MONTH ) + 1 )
                 + STRING_SEPARATOR + gregCal.get( Calendar.DATE )
-//                + STRING_SEPARATOR + ( gregCal.get( Calendar.MONTH ) + 1 )
                 + STRING_SEPARATOR + gregCal.get( Calendar.YEAR );
 
             return  sDate;

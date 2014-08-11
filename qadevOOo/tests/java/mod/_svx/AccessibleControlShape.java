@@ -90,8 +90,6 @@ public class AccessibleControlShape extends TestCase {
 
         AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-//        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE,
-//            "Button");
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "Button");
 
         // create test environment here

@@ -215,7 +215,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 for (int i = 0; i < rowHeights.size(); i++)
                 {
                     len.add(rowHeights.get(i));
-                    // val += (rowHeights.get(i)).getValue();
                 }
 
                 rowHeights.clear();
@@ -683,8 +682,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 
         // do this after we close the tag
         final XmlWriter xmlWriter = getXmlWriter();
-        // final Object attribute = attrs.getAttribute(OfficeNamespaces.TABLE_NS,NUMBERCOLUMNSSPANNED);
-        // final int span = TextUtilities.parseInt((String) attribute, 0);
         final int span = currentSpan;
         currentSpan = 0;
         for (int i = 1; i < span; i++)

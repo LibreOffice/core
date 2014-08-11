@@ -170,10 +170,8 @@ public class ScDatabaseRangeObj extends TestCase {
         }
 
 
-        //CellRangeAddress aRange = new CellRangeAddress((short)0, 0, 0, 0, 13);
         CellRangeAddress aRange = null;
 
-        //dbRanges.addNewByName("dbRange", aRange);
         XNameAccess dbrNA = UnoRuntime.queryInterface(
                                     XNameAccess.class, dbRanges);
         try {

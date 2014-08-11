@@ -75,7 +75,6 @@ public class ExecCmd
                     String buff = null;
                     while ((buff = br_err.readLine()) != null) {
                     System.out.println("Process err :" + buff);
-                    /*try {Thread.sleep(100); } catch(Exception e) {}*/
                  }
                  System.out.println("finished reading err");
                  } catch (IOException ioe) {

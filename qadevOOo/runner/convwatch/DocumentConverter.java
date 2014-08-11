@@ -141,9 +141,6 @@ public class DocumentConverter extends EnhancedComplexTestCase
             // check if all need software is installed and accessible
             checkEnvironment(mustInstalledSoftware());
 
-            // test_removeFirstDirectorysAndBasenameFrom();
-            // Get the MultiServiceFactory.
-            // XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
             if (aGTA == null)
             {

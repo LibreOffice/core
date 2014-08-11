@@ -38,13 +38,6 @@ public class BinaryOnlyFilter implements FileFilter {
 
     @Override
     public String toString() {
-        /* StringBuffer buf = new StringBuffer(DESCRIPTION + ": ");
-
-        for (int i = 0; i < EXTENSIONS.length - 1; i++)
-            buf.append("<" + EXTENSIONS[i] + "> ");
-        buf.append("<" + EXTENSIONS[EXTENSIONS.length - 1] + ">");
-
-        return buf.toString(); */
         return DESCRIPTION;
     }
 }

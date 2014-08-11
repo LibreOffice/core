@@ -169,7 +169,6 @@ public class DialogComponent {
 
         //XServiceInfo
         public String getImplementationName() {
-            // return  DialogComponent.class.getName();
             return  _DialogComponent.class.getName();
         }
 

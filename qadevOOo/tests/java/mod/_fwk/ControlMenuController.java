@@ -71,29 +71,6 @@ public class ControlMenuController extends TestCase {
         }
 
 
-/*        log.println("Creating instance...");
-
-        xTextDoc = WriterTools.createTextDoc(xMSF);
-
-/*        XText xText = xTextDoc.getText();
-        XTextCursor xTextCursor = xText.createTextCursor();
-
-        for (int i = 0; i < 11; i++) {
-            xText.insertString(xTextCursor, "A sample text and why not? ", false);
-        }
-
-        XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, xTextDoc);
-
-        // the supplier is available from the model
-        XUIConfigurationManagerSupplier xSupplier =
-                (XUIConfigurationManagerSupplier)UnoRuntime.queryInterface(
-                XUIConfigurationManagerSupplier.class, xModel);
-
-        xManager = xSupplier.getUIConfigurationManager();
-
-        // just to make sure, it's the right one.
-        log.println("TestObject: " + util.utils.getImplName(xManager));
-        tEnv = new TestEnvironment(xManager); */
         log.println("TestObject: " + utils.getImplName(oObj));
         tEnv = new TestEnvironment(oObj);
         return tEnv;

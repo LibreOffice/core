@@ -41,72 +41,15 @@ public abstract class TestBase extends ComplexTestCase {
         t.setProp1(0);
         assure(t.getProp1() == 0);
         assure(t.getProp2() == 2);
-        /*try {
-            t.getProp3Void();
-            failed();
-        } catch (VoidPropertyException e) {
-        }*/
         assure(t.getProp3Long() == 3);
-        /*try {
-            t.getProp4None();
-            failed();
-        } catch (OptionalPropertyException e) {
-        }*/
         assure(t.getProp4Long() == 4);
-        /*try {
-            t.getProp5None();
-            failed();
-        } catch (OptionalPropertyException e) {
-        }
-        try {
-            t.getProp5Void();
-            failed();
-        } catch (VoidPropertyException e) {
-        }*/
         assure(t.getProp5Long() == 5);
         assure(t.getProp6() == 6);
-        /*t.clearProp6();
-        try {
-            t.getProp6();
-            failed();
-        } catch (VoidPropertyException e) {
-        }*/
         t.setProp6(0);
         assure(t.getProp6() == 0);
-        /*try {
-            t.getProp7None();
-            failed();
-        } catch (OptionalPropertyException e) {
-        }
-        try {
-            t.setProp7None(0);
-            failed();
-        } catch (OptionalPropertyException e) {
-        }
-        try {
-            t.clearProp7None();
-            failed();
-        } catch (OptionalPropertyException e) {
-        }*/
         assure(t.getProp7() == 7);
-        /*t.clearProp7();
-        try {
-            t.getProp7();
-            failed();
-        } catch (VoidPropertyException e) {
-        }*/
         t.setProp7(0);
         assure(t.getProp7() == 0);
-        /*try {
-            t.getProp8None();
-            failed();
-        } catch (OptionalPropertyException e) {
-        }
-        try {
-            t.setProp8None(0);
-            failed();
-        } catch (OptionalPropertyException e) {
-        }*/
         assure(t.getProp8Long() == 8);
         t.setProp8Long(0);
         assure(t.getProp8Long() == 0);

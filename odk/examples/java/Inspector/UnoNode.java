@@ -316,10 +316,8 @@ public class UnoNode{
 
 
     private static Type sequenceComponentType(Type sequenceType) {
-//        assert sequenceType.getTypeClass() == TypeClass.SEQUENCE;
         String n = sequenceType.getTypeName();
         final String PREFIX = "[]";
-//        assert n.startsWith(PREFIX);
         return new Type(n.substring(PREFIX.length()));
     }
 

@@ -101,8 +101,6 @@ public class SwXChapterNumbering extends TestCase {
             e.printStackTrace();
         }
 
-        //instance1[0].Value = new Short((short)5);
-
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         tEnv.addObjRelation("INSTANCE1", instance1);

@@ -70,101 +70,40 @@ public final class TestService implements XServiceInfo, XSingleComponentFactory
             return 2;
         }
 
-        /*public int getProp3Void() throws VoidPropertyException {
-            throw new VoidPropertyException("Prop3Void", this);
-        }*/
-
-        public int getProp3Long() /*throws VoidPropertyException*/ {
+        public int getProp3Long(){
             return 3;
         }
-
-        /*public int getProp4None() throws OptionalPropertyException {
-            throw new OptionalPropertyException("Prop4None", this);
-        }*/
-
-        public int getProp4Long() /*throws OptionalPropertyException*/ {
+        public int getProp4Long(){
             return 4;
         }
 
-        /*public int getProp5None()
-            throws OptionalPropertyException, VoidPropertyException
-        {
-            throw new OptionalPropertyException("Prop4None", this);
-        }*/
-
-        /*public int getProp5Void()
-            throws OptionalPropertyException, VoidPropertyException
-        {
-            throw new VoidPropertyException("Prop4None", this);
-        }*/
-
         public int getProp5Long()
-            /*throws OptionalPropertyException, VoidPropertyException*/
         {
             return 5;
         }
 
-        public int getProp6() /*throws VoidPropertyException*/ {
-            /*if (prop6 == null) {
-                throw new VoidPropertyException("Prop6", this);
-            } else {*/
+        public int getProp6() {
                 return prop6.intValue();
-            /*}*/
         }
 
         public void setProp6(int value) {
             prop6 = new Integer(value);
         }
 
-        /*public void clearProp6() {
-            prop6 = null;
-        }*/
-
-        /*public int getProp7None()
-            throws OptionalPropertyException, VoidPropertyException
-        {
-            throw new OptionalPropertyException("Prop7None", this);
-        }*/
-
-        /*public void setProp7None(int value) throws OptionalPropertyException {
-            throw new OptionalPropertyException("Prop7None", this);
-        }*/
-
-        /*public void clearProp7None() throws OptionalPropertyException {
-            throw new OptionalPropertyException("Prop7None", this);
-        }*/
-
         public int getProp7()
-            /*throws OptionalPropertyException, VoidPropertyException*/
         {
-            /*if (prop7 == null) {
-                throw new VoidPropertyException("Prop7", this);
-            } else {*/
                 return prop7.intValue();
-            /*}*/
         }
 
-        public void setProp7(int value) /*throws OptionalPropertyException*/ {
+        public void setProp7(int value) {
             prop7 = new Integer(value);
         }
 
-        /*public void clearProp7() throws OptionalPropertyException {
-            prop7 = null;
-        }*/
-
-        /*public int getProp8None() throws OptionalPropertyException {
-            throw new OptionalPropertyException("Prop8None", this);
-        }*/
-
-        /*public void setProp8None(int value) throws OptionalPropertyException {
-            throw new OptionalPropertyException("Prop8None", this);
-        }*/
-
-        public int getProp8Long() /*throws OptionalPropertyException*/ {
+        public int getProp8Long() {
             return prop8;
         }
 
-        public void setProp8Long(int value) /*throws OptionalPropertyException*/
+        public void setProp8Long(int value)
         {
             prop8 = value;
         }

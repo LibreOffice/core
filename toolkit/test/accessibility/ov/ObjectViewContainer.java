@@ -45,7 +45,6 @@ public class ObjectViewContainer
 
         System.out.println ("ObjectViewContainer");
         RegisterView (ContextView.class);
-        //        RegisterView (StateSetView.class);
         RegisterView (FocusView.class);
         RegisterView (TextView.class);
     }

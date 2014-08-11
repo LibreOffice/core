@@ -114,7 +114,6 @@ public class PageStyle extends TestCase {
             XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
             XInterface oInt = (XInterface)
                 oMSF.createInstance("com.sun.star.style.PageStyle");
-//                oMSF.createInstanceWithArguments("com.sun.star.style.PageStyle",new Object[]{oStyle});
             oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
         } catch ( com.sun.star.uno.Exception e ) {
             log.println("Error: exception occurred.");

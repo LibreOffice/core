@@ -91,7 +91,6 @@ public class _XPrintable extends MultiMethodTest {
             tRes.tested("setPrinter()",false);
         }
 
-        //oObj.setPrinter(the_printer);
         the_printer = oObj.getPrinter() ;
 
         propIdx = 0 ;

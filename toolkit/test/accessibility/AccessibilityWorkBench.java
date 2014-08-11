@@ -126,7 +126,6 @@ public class AccessibilityWorkBench
 
         //  Accessible Tree.
         maAccessibilityTree = new AccessibilityTree ();
-        //        maAccessibilityTree.getComponent().setMinimumSize (new Dimension (250,300));
         JScrollPane aTreeScrollPane = new JScrollPane(
             maAccessibilityTree.getComponent(),
             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -136,7 +135,6 @@ public class AccessibilityWorkBench
         // Object view shows details about the currently selected accessible
         // object.
         maObjectViewContainer = new ObjectViewContainer ();
-        //        maObjectViewContainer.setPreferredSize (new Dimension (300,100));
         JScrollPane aObjectViewContainerScrollPane = new JScrollPane(
             maObjectViewContainer,
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -172,7 +170,6 @@ public class AccessibilityWorkBench
 
         //  Text output area.
         maMessageArea = MessageArea.Instance ();
-        //        maMessageArea.setPreferredSize (new Dimension (300,50));
 
         // Split pane for the two views and the message area.
         JSplitPane aSplitPane = new JSplitPane (JSplitPane.VERTICAL_SPLIT,

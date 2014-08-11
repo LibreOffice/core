@@ -330,7 +330,6 @@ public class OfficeProvider implements AppProvider
         final XMultiComponentFactory xLocalServiceManager = xcomponentcontext.getServiceManager();
 
         // create a connector, so that it can contact the office
-//        XUnoUrlResolver urlResolver = UnoUrlResolver.create(xcomponentcontext);
         final Object xUrlResolver = xLocalServiceManager.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", xcomponentcontext);
         final XUnoUrlResolver urlResolver = UnoRuntime.queryInterface(XUnoUrlResolver.class, xUrlResolver);
 

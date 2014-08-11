@@ -221,8 +221,7 @@ public class _XContentProviderManager extends MultiMethodTest {
         ContentProviderInfo[] providersInfo = oObj.queryContentProviders();
 
         for (int i = 0; i < providersInfo.length; i++) {
-            if (result.equals(providersInfo[i].ContentProvider)
-                    /*&& myScheme.equals(providersInfo[i].Scheme)*/) {
+            if (result.equals(providersInfo[i].ContentProvider)) {
                 found = true;
                 break;
             }

@@ -166,28 +166,6 @@ public class EventTest {
     }
 
     /**
-     * creates a chart document and check the <CODE>XMouseClickHandler</CODE> and
-     * <CODE>XKeyHandler</CODE>
-     * @see com.sun.star.awt.XKeyHandler
-     * @see com.sun.star.awt.XMouseClickHandler
-     */
-// TODO!
-//    @Test public void checkChartDocument(){
-//
-//        XChartDocument xDoc = null;
-//
-//        try{
-//            xDoc = m_SOF.createChartDoc("ChartTest");
-//        } catch (com.sun.star.uno.Exception e){
-//            fail("Could not create a chart document: " +e.toString());
-//        }
-//
-//        checkListener(xDoc);
-//
-//        closeDoc(xDoc);
-//    }
-
-    /**
      * creates a math document and check the <CODE>XMouseClickHandler</CODE> and
      * <CODE>XKeyHandler</CODE>
      * @see com.sun.star.awt.XKeyHandler

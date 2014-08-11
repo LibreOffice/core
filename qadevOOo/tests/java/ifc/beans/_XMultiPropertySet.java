@@ -88,7 +88,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
     */
     public class MyChangeListener implements XPropertiesChangeListener {
          public void propertiesChange(PropertyChangeEvent[] e) {
-             //_log.println("Listener was called");
              propertiesChanged = true;
          }
          public void disposing (EventObject obj) {}
@@ -170,8 +169,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
 
 
         // Change one of the property to be sure, that this event was cauched.
-        //Random rnd = new Random();
-        //int idx = rnd.nextInt(testPropsAmount);
         for (int i=0; i<testPropsAmount;i++) {
             log.print("Trying to change property " + testPropsNames[i]);
             try {

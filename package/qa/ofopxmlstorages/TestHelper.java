@@ -234,11 +234,6 @@ public class TestHelper  {
 
     public boolean checkRelations( StringPair[][] aStorRels, StringPair[][] aTestRels )
     {
-        // Message( "StorageRels:" );
-        // PrintRelations( aStorRels );
-        // Message( "TestRels:" );
-        // PrintRelations( aTestRels );
-
         if ( aStorRels.length != aTestRels.length )
         {
             Error( "The provided relations sequence has different size than the storage's one!" );

@@ -110,7 +110,6 @@ public class OpenOfficeDocFileSystem
         attr = defattr;
         list = defattr;
 
-        // transfer = new TransferImpl();
         setRefreshTime(REFRESH_OFF);
     }
 
@@ -1032,9 +1031,7 @@ System.out.println("    exception: " + ioe.getMessage());
         public void rename(String name)
             throws IOException
         {
-//            throw new IOException(
-//                "cannot rename readonly file: " + getName());   // I18N
-            // BUG: this is the design bug. Cache has to mamage such kind
+            // BUG: this is the design bug. Cache has to manage such kind
             //      of operation in order to keep the data integrity.
             this.name = name;
         }

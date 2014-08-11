@@ -228,7 +228,6 @@ public class SvxShapePolyPolygonBezier extends TestCase {
 
             shapeProps.setPropertyValue("PolyPolygonBezier",coords);
 
-            //SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF()) ;
             oShape = SOF.createShape(xDrawDoc,5000,3500,7500,5000,"Line");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
         }

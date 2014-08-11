@@ -923,7 +923,6 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         {
             xProducer.addConsumer( compareImages );
             xProducer.startProduction();
-//            wait();
         }
         xProducer.removeConsumer( compareImages );
 

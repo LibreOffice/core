@@ -126,7 +126,6 @@ public class PathSettingsTest
         {
             System.out.println(e.getClass().getName());
             System.out.println("Message: " + e.getMessage());
-            // fail("Could not create an instance of the test object.");
         }
         catch (Exception e)
         {

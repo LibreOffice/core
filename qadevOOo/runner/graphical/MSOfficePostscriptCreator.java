@@ -422,7 +422,6 @@ public class MSOfficePostscriptCreator implements IOffice
             String sTmpPath = util.utils.getUsersTempDir();
             String ls = System.getProperty("line.separator");
 
-            // ArrayList aList = new ArrayList();
             String sSaveViaWord = "saveViaWord.pl";
 
             ArrayList<String> aList = searchLocalFile(sSaveViaWord);
@@ -520,8 +519,6 @@ public class MSOfficePostscriptCreator implements IOffice
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile);
 
-            // out.write( "eval 'exec perl -wS $0 ${1+\"$@\"}'                                                                                " + ls );
-            // out.write( "   if 0;                                                                                                         " + ls );
             out.write("#BEGIN" + ls);
             out.write("#{" + ls);
             out.write("#" + ls);
@@ -589,9 +586,6 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "{" + ls);
             out.write( "   print FILE \"name=$ARGV[0]\\n\";" + ls);
             out.write( "   print FILE \"ExcelVersion=$sVersion\\n\";" + ls);
-//            out.write( "   print FILE \"WordStartTime=$stopWordTime\\n\";" + ls);
-//            out.write( "   print FILE \"WordLoadTime=$stopLoadWordTime\\n\";" + ls);
-//            out.write( "   print FILE \"WordPrintTime=$stopPrintWordTime\\n\";" + ls);
             out.write( "   close(FILE);" + ls);
             out.write( "}" + ls);
             out.close();
@@ -889,7 +883,6 @@ public class MSOfficePostscriptCreator implements IOffice
                 GlobalLogWriter.println("Error: unknown root node: '" + sRootNodeName + "' please check the document. Try to use Word as default.");
                 sType = "word"; // default
             }
-            // printNodesFromList( ndList );
         }
         catch (java.lang.Exception e)
         {

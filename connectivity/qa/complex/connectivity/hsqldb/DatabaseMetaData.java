@@ -71,8 +71,6 @@ public class DatabaseMetaData {
 
     public void test(){
 
-   //     try {
-
             try{
         ResultSet rs = m_xMD.getTables(null,null,"TESTCASE",null);
         while ( rs.next() )
@@ -99,66 +97,5 @@ public class DatabaseMetaData {
             } catch(Exception e){
 
             }
-            //testMethod("getTypeInfo", zclass,empty,17);
-/*
-            Class[] zclass = new Class[]{};
-            Object[] empty = new Object[]{};
-            testMethod("getCatalogs", zclass,empty,1);
-
-            testMethod("getSchemas", zclass,empty,2);
-            testMethod("getTableTypes", zclass,empty,1);
-            Class[] a4 = new Class[4];
-            Object[] o4 = new Object[4];
-            a4[0] = Class.forName("java.lang.Object");
-            a4[1] = Class.forName("java.lang.String");
-            a4[2] = Class.forName("java.lang.String");
-            a4[3] = Class.forName("java.lang.String");
-
-            o4[0] = null;
-            o4[1] = null;
-            o4[2] = null;
-            o4[3] = "%";
-            testMethod("getColumnPrivileges", a4,o4,7);
-            testMethod("getColumns", a4,o4,18);
-            testMethod("getProcedureColumns", a4,o4,13);
-            testMethod("getColumns", a4,o4,18);
-
-            Class[] a3 = new Class[3];
-            Object[] o3 = new Object[3];
-            a3[0] = Class.forName("java.lang.Object");
-            a3[1] = Class.forName("java.lang.String");
-            a3[2] = Class.forName("java.lang.String");
-
-            o3[0] = null;
-            o3[1] = null;
-            o3[2] = "%";
-
-            testMethod("getExportedKeys", a3,o3,14);
-            testMethod("getImportedKeys", a3,o3,14);
-            testMethod("getPrimaryKeys", a3,o3,14);
-            testMethod("getProcedures", a3,o3,5);
-            testMethod("getTablePrivileges", a3,o3,6);
-            testMethod("getVersionColumns", a3,o3,7);
-            // testMethod("getCrossReference", a3,o3,14);
-
-        } catch( java.lang.ClassNotFoundException ex) {
-            assure("ClassNotFoundException: " + ex.getMessage() ,false);
-        }
- */
     }
-/*
-    public com.sun.star.sdbc.XResultSet getCrossReference(Object obj, String str, String str2, Object obj3, String str4, String str5) {
-    }
-    public com.sun.star.sdbc.XResultSet getIndexInfo(Object obj, String str, String str2, boolean param, boolean param4) {
-    }
-
-    public com.sun.star.sdbc.XResultSet getTables(Object obj, String str, String str2, String[] str3) {
-    }
-
-    public com.sun.star.sdbc.XResultSet getUDTs(Object obj, String str, String str2, int[] values) {
-    }
-
-    public com.sun.star.sdbc.XResultSet getBestRowIdentifier(Object obj, String str, String str2, int param, boolean param4) throws com.sun.star.sdbc.SQLException {
-    }
- */
 }

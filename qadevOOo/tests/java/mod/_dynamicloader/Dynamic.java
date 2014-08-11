@@ -81,7 +81,6 @@ public class Dynamic extends TestCase {
         tEnv.addObjRelation("ImplementationLoader", loader) ;
 
         String url = "servicename=com.sun.star.loader.SharedLibrary,link=mylink";
-        //util.utils.getFullTestURL("solibrary.jar");
         tEnv.addObjRelation("ImplementationUrl", url) ;
 
         tEnv.addObjRelation("ImplementationName", "com.sun.star.io.Pipe") ;

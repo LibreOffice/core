@@ -118,13 +118,6 @@ public final class java_environment implements IEnvironment {
      */
     public void list() {
 // TODO???
-//      synchronized (proxies) {
-//          System.err.println("##### " + getClass().getName() + ".list: "
-//                             + getName() + ", " + getContext());
-//          for (Iterator it = proxies.values().iterator(); it.hasNext();) {
-//              System.err.println("#### entry: " + it.next());
-//          }
-//      }
     }
 
     /**

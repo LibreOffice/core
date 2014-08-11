@@ -89,8 +89,6 @@ public class java_complex implements TestBase
 //        and the office was killed.
 //        In complex tests just use "ThreadTimeOut" as timout.
 
-        // param.put("TimeOut", new Integer(0));
-
         for (int i = 0; i < entries.length; i++)
         {
 

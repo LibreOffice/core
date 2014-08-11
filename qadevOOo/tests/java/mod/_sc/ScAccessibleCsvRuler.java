@@ -103,7 +103,6 @@ public class ScAccessibleCsvRuler extends TestCase {
         }
 
 
-        //util.dbg.printInterfaces(oObj);
         AccessibilityTools.printAccessibleTree(log, xRoot);
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT,
                                              "Ruler", true);
@@ -144,12 +143,6 @@ public class ScAccessibleCsvRuler extends TestCase {
     */
     @Override
     protected void cleanup( TestParameters Param, PrintWriter log) {
-/*        log.println( "    closing Dialog " );
-        try {
-            accAction.doAccessibleAction(0);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException iae) {
-            log.println("Couldn't close dialog");
-        } */
     }
 
     /**

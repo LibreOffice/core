@@ -137,16 +137,6 @@ public class XMLSettingsExporter extends TestCase {
             xPropSet.setPropertyValue("IsLayerMode",
                 new Boolean (NewDataValue));
 
-/*            XViewDataSupplier xViewDataSupp = (XViewDataSupplier)
-                UnoRuntime.queryInterface(XViewDataSupplier.class, xImpressDoc);
-            XIndexAccess xViewData = xViewDataSupp.getViewData();
-            PropertyValue[] xData = (PropertyValue[]) xViewData.getByIndex(0);
-            NewDataValue = ! ((Boolean) xData[1].Value).booleanValue();
-            xData[1].Value = new Boolean(NewDataValue);
-            XIndexReplace xViewDataReplacable = (XIndexReplace)
-                UnoRuntime.queryInterface(XIndexReplace.class, xViewData);
-            xViewDataReplacable.replaceByIndex(0,xData);
-*/
 
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;

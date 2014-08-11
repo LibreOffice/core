@@ -113,12 +113,9 @@ public class _FunctionDescription extends MultiMethodTest {
 
 
         try {
-            //waitForAllThreads();
             gValue = oObj.getPropertyValue( name );
 
-            //waitForAllThreads();
             ValueToSet = ValueChanger.changePValue( gValue );
-            //waitForAllThreads();
             oObj.setPropertyValue( name, ValueToSet );
             sValue = oObj.getPropertyValue( name );
 

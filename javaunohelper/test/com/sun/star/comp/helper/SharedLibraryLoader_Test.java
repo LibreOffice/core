@@ -156,7 +156,6 @@ public class SharedLibraryLoader_Test {
         passed = test_instantiateSharedLibraryLoader() && passed;
         passed = test_loadNativeServiceManager() && passed;
         passed = test_loadNativeSimpleRegistry() && passed;
-        //passed = test_registerSharedLibraryLoader() && passed;
 
         System.err.println("SharedLibraryLoader test passed? " + passed);
 

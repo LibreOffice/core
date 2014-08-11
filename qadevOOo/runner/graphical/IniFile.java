@@ -231,7 +231,7 @@ public class IniFile implements Enumeration<String>
                 {
                     continue;
                 }
-                if (sLine.startsWith("[") /* && sLine.endsWith("]") */)
+                if (sLine.startsWith("[") )
                 {
                     // TODO: due to the fact we would like to insert an empty line before new sections
                     // TODO: we should check if we are in an empty line and if, go back one line.
@@ -267,7 +267,7 @@ public class IniFile implements Enumeration<String>
                     continue;
                 }
 
-                if (sLine.startsWith("[") /* && sLine.endsWith("]") */)
+                if (sLine.startsWith("["))
                 {
                     // found end.
                     return j;

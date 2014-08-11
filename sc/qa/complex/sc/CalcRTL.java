@@ -206,9 +206,6 @@ public class CalcRTL /* extends ComplexTestCase */
      * this method opens a calc document and sets the corresponding class variable xSheetDoc
      */
     protected boolean openSpreadsheetDocument() {
-        // SOfficeFactory SOF = SOfficeFactory.getFactory(
-        //                             (XMultiServiceFactory) param.getMSF());
-
         final XMultiServiceFactory xMsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
         SOfficeFactory SOF = SOfficeFactory.getFactory(xMsf);
 
@@ -468,8 +465,6 @@ public class CalcRTL /* extends ComplexTestCase */
                     } else {
                         return false;
                     }
-
-                    //tRes.tested(propName, false);
                 } else {
                     System.out.println("Property '" + propName + "' OK");
 
@@ -542,8 +537,6 @@ public class CalcRTL /* extends ComplexTestCase */
             final XMultiServiceFactory xMsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
             SOfficeFactory SOF = SOfficeFactory.getFactory(xMsf);
 
-            // SOfficeFactory SOF = SOfficeFactory.getFactory(
-            //                              (XMultiServiceFactory) param.getMSF());
             XComponent xComp =  UnoRuntime.queryInterface(
                                        XComponent.class, xSheetDoc);
             insertedShape = SOF.createShape(xComp, 5000, 3500, 700, 500,

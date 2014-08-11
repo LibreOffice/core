@@ -116,7 +116,6 @@ public class GlobalFile {
   public static ArrayList<ArrayList<Double>> getCurveDataFromFile(String fileName) {
     File file = new File(fileName);
     if(!file.exists()){
-      //showMessage();
       return null;
     }
     //open data file
@@ -126,7 +125,6 @@ public class GlobalFile {
       inStream = new FileInputStream(file);
       inReader = new BufferedReader(new InputStreamReader(inStream));
     }catch(Exception e){
-      //showMessage();
       return null;//Data file open error.
     }
     ArrayList<Double> xaxes = new ArrayList<Double>(1);
@@ -158,7 +156,6 @@ public class GlobalFile {
             xaxis = Double.valueOf(s);
             xaxes.add(xaxis);
           }catch(NumberFormatException e){
-            //showMessage();
             inReader.close();
             inStream.close();
             return null;//Data file data format error.
@@ -168,7 +165,6 @@ public class GlobalFile {
             yaxis = Double.valueOf(s);
             yaxes.add(yaxis);
           }catch(NumberFormatException e){
-          //showMessage();
           inReader.close();
           inStream.close();
           return null;//Data file data format error.
@@ -177,7 +173,6 @@ public class GlobalFile {
       }
       inReader.close();
     }catch(Exception e){
-      //showMessage();
       return null;//Uncertain data file error.
     }
     ArrayList<ArrayList<Double>> curveData = new ArrayList<ArrayList<Double>>(2);

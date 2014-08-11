@@ -54,11 +54,6 @@ public class AccessibilityTree
         maTree.setModel (aModel);
 
         maCellRenderer = new AccessibleTreeCellRenderer();
-        //        setCellRenderer (maCellRenderer);
-
-        // allow editing of XAccessibleText interfaces
-        //        setEditable (true);
-        //        maTreeModel.addTreeModelListener( new TextUpdateListener() );
 
         maTree.addMouseListener (new MouseListener (this));
 

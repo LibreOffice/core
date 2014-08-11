@@ -163,8 +163,6 @@ public class AccessibleEdit extends TestCase {
         tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
-                //                    buttonAccComp.grabFocus();
-                //                    acomp.grabFocus();
                 edText.setText("firing event ...");
                 edText.setText("firing event ... 2");
                 edText.setText("AccessibleEdit");

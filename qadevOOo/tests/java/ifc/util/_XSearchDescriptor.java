@@ -70,7 +70,6 @@ public class _XSearchDescriptor extends MultiMethodTest {
         cmpSearchStr = oObj.getSearchString();
 
         if(!(cmpSearchStr.equals(oldSearchStr))){ bResult = true; }
-        //oObj.setSearchString(oldSearchStr);
         tRes.tested("setSearchString()", bResult);
     }
 

@@ -122,9 +122,6 @@ public class XMLContentImporter extends TestCase {
         try {
             oInt = xMSF.createInstance
                 ("com.sun.star.comp.Writer.XMLContentImporter") ;
-            //XImporter imp = (XImporter) UnoRuntime.queryInterface
-            //    (XImporter.class, oInt) ;
-            //imp.setTargetDocument(xTextDoc) ;
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;

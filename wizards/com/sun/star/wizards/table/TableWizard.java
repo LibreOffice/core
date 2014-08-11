@@ -213,30 +213,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
-/*
-    public static void main(String args[])
-    {
-        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
-        PropertyValue[] curproperties = null;
-        try
-        {
-            XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
-            TableWizard CurTableWizard = new TableWizard(xLocMSF);
-            if (xLocMSF != null)
-            {
-                System.out.println("Connected to " + ConnectStr);
-                curproperties = new PropertyValue[1];
-                curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
-                //curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///path/to/database.odb");
-                CurTableWizard.startTableWizard(xLocMSF, curproperties);
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
-*/
     private void buildSteps()
     {
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);

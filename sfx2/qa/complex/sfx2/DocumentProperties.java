@@ -182,7 +182,6 @@ public class DocumentProperties
                 "Description",
                 "Modern internal company memorandum in full-blocked style",
                 xDP.getDescription());
-//          assertEquals("Language", "", xDP.getLanguage());
             assertEquals(
                 "ModifiedBy", "Karl-Heinz Mustermann", xDP.getModifiedBy());
             assertEquals(
@@ -206,13 +205,6 @@ public class DocumentProperties
                     fromArray(new Object[] { "Asien", "Memo", "Reis" })));
 
             NamedValue[] ds = xDP.getDocumentStatistics();
-/*            for (int i = 0; i < ds.length; ++i) {
-                System.out.println("nv: " + ds[i].Name + " " + ds[i].Value);
-            }
-            NamedValue nv1 = new NamedValue("WordCount", new Integer(23));
-            NamedValue nv2 = new NamedValue("WordCount", new Integer(23));
-            System.out.println("eq: " + nv1.equals(nv2)); // grrr, this is false...
-*/
             assertTrue("DocumentStatistics:WordCount", containsNV(ds,
                         new NamedValue("WordCount", new Integer(23))));
             assertTrue("DocumentStatistics:PageCount", containsNV(ds,

@@ -37,7 +37,6 @@ import java.io.PrintStream;
 public final class TestBed {
     public boolean execute(XInstanceProvider provider, boolean waitForServer,
                            Class client, long wait) throws Exception {
-        // assert client.isAssignableFrom(client) && wait >= 0;
         synchronized (lock) {
             server = new Server(provider);
             server.start();
@@ -45,10 +44,6 @@ public final class TestBed {
         }
         Process p = Runtime.getRuntime().exec(new String[] {
             "java", "-classpath", System.getProperty("java.class.path"),
-/*
-            "-Xdebug",
-            "-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n",
-*/
             client.getName() });
         pipe(p.getInputStream(), System.out, "CO> ");
         pipe(p.getErrorStream(), System.err, "CE> ");

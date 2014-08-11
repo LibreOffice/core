@@ -312,12 +312,6 @@ public class ConverterServlet extends HttpServlet {
                 xComponent.dispose();
             }
 
-//         }
-//         catch( Exception exception ) {
-//             exception.printStackTrace();
-//             return( "" );
-//         }
-
         if ( stringConvertedFile.startsWith( "file:///" ) ) {
             // Truncating the beginning of the file name
             stringConvertedFile = stringConvertedFile.substring( 8 );

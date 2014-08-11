@@ -62,8 +62,6 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
 
     protected WizardDescriptor.Panel[] createPanels() {
         return new WizardDescriptor.Panel[] {
-            // keep the default 2nd panel:
-            // wiz.targetChooser(),
             new ParcelPropertiesPanel(),
         };
     }

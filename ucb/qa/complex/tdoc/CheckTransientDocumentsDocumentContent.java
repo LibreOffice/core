@@ -145,15 +145,6 @@ public class CheckTransientDocumentsDocumentContent {
             titleSetCommand.Argument = titleProp;
             xFolderCommandProcessor.execute(titleSetCommand, 0, null);
 
-            // 2do: check all this stuff!
-            // commit changes
-/*            InsertCommandArgument insertArgs = new InsertCommandArgument();
-            insertArgs.Data = null;
-            insertArgs.ReplaceExisting = true;
-            Command commitCommand = new Command();
-            commitCommand.Name = "insert";
-            commitCommand.Argument = insertArgs;
-            xFolderCommandProcessor.execute(commitCommand, 0, null); */
         }
         catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();

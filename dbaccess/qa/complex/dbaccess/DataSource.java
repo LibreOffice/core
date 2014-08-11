@@ -81,7 +81,6 @@ public class DataSource extends TestCase
         }
         catch (Exception ex)
         {
-            // Logger.getLogger(DataSource.class.getName()).log(Level.SEVERE, null, ex);
             fail();
         }
     }

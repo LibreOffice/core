@@ -69,9 +69,7 @@ public class StatusWindow extends JFrame
         statusLabel.setColumns( 25 );
         statusLabel.setEditable( false );
         statusLabel.setBorder( null );
-        //statusLabel.setBorder( LineBorder.createGrayLineBorder() );
         JPanel statusPanel = new JPanel();
-        //statusPanel.setBorder( LineBorder.createBlackLineBorder() );
         statusPanel.setLayout( new BorderLayout() );
         statusPanel.add( statusLabel, "West" );
 
@@ -120,7 +118,6 @@ public class StatusWindow extends JFrame
 
         this.pack();
         this.setResizable( false );
-        //this.setVisible( true );
 
     }
 

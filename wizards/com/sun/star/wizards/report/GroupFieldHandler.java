@@ -137,7 +137,7 @@ public class GroupFieldHandler extends FieldSelection
 
     }
 
-    /* protected */ private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
         public void moveItemDown(String Selitem)
@@ -174,7 +174,6 @@ public class GroupFieldHandler extends FieldSelection
                 String[] NewSelGroupNames = xSelectedFieldsListBox.getItems();
                 CurUnoDialog.setControlProperty("lblBlindTextNote_1", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(NewSelGroupNames.length == 0));
 
-            // CurReportDocument.refreshGroupFields(xSelectedFieldsListBox.getItems());
             }
         }
 

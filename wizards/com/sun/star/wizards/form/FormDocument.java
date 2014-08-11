@@ -160,7 +160,6 @@ public class FormDocument extends TextDocument
                 adjustMainFormSize(_NBorderType);
                 final ControlForm aSubControlForm = new ControlForm(this, SOSUBFORM, getSubFormPoint(), getSubFormSize());
                 oControlForms.add(aSubControlForm);
-                /* ((ControlForm) oControlForms.get(1))*/
                 aSubControlForm.initialize(curUIControlArranger.getSelectedArrangement(1), _NBorderType);
             }
             else if (_bModifySubForm)
@@ -260,7 +259,6 @@ public class FormDocument extends TextDocument
         }
         else
         {
-//          oSubControlForm.oFormController.adjustYPositions(_idiffheight);
             oSubControlForm.setStartPoint(new Point(oSubControlForm.aStartPoint.X, oMainControlForm.getActualFormHeight() + oMainControlForm.aStartPoint.Y + SOFORMGAP));
             oSubControlForm.oFormController.positionControls(oSubControlForm.curArrangement, oSubControlForm.aStartPoint, curUIControlArranger.getAlignValue(), _NBorderType);
         }

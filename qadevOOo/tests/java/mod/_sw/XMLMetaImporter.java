@@ -125,9 +125,6 @@ public class XMLMetaImporter extends TestCase {
         try {
             oInt = xMSF.createInstance
                 ("com.sun.star.comp.Writer.XMLMetaImporter") ;
-            //XImporter imp = (XImporter) UnoRuntime.queryInterface
-            //    (XImporter.class, oInt) ;
-            //imp.setTargetDocument(xTextDoc) ;
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;

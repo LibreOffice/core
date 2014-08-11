@@ -54,7 +54,6 @@ public class _XImportable extends MultiMethodTest {
         log.print("Getting when calling createImportDescriptor(true) --");
 
 
-        //printPropertyValue(descriptor);
         log.println("done");
 
         log.print("Checking PropertyNames -- ");
@@ -71,7 +70,6 @@ public class _XImportable extends MultiMethodTest {
         log.print("Getting when calling createImportDescriptor(false) -- ");
 
 
-        //printPropertyValue(descriptor);
         log.println("done");
 
         log.print("Checking PropertyNames -- ");

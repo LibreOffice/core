@@ -57,7 +57,6 @@ public class BuildID
                 sOfficePath = _sApp;
             }
         }
-        // GlobalLogWriter.get().println("Office path: " + sOfficePath);
         return sOfficePath;
     }
 
@@ -75,7 +74,6 @@ public class BuildID
             if (aSOfficeFile.exists())
             {
                 String sOfficePath = FileHelper.getPath(_sOfficePath);
-                // ok. System.out.println("directory: " + sOfficePath);
                 sBuildID = getBuildIDFromBootstrap(sOfficePath, _sIniSection);
                 if (sBuildID.length() == 0)
                 {
@@ -87,7 +85,6 @@ public class BuildID
                 GlobalLogWriter.println("soffice executable not found.");
             }
 
-//            int dummy = 0;
             return sBuildID;
         }
 

@@ -79,11 +79,7 @@ public class TestComponent implements XServiceInfo, XTypeProvider
         }catch( IOException e) {
             String s= e.getMessage();
             System.out.println(s);
-        }/*catch( SandboxSecurityException sse) {
-            String s= sse.getMessage();
-            System.out.println("s");
         }
-*/
 
         return __serviceName;
     }

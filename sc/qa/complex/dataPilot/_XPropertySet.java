@@ -229,8 +229,6 @@ public class _XPropertySet {
     */
     public boolean _addVetoableChangeListener() {
 
-//        requiredMethod("getPropertySetInfo()");
-
         vetoableChanged = false;
         boolean result = true;
 
@@ -285,8 +283,6 @@ public class _XPropertySet {
     */
     public boolean _setPropertyValue() {
 
-//        requiredMethod("getPropertySetInfo()");
-
         Object gValue = null;
         Object sValue = null;
 
@@ -337,8 +333,6 @@ public class _XPropertySet {
     */
     public boolean _getPropertyValue() {
 
-//        requiredMethod("getPropertySetInfo()");
-
         boolean result = true;
         String toCheck = PTT.normal;
 
@@ -378,8 +372,6 @@ public class _XPropertySet {
     * was not called and no exceptions arose.
     */
     public boolean _removePropertyChangeListener() {
-
-//        requiredMethod("addPropertyChangeListener()");
 
         propertyChanged = false;
         boolean result = true;
@@ -436,8 +428,6 @@ public class _XPropertySet {
     * was NOT called and no exceptions arose.
     */
     public boolean _removeVetoableChangeListener() {
-
-//        requiredMethod("addVetoableChangeListener()");
 
         vetoableChanged = false;
         boolean result = true;

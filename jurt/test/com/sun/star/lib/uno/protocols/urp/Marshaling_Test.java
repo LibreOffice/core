@@ -67,7 +67,7 @@ public final class Marshaling_Test {
             new Any(new Type(Integer.class), new Integer(10)), // Any as Any
             null,
             new TestPrimitiveStruct(),
-            x, //new TestPrimitiveSeqStruct(),
+            x,
             new byte[]{1,2,3,4,5,6,7}, // primitive sequence
             new int[]{7,6,5,4,3,2,1}, // primitive sequence
             new Object[]{new Integer(123), new String("hallo")}, // any sequence

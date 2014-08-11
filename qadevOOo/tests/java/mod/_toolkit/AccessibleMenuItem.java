@@ -125,7 +125,6 @@ public class AccessibleMenuItem extends TestCase {
         }
 
 
-        //oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENUITEM);
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);

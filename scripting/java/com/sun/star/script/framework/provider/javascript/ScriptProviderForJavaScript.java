@@ -279,7 +279,6 @@ class ScriptImpl implements XScript
             catch (JavaScriptException jse) {
                 LogUtils.DEBUG( "Caught JavaScriptException exception for JavaScript type = " + jse.getClass() );
                 String message = jse.getMessage();
-                //int lineNo = jse.getLineNumber();
                 Object wrap = jse.getValue();
                 LogUtils.DEBUG( "\t message  " + message );
                 LogUtils.DEBUG( "\t wrapped type " + wrap.getClass() );

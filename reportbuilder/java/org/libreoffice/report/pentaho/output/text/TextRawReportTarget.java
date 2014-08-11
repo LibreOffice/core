@@ -250,8 +250,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
             currentMasterPage = masterPageFactory.createMasterPage(STANDARD, activePageHeader, activePageFooter);
 
-//      LOGGER.debug("Created a new master-page: " + currentMasterPage.getStyleName());
-
             // todo: Store the page-layouts as well.
             // The page layouts are derived from a common template, but as the
             // header-heights differ, we have to derive these beasts instead
@@ -384,14 +382,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             columns.setAttribute(OfficeNamespaces.FO_NS, "column-count", String.valueOf(columnCount));
             columns.setAttribute(OfficeNamespaces.STYLE_NS, "column-gap", "0cm");
             sectionProperties.addNode(columns);
-
-//    final Section columnSep = new Section();
-//    columnSep.setNamespace(OfficeNamespaces.STYLE_NS);
-//    columnSep.setType("column-sep");
-//    columnSep.setAttribute(OfficeNamespaces.STYLE_NS, "width", "0.035cm");
-//    columnSep.setAttribute(OfficeNamespaces.STYLE_NS, "color", "#000000");
-//    columnSep.setAttribute(OfficeNamespaces.STYLE_NS, "height", "100%");
-//    columns.addNode(columnSep);
 
             for (int i = 0; i < columnCount; i++)
             {
@@ -596,8 +586,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                     final String varType = (String) attrs.getAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE);
                     final String newVarName = variablesDeclarations.produceVariable(varName, varType);
                     attrs.setAttribute(OfficeNamespaces.TEXT_NS, NAME, newVarName);
-                    // this one must not be written, as the DTD does not declare it.
-                    // attrs.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE, null);
                 }
             }
 
@@ -605,7 +593,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             {
                 // This cannot happen as long as the report sections only contain tables. But at some point in the
                 // future they will be made of paragraphs, and then we are prepared ..
-                // LOGGER.debug("Variables-Section in own paragraph " + variables);
 
                 StyleUtilities.copyStyle(OfficeToken.PARAGRAPH,
                         TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, getStylesCollection(),
@@ -696,7 +683,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                     graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "flow-with-text", "false");
                     graphicProperties.setAttribute(OfficeNamespaces.DRAWING_NS, "ole-draw-aspect", "1");
 
-                    // attrs.setAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME, predefAutoStyle.getStyleName());
                 }
             }
 
@@ -711,7 +697,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                     && !isRepeatingSection()
                     && ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs))
             {
-                //LOGGER.debug("Variables-Section in existing cell " + variables);
                 xmlWriter.writeText(variables);
                 variables = null;
             }
@@ -725,7 +710,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         expectedTableRowCount -= 1;
         final String rowStyle = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
         final CSSNumericValue rowHeight = computeRowHeight(rowStyle);
-        // LOGGER.debug("Adding row-Style: " + rowStyle + " " + rowHeight);
         sectionHeight.add(rowHeight);
 
         // process the styles as usual
@@ -810,7 +794,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         else if (isPagebreakPending() && currentRole != OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER && currentRole != OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
         {
             // Derive an automatic style for the pagebreak.
-//      LOGGER.debug("Manual pagebreak (within the section): " + getCurrentRole());
             breakDefinition = getPagebreakDefinition();
             setPagebreakDefinition(null);
             masterPageName = createMasterPage(true, true);
@@ -841,7 +824,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 // write a paragraph that uses the VARIABLES_HIDDEN_STYLE as
                 // primary style. Derive that one and add the manual pagebreak.
                 // The predefined style already has the 'keep-together' flags set.
-//        LOGGER.debug("Variables-Section with new Master-Page " + variables + " " + masterPageName);
 
                 final OfficeStyle style = deriveStyle(OfficeToken.PARAGRAPH, TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT);
                 style.setAttribute(OfficeNamespaces.STYLE_NS, "master-page-name", masterPageName);
@@ -875,7 +857,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             {
                 // Write a paragraph without adding the pagebreak. We can reuse the global style, but we have to make
                 // sure that the style is part of the current 'auto-style' collection.
-//        LOGGER.debug("Variables-Section " + variables);
 
                 StyleUtilities.copyStyle(OfficeToken.PARAGRAPH,
                         TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, getStylesCollection(),
@@ -901,7 +882,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
             if (masterPageName != null)
             {
-//        LOGGER.debug("Starting a new MasterPage: " + masterPageName);
                 // Patch the current styles.
                 // This usually only happens on Table-Styles or Paragraph-Styles
                 style.setAttribute(OfficeNamespaces.STYLE_NS, "master-page-name", masterPageName);
@@ -1314,7 +1294,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             {
                 // This cannot happen as long as the report sections only contain tables. But at some point in the
                 // future they will be made of paragraphs, and then we are prepared ..
-                //LOGGER.debug("Variables-Section " + variables);
                 final String tag;
                 if (sectionKeepTogether && expectedTableRowCount > 0)
                 {

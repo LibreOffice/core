@@ -710,9 +710,6 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             aAutoFormatObj = xAutoFormatsNA.getByName( aAutoFormatName );
         else
         {
-            // create a new auto format (with document service manager!)
-//             xDocServiceManager = (com.sun.star.lang.XMultiServiceFactory)
-//                 UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
             aAutoFormatObj = xDocServiceManager.createInstance(
                 "com.sun.star.sheet.TableAutoFormat" );
             xAutoFormatsNA.insertByName( aAutoFormatName, aAutoFormatObj );

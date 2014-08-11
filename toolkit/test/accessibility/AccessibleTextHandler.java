@@ -501,7 +501,6 @@ abstract class TextActionDialog extends JDialog
         aNode = aNd;
         sName = sButtonText;
         init( sExplanation, aNode.getText().getText(), sButtonText );
-//        setSize( getPreferredSize() );
         setSize( 350, 225 );
     }
 
@@ -514,7 +513,6 @@ abstract class TextActionDialog extends JDialog
 
         // vertical stacking of the elements
         Container aContent = getContentPane();
-        //        aContent.setLayout( new BorderLayout() );
 
         // label with explanation
         if( sExplanation.length() > 0 )

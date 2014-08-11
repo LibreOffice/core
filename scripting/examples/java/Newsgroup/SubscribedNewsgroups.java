@@ -88,7 +88,6 @@ public class SubscribedNewsgroups {
         }
         // Check that at least one News directory exists and remove nulls
         boolean newsFound = false;
-        //Vector nonNullNews = new Vector();
         for( int i=0; i < allNewsDirs.length; i++ ) {
             if( allNewsDirs[i] != null ) {
                 newsFound = true;

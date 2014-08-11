@@ -102,7 +102,6 @@ public class CodeSamples
                 }
                 displayTableStructure( con );
             }
-            //  printDataSources();
         }
         catch(Exception e)
         {

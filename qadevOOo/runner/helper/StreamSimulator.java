@@ -36,7 +36,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
 {
 
     /**
-     * @member  m_sFileName     name of the corrsponding file on disk
+     * @member  m_sFileName     name of the corresponding file on disk
      * @member  m_xInStream     the internal input stream for reading
      * @member  m_xOutStream    the internal input stream for writing
      * @member  m_xSeek         points at runtime to m_xInStream or m_xOutStream and make it seekable
@@ -79,16 +79,12 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     public StreamSimulator( String  sFileName , boolean bInput ,
         lib.TestParameters param   ) throws com.sun.star.io.NotConnectedException
     {
-        ////m_aProtocol = new ComplexTestEnvironment();
         m_sFileName     = sFileName ;
 
         try
         {
             XSimpleFileAccess xHelper = UnoRuntime.queryInterface(XSimpleFileAccess.class,
                 param.getMSF().createInstance("com.sun.star.ucb.SimpleFileAccess"));
-/*            com.sun.star.ucb.XSimpleFileAccess xHelper = (com.sun.star.ucb.XSimpleFileAccess)OfficeConnect.createRemoteInstance(
-                com.sun.star.ucb.XSimpleFileAccess.class,
-                "com.sun.star.ucb.SimpleFileAccess");*/
 
             if (xHelper == null)
                 throw new com.sun.star.io.NotConnectedException("ucb helper not available. Can't create streams.");
@@ -110,7 +106,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch(com.sun.star.uno.Exception exUno)
         {
-            ////m_aProtocol.log("\tstream not open. throw NotConnectedException\n\n\tfailed\n}\n");
             throw new com.sun.star.io.NotConnectedException("Could not open the file.");
         }
     }
@@ -136,13 +131,13 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             nRead = m_xInStream.readBytes(lData,nBytesToRead);
         }
-        catch (com.sun.star.io.NotConnectedException       exConnect) { //m_aProtocol.log("\tgot NotConnectedException\n\tfailed\n}\n"      ); throw exConnect;
+        catch (com.sun.star.io.NotConnectedException       exConnect) {
         }
-        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) { //m_aProtocol.log("\tgot BufferSizeExceededException\n\tfailed\n}\n"); throw exBuffer;
+        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) {
         }
-        catch (com.sun.star.io.IOException                 exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"                ); throw exIO;
+        catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
 
         return nRead;
@@ -155,11 +150,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                                                         com.sun.star.io.BufferSizeExceededException ,
                                                                         com.sun.star.io.IOException
     {
-        //m_aProtocol.log("readSomeBytes(lData["+lData.length+"]["+lData[0]+"],"+nMaxBytesToRead+")\n{\n");
-
         if (m_xInStream == null)
         {
-            //m_aProtocol.log("\tstream not open. throw NotConnectedException\n\tfailed\n}\n");
             throw new com.sun.star.io.NotConnectedException("stream not open");
         }
 
@@ -168,19 +160,14 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             nRead = m_xInStream.readSomeBytes(lData,nMaxBytesToRead);
         }
-        catch (com.sun.star.io.NotConnectedException       exConnect) { //m_aProtocol.log("\tgot NotConnectedException\n\tfailed\n}\n"      ); throw exConnect;
+        catch (com.sun.star.io.NotConnectedException       exConnect) {
         }
-        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) { //m_aProtocol.log("\tgot BufferSizeExceededException\n\tfailed\n}\n"); throw exBuffer;
+        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) {
         }
-        catch (com.sun.star.io.IOException                 exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"                ); throw exIO;
+        catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-
-        //m_aProtocol.log("\treads "+nRead+" bytes\n\tOK\n}\n");
-
-        //if (nRead != nMaxBytesToRead)
-            //m_aProtocol.log("there are some missing bytes for reading!");
 
         return nRead;
     }
@@ -191,11 +178,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                                             com.sun.star.io.BufferSizeExceededException ,
                                                             com.sun.star.io.IOException
     {
-        //m_aProtocol.log("skipBytes("+nBytesToSkip+")\n{\n");
-
         if (m_xInStream == null)
         {
-            //m_aProtocol.log("\tstream not open. throw NotConnectedException\n\tfailed\n}\n");
             throw new com.sun.star.io.NotConnectedException("stream not open");
         }
 
@@ -203,16 +187,14 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             m_xInStream.skipBytes(nBytesToSkip);
         }
-        catch (com.sun.star.io.NotConnectedException       exConnect) { //m_aProtocol.log("\tgot NotConnectedException\n\tfailed\n}\n"      ); throw exConnect;
+        catch (com.sun.star.io.NotConnectedException       exConnect) {
         }
-        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) { //m_aProtocol.log("\tgot BufferSizeExceededException\n\tfailed\n}\n"); throw exBuffer;
+        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) {
         }
-        catch (com.sun.star.io.IOException                 exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"                ); throw exIO;
+        catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-
-        //m_aProtocol.log("\tOK\n}\n");
     }
 
 
@@ -220,11 +202,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     public int available() throws com.sun.star.io.NotConnectedException,
                                   com.sun.star.io.IOException
     {
-        //m_aProtocol.log("available()\n{\n");
-
         if (m_xInStream == null)
         {
-            //m_aProtocol.log("\tstream not open. throw NotConnectedException\n\tfailed\n}\n");
             throw new com.sun.star.io.NotConnectedException("stream not open");
         }
 
@@ -233,14 +212,13 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             nAvailable = m_xInStream.available();
         }
-        catch (com.sun.star.io.NotConnectedException exConnect) { //m_aProtocol.log("\tgot NotConnectedException\n\tfailed\n}\n"); throw exConnect;
+        catch (com.sun.star.io.NotConnectedException exConnect) {
         }
-        catch (com.sun.star.io.IOException           exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"          ); throw exIO;
+        catch (com.sun.star.io.IOException           exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException     exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"     ); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException     exRuntime) {
         }
 
-        //m_aProtocol.log("\treturns "+nAvailable+" bytes\n\tOK\n}\n");
         return nAvailable;
     }
 
@@ -249,11 +227,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     public void closeInput() throws com.sun.star.io.NotConnectedException,
                                     com.sun.star.io.IOException
     {
-        //m_aProtocol.log("closeInput()\n{\n");
-
         if (m_xInStream == null)
         {
-            //m_aProtocol.log("\tstream not open. throw NotConnectedException\n\tfailed\n}\n");
             throw new com.sun.star.io.NotConnectedException("stream not open");
         }
 
@@ -261,14 +236,12 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             m_xInStream.closeInput();
         }
-        catch (com.sun.star.io.NotConnectedException exConnect) { //m_aProtocol.log("\tgot NotConnectedException\n\tfailed\n}\n"); throw exConnect;
+        catch (com.sun.star.io.NotConnectedException exConnect) {
         }
-        catch (com.sun.star.io.IOException           exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"          ); throw exIO;
+        catch (com.sun.star.io.IOException           exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException     exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"     ); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException     exRuntime) {
         }
-
-        //m_aProtocol.log("\tOK\n}\n");
     }
 
 
@@ -282,11 +255,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                                         com.sun.star.io.BufferSizeExceededException ,
                                                         com.sun.star.io.IOException
     {
-        //m_aProtocol.log("writeBytes(lData["+lData.length+"])\n{\n");
-
         if (m_xOutStream == null)
         {
-            //m_aProtocol.log("\tstream not open. throw NotConnectedException\n\tfailed\n}\n");
             throw new com.sun.star.io.NotConnectedException("stream not open");
         }
 
@@ -294,16 +264,14 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             m_xOutStream.writeBytes(lData);
         }
-        catch (com.sun.star.io.NotConnectedException       exConnect) { //m_aProtocol.log("\tgot NotConnectedException\n\tfailed\n}\n"      ); throw exConnect;
+        catch (com.sun.star.io.NotConnectedException       exConnect) {
         }
-        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) { //m_aProtocol.log("\tgot BufferSizeExceededException\n\tfailed\n}\n"); throw exBuffer;
+        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) {
         }
-        catch (com.sun.star.io.IOException                 exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"                ); throw exIO;
+        catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-
-        //m_aProtocol.log("\tOK\n}\n");
     }
 
 
@@ -312,11 +280,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                com.sun.star.io.BufferSizeExceededException  ,
                                com.sun.star.io.IOException
     {
-        //m_aProtocol.log("flush()\n{\n");
-
         if (m_xOutStream == null)
         {
-            //m_aProtocol.log("\tstream not open. throw NotConnectedException\n\tfailed\n}\n");
             throw new com.sun.star.io.NotConnectedException("stream not open");
         }
 
@@ -324,15 +289,14 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             m_xOutStream.flush();
         }
-        catch (com.sun.star.io.NotConnectedException       exConnect) { //m_aProtocol.log("\tgot NotConnectedException\n\tfailed\n}\n"      ); throw exConnect;
+        catch (com.sun.star.io.NotConnectedException       exConnect) {
         }
-        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) { //m_aProtocol.log("\tgot BufferSizeExceededException\n\tfailed\n}\n"); throw exBuffer;
+        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) {
         }
-        catch (com.sun.star.io.IOException                 exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"                ); throw exIO;
+        catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-        //m_aProtocol.log("\tOK\n}\n");
     }
 
 
@@ -341,11 +305,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                      com.sun.star.io.BufferSizeExceededException,
                                      com.sun.star.io.IOException
     {
-        //m_aProtocol.log("closeOutput()\n{\n");
-
         if (m_xOutStream == null)
         {
-            //m_aProtocol.log("\tstream not open. throw NotConnectedException\n\tfailed\n}\n");
             throw new com.sun.star.io.NotConnectedException("stream not open");
         }
 
@@ -353,16 +314,14 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             m_xOutStream.closeOutput();
         }
-        catch (com.sun.star.io.NotConnectedException       exConnect) { //m_aProtocol.log("\tgot NotConnectedException\n\tfailed\n}\n"      ); throw exConnect;
+        catch (com.sun.star.io.NotConnectedException       exConnect) {
         }
-        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) { //m_aProtocol.log("\tgot BufferSizeExceededException\n\tfailed\n}\n"); throw exBuffer;
+        catch (com.sun.star.io.BufferSizeExceededException exBuffer ) {
         }
-        catch (com.sun.star.io.IOException                 exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"                ); throw exIO;
+        catch (com.sun.star.io.IOException                 exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-
-        //m_aProtocol.log("\tOK\n}\n");
     }
 
 
@@ -375,11 +334,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     public void seek( /*IN*/long nLocation ) throws com.sun.star.lang.IllegalArgumentException,
                                                     com.sun.star.io.IOException
     {
-        //m_aProtocol.log("seek("+nLocation+")\n{\n");
-
         if (m_xSeek == null)
         {
-            //m_aProtocol.log("\tstream not seekable. throw IOException\n\tfailed\n}\n");
             throw new com.sun.star.io.IOException("stream not seekable");
         }
 
@@ -387,25 +343,20 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             m_xSeek.seek(nLocation);
         }
-        catch (com.sun.star.lang.IllegalArgumentException exArg    ) { //m_aProtocol.log("\tgot IllegalArgumentException\n\tfailed\n}\n" ); throw exArg;
+        catch (com.sun.star.lang.IllegalArgumentException exArg    ) {
         }
-        catch (com.sun.star.io.IOException                exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"              ); throw exIO;
+        catch (com.sun.star.io.IOException                exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException          exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"         ); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException          exRuntime) {
         }
-
-        //m_aProtocol.log("\tOK\n}\n");
     }
 
 
 
     public long getPosition() throws com.sun.star.io.IOException
     {
-        //m_aProtocol.log("getPosition()\n{\n");
-
         if (m_xSeek == null)
         {
-            //m_aProtocol.log("\tstream not seekable. throw IOException\n\tfailed\n}\n");
             throw new com.sun.star.io.IOException("stream not seekable");
         }
 
@@ -414,12 +365,11 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             nPos = m_xSeek.getPosition();
         }
-        catch (com.sun.star.io.IOException       exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"     ); throw exIO;
+        catch (com.sun.star.io.IOException       exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException exRuntime) {
         }
 
-        //m_aProtocol.log("\treturns pos="+nPos+"\n\tOK\n}\n");
         return nPos;
     }
 
@@ -427,11 +377,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
 
     public long getLength() throws com.sun.star.io.IOException
     {
-        //m_aProtocol.log("getLength()\n{\n");
-
         if (m_xSeek == null)
         {
-            //m_aProtocol.log("\tstream not seekable. throw IOException\n\tfailed\n}\n");
             throw new com.sun.star.io.IOException("stream not seekable");
         }
 
@@ -440,12 +387,11 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             nLen = m_xSeek.getLength();
         }
-        catch (com.sun.star.io.IOException       exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"     ); throw exIO;
+        catch (com.sun.star.io.IOException       exIO     ) {
         }
-        catch (com.sun.star.uno.RuntimeException exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"); throw exRuntime;
+        catch (com.sun.star.uno.RuntimeException exRuntime) {
         }
 
-        //m_aProtocol.log("\treturns len="+nLen+"\n\tOK\n}\n");
         return nLen;
     }
 }

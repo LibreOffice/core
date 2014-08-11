@@ -106,8 +106,6 @@ public class RegistryTypeDescriptionProvider extends TestCase {
             log.println("Service not available" );
         }
 
-        //oObj = (XInterface) oInterface;
-
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

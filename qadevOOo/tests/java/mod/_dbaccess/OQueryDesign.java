@@ -158,8 +158,6 @@ public class OQueryDesign extends TestCase {
         }
         UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
 
-//        Frame = xMod.getCurrentController().getFrame();
-
         xFrame = DesktopTools.getCurrentFrame(xMSF);
 
          SOfficeFactory SOF = null;
@@ -271,8 +269,6 @@ public class OQueryDesign extends TestCase {
         } catch (com.sun.star.container.NoSuchElementException e){
             throw new StatusException("Could not set controller", e) ;
         }
-
-        //xCont.attachFrame(xFrame);
 
         return UnoRuntime.queryInterface(XInitialization.class, oQueryDesign);
 

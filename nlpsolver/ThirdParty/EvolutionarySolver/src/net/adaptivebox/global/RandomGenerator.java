@@ -68,7 +68,6 @@ public static double doubleRangeRandom(double lowLimit,double upLimit){
     if(times<=0) return new int[0];
     int realTimes = Math.min(maxNum, times);
     boolean[] flags = new boolean[maxNum];
-//    Arrays.fill(flags, false);
     boolean isBelowHalf = times<maxNum*0.5;
     int virtualTimes = realTimes;
     if(!isBelowHalf) {

@@ -107,7 +107,6 @@ public class Tabular extends ReportBuilderLayouter
                 xGroup = UnoRuntime.queryInterface(XGroup.class, xGroups.getByIndex(lastGroupPostion));
 
                 // We don't need to copy the GroupProperties, because this is done in the insertGroup() member function
-                // copyGroupProperties(0);
                 aSO = getDesignTemplate().getGroupLabel(lastGroupPostion);
             }
 

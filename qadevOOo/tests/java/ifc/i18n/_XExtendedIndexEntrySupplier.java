@@ -163,19 +163,6 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
 
                 res &= localres;
             }
-
-/*            log.println("\tTrying to load 'dummy' algorithm");
-
-            boolean localres = !oObj.loadAlgorithm(locales[i], "dummy",
-                                                   CollatorOptions.CollatorOptions_IGNORE_WIDTH);
-
-            if (!localres) {
-                log.println("\t ... didn't work as expected - FAILED");
-            } else {
-                log.println("\t ... worked - OK");
-            }
-
-            res &= localres;*/
         }
 
         tRes.tested("loadAlgorithm()", res);

@@ -534,13 +534,5 @@ public class _XCalendar extends MultiMethodTest {
         tRes.tested("isValid()", res);
     }
 
-    /**
-    * Method returns locale for a given language and country.
-    * @param localeIndex index of needed locale.
-    */
-/*    public Locale getLocale(int localeIndex) {
-        return new Locale(languages[localeIndex], countries[localeIndex], "");
-    }*/
-
 }
 

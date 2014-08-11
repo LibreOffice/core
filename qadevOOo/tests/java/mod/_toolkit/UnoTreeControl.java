@@ -149,8 +149,6 @@ public class UnoTreeControl extends TestCase {
 
             aDialog.start();
 
-//            xDialog.execute();
-
         } catch (com.sun.star.uno.Exception ex) {
             ex.printStackTrace();
         }

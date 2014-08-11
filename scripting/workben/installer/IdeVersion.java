@@ -47,10 +47,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
 
 
     try {
-            //props = InstUtil.getNetbeansLocation();
-
         Properties netbeansProps = InstUtil.getNetbeansLocation();
-        //Properties jeditProps = InstUtil.getJeditLocation();
         Properties ideProps = new Properties();
         if(netbeansProps!=null )
         {
