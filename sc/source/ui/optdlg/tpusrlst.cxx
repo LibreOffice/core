@@ -263,7 +263,7 @@ void ScTpUserLists::UpdateEntries( size_t nList )
     if ( nList < pUserLists->size() )
     {
         const ScUserListData* pList = (*pUserLists)[nList];
-        sal_uInt16          nSubCount = pList->GetSubCount();
+        std::size_t nSubCount = pList->GetSubCount();
         OUString          aEntryListStr;
 
         for ( sal_uInt16 i=0; i<nSubCount; i++ )
