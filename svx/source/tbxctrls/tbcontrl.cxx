@@ -1027,18 +1027,27 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     theSlotId( nSlotId ),
     maWindowSize( 250, 350 ),
     maCommand( rCommand ),
-    mrPaletteManager( rPaletteManager )
+    mrPaletteManager( rPaletteManager ),
+    mnColorSetCols( 10 )
 
 {
     get(mpPaletteListBox,   "palette_listbox");
+    get(mpButtonAutoColor,  "auto_color_button");
     get(mpButtonPicker,     "color_picker_button");
     get(mpColorSet,         "colorset");
+    get(mpRecentColorSet,   "recent_colorset");
 
-    mpColorSet->SetStyle( WinBits(WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) );
-    mpColorSet->SetEdgeBlending( false );
+    mpColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT) );
+    mpRecentColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT) );
+
+    mpColorSet->SetColCount( mnColorSetCols );
+    mpColorSet->layoutAllVisible(mrPaletteManager.GetColorCount());
+    mpRecentColorSet->SetColCount( mnColorSetCols );
+    mpRecentColorSet->SetLineCount( 1 );
+    mpRecentColorSet->layoutAllVisible(mrPaletteManager.GetRecentColorCount());
+
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
     {
-        mpColorSet->SetStyle( mpColorSet->GetStyle() | WB_NONEFIELD );
         mpColorSet->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
         mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
     }
@@ -1053,7 +1062,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         SfxItemState eState = aQueryStatus.QueryState( pDummy );
         if( (SFX_ITEM_DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
         {
-            mpColorSet->SetStyle( mpColorSet->GetStyle() | WB_NONEFIELD );
             mpColorSet->SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
             mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ) );
         }
@@ -1077,9 +1085,11 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     }
     mpPaletteListBox->SelectEntryPos(mrPaletteManager.GetPalette(), true);
 
+    mpButtonAutoColor->SetClickHdl( LINK( this, SvxColorWindow_Impl, AutoColorClickHdl ) );
     mpButtonPicker->SetClickHdl( LINK( this, SvxColorWindow_Impl, OpenPickerClickHdl ) );
 
     mpColorSet->SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
+    mpRecentColorSet->SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectRecentHdl ) );
     SetHelpId( HID_POPUP_COLOR );
     mpColorSet->SetHelpId( HID_POPUP_COLOR_CTRL );
     SetText( rWndTitle );
@@ -1087,9 +1097,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     AddStatusListener( maCommand );
 
     mrPaletteManager.ReloadColorSet(*mpColorSet);
-    mpPaletteListBox->Show();
-    mpButtonPicker->Show();
-    mpColorSet->Show();
+    mrPaletteManager.ReloadRecentColorSet(*mpRecentColorSet);
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1129,6 +1137,28 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
         maSelectedLink.Call(&aColor);
 
     PaletteManager::DispatchColorCommand(maCommand, aColor);
+    mrPaletteManager.AddRecentColor(aColor);
+    return 0;
+}
+
+IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectRecentHdl)
+{
+    sal_uInt16 nItemId = mpRecentColorSet->GetSelectItemId();
+    Color aColor;
+    aColor = mpRecentColorSet->GetItemColor( nItemId );
+
+    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
+        This instance may be deleted in the meantime (i.e. when a dialog is opened
+        while in Dispatch()), accessing members will crash in this case. */
+    mpRecentColorSet->SetNoSelection();
+
+    if ( IsInPopupMode() )
+        EndPopupMode();
+
+    if ( maSelectedLink.IsSet() )
+        maSelectedLink.Call(&aColor);
+
+    PaletteManager::DispatchColorCommand(maCommand, aColor);
     return 0;
 }
 
@@ -1137,6 +1167,26 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
     sal_Int32 nPos = mpPaletteListBox->GetSelectEntryPos();
     mrPaletteManager.SetPalette( nPos );
     mrPaletteManager.ReloadColorSet(*mpColorSet);
+    return 0;
+}
+
+IMPL_LINK_NOARG(SvxColorWindow_Impl, AutoColorClickHdl)
+{
+    Color aColor;
+    if (SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId)
+        aColor = COL_TRANSPARENT;
+    else if (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId)
+        aColor = COL_AUTO;
+
+    mpRecentColorSet->SetNoSelection();
+
+    if ( IsInPopupMode() )
+        EndPopupMode();
+
+    if ( maSelectedLink.IsSet() )
+        maSelectedLink.Call(&aColor);
+
+    PaletteManager::DispatchColorCommand(maCommand, aColor);
     return 0;
 }
 
@@ -1151,6 +1201,7 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, OpenPickerClickHdl)
 void SvxColorWindow_Impl::Resize()
 {
     mpColorSet->SetSizePixel( this->GetOutputSizePixel() );
+    mpRecentColorSet->SetSizePixel( this->GetOutputSizePixel() );
     SetOutputSizePixel(maWindowSize);
 }
 
@@ -1171,6 +1222,10 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
         if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorListItem )))
         {
             mrPaletteManager.ReloadColorSet(*mpColorSet);
+            mrPaletteManager.ReloadRecentColorSet(*mpRecentColorSet);
+
+            mpColorSet->layoutAllVisible(mrPaletteManager.GetColorCount());
+            mpRecentColorSet->layoutAllVisible(mrPaletteManager.GetRecentColorCount());
         }
         else if ( SFX_ITEM_DEFAULT <= eState )
         {

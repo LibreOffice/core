@@ -43,16 +43,22 @@ class SvxColorWindow_Impl : public SfxPopupWindow
 private:
     const sal_uInt16    theSlotId;
     SvxColorValueSet*   mpColorSet;
+    SvxColorValueSet*   mpRecentColorSet;
     Size                maWindowSize;
     ListBox*            mpPaletteListBox;
+    PushButton*         mpButtonAutoColor;
     PushButton*         mpButtonPicker;
     OUString            maCommand;
     Link                maSelectedLink;
 
     PaletteManager&     mrPaletteManager;
 
+    const sal_uInt16    mnColorSetCols;
+
     DECL_LINK( SelectHdl, void * );
+    DECL_LINK( SelectRecentHdl, void * );
     DECL_LINK( SelectPaletteHdl, void *);
+    DECL_LINK( AutoColorClickHdl, void * );
     DECL_LINK( OpenPickerClickHdl, void * );
 
 protected:
