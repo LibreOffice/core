@@ -22,8 +22,10 @@ bool isOpenSymbolFont(const Font &rFont)
 bool isSymbolFont(const Font &rFont)
 {
     return (rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL) ||
+            rFont.GetName().equalsIgnoreAsciiCase("Apple Color Emoji") ||
             rFont.GetName().equalsIgnoreAsciiCase("cmsy10") ||
             rFont.GetName().equalsIgnoreAsciiCase("cmex10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("esint10") ||
             rFont.GetName().equalsIgnoreAsciiCase("feta26") ||
             rFont.GetName().equalsIgnoreAsciiCase("jsMath-cmsy10") ||
             rFont.GetName().equalsIgnoreAsciiCase("jsMath-cmex10") ||
@@ -38,6 +40,9 @@ bool isSymbolFont(const Font &rFont)
             rFont.GetName().equalsIgnoreAsciiCase("Letters Laughing") ||
             rFont.GetName().equalsIgnoreAsciiCase("MusiQwik") ||
             rFont.GetName().equalsIgnoreAsciiCase("MusiSync") ||
+            rFont.GetName().equalsIgnoreAsciiCase("stmary10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("Symbol") ||
+            rFont.GetName().startsWith("STIX") ||
             isOpenSymbolFont(rFont);
 }
 
@@ -49,6 +54,20 @@ bool canRenderNameOfSelectedFont(OutputDevice &rDevice)
 
 OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
 {
+    if (rDevice.GetFont().GetName() == "Symbol")
+    {
+        static const sal_Unicode aImplAppleSymbolText[] = {
+            0x03BC, 0x2202, 0x2211, 0x220F, 0x03C0, 0x222B, 0x03A9, 0x221A, 0};
+        OUString sSampleText(aImplAppleSymbolText);
+        bool bHasSampleTextGlyphs = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
+        //It's the Apple version
+        if (bHasSampleTextGlyphs)
+            return OUString(aImplAppleSymbolText);
+        static const sal_Unicode aImplAdobeSymbolText[] = {
+            0xF06D, 0xF0B6, 0xF0E5, 0xF0D5, 0xF070, 0xF0F2, 0xF057, 0xF0D6, 0};
+        return OUString(aImplAdobeSymbolText);
+    }
+
     const bool bOpenSymbol = isOpenSymbolFont(rDevice.GetFont());
 
     if (!bOpenSymbol)
@@ -62,11 +81,6 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
 
             // start just above the PUA used by most symbol fonts
             sal_uInt32 cNewChar = 0xFF00;
-#ifdef MACOSX
-            // on MacOSX there are too many non-presentable symbols above the codepoint 0x0192
-            if( !bOpenSymbol )
-                cNewChar = 0x0192;
-#endif
 
             const int nMaxCount = sizeof(aText)/sizeof(*aText) - 1;
             int nSkip = aFontCharMap.GetCharCount() / nMaxCount;
@@ -92,7 +106,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
     static const sal_Unicode aImplSymbolFontText[] = {
         0xF021,0xF032,0xF043,0xF054,0xF065,0xF076,0xF0B7,0xF0C8,0};
     static const sal_Unicode aImplStarSymbolText[] = {
-        0x2706,0x2704,0x270D,0xE033,0x2211,0x2288,0};
+        0x2702,0x2708,0x270D,0xE033,0x2211,0x2288,0};
     const sal_Unicode* pText = bOpenSymbol ? aImplStarSymbolText : aImplSymbolFontText;
     OUString sSampleText(pText);
     bool bHasSampleTextGlyphs = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
@@ -139,6 +153,15 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
                 0x0631, 0x0628, 0x064A, 0x0629
             };
             sSampleText = OUString(aArab, SAL_N_ELEMENTS(aArab));
+            break;
+        }
+        case USCRIPT_ARMENIAN:
+        {
+            const sal_Unicode aArmenian[] = {
+                0x0561, 0x0575, 0x0562, 0x0578, 0x0582, 0x0562, 0x0565,
+                0x0576
+            };
+            sSampleText = OUString(aArmenian, SAL_N_ELEMENTS(aArmenian));
             break;
         }
         case USCRIPT_DEVANAGARI:
@@ -504,6 +527,9 @@ OUString makeRepresentativeTextForLanguage(LanguageType eLang)
     OUString sRet;
     switch( eLang & LANGUAGE_MASK_PRIMARY )
     {
+        case LANGUAGE_ARMENIAN & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_ARMENIAN);
+            break;
         case LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_HAN);
             break;
