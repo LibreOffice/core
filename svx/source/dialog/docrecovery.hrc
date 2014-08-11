@@ -69,38 +69,6 @@
 #define RECOV_FILELISTHEIGHT        (RECOV_ROW7-RECOV_ROW6)
 #define RECOV_CONTROLWIDTH          (SAVE_COL2-SAVE_COL0)
 
-// TabPage Broken Recovery
-
-#define FT_BROKEN_DESCR             1
-#define FT_BROKEN_FILELIST          2
-#define LB_BROKEN_FILELIST          3
-#define FT_BROKEN_SAVEDIR           4
-#define ED_BROKEN_SAVEDIR           5
-#define BTN_BROKEN_SAVEDIR          6
-#define FL_BROKEN_BOTTOM            7
-#define BTN_BROKEN_OK               8
-#define BTN_BROKEN_CANCEL           9
-
-#define BROKEN_WIDTH                210
-#define BROKEN_HEIGHT               160
-#define BROKEN_COL0                 (RSC_SP_DLG_INNERBORDER_LEFT)
-#define BROKEN_COL4                 (BROKEN_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define BROKEN_COL3                 (BROKEN_COL4-RSC_CD_PUSHBUTTON_WIDTH)
-#define BROKEN_COL2                 (BROKEN_COL3-RSC_SP_CTRL_GROUP_X)
-#define BROKEN_COL1                 (BROKEN_COL2-RSC_CD_PUSHBUTTON_WIDTH)
-
-#define BROKEN_ROW0                 (RSC_SP_DLG_INNERBORDER_TOP)
-#define BROKEN_ROW1                 (BROKEN_ROW0+5*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
-#define BROKEN_ROW2                 (BROKEN_ROW1+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
-#define BROKEN_ROW8                 (BROKEN_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
-#define BROKEN_ROW7                 (BROKEN_ROW8-RSC_CD_PUSHBUTTON_HEIGHT)
-#define BROKEN_ROW6                 (BROKEN_ROW7-RSC_SP_FLGR_INNERBORDER_BOTTOM-RSC_CD_FIXEDLINE_HEIGHT)
-#define BROKEN_ROW5                 (BROKEN_ROW6-RSC_SP_FLGR_INNERBORDER_TOP-RSC_CD_PUSHBUTTON_HEIGHT)
-#define BROKEN_ROW4                 (BROKEN_ROW5-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDTEXT_HEIGHT)
-#define BROKEN_ROW3                 (BROKEN_ROW4-RSC_SP_CTRL_GROUP_Y)
-
-#define BROKEN_CONTROLWIDTH         (BROKEN_COL4-BROKEN_COL0)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
