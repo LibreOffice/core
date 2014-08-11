@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_defs,sal,\
 # need the "ure-link" symlink to exist in INSTDIR so it's possible to link sal
 # FIXME: this creates cyclic dependency between ure and sal modules
 $(eval $(call gb_Library_use_package,sal,ure_install))
+$(eval $(call gb_Library_use_package,sal,ure_builddir_install))
 
 $(eval $(call gb_Library_use_libraries,sal,\
 	$(if $(filter $(OS),ANDROID), \
