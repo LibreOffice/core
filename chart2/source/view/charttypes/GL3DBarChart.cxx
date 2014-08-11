@@ -495,8 +495,7 @@ GL3DBarChart::GL3DBarChart(
     Size aSize;
     if (mpWindow)
     {
-        mpWindow->setRenderer(this);
-        Size aSize = mpWindow->GetSizePixel();
+        aSize = mpWindow->GetSizePixel();
     }
     mpRenderer->SetSize(aSize);
     mpWindow->setRenderer(this);
