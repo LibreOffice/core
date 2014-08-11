@@ -28,7 +28,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mariadb,1))
 # non-static inline local_thr_alarm in libmariadb/net.c":
 $(eval $(call gb_UnpackedTarball_add_patches,mariadb,\
     external/libmariadb/mariadb-swap.patch \
-    external/libmariadb/mariadb-trunk-101.patch \
     external/libmariadb/mariadb-msvc.patch.1 \
 ))
 
