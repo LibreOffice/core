@@ -54,7 +54,12 @@ class LibreOfficeAction
     : public PluginASTAction
     {
     public:
+#if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ > 3
+        virtual std::unique_ptr<ASTConsumer> CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile );
+#else
         virtual ASTConsumer* CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile );
+#endif
+
         virtual bool ParseArgs( const CompilerInstance& CI, const vector< string >& args );
     private:
         vector< string > _args;
