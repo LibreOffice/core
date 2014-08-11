@@ -8244,12 +8244,11 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     if test "$with_system_mariadb" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_MARIADB=TRUE
-        #AC_PATH_PROG(MARIADBCONFIG, [mariadb_config])
+        AC_PATH_PROG(MARIADBCONFIG, [mariadb_config])
         if test -z "$MARIADBCONFIG"; then
             AC_PATH_PROG(MARIADBCONFIG, [mysql_config])
             if test -z "$MARIADBCONFIG"; then
-                #AC_MSG_ERROR([mariadb_config and mysql_config are missing. Install MariaDB or MySQL package.])
-                AC_MSG_ERROR([mysql_config is missing. Install MySQL client library development package.])
+                AC_MSG_ERROR([mariadb_config and mysql_config are missing. Install MariaDB or MySQL development package.])
             fi
         fi
         AC_MSG_CHECKING([MariaDB version])
@@ -8302,7 +8301,6 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         fi
     else
         AC_MSG_RESULT([internal])
-        AC_MSG_ERROR([libmariadb is known to be broken as of 2013-10; use libmysqlclient])
         SYSTEM_MARIADB=
         MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb/include"
         MARIADB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lmariadblib"
