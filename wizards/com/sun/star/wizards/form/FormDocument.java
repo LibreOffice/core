@@ -439,19 +439,6 @@ public class FormDocument extends TextDocument
             return aFormSize;
         }
 
-        private Size getAvailableFormSize()
-        {
-            if (this.Name.equals(SOMAINFORM))
-            {
-                setFormSize(getMainFormSize(curArrangement));
-            }
-            else
-            {
-                setFormSize(getSubFormSize());
-            }
-            return aFormSize;
-        }
-
         public void setFormSize(Size _aSize)
         {
             aFormSize = _aSize;
