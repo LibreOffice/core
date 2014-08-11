@@ -26,7 +26,6 @@
 #include "ado_post_sys_include.h"
 
 struct ADOConnection;
-enum DataTypeEnum;
 namespace connectivity
 {
     namespace ado
