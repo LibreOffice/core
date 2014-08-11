@@ -284,10 +284,6 @@ public:
      */
     float mnGLVersion;
 
-#ifdef UNX
-    float mnGLXVersion;
-#endif
-
     /**
        Whether the display has GLX extension on X11, always true otherwise (?)
      */
@@ -448,7 +444,7 @@ void OGLTransitionerImpl::impl_prepareSlides()
 
 #if defined( GLX_EXT_texture_from_pixmap )
 
-    if( mnGLXVersion >= 1.2999 && mbTextureFromPixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
+    if( mbTextureFromPixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
         Sequence< Any > leaveArgs;
         Sequence< Any > enterArgs;
         if( (xLeavingSet->getFastPropertyValue( 1 ) >>= leaveArgs) &&
@@ -1358,9 +1354,6 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , maSlideSize()
     , mbBrokenTexturesATI(false)
     , mnGLVersion(0)
-#ifdef UNX
-    , mnGLXVersion(0.0)
-#endif
     , mbGLXPresent(false)
     , mbMesa(false)
     , mbTextureFromPixmap(false)
