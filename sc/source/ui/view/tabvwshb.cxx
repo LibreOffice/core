@@ -244,11 +244,6 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
     return nErr;
 }
 
-void ScTabViewShell::Initialize()
-{
-    AddOpenGLChartWindows();
-}
-
 void ScTabViewShell::DeactivateOle()
 {
     // deactivate inplace editing if currently active

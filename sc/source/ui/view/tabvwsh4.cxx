@@ -571,39 +571,6 @@ bool isGL3DDiagram( const css::uno::Reference<css::chart2::XDiagram>& xDiagram )
 
 }
 
-void ScTabViewShell::AddOpenGLChartWindows()
-{
-    ScDocument* pDoc = GetViewData().GetDocument();
-    ScGridWindow* pParentWindow = GetActiveWin();
-
-    std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> > aCharts = pDoc->GetAllCharts();
-
-    for(std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> >::iterator itr = aCharts.begin(),
-            itrEnd = aCharts.end(); itr != itrEnd; ++itr)
-    {
-        if(!itr->first.is())
-            return;
-        OpenGLWindow* pOpenGLWindow = new OpenGLWindow(pParentWindow);
-
-        pOpenGLWindow->Show(false);
-        Size aSize = itr->second.GetSize();
-        Size aWindowSize = pOpenGLWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
-
-        pOpenGLWindow->SetSizePixel(aWindowSize);
-        Point aPos = itr->second.TopLeft();
-        pOpenGLWindow->SetPosPixel(pOpenGLWindow->LogicToPixel(aPos, MapMode(MAP_100TH_MM)));
-        pParentWindow->AddChildWindow(pOpenGLWindow);
-        uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider( itr->first, uno::UNO_QUERY_THROW );
-        sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(pOpenGLWindow);
-        x3DWindowProvider->setWindow(nWindowPtr);
-
-        if(isGL3DDiagram(itr->first->getFirstDiagram()))
-        {
-            x3DWindowProvider->update();
-        }
-    }
-}
-
 // DoReadUserData is also called from ctor when switching from print preview
 
 void ScTabViewShell::DoReadUserData( const OUString& rData )
