@@ -1468,6 +1468,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         SdrTextObj *pNextTextObj = GetNextLinkInChain();
         assert (pNextTextObj);
         impCopyTextInTextObj(pNextTextObj); // XXX: it actually moves the overflowing text currently
+        // Chaining occurred. Let's reset the status
+        const_cast<SdrTextObj*>(this)->SetToBeChained( false );
 
         //pNextTextObj->SetOutlinerParaObject( mpOverflowingText );
         //SdrOutliner rOutl = pNextTextObj->ImpGetDrawOutliner();
