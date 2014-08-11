@@ -1200,31 +1200,26 @@ OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
 BrokenRecoveryDialog::BrokenRecoveryDialog(Window*       pParent        ,
                                            RecoveryCore* pCore          ,
                                            bool      bBeforeRecovery)
-    : ModalDialog   ( pParent, SVX_RES( RID_SVX_MDLG_DOCRECOVERY_BROKEN ) )
-    , m_aDescrFT    ( this   , SVX_RES( FT_BROKEN_DESCR                   ) )
-    , m_aFileListFT ( this   , SVX_RES( FT_BROKEN_FILELIST                ) )
-    , m_aFileListLB ( this   , SVX_RES( LB_BROKEN_FILELIST                ) )
-    , m_aSaveDirFT  ( this   , SVX_RES( FT_BROKEN_SAVEDIR                 ) )
-    , m_aSaveDirED  ( this   , SVX_RES( ED_BROKEN_SAVEDIR                 ) )
-    , m_aSaveDirBtn ( this   , SVX_RES( BTN_BROKEN_SAVEDIR                ) )
-    , m_aBottomFL   ( this   , SVX_RES( FL_BROKEN_BOTTOM                  ) )
-    , m_aOkBtn      ( this   , SVX_RES( BTN_BROKEN_OK                     ) )
-    , m_aCancelBtn  ( this   , SVX_RES( BTN_BROKEN_CANCEL                 ) )
+    : ModalDialog   ( pParent, "DocRecoveryBrokenDialog", "svx/ui/docrecoverybrokendialog.ui" )
     , m_pCore       ( pCore                                               )
     , m_bBeforeRecovery (bBeforeRecovery)
     , m_bExecutionNeeded(false)
 {
-    FreeResource();
+    get(m_pFileListLB, "filelist");
+    get(m_pSaveDirED, "savedir");
+    get(m_pSaveDirBtn, "change");
+    get(m_pOkBtn, "save");
+    get(m_pCancelBtn, "cancel");
 
-    m_aSaveDirBtn.SetClickHdl( LINK( this, BrokenRecoveryDialog, SaveButtonHdl ) );
-    m_aOkBtn.SetClickHdl( LINK( this, BrokenRecoveryDialog, OkButtonHdl ) );
-    m_aCancelBtn.SetClickHdl( LINK( this, BrokenRecoveryDialog, CancelButtonHdl ) );
+    m_pSaveDirBtn->SetClickHdl( LINK( this, BrokenRecoveryDialog, SaveButtonHdl ) );
+    m_pOkBtn->SetClickHdl( LINK( this, BrokenRecoveryDialog, OkButtonHdl ) );
+    m_pCancelBtn->SetClickHdl( LINK( this, BrokenRecoveryDialog, CancelButtonHdl ) );
 
     m_sSavePath = SvtPathOptions().GetWorkPath();
     INetURLObject aObj( m_sSavePath );
     OUString sPath;
     ::utl::LocalFileHelper::ConvertURLToSystemPath( aObj.GetMainURL( INetURLObject::NO_DECODE ), sPath );
-    m_aSaveDirED.SetText( sPath );
+    m_pSaveDirED->SetText( sPath );
 
     impl_refresh();
 }
@@ -1263,11 +1258,11 @@ void BrokenRecoveryDialog::impl_refresh()
 
         m_bExecutionNeeded = true;
 
-        sal_uInt16 nPos = m_aFileListLB.InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
-        m_aFileListLB.SetEntryData( nPos, (void*)&rInfo );
+        sal_uInt16 nPos = m_pFileListLB->InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
+        m_pFileListLB->SetEntryData( nPos, (void*)&rInfo );
     }
     m_sSavePath = "";
-    m_aOkBtn.GrabFocus();
+    m_pOkBtn->GrabFocus();
 }
 
 
@@ -1285,7 +1280,7 @@ OUString BrokenRecoveryDialog::getSaveDirURL()
 
 IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
 {
-    OUString sPhysicalPath = comphelper::string::strip(m_aSaveDirED.GetText(), ' ');
+    OUString sPhysicalPath = comphelper::string::strip(m_pSaveDirED->GetText(), ' ');
     OUString sURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPhysicalPath, sURL );
     m_sSavePath = sURL;
@@ -1324,7 +1319,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         m_sSavePath = xFolderPicker->getDirectory();
         OUString sPath;
         ::utl::LocalFileHelper::ConvertURLToSystemPath( m_sSavePath, sPath );
-        m_aSaveDirED.SetText( sPath );
+        m_pSaveDirED->SetText( sPath );
     }
 }
 
