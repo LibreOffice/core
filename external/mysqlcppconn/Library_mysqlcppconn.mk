@@ -63,6 +63,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mysqlcppconn,\
 	UnpackedTarball/mysqlcppconn/driver/mysql_resultset \
 	UnpackedTarball/mysqlcppconn/driver/mysql_resultset_metadata \
 	UnpackedTarball/mysqlcppconn/driver/mysql_statement \
+	UnpackedTarball/mysqlcppconn/driver/mysql_uri \
 	UnpackedTarball/mysqlcppconn/driver/mysql_util \
 	UnpackedTarball/mysqlcppconn/driver/mysql_warning \
 	UnpackedTarball/mysqlcppconn/driver/nativeapi/mysql_client_api \
@@ -72,5 +73,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,mysqlcppconn,\
 	UnpackedTarball/mysqlcppconn/driver/nativeapi/mysql_native_resultset_wrapper \
 	UnpackedTarball/mysqlcppconn/driver/nativeapi/mysql_native_statement_wrapper \
 ))
+
+$(WORKDIR)/GenCxxObject/UnpackedTarball/mysqlcppconn/driver/mysql_metadata.o $(WORKDIR)/GenCxxObject/UnpackedTarball/mysqlcppconn/driver/mysql_driver.o: mysqlcppconn_configure
+
+mysqlcppconn_configure: $(call gb_UnpackedTarball_get_target,mysqlcppconn)
+	cd ../../workdir/GenCxxObject/UnpackedTarball/mysqlcppconn && cmake ../../../UnpackedTarball/mysqlcppconn/
+
+.PHONY: mysqlcppconn_configure
 
 # vim: set noet sw=4 ts=4:
