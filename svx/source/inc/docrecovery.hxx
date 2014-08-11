@@ -558,15 +558,11 @@ class BrokenRecoveryDialog : public ModalDialog
 
     // member
     private:
-        FixedText       m_aDescrFT;
-        FixedText       m_aFileListFT;
-        ListBox         m_aFileListLB;
-        FixedText       m_aSaveDirFT;
-        Edit            m_aSaveDirED;
-        PushButton      m_aSaveDirBtn;
-        FixedLine       m_aBottomFL;
-        OKButton        m_aOkBtn;
-        CancelButton    m_aCancelBtn;
+        ListBox         *m_pFileListLB;
+        Edit            *m_pSaveDirED;
+        PushButton      *m_pSaveDirBtn;
+        PushButton        *m_pOkBtn;
+        CancelButton    *m_pCancelBtn;
 
         OUString m_sSavePath;
         RecoveryCore*   m_pCore;
