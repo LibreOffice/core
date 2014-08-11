@@ -273,8 +273,6 @@ static bool findSignatureAtOffset(StreamInterface *stream, unsigned long nOffset
     stream->sseek(nOffset, SEEK_SET);
 
     unsigned long nBytesRead = stream->sread(aBuffer, sizeof(aBuffer));
-    if (nBytesRead < 0)
-        return false;
 
     for (long n = nBytesRead - 4; n >= 0; n--)
     {
