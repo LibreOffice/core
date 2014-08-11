@@ -405,9 +405,9 @@ inline sal_uInt16 SwHTMLTableLayout::GetInhCellSpace( sal_uInt16 nCol,
 {
     sal_uInt16 nSpace = 0;
     if( nCol==0 )
-        nSpace = nSpace + sal::static_int_cast< sal_uInt16 >(nInhAbsLeftSpace);
+        nSpace = nSpace + nInhAbsLeftSpace;
     if( nCol+nColSpan==nCols )
-        nSpace = nSpace + sal::static_int_cast< sal_uInt16 >(nInhAbsRightSpace);
+        nSpace = nSpace + nInhAbsRightSpace;
 
     return nSpace;
 }
