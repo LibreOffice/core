@@ -90,6 +90,9 @@ namespace oglcanvas
         mnRectangularMultiColorGradientProgram(0)
     {}
 
+    SpriteDeviceHelper::~SpriteDeviceHelper()
+    {}
+
     void SpriteDeviceHelper::init( Window&               rWindow,
                                    SpriteCanvas&         rSpriteCanvas,
                                    const awt::Rectangle& rViewArea )

@@ -44,6 +44,7 @@ $(eval $(call gb_Library_add_exception_objects,oglcanvas,\
 $(eval $(call gb_Library_use_externals,oglcanvas,\
 	boost_headers \
 	glew \
+	mesa_headers \
 ))
 
 ifeq ($(strip $(OS)),MACOSX)

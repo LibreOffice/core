@@ -80,7 +80,7 @@ namespace oglcanvas
         maArguments.realloc(0);
     }
 
-    void SAL_CALL SpriteCanvas::disposeThis()
+    void SpriteCanvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

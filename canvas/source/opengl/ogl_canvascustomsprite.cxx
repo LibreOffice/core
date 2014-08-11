@@ -50,7 +50,7 @@ namespace oglcanvas
                              rDeviceHelper );
     }
 
-    void SAL_CALL CanvasCustomSprite::disposeThis()
+    void CanvasCustomSprite::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

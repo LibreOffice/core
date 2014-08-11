@@ -41,6 +41,7 @@ namespace oglcanvas
     {
     public:
         SpriteDeviceHelper();
+        ~SpriteDeviceHelper();
 
         void init( Window&                                 rWindow,
                    SpriteCanvas&                           rSpriteCanvas,

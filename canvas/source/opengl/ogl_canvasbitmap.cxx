@@ -38,7 +38,7 @@ namespace oglcanvas
         maCanvasHelper = rSrc.maCanvasHelper;
     }
 
-    void SAL_CALL CanvasBitmap::disposeThis()
+    void CanvasBitmap::disposeThis()
     {
         mpDevice.clear();
 
