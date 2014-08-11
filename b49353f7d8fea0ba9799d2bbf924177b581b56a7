@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad32947_9602ac6e",
+        "filename": "l10ntools/source/export.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-11T08:49:32Z",
+      "side": 1,
+      "message": "why add the aOutput.mSimple and aOutput.mPo checks here?  the invariant established by the Export ctors clearly is that aOutput.mSimple !\u003d 0 iff bMergeMode and aOutput.mPo !\u003d 0 iff !bMergeMode",
+      "revId": "b49353f7d8fea0ba9799d2bbf924177b581b56a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
