@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad32947_b6e6c8e6",
+        "filename": "javaunohelper/test/com/sun/star/comp/helper/Bootstrap_Test.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-11T08:13:42Z",
+      "side": 1,
+      "message": "is this change sound?  the original code happily accepted arguments that contained more than one \u003d (but on the other hand rejected arguments where the \u003d is at index 0)",
+      "revId": "aa0e3701aad1a8a955773e869d9a6b59eac51e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
