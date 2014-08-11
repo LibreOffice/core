@@ -342,20 +342,18 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
 
     bIsInPaint = true;
 
-    Rectangle aPixRect = LogicToPixel( rRect, maPaintMapMode );
-
     SCCOL nX1 = pViewData->GetPosX(eHWhich);
     SCROW nY1 = pViewData->GetPosY(eVWhich);
 
     SCTAB nTab = pViewData->GetTabNo();
 
-    Rectangle aMirroredPixel = aPixRect;
+    Rectangle aMirroredPixel = rRect;
     if ( pDoc->IsLayoutRTL( nTab ) )
     {
         //  mirror and swap
         long nWidth = GetSizePixel().Width();
-        aMirroredPixel.Left()  = nWidth - 1 - aPixRect.Right();
-        aMirroredPixel.Right() = nWidth - 1 - aPixRect.Left();
+        aMirroredPixel.Left()  = nWidth - 1 - rRect.Right();
+        aMirroredPixel.Right() = nWidth - 1 - rRect.Left();
     }
 
     long nScrX = LogicToPixel( Point( pDoc->GetColWidth( nX1, nTab ), 0 ), maPaintMapMode ).getX();/*ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );*/
@@ -372,13 +370,13 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
     }
 
     long nScrY = 0;
-    while ( nScrY < aPixRect.Top() && nY1 < MAXROW )
+    while ( nScrY < rRect.Top() && nY1 < MAXROW )
     {
         ++nY1;
         nScrY += LogicToPixel( Point( 0, pDoc->GetRowHeight( nY1, nTab ) ), maPaintMapMode ).getY();
     }
     SCROW nY2 = nY1;
-    while ( nScrY <= aPixRect.Bottom() && nY2 < MAXROW )
+    while ( nScrY <= rRect.Bottom() && nY2 < MAXROW )
     {
         ++nY2;
         nScrY += LogicToPixel( Point( 0, pDoc->GetRowHeight( nY2, nTab ) ), maPaintMapMode ).getY();
