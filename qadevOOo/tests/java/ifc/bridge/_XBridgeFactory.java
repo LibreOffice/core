@@ -133,7 +133,7 @@ public class _XBridgeFactory extends MultiMethodTest {
 
     /**
     * First creates connection with StarOffice process, using environment
-    * property <code>'CNCSTR'</code>. Then cerates bridge with unique name
+    * property <code>'CONNECTION_STRING'</code>. Then create bridge with unique name
     * using protocol specified in environment as <code>'PROTOCOL'</code>
     * property. After that bridge is disposed. <p>
     * Has <b>OK</b> status if value returned is not null

@@ -163,8 +163,6 @@ public class TestParameters extends HashMap<String,Object> {
         put(PropertyName.OPERATING_SYSTEM, getSOCompatibleOSName());
 
         //For compatibility Reasons
-        put("CNCSTR", DefaultConnectionString);
-        put("DOCPTH", DefaultTestDocumentPath);
         System.setProperty("DOCPTH", DefaultTestDocumentPath);
     }
 

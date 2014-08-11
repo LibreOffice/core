@@ -38,8 +38,8 @@ public class ScriptInfo extends TestCase {
     @Override
     public void initialize( TestParameters tParam, PrintWriter log ) {
         // Get path to test documents
-        String rootDocPath = ( String )tParam.get( "DOCPTH" );
-        System.out.println( "DOCPTH is " + rootDocPath );
+        String rootDocPath = ( String )tParam.get( "TEST_DOCUMENT_PATH" );
+        System.out.println( "TEST_DOCUMENT_PATH is " + rootDocPath );
         rootDocPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
         if ( rootDocPath != null && rootDocPath.length() > 1 ){
             // convert all "\\" to "/", necessary for UCB

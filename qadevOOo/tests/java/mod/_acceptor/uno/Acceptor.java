@@ -45,11 +45,11 @@ public class Acceptor extends TestCase {
 
     /**
     * Retrieves host name where StarOffice is started from test
-    * parameter <code>'CNCSTR'</code>.
+    * parameter <code>'CONNECTION_STRING'</code>.
     */
     @Override
     public void initialize( TestParameters tParam, PrintWriter log ) {
-        String cncstr = (String) tParam.get("CNCSTR") ;
+        String cncstr = (String) tParam.get("CONNECTION_STRING") ;
         int idx = cncstr.indexOf("host=") + 5 ;
         sOfficeHost = cncstr.substring(idx, cncstr.indexOf(",", idx)) ;
     }

@@ -182,7 +182,7 @@ public class various extends TestCase {
             // creating arguments for XInitialization
             // first, creating a connection
             // connection string
-            String cncstr = (String) tParam.get("CNCSTR") ;
+            String cncstr = (String) tParam.get("CONNECTION_STRING") ;
             int idx = cncstr.indexOf("host=") + 5 ;
 
             // select the port

@@ -129,14 +129,14 @@ public class _XUnoUrlResolver extends MultiMethodTest {
     }
     /**
     * Test calls the method using environment property
-    * <code>'CNCSTR'</code>. <p>
+    * <code>'CONNECTION_STRING'</code>. <p>
     * Has <b> OK </b> status if the method successfully returns
     * object that support interface <code>XMultiServiceFactory</code> and
     * no exceptions were thrown. <p>
     * @see com.sun.star.lang.XMultiServiceFactory
     */
     public void _resolve() {
-        String connectStr = (String)tParam.get("CNCSTR");
+        String connectStr = (String)tParam.get("CONNECTION_STRING");
         int pIndex = connectStr.indexOf("port=") + 5;
         connectStr = connectStr.substring(0, pIndex);
         System.out.println("ConnectString: " + connectStr);
