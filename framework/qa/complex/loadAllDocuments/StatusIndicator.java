@@ -31,20 +31,6 @@ package complex.loadAllDocuments;
 public class StatusIndicator implements com.sun.star.task.XStatusIndicator
 {
 
-
-    /**
-     * @const SHOWSTATUS_NO         don't show the status - but save information about using of this indicator object
-     * @const SHOWSTATUS_LOG        the possible set protocol object will be used (it covers STDOUT, STDERR automatically too)
-     * @const SHOWSTATUS_DIALOG     the status will be shown inside a java dialog
-     * @const SHOWSTATUS_LINK       the status will be notified to interested listener (one listener only!)
-     */
-    public static final int SHOWSTATUS_NO       =   0;
-    public static final int SHOWSTATUS_LOG      =   1;
-    public static final int SHOWSTATUS_DIALOG   =   4;
-    public static final int SHOWSTATUS_LINK     =   8;
-
-
-
     private boolean         m_bWasUsed  ;
 
 

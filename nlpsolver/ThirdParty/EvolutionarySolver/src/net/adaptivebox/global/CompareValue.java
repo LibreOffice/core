@@ -16,5 +16,4 @@ public class CompareValue {
   public static final int LARGER_THAN = 2;
   public static final int EQUAL_TO = 1;
   public static final int LESS_THAN = 0;
-  public static final int INVALID = -1;
 }

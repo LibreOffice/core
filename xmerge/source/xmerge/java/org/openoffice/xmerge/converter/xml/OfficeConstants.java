@@ -72,42 +72,6 @@ public interface OfficeConstants {
     /** Element tag for <i>office:settings</i>. */
     public final static String TAG_OFFICE_SETTINGS = "office:settings";
 
- //Adding
-
-    /** Element tag for <i>text:variable-set</i>. */
-    public final static String TAG_TEXT_VARIABLE_SET = "text:variable-set";
-
-  /** Element tag for <i>text:variable-get</i>. */
-    public final static String TAG_TEXT_VARIABLE_GET = "text:variable-get";
-/** Element tag for <i>text:expression</i>. */
-    public final static String TAG_TEXT_EXPRESSION = "text:expression";
-
-
-
-/** Element tag for <i>text:page-variable-get</i>. */
-    public final static String TAG_TEXT_PAGE_VARIABLE_GET = "text:page-variable-get";
-/** Element tag for <i>text:sequence</i>. */
-    public final static String TAG_TEXT_SEQUENCE = "text:sequence";
-
-     /** Element tag for <i>text:text-input</i>. */
-    public final static String TAG_TEXT_VARIABLE_INPUT = "text:variable-input";
-     /** Element tag for <i>text:time</i>. */
-     public final static String TAG_TEXT_TIME = "text:time";
-
-
-
-
-    /** Element tag for <i>text:subject</i>. */
-     public final static String TAG_TEXT_SUBJECT = "text:subject";
-
-
-
-
-
-
-
-//end adding
-
     /** Element tag for <i>office:font-decls</i>. */
     public final static String TAG_OFFICE_FONT_DECLS = "office:font-decls";
 
@@ -138,9 +102,6 @@ public interface OfficeConstants {
     /** Element tag for <i>text:p</i>. */
     public final static String TAG_PARAGRAPH = "text:p";
 
-    /** Element tag for <i>text:</i>. */
-    public final static String TAG_TEXT = "text:";
-
     /** Element tag for <i>text:h</i>. */
     public final static String TAG_HEADING = "text:h";
 
@@ -159,12 +120,6 @@ public interface OfficeConstants {
     /** Element tag for <i>text:a</i>. */
     public final static String TAG_HYPERLINK = "text:a";
 
-    /** Element tag for <i>text:bookmark</i>. */
-    public final static String TAG_BOOKMARK = "text:bookmark";
-
-    /** Element tag for <i>text:bookmark-start</i>. */
-    public final static String TAG_BOOKMARK_START = "text:bookmark-start";
-
     /** Element tag for <i>text:unordered-list</i>. */
     public final static String TAG_UNORDERED_LIST = "text:unordered-list";
 
@@ -179,12 +134,6 @@ public interface OfficeConstants {
 
     /** Attribute tag for <i>text:c</i> of element <i>text:s</i>. */
     public final static String ATTRIBUTE_SPACE_COUNT = "text:c";
-
-    /**
-     * Attribute tag for <i>text:style-name</i> of element
-     *  <i>text:style-name</i>.
-     */
-    public final static String ATTRIBUTE_TEXT_STYLE_NAME = "text:style-name";
 
     /** Element tag for <i>table:table</i>. */
     public final static String TAG_TABLE = "table:table";
@@ -391,26 +340,7 @@ public interface OfficeConstants {
     /** StarWriter XML MIME type. */
     public final static String SXW_MIME_TYPE = "application/vnd.sun.xml.writer";
 
-    /** StarWriter XML Template MIME type. */
-    public final static String STW_MIME_TYPE = "application/vnd.sun.xml.writer.template";
-
     /** StarCalc XML MIME type. */
     public final static String SXC_MIME_TYPE = "application/vnd.sun.xml.calc";
-
-    /** StarCalc XML Template MIME type. */
-    public final static String STC_MIME_TYPE = "application/vnd.sun.xml.calc.template";
-
-    /** StarImpress XML MIME type. */
-    public final static String SXI_MIME_TYPE = "application/vnd.sun.xml.impress";
-
-    /** StarImpress XML Template MIME type. */
-    public final static String STI_MIME_TYPE = "application/vnd.sun.xml.impress.template";
-
-    /** StarDraw XML MIME type. */
-    public final static String SXD_MIME_TYPE = "application/vnd.sun.xml.draw";
-
-    /** StarMath XML MIME type. */
-    public final static String SXM_MIME_TYPE = "application/vnd.sun.xml.math";
-
 
 }

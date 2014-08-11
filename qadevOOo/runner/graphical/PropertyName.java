@@ -33,13 +33,6 @@ public interface PropertyName
     final public static String DOC_COMPARATOR_HTML_OUTPUT_PREFIX =         "DOC_COMPARATOR_HTML_OUTPUT_PREFIX";
 
 
-    final public static String DOC_CONVERTER_EXPORT_FILTER_NAME =          "DOC_CONVERTER_EXPORT_FILTER_NAME";
-
-
-
-
-
-
     final public static String OFFICE_VIEWABLE =                           "OFFICE_VIEWABLE";
 
     final public static String NO_SMALL_PICTURES = "NoSmallPictures";
