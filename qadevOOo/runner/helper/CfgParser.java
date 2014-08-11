@@ -46,7 +46,7 @@ public class CfgParser
 
     public void getIniParameters(TestParameters param)
     {
-        debug = param.DebugIsActive;
+        debug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
         Properties cfg = null;
         if (iniFile.equals(""))
         {
@@ -94,7 +94,7 @@ public class CfgParser
             }
         }
 
-        debug = param.DebugIsActive;
+        debug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
 
         //check for platform dependent parameters
         //this would have a $OperatingSystem as prefix

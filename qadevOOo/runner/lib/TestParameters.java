@@ -38,72 +38,12 @@ public class TestParameters extends HashMap<String,Object> {
      * The ConnectionString for Office Connection<br>
      * default is 'socket,host=localhost,port=8100'
      */
-    public String ConnectionString = "socket,host=localhost,port=8100";
-
-    /**
-     * The AppProvider contains the Application Provider<br>
-     * to control the ServiceFactory.
-     */
-    public Object AppProvider = null;
-
-    /**
-     * The Process contains the Process handler<br>
-     * to control the Application.
-     */
-    public Object ProcessHandler = null;
-
-    /**
-     * The AppExecutionCmd contains the full qualified<br>
-     * command to an Application to be started.
-     */
-    public String AppExecutionCommand = "";
-
-    /**
-     * If this parameter is <CODE>true</CODE> the <CODE>OfficeProvider</CODE> tries
-     * to get the URL to the binary of the office and to fill the
-     * <CODE>AppExecutionCommand</CODE> with useful content if needet
-     */
-    public boolean AutoRestart = false;
-
-    /**
-     * Short wait time for the Office: default is 500 milliseconds
-     */
-    public int ShortWait = 500;
-
-    /**
-     * The OfficeProvider contains the full qualified
-     * class that provides a connection to StarOffice<br>
-     * default is helper.OfficeProvider
-     */
-    public String OfficeProvider = "helper.OfficeProvider";
-
-    /**
-     * The Testbase to be executed by the runner<br>
-     * default is 'java_fat'
-     */
-    public String TestBase = "java_fat";
-
-    /**
-     * The ServiceFactory to create instances
-     */
-    public Object ServiceFactory;
-
-    /**
-     * The Path to the component description
-     */
-    public String DescriptionPath;
+    private static final String DefaultConnectionString = "socket,host=localhost,port=8100";
 
     /**
      * The Path to the test documents that are loaded during the test <br>
      */
-    public String TestDocumentPath="unknown";
-
-    /**
-     * 'true' is a log should be written, 'false' elsewhere <br>
-     * these will be provided by the testcases<br>
-     * default is true
-     */
-    public boolean LoggingIsActive = true;
+    private static final String DefaultTestDocumentPath = "unknown";
 
     /**
      * 'true' is a debug information should be written, 'false' elsewhere
@@ -111,43 +51,7 @@ public class TestParameters extends HashMap<String,Object> {
      * Debug information will always be written on standard out.<br>
      * default is true
      */
-    public boolean DebugIsActive = false;
-
-    /**
-     * This parameter contains the test job to be executed<br>
-     * by the framework
-     */
-    public Object TestJob;
-
-    /**
-     * This parameter contains the class used<br>
-     * for Logging
-     */
-    public String LogWriter="stats.SimpleLogWriter";
-
-    /**
-     * This parameter contains the class used<br>
-     * for Logging
-     */
-    public String OutProducer="stats.SimpleOutProducer";
-
-    /**
-     * This parameter contains the timeout used<br>
-     * by the watcher
-     */
-    public Integer TimeOut = new Integer(3000000);
-
-    /**
-     * This parameter contains the timeout used<br>
-     * by the complex tests
-     */
-    public Integer ThreadTimeOut = new Integer(3000000);
-
-    /**
-     * This parameter contains the time which the office could use to close for
-     * itself before it is destroyed. Default is 15000 ms
-     */
-    public Integer OfficeCloseTimeOut = new Integer(15000);
+    private boolean DebugIsActive = false;
 
     /**
      * Wrapper around "get()" with some debug output
@@ -240,28 +144,28 @@ public class TestParameters extends HashMap<String,Object> {
             put(PropertyName.PIPE_CONNECTION_STRING,PipeConnectionString);
             put(PropertyName.USE_PIPE_CONNECTION, Boolean.TRUE);
         }
-        put(PropertyName.CONNECTION_STRING,ConnectionString);
-        put(PropertyName.TEST_BASE,TestBase);
-        put(PropertyName.TEST_DOCUMENT_PATH,TestDocumentPath);
-        put(PropertyName.LOGGING_IS_ACTIVE,LoggingIsActive?Boolean.TRUE:Boolean.FALSE);
-        put(PropertyName.DEBUG_IS_ACTIVE,DebugIsActive?Boolean.TRUE:Boolean.FALSE);
-        put(PropertyName.OUT_PRODUCER,OutProducer);
-        put(PropertyName.SHORT_WAIT,new Integer(ShortWait));
-        put(PropertyName.OFFICE_PROVIDER,OfficeProvider);
-        put(PropertyName.LOG_WRITER,LogWriter);
-        put(PropertyName.APP_EXECUTION_COMMAND,AppExecutionCommand);
-        put(PropertyName.TIME_OUT,TimeOut);
-        put(PropertyName.THREAD_TIME_OUT,ThreadTimeOut);
-        put(PropertyName.AUTO_RESTART,AutoRestart?Boolean.TRUE:Boolean.FALSE);
-        put(PropertyName.OFFICE_CLOSE_TIME_OUT, OfficeCloseTimeOut);
+        put(PropertyName.CONNECTION_STRING, DefaultConnectionString);
+        put(PropertyName.TEST_BASE, "java_fat");
+        put(PropertyName.TEST_DOCUMENT_PATH, DefaultTestDocumentPath);
+        put(PropertyName.LOGGING_IS_ACTIVE, Boolean.TRUE);
+        put(PropertyName.DEBUG_IS_ACTIVE, Boolean.valueOf(DebugIsActive));
+        put(PropertyName.OUT_PRODUCER, "stats.SimpleOutProducer");
+        put(PropertyName.SHORT_WAIT, new Integer(500));
+        put(PropertyName.OFFICE_PROVIDER, "helper.OfficeProvider");
+        put(PropertyName.LOG_WRITER, "stats.SimpleLogWriter");
+        put(PropertyName.APP_EXECUTION_COMMAND, "");
+        put(PropertyName.TIME_OUT, new Integer(3000000));
+        put(PropertyName.THREAD_TIME_OUT, new Integer(3000000));
+        put(PropertyName.AUTO_RESTART, Boolean.FALSE);
+        put(PropertyName.OFFICE_CLOSE_TIME_OUT, new Integer(15000));
 
         // get the operating system
         put(PropertyName.OPERATING_SYSTEM, getSOCompatibleOSName());
 
         //For compatibility Reasons
-        put("CNCSTR",ConnectionString);
-        put("DOCPTH",TestDocumentPath);
-        System.setProperty("DOCPTH",TestDocumentPath);
+        put("CNCSTR", DefaultConnectionString);
+        put("DOCPTH", DefaultTestDocumentPath);
+        System.setProperty("DOCPTH", DefaultTestDocumentPath);
     }
 
     /**

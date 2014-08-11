@@ -28,6 +28,7 @@ import lib.TestParameters;
 import share.LogWriter;
 import stats.InternalLogWriter;
 import util.DynamicClassLoader;
+import util.PropertyName;
 import base.TestBase;
 
 import com.sun.star.beans.NamedValue;
@@ -77,8 +78,8 @@ public class RunnerService implements XJob, XServiceInfo,
 
 
         // take the standard log writer
-        String standardLogWriter = param.LogWriter;
-        String standardOutProducer = param.OutProducer;
+        String standardLogWriter = (String) param.get(PropertyName.LOG_WRITER);
+        String standardOutProducer = (String) param.get(PropertyName.OUT_PRODUCER);
 
         ClParser cli = new ClParser();
 
@@ -115,9 +116,6 @@ public class RunnerService implements XJob, XServiceInfo,
                                             (String)param.get("LogWriter"));
 
         param.put("ServiceFactory", xMSF);
-
-        param.ServiceFactory = xMSF; //(XMultiServiceFactory)
-                                     //       appProvider.getManager(param);
 
         log.println("TestJob: "+param.get("TestJob"));
 

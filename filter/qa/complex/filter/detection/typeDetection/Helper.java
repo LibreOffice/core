@@ -23,6 +23,7 @@ import com.sun.star.io.NotConnectedException;
 import com.sun.star.io.XInputStream;
 
 import helper.StreamSimulator;
+
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -30,8 +31,10 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.ArrayList;
+
 import lib.TestParameters;
 import share.LogWriter;
+import util.PropertyName;
 import util.utils;
 
 
@@ -181,7 +184,7 @@ public class Helper  {
             ArrayList<String> content = new ArrayList<String>();
             BufferedReader br;
             String line;
-            if ( m_param.DebugIsActive ) {
+            if ( m_param.getBool(PropertyName.DEBUG_IS_ACTIVE) ) {
                 System.out.println("Looking for "+csvFileName);
             }
 

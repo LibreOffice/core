@@ -24,6 +24,8 @@ package util;
 public interface PropertyName {
     /**
      * parameter name: "AppExecutionCommand"
+     * The AppExecutionCmd contains the full qualified<br>
+     * command to an Application to be started.
      */
     final public static String APP_EXECUTION_COMMAND = "AppExecutionCommand";
     /**
@@ -39,6 +41,8 @@ public interface PropertyName {
 
     /**
      * parameter name: "TestBase"
+     * The Testbase to be executed by the runner<br>
+     * default is 'java_fat'
      */
     final public static String TEST_BASE = "TestBase";
     /**
@@ -47,6 +51,9 @@ public interface PropertyName {
     final public static String TEST_DOCUMENT_PATH = "TestDocumentPath";
     /**
      * parameter name: "LoggingIsActive"
+     * 'true' is a log should be written, 'false' elsewhere <br>
+     * these will be provided by the testcases<br>
+     * default is true
      */
     final public static String LOGGING_IS_ACTIVE = "LoggingIsActive";
     /**
@@ -55,14 +62,20 @@ public interface PropertyName {
     final public static String DEBUG_IS_ACTIVE = "DebugIsActive";
     /**
      * parameter name: "OutProduceer"
+     * This parameter contains the class used<br>
+     * for Logging
      */
     final public static String OUT_PRODUCER = "OutProducer";
     /**
      * parameter name: "ShortWait"
+     * Short wait time for the Office: default is 500 milliseconds
      */
     final public static String SHORT_WAIT= "ShortWait";
     /**
      * internal only, no parameter
+     * The OfficeProvider contains the full qualified
+     * class that provides a connection to StarOffice<br>
+     * default is helper.OfficeProvider
      */
     final public static String OFFICE_PROVIDER = "OfficeProvider";
     /**
@@ -71,19 +84,27 @@ public interface PropertyName {
     final public static String OFFICE_WATCHER = "Watcher";
     /**
      * internal only, no parameter
+     * This parameter contains the class used<br>
+     * for Logging
      */
     final public static String LOG_WRITER = "LogWriter";
     /**
      * parameter name: "TimeOut"<p>
      * time out given in milli seconds
+     * This parameter contains the timeout used<br>
+     * by the watcher
      */
     final public static String TIME_OUT = "TimeOut";
     /**
      * parameter name: "ThreadTimeOut"
+     * This parameter contains the timeout used<br>
+     * by the complex tests
      */
     final public static String THREAD_TIME_OUT = "ThreadTimeOut";
     /**
      * parameter name: "OfficeCloseTimeOut"
+     * This parameter contains the time which the office could use to close for
+     * itself before it is destroyed. Default is 15000 ms
      */
     final public static String OFFICE_CLOSE_TIME_OUT = "OfficeCloseTimeOut";
     /**
@@ -92,6 +113,10 @@ public interface PropertyName {
     final public static String OPERATING_SYSTEM = "OperatingSystem";
     /**
      * parameter name: "AutoRestart"
+     * If this parameter is <CODE>true</CODE> the <CODE>OfficeProvider</CODE> tries
+     * to get the URL to the binary of the office and to fill the
+     * <CODE>AppExecutionCommand</CODE> with useful content if needed.
+     * Default is false.
      */
     final public static String AUTO_RESTART = "AutoRestart";
     /**

@@ -130,7 +130,7 @@ public class UnoProvider implements AppProvider {
                         "/" + unorcName;
         }
         unorcName = utils.getFullURL(unorcName);
-        if (param.DebugIsActive) {
+        if (param.getBool(PropertyName.DEBUG_IS_ACTIVE)) {
             System.out.println("UnoUcr: " + unorcName);
         }
         return unorcName;
@@ -148,7 +148,7 @@ public class UnoProvider implements AppProvider {
                                 base.indexOf("program")+7);
 
         sysbindir = utils.getFullURL(sysbindir);
-        if (param.DebugIsActive) {
+        if (param.getBool(PropertyName.DEBUG_IS_ACTIVE)) {
             System.out.println("SysBinDir: " + sysbindir);
         }
         return sysbindir;
