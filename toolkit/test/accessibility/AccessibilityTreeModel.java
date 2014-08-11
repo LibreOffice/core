@@ -411,25 +411,6 @@ public class AccessibilityTreeModel
 
 
 
-    /**
-     * broadcast a tree event in a separate Thread
-     * must override fire method
-     */
-    class EventRunner implements Runnable
-    {
-        public void run()
-        {
-            for(int i = 0; i < maTMListeners.size(); i++)
-            {
-                fire( maTMListeners.get(i) );
-            }
-        }
-
-        protected void fire( TreeModelListener l) { }
-    }
-
-
-
     protected XAccessibleEventBroadcaster getBroadcaster (Object aObject)
     {
         if (aObject instanceof AccTreeNode)

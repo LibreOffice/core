@@ -34,16 +34,15 @@ class AccessibleUNOHandler
         if (xContext == null)
             return null;
         else
-            return new AccessibleUNOHandler (xContext);
+        {
+            AccessibleUNOHandler h = new AccessibleUNOHandler();
+            h.maChildList.setSize (3);
+            return h;
+        }
     }
 
     public AccessibleUNOHandler()
     {
-    }
-
-    public AccessibleUNOHandler (XAccessibleContext xContext)
-    {
-        maChildList.setSize (3);
     }
 
     private XServiceInfo GetServiceInfo (AccessibleTreeNode aNode)

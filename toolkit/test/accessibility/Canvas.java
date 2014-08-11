@@ -257,8 +257,7 @@ class Canvas
             // Paint highlighted frame around active object as the last thing.
             if (maActiveObject != null)
                 maActiveObject.paint_highlight (
-                    g2,
-                    mnHOffset, mnVOffset, mnScale);
+                    g2);
         }
     }
 

@@ -85,37 +85,18 @@ class TopWindowListener
                 System.out.println ("top level window not accessible");
             else
             {
-                if ( ! FilterTopLevelNode (xContext))
+                Object aRootObject = maModel.getRoot();
+                if (aRootObject instanceof VectorNode)
                 {
-                    Object aRootObject = maModel.getRoot();
-                    if (aRootObject instanceof VectorNode)
-                    {
-                        VectorNode aRoot = (VectorNode) aRootObject;
-                        AccessibleTreeNode aNode =
-                            NodeFactory.Instance().createDefaultNode (xNewTopLevelObject, aRoot);
-                        aRoot.addChild (aNode);
-                        maModel.fireTreeNodesInserted (maModel.createEvent (aRoot, aNode));
-                    }
+                    VectorNode aRoot = (VectorNode) aRootObject;
+                    AccessibleTreeNode aNode =
+                        NodeFactory.Instance().createDefaultNode (xNewTopLevelObject, aRoot);
+                    aRoot.addChild (aNode);
+                    maModel.fireTreeNodesInserted (maModel.createEvent (aRoot, aNode));
                 }
             }
         }
     }
-
-    /** Ignore windows that have no accessible name, i.e. do not represent
-        document windows.
-        @return
-            Returns <true/> when the given object should not be displayed,
-            i.e. filtered out.
-    */
-    private boolean FilterTopLevelNode (XAccessibleContext xContext)
-    {
-        // No filtering at the moment.
-        return false;
-        //        return xContext.getAccessibleName().length() == 0;
-    }
-
-
-
 
     /** Remove an existing top level node from the tree.
         @param xNewTopLevelObject

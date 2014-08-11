@@ -177,8 +177,7 @@ class CanvasShape
         }
     }
 
-    public void paint_highlight (Graphics2D g,
-        double nXOffset, double nYOffset, double nScaleFactor)
+    public void paint_highlight (Graphics2D g)
     {
         if (mbHighlighted)
             g.setColor (maHighlightColor);
