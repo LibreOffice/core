@@ -58,7 +58,7 @@ bool SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
 
 int SvXMLAttrContainerItem::Compare( const SfxPoolItem &/*rWith*/ ) const
 {
-    DBG_ASSERT( !this, "not yet implemented" );
+    DBG_ASSERT( false, "not yet implemented" );
 
     return 0;
 }

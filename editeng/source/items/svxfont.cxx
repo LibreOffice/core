@@ -146,7 +146,7 @@ OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
         }
         default:
         {
-            DBG_ASSERT(!this, "SvxFont::CaseMapTxt: unknown casemap");
+            DBG_ASSERT(false, "SvxFont::CaseMapTxt: unknown casemap");
             break;
         }
     }

@@ -2149,7 +2149,7 @@ void SvxAutoCorrectLanguageLists::SetAutocorrWordList( SvxAutocorrWordList* pLis
     pAutocorr_List = pList;
     if( !pAutocorr_List )
     {
-        OSL_ENSURE( !this, "No valid list" );
+        OSL_ENSURE( false, "No valid list" );
         pAutocorr_List = new SvxAutocorrWordList();
     }
     nFlags |= ChgWordLstLoad;
@@ -2248,7 +2248,7 @@ void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList
     pCplStt_ExcptLst = pList;
     if( !pCplStt_ExcptLst )
     {
-        OSL_ENSURE( !this, "No valid list" );
+        OSL_ENSURE( false, "No valid list" );
         pCplStt_ExcptLst = new SvStringsISortDtor;
     }
     nFlags |= CplSttLstLoad;
@@ -2291,7 +2291,7 @@ void SvxAutoCorrectLanguageLists::SetWrdSttExceptList( SvStringsISortDtor* pList
     pWrdStt_ExcptLst = pList;
     if( !pWrdStt_ExcptLst )
     {
-        OSL_ENSURE( !this, "No valid list" );
+        OSL_ENSURE( false, "No valid list" );
         pWrdStt_ExcptLst = new SvStringsISortDtor;
     }
     nFlags |= WrdSttLstLoad;
