@@ -1716,7 +1716,7 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
         long nOutHeight = 0;
         SCCOL nCountX = pMerge->GetColMerge();
         for (SCCOL i=0; i<nCountX; i++)
-            nOutWidth += ToPixel( pDoc->GetColWidth(nX+i,nTabNo), nPPTX );
+            nOutWidth += pDoc->GetColWidth(nX+i,nTabNo);
         SCROW nCountY = pMerge->GetRowMerge();
 
         for (SCROW nRow = nY; nRow <= nY+nCountY-1; ++nRow)
@@ -1730,6 +1730,7 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
 
             sal_uInt16 nHeight = pDoc->GetRowHeight(nRow, nTabNo);
             nOutHeight += ToPixel(nHeight, nPPTY);
+            nOutHeight += nHeight;
         }
 
         rSizeXPix = nOutWidth;
@@ -1738,8 +1739,8 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
     }
     else
     {
-        rSizeXPix = ToPixel( pDoc->GetColWidth( nX, nTabNo ), nPPTX );
-        rSizeYPix = ToPixel( pDoc->GetRowHeight( nY, nTabNo ), nPPTY );
+        rSizeXPix = pDoc->GetColWidth( nX, nTabNo );
+        rSizeYPix = pDoc->GetRowHeight( nY, nTabNo );
         return false;
     }
 }
