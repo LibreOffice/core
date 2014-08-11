@@ -16,6 +16,24 @@
       "revId": "aa0e3701aad1a8a955773e869d9a6b59eac51e72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad32947_16efbcb1",
+        "filename": "javaunohelper/test/com/sun/star/comp/helper/Bootstrap_Test.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-08-11T09:13:43Z",
+      "side": 1,
+      "message": "You are right.\n\n    public static void main(String[] args) {\n        String string \u003d \"\u003d1\u003d2\";\n        String[] split \u003d string.split(\"\u003d\");\n        if (split[0].length() \u003d\u003d 0) {\n            System.out.println(\"Error: produces a null key\");\n        }\n        if (split.length \u003e 2){\n            System.out.println(\"Error: produces an incomplete value\");\n        }\n    }",
+      "parentUuid": "7ad32947_b6e6c8e6",
+      "revId": "aa0e3701aad1a8a955773e869d9a6b59eac51e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
