@@ -315,11 +315,6 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
             break;
         }
     }
-    if ( ! pCurrentPageDescriptor && nPageCount>0)
-    {
-        // No page is selected.  Make the first slide the current page.
-        pCurrentPageDescriptor = mrModel.GetPageDescriptor(0);
-    }
 
     if (pCurrentPageDescriptor)
     {
