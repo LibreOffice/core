@@ -26,13 +26,14 @@
  *
  ************************************************************************/
 
+#include <GL/glew.h>
+#include <vcl/opengl/OpenGLHelper.hxx>
+
 #include <utility>
 
 #include <boost/make_shared.hpp>
 
 #include "OGLTrans_TransitionImpl.hxx"
-#include "OGLTrans_Shaders.hxx"
-#include <GL/gl.h>
 #include <math.h>
 
 using boost::make_shared;
@@ -1302,74 +1303,6 @@ boost::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack()
     return makeFadeThroughBlackTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
 
-static const char* basicVertexShader = "\n\
-varying vec2 v_texturePosition;\n\
-\n\
-void main( void )\n\
-{\n\
-    gl_Position = ftransform();\n\
-    v_texturePosition = gl_MultiTexCoord0.xy;\n\
-}\n\
-";
-
-static const char* staticFragmentShader = "\n\
-uniform sampler2D leavingSlideTexture;\n\
-uniform sampler2D enteringSlideTexture;\n\
-uniform sampler2D permTexture;\n\
-uniform float time;\n\
-varying vec2 v_texturePosition;\n\
-\n\
-float snoise(vec2 P) {\n\
-\n\
-  return texture2D(permTexture, P).r;\n\
-}\n\
-\n\
-\n\
-#define PART 0.5\n\
-#define START 0.4\n\
-#define END 0.9\n\
-\n\
-void main() {\n\
-    float sn = snoise(10.0*v_texturePosition+time*0.07);\n\
-    if( time < PART ) {\n\
-        float sn1 = snoise(vec2(time*15.0, 20.0*v_texturePosition.y));\n\
-        float sn2 = snoise(v_texturePosition);\n\
-        if (sn1 > 1.0 - time*time && sn2 < 2.0*time+0.1)\n\
-            gl_FragColor = vec4(sn, sn, sn, 1.0);\n\
-        else if (time > START )\n\
-            gl_FragColor = ((time-START)/(PART - START))*vec4(sn, sn, sn, 1.0) + (1.0 - (time - START)/(PART - START))*texture2D(leavingSlideTexture, v_texturePosition);\n\
-        else\n\
-            gl_FragColor = texture2D(leavingSlideTexture, v_texturePosition);\n\
-    } else if ( time < PART ) {\n\
-            gl_FragColor = texture2D(leavingSlideTexture, v_texturePosition);\n\
-    } else if ( time > END ) {\n\
-        gl_FragColor = ((1.0 - time)/(1.0 - END))*vec4(sn, sn, sn, 1.0) + ((time - END)/(1.0 - END))*texture2D(enteringSlideTexture, v_texturePosition);\n\
-    } else \n\
-        gl_FragColor = vec4(sn, sn, sn, 1.0);\n\
-}\n\
-";
-
-static const char* dissolveFragmentShader = "\n\
-uniform sampler2D leavingSlideTexture;\n\
-uniform sampler2D enteringSlideTexture;\n\
-uniform sampler2D permTexture;\n\
-uniform float time;\n\
-varying vec2 v_texturePosition;\n\
-\n\
-float snoise(vec2 P) {\n\
-\n\
-  return texture2D(permTexture, P).r;\n\
-}\n\
-\n\
-void main() {\n\
-     float sn = snoise(10.0*v_texturePosition);\n\
-     if( sn < time)\n\
-         gl_FragColor = texture2D(enteringSlideTexture, v_texturePosition);\n\
-     else\n\
-         gl_FragColor = texture2D(leavingSlideTexture, v_texturePosition);\n\
-}\n\
-";
-
 namespace
 {
 
@@ -1404,18 +1337,16 @@ void ShaderTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideT
 {
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
-#ifdef GL_VERSION_2_0
     if( m_nProgramObject ) {
-        GLint location = OGLShaders::glGetUniformLocation( m_nProgramObject, "time" );
+        GLint location = glGetUniformLocation( m_nProgramObject, "time" );
         if( location != -1 ) {
-            OGLShaders::glUniform1f( location, nTime );
+            glUniform1f( location, nTime );
         }
     }
 
-    OGLShaders::glActiveTexture( GL_TEXTURE2 );
+    glActiveTexture( GL_TEXTURE2 );
     glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
-    OGLShaders::glActiveTexture( GL_TEXTURE0 );
-#endif
+    glActiveTexture( GL_TEXTURE0 );
 
     displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
 }
@@ -1429,9 +1360,8 @@ void ShaderTransition::prepareTransition_( ::sal_Int32 /* glLeavingSlideTex */, 
 
 void ShaderTransition::finishTransition_()
 {
-#ifdef GL_VERSION_2_0
     if( m_nProgramObject ) {
-        OGLShaders::glDeleteProgram( m_nProgramObject );
+        glDeleteProgram( m_nProgramObject );
         m_nProgramObject = 0;
     }
     if ( m_nHelperTexture )
@@ -1439,7 +1369,6 @@ void ShaderTransition::finishTransition_()
         glDeleteTextures( 1, &m_nHelperTexture );
         m_nHelperTexture = 0;
     }
-#endif
 }
 
 int permutation256 [256]= {
@@ -1501,31 +1430,29 @@ void initPermTexture(GLuint *texID)
 
 void ShaderTransition::impl_preparePermShader()
 {
-#ifdef GL_VERSION_2_0
     if( m_nProgramObject ) {
-        OGLShaders::glUseProgram( m_nProgramObject );
+        glUseProgram( m_nProgramObject );
 
-        GLint location = OGLShaders::glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
+        GLint location = glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
         if( location != -1 ) {
-            OGLShaders::glUniform1i( location, 0 );  // texture unit 0
+            glUniform1i( location, 0 );  // texture unit 0
         }
 
-        OGLShaders::glActiveTexture(GL_TEXTURE1);
+        glActiveTexture(GL_TEXTURE1);
         if( !m_nHelperTexture )
             initPermTexture( &m_nHelperTexture );
-        OGLShaders::glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE0);
 
-        location = OGLShaders::glGetUniformLocation( m_nProgramObject, "permTexture" );
+        location = glGetUniformLocation( m_nProgramObject, "permTexture" );
         if( location != -1 ) {
-            OGLShaders::glUniform1i( location, 1 );  // texture unit 1
+            glUniform1i( location, 1 );  // texture unit 1
         }
 
-        location = OGLShaders::glGetUniformLocation( m_nProgramObject, "enteringSlideTexture" );
+        location = glGetUniformLocation( m_nProgramObject, "enteringSlideTexture" );
         if( location != -1 ) {
-            OGLShaders::glUniform1i( location, 2 );  // texture unit 2
+            glUniform1i( location, 2 );  // texture unit 2
         }
     }
-#endif
 }
 
 }
@@ -1546,7 +1473,7 @@ private:
 
 GLuint StaticNoiseTransition::makeShader_()
 {
-    return OGLShaders::LinkProgram( basicVertexShader, staticFragmentShader );
+    return OpenGLHelper::LoadShaders( "basicVertexShader.glsl", "staticFragmentShader.glsl" );
 }
 
 shared_ptr<OGLTransitionImpl>
@@ -1597,7 +1524,7 @@ private:
 
 GLuint DissolveTransition::makeShader_()
 {
-    return OGLShaders::LinkProgram( basicVertexShader, dissolveFragmentShader );
+    return OpenGLHelper::LoadShaders( "basicVertexShader.glsl", "dissolveFragmentShader.glsl" );
 }
 
 shared_ptr<OGLTransitionImpl>
