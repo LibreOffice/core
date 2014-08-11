@@ -38,6 +38,7 @@ bool isSymbolFont(const Font &rFont)
             rFont.GetName().equalsIgnoreAsciiCase("Letters Laughing") ||
             rFont.GetName().equalsIgnoreAsciiCase("MusiQwik") ||
             rFont.GetName().equalsIgnoreAsciiCase("MusiSync") ||
+            rFont.GetName().equalsIgnoreAsciiCase("stmary10") ||
             isOpenSymbolFont(rFont);
 }
 
