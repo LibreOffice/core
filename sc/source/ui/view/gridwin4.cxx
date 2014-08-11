@@ -321,7 +321,7 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
         else
         {
             bNeedsRepaint = true;
-            aRepaintPixel = LogicToPixel(rRect);    // nur betroffenen Bereich
+            aRepaintPixel = rRect;    // nur betroffenen Bereich
         }
         return;
     }
@@ -335,15 +335,12 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
 
     bIsInPaint = true;
 
-    Rectangle aPixRect = pOutDev->LogicToPixel( rRect );
+    Rectangle aPixRect = LogicToPixel( rRect, maPaintMapMode );
 
     SCCOL nX1 = pViewData->GetPosX(eHWhich);
     SCROW nY1 = pViewData->GetPosY(eVWhich);
 
     SCTAB nTab = pViewData->GetTabNo();
-
-    double nPPTX = pViewData->GetPPTX();
-    double nPPTY = pViewData->GetPPTY();
 
     Rectangle aMirroredPixel = aPixRect;
     if ( pDoc->IsLayoutRTL( nTab ) )
@@ -354,26 +351,30 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
         aMirroredPixel.Right() = nWidth - 1 - aPixRect.Left();
     }
 
-    long nScrX = ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
+    long nScrX = LogicToPixel( Point( pDoc->GetColWidth( nX1, nTab ), 0 ), maPaintMapMode ).getX();/*ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );*/
     while ( nScrX <= aMirroredPixel.Left() && nX1 < MAXCOL )
     {
         ++nX1;
-        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
+        nScrX += LogicToPixel( Point( pDoc->GetColWidth( nX1, nTab ), 0 ), maPaintMapMode ).getX();
     }
     SCCOL nX2 = nX1;
     while ( nScrX <= aMirroredPixel.Right() && nX2 < MAXCOL )
     {
         ++nX2;
-        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
+        nScrX += LogicToPixel( Point( pDoc->GetColWidth( nX2, nTab ), 0 ), maPaintMapMode ).getX();
     }
 
     long nScrY = 0;
-    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, MAXROW, nPPTY, pDoc, nTab);
+    while ( nScrY < aPixRect.Top() && nY1 < MAXROW )
+    {
+        ++nY1;
+        nScrY += LogicToPixel( Point( 0, pDoc->GetRowHeight( nY1, nTab ) ), maPaintMapMode ).getY();
+    }
     SCROW nY2 = nY1;
-    if (nScrY <= aPixRect.Bottom() && nY2 < MAXROW)
+    while ( nScrY <= aPixRect.Bottom() && nY2 < MAXROW )
     {
         ++nY2;
-        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
+        nScrY += LogicToPixel( Point( 0, pDoc->GetRowHeight( nY2, nTab ) ), maPaintMapMode ).getY();
     }
 
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS, pOutDev );           // nicht weiterzeichnen
