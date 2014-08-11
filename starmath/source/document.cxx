@@ -1116,7 +1116,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 bool (::svl::IUndoManager:: *fnDo)();
 
-                sal_uInt16 nCount;
+                std::size_t nCount;
                 if( SID_UNDO == rReq.GetSlot() )
                 {
                     nCount = pTmpUndoMgr->GetUndoActionCount();
