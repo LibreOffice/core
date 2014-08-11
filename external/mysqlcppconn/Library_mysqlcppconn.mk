@@ -77,7 +77,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mysqlcppconn,\
 $(WORKDIR)/GenCxxObject/UnpackedTarball/mysqlcppconn/driver/mysql_metadata.o $(WORKDIR)/GenCxxObject/UnpackedTarball/mysqlcppconn/driver/mysql_driver.o: mysqlcppconn_configure
 
 mysqlcppconn_configure: $(call gb_UnpackedTarball_get_target,mysqlcppconn)
-	cd ../../workdir/GenCxxObject/UnpackedTarball/mysqlcppconn && cmake ../../../UnpackedTarball/mysqlcppconn/
+	cd $(WORKDIR)/GenCxxObject/UnpackedTarball/mysqlcppconn && cmake ../../../UnpackedTarball/mysqlcppconn/
 
 .PHONY: mysqlcppconn_configure
 
