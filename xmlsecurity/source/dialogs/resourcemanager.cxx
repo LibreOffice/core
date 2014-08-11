@@ -356,28 +356,6 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         _rCtrl.SetSizePixel( aSize );
         return nWidth;
     }
-
-    void AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset )
-    {
-        Point   aPos( _rImage.GetPosPixel() );
-        Size    aSize( _rImage.GetSizePixel() );
-        long    n = aPos.X();
-        n += aSize.Width();
-        n += _nXOffset;
-        aPos.X() = n;
-        n = aPos.Y();
-        n += aSize.Height() / 2;                    // y-position is in the middle of the image
-        n -= _rCtrl.GetSizePixel().Height() / 2;    // center Control
-        aPos.Y() = n;
-        _rCtrl.SetPosPixel( aPos );
-    }
-
-    void AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset )
-    {
-        AlignAfterImage( _rImage, static_cast< Control& >( _rFI ), _nXOffset );
-        ShrinkToFitWidth( _rFI );
-    }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

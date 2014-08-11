@@ -72,7 +72,6 @@ private:
 
 public:
                         ProgressBar( Window* pParent, WinBits nWinBits = WB_STDPROGRESSBAR );
-                        ProgressBar( Window* pParent, const ResId& rResId );
                         virtual ~ProgressBar();
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;

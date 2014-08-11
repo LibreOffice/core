@@ -88,27 +88,6 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-
-    OConnectionHelper::OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs)
-        : OGenericAdministrationPage(pParent, _rId, _rCoreAttrs)
-        , m_bUserGrabFocus(false)
-        , m_pFT_Connection(new FixedText(this, ResId(FT_AUTOBROWSEURL, *_rId.GetResMgr())))
-        , m_pConnectionURL(new OConnectionURLEdit(this, ResId(ET_AUTOBROWSEURL, *_rId.GetResMgr())))
-        , m_pPB_Connection(new PushButton(this, ResId(PB_AUTOBROWSEURL, *_rId.GetResMgr())))
-        , m_pPB_CreateDB(new PushButton(this, ResId(PB_CREATEDB, *_rId.GetResMgr())))
-        , m_pCollection(NULL)
-        , m_bDelete(true)
-    {
-        // extract the datasource type collection from the item set
-        DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
-        if (pCollectionItem)
-            m_pCollection = pCollectionItem->getCollection();
-        m_pPB_Connection->SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));
-        m_pPB_CreateDB->SetClickHdl(LINK(this, OConnectionHelper, OnCreateDatabase));
-        OSL_ENSURE(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
-        m_pConnectionURL->SetTypeCollection(m_pCollection);
-    }
-
     OConnectionHelper::OConnectionHelper( Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs)
         : OGenericAdministrationPage(pParent, _rId, _rUIXMLDescription, _rCoreAttrs)
         , m_bUserGrabFocus(false)

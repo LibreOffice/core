@@ -39,7 +39,6 @@ class OMarkableTreeListBox : public DBTreeListBox
 
 public:
     OMarkableTreeListBox( Window* pParent, WinBits nWinStyle=0 );
-    OMarkableTreeListBox( Window* pParent, const ResId& rResId );
     virtual ~OMarkableTreeListBox();
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

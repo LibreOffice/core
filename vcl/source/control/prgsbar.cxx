@@ -56,12 +56,6 @@ ProgressBar::ProgressBar( Window* pParent, WinBits nWinStyle ) :
     ImplInit();
 }
 
-ProgressBar::ProgressBar( Window* pParent, const ResId& rResId ) :
-    Window( pParent, rResId )
-{
-    ImplInit();
-}
-
 ProgressBar::~ProgressBar()
 {
 }

@@ -32,7 +32,6 @@ namespace dbaui
         OCopyTableWizard*           m_pParent;
         bool                    m_bFirstTime;   // Page wird das erste mal gerufen ; should be set in the reset methode
 
-        OWizardPage( Window* pParent, const ResId& rResId );
         OWizardPage( Window *pParent, const OString& rID, const OUString& rUIXMLDescription );
 
     public:

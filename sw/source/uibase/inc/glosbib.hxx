@@ -60,11 +60,6 @@ struct GlosBibUserData
 class SwGlossaryGroupTLB : public SvTabListBox
 {
 public:
-    SwGlossaryGroupTLB(Window* pParent, const ResId& rResId)
-        : SvTabListBox(pParent, rResId)
-    {
-    }
-
     SwGlossaryGroupTLB(Window* pParent)
         : SvTabListBox(pParent, WB_BORDER|WB_HSCROLL|WB_CLIPCHILDREN|WB_SORT)
     {

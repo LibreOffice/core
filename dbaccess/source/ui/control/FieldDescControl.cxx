@@ -93,55 +93,6 @@ namespace
 }
 
 // class OFieldDescControl
-
-
-OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTableDesignHelpBar* pHelpBar)
-    :TabPage( pParent, rResId )
-    ,pHelp( pHelpBar )
-    ,pLastFocusWindow(NULL)
-    ,m_pActFocusWindow(NULL)
-    ,pDefaultText(NULL)
-    ,pRequiredText(NULL)
-    ,pAutoIncrementText(NULL)
-    ,pTextLenText(NULL)
-    ,pNumTypeText(NULL)
-    ,pLengthText(NULL)
-    ,pScaleText(NULL)
-    ,pFormatText(NULL)
-    ,pBoolDefaultText(NULL)
-    ,m_pColumnNameText(NULL)
-    ,m_pTypeText(NULL)
-    ,m_pAutoIncrementValueText(NULL)
-    ,pRequired(NULL)
-    ,pNumType(NULL)
-    ,pAutoIncrement(NULL)
-    ,pDefault(NULL)
-    ,pTextLen(NULL)
-    ,pLength(NULL)
-    ,pScale(NULL)
-    ,pFormatSample(NULL)
-    ,pBoolDefault(NULL)
-    ,m_pColumnName(NULL)
-    ,m_pType(NULL)
-    ,m_pAutoIncrementValue(NULL)
-    ,pFormat(NULL)
-    ,m_pVertScroll( NULL )
-    ,m_pHorzScroll( NULL )
-    ,m_pPreviousType()
-    ,m_nPos(-1)
-    ,aYes(ModuleRes(STR_VALUE_YES))
-    ,aNo(ModuleRes(STR_VALUE_NO))
-    ,m_nOldVThumb( 0 )
-    ,m_nOldHThumb( 0 )
-    ,m_nWidth(50)
-    ,m_bAdded(false)
-    ,m_bRightAligned(false)
-    ,pActFieldDescr(NULL)
-{
-
-    Contruct();
-}
-
 OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar )
     :TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
     ,pHelp( pHelpBar )

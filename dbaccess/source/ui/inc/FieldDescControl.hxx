@@ -174,7 +174,6 @@ namespace dbaui
 
     public:
         OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar);
-        OFieldDescControl( Window* pParent, const ResId& rResId, OTableDesignHelpBar* pHelpBar);
         virtual ~OFieldDescControl();
 
         void                DisplayData(OFieldDescription* pFieldDescr );

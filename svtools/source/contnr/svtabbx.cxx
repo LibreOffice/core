@@ -108,16 +108,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvTabListBox(Window *pParen
     return new SvTabListBox(pParent, nWinStyle);
 }
 
-SvTabListBox::SvTabListBox( Window* pParent, const ResId& rResId )
-    : SvTreeListBox( pParent, rResId )
-{
-    pTabList = 0;
-    nTabCount = 0;
-    pViewParent = 0;
-    SvTabListBox::Resize();
-    SetHighlightRange();
-}
-
 SvTabListBox::~SvTabListBox()
 {
     // delete array

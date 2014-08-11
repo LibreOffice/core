@@ -92,18 +92,6 @@ GroupBox::GroupBox( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_GROUPBOX )
-{
-    rResId.SetRT( RSC_GROUPBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {

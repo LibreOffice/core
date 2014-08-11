@@ -66,7 +66,6 @@ class CertificateViewerTP : public TabPage
 protected:
     CertificateViewer*  mpDlg;
 public:
-    CertificateViewerTP( Window* _pParent, const ResId& _rResId, CertificateViewer* _pDlg );
     CertificateViewerTP( Window* _pParent, const OString& rID,
         const OUString& rUIXMLDescription, CertificateViewer* _pDlg );
     void SetTabDlg( CertificateViewer* _pTabDlg )

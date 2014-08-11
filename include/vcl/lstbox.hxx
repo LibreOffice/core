@@ -254,7 +254,6 @@ private:
 
 public:
     explicit        MultiListBox( Window* pParent, WinBits nStyle = 0 );
-    explicit        MultiListBox( Window* pParent, const ResId& rResId );
 
 };
 

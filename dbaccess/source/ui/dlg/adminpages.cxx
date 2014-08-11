@@ -278,15 +278,6 @@ namespace dbaui
         return 0L;
     }
 
-    void OGenericAdministrationPage::SetHeaderText( sal_uInt16 _nFTResId, sal_uInt16 _StringResId)
-    {
-        delete(m_pFT_HeaderText);
-        m_pFT_HeaderText = new FixedText(this, ModuleRes(_nFTResId));
-        OUString sHeaderText = ModuleRes(_StringResId);
-        m_pFT_HeaderText->SetText(sHeaderText);
-        SetControlFontWeight(m_pFT_HeaderText);
-    }
-
     // LayoutHelper
     void LayoutHelper::positionBelow( const Control& _rReference, Control& _rControl, const ControlRelation _eRelation,
         const long _nIndentAppFont )

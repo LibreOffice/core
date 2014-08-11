@@ -123,18 +123,6 @@ ScrollBar::ScrollBar( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-ScrollBar::ScrollBar( Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_SCROLLBAR )
-{
-    rResId.SetRT( RSC_SCROLLBAR );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 ScrollBar::~ScrollBar()
 {
     delete mpData;

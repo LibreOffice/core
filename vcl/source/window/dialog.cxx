@@ -1280,19 +1280,8 @@ VclBuilderContainer::~VclBuilderContainer()
     delete m_pUIBuilder;
 }
 
-ModelessDialog::ModelessDialog( Window* pParent, const ResId& rResId ) :
-    Dialog( WINDOW_MODELESSDIALOG )
-{
-    rResId.SetRT( RSC_MODELESSDIALOG );
-
-    WinBits nStyle = init( pParent, rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-ModelessDialog::ModelessDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
-    Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG)
+ModelessDialog::ModelessDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+    : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG)
 {
 }
 

@@ -1496,17 +1496,4 @@ MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
     EnableMultiSelection( true );
 }
 
-MultiListBox::MultiListBox( Window* pParent, const ResId& rResId ) :
-    ListBox( WINDOW_MULTILISTBOX )
-{
-    rResId.SetRT( RSC_MULTILISTBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-    EnableMultiSelection( true );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

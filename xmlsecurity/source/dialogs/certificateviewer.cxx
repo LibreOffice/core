@@ -66,12 +66,6 @@ CertificateViewer::~CertificateViewer()
     delete mpTabCtrl->GetTabPage(mnPathId);
 }
 
-CertificateViewerTP::CertificateViewerTP( Window* _pParent, const ResId& _rResId, CertificateViewer* _pDlg )
-    :TabPage        ( _pParent, _rResId )
-    ,mpDlg          ( _pDlg )
-{
-}
-
 CertificateViewerTP::CertificateViewerTP( Window* _pParent, const OString& rID,
     const OUString& rUIXMLDescription, CertificateViewer* _pDlg )
     : TabPage(_pParent, rID, rUIXMLDescription)

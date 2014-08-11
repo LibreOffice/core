@@ -144,10 +144,7 @@ public:
     void            GrabFocusToFirstControl();
 };
 
-
 // - ModelessDialog -
-
-
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
 {
     // Copy assignment is forbidden and not implemented.
@@ -155,14 +152,10 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
     SAL_DLLPRIVATE         ModelessDialog & operator= (const ModelessDialog &);
 
 public:
-    explicit        ModelessDialog( Window* pParent, const ResId& rResId );
     explicit        ModelessDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
 };
 
-
 // - ModalDialog -
-
-
 class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:

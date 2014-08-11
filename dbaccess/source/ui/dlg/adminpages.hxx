@@ -233,7 +233,6 @@ namespace dbaui
     protected:
         // used to set the right Pane header of a wizard to bold
         void SetControlFontWeight(Window* _pWindow, FontWeight _eWeight = WEIGHT_BOLD);
-        void SetHeaderText( sal_uInt16 _nFTResId, sal_uInt16 _StringResId);
 
         /** This link be used for controls where the tabpage does not need to take any special action when the control
             is modified. The implementation just calls callModifiedHdl.

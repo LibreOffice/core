@@ -25,14 +25,9 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 
-
-// - FixedInfo -
-
-
 class SVT_DLLPUBLIC FixedInfo : public FixedText
 {
 public:
-    FixedInfo( Window* pParent, WinBits nWinStyle = WB_LEFT );
     FixedInfo( Window* pParent, const ResId& rResId );
 };
 

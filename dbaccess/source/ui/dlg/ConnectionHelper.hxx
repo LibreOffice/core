@@ -40,7 +40,6 @@ namespace dbaui
         bool            m_bUserGrabFocus : 1;
 
     public:
-        OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs);
         OConnectionHelper( Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs);
         virtual ~OConnectionHelper();
         FixedText           *m_pFT_Connection;

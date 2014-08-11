@@ -34,7 +34,6 @@ protected:
     virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-    SvSimpleTableContainer( Window* pParent, const ResId& rResId );
     SvSimpleTableContainer( Window* pParent, WinBits nBits = WB_BORDER );
 
     void SetTable(SvSimpleTable* pTable);

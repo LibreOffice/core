@@ -26,15 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-// SvSimpleTableContainer  ------------------------------------------------------
-
-SvSimpleTableContainer::SvSimpleTableContainer(Window* pParent, const ResId& rResId)
-    : Control(pParent, rResId)
-    , m_pTable(NULL)
-{
-    SetBorderStyle(WINDOW_BORDER_NOBORDER);
-}
-
 SvSimpleTableContainer::SvSimpleTableContainer(Window* pParent, WinBits nBits)
     : Control(pParent, nBits)
     , m_pTable(NULL)

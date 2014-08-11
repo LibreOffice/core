@@ -17,17 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svtools/stdctrl.hxx>
-
-
-
-FixedInfo::FixedInfo( Window* pParent, WinBits nWinStyle ) :
-    FixedText( pParent, nWinStyle | WB_INFO )
-{
-}
-
-
 
 FixedInfo::FixedInfo( Window* pParent, const ResId& rResId ) :
     FixedText( pParent, rResId )

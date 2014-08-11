@@ -35,13 +35,6 @@ OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, WinBits nWinStyle )
     InitButtonData();
 }
 
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const ResId& rResId)
-    : DBTreeListBox(pParent, rResId)
-{
-
-    InitButtonData();
-}
-
 OMarkableTreeListBox::~OMarkableTreeListBox()
 {
     delete m_pCheckButton;

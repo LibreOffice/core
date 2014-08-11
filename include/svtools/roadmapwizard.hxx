@@ -69,11 +69,6 @@ namespace svt
     public:
         RoadmapWizard(
             Window* _pParent,
-            const ResId& _rRes,
-            sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
-        );
-        RoadmapWizard(
-            Window* _pParent,
             const WinBits i_nStyle,
             sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
         );

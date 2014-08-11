@@ -91,7 +91,6 @@ private:
 
 public:
     explicit        ScrollBar( Window* pParent, WinBits nStyle = WB_VERT );
-    explicit        ScrollBar( Window* pParent, const ResId& );
     virtual         ~ScrollBar();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

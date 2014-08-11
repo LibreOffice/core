@@ -25,10 +25,6 @@ MultiLineEdit::MultiLineEdit( Window* pParent, WinBits nWinStyle )
     : VclMultiLineEdit( pParent,nWinStyle )
 {
 }
-MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
-    : VclMultiLineEdit( pParent,rResId )
-{
-}
 
 // virtual
 css::uno::Reference< css::awt::XWindowPeer >

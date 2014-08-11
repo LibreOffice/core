@@ -35,24 +35,13 @@ short SvxStandardDialog::Execute()
     return nRet;
 }
 
-
-
-SvxStandardDialog::SvxStandardDialog( Window *pParent, const ResId &rResId )
-    : SfxModalDialog( pParent, rResId )
-{
-}
-
 SvxStandardDialog::SvxStandardDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription )
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
 {
 }
 
-
-
 SvxStandardDialog::~SvxStandardDialog()
 {
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
