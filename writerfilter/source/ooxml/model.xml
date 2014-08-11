@@ -4905,9 +4905,9 @@
       <action name="start" action="setDefaultStringValue"/>
     </resource>
     <resource name="CT_SdtCheckbox" resource="Properties">
-      <element name="checked" tokenid="ooxml:CT_SdtCheckbox_checked">checked</element>
-      <element name="checkedState" tokenid="ooxml:CT_SdtCheckbox_checkedState">checkedState</element>
-      <element name="uncheckedState" tokenid="ooxml:CT_SdtCheckbox_uncheckedState">uncheckedState</element>
+      <element name="checked" tokenid="ooxml:CT_SdtCheckbox_checked"/>
+      <element name="checkedState" tokenid="ooxml:CT_SdtCheckbox_checkedState"/>
+      <element name="uncheckedState" tokenid="ooxml:CT_SdtCheckbox_uncheckedState"/>
     </resource>
     <resource name="ST_SchemeColorVal" resource="List">
       <value tokenid="ooxml:ST_SchemeColorVal_bg1">bg1</value>
