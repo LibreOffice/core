@@ -24,9 +24,6 @@
 #include <algorithm>
 #include <vector>
 
-#ifdef DBG_UTIL
-#include <rtl/strbuf.hxx>
-#endif
 
 namespace utl
 {
@@ -82,7 +79,7 @@ namespace utl
 
     void NodeValueAccessor::bind( void* _pLocation, const Type& _rType )
     {
-        DBG_ASSERT( !isBound(), "NodeValueAccessor::bind: already bound!" );
+        SAL_WARN_IF(isBound(), "unotools.config", "NodeValueAccessor::bind: already bound!");
 
         eLocationType = ltSimplyObjectInstance;
         pLocation = _pLocation;
@@ -96,32 +93,24 @@ namespace utl
     {
         ::osl::MutexGuard aGuard( _rMutex );
 
-        DBG_ASSERT( _rAccessor.isBound(), "::utl::lcl_copyData: invalid accessor!" );
+        SAL_WARN_IF(!_rAccessor.isBound(), "unotools.config", "::utl::lcl_copyData: invalid accessor!");
         switch ( _rAccessor.getLocType() )
         {
             case ltSimplyObjectInstance:
             {
                 if ( _rData.hasValue() )
                 {
-#ifdef DBG_UTIL
-                    bool bSuccess =
-#endif
                     // assign the value
-                    uno_type_assignData(
+                    bool bSuccess = uno_type_assignData(
                         _rAccessor.getLocation(), _rAccessor.getDataType().getTypeLibType(),
                         const_cast< void* >( _rData.getValue() ), _rData.getValueType().getTypeLibType(),
                         (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release
                     );
-                    #ifdef DBG_UTIL
-                    OStringBuffer aBuf( 256 );
-                    aBuf.append("::utl::lcl_copyData( Accessor, Any ): could not assign the data (node path: ");
-                    aBuf.append( OUStringToOString( _rAccessor.getPath(), RTL_TEXTENCODING_ASCII_US ) );
-                    aBuf.append( " !" );
-                    DBG_ASSERT( bSuccess, aBuf.getStr() );
-                    #endif
+                    SAL_WARN_IF(!bSuccess, "unotools.config",
+                        "::utl::lcl_copyData( Accessor, Any ): could not assign the data (node path: \"" << _rAccessor.getPath() << "\"");
                 }
                 else {
-                    DBG_WARNING( "::utl::lcl_copyData: NULL value lost!" );
+                    SAL_INFO("unotools.config", "::utl::lcl_copyData: NULL value lost!");
                 }
             }
             break;
@@ -141,7 +130,7 @@ namespace utl
     {
         ::osl::MutexGuard aGuard( _rMutex );
 
-        DBG_ASSERT( _rAccessor.isBound(), "::utl::lcl_copyData: invalid accessor!" );
+        SAL_WARN_IF(!_rAccessor.isBound(), "unotools.config", "::utl::lcl_copyData: invalid accessor!" );
         switch ( _rAccessor.getLocType() )
         {
             case ltSimplyObjectInstance:
@@ -236,7 +225,7 @@ namespace utl
     void OConfigurationValueContainer::implConstruct( const OUString& _rConfigLocation,
         const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
     {
-        DBG_ASSERT( !m_pImpl->aConfigRoot.isValid(), "OConfigurationValueContainer::implConstruct: already initialized!" );
+        SAL_WARN_IF(m_pImpl->aConfigRoot.isValid(), "unotools.config", "OConfigurationValueContainer::implConstruct: already initialized!");
 
         // create the configuration node we're about to work with
         m_pImpl->aConfigRoot = OConfigurationTreeRoot::createWithComponentContext(
@@ -246,29 +235,26 @@ namespace utl
             ( _nAccessFlags & CVC_UPDATE_ACCESS ) ? OConfigurationTreeRoot::CM_UPDATABLE : OConfigurationTreeRoot::CM_READONLY,
             ( _nAccessFlags & CVC_IMMEDIATE_UPDATE ) ? sal_False : sal_True
         );
-        #ifdef DBG_UTIL
-        OStringBuffer aBuf(256);
-        aBuf.append("Could not access the configuration node located at ");
-        aBuf.append( OUStringToOString( _rConfigLocation, RTL_TEXTENCODING_ASCII_US ) );
-        aBuf.append( " !" );
-        DBG_ASSERT( m_pImpl->aConfigRoot.isValid(), aBuf.getStr() );
-        #endif
+        SAL_WARN_IF(!m_pImpl->aConfigRoot.isValid(), "unotools.config",
+            "Could not access the configuration node located at " << _rConfigLocation);
     }
 
     void OConfigurationValueContainer::registerExchangeLocation( const sal_Char* _pRelativePath,
         void* _pContainer, const Type& _rValueType )
     {
         // checks ....
-        DBG_ASSERT( _pContainer, "OConfigurationValueContainer::registerExchangeLocation: invalid container location!" );
-        DBG_ASSERT( (   TypeClass_CHAR      ==  _rValueType.getTypeClass( ) )
+        SAL_WARN_IF(!_pContainer, "unotools.config",
+            "OConfigurationValueContainer::registerExchangeLocation: invalid container location!");
+        SAL_WARN_IF(!( (TypeClass_CHAR      ==  _rValueType.getTypeClass( ) )
                 ||  (   TypeClass_BOOLEAN   ==  _rValueType.getTypeClass( ) )
                 ||  (   TypeClass_BYTE      ==  _rValueType.getTypeClass( ) )
                 ||  (   TypeClass_SHORT     ==  _rValueType.getTypeClass( ) )
                 ||  (   TypeClass_LONG      ==  _rValueType.getTypeClass( ) )
                 ||  (   TypeClass_DOUBLE    ==  _rValueType.getTypeClass( ) )
                 ||  (   TypeClass_STRING    ==  _rValueType.getTypeClass( ) )
-                ||  (   TypeClass_SEQUENCE  ==  _rValueType.getTypeClass( ) ),
-                "OConfigurationValueContainer::registerExchangeLocation: invalid type!" );
+                ||  (   TypeClass_SEQUENCE  ==  _rValueType.getTypeClass( ) )),
+            "unotools.config",
+            "OConfigurationValueContainer::registerExchangeLocation: invalid type!" );
 
         // build an accessor for this container
         NodeValueAccessor aNewAccessor( OUString::createFromAscii( _pRelativePath ) );
@@ -314,18 +300,17 @@ namespace utl
     void OConfigurationValueContainer::implRegisterExchangeLocation( const NodeValueAccessor& _rAccessor )
     {
         // some checks
-        DBG_ASSERT( !m_pImpl->aConfigRoot.isValid() || m_pImpl->aConfigRoot.hasByHierarchicalName( _rAccessor.getPath() ),
+        SAL_WARN_IF(m_pImpl->aConfigRoot.isValid() && !m_pImpl->aConfigRoot.hasByHierarchicalName(_rAccessor.getPath()),
+            "unotools.config",
             "OConfigurationValueContainer::implRegisterExchangeLocation: invalid relative path!" );
 
-#ifdef DBG_UTIL
         // another check (should be the first container for this node)
-        NodeValueAccessors::const_iterator aExistent = ::std::find(
+        SAL_WARN_IF(!(m_pImpl->aAccessors.end() == ::std::find(
             m_pImpl->aAccessors.begin(),
             m_pImpl->aAccessors.end(),
-            _rAccessor
-        );
-        DBG_ASSERT( m_pImpl->aAccessors.end() == aExistent, "OConfigurationValueContainer::implRegisterExchangeLocation: already registered a container for this subnode!" );
-#endif
+            _rAccessor)),
+            "unotools.config",
+            "OConfigurationValueContainer::implRegisterExchangeLocation: already registered a container for this subnode!" );
 
         // remember the accessor
         m_pImpl->aAccessors.push_back( _rAccessor );
