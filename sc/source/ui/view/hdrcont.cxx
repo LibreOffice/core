@@ -319,7 +319,6 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     OUString            aString;
     sal_uInt16          nBarSize;
     Point               aScrPos;
-    Size                aTextSize;
 
     Size aLogicSize = PixelToLogic( GetSizePixel(), maPaintMapMode );
 
@@ -622,9 +621,10 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                                     bBoldSet = bMark;
                                 }
                                 aString = GetEntryText( nEntryNo );
-                                aTextSize.Width() = GetTextWidth( aString );
-                                aTextSize.Height() = GetTextHeight();
-                                aTextSize = PixelToLogic( aTextSize, maPaintMapMode );
+                                Size aTextSize = PixelToLogic( Size(
+                                                                   GetTextWidth( aString ),
+                                                                   GetTextHeight() ),
+                                                               maPaintMapMode );
 
                                 Point aTxtPos(aScrPos);
                                 if (bVertical)
