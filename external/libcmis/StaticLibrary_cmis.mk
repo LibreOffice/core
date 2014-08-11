@@ -66,6 +66,14 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,cmislib,\
 	UnpackedTarball/cmis/src/libcmis/rendition \
 	UnpackedTarball/cmis/src/libcmis/repository \
 	UnpackedTarball/cmis/src/libcmis/session-factory \
+	UnpackedTarball/cmis/src/libcmis/sharepoint-document \
+	UnpackedTarball/cmis/src/libcmis/sharepoint-folder \
+	UnpackedTarball/cmis/src/libcmis/sharepoint-object \
+	UnpackedTarball/cmis/src/libcmis/sharepoint-object-type \
+	UnpackedTarball/cmis/src/libcmis/sharepoint-property \
+	UnpackedTarball/cmis/src/libcmis/sharepoint-repository \
+	UnpackedTarball/cmis/src/libcmis/sharepoint-session \
+	UnpackedTarball/cmis/src/libcmis/sharepoint-utils \
 	UnpackedTarball/cmis/src/libcmis/ws-document \
 	UnpackedTarball/cmis/src/libcmis/ws-folder \
 	UnpackedTarball/cmis/src/libcmis/ws-navigationservice \
