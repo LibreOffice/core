@@ -548,7 +548,8 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     if (!bMetaFile && pViewData)
         pDev->SetMapMode(aMode);
 
-    aOutputData.DrawBackground();
+    // TODO: Probably wrong -- update this.
+    aOutputData.DrawBackground(MAP_PIXEL);
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
     aOutputData.DrawStrings();
@@ -562,8 +563,8 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     {
         if (!bMetaFile && pViewData)
             pDev->SetMapMode(aMode);
-
-        aOutputData.DrawGrid( true, false );    // no page breaks
+        // TODO: Same mapping issue
+        aOutputData.DrawGrid( true, false, MAP_PIXEL );    // no page breaks
 
         pDev->SetLineColor( COL_BLACK );
 
@@ -1603,8 +1604,9 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
             aOutputData.SetRefDevice( pRefDev );
     }
 
+    // TODO: I don't think we're using the right map mode here?
     if( aTableParam.bCellContent )
-        aOutputData.DrawBackground();
+        aOutputData.DrawBackground(MAP_PIXEL);
 
     pDev->SetClipRegion(Region(Rectangle(
                 aPos, Size(aOutputData.GetScrW(), aOutputData.GetScrH()))));
@@ -1619,7 +1621,8 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     }
 
     if (aTableParam.bGrid)
-        aOutputData.DrawGrid( true, false );    // no page breaks
+        // TODO: again
+        aOutputData.DrawGrid( true, false, MAP_PIXEL );    // no page breaks
 
     aOutputData.AddPDFNotes();      // has no effect if not rendering PDF with notes enabled
 
