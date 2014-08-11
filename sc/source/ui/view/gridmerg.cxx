@@ -86,7 +86,7 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
     }
 }
 
-void ScGridMerger::AddHorLine( long nX1, long nX2, long nY )
+void ScGridMerger::AddHorLine( const Point& rStart, const Point& rEnd )
 {
     if ( bOptimize )
     {
@@ -95,13 +95,13 @@ void ScGridMerger::AddHorLine( long nX1, long nX2, long nY )
             Flush();
             bVertical = false;
         }
-        AddLine( nX1, nX2, nY );
+        AddLine( rStart.X(), rEnd.X(), rStart.Y() );
     }
     else
-        pDev->DrawLine( Point( nX1, nY ), Point( nX2, nY ) );
+        pDev->DrawLine( rStart, rEnd );
 }
 
-void ScGridMerger::AddVerLine( long nX, long nY1, long nY2 )
+void ScGridMerger::AddVerLine( const Point& rStart, const Point& rEnd )
 {
     if ( bOptimize )
     {
@@ -110,10 +110,10 @@ void ScGridMerger::AddVerLine( long nX, long nY1, long nY2 )
             Flush();
             bVertical = true;
         }
-        AddLine( nY1, nY2, nX );
+        AddLine( rStart.Y(), rEnd.Y(), rStart.X() );
     }
     else
-        pDev->DrawLine( Point( nX, nY1 ), Point( nX, nY2 ) );
+        pDev->DrawLine( rStart, rEnd );
 }
 
 void ScGridMerger::Flush()

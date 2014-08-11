@@ -498,9 +498,9 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                             if ( nPass == ( bNextToMark ? SC_HDRPAINT_SEL_BOTTOM : SC_HDRPAINT_BOTTOM ) )
                             {
                                 if (bVertical)
-                                    aGrid.AddHorLine( aScrPos.X(), aEndPos.X(), aEndPos.Y() );
+                                    aGrid.AddHorLine( aScrPos, aEndPos );
                                 else
-                                    aGrid.AddVerLine( aEndPos.X(), aScrPos.Y(), aEndPos.Y() );
+                                    aGrid.AddVerLine( aScrPos, aEndPos );
 
                                 //  thick bottom for hidden rows
                                 //  (drawn directly, without aGrid)

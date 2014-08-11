@@ -296,10 +296,10 @@ public:
 
     void    SetSnapPixel( bool bSet = true );
 
-    void    DrawGrid( bool bGrid, bool bPage );
+    void    DrawGrid( bool bGrid, bool bPage, const MapMode& rPaintMapMode );
     void    DrawStrings( bool bPixelToLogic = false );
     void    DrawDocumentBackground();
-    void    DrawBackground();
+    void    DrawBackground(const MapMode& rPaintMapMode);
     void    DrawShadow();
     void    DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom);
     void    DrawFrame();

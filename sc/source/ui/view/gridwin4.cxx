@@ -747,12 +747,12 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.DrawDocumentBackground();
 
     if ( bGridFirst && ( bGrid || bPage ) )
-        aOutputData.DrawGrid( bGrid, bPage );
+        aOutputData.DrawGrid( bGrid, bPage, maPaintMapMode );
 
-    aOutputData.DrawBackground();
+    aOutputData.DrawBackground(maPaintMapMode);
 
     if ( !bGridFirst && ( bGrid || bPage ) )
-        aOutputData.DrawGrid( bGrid, bPage );
+        aOutputData.DrawGrid( bGrid, bPage, maPaintMapMode );
 
     if ( bPageMode )
     {

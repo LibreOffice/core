@@ -307,7 +307,7 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
         }
 }
 
-void ScOutputData::DrawGrid( bool bGrid, bool bPage )
+void ScOutputData::DrawGrid( bool bGrid, bool bPage, const MapMode& rPaintMapMode )
 {
     SCCOL nX;
     SCROW nY;
@@ -327,7 +327,7 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
     //! um den einen Pixel sieht das Metafile (oder die Druck-Ausgabe) anders aus
     //! als die Bildschirmdarstellung, aber wenigstens passen Druck und Metafile zusammen
 
-    Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
+    Size aOnePixel = mpDev->PixelToLogic(Size(1,1), rPaintMapMode);
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
     if (bMetaFile)
@@ -442,14 +442,26 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 
                         if (pThisRowInfo->bChanged && !bHOver)
                         {
-                            aGrid.AddVerLine( nPosX-nSignedOneX, nPosY, nNextY-nOneY );
+                            const Point aStart = mpDev->LogicToPixel(
+                                Point( nPosX-nSignedOneX, nPosY ),
+                                rPaintMapMode );
+                            const Point aEnd = mpDev->LogicToPixel(
+                                Point( nPosX-nSignedOneX, nNextY-nOneY ),
+                                rPaintMapMode );
+                            aGrid.AddVerLine( aStart, aEnd );
                         }
                         nPosY = nNextY;
                     }
                 }
                 else
                 {
-                    aGrid.AddVerLine( nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY );
+                    const Point aStart = mpDev->LogicToPixel(
+                        Point( nPosX-nSignedOneX, nScrY ),
+                        rPaintMapMode );
+                    const Point aEnd = mpDev->LogicToPixel(
+                        Point( nPosX-nSignedOneX, nScrY+nScrH-nOneY ),
+                        rPaintMapMode );
+                    aGrid.AddVerLine( aStart, aEnd );
                 }
             }
         }
@@ -537,7 +549,13 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                             }
                             if (!bVOver)
                             {
-                                aGrid.AddHorLine( nPosX, nNextX-nSignedOneX, nPosY-nOneY );
+                                const Point rStart = mpDev->LogicToPixel(
+                                    Point( nPosX, nPosY-nOneY ),
+                                    rPaintMapMode );
+                                const Point rEnd = mpDev->LogicToPixel(
+                                    Point( nPosX, nPosY-nOneY ),
+                                    rPaintMapMode );
+                                aGrid.AddHorLine( rStart, rEnd );
                             }
                         }
                         nPosX = nNextX;
@@ -545,7 +563,13 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                 }
                 else
                 {
-                    aGrid.AddHorLine( nScrX, nScrX+nScrW-nOneX, nPosY-nOneY );
+                    const Point rStart = mpDev->LogicToPixel(
+                        Point( nScrX, nPosY-nOneY ),
+                        rPaintMapMode );
+                    const Point rEnd = mpDev->LogicToPixel(
+                        Point( nScrX+nScrW-nOneX, nPosY-nOneY ),
+                        rPaintMapMode );
+                    aGrid.AddHorLine( rStart, rEnd );
                 }
             }
         }
@@ -869,7 +893,7 @@ void drawIconSets( const ScIconSetInfo* pOldIconSetInfo, OutputDevice* pDev, con
 }
 
 void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
-        Rectangle& rRect, long nPosX, long nSignedOneX, OutputDevice* pDev, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
+               Rectangle& rRect, long nPosX, long nSignedOneX, OutputDevice* pDev, const MapMode& rPaintMapMode, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
         const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo)
 {
 
@@ -879,15 +903,16 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
     if (pOldColor && (pBackground || pOldColor != pColor || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo))
     {
         rRect.Right() = nPosX-nSignedOneX;
+        const Rectangle aPixRect = pDev->LogicToPixel( rRect, rPaintMapMode );
         if( !pOldColor->GetTransparency() )
         {
             pDev->SetFillColor( *pOldColor );
-            pDev->DrawRect( rRect );
+            pDev->DrawRect( aPixRect );
         }
         if( pOldDataBarInfo )
-            drawDataBars( pOldDataBarInfo, pDev, rRect );
+            drawDataBars( pOldDataBarInfo, pDev, aPixRect );
         if( pOldIconSetInfo )
-            drawIconSets( pOldIconSetInfo, pDev, rRect );
+            drawIconSets( pOldIconSetInfo, pDev, aPixRect );
 
         rRect.Left() = nPosX - nSignedOneX;
     }
@@ -895,19 +920,21 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
     if ( pOldBackground && (pColor ||pBackground != pOldBackground || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo) )
     {
         rRect.Right() = nPosX-nSignedOneX;
+        const Rectangle aPixRect = pDev->LogicToPixel( rRect, rPaintMapMode );
+
         if (pOldBackground)             // ==0 if hidden
         {
             Color aBackCol = pOldBackground->GetColor();
             if ( !aBackCol.GetTransparency() )      //! partial transparency?
             {
                 pDev->SetFillColor( aBackCol );
-                pDev->DrawRect( rRect );
+                pDev->DrawRect( aPixRect );
             }
         }
         if( pOldDataBarInfo )
-            drawDataBars( pOldDataBarInfo, pDev, rRect );
+            drawDataBars( pOldDataBarInfo, pDev, aPixRect );
         if( pOldIconSetInfo )
-            drawIconSets( pOldIconSetInfo, pDev, rRect );
+            drawIconSets( pOldIconSetInfo, pDev, aPixRect );
 
         rRect.Left() = nPosX - nSignedOneX;
     }
@@ -945,12 +972,12 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
 
 }
 
-void ScOutputData::DrawBackground()
+void ScOutputData::DrawBackground(const MapMode& rPaintMapMode)
 {
     FindRotated();              //! from the outside?
 
     Rectangle aRect;
-    Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
+    Size aOnePixel = mpDev->PixelToLogic(Size(1,1), rPaintMapMode);
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
 
@@ -1044,11 +1071,11 @@ void ScOutputData::DrawBackground()
                     pColor = pInfo->pColorScale;
                     const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar;
                     const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet;
-                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo );
+                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, rPaintMapMode, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo );
 
                     nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
                 }
-                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo );
+                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, rPaintMapMode, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo );
 
                 nArrY += nSkip;
             }
