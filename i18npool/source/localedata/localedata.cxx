@@ -1585,7 +1585,7 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
     pValues[4].Name = "BulletFontName";
     pValues[4].Value <<= pTemp->sBulletFontName;
     pValues[5].Name = "ParentNumbering";
-    pValues[5].Value <<= OUString::number(pTemp->nParentNumbering);
+    pValues[5].Value <<= pTemp->nParentNumbering;
     pValues[6].Name = "LeftMargin";
     pValues[6].Value <<= pTemp->nLeftMargin;
     pValues[7].Name = "SymbolTextDistance";
