@@ -144,6 +144,5 @@
 #include <stack>
 #include <vector>
 #include <xmlreader/span.hxx>
-#include <xmlreader/xmlreader.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

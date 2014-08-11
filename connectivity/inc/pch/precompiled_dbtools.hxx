@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include <sal/log.hxx>
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
@@ -158,6 +157,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <set>
 #include <sqlbison.hxx>

@@ -50,6 +50,7 @@
 #include "rtl/ustring.hxx"
 #include "rtl/uuid.h"
 #include <algorithm>
+#include <assert.h>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/unordered_map.hpp>

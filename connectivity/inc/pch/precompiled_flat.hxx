@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

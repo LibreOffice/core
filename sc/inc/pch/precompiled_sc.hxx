@@ -387,6 +387,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -783,6 +784,7 @@
 #include <svx/sidebar/SidebarDialControl.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdfield.hxx>
 #include <svx/svditer.hxx>

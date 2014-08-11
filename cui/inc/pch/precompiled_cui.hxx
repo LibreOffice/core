@@ -102,6 +102,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -461,7 +462,6 @@
 #include <svtools/insdlg.hxx>
 #include <svtools/langhelp.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/localresaccess.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
@@ -543,7 +543,9 @@
 #include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
 #include <svx/ucsubset.hxx>
+#include <svx/unobrushitemhelper.hxx>
 #include <svx/viewlayoutitem.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/xfltrit.hxx>

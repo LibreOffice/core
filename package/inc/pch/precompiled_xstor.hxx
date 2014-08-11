@@ -14,6 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include <boost/checked_delete.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

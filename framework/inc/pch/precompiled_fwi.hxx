@@ -14,6 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include <cassert>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>

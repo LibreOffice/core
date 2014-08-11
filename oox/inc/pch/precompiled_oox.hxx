@@ -22,6 +22,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "sal/log.hxx"
 #include "sax/fastparser.hxx"
+#include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <algorithm>
 #include <assert.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -34,6 +35,8 @@
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
+#include <boost/utility.hpp>
 #include <cassert>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
@@ -86,6 +89,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -334,6 +338,7 @@
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <comphelper/anytostring.hxx>
+#include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
@@ -360,6 +365,7 @@
 #include <functional>
 #include <i18nlangtag/languagetag.hxx>
 #include <iostream>
+#include <iterator>
 #include <list>
 #include <map>
 #include <osl/diagnose.h>

@@ -246,6 +246,7 @@
 #include <svx/svxerr.hxx>
 #include <svx/sxctitm.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/unobrushitemhelper.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xfillit.hxx>

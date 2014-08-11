@@ -496,6 +496,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/xmltools.hxx>
+#include <config_features.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>

@@ -14,6 +14,10 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include "editeng/lrspitem.hxx"
+#include "editeng/tstpitem.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "svl/itemiter.hxx"
 #include <algorithm>
 #include <assert.h>
 #include <avmedia/mediaitem.hxx>
@@ -42,7 +46,10 @@
 #include <basic/sbxvar.hxx>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/function.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/scoped_array.hpp>
@@ -127,6 +134,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/RedlineDisplayType.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
@@ -486,9 +494,7 @@
 #include <ctype.h>
 #include <deque>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
@@ -637,6 +643,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
@@ -710,6 +717,7 @@
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/styfitem.hxx>
+#include <sfx2/styledlg.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/taskpane.hxx>
 #include <sfx2/templdlg.hxx>
@@ -725,14 +733,15 @@
 #include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
 #include <stack>
+#include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <svl/PasswordHelper.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/asiancfg.hxx>
-#include <svl/SfxBroadcaster.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>
@@ -778,6 +787,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/embedtransfer.hxx>
+#include <svtools/fmtfield.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svtools/htmlkywd.hxx>
@@ -878,6 +888,7 @@
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgmoitm.hxx>
 #include <svx/sdgtritm.hxx>
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -888,8 +899,6 @@
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -909,10 +918,12 @@
 #include <svx/srchdlg.hxx>
 #include <svx/stddlg.hxx>
 #include <svx/svddef.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdfield.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdlayer.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
@@ -946,6 +957,7 @@
 #include <svx/tbxctl.hxx>
 #include <svx/tbxcustomshapes.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/unobrushitemhelper.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unomid.hxx>
 #include <svx/unomod.hxx>
@@ -1105,6 +1117,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/print.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scrbar.hxx>
@@ -1155,6 +1168,7 @@
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlscripti.hxx>
 #include <xmloff/xmlstyle.hxx>
@@ -1163,6 +1177,5 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmlreader/xmlreader.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

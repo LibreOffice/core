@@ -16,6 +16,8 @@
 
 #include "rtl/string.h"
 #include <algorithm>
+#include <assert.h>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

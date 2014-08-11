@@ -86,6 +86,7 @@
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>

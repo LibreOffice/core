@@ -16,7 +16,9 @@
 
 #include "math.h"
 #include <boost/foreach.hpp>
+#include <boost/optional.hpp>
 #include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <com/sun/star/i18n/LocaleCalendar.hpp>
@@ -77,6 +79,5 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

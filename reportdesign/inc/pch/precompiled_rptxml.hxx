@@ -113,6 +113,7 @@
 #include <xmloff/contextid.hxx>
 #include <xmloff/controlpropertyhdl.hxx>
 #include <xmloff/families.hxx>
+#include <xmloff/maptype.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/numehelp.hxx>
 #include <xmloff/prstylei.hxx>
@@ -127,6 +128,7 @@
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

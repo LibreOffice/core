@@ -109,7 +109,6 @@
 #include <com/sun/star/view/XViewCursor.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <cppuhelper/bootstrap.hxx>

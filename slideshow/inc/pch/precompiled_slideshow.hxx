@@ -167,7 +167,6 @@
 #include <comphelper/optional.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <comphelper/uno3.hxx>
 #include <config_features.h>
 #include <cppcanvas/basegfxfactory.hxx>
@@ -219,7 +218,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>

@@ -194,6 +194,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -308,8 +309,10 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <valarray>
+#include <vcl/bmpacc.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/font.hxx>
+#include <vcl/opengl/GLMHelper.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/openglwin.hxx>
 #include <vcl/outdev.hxx>

@@ -354,6 +354,7 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <o3tl/heap_ptr.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/System.hxx>
@@ -368,7 +369,6 @@
 #include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/drawingml/lineproperties.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
-#include <oox/drawingml/theme.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/drawingml.hxx>
@@ -448,6 +448,7 @@
 #include <svl/zformat.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/embedhlp.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svtools/htmlkywd.hxx>

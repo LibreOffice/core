@@ -22,12 +22,14 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <boost/checked_delete.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/unordered_map.hpp>
 #include <cassert>
 #include <cmath>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <comphelper/string.hxx>
 #include <config_features.h>
@@ -47,6 +49,7 @@
 #include <list>
 #include <math.h>
 #include <new>
+#include <o3tl/heap_ptr.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
@@ -67,6 +70,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -74,6 +78,7 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
+#include <sax/tools/converter.hxx>
 #include <set>
 #include <stdio.h>
 #include <stdlib.h>

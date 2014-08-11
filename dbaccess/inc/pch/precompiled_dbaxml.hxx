@@ -123,6 +123,7 @@
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/families.hxx>
+#include <xmloff/maptype.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlement.hxx>
@@ -133,6 +134,7 @@
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmlscripti.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

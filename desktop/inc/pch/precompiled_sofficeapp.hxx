@@ -23,6 +23,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <cassert>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -139,6 +140,7 @@
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/module.h>
+#include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/security.hxx>
@@ -154,6 +156,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <salinst.hxx>
 #include <set>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -198,7 +201,10 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/svmain.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vector>
 

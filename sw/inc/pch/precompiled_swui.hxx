@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -211,6 +212,7 @@
 #include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/poly.hxx>
+#include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

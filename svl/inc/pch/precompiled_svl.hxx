@@ -20,6 +20,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
@@ -106,11 +107,16 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <iostream>
 #include <limits.h>
 #include <limits>
 #include <list>
 #include <map>
 #include <math.h>
+#include <mdds/multi_type_matrix.hpp>
+#include <mdds/multi_type_vector_custom_func1.hpp>
+#include <mdds/multi_type_vector_trait.hpp>
+#include <mdds/multi_type_vector_types.hpp>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.h>

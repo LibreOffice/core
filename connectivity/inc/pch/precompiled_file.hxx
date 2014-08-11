@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include <sal/config.h>
 #include <algorithm>
 #include <cmath>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -59,6 +58,7 @@
 #include <osl/thread.h>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/config.h>
 #include <stdio.h>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

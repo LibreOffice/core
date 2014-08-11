@@ -202,6 +202,7 @@
 #include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -514,6 +515,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/frmhtmlw.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <sfx2/infobar.hxx>
@@ -554,7 +556,6 @@
 #include <string>
 #include <svl/IndexedStyleSheets.hxx>
 #include <svl/aeitem.hxx>
-#include <svl/SfxBroadcaster.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>
@@ -588,6 +589,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ehdl.hxx>
+#include <svtools/embedhlp.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/imapcirc.hxx>

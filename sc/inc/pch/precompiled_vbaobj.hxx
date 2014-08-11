@@ -201,7 +201,6 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <cppuhelper/bootstrap.hxx>

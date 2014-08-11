@@ -54,6 +54,7 @@
 #include "vcl/builder.hxx"
 #include "vcl/svapp.hxx"
 #include <algorithm>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -64,6 +65,7 @@
 #include <basic/sbxvar.hxx>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <cassert>
@@ -276,6 +278,9 @@
 #include <deque>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/charreliefitem.hxx>

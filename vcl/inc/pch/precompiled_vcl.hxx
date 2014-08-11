@@ -137,6 +137,7 @@
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/mem_fn.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
@@ -145,6 +146,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
+#include <cassert>
 #include <cmath>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -339,6 +341,7 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
+#include <salhelper/linkhelper.hxx>
 #include <set>
 #include <setjmp.h>
 #include <sot/exchange.hxx>
@@ -350,7 +353,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <svl/SfxBroadcaster.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/lstner.hxx>
 #include <svl/smplhint.hxx>

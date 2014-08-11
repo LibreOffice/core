@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "boost/scoped_ptr.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "cppuhelper/factory.hxx"
@@ -97,6 +96,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/spirit/include/classic_core.hpp>
@@ -237,6 +237,7 @@
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
 #include <com/sun/star/embed/XEmbedObjectFactory.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/XEmbedPersist2.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>
@@ -306,6 +307,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -667,8 +669,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
-#include <svl/aeitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include <svl/aeitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/flagitem.hxx>

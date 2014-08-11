@@ -149,6 +149,7 @@
 #include <unotools/useroptions.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>

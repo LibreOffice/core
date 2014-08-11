@@ -108,6 +108,7 @@
 #include <com/sun/star/form/XResetListener.hpp>
 #include <com/sun/star/form/XSubmit.hpp>
 #include <com/sun/star/form/XSubmitListener.hpp>
+#include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/Frame.hpp>
