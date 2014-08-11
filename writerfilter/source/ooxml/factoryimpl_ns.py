@@ -114,7 +114,10 @@ def fastNamespace(attrNode):
 
 
 def fastLocalName(attrNode):
-    return "oox::XML_%s" % attrNode.getAttribute("localname")
+    if len(attrNode.getAttribute("localname")):
+        return "oox::XML_%s" % attrNode.getAttribute("localname")
+    else:
+        return "oox::XML_TOKEN_COUNT"
 
 
 def fastToken(attrNode):

@@ -2632,7 +2632,6 @@
       <include href="shared-relationshipReference.rng"/>
       <define name="CT_OfficeArtExtension">
         <element>
-          <anyName/>
           <ref name="BUILT_IN_ANY_TYPE"/>
         </element>
         <attribute name="uri">
@@ -4012,7 +4011,6 @@
           <ref name="wsp"/>
           <ref name="wgp"/>
           <element>
-            <anyName/>
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         <attribute name="uri">
@@ -9146,7 +9144,6 @@
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
           <element>
-            <anyName/>
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </choice>
@@ -9409,12 +9406,8 @@
       <define name="BUILT_IN_ANY_TYPE">
           <choice>
             <element>
-              <anyName/>
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
-            <attribute>
-              <anyName/>
-            </attribute>
             <text/>
           </choice>
       </define>
@@ -10415,12 +10408,8 @@
       <define name="BUILT_IN_ANY_TYPE">
           <choice>
             <element>
-              <anyName/>
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
-            <attribute>
-              <anyName/>
-            </attribute>
             <text/>
           </choice>
       </define>
@@ -12539,7 +12528,6 @@
       </define>
       <define name="CT_PictureBase">
             <element>
-              <anyName/>
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
       </define>
@@ -16316,7 +16304,6 @@
       </define>
       <define name="CT_ShapeDefaults">
             <element>
-              <anyName/>
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
       </define>
@@ -16602,12 +16589,8 @@
       <define name="BUILT_IN_ANY_TYPE">
           <choice>
             <element>
-              <anyName/>
               <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
-            <attribute>
-              <anyName/>
-            </attribute>
             <text/>
           </choice>
       </define>

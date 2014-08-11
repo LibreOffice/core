@@ -137,8 +137,6 @@ def preprocess(model):
             # localname
             if ":" in j.getAttribute("name"):
                 localname = j.getAttribute("name").split(':')[1]
-            elif len(j.getElementsByTagName("anyName")):
-                localname = "TOKEN_COUNT"
             else:
                 localname = j.getAttribute("name")
 
