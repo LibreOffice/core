@@ -990,7 +990,6 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
 
 void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, bool bCheck )
 {
-    DBG_ASSERT( this != 0, "");
     DBG_ASSERT( pSVMenu != 0, "" );
     if (pSVMenu->GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND )
         pSVMenu->CheckItem( nItemId, bCheck );
@@ -1001,7 +1000,6 @@ void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, bool bCheck )
 
 void SfxVirtualMenu::EnableItem( sal_uInt16 nItemId, bool bEnable )
 {
-    DBG_ASSERT( this != 0, "");
     DBG_ASSERT( pSVMenu != 0, "" );
 
     if (pSVMenu->GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND )
@@ -1013,7 +1011,6 @@ void SfxVirtualMenu::EnableItem( sal_uInt16 nItemId, bool bEnable )
 
 void SfxVirtualMenu::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
-    DBG_ASSERT( this != 0, "");
     DBG_ASSERT( pSVMenu != 0, "" );
     if (pSVMenu->GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND )
         pSVMenu->SetItemText( nItemId, rText );
