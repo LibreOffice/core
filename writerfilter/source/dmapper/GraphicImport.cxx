@@ -46,6 +46,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <oox/drawingml/drawingmltypes.hxx>
 
@@ -253,6 +254,7 @@ public:
     OUString title;
     std::queue<OUString>& m_rPositivePercentages;
     OUString sAnchorId;
+    comphelper::SequenceAsHashMap m_aInteropGrabBag;
 
     GraphicImport_Impl(GraphicImportType eImportType, DomainMapper&   rDMapper, std::queue<OUString>& rPositivePercentages) :
         nXSize(0)
@@ -790,6 +792,11 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xShapeProps->setPropertyValue("Surround", uno::makeAny(m_pImpl->nWrap));
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
+
+                        // Get the grab-bag set by oox, merge with our one and then put it back.
+                        comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
+                        aInteropGrabBag.update(m_pImpl->m_aInteropGrabBag);
+                        xShapeProps->setPropertyValue("InteropGrabBag", uno::makeAny(aInteropGrabBag.getAsConstPropertyValueList()));
                     }
                 }
             }
@@ -953,6 +960,12 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             {
                 pProperties->resolve(*this);
             }
+
+            // We'll map these to PARALLEL, save the original wrap type.
+            if (nSprmId == NS_ooxml::LN_EG_WrapType_wrapTight)
+                m_pImpl->m_aInteropGrabBag["EG_WrapType"] <<= OUString("wrapTight");
+            else if (nSprmId == NS_ooxml::LN_EG_WrapType_wrapThrough)
+                m_pImpl->m_aInteropGrabBag["EG_WrapType"] <<= OUString("wrapThrough");
         }
         break;
         case NS_ooxml::LN_CT_WrapTight_wrapPolygon:
@@ -963,6 +976,9 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 resolveSprmProps(aHandler, rSprm);
 
                 m_pImpl->mpWrapPolygon = aHandler.getPolygon();
+
+                // Save the wrap path in case we can't handle it natively: drawinglayer shapes, TextFrames.
+                m_pImpl->m_aInteropGrabBag["CT_WrapPath"] <<= m_pImpl->mpWrapPolygon->getPointSequenceSequence();
             }
             break;
         case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
