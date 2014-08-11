@@ -975,7 +975,7 @@ namespace sfx2
 
     IMPL_LINK( TaskPaneController_Impl, DockingChanged, TitledDockingWindow*, i_pDockingWindow )
     {
-        ENSURE_OR_RETURN( i_pDockingWindow && &m_rDockingWindow, "TaskPaneController_Impl::DockingChanged: where does this come from?", 0L );
+        ENSURE_OR_RETURN( i_pDockingWindow, "TaskPaneController_Impl::DockingChanged: where does this come from?", 0L );
 
         if ( impl_getLayout() == LAYOUT_DRAWERS )
             return 0L;
