@@ -326,13 +326,6 @@ void SfxItemPool::LoadCompleted()
                 {
                     if (*ppHtArr)
                     {
-                        #ifdef DBG_UTIL
-                        const SfxPoolItem &rItem = **ppHtArr;
-                        DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
-                                    0 != &((const SfxSetItem&)rItem).GetItemSet(),
-                                    "SetItem without ItemSet" );
-                        #endif
-
                         if ( !ReleaseRef( **ppHtArr, 1 ) )
                             DELETEZ( *ppHtArr );
                     }
@@ -488,13 +481,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                 for( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
                     if (*ppHtArr)
                     {
-                        #ifdef DBG_UTIL
-                        const SfxPoolItem &rItem = **ppHtArr;
-                        DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
-                                    0 != &((const SfxSetItem&)rItem).GetItemSet(),
-                                    "SetItem without ItemSet" );
                         DBG_WARNING( "loading non-empty ItemPool" );
-                        #endif
 
                         AddRef( **ppHtArr, 1 );
                     }

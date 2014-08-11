@@ -636,10 +636,6 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
 
 const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
-    DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
-                0 != &((const SfxSetItem&)rItem).GetItemSet(),
-                "SetItem without ItemSet" );
-
     if ( 0 == nWhich )
         nWhich = rItem.Which();
 
@@ -792,10 +788,6 @@ void SfxPoolItemArray_Impl::ReHash()
 
 void SfxItemPool::Remove( const SfxPoolItem& rItem )
 {
-    DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
-                0 != &((const SfxSetItem&)rItem).GetItemSet(),
-                "SetItem without ItemSet" );
-
     SFX_ASSERT( !IsPoolDefaultItem(&rItem), rItem.Which(),
                 "where's the Pool Default coming from here?" );
 

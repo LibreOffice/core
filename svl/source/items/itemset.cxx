@@ -482,12 +482,6 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
 
                     if (ppItem)
                     {
-                        #ifdef DBG_UTIL
-                        const SfxPoolItem *pItem = *ppFnd;
-                        DBG_ASSERT( !pItem->ISA(SfxSetItem) ||
-                                0 != &((const SfxSetItem*)pItem)->GetItemSet(),
-                                "SetItem without ItemSet" );
-                        #endif
                         *ppItem = *ppFnd;
                     }
                     return SFX_ITEM_SET;
@@ -512,9 +506,6 @@ bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
 
 const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
-    DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
-            0 != &((const SfxSetItem&)rItem).GetItemSet(),
-            "SetItem without ItemSet" );
     if ( !nWhich )
         return 0; //FIXME: Only because of Outliner bug
 
@@ -936,9 +927,6 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
                         }
 #ifdef DBG_UTIL
                         const SfxPoolItem *pItem = *ppFnd;
-                        DBG_ASSERT( !pItem->ISA(SfxSetItem) ||
-                                0 != &((const SfxSetItem*)pItem)->GetItemSet(),
-                                "SetItem without ItemSet" );
                         if ( pItem->ISA(SfxVoidItem) || !pItem->Which() )
                             DBG_WARNING( "SFX_WARNING: Getting disabled Item" );
 #endif
@@ -958,9 +946,6 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
     // Get the Default from the Pool and return
     SFX_ASSERT(_pPool, nWhich, "no Pool, but status is ambiguous");
     const SfxPoolItem *pItem = &_pPool->GetDefaultItem( nWhich );
-    DBG_ASSERT( !pItem->ISA(SfxSetItem) ||
-            0 != &((const SfxSetItem*)pItem)->GetItemSet(),
-            "SetItem without ItemSet" );
     return *pItem;
 }
 
