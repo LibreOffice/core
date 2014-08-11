@@ -94,8 +94,9 @@ public class Bootstrap_Test {
         java.util.HashMap<String,String> bootstrap_parameters = new java.util.HashMap<String,String>();
         for ( int nPos = 1; nPos < args.length; ++nPos ) {
             if (args[nPos].contains("=")) {
-                String bootstrap_parameter[] = args[nPos].split("=");
-                if (bootstrap_parameter.length == 2){
+                String bootstrap_parameter[] = args[nPos].split("=",2);
+                // Reject empty bootstrap parameters
+                if ((bootstrap_parameter[0].length() > 0) && (bootstrap_parameter[1].length() > 0)){
                     bootstrap_parameters.put( bootstrap_parameter[0], bootstrap_parameter[1] );
                 } else{
                     usage();
