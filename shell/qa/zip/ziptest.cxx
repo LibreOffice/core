@@ -82,10 +82,12 @@ Test::Test() : documentName(), pStream(NULL)
     LPVOID pvData = GlobalLock(hGlobal);
     DWORD dwBytesRead = 0;
     BOOL bRead = ReadFile(hFile, pvData, dwFileSize, &dwBytesRead, NULL);
+    CPPUNIT_ASSERT_MESSAGE("FileStream: ReadFile error.", bRead);
     GlobalUnlock(hGlobal);
     CloseHandle(hFile);
 
     HRESULT hr = CreateStreamOnHGlobal(hGlobal, TRUE, &pStream);
+    CPPUNIT_ASSERT_MESSAGE("FileStream: CreateStreamOnHGlobal failure.", hr == S_OK);
 }
 
 void Test::test_file_directory()
