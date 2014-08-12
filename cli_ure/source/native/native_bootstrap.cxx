@@ -236,7 +236,7 @@ void extendPath(LPCWSTR szUreBinPath)
         lstrcat(sNewPath, L";");
         lstrcat(sNewPath, sEnvPath);
     }
-    BOOL bSet = SetEnvironmentVariable(L"PATH", sNewPath);
+    SetEnvironmentVariable(L"PATH", sNewPath);
 
     delete[] sEnvPath;
     delete[] sNewPath;
