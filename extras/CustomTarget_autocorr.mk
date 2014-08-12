@@ -240,51 +240,7 @@ extras_AUTOCORR_XMLFILES := \
 	zh-TW/SentenceExceptList.xml \
 
 
-extras_AUTOCORR_MIMETYPEFILES := \
-	af-ZA/mimetype \
-	bg/mimetype \
-	ca/mimetype \
-	cs/mimetype \
-	da/mimetype \
-	de/mimetype \
-	en-AU/mimetype \
-	en-GB/mimetype \
-	en-US/mimetype \
-	en-ZA/mimetype \
-	es/mimetype \
-	fa/mimetype \
-	fi/mimetype \
-	fr/mimetype \
-	ga-IE/mimetype \
-	hr/mimetype \
-	hu/mimetype \
-	is/mimetype \
-	it/mimetype \
-	ja/mimetype \
-	ko/mimetype \
-	lb-LU/mimetype \
-	lt/mimetype \
-	mn/mimetype \
-	nl-BE/mimetype \
-	nl/mimetype \
-	pl/mimetype \
-	pt-BR/mimetype \
-	pt/mimetype \
-	ro/mimetype \
-	ru/mimetype \
-	sk/mimetype \
-	sl/mimetype \
-	sr-CS/mimetype \
-	sr-Latn-CS/mimetype \
-	sr-Latn-ME/mimetype \
-	sr-Latn-RS/mimetype \
-	sr-ME/mimetype \
-	sr-RS/mimetype \
-	sv/mimetype \
-	tr/mimetype \
-	vi/mimetype \
-	zh-CN/mimetype \
-	zh-TW/mimetype \
+extras_AUTOCORR_MIMETYPEFILES := $(foreach lang,$(extras_AUTOCORR_LANGS),$(firstword $(subst :, ,$(lang)))/mimetype)
 
 
 ifneq ($(sort $(foreach file,$(extras_AUTOCORR_XMLFILES),$(firstword $(subst /, ,$(file))))),$(sort $(foreach lang,$(extras_AUTOCORR_LANGS),$(firstword $(subst :, ,$(lang))))))
