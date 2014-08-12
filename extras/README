@@ -1,4 +1,4 @@
-Contains templates, clipart galleries, palettes, symbol font etc.
+Contains templates, clipart galleries, palettes, symbol font, autocorrections, autotexts etc.
 
 How-to add a new gallery:
 	+ create a directory extras/source/gallery/foo/
@@ -6,3 +6,23 @@ How-to add a new gallery:
 	+ add a [foo] section to extras/source/gallery/share/gallery_names.ulf
 	+ add a Gallery_foo.mk at the top-level (and mention in Module_extra.mk)
 	+ add a new GALLERY_FILELIST statement in scp2/
+
+How-to add a new autotext category
+	+ create a directory extras/source/autotext/lang/xx/foo/ where xx is your lang code
+	+ unzip your foo.bau autotext file in this directory (including an empty mimetype file)
+	+ add xx/foo.bau in extras/AllLangPackage_autotextshare.mk
+	+ in extras/CustomTarget_autotextshare.mk:
+		+ add xx/foo in extras_AUTOTEXTSHARE_AUTOTEXTS
+		+ add all files contained in foo.bau (except mimetype) in extras_AUTOTEXTSHARE_XMLFILES
+		+ if foo.bau contains files with other extension than .xml, .rdf, .svm and .png
+			+ add a CPY call at the end of the file
+
+How-to add a new autotext to an existing category
+	+ create a directory extras/source/autotext/lang/xx/standard/FOO/ to add it in category standard of lang xx
+	+ add files of the autotext (at least FOO.xml for an unformatted autotext)
+	+ add autotext name in extras/source/autotext/lang/xx/standard/BlockList.xml
+	+ add all files of autotext in extras/source/autotext/lang/xx/standard/META-INF/manifest.xml
+	+ in extras/CustomTarget_autotextshare.mk:
+		+ add all files of autotext in extras_AUTOTEXTSHARE_XMLFILES
+		+ if some files have different extension from .xml, .rdf, .svm and .png
+			+ add a CPY call at the end of the file
