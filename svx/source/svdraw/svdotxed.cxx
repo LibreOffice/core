@@ -63,9 +63,13 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     }
 
     // FIXME(matteocam)
-    sal_uIntPtr nStat1=rOutl.GetControlWord();
-    nStat1 &=~EE_CNTRL_AUTOPAGESIZE;
-    rOutl.SetControlWord(nStat1);
+    bool bIsChained = true; // XXX: get it from a method
+    // disable AUTOPAGESIZE
+    if ( bIsChained ) {
+        sal_uIntPtr nStat1=rOutl.GetControlWord();
+        nStat1 &=~EE_CNTRL_AUTOPAGESIZE;
+        rOutl.SetControlWord(nStat1);
+    }
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
     if(pOutlinerParaObject!=NULL)
