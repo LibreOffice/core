@@ -393,10 +393,10 @@ Public Function getObject(Optional pvShortcut As Variant) As Variant
 Const cstEXCLAMATION = &quot;!&quot;
 Const cstDOT = &quot;.&quot;
 
+	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;getObject&quot;)
 	If IsMissing(pvShortcut) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvShortcut, 1, vbString) Then Goto Exit_Function
-	If _ErrorHandler() Then On Local Error Goto Error_Function
 
 Dim iCurrentIndex As Integer, vCurrentObject As Variant, sCurrentProperty As String
 Dim sComponents() As String, sSubComponents() As String, sDialog As String

@@ -29,7 +29,7 @@ REM		TraceConsole()
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub TraceConsole()
 &apos;	Display the Trace dialog with current trace log values and parameter choices
-If _ErrorHandler() Then On Local Error Goto Error_Sub
+	If _ErrorHandler() Then On Local Error Goto Error_Sub
 
 Dim sLineBreak As String, oDialogLib As Object, oTraceDialog As Object
 	sLineBreak = Chr(10)
@@ -156,6 +156,7 @@ Public Sub TraceError(ByVal psErrorLevel As String _
 &apos;	store error codes in trace buffer
 
 	On Local Error Resume Next
+	If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current LibO/AOO session
 
 Dim sErrorText As String, sErrorDesc As String, oDb As Object
 	sErrorDesc = _ErrorMessage(piErrorCode, pvArgs)
@@ -210,7 +211,8 @@ Public Sub TraceLog(Byval psTraceLevel As String _
 						, ByVal Optional pbMsgBox As Boolean _
 						)
 &apos;	Store Text in trace log (circular buffer)
-If _ErrorHandler() Then On Local Error Goto Error_Sub
+
+	If _ErrorHandler() Then On Local Error Goto Error_Sub
 Dim vTraceLogs() As String, sTraceLevel As String
 
 	With _A2B_
@@ -267,7 +269,7 @@ Private Sub _DumpToFile(oEvent As Object)
 &apos;		Modified from Andrew Pitonyak&apos;s Base Macro Programming §10.4
 
 
-If _ErrorHandler() Then On Local Error GoTo Error_Sub
+	If _ErrorHandler() Then On Local Error GoTo Error_Sub
 
 Dim sPath as String, iFileNumber As Integer, i As Integer
 
@@ -299,6 +301,7 @@ REM ----------------------------------------------------------------------------
 Public Function _ErrorHandler(Optional ByVal pbCheck As Boolean) As Boolean
 &apos; Indicate if error handler is activated or not
 &apos; When argument present set error handler
+	If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current LibO/AOO session
 	If Not IsMissing(pbCheck) Then _A2B_.ErrorHandler = pbCheck
 	_ErrorHandler = _A2B_.ErrorHandler
 	Exit Function		
@@ -340,7 +343,7 @@ Public Function _PromptFilePicker(ByVal psSuffix As String) As String
 &apos;		Return &quot;&quot; if Cancel
 &apos;		Modified from Andrew Pitonyak&apos;s Base Macro Programming §10.4
 
-If _ErrorHandler() Then On Local Error GoTo Error_Function
+	If _ErrorHandler() Then On Local Error GoTo Error_Function
 
 Dim oFileDialog as Object, oUcb as object, oPath As Object
 Dim iAccept as Integer, sInitPath as String
