@@ -1971,10 +1971,10 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
             ImpAutoFitText(*pEdtOutl);
             mbInDownScale = false;
         }
-        else if ( GetNextLinkInChain() != NULL &&  pEditStatus->IsPageOverflow())
+        else if ( GetNextLinkInChain() != NULL)
         {
             // set the need for chaining
-            SetToBeChained( true );
+            SetToBeChained( pEditStatus->IsPageOverflow() );
             //impDecomposeChainedTextPrimitive();
         }
     }
