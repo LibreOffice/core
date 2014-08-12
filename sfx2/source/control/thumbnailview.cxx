@@ -220,7 +220,7 @@ void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
     mpItemAttrs->aFillColor = maColor.getBColor();
     mpItemAttrs->aHighlightColor = rStyleSettings.GetHighlightColor().getBColor();
     mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize,GetFont(),false,true);
-    mpItemAttrs->nMaxTextLength = -1;
+    mpItemAttrs->nMaxTextLength = 0;
 }
 
 void ThumbnailView::ImplInitScrollBar()
