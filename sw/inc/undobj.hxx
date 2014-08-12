@@ -134,7 +134,7 @@ namespace nsDelCntntType
 
 /// will DelCntntIndex destroy a frame anchored at character at rAnchorPos?
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
-        SwPosition const & rStart, SwPosition const & rEnd,
+        SwPosition const & rStart, SwPosition const & rEnd, const SwDoc* doc,
         DelCntntType const nDelCntntType = nsDelCntntType::DELCNT_ALL);
 
 // This class has to be inherited into an Undo-object if it saves content
