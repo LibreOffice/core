@@ -245,7 +245,7 @@ public class ObjectInputStream extends TestCase {
         data.add(Boolean.TRUE) ;
         data.add(new Byte((byte)123)) ;
         data.add(new Character((char)1234)) ;
-        data.add(new Short((short)1234)) ;
+        data.add(Short.valueOf((short)1234)) ;
         data.add(Integer.valueOf(123456)) ;
         data.add(new Float(1.234)) ;
         data.add(new Double(1.23456)) ;

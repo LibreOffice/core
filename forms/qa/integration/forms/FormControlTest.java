@@ -223,7 +223,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         }
 
         XPropertySet checkModel = getControlModel( "f_tinyint" );
-        checkModel.setPropertyValue( "State", new Short( (short)0 ) );
+        checkModel.setPropertyValue( "State", Short.valueOf( (short)0 ) );
 
         // setting the state of the check box needs to be reflected in the formatted field immediately
         if ( !checkDoubleValue( 0, "f_tinyint_format", "EffectiveValue" ) )
@@ -233,7 +233,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         }
 
         // same for the "indetermined" state of the check box
-        checkModel.setPropertyValue( "State", new Short( (short)2 ) );
+        checkModel.setPropertyValue( "State", Short.valueOf( (short)2 ) );
         if ( !checkNullValue( "f_tinyint_format", "EffectiveValue" ) )
         {
             failed( "cross-update failed: updating the check box should result in updating the same-bound formatted field (2)!" );
@@ -294,7 +294,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         }
 
         XPropertySet radioModel = getRadioModel( "radio_group", "normal" );
-        radioModel.setPropertyValue( "State", new Short( (short)1 ) );
+        radioModel.setPropertyValue( "State", Short.valueOf( (short)1 ) );
 
         // setting the state of the radio button needs to be reflected in the formatted field immediately
         if ( !checkStringValue( "normal", "f_text_enum_text", "Text" ) )
@@ -304,7 +304,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         }
 
         // same for the "indetermined" state of the check box
-        getRadioModel( "radio_group", "important" ).setPropertyValue( "State", new Short( (short)1 ) );
+        getRadioModel( "radio_group", "important" ).setPropertyValue( "State", Short.valueOf( (short)1 ) );
         if ( !checkStringValue( "important", "f_text_enum_text", "Text" ) )
         {
             failed( "cross-update failed: updating the radio button should result in updating the same-bound text field (2)!" );
@@ -526,12 +526,12 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
                                     m_formLayer.insertControlLine( "DatabaseFormattedField","f_tinyint",        "_format",80, 41, 6 );
                                     m_formLayer.insertControlLine( "DatabaseTextField",     "dummy",            "", 150 );
 
-        xIDField.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
+        xIDField.setPropertyValue( "DecimalAccuracy", Short.valueOf( (short)0 ) );
         xImageField.setPropertyValue( "ScaleImage", Boolean.TRUE );
         xImageField.setPropertyValue( "Tabstop", Boolean.TRUE );
         xCheckBox.setPropertyValue( "TriState", Boolean.TRUE );
-        xCheckBox.setPropertyValue( "DefaultState", new Short( (short)2 ) );
-        xTimeField.setPropertyValue( "TimeFormat", new Short( (short)1 ) );
+        xCheckBox.setPropertyValue( "DefaultState", Short.valueOf( (short)2 ) );
+        xTimeField.setPropertyValue( "TimeFormat", Short.valueOf( (short)1 ) );
         xTimeField.setPropertyValue( "TimeMax", Integer.valueOf( 23595999 ) );
         xReqField.setPropertyValue( "ConvertEmptyToNull", Boolean.FALSE );
 

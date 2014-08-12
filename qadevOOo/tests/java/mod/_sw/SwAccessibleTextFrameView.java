@@ -124,9 +124,9 @@ public class SwAccessibleTextFrameView extends TestCase {
                 public void fireEvent() {
                     try {
                         //change zoom value to 15%
-                        PropSet.setPropertyValue("ZoomValue", new Short("15"));
+                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("15"));
                         //and back to 100%
-                        PropSet.setPropertyValue("ZoomValue", new Short("100"));
+                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("100"));
                     } catch ( com.sun.star.lang.WrappedTargetException e ) {
 
                     }  catch ( com.sun.star.lang.IllegalArgumentException e ) {

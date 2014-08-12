@@ -246,7 +246,7 @@ public class TextDocument
         ViewHandler myViewHandler = new ViewHandler(xTextDocument);
         try
         {
-            myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
+            myViewHandler.setViewSetting("ZoomType", Short.valueOf(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
         }
         catch (Exception e)
         {

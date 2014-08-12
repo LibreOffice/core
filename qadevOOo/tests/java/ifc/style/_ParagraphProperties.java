@@ -171,10 +171,10 @@ public class _ParagraphProperties extends MultiPropertyTest {
         @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if ((oldValue != null) &&
-                    (oldValue.equals(new Short((short) 0)))) {
-                return new Short((short) 2);
+                    (oldValue.equals(Short.valueOf((short) 0)))) {
+                return Short.valueOf((short) 2);
             } else {
-                return new Short((short) 0);
+                return Short.valueOf((short) 0);
             }
         }
     };

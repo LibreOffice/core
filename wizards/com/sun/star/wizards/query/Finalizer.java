@@ -63,7 +63,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    8, reslblQueryTitle, 95, 27, Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 52
+                    8, reslblQueryTitle, 95, 27, Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), Short.valueOf(curtabindex++), 52
                 });
         m_aTxtTitle = m_queryWizard.insertTextField("txtQueryTitle", "changeTitle", this, new String[]
                 {
@@ -71,7 +71,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    12, HelpIds.getHelpIdString(curHelpIndex++), 95, 37, Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 90
+                    12, HelpIds.getHelpIdString(curHelpIndex++), 95, 37, Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), Short.valueOf(curtabindex++), 90
                 });
         m_queryWizard.insertLabel("lblHowGoOn", new String[]
                 {
@@ -79,7 +79,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    16, reslblHowGoOn, Boolean.TRUE, 192, 27, Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 112
+                    16, reslblHowGoOn, Boolean.TRUE, 192, 27, Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), Short.valueOf(curtabindex++), 112
                 });
         this.xRadioDisplayQuery = m_queryWizard.insertRadioButton("optDisplayQuery",
                 new String[]
@@ -88,7 +88,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    9, HelpIds.getHelpIdString(curHelpIndex++), resoptDisplayQuery, 192, 46, new Short((short) 1), Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 118
+                    9, HelpIds.getHelpIdString(curHelpIndex++), resoptDisplayQuery, 192, 46, Short.valueOf((short) 1), Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), Short.valueOf(curtabindex++), 118
                 });
 
         m_queryWizard.insertRadioButton("optModifyQuery",
@@ -98,7 +98,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    10, HelpIds.getHelpIdString(curHelpIndex++), resoptModifyQuery, 192, 56, Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 118
+                    10, HelpIds.getHelpIdString(curHelpIndex++), resoptModifyQuery, 192, 56, Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), Short.valueOf(curtabindex++), 118
                 });
         m_queryWizard.insertFixedLine("flnSummary", new String[]
                 {
@@ -106,7 +106,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    10, resflnSummary, 95, 68, 8, new Short(curtabindex++), 209
+                    10, resflnSummary, 95, 68, 8, Short.valueOf(curtabindex++), 209
                 });
         m_queryWizard.insertTextField("txtSummary", 0, null, new String[]
                 {

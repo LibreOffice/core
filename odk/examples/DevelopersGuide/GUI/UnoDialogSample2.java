@@ -100,7 +100,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             final int nListBoxHeight = nDialogHeight - 4*nControlMargin - nButtonHeight;
             oUnoDialogSample2 = new UnoDialogSample2(xContext, xMCF, oUnoObject);
             oUnoDialogSample2.initialize( new String[] {"Height", "Moveable", "Name","PositionX","PositionY", "Step", "TabIndex","Title","Width"},
-                                          new Object[] { Integer.valueOf(nDialogHeight), Boolean.TRUE, "Dialog1", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(1), new Short((short) 0), "Inspect a Uno-Object", Integer.valueOf(nDialogWidth)});
+                                          new Object[] { Integer.valueOf(nDialogHeight), Boolean.TRUE, "Dialog1", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(1), Short.valueOf((short) 0), "Inspect a Uno-Object", Integer.valueOf(nDialogWidth)});
             String sIntroLabel = "This Dialog lists information about a given Uno-Object.\nIt offers a view to inspect all suppported servicenames, exported interfaces, methods and properties.";
             oUnoDialogSample2.insertMultiLineFixedText(nControlPosX, 27, nControlWidth, 4, 1, sIntroLabel);
             // get the data from the UNO object...
@@ -127,7 +127,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             oUnoDialogSample2.insertRoadmapItem(2, true, "Interfaces", 3);
             oUnoDialogSample2.insertRoadmapItem(3, true, "Methods", 4);
             oUnoDialogSample2.insertRoadmapItem(4, true, "Properties", 5);
-            oUnoDialogSample2.m_xRMPSet.setPropertyValue("CurrentItemID", new Short((short) 1));
+            oUnoDialogSample2.m_xRMPSet.setPropertyValue("CurrentItemID", Short.valueOf((short) 1));
             oUnoDialogSample2.m_xRMPSet.setPropertyValue("Complete", Boolean.TRUE);
             oUnoDialogSample2.xDialog = UnoRuntime.queryInterface(XDialog.class, oUnoDialogSample2.m_xDialogControl);
             oUnoDialogSample2.xDialog.execute();

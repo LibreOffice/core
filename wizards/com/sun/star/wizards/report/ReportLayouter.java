@@ -80,7 +80,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        8, slblDataStructure, 95, 27, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 99
+                        8, slblDataStructure, 95, 27, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 99
                     });
 
             short iSelPos = 0;
@@ -101,7 +101,7 @@ public class ReportLayouter
                         108, "HID:WIZARDS_HID_DLGREPORT_4_DATALAYOUT", 95, 37, new short[]
                         {
                             iSelPos
-                        }, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], new Short(curtabindex++), 99
+                        }, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], Short.valueOf(curtabindex++), 99
                     });
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblLayout",
@@ -111,7 +111,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        8, slblPageLayout, 205, 27, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 99
+                        8, slblPageLayout, 205, 27, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 99
                     });
 
             short iSelLayoutPos = 0;
@@ -135,7 +135,7 @@ public class ReportLayouter
                         108, "HID:WIZARDS_HID_DLGREPORT_4_PAGELAYOUT", 205, 37, new short[]
                         {
                             iSelLayoutPos
-                        }, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), 99
+                        }, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], Short.valueOf(curtabindex++), 99
                     });
             iOldLayoutPos = iSelPos;
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblOrientation",
@@ -145,7 +145,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        8, sOrientationHeader, 95, 148, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 74
+                        8, sOrientationHeader, 95, 148, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 74
                     });
 
             short m_nLandscapeState = CurReportDocument.getDefaultPageOrientation() == SOOPTLANDSCAPE ? (short) 1 : 0;
@@ -156,7 +156,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        10, "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, 101, 158, new Short(m_nLandscapeState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 60
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, 101, 158, Short.valueOf(m_nLandscapeState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 60
                     });
 
             short m_nPortraitState = CurReportDocument.getDefaultPageOrientation() == SOOPTPORTRAIT ? (short) 1 : (short) 0;
@@ -167,7 +167,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        10, "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, 101, 171, new Short(m_nPortraitState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 60
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, 101, 171, Short.valueOf(m_nPortraitState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 60
                     });
 
             aOrientationImage = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgOrientation",
@@ -177,7 +177,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Short("0"), 23, 164, 158, Boolean.FALSE, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), 30
+                        Short.valueOf("0"), 23, 164, 158, Boolean.FALSE, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), 30
                     });
 
             String sNote = ReportWizard.getBlindTextNote(CurReportDocument, CurUnoDialog.m_oResource);

@@ -156,7 +156,7 @@ public class SwXMailMerge extends TestCase {
             oObjProps.setPropertyValue("DataSourceName", cDataSourceName);
             oObjProps.setPropertyValue("Command", cDataCommand);
             oObjProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
-            oObjProps.setPropertyValue("OutputType", new Short(MailMergeType.FILE));
+            oObjProps.setPropertyValue("OutputType", Short.valueOf(MailMergeType.FILE));
             oObjProps.setPropertyValue("DocumentURL", cTestDoc);
             oObjProps.setPropertyValue("OutputURL", cOutputURL);
             oObjProps.setPropertyValue("FileNamePrefix", "Author");
@@ -186,7 +186,7 @@ public class SwXMailMerge extends TestCase {
         vXJobArg0[0] = new NamedValue("DataSourceName", cDataSourceName);
         vXJobArg0[1] = new NamedValue("Command", cDataCommand);
         vXJobArg0[2] = new NamedValue("CommandType",Integer.valueOf(CommandType.TABLE));
-        vXJobArg0[3] = new NamedValue("OutputType",new Short(MailMergeType.FILE));
+        vXJobArg0[3] = new NamedValue("OutputType",Short.valueOf(MailMergeType.FILE));
         vXJobArg0[4] = new NamedValue("DocumentURL", cTestDoc);
         vXJobArg0[5] = new NamedValue("OutputURL", cOutputURL);
         vXJobArg0[6] = new NamedValue("FileNamePrefix", "Identifier");
@@ -197,7 +197,7 @@ public class SwXMailMerge extends TestCase {
         vXJobArg1[1] = new NamedValue("Command", cDataCommand);
         vXJobArg1[2] = new NamedValue("CommandType",Integer.valueOf(CommandType.TABLE));
         vXJobArg1[3] = new NamedValue("OutputType",
-                             new Short(MailMergeType.PRINTER));
+                             Short.valueOf(MailMergeType.PRINTER));
         vXJobArg1[4] = new NamedValue("DocumentURL", cTestDoc);
         vXJobArg1[5] = new NamedValue("FileNamePrefix", "Author");
         vXJobArg1[6] = new NamedValue("FileNameFromColumn", Boolean.TRUE);
@@ -208,7 +208,7 @@ public class SwXMailMerge extends TestCase {
         vXJobArg2[2] = new NamedValue("Command", cDataCommand);
         vXJobArg2[3] = new NamedValue("CommandType",Integer.valueOf(CommandType.TABLE));
         vXJobArg2[4] = new NamedValue("OutputType",
-                             new Short(MailMergeType.FILE));
+                             Short.valueOf(MailMergeType.FILE));
         vXJobArg2[5] = new NamedValue("ResultSet", oResultSet);
         vXJobArg2[6] = new NamedValue("OutputURL", cOutputURL);
         vXJobArg2[7] = new NamedValue("FileNamePrefix", "Identifier");

@@ -53,7 +53,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor
                 // create a line separator for our new help sub menu
                 com.sun.star.beans.XPropertySet xSeparator =
                         UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, xMenuElementFactory.createInstance("com.sun.star.ui.ActionTriggerSeparator"));
-                Short aSeparatorType = new Short(ActionTriggerSeparatorType.LINE);
+                Short aSeparatorType = Short.valueOf(ActionTriggerSeparatorType.LINE);
                 xSeparator.setPropertyValue("SeparatorType", aSeparatorType);
 
                 // query sub menu for index container to get access

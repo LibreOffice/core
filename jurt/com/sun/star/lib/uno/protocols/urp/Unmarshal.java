@@ -218,7 +218,7 @@ final class Unmarshal {
 
     private Short readShortValue() {
         try {
-            return new Short(input.readShort());
+            return Short.valueOf(input.readShort());
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }

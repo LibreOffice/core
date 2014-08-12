@@ -99,7 +99,7 @@ public class SystemDialog  {
 
             // choose the template that defines the capabilities of the filepicker dialog
             XInitialization xInitialize = UnoRuntime.queryInterface(XInitialization.class, xFilePicker);
-            Short[] listAny = new Short[] { new Short(com.sun.star.ui.dialogs.TemplateDescription.FILESAVE_AUTOEXTENSION)};
+            Short[] listAny = new Short[] { Short.valueOf(com.sun.star.ui.dialogs.TemplateDescription.FILESAVE_AUTOEXTENSION)};
             xInitialize.initialize(listAny);
 
             // add a control to the dialog to add the extension automatically to the filename...

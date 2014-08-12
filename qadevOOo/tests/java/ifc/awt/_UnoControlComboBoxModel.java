@@ -99,7 +99,7 @@ public class _UnoControlComboBoxModel extends MultiPropertyTest {
 
     public void _Text() {
         try {
-            oObj.setPropertyValue("MaxTextLen",new Short((short)0));
+            oObj.setPropertyValue("MaxTextLen",Short.valueOf((short)0));
         } catch (com.sun.star.beans.UnknownPropertyException ue) {
         } catch (com.sun.star.beans.PropertyVetoException pe) {
         } catch (com.sun.star.lang.IllegalArgumentException ie) {

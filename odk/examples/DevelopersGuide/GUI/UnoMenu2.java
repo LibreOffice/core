@@ -42,7 +42,7 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         XMultiComponentFactory xMCF = xContext.getServiceManager();
         oUnoMenu2 = new UnoMenu2(xContext, xMCF);
         oUnoMenu2.initialize( new String[] {"Height", "Moveable", "Name","PositionX","PositionY", "Step", "TabIndex","Title","Width"},
-                                    new Object[] { Integer.valueOf(140), Boolean.TRUE, "Dialog1", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(1), new Short((short) 0), "Menu-Dialog", Integer.valueOf(200)});
+                                    new Object[] { Integer.valueOf(140), Boolean.TRUE, "Dialog1", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(1), Short.valueOf((short) 0), "Menu-Dialog", Integer.valueOf(200)});
 
         Object oFTHeaderModel = oUnoMenu2.m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
         XMultiPropertySet xFTHeaderModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);

@@ -81,7 +81,7 @@ public class DatabaseControl extends Control
 
             XPropertySetInfo xPSI = xPropColumn.getPropertySetInfo();
             if ( xPSI.hasPropertyByName( "MouseWheelBehavior" ) )
-                xPropColumn.setPropertyValue( "MouseWheelBehavior", new Short( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
+                xPropColumn.setPropertyValue( "MouseWheelBehavior", Short.valueOf( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
 
             setNumericLimits();
             _oGridControl.xNameContainer.insertByName(sFieldName, xPropColumn);

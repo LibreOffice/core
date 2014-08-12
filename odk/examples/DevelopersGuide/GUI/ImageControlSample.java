@@ -69,7 +69,7 @@ public class ImageControlSample extends UnoDialogSample{
             XMultiComponentFactory xMCF = xContext.getServiceManager();
             oImageControlSample = new ImageControlSample(xContext, xMCF);
             oImageControlSample.initialize( new String[] {"Height", "Moveable", "Name","PositionX","PositionY", "Step", "TabIndex","Title","Width"},
-                    new Object[] { Integer.valueOf(100), Boolean.TRUE, "MyTestDialog", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(0), new Short((short) 0), "OpenOffice", Integer.valueOf(230)});
+                    new Object[] { Integer.valueOf(100), Boolean.TRUE, "MyTestDialog", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(0), Short.valueOf((short) 0), "OpenOffice", Integer.valueOf(230)});
             Object oFTHeaderModel = oImageControlSample.m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
             XMultiPropertySet xFTHeaderModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
             xFTHeaderModelMPSet.setPropertyValues(
@@ -116,7 +116,7 @@ public class ImageControlSample extends UnoDialogSample{
             // The image is not scaled
             xICModelMPSet.setPropertyValues(
                     new String[] {"Border", "Height", "Name", "PositionX", "PositionY", "ScaleImage", "Width"},
-                    new Object[] { new Short((short) 1), Integer.valueOf(_nHeight), sName, Integer.valueOf(_nPosX), Integer.valueOf(_nPosY), Boolean.FALSE, Integer.valueOf(_nWidth)});
+                    new Object[] { Short.valueOf((short) 1), Integer.valueOf(_nHeight), sName, Integer.valueOf(_nPosX), Integer.valueOf(_nPosY), Boolean.FALSE, Integer.valueOf(_nWidth)});
 
             // The controlmodel is not really available until inserted to the Dialog container
             m_xDlgModelNameContainer.insertByName(sName, oICModel);

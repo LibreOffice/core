@@ -576,7 +576,7 @@ public class _XBreakIterator extends MultiMethodTest {
             vCharBlockBounds.add(new Boundary(startPos, endPos));
             log.println("" + vCharBlockBounds.size() + "). Bounds: ["
                 + startPos + "," + endPos + "]; Type = " + charType);
-            vCharBlockTypes.add(new Short(charType));
+            vCharBlockTypes.add(Short.valueOf(charType));
         }
 
         for(int i = 0; i < vCharBlockBounds.size() - 1; i++) {

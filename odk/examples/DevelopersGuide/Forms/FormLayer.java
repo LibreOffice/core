@@ -117,10 +117,10 @@ public class FormLayer
             if ( xPSI.hasPropertyByName( "Border" ) )
             {
                 if ( ((Short)xModelProps.getPropertyValue( "Border" )).shortValue() == com.sun.star.awt.VisualEffect.LOOK3D )
-                    xModelProps.setPropertyValue( "Border", new Short( com.sun.star.awt.VisualEffect.FLAT ) );
+                    xModelProps.setPropertyValue( "Border", Short.valueOf( com.sun.star.awt.VisualEffect.FLAT ) );
             }
             if ( xPSI.hasPropertyByName( "VisualEffect" ) )
-                xModelProps.setPropertyValue( "VisualEffect", new Short( com.sun.star.awt.VisualEffect.FLAT ) );
+                xModelProps.setPropertyValue( "VisualEffect", Short.valueOf( com.sun.star.awt.VisualEffect.FLAT ) );
             if ( m_document.classify() != DocumentType.CALC )
                 if ( xPSI.hasPropertyByName( "BorderColor" ) )
                     xModelProps.setPropertyValue( "BorderColor", Integer.valueOf( 0x00C0C0C0 ) );

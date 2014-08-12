@@ -84,7 +84,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        8, HelpIds.getHelpIdString(curHelpID), soptDetailQuery, Integer.valueOf(_iPosX), Integer.valueOf(iCompPosY - 42), new Short((short) 1), IStep, new Short(curtabindex++), Integer.valueOf(iCompWidth)
+                        8, HelpIds.getHelpIdString(curHelpID), soptDetailQuery, Integer.valueOf(_iPosX), Integer.valueOf(iCompPosY - 42), Short.valueOf((short) 1), IStep, Short.valueOf(curtabindex++), Integer.valueOf(iCompWidth)
                     });
 
             CurUnoDialog.insertRadioButton("optSummaryQuery", 0, new ActionListenerImpl(),
@@ -94,7 +94,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        16, HelpIds.getHelpIdString(curHelpID + 1), soptSummaryQuery, Boolean.TRUE, Integer.valueOf(_iPosX), Integer.valueOf(iCompPosY - 32), IStep, new Short(curtabindex++), Integer.valueOf(iCompWidth)
+                        16, HelpIds.getHelpIdString(curHelpID + 1), soptSummaryQuery, Boolean.TRUE, Integer.valueOf(_iPosX), Integer.valueOf(iCompPosY - 32), IStep, Short.valueOf(curtabindex++), Integer.valueOf(iCompWidth)
                     });
             CurUnoDialog.insertLabel("lblAggregate",
                     new String[]
@@ -103,7 +103,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        8, slblAggregate, Integer.valueOf(iCompPosX + 5), Integer.valueOf(iCompPosY - 10), IStep, new Short(curtabindex++), 90
+                        8, slblAggregate, Integer.valueOf(iCompPosX + 5), Integer.valueOf(iCompPosY - 10), IStep, Short.valueOf(curtabindex++), 90
                     });
             CurUnoDialog.insertLabel("lblFieldnames",
                     new String[]
@@ -112,7 +112,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        8, slblFieldNames, Integer.valueOf(iCompPosX + 101), Integer.valueOf(iCompPosY - 10), IStep, new Short(curtabindex++), 90
+                        8, slblFieldNames, Integer.valueOf(iCompPosX + 101), Integer.valueOf(iCompPosY - 10), IStep, Short.valueOf(curtabindex++), 90
                     });
             this.setTotalFieldCount(1);
             FontDescriptor oFontDescriptor = new FontDescriptor();
@@ -127,7 +127,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        oFontDescriptor, 14, HelpIds.getHelpIdString(lastHelpIndex + 1), "+", Integer.valueOf(_iPosX + iCompWidth - 36), Integer.valueOf(iButtonPosY), IStep, new Short((curtabindex++)), 16
+                        oFontDescriptor, 14, HelpIds.getHelpIdString(lastHelpIndex + 1), "+", Integer.valueOf(_iPosX + iCompWidth - 36), Integer.valueOf(iButtonPosY), IStep, Short.valueOf((curtabindex++)), 16
                     });
             CurUnoDialog.insertButton("btnminus", SOREMOVEROW, new ActionListenerImpl(),
                     new String[]
@@ -136,7 +136,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        oFontDescriptor, 14, HelpIds.getHelpIdString(lastHelpIndex + 2), "-", Integer.valueOf(_iPosX + iCompWidth - 16), Integer.valueOf(iButtonPosY), IStep, new Short(curtabindex++), 16
+                        oFontDescriptor, 14, HelpIds.getHelpIdString(lastHelpIndex + 2), "-", Integer.valueOf(_iPosX + iCompWidth - 16), Integer.valueOf(iButtonPosY), IStep, Short.valueOf(curtabindex++), 16
                     });
             CurDBMetaData.Type = getQueryType();
         }
@@ -525,7 +525,7 @@ public class AggregateComponent extends ControlScroller
                         },
                         new Object[]
                         {
-                            Boolean.TRUE, 12, HelpIds.getHelpIdString(_curHelpID++), Integer.valueOf(iCompPosX + 4), Integer.valueOf(ypos), UIConsts.INVISIBLESTEP, sFunctions, new Short(curtabindex++), 88
+                            Boolean.TRUE, 12, HelpIds.getHelpIdString(_curHelpID++), Integer.valueOf(iCompPosX + 4), Integer.valueOf(ypos), UIConsts.INVISIBLESTEP, sFunctions, Short.valueOf(curtabindex++), 88
                         });
 
                 xFieldListBox = CurUnoDialog.insertListBox(getFieldsControlName(index), 1, null, new ItemListenerImpl(),
@@ -535,7 +535,7 @@ public class AggregateComponent extends ControlScroller
                         },
                         new Object[]
                         {
-                            Boolean.TRUE, 12, HelpIds.getHelpIdString(_curHelpID++), Integer.valueOf(iCompPosX + 98), Integer.valueOf(ypos), UIConsts.INVISIBLESTEP, new Short(curtabindex++), 86
+                            Boolean.TRUE, 12, HelpIds.getHelpIdString(_curHelpID++), Integer.valueOf(iCompPosX + 98), Integer.valueOf(ypos), UIConsts.INVISIBLESTEP, Short.valueOf(curtabindex++), 86
                         });
                 lastHelpIndex = _curHelpID - 1;
             }

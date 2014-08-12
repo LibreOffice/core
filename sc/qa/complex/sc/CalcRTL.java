@@ -98,10 +98,10 @@ public class CalcRTL /* extends ComplexTestCase */
                changeProperty(set, "PageStyle", "Default"));
         assertTrue("Problems when setting property 'TableLayout'",
                changeProperty(set, "TableLayout",
-                              new Short(com.sun.star.text.WritingMode2.RL_TB)));
+                              Short.valueOf(com.sun.star.text.WritingMode2.RL_TB)));
         assertTrue("Problems when setting property 'TableLayout'",
                changeProperty(set, "TableLayout",
-                              new Short(com.sun.star.text.WritingMode2.LR_TB)));
+                              Short.valueOf(com.sun.star.text.WritingMode2.LR_TB)));
         assertTrue("Couldn't close document", closeSpreadsheetDocument());
     }
 
@@ -152,12 +152,12 @@ public class CalcRTL /* extends ComplexTestCase */
         String[] previous = getShapeProps(shapeProps, oShape);
         assertTrue("Problems when setting property 'TableLayout'",
                changeProperty(sheetProps, "TableLayout",
-                              new Short(com.sun.star.text.WritingMode2.RL_TB)));
+                              Short.valueOf(com.sun.star.text.WritingMode2.RL_TB)));
 
         String[] RL_TB = getShapeProps(shapeProps, oShape);
         assertTrue("Problems when setting property 'TableLayout'",
                changeProperty(sheetProps, "TableLayout",
-                              new Short(com.sun.star.text.WritingMode2.LR_TB)));
+                              Short.valueOf(com.sun.star.text.WritingMode2.LR_TB)));
 
         String[] LR_TB = getShapeProps(shapeProps, oShape);
         assertTrue("Anchor has changed",

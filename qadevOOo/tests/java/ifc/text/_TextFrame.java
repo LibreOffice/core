@@ -43,9 +43,9 @@ public class _TextFrame extends MultiPropertyTest {
         @Override
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
-            if (oldValue.equals(new Short(com.sun.star.text.WritingMode2.LR_TB)))
-                return new Short(com.sun.star.text.WritingMode2.TB_LR); else
-                return new Short(com.sun.star.text.WritingMode2.LR_TB);
+            if (oldValue.equals(Short.valueOf(com.sun.star.text.WritingMode2.LR_TB)))
+                return Short.valueOf(com.sun.star.text.WritingMode2.TB_LR); else
+                return Short.valueOf(com.sun.star.text.WritingMode2.LR_TB);
         }
     } ;
 

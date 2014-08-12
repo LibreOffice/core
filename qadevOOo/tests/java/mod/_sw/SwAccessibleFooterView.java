@@ -110,7 +110,7 @@ public class SwAccessibleFooterView extends TestCase {
             XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
             xController);
             XPropertySet xPropSet = xViewSetSup.getViewSettings();
-            xPropSet.setPropertyValue("ZoomValue", new Short("20"));
+            xPropSet.setPropertyValue("ZoomValue", Short.valueOf("20"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't set propertyValue...", e);

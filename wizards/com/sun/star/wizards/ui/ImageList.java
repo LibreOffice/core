@@ -59,7 +59,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private Size selectionGap = new Size(2, 2);
     private boolean showButtons = true;
     private Short step;
-    private final static Short NO_BORDER = new Short((short) 0);
+    private final static Short NO_BORDER = Short.valueOf((short) 0);
     private boolean refreshOverNull = true;
     private int imageTextLines = 1;
     private boolean rowSelect = false;
@@ -76,7 +76,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private Object dialogModel;
     private ImageKeyListener imageKeyListener;
     private static final Integer BACKGROUND_COLOR = 16777216;
-    private final static Short HIDE_PAGE = new Short((short) 99);
+    private final static Short HIDE_PAGE = Short.valueOf((short) 99);
     private final static Integer TRANSPARENT = Integer.valueOf(-1);
     private final static int LINE_HEIGHT = 8;
     private MethodInvocation METHOD_MOUSE_PRESSED;
@@ -150,7 +150,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                 new Object[]
                 {
                     BACKGROUND_COLOR,
-                    new Short((short) 1),
+                    Short.valueOf((short) 1),
                     Integer.valueOf((imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                     Integer.valueOf(pos.Width),
                     Integer.valueOf(pos.Height),
@@ -183,7 +183,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                 }, new Object[]
                 {
                     TRANSPARENT,
-                    new Short((short) 1),
+                    Short.valueOf((short) 1),
                     Integer.valueOf(imageSize.Height + (selectionGap.Height * 2)),
                     //height
                     0, //posx
@@ -215,7 +215,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                     Integer.valueOf(pos.Width + 1),
                     Integer.valueOf(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height),
                     step,
-                    new Short((short) 0),
+                    Short.valueOf((short) 0),
                     Boolean.FALSE,
                     Integer.valueOf(cols * (imageSize.Width + gap.Width) + gap.Width - 2)
                 });
@@ -232,7 +232,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                         Integer.valueOf(pos.Width),
                         Integer.valueOf(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
-                        new Short((short) (tabIndex + 1)),
+                        Short.valueOf((short) (tabIndex + 1)),
                         Boolean.TRUE,
                         btnSize
                     });
@@ -244,7 +244,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                         Integer.valueOf(pos.Width + (imageSize.Width + gap.Width) * cols + gap.Width - btnSize.intValue() + 1),
                         Integer.valueOf(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
-                        new Short((short) (tabIndex + 2)),
+                        Short.valueOf((short) (tabIndex + 2)),
                         Boolean.TRUE,
                         btnSize
                     });
@@ -256,12 +256,12 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                         Integer.valueOf(pos.Width + btnSize.intValue() + 1),
                         Integer.valueOf(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + ((btnSize.intValue() - LINE_HEIGHT) / 2)),
                         step,
-                        new Short((short) 0),
+                        Short.valueOf((short) 0),
                         Boolean.FALSE,
                         Integer.valueOf(cols * (imageSize.Width + gap.Width) + gap.Width - 2 * btnSize.intValue() - 1)
                     });
 
-            Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_ALIGN, new Short((short) 1));
+            Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) 1));
             Helper.setUnoPropertyValue(getModel(btnBack), PropertyNames.PROPERTY_LABEL, "<");
             Helper.setUnoPropertyValue(getModel(btnNext), PropertyNames.PROPERTY_LABEL, ">");
 
@@ -269,7 +269,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         }
 
         imageKeyListener = new ImageKeyListener();
-        m_tabIndex = new Short((short) tabIndex);
+        m_tabIndex = Short.valueOf((short) tabIndex);
 
         m_aImages = new XControl[rows * cols];
 

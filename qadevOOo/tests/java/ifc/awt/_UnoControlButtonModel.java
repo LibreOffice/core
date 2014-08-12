@@ -107,7 +107,7 @@ public class _UnoControlButtonModel extends MultiPropertyTest {
     public void _PushButtonType() {
         log.println("Testing with custom Property tester") ;
         testProperty("PushButtonType",
-            new Short((short)0), new Short((short)1));
+            Short.valueOf((short)0), Short.valueOf((short)1));
     }
 
 

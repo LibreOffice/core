@@ -82,8 +82,8 @@ public class _TextSection extends MultiPropertyTest {
     public void _FootnoteNumberingType() {
         log.println("Testing with custom Property tester") ;
         testProperty("FootnoteNumberingType",
-        new Short(com.sun.star.text.FootnoteNumbering.PER_DOCUMENT),
-        new Short(com.sun.star.text.FootnoteNumbering.PER_PAGE)) ;
+        Short.valueOf(com.sun.star.text.FootnoteNumbering.PER_DOCUMENT),
+        Short.valueOf(com.sun.star.text.FootnoteNumbering.PER_PAGE)) ;
     }
 
 

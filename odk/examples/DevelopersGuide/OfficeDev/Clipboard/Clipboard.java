@@ -83,7 +83,7 @@ public class Clipboard
                 com.sun.star.view.XViewSettingsSupplier.class,
                 xModel.getCurrentController());
             xViewSettings.getViewSettings().setPropertyValue(
-                "ZoomType", new Short((short)0));
+                "ZoomType", Short.valueOf((short)0));
             }
             // test document will be closed later
 

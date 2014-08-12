@@ -140,31 +140,31 @@ final class TestAny {
                               new CompareUnboxed());
 
         // SHORT:
-        success &= testMapAny(transport, new Short((short) -32768),
+        success &= testMapAny(transport, Short.valueOf((short) -32768),
                               new CompareBoxed());
-        success &= testMapAny(transport, new Short((short) 0),
+        success &= testMapAny(transport, Short.valueOf((short) 0),
                               new CompareBoxed());
-        success &= testMapAny(transport, new Short((short) 32767),
+        success &= testMapAny(transport, Short.valueOf((short) 32767),
                               new CompareBoxed());
         success &= testMapAny(transport,
                               new Any(Type.SHORT,
-                                      new Short((short) -32768)),
+                                      Short.valueOf((short) -32768)),
                               new CompareUnboxed());
         success &= testMapAny(transport,
-                              new Any(Type.SHORT, new Short((short) 0)),
+                              new Any(Type.SHORT, Short.valueOf((short) 0)),
                               new CompareUnboxed());
         success &= testMapAny(transport,
-                              new Any(Type.SHORT, new Short((short) 32767)),
+                              new Any(Type.SHORT, Short.valueOf((short) 32767)),
                               new CompareUnboxed());
 
         // UNSIGNED SHORT:
         success &= testMapAny(transport,
                               new Any(Type.UNSIGNED_SHORT,
-                                      new Short((short) 0)),
+                                      Short.valueOf((short) 0)),
                               new CompareBoxed());
         success &= testMapAny(transport,
                               new Any(Type.UNSIGNED_SHORT,
-                                      new Short((short) -32768)),
+                                      Short.valueOf((short) -32768)),
                               new CompareBoxed());
 
         // LONG:

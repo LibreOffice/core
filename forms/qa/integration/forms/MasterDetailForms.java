@@ -227,7 +227,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
                 formFactory.createInstanceWithArguments( "com.sun.star.sdb.DocumentDefinition", loadArgs ) );
             Command command = new Command();
             command.Name = "openDesign";
-            command.Argument = new Short( OpenMode.DOCUMENT );
+            command.Argument = Short.valueOf( OpenMode.DOCUMENT );
 
             DocumentHelper subDocument = new DocumentHelper( m_orb,
                 UnoRuntime.queryInterface( XComponent.class,

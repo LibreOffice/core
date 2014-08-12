@@ -94,7 +94,7 @@ public class Control extends Shape
 
             XPropertySetInfo xPSI = xPropertySet.getPropertySetInfo();
             if ( xPSI.hasPropertyByName( "MouseWheelBehavior" ) )
-                xPropertySet.setPropertyValue( "MouseWheelBehavior", new Short( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
+                xPropertySet.setPropertyValue( "MouseWheelBehavior", Short.valueOf( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
 
             insertControlInContainer(_FieldName);
             xControlShape.setControl(xControlModel);

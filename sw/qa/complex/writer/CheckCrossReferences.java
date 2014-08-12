@@ -90,7 +90,7 @@ public class CheckCrossReferences {
         throws com.sun.star.uno.Exception
     {
         // set requested format
-        xProps.setPropertyValue("ReferenceFieldPart", new Short(nFormat));
+        xProps.setPropertyValue("ReferenceFieldPart", Short.valueOf(nFormat));
 
         // refresh fields in order to get new format applied
         xFldsRefresh.refresh();
@@ -260,8 +260,8 @@ public class CheckCrossReferences {
                 com.sun.star.beans.XPropertySet xFieldProps =
                         UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertySet.class, xNewField );
-                xFieldProps.setPropertyValue( "ReferenceFieldPart", new Short(com.sun.star.text.ReferenceFieldPart.TEXT) );
-                xFieldProps.setPropertyValue( "ReferenceFieldSource", new Short(com.sun.star.text.ReferenceFieldSource.BOOKMARK) );
+                xFieldProps.setPropertyValue( "ReferenceFieldPart", Short.valueOf(com.sun.star.text.ReferenceFieldPart.TEXT) );
+                xFieldProps.setPropertyValue( "ReferenceFieldSource", Short.valueOf(com.sun.star.text.ReferenceFieldSource.BOOKMARK) );
                 xFieldProps.setPropertyValue( "SourceName", cBookmarkName );
                 com.sun.star.text.XTextRange xFieldTextRange =
                         UnoRuntime.queryInterface(

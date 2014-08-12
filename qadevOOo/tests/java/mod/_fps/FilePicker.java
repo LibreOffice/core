@@ -93,7 +93,7 @@ public class FilePicker extends TestCase {
         Object oInterface = null;
         XMultiServiceFactory xMSF = Param.getMSF();
 
-        Object[] iniArgs = new Object[] { new Short
+        Object[] iniArgs = new Object[] { Short.valueOf
             (com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_READONLY_VERSION)};
         short ctrlId =
             com.sun.star.ui.dialogs.ExtendedFilePickerElementIds.CHECKBOX_READONLY;
@@ -114,7 +114,7 @@ public class FilePicker extends TestCase {
 
         // adding relation for XFilePickerControlAccess
         tEnv.addObjRelation("XFilePickerControlAccess.ControlID",
-            new Short(ctrlId)) ;
+            Short.valueOf(ctrlId)) ;
         tEnv.addObjRelation("XFilePickerControlAccess.ControlValue",
             Boolean.FALSE) ;
 

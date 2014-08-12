@@ -180,7 +180,7 @@ public class WikiEditSettingDialog extends WikiDialog
         XPropertySet xSaveCheck = GetPropSet( "SaveBox" );
         try
         {
-            xSaveCheck.setPropertyValue( "State", new Short( bInitSaveCheckBox ? (short)1 : (short)0 ) );
+            xSaveCheck.setPropertyValue( "State", Short.valueOf( bInitSaveCheckBox ? (short)1 : (short)0 ) );
             xSaveCheck.setPropertyValue( "Enabled", Boolean.valueOf( Helper.PasswordStoringIsAllowed( xContext ) ) );
         }
         catch( Exception e )

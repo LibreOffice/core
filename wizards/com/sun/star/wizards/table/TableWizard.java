@@ -73,7 +73,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
                 },
                 new Object[]
                 {
-                    218, Boolean.TRUE, "DialogTable", 102, 41, 1, new Short((short) 0), sTitle, 330
+                    218, Boolean.TRUE, "DialogTable", 102, 41, 1, Short.valueOf((short) 0), sTitle, 330
                 });
         drawNaviBar();
         fielditems = new HashMap<String, FieldDescription>();

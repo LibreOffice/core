@@ -1053,7 +1053,7 @@ public class TextDocuments {
                 "AlternativeText", "Big dogs! Falling on my head!");
 
             // The Level property _must_ be set
-            xEntry.setPropertyValue ( "Level", new Short ( (short) 1 ) );
+            xEntry.setPropertyValue ( "Level", Short.valueOf( (short) 1 ) );
 
             // Create a ContentIndex and access its XPropertySet interface
             XPropertySet xIndex = UnoRuntime.queryInterface(
@@ -1061,7 +1061,7 @@ public class TextDocuments {
                 mxDocFactory.createInstance ( "com.sun.star.text.ContentIndex" ) );
 
             // Again, the Level property _must_ be set
-            xIndex.setPropertyValue ( "Level", new Short ( (short) 10 ) );
+            xIndex.setPropertyValue ( "Level", Short.valueOf( (short) 10 ) );
 
             // Access the XTextContent interfaces of both the Index and the
             // IndexMark
@@ -1172,11 +1172,11 @@ public class TextDocuments {
                 // specify that the source is a reference mark (could also be a
                 // footnote, bookmark or sequence field )
                 xFieldProps.setPropertyValue ( "ReferenceFieldSource",
-                                new Short(ReferenceFieldSource.REFERENCE_MARK));
+                                Short.valueOf(ReferenceFieldSource.REFERENCE_MARK));
 
                 // We want the reference displayed as 'above' or 'below'
                 xFieldProps.setPropertyValue ( "ReferenceFieldPart",
-                                new Short(ReferenceFieldPart.UP_DOWN));
+                                Short.valueOf(ReferenceFieldPart.UP_DOWN));
 
 
                 // Get the XTextContent interface of the GetReference text field
@@ -1489,13 +1489,13 @@ public class TextDocuments {
                         switch ( i )
                         {
                         case 0 : aProps[j].Value =
-                                     new Short(NumberingType.ROMAN_UPPER);
+                                     Short.valueOf(NumberingType.ROMAN_UPPER);
                             break;
                         case 1 : aProps[j].Value =
-                                     new Short(NumberingType.CHARS_UPPER_LETTER);
+                                     Short.valueOf(NumberingType.CHARS_UPPER_LETTER);
                             break;
                         case 2 : aProps[j].Value =
-                                     new Short(NumberingType.ARABIC);
+                                     Short.valueOf(NumberingType.ARABIC);
                             break;
                         }
                         // Put the updated PropertyValue sequence back into the
@@ -1523,15 +1523,15 @@ public class TextDocuments {
 
             // Set the first paragraph that was inserted to a numbering level of
             // 2 (thus it will have Arabic style numbering)
-            xParas[0].setPropertyValue ( "NumberingLevel", new Short((short) 2));
+            xParas[0].setPropertyValue ( "NumberingLevel", Short.valueOf((short) 2));
 
             // Set the second paragraph that was inserted to a numbering level of
             // 1 (thus it will have 'Chars Upper Letter' style numbering)
-            xParas[1].setPropertyValue ( "NumberingLevel", new Short((short) 1));
+            xParas[1].setPropertyValue ( "NumberingLevel", Short.valueOf((short) 1));
 
             // Set the third paragraph that was inserted to a numbering level of
             // 0 (thus it will have 'Chars Upper Letter' style numbering)
-            xParas[2].setPropertyValue ( "NumberingLevel", new Short((short) 0));
+            xParas[2].setPropertyValue ( "NumberingLevel", Short.valueOf((short) 0));
             }
         catch (Exception e)
         {

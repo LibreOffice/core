@@ -40,7 +40,7 @@ public class _Settings extends MultiPropertyTest {
     public void _PrinterIndependentLayout() {
         try{
             Short oldVal = (Short) oObj.getPropertyValue("PrinterIndependentLayout");
-            Short newVal = oldVal.intValue() == 1 ?  new Short("3") : new Short("1");
+            Short newVal = oldVal.intValue() == 1 ?  Short.valueOf("3") : Short.valueOf("1");
 
 
             testProperty("PrinterIndependentLayout", oldVal, newVal);

@@ -94,7 +94,7 @@ public class WikiPropDialog extends WikiDialog{
     {
         try
         {
-            GetPropSet( "BrowserCheck" ).setPropertyValue( "State", new Short( Helper.GetShowInBrowserByDefault( m_xContext ) ? (short)1 : (short)0 ) );
+            GetPropSet( "BrowserCheck" ).setPropertyValue( "State", Short.valueOf( Helper.GetShowInBrowserByDefault( m_xContext ) ? (short)1 : (short)0 ) );
         }
         catch( Exception e )
         {

@@ -82,7 +82,7 @@ public class PlaceholderTextElement extends TextElement
         }
         Helper.setUnoPropertyValue(placeHolder, "PlaceHolder", ph);
         Helper.setUnoPropertyValue(placeHolder, "Hint", hint);
-        Helper.setUnoPropertyValue(placeHolder, "PlaceHolderType", new Short(PlaceholderType.TEXT));
+        Helper.setUnoPropertyValue(placeHolder, "PlaceHolderType", Short.valueOf(PlaceholderType.TEXT));
         return UnoRuntime.queryInterface(XTextContent.class, placeHolder);
 
     }

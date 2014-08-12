@@ -132,7 +132,7 @@ public class XMLSettingsExporter extends TestCase {
             XPropertySet xPS = UnoRuntime.queryInterface
                 (XPropertySet.class, xMathDoc) ;
 
-            xPS.setPropertyValue("TopMargin", new Short(expMargin)) ;
+            xPS.setPropertyValue("TopMargin", Short.valueOf(expMargin)) ;
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;

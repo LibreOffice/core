@@ -737,7 +737,7 @@ XMultiPropertySet
         else if (cl.equals(byte.class))
             retVal= new Byte(AnyConverter.toByte(obj));
         else if (cl.equals(short.class))
-            retVal= new Short(AnyConverter.toShort(obj));
+            retVal= Short.valueOf(AnyConverter.toShort(obj));
         else if (cl.equals(int.class))
             retVal= Integer.valueOf(AnyConverter.toInt(obj));
         else if (cl.equals(long.class))
@@ -759,7 +759,7 @@ XMultiPropertySet
         else if (cl.equals(Byte.class))
             retVal= new Byte(AnyConverter.toByte(obj));
         else if (cl.equals(Short.class))
-            retVal= new Short(AnyConverter.toShort(obj));
+            retVal= Short.valueOf(AnyConverter.toShort(obj));
         else if (cl.equals(Integer.class))
             retVal= Integer.valueOf(AnyConverter.toInt(obj));
         else if (cl.equals(Long.class))

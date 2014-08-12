@@ -300,7 +300,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
         prop[1].Value = sLabelName;
         prop[2] = new PropertyValue();
         prop[2].Name = "Type";
-        prop[2].Value = new Short((short)0);
+        prop[2].Value = Short.valueOf((short)0);
         prop[3] = new PropertyValue();
         prop[3].Name = "ItemDescriptorContainer";
 
@@ -337,7 +337,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
         aMenuItem[1].Value = sLabelName;
         aMenuItem[2] = new PropertyValue();
         aMenuItem[2].Name = "Type";
-        aMenuItem[2].Value = new Short((short)0);
+        aMenuItem[2].Value = Short.valueOf((short)0);
 
         try {
             xDescriptionContainer.insertByIndex(0, aMenuItem);

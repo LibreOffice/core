@@ -222,7 +222,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         bindToCell( checkBox, col, row );
 
         // initialize with "not checked"
-        checkBox.setPropertyValue( "State", new Short( (short)0 ) );
+        checkBox.setPropertyValue( "State", Short.valueOf( (short)0 ) );
         verifyNumericCellContent( col, row, 0, "programmatically unchecking the check box is not propagated to the cell." );
 
         // first click: "not checked" -> "checked"
@@ -253,7 +253,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         bindToCell( checkBox, col, row );
 
         // initialize with "not checked"
-        checkBox.setPropertyValue( "State", new Short( (short)0 ) );
+        checkBox.setPropertyValue( "State", Short.valueOf( (short)0 ) );
         verifyNumericCellContent( col, row, 0, "programmatically unchecking the check box is not propagated to the cell." );
 
         // first click: "not checked" -> "checked"
@@ -524,7 +524,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         XAccessibleValue xValue = UnoRuntime.queryInterface(
             XAccessibleValue.class, accessible.getAccessibleContext() );
 
-        xValue.setCurrentValue( new Short( state ) );
+        xValue.setCurrentValue( Short.valueOf( state ) );
     }
 
     /* ------------------------------------------------------------------ */

@@ -65,7 +65,7 @@ public class ValueChanger {
 
    if (oldValue instanceof Short) {
      short oldshort = ((Short) oldValue).shortValue();
-     newValue = new Short((short) (oldshort + 1));
+     newValue = Short.valueOf((short) (oldshort + 1));
    } else
 
    if (oldValue instanceof Byte) {

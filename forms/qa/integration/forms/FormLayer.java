@@ -217,7 +217,7 @@ public class FormLayer
         xFieldModel.setPropertyValue( "DataField", sFieldName );
         if ( xFieldModel.getPropertySetInfo().hasPropertyByName( "Border" ) )
         {
-            xFieldModel.setPropertyValue( "Border", new Short( VisualEffect.FLAT ) );
+            xFieldModel.setPropertyValue( "Border", Short.valueOf( VisualEffect.FLAT ) );
             if ( xFieldModel.getPropertySetInfo().hasPropertyByName( "BorderColor" ) )
                 xFieldModel.setPropertyValue( "BorderColor", Integer.valueOf( 0x00C0C0C0 ) );
         }

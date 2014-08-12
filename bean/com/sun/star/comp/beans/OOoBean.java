@@ -595,7 +595,7 @@ public class OOoBean
                     com.sun.star.beans.PropertyValue aArgs[] =
                         addArgument( aArguments, new com.sun.star.beans.PropertyValue(
                             "MacroExecutionMode", -1,
-                            new Short( com.sun.star.document.MacroExecMode.USE_CONFIG ),
+                            Short.valueOf( com.sun.star.document.MacroExecMode.USE_CONFIG ),
                             com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
 
                     com.sun.star.lang.XComponent xComponent = xLoader.loadComponentFromURL(

@@ -60,7 +60,7 @@ public class StyleApplier
     private final static int SODBTEXTCOLOR = 1;
     private final static int SOLABELTEXTCOLOR = 2;
     private final static int SOBORDERCOLOR = 5;
-    private Short IBorderValue = new Short((short) 1);
+    private Short IBorderValue = Short.valueOf((short) 1);
 
     public StyleApplier(WizardDialog _CurUnoDialog, FormDocument _curFormDocument)
     {
@@ -91,7 +91,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], sPageStyles, 92, 25, IStyleStep, new Short(curtabindex++), 90
+                        UIConsts.INTEGERS[8], sPageStyles, 92, 25, IStyleStep, Short.valueOf(curtabindex++), 90
                     });
 
             lstStyles = CurUnoDialog.insertListBox("lstStyles", null, SCHANGELAYOUT, this,
@@ -101,7 +101,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        143, "HID:WIZARDS_HID_DLGFORM_LSTSTYLES", 92, 35, SelLayoutPos, IStyleStep, this.StyleNames, new Short(curtabindex++), 90
+                        143, "HID:WIZARDS_HID_DLGFORM_LSTSTYLES", 92, 35, SelLayoutPos, IStyleStep, this.StyleNames, Short.valueOf(curtabindex++), 90
                     });
 
             optNoBorder = CurUnoDialog.insertRadioButton("otpNoBorder", SCHANGEBORDERTYPE, this,
@@ -111,7 +111,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDNOBORDER", sNoBorder, 196, 39, IStyleStep, new Short(curtabindex++), "0", 93
+                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDNOBORDER", sNoBorder, 196, 39, IStyleStep, Short.valueOf(curtabindex++), "0", 93
                     });
 
             opt3DLook = CurUnoDialog.insertRadioButton("otp3DLook", SCHANGEBORDERTYPE, this,
@@ -121,7 +121,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, 196, 53, new Short((short) 1), IStyleStep, new Short(curtabindex++), "1", 93
+                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, 196, 53, Short.valueOf((short) 1), IStyleStep, Short.valueOf(curtabindex++), "1", 93
                     });
 
             optFlat = CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
@@ -131,7 +131,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDSIMPLEBORDER", sFlat, 196, 67, IStyleStep, new Short(curtabindex++), "2", 93
+                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDSIMPLEBORDER", sFlat, 196, 67, IStyleStep, Short.valueOf(curtabindex++), "2", 93
                     });
 
             CurUnoDialog.insertFixedLine("lnFieldBorder",
@@ -141,7 +141,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], sFieldBorder, 192, 25, IStyleStep, new Short(curtabindex++), 98
+                        UIConsts.INTEGERS[8], sFieldBorder, 192, 25, IStyleStep, Short.valueOf(curtabindex++), 98
                     });
     }
 

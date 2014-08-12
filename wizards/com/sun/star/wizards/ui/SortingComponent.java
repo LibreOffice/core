@@ -90,7 +90,7 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.ORIENTATION, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                                Boolean.valueOf(bDoEnable), 8, sSortHeader[i], 0, ICompPosX, Integer.valueOf(iCurPosY), IStep, new Short(curtabindex++), ICompWidth
+                                Boolean.valueOf(bDoEnable), 8, sSortHeader[i], 0, ICompPosX, Integer.valueOf(iCurPosY), IStep, Short.valueOf(curtabindex++), ICompWidth
                         });
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex);
@@ -99,8 +99,8 @@ public class SortingComponent
                             "Dropdown", PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            true, bDoEnable, 12, HIDString, new Short(UnoDialog.getListBoxLineCount()), "lstSort" + Integer.valueOf(i + 1), IListBoxPosX, Integer.valueOf(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
-                        }); //new Short((short) (17+i*4))
+                            true, bDoEnable, 12, HIDString, Short.valueOf(UnoDialog.getListBoxLineCount()), "lstSort" + Integer.valueOf(i + 1), IListBoxPosX, Integer.valueOf(iCurPosY + 14), IStep, Short.valueOf(curtabindex++), IListBoxWidth
+                        }); //Short.valueOf((short) (17+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 1);
                 XRadioButton xRadioButtonAsc = CurUnoDialog.insertRadioButton("optAscend" + Integer.toString(i + 1), 0, new String[]
@@ -108,8 +108,8 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            bDoEnable, 10, HIDString, sSortAscend[i], IOptButtonPosX, Integer.valueOf(iCurPosY + 10), new Short((short) 1), IStep, new Short(curtabindex++), PropertyNames.ASC, IOptButtonWidth
-                        }); //, new Short((short) (18+i*4))
+                            bDoEnable, 10, HIDString, sSortAscend[i], IOptButtonPosX, Integer.valueOf(iCurPosY + 10), Short.valueOf((short) 1), IStep, Short.valueOf(curtabindex++), PropertyNames.ASC, IOptButtonWidth
+                        }); //, Short.valueOf((short) (18+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 2);
                 XRadioButton xRadioButtonDesc = CurUnoDialog.insertRadioButton("optDescend" + Integer.toString(i + 1), 0, new String[]
@@ -117,8 +117,8 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            bDoEnable, 10, HIDString, sSortDescend[i], IOptButtonPosX, Integer.valueOf(iCurPosY + 24), new Short((short) 0), IStep, new Short(curtabindex++), "DESC", IOptButtonWidth
-                        }); //, new Short((short) (19+i*4))
+                            bDoEnable, 10, HIDString, sSortDescend[i], IOptButtonPosX, Integer.valueOf(iCurPosY + 24), Short.valueOf((short) 0), IStep, Short.valueOf(curtabindex++), "DESC", IOptButtonWidth
+                        }); //, Short.valueOf((short) (19+i*4))
                 iCurPosY = iCurPosY + 36;
                 FirstHelpIndex += 3;
             }

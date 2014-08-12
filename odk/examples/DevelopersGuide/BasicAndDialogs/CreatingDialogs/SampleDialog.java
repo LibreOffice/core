@@ -167,7 +167,7 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
         xPSetButton.setPropertyValue( "Width", Integer.valueOf( 50 ) );
         xPSetButton.setPropertyValue( "Height", Integer.valueOf( 14 ) );
         xPSetButton.setPropertyValue( "Name", _buttonName );
-        xPSetButton.setPropertyValue( "TabIndex", new Short( (short)0 ) );
+        xPSetButton.setPropertyValue( "TabIndex", Short.valueOf( (short)0 ) );
         xPSetButton.setPropertyValue( "Label", new String( "Click Me" ) );
 
         // create the label model and set the properties
@@ -180,7 +180,7 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
         xPSetLabel.setPropertyValue( "Width", Integer.valueOf( 100 ) );
         xPSetLabel.setPropertyValue( "Height", Integer.valueOf( 14 ) );
         xPSetLabel.setPropertyValue( "Name", _labelName );
-        xPSetLabel.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+        xPSetLabel.setPropertyValue( "TabIndex", Short.valueOf( (short)1 ) );
         xPSetLabel.setPropertyValue( "Label", _labelPrefix );
 
         // create a Cancel button model and set the properties
@@ -193,8 +193,8 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
         xPSetCancelButton.setPropertyValue( "Width", Integer.valueOf( 50 ) );
         xPSetCancelButton.setPropertyValue( "Height", Integer.valueOf( 14 ) );
         xPSetCancelButton.setPropertyValue( "Name", _cancelButtonName );
-        xPSetCancelButton.setPropertyValue( "TabIndex", new Short( (short)2 ) );
-        xPSetCancelButton.setPropertyValue( "PushButtonType", new Short( (short)2 ) );
+        xPSetCancelButton.setPropertyValue( "TabIndex", Short.valueOf( (short)2 ) );
+        xPSetCancelButton.setPropertyValue( "PushButtonType", Short.valueOf( (short)2 ) );
         xPSetCancelButton.setPropertyValue( "Label", new String( "Cancel" ) );
 
         // insert the control models into the dialog model

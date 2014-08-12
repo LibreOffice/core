@@ -58,7 +58,7 @@ public class _XComponentLoader extends MultiMethodTest {
             PropertyValue [] szArgs = new PropertyValue [1];
             PropertyValue Arg = new PropertyValue();
             Arg.Name = "UpdateDocMode";
-            Arg.Value = new Short(com.sun.star.document.UpdateDocMode.NO_UPDATE);
+            Arg.Value = Short.valueOf(com.sun.star.document.UpdateDocMode.NO_UPDATE);
             szArgs[0]=Arg;
             String url = util.utils.getFullTestURL("Writer_link.sxw");
             log.println("try to load '" + url + "'");

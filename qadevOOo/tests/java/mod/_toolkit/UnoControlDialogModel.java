@@ -108,7 +108,7 @@ public class UnoControlDialogModel extends TestCase {
             xPSetButton.setPropertyValue("Width", Integer.valueOf(50));
             xPSetButton.setPropertyValue("Height", Integer.valueOf(14));
             xPSetButton.setPropertyValue("Name", _buttonName);
-            xPSetButton.setPropertyValue("TabIndex", new Short((short) 0));
+            xPSetButton.setPropertyValue("TabIndex", Short.valueOf((short) 0));
             xPSetButton.setPropertyValue("Label", "Click Me");
 
             // create the label model and set the properties
@@ -121,7 +121,7 @@ public class UnoControlDialogModel extends TestCase {
             xPSetLabel.setPropertyValue("Width", Integer.valueOf(100));
             xPSetLabel.setPropertyValue("Height", Integer.valueOf(14));
             xPSetLabel.setPropertyValue("Name", _labelName);
-            xPSetLabel.setPropertyValue("TabIndex", new Short((short) 1));
+            xPSetLabel.setPropertyValue("TabIndex", Short.valueOf((short) 1));
             xPSetLabel.setPropertyValue("Label", _labelPrefix);
 
             // insert the control models into the dialog model

@@ -129,7 +129,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     },
                     new Object[]
                     {
-                        14, HelpIds.getHelpIdString(34321), 74, 58, 0, new Short((short) 1), 40, sStop
+                        14, HelpIds.getHelpIdString(34321), 74, 58, 0, Short.valueOf((short) 1), 40, sStop
                     });
             createWindowPeer(CurReportDocument.getWizardParent());
             calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());

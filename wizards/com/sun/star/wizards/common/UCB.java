@@ -223,7 +223,7 @@ public class UCB
         }
         else if (type.equals(Short.class))
         {
-            return new Short(xrow.getShort(1));
+            return Short.valueOf(xrow.getShort(1));
         }
         else
         {

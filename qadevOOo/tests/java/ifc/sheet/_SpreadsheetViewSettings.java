@@ -52,8 +52,8 @@ import lib.MultiPropertyTest;
 */
 public class _SpreadsheetViewSettings extends MultiPropertyTest {
     public void _ZoomType() {
-        testProperty("ZoomType", new Short(DocumentZoomType.PAGE_WIDTH),
-                     new Short(DocumentZoomType.BY_VALUE));
+        testProperty("ZoomType", Short.valueOf(DocumentZoomType.PAGE_WIDTH),
+                     Short.valueOf(DocumentZoomType.BY_VALUE));
     }
 
     /**

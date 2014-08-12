@@ -73,8 +73,8 @@ public class _FootnoteSettings extends MultiPropertyTest {
     * value must be defined.
     */
     public void _NumberingType() {
-        Short val1 = new Short(com.sun.star.text.FootnoteNumbering.PER_DOCUMENT);
-        Short val2 = new Short(com.sun.star.text.FootnoteNumbering.PER_PAGE);
+        Short val1 = Short.valueOf(com.sun.star.text.FootnoteNumbering.PER_DOCUMENT);
+        Short val2 = Short.valueOf(com.sun.star.text.FootnoteNumbering.PER_PAGE);
         log.println("Testing with custom Property tester") ;
         testProperty("NumberingType", val1, val2) ;
     }
@@ -84,8 +84,8 @@ public class _FootnoteSettings extends MultiPropertyTest {
     * value must be defined.
     */
     public void _FootnoteCounting() {
-        Short val1 = new Short( (short) 1 );
-        Short val2 = new Short( (short) 2 );
+        Short val1 = Short.valueOf( (short) 1 );
+        Short val2 = Short.valueOf( (short) 2 );
         log.println("Testing with custom Property tester") ;
         testProperty("FootnoteCounting", val1, val2) ;
     }

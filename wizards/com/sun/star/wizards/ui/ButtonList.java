@@ -165,7 +165,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                         Integer.valueOf(pos.Width + (m_aButtonSize.Width + gap.Width) * cols + gap.Width - btnSize.intValue() + 1),
                         Integer.valueOf(pos.Height + (m_aButtonSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
-                        new Short((short) (tabIndex + 2)),
+                        Short.valueOf((short) (tabIndex + 2)),
                         Boolean.TRUE,
                         btnSize
                     });
@@ -182,14 +182,14 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                         Integer.valueOf(cols * (m_aButtonSize.Width + gap.Width) + gap.Width - 2 * btnSize.intValue() - 1)
                     });
 
-            Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_ALIGN, new Short((short) 1));
+            Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) 1));
             Helper.setUnoPropertyValue(getModel(btnBack), PropertyNames.PROPERTY_LABEL, "<");
             Helper.setUnoPropertyValue(getModel(btnNext), PropertyNames.PROPERTY_LABEL, ">");
 
 
         }
 
-        m_tabIndex = new Short((short) tabIndex);
+        m_tabIndex = Short.valueOf((short) tabIndex);
 
         m_aButtons = new XControl[rows * cols];
 

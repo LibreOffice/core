@@ -108,10 +108,10 @@ public class ChartHelper
                     xShape.setSize( aExtent );
 
                     aAny = new Any(new Type(Short.class),
-                               new Short(com.sun.star.text.VertOrientation.NONE));
+                               Short.valueOf(com.sun.star.text.VertOrientation.NONE));
                     xPropSet.setPropertyValue("VertOrient", aAny );
                     aAny = new Any(new Type(Short.class),
-                               new Short(com.sun.star.text.HoriOrientation.NONE));
+                               Short.valueOf(com.sun.star.text.HoriOrientation.NONE));
                     xPropSet.setPropertyValue("HoriOrient", aAny );
                     aAny = new Any(new Type(Integer.class), Integer.valueOf(aUpperLeft.Y));
                     xPropSet.setPropertyValue("VertOrientPosition", aAny );

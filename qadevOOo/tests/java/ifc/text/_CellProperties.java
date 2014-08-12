@@ -84,8 +84,8 @@ public class _CellProperties extends MultiPropertyTest {
     * Redefined method returns value, that differs from property value.
     */
     public void _BackColor() {
-        final Short val1 = new Short( (short) 4 );
-        final Short val2 = new Short( (short) 6 );
+        final Short val1 = Short.valueOf( (short) 4 );
+        final Short val2 = Short.valueOf( (short) 6 );
         log.println("Testing with custom Property tester") ;
         testProperty("BackColor", new PropertyTester() {
             @Override

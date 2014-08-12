@@ -75,7 +75,7 @@ public class FormControlArranger
     private int a;
     private int StartA;
     private int m_controlMaxPosY = 0;     //the maximum YPosition of a DBControl in the form
-    private Short NBorderType = new Short((short) 1); //3-D Border
+    private Short NBorderType = Short.valueOf((short) 1); //3-D Border
 
     public FormControlArranger(FormHandler _oFormHandler, XNameContainer _xFormName, CommandMetaData oDBMetaData, XStatusIndicator _xProgressBar, Point _StartPoint, Size _FormSize)
     {
@@ -105,7 +105,7 @@ public class FormControlArranger
 
     public void setBorderType(short _nBorderType)
     {
-        NBorderType = new Short(_nBorderType);
+        NBorderType = Short.valueOf(_nBorderType);
     }
 
     public Control[] getLabelControlList()
@@ -564,11 +564,11 @@ public class FormControlArranger
             {
                 m_currentControlPosX = m_currentLabelPosX;
                 m_currentControlPosY = m_currentLabelPosY + m_LabelHeight;
-                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, new Short((short) com.sun.star.awt.TextAlign.LEFT));
+                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) com.sun.star.awt.TextAlign.LEFT));
             }
             else
             {
-                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, new Short((short) _iAlign));
+                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) _iAlign));
             }
             if (!bControlsareCreated)
             {

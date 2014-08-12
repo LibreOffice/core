@@ -96,7 +96,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
                 controls[ i ].setPropertyValue( "Tag", String.valueOf( i ) );
 
                 if ( controls[ i ].getPropertySetInfo().hasPropertyByName( "Border" ) )
-                    controls[ i ].setPropertyValue( "Border", new Short( (short)2 ) );
+                    controls[ i ].setPropertyValue( "Border", Short.valueOf( (short)2 ) );
 
                 XValidatableFormComponent xComp = UnoRuntime.queryInterface( XValidatableFormComponent.class,
                     controls[ i ] );

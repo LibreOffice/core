@@ -110,7 +110,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                         102,
                         41,
                         1,
-                        new Short((short) 0),
+                        Short.valueOf((short) 0),
                         sMsgWizardName,
                         310
                     });

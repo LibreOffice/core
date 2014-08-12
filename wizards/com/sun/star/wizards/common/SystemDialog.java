@@ -66,7 +66,7 @@ public class SystemDialog
             xStringSubstitution = createStringSubstitution(xMSF);
             Short[] listAny = new Short[]
             {
-                new Short(type)
+                Short.valueOf(type)
             };
             if (xInitialize != null)
             {

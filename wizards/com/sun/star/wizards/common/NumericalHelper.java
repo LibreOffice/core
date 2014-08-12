@@ -253,7 +253,7 @@ public class NumericalHelper
                 break;
             case TypeClass.SHORT_value:
                 aTypeObject.iType = SHORT_TYPE;
-                aTypeObject.aValue = new Short(AnyConverter.toShort(aValue));
+                aTypeObject.aValue = Short.valueOf(AnyConverter.toShort(aValue));
                 break;
             case TypeClass.LONG_value:
                 aTypeObject.iType = INT_TYPE;

@@ -368,7 +368,7 @@ public class DataAwareFields
                     }
                     if (field.getType().equals(Short.class))
                     {
-                        return new Short((short) 0);
+                        return Short.valueOf((short) 0);
                     }
                     if (field.getType().equals(Integer.class))
                     {
@@ -477,7 +477,7 @@ public class DataAwareFields
         }
         else if (c.equals(Short.class))
         {
-            return new Short((short) i);
+            return Short.valueOf((short) i);
         }
         else if (c.equals(Double.class))
         {

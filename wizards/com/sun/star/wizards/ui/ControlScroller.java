@@ -105,7 +105,7 @@ public abstract class ControlScroller
                 },
                 new Object[]
                 {
-                    new Short((short) 0), Boolean.TRUE, Integer.valueOf(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), Integer.valueOf(ScrollBarOrientation.VERTICAL), Integer.valueOf(iCompPosX + iCompWidth - iScrollBarWidth - 1), Integer.valueOf(iCompPosY + 1), IStep, Integer.valueOf(iScrollBarWidth)
+                    Short.valueOf((short) 0), Boolean.TRUE, Integer.valueOf(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), Integer.valueOf(ScrollBarOrientation.VERTICAL), Integer.valueOf(iCompPosX + iCompWidth - iScrollBarWidth - 1), Integer.valueOf(iCompPosY + 1), IStep, Integer.valueOf(iScrollBarWidth)
                 });
         scrollfields = new ArrayList<PropertyValue[]>();
         int ypos = iStartPosY + SORELFIRSTPOSY;

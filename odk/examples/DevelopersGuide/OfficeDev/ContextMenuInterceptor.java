@@ -83,7 +83,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                 UnoRuntime.queryInterface(
                 com.sun.star.view.XViewSettingsSupplier.class, xModel.getCurrentController());
             xViewSettings.getViewSettings().setPropertyValue(
-                "ZoomType", new Short((short)0));
+                "ZoomType", Short.valueOf((short)0));
             }
             // test document will be closed later
 
@@ -165,7 +165,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                     com.sun.star.beans.XPropertySet.class,
                     xMenuElementFactory.createInstance( "com.sun.star.ui.ActionTriggerSeparator" ));
 
-                Short aSeparatorType = new Short( ActionTriggerSeparatorType.LINE );
+                Short aSeparatorType = Short.valueOf( ActionTriggerSeparatorType.LINE );
                 xSeparator.setPropertyValue( "SeparatorType", aSeparatorType );
 
                 // query sub menu for index container to get access

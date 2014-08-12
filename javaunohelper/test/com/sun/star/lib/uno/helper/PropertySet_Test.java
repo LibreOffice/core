@@ -109,7 +109,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropByteA",value);
             ret= cl.getPropertyValue("PropByteA");
             r[i++]= ((Byte) ret).equals(value);
-            value= new Short((short)112);
+            value= Short.valueOf((short)112);
             cl.setPropertyValue("PropShortA", value);
             ret= cl.getPropertyValue("PropShortA");
             r[i++]= ((Short) ret).equals(value);
@@ -184,7 +184,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropObjectA",value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Byte) ret).equals(value);
-            value= new Short((short)112);
+            value= Short.valueOf((short)112);
             cl.setPropertyValue("PropObjectA", value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Short) ret).equals(value);
@@ -241,7 +241,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new Short((short)112);
+            value= Short.valueOf((short)112);
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -295,7 +295,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropByteA",value);
             ret= cl.getPropertyValue("PropByteA");
             r[i++]= ret instanceof Byte && util.anyEquals(value, ret);
-            value= new Any(new Type(short.class), new Short((short)112));
+            value= new Any(new Type(short.class), Short.valueOf((short)112));
             cl.setPropertyValue("PropShortA", value);
             ret= cl.getPropertyValue("PropShortA");
             r[i++]= ret instanceof Short && util.anyEquals(value, ret);
@@ -350,7 +350,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new Any(new Type(short.class), new Short((short)112));
+            value= new Any(new Type(short.class), Short.valueOf((short)112));
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -406,7 +406,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropByteClass",value);
             ret= cl.getPropertyValue("PropByteClass");
             r[i++]= ((Byte) ret).equals(value);
-            value= new Short((short)112);
+            value= Short.valueOf((short)112);
             cl.setPropertyValue("PropShortClass", value);
             ret= cl.getPropertyValue("PropShortClass");
             r[i++]= ((Short) ret).equals(value);
@@ -442,7 +442,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropByteClass",value);
             ret= cl.getPropertyValue("PropByteClass");
             r[i++]= ret instanceof Byte && util.anyEquals(value, ret);
-            value= new Any(new Type(short.class), new Short((short)112));
+            value= new Any(new Type(short.class), Short.valueOf((short)112));
             cl.setPropertyValue("PropShortClass", value);
             ret= cl.getPropertyValue("PropShortClass");
             r[i++]= ret instanceof Short && util.anyEquals(value, ret);
@@ -1213,7 +1213,7 @@ class TestClass extends PropertySet
             value= new Byte((byte) 111);
             r[i++]= convertPropertyValue(propByteA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Byte && outNewVal[0].equals(value);
-            value= new Short((short) 112);
+            value= Short.valueOf((short) 112);
             r[i++]= convertPropertyValue(propShortA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Short && outNewVal[0].equals(value);
             value= Integer.valueOf( 113);
@@ -1324,7 +1324,7 @@ class TestClass extends PropertySet
             value= new Byte((byte) 111);
             r[i++]= convertPropertyValue(propByteClass, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Byte && outNewVal[0].equals(value);
-            value= new Short((short) 112);
+            value= Short.valueOf((short) 112);
             r[i++]= convertPropertyValue(propShortClass, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Short && outNewVal[0].equals(value);
             value= Integer.valueOf( 113);
@@ -1365,7 +1365,7 @@ class TestClass extends PropertySet
             value= new Byte((byte) 111);
             setPropertyValueNoBroadcast(propByteA, value);
             r[i++]= bytePropA == ((Byte)value).byteValue();
-            value= new Short((short) 112);
+            value= Short.valueOf((short) 112);
             setPropertyValueNoBroadcast(propShortA, value);
             r[i++]= shortPropA == ((Short) value).shortValue();
             value= Integer.valueOf( 113);

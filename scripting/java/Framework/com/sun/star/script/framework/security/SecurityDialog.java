@@ -259,7 +259,7 @@ XInitialization {
         xPSetButton.setPropertyValue( "Width", Integer.valueOf( runButtonW ));
         xPSetButton.setPropertyValue( "Height", Integer.valueOf( runButtonH ));
         xPSetButton.setPropertyValue( "Name", _runButtonName );
-        xPSetButton.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+        xPSetButton.setPropertyValue( "TabIndex", Short.valueOf( (short)1 ) );
         xPSetButton.setPropertyValue( "Label", _runMacro );
 
         // create the Dont Run Macro button model and set the properties
@@ -274,7 +274,7 @@ XInitialization {
         xPSetButton.setPropertyValue( "Width", Integer.valueOf( doNotRunButtonW ));
         xPSetButton.setPropertyValue( "Height", Integer.valueOf( doNotRunButtonH ));
         xPSetButton.setPropertyValue( "Name", _doNotRunButtonName );
-        xPSetButton.setPropertyValue( "TabIndex", new Short( (short)0 ) );
+        xPSetButton.setPropertyValue( "TabIndex", Short.valueOf( (short)0 ) );
         xPSetButton.setPropertyValue( "Label", _doNotRunMacro );
 
         // insert the control models into the dialog model
@@ -296,7 +296,7 @@ XInitialization {
             xPSetLabel.setPropertyValue( "Width", Integer.valueOf( label2W ));
             xPSetLabel.setPropertyValue( "Height", Integer.valueOf( label2H ));
             xPSetLabel.setPropertyValue( "Name", _label2Name );
-            xPSetLabel.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetLabel.setPropertyValue( "TabIndex", Short.valueOf( (short)1 ) );
             xPSetLabel.setPropertyValue( "Label", _label2String );
 
             // create the label model and set the properties
@@ -309,7 +309,7 @@ XInitialization {
             xPSetLabel3.setPropertyValue( "Width", Integer.valueOf( label3W ));
             xPSetLabel3.setPropertyValue( "Height", Integer.valueOf( label3H ));
             xPSetLabel3.setPropertyValue( "Name", _label3Name );
-            xPSetLabel3.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetLabel3.setPropertyValue( "TabIndex", Short.valueOf( (short)1 ) );
             xPSetLabel3.setPropertyValue( "Label", _label3String );
 
             // create the label model and set the properties
@@ -322,7 +322,7 @@ XInitialization {
             xPSetLabel4.setPropertyValue( "Width", Integer.valueOf( label4W ));
             xPSetLabel4.setPropertyValue( "Height", Integer.valueOf( label4H ));
             xPSetLabel4.setPropertyValue( "Name", _label4Name );
-            xPSetLabel4.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetLabel4.setPropertyValue( "TabIndex", Short.valueOf( (short)1 ) );
             xPSetLabel4.setPropertyValue( "Label", _label4String );
 
             // create the checkbox model and set the properties
@@ -334,9 +334,9 @@ XInitialization {
             xPSetCheckBox.setPropertyValue( "PositionY", Integer.valueOf( checkBoxY ));
             xPSetCheckBox.setPropertyValue( "Width", Integer.valueOf( checkBoxW ));
             xPSetCheckBox.setPropertyValue( "Height", Integer.valueOf( checkBoxH ));
-            xPSetCheckBox.setPropertyValue( "State", new Short((short)0) );
+            xPSetCheckBox.setPropertyValue( "State", Short.valueOf((short)0) );
             xPSetCheckBox.setPropertyValue( "Name", _checkBoxName );
-            xPSetCheckBox.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetCheckBox.setPropertyValue( "TabIndex", Short.valueOf( (short)1 ) );
             xPSetCheckBox.setPropertyValue( "Label", new String(_checkBoxString +checkBoxPath) );
 
             // insert the control models into the dialog model
@@ -357,7 +357,7 @@ XInitialization {
             xPSetLabel5.setPropertyValue( "Width", Integer.valueOf( label5W ));
             xPSetLabel5.setPropertyValue( "Height", Integer.valueOf( label5H ));
             xPSetLabel5.setPropertyValue( "Name", _label5Name );
-            xPSetLabel5.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetLabel5.setPropertyValue( "TabIndex", Short.valueOf( (short)1 ) );
             xPSetLabel5.setPropertyValue( "Label", checkBoxPath2 );
             xNameCont.insertByName( _label5Name, label5Model );
             }
@@ -374,7 +374,7 @@ XInitialization {
             xPSetLabel.setPropertyValue( "Width", Integer.valueOf( label1W ));
             xPSetLabel.setPropertyValue( "Height", Integer.valueOf( label1H ));
             xPSetLabel.setPropertyValue( "Name", _label1Name );
-            xPSetLabel.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetLabel.setPropertyValue( "TabIndex", Short.valueOf( (short)1 ) );
             xPSetLabel.setPropertyValue( "Label", _label1String );
 
             // insert the control models into the dialog model

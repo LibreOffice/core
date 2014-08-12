@@ -277,7 +277,7 @@ public class ListBox extends TestCase
             listBoxModel.setPropertyValue( "ListSourceType", ListSourceType.SQL );
             listBoxModel.setPropertyValue( "ListSource", new String[] { "SELECT \"content\", \"" + columnPKName +
                 "\" FROM \"" + tableName + "\"" } );
-            listBoxModel.setPropertyValue( "BoundColumn", new Short( (short)1 ) );
+            listBoxModel.setPropertyValue( "BoundColumn", Short.valueOf( (short)1 ) );
         }
 
         m_document.getCurrentView().toggleFormDesignMode();

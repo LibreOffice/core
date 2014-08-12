@@ -309,7 +309,7 @@ public class UnoRuntime {
             return new Byte((byte) 0);
         case TypeClass.SHORT_value:
         case TypeClass.UNSIGNED_SHORT_value:
-            return new Short((short) 0);
+            return Short.valueOf((short) 0);
         case TypeClass.LONG_value:
         case TypeClass.UNSIGNED_LONG_value:
             return Integer.valueOf(0);

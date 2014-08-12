@@ -80,7 +80,7 @@ public class FieldLinker extends DBLimitedFieldSelection
                     },
                     new Object[]
                     {
-                            Boolean.valueOf(bDoEnable), 8, sSlaveListHeader[i], 97, Integer.valueOf(iCurPosY), IStep, new Short(curtabindex++), 97
+                            Boolean.valueOf(bDoEnable), 8, sSlaveListHeader[i], 97, Integer.valueOf(iCurPosY), IStep, Short.valueOf(curtabindex++), 97
                     });
             lstSlaveFields[i] = CurUnoDialog.insertListBox("lstSlaveFieldLink" + (i + 1), SOLINKLST[i], null, new ItemListenerImpl(),
                     new String[]
@@ -106,7 +106,7 @@ public class FieldLinker extends DBLimitedFieldSelection
                         97,
                         Integer.valueOf(iCurPosY + 10),
                         IStep,
-                        new Short(curtabindex++),
+                        Short.valueOf(curtabindex++),
                         97
                     });
 
@@ -117,7 +117,7 @@ public class FieldLinker extends DBLimitedFieldSelection
                     },
                     new Object[]
                     {
-                            Boolean.valueOf(bDoEnable), 8, sMasterListHeader[i], 206, Integer.valueOf(iCurPosY), IStep, new Short(curtabindex++), 97
+                            Boolean.valueOf(bDoEnable), 8, sMasterListHeader[i], 206, Integer.valueOf(iCurPosY), IStep, Short.valueOf(curtabindex++), 97
                     });
 
             lstMasterFields[i] = CurUnoDialog.insertListBox("lstMasterFieldLink" + Integer.toString(i + 1), SOLINKLST[i], null, new ItemListenerImpl(),
@@ -144,7 +144,7 @@ public class FieldLinker extends DBLimitedFieldSelection
                         206,
                         Integer.valueOf(iCurPosY + 10),
                         IStep,
-                        new Short(curtabindex++),
+                        Short.valueOf(curtabindex++),
                         97
                     });
             iCurPosY = iCurPosY + 38;

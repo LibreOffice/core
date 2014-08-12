@@ -75,7 +75,7 @@ public class FormWizard extends DatabaseObjectWizard
                 },
                 new Object[]
                 {
-                    210, Boolean.TRUE, "DialogForm", 102, 41, 1, new Short((short) 0), m_oResource.getResText(UIConsts.RID_FORM), 310
+                    210, Boolean.TRUE, "DialogForm", 102, 41, 1, Short.valueOf((short) 0), m_oResource.getResText(UIConsts.RID_FORM), 310
                 });
         drawNaviBar();
         if (getFormResources())

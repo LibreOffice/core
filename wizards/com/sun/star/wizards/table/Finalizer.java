@@ -83,7 +83,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", 97, 35, IFINALSTEP, new Short(curtabindex++), PropertyNames.EMPTY_STRING, 223
+                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", 97, 35, IFINALSTEP, Short.valueOf(curtabindex++), PropertyNames.EMPTY_STRING, 223
                     });
             txtTableName.addTextListener(CurUnoDialog);
             txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
@@ -110,7 +110,7 @@ public class Finalizer
                                 },
                                 new Object[]
                                 {
-                                    8, slblCatalog, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, new Short(curtabindex++), 120
+                                    8, slblCatalog, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, Short.valueOf(curtabindex++), 120
                                 });
 
                         try
@@ -122,7 +122,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", new Short(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sCatalogNames, new Short(curtabindex++), 80
+                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", Short.valueOf(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sCatalogNames, Short.valueOf(curtabindex++), 80
                                     });
                             int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
                             if (isel < 0)
@@ -165,7 +165,7 @@ public class Finalizer
                                 },
                                 new Object[]
                                 {
-                                    8, slblSchema, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, new Short(curtabindex++), 80
+                                    8, slblSchema, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, Short.valueOf(curtabindex++), 80
                                 });
 
                         try
@@ -177,7 +177,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", new Short(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sSchemaNames, new Short(curtabindex++), 80
+                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", Short.valueOf(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sSchemaNames, Short.valueOf(curtabindex++), 80
                                     });
                             int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
                             if (isel < 0)
@@ -205,7 +205,7 @@ public class Finalizer
                         },
                         new Object[]
                         {
-                            16, sCongratulations, Boolean.TRUE, 97, 62, IFINALSTEP, new Short(curtabindex++), 226
+                            16, sCongratulations, Boolean.TRUE, 97, 62, IFINALSTEP, Short.valueOf(curtabindex++), 226
                         });
             }
             else
@@ -219,7 +219,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], slblProceed, 97, Integer.valueOf(82 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 227
+                        UIConsts.INTEGERS[8], slblProceed, 97, Integer.valueOf(82 + ndiffPosY), IFINALSTEP, Short.valueOf(curtabindex++), 227
                     });
             optWorkWithTable = CurUnoDialog.insertRadioButton("optWorkWithTable", null,
                     new String[]
@@ -228,7 +228,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_WORKWITHTABLE", sWorkWithTable, 101, Integer.valueOf(97 + ndiffPosY), new Short((short) 1), IFINALSTEP, new Short(curtabindex++), 177
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_WORKWITHTABLE", sWorkWithTable, 101, Integer.valueOf(97 + ndiffPosY), Short.valueOf((short) 1), IFINALSTEP, Short.valueOf(curtabindex++), 177
                     });
             optModifyTable = CurUnoDialog.insertRadioButton("optModifyTable", null,
                     new String[]
@@ -237,7 +237,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_MODIFYTABLE", sModifyTable, 101, Integer.valueOf(109 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 177
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_MODIFYTABLE", sModifyTable, 101, Integer.valueOf(109 + ndiffPosY), IFINALSTEP, Short.valueOf(curtabindex++), 177
                     });
             CurUnoDialog.insertRadioButton("optStartFormWizard", null,
                     new String[]
@@ -246,7 +246,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_STARTFORMWIZARD", sStartFormWizard, 101, Integer.valueOf(121 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 177
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_STARTFORMWIZARD", sStartFormWizard, 101, Integer.valueOf(121 + ndiffPosY), IFINALSTEP, Short.valueOf(curtabindex++), 177
                     });
         }
         catch (SQLException e)

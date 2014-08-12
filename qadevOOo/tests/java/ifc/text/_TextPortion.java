@@ -40,8 +40,8 @@ public class _TextPortion extends MultiPropertyTest {
      */
     public void _ControlCharacter() {
         testProperty("ControlCharacter",
-            new Short(ControlCharacter.LINE_BREAK),
-            new Short(ControlCharacter.PARAGRAPH_BREAK)) ;
+            Short.valueOf(ControlCharacter.LINE_BREAK),
+            Short.valueOf(ControlCharacter.PARAGRAPH_BREAK)) ;
     }
 
 } //finish class _TextPortion

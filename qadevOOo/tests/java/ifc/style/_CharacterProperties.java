@@ -250,13 +250,13 @@ public class _CharacterProperties extends MultiPropertyTest {
         Object oPara = tEnv.getObjRelation("PARA");
         Object oPort = tEnv.getObjRelation("PORTION");
         if (oPara == null) {
-            testProperty("RubyAdjust",new Short((short)0),new Short((short)1));
+            testProperty("RubyAdjust",Short.valueOf((short)0),Short.valueOf((short)1));
         } else {
-            Short aShort = new Short((short) 1);
+            Short aShort = Short.valueOf((short) 1);
             changeProp((XPropertySet) oPara,
                 (XPropertySet) oPort,"RubyAdjust", aShort);
         }
-        new Short((short) 1);
+        Short.valueOf((short) 1);
     }
 
     /**
@@ -324,7 +324,7 @@ public class _CharacterProperties extends MultiPropertyTest {
     * new value must be specified.
     */
     public void _CharRotation() {
-        Short aShort = new Short((short) 10);
+        Short aShort = Short.valueOf((short) 10);
         changeProp(oObj,oObj, "CharRotation", aShort);
     }
 
@@ -360,8 +360,8 @@ public class _CharacterProperties extends MultiPropertyTest {
             }
 
             if (name.equals("CharRotation")) {
-                Short s1 = new Short((short) 0);
-                Short s2 = new Short((short) 900);
+                Short s1 = Short.valueOf((short) 0);
+                Short s2 = Short.valueOf((short) 900);
                 if (gValue.equals(s1)) {
                     ValueToSet = s2;
                 } else {

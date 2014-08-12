@@ -104,7 +104,7 @@ public class TitlesComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        16, Boolean.TRUE, Integer.valueOf(iLabelPosX), Integer.valueOf(_iCompPosY + 1), UIConsts.INVISIBLESTEP, new Short(curtabindex++), 30
+                        16, Boolean.TRUE, Integer.valueOf(iLabelPosX), Integer.valueOf(_iCompPosY + 1), UIConsts.INVISIBLESTEP, Short.valueOf(curtabindex++), 30
                     });
 
             xTextComponent = CurUnoDialog.insertTextField(stextfieldname, 0, null,
@@ -114,7 +114,7 @@ public class TitlesComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        12, HelpIds.getHelpIdString(curHelpIndex++), Integer.valueOf(iLabelPosX + 30), Integer.valueOf(_iCompPosY), UIConsts.INVISIBLESTEP, new Short(curtabindex++), Integer.valueOf(iCompWidth - 90 - 20)
+                        12, HelpIds.getHelpIdString(curHelpIndex++), Integer.valueOf(iLabelPosX + 30), Integer.valueOf(_iCompPosY), UIConsts.INVISIBLESTEP, Short.valueOf(curtabindex++), Integer.valueOf(iCompWidth - 90 - 20)
                     });
         }
     }

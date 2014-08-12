@@ -541,7 +541,7 @@ public class AnyConverter
             case TypeClass.SHORT_value:
                 switch (tc) {
                 case TypeClass.BYTE_value:
-                    return new Short( ((Byte)object).byteValue() );
+                    return Short.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
                     return object;
                 }

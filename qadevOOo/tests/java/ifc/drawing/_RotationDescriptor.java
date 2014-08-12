@@ -74,7 +74,7 @@ public class _RotationDescriptor extends MultiPropertyTest {
         }
 
         try {
-            oObj.setPropertyValue("RotateAngle",new Short((short) 0));
+            oObj.setPropertyValue("RotateAngle",Short.valueOf((short) 0));
         } catch (Exception e) {
         }
         log.println("Testing with custom Property tester") ;

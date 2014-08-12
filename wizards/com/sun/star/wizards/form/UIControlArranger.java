@@ -67,7 +67,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], sLabelPlacment, 97, 25, IControlStep, new Short(curtabindex++), 207
+                    UIConsts.INTEGERS[8], sLabelPlacment, 97, 25, IControlStep, Short.valueOf(curtabindex++), 207
                 });
         // Radio Button "Align Left"
         optAlignLeft = CurUnoDialog.insertRadioButton("optAlignLeft", SOALIGNMETHOD, this,
@@ -77,7 +77,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT", sAlignLeft, 107, 38, new Short((short) 1), IControlStep, new Short(curtabindex++), 171
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT", sAlignLeft, 107, 38, Short.valueOf((short) 1), IControlStep, Short.valueOf(curtabindex++), 171
                 });
         // Radio Button "Align Right"
         optAlignRight = CurUnoDialog.insertRadioButton("optAlignRight", SOALIGNMETHOD, this,
@@ -87,7 +87,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT", sAlignRight, Boolean.TRUE, 107, 50, IControlStep, new Short(curtabindex++), 171
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT", sAlignRight, Boolean.TRUE, 107, 50, IControlStep, Short.valueOf(curtabindex++), 171
                 });
 
 
@@ -186,7 +186,7 @@ public class UIControlArranger
                         97,
                         YPos,
                         IControlStep,
-                        new Short(curtabindex++),
+                        Short.valueOf(curtabindex++),
                         207
                     });
 

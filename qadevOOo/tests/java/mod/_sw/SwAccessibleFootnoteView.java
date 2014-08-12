@@ -98,7 +98,7 @@ public class SwAccessibleFootnoteView extends TestCase {
         try {
             //change zoom value to 10%
             //footer should be in the vissible area of the document
-            xPropSet.setPropertyValue("ZoomValue", new Short("10"));
+            xPropSet.setPropertyValue("ZoomValue", Short.valueOf("10"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't set propertyValue...", e);
@@ -134,9 +134,9 @@ public class SwAccessibleFootnoteView extends TestCase {
                 public void fireEvent() {
                     try {
                         //change zoom value to 130%
-                        PropSet.setPropertyValue("ZoomValue", new Short("15"));
+                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("15"));
                         //and back to 10%
-                        PropSet.setPropertyValue("ZoomValue", new Short("10"));
+                        PropSet.setPropertyValue("ZoomValue", Short.valueOf("10"));
                     } catch ( com.sun.star.lang.WrappedTargetException e ) {
 
                     }  catch ( com.sun.star.lang.IllegalArgumentException e ) {

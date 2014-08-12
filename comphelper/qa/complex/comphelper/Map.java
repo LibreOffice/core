@@ -235,7 +235,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         switch ( _pos )
         {
             case 0: someValue = Boolean.FALSE; break;
-            case 1: someValue = new Short( (short)0 ); break;
+            case 1: someValue = Short.valueOf( (short)0 ); break;
             case 2: someValue = Integer.valueOf( 0 ); break;
             case 3: someValue = Long.valueOf( 0 ); break;
             case 4: someValue = UnoRuntime.queryInterface( XInterface.class, new DummyInterface() ); break;

@@ -400,7 +400,7 @@ public class DesktopTools
             XInterface oViewSettings = oVSSupp.getViewSettings();
             XPropertySet oViewProp = UnoRuntime.queryInterface(XPropertySet.class, oViewSettings);
             oViewProp.setPropertyValue("ZoomType",
-                    new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
+                    Short.valueOf(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
 
             utils.shortWait(5000);
         }

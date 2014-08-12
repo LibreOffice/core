@@ -40,7 +40,7 @@ public final class AnyConverter_Test {
     Boolean aBool= Boolean.TRUE;
     Character aChar= new Character('A');
     Byte aByte= new Byte((byte) 111);
-    Short aShort= new Short((short) 11111);
+    Short aShort= Short.valueOf((short) 11111);
     Integer aInt= Integer.valueOf( 1111111);
     Long aLong= Long.valueOf( 0xffffffff);
     Float aFloat= new Float( 3.14);
@@ -242,7 +242,7 @@ public final class AnyConverter_Test {
         assertEquals(sh, ((Byte)anyByte.getObject()).byteValue());
         sh= AnyConverter.toShort(anyShort);
         assertEquals(sh, ((Short) anyShort.getObject()).shortValue());
-        Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
+        Any a = new Any( Type.UNSIGNED_SHORT, Short.valueOf((short)5) );
         assertEquals(5, AnyConverter.toUnsignedShort( a ));
 
         // must fail
@@ -312,7 +312,7 @@ public final class AnyConverter_Test {
         assertEquals(val, ((Short) anyShort.getObject()).shortValue());
         val= AnyConverter.toInt(anyInt);
         assertEquals(val, ((Integer) anyInt.getObject()).intValue());
-        Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
+        Any a = new Any( Type.UNSIGNED_SHORT, Short.valueOf((short)5) );
         assertEquals(5, AnyConverter.toInt(a));
         assertEquals(5, AnyConverter.toUnsignedInt(a));
         a = new Any( Type.UNSIGNED_LONG, Integer.valueOf(5) );
@@ -383,7 +383,7 @@ public final class AnyConverter_Test {
         assertEquals(val, ((Integer) anyInt.getObject()).intValue());
         val= AnyConverter.toLong(anyLong);
         assertEquals(val, ((Long) anyLong.getObject()).longValue());
-        Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
+        Any a = new Any( Type.UNSIGNED_SHORT, Short.valueOf((short)5) );
         assertEquals(5, AnyConverter.toLong(a));
         assertEquals(5, AnyConverter.toUnsignedLong(a));
         a = new Any( Type.UNSIGNED_LONG, Integer.valueOf(5) );
@@ -797,7 +797,7 @@ public final class AnyConverter_Test {
         assertTrue(AnyConverter.isShort(aShort));
         assertTrue(AnyConverter.isShort(anyShort));
         assertEquals(Type.SHORT, AnyConverter.getType(anyShort));
-        Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
+        Any a = new Any( Type.UNSIGNED_SHORT, Short.valueOf((short)5) );
         assertEquals(Type.UNSIGNED_SHORT, AnyConverter.getType(a));
         assertFalse(AnyConverter.isShort(a));
         assertFalse(Type.SHORT.equals(AnyConverter.getType(a)));

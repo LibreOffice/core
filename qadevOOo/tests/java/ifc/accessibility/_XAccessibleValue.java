@@ -320,7 +320,7 @@ public class _XAccessibleValue extends MultiMethodTest {
             return Integer.valueOf((int)val);
         }
         else if (clazz.equals(Short.class)) {
-            return new Short((short)val);
+            return Short.valueOf((short)val);
         }
         else if (clazz.equals(Float.class)) {
             return new Float((float)val);

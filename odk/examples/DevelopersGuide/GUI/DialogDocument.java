@@ -65,7 +65,7 @@ public class DialogDocument extends UnoDialogSample {
             XMultiComponentFactory xMCF = xContext.getServiceManager();
             oDialogDocument = new DialogDocument(xContext, xMCF);
             oDialogDocument.initialize( new String[] {"Height", "Moveable", "Name","PositionX","PositionY", "Step", "TabIndex","Title","Width"},
-                    new Object[] { Integer.valueOf(400), Boolean.TRUE, "Dialog1", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(1), new Short((short) 0), "Document-Dialog", Integer.valueOf(300)});
+                    new Object[] { Integer.valueOf(400), Boolean.TRUE, "Dialog1", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(1), Short.valueOf((short) 0), "Document-Dialog", Integer.valueOf(300)});
             oDialogDocument.createWindowPeer();
             Object oFTHeaderModel = oDialogDocument.m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
             XMultiPropertySet xFTHeaderModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);

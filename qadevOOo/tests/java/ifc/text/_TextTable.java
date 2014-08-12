@@ -69,7 +69,7 @@ public class _TextTable extends MultiPropertyTest {
      * set to non-automatic.
      */
     public void _Width() {
-        Short align = new Short(com.sun.star.text.HoriOrientation.CENTER);
+        Short align = Short.valueOf(com.sun.star.text.HoriOrientation.CENTER);
         try {
           oObj.setPropertyValue("HoriOrient",align);
         }
@@ -86,7 +86,7 @@ public class _TextTable extends MultiPropertyTest {
      * set to non-automatic.
      */
     public void _RelativeWidth() {
-        Short align = new Short(com.sun.star.text.HoriOrientation.CENTER);
+        Short align = Short.valueOf(com.sun.star.text.HoriOrientation.CENTER);
         try {
           oObj.setPropertyValue("HoriOrient",align);
         }

@@ -704,8 +704,8 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
                                     m_formLayer.insertControlLine( "FormattedField", "BIRTHDATE", "", 51 );
 
         // for the salesman number / zip code, we don't want to have decimal places:
-        xSNRField.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
-        xZipField.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
+        xSNRField.setPropertyValue( "DecimalAccuracy", Short.valueOf( (short)0 ) );
+        xZipField.setPropertyValue( "DecimalAccuracy", Short.valueOf( (short)0 ) );
 
 
         /** need the form the control models belong to
@@ -771,10 +771,10 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         m_aSalesNameValidator = new GridFieldValidator( m_xCtx, xSalesNameColumn );
         m_aSalesNameValidator.enableColumnWatch( m_bAllowEmptySales );
 
-        xKeyColumn.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
+        xKeyColumn.setPropertyValue( "DecimalAccuracy", Short.valueOf( (short)0 ) );
 
         // init the list box which is for choosing the customer a sale belongs to
-        xCustomerColumn.setPropertyValue( "BoundColumn", new Short( (short)1 ) );
+        xCustomerColumn.setPropertyValue( "BoundColumn", Short.valueOf( (short)1 ) );
         xCustomerColumn.setPropertyValue( "Label", "Customer" );
         xCustomerColumn.setPropertyValue( "ListSourceType", ListSourceType.SQL );
 
@@ -859,7 +859,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         m_aSalesLocker.enableLock( m_bProtectKeyFields );
 
         // initially, we want to generate keys when moving to a new record
-        xKeyGen.setPropertyValue( "DefaultState", new Short( (short)1 ) );
+        xKeyGen.setPropertyValue( "DefaultState", Short.valueOf( (short)1 ) );
 
 
         // second options block

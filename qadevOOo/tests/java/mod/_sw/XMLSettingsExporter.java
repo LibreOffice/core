@@ -139,7 +139,7 @@ public class XMLSettingsExporter extends TestCase {
             XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
             xController);
             XPropertySet xPropSet = xViewSetSup.getViewSettings();
-            xPropSet.setPropertyValue("ZoomValue", new Short(ZOOM));
+            xPropSet.setPropertyValue("ZoomValue", Short.valueOf(ZOOM));
 
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;

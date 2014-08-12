@@ -51,10 +51,10 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
         // a numeric control
         XPropertySet numericControl = m_formLayer.insertControlLine( "NumericField",
             "enter a value", "", 30 );
-        numericControl.setPropertyValue( "ValueMin", new Short( (short)1 ) );
-        numericControl.setPropertyValue( "ValueMax", new Short( (short)5 ) );
-        numericControl.setPropertyValue( "Value", new Short( (short)1 ) );
-        numericControl.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
+        numericControl.setPropertyValue( "ValueMin", Short.valueOf( (short)1 ) );
+        numericControl.setPropertyValue( "ValueMax", Short.valueOf( (short)5 ) );
+        numericControl.setPropertyValue( "Value", Short.valueOf( (short)1 ) );
+        numericControl.setPropertyValue( "DecimalAccuracy", Short.valueOf( (short)0 ) );
         numericControl.setPropertyValue( "Spin", Boolean.TRUE );
 
         // bind the control model to cell B2
