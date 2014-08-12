@@ -68,7 +68,6 @@ private:
     SAL_DLLPRIVATE void init();
 
 protected:
-    SfxModalDialog(Window *pParent, const ResId& );
     SfxModalDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
 
     OUString&           GetExtraData()      { return aExtraData; }

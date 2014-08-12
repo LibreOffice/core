@@ -146,29 +146,9 @@ void SfxModalDialog::GetDialogData_Impl()
     }
 }
 
-
-
 void SfxModalDialog::init()
 {
     GetDialogData_Impl();
-}
-
-
-
-SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
-
-/*  [Description]
-
-    Constructor of the general base class for modal Dialoge;
-    ResId is used as ID in ini-file. The saved position from there is set.
-*/
-
-:   ModalDialog(pParent, rResId),
-    nUniqId(rResId.GetId()),
-    pInputSet(0),
-    pOutputSet(0)
-{
-    init();
 }
 
 SfxModalDialog::SfxModalDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription )
@@ -179,8 +159,6 @@ SfxModalDialog::SfxModalDialog(Window *pParent, const OString& rID, const OUStri
 {
     init();
 }
-
-
 
 SfxModalDialog::~SfxModalDialog()
 

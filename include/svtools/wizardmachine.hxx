@@ -171,11 +171,8 @@ namespace svt
     public:
         /** ctor
 
-            The ctor does not call FreeResource, this is the resposibility of the derived class.
-
             For the button flags, use any combination of the WZB_* flags.
         */
-        OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags );
         OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags );
         OWizardMachine(Window* _pParent, sal_uInt32 _nButtonFlags );
         virtual ~OWizardMachine();

@@ -346,16 +346,6 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 
         return aStr.makeStringAndClear();
     }
-
-    long ShrinkToFitWidth( Control& _rCtrl, long _nOffs )
-    {
-        long    nWidth = _rCtrl.GetTextWidth( _rCtrl.GetText() );
-        Size    aSize( _rCtrl.GetSizePixel() );
-        nWidth += _nOffs;
-        aSize.Width() = nWidth;
-        _rCtrl.SetSizePixel( aSize );
-        return nWidth;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

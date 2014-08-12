@@ -83,9 +83,6 @@ namespace dbaui
         DBTreeListBox( Window* pParent
             ,WinBits nWinStyle=0
             ,bool _bHandleEnterKey = false);
-        DBTreeListBox( Window* pParent
-            ,const ResId& rResId
-            ,bool _bHandleEnterKey = false);
         virtual ~DBTreeListBox();
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }

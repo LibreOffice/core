@@ -221,13 +221,6 @@ namespace dbaui
         }
     }
 
-    void OGenericAdministrationPage::SetControlFontWeight(Window* _pWindow, FontWeight _eWeight)
-    {
-        Font aFont = _pWindow->GetControlFont();
-        aFont.SetWeight( _eWeight );
-        _pWindow->SetControlFont( aFont );
-    }
-
     IMPL_LINK(OGenericAdministrationPage, OnTestConnectionClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");

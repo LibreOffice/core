@@ -938,36 +938,6 @@ VclMultiLineEdit::VclMultiLineEdit( Window* pParent, WinBits nWinStyle )
     SetStyle( ImplInitStyle( nWinStyle ) );
 }
 
-VclMultiLineEdit::VclMultiLineEdit( Window* pParent, const ResId& rResId )
-    : Edit( pParent, rResId.SetRT( RSC_MULTILINEEDIT ) )
-{
-    SetType( WINDOW_MULTILINEEDIT );
-    WinBits nWinStyle = rResId.GetWinBits();
-    pImpVclMEdit = new ImpVclMEdit( this, nWinStyle );
-    ImplInitSettings( true, true, true );
-    pUpdateDataTimer = 0;
-
-    sal_Int32 nMaxLen = Edit::GetMaxTextLen();
-    if ( nMaxLen )
-        SetMaxTextLen( nMaxLen );
-
-    SetText( Edit::GetText() );
-
-    if ( IsVisible() )
-        pImpVclMEdit->Resize();
-
-    SetCompoundControl( true );
-    SetStyle( ImplInitStyle( nWinStyle ) );
-
-    // Base Edit ctor could call Show already, but that would cause problems
-    // with accessibility, as Show might (indirectly) trigger a call to virtual
-    // GetComponentInterface, which is the Edit's base version instead of the
-    // VclMultiLineEdit's version while in the base Edit ctor:
-    if ((GetStyle() & WB_HIDE) == 0)
-        Show();
-
-}
-
 VclMultiLineEdit::~VclMultiLineEdit()
 {
     {

@@ -118,23 +118,6 @@ namespace svt
         }
     };
 
-
-    //= OWizardMachine
-
-
-    OWizardMachine::OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags )
-        :WizardDialog( _pParent, _rRes )
-        ,m_pFinish(NULL)
-        ,m_pCancel(NULL)
-        ,m_pNextPage(NULL)
-        ,m_pPrevPage(NULL)
-        ,m_pHelp(NULL)
-        ,m_pImpl( new WizardMachineImplData )
-    {
-        implConstruct( _nButtonFlags );
-    }
-
-
     OWizardMachine::OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
         :WizardDialog( _pParent, i_nStyle )
         ,m_pFinish(NULL)
@@ -146,7 +129,6 @@ namespace svt
     {
         implConstruct( _nButtonFlags );
     }
-
 
     OWizardMachine::OWizardMachine(Window* _pParent, sal_uInt32 _nButtonFlags )
         :WizardDialog( _pParent, "WizardDialog", "svt/ui/wizarddialog.ui" )

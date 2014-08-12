@@ -64,16 +64,6 @@ DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,bool _bHandleE
     init();
 }
 
-DBTreeListBox::DBTreeListBox( Window* pParent, const ResId& rResId,bool _bHandleEnterKey)
-    :SvTreeListBox(pParent,rResId)
-    ,m_pDragedEntry(NULL)
-    ,m_pActionListener(NULL)
-    ,m_pContextMenuProvider( NULL )
-    ,m_bHandleEnterKey(_bHandleEnterKey)
-{
-    init();
-}
-
 void DBTreeListBox::init()
 {
     sal_uInt16 nSize = SPACEBETWEENENTRIES;

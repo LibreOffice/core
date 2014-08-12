@@ -24,14 +24,6 @@
 
 namespace dbaui
 {
-// OConnectionURLEdit
-OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,bool _bShowPrefix)
-    :Edit(_pParent, _rResId)
-    ,m_pTypeCollection(NULL)
-    ,m_pForcedPrefix(NULL)
-    ,m_bShowPrefix(_bShowPrefix)
-{
-}
 
 OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, WinBits _nBits,bool _bShowPrefix)
     :Edit(_pParent, _nBits)
