@@ -272,6 +272,7 @@ Dim bFound As Boolean, b2ndRound As Boolean, bStop As Boolean
 Dim vFindValue As Variant, oFindrecord As Object
 
 	Set oFindRecord = _A2B_.FindRecord
+	If IsNull(oFindRecord) Then GoTo Error_FindRecord
 	With oFindRecord
 
 		If .FindRecord = 0 Then Goto Error_FindRecord
@@ -655,8 +656,8 @@ Public Function GoToControl(Optional ByVal pvControlName As variant) As Boolean
 &apos;	Set the focus on the named control on the active form.
 &apos;	Return False if the control does not exist or is disabled,
 
-	Utils._SetCalledSub(&quot;GoToControl&quot;)
 	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(&quot;GoToControl&quot;)
 	If IsMissing(pvControlName) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvControlName, 1, vbString) Then Goto Exit_Function
 	
@@ -848,8 +849,8 @@ Public Function MoveSize(ByVal Optional pvLeft As Variant _
 						, ByVal Optional pvHeight As Variant _
 						) As Variant
 &apos;	Execute MoveSize action
-	Utils._SetCalledSub(&quot;MoveSize&quot;)
 	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(&quot;MoveSize&quot;)
 	MoveSize = False
 	If IsMissing(pvLeft) Then pvLeft = -1
 	If IsMissing(pvTop) Then pvTop = -1
@@ -1323,7 +1324,6 @@ Error_Sub:
 End Sub				&apos;	RunApp		V0.8.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
-REM -----------------------------------------------------------------------------------------------------------------------
 Public Function RunCommand(Optional pvCommand As Variant) As Boolean
 &apos;	Execute command via DispatchHelper
 
@@ -1771,9 +1771,9 @@ REM ----------------------------------------------------------------------------
 Public Function ShowAllrecords() As Boolean
 &apos;	Removes any existing filter that exists on the current table, query or form
 
+	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;ShowAllRecords&quot;
 	Utils._SetCalledSub(cstThisSub)
-	If _ErrorHandler() Then On Local Error Goto Error_Function
 	ShowAllRecords = False
 
 Dim oWindow As Object, oDatabase As Object

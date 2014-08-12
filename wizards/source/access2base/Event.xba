@@ -297,9 +297,6 @@ Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 	End Select
 
 	&apos;	Evaluate ContextShortcut
-	iCurrentDoc = Application._CurrentDoc()
-	If iCurrentDoc &lt; 0 Then Goto Exit_Function
-	Set oDoc = _A2B_.CurrentDoc(iCurrentDoc)
 	sShortcut = &quot;&quot;
 	sImplementation = Utils._ImplementationName(oObject)
 	
@@ -314,6 +311,10 @@ Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 		Case Else
 	End Select
 	
+	iCurrentDoc = Application._CurrentDoc(, False)
+	If iCurrentDoc &lt; 0 Then Goto Exit_Function
+	Set oDoc = _A2B_.CurrentDoc(iCurrentDoc)
+
 	&apos;	To manage 2x triggers of &quot;Before record action&quot; form event
 	If _EventType = &quot;ROWCHANGEEVENT&quot; And sImplementation &lt;&gt; &quot;com.sun.star.comp.forms.ODatabaseForm&quot; Then _Recommendation = &quot;IGNORE&quot;
 

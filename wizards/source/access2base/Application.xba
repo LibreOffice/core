@@ -291,7 +291,7 @@ Public Function AllForms(ByVal Optional pvIndex As Variant) As Variant
 &apos;	Easiest use for standalone forms: AllForms(0)
 &apos;	If no argument, return a Collection type
 
-If _ErrorHandler() Then On Local Error Goto Error_Function
+	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;AllForms&quot;
 	Utils._SetCalledSub(cstThisSub)
 Dim iIndex As Integer, vAllForms As Variant
@@ -443,10 +443,11 @@ Dim i As Integer, bFound As Boolean, sURL As String, iCurrentDoc As Integer, oCu
 
 	bFound = False
 	Set CurrentDb = Nothing
+	If IsEmpty(_A2B_) Then GoTo Exit_Function
 	With _A2B_
 		If Not IsArray(.CurrentDoc) Then Goto Exit_Function
 		If UBound(.CurrentDoc) &lt; 0 Then Goto Exit_Function
-		iCurrentDoc = _CurrentDoc()
+		iCurrentDoc = _CurrentDoc(, False)
 		If iCurrentDoc &gt;= 0 Then Set CurrentDb = .CurrentDoc(iCurrentDoc).DbContainers(0).Database
 	End With
 
@@ -980,6 +981,7 @@ End Function			&apos;	OpenDatabase		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function ProductCode()
+	If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current AOO/LibO session
 	ProductCode = &quot;Access2Base &quot; &amp; _A2B_.VersionNumber
 End Function	&apos;	ProductCode	V0.9.1
 
@@ -991,10 +993,10 @@ Public Function SysCmd(Optional pvAction As Variant _
 &apos;	Manage progress meter in the status bar
 &apos;	Other values supported by MSAccess are ignored	
 
+	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;SysCmd&quot;
 	Utils._SetCalledSub(cstThisSub)
 	SysCmd = False
-	If _ErrorHandler() Then On Local Error Goto Error_Function
 
 Const cstMissing = -1
 Const cstBarLength = 350
@@ -1117,6 +1119,7 @@ REM Without arguments same as CurrentDb() except that it generates an error if d
 REM With 2 arguments return the corresponding entry in Root
 
 Dim odbDatabase As Variant
+	If IsEmpty(_A2B_) Then GoTo Trace_Error
 	If IsMissing(piDocEntry) Then
 		Set odbDatabase = Application.CurrentDb()
 	Else
@@ -1139,16 +1142,16 @@ Trace_Error:
 End Function		&apos;	_CurrentDb	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _CurrentDoc(Optional pvURL As String) As Integer
+Public Function _CurrentDoc(Optional pvURL As String, Optional pbAbort As Boolean) As Integer
 &apos;	Returns the entry in _A2B_.CurrentDoc(...) referring to the current document
 
 Dim i As Integer, bFound As Boolean, sURL As String
 
 	bFound = False
-	_CurrentDoc = -1		&apos;	Convention for _A2B_ not initalized or no entry found
+	If IsEmpty(_A2B_) Then GoTo Trace_Error
 	With _A2B_
-		If Not IsArray(.CurrentDoc) Then Goto Exit_Function
-		If UBound(.CurrentDoc) &lt; 0 Then Goto Exit_Function
+		If Not IsArray(.CurrentDoc) Then Goto Trace_Error
+		If UBound(.CurrentDoc) &lt; 0 Then Goto Trace_Error
 		For i = 1 To UBound(.CurrentDoc)					&apos;	[0] reserved to database .odb document
 			If IsMissing(pvURL) Then					&apos;	Not on 1 single line ?!?
 				If Utils._hasUNOProperty(ThisComponent, &quot;URL&quot;) Then
@@ -1166,12 +1169,16 @@ Dim i As Integer, bFound As Boolean, sURL As String
 			End If
 		Next  i
 		If Not bFound Then
-			If Not IsNull(.CurrentDoc(0)) Then _CurrentDoc = 0
+			If Not IsNull(.CurrentDoc(0)) Then _CurrentDoc = 0 Else GoTo Trace_Error
 		End If
 	End With
 
 Exit_Function:
 	Exit Function
+Trace_Error:
+	If IsMissing(pbAbort) Then pbAbort = True
+	If pbAbort Then TraceError(TRACEABORT, ERRDBNOTCONNECTED, Utils._CalledSub(), 0, 1) Else _CurrentDoc = -1
+	Goto Exit_Function
 End Function	&apos;	_CurrentDoc		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
