@@ -321,7 +321,7 @@ sal_uInt16 StatusBar::ImplGetFirstVisiblePos() const
         }
     }
 
-    return ~0;
+    return SAL_MAX_UINT16;
 }
 
 void StatusBar::ImplDrawText( bool bOffScreen, long nOldTextWidth )
