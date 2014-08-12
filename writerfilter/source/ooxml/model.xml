@@ -18228,7 +18228,6 @@
     <resource name="ST_Merge" resource="List">
       <value tokenid="ooxml:Value_ST_Merge_continue">continue</value>
       <value tokenid="ooxml:Value_ST_Merge_restart">restart</value>
-      <default tokenid="ooxml:Value_ST_Merge_continue"/>
     </resource>
     <resource name="CT_VMerge" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_VMerge_val" action="setValue"/>
