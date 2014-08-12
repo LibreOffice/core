@@ -724,6 +724,8 @@ void VistaFilePickerImpl::impl_sta_SetDefaultName(const RequestRef& rRequest)
     // so that the autoextension mechanism can do its job
     BOOL bValue = FALSE;
     HRESULT hResult = iCustom->GetCheckButtonState( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &bValue);
+    if ( FAILED(hResult) )
+        return;
     if ( bValue )
     {
         sal_Int32 nSepPos = sFilename.lastIndexOf( '.' );
@@ -759,6 +761,8 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
 
     BOOL bValue = FALSE;
     HRESULT hResult = iCustomize->GetCheckButtonState( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &bValue);
+    if ( FAILED(hResult) )
+        return;
 
     if ( bValue )
     {
