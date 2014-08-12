@@ -45,10 +45,9 @@ private:
     std::vector<css::beans::PropertyValue>* m_pCurrentInteropGrabBag;
     DomainMapperTableManager_Base_t *m_pTableManager;
     bool m_bOOXML;
-    DomainMapper& m_rDMapper;
 
 public:
-    TablePropertiesHandler( bool bOOXML, DomainMapper& rDMapper );
+    TablePropertiesHandler( bool bOOXML );
     virtual ~TablePropertiesHandler( );
 
     bool sprm(Sprm & sprm);

@@ -41,11 +41,10 @@ using namespace oox;
 namespace writerfilter {
 namespace dmapper {
 
-    TablePropertiesHandler::TablePropertiesHandler( bool bOOXML, DomainMapper& rDMapper ) :
+    TablePropertiesHandler::TablePropertiesHandler( bool bOOXML ) :
         m_pCurrentInteropGrabBag(0),
         m_pTableManager( NULL ),
-        m_bOOXML( bOOXML ),
-        m_rDMapper( rDMapper )
+        m_bOOXML( bOOXML )
     {
     }
 

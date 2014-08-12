@@ -86,7 +86,6 @@ class StyleSheetTable :
         public LoggedTable
 {
     StyleSheetTable_Impl   *m_pImpl;
-    DomainMapper &          m_rDMapper;
 
 public:
     StyleSheetTable( DomainMapper& rDMapper,
