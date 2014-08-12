@@ -198,7 +198,7 @@ protected:
         return (rBHelper.bDisposed || rBHelper.bInDispose);
     }
 
-    void createTexture( unsigned int* texID,
+    void createTexture( GLuint* texID,
 #if defined( GLX_EXT_texture_from_pixmap )
             GLXPixmap pixmap,
             bool usePixmap,
@@ -232,10 +232,10 @@ private:
 
     /** OpenGL handle to the leaving slide's texture
     */
-    unsigned int maLeavingSlideGL;
+    GLuint maLeavingSlideGL;
     /** OpenGL handle to the entering slide's texture
     */
-    unsigned int maEnteringSlideGL;
+    GLuint maEnteringSlideGL;
 
     Reference< presentation::XSlideShowView > mxView;
     Reference< rendering::XIntegerBitmap > mxLeavingBitmap;
@@ -561,7 +561,7 @@ void OGLTransitionerImpl::setTransition( boost::shared_ptr<OGLTransitionImpl> co
     impl_prepareTransition();
 }
 
-void OGLTransitionerImpl::createTexture( unsigned int* texID,
+void OGLTransitionerImpl::createTexture( GLuint* texID,
 #if defined( GLX_EXT_texture_from_pixmap )
                      GLXPixmap pixmap,
                      bool usePixmap,
