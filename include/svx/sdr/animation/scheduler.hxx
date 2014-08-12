@@ -31,7 +31,7 @@ namespace sdr
 {
     namespace animation
     {
-        class Event
+        class SVX_DLLPUBLIC Event
         {
             // time of event in ms
             sal_uInt32                                      mnTime;
@@ -41,16 +41,16 @@ namespace sdr
 
         public:
             // constructor/destructor
-            explicit Event(sal_uInt32 nTime);
-            SVX_DLLPUBLIC virtual ~Event();
+            SAL_DLLPRIVATE explicit Event(sal_uInt32 nTime);
+            virtual ~Event();
 
             // access to mpNext
-            Event* GetNext() const {  return mpNext; }
-            void SetNext(Event* pNew);
+            SAL_DLLPRIVATE Event* GetNext() const {  return mpNext; }
+            SAL_DLLPRIVATE void SetNext(Event* pNew);
 
             // get/set time
-            sal_uInt32 GetTime() const {  return mnTime; }
-            void SVX_DLLPUBLIC SetTime(sal_uInt32 nNew);
+            SAL_DLLPRIVATE sal_uInt32 GetTime() const {  return mnTime; }
+            void SetTime(sal_uInt32 nNew);
 
             // execute event
             virtual void Trigger(sal_uInt32 nTime) = 0;
@@ -65,25 +65,25 @@ namespace sdr
 {
     namespace animation
     {
-        class EventList
+        class SVX_DLLPUBLIC EventList
         {
             // pointer to first entry
             Event*                                          mpHead;
 
         public:
             // constructor/destructor
-            EventList();
-            SVX_DLLPUBLIC virtual ~EventList();
+            SAL_DLLPRIVATE EventList();
+            virtual ~EventList();
 
             // insert/remove time dependent
-            void Insert(Event* pNew);
-            void Remove(Event* pOld);
+            SAL_DLLPRIVATE void Insert(Event* pNew);
+            SAL_DLLPRIVATE void Remove(Event* pOld);
 
             // clear list
-            void Clear();
+            SAL_DLLPRIVATE void Clear();
 
             // get first
-            Event* GetFirst() {  return mpHead; }
+            SAL_DLLPRIVATE Event* GetFirst() {  return mpHead; }
         };
     } // end of namespace animation
 } // end of namespace sdr
@@ -95,7 +95,7 @@ namespace sdr
 {
     namespace animation
     {
-        class Scheduler : public Timer
+        class SVX_DLLPUBLIC Scheduler : public Timer
         {
             // time in ms
             sal_uInt32                                      mnTime;
@@ -112,31 +112,31 @@ namespace sdr
 
         public:
             // constructor/destructor
-            Scheduler();
-            SVX_DLLPUBLIC virtual ~Scheduler();
+            SAL_DLLPRIVATE Scheduler();
+            virtual ~Scheduler();
 
             // From baseclass Timer, the timeout call
-            SVX_DLLPUBLIC virtual void Timeout() SAL_OVERRIDE;
+            virtual void Timeout() SAL_OVERRIDE;
 
             // get time
-            sal_uInt32 GetTime() {  return mnTime; }
+            SAL_DLLPRIVATE sal_uInt32 GetTime() {  return mnTime; }
 
             // #i38135#
-            void SetTime(sal_uInt32 nTime);
+            SAL_DLLPRIVATE void SetTime(sal_uInt32 nTime);
 
             // execute all ripe events, removes executed ones from the scheduler
-            void triggerEvents();
+            SAL_DLLPRIVATE void triggerEvents();
 
             // re-start or stop timer according to event list
-            void checkTimeout();
+            SAL_DLLPRIVATE void checkTimeout();
 
             // insert/remove events, wrapper to EventList methods
-            void SVX_DLLPUBLIC InsertEvent(Event* pNew);
-            void RemoveEvent(Event* pOld);
+            void InsertEvent(Event* pNew);
+            SAL_DLLPRIVATE void RemoveEvent(Event* pOld);
 
             // get/set pause
-            bool IsPaused() const { return mbIsPaused; }
-            void SetPaused(bool bNew);
+            SAL_DLLPRIVATE bool IsPaused() const { return mbIsPaused; }
+            SAL_DLLPRIVATE void SetPaused(bool bNew);
         };
     } // end of namespace animation
 } // end of namespace sdr
