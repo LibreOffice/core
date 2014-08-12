@@ -536,7 +536,7 @@ void ImpEditEngine::CheckAutoPageSize()
     // setting overflow status
     sal_uInt32 nBoxHeight = 1783; // XXX: hard coded for testing
     //if ( IsPageOverflow( aPaperSize, aPrevPaperSize ) ) {
-    if (GetTextHeight() > nBoxHeight) // XXX: CalcTextHeight here??
+    if (CalcTextHeight() > nBoxHeight) // XXX: CalcTextHeight here??
     {
         // which paragraph is the first to cause higher size of the box?
         UpdateOverflowingParaNum( nBoxHeight /*aPrevPaperSize.Height()*/ ); // XXX: currently only for horizontal text
