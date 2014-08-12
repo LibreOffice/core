@@ -660,6 +660,36 @@ namespace sw
             }
         }
 
+        Polygon CorrectWordWrapPolygonForExport(const PolyPolygon& rPolyPoly, const SwNoTxtNode* pNd)
+        {
+            Polygon aPoly(PolygonFromPolyPolygon(rPolyPoly));
+            const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
+            Fraction aMapPolyX(ww::nWrap100Percent, rOrigSize.Width());
+            Fraction aMapPolyY(ww::nWrap100Percent, rOrigSize.Height());
+            aPoly.Scale(aMapPolyX, aMapPolyY);
+
+            /*
+             a) stretch right bound by 15twips
+             b) shrink bottom bound to where it would have been in word
+             c) Move it to the left by 15twips
+
+             See the import for details
+            */
+            const Size &rSize = pNd->GetTwipSize();
+            Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
+            aMoveHack *= Fraction(15, 1);
+            long nMove(aMoveHack);
+
+            Fraction aHackX(ww::nWrap100Percent + nMove,
+                    ww::nWrap100Percent);
+            Fraction aHackY(ww::nWrap100Percent - nMove,
+                    ww::nWrap100Percent);
+            aPoly.Scale(aHackX, aHackY);
+
+            aPoly.Move(-nMove, 0);
+            return aPoly;
+        }
+
         Size GetSwappedInSize(const SwNoTxtNode& rNd)
         {
             Size aGrTwipSz(rNd.GetTwipSize());

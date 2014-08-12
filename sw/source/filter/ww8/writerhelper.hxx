@@ -741,6 +741,9 @@ namespace sw
         */
         Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly);
 
+        /// Undo all scaling / move tricks of the wrap polygon done during import.
+        Polygon CorrectWordWrapPolygonForExport(const PolyPolygon& rPolyPoly, const SwNoTxtNode* pNd);
+
         /** Make setting a drawing object's layer in a Writer document easy
 
             Word has the simple concept of a drawing object either in the

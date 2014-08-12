@@ -2106,32 +2106,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
             const PolyPolygon *pPolyPoly = pNd->HasContour();
             if (pPolyPoly && pPolyPoly->Count())
             {
-                Polygon aPoly(PolygonFromPolyPolygon(*pPolyPoly));
-                const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
-                Fraction aMapPolyX(ww::nWrap100Percent, rOrigSize.Width());
-                Fraction aMapPolyY(ww::nWrap100Percent, rOrigSize.Height());
-                aPoly.Scale(aMapPolyX, aMapPolyY);
-
-                /*
-                 a) stretch right bound by 15twips
-                 b) shrink bottom bound to where it would have been in word
-                 c) Move it to the left by 15twips
-
-                 See the import for details
-                */
-                const Size &rSize = pNd->GetTwipSize();
-                Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
-                aMoveHack *= Fraction(15, 1);
-                long nMove(aMoveHack);
-
-                Fraction aHackX(ww::nWrap100Percent + nMove,
-                        ww::nWrap100Percent);
-                Fraction aHackY(ww::nWrap100Percent - nMove,
-                        ww::nWrap100Percent);
-                aPoly.Scale(aHackX, aHackY);
-
-                aPoly.Move(-nMove, 0);
-
+                Polygon aPoly = CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
                 SvMemoryStream aPolyDump;
                 aPolyDump.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
 
