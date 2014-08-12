@@ -576,7 +576,7 @@ XMultiPropertySet
      *  value of the property is to be stored in a member variable of type int with name intProp. Then setPropertyValue is
      *  called:
      *  <pre>
-     *  set.setPropertyValue( "PropA", new Byte( (byte)111));
+     *  set.setPropertyValue( "PropA", Byte.valueOf( (byte)111));
      *  </pre>
      *  At some point setPropertyValue will call convertPropertyValue and pass in the Byte object. Since we allow
      *  that Byte values can be used with the property and know that the value is to be stored in intProp (type int)
@@ -735,7 +735,7 @@ XMultiPropertySet
         else if (cl.equals(char.class))
             retVal= new Character(AnyConverter.toChar(obj));
         else if (cl.equals(byte.class))
-            retVal= new Byte(AnyConverter.toByte(obj));
+            retVal= Byte.valueOf(AnyConverter.toByte(obj));
         else if (cl.equals(short.class))
             retVal= Short.valueOf(AnyConverter.toShort(obj));
         else if (cl.equals(int.class))
@@ -757,7 +757,7 @@ XMultiPropertySet
         else if (cl.equals(Character.class))
             retVal= new Character(AnyConverter.toChar(obj));
         else if (cl.equals(Byte.class))
-            retVal= new Byte(AnyConverter.toByte(obj));
+            retVal= Byte.valueOf(AnyConverter.toByte(obj));
         else if (cl.equals(Short.class))
             retVal= Short.valueOf(AnyConverter.toShort(obj));
         else if (cl.equals(Integer.class))

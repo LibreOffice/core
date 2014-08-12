@@ -105,7 +105,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropCharA",value);
             ret= cl.getPropertyValue("PropCharA");
             r[i++]= ((Character) ret).equals(value);
-            value= new Byte((byte) 111);
+            value= Byte.valueOf((byte) 111);
             cl.setPropertyValue("PropByteA",value);
             ret= cl.getPropertyValue("PropByteA");
             r[i++]= ((Byte) ret).equals(value);
@@ -180,7 +180,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropObjectA",value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Character) ret).equals(value);
-            value= new Byte((byte) 111);
+            value= Byte.valueOf((byte) 111);
             cl.setPropertyValue("PropObjectA",value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Byte) ret).equals(value);
@@ -224,7 +224,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropObjectA", value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Type) ret).equals(value);
-            cl.setPropertyValue("PropObjectA", new Any( new Type(byte.class), new Byte((byte)1)));
+            cl.setPropertyValue("PropObjectA", new Any( new Type(byte.class), Byte.valueOf((byte)1)));
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Byte) ret).byteValue() == 1;
 
@@ -237,7 +237,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new Byte((byte) 111);
+            value= Byte.valueOf((byte) 111);
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -291,7 +291,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropCharA",value);
             ret= cl.getPropertyValue("PropCharA");
             r[i++]= ret instanceof Character && util.anyEquals(value, ret);
-            value= new Any(new Type(byte.class), new Byte((byte) 111));
+            value= new Any(new Type(byte.class), Byte.valueOf((byte) 111));
             cl.setPropertyValue("PropByteA",value);
             ret= cl.getPropertyValue("PropByteA");
             r[i++]= ret instanceof Byte && util.anyEquals(value, ret);
@@ -346,7 +346,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new Any(new Type(byte.class), new Byte((byte) 111));
+            value= new Any(new Type(byte.class), Byte.valueOf((byte) 111));
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -402,7 +402,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropCharClass",value);
             ret= cl.getPropertyValue("PropCharClass");
             r[i++]= ((Character) ret).equals(value);
-            value= new Byte((byte) 111);
+            value= Byte.valueOf((byte) 111);
             cl.setPropertyValue("PropByteClass",value);
             ret= cl.getPropertyValue("PropByteClass");
             r[i++]= ((Byte) ret).equals(value);
@@ -438,7 +438,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropCharClass",value);
             ret= cl.getPropertyValue("PropCharClass");
             r[i++]= ret instanceof Character && util.anyEquals(value, ret);
-            value= new Any(new Type(byte.class), new Byte((byte) 111));
+            value= new Any(new Type(byte.class), Byte.valueOf((byte) 111));
             cl.setPropertyValue("PropByteClass",value);
             ret= cl.getPropertyValue("PropByteClass");
             r[i++]= ret instanceof Byte && util.anyEquals(value, ret);
@@ -536,7 +536,7 @@ public class PropertySet_Test
             r[i++]= cl.anyPropA.getType().equals(new Type(void.class)) &&
                     cl.anyPropA.getObject() == null;
 
-            cl.anyPropA= new Any(new Type(byte.class),new Byte((byte) 111));
+            cl.anyPropA= new Any(new Type(byte.class),Byte.valueOf((byte) 111));
             cl.setPropertyValue("PropAnyA", null);
             r[i++]= cl.anyPropA.getType().equals(new Type(byte.class)) &&
                     cl.anyPropA.getObject() == null;
@@ -601,12 +601,12 @@ public class PropertySet_Test
             TestClass cl= new TestClass();
             Listener li= new Listener();
             cl.addPropertyChangeListener("PropByteA", li);
-            Byte val1= new Byte((byte)115);
+            Byte val1= Byte.valueOf((byte)115);
             cl.setPropertyValue("PropByteA", val1);
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 0;
             cl.propByteA.Attributes = PropertyAttribute.BOUND;
             cl.addPropertyChangeListener("PropByteA", li);
-            Byte val2= new Byte((byte)116);
+            Byte val2= Byte.valueOf((byte)116);
             cl.setPropertyValue("PropByteA", val2);
             r[i++]= li.nChangeCalled == 1 && li.nVetoCalled == 0;
             r[i++]= li.evt.OldValue.equals(val1) && li.evt.NewValue.equals(val2) && li.evt.Source == cl;
@@ -614,7 +614,7 @@ public class PropertySet_Test
             li.reset();
             Listener li2= new Listener();
             cl.addPropertyChangeListener("PropByteA", li2);
-            Byte val3= new Byte((byte) 117);
+            Byte val3= Byte.valueOf((byte) 117);
             cl.setPropertyValue("PropByteA", val3);
             r[i++]= li.nChangeCalled == 1 && li.nVetoCalled == 0
                     && li2.nChangeCalled == 1 && li2.nVetoCalled == 0;
@@ -624,7 +624,7 @@ public class PropertySet_Test
             li.reset();
             li2.reset();
             Listener li3= new Listener();
-            val1= new Byte((byte)118);
+            val1= Byte.valueOf((byte)118);
             cl.addPropertyChangeListener("", li3);
             cl.setPropertyValue("PropByteA", val1);
             r[i++]= li.nChangeCalled == 1 && li.nVetoCalled == 0
@@ -680,12 +680,12 @@ public class PropertySet_Test
             li2.reset();
             li3.reset();
             cl.addVetoableChangeListener("PropByteA", li);
-            val1= new Byte((byte)115);
+            val1= Byte.valueOf((byte)115);
             cl.setPropertyValue("PropByteA", val1);
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 0;
             cl.propByteA.Attributes = PropertyAttribute.CONSTRAINED;
             cl.addVetoableChangeListener("PropByteA", li);
-            val2= new Byte((byte)116);
+            val2= Byte.valueOf((byte)116);
             li.reset();
             cl.setPropertyValue("PropByteA", val2);
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 1;
@@ -695,7 +695,7 @@ public class PropertySet_Test
             li2.reset();
             li3.reset();
             cl.addVetoableChangeListener("PropByteA", li2);
-            val3= new Byte((byte) 117);
+            val3= Byte.valueOf((byte) 117);
             cl.setPropertyValue("PropByteA", val3);
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 1
                     && li2.nChangeCalled == 0 && li2.nVetoCalled == 1;
@@ -705,7 +705,7 @@ public class PropertySet_Test
             li.reset();
             li2.reset();
             li3.reset();
-            val1= new Byte((byte)118);
+            val1= Byte.valueOf((byte)118);
             cl.addVetoableChangeListener("", li3);
             cl.setPropertyValue("PropByteA", val1);
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 1
@@ -904,7 +904,7 @@ public class PropertySet_Test
             String[] arNames= new String[] {"PropCharA","PropIntClass","PropObjectA"};
             Character aChar= new Character('A');
             Integer aInt= Integer.valueOf(111);
-            Byte aByte= new Byte((byte)11);
+            Byte aByte= Byte.valueOf((byte)11);
             Object[] values= new Object[]{aChar, aInt, aByte};
             cl.setPropertyValues(arNames, values);
             r[i++]= cl.charPropA == 'A' && cl.intClassProp.intValue() == 111 && ((Byte)cl.objectPropA).byteValue() == 11;
@@ -937,7 +937,7 @@ public class PropertySet_Test
         try {
             cl.charPropA= 'A';
             cl.intClassProp= Integer.valueOf(111);
-            cl.objectPropA= new Byte((byte)11);
+            cl.objectPropA= Byte.valueOf((byte)11);
             Object[] values= cl.getPropertyValues(new String[] {"PropCharA","PropIntClass","PropObjectA"});
 
             r[i++]= ((Character) values[0]).charValue() == 'A' && ((Integer) values[1]).intValue() == 111
@@ -1210,7 +1210,7 @@ class TestClass extends PropertySet
             charPropA= 'B';
             r[i++]= convertPropertyValue(propCharA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Character && outNewVal[0].equals(value) && outOldVal[0].equals(new Character('B'));
-            value= new Byte((byte) 111);
+            value= Byte.valueOf((byte) 111);
             r[i++]= convertPropertyValue(propByteA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Byte && outNewVal[0].equals(value);
             value= Short.valueOf((short) 112);
@@ -1321,7 +1321,7 @@ class TestClass extends PropertySet
             value= new Character('A');
             r[i++]= convertPropertyValue(propCharClass, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Character && outNewVal[0].equals(value);
-            value= new Byte((byte) 111);
+            value= Byte.valueOf((byte) 111);
             r[i++]= convertPropertyValue(propByteClass, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Byte && outNewVal[0].equals(value);
             value= Short.valueOf((short) 112);
@@ -1362,7 +1362,7 @@ class TestClass extends PropertySet
             value= new Character('A');
             setPropertyValueNoBroadcast(propCharA, value);
             r[i++]= charPropA == ((Character) value).charValue();
-            value= new Byte((byte) 111);
+            value= Byte.valueOf((byte) 111);
             setPropertyValueNoBroadcast(propByteA, value);
             r[i++]= bytePropA == ((Byte)value).byteValue();
             value= Short.valueOf((short) 112);

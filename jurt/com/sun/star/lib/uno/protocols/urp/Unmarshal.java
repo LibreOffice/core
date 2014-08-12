@@ -210,7 +210,7 @@ final class Unmarshal {
 
     private Byte readByteValue() {
         try {
-            return new Byte(input.readByte());
+            return Byte.valueOf(input.readByte());
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }

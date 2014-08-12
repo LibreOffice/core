@@ -1165,7 +1165,7 @@ public class TestComponent {
                 null);
             Constructors.create2(context, new Object[] {
                 Boolean.TRUE,
-                new Byte(Byte.MIN_VALUE),
+                Byte.valueOf(Byte.MIN_VALUE),
                 Short.valueOf(Short.MIN_VALUE),
                 new Any(Type.UNSIGNED_SHORT, Short.valueOf((short) -1)),
                 Integer.valueOf(Integer.MIN_VALUE),
@@ -1223,7 +1223,7 @@ public class TestComponent {
                 new TestPolyStruct(Type.LONG),
                 new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE)),
                 new TestPolyStruct(Boolean.TRUE),
-                new TestPolyStruct(new Byte(Byte.MIN_VALUE)),
+                new TestPolyStruct(Byte.valueOf(Byte.MIN_VALUE)),
                 new TestPolyStruct(Short.valueOf(Short.MIN_VALUE)),
                 new TestPolyStruct(Integer.valueOf(Integer.MIN_VALUE)),
                 new TestPolyStruct(Long.valueOf(Long.MIN_VALUE)),

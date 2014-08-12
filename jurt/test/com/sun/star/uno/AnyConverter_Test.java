@@ -39,7 +39,7 @@ public final class AnyConverter_Test {
 
     Boolean aBool= Boolean.TRUE;
     Character aChar= new Character('A');
-    Byte aByte= new Byte((byte) 111);
+    Byte aByte= Byte.valueOf((byte) 111);
     Short aShort= Short.valueOf((short) 11111);
     Integer aInt= Integer.valueOf( 1111111);
     Long aLong= Long.valueOf( 0xffffffff);

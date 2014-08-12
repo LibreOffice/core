@@ -306,7 +306,7 @@ public class UnoRuntime {
         case TypeClass.BOOLEAN_value:
             return Boolean.FALSE;
         case TypeClass.BYTE_value:
-            return new Byte((byte) 0);
+            return Byte.valueOf((byte) 0);
         case TypeClass.SHORT_value:
         case TypeClass.UNSIGNED_SHORT_value:
             return Short.valueOf((short) 0);

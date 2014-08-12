@@ -249,7 +249,7 @@ public class NumericalHelper
                 break;
             case TypeClass.BYTE_value:
                 aTypeObject.iType = BYTE_TYPE;
-                aTypeObject.aValue = new Byte(AnyConverter.toByte(aValue));
+                aTypeObject.aValue = Byte.valueOf(AnyConverter.toByte(aValue));
                 break;
             case TypeClass.SHORT_value:
                 aTypeObject.iType = SHORT_TYPE;

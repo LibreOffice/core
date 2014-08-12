@@ -123,20 +123,20 @@ final class TestAny {
                               new CompareUnboxed());
 
         // BYTE:
-        success &= testMapAny(transport, new Byte((byte) -128),
+        success &= testMapAny(transport, Byte.valueOf((byte) -128),
                               new CompareBoxed());
-        success &= testMapAny(transport, new Byte((byte) 0),
+        success &= testMapAny(transport, Byte.valueOf((byte) 0),
                               new CompareBoxed());
-        success &= testMapAny(transport, new Byte((byte) 127),
+        success &= testMapAny(transport, Byte.valueOf((byte) 127),
                               new CompareBoxed());
         success &= testMapAny(transport,
-                              new Any(Type.BYTE, new Byte((byte) -128)),
+                              new Any(Type.BYTE, Byte.valueOf((byte) -128)),
                               new CompareUnboxed());
         success &= testMapAny(transport,
-                              new Any(Type.BYTE, new Byte((byte) 0)),
+                              new Any(Type.BYTE, Byte.valueOf((byte) 0)),
                               new CompareUnboxed());
         success &= testMapAny(transport,
-                              new Any(Type.BYTE, new Byte((byte) 127)),
+                              new Any(Type.BYTE, Byte.valueOf((byte) 127)),
                               new CompareUnboxed());
 
         // SHORT:

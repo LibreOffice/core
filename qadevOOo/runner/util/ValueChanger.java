@@ -70,7 +70,7 @@ public class ValueChanger {
 
    if (oldValue instanceof Byte) {
      byte oldbyte = ((Byte) oldValue).byteValue();
-     newValue = new Byte((byte) (oldbyte + 1));
+     newValue = Byte.valueOf((byte) (oldbyte + 1));
    } else
 
    if (oldValue instanceof Float) {

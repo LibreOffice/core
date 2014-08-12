@@ -44,7 +44,7 @@ public final class Marshaling_Test {
             new com.sun.star.uno.RuntimeException("testRuntimeException"),
             new com.sun.star.uno.Exception("testException"),
             Boolean.TRUE,
-            new Byte((byte)47),
+            Byte.valueOf((byte)47),
             new Character('k'),
             new Double(0.12345),
             TestEnum.B,

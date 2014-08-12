@@ -621,7 +621,7 @@ public class ODatabaseForm extends TestCase {
                 values must be added here as relation. */
         params.add("SAU99") ;
         params.add(Boolean.FALSE) ;
-        params.add(new Byte((byte) 123)) ;
+        params.add(Byte.valueOf((byte) 123)) ;
         params.add(Short.valueOf((short) 234)) ;
         params.add(Integer.valueOf(12345)) ;
         params.add(Long.valueOf(23456)) ;

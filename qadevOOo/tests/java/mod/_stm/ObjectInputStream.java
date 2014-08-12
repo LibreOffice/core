@@ -243,7 +243,7 @@ public class ObjectInputStream extends TestCase {
         // all data types for writing to an XDataInputStream
         ArrayList<Object> data = new ArrayList<Object>() ;
         data.add(Boolean.TRUE) ;
-        data.add(new Byte((byte)123)) ;
+        data.add(Byte.valueOf((byte)123)) ;
         data.add(new Character((char)1234)) ;
         data.add(Short.valueOf((short)1234)) ;
         data.add(Integer.valueOf(123456)) ;

@@ -58,16 +58,16 @@ public final class PolyStructTest extends ComplexTestCase {
                 t.transportBoolean(new TestPolyStruct(Boolean.TRUE)).member);
 
             assertEquals(
-                new Byte((byte) 0),
+                Byte.valueOf((byte) 0),
                 t.transportByte(new TestPolyStruct()).member);
             assertEquals(
-                new Byte(Byte.MIN_VALUE),
+                Byte.valueOf(Byte.MIN_VALUE),
                 t.transportByte(
-                    new TestPolyStruct(new Byte(Byte.MIN_VALUE))).member);
+                    new TestPolyStruct(Byte.valueOf(Byte.MIN_VALUE))).member);
             assertEquals(
-                new Byte(Byte.MAX_VALUE),
+                Byte.valueOf(Byte.MAX_VALUE),
                 t.transportByte(
-                    new TestPolyStruct(new Byte(Byte.MAX_VALUE))).member);
+                    new TestPolyStruct(Byte.valueOf(Byte.MAX_VALUE))).member);
 
             assertEquals(
                 Short.valueOf((short) 0),

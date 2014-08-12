@@ -313,8 +313,8 @@ public class _CharacterProperties extends MultiPropertyTest {
     * so ist must be treated special
     */
     public void _CharEscapementHeight() {
-        Byte aByte = new Byte((byte)75);
-        Byte max = new Byte((byte)100);
+        Byte aByte = Byte.valueOf((byte)75);
+        Byte max = Byte.valueOf((byte)100);
         testProperty("CharEscapementHeight", aByte, max) ;
     }
 

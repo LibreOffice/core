@@ -206,7 +206,7 @@ public class MyPersistObject implements XPersistObject, XTypeProvider,
      */
     public Object getPropertyValue(String property) {
         if ( property.equals(props[0].Name))
-            return new Byte(by);
+            return Byte.valueOf(by);
         if ( property.equals(props[1].Name))
             return Integer.valueOf(i);
         if ( property.equals(props[2].Name))
