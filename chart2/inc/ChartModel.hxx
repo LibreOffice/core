@@ -581,7 +581,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // X3DChartWindowProvider
-    virtual void SAL_CALL setWindow( const sal_uInt64 nWindowPtr )
+    virtual void SAL_CALL setWindow( sal_uInt64 nWindowPtr )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL update()
