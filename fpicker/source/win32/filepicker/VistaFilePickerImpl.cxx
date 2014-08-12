@@ -1196,29 +1196,6 @@ void VistaFilePickerImpl::impl_SetDefaultExtension( const OUString& currentFilte
    }
 }
 
-static void impl_refreshFileDialog( TFileDialog iDialog )
-{
-    if ( SUCCEEDED(iDialog->SetFileName(L"")) &&
-         SUCCEEDED(iDialog->SetFileName(L"*.*")) )
-    {
-        IOleWindow* iOleWindow;
-#ifdef __MINGW32__
-        if (SUCCEEDED(iDialog->QueryInterface(IID_IOleWindow, reinterpret_cast<void**>(&iOleWindow))))
-#else
-        if (SUCCEEDED(iDialog->QueryInterface(IID_PPV_ARGS(&iOleWindow))))
-#endif
-        {
-            HWND hwnd;
-            if (SUCCEEDED(iOleWindow->GetWindow(&hwnd)))
-            {
-                PostMessage(hwnd, WM_COMMAND, IDOK, 0);
-            }
-            iOleWindow->Release();
-        }
-    }
-}
-
-
 void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
 {
     // SYNCHRONIZED->
