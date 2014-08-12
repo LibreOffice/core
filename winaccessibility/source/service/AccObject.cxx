@@ -157,7 +157,7 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
         m_bShouldDestroy(sal_False),
         m_xAccRef( pAcc )
 {
-    sal_Bool bRet = ImplInitializeCreateObj();
+    ImplInitializeCreateObj();
 
     m_xAccContextRef = m_xAccRef->getAccessibleContext();
     m_xAccActionRef = Reference< XAccessibleAction > (m_xAccContextRef,UNO_QUERY);
@@ -245,13 +245,11 @@ void AccObject::UpdateValidWindow()
    * @param
    * @return If the method is correctly processed.
    */
-sal_Bool AccObject::ImplInitializeCreateObj()
+void AccObject::ImplInitializeCreateObj()
 {
     m_pIMAcc = UAccCOMCreateInstance();
 
     assert(m_pIMAcc);
-
-    return m_pIMAcc != 0;
 }
 
 /**
