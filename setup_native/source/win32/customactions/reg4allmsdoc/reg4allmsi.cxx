@@ -219,7 +219,6 @@ static void registerForExtension( MSIHANDLE handle, const int nIndex, bool bRegi
 
 static void saveOldRegistration( LPCSTR lpSubKey )
 {
-    BOOL    bRet = false;
     HKEY    hKey = NULL;
     LONG    lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, lpSubKey, 0,
                                      KEY_QUERY_VALUE|KEY_SET_VALUE, &hKey );
@@ -498,7 +497,6 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 
 static void restoreOldRegistration( LPCSTR lpSubKey )
 {
-    BOOL    bRet = false;
     HKEY    hKey = NULL;
     LONG    lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, lpSubKey, 0,
                                      KEY_QUERY_VALUE|KEY_SET_VALUE, &hKey );
