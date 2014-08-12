@@ -20,7 +20,6 @@ package integration.forms;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XChild;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.document.MacroExecMode;

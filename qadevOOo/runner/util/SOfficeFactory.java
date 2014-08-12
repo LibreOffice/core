@@ -28,8 +28,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XServiceInfo;
-
 // name - value pair
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyState;
@@ -40,7 +38,6 @@ import com.sun.star.text.*;
 import com.sun.star.container.*;
 import com.sun.star.chart.*;
 import com.sun.star.drawing.*;
-import com.sun.star.awt.*;
 
 public class SOfficeFactory {
 

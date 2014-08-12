@@ -25,17 +25,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.document.XExporter;
-import com.sun.star.document.XFilter;
-import com.sun.star.document.XImporter;
 import com.sun.star.io.XActiveDataSource;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.Any;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.xml.sax.InputSource;

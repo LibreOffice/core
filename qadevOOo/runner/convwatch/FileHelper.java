@@ -23,8 +23,6 @@ import java.io.FileFilter;
 import java.util.StringTokenizer;
 import helper.OSHelper;
 
-import javax.swing.JOptionPane;
-
 public class FileHelper
 {
     public FileHelper()

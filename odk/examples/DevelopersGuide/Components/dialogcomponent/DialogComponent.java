@@ -38,16 +38,9 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.awt.XDialog;
-import com.sun.star.awt.XDialogProvider2;
 import com.sun.star.awt.XDialogEventHandler;
-import com.sun.star.awt.XControl;
-import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XControlContainer;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.frame.XModel;
 import com.sun.star.frame.XFrame;
 
 import com.sun.star.awt.XToolkit;

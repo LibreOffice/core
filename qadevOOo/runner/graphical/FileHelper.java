@@ -28,7 +28,6 @@ import java.util.StringTokenizer;
 import helper.OSHelper;
 
 import java.io.PrintStream;
-import javax.swing.JOptionPane;
 
 public class FileHelper
 {

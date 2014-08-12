@@ -18,7 +18,6 @@
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.XListBox;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.PropertyNames;

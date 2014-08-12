@@ -18,7 +18,6 @@
 
 package org.openoffice.xmerge.converter.palm;
 
-import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;

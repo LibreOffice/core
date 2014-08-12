@@ -19,7 +19,6 @@ package complex.tdoc;
 
 import com.sun.star.ucb.XCommandInfoChangeListener;
 import com.sun.star.ucb.XCommandInfoChangeNotifier;
-import share.LogWriter;
 
 /**
  *

@@ -21,7 +21,6 @@ package complex.framework.recovery;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;

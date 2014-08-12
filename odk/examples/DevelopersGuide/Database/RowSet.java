@@ -37,7 +37,6 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.*;
 import com.sun.star.sdbcx.Privilege;
 import com.sun.star.sdb.XRowSetApproveBroadcaster;

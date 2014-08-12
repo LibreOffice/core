@@ -30,8 +30,6 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.PropertySetMixin;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.registry.InvalidRegistryException;

@@ -17,8 +17,6 @@
  */
 package org.libreoffice.report;
 
-import java.util.Locale;
-
 public interface ReportExpressionMetaData
 {
 

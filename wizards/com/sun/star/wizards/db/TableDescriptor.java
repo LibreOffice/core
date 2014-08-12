@@ -28,7 +28,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ContainerEvent;
 import com.sun.star.container.XContainer;
 import com.sun.star.container.XContainerListener;
-import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;

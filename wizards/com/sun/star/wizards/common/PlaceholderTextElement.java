@@ -23,7 +23,6 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.*;
-import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.PlaceholderTextElement;
 
 public class PlaceholderTextElement extends TextElement

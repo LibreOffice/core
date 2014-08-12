@@ -26,9 +26,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Calendar;
 import java.util.Properties;
 
 /**

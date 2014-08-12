@@ -39,7 +39,6 @@ import com.sun.star.container.*;
 import com.sun.star.form.*;
 import com.sun.star.lang.*;
 import com.sun.star.sdb.*;
-import com.sun.star.sdbcx.*;
 
 public class UNO
 {

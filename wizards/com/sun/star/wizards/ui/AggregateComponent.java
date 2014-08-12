@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.VclWindowPeerAttribute;
-import com.sun.star.awt.XButton;
 import com.sun.star.awt.XListBox;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.EventObject;

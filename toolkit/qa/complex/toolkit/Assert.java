@@ -20,7 +20,6 @@ package complex.toolkit;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import com.sun.star.uno.UnoRuntime;
 import static org.junit.Assert.*;
 
 /**

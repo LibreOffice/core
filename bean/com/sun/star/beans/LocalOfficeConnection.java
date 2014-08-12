@@ -18,7 +18,6 @@
 
 package com.sun.star.beans;
 
-import java.awt.Container;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;

@@ -33,7 +33,6 @@ import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.common.PropertySetHelper;
 import com.sun.star.wizards.common.PropertyNames;
 import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
 import com.sun.star.wizards.common.HelpIds;
 
 public class ButtonList implements XItemEventBroadcaster, XActionListener

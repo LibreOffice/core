@@ -18,8 +18,6 @@
 
 package com.sun.star.beans;
 
-import java.awt.Container;
-
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.XComponentContext;
 

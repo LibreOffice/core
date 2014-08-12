@@ -34,7 +34,6 @@
 
 // __________ Imports __________
 
-import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 
 // others

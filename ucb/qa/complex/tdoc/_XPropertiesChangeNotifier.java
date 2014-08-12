@@ -19,7 +19,6 @@ package complex.tdoc;
 
 import com.sun.star.beans.XPropertiesChangeListener;
 import com.sun.star.beans.XPropertiesChangeNotifier;
-import share.LogWriter;
 
 /**
  * Check the XPropertiesChangeNotifier

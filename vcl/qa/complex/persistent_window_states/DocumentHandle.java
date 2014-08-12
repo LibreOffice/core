@@ -21,7 +21,6 @@ package complex.persistent_window_states;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.PosSize;
 import com.sun.star.frame.XComponentLoader;
-import com.sun.star.lang.XComponent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyState;

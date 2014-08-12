@@ -34,7 +34,6 @@
 
 import com.sun.star.uno.*;
 import com.sun.star.lang.*;
-import com.sun.star.util.*;
 import com.sun.star.beans.*;
 import com.sun.star.container.*;
 import com.sun.star.awt.*;

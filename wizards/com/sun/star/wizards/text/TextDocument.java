@@ -17,54 +17,34 @@
  */
 package com.sun.star.wizards.text;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XDocumentPropertiesSupplier;
-import com.sun.star.frame.XController;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.frame.XLoadable;
-import com.sun.star.frame.XModel;
 import com.sun.star.frame.XModule;
 import com.sun.star.frame.XTerminateListener;
 import com.sun.star.frame.XStorable;
-import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.lang.Locale;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.task.XStatusIndicatorFactory;
-import com.sun.star.text.XPageCursor;
 import com.sun.star.text.XSimpleText;
 import com.sun.star.text.XText;
-import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextViewCursor;
-import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.DateTime;
 import com.sun.star.util.XModifiable;
 import com.sun.star.util.XNumberFormatsSupplier;
-import com.sun.star.util.XRefreshable;
-import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.Helper.DateUtils;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.document.OfficeDocument;
 

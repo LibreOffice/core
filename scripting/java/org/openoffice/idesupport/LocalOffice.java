@@ -18,9 +18,7 @@
 
 package org.openoffice.idesupport;
 
-import java.io.File;
 import java.net.ConnectException;
-import java.util.ArrayList;
 
 /**
  * LocalOffice represents a connection to the local office.

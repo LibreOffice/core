@@ -52,7 +52,6 @@ import com.sun.star.reflection.TypeDescriptionSearchDepth;
 import com.sun.star.reflection.XConstantTypeDescription;
 import com.sun.star.reflection.XConstantsTypeDescription;
 import com.sun.star.reflection.XIdlClass;
-import com.sun.star.reflection.XIdlField;
 import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.reflection.XIdlReflection;
 import com.sun.star.reflection.XIndirectTypeDescription;

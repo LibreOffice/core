@@ -31,7 +31,6 @@ import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.VisualEffect;
 import com.sun.star.awt.XControlModel;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.text.TextContentAnchorType;
 import com.sun.star.drawing.XDrawPage;
 

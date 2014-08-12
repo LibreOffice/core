@@ -32,11 +32,7 @@
  *
  *************************************************************************/
 
-// __________ Imports __________
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Any;
 
-import java.lang.String;
 
 
 // __________ Implementation __________

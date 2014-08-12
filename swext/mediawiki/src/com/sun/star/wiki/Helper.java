@@ -39,8 +39,6 @@ import com.sun.star.frame.XModel;
 import com.sun.star.frame.XModuleManager;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
-import com.sun.star.io.XSeekable;
-import com.sun.star.io.XStream;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;

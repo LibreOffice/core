@@ -17,8 +17,6 @@
  */
 package org.libreoffice.report.pentaho.parser;
 
-import org.jfree.layouting.input.style.CSSDeclarationRule;
-
 public interface StyleMapper
 {
 

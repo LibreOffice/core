@@ -18,25 +18,17 @@
 package com.sun.star.wizards.common;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.lang.Locale;
-import com.sun.star.uno.XInterface;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.util.XStringSubstitution;
 import com.sun.star.frame.*;
 import com.sun.star.i18n.KParseType;
 import com.sun.star.i18n.ParseResult;

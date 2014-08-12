@@ -54,7 +54,6 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.registry.XRegistryKey;
 import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.ui.dialogs.XFolderPicker2;
 import com.sun.star.uno.UnoRuntime;

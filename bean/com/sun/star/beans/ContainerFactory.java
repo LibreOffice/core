@@ -18,8 +18,6 @@
 
 package com.sun.star.beans;
 
-import java.awt.Container;
-
 /**
  * This interface reprecents an AWT container factory.
  *

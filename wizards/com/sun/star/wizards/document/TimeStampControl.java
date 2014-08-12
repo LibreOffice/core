@@ -30,7 +30,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapes;
 
 public class TimeStampControl extends DatabaseControl
 {

@@ -34,7 +34,6 @@ import com.sun.star.text.XTextTable;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XNumberFormats;
 import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.text.TextDocument;

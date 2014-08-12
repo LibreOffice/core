@@ -41,7 +41,6 @@ import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.reflection.XTypeDescription;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 
 

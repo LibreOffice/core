@@ -24,7 +24,6 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XPreparedStatement;
-import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.Exception;

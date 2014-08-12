@@ -19,7 +19,6 @@ package complex.tdoc;
 
 import com.sun.star.beans.XPropertySetInfoChangeListener;
 import com.sun.star.beans.XPropertySetInfoChangeNotifier;
-import share.LogWriter;
 
 /**
  *

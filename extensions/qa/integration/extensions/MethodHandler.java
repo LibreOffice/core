@@ -19,7 +19,6 @@
 package integration.extensions;
 
 import com.sun.star.uno.*;
-import com.sun.star.lang.*;
 import com.sun.star.beans.*;
 import com.sun.star.reflection.*;
 import com.sun.star.inspection.*;

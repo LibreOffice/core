@@ -21,8 +21,6 @@ package util;
 import com.sun.star.uno.Exception;
 import java.io.PrintWriter ;
 
-// access the implementations via names
-import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
@@ -37,8 +35,6 @@ import com.sun.star.util.Date ;
 import com.sun.star.uno.XNamingService ;
 import com.sun.star.task.XInteractionHandler ;
 import com.sun.star.sdb.XCompletedConnection ;
-import com.sun.star.container.XEnumeration ;
-import com.sun.star.container.XEnumerationAccess ;
 import com.sun.star.io.XInputStream ;
 import com.sun.star.io.XTextInputStream ;
 import com.sun.star.io.XDataInputStream ;

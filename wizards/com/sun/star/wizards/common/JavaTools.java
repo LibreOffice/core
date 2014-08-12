@@ -17,7 +17,6 @@
  */
 package com.sun.star.wizards.common;
 
-import com.sun.star.util.DateTime;
 import com.sun.star.beans.PropertyValue;
 import java.util.*;
 import java.io.File;

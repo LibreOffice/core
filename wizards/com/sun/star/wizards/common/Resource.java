@@ -18,7 +18,6 @@
 
 package com.sun.star.wizards.common;
 
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;

@@ -26,7 +26,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.Locale;
-import com.sun.star.util.XChangesBatch;
 
 /**
  * This class gives access to the OO configuration api.

@@ -18,7 +18,6 @@
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.*;
-import com.sun.star.beans.Property;
 import com.sun.star.beans.XMultiPropertySet;
 
 import com.sun.star.beans.XPropertySet;

@@ -19,9 +19,6 @@ package com.sun.star.wizards.db;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbcx.KeyType;
-import com.sun.star.sdbcx.XColumnsSupplier;
-import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.uno.UnoRuntime;

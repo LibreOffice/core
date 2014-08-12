@@ -26,8 +26,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.sun.star.util.XURLTransformer;
-
 
 /**
  * It collects some static helper functons to handle URLs.

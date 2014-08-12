@@ -19,8 +19,6 @@ package org.libreoffice.report;
 
 import com.sun.star.awt.Size;
 
-import java.io.InputStream;
-
 public interface ImageService
 {
 

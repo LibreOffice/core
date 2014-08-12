@@ -25,7 +25,6 @@
  */
 
 package net.adaptivebox.space;
-import net.adaptivebox.global.*;
 
 public class DesignSpace {
   //The information of all the dimension

@@ -23,8 +23,6 @@ import convwatch.DirectoryHelper;
 import convwatch.FileHelper;
 
 import lib.TestParameters;
-import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 
 import util.compare.DocComparator;

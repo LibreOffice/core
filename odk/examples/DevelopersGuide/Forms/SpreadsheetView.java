@@ -21,11 +21,8 @@
  * Created on 2. Oktober 2003, 14:02
  */
 
-import com.sun.star.uno.*;
 import com.sun.star.lang.*;
 import com.sun.star.frame.*;
-import com.sun.star.sheet.*;
-import com.sun.star.container.*;
 
 public class SpreadsheetView extends DocumentViewHelper
 {

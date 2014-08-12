@@ -34,7 +34,6 @@ import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.document.DatabaseControl;
-import com.sun.star.wizards.document.GridControl;
 import com.sun.star.wizards.document.TimeStampControl;
 import com.sun.star.wizards.text.TextStyleHandler;
 import com.sun.star.wizards.ui.*;

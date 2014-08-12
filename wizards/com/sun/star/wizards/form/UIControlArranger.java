@@ -26,7 +26,6 @@ import com.sun.star.awt.XRadioButton;
 import com.sun.star.lang.EventObject;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
-import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.ui.ButtonList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;

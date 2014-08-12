@@ -23,7 +23,6 @@ import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.table.XCellRange;
 import com.sun.star.table.XTableColumns;
-import com.sun.star.table.XTableRows;
 import com.sun.star.text.XTextTable;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;

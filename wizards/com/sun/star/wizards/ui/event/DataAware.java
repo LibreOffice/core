@@ -20,8 +20,6 @@ package com.sun.star.wizards.ui.event;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import com.sun.star.wizards.common.PropertyNames;
 
 /**
