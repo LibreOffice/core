@@ -110,6 +110,8 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmlscript/util/xmlscript \
 	xmlsecurity/util/xmlsecurity \
 	xmlsecurity/util/xsec_fw \
+	$(if $(filter-out ANDROID,$(OS)), \
+		xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows)) \
 	$(if $(ENABLE_COINMP), \
 		sccomp/source/solver/coinmpsolver \
 	) \
@@ -330,7 +332,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/scanner/scn \
 	extensions/source/update/feed/updatefeed \
 	xmlhelp/util/ucpchelp1 \
-	xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows) \
 	$(if $(filter-out WNT,$(OS)),\
 		shell/source/cmdmail/cmdmail \
 	) \

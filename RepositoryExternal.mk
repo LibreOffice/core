@@ -3226,7 +3226,7 @@ endif # GUIBASE=unx
 
 gb_ExternalProject__use_nss3:=
 
-ifeq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifeq ($(OS),ANDROID)
 
 gb_LinkTarget__use_nss3:=
 

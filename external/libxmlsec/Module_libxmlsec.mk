@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,libxmlsec))
 
-ifneq ($(filter-out ANDROID IOS,$(OS)),)
+ifneq ($(filter-out ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,libxmlsec,\
 	UnpackedTarball_xmlsec \
 	ExternalPackage_xmlsec \

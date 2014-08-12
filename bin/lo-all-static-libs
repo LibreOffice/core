@@ -42,6 +42,11 @@ ANDROID)
     ;;
 IOS)
     oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/*.a"
+    # Unfortunately NSS's build mechanism copies each static archive
+    # it constructs to another place, but we don't bother filtering
+    # out duplicates, it shouldn't hurt.
     nsslibs=`find $WORKDIR/UnpackedTarball/nss -name 'lib*.a'`
     ;;
 *)
