@@ -18,6 +18,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
+#include <svx/svdograf.hxx>
 
 #include "drwlayer.hxx"
 #include <svx/svdpage.hxx>
@@ -177,6 +178,7 @@ public:
     void testHybridSharedStringODS();
     void testCopyMergedNumberFormats();
     void testVBAUserFunctionXLSM();
+    void testEmbeddedImageXLS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -257,6 +259,7 @@ public:
     CPPUNIT_TEST(testHybridSharedStringODS);
     CPPUNIT_TEST(testCopyMergedNumberFormats);
     CPPUNIT_TEST(testVBAUserFunctionXLSM);
+    CPPUNIT_TEST(testEmbeddedImageXLS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2620,6 +2623,30 @@ void ScFiltersTest::testVBAUserFunctionXLSM()
 
     // Check the result.
     CPPUNIT_ASSERT_EQUAL(42.0, rDoc.GetValue(ScAddress(0,0,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testEmbeddedImageXLS()
+{
+    // The document has one embedded image on the first sheet.  Make sure it's
+    // imported properly.
+
+    ScDocShellRef xDocSh = loadDoc("file-with-png-image.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScDrawLayer* pDL = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT(pDL);
+    const SdrPage* pPage = pDL->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    const SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+    const SdrGrafObj* pImageObj = dynamic_cast<const SdrGrafObj*>(pObj);
+    CPPUNIT_ASSERT(pImageObj);
+    const Graphic& rGrf = pImageObj->GetGraphic();
+    BitmapEx aBMP = rGrf.GetBitmapEx();
+    CPPUNIT_ASSERT_MESSAGE("Bitmap content should not be empty if the image has been properly imported.", !aBMP.IsEmpty());
 
     xDocSh->DoClose();
 }
