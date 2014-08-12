@@ -317,7 +317,6 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         vector< ::com::sun::star::style::TabStop > vecTabStop;
         ::com::sun::star::style::TabStop tabStop;
         ::rtl::OUString ouSubValue;
-        sal_Int32 nIndex = 0;
         sal_Int32 pos = 0, posComma = 0;
 
         do
