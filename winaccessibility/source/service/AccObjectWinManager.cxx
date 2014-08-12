@@ -174,8 +174,6 @@ sal_Bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
     if(selfAccObj==NULL)
         return sal_False;
 
-    int selectNum =0;
-
     long dChildID = selfAccObj->GetResID();
     HWND hAcc = selfAccObj->GetParentHWND();
 
@@ -385,7 +383,6 @@ void AccObjectWinManager::UpdateAccFocus(XAccessible* newFocus)
    */
 int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
 {
-    XAccessibleSelection* pSelection = NULL;
     Reference< XAccessibleContext > pRContext;
 
     if( pXAcc == NULL)

@@ -208,10 +208,6 @@ void AccTopWindowListener::windowClosed( const ::com::sun::star::lang::EventObje
     if ( pAccessible == NULL)
         return;
 
-    VCLXWindow* pvclwindow = (VCLXWindow*)pAccessible;
-    Window* window = pvclwindow->GetWindow();
-    const SystemEnvData* systemdata=window->GetSystemData();
-
     Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
     if(!xContext.is())
     {

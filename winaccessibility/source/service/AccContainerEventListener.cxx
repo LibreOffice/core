@@ -51,7 +51,6 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    short role = GetRole();
     switch (aEvent.EventId)
     {
     case AccessibleEventId::CHILD:

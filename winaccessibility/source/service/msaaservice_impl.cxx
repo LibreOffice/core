@@ -228,7 +228,6 @@ static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xA
             css::uno::Reference< css::accessibility::XAccessibleContext > xAC( xAccessible->getAccessibleContext() );
             if ( xAC.is())
             {
-                short role = xAC->getAccessibleRole();
                 if ( !xAC->getAccessibleName().isEmpty() )
                     AccessBridgeHandleExistingWindow( xAccMgr, pTopWindow, true );
             }
