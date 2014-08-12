@@ -1243,13 +1243,13 @@ class TestClass extends PropertySet
 
             value= new Object(); // TypeClass.VOID
             r[i++]= convertPropertyValue(propObjectA, outNewVal, outOldVal, value);
-            r[i++]= outNewVal[0] instanceof Object && outNewVal[0].equals(value);
+            r[i++]= outNewVal[0].equals(value);
             value= new Integer(111);
             r[i++]= convertPropertyValue(propObjectA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Integer && outNewVal[0].equals(value);
             value= new ComponentBase();
             r[i++]= convertPropertyValue(propObjectA, outNewVal, outOldVal, value);
-            r[i++]= outNewVal[0] instanceof Object && outNewVal[0].equals(value);
+            r[i++]= outNewVal[0].equals(value);
             value= new Integer(111);
             r[i++]= convertPropertyValue(propAnyA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Any && ((Any)outNewVal[0]).getType().equals(new Type(Integer.class))
