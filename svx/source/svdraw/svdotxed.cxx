@@ -63,9 +63,9 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     }
 
     // FIXME(matteocam)
-    sal_uIntPtr nStat1=rOutl.GetControlWord();
+    /*sal_uIntPtr nStat1=rOutl.GetControlWord();
     nStat1 &=~EE_CNTRL_AUTOPAGESIZE;
-    rOutl.SetControlWord(nStat1);
+    rOutl.SetControlWord(nStat1);*/
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
     if(pOutlinerParaObject!=NULL)
@@ -139,7 +139,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     }
     Size aAnkSiz(aViewInit.GetSize());
     aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() adds 1
-    Size aMaxSiz(100001000000,1000000);
+    Size aMaxSiz(1000000,1000000);
     if (pModel!=NULL) {
         Size aTmpSiz(pModel->GetMaxObjSize());
         if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
