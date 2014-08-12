@@ -39,13 +39,14 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs,
     : SfxTabDialog(pParent, "FieldDialog", "dbaccess/ui/fielddialog.ui", pCellAttrs)
     , m_nNumberFormatId(0)
 {
-
     pNumberInfoItem = new SvxNumberInfoItem( pFormatter, 0 );
 
     if (bRow)
         SetText(get<FixedText>("alttitle")->GetText());
     if (bHasFormat)
         m_nNumberFormatId = AddTabPage("format", RID_SVXPAGE_NUMBERFORMAT);
+    else
+        RemoveTabPage("format");
     AddTabPage("alignment", RID_SVXPAGE_ALIGNMENT);
 }
 
