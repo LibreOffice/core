@@ -51,6 +51,7 @@
 
 
 #include <IDocumentDrawModelAccess.hxx>
+#include <writerhelper.hxx>
 
 using namespace com::sun::star;
 using namespace oox;
@@ -679,6 +680,34 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
             }
 
             m_pImpl->m_pSerializer->endElementNS(XML_wp, nWrapToken);
+        }
+    }
+
+    // Or if we have a contour.
+    if (!nWrapToken && pFrmFmt->GetSurround().IsContour())
+    {
+        if (const SwNoTxtNode* pNd = sw::util::GetNoTxtNodeFromSwFrmFmt(*pFrmFmt))
+        {
+            const PolyPolygon* pPolyPoly = pNd->HasContour();
+            if (pPolyPoly && pPolyPoly->Count())
+            {
+                nWrapToken = XML_wrapTight;
+                m_pImpl->m_pSerializer->startElementNS(XML_wp, nWrapToken,
+                                                       XML_wrapText, "bothSides", FSEND);
+
+                m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_wrapPolygon,
+                                                       XML_edited, "0",
+                                                       FSEND);
+                Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
+                for (sal_uInt16 i = 0; i < aPoly.GetSize(); ++i)
+                    m_pImpl->m_pSerializer->singleElementNS(XML_wp, (i == 0 ? XML_start : XML_lineTo),
+                                                            XML_x, OString::number(aPoly[i].X()),
+                                                            XML_y, OString::number(aPoly[i].Y()),
+                                                            FSEND);
+                m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_wrapPolygon);
+
+                m_pImpl->m_pSerializer->endElementNS(XML_wp, nWrapToken);
+            }
         }
     }
 

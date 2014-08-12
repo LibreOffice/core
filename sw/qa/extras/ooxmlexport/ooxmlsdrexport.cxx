@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -1790,6 +1791,17 @@ DECLARE_OOXMLEXPORT_TEST(testWrapTightThrough, "wrap-tight-through.docx")
         // The second shape should be wrapTight with a wrap polygon (was wrapSquare).
         assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapTight/wp:wrapPolygon/wp:start", "y", "792");
     }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.docx")
+{
+    // The problem was that the wrap polygon was ignored during export.
+    drawing::PointSequenceSequence aSeqSeq = getProperty<drawing::PointSequenceSequence>(getShape(1), "ContourPolyPolygon");
+    // This was 0: the polygon list was empty.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeqSeq.getLength());
+
+    drawing::PointSequence aSeq = aSeqSeq[0];
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aSeq.getLength());
 }
 
 #endif
