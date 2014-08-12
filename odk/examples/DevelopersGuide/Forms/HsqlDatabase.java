@@ -89,24 +89,6 @@ public class HsqlDatabase
         storable.storeAsURL( m_databaseDocumentFile, new PropertyValue[]{} );
     }
 
-    /** returns a connection to the database
-     *
-     * Multiple calls to this method return the same connection. The HsqlDatabase object keeps
-     * the ownership of the connection, so you don't need to (and should not) dispose/close it.
-     *
-     */
-    private XConnection defaultConnection() throws SQLException
-    {
-        if ( m_connection != null )
-            return m_connection;
-        m_connection  = m_databaseDocument.getDataSource().getConnection(new String(),new String());
-        return m_connection;
-    }
-
-
-
-
-
     /** closes the database document
      *
      *  Any CloseVetoExceptions fired by third parties are ignored, and any reference to the

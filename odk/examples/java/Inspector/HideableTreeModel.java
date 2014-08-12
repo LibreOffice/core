@@ -17,9 +17,6 @@
  */
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-
-import javax.swing.JTree;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
@@ -87,14 +84,6 @@ public class HideableTreeModel implements TreeModel {
 
 
 
-        private void reload(Object node) {
-            if(node != null) {
-                TreePath tp = new TreePath(getPathToRoot(node));
-                fireTreeStructureChanged(new TreeModelEvent(this, tp));
-            }
-    }
-
-
         public void valueForPathChanged(TreePath path, Object newValue) {
             nodeChanged(path.getLastPathComponent());
     }
@@ -153,30 +142,7 @@ public class HideableTreeModel implements TreeModel {
             }
     }
 
-    private void fireTreeStructureChanged(TreeModelEvent event) {
-            for(TreeModelListener l : modelListeners) {
-                l.treeStructureChanged(event);
-            }
-    }
-
-
-
-
-
-        private void addExpandedPaths(JTree tree, TreePath path, ArrayList<TreePath> pathlist) {
-            Enumeration aEnum = tree.getExpandedDescendants(path);
-            while(aEnum.hasMoreElements()) {
-                TreePath tp = (TreePath) aEnum.nextElement();
-                pathlist.add(tp);
-                addExpandedPaths(tree, tp, pathlist);
-            }
-    }
-
-
-
-
-
-        public boolean isLeaf(Object _oNode) {
+    public boolean isLeaf(Object _oNode) {
             if(_oNode instanceof TreeNode) {
                 return ((TreeNode) _oNode).isLeaf();
             }

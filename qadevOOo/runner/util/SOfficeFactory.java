@@ -440,22 +440,5 @@ public class SOfficeFactory {
 
     } // finished openDoc
 
-    private XComponent openDoc(String kind, String frameName, PropertyValue[] mediaDescriptor)
-        throws com.sun.star.lang.IllegalArgumentException,
-        com.sun.star.io.IOException,
-        com.sun.star.uno.Exception {
-
-        if (frameName == null) {
-            frameName = "_blank";
-        }
-        // load a blank a doc
-        XComponent oDoc = oCLoader.loadComponentFromURL(
-            "private:factory/" + kind, frameName, 40, mediaDescriptor);
-        DesktopTools.bringWindowToFront(oDoc);
-
-        return oDoc;
-
-    } // finished openDoc
-
 
 }

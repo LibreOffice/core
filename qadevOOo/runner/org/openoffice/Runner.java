@@ -37,20 +37,6 @@ import base.TestBase;
 public class Runner
 {
 
-    /**
-     * @return the time, which is done until last startTime()
-     */
-    private static long meanTime(long _nCurrentTimer)
-    {
-        if (_nCurrentTimer == 0)
-        {
-            System.out.println("Forgotten to initialise a start timer?");
-            return 0;
-        }
-        long nMeanTime = System.currentTimeMillis();
-        return nMeanTime - _nCurrentTimer;
-    }
-
     private static String beautifyTime(long _nTime)
     {
         long sec = (_nTime / 1000) % 60;

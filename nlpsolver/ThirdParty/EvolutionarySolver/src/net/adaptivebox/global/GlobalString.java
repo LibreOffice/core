@@ -23,7 +23,6 @@
 
 package net.adaptivebox.global;
 
-import java.io.*;
 import java.util.*;
 
 public class GlobalString {
@@ -43,83 +42,6 @@ public class GlobalString {
     while (t.hasMoreTokens())
       v.add(t.nextToken());
     return v.toArray(new String[v.size()]);
-  }
-
-
-
-
-
-  private static int getCharLoc(char data, String str) {
-    for(int i=0; i<str.length(); i++) {
-      if(str.charAt(i)==data) return i;
-    }
-    return -1;
-  }
-  private static String trim(String origStr, String discardStr) {
-    String str = origStr;
-    do {
-      if(str.length()==0) return str;
-      if(getCharLoc(str.charAt(0), discardStr)!=-1) str = str.substring(1);
-      else if(getCharLoc(str.charAt(str.length()-1), discardStr)!=-1) str = str.substring(0, str.length()-1);
-      else {return str;}
-    } while(true);
-  }
-
-  private static boolean getFirstCharExist(String str, String chars) throws Exception {
-    int neglectFirstCharLength = chars.length();
-    for(int i=0; i<neglectFirstCharLength; i++) {
-      if(str.startsWith(chars.substring(i, i+1))) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private static String getMeaningfulLine(BufferedReader outReader, String neglectFirstChars) throws Exception {
-    String str;
-    boolean isNeglect = true;
-    do {
-      str = outReader.readLine();
-      if (str==null) {
-        return null;
-      }
-      str = trim(str, " \t");
-      if(str.length()>0) {
-        isNeglect = getFirstCharExist(str, neglectFirstChars);
-      }
-    } while (isNeglect);
-    return str;
-  }
-
-   private static String[] getMeaningfulLines(String srcStr, String neglectFirstChars) throws Exception {
-    StringReader outStringReader = new StringReader(srcStr);
-    BufferedReader outReader = new BufferedReader(outStringReader);
-    ArrayList<String> origData = new ArrayList<String>();
-    while(true) {
-        String str = getMeaningfulLine(outReader, neglectFirstChars);
-        if (str==null) {
-            break;
-        }
-        origData.add(str);
-    }
-    return convert1DVectorToStringArray(origData);
-  }
-
-  /**
-   * convert vector to 1D String array
-   */
-  private static String[] convert1DVectorToStringArray(ArrayList<String> toToConvert) {
-    if (toToConvert==null) return null;
-    String[] objs = new String[toToConvert.size()];
-    for (int i=0; i<toToConvert.size(); i++) {
-        objs[i] = getObjString(toToConvert.get(i));
-    }
-    return(objs);
-  }
-
-  private static String getObjString(Object nObj) {
-    if(nObj instanceof String) return (String)nObj;
-    return nObj.toString();
   }
 
 

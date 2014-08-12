@@ -83,12 +83,6 @@ public class UITools {
         oText.setText(cText);
     }
 
-    private static Object getValue(XInterface xInt)
-    {
-         XAccessibleValue oValue = UnoRuntime.queryInterface(XAccessibleValue.class, xInt);
-         return oValue.getCurrentValue();
-    }
-
     private static XAccessible makeRoot(XWindow xWindow)
     {
         return AccessibilityTools.getAccessibleObject(xWindow);
@@ -157,55 +151,6 @@ public class UITools {
 
 
     /**
-     * Helper method: gets button via accessibility and 'click' it
-     *  @param buttonName   The name of the button in the accessibility tree
-     *  @param toBePressed  desired state of the toggle button
-     *
-     *  @return true if the state of the button could be changed in the desired manner
-     */
-     private boolean clickToggleButton(String buttonName, boolean toBePressed)
-     {
-        XAccessibleContext oButton =AccessibilityTools.getAccessibleObjectForRole
-                                (mXRoot, AccessibleRole.TOGGLE_BUTTON, buttonName);
-
-        if (oButton != null){
-            boolean isChecked = oButton.getAccessibleStateSet().contains(com.sun.star.accessibility.AccessibleStateType.CHECKED);
-            if((isChecked && !toBePressed) || (!isChecked && toBePressed)){
-                XAccessibleAction oAction = UnoRuntime.queryInterface(XAccessibleAction.class, oButton);
-                try{
-                    // "click" the button
-                    oAction.doAccessibleAction(0);
-                    return true;
-                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                  System.out.println("Could not do accessible action with '"
-                        + buttonName + "'" + e.toString());
-                  return false;
-                }
-            }else
-                //no need to press togglebar, do nothing
-                return true;
-        } else{
-            System.out.println("Could not get button '" + buttonName + "'");
-            return false;
-        }
-     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     /**
       * Helper method: returns the entry manes of a List-Box
       * @param ListBoxName the name of the listbox
       * @return the listbox entry names
@@ -263,71 +208,6 @@ public class UITools {
         String[]ret = new String[Items.size()];
         return Items.toArray(ret);
      }
-
-
-     /**
-      * returns the value of a numeric field
-      * @param NumericFieldName the name of the numreic field
-      * @throws java.lang.Exception if something fail
-      * @return the value of the named numeric filed
-      */
-     private String getNumericFieldValue(String NumericFieldName)
-        throws java.lang.Exception
-     {
-         try{
-            XInterface xNumericField =AccessibilityTools.getAccessibleObjectForRole(
-                                  mXRoot, AccessibleRole.TEXT, NumericFieldName);
-            return getString(xNumericField);
-
-         } catch (Exception e) {
-          throw new Exception("Could get value from NumericField '"
-                                    + NumericFieldName + "' : " + e.toString());
-        }
-     }
-
-     private String removeCharactersFromCurrencyString(String stringVal)
-        throws java.lang.Exception
-     {
-         try{
-            int beginIndex = 0;
-            int endIndex = 0;
-            // find the first numeric character in stringVal
-            for(int i = 0; i < stringVal.length(); i++){
-                int numVal = Character.getNumericValue(stringVal.charAt(i));
-                // if ascii is a numeric value
-                if (numVal != -1){
-                    beginIndex = i;
-                    break;
-                }
-            }
-            // find the last numeric character in stringVal
-            for(int i = stringVal.length()-1; i > 0; i--){
-                int numVal = Character.getNumericValue(stringVal.charAt(i));
-                if (numVal != -1){
-                    endIndex = i+1;
-                    break;
-                }
-            }
-            String currencyVal = stringVal.substring(beginIndex, endIndex);
-
-            currencyVal = currencyVal.substring(0, currencyVal.length()-3) +
-                          "#" + currencyVal.substring(currencyVal.length()-2);
-
-            currencyVal = currencyVal.replace(",", "");
-            currencyVal = currencyVal.replace("\\.", "");
-            currencyVal = currencyVal.replace("#", ".");
-
-            return currencyVal;
-         } catch (Exception e) {
-          throw new Exception("Could get remove characters from currency string '"
-                                    + stringVal + "' : " + e.toString());
-        }
-
-     }
-
-
-
-
 
 
      /**

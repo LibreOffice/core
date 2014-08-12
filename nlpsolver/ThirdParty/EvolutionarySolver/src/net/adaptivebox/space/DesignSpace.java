@@ -51,16 +51,6 @@ public class DesignSpace {
     return dimProps[dim].paramBound.boundAdjust(val);
   }
 
-  private void annulusAdjust (double[] location){
-    for (int i=0; i<getDimension(); i++) {
-      location[i] = dimProps[i].paramBound.annulusAdjust(location[i]);
-    }
-  }
-
-
-
-
-
   public void mutationAt(double[] location, int i){
     location[i] = dimProps[i].paramBound.getRandomValue();
   }

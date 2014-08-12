@@ -125,43 +125,6 @@ public class ConfigHelper
     }
 
 
-    private Object readRelativeKey(String sRelPath,
-                                  String sKey    )
-        throws com.sun.star.container.NoSuchElementException
-    {
-        try
-        {
-            XPropertySet xPath = UnoRuntime.queryInterface(
-                                    XPropertySet.class,
-                                    m_xConfig.getByHierarchicalName(sRelPath));
-            return xPath.getPropertyValue(sKey);
-        }
-        catch(com.sun.star.uno.Exception ex)
-        {
-            throw new com.sun.star.container.NoSuchElementException(ex.getMessage());
-        }
-    }
-
-
-    private void writeRelativeKey(String sRelPath,
-                                 String sKey    ,
-                                 Object aValue  )
-        throws com.sun.star.container.NoSuchElementException
-    {
-        try
-        {
-            XPropertySet xPath = UnoRuntime.queryInterface(
-                                    XPropertySet.class,
-                                    m_xConfig.getByHierarchicalName(sRelPath));
-            xPath.setPropertyValue(sKey, aValue);
-        }
-        catch(com.sun.star.uno.Exception ex)
-        {
-            throw new com.sun.star.container.NoSuchElementException(ex.getMessage());
-        }
-    }
-
-
     /**
      * Updates the configuration.<p>
      * This must be called after you have changed the configuration

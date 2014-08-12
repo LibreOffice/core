@@ -142,36 +142,6 @@ public class InstUtil {
 
 
 
-    private static Properties getJeditLocation() {
-
-    Properties results = new Properties();
-
-    StringBuffer str = new StringBuffer();
-        str.append(System.getProperty("user.home"));
-        str.append(File.separator);
-    StringBuffer thePath = new StringBuffer(str.toString());
-
-        thePath.append(".jedit");
-
-    File jeditLogFile = new File( thePath.toString() + File.separator + "activity.log" );
-    if( jeditLogFile.exists() ) {
-        String[] jeditDetails = getJeditInstallation( jeditLogFile );
-        System.out.println( "getJeditLocation ) " + jeditDetails[0] );
-        results.put("jEdit "+jeditDetails[1], jeditDetails[0]);
-        System.out.println( "jeditDetails[0] is " + jeditDetails[0]);
-    }
-    else {
-        System.out.println( "Prompt user for Jedit installation path" );
-    }
-
-
-    return results;
-    }
-
-
-
-
-
     private static String getNetbeansInstallation( File logFile ) {
         String installPath = "";
         try {
@@ -194,38 +164,6 @@ public class InstUtil {
 
         return installPath;
     }
-
-
-    private static String[] getJeditInstallation( File logFile ) {
-        String[] jeditDetails = new String[2];
-        try {
-        BufferedReader reader = new BufferedReader(new FileReader(logFile));
-        String installPath = "";
-        String version = "";
-
-        for (String s = reader.readLine(); s != null; s = reader.readLine()) {
-        if( s.indexOf( "jEdit home directory is" ) != -1 ) {
-            int pathStart = new String( "[message] jEdit: jEdit home directory is " ).length();
-            installPath = s.substring( pathStart, s.length() ) +File.separator;
-            System.out.println( "installPath 1" + installPath );
-            jeditDetails[0] = installPath;
-        }
-        if( s.indexOf( "jEdit: jEdit version" ) != -1 ) {
-            int versionStart = s.indexOf( "version" ) + 8;
-            System.out.println( "versionStart is: " + versionStart );
-            version = s.substring( versionStart, s.length() );
-            System.out.println( "jEdit version is: " + version );
-            jeditDetails[1] = version;
-        }
-        }
-        reader.close();
-        }
-        catch( IOException ioe ) {
-        System.out.println( "Error reading Jedit location information" );
-            }
-        return jeditDetails;
-    }
-
 
 
     private static File findVersionFile(File start)

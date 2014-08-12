@@ -59,16 +59,6 @@ public class OfficeStyles extends Element
             this.name = name;
         }
 
-        public String getFamily()
-        {
-            return family;
-        }
-
-        public String getName()
-        {
-            return name;
-        }
-
         @Override
         public boolean equals(final Object obj)
         {

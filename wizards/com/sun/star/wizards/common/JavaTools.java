@@ -310,14 +310,6 @@ public class JavaTools
         }
     }
 
-    private static String getFilenameOutOfPath(String sPath)
-    {
-        String[] Hierarchy = ArrayoutofString(sPath, "/");
-        return Hierarchy[Hierarchy.length - 1];
-    }
-
-
-
     public static String convertfromURLNotation(String _sURLPath)
     {
         String sPath = PropertyNames.EMPTY_STRING;
@@ -335,12 +327,6 @@ public class JavaTools
     }
 
 
-
-    private static long getTimeInMillis(Calendar _calendar)
-    {
-        java.util.Date dDate = _calendar.getTime();
-        return dDate.getTime();
-    }
 
     public static void setTimeInMillis(Calendar _calendar, long _timemillis)
     {

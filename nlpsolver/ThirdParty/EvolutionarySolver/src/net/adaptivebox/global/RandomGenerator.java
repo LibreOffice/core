@@ -53,17 +53,6 @@ public static double doubleRangeRandom(double lowLimit,double upLimit){
 
 
 
-  private static int[] randomSelection(int[] totalIndices, int times) {
-    if (times>=totalIndices.length) {
-      return totalIndices;
-    }
-    int[] indices = randomSelection(totalIndices.length, times);
-    for(int i=0; i<indices.length; i++) {
-      indices[i] = totalIndices[indices[i]];
-    }
-    return indices;
-  }
-
   public static int[] randomSelection(int maxNum, int times) {
     if(times<=0) return new int[0];
     int realTimes = Math.min(maxNum, times);

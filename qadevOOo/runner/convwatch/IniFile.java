@@ -198,39 +198,6 @@ class IniFile
             return -1;
         }
 
-    // i must be the index in the list, where the well known section starts
-    private int findLastKnownKeyIndex(int _nSectionIndex, String _sKey)
-        {
-            _sKey = toLowerIfNeed(_sKey);
-            int i = _nSectionIndex + 1;
-            for (int j=i; j<m_aList.size();j++)
-            {
-                String sLine = getItem(j).trim();
-
-                if (isRemark(sLine))
-                {
-                    continue;
-                }
-
-                if (sLine.startsWith("["))
-                {
-                    // found end.
-                    return j;
-                }
-
-                int nEqual = sLine.indexOf("=");
-                if (nEqual >= 0)
-                {
-                    String sKey = toLowerIfNeed(sLine.substring(0, nEqual).trim());
-                    if (sKey.equals(_sKey))
-                    {
-                        return j;
-                    }
-                }
-            }
-            return i;
-        }
-
     private String getValue(int _nIndex)
         {
             String sLine = getItem(_nIndex).trim();

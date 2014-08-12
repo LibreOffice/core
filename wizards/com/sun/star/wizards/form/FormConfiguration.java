@@ -145,29 +145,6 @@ public class FormConfiguration
         Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bsupportsRelations && (chkcreateSubForm.getState() == 1)));
     }
 
-    private void toggleSteps()
-    {
-        if (chkcreateSubForm.getState() == 1)
-        {
-            if (optOnExistingRelation.getState())
-            {
-                onexistingRelationSelection();
-            }
-            else if (optSelectManually.getState())
-            {
-                CurUnoDialog.enablefromStep(FormWizard.SOFIELDLINKER_PAGE, (CurSubFormFieldSelection.getSelectedFieldNames().length > 0));
-                CurUnoDialog.setStepEnabled(FormWizard.SOSUBFORMFIELDS_PAGE, true);
-            }
-        }
-        else
-        {
-            CurUnoDialog.setStepEnabled(FormWizard.SOSUBFORMFIELDS_PAGE, false);
-            CurUnoDialog.setStepEnabled(FormWizard.SOFIELDLINKER_PAGE, false);
-            CurUnoDialog.enablefromStep(FormWizard.SOCONTROL_PAGE, true);
-        }
-        toggleRelationsListbox();
-    }
-
     public String getreferencedTableName()
     {
         if (areexistingRelationsdefined())
@@ -182,27 +159,6 @@ public class FormConfiguration
             }
         }
         return PropertyNames.EMPTY_STRING;
-    }
-
-    private void onexistingRelationSelection()
-    {
-        String scurreferencedTableName = getreferencedTableName();
-        if (scurreferencedTableName.length() > 0)
-        {
-            if (CurSubFormFieldSelection.getSelectedCommandName().equals(scurreferencedTableName))
-            {
-                CurUnoDialog.enablefromStep(FormWizard.SOSUBFORMFIELDS_PAGE, true);
-                CurUnoDialog.setStepEnabled(FormWizard.SOFIELDLINKER_PAGE, false);
-                return;
-            }
-            else
-            {
-                CurUnoDialog.setStepEnabled(FormWizard.SOSUBFORMFIELDS_PAGE, true);
-                CurUnoDialog.enablefromStep(FormWizard.SOFIELDLINKER_PAGE, false);
-                return;
-            }
-        }
-        CurUnoDialog.enablefromStep(FormWizard.SOSUBFORMFIELDS_PAGE, false);
     }
 
     private void toggleRelationsListbox()

@@ -25,18 +25,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.io.XActiveDataSource;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.xml.sax.InputSource;
 import com.sun.star.xml.sax.XAttributeList;
 import com.sun.star.xml.sax.XDocumentHandler;
 import com.sun.star.xml.sax.XLocator;
-import com.sun.star.xml.sax.XParser;
 
 
 public class XMLTools {
@@ -747,64 +738,6 @@ public class XMLTools {
         }
 
         return props ;
-    }
-
-    /**
-     * Gets the hanlder, which writes all the XML data passed to the
-     * file specified.
-     * @param xMSF Soffice <code>ServiceManager</code> factory.
-     * @param fileURL The file URL (in form file:///<path>) to which
-     * XML data is written.
-     * @return SAX handler to which XML data has to be written.
-     */
-    private static XDocumentHandler getFileXMLWriter(XMultiServiceFactory xMSF, String fileURL)
-        throws com.sun.star.uno.Exception
-    {
-        XInterface oFacc = (XInterface)xMSF.createInstance(
-            "com.sun.star.comp.ucb.SimpleFileAccess");
-        XSimpleFileAccess xFacc = UnoRuntime.queryInterface
-            (XSimpleFileAccess.class, oFacc) ;
-
-        XInterface oWriter = (XInterface)xMSF.createInstance(
-            "com.sun.star.xml.sax.Writer");
-        XActiveDataSource xWriterDS = UnoRuntime.queryInterface(XActiveDataSource.class, oWriter);
-        XDocumentHandler xDocHandWriter = UnoRuntime.queryInterface
-            (XDocumentHandler.class, oWriter) ;
-
-        if (xFacc.exists(fileURL))
-            xFacc.kill(fileURL);
-        XOutputStream fOut = xFacc.openFileWrite(fileURL) ;
-        xWriterDS.setOutputStream(fOut);
-
-        return xDocHandWriter ;
-    }
-
-    /**
-     * Parses XML file and passes its data to the SAX handler specified.
-     * @param xMSF Soffice <code>ServiceManager</code> factory.
-     * @param fileURL XML file name (in form file:///<path>) to be parsed.
-     * @param handler SAX handler to which XML data from file will
-     * be transferred.
-     */
-    private static void parseXMLFile(XMultiServiceFactory xMSF,
-        String fileURL, XDocumentHandler handler) throws com.sun.star.uno.Exception
-    {
-        XInterface oFacc = (XInterface)xMSF.createInstance(
-            "com.sun.star.comp.ucb.SimpleFileAccess");
-        XSimpleFileAccess xFacc = UnoRuntime.queryInterface
-            (XSimpleFileAccess.class, oFacc) ;
-        XInputStream oIn = xFacc.openFileRead(fileURL) ;
-
-        XInterface oParser = (XInterface)xMSF.createInstance(
-            "com.sun.star.xml.sax.Parser");
-        XParser xParser = UnoRuntime.queryInterface(XParser.class, oParser);
-
-        xParser.setDocumentHandler(handler) ;
-        InputSource inSrc = new InputSource() ;
-        inSrc.aInputStream = oIn ;
-        xParser.parseStream(inSrc) ;
-
-        oIn.closeInput();
     }
 
 

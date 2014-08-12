@@ -98,58 +98,6 @@ public class URLHelper
 
 
     /**
-     * Does the same as getFileURLFromSystemPath() before ... but uses
-     * the given protocol string (e.g."http://") instead of "file:///".
-     *
-     * @param aSystemPath
-     *          represent the file in system notation
-     *
-     * @param aBasePath
-     *          define the base path of the aSystemPath value,
-     *          which must be replaced with the value of "sServerPath".
-     *
-     * @param sServerURL
-     *          Will be used to replace sBasePath.
-     *
-     * @example
-     *          System Path = "d:\test\file.txt"
-     *          Base Path   = "d:\test"
-     *          Server Path = "http://alaska:8000"
-     *          => "http://alaska:8000/file.txt"
-     *
-     * @return [String]
-     *          an url which represent the given system path
-     *          and uses the given protocol
-     */
-    private static String getURLWithProtocolFromSystemPath( File aSystemPath, File aBasePath, String sServerURL )
-    {
-        String sFileURL = URLHelper.getFileURLFromSystemPath(aSystemPath);
-        String sBaseURL = URLHelper.getFileURLFromSystemPath(aBasePath  );
-
-        // cut last '/'!
-        if (sBaseURL.lastIndexOf('/')==(sBaseURL.length()-1))
-            sBaseURL = sBaseURL.substring(0,sBaseURL.length()-1);
-
-        // cut last '/'!
-        if (sServerURL.lastIndexOf('/')==(sServerURL.length()-1))
-            sServerURL = sServerURL.substring(0,sServerURL.length()-1);
-
-        int index = sFileURL.indexOf(sBaseURL);
-        String sURL = sFileURL.substring(0,index) + sServerURL +
-                                sFileURL.substring(index+sBaseURL.length());
-        return sURL;
-    }
-
-
-
-
-
-
-
-
-
-
-    /**
      * Return a name list of all available files of a directory.
      * We filter pure sub directories names. All other files
      * are returned as full qualified URL strings. So they can be

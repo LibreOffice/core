@@ -17,13 +17,9 @@
  */
 package com.sun.star.wizards.common;
 
-import com.sun.star.beans.Property;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.lang.XServiceInfo;
-
 import java.util.HashMap;
 
 public class PropertySetHelper
@@ -259,35 +255,5 @@ public class PropertySetHelper
             }
         }
         return aObject;
-    }
-
-
-
-    /**
-    Debug helper, to show all properties which are available in the current object.
-     */
-    private void showProperties()
-    {
-        String sName = PropertyNames.EMPTY_STRING;
-
-        if (m_xPropertySet != null)
-        {
-            XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, m_xPropertySet);
-            if (xServiceInfo != null)
-            {
-                sName = xServiceInfo.getImplementationName();
-            }
-            XPropertySetInfo xInfo = m_xPropertySet.getPropertySetInfo();
-            Property[] aAllProperties = xInfo.getProperties();
-            DebugHelper.writeInfo("Show all properties of Implementation of :'" + sName + "'");
-            for (int i = 0; i < aAllProperties.length; i++)
-            {
-                DebugHelper.writeInfo(" - " + aAllProperties[i].Name);
-            }
-        }
-        else
-        {
-            DebugHelper.writeInfo("The given object don't support XPropertySet interface.");
-        }
     }
 }

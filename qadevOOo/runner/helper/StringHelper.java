@@ -21,16 +21,6 @@ package helper;
 public class StringHelper
 {
 
-    private static String doubleQuote(String _sStr)
-        {
-            return "\"" + _sStr + "\"";
-        }
-
-    private static String singleQuote(String _sStr)
-        {
-            return "'" + _sStr + "'";
-        }
-
     /**
      * removes quotes if both exists at start and at end
      */

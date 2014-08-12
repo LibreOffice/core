@@ -18,7 +18,6 @@
 package com.sun.star.wizards.common;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -71,16 +70,6 @@ public class Desktop
         XFramesSupplier xFrameSuppl = UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
         return xFrameSuppl.getActiveFrame();
     }
-
-    private static XComponent getActiveComponent(XMultiServiceFactory _xMSF)
-    {
-        XFrame xFrame = getActiveFrame(_xMSF);
-        return UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
-    }
-
-
-
-
 
     private static XDispatch getDispatcher(XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL)
     {

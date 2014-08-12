@@ -21,7 +21,6 @@ package com.sun.star.wiki;
 import com.sun.star.awt.MessageBoxButtons;
 import com.sun.star.awt.MessageBoxType;
 import com.sun.star.awt.XControl;
-import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XMessageBoxFactory;
@@ -814,31 +813,6 @@ public class Helper
 
         return aHostConfig;
     }
-
-    private static XControl GetControlFromDialog( XDialog xDialog, String aControlName )
-    {
-        XControl xResult = null;
-        XControlContainer xControlCont = UnoRuntime.queryInterface( XControlContainer.class, xDialog );
-
-        if ( xControlCont != null )
-        {
-            Object oControl = xControlCont.getControl( aControlName );
-            xResult = UnoRuntime.queryInterface( XControl.class, oControl );
-        }
-
-        return xResult;
-    }
-
-    private static XPropertySet GetSubControlPropSet( XDialog xDialog, String aControlName )
-    {
-        XControl xControl = GetControlFromDialog( xDialog, aControlName );
-        if ( xControl != null )
-            return UnoRuntime.queryInterface( XPropertySet.class, xControl.getModel() );
-
-        return null;
-    }
-
-
 
     protected static String[] GetPasswordsForURLAndUser( XComponentContext xContext, String sURL, String sUserName )
     {

@@ -336,28 +336,6 @@ public abstract class Configuration
 
 
 
-    private static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname, String _nodename)
-    {
-        String[] snames = null;
-        try
-        {
-            snames = _xNameAccessNode.getElementNames();
-            for (int i = 0; i < snames.length; i++)
-            {
-                String curdisplayname = (String) Helper.getUnoPropertyValue(_xNameAccessNode.getByName(snames[i]), _nodename);
-                if (curdisplayname.equals(_displayname))
-                {
-                    return UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(snames[i]));
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-        return null;
-    }
-
     public static XNameAccess getChildNodebyDisplayName(XMultiServiceFactory _xMSF, Locale _aLocale, XNameAccess _xNameAccessNode, String _displayname, String _nodename, int _nmaxcharcount)
     {
         String[] snames = null;

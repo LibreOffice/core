@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
-import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTextInputStream;
@@ -339,40 +338,6 @@ public class FileAccess
         return ReturnPath;
     }
 
-    private static boolean createSubDirectory(XMultiServiceFactory xMSF, XSimpleFileAccess xSimpleFileAccess, String Path)
-    {
-        String sNoDirCreation = PropertyNames.EMPTY_STRING;
-        try
-        {
-            Resource oResource = new Resource(xMSF, "ImportWizard", "imp");
-            sNoDirCreation = oResource.getResText(1050);
-            String sMsgDirNotThere = oResource.getResText(1051);
-            String sQueryForNewCreation = oResource.getResText(1052);
-            String OSPath = JavaTools.convertfromURLNotation(Path);
-            String sQueryMessage = JavaTools.replaceSubString(sMsgDirNotThere, OSPath, "%1");
-            sQueryMessage = sQueryMessage + (char) 13 + sQueryForNewCreation;
-            int icreate = SystemDialog.showMessageBox(xMSF, "QueryBox", VclWindowPeerAttribute.YES_NO, sQueryMessage);
-            if (icreate == 2)
-            {
-                xSimpleFileAccess.createFolder(Path);
-                return true;
-            }
-            return false;
-        }
-        catch (com.sun.star.ucb.CommandAbortedException exception)
-        {
-            String sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1");
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgNoDir);
-            return false;
-        }
-        catch (com.sun.star.uno.Exception unoexception)
-        {
-            String sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1");
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgNoDir);
-            return false;
-        }
-    }
-
     /**
      * We search in all given path for a given file
      */
@@ -566,24 +531,6 @@ public class FileAccess
         return filename;
     }
 
-    private boolean mkdir(String s)
-    {
-        try
-        {
-            fileAccess.createFolder(s);
-            return true;
-        }
-        catch (CommandAbortedException cax)
-        {
-            cax.printStackTrace();
-        }
-        catch (com.sun.star.uno.Exception ex)
-        {
-            ex.printStackTrace();
-        }
-        return false;
-    }
-
     /**
      * @param def what to return in case of an exception
      * @return true if the given file exists or not.
@@ -649,26 +596,6 @@ public class FileAccess
     }
 
 
-
-    private String getNewFile(String parentDir, String name, String extension)
-    {
-
-        int i = 0;
-        String url;
-        do
-        {
-            String filename = filename(name, extension, i++);
-            url = getURL(parentDir, filename);
-        }
-        while (exists(url, true));
-
-        return url;
-    }
-
-    private static String filename(String name, String ext, int i)
-    {
-        return name + (i == 0 ? PropertyNames.EMPTY_STRING : String.valueOf(i)) + (ext.equals(PropertyNames.EMPTY_STRING) ? PropertyNames.EMPTY_STRING : "." + ext);
-    }
 
     public static String connectURLs(String urlFolder, String urlFilename)
     {

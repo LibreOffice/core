@@ -178,24 +178,6 @@ public class Assert
         assertException( i_message, i_object, i_methodName, argClasses, i_methodArgs, i_expectedExceptionClass );
     }
 
-    /** invokes a given method on a given object, and assures a certain exception is caught
-     * @param i_object is the object to invoke the method on
-     * @param i_methodName is the name of the method to invoke
-     * @param i_methodArgs are the arguments to pass to the method. Those implicitly define
-     *      the classes of the arguments of the method which is called.
-     * @param i_expectedExceptionClass is the class of the exception to be caught. If this is null,
-     *          it means that <em>no</em> exception must be throw by invoking the method.
-    */
-    private static void assertException( final Object i_object, final String i_methodName, final Object[] i_methodArgs,
-        final Class<?> i_expectedExceptionClass )
-    {
-        assertException(
-            "did not catch the expected exception (" +
-                ( ( i_expectedExceptionClass == null ) ? "none" : i_expectedExceptionClass.getName() ) +
-                ") while calling " + i_object.getClass().getName() + "." + i_methodName,
-            i_object, i_methodName, i_methodArgs, i_expectedExceptionClass );
-    }
-
 
 
 

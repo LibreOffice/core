@@ -308,23 +308,6 @@ public class Helper
             return getDocumentDateAsDouble(date.Year * 10000 + date.Month * 100 + date.Day);
         }
 
-        private synchronized double getDocumentDateAsDouble(long javaTimeInMillis)
-        {
-            calendar.clear();
-            JavaTools.setTimeInMillis(calendar, javaTimeInMillis);
-
-            long date1 = getTimeInMillis();
-
-            /*
-             * docNullTime and date1 are in millis, but
-             * I need a day...
-             */
-            return (date1 - docNullTime) / DAY_IN_MILLIS + 1;
-
-        }
-
-
-
         public String format(int formatIndex, DateTime date)
         {
             return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date));

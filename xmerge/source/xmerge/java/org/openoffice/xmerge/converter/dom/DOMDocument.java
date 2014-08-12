@@ -35,7 +35,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -334,37 +333,6 @@ public class DOMDocument
         byte bytes[] = baos.toByteArray();
 
         return bytes;
-    }
-
-
-
-
-    /**
-     *  <p>Creates a new DOM <code>Document</code> containing minimum
-     *  OpenOffice XML tags.</p>
-     *
-     *  <p>This method uses the subclass
-     *  <code>getOfficeClassAttribute</code> method to get the
-     *  attribute for <i>office:class</i>.</p>
-     *
-     *  @param  rootName  root name of <code>Document</code>.
-     *
-     *  @throws  IOException  If any I/O error occurs.
-     */
-    private final Document createDOM(String rootName) throws IOException {
-
-        Document doc = null;
-
-        try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            doc = builder.newDocument();
-            Element root = doc.createElement(rootName);
-            doc.appendChild(root);
-        } catch (ParserConfigurationException ex) {
-             System.out.println("Error:"+ ex);
-        }
-
-        return doc;
     }
 
 }

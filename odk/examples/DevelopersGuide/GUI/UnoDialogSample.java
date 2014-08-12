@@ -70,10 +70,8 @@ import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XMultiPropertySet;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
@@ -182,25 +180,6 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
         System.exit( 0 );
     }
-
-
-    private XNameAccess getRegistryKeyContent(String _sKeyName){
-        try {
-            PropertyValue[] aNodePath = new PropertyValue[1];
-            XMultiServiceFactory xMSFConfig = theDefaultProvider.get(m_xContext);
-            aNodePath[0] = new PropertyValue();
-            aNodePath[0].Name = "nodepath";
-            aNodePath[0].Value = _sKeyName;
-            Object oNode = xMSFConfig.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aNodePath);
-            XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oNode);
-            return xNameAccess;
-        } catch (Exception exception) {
-            exception.printStackTrace(System.err);
-            return null;
-        }
-    }
-
-
 
 
     protected void createDialog(XMultiComponentFactory _xMCF) {

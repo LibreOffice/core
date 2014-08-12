@@ -18,9 +18,6 @@
 
 package complexlib;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 /**
  * I have removed the assure(...) functions from ComplexTestCase due to the fact now I can
  * use the functions every where and don't need to be a ComplexTestCase any longer.
@@ -119,66 +116,6 @@ public class Assurance
             assureEquals( i_message + ": mismatch at element pos " + i, i_expected[i], i_actual[i], i_continue );
         }
     }
-
-
-
-    /** invokes a given method on a given object, and assures a certain exception is caught
-     * @param _message is the message to print when the check fails
-     * @param _object is the object to invoke the method on
-     * @param _methodName is the name of the method to invoke
-     * @param _methodArgs are the arguments to pass to the method.
-     * @param _argClasses are the classes to assume for the arguments of the methods
-     * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
-     *          it means that <em>no</em> exception must be throw by invoking the method.
-    */
-    private void assureException( final String _message, final Object _object, final String _methodName,
-        final Class<?>[] _argClasses, final Object[] _methodArgs, final Class<?> _expectedExceptionClass )
-    {
-        Class<?> objectClass = _object.getClass();
-
-        boolean noExceptionAllowed = ( _expectedExceptionClass == null );
-
-        boolean caughtExpected = noExceptionAllowed;
-        try
-        {
-            Method method = objectClass.getMethod( _methodName, _argClasses );
-            method.invoke(_object, _methodArgs );
-        }
-        catch ( InvocationTargetException e )
-        {
-            caughtExpected =    noExceptionAllowed
-                            ?   false
-                            :   ( e.getTargetException().getClass().equals( _expectedExceptionClass ) );
-        }
-        catch( Exception e )
-        {
-            caughtExpected = false;
-        }
-
-        assure( _message, caughtExpected );
-    }
-
-    /** invokes a given method on a given object, and assures a certain exception is caught
-     * @param _message is the message to print when the check fails
-     * @param _object is the object to invoke the method on
-     * @param _methodName is the name of the method to invoke
-     * @param _methodArgs are the arguments to pass to the method. Those implicitly define
-     *      the classes of the arguments of the method which is called.
-     * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
-     *          it means that <em>no</em> exception must be throw by invoking the method.
-    */
-    private void assureException( final String _message, final Object _object, final String _methodName,
-        final Object[] _methodArgs, final Class<?> _expectedExceptionClass )
-    {
-        Class<?>[] argClasses = new Class[ _methodArgs.length ];
-        for ( int i=0; i<_methodArgs.length; ++i )
-            argClasses[i] = _methodArgs[i].getClass();
-        assureException( _message, _object, _methodName, argClasses, _methodArgs, _expectedExceptionClass );
-    }
-
-
-
-
 
 
 

@@ -19,29 +19,18 @@
 package util;
 
 import com.sun.star.uno.Exception;
-import java.io.PrintWriter ;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.XConnection ;
-import com.sun.star.sdbc.XResultSet ;
-import com.sun.star.sdbc.XResultSetUpdate ;
-import com.sun.star.sdbc.XStatement ;
-import com.sun.star.sdbc.XRowUpdate ;
 import com.sun.star.util.Date ;
 import com.sun.star.uno.XNamingService ;
 import com.sun.star.task.XInteractionHandler ;
 import com.sun.star.sdb.XCompletedConnection ;
-import com.sun.star.io.XInputStream ;
-import com.sun.star.io.XTextInputStream ;
-import com.sun.star.io.XDataInputStream ;
-import com.sun.star.container.XNameAccess ;
 import com.sun.star.frame.XStorable;
 import com.sun.star.sdb.XDocumentDataSource;
-import com.sun.star.sdbc.XCloseable ;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -184,50 +173,6 @@ public class DBTools {
         }
 
         /**
-        * Prints datasource info.
-        * @param out Stream to which information is printed.
-        */
-        private void printInfo(PrintWriter out) {
-            out.println("Name = '" + Name + "'") ;
-            out.println("  URL = '" + URL + "'") ;
-            out.print("  Info = ") ;
-            if (Info == null) out.println("null") ;
-            else {
-                out.print("{") ;
-                for (int i = 0; i < Info.length; i++) {
-                    out.print(Info[i].Name + " = '" + Info[i].Value + "'") ;
-                    if (i + 1 < Info.length) out.print("; ") ;
-                }
-                out.println("}") ;
-            }
-            out.println("  User = '" + User + "'") ;
-            out.println("  Password = '" + Password + "'") ;
-            out.println("  IsPasswordRequired = '" + IsPasswordRequired + "'") ;
-            out.println("  SuppressVersionColumns = '" + SuppressVersionColumns + "'") ;
-            out.println("  IsReadOnly = '" + IsReadOnly + "'") ;
-            out.print("  TableFilter = ") ;
-            if (TableFilter == null) out.println("null") ;
-            else {
-                out.print("{") ;
-                for (int i = 0; i < TableFilter.length; i++) {
-                    out.print("'" + TableFilter[i] + "'") ;
-                    if (i+1 < TableFilter.length) out.print("; ");
-                }
-                out.println("}") ;
-            }
-            out.print("  TableTypeFilter = ") ;
-            if (TableTypeFilter == null) out.println("null") ;
-            else {
-                out.print("{") ;
-                for (int i = 0; i < TableTypeFilter.length; i++) {
-                    out.print("'" + TableTypeFilter[i] + "'") ;
-                    if (i+1 < TableTypeFilter.length) out.print("; ");
-                }
-                out.println("}") ;
-            }
-        }
-
-        /**
         * Creates new <code>com.sun.star.sdb.DataSource</code> service
         * instance and copies all fields (which are not null) to
         * appropriate service properties.
@@ -336,166 +281,6 @@ public class DBTools {
 
         return xSrcCon.connectWithCompletion(xHandler) ;
     }
-
-    /**
-    * Registers Test data source in the <code>DatabaseContext</code> service.
-    * This source always has name <code>'APITestDatabase'</code> and it
-    * is registered in subdirectory <code>TestDB</code> of directory
-    * <code>docPath</code> which is supposed to be a directory with test
-    * documents, but can be any other (it must have subdirectory with DBF
-    * tables). If such data source doesn't exists or exists with
-    * different URL it is recreated and reregistered.
-    * @param docPath Path to database <code>TestDB</code> directory.
-    * @return <code>com.sun.star.sdb.DataSource</code> service
-    * implementation which represents TestDB.
-    */
-    private Object registerTestDB(String docPath)
-        throws com.sun.star.uno.Exception {
-
-        String testURL = null ;
-        if (docPath.endsWith("/") || docPath.endsWith("\\"))
-            testURL = dirToUrl(docPath + "TestDB") ;
-        else
-            testURL = dirToUrl(docPath + "/" + "TestDB") ;
-        testURL = "sdbc:dbase:" + testURL ;
-
-        String existURL = null ;
-
-        XNameAccess na = UnoRuntime.queryInterface
-            (XNameAccess.class, dbContext) ;
-
-        Object src = null ;
-        if (na.hasByName("APITestDatabase")) {
-            src = dbContext.getRegisteredObject("APITestDatabase") ;
-
-            XPropertySet srcPs = UnoRuntime.queryInterface
-                (XPropertySet.class, src) ;
-
-            existURL = (String) srcPs.getPropertyValue("URL") ;
-        }
-
-        if (src == null || !testURL.equals(existURL)) {
-            // test data source must be reregistered.
-            DataSourceInfo info = new DataSourceInfo() ;
-            info.URL = testURL ;
-            src = info.getDataSourceService() ;
-            reRegisterDB("APITestDatabase", src) ;
-            src = dbContext.getRegisteredObject("APITestDatabase") ;
-        }
-
-        return src ;
-    }
-
-
-
-    /**
-    * Empties the table in the specified source.
-    * @param con Connection to the DataSource where appropriate
-    * table exists.
-    * @param table The name of the table where all rows will be deleted.
-    * @return Number of rows deleted.
-    */
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // Currently doesn't work because of bugs 85509, 85510
-
-    private int deleteAllRows(XConnection con, String table)
-        throws com.sun.star.sdbc.SQLException {
-
-        XStatement stat = con.createStatement() ;
-
-        XResultSet set = stat.executeQuery("SELECT * FROM " + table) ;
-
-        XResultSetUpdate updt = UnoRuntime.queryInterface
-            (XResultSetUpdate.class, set) ;
-
-        int count = 0 ;
-        set.last() ;
-        int rowNum = set.getRow() ;
-        set.first() ;
-
-        for (int i = 0; i < rowNum; i++) {
-            updt.deleteRow() ;
-            set.next() ;
-            count ++ ;
-        }
-
-        XCloseable xClose = UnoRuntime.queryInterface
-            (XCloseable.class, set) ;
-        xClose.close() ;
-
-        return count ;
-    }
-
-    /**
-    * Inserts row into test table of the specified connection.
-    * Test table has some predefined format which includes as much
-    * field types as possible. For every column type constants
-    * {@link #TST_STRING TST_STRING}, {@link #TST_INT TST_INT}, etc.
-    * are declared for column index fast find.
-    * @param con Connection to data source where test table exists.
-    * @param table Test table name.
-    * @param values Values to be inserted into test table. Values of
-    * this array inserted into appropriate fields depending on their
-    * types. So <code>String</code> value of the array is inserted
-    * into the field of <code>CHARACTER</code> type, etc.
-    * @param streamLength Is optional. It is used only if in values
-    * list <code>XCharacterInputStream</code> or <code>XBinaryInputStream
-    * </code> types specified. In this case the parameter specifies
-    * the length of the stream for inserting.
-    */
-    private void addRowToTestTable(XConnection con, String table, Object[] values,
-        int streamLength)
-        throws com.sun.star.sdbc.SQLException {
-
-        XStatement stat = con.createStatement() ;
-
-        XResultSet set = stat.executeQuery("SELECT * FROM " + table) ;
-
-        XResultSetUpdate updt = UnoRuntime.queryInterface
-            (XResultSetUpdate.class, set) ;
-
-        XRowUpdate rowUpdt = UnoRuntime.queryInterface
-            (XRowUpdate.class, set) ;
-
-        updt.moveToInsertRow() ;
-
-        for (int i = 0; i < values.length; i++) {
-            if (values[i] instanceof String) {
-                rowUpdt.updateString(TST_STRING, (String) values[i]) ;
-            } else
-            if (values[i] instanceof Integer) {
-                rowUpdt.updateInt(TST_INT, ((Integer) values[i]).intValue()) ;
-            } else
-            if (values[i] instanceof Double) {
-                rowUpdt.updateDouble(TST_DOUBLE, ((Double) values[i]).doubleValue()) ;
-            } else
-            if (values[i] instanceof Date) {
-                rowUpdt.updateDate(TST_DATE, (Date) values[i]) ;
-            } else
-            if (values[i] instanceof Boolean) {
-                rowUpdt.updateBoolean(TST_BOOLEAN, ((Boolean) values[i]).booleanValue()) ;
-            } else
-            if (values[i] instanceof XTextInputStream) {
-                rowUpdt.updateCharacterStream(TST_CHARACTER_STREAM, (XInputStream) values[i],
-                    streamLength) ;
-            } else
-            if (values[i] instanceof XDataInputStream) {
-                rowUpdt.updateBinaryStream(TST_BINARY_STREAM, (XInputStream) values[i],
-                    streamLength) ;
-            }
-        }
-
-        updt.insertRow() ;
-
-        XCloseable xClose = UnoRuntime.queryInterface
-            (XCloseable.class, set) ;
-        xClose.close() ;
-    }
-
-
-
-
 
     /**
     * Convert system pathname to SOffice URL string

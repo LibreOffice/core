@@ -52,25 +52,6 @@ public class Task
         fireTaskStatusChanged();
     }
 
-    private void advance(boolean success_)
-    {
-        if (success_)
-        {
-            successful++;
-        }
-        else
-        {
-            failed++;
-        }
-        fireTaskStatusChanged();
-        if (failed + successful == max)
-        {
-            fireTaskFinished();
-        }
-    }
-
-
-
     public int getStatus()
     {
         return successful + failed;
@@ -87,36 +68,6 @@ public class Task
         for (int i = 0; i < listeners.size(); i++)
         {
             listeners.get(i).taskStatusChanged(te);
-        }
-    }
-
-    private void fireTaskStarted()
-    {
-        TaskEvent te = new TaskEvent(this, TaskEvent.TASK_STARTED);
-
-        for (int i = 0; i < listeners.size(); i++)
-        {
-            listeners.get(i).taskStarted(te);
-        }
-    }
-
-    private void fireTaskFailed()
-    {
-        TaskEvent te = new TaskEvent(this, TaskEvent.TASK_FAILED);
-
-        for (int i = 0; i < listeners.size(); i++)
-        {
-            listeners.get(i).taskFinished(te);
-        }
-    }
-
-    private void fireTaskFinished()
-    {
-        TaskEvent te = new TaskEvent(this, TaskEvent.TASK_FINISHED);
-
-        for (int i = 0; i < listeners.size(); i++)
-        {
-            listeners.get(i).taskFinished(te);
         }
     }
 

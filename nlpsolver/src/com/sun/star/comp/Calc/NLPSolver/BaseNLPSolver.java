@@ -45,7 +45,6 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.sheet.SolverConstraint;
 import com.sun.star.sheet.SolverConstraintOperator;
-import com.sun.star.sheet.XCellRangeData;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
@@ -361,21 +360,6 @@ public abstract class BaseNLPSolver extends WeakBase
     }
 
 
-
-    private XCellRangeData getCellRangeData(int sheet, int startCol, int startRow, int endCol, int endRow) {
-        try {
-            XSpreadsheets xSpreadsheets = m_document.getSheets();
-            XIndexAccess xSheetIndex = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-            XSpreadsheet xSpreadsheet = UnoRuntime.queryInterface(XSpreadsheet.class, xSheetIndex.getByIndex(sheet));
-            return UnoRuntime.queryInterface(XCellRangeData.class, xSpreadsheet.getCellRangeByPosition(startCol, startRow, endCol, endRow));
-        } catch (IndexOutOfBoundsException ex) {
-            Logger.getLogger(BaseNLPSolver.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (WrappedTargetException ex) {
-            Logger.getLogger(BaseNLPSolver.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
-    }
 
     private XChartDataArray getChartDataArray(CellRangeAddress cellRangeAddress) {
         return getChartDataArray(cellRangeAddress.Sheet, cellRangeAddress.StartColumn,

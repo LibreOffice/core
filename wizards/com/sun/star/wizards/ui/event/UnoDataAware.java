@@ -120,43 +120,6 @@ public class UnoDataAware extends DataAware
         return Helper.getUnoPropertyValue(unoModel, unoPropName);
     }
 
-    private static UnoDataAware attachTextControl(Object data, String prop, Object unoText, final Listener listener, String unoProperty, boolean field, Object value)
-    {
-        XTextComponent text = UnoRuntime.queryInterface(XTextComponent.class, unoText);
-        final UnoDataAware uda = new UnoDataAware(data,
-                field
-                ? DataAwareFields.getFieldValueFor(data, prop, value)
-                : new DataAware.PropertyValue(prop, data),
-                text, unoProperty);
-        text.addTextListener(new XTextListener()
-        {
-
-            public void textChanged(TextEvent te)
-            {
-                uda.updateData();
-                if (listener != null)
-                {
-                    listener.eventPerformed(te);
-                }
-            }
-
-            public void disposing(EventObject eo)
-            {
-            }
-        });
-        return uda;
-    }
-
-
-
-
-
-
-
-
-
-
-
     static XItemListener itemListener(final DataAware da, final Listener listener)
     {
         return new XItemListener()

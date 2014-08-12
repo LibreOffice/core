@@ -239,18 +239,6 @@ public class FieldFormatter implements XItemListener
 
 
 
-    private String[] shiftArrayItem(String[] _slist, int _oldindex, int _shiftcount)
-    {
-        int newindex = _oldindex + _shiftcount;
-        if ((newindex >= 0) && (newindex < _slist.length))
-        {
-            String buffer = _slist[newindex];
-            _slist[newindex] = _slist[_oldindex];
-            _slist[_oldindex] = buffer;
-        }
-        return _slist;
-    }
-
     public boolean updateColumnofColumnDescriptor()
     {
         Object oColumn = Helper.getUnoPropertyValue(oColumnDescriptorModel, "Column");

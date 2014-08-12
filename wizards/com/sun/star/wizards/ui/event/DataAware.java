@@ -64,24 +64,6 @@ public abstract class DataAware {
     }
 
     /**
-     * sets a new data object. Optionally
-     * update the UI.
-     * @param obj the new data object.
-     * @param updateUI if true updateUI() will be called.
-     */
-    private void setDataObject(Object obj, boolean updateUI) {
-
-        if (obj != null && !value.isAssignable(obj.getClass()))
-            throw new ClassCastException("can not cast new DataObject to original Class");
-
-        dataObject = obj;
-
-        if (updateUI)
-            updateUI();
-
-    }
-
-    /**
      * Sets the given value to the data object.
      * this method delegates the job to the
      * Value object, but can be overwritten if
@@ -113,23 +95,6 @@ public abstract class DataAware {
      * @return the current value from the UI control.
      */
     protected abstract Object getFromUI();
-
-    /**
-     * updates the UI control according to the
-     * current state of the data object.
-     */
-    private void updateUI() {
-        Object data = getFromData();
-        Object ui = getFromUI();
-        if (!equals(data, ui))
-            try {
-                setToUI(data);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                //TODO tell user...
-            }
-        enableControls(data);
-    }
 
     /**
      * enables

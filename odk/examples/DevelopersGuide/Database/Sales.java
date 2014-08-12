@@ -33,7 +33,6 @@
  *************************************************************************/
 
 import com.sun.star.uno.*;
-import com.sun.star.util.Date;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.*;
 
@@ -104,49 +103,6 @@ public class Sales
                 float  n = row.getFloat(2);
                 System.out.println("The current price for " + s + " is: $" + n + ".");
         }
-    }
-
-
-
-    // inserts a row programmatically.
-    private void insertRow() throws com.sun.star.uno.Exception
-    {
-        // example for a programmatic way to do updates.
-        XStatement stmt = con.createStatement();
-        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
-        xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
-        xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.UPDATABLE));
-        XResultSet rs = stmt.executeQuery("SELECT * FROM SALES");
-        XRow       row = UnoRuntime.queryInterface(XRow.class,rs);
-
-        // insert a new row
-        XRowUpdate updateRow = UnoRuntime.queryInterface(XRowUpdate.class,rs);
-        XResultSetUpdate updateRs = UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
-        updateRs.moveToInsertRow();
-        updateRow.updateInt(1, 4);
-        updateRow.updateInt(2, 102);
-        updateRow.updateInt(3, 5);
-        updateRow.updateString(4, "FTOP Darjeeling tea");
-        updateRow.updateDate(5, new Date((short)1,(short)2,(short)2002));
-        updateRow.updateFloat(6, 150);
-        updateRs.insertRow();
-    }
-
-    // deletes a row programmatically.
-    private void deleteRow() throws com.sun.star.uno.Exception
-    {
-        // example for a programmatic way to do updates.
-        XStatement stmt = con.createStatement();
-        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
-        xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
-        xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.UPDATABLE));
-        XResultSet rs = stmt.executeQuery("SELECT * FROM SALES");
-        XRow       row = UnoRuntime.queryInterface(XRow.class,rs);
-
-        XResultSetUpdate updateRs = UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
-        // move to the inserted row
-        rs.absolute(4);
-        updateRs.deleteRow();
     }
 
 

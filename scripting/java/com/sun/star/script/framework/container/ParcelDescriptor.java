@@ -20,7 +20,6 @@ package com.sun.star.script.framework.container;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -57,28 +56,6 @@ public class ParcelDescriptor {
     private Map<String,String> languagedepprops = new HashMap<String,String>(3);
 
 
-
-
-
-    // returns the ParcelDescriptor in the corresponding directory
-    // returns null if no ParcelDescriptor is found in the directory
-    private static synchronized ParcelDescriptor
-        getParcelDescriptor(File parent) {
-
-        File path = new File(parent, PARCEL_DESCRIPTOR_NAME);
-        ParcelDescriptor pd = PARCEL_DESCRIPTOR_MAP.get(path);
-
-        if (pd == null && path.exists()) {
-            try {
-                pd = new ParcelDescriptor(path);
-            }
-            catch (IOException ioe) {
-                return null;
-            }
-            PARCEL_DESCRIPTOR_MAP.put(path, pd);
-        }
-        return pd;
-    }
 
 
 
@@ -135,14 +112,6 @@ public class ParcelDescriptor {
         }
         initLanguageProperties();
     }
-
-    private void write(File file) throws IOException {
-        FileOutputStream fos = new FileOutputStream(file);
-        XMLParserFactory.getParser().write(document, fos);
-        fos.close();
-    }
-
-
 
     public void write(OutputStream out) throws IOException {
         XMLParserFactory.getParser().write(document, out);

@@ -24,10 +24,6 @@ import java.io.RandomAccessFile;
 import helper.ProcessHandler;
 import java.util.ArrayList;
 import helper.OSHelper;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 /**
  * This object gives all functionallity to print msoffice documents.
@@ -416,87 +412,6 @@ public class MSOfficePostscriptCreator implements IOffice
             return aList;
         }
 
-    private ArrayList<String> createWordStoreHelper() throws java.io.IOException
-        {
-            // create a program in tmp file
-            String sTmpPath = util.utils.getUsersTempDir();
-            String ls = System.getProperty("line.separator");
-
-            String sSaveViaWord = "saveViaWord.pl";
-
-            ArrayList<String> aList = searchLocalFile(sSaveViaWord);
-            if (aList.isEmpty() == false)
-            {
-                return aList;
-            }
-
-            String sName = FileHelper.appendPath(sTmpPath, sSaveViaWord);
-            if (FileHelper.isDebugEnabled())
-            {
-                GlobalLogWriter.println("No local found, create a perl script: " + sName);
-            }
-
-            File aFile = new File(sName);
-            FileWriter out = new FileWriter(aFile);
-
-            out.write( "eval 'exec perl -wS $0 ${1+\"$@\"}'                                                          " + ls );
-            out.write( "   if 0;                                                                                     " + ls );
-            out.write( "use strict;                                                                                  " + ls );
-            out.write( "                                                                                             " + ls );
-            out.write( "if ( $^O ne \"MSWin32\")                                                                     " + ls );
-            out.write( "{                                                                                            " + ls );
-            out.write( "   print 'Windows only.\\n';                                                                  " + ls );
-            out.write( "   print_usage();                                                                            " + ls );
-            out.write( "   exit(1);                                                                                  " + ls );
-            out.write( "}                                                                                            " + ls );
-            out.write( "                                                                                             " + ls );
-            out.write( "use Win32::OLE;                                                                              " + ls );
-            out.write( "use Win32::OLE::Const 'Microsoft Word';                                                      " + ls );
-            out.write( "                                                                                             " + ls );
-            out.write( "# ------ usage ------                                                                        " + ls );
-            out.write( "sub print_usage()                                                                            " + ls );
-            out.write( "{                                                                                            " + ls );
-            out.write( "    print STDERR \"Usage: storeViaWord.pl  <Word file> <output filer> <output file> \\n\"     " + ls );
-            out.write( "}                                                                                            " + ls );
-            out.write( "                                                                                             " + ls );
-            out.write( "                                                                                             " + ls );
-            out.write( "if ($#ARGV != 2)                                                                             " + ls );
-            out.write( "{                                                                                            " + ls );
-            out.write( "   print 'Too less arguments.\\n';                                                            " + ls );
-            out.write( "   print_usage();                                                                            " + ls );
-            out.write( "   exit(1);                                                                                  " + ls );
-            out.write( "}                                                                                            " + ls );
-            out.write( "                                                                                             " + ls );
-            out.write( "                                                                                             " + ls );
-            out.write( "my $Word = Win32::OLE->new('Word.Application');                                              " + ls );
-            out.write( "# $Word->{'Visible'} = 1;         # if you want to see what's going on                       " + ls );
-            out.write( "my $Book = $Word->Documents->Open($ARGV[0])                                                             " + ls );
-            out.write( "    || die('Unable to open document ', Win32::OLE->LastError());                             " + ls );
-            out.write( "# my $oldActivePrinte = $Word->{ActivePrinter} ;                                               " + ls );
-            out.write( "# $Word->{ActivePrinter} = $ARGV[1];                                                           " + ls );
-            out.write( "# $Word->ActiveDocument->PrintOut({                                                            " + ls );
-            out.write( "#                                  Background => 0,                                            " + ls );
-            out.write( "#                                  Append     => 0,                                            " + ls );
-            out.write( "#                                  Range      => wdPrintAllDocument,                           " + ls );
-            out.write( "#                                  Item       => wdPrintDocumentContent,                       " + ls );
-            out.write( "#                                  Copies     => 1,                                            " + ls );
-            out.write( "#                                  PageType   => wdPrintAllPages,                              " + ls );
-            out.write( "#                                  PrintToFile => 1,                                           " + ls );
-            out.write( "#                                  OutputFileName => $ARGV[2]                                  " + ls );
-            out.write( "#   });                                                                                        " + ls );
-            out.write( "# $Word->{ActivePrinter} = $oldActivePrinte;                                                   " + ls );
-            out.write( "$Book->savaAs($ARGV[2], $ARGV[1]);                                                             " + ls );
-            out.write( "# ActiveDocument.Close(SaveChanges:=WdSaveOptions.wdDoNotSaveChanges)" + ls );
-            out.write( "$Book->Close({SaveChanges => 0});                                                           " + ls );
-            out.write( "$Word->Quit();                                                                               " + ls );
-            out.close();
-
-            aList.add(getPerlExe());
-            aList.add(sName);
-            return aList;
-        }
-
-
     private ArrayList<String> createExcelPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
@@ -588,95 +503,6 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "   print FILE \"ExcelVersion=$sVersion\\n\";" + ls);
             out.write( "   close(FILE);" + ls);
             out.write( "}" + ls);
-            out.close();
-
-            aList.add(getPerlExe());
-            aList.add(sName);
-            return aList;
-        }
-
-    private ArrayList<String> createExcelStoreHelper() throws java.io.IOException
-        {
-            // create a program in tmp file
-            String sTmpPath = util.utils.getUsersTempDir();
-            String ls = System.getProperty("line.separator");
-
-            String sSaveViaExcel = "saveViaExcel.pl";
-
-            ArrayList<String> aList = searchLocalFile(sSaveViaExcel);
-            if (aList.isEmpty() == false)
-            {
-                return aList;
-            }
-            String sName = FileHelper.appendPath(sTmpPath, sSaveViaExcel);
-            if (FileHelper.isDebugEnabled())
-            {
-                GlobalLogWriter.println("No local found, create a script: " + sName);
-            }
-
-            File aFile = new File(sName);
-            FileWriter out = new FileWriter(aFile);
-
-            out.write( "eval 'exec perl -wS $0 ${1+\"$@\"}'                                                                                " + ls );
-            out.write( "   if 0;                                                                                                         " + ls );
-            out.write( "use strict;                                                                                                      " + ls );
-            out.write( "# This script is automatically created.                                                                          " + ls );
-            out.write( "                                                                                                                 " + ls );
-            out.write( "use Win32::OLE qw(in with);                                                                                      " + ls );
-            out.write( "use Win32::OLE::Const 'Microsoft Excel';                                                                         " + ls );
-            out.write( "                                                                                                                 " + ls );
-            out.write( "# ------ usage ------                                                                                            " + ls );
-            out.write( "sub print_usage()                                                                                                " + ls );
-            out.write( "{                                                                                                                " + ls );
-            out.write( "    print STDERR \"Usage: savaViaExcel.pl  <Excel file> <filefilter> <output file> .\\n                       " + ls );
-            out.write( "                  execl_print.pl  c:\\book1.xls Apple LaserWriter II NT v47.0 c:\\output\\book1.ps \\n\";     " + ls );
-            out.write( "}                                                                                                                " + ls );
-            out.write( "                                                                                                                 " + ls );
-            out.write( "                                                                                                                 " + ls );
-            out.write( "                                                                                                                 " + ls );
-            out.write( "$Win32::OLE::Warn = 3;                                # die on errors...                                         " + ls );
-            out.write( "                                                                                                                 " + ls );
-            out.write( "                                                                                                                 " + ls );
-            out.write( "if ($#ARGV != 2)                                                                                                 " + ls );
-            out.write( "{                                                                                                                " + ls );
-            out.write( "   print \"Too less arguments.\\n\";                                                                              " + ls );
-            out.write( "   print_usage();                                                                                                " + ls );
-            out.write( "   exit(1);                                                                                                      " + ls );
-            out.write( "}                                                                                                                " + ls );
-            out.write( "                                                                                                                 " + ls );
-            out.write( "my $Excel = Win32::OLE->GetActiveObject('Excel.Application')                                                     " + ls );
-            out.write( "    || Win32::OLE->new('Excel.Application', 'Quit');  # get already active Excel                                 " + ls );
-            out.write( "                                                      # application or open new                                  " + ls );
-            out.write( "my $sFilterParameter = $ARGV[1];                                                                                                                 " + ls );
-            out.write( "my $sFilterName = xlHTML;                                                                                                                 " + ls );
-            out.write( "if ($sFilterParameter eq 'xlXMLSpreadsheet')                                                                                                                 " + ls );
-            out.write( "{                                                                                                                 " + ls );
-            out.write( "    $sFilterName = xlXMLSpreadsheet;                                                                                                                " + ls );
-            out.write( "}                                                                                                                 " + ls );
-            out.write( "elsif ($sFilterParameter eq 'xlHTML')                                                                                                                 " + ls );
-            out.write( "{                                                                                                                 " + ls );
-            out.write( "    $sFilterName = xlHTML;                                                                                                                 " + ls );
-            out.write( "}                                                                                                                 " + ls );
-            out.write( "else                                                                                                                 " + ls );
-            out.write( "{                                                                                                                 " + ls );
-            out.write( "    my $undefined;                                                                                                " + ls);
-            out.write( "    $sFilterName = $undefined;                                                                                                              " + ls );
-            out.write( "}                                                                                                                 " + ls );
-            out.write( "                                                                                                                 " + ls );
-            out.write( "my $Book = $Excel->Workbooks->Open( $ARGV[0] );                                                                  " + ls );
-            out.write( "$Excel->{DisplayAlerts} = 0;                                                                                     " + ls );
-            out.write( "$Book->saveAs($ARGV[2],                                                                                          " + ls );
-            out.write( "              $sFilterName,                                                                                   " + ls );
-            out.write( "              '',                                                                                                " + ls );
-            out.write( "              '',                                                                                                " + ls );
-            out.write( "              0,                                                                                                 " + ls );
-            out.write( "              0,                                                                                                 " + ls );
-            out.write( "              xlNoChange,                                                                                        " + ls );
-            out.write( "              xlLocalSessionChanges,                                                                             " + ls );
-            out.write( "              1);                                                                                                " + ls );
-            out.write( "# Close worksheets without store changes" + ls );
-            out.write( "# $Book->Close({SaveChanges => 0}); " + ls );
-            out.write( "$Excel->Quit();                                                                                                     " + ls );
             out.close();
 
             aList.add(getPerlExe());
@@ -854,40 +680,5 @@ public class MSOfficePostscriptCreator implements IOffice
             }
             return sOfficeType;
         }
-
-    private static String getXMLDocumentFormat(String _sInputFile)
-    {
-        String sType = "word"; // default
-        try
-        {
-            // ---- Parse XML file ----
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder  = factory.newDocumentBuilder();
-            Document        document = builder.parse( new File (_sInputFile) );
-            Node            rootNode = document.getDocumentElement();
-
-            // ---- Get list of nodes to given tag ----
-            // document.
-            String sRootNodeName = rootNode.getNodeName();
-            if (sRootNodeName.equals("w:wordDocument"))
-            {
-                sType = "word";
-            }
-            else if (sRootNodeName.equals("WorkBook"))
-            {
-                sType = "excel";
-            }
-            // there exists no powerpoint xml representation in MSOffice 2003
-            else
-            {
-                GlobalLogWriter.println("Error: unknown root node: '" + sRootNodeName + "' please check the document. Try to use Word as default.");
-                sType = "word"; // default
-            }
-        }
-        catch (java.lang.Exception e)
-        {
-        }
-        return sType;
-    }
 
 }

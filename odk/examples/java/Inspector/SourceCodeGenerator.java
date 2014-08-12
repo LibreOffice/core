@@ -613,20 +613,8 @@ private class UnoObjectDefinition{
         }
 
 
-        public void setTypeClass(TypeClass _aTypeClass){
-            sVariableStemName = "";
-            m_aTypeClass = _aTypeClass;
-        }
-
-
         public TypeClass getTypeClass(){
             return m_aTypeClass;
-        }
-
-
-        public void setTypeName(String _sTypeName){
-            sVariableStemName = "";
-            m_sTypeName = _sTypeName;
         }
 
 
@@ -1080,10 +1068,6 @@ private class UnoObjectDefinition{
             return "short";
         }
 
-        public String getunsignedshortTypeDescription(){
-            return "short";
-        }
-
         public String getlongTypeDescription(){
             return "int";
         }
@@ -1121,15 +1105,6 @@ private class UnoObjectDefinition{
             }
         }
 
-        public String gettypeTypeDescription(boolean _bAsHeaderSourceCode){
-            if (_bAsHeaderSourceCode){
-                return "com.sun.star.uno.Type";
-            }
-            else{
-                return "Type";
-            }
-        }
-
         public String getanyTypeDescription(boolean _bAsHeaderSourceCode){
             if (_bAsHeaderSourceCode){
                 return "";
@@ -1156,21 +1131,6 @@ private class UnoObjectDefinition{
             return sReturn;
         }
 
-
-        public String getArrayDeclaration(String _sVariableDeclaration){
-            String sReturn = "";
-            String[] sDeclarations = _sVariableDeclaration.split(" ");
-            for (int i = 0; i< sDeclarations.length;i++){
-                sReturn += sDeclarations[i];
-                if (i == 0){
-                    sReturn += "[]";
-                }
-                if (i < (sDeclarations.length -1)){
-                    sReturn += " ";
-                }
-            }
-            return sReturn;
-        }
 
         public String getCommentSign(){
             return "//";
@@ -1280,10 +1240,6 @@ private class UnoObjectDefinition{
             return "Integer";
         }
 
-        public String getunsignedshortTypeDescription(){
-            return "Integer";
-        }
-
         public String getlongTypeDescription(){
             return "Integer";
         }
@@ -1321,15 +1277,6 @@ private class UnoObjectDefinition{
             }
         }
 
-        public String gettypeTypeDescription(boolean _bAsHeaderSourceCode){
-            if (_bAsHeaderSourceCode){
-                return "";
-            }
-            else{
-                return "Object";
-            }
-        }
-
         public String getanyTypeDescription(boolean _bAsHeaderSourceCode){
             if (_bAsHeaderSourceCode){
                 return "";
@@ -1360,21 +1307,6 @@ private class UnoObjectDefinition{
             return _sValue;
         }
 
-
-        public String getArrayDeclaration(String _sVariableDeclaration){
-            String sReturn = "";
-            String[] sDeclarations = _sVariableDeclaration.split(" ");
-            for (int i = 0; i< sDeclarations.length;i++){
-                sReturn += sDeclarations[i];
-                if (i == 0){
-                    sReturn += "[]";
-                }
-                if (i < (sDeclarations.length -1)){
-                    sReturn += " ";
-                }
-            }
-            return sReturn;
-        }
 
         public String getCommentSign(){
             return "'";
@@ -1596,10 +1528,6 @@ private class UnoObjectDefinition{
             return "sal_Int16";
         }
 
-        public String getunsignedshortTypeDescription(){
-            return "sal_uInt16";
-        }
-
         public String getlongTypeDescription(){
             return "sal_Int32";
         }
@@ -1635,15 +1563,6 @@ private class UnoObjectDefinition{
             }
             else{
                 return "OUString";
-            }
-        }
-
-        public String gettypeTypeDescription(boolean _bAsHeaderSourceCode){
-            if (_bAsHeaderSourceCode){
-                return "com/sun/star/uno/Type";
-            }
-            else{
-                return "Type";
             }
         }
 
@@ -1701,16 +1620,6 @@ private class UnoObjectDefinition{
                 else{
                     sReturn = getCSSNameSpaceString() + "::uno::Reference<" + _sTypeString + "> "  +_sVariableName;
                 }
-            }
-            return sReturn;
-        }
-
-        public String getArrayDeclaration(String _sVariableDeclaration){
-            this.bIncludeSequenceHeader = true;
-            String sReturn = "";
-            String[] sDeclarations = _sVariableDeclaration.split(" ");
-            if (sDeclarations.length == 2){
-                sReturn = getCSSNameSpaceString() +"::uno::Sequence<" + sDeclarations[1] + ">";
             }
             return sReturn;
         }

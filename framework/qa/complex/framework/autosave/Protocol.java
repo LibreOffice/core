@@ -681,17 +681,6 @@ public class Protocol extends JComponent
         return "********************************************************************************\n";
     }
 
-    private String impl_generateHTMLFooter()
-    {
-        return "\n</table>\n</body>\n</html>\n";
-    }
-
-    private String impl_generateAsciiFooter()
-    {
-        return "\n\n";
-    }
-
-
     /**
      * helper to log different representations of a property(array)
      *

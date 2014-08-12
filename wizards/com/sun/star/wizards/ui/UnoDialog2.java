@@ -105,30 +105,6 @@ public class UnoDialog2 extends UnoDialog
         return insertCheckBox(sName, itemChanged, this, sPropNames, oPropValues);
     }
 
-    private XComboBox insertComboBox(String sName, String actionPerformed, String itemChanged, String textChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        XComboBox xComboBox = (XComboBox) insertControlModel2("com.sun.star.awt.UnoControlComboBoxModel", sName, sPropNames, oPropValues, XComboBox.class);
-        if (actionPerformed != null)
-        {
-            xComboBox.addActionListener((XActionListener) guiEventListener);
-            guiEventListener.add(sName, EVENT_ACTION_PERFORMED, actionPerformed, eventTarget);
-        }
-        if (itemChanged != null)
-        {
-            xComboBox.addItemListener((XItemListener) guiEventListener);
-            guiEventListener.add(sName, EVENT_ITEM_CHANGED, itemChanged, eventTarget);
-        }
-        if (textChanged != null)
-        {
-            XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, xComboBox);
-            xTextComponent.addTextListener((XTextListener) guiEventListener);
-            guiEventListener.add(sName, EVENT_TEXT_CHANGED, textChanged, eventTarget);
-        }
-        return xComboBox;
-    }
-
-
-
     public XListBox insertListBox(String sName, String actionPerformed, String itemChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         XListBox xListBox = (XListBox) insertControlModel2("com.sun.star.awt.UnoControlListBoxModel", sName, sPropNames, oPropValues, XListBox.class);
@@ -209,55 +185,6 @@ public class UnoDialog2 extends UnoDialog
         }
         return UnoRuntime.queryInterface(type, xField);
     }
-
-    private XControl insertFileControl(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XControl) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFileControlModel", sPropNames, oPropValues, XControl.class);
-    }
-
-
-
-    private XCurrencyField insertCurrencyField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XCurrencyField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlCurrencyFieldModel", sPropNames, oPropValues, XCurrencyField.class);
-    }
-
-
-
-    private XDateField insertDateField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XDateField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlDateFieldModel", sPropNames, oPropValues, XDateField.class);
-    }
-
-
-
-    private XNumericField insertNumericField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XNumericField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlNumericFieldModel", sPropNames, oPropValues, XNumericField.class);
-    }
-
-
-
-    private XTimeField insertTimeField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XTimeField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlTimeFieldModel", sPropNames, oPropValues, XTimeField.class);
-    }
-
-
-
-    private XPatternField insertPatternField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XPatternField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlPatternFieldModel", sPropNames, oPropValues, XPatternField.class);
-    }
-
-
-
-    private XTextComponent insertFormattedField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XTextComponent) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFormattedFieldModel", sPropNames, oPropValues, XTextComponent.class);
-    }
-
-
 
     public XControl insertFixedLine(String sName, String[] sPropNames, Object[] oPropValues)
     {

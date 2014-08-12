@@ -145,9 +145,6 @@ public class Parameters implements XPropertySet {
 
     private Map<String,Object> toMap() {
         return new HashMap<String,Object>(parameters) {
-            public String get(String obj) {
-               return Parameters.this.get(obj);
-            }
         };
     }
 

@@ -765,20 +765,6 @@ public class ProcessHandler
         return exitValue;
     }
 
-    /** Causes the thread to sleep some time.
-     */
-    private static void shortWait(long milliseconds)
-    {
-        try
-        {
-            Thread.sleep(milliseconds);
-        }
-        catch (InterruptedException e)
-        {
-            System.out.println("While waiting :" + e);
-        }
-    }
-
     private void dbg(String message)
     {
         if (debug)
@@ -813,18 +799,6 @@ public class ProcessHandler
         {
             return m_bInterrupt;
         }
-        /**
-         * Marks the thread to hold on, next time
-         * STUPID: The thread must poll this flag itself.
-         *
-         * Reason: interrupt() seems not to work as expected.
-         */
-        private synchronized void holdOn()
-        {
-            m_bInterrupt = true;
-            interrupt();
-        }
-
         @Override
         public void run()
         {
