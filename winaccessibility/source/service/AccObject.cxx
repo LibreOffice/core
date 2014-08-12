@@ -944,7 +944,6 @@ void AccObject::UpdateState()
     else
     {
         m_pIMAcc->IncreaseState( STATE_SYSTEM_UNAVAILABLE );
-        sal_Bool isDecreaseFocusable = sal_False;
         if( !((Role == MENU_ITEM) ||
                 (Role == RADIO_MENU_ITEM) ||
                 (Role == CHECK_MENU_ITEM)) )
