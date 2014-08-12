@@ -615,7 +615,7 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
         {
             OUString aStr(aTerm);
             sal_Int32 nc = 0;
-            for (sal_uInt16 tindex = 0; tindex < tlen;  tindex++)
+            for (sal_Int32 tindex = 0; tindex < tlen; ++tindex)
             {
                 if (pCC->getCharacterType(aStr,tindex) &
                    ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
