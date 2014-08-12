@@ -706,6 +706,70 @@
 		BE82C4EE18CE6DBE0050EB79 /* window3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = window3.cxx; path = ../../../vcl/source/window/window3.cxx; sourceTree = "<group>"; };
 		BE82C4EF18CE6DBE0050EB79 /* winproc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = winproc.cxx; path = ../../../vcl/source/window/winproc.cxx; sourceTree = "<group>"; };
 		BE82C4F018CE6DBE0050EB79 /* wrkwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wrkwin.cxx; path = ../../../vcl/source/window/wrkwin.cxx; sourceTree = "<group>"; };
+		BE9931C5199A185D0008A364 /* accessiblecomponenthelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accessiblecomponenthelper.cxx; path = ../../../comphelper/source/misc/accessiblecomponenthelper.cxx; sourceTree = "<group>"; };
+		BE9931C6199A185D0008A364 /* accessiblecontexthelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accessiblecontexthelper.cxx; path = ../../../comphelper/source/misc/accessiblecontexthelper.cxx; sourceTree = "<group>"; };
+		BE9931C7199A185D0008A364 /* accessibleeventnotifier.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accessibleeventnotifier.cxx; path = ../../../comphelper/source/misc/accessibleeventnotifier.cxx; sourceTree = "<group>"; };
+		BE9931C8199A185D0008A364 /* accessiblekeybindinghelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accessiblekeybindinghelper.cxx; path = ../../../comphelper/source/misc/accessiblekeybindinghelper.cxx; sourceTree = "<group>"; };
+		BE9931C9199A185D0008A364 /* accessibleselectionhelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accessibleselectionhelper.cxx; path = ../../../comphelper/source/misc/accessibleselectionhelper.cxx; sourceTree = "<group>"; };
+		BE9931CA199A185D0008A364 /* accessibletexthelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accessibletexthelper.cxx; path = ../../../comphelper/source/misc/accessibletexthelper.cxx; sourceTree = "<group>"; };
+		BE9931CB199A185D0008A364 /* accessiblewrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accessiblewrapper.cxx; path = ../../../comphelper/source/misc/accessiblewrapper.cxx; sourceTree = "<group>"; };
+		BE9931CC199A185D0008A364 /* accimplaccess.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accimplaccess.cxx; path = ../../../comphelper/source/misc/accimplaccess.cxx; sourceTree = "<group>"; };
+		BE9931CD199A185D0008A364 /* anycompare.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = anycompare.cxx; path = ../../../comphelper/source/misc/anycompare.cxx; sourceTree = "<group>"; };
+		BE9931CE199A185D0008A364 /* anytostring.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = anytostring.cxx; path = ../../../comphelper/source/misc/anytostring.cxx; sourceTree = "<group>"; };
+		BE9931CF199A185D0008A364 /* asyncnotification.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = asyncnotification.cxx; path = ../../../comphelper/source/misc/asyncnotification.cxx; sourceTree = "<group>"; };
+		BE9931D0199A185D0008A364 /* comphelper_module.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = comphelper_module.cxx; path = ../../../comphelper/source/misc/comphelper_module.cxx; sourceTree = "<group>"; };
+		BE9931D1199A185D0008A364 /* comphelper_services.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = comphelper_services.cxx; path = ../../../comphelper/source/misc/comphelper_services.cxx; sourceTree = "<group>"; };
+		BE9931D2199A185D0008A364 /* componentbase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = componentbase.cxx; path = ../../../comphelper/source/misc/componentbase.cxx; sourceTree = "<group>"; };
+		BE9931D3199A185D0008A364 /* componentmodule.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = componentmodule.cxx; path = ../../../comphelper/source/misc/componentmodule.cxx; sourceTree = "<group>"; };
+		BE9931D4199A185D0008A364 /* configuration.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = configuration.cxx; path = ../../../comphelper/source/misc/configuration.cxx; sourceTree = "<group>"; };
+		BE9931D5199A185D0008A364 /* configurationhelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = configurationhelper.cxx; path = ../../../comphelper/source/misc/configurationhelper.cxx; sourceTree = "<group>"; };
+		BE9931D6199A185D0008A364 /* docpasswordhelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docpasswordhelper.cxx; path = ../../../comphelper/source/misc/docpasswordhelper.cxx; sourceTree = "<group>"; };
+		BE9931D7199A185D0008A364 /* docpasswordrequest.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docpasswordrequest.cxx; path = ../../../comphelper/source/misc/docpasswordrequest.cxx; sourceTree = "<group>"; };
+		BE9931D8199A185D0008A364 /* documentinfo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = documentinfo.cxx; path = ../../../comphelper/source/misc/documentinfo.cxx; sourceTree = "<group>"; };
+		BE9931D9199A185D0008A364 /* documentiologring.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = documentiologring.cxx; path = ../../../comphelper/source/misc/documentiologring.cxx; sourceTree = "<group>"; };
+		BE9931DA199A185D0008A364 /* evtlistenerhlp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = evtlistenerhlp.cxx; path = ../../../comphelper/source/misc/evtlistenerhlp.cxx; sourceTree = "<group>"; };
+		BE9931DB199A185D0008A364 /* evtmethodhelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = evtmethodhelper.cxx; path = ../../../comphelper/source/misc/evtmethodhelper.cxx; sourceTree = "<group>"; };
+		BE9931DC199A185D0008A364 /* expandmacro.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = expandmacro.cxx; path = ../../../comphelper/source/misc/expandmacro.cxx; sourceTree = "<group>"; };
+		BE9931DD199A185D0008A364 /* instancelocker.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = instancelocker.cxx; path = ../../../comphelper/source/misc/instancelocker.cxx; sourceTree = "<group>"; };
+		BE9931DE199A185D0008A364 /* interaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = interaction.cxx; path = ../../../comphelper/source/misc/interaction.cxx; sourceTree = "<group>"; };
+		BE9931DF199A185D0008A364 /* listenernotification.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = listenernotification.cxx; path = ../../../comphelper/source/misc/listenernotification.cxx; sourceTree = "<group>"; };
+		BE9931E0199A185D0008A364 /* logging.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = logging.cxx; path = ../../../comphelper/source/misc/logging.cxx; sourceTree = "<group>"; };
+		BE9931E1199A185D0008A364 /* mimeconfighelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mimeconfighelper.cxx; path = ../../../comphelper/source/misc/mimeconfighelper.cxx; sourceTree = "<group>"; };
+		BE9931E2199A185D0008A364 /* namedvaluecollection.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = namedvaluecollection.cxx; path = ../../../comphelper/source/misc/namedvaluecollection.cxx; sourceTree = "<group>"; };
+		BE9931E3199A185D0008A364 /* numberedcollection.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = numberedcollection.cxx; path = ../../../comphelper/source/misc/numberedcollection.cxx; sourceTree = "<group>"; };
+		BE9931E4199A185D0008A364 /* numbers.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = numbers.cxx; path = ../../../comphelper/source/misc/numbers.cxx; sourceTree = "<group>"; };
+		BE9931E5199A185D0008A364 /* officeresourcebundle.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = officeresourcebundle.cxx; path = ../../../comphelper/source/misc/officeresourcebundle.cxx; sourceTree = "<group>"; };
+		BE9931E6199A185D0008A364 /* officerestartmanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = officerestartmanager.cxx; path = ../../../comphelper/source/misc/officerestartmanager.cxx; sourceTree = "<group>"; };
+		BE9931E7199A185D0008A364 /* proxyaggregation.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = proxyaggregation.cxx; path = ../../../comphelper/source/misc/proxyaggregation.cxx; sourceTree = "<group>"; };
+		BE9931E8199A185D0008A364 /* random.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = random.cxx; path = ../../../comphelper/source/misc/random.cxx; sourceTree = "<group>"; };
+		BE9931E9199A185D0008A364 /* scopeguard.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scopeguard.cxx; path = ../../../comphelper/source/misc/scopeguard.cxx; sourceTree = "<group>"; };
+		BE9931EA199A185D0008A364 /* SelectionMultiplex.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SelectionMultiplex.cxx; path = ../../../comphelper/source/misc/SelectionMultiplex.cxx; sourceTree = "<group>"; };
+		BE9931EB199A185D0008A364 /* sequence.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sequence.cxx; path = ../../../comphelper/source/misc/sequence.cxx; sourceTree = "<group>"; };
+		BE9931EC199A185D0008A364 /* sequenceashashmap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sequenceashashmap.cxx; path = ../../../comphelper/source/misc/sequenceashashmap.cxx; sourceTree = "<group>"; };
+		BE9931ED199A185D0008A364 /* servicedecl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = servicedecl.cxx; path = ../../../comphelper/source/misc/servicedecl.cxx; sourceTree = "<group>"; };
+		BE9931EE199A185D0008A364 /* serviceinfohelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = serviceinfohelper.cxx; path = ../../../comphelper/source/misc/serviceinfohelper.cxx; sourceTree = "<group>"; };
+		BE9931EF199A185D0008A364 /* sharedmutex.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sharedmutex.cxx; path = ../../../comphelper/source/misc/sharedmutex.cxx; sourceTree = "<group>"; };
+		BE9931F0199A185D0008A364 /* solarmutex.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = solarmutex.cxx; path = ../../../comphelper/source/misc/solarmutex.cxx; sourceTree = "<group>"; };
+		BE9931F1199A185D0008A364 /* stillreadwriteinteraction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stillreadwriteinteraction.cxx; path = ../../../comphelper/source/misc/stillreadwriteinteraction.cxx; sourceTree = "<group>"; };
+		BE9931F2199A185D0008A364 /* storagehelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = storagehelper.cxx; path = ../../../comphelper/source/misc/storagehelper.cxx; sourceTree = "<group>"; };
+		BE9931F3199A185D0008A364 /* string.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = string.cxx; path = ../../../comphelper/source/misc/string.cxx; sourceTree = "<group>"; };
+		BE9931F4199A185D0008A364 /* synchronousdispatch.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = synchronousdispatch.cxx; path = ../../../comphelper/source/misc/synchronousdispatch.cxx; sourceTree = "<group>"; };
+		BE9931F5199A185D0008A364 /* syntaxhighlight.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = syntaxhighlight.cxx; path = ../../../comphelper/source/misc/syntaxhighlight.cxx; sourceTree = "<group>"; };
+		BE9931F6199A185D0008A364 /* types.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = types.cxx; path = ../../../comphelper/source/misc/types.cxx; sourceTree = "<group>"; };
+		BE9931F7199A185D0008A364 /* weak.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = weak.cxx; path = ../../../comphelper/source/misc/weak.cxx; sourceTree = "<group>"; };
+		BE9931F8199A185D0008A364 /* weakeventlistener.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = weakeventlistener.cxx; path = ../../../comphelper/source/misc/weakeventlistener.cxx; sourceTree = "<group>"; };
+		BE9931FC199A1BF00008A364 /* ciphercontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ciphercontext.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/ciphercontext.cxx; sourceTree = "<group>"; };
+		BE9931FD199A1BF00008A364 /* digestcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = digestcontext.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/digestcontext.cxx; sourceTree = "<group>"; };
+		BE9931FE199A1BF00008A364 /* nssinitializer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = nssinitializer.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/nssinitializer.cxx; sourceTree = "<group>"; };
+		BE9931FF199A1BF00008A364 /* sanextension_nssimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sanextension_nssimpl.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/sanextension_nssimpl.cxx; sourceTree = "<group>"; };
+		BE993200199A1BF00008A364 /* secerror.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = secerror.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/secerror.cxx; sourceTree = "<group>"; };
+		BE993201199A1BF00008A364 /* securityenvironment_nssimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = securityenvironment_nssimpl.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.cxx; sourceTree = "<group>"; };
+		BE993202199A1BF00008A364 /* seinitializer_nssimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = seinitializer_nssimpl.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/seinitializer_nssimpl.cxx; sourceTree = "<group>"; };
+		BE993203199A1BF00008A364 /* x509certificate_nssimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = x509certificate_nssimpl.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/x509certificate_nssimpl.cxx; sourceTree = "<group>"; };
+		BE993204199A1BF00008A364 /* xmlencryption_nssimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlencryption_nssimpl.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/xmlencryption_nssimpl.cxx; sourceTree = "<group>"; };
+		BE993205199A1BF00008A364 /* xmlsecuritycontext_nssimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlsecuritycontext_nssimpl.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/xmlsecuritycontext_nssimpl.cxx; sourceTree = "<group>"; };
+		BE993206199A1BF00008A364 /* xmlsignature_nssimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlsignature_nssimpl.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/xmlsignature_nssimpl.cxx; sourceTree = "<group>"; };
+		BE993207199A1BF00008A364 /* xsec_nss.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xsec_nss.cxx; path = ../../../xmlsecurity/source/xmlsec/nss/xsec_nss.cxx; sourceTree = "<group>"; };
 		BE9F45F91868396500B8BE69 /* cpp2uno-arm.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-arm.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-arm.cxx"; sourceTree = "<group>"; };
 		BE9F45FA1868396500B8BE69 /* cpp2uno-arm64.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-arm64.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-arm64.cxx"; sourceTree = "<group>"; };
 		BE9F45FB1868396500B8BE69 /* cpp2uno-i386.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-i386.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-i386.cxx"; sourceTree = "<group>"; };
@@ -844,6 +908,7 @@
 			isa = PBXGroup;
 			children = (
 				BE9F45F81868393D00B8BE69 /* bridges */,
+				BE9931C3199A17E90008A364 /* comphelper */,
 				BE55B10518DAD85E00950228 /* cppu */,
 				BE35B58A188FFA43001B7439 /* cppuhelper */,
 				BED531661937389B00830918 /* cppcanvas */,
@@ -1441,6 +1506,7 @@
 			children = (
 				BE03BF8F18F9641D00620DC7 /* External library sources */,
 				BE0898E61860D3CD0021A679 /* LibreOffice source files */,
+				BE9931F9199A1B750008A364 /* xmlsecurity */,
 				BE82BD7B18218E2E00A447B5 /* TiledLibreOffice */,
 				BEEEF9681860A21F00FBDE67 /* Resources */,
 				BE82BD7418218E2E00A447B5 /* Frameworks */,
@@ -1795,6 +1861,108 @@
 				BE82C4F018CE6DBE0050EB79 /* wrkwin.cxx */,
 			);
 			name = window;
+			sourceTree = "<group>";
+		};
+		BE9931C3199A17E90008A364 /* comphelper */ = {
+			isa = PBXGroup;
+			children = (
+				BE9931C4199A182D0008A364 /* misc */,
+			);
+			name = comphelper;
+			sourceTree = "<group>";
+		};
+		BE9931C4199A182D0008A364 /* misc */ = {
+			isa = PBXGroup;
+			children = (
+				BE9931C5199A185D0008A364 /* accessiblecomponenthelper.cxx */,
+				BE9931C6199A185D0008A364 /* accessiblecontexthelper.cxx */,
+				BE9931C7199A185D0008A364 /* accessibleeventnotifier.cxx */,
+				BE9931C8199A185D0008A364 /* accessiblekeybindinghelper.cxx */,
+				BE9931C9199A185D0008A364 /* accessibleselectionhelper.cxx */,
+				BE9931CA199A185D0008A364 /* accessibletexthelper.cxx */,
+				BE9931CB199A185D0008A364 /* accessiblewrapper.cxx */,
+				BE9931CC199A185D0008A364 /* accimplaccess.cxx */,
+				BE9931CD199A185D0008A364 /* anycompare.cxx */,
+				BE9931CE199A185D0008A364 /* anytostring.cxx */,
+				BE9931CF199A185D0008A364 /* asyncnotification.cxx */,
+				BE9931D0199A185D0008A364 /* comphelper_module.cxx */,
+				BE9931D1199A185D0008A364 /* comphelper_services.cxx */,
+				BE9931D2199A185D0008A364 /* componentbase.cxx */,
+				BE9931D3199A185D0008A364 /* componentmodule.cxx */,
+				BE9931D4199A185D0008A364 /* configuration.cxx */,
+				BE9931D5199A185D0008A364 /* configurationhelper.cxx */,
+				BE9931D6199A185D0008A364 /* docpasswordhelper.cxx */,
+				BE9931D7199A185D0008A364 /* docpasswordrequest.cxx */,
+				BE9931D8199A185D0008A364 /* documentinfo.cxx */,
+				BE9931D9199A185D0008A364 /* documentiologring.cxx */,
+				BE9931DA199A185D0008A364 /* evtlistenerhlp.cxx */,
+				BE9931DB199A185D0008A364 /* evtmethodhelper.cxx */,
+				BE9931DC199A185D0008A364 /* expandmacro.cxx */,
+				BE9931DD199A185D0008A364 /* instancelocker.cxx */,
+				BE9931DE199A185D0008A364 /* interaction.cxx */,
+				BE9931DF199A185D0008A364 /* listenernotification.cxx */,
+				BE9931E0199A185D0008A364 /* logging.cxx */,
+				BE9931E1199A185D0008A364 /* mimeconfighelper.cxx */,
+				BE9931E2199A185D0008A364 /* namedvaluecollection.cxx */,
+				BE9931E3199A185D0008A364 /* numberedcollection.cxx */,
+				BE9931E4199A185D0008A364 /* numbers.cxx */,
+				BE9931E5199A185D0008A364 /* officeresourcebundle.cxx */,
+				BE9931E6199A185D0008A364 /* officerestartmanager.cxx */,
+				BE9931E7199A185D0008A364 /* proxyaggregation.cxx */,
+				BE9931E8199A185D0008A364 /* random.cxx */,
+				BE9931E9199A185D0008A364 /* scopeguard.cxx */,
+				BE9931EA199A185D0008A364 /* SelectionMultiplex.cxx */,
+				BE9931EB199A185D0008A364 /* sequence.cxx */,
+				BE9931EC199A185D0008A364 /* sequenceashashmap.cxx */,
+				BE9931ED199A185D0008A364 /* servicedecl.cxx */,
+				BE9931EE199A185D0008A364 /* serviceinfohelper.cxx */,
+				BE9931EF199A185D0008A364 /* sharedmutex.cxx */,
+				BE9931F0199A185D0008A364 /* solarmutex.cxx */,
+				BE9931F1199A185D0008A364 /* stillreadwriteinteraction.cxx */,
+				BE9931F2199A185D0008A364 /* storagehelper.cxx */,
+				BE9931F3199A185D0008A364 /* string.cxx */,
+				BE9931F4199A185D0008A364 /* synchronousdispatch.cxx */,
+				BE9931F5199A185D0008A364 /* syntaxhighlight.cxx */,
+				BE9931F6199A185D0008A364 /* types.cxx */,
+				BE9931F7199A185D0008A364 /* weak.cxx */,
+				BE9931F8199A185D0008A364 /* weakeventlistener.cxx */,
+			);
+			name = misc;
+			sourceTree = "<group>";
+		};
+		BE9931F9199A1B750008A364 /* xmlsecurity */ = {
+			isa = PBXGroup;
+			children = (
+				BE9931FB199A1BC20008A364 /* xmlsec */,
+			);
+			name = xmlsecurity;
+			sourceTree = "<group>";
+		};
+		BE9931FA199A1B920008A364 /* nss */ = {
+			isa = PBXGroup;
+			children = (
+				BE9931FC199A1BF00008A364 /* ciphercontext.cxx */,
+				BE9931FD199A1BF00008A364 /* digestcontext.cxx */,
+				BE9931FE199A1BF00008A364 /* nssinitializer.cxx */,
+				BE9931FF199A1BF00008A364 /* sanextension_nssimpl.cxx */,
+				BE993200199A1BF00008A364 /* secerror.cxx */,
+				BE993201199A1BF00008A364 /* securityenvironment_nssimpl.cxx */,
+				BE993202199A1BF00008A364 /* seinitializer_nssimpl.cxx */,
+				BE993203199A1BF00008A364 /* x509certificate_nssimpl.cxx */,
+				BE993204199A1BF00008A364 /* xmlencryption_nssimpl.cxx */,
+				BE993205199A1BF00008A364 /* xmlsecuritycontext_nssimpl.cxx */,
+				BE993206199A1BF00008A364 /* xmlsignature_nssimpl.cxx */,
+				BE993207199A1BF00008A364 /* xsec_nss.cxx */,
+			);
+			name = nss;
+			sourceTree = "<group>";
+		};
+		BE9931FB199A1BC20008A364 /* xmlsec */ = {
+			isa = PBXGroup;
+			children = (
+				BE9931FA199A1B920008A364 /* nss */,
+			);
+			name = xmlsec;
 			sourceTree = "<group>";
 		};
 		BE9F45F81868393D00B8BE69 /* bridges */ = {
