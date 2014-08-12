@@ -91,6 +91,7 @@ TiledLibreOffice_setup:
 	# Do we really need all these?
 	file=$(TiledLibreOffice_resource)/fundamentalrc; \
 	echo '[Bootstrap]'                                      >  $$file; \
+	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/'            >> $$file; \
 	echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR'             >> $$file; \
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry res:$${BRAND_BASE_DIR}/registry' >> $$file;
 
