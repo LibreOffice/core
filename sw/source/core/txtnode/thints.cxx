@@ -1119,7 +1119,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 // zeichengebundener Frames" in fesh.cxx, SwFEShell::DelFmt()
                 SwFrmFmt* pFmt = pAttr->GetFlyCnt().GetFrmFmt();
                 if( pFmt )      // vom Undo auf 0 gesetzt ??
-                    pDoc->DelLayoutFmt( (SwFlyFrmFmt*)pFmt );
+                    pDoc->DelLayoutFmt( pFmt );
             }
             break;
 
