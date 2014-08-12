@@ -4288,8 +4288,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( IsHardAttribute( DFF_Prop_gtextFBold ) )
                             aSet.Put( SvxWeightItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0020 ) != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
 
-                        // SJ TODO: Vertical Writing is not correct, instead this should be
-                        // replaced through "CharacterRotation" by 90°, therefore a new Item has to be
+                        // SJ TODO: Vertical Writing is not correct, instead
+                        // this should be replaced through "CharacterRotation"
+                        // by 90 degrees, therefore a new Item has to be
                         // supported by svx core, api and xml file format
                         ((SdrObjCustomShape*)pRet)->SetVerticalWriting( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 ) != 0 );
 
@@ -6184,81 +6185,85 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
 ******************************************************************************/
 bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisArea )
 {
+    if (!pStData)
+        return false;
+
     bool bOk = false;       // initialize result variable
-    if ( pStData )
+
+    // check if a graphic for this blipId is already imported
+    if ( nIdx_)
     {
-        // check if a graphic for this blipId is already imported
-        if ( nIdx_)
+        std::map<sal_uInt32,OString>::iterator iter = aEscherBlipCache.find(nIdx_);
+
+        if (iter != aEscherBlipCache.end())
         {
-            std::map<sal_uInt32,OString>::iterator iter = aEscherBlipCache.find(nIdx_);
-
-            if (iter != aEscherBlipCache.end())
-            {
-                /* if this entry is available, then it should be possible
-                to get the Graphic via GraphicObject */
-                GraphicObject aGraphicObject( iter->second );
-                rData = aGraphicObject.GetGraphic();
-                if ( rData.GetType() != GRAPHIC_NONE )
-                    bOk = true;
-                else
-                    aEscherBlipCache.erase(iter);
-            }
-        }
-        if ( !bOk )
-        {
-            sal_uInt16 nIdx = sal_uInt16( nIdx_ );
-            if( !nIdx || (pBLIPInfos->size() < nIdx) ) return false;
-
-            // possibly delete old error flag(s)
-            if( rStCtrl.GetError() )
-                rStCtrl.ResetError();
-            if(    ( &rStCtrl != pStData )
-                && pStData->GetError() )
-                pStData->ResetError();
-
-            // remember FilePos of the stream(s)
-            sal_uLong nOldPosCtrl = rStCtrl.Tell();
-            sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
-
-            // fetch matching info struct out of the pointer array
-            SvxMSDffBLIPInfo& rInfo = (*pBLIPInfos)[ nIdx-1 ];
-            // jump to the BLIP atom in the data stream
-            pStData->Seek( rInfo.nFilePos );
-            // possibly reset error status
-            if( pStData->GetError() )
-                pStData->ResetError();
+            /* if this entry is available, then it should be possible
+            to get the Graphic via GraphicObject */
+            GraphicObject aGraphicObject( iter->second );
+            rData = aGraphicObject.GetGraphic();
+            if ( rData.GetType() != GRAPHIC_NONE )
+                bOk = true;
             else
-                bOk = GetBLIPDirect( *pStData, rData, pVisArea );
-            if( pStData2 && !bOk )
-            {
-                // Error, but the is a second chance: There is a second
-                //         data stream in which the graphic could be stored!
-                if( pStData2->GetError() )
-                    pStData2->ResetError();
-                sal_uLong nOldPosData2 = pStData2->Tell();
-                // jump to the BLIP atom in the second data stream
-                pStData2->Seek( rInfo.nFilePos );
-                // reset error status if necessary
-                if( pStData2->GetError() )
-                    pStData2->ResetError();
-                else
-                    bOk = GetBLIPDirect( *pStData2, rData, pVisArea );
-                // restore olf FilePos of the second data stream
-                pStData2->Seek( nOldPosData2 );
-            }
-            // restore old FilePos of the stream(s)
-            rStCtrl.Seek( nOldPosCtrl );
-            if( &rStCtrl != pStData )
-              pStData->Seek( nOldPosData );
-
-            if ( bOk )
-            {
-                // create new BlipCacheEntry for this graphic
-                GraphicObject aGraphicObject( rData );
-                aEscherBlipCache.insert(std::make_pair(nIdx_,aGraphicObject.GetUniqueID()));
-            }
+                aEscherBlipCache.erase(iter);
         }
     }
+
+    if ( !bOk )
+    {
+        sal_uInt16 nIdx = sal_uInt16( nIdx_ );
+        if( !nIdx || (pBLIPInfos->size() < nIdx) )
+            return false;
+
+        // possibly delete old error flag(s)
+        if( rStCtrl.GetError() )
+            rStCtrl.ResetError();
+        if(    ( &rStCtrl != pStData )
+            && pStData->GetError() )
+            pStData->ResetError();
+
+        // remember FilePos of the stream(s)
+        sal_uLong nOldPosCtrl = rStCtrl.Tell();
+        sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
+
+        // fetch matching info struct out of the pointer array
+        SvxMSDffBLIPInfo& rInfo = (*pBLIPInfos)[ nIdx-1 ];
+        // jump to the BLIP atom in the data stream
+        pStData->Seek( rInfo.nFilePos );
+        // possibly reset error status
+        if( pStData->GetError() )
+            pStData->ResetError();
+        else
+            bOk = GetBLIPDirect( *pStData, rData, pVisArea );
+        if( pStData2 && !bOk )
+        {
+            // Error, but the is a second chance: There is a second
+            //         data stream in which the graphic could be stored!
+            if( pStData2->GetError() )
+                pStData2->ResetError();
+            sal_uLong nOldPosData2 = pStData2->Tell();
+            // jump to the BLIP atom in the second data stream
+            pStData2->Seek( rInfo.nFilePos );
+            // reset error status if necessary
+            if( pStData2->GetError() )
+                pStData2->ResetError();
+            else
+                bOk = GetBLIPDirect( *pStData2, rData, pVisArea );
+            // restore olf FilePos of the second data stream
+            pStData2->Seek( nOldPosData2 );
+        }
+        // restore old FilePos of the stream(s)
+        rStCtrl.Seek( nOldPosCtrl );
+        if( &rStCtrl != pStData )
+          pStData->Seek( nOldPosData );
+
+        if ( bOk )
+        {
+            // create new BlipCacheEntry for this graphic
+            GraphicObject aGraphicObject( rData );
+            aEscherBlipCache.insert(std::make_pair(nIdx_,aGraphicObject.GetUniqueID()));
+        }
+    }
+
     return bOk;
 }
 
