@@ -25,6 +25,7 @@ bool isSymbolFont(const Font &rFont)
             rFont.GetName().equalsIgnoreAsciiCase("Apple Color Emoji") ||
             rFont.GetName().equalsIgnoreAsciiCase("cmsy10") ||
             rFont.GetName().equalsIgnoreAsciiCase("cmex10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("esint10") ||
             rFont.GetName().equalsIgnoreAsciiCase("feta26") ||
             rFont.GetName().equalsIgnoreAsciiCase("jsMath-cmsy10") ||
             rFont.GetName().equalsIgnoreAsciiCase("jsMath-cmex10") ||
