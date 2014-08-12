@@ -24,6 +24,7 @@
 #include <svl/lstner.hxx>
 #include <svtools/ehdl.hxx>
 #include <vcl/timer.hxx>
+#include <sfx2/app.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -32,7 +33,6 @@
 
 class SfxApplication;
 class SfxProgress;
-class SfxChildWinFactArr_Impl;
 class SfxDdeDocTopics_Impl;
 class DdeService;
 class SfxItemPool;
@@ -47,12 +47,6 @@ typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;
 class SvtSaveOptions;
 class SvtHelpOptions;
 class ResMgr;
-class SfxTbxCtrlFactArr_Impl;
-class SfxStbCtrlFactArr_Impl;
-class SfxMenuCtrlFactArr_Impl;
-class SfxViewFrameArr_Impl;
-class SfxViewShellArr_Impl;
-class SfxObjectShellArr_Impl;
 class ResMgr;
 class SfxViewFrame;
 class SfxSlotPool;

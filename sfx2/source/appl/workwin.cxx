@@ -27,7 +27,6 @@
 #include <sfx2/app.hxx>
 #include "workwin.hxx"
 #include <sfx2/viewfrm.hxx>
-#include "arrdecl.hxx"
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
@@ -2436,7 +2435,7 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
         for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
         {
-            pFact = rFactories[nFactory];
+            pFact = &rFactories[nFactory];
             if ( pFact->nId == pCW->nSaveId )
             {
                 pCW->aInfo   = pFact->aInfo;
@@ -2465,7 +2464,7 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
             SfxChildWinFactArr_Impl &rFactories = *pFactories;
             for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
             {
-                pFact = rFactories[nFactory];
+                pFact = &rFactories[nFactory];
                 if ( pFact->nId == pCW->nSaveId )
                 {
                     pCW->aInfo   = pFact->aInfo;

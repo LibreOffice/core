@@ -32,7 +32,6 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/app.hxx>
-#include "arrdecl.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dockwin.hxx>
@@ -205,7 +204,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
         for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
         {
-            pFact = rFactories[nFactory];
+            pFact = &rFactories[nFactory];
             if ( pFact->nId == nId )
             {
                 SfxChildWinInfo& rFactInfo = pFact->aInfo;
@@ -236,7 +235,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
             SfxChildWinFactArr_Impl &rFactories = *pFactories;
             for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
             {
-                pFact = rFactories[nFactory];
+                pFact = &rFactories[nFactory];
                 if ( pFact->nId == nId )
                 {
                     SfxChildWinInfo& rFactInfo = pFact->aInfo;
@@ -429,7 +428,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
             SfxChildWinFactArr_Impl &rFactories = *pFactories;
             for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
             {
-                pFact = rFactories[nFactory];
+                pFact = &rFactories[nFactory];
                 if ( pFact->nId == GetType() )
                 {
                     DBG_ASSERT( pFact->pArr, "No context registered!" );
@@ -460,7 +459,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
         for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
         {
-            pFact = rFactories[nFactory];
+            pFact = &rFactories[nFactory];
             if ( pFact->nId == GetType() )
             {
                 DBG_ASSERT( pFact->pArr, "No context registered!" );

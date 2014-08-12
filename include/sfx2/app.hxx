@@ -35,7 +35,12 @@
 // header file because in former times SfxApplication was derived from it
 #include <vcl/svapp.hxx>
 
+#include <sfx2/childwin.hxx>
+#include <sfx2/mnuitem.hxx>
 #include <sfx2/shell.hxx>
+#include <sfx2/stbitem.hxx>
+#include <sfx2/tbxctrl.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 
 class Timer;
@@ -51,32 +56,31 @@ class AppSettings;
 struct SfxChildWinContextFactory;
 class SfxAppData_Impl;
 class SfxBindings;
-class SfxChildWinFactArr_Impl;
+typedef boost::ptr_vector<SfxChildWinFactory> SfxChildWinFactArr_Impl;
 class SfxChildWindow;
 class SfxDispatcher;
 class SfxEventConfiguration;
 class SfxEventHint;
 class SfxItemSet;
 class SfxMedium;
-class SfxMenuCtrlFactArr_Impl;
+typedef boost::ptr_vector<SfxMenuCtrlFactory> SfxMenuCtrlFactArr_Impl;
 class SfxNewFileDialog;
 class SfxObjectShell;
-class SfxObjectShellArr_Impl;
+typedef ::std::vector<SfxObjectShell*> SfxObjectShellArr_Impl;
 class SfxProgress;
 class SfxSlotPool;
-class SfxStbCtrlFactArr_Impl;
-class SfxTbxCtrlFactArr_Impl;
+typedef boost::ptr_vector<SfxStbCtrlFactory> SfxStbCtrlFactArr_Impl;
+typedef boost::ptr_vector<SfxTbxCtrlFactory> SfxTbxCtrlFactArr_Impl;
 class SfxTemplateDialog;
 class SfxViewFrame;
-class SfxViewFrameArr_Impl;
+typedef ::std::vector<SfxViewFrame*> SfxViewFrameArr_Impl;
 class SfxViewShell;
-class SfxViewShellArr_Impl;
+typedef ::std::vector<SfxViewShell*> SfxViewShellArr_Impl;
 class StarBASIC;
 class SfxWorkWindow;
 class SfxFilterMatcher;
 class SfxModule;
 class SfxModule;
-typedef ::std::vector<SfxModule*> SfxModuleArr_Impl;
 class Window;
 struct SfxChildWinFactory;
 struct SfxMenuCtrlFactory;

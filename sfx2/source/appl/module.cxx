@@ -23,7 +23,6 @@
 #include <cstdarg>
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
-#include "arrdecl.hxx"
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -190,7 +189,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 
     for (sal_uInt16 nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
     {
-        if (pFact->nId ==  (*pImpl->pFactArr)[nFactory]->nId)
+        if (pFact->nId ==  (*pImpl->pFactArr)[nFactory].nId)
         {
             pImpl->pFactArr->erase( pImpl->pFactArr->begin() + nFactory );
             SAL_WARN("sfx.appl", "ChildWindow registered multiple times!");
@@ -211,7 +210,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
 #ifdef DBG_UTIL
     for ( sal_uInt16 n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
     {
-        SfxTbxCtrlFactory *pF = (*pImpl->pTbxCtrlFac)[n];
+        SfxTbxCtrlFactory *pF = &(*pImpl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
@@ -233,7 +232,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
 #ifdef DBG_UTIL
     for ( sal_uInt16 n=0; n<pImpl->pStbCtrlFac->size(); n++ )
     {
-        SfxStbCtrlFactory *pF = (*pImpl->pStbCtrlFac)[n];
+        SfxStbCtrlFactory *pF = &(*pImpl->pStbCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
@@ -255,7 +254,7 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
 #ifdef DBG_UTIL
     for ( sal_uInt16 n=0; n<pImpl->pMenuCtrlFac->size(); n++ )
     {
-        SfxMenuCtrlFactory *pF = (*pImpl->pMenuCtrlFac)[n];
+        SfxMenuCtrlFactory *pF = &(*pImpl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {

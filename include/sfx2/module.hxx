@@ -21,6 +21,7 @@
 #define _SFXMOD_HXX     // external
 
 #include <sal/config.h>
+#include <sfx2/app.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
 #include <svtools/imgdef.hxx>
@@ -44,10 +45,6 @@ struct SfxChildWinFactory;
 struct SfxMenuCtrlFactory;
 struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
-class SfxTbxCtrlFactArr_Impl;
-class SfxChildWinFactArr_Impl;
-class SfxMenuCtrlFactArr_Impl;
-class SfxStbCtrlFactArr_Impl;
 class SfxTabPage;
 class Window;
 
