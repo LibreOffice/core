@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_SDUNDOGR_HXX
 
 #include <tools/contnr.hxx>
+#include <tools/solar.h>
 #include "sdundo.hxx"
 #include "sddllapi.h"
 

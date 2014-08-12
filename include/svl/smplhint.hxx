@@ -22,6 +22,7 @@
 #include <svl/svldllapi.h>
 #include <svl/hint.hxx>
 #include <tools/rtti.hxx>
+#include <tools/solar.h>
 
 #define SFX_HINT_DYING              0x00000001
 #define SFX_HINT_NAMECHANGED        0x00000002

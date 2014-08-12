@@ -20,6 +20,7 @@
 #define INCLUDED_RSC_INC_RSCDEF_HXX
 
 #include <tools/unqidx.hxx>
+#include <tools/solar.h>
 #include <rsctree.hxx>
 #include <rtl/strbuf.hxx>
 #include <vector>

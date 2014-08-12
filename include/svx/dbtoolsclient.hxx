@@ -24,7 +24,6 @@
 #include <osl/mutex.hxx>
 #include <osl/module.h>
 #include <svx/svxdllapi.h>
-#include <tools/solar.h>
 #include <unotools/sharedunocomponent.hxx>
 
 namespace svxform

@@ -25,7 +25,6 @@
 #include "sdxfer.hxx"
 
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <svx/svdpage.hxx>
 
 #include <set>

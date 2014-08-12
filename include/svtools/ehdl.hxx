@@ -25,6 +25,7 @@
 #include <svtools/svtdllapi.h>
 
 #include <tools/errinf.hxx>
+#include <tools/solar.h>
 
 class Window;
 class ResMgr;

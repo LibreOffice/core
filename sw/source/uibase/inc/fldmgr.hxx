@@ -23,6 +23,7 @@
 #include "swtypes.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
+#include <tools/solar.h>
 #include <vector>
 
 namespace com{namespace sun{namespace star{

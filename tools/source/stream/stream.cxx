@@ -30,6 +30,7 @@
 
 #include <osl/endian.h>
 
+#include <comphelper/fileformat.h>
 #include <comphelper/string.hxx>
 
 #define SWAPNIBBLES(c)      \

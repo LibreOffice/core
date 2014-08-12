@@ -29,6 +29,8 @@
 #include <SwRewriter.hxx>
 #include <swundo.hxx>
 
+#include <tools/solar.h>
+
 class SwHistory;
 class SwIndex;
 class SwPaM;

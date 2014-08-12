@@ -33,6 +33,7 @@
 
 #include <tools/lineend.hxx>
 #include <tools/rtti.hxx>
+#include <tools/solar.h>
 
 #include <editeng/eedata.hxx>
 

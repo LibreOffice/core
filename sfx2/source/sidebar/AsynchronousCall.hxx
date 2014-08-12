@@ -20,7 +20,6 @@
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_ASYNCHRONOUSCALL_HXX
 
 #include <boost/function.hpp>
-#include <tools/solar.h>
 #include <tools/link.hxx>
 
 struct ImplSVEvent;

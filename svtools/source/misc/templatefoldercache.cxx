@@ -32,6 +32,7 @@
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <tools/solar.h>
 #include <unotools/pathoptions.hxx>
 
 #include <comphelper/processfactory.hxx>

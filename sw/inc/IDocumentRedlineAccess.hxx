@@ -21,7 +21,6 @@
 #define INCLUDED_SW_INC_IDOCUMENTREDLINEACCESS_HXX
 
 #include <sal/types.h>
-#include <tools/solar.h>
 
 #include <limits.h>
 

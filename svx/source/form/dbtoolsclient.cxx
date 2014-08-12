@@ -24,8 +24,8 @@
 #include "svx/dbtoolsclient.hxx"
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
+#include <tools/solar.h>
 #include <connectivity/formattedcolumnvalue.hxx>
-
 
 namespace svxform
 {

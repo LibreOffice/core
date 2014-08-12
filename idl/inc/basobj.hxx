@@ -21,6 +21,7 @@
 #define INCLUDED_IDL_INC_BASOBJ_HXX
 
 #include <tools/ref.hxx>
+#include <tools/solar.h>
 #include <bastype.hxx>
 #include <tools/pstm.hxx>
 

@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 
 #include "defs.hxx"

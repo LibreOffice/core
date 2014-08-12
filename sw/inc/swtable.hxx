@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_SWTABLE_HXX
 #include <tools/mempool.hxx>
 #include <tools/ref.hxx>
+#include <tools/solar.h>
 #include <tblenum.hxx>
 #include <swtypes.hxx>
 #include <calbck.hxx>

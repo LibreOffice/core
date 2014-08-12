@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVL_SOURCE_NUMBERS_NUMHEAD_HXX
 #define INCLUDED_SVL_SOURCE_NUMBERS_NUMHEAD_HXX
 
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 
 // This header contains size measures for various objects

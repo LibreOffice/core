@@ -30,6 +30,7 @@
 #include <calbck.hxx>
 #include <modeltoviewhelper.hxx>
 #include <unotextmarkup.hxx>
+#include <tools/solar.h>
 
 #include <set>
 

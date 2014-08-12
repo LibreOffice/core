@@ -43,6 +43,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <connectivity/dbconversion.hxx>
 #include "file/quotedstring.hxx"
+#include <tools/solar.h>
 #include <unotools/syslocale.hxx>
 
 using namespace ::comphelper;

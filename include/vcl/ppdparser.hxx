@@ -23,6 +23,7 @@
 #include <vector>
 #include <boost/unordered_map.hpp>
 
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>

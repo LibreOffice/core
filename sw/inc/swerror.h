@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_SWERROR_H
 
 #include <tools/errcode.hxx>
+#include <tools/solar.h>
 
 #define ERROR_SW_BASE           (ERRCODE_AREA_SW)
 #define ERROR_SW_READ_BASE      (ERROR_SW_BASE | ERRCODE_CLASS_READ)

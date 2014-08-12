@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_INC_TOXWRAP_HXX
 #define INCLUDED_SW_INC_TOXWRAP_HXX
 
-#include <tools/solar.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include "swdllapi.h"

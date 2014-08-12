@@ -22,7 +22,6 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 
 struct RSHEADER_TYPE;

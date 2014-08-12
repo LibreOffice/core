@@ -26,6 +26,7 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/digitgroupingiterator.hxx>
 #include <tools/debug.hxx>
+#include <tools/solar.h>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>

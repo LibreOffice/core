@@ -22,6 +22,7 @@
 
 #include <tools/link.hxx>
 #include <tools/rtti.hxx>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/impdel.hxx>
 

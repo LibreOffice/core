@@ -22,6 +22,7 @@
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <tools/debug.hxx>
+#include <tools/solar.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
@@ -34,8 +35,6 @@
 using namespace osl;
 using namespace utl;
 using namespace com::sun::star::uno;
-
-// define ----------------------------------------------------------------
 
 #define DEFAULTPATH__ADDIN          0
 #define DEFAULTPATH__AUTOCORRECT    1

@@ -22,7 +22,7 @@
 
 #include <IDocumentLinksAdministration.hxx>
 #include <boost/utility.hpp>
-
+#include <tools/solar.h>
 
 namespace sfx2 { class LinkManager; }
 class SwDoc;

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_TXATBASE_HXX
 #define INCLUDED_SW_INC_TXATBASE_HXX
 
-#include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include <hintids.hxx>
 

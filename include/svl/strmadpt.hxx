@@ -25,8 +25,8 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <cppuhelper/weak.hxx>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
-
 
 class SVL_DLLPUBLIC SvOutputStreamOpenLockBytes: public SvOpenLockBytes
 {

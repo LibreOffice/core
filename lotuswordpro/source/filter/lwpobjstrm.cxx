@@ -61,6 +61,7 @@
 #include "lwpobjstrm.hxx"
 #include "lwptools.hxx"
 #include <boost/scoped_array.hpp>
+#include <tools/solar.h>
 
 /**
  * @descr  ctor() from LwpSvStream

@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_ICONTHEMESCANNER_HXX
 
 #include <vcl/dllapi.h>
-#include <tools/solar.h>
 
 #include <rtl/ustring.hxx>
 
