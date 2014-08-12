@@ -764,7 +764,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         case SDRATTR_CAPTIONANGLE: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONFIXEDANGLE,pItem)) {
-                bool bFixed=((const SdrCaptionFixedAngleItem*)pItem)->GetValue();
+                bool bFixed=((const SdrOnOffItem*)pItem)->GetValue();
                 if (!bFixed) return true;
             }
         } break;
