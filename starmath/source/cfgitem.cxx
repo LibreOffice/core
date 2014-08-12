@@ -391,7 +391,7 @@ const OUString SmFontFormatList::GetNewFontFormatId() const
         if (!GetFontFormat(aTmpId))
             return aTmpId;
     }
-    OSL_ENSURE( !this, "failed to create new FontFormatId" );
+    OSL_ENSURE( false, "failed to create new FontFormatId" );
 
     return OUString();
 }
