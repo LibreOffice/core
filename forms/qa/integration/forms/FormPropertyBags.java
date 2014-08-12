@@ -102,7 +102,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
         propContainer.addProperty( "SomeBoundText", PropertyAttribute.BOUND, "InitialBoundText" );
         propContainer.addProperty( "SomeTransientText", PropertyAttribute.TRANSIENT, "InitialTransientProperty" );
         propContainer.addProperty( "SomeReadonlyText", PropertyAttribute.READONLY, "InitialReadonlyText" );
-        propContainer.addProperty( "SomeNumericValue", PropertyAttribute.BOUND, new Integer( 42 ) );
+        propContainer.addProperty( "SomeNumericValue", PropertyAttribute.BOUND, Integer.valueOf( 42 ) );
 
         XPropertySetInfo propertyInfo = textFieldModel.getPropertySetInfo();
         assure( "Per service definition, dynamic properties are expected to be forced to be removable",
@@ -171,7 +171,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
         // all persistent properties should have the expected values
         assure( "persistent properties did not survive reload (1)!", ((String)textFieldModel.getPropertyValue( "SomeBoundText" )).equals( "ChangedBoundText" ) );
         assure( "persistent properties did not survive reload (2)!", ((String)textFieldModel.getPropertyValue( "SomeReadonlyText" )).equals( "InitialReadonlyText" ) );
-//        assure( "persistent properties did not survive reload (3)!", ((Integer)textFieldModel.getPropertyValue( "SomeNumericValue" )).equals( new Integer( 42 ) ) );
+//        assure( "persistent properties did not survive reload (3)!", ((Integer)textFieldModel.getPropertyValue( "SomeNumericValue" )).equals( Integer.valueOf( 42 ) ) );
             // cannot check this until the types really survice - at the moment, integers are converted to doubles ...
 
         // the transient property should not have survived

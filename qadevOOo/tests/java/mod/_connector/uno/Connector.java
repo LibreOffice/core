@@ -97,7 +97,7 @@ public class Connector extends TestCase {
             "socket,host=" + sOfficeHost + ",port=" + curPort) ;
 
         // adding port number for freeing it.
-        tEnv.addObjRelation("Connector.Port", new Integer(curPort)) ;
+        tEnv.addObjRelation("Connector.Port", Integer.valueOf(curPort)) ;
 
         return tEnv ;
     }

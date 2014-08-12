@@ -116,7 +116,7 @@ public class ScUniqueCellFormatsObj extends TestCase {
         int c2int = 16777216 + c.hashCode();
 
         try {
-            xPropertySet.setPropertyValue("CellBackColor", new Integer(c2int));
+            xPropertySet.setPropertyValue("CellBackColor", Integer.valueOf(c2int));
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("Couldn't change CellFormat");
         } catch (com.sun.star.beans.PropertyVetoException e) {

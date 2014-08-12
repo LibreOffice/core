@@ -591,7 +591,7 @@ public class TextDocuments {
 
             // Set the name and value of the FieldMaster
             xMasterPropSet.setPropertyValue ( "Name", "UserEmperor" );
-            xMasterPropSet.setPropertyValue ( "Value", new Integer ( 42 ) );
+            xMasterPropSet.setPropertyValue ( "Value", Integer.valueOf( 42 ) );
 
             // Attach the field master to the user field
             xUserField.attachTextFieldMaster ( xMasterPropSet );
@@ -682,7 +682,7 @@ public class TextDocuments {
         try
         {
             // Set the colour of the text to white
-            xCellCursorProps.setPropertyValue( "CharColor", new Integer(16777215));
+            xCellCursorProps.setPropertyValue( "CharColor", Integer.valueOf(16777215));
         }
         catch ( Exception e)
         {
@@ -719,7 +719,7 @@ public class TextDocuments {
             // If BackTransparant is false, then the background color is visible
             xRow.setPropertyValue( "BackTransparent", Boolean.FALSE);
             // Specify the color of the background to be dark blue
-            xRow.setPropertyValue( "BackColor", new Integer(6710932));
+            xRow.setPropertyValue( "BackColor", Integer.valueOf(6710932));
 
             // Access the property set of the whole table
             XPropertySet xTableProps = UnoRuntime.queryInterface(
@@ -727,7 +727,7 @@ public class TextDocuments {
             // We want visible background colors
             xTableProps.setPropertyValue( "BackTransparent", Boolean.FALSE);
             // Set the background colour to light blue
-            xTableProps.setPropertyValue( "BackColor", new Integer(13421823));
+            xTableProps.setPropertyValue( "BackColor", Integer.valueOf(13421823));
 
             // set the text (and text colour) of all the cells in the first row
             // of the table
@@ -866,7 +866,7 @@ public class TextDocuments {
                                               Boolean.FALSE);
 
                 // We want the background to be light blue
-                xTableProps.setPropertyValue( "BackColor", new Integer(13421823));
+                xTableProps.setPropertyValue( "BackColor", Integer.valueOf(13421823));
 
                 // Inser the table into the document
                 mxDocText.insertTextContent( mxDocCursor, xTable, false);
@@ -882,7 +882,7 @@ public class TextDocuments {
                 xRow.setPropertyValue( "BackTransparent", Boolean.FALSE);
 
                 // And let's make it dark blue
-                xRow.setPropertyValue( "BackColor", new Integer(6710932));
+                xRow.setPropertyValue( "BackColor", Integer.valueOf(6710932));
 
                 // Put a description of the table contents into the first cell
                 insertIntoCell( "A1", "AutoText Groups", xTable);
@@ -1380,7 +1380,7 @@ public class TextDocuments {
                 XPropertySet.class, xStyle );
 
             // Give the new style a light blue background
-            xStyleProps.setPropertyValue ( "ParaBackColor", new Integer (13421823));
+            xStyleProps.setPropertyValue ( "ParaBackColor", Integer.valueOf(13421823));
 
             // Get the StyleFamiliesSupplier interface of the document
             XStyleFamiliesSupplier xSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, mxDoc);
@@ -1628,7 +1628,7 @@ public class TextDocuments {
             XPropertySet xChildProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xChildNamed );
             // Set the Child_Section's background colour to blue
-            xChildProps.setPropertyValue( "BackColor", new Integer(13421823));
+            xChildProps.setPropertyValue( "BackColor", Integer.valueOf(13421823));
 
             // Refresh the document, so the linked section matches the Child_Section
             XRefreshable xRefresh = UnoRuntime.queryInterface(

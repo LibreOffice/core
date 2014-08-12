@@ -147,10 +147,10 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
             "com.sun.star.awt.UnoControlDialogModel", _xComponentContext );
         XPropertySet xPSetDialog = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, dialogModel );
-        xPSetDialog.setPropertyValue( "PositionX", new Integer( 100 ) );
-        xPSetDialog.setPropertyValue( "PositionY", new Integer( 100 ) );
-        xPSetDialog.setPropertyValue( "Width", new Integer( 150 ) );
-        xPSetDialog.setPropertyValue( "Height", new Integer( 100 ) );
+        xPSetDialog.setPropertyValue( "PositionX", Integer.valueOf( 100 ) );
+        xPSetDialog.setPropertyValue( "PositionY", Integer.valueOf( 100 ) );
+        xPSetDialog.setPropertyValue( "Width", Integer.valueOf( 150 ) );
+        xPSetDialog.setPropertyValue( "Height", Integer.valueOf( 100 ) );
         xPSetDialog.setPropertyValue( "Title", new String( "Runtime Dialog Demo" ) );
 
         // get the service manager from the dialog model
@@ -162,10 +162,10 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
             "com.sun.star.awt.UnoControlButtonModel" );
         XPropertySet xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, buttonModel );
-        xPSetButton.setPropertyValue( "PositionX", new Integer( 20 ) );
-        xPSetButton.setPropertyValue( "PositionY", new Integer( 70 ) );
-        xPSetButton.setPropertyValue( "Width", new Integer( 50 ) );
-        xPSetButton.setPropertyValue( "Height", new Integer( 14 ) );
+        xPSetButton.setPropertyValue( "PositionX", Integer.valueOf( 20 ) );
+        xPSetButton.setPropertyValue( "PositionY", Integer.valueOf( 70 ) );
+        xPSetButton.setPropertyValue( "Width", Integer.valueOf( 50 ) );
+        xPSetButton.setPropertyValue( "Height", Integer.valueOf( 14 ) );
         xPSetButton.setPropertyValue( "Name", _buttonName );
         xPSetButton.setPropertyValue( "TabIndex", new Short( (short)0 ) );
         xPSetButton.setPropertyValue( "Label", new String( "Click Me" ) );
@@ -175,10 +175,10 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
             "com.sun.star.awt.UnoControlFixedTextModel" );
         XPropertySet xPSetLabel = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, labelModel );
-        xPSetLabel.setPropertyValue( "PositionX", new Integer( 40 ) );
-        xPSetLabel.setPropertyValue( "PositionY", new Integer( 30 ) );
-        xPSetLabel.setPropertyValue( "Width", new Integer( 100 ) );
-        xPSetLabel.setPropertyValue( "Height", new Integer( 14 ) );
+        xPSetLabel.setPropertyValue( "PositionX", Integer.valueOf( 40 ) );
+        xPSetLabel.setPropertyValue( "PositionY", Integer.valueOf( 30 ) );
+        xPSetLabel.setPropertyValue( "Width", Integer.valueOf( 100 ) );
+        xPSetLabel.setPropertyValue( "Height", Integer.valueOf( 14 ) );
         xPSetLabel.setPropertyValue( "Name", _labelName );
         xPSetLabel.setPropertyValue( "TabIndex", new Short( (short)1 ) );
         xPSetLabel.setPropertyValue( "Label", _labelPrefix );
@@ -188,10 +188,10 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
             "com.sun.star.awt.UnoControlButtonModel" );
         XPropertySet xPSetCancelButton = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, cancelButtonModel );
-        xPSetCancelButton.setPropertyValue( "PositionX", new Integer( 80 ) );
-        xPSetCancelButton.setPropertyValue( "PositionY", new Integer( 70 ) );
-        xPSetCancelButton.setPropertyValue( "Width", new Integer( 50 ) );
-        xPSetCancelButton.setPropertyValue( "Height", new Integer( 14 ) );
+        xPSetCancelButton.setPropertyValue( "PositionX", Integer.valueOf( 80 ) );
+        xPSetCancelButton.setPropertyValue( "PositionY", Integer.valueOf( 70 ) );
+        xPSetCancelButton.setPropertyValue( "Width", Integer.valueOf( 50 ) );
+        xPSetCancelButton.setPropertyValue( "Height", Integer.valueOf( 14 ) );
         xPSetCancelButton.setPropertyValue( "Name", _cancelButtonName );
         xPSetCancelButton.setPropertyValue( "TabIndex", new Short( (short)2 ) );
         xPSetCancelButton.setPropertyValue( "PushButtonType", new Short( (short)2 ) );

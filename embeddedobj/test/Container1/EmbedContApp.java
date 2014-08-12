@@ -1453,7 +1453,7 @@ public class EmbedContApp extends Applet
                 {
                     Object aArgs[] = new Object[2];
                     aArgs[0] = aFileURI;
-                    aArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+                    aArgs[1] = Integer.valueOf( ElementModes.ELEMENT_READWRITE );
 
                     Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
                     XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
@@ -1503,7 +1503,7 @@ public class EmbedContApp extends Applet
                                                                                         oStorageFactory );
             Object aArgs[] = new Object[2];
             aArgs[0] = aFileURI;
-            aArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+            aArgs[1] = Integer.valueOf( ElementModes.ELEMENT_READWRITE );
 
             Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
             XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
@@ -1631,7 +1631,7 @@ public class EmbedContApp extends Applet
             {
                 Object aArgs[] = new Object[2];
                 aArgs[0] = aFileURI;
-                aArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+                aArgs[1] = Integer.valueOf( ElementModes.ELEMENT_READWRITE );
 
                 Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
                 XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );

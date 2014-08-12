@@ -76,7 +76,7 @@ public class InstallationPathDescriptor extends WizardDescriptor {
     protected void updateState() {
         super.updateState();
         putProperty("WizardPanel_contentData", iterator.getSteps()); // NOI18N
-        putProperty("WizardPanel_contentSelectedIndex", new Integer(iterator.getIndex())); // NOI18N
+        putProperty("WizardPanel_contentSelectedIndex", Integer.valueOf(iterator.getIndex())); // NOI18N
     }
 
 }

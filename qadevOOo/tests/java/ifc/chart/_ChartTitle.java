@@ -41,7 +41,7 @@ public class _ChartTitle extends MultiPropertyTest {
             protected Object getNewValue(String propName, Object oldValue) {
                 Object ValueToSet = ValueChanger.changePValue(oldValue);
                 int ro = ((Integer) ValueToSet).intValue() * 100;
-                return new Integer( ro );
+                return Integer.valueOf( ro );
             }
         } );
     }

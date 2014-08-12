@@ -64,11 +64,11 @@ public class SOfficeFactory {
 
     public static SOfficeFactory getFactory(XMultiServiceFactory xMSF) {
 
-        SOfficeFactory soFactory = lookup.get(new Integer(xMSF.hashCode()).toString());
+        SOfficeFactory soFactory = lookup.get(Integer.valueOf(xMSF.hashCode()).toString());
 
         if (soFactory == null) {
             soFactory = new SOfficeFactory(xMSF);
-            lookup.put(new Integer(xMSF.hashCode()).toString(), soFactory);
+            lookup.put(Integer.valueOf(xMSF.hashCode()).toString(), soFactory);
         }
 
         return soFactory;

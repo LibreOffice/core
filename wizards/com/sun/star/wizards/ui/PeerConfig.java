@@ -182,7 +182,7 @@ public class PeerConfig implements XWindowListener
      */
     public void setImageUrl(Object _ocontrolmodel, int _nResId, int _nhcResId)
     {
-        ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, new Integer(_nResId), new Integer(_nhcResId));
+        ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, Integer.valueOf(_nResId), Integer.valueOf(_nhcResId));
         this.aImageUrlTasks.add(oImageUrlTask);
     }
 

@@ -76,13 +76,13 @@ public class TypeInspector
             while (xResultSet.next())
             {
                 aTypeNameVector.add(xRow.getString(1));
-                aTypeVector.add(new Integer(xRow.getShort(2)));
-                aPrecisionVector.add(new Integer(xRow.getInt(3)));
-                aNullableVector.add(new Integer(xRow.getShort(7)));
-                aSearchableVector.add(new Integer(xRow.getShort(9)));
+                aTypeVector.add(Integer.valueOf(xRow.getShort(2)));
+                aPrecisionVector.add(Integer.valueOf(xRow.getInt(3)));
+                aNullableVector.add(Integer.valueOf(xRow.getShort(7)));
+                aSearchableVector.add(Integer.valueOf(xRow.getShort(9)));
                 aAutoIncrementVector.add(Boolean.valueOf(xRow.getBoolean(12)));
-                aMinScaleVector.add(new Integer(xRow.getShort(14)));
-                aMaxScaleVector.add(new Integer(xRow.getShort(15)));
+                aMinScaleVector.add(Integer.valueOf(xRow.getShort(14)));
+                aMaxScaleVector.add(Integer.valueOf(xRow.getShort(15)));
 
             }
             sDataTypeNames = new String[aTypeNameVector.size()];

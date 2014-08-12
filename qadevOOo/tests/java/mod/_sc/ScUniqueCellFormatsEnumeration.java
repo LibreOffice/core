@@ -109,7 +109,7 @@ public class ScUniqueCellFormatsEnumeration extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("ExpectedCount", new Integer(4));
+        tEnv.addObjRelation("ExpectedCount", Integer.valueOf(4));
 
         return tEnv;
     }
@@ -122,7 +122,7 @@ public class ScUniqueCellFormatsEnumeration extends TestCase {
         int c2int = 16777216 + c.hashCode();
 
         try {
-            xPropertySet.setPropertyValue("CellBackColor", new Integer(c2int));
+            xPropertySet.setPropertyValue("CellBackColor", Integer.valueOf(c2int));
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("Couldn't change CellFormat");
         } catch (com.sun.star.beans.PropertyVetoException e) {

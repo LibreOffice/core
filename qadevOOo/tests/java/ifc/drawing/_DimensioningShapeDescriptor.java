@@ -29,7 +29,7 @@ public class _DimensioningShapeDescriptor extends MultiPropertyTest {
                 throws java.lang.IllegalArgumentException {
 
             int val = ((Integer)oldValue).intValue() ;
-            return new Integer(val + 100) ;
+            return Integer.valueOf(val + 100) ;
         }
     } ;
 */

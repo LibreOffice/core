@@ -152,7 +152,7 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
 
             // Sets the replaced text property color value to RGB parameter
             PropertyValue cv = new PropertyValue("CharColor", -1,
-                new Integer(red),
+                Integer.valueOf(red),
                     com.sun.star.beans.PropertyState.DIRECT_VALUE);
 
             // Apply the properties

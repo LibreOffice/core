@@ -56,7 +56,7 @@ public class _XUpdateHandler extends MultiMethodTest {
             xLayerHandler.overrideProperty("ooSetupFactoryIcon", (short) 0,
                                            new Type(java.lang.Long.class),
                                            false);
-            xLayerHandler.setPropertyValue(new Integer(13));
+            xLayerHandler.setPropertyValue(Integer.valueOf(13));
             xLayerHandler.endProperty();
             xLayerHandler.overrideProperty("ooSetupFactoryShortName",
                                            (short) 0,

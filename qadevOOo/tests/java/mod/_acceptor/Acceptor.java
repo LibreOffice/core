@@ -101,7 +101,7 @@ public class Acceptor extends TestCase {
             "socket,host=" + sOfficeHost + ",port=" + curPort) ;
 
         // adding port number for freeing it.
-        tEnv.addObjRelation("Acceptor.Port", new Integer(curPort)) ;
+        tEnv.addObjRelation("Acceptor.Port", Integer.valueOf(curPort)) ;
 
         return tEnv ;
     }

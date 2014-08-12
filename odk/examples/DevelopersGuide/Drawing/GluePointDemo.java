@@ -119,11 +119,11 @@ public class GluePointDemo
             // if there is a shape to connect
             xConnectorPropSet.setPropertyValue( "StartShape", xShape1 );
             xConnectorPropSet.setPropertyValue( "StartGluePointIndex",
-                                                new Integer( nStartIndex ) );
+                                                Integer.valueOf( nStartIndex ) );
 
             xConnectorPropSet.setPropertyValue( "EndShape", xShape2 );
             xConnectorPropSet.setPropertyValue( "EndGluePointIndex",
-                                                new Integer( nEndIndex ) );
+                                                Integer.valueOf( nEndIndex ) );
 
             XGluePointsSupplier  xGluePointsSupplier;
             XIndexContainer      xIndexContainer;
@@ -162,11 +162,11 @@ public class GluePointDemo
 
             xConnector2PropSet.setPropertyValue( "StartShape", xShape1 );
             xConnector2PropSet.setPropertyValue( "StartGluePointIndex",
-                new Integer( nIndexOfGluePoint1 ) );
+                Integer.valueOf( nIndexOfGluePoint1 ) );
 
             xConnector2PropSet.setPropertyValue( "EndShape", xShape2 );
             xConnector2PropSet.setPropertyValue( "EndGluePointIndex",
-                new Integer( nIndexOfGluePoint2 ) );
+                Integer.valueOf( nIndexOfGluePoint2 ) );
 
 
         }

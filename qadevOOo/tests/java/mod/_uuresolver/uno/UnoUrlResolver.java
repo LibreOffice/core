@@ -48,7 +48,7 @@ public class UnoUrlResolver extends TestCase {
             tEnv.addObjRelation("ACCEPTOR", oAcctr);
 
             int port = util.utils.getNextFreePort(20004);
-            tEnv.addObjRelation("PORT", new Integer(port));
+            tEnv.addObjRelation("PORT", Integer.valueOf(port));
 
             return tEnv;
         } catch (Exception e) {

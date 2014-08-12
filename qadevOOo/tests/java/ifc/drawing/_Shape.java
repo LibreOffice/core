@@ -124,7 +124,7 @@ public class _Shape extends MultiPropertyTest {
             log.println("Therefore this property can't be changed");
             tRes.tested("ZOrder",true);
         } else {
-            testProperty("ZOrder", new Integer(0), new Integer(1));
+            testProperty("ZOrder", Integer.valueOf(0), Integer.valueOf(1));
         }
     }
 

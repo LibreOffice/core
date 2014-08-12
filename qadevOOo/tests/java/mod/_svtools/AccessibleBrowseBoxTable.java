@@ -175,7 +175,7 @@ public class AccessibleBrowseBoxTable extends TestCase {
 
         PropertyValue param2 = new PropertyValue();
         param2.Name = "CommandType";
-        param2.Value = new Integer(com.sun.star.sdb.CommandType.TABLE);
+        param2.Value = Integer.valueOf(com.sun.star.sdb.CommandType.TABLE);
         params[1] = param2;
 
         PropertyValue param3 = new PropertyValue();

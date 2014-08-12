@@ -342,42 +342,42 @@ public class sdbcx
             XPropertySet xCol = xColFac.createDataDescriptor();
             // create first column and append
             xCol.setPropertyValue("Name","SNR");
-            xCol.setPropertyValue("Type",new Integer(DataType.INTEGER));
-            xCol.setPropertyValue("IsNullable",new Integer(ColumnValue.NO_NULLS));
+            xCol.setPropertyValue("Type",Integer.valueOf(DataType.INTEGER));
+            xCol.setPropertyValue("IsNullable",Integer.valueOf(ColumnValue.NO_NULLS));
             xAppend.appendByDescriptor(xCol);
             // 2nd only set the properties which differs
             xCol.setPropertyValue("Name","FIRSTNAME");
-            xCol.setPropertyValue("Type",new Integer(DataType.VARCHAR));
-            xCol.setPropertyValue("IsNullable",new Integer(ColumnValue.NULLABLE));
-            xCol.setPropertyValue("Precision",new Integer(50));
+            xCol.setPropertyValue("Type",Integer.valueOf(DataType.VARCHAR));
+            xCol.setPropertyValue("IsNullable",Integer.valueOf(ColumnValue.NULLABLE));
+            xCol.setPropertyValue("Precision",Integer.valueOf(50));
             xAppend.appendByDescriptor(xCol);
             // 3nd only set the properties which differs
             xCol.setPropertyValue("Name","LASTNAME");
-            xCol.setPropertyValue("Precision",new Integer(100));
+            xCol.setPropertyValue("Precision",Integer.valueOf(100));
             xAppend.appendByDescriptor(xCol);
             // 4nd only set the properties which differs
             xCol.setPropertyValue("Name","STREET");
-            xCol.setPropertyValue("Precision",new Integer(50));
+            xCol.setPropertyValue("Precision",Integer.valueOf(50));
             xAppend.appendByDescriptor(xCol);
             // 5nd only set the properties which differs
             xCol.setPropertyValue("Name","STATE");
             xAppend.appendByDescriptor(xCol);
             // 6nd only set the properties which differs
             xCol.setPropertyValue("Name","ZIP");
-            xCol.setPropertyValue("Type",new Integer(DataType.INTEGER));
-            xCol.setPropertyValue("Precision",new Integer(10)); // default value integer
+            xCol.setPropertyValue("Type",Integer.valueOf(DataType.INTEGER));
+            xCol.setPropertyValue("Precision",Integer.valueOf(10)); // default value integer
             xAppend.appendByDescriptor(xCol);
             // 7nd only set the properties which differs
             xCol.setPropertyValue("Name","BIRTHDATE");
-            xCol.setPropertyValue("Type",new Integer(DataType.DATE));
-            xCol.setPropertyValue("Precision",new Integer(10)); // default value integer
+            xCol.setPropertyValue("Type",Integer.valueOf(DataType.DATE));
+            xCol.setPropertyValue("Precision",Integer.valueOf(10)); // default value integer
             xAppend.appendByDescriptor(xCol);
             // now we create the primary key
             XKeysSupplier xKeySup = UnoRuntime.queryInterface(XKeysSupplier.class,xTable);
             XDataDescriptorFactory xKeyFac = UnoRuntime.queryInterface(XDataDescriptorFactory.class,xKeySup.getKeys());
             XAppend xKeyAppend = UnoRuntime.queryInterface(XAppend.class,xKeyFac);
             XPropertySet xKey = xKeyFac.createDataDescriptor();
-            xKey.setPropertyValue("Type",new Integer(KeyType.PRIMARY));
+            xKey.setPropertyValue("Type",Integer.valueOf(KeyType.PRIMARY));
             // now append the columns to key
             XColumnsSupplier xKeyColumSup = UnoRuntime.queryInterface(XColumnsSupplier.class,xKey);
             XDataDescriptorFactory xKeyColFac = UnoRuntime.queryInterface(XDataDescriptorFactory.class,xKeyColumSup.getColumns());

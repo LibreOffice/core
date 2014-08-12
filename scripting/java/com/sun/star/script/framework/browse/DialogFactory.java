@@ -131,10 +131,10 @@ public class DialogFactory
     {
         XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, o);
 
-        props.setPropertyValue("PositionX", new Integer(x));
-        props.setPropertyValue("PositionY", new Integer(y));
-        props.setPropertyValue("Height", new Integer(height));
-        props.setPropertyValue("Width", new Integer(width));
+        props.setPropertyValue("PositionX", Integer.valueOf(x));
+        props.setPropertyValue("PositionY", Integer.valueOf(y));
+        props.setPropertyValue("Height", Integer.valueOf(height));
+        props.setPropertyValue("Width", Integer.valueOf(width));
     }
 
     private XDialog createInputDialog(String title, String prompt)

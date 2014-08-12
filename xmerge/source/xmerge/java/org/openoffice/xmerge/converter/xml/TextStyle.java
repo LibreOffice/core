@@ -559,7 +559,7 @@ public class TextStyle extends Style implements Cloneable {
                 node.setAttribute("style:text-position", "sub 58%");
 
         if (sizeInPoints != 0) {
-            Integer fs = new Integer(sizeInPoints);
+            Integer fs = Integer.valueOf(sizeInPoints);
             node.setAttribute("fo:font-size", fs.toString() + "pt");
         }
 

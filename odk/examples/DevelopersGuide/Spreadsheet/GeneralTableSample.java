@@ -106,7 +106,7 @@ public class GeneralTableSample extends SpreadsheetDocHelper
     // *** Change cell properties ***
         int nValue = bValid ? 0x00FF00 : 0xFF4040;
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCell );
-        xPropSet.setPropertyValue( "CellBackColor", new Integer( nValue ) );
+        xPropSet.setPropertyValue( "CellBackColor", Integer.valueOf( nValue ) );
 
 
     // *** Accessing a CELL RANGE ***
@@ -117,14 +117,14 @@ public class GeneralTableSample extends SpreadsheetDocHelper
 
         // Change properties of the range.
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
-        xPropSet.setPropertyValue( "CellBackColor", new Integer( 0x8080FF ) );
+        xPropSet.setPropertyValue( "CellBackColor", Integer.valueOf( 0x8080FF ) );
 
         // Accessing a cell range over its name.
         xCellRange = xSheet.getCellRangeByName( "C4:D5" );
 
         // Change properties of the range.
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
-        xPropSet.setPropertyValue( "CellBackColor", new Integer( 0xFFFF80 ) );
+        xPropSet.setPropertyValue( "CellBackColor", Integer.valueOf( 0xFFFF80 ) );
 
 
     // *** Using the CELL CURSOR to add some data below of the filled area ***
@@ -155,7 +155,7 @@ public class GeneralTableSample extends SpreadsheetDocHelper
         // Get column C by index (interface XIndexAccess).
         Object aColumnObj = xColumns.getByIndex( 2 );
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aColumnObj );
-        xPropSet.setPropertyValue( "Width", new Integer( 5000 ) );
+        xPropSet.setPropertyValue( "Width", Integer.valueOf( 5000 ) );
 
         // Get the name of the column.
         com.sun.star.container.XNamed xNamed = UnoRuntime.queryInterface( com.sun.star.container.XNamed.class, aColumnObj );
@@ -172,7 +172,7 @@ public class GeneralTableSample extends SpreadsheetDocHelper
         // Get row 7 by index (interface XIndexAccess)
         Object aRowObj = xRows.getByIndex( 6 );
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aRowObj );
-        xPropSet.setPropertyValue( "Height", new Integer( 5000 ) );
+        xPropSet.setPropertyValue( "Height", Integer.valueOf( 5000 ) );
 
         xSheet.getCellByPosition( 2, 6 ).setFormula( "What a big cell." );
 

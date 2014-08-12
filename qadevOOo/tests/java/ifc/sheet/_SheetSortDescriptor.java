@@ -106,8 +106,8 @@ public class _SheetSortDescriptor extends MultiMethodTest {
             sValue = props[nr].Value;
             if ( name.equals("OutputPosition")) {
                 sInt = ((CellAddress) sValue).Row;
-                gValue = new Integer(gInt);
-                sValue = new Integer(sInt);
+                gValue = Integer.valueOf(gInt);
+                sValue = Integer.valueOf(sInt);
             }
 
             //check get-set methods

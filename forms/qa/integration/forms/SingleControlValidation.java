@@ -155,7 +155,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
                 boolean isValid = xComp.isValid();
 
                 m_statusField.setPropertyValue("Label", isValid ? "valid" : "invalid" );
-                m_statusField.setPropertyValue( "TextColor", new Integer( isValid ? 0x008000 : 0x800000 ) );
+                m_statusField.setPropertyValue( "TextColor", Integer.valueOf( isValid ? 0x008000 : 0x800000 ) );
 
                 String validityMessage = "";
                 if ( !isValid )

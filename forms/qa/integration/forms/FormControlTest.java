@@ -532,13 +532,13 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         xCheckBox.setPropertyValue( "TriState", Boolean.TRUE );
         xCheckBox.setPropertyValue( "DefaultState", new Short( (short)2 ) );
         xTimeField.setPropertyValue( "TimeFormat", new Short( (short)1 ) );
-        xTimeField.setPropertyValue( "TimeMax", new Integer( 23595999 ) );
+        xTimeField.setPropertyValue( "TimeMax", Integer.valueOf( 23595999 ) );
         xReqField.setPropertyValue( "ConvertEmptyToNull", Boolean.FALSE );
 
         // the logical form
         m_masterForm = (XPropertySet)dbfTools.getParent( xIDField, XPropertySet.class );
         m_masterForm.setPropertyValue( "DataSourceName", m_dataSourceProps.getPropertyValue( "Name" ) );
-        m_masterForm.setPropertyValue( "CommandType", new Integer( CommandType.TABLE ) );
+        m_masterForm.setPropertyValue( "CommandType", Integer.valueOf( CommandType.TABLE ) );
         m_masterForm.setPropertyValue( "Command", s_tableName );
 
         insertRadio( 3, "none", "none" );

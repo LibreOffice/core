@@ -116,8 +116,8 @@ public class FillAndLineStyleDemo
             aLineDash.DashLen = 300;
             aLineDash.Distance = 150;
             xPropSet.setPropertyValue( "LineDash", aLineDash );
-            xPropSet.setPropertyValue( "LineColor", new Integer( 0x0000ff ) );
-            xPropSet.setPropertyValue( "LineWidth", new Integer( 200 ) );
+            xPropSet.setPropertyValue( "LineColor", Integer.valueOf( 0x0000ff ) );
+            xPropSet.setPropertyValue( "LineWidth", Integer.valueOf( 200 ) );
 
         }
         catch( Exception ex )

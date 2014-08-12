@@ -110,7 +110,7 @@ public class TestParameters extends HashMap<String,Object> {
             else {
                 try {
                     if ( val instanceof String ) {
-                        Integer nr = new Integer((String)val);
+                        Integer nr = Integer.valueOf((String)val);
                         if (nr.intValue() > 0) return nr.intValue();
                     }
                 } catch ( java.lang.NumberFormatException nfe) {}
@@ -150,14 +150,14 @@ public class TestParameters extends HashMap<String,Object> {
         put(PropertyName.LOGGING_IS_ACTIVE, Boolean.TRUE);
         put(PropertyName.DEBUG_IS_ACTIVE, Boolean.valueOf(DebugIsActive));
         put(PropertyName.OUT_PRODUCER, "stats.SimpleOutProducer");
-        put(PropertyName.SHORT_WAIT, new Integer(500));
+        put(PropertyName.SHORT_WAIT, Integer.valueOf(500));
         put(PropertyName.OFFICE_PROVIDER, "helper.OfficeProvider");
         put(PropertyName.LOG_WRITER, "stats.SimpleLogWriter");
         put(PropertyName.APP_EXECUTION_COMMAND, "");
-        put(PropertyName.TIME_OUT, new Integer(3000000));
-        put(PropertyName.THREAD_TIME_OUT, new Integer(3000000));
+        put(PropertyName.TIME_OUT, Integer.valueOf(3000000));
+        put(PropertyName.THREAD_TIME_OUT, Integer.valueOf(3000000));
         put(PropertyName.AUTO_RESTART, Boolean.FALSE);
-        put(PropertyName.OFFICE_CLOSE_TIME_OUT, new Integer(15000));
+        put(PropertyName.OFFICE_CLOSE_TIME_OUT, Integer.valueOf(15000));
 
         // get the operating system
         put(PropertyName.OPERATING_SYSTEM, getSOCompatibleOSName());

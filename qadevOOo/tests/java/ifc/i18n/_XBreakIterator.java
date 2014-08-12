@@ -355,7 +355,7 @@ public class _XBreakIterator extends MultiMethodTest {
     public void _beginOfSentence() {
         int iPos = 0;
         while( iPos < UnicodeString.length() ) {
-            Integer start = new Integer( oObj.beginOfSentence(UnicodeString,
+            Integer start = Integer.valueOf( oObj.beginOfSentence(UnicodeString,
                 iPos, locale) );
             if (start.intValue() >= 0 && !vSentenceStart.contains(start) ) {
                 vSentenceStart.add( start );

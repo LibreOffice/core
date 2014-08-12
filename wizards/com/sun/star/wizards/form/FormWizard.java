@@ -236,7 +236,7 @@ public class FormWizard extends DatabaseObjectWizard
                 },
                 new Object[]
                 {
-                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, new Integer(SOMAIN_PAGE), 210
+                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, Integer.valueOf(SOMAIN_PAGE), 210
                 });
 
         curFormConfiguration = new FormConfiguration(this);
@@ -254,7 +254,7 @@ public class FormWizard extends DatabaseObjectWizard
                 },
                 new Object[]
                 {
-                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, new Integer(SOSUBFORMFIELDS_PAGE), 210
+                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, Integer.valueOf(SOSUBFORMFIELDS_PAGE), 210
                 });
 
         curFormDocument.xProgressBar.setValue(40);

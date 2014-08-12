@@ -66,10 +66,10 @@ public class RadioDataAware extends DataAware
         {
             if (radioButtons[i].getState())
             {
-                return new Integer(i);
+                return Integer.valueOf(i);
             }
         }
-        return new Integer(-1);
+        return Integer.valueOf(-1);
     }
 
     public static DataAware attachRadioButtons(Object data, String dataProp, Object[] buttons, final Listener listener, boolean field)

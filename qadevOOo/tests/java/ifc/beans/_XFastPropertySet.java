@@ -173,7 +173,7 @@ public class _XFastPropertySet extends MultiMethodTest {
             if ( isWritable && isNotNull )
                 canChange = isChangeable(handle);
             if ( isWritable && isNotNull && canChange)
-                handles.add(new Integer(handle));
+                handles.add(Integer.valueOf(handle));
         } // endfor
 
         Random rnd = new Random();

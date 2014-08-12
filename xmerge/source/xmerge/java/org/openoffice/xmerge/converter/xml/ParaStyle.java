@@ -542,7 +542,7 @@ public class ParaStyle extends Style implements Cloneable {
         if (isSet[LINE_HEIGHT]) {
             String stringVal;
             if ((value[LINE_HEIGHT] & LH_PCT) != 0)
-                stringVal = (new Integer(value[LINE_HEIGHT] & LH_VALUEMASK)).toString() + "%";
+                stringVal = (Integer.valueOf(value[LINE_HEIGHT] & LH_VALUEMASK)).toString() + "%";
             else {
                 double temp = (value[LINE_HEIGHT] & LH_VALUEMASK) / 100.0;
                 stringVal = (new Double(temp)).toString() + "mm";

@@ -156,9 +156,9 @@ public class SWriter  {
         // Change the BackColor
         try {
             xTTPS.setPropertyValue("BackTransparent", Boolean.FALSE);
-            xTTPS.setPropertyValue("BackColor",new Integer(13421823));
+            xTTPS.setPropertyValue("BackColor",Integer.valueOf(13421823));
             xTTRowPS.setPropertyValue("BackTransparent", Boolean.FALSE);
-            xTTRowPS.setPropertyValue("BackColor",new Integer(6710932));
+            xTTRowPS.setPropertyValue("BackColor",Integer.valueOf(6710932));
 
         } catch (Exception e) {
             System.err.println("Couldn't change the color " + e);
@@ -205,7 +205,7 @@ public class SWriter  {
 
         // Change the CharColor and add a Shadow
         try {
-            xTCPS.setPropertyValue("CharColor",new Integer(255));
+            xTCPS.setPropertyValue("CharColor",Integer.valueOf(255));
             xTCPS.setPropertyValue("CharShadowed", Boolean.TRUE);
         } catch (Exception e) {
             System.err.println("Couldn't change the color " + e);
@@ -315,7 +315,7 @@ public class SWriter  {
 
         // Change the CharColor and add a Shadow
         try {
-            xTCPS.setPropertyValue("CharColor",new Integer(65536));
+            xTCPS.setPropertyValue("CharColor",Integer.valueOf(65536));
             xTCPS.setPropertyValue("CharShadowed", Boolean.FALSE);
         } catch (Exception e) {
             System.err.println("Couldn't change the color " + e);
@@ -374,7 +374,7 @@ public class SWriter  {
         com.sun.star.beans.XPropertySet xTPS = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, xTC);
 
         try {
-            xTPS.setPropertyValue("CharColor",new Integer(16777215));
+            xTPS.setPropertyValue("CharColor",Integer.valueOf(16777215));
         } catch (Exception e) {
             System.err.println(" Exception " + e);
             e.printStackTrace(System.err);

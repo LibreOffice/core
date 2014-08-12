@@ -31,7 +31,7 @@ public class _UnoControlSpinButtonModel extends MultiPropertyTest {
         testProperty("BackgroundColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(32768) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(32768) : null ;
             }
         }) ;
     }
@@ -44,7 +44,7 @@ public class _UnoControlSpinButtonModel extends MultiPropertyTest {
         testProperty("BorderColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(1234) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(1234) : null ;
             }
         }) ;
     }
@@ -57,7 +57,7 @@ public class _UnoControlSpinButtonModel extends MultiPropertyTest {
         testProperty("SymbolColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(65324) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(65324) : null ;
             }
         }) ;
     }

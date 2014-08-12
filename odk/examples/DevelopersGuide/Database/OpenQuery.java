@@ -96,7 +96,7 @@ public class OpenQuery {
         xProp.setPropertyValue("DataSourceName","Bibliography");
 
         // the CommandType must be TABLE, QUERY or COMMAND, here we use COMMAND
-        xProp.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.COMMAND));
+        xProp.setPropertyValue("CommandType",Integer.valueOf(com.sun.star.sdb.CommandType.COMMAND));
 
         // the Command could be a table or query name or a SQL command, depending on the CommandType
         xProp.setPropertyValue("Command","SELECT IDENTIFIER, AUTHOR FROM biblio ORDER BY IDENTIFIER");

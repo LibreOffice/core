@@ -97,7 +97,7 @@ public class NumericalHelper
             case STRING_TYPE:
                 try
                 {
-                    Integer i = new Integer((String) aTypeObject.aValue);
+                    Integer i = Integer.valueOf((String) aTypeObject.aValue);
                     retValue = i.intValue();
                 }
                 catch (java.lang.NumberFormatException e)
@@ -257,7 +257,7 @@ public class NumericalHelper
                 break;
             case TypeClass.LONG_value:
                 aTypeObject.iType = INT_TYPE;
-                aTypeObject.aValue = new Integer(AnyConverter.toInt(aValue));
+                aTypeObject.aValue = Integer.valueOf(AnyConverter.toInt(aValue));
                 break;
             case TypeClass.HYPER_value:
                 aTypeObject.iType = LONG_TYPE;

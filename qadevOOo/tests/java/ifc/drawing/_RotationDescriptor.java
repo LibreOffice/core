@@ -40,7 +40,7 @@ public class _RotationDescriptor extends MultiPropertyTest {
         @Override
         protected Object getNewValue(String propName, Object oldValue) {
             int val = ((Integer)oldValue).intValue() ;
-            return new Integer(val + 200) ;
+            return Integer.valueOf(val + 200) ;
         }
     } ;
 

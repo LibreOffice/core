@@ -1168,8 +1168,8 @@ public class TestComponent {
                 new Byte(Byte.MIN_VALUE),
                 new Short(Short.MIN_VALUE),
                 new Any(Type.UNSIGNED_SHORT, new Short((short) -1)),
-                new Integer(Integer.MIN_VALUE),
-                new Any(Type.UNSIGNED_LONG, new Integer(-1)),
+                Integer.valueOf(Integer.MIN_VALUE),
+                new Any(Type.UNSIGNED_LONG, Integer.valueOf(-1)),
                 new Long(Long.MIN_VALUE),
                 new Any(Type.UNSIGNED_HYPER, new Long(-1L)),
                 new Float(0.123f),
@@ -1225,7 +1225,7 @@ public class TestComponent {
                 new TestPolyStruct(Boolean.TRUE),
                 new TestPolyStruct(new Byte(Byte.MIN_VALUE)),
                 new TestPolyStruct(new Short(Short.MIN_VALUE)),
-                new TestPolyStruct(new Integer(Integer.MIN_VALUE)),
+                new TestPolyStruct(Integer.valueOf(Integer.MIN_VALUE)),
                 new TestPolyStruct(new Long(Long.MIN_VALUE)),
                 new TestPolyStruct(new Character('X')),
                 new TestPolyStruct("test"),
@@ -1261,7 +1261,7 @@ public class TestComponent {
                 new TestPolyStruct(new TestPolyStruct2[] {new TestPolyStruct2(
                     new TestPolyStruct(new Character('X')), new Any[] {new Any(Type.BOOLEAN, Boolean.TRUE)})}),
                 new TestPolyStruct(new int[][] { new int[] {Integer.MIN_VALUE} }),
-                new TestPolyStruct[]{ new TestPolyStruct(new Integer(Integer.MIN_VALUE))},
+                new TestPolyStruct[]{ new TestPolyStruct(Integer.valueOf(Integer.MIN_VALUE))},
                 new TestPolyStruct[]{new TestPolyStruct(new TestPolyStruct2(
                     new Character('X'), new Any(Type.BOOLEAN, Boolean.TRUE)))},
                 new TestPolyStruct[]{new TestPolyStruct(new TestPolyStruct2(

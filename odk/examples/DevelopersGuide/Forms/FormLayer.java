@@ -123,7 +123,7 @@ public class FormLayer
                 xModelProps.setPropertyValue( "VisualEffect", new Short( com.sun.star.awt.VisualEffect.FLAT ) );
             if ( m_document.classify() != DocumentType.CALC )
                 if ( xPSI.hasPropertyByName( "BorderColor" ) )
-                    xModelProps.setPropertyValue( "BorderColor", new Integer( 0x00C0C0C0 ) );
+                    xModelProps.setPropertyValue( "BorderColor", Integer.valueOf( 0x00C0C0C0 ) );
         }
         catch( com.sun.star.uno.Exception e )
         {

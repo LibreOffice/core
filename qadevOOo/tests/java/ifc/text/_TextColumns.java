@@ -54,7 +54,7 @@ public class _TextColumns extends MultiPropertyTest {
                     (XTextColumns.class,tEnv.getTestObject());
                 int ref = xTC.getReferenceValue();
                 int setting = ( ( (Integer) oldValue).intValue() + ref) / 2;
-                return new Integer(setting);
+                return Integer.valueOf(setting);
             }
         });
     }

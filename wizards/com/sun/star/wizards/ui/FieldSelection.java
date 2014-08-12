@@ -184,22 +184,22 @@ public class FieldSelection
             final int lblHeight = 8;
             final int lblVertiDist = 2;
 
-            ListBoxWidth = new Integer(((CompWidth - 3 * cmdButtonHoriDist - 2 * cmdButtonWidth) / 2));
-            Integer cmdShiftButtonPosX = new Integer((CompPosX + ListBoxWidth.intValue() + cmdButtonHoriDist));
-            Integer ListBoxPosY = new Integer(CompPosY + lblVertiDist + lblHeight);
-            Integer ListBoxHeight = new Integer(CompHeight - 8 - 2);
-            SelListBoxPosX = new Integer(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
+            ListBoxWidth = Integer.valueOf(((CompWidth - 3 * cmdButtonHoriDist - 2 * cmdButtonWidth) / 2));
+            Integer cmdShiftButtonPosX = Integer.valueOf((CompPosX + ListBoxWidth.intValue() + cmdButtonHoriDist));
+            Integer ListBoxPosY = Integer.valueOf(CompPosY + lblVertiDist + lblHeight);
+            Integer ListBoxHeight = Integer.valueOf(CompHeight - 8 - 2);
+            SelListBoxPosX = Integer.valueOf(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
 
-            IStep = new Integer(_iStep);
+            IStep = Integer.valueOf(_iStep);
             if (bshowFourButtons)
             {
                 ShiftButtonCount = 4;
             }
             Integer[] ShiftButtonPosY = getYButtonPositions(ShiftButtonCount);
             Integer[] MoveButtonPosY = getYButtonPositions(2);
-            Integer cmdMoveButtonPosX = new Integer(SelListBoxPosX.intValue() + ListBoxWidth.intValue() + cmdButtonHoriDist);
+            Integer cmdMoveButtonPosX = Integer.valueOf(SelListBoxPosX.intValue() + ListBoxWidth.intValue() + cmdButtonHoriDist);
 
-            Integer CmdButtonWidth = new Integer(cmdButtonWidth);
+            Integer CmdButtonWidth = Integer.valueOf(cmdButtonWidth);
 
             sIncSuffix = "_" + com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "lblFields_");
 
@@ -211,7 +211,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        8, slblFields, new Integer(CompPosX), new Integer(CompPosY), IStep, new Short(curtabindex), 109
+                        8, slblFields, Integer.valueOf(CompPosX), Integer.valueOf(CompPosY), IStep, new Short(curtabindex), 109
                     });
 
             // Listbox 'Available fields'
@@ -222,7 +222,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        ListBoxHeight, HelpIds.getHelpIdString(_FirstHelpIndex), Boolean.TRUE, new Integer(CompPosX), ListBoxPosY, IStep, new Short((curtabindex++)), ListBoxWidth
+                        ListBoxHeight, HelpIds.getHelpIdString(_FirstHelpIndex), Boolean.TRUE, Integer.valueOf(CompPosX), ListBoxPosY, IStep, new Short((curtabindex++)), ListBoxWidth
                     });
 
             Object btnmoveselected = CurUnoDialog.insertButton("cmdMoveSelected" + sIncSuffix, SOCMDMOVESEL, new ActionListenerImpl(),
@@ -281,7 +281,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        8, slblSelFields, SelListBoxPosX, new Integer(CompPosY), IStep, new Short(curtabindex++), ListBoxWidth
+                        8, slblSelFields, SelListBoxPosX, Integer.valueOf(CompPosY), IStep, new Short(curtabindex++), ListBoxWidth
                     });
 
             // ListBox 'Fields in the form'
@@ -353,12 +353,12 @@ public class FieldSelection
             final int cmdButtonHeight = 14;
             final int cmdButtonVertiDist = 2;
 
-            YPosArray[0] = new Integer( (CompPosY + 10 + (((CompHeight - 10) - (ButtonCount * cmdButtonHeight) - ((ButtonCount - 1) * cmdButtonVertiDist)) / 2)));
+            YPosArray[0] = Integer.valueOf( (CompPosY + 10 + (((CompHeight - 10) - (ButtonCount * cmdButtonHeight) - ((ButtonCount - 1) * cmdButtonVertiDist)) / 2)));
             if (ButtonCount > 1)
             {
                 for (int i = 1; i < ButtonCount; i++)
                 {
-                    YPosArray[i] = new Integer(YPosArray[i - 1].intValue() + cmdButtonHeight + cmdButtonVertiDist);
+                    YPosArray[i] = Integer.valueOf(YPosArray[i - 1].intValue() + cmdButtonHeight + cmdButtonVertiDist);
                 }
             }
             return YPosArray;

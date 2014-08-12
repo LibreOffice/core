@@ -434,7 +434,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
                     (DataPilotFieldOrientation)propSet.getPropertyValue("Orientation");
                 if (orient == DataPilotFieldOrientation.DATA)
                 {
-                    Integer item = new Integer(i);
+                    Integer item = Integer.valueOf(i);
                     mDataFieldDims.add(item);
                 }
             }

@@ -923,7 +923,7 @@ public class TestHelper  {
 
             Object pArgs[] = new Object[3];
             pArgs[0] = (Object) aURL;
-            pArgs[1] = new Integer( nMode );
+            pArgs[1] = Integer.valueOf( nMode );
             pArgs[2] = (Object) aAddArgs;
 
             Object oTempStorage = xFactory.createInstanceWithArguments( pArgs );
@@ -957,7 +957,7 @@ public class TestHelper  {
 
             Object pArgs[] = new Object[3];
             pArgs[0] = (Object) xStream;
-            pArgs[1] = new Integer( nMode );
+            pArgs[1] = Integer.valueOf( nMode );
             pArgs[2] = (Object) aAddArgs;
 
             Object oTempStorage = xFactory.createInstanceWithArguments( pArgs );
@@ -990,7 +990,7 @@ public class TestHelper  {
 
             Object pArgs[] = new Object[3];
             pArgs[0] = (Object) xInStream;
-            pArgs[1] = new Integer( ElementModes.READ );
+            pArgs[1] = Integer.valueOf( ElementModes.READ );
             pArgs[2] = (Object) aAddArgs;
 
             Object oTempStorage = xFactory.createInstanceWithArguments( pArgs );

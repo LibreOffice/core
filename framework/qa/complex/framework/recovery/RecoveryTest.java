@@ -250,7 +250,7 @@ public class RecoveryTest extends ComplexTestCase {
             assure(msg, expectedDocumentCount == documents.length);
 
             log.println("disable automatically launch of Office");
-            oUITools.setCheckBoxValue("Launch StarOffice automatically", new Integer(0));
+            oUITools.setCheckBoxValue("Launch StarOffice automatically", Integer.valueOf(0));
 
             log.println("start saving...");
             oUITools.clickButton("OK");

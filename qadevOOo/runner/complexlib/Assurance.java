@@ -81,7 +81,7 @@ public class Assurance
      * @param actual specifies the actual int value
      */
     protected void assureEquals( String message, int expected, int actual ) {
-        assureEquals( message, new Integer( expected ), new Integer( actual ), false );
+        assureEquals( message, Integer.valueOf( expected ), Integer.valueOf( actual ), false );
     }
 
 

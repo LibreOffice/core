@@ -230,7 +230,7 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
             PropertyInfo[] pInfo = new PropertyInfo[1];
             pInfo[0] = new PropertyInfo();
             pInfo[0].Name = "org.openoffice.Office.Common/Undo/Steps";
-            pInfo[0].Value = new Integer(12);
+            pInfo[0].Value = Integer.valueOf(12);
             pInfo[0].Type = "int";
             pInfo[0].Protected = false;
             xLayerContentDescriber.describeLayer(xLayerHandler, pInfo);

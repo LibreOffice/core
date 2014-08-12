@@ -276,7 +276,7 @@ public class DBColumn
             if (bAlignLeft)
             {
                 xValCellCursor = TextDocument.createTextCursor(xValCell);
-                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(com.sun.star.style.ParagraphAdjust.LEFT_value));
+                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", Integer.valueOf(com.sun.star.style.ParagraphAdjust.LEFT_value));
             }
         }
         catch (Exception exception)
@@ -353,7 +353,7 @@ public class DBColumn
             modifyCellContent(CurGroupValue);
             if (bAlignLeft)
             {
-                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.LEFT_value));
+                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", Integer.valueOf(ParagraphAdjust.LEFT_value));
             }
 
             int nFieldType = CurDBField.getFieldType();
@@ -364,7 +364,7 @@ public class DBColumn
                 Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
                 if (!bIsGroupColumn)
                 {
-                    Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.CENTER_value));
+                    Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", Integer.valueOf(ParagraphAdjust.CENTER_value));
                 }
             }
             else

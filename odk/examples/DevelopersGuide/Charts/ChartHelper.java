@@ -113,9 +113,9 @@ public class ChartHelper
                     aAny = new Any(new Type(Short.class),
                                new Short(com.sun.star.text.HoriOrientation.NONE));
                     xPropSet.setPropertyValue("HoriOrient", aAny );
-                    aAny = new Any(new Type(Integer.class), new Integer(aUpperLeft.Y));
+                    aAny = new Any(new Type(Integer.class), Integer.valueOf(aUpperLeft.Y));
                     xPropSet.setPropertyValue("VertOrientPosition", aAny );
-                    aAny = new Any(new Type(Integer.class), new Integer(aUpperLeft.X));
+                    aAny = new Any(new Type(Integer.class), Integer.valueOf(aUpperLeft.X));
                     xPropSet.setPropertyValue("HoriOrientPosition", aAny );
 
                     // retrieve the chart document as model of the OLE shape

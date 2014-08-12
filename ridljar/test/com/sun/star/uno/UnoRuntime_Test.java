@@ -57,11 +57,11 @@ public final class UnoRuntime_Test {
     @Test public void test_areSame() {
         assertTrue(
             UnoRuntime.areSame(
-                new Any(Type.UNSIGNED_LONG, new Integer(3)),
-                new Any(Type.UNSIGNED_LONG, new Integer(3))));
+                new Any(Type.UNSIGNED_LONG, Integer.valueOf(3)),
+                new Any(Type.UNSIGNED_LONG, Integer.valueOf(3))));
         assertFalse(
             UnoRuntime.areSame(
-                new Any(Type.UNSIGNED_LONG, new Integer(3)), new Integer(3)));
+                new Any(Type.UNSIGNED_LONG, Integer.valueOf(3)), Integer.valueOf(3)));
         assertFalse(UnoRuntime.areSame(new int[] { 1 }, new int[] { 1, 2 }));
         assertTrue(
             UnoRuntime.areSame(
@@ -74,7 +74,7 @@ public final class UnoRuntime_Test {
                     new Optional<Integer>()),
                 new Any(
                     new Type("com.sun.star.beans.Optional<unsigned long>"),
-                    new Optional<Integer>(false, new Integer(0)))));
+                    new Optional<Integer>(false, Integer.valueOf(0)))));
         assertFalse(UnoRuntime.areSame(new Test1(), new Test2()));
         Test2 test2 = new Test2();
         assertTrue(
@@ -86,7 +86,7 @@ public final class UnoRuntime_Test {
     @SuppressWarnings("rawtypes")
     @Test public void test_completeValue() {
         assertEquals(
-            new Integer(0), UnoRuntime.completeValue(Type.UNSIGNED_LONG, null));
+            Integer.valueOf(0), UnoRuntime.completeValue(Type.UNSIGNED_LONG, null));
         Object v = UnoRuntime.completeValue(
             new Type("[][]unsigned long"), null);
         assertTrue(v instanceof int[][]);

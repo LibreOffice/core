@@ -69,7 +69,7 @@ public class PathSelection
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
-                        Boolean.valueOf(Enabled), 8, LabelText, new Integer(XPos), new Integer(YPos), new Integer(DialogStep), new Short(CurTabIndex), new Integer(Width)
+                        Boolean.valueOf(Enabled), 8, LabelText, Integer.valueOf(XPos), Integer.valueOf(YPos), Integer.valueOf(DialogStep), new Short(CurTabIndex), Integer.valueOf(Width)
                 });
 
         xSaveTextBox = CurUnoDialog.insertTextField("txtSavePath", "callXPathSelectionListener", this, new String[]
@@ -77,7 +77,7 @@ public class PathSelection
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
-                        Boolean.valueOf(Enabled), 12, TxtHelpURL, new Integer(XPos), new Integer(YPos + 10), new Integer(DialogStep), new Short((short) (CurTabIndex + 1)), new Integer(Width - 26)
+                        Boolean.valueOf(Enabled), 12, TxtHelpURL, Integer.valueOf(XPos), Integer.valueOf(YPos + 10), Integer.valueOf(DialogStep), new Short((short) (CurTabIndex + 1)), Integer.valueOf(Width - 26)
                 });
         CurUnoDialog.setControlProperty("txtSavePath", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
         CurUnoDialog.insertButton("cmdSelectPath", "triggerPathPicker", this, new String[]
@@ -85,7 +85,7 @@ public class PathSelection
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
-                        Boolean.valueOf(Enabled), 14, BtnHelpURL, "...", new Integer(XPos + Width - 16), new Integer(YPos + 9), new Integer(DialogStep), new Short((short) (CurTabIndex + 2)), 16
+                        Boolean.valueOf(Enabled), 14, BtnHelpURL, "...", Integer.valueOf(XPos + Width - 16), Integer.valueOf(YPos + 9), Integer.valueOf(DialogStep), new Short((short) (CurTabIndex + 2)), 16
                 });
 
     }

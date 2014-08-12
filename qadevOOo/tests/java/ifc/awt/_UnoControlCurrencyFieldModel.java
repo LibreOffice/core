@@ -56,7 +56,7 @@ public class _UnoControlCurrencyFieldModel extends MultiPropertyTest {
         testProperty("BackgroundColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return utils.isVoid(old) ? new Integer(6543) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(6543) : null ;
             }
         }) ;
     }
@@ -82,7 +82,7 @@ public class _UnoControlCurrencyFieldModel extends MultiPropertyTest {
         testProperty("BorderColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(1234) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(1234) : null ;
             }
         }) ;
     }
@@ -95,7 +95,7 @@ public class _UnoControlCurrencyFieldModel extends MultiPropertyTest {
         testProperty("TextColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return utils.isVoid(old) ? new Integer(123) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(123) : null ;
             }
         }) ;
     }
@@ -108,7 +108,7 @@ public class _UnoControlCurrencyFieldModel extends MultiPropertyTest {
         testProperty("TextLineColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return utils.isVoid(old) ? new Integer(123) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(123) : null ;
             }
         }) ;
     }

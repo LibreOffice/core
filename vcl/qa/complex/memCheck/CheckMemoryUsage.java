@@ -455,7 +455,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
             aToken.nextToken();
             String mem = aToken.nextToken();
             mem = mem.substring(0, mem.indexOf('K'));
-            Integer memory = new Integer(mem);
+            Integer memory = Integer.valueOf(mem);
             return memory.intValue();
         }
 

@@ -139,7 +139,7 @@ public class Test04 implements StorageTest {
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
-            pArgs[1] = new Integer( ElementModes.WRITE );
+            pArgs[1] = Integer.valueOf( ElementModes.WRITE );
 
             Object oTempFileStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempFileStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oTempFileStorage );
@@ -209,7 +209,7 @@ public class Test04 implements StorageTest {
 
 
             // the temporary file must not be locked any more after storage disposing
-            pArgs[1] = new Integer( ElementModes.WRITE );
+            pArgs[1] = Integer.valueOf( ElementModes.WRITE );
             Object oResStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResStorage );
             if ( xResStorage == null )

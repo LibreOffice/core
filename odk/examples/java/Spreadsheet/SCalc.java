@@ -139,15 +139,15 @@ public class SCalc  {
             XPropertySet oCPS1 = UnoRuntime.queryInterface(
                 XPropertySet.class, oInt1 );
             oCPS1.setPropertyValue("IsCellBackgroundTransparent", Boolean.FALSE);
-            oCPS1.setPropertyValue("CellBackColor",new Integer(6710932));
-            oCPS1.setPropertyValue("CharColor",new Integer(16777215));
+            oCPS1.setPropertyValue("CellBackColor",Integer.valueOf(6710932));
+            oCPS1.setPropertyValue("CharColor",Integer.valueOf(16777215));
             XInterface oInt2 = (XInterface) oDocMSF.createInstance(
                 "com.sun.star.style.CellStyle");
             oStyleFamilyNameContainer.insertByName("My Style2", oInt2);
             XPropertySet oCPS2 = UnoRuntime.queryInterface(
                 XPropertySet.class, oInt2 );
             oCPS2.setPropertyValue("IsCellBackgroundTransparent", Boolean.FALSE);
-            oCPS2.setPropertyValue("CellBackColor",new Integer(13421823));
+            oCPS2.setPropertyValue("CellBackColor",Integer.valueOf(13421823));
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }

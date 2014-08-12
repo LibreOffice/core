@@ -37,7 +37,7 @@ public final class Marshaling_Test {
         TestObject testObject = new TestObject();
 
         TestPrimitiveSeqStruct x = new TestPrimitiveSeqStruct();
-        x.zAny = new Object[]{new Integer(1), new Double(2) };
+        x.zAny = new Object[]{Integer.valueOf(1), new Double(2) };
 
 
         Object data[] = new Object[] {
@@ -49,28 +49,28 @@ public final class Marshaling_Test {
             new Double(0.12345),
             TestEnum.B,
             new Float(0.5678),
-            new Integer(0),
-            new Integer(128),
-            new Integer(0x0f00),
-            new Integer(0x0f0000),
-            new Integer(0x0f000000),
-            new Integer(-128),
-            new Integer(0xff00),
-            new Integer(0xff0000),
-            new Integer(0xff000000),
+            Integer.valueOf(0),
+            Integer.valueOf(128),
+            Integer.valueOf(0x0f00),
+            Integer.valueOf(0x0f0000),
+            Integer.valueOf(0x0f000000),
+            Integer.valueOf(-128),
+            Integer.valueOf(0xff00),
+            Integer.valueOf(0xff0000),
+            Integer.valueOf(0xff000000),
             new Long(666L),
             new Short((short)444),
             new String("blabla"),
-            new Integer(10),  // Any as object
-            new Integer(10),  // Any as object
-            new Any(new Type(Integer.class), new Integer(10)), // Any as Any
-            new Any(new Type(Integer.class), new Integer(10)), // Any as Any
+            Integer.valueOf(10),  // Any as object
+            Integer.valueOf(10),  // Any as object
+            new Any(new Type(Integer.class), Integer.valueOf(10)), // Any as Any
+            new Any(new Type(Integer.class), Integer.valueOf(10)), // Any as Any
             null,
             new TestPrimitiveStruct(),
             x,
             new byte[]{1,2,3,4,5,6,7}, // primitive sequence
             new int[]{7,6,5,4,3,2,1}, // primitive sequence
-            new Object[]{new Integer(123), new String("hallo")}, // any sequence
+            new Object[]{Integer.valueOf(123), new String("hallo")}, // any sequence
             new TestPrimitiveStruct[]{new TestPrimitiveStruct(), new TestPrimitiveStruct()}, // sequence of primitive structs
             new TestPrimitiveSeqStruct[]{new TestPrimitiveSeqStruct(), new TestPrimitiveSeqStruct()}, // sequence of primitive structs
             new TestNestedStruct(),

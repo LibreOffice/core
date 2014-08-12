@@ -169,7 +169,7 @@ public class SdXShape extends TestCase {
         try {
             aStyle = (XStyle) AnyConverter.toObject(
                 new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
-            oShapeProps.setPropertyValue("ZOrder", new Integer(1));
+            oShapeProps.setPropertyValue("ZOrder", Integer.valueOf(1));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't set or get property value", e);

@@ -87,7 +87,7 @@ public class RowSet
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,xRowRes);
         xProp.setPropertyValue("DataSourceName","Bibliography");
         xProp.setPropertyValue("Command","biblio");
-        xProp.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
+        xProp.setPropertyValue("CommandType",Integer.valueOf(com.sun.star.sdb.CommandType.TABLE));
 
         xRowRes.execute();
         System.out.println("RowSet executed!");
@@ -110,7 +110,7 @@ public class RowSet
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,xRowRes);
         xProp.setPropertyValue("DataSourceName","Bibliography");
         xProp.setPropertyValue("Command","biblio");
-        xProp.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
+        xProp.setPropertyValue("CommandType",Integer.valueOf(com.sun.star.sdb.CommandType.TABLE));
 
         xRowRes.execute();
         System.out.println("RowSet executed!");
@@ -144,7 +144,7 @@ public class RowSet
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,xRowRes);
         xProp.setPropertyValue("DataSourceName","Bibliography");
         xProp.setPropertyValue("Command","biblio");
-        xProp.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
+        xProp.setPropertyValue("CommandType",Integer.valueOf(com.sun.star.sdb.CommandType.TABLE));
 
         xRowRes.execute();
         System.out.println("RowSet executed!");
@@ -183,7 +183,7 @@ public class RowSet
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,xRowRes);
         xProp.setPropertyValue("DataSourceName","Bibliography");
         xProp.setPropertyValue("Command","biblio");
-        xProp.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
+        xProp.setPropertyValue("CommandType",Integer.valueOf(com.sun.star.sdb.CommandType.TABLE));
 
         xRowRes.execute();
         System.out.println("RowSet executed!");

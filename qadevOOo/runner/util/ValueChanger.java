@@ -55,7 +55,7 @@ public class ValueChanger {
 
    if (oldValue instanceof Integer) {
      int oldint = ((Integer) oldValue).intValue();
-     newValue = new Integer(oldint+5);
+     newValue = Integer.valueOf(oldint+5);
    } else
 
    if (oldValue instanceof Long) {

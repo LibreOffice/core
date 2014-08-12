@@ -66,7 +66,7 @@ public class FieldDescription
     {
         Name = _fieldname;
         aPropertyValues = new ArrayList<PropertyValue>();
-        Type = new Integer(com.sun.star.sdbc.DataType.VARCHAR);
+        Type = Integer.valueOf(com.sun.star.sdbc.DataType.VARCHAR);
         aPropertyValues.add(Properties.createProperty(PropertyNames.PROPERTY_NAME, _fieldname));
         aPropertyValues.add(Properties.createProperty("Type", Type));
     }

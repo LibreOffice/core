@@ -176,7 +176,7 @@ public class ChartInCalc
 
             // change attributes for all series
             // set line width to 0.5mm
-            aDiaProp.setPropertyValue( "LineWidth",  new Integer( 50 ));
+            aDiaProp.setPropertyValue( "LineWidth",  Integer.valueOf( 50 ));
         }
     }
 
@@ -193,7 +193,7 @@ public class ChartInCalc
             for( int i = 1; i <= 3; i++ )
             {
                 aSeriesProp = maDiagram.getDataRowProperties( i );
-                aSeriesProp.setPropertyValue( "LineColor", new Integer(
+                aSeriesProp.setPropertyValue( "LineColor", Integer.valueOf(
                                                   0x400000 * i +
                                                   0x005000 * i +
                                                   0x0000ff - 0x40 * i ));
@@ -209,12 +209,12 @@ public class ChartInCalc
                     }
 
                     // set a bitmap via URL as symbol for the first series
-                    aSeriesProp.setPropertyValue( "SymbolType", new Integer( ChartSymbolType.BITMAPURL ));
+                    aSeriesProp.setPropertyValue( "SymbolType", Integer.valueOf( ChartSymbolType.BITMAPURL ));
                     aSeriesProp.setPropertyValue( "SymbolBitmapURL", sUrl.toString() );
                 }
                 else
                 {
-                    aSeriesProp.setPropertyValue( "SymbolType", new Integer( ChartSymbolType.SYMBOL1 ));
+                    aSeriesProp.setPropertyValue( "SymbolType", Integer.valueOf( ChartSymbolType.SYMBOL1 ));
                     aSeriesProp.setPropertyValue( "SymbolSize", new Size( 250, 250 ));
                 }
             }
@@ -254,13 +254,13 @@ public class ChartInCalc
             XPropertySet aPointProp = maDiagram.getDataPointProperties( 0, 1 );
 
             // set a different, larger symbol
-            aPointProp.setPropertyValue( "SymbolType", new Integer( ChartSymbolType.SYMBOL6 ));
+            aPointProp.setPropertyValue( "SymbolType", Integer.valueOf( ChartSymbolType.SYMBOL6 ));
             aPointProp.setPropertyValue( "SymbolSize", new Size( 600, 600 ));
 
             // add a label text with bold font, bordeaux red 14pt
-            aPointProp.setPropertyValue( "DataCaption", new Integer( ChartDataCaption.VALUE ));
+            aPointProp.setPropertyValue( "DataCaption", Integer.valueOf( ChartDataCaption.VALUE ));
             aPointProp.setPropertyValue( "CharHeight",  new Float( 14.0 ));
-            aPointProp.setPropertyValue( "CharColor",   new Integer( 0x993366 ));
+            aPointProp.setPropertyValue( "CharColor",   Integer.valueOf( 0x993366 ));
             aPointProp.setPropertyValue( "CharWeight",  new Float( FontWeight.BOLD ));
         }
         catch( IndexOutOfBoundsException ex )
@@ -281,7 +281,7 @@ public class ChartInCalc
         {
             // change background color of entire chart
             aArea.setPropertyValue( "FillStyle", FillStyle.SOLID );
-            aArea.setPropertyValue( "FillColor", new Integer( 0xeeeeee ));
+            aArea.setPropertyValue( "FillColor", Integer.valueOf( 0xeeeeee ));
         }
     }
 
@@ -296,7 +296,7 @@ public class ChartInCalc
 
         // change background color of area
         aWall.setPropertyValue( "FillStyle", FillStyle.SOLID );
-        aWall.setPropertyValue( "FillColor", new Integer( 0xcccccc ));
+        aWall.setPropertyValue( "FillColor", Integer.valueOf( 0xcccccc ));
     }
 
 
@@ -346,8 +346,8 @@ public class ChartInCalc
                                       XAxisXSupplier.class, maDiagram ).getXAxis();
         if( aAxisProp != null )
         {
-            aAxisProp.setPropertyValue( "Max",      new Integer( 24 ));
-            aAxisProp.setPropertyValue( "StepMain", new Integer( 3 ));
+            aAxisProp.setPropertyValue( "Max",      Integer.valueOf( 24 ));
+            aAxisProp.setPropertyValue( "StepMain", Integer.valueOf( 3 ));
         }
 
         // change number format for y axis
@@ -370,7 +370,7 @@ public class ChartInCalc
 
         if( aAxisProp != null )
         {
-            aAxisProp.setPropertyValue( "NumberFormat", new Integer( nNewNumberFormat ));
+            aAxisProp.setPropertyValue( "NumberFormat", Integer.valueOf( nNewNumberFormat ));
         }
     }
 
@@ -396,10 +396,10 @@ public class ChartInCalc
             aDash.DashLen  = 200;
             aDash.Distance = 100;
 
-            aGridProp.setPropertyValue( "LineColor", new Integer( 0x999999 ));
+            aGridProp.setPropertyValue( "LineColor", Integer.valueOf( 0x999999 ));
             aGridProp.setPropertyValue( "LineStyle", LineStyle.DASH );
             aGridProp.setPropertyValue( "LineDash", aDash );
-            aGridProp.setPropertyValue( "LineWidth", new Integer( 30 ));
+            aGridProp.setPropertyValue( "LineWidth", Integer.valueOf( 30 ));
         }
     }
 

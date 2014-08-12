@@ -175,7 +175,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
             nDate = nDate * 100 + aCalDate.get( Calendar.MONTH ) + 1;
             nDate = nDate * 100 + aCalDate.get( Calendar.DAY_OF_MONTH );
 
-            aReturn = new Integer( nDate );
+            aReturn = Integer.valueOf( nDate );
         }
         else if ( aDate.getClass().equals( Class.forName( "java.lang.Integer" ) ) )
         {
@@ -215,19 +215,19 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
                 aCal.setTime( (java.util.Date)aDate );
 
                 sOdbcDate += new String( "{D '" );
-                sOdbcDate += (new Integer( aCal.get( Calendar.YEAR ) ) ).toString();
+                sOdbcDate += (Integer.valueOf( aCal.get( Calendar.YEAR ) ) ).toString();
                 sOdbcDate += "-";
 
                 int nMonth = aCal.get( Calendar.MONTH ) + 1;
                 if ( nMonth < 10 )
                     sOdbcDate += "0";
-                sOdbcDate += (new Integer( nMonth ) ).toString();
+                sOdbcDate += (Integer.valueOf( nMonth ) ).toString();
                 sOdbcDate += "-";
 
                 int nDay = aCal.get( Calendar.DAY_OF_MONTH );
                 if ( nDay < 10 )
                     sOdbcDate += "0";
-                sOdbcDate += (new Integer( nDay ) ).toString();
+                sOdbcDate += (Integer.valueOf( nDay ) ).toString();
                 sOdbcDate += "'}";
             }
         }

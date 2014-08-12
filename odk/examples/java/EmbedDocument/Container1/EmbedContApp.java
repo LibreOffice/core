@@ -891,7 +891,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             {
                 Object aArgs[] = new Object[2];
                 aArgs[0] = aFileURI;
-                aArgs[1] = new Integer( ElementModes.READWRITE );
+                aArgs[1] = Integer.valueOf( ElementModes.READWRITE );
 
                 Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
                 XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
@@ -926,7 +926,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                                                                         oStorageFactory );
             Object aArgs[] = new Object[2];
             aArgs[0] = aFileURI;
-            aArgs[1] = new Integer( ElementModes.READWRITE );
+            aArgs[1] = Integer.valueOf( ElementModes.READWRITE );
 
             Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
             XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );

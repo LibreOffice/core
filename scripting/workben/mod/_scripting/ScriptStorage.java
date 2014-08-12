@@ -74,7 +74,7 @@ public class ScriptStorage extends TestCase {
             access = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
             oObj = ( XInterface )xMSF.createInstanceWithArguments(
                 "drafts.com.sun.star.script.framework.storage.ScriptStorage",
-                new Object[]{ access, new Integer(99), docPath } );
+                new Object[]{ access, Integer.valueOf(99), docPath } );
 
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;

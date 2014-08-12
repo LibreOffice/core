@@ -107,7 +107,7 @@ final class ProxyFactory {
                 return Boolean.valueOf(args[0] != null
                         && oid.equals(UnoRuntime.generateOid(args[0])));
             } else if (method.equals(METHOD_HASH_CODE)) {
-                return new Integer(oid.hashCode());
+                return Integer.valueOf(oid.hashCode());
             } else if (method.equals(METHOD_TO_STRING)) {
                 return "[Proxy:" + System.identityHashCode(proxy) + "," + oid
                     + "," + type + "]";

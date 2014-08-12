@@ -48,7 +48,7 @@ public class RowSet implements XRowSet, XRow
             m_rowSetProps = UnoRuntime.queryInterface(
                 XPropertySet.class, _context.getServiceManager().createInstanceWithContext( "com.sun.star.sdb.RowSet", _context ) );
             m_rowSetProps.setPropertyValue( "DataSourceName", _dataSource );
-            m_rowSetProps.setPropertyValue( "CommandType", new Integer( _commandType ) );
+            m_rowSetProps.setPropertyValue( "CommandType", Integer.valueOf( _commandType ) );
             m_rowSetProps.setPropertyValue( "Command", _command );
 
             m_rowSet = UnoRuntime.queryInterface( XRowSet.class, m_rowSetProps );

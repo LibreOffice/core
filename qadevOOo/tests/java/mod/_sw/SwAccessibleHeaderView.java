@@ -134,7 +134,7 @@ public class SwAccessibleHeaderView extends TestCase {
                 public void fireEvent() {
                     try {
                         PropSet.setPropertyValue("HeaderLeftMargin",
-                            new Integer(1000));
+                            Integer.valueOf(1000));
                     } catch (com.sun.star.uno.Exception e) {
                         e.printStackTrace();
                         throw new StatusException("Cann't change footer.", e);

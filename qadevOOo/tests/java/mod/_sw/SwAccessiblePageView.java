@@ -195,7 +195,7 @@ public class SwAccessiblePageView extends TestCase {
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
                     Integer old = (Integer) xAccVal.getCurrentValue();
-                    Integer newValue = new Integer(old.intValue()+10);
+                    Integer newValue = Integer.valueOf(old.intValue()+10);
                     xAccVal.setCurrentValue(newValue);
                     xAccVal.setCurrentValue(old);
                 }

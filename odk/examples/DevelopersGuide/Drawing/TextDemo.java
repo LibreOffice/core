@@ -102,16 +102,16 @@ public class TextDemo
 
             // first paragraph
             xTextPropSet = ShapeHelper.addPortion( xRectangle, "Portion1", false );
-            xTextPropSet.setPropertyValue( "CharColor", new Integer( 0xff0000 ) );
+            xTextPropSet.setPropertyValue( "CharColor", Integer.valueOf( 0xff0000 ) );
             xTextPropSet = ShapeHelper.addPortion( xRectangle, "Portion2", false );
-            xTextPropSet.setPropertyValue( "CharColor", new Integer( 0x8080ff ) );
+            xTextPropSet.setPropertyValue( "CharColor", Integer.valueOf( 0x8080ff ) );
             aLineSpacing.Height = 100;
             ShapeHelper.setPropertyForLastParagraph( xRectangle, "ParaLineSpacing",
                                                      aLineSpacing );
 
             // second paragraph
             xTextPropSet = ShapeHelper.addPortion( xRectangle, "Portion3", true );
-            xTextPropSet.setPropertyValue( "CharColor", new Integer( 0xff ) );
+            xTextPropSet.setPropertyValue( "CharColor", Integer.valueOf( 0xff ) );
             aLineSpacing.Height = 200;
             ShapeHelper.setPropertyForLastParagraph( xRectangle, "ParaLineSpacing",
                                                      aLineSpacing );
@@ -127,18 +127,18 @@ public class TextDemo
             xShapePropSet = UnoRuntime.queryInterface( XPropertySet.class, xRectangle );
             xShapePropSet.setPropertyValue( "TextFitToSize",
                                             TextFitToSizeType.PROPORTIONAL );
-            xShapePropSet.setPropertyValue( "TextLeftDistance",  new Integer(2500));
-            xShapePropSet.setPropertyValue( "TextRightDistance", new Integer(2500));
-            xShapePropSet.setPropertyValue( "TextUpperDistance", new Integer(2500));
-            xShapePropSet.setPropertyValue( "TextLowerDistance", new Integer(2500));
+            xShapePropSet.setPropertyValue( "TextLeftDistance",  Integer.valueOf(2500));
+            xShapePropSet.setPropertyValue( "TextRightDistance", Integer.valueOf(2500));
+            xShapePropSet.setPropertyValue( "TextUpperDistance", Integer.valueOf(2500));
+            xShapePropSet.setPropertyValue( "TextLowerDistance", Integer.valueOf(2500));
             xTextPropSet = ShapeHelper.addPortion( xRectangle,
                                                    "using TextFitToSize", false );
             xTextPropSet.setPropertyValue( "ParaAdjust", ParagraphAdjust.CENTER );
-            xTextPropSet.setPropertyValue( "CharColor",  new Integer(0xff00));
+            xTextPropSet.setPropertyValue( "CharColor",  Integer.valueOf(0xff00));
             xTextPropSet = ShapeHelper.addPortion(xRectangle,
                                                   "and a Border distance of 2,5 cm",
                                                   true );
-            xTextPropSet.setPropertyValue( "CharColor",  new Integer( 0xff0000 ) );
+            xTextPropSet.setPropertyValue( "CharColor",  Integer.valueOf( 0xff0000 ) );
 
         }
         catch( Exception ex )

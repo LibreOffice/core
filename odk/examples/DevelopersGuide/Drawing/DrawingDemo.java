@@ -342,7 +342,7 @@ public class DrawingDemo
             xShapeProperties.setPropertyValue( "PolyPolygonBezier", aCoords );
 
             // move the shape to the back by changing the ZOrder
-            xShapeProperties.setPropertyValue( "ZOrder", new Integer( 1 ) );
+            xShapeProperties.setPropertyValue( "ZOrder", Integer.valueOf( 1 ) );
         }
         catch ( Exception ex )
         {

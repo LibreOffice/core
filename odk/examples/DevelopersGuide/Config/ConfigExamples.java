@@ -757,7 +757,7 @@ public class ConfigExamples
                     int nNew = 9999 - nOld;
 
                     System.out.println("Replacing integer value: " + aItemNames [i]);
-                    aReplace.replaceByName( aItemNames [i], new Integer( nNew ) );
+                    aReplace.replaceByName( aItemNames [i], Integer.valueOf( nNew ) );
                 }
 
                 // and booleans by their negated value
@@ -898,7 +898,7 @@ public class ConfigExamples
         xDataSourceProperties.setPropertyValue("URL",  sDataSourceURL  );
         xDataSourceProperties.setPropertyValue("User", sUser  );
         xDataSourceProperties.setPropertyValue("IsPasswordRequired", Boolean.valueOf( bNeedsPassword ) );
-        xDataSourceProperties.setPropertyValue("LoginTimeout", new Integer( nTimeout ) );
+        xDataSourceProperties.setPropertyValue("LoginTimeout", Integer.valueOf( nTimeout ) );
 
         if ( aTableFilter != null )
             xDataSourceProperties.setPropertyValue("TableFilter",  aTableFilter  );

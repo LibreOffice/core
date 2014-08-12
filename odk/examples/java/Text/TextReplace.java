@@ -113,10 +113,10 @@ public class TextReplace {
             com.sun.star.beans.XPropertySet xCPS = UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertySet.class, xTextCursor);
             // Set the word blue
-            xCPS.setPropertyValue( "CharColor", new Integer( 255 ) );
+            xCPS.setPropertyValue( "CharColor", Integer.valueOf( 255 ) );
             // Go to last character
             xTextCursor.gotoEnd(false);
-            xCPS.setPropertyValue( "CharColor", new Integer( 0 ) );
+            xCPS.setPropertyValue( "CharColor", Integer.valueOf( 0 ) );
 
             xText.insertString( xTextCursor, "in the alley. Like lightening he darted off to the left and disappeared between the two warehouses almost falling over the trash can lying in the ", false  );
 
@@ -124,10 +124,10 @@ public class TextReplace {
             xCPS = UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertySet.class, xTextCursor);
             // Set the word blue
-            xCPS.setPropertyValue( "CharColor", new Integer( 255 ) );
+            xCPS.setPropertyValue( "CharColor", Integer.valueOf( 255 ) );
             // Go to last character
             xTextCursor.gotoEnd(false);
-            xCPS.setPropertyValue( "CharColor", new Integer( 0 ) );
+            xCPS.setPropertyValue( "CharColor", Integer.valueOf( 0 ) );
 
             xText.insertString( xTextCursor, "of the sidewalk.", false );
 

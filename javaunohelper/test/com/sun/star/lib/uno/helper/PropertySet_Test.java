@@ -113,7 +113,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropShortA", value);
             ret= cl.getPropertyValue("PropShortA");
             r[i++]= ((Short) ret).equals(value);
-            value= new Integer(113);
+            value= Integer.valueOf(113);
             cl.setPropertyValue("PropIntA", value);
             ret= cl.getPropertyValue("PropIntA");
             r[i++]= ((Integer) ret).equals(value);
@@ -188,7 +188,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropObjectA", value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Short) ret).equals(value);
-            value= new Integer(113);
+            value= Integer.valueOf(113);
             cl.setPropertyValue("PropObjectA", value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Integer) ret).equals(value);
@@ -245,7 +245,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new Integer(113);
+            value= Integer.valueOf(113);
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -299,7 +299,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropShortA", value);
             ret= cl.getPropertyValue("PropShortA");
             r[i++]= ret instanceof Short && util.anyEquals(value, ret);
-            value= new Any(new Type(int.class), new Integer(113));
+            value= new Any(new Type(int.class), Integer.valueOf(113));
             cl.setPropertyValue("PropIntA", value);
             ret= cl.getPropertyValue("PropIntA");
             r[i++]= ret instanceof Integer && util.anyEquals(value, ret);
@@ -354,7 +354,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new Any(new Type(int.class), new Integer(113));
+            value= new Any(new Type(int.class), Integer.valueOf(113));
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -410,7 +410,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropShortClass", value);
             ret= cl.getPropertyValue("PropShortClass");
             r[i++]= ((Short) ret).equals(value);
-            value= new Integer(113);
+            value= Integer.valueOf(113);
             cl.setPropertyValue("PropIntClass", value);
             ret= cl.getPropertyValue("PropIntClass");
             r[i++]= ((Integer) ret).equals(value);
@@ -446,7 +446,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropShortClass", value);
             ret= cl.getPropertyValue("PropShortClass");
             r[i++]= ret instanceof Short && util.anyEquals(value, ret);
-            value= new Any(new Type(int.class), new Integer(113));
+            value= new Any(new Type(int.class), Integer.valueOf(113));
             cl.setPropertyValue("PropIntClass", value);
             ret= cl.getPropertyValue("PropIntClass");
             r[i++]= ret instanceof Integer && util.anyEquals(value, ret);
@@ -843,10 +843,10 @@ public class PropertySet_Test
 
         TestClass cl= new TestClass();
         try {
-            cl.setFastPropertyValue(5, new Integer(111));
+            cl.setFastPropertyValue(5, Integer.valueOf(111));
             r[i++]= cl.intPropA == 111;
             try {
-            cl.setFastPropertyValue(-1, new Integer(1)); i++;
+            cl.setFastPropertyValue(-1, Integer.valueOf(1)); i++;
             } catch(UnknownPropertyException e)
             {
                 r[i++]= true;
@@ -874,7 +874,7 @@ public class PropertySet_Test
 
         TestClass cl= new TestClass();
         try {
-            cl.setFastPropertyValue(5, new Integer(111));
+            cl.setFastPropertyValue(5, Integer.valueOf(111));
             Integer aInt= (Integer) cl.getFastPropertyValue(5);
             r[i++]= aInt.intValue() == 111;
         }catch(java.lang.Exception e){
@@ -903,7 +903,7 @@ public class PropertySet_Test
             cl.setPropertyValues(new String[0], new Object[0]);
             String[] arNames= new String[] {"PropCharA","PropIntClass","PropObjectA"};
             Character aChar= new Character('A');
-            Integer aInt= new Integer(111);
+            Integer aInt= Integer.valueOf(111);
             Byte aByte= new Byte((byte)11);
             Object[] values= new Object[]{aChar, aInt, aByte};
             cl.setPropertyValues(arNames, values);
@@ -936,7 +936,7 @@ public class PropertySet_Test
         TestClass cl= new TestClass();
         try {
             cl.charPropA= 'A';
-            cl.intClassProp= new Integer(111);
+            cl.intClassProp= Integer.valueOf(111);
             cl.objectPropA= new Byte((byte)11);
             Object[] values= cl.getPropertyValues(new String[] {"PropCharA","PropIntClass","PropObjectA"});
 
@@ -1007,7 +1007,7 @@ public class PropertySet_Test
         TestClass cl= new TestClass();
         try {
             Listener li1= new Listener();
-            cl.intClassProp= new Integer(111);
+            cl.intClassProp= Integer.valueOf(111);
             cl.charPropA= 'A';
             cl.firePropertiesChangeEvent(new String[]{"PropCharA","PropIntClass"},  li1);
             r[i++]= li1.nPropertiesChange == 1;
@@ -1216,7 +1216,7 @@ class TestClass extends PropertySet
             value= new Short((short) 112);
             r[i++]= convertPropertyValue(propShortA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Short && outNewVal[0].equals(value);
-            value= new Integer( 113);
+            value= Integer.valueOf( 113);
             r[i++]= convertPropertyValue(propIntA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Integer && outNewVal[0].equals(value);
             value= new Long(114);
@@ -1244,13 +1244,13 @@ class TestClass extends PropertySet
             value= new Object(); // TypeClass.VOID
             r[i++]= convertPropertyValue(propObjectA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0].equals(value);
-            value= new Integer(111);
+            value= Integer.valueOf(111);
             r[i++]= convertPropertyValue(propObjectA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Integer && outNewVal[0].equals(value);
             value= new ComponentBase();
             r[i++]= convertPropertyValue(propObjectA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0].equals(value);
-            value= new Integer(111);
+            value= Integer.valueOf(111);
             r[i++]= convertPropertyValue(propAnyA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Any && ((Any)outNewVal[0]).getType().equals(new Type(Integer.class))
                     && ((Any)outNewVal[0]).getObject().equals(value);
@@ -1271,7 +1271,7 @@ class TestClass extends PropertySet
             r[i++]= outNewVal[0] instanceof com.sun.star.uno.Enum && outNewVal[0].equals(value);
 
             // Any arguments ------------------------------------------------------------------
-            value= new Any( new Type(Integer.class),new Integer(111));
+            value= new Any( new Type(Integer.class),Integer.valueOf(111));
             r[i++]= convertPropertyValue(propIntA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Integer && ((Integer)outNewVal[0]).equals( ((Any)value).getObject());
             value= new Any(new Type(Boolean.class), Boolean.TRUE);
@@ -1282,7 +1282,7 @@ class TestClass extends PropertySet
             value= new Any(new Type(Object.class), new Object());
             r[i++]= convertPropertyValue(propObjectA, outNewVal, outOldVal, value);
             r[i++]= convertPropertyValue(propAnyA, outNewVal, outOldVal, value);
-            value= new Any(new Type(Integer.class), new Integer(111));
+            value= new Any(new Type(Integer.class), Integer.valueOf(111));
             r[i++]= convertPropertyValue(propObjectA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Integer && outNewVal[0].equals( ((Any)value).getObject());
             r[i++]= convertPropertyValue(propAnyA, outNewVal, outOldVal, value);
@@ -1327,7 +1327,7 @@ class TestClass extends PropertySet
             value= new Short((short) 112);
             r[i++]= convertPropertyValue(propShortClass, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Short && outNewVal[0].equals(value);
-            value= new Integer( 113);
+            value= Integer.valueOf( 113);
             r[i++]= convertPropertyValue(propIntClass, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Integer && outNewVal[0].equals(value);
             value= new Long(114);
@@ -1368,7 +1368,7 @@ class TestClass extends PropertySet
             value= new Short((short) 112);
             setPropertyValueNoBroadcast(propShortA, value);
             r[i++]= shortPropA == ((Short) value).shortValue();
-            value= new Integer( 113);
+            value= Integer.valueOf( 113);
             setPropertyValueNoBroadcast(propIntA, value);
             r[i++]= intPropA == ((Integer) value).intValue();
             value= new Long(114);
@@ -1389,13 +1389,13 @@ class TestClass extends PropertySet
             value= new Type(XInterface.class);
             setPropertyValueNoBroadcast(propTypeA, value);
             r[i++]= typePropA.equals(value);
-            value= new Integer(111);
+            value= Integer.valueOf(111);
             setPropertyValueNoBroadcast(propObjectA, value);
             r[i++]= objectPropA.equals(value);
             value= new ComponentBase();
             setPropertyValueNoBroadcast(propObjectA, value);
             r[i++]= objectPropA.equals(value);
-            value= new Any( new Type(Integer.TYPE), new Integer(111));
+            value= new Any( new Type(Integer.TYPE), Integer.valueOf(111));
             setPropertyValueNoBroadcast(propAnyA, value);
             r[i++]= util.anyEquals(anyPropA, value);
             value= new ComponentBase();
@@ -1554,7 +1554,7 @@ class TestClass2 extends PropertySet
             setPropertyValue("charClassB",val);
             ret= getPropertyValue("charClassB");
             r[i++]= val.equals(ret);
-            val= new Integer(111);
+            val= Integer.valueOf(111);
             setPropertyValue("IntProp",val);
             ret= getPropertyValue("IntProp");
             r[i++]= val.equals(ret);

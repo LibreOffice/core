@@ -146,7 +146,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             xKeyDrop = UnoRuntime.queryInterface(XDrop.class, xIndexAccessKeys);
             xKeyAppend = UnoRuntime.queryInterface(XAppend.class, xKeyFac);
             xKey = xKeyFac.createDataDescriptor();
-            xKey.setPropertyValue("Type", new Integer(KeyType.PRIMARY));
+            xKey.setPropertyValue("Type", Integer.valueOf(KeyType.PRIMARY));
             xKeyColumnSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, xKey);
             XDataDescriptorFactory xKeyColFac = UnoRuntime.queryInterface(XDataDescriptorFactory.class, xKeyColumnSupplier.getColumns());
             xKeyColAppend = UnoRuntime.queryInterface(XAppend.class, xKeyColFac);
@@ -165,7 +165,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 {
                     xColPropertySet = addPrimaryKeyColumn(_fieldnames[i]);
                 }
-                xColPropertySet.setPropertyValue("IsNullable", new Integer(com.sun.star.sdbc.ColumnValue.NO_NULLS));
+                xColPropertySet.setPropertyValue("IsNullable", Integer.valueOf(com.sun.star.sdbc.ColumnValue.NO_NULLS));
                 if (_bAutoincrementation)
                 {
                     int nDataType = oTypeInspector.getAutoIncrementIndex(xColPropertySet);
@@ -173,7 +173,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                     {
                         if (xColPropertySet.getPropertySetInfo().hasPropertyByName("IsAutoIncrement"))
                         {
-                            xColPropertySet.setPropertyValue("Type", new Integer(nDataType));
+                            xColPropertySet.setPropertyValue("Type", Integer.valueOf(nDataType));
                             xColPropertySet.setPropertyValue("IsAutoIncrement", Boolean.valueOf(_bAutoincrementation));
                         }
                     }
@@ -654,7 +654,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                     xColPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, IDFieldName);
 
                     int nDataType = oTypeInspector.convertDataType(com.sun.star.sdbc.DataType.INTEGER);
-                    xColPropertySet.setPropertyValue("Type", new Integer(nDataType));
+                    xColPropertySet.setPropertyValue("Type", Integer.valueOf(nDataType));
                     xColPropertySet.setPropertyValue("TypeName", oTypeInspector.getDefaultTypeName(nDataType, null));
                     ColumnDescriptor oColumnDescriptor = new ColumnDescriptor(xColPropertySet, IDFieldName);
                     this.columncontainer.add(0, oColumnDescriptor);

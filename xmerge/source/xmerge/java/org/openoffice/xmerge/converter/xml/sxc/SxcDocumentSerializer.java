@@ -400,7 +400,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 // Get the number of times the row is repeated
                 String rowsRepeatedString = rowsRepeatedNode.getNodeValue();
 
-                Integer rowsRepeatedInt = new Integer(rowsRepeatedString);
+                Integer rowsRepeatedInt = Integer.valueOf(rowsRepeatedString);
 
                 rowsRepeated = rowsRepeatedInt.intValue();
 
@@ -594,7 +594,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             // Get the number of times the cell is repeated
             String colsRepeatedString = colsRepeatedNode.getNodeValue();
 
-            Integer colsRepeatedInt = new Integer(colsRepeatedString);
+            Integer colsRepeatedInt = Integer.valueOf(colsRepeatedString);
             colsRepeated = colsRepeatedInt.intValue();
         } else {
 

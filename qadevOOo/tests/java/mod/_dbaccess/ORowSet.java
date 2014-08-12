@@ -301,7 +301,7 @@ public class ORowSet extends TestCase {
             rowSetProps.setPropertyValue("DataSourceName", dbSourceName);
             rowSetProps.setPropertyValue("Command", tableName);
             rowSetProps.setPropertyValue("CommandType",
-                new Integer(CommandType.TABLE));
+                Integer.valueOf(CommandType.TABLE));
 
             final XRowSet rowSet = UnoRuntime.queryInterface( XRowSet.class, m_rowSet);
             rowSet.execute();
@@ -407,7 +407,7 @@ public class ORowSet extends TestCase {
                     :   "SELECT \"_TEXT\" FROM \"" + tableName + "\" WHERE ( ( \"_TEXT\" = :param1 ) )";
                 rowSetProps.setPropertyValue( "DataSourceName", dbSourceName );
                 rowSetProps.setPropertyValue( "Command", sqlCommand );
-                rowSetProps.setPropertyValue( "CommandType", new Integer(CommandType.COMMAND) );
+                rowSetProps.setPropertyValue( "CommandType", Integer.valueOf(CommandType.COMMAND) );
             }
             catch(Exception e)
             {

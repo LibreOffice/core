@@ -102,10 +102,10 @@ public class StyleCreation {
             xPropertySet.setPropertyValue("CharAutoKerning", Boolean.TRUE );
             System.out.println( "set the paragraph attribute 'AutoKerning'" );
             xPropertySet.setPropertyValue("ParaAdjust",
-                new Integer( com.sun.star.style.ParagraphAdjust.CENTER_value ) );
+                Integer.valueOf( com.sun.star.style.ParagraphAdjust.CENTER_value ) );
             System.out.println( "set the paragraph adjust to LEFT" );
 
-            xPropertySet.setPropertyValue("ParaFirstLineIndent", new Integer( 0 ) );
+            xPropertySet.setPropertyValue("ParaFirstLineIndent", Integer.valueOf( 0 ) );
             System.out.println( "set the first line indent to 0 cm" );
 
             xPropertySet.setPropertyValue("BreakType",

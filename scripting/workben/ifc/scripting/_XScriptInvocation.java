@@ -90,7 +90,7 @@ public class _XScriptInvocation extends MultiMethodTest {
             ctx = loadDocument(context);
 
         HashMap<String,Object> map = new HashMap<String,Object>();
-        map.put("SCRIPTING_DOC_STORAGE_ID", new Integer(storageId));
+        map.put("SCRIPTING_DOC_STORAGE_ID", Integer.valueOf(storageId));
         map.put("SCRIPTING_DOC_URI", "hahaha");
         if (ctx != null)
             map.put("SCRIPTING_DOC_REF", ctx);

@@ -87,7 +87,7 @@ public final class TestService implements XServiceInfo, XSingleComponentFactory
         }
 
         public void setProp6(int value) {
-            prop6 = new Integer(value);
+            prop6 = Integer.valueOf(value);
         }
 
         public int getProp7()
@@ -96,7 +96,7 @@ public final class TestService implements XServiceInfo, XSingleComponentFactory
         }
 
         public void setProp7(int value) {
-            prop7 = new Integer(value);
+            prop7 = Integer.valueOf(value);
         }
 
         public int getProp8Long() {
@@ -117,8 +117,8 @@ public final class TestService implements XServiceInfo, XSingleComponentFactory
         }
 
         private int prop1 = 1;
-        private Integer prop6 = new Integer(6);
-        private Integer prop7 = new Integer(7);
+        private Integer prop6 = Integer.valueOf(6);
+        private Integer prop7 = Integer.valueOf(7);
         private int prop8 = 8;
     }
 

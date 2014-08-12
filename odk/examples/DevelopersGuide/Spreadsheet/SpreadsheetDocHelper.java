@@ -202,7 +202,7 @@ public class SpreadsheetDocHelper
             com.sun.star.util.NumberFormat.DATE, new com.sun.star.lang.Locale() );
 
         com.sun.star.beans.XPropertySet xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCell );
-        xPropSet.setPropertyValue( "NumberFormat", new Integer( nFormat ) );
+        xPropSet.setPropertyValue( "NumberFormat", Integer.valueOf( nFormat ) );
     }
 
     /** Draws a colored border around the range and writes the headline in the
@@ -237,12 +237,12 @@ public class SpreadsheetDocHelper
         xCellRange = xSheet.getCellRangeByPosition(
             aAddr.StartColumn, aAddr.StartRow, aAddr.EndColumn, aAddr.StartRow );
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
-        xPropSet.setPropertyValue( "CellBackColor", new Integer( 0x99CCFF ) );
+        xPropSet.setPropertyValue( "CellBackColor", Integer.valueOf( 0x99CCFF ) );
         // write headline
         com.sun.star.table.XCell xCell = xCellRange.getCellByPosition( 0, 0 );
         xCell.setFormula( aHeadline );
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCell );
-        xPropSet.setPropertyValue( "CharColor", new Integer( 0x003399 ) );
+        xPropSet.setPropertyValue( "CharColor", Integer.valueOf( 0x003399 ) );
         xPropSet.setPropertyValue( "CharWeight", new Float( com.sun.star.awt.FontWeight.BOLD ) );
     }
 

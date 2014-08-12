@@ -29,12 +29,12 @@ public class ComponentContext_Test {
     public static void main(String args[]) {
         try {
             HashMap<String,Object> table = new HashMap<String,Object>();
-            table.put( "bla1", new ComponentContextEntry( null, new Integer( 1 ) ) );
+            table.put( "bla1", new ComponentContextEntry( null, Integer.valueOf( 1 ) ) );
             XComponentContext xInitialContext = Bootstrap.createInitialComponentContext( table );
 
             table = new HashMap<String,Object>();
-            table.put( "bla2", new ComponentContextEntry( new Integer( 2 ) ) );
-            table.put( "bla3", new Integer( 3 ) );
+            table.put( "bla2", new ComponentContextEntry( Integer.valueOf( 2 ) ) );
+            table.put( "bla3", Integer.valueOf( 3 ) );
             XComponentContext xContext = new ComponentContext( table, xInitialContext );
 
             XMultiComponentFactory xSMgr = xContext.getServiceManager();

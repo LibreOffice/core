@@ -152,9 +152,9 @@ public class PropTest extends PropertySet implements XServiceInfo
 
     // readonly
     public int roIntA= 100;
-    public Integer roIntClassA= new Integer(100);
-    public Object roObjectA= new Integer(101);
-    public Any roAnyA= new Any( new Type(int.class), new Integer(102));
+    public Integer roIntClassA= Integer.valueOf(100);
+    public Object roObjectA= Integer.valueOf(101);
+    public Any roAnyA= new Any( new Type(int.class), Integer.valueOf(102));
 
     // BOUND & CONSTRAINED
     public boolean bcBoolA;

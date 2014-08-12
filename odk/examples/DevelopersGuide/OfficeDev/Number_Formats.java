@@ -114,7 +114,7 @@ public class Number_Formats
         com.sun.star.beans.XPropertySet.class, xCellRange );
 
         // Set number format to default currency
-        xCellProp.setPropertyValue( "NumberFormat", new Integer(nCurrencyKey) );
+        xCellProp.setPropertyValue( "NumberFormat", Integer.valueOf(nCurrencyKey) );
 
         // Get cell B3
         com.sun.star.table.XCell xCell = maSheet.getCellByPosition( 1, 2 );
@@ -158,7 +158,7 @@ public class Number_Formats
 
         // Set the new format at the cell
         if ( nIndexKey != -1 )
-            xCellProp.setPropertyValue( "NumberFormat", new Integer(nIndexKey) );
+            xCellProp.setPropertyValue( "NumberFormat", Integer.valueOf(nIndexKey) );
 
 
         // Set column containing the example values to optimal width to show

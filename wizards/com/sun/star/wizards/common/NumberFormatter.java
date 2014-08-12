@@ -183,11 +183,11 @@ public class NumberFormatter
             }
             if (xPSet.getPropertySetInfo().hasPropertyByName("NumberFormat"))
             {
-                xPSet.setPropertyValue("NumberFormat", new Integer(NewFormatKey));
+                xPSet.setPropertyValue("NumberFormat", Integer.valueOf(NewFormatKey));
             }
             else if (xPSet.getPropertySetInfo().hasPropertyByName("FormatKey"))
             {
-                xPSet.setPropertyValue("FormatKey", new Integer(NewFormatKey));
+                xPSet.setPropertyValue("FormatKey", Integer.valueOf(NewFormatKey));
             }
             else
             {

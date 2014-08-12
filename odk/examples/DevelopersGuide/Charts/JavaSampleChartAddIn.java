@@ -167,8 +167,8 @@ public class JavaSampleChartAddIn extends WeakBase implements
                 XPropertySet aShapeProp = UnoRuntime.queryInterface(
                     XPropertySet.class, maTopLine );
 
-                aShapeProp.setPropertyValue( "LineColor", new Integer( 0xe01010 ));
-                aShapeProp.setPropertyValue( "LineWidth", new Integer( 50 ));
+                aShapeProp.setPropertyValue( "LineColor", Integer.valueOf( 0xe01010 ));
+                aShapeProp.setPropertyValue( "LineWidth", Integer.valueOf( 50 ));
                 aShapeProp.setPropertyValue( "Name", "top" );
             }
         }
@@ -190,8 +190,8 @@ public class JavaSampleChartAddIn extends WeakBase implements
                 XPropertySet aShapeProp = UnoRuntime.queryInterface(
                     XPropertySet.class, maBottomLine );
 
-                aShapeProp.setPropertyValue( "LineColor", new Integer( 0x10e010 ));
-                aShapeProp.setPropertyValue( "LineWidth", new Integer( 50 ));
+                aShapeProp.setPropertyValue( "LineColor", Integer.valueOf( 0x10e010 ));
+                aShapeProp.setPropertyValue( "LineWidth", Integer.valueOf( 50 ));
                 aShapeProp.setPropertyValue( "Name", "bottom" );
             }
         }

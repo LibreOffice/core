@@ -150,17 +150,17 @@ public class GraphicsInserter {
 
                 // Setting the horizontal position
                 xPropSet.setPropertyValue( "HoriOrientPosition",
-                                           new Integer( 5500 ) );
+                                           Integer.valueOf( 5500 ) );
 
                 // Setting the vertical position
                 xPropSet.setPropertyValue( "VertOrientPosition",
-                                           new Integer( 4200 ) );
+                                           Integer.valueOf( 4200 ) );
 
                 // Setting the width
-                xPropSet.setPropertyValue( "Width", new Integer( 4400 ) );
+                xPropSet.setPropertyValue( "Width", Integer.valueOf( 4400 ) );
 
                 // Setting the height
-                xPropSet.setPropertyValue( "Height", new Integer( 4000 ) );
+                xPropSet.setPropertyValue( "Height", Integer.valueOf( 4000 ) );
             } catch ( Exception exception ) {
                 System.out.println( "Couldn't set property 'GraphicURL'" );
                 exception.printStackTrace( printwriterLog );

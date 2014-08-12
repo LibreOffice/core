@@ -42,13 +42,13 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         XMultiComponentFactory xMCF = xContext.getServiceManager();
         oUnoMenu2 = new UnoMenu2(xContext, xMCF);
         oUnoMenu2.initialize( new String[] {"Height", "Moveable", "Name","PositionX","PositionY", "Step", "TabIndex","Title","Width"},
-                                    new Object[] { new Integer(140), Boolean.TRUE, "Dialog1", new Integer(102),new Integer(41), new Integer(1), new Short((short) 0), "Menu-Dialog", new Integer(200)});
+                                    new Object[] { Integer.valueOf(140), Boolean.TRUE, "Dialog1", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(1), new Short((short) 0), "Menu-Dialog", Integer.valueOf(200)});
 
         Object oFTHeaderModel = oUnoMenu2.m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
         XMultiPropertySet xFTHeaderModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
         xFTHeaderModelMPSet.setPropertyValues(
             new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Width"},
-            new Object[] { new Integer(8), "This code-sample demonstrates the creation of a popup-menu", "HeaderLabel", new Integer(6), new Integer(6), new Integer(200)});
+            new Object[] { Integer.valueOf(8), "This code-sample demonstrates the creation of a popup-menu", "HeaderLabel", Integer.valueOf(6), Integer.valueOf(6), Integer.valueOf(200)});
         // add the model to the NameContainer of the dialog model
         oUnoMenu2.m_xDlgModelNameContainer.insertByName("Headerlabel", oFTHeaderModel);
         oUnoMenu2.addLabelForPopupMenu();
@@ -75,7 +75,7 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         // Set the properties at the model - keep in mind to pass the property names in alphabetical order!
         xFTModelMPSet.setPropertyValues(
             new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Width"},
-            new Object[] { new Integer(8), "Right-click here", sName, new Integer(50), new Integer(50), new Integer(100)});
+            new Object[] { Integer.valueOf(8), "Right-click here", sName, Integer.valueOf(50), Integer.valueOf(50), Integer.valueOf(100)});
         // add the model to the NameContainer of the dialog model
         m_xDlgModelNameContainer.insertByName(sName, oFTModel);
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, m_xDlgContainer.getControl(sName));

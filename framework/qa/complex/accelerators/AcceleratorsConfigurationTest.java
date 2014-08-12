@@ -565,7 +565,7 @@ public class AcceleratorsConfigurationTest
 
         Object aArgs[] = new Object[2];
         aArgs[0] = sDocCfgName;
-        aArgs[1] = new Integer(com.sun.star.embed.ElementModes.READ);
+        aArgs[1] = Integer.valueOf(com.sun.star.embed.ElementModes.READ);
         XStorage xRootStorage = UnoRuntime.queryInterface(XStorage.class, xStorageFactory.createInstanceWithArguments(aArgs));
 
         XStorage xUIConfig = xRootStorage.openStorageElement("Configurations2", com.sun.star.embed.ElementModes.READ);
@@ -601,7 +601,7 @@ public class AcceleratorsConfigurationTest
 
         Object aArgs[] = new Object[2];
         aArgs[0] = sDocCfgName;
-        aArgs[1] = new Integer(com.sun.star.embed.ElementModes.WRITE);
+        aArgs[1] = Integer.valueOf(com.sun.star.embed.ElementModes.WRITE);
         XStorage xRootStorage = UnoRuntime.queryInterface(XStorage.class, xStorageFactory.createInstanceWithArguments(aArgs));
 
         XStorage xUIConfig = xRootStorage.openStorageElement("Configurations2", com.sun.star.embed.ElementModes.WRITE);

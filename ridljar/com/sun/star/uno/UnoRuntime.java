@@ -312,7 +312,7 @@ public class UnoRuntime {
             return new Short((short) 0);
         case TypeClass.LONG_value:
         case TypeClass.UNSIGNED_LONG_value:
-            return new Integer(0);
+            return Integer.valueOf(0);
         case TypeClass.HYPER_value:
         case TypeClass.UNSIGNED_HYPER_value:
             return new Long(0L);

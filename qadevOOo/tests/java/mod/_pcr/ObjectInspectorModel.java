@@ -128,8 +128,8 @@ public class ObjectInspectorModel extends TestCase {
             TestEnvironment tEnv = new TestEnvironment(oInspectorModel);
 
             // com.sun.star.inspection.XObjectInspectorModel
-            tEnv.addObjRelation("minHelpTextLines", new Integer(minHelpTextLines));
-            tEnv.addObjRelation("maxHelpTextLines", new Integer(maxHelpTextLines));
+            tEnv.addObjRelation("minHelpTextLines", Integer.valueOf(minHelpTextLines));
+            tEnv.addObjRelation("maxHelpTextLines", Integer.valueOf(maxHelpTextLines));
 
             return tEnv;
         } catch (com.sun.star.lang.IllegalArgumentException e) {

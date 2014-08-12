@@ -55,7 +55,7 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
 
         for (int i = 0; i < locales.length; i++) {
             String[] algNames = oObj.getAlgorithmList(locales[i]);
-            algorithms.put(new Integer(i), algNames);
+            algorithms.put(Integer.valueOf(i), algNames);
 
             locResult = algNames != null && algNames.length > 0;
             System.out.println("Locale " + i + ": " + locales[i].Country+","+locales[i].Language);
@@ -83,7 +83,7 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
             log.println("Language: " + locales[i].Language);
 
             for (int j = 0; j < algorithms.size(); j++) {
-                String[] algs = algorithms.get(new Integer(j));
+                String[] algs = algorithms.get(Integer.valueOf(j));
                 for (int k=0;k<algs.length;k++) {
                 log.println("\t Algorythm :" +
                             algs[k]);
@@ -145,7 +145,7 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
         boolean res = true;
 
         for (int i = 0; i < algorithms.size(); i++) {
-            String[] names = algorithms.get(new Integer(i));
+            String[] names = algorithms.get(Integer.valueOf(i));
             log.println("loading algorithms for " + locales[i].Country +
                         "," + locales[i].Language);
 

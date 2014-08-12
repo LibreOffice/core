@@ -261,13 +261,13 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // --- Change cell properties. ---
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCell );
         // from styles.CharacterProperties
-        xPropSet.setPropertyValue( "CharColor", new Integer( 0x003399 ) );
+        xPropSet.setPropertyValue( "CharColor", Integer.valueOf( 0x003399 ) );
         xPropSet.setPropertyValue( "CharHeight", new Float( 20.0 ) );
         // from styles.ParagraphProperties
-        xPropSet.setPropertyValue( "ParaLeftMargin", new Integer( 500 ) );
+        xPropSet.setPropertyValue( "ParaLeftMargin", Integer.valueOf( 500 ) );
         // from table.CellProperties
         xPropSet.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
-        xPropSet.setPropertyValue( "CellBackColor", new Integer( 0x99CCFF ) );
+        xPropSet.setPropertyValue( "CellBackColor", Integer.valueOf( 0x99CCFF ) );
 
 
         // --- Get cell address. ---
@@ -312,13 +312,13 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // --- Change cell range properties. ---
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
         // from com.sun.star.styles.CharacterProperties
-        xPropSet.setPropertyValue( "CharColor", new Integer( 0x003399 ) );
+        xPropSet.setPropertyValue( "CharColor", Integer.valueOf( 0x003399 ) );
         xPropSet.setPropertyValue( "CharHeight", new Float( 20.0 ) );
         // from com.sun.star.styles.ParagraphProperties
-        xPropSet.setPropertyValue( "ParaLeftMargin", new Integer( 500 ) );
+        xPropSet.setPropertyValue( "ParaLeftMargin", Integer.valueOf( 500 ) );
         // from com.sun.star.table.CellProperties
         xPropSet.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
-        xPropSet.setPropertyValue( "CellBackColor", new Integer( 0x99CCFF ) );
+        xPropSet.setPropertyValue( "CellBackColor", Integer.valueOf( 0x99CCFF ) );
 
 
         // --- Replace text in all cells. ---
@@ -366,7 +366,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         Object aColumnObj = xColumns.getByIndex( 0 );
         xPropSet = UnoRuntime.queryInterface(
             com.sun.star.beans.XPropertySet.class, aColumnObj );
-        xPropSet.setPropertyValue( "Width", new Integer( 6000 ) );
+        xPropSet.setPropertyValue( "Width", Integer.valueOf( 6000 ) );
 
         com.sun.star.container.XNamed xNamed = UnoRuntime.queryInterface( com.sun.star.container.XNamed.class, aColumnObj );
         System.out.println( "The name of the wide column is " + xNamed.getName() + "." );
@@ -647,7 +647,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // modify properties of the new style
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aCellStyle );
-        xPropSet.setPropertyValue( "CellBackColor", new Integer( 0x888888 ) );
+        xPropSet.setPropertyValue( "CellBackColor", Integer.valueOf( 0x888888 ) );
         xPropSet.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
 
 
@@ -741,7 +741,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
                 Object aFieldObj = xAutoFormatIA.getByIndex( 4 * nRow + nColumn );
                 xPropSet = UnoRuntime.queryInterface(
                     com.sun.star.beans.XPropertySet.class, aFieldObj );
-                xPropSet.setPropertyValue( "CellBackColor", new Integer( nColor ) );
+                xPropSet.setPropertyValue( "CellBackColor", Integer.valueOf( nColor ) );
             }
         }
 
@@ -1208,7 +1208,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
                     com.sun.star.table.XCellRange xResultRange = xRef.getReferredCells();
                     com.sun.star.beans.XPropertySet xResultProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xResultRange );
                     xResultProp.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
-                    xResultProp.setPropertyValue( "CellBackColor", new Integer( 0xFFFFCC ) );
+                    xResultProp.setPropertyValue( "CellBackColor", Integer.valueOf( 0xFFFFCC ) );
                 }
             }
         }

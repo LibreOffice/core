@@ -118,7 +118,7 @@ public class PresentationDemo
                after the animation has been finished */
             xShapePropSet.setPropertyValue( "DimHide", Boolean.FALSE );
             xShapePropSet.setPropertyValue( "DimPrevious", Boolean.TRUE );
-            xShapePropSet.setPropertyValue( "DimColor", new Integer( 0xff0000 ) );
+            xShapePropSet.setPropertyValue( "DimColor", Integer.valueOf( 0xff0000 ) );
 
 
             // set the slide transition for the second page
@@ -189,7 +189,7 @@ public class PresentationDemo
             XPropertySet xPresPropSet = UnoRuntime.queryInterface( XPropertySet.class, xPresentation );
             xPresPropSet.setPropertyValue( "IsEndless", Boolean.TRUE );
             xPresPropSet.setPropertyValue( "IsAlwaysOnTop", Boolean.TRUE );
-            xPresPropSet.setPropertyValue( "Pause", new Integer( 0 ) );
+            xPresPropSet.setPropertyValue( "Pause", Integer.valueOf( 0 ) );
             xPresentation.start();
         }
         catch( Exception ex )
@@ -218,8 +218,8 @@ public class PresentationDemo
                 XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, xPage );
                 xPropSet.setPropertyValue( "Effect",   eEffect );
                 xPropSet.setPropertyValue( "Speed",    eSpeed );
-                xPropSet.setPropertyValue( "Change",   new Integer( nChange ) );
-                xPropSet.setPropertyValue( "Duration", new Integer( nDuration ) );
+                xPropSet.setPropertyValue( "Change",   Integer.valueOf( nChange ) );
+                xPropSet.setPropertyValue( "Duration", Integer.valueOf( nDuration ) );
             }
             catch( Exception ex )
             {

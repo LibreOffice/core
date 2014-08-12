@@ -236,7 +236,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         {
             case 0: someValue = Boolean.FALSE; break;
             case 1: someValue = new Short( (short)0 ); break;
-            case 2: someValue = new Integer( 0 ); break;
+            case 2: someValue = Integer.valueOf( 0 ); break;
             case 3: someValue = new Long( 0 ); break;
             case 4: someValue = UnoRuntime.queryInterface( XInterface.class, new DummyInterface() ); break;
             case 5: someValue = UnoRuntime.queryInterface( XSet.class, new DummySet() ); break;

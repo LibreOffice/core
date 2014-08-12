@@ -112,8 +112,8 @@ public class Sales
     {
         XStatement stmt = con.createStatement();
         XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
-        xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
-        xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.READ_ONLY));
+        xProp.setPropertyValue("ResultSetType", Integer.valueOf(ResultSetType.SCROLL_INSENSITIVE));
+        xProp.setPropertyValue("ResultSetConcurrency", Integer.valueOf(ResultSetConcurrency.READ_ONLY));
         XResultSet rs = stmt.executeQuery("SELECT NAME, PRICE FROM SALES");
         XResultSetMetaDataSupplier xRsMetaSup = UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class,rs);
         XResultSetMetaData xRsMetaData =  xRsMetaSup.getMetaData();

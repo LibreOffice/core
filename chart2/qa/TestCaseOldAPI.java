@@ -213,7 +213,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 float fWeight = FontWeight.BOLD;
                 float fHeight = (float)14.0;
 
-                xTitleProp.setPropertyValue( "CharColor", new Integer( nColor ) );
+                xTitleProp.setPropertyValue( "CharColor", Integer.valueOf( nColor ) );
                 xTitleProp.setPropertyValue( "CharWeight", new Float( fWeight ));
                 xTitleProp.setPropertyValue( "CharHeight", new Float( fHeight ) );
 
@@ -253,7 +253,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 if( xProp != null )
                 {
                     int nColor = 0xffe1ff; // thistle1
-                    xProp.setPropertyValue( "FillColor", new Integer( nColor ) );
+                    xProp.setPropertyValue( "FillColor", Integer.valueOf( nColor ) );
                     int nNewColor = AnyConverter.toInt( xProp.getPropertyValue( "FillColor" ) );
                     assure( "Changing FillColor via old API failed", nNewColor == nColor );
                 }
@@ -387,7 +387,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                     ! AnyConverter.toBoolean( xProp.getPropertyValue( "Logarithmic" )) );
 
             int nNewColor =  0xcd853f; // peru
-            xProp.setPropertyValue( "LineColor", new Integer( nNewColor ));
+            xProp.setPropertyValue( "LineColor", Integer.valueOf( nNewColor ));
             assure( "Property LineColor",
                     AnyConverter.toInt( xProp.getPropertyValue( "LineColor" )) == nNewColor );
             float fNewCharHeight = (float)(16.0);
@@ -396,7 +396,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                     AnyConverter.toFloat( xProp.getPropertyValue( "CharHeight" )) == fNewCharHeight );
 
             int nNewTextRotation = 700; // in 1/100 degrees
-            xProp.setPropertyValue( "TextRotation", new Integer( nNewTextRotation ));
+            xProp.setPropertyValue( "TextRotation", Integer.valueOf( nNewTextRotation ));
             assure( "Property TextRotation",
                     AnyConverter.toInt( xProp.getPropertyValue( "TextRotation" )) == nNewTextRotation );
 
@@ -481,7 +481,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         try
         {
             int nColor = 0xf5fffa; // mint cream
-            xArea.setPropertyValue( "FillColor", new Integer( nColor ) );
+            xArea.setPropertyValue( "FillColor", Integer.valueOf( nColor ) );
             xArea.setPropertyValue( "FillStyle", FillStyle.SOLID );
 
             int nNewColor = AnyConverter.toInt( xArea.getPropertyValue( "FillColor" ) );
@@ -582,7 +582,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             // FillColor
             XPropertySet xProp = xDia.getDataRowProperties( 0 );
             int nColor = 0xffd700; // gold
-            xProp.setPropertyValue( "FillColor", new Integer( nColor ));
+            xProp.setPropertyValue( "FillColor", Integer.valueOf( nColor ));
             int nNewColor = AnyConverter.toInt( xProp.getPropertyValue( "FillColor" ) );
             assure( "Changing FillColor of Data Series failed", nNewColor == nColor );
 
@@ -778,7 +778,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             assure( "No MinMaxLine", xMinMaxProp != null );
 
             int nLineColor = 0x458b00; // chartreuse4
-            xMinMaxProp.setPropertyValue( "LineColor", new Integer( nLineColor ));
+            xMinMaxProp.setPropertyValue( "LineColor", Integer.valueOf( nLineColor ));
             int nNewColor = AnyConverter.toInt( xMinMaxProp.getPropertyValue( "LineColor" ) );
             assure( "Changing LineColor of MinMax Line", nNewColor == nLineColor );
         }

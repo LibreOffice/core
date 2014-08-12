@@ -87,10 +87,10 @@ public class UnoControlDialogModel extends TestCase {
             // create the dialog model and set the properties
             XPropertySet xPSetDialog = UnoRuntime.queryInterface(
                                                XPropertySet.class, dialogModel);
-            xPSetDialog.setPropertyValue("PositionX", new Integer(100));
-            xPSetDialog.setPropertyValue("PositionY", new Integer(100));
-            xPSetDialog.setPropertyValue("Width", new Integer(150));
-            xPSetDialog.setPropertyValue("Height", new Integer(100));
+            xPSetDialog.setPropertyValue("PositionX", Integer.valueOf(100));
+            xPSetDialog.setPropertyValue("PositionY", Integer.valueOf(100));
+            xPSetDialog.setPropertyValue("Width", Integer.valueOf(150));
+            xPSetDialog.setPropertyValue("Height", Integer.valueOf(100));
             xPSetDialog.setPropertyValue("Title", "Runtime Dialog Demo");
 
             // get the service manager from the dialog model
@@ -103,10 +103,10 @@ public class UnoControlDialogModel extends TestCase {
                                          "com.sun.star.awt.UnoControlButtonModel");
             XPropertySet xPSetButton = UnoRuntime.queryInterface(
                                                XPropertySet.class, buttonModel);
-            xPSetButton.setPropertyValue("PositionX", new Integer(50));
-            xPSetButton.setPropertyValue("PositionY", new Integer(30));
-            xPSetButton.setPropertyValue("Width", new Integer(50));
-            xPSetButton.setPropertyValue("Height", new Integer(14));
+            xPSetButton.setPropertyValue("PositionX", Integer.valueOf(50));
+            xPSetButton.setPropertyValue("PositionY", Integer.valueOf(30));
+            xPSetButton.setPropertyValue("Width", Integer.valueOf(50));
+            xPSetButton.setPropertyValue("Height", Integer.valueOf(14));
             xPSetButton.setPropertyValue("Name", _buttonName);
             xPSetButton.setPropertyValue("TabIndex", new Short((short) 0));
             xPSetButton.setPropertyValue("Label", "Click Me");
@@ -116,10 +116,10 @@ public class UnoControlDialogModel extends TestCase {
                                         "com.sun.star.awt.UnoControlFixedTextModel");
             XPropertySet xPSetLabel = UnoRuntime.queryInterface(
                                               XPropertySet.class, labelModel);
-            xPSetLabel.setPropertyValue("PositionX", new Integer(40));
-            xPSetLabel.setPropertyValue("PositionY", new Integer(60));
-            xPSetLabel.setPropertyValue("Width", new Integer(100));
-            xPSetLabel.setPropertyValue("Height", new Integer(14));
+            xPSetLabel.setPropertyValue("PositionX", Integer.valueOf(40));
+            xPSetLabel.setPropertyValue("PositionY", Integer.valueOf(60));
+            xPSetLabel.setPropertyValue("Width", Integer.valueOf(100));
+            xPSetLabel.setPropertyValue("Height", Integer.valueOf(14));
             xPSetLabel.setPropertyValue("Name", _labelName);
             xPSetLabel.setPropertyValue("TabIndex", new Short((short) 1));
             xPSetLabel.setPropertyValue("Label", _labelPrefix);

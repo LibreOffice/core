@@ -147,7 +147,7 @@ public class SdXImpressDocument extends TestCase {
 
         try {
             xShapeProps.setPropertyValue("FillStyle", com.sun.star.drawing.FillStyle.SOLID);
-            xShapeProps.setPropertyValue("FillTransparence", new Integer(50));
+            xShapeProps.setPropertyValue("FillTransparence", Integer.valueOf(50));
         } catch (UnknownPropertyException ex) {
             ex.printStackTrace(log);
             throw new StatusException("Couldn't make shape transparent", ex);

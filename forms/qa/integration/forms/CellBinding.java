@@ -509,7 +509,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         XAccessibleValue xValue = UnoRuntime.queryInterface(
             XAccessibleValue.class, accessible.getAccessibleContext() );
 
-        Integer newValue = new Integer( 1 );
+        Integer newValue = Integer.valueOf( 1 );
         xValue.setCurrentValue( newValue );
     }
 

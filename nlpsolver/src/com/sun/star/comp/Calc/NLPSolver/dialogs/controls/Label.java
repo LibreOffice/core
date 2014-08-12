@@ -61,7 +61,7 @@ public class Label extends LabeledControl {
 
 
     public void setTextColor(int RGB) {
-        setProperty("TextColor", new Integer(RGB));
+        setProperty("TextColor", Integer.valueOf(RGB));
     }
 
     public int getTextColor() {

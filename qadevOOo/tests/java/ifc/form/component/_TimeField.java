@@ -40,7 +40,7 @@ public class _TimeField extends MultiPropertyTest {
         testProperty("DefaultTime", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(4321) :
+                return utils.isVoid(old) ? Integer.valueOf(4321) :
                     super.getNewValue(p, old) ;
             }
         }) ;

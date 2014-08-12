@@ -54,7 +54,7 @@ public class RoadmapItemStateChangeListener implements XItemListener {
             // in the following line "ID" and "Step" are mixed together.
             // In fact in this case they denot the same
             if (nNewID != nOldStep){
-                xDialogModelPropertySet.setPropertyValue("Step", new Integer(nNewID));
+                xDialogModelPropertySet.setPropertyValue("Step", Integer.valueOf(nNewID));
             }
         } catch (com.sun.star.uno.Exception exception) {
             exception.printStackTrace(System.err);

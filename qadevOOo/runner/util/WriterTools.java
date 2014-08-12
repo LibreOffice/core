@@ -93,10 +93,10 @@ public class WriterTools {
 
             String fullURL = util.utils.getFullTestURL(pic);
             oProps.setPropertyValue("GraphicURL", fullURL);
-            oProps.setPropertyValue("HoriOrientPosition", new Integer(hpos));
-            oProps.setPropertyValue("VertOrientPosition", new Integer(vpos));
-            oProps.setPropertyValue("Width", new Integer(width));
-            oProps.setPropertyValue("Height", new Integer(height));
+            oProps.setPropertyValue("HoriOrientPosition", Integer.valueOf(hpos));
+            oProps.setPropertyValue("VertOrientPosition", Integer.valueOf(vpos));
+            oProps.setPropertyValue("Width", Integer.valueOf(width));
+            oProps.setPropertyValue("Height", Integer.valueOf(height));
 
             XNamed the_name = UnoRuntime.queryInterface(XNamed.class,
                                                                  oGObject);

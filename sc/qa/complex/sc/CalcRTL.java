@@ -132,10 +132,10 @@ public class CalcRTL /* extends ComplexTestCase */
         }
 
         assertTrue("Problems when setting property 'HoriOrientPosition'",
-               changeProperty(set, "HoriOrientPosition", new Integer(1000)));
+               changeProperty(set, "HoriOrientPosition", Integer.valueOf(1000)));
 
         assertTrue("Problems when setting property 'VertOrientPosition'",
-               changeProperty(set, "VertOrientPosition", new Integer(1000)));
+               changeProperty(set, "VertOrientPosition", Integer.valueOf(1000)));
 
         assertTrue("Couldn't close document", closeSpreadsheetDocument());
     }
@@ -188,7 +188,7 @@ public class CalcRTL /* extends ComplexTestCase */
             reValue[0] = toString(getRealValue(set.getPropertyValue("Anchor")));
             reValue[1] = toString(set.getPropertyValue("HoriOrientPosition"));
             reValue[2] = toString(set.getPropertyValue("VertOrientPosition"));
-            reValue[3] = toString(new Integer(oShape.getPosition().X));
+            reValue[3] = toString(Integer.valueOf(oShape.getPosition().X));
         } catch (com.sun.star.beans.UnknownPropertyException e) {
         } catch (com.sun.star.lang.WrappedTargetException e) {
         }

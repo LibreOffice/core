@@ -44,10 +44,10 @@ public class _UnoControlContainerModel extends MultiPropertyTest {
     protected PropertyTester ColorTester = new PropertyTester() {
         @Override
         protected Object getNewValue(String propName, Object oldValue) {
-            if (util.ValueComparer.equalValue(oldValue, new Integer(17)))
-                return new Integer(25);
+            if (util.ValueComparer.equalValue(oldValue, Integer.valueOf(17)))
+                return Integer.valueOf(25);
             else
-                return new Integer(17);
+                return Integer.valueOf(17);
         }
     };
 

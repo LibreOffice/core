@@ -113,7 +113,7 @@ public class _XValidatableFormComponent extends MultiMethodTest
                     || testPropsNames[i].equals("EffectiveValue")
             )
             {
-                oldValue = new Integer(10);
+                oldValue = Integer.valueOf(10);
             }
             else if (testPropsNames[i].equals("Time"))
             {

@@ -122,13 +122,13 @@ public abstract class BaseControl {
     // <editor-fold defaultstate="collapsed" desc="Uno Properties">
 
     public void setPosition(int x, int y) {
-        setProperty("PositionX", new Integer(x));
-        setProperty("PositionY", new Integer(y));
+        setProperty("PositionX", Integer.valueOf(x));
+        setProperty("PositionY", Integer.valueOf(y));
     }
 
     public void setSize(int width, int height) {
-        setProperty("Width", new Integer(width));
-        setProperty("Height", new Integer(height));
+        setProperty("Width", Integer.valueOf(width));
+        setProperty("Height", Integer.valueOf(height));
     }
 
     public void setEnabled(boolean enabled) {

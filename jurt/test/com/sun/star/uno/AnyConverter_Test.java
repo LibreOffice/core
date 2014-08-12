@@ -41,7 +41,7 @@ public final class AnyConverter_Test {
     Character aChar= new Character('A');
     Byte aByte= new Byte((byte) 111);
     Short aShort= new Short((short) 11111);
-    Integer aInt= new Integer( 1111111);
+    Integer aInt= Integer.valueOf( 1111111);
     Long aLong= new Long( 0xffffffff);
     Float aFloat= new Float( 3.14);
     Double aDouble= new Double( 3.145);
@@ -315,7 +315,7 @@ public final class AnyConverter_Test {
         Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
         assertEquals(5, AnyConverter.toInt(a));
         assertEquals(5, AnyConverter.toUnsignedInt(a));
-        a = new Any( Type.UNSIGNED_LONG, new Integer(5) );
+        a = new Any( Type.UNSIGNED_LONG, Integer.valueOf(5) );
         assertEquals(5, AnyConverter.toUnsignedInt(a));
 
         // must fail
@@ -386,7 +386,7 @@ public final class AnyConverter_Test {
         Any a = new Any( Type.UNSIGNED_SHORT, new Short((short)5) );
         assertEquals(5, AnyConverter.toLong(a));
         assertEquals(5, AnyConverter.toUnsignedLong(a));
-        a = new Any( Type.UNSIGNED_LONG, new Integer(5) );
+        a = new Any( Type.UNSIGNED_LONG, Integer.valueOf(5) );
         assertEquals(5, AnyConverter.toUnsignedLong(a));
         assertEquals(5, AnyConverter.toLong(a));
         a = new Any( Type.UNSIGNED_HYPER, new Long(5) );
@@ -808,7 +808,7 @@ public final class AnyConverter_Test {
         assertTrue(AnyConverter.isInt(aInt));
         assertTrue(AnyConverter.isInt(anyInt));
         assertEquals(Type.LONG, AnyConverter.getType(anyInt));
-        Any a = new Any(Type.UNSIGNED_LONG, new Integer(5));
+        Any a = new Any(Type.UNSIGNED_LONG, Integer.valueOf(5));
         assertEquals(Type.UNSIGNED_LONG, AnyConverter.getType(a));
         assertFalse(AnyConverter.isInt(a));
         assertFalse(Type.LONG.equals(AnyConverter.getType(a)));

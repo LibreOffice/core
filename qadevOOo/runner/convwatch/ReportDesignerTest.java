@@ -199,7 +199,7 @@ public class ReportDesignerTest extends ComplexTestCase {
     private static XMultiServiceFactory m_xXMultiServiceFactory = null;
     private void startOffice()
         {
-            param.put("TimeOut", new Integer(300000));
+            param.put("TimeOut", Integer.valueOf(300000));
             System.out.println("TimeOut: " + param.getInt("TimeOut"));
             System.out.println("ThreadTimeOut: " + param.getInt("ThreadTimeOut"));
 

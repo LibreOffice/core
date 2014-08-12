@@ -143,7 +143,7 @@ public class ChartInDraw
         {
             // change background color of entire chart
             aArea.setPropertyValue( "FillStyle", FillStyle.SOLID );
-            aArea.setPropertyValue( "FillColor", new Integer( 0xeeeeee ));
+            aArea.setPropertyValue( "FillColor", Integer.valueOf( 0xeeeeee ));
         }
     }
 
@@ -157,7 +157,7 @@ public class ChartInDraw
                                   X3DDisplay.class, maDiagram ).getWall();
 
         // change background color of area
-        aWall.setPropertyValue( "FillColor", new Integer( 0xcccccc ));
+        aWall.setPropertyValue( "FillColor", Integer.valueOf( 0xcccccc ));
         aWall.setPropertyValue( "FillStyle",  FillStyle.SOLID );
     }
 
@@ -193,7 +193,7 @@ public class ChartInDraw
 
         aLegendProp.setPropertyValue( "Alignment", ChartLegendPosition.LEFT );
         aLegendProp.setPropertyValue( "FillStyle", FillStyle.SOLID );
-        aLegendProp.setPropertyValue( "FillColor", new Integer( 0xeeddee ));
+        aLegendProp.setPropertyValue( "FillColor", Integer.valueOf( 0xeeddee ));
     }
 
 
@@ -208,12 +208,12 @@ public class ChartInDraw
         aDiaProp.setPropertyValue( "Dim3D", aTrue );
         aDiaProp.setPropertyValue( "Deep", aTrue );
         // from Chart3DBarProperties:
-        aDiaProp.setPropertyValue( "SolidType", new Integer( ChartSolidType.CYLINDER ));
+        aDiaProp.setPropertyValue( "SolidType", Integer.valueOf( ChartSolidType.CYLINDER ));
 
         // change floor color to Magenta6
         XPropertySet aFloor = UnoRuntime.queryInterface(
                                    X3DDisplay.class, maDiagram ).getFloor();
-        aFloor.setPropertyValue( "FillColor", new Integer( 0x6b2394 ));
+        aFloor.setPropertyValue( "FillColor", Integer.valueOf( 0x6b2394 ));
 
         // apply changes to get a 3d scene
         unlockControllers();
@@ -268,7 +268,7 @@ public class ChartInDraw
 
         // in a chart by default only the second (non-specular) light source is switched on
         // light source 1 is a specular light source
-        aDiaProp.setPropertyValue( "D3DSceneLightColor1", new Integer( 0xff3333 ));
+        aDiaProp.setPropertyValue( "D3DSceneLightColor1", Integer.valueOf( 0xff3333 ));
 
         // set direction
         com.sun.star.drawing.Direction3D aDirection = new com.sun.star.drawing.Direction3D();

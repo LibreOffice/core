@@ -623,7 +623,7 @@ public class ODatabaseForm extends TestCase {
         params.add(Boolean.FALSE) ;
         params.add(new Byte((byte) 123)) ;
         params.add(new Short((short) 234)) ;
-        params.add(new Integer(12345)) ;
+        params.add(Integer.valueOf(12345)) ;
         params.add(new Long(23456)) ;
         params.add(new Float(1.234)) ;
         params.add(new Double(2.345)) ;
@@ -660,7 +660,7 @@ public class ODatabaseForm extends TestCase {
             }
 
             xSetProp.setPropertyValue("CommandType",
-                new Integer(CommandType.COMMAND)) ;
+                Integer.valueOf(CommandType.COMMAND)) ;
         }
         catch(Exception e) {
         }
@@ -810,7 +810,7 @@ public class ODatabaseForm extends TestCase {
                     log.println("### _XDatabaseParameterBroadcaster.ParameterListenerImpl: Parameter "+i+": "+params.getByIndex(i));
                     XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
                     log.println("### _XDatabaseParameterBroadcaster.ParameterListenerImpl: Parameter Name: '"+xProp.getPropertyValue("Name") + "' is set to Value '1'");
-                    xProp.setPropertyValue("Value", new Integer(1));
+                    xProp.setPropertyValue("Value", Integer.valueOf(1));
                     listenerWasCalled = true;
                 }
             }
@@ -868,7 +868,7 @@ public class ODatabaseForm extends TestCase {
                     log.println("### _XCompletedExecution.InteractionHandlerImpl: Parameter "+i+": "+params.getByIndex(i));
                     XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
                     log.println("### _XCompletedExecution.InteractionHandlerImpl: Parameter Name: '"+xProp.getPropertyValue("Name") + "' is set to Value '1'");
-                    xProp.setPropertyValue("Value", new Integer(1));
+                    xProp.setPropertyValue("Value", Integer.valueOf(1));
                     handlerWasUsed = true;
                 }
             }

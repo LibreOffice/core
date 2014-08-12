@@ -98,8 +98,8 @@ public class ChangeOrderDemo
             int nOrderOfShape1 = ((Integer)xPropSet1.getPropertyValue( "ZOrder" )).intValue();
             int nOrderOfShape2 = ((Integer)xPropSet2.getPropertyValue( "ZOrder" )).intValue();
 
-            xPropSet1.setPropertyValue( "ZOrder", new Integer( nOrderOfShape2 ) );
-            xPropSet2.setPropertyValue( "ZOrder", new Integer( nOrderOfShape1 ) );
+            xPropSet1.setPropertyValue( "ZOrder", Integer.valueOf( nOrderOfShape2 ) );
+            xPropSet2.setPropertyValue( "ZOrder", Integer.valueOf( nOrderOfShape1 ) );
         }
         catch( Exception ex )
         {

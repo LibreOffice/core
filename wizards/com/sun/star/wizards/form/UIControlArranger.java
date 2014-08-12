@@ -54,7 +54,7 @@ public class UIControlArranger
         this.CurUnoDialog = _CurUnoDialog;
         this.curFormDocument = _curFormDocument;
         curtabindex = (short) (FormWizard.SOCONTROL_PAGE * 100);
-        IControlStep = new Integer(FormWizard.SOCONTROL_PAGE);
+        IControlStep = Integer.valueOf(FormWizard.SOCONTROL_PAGE);
         String sLabelPlacment = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 32);
         String sAlignLeft = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 33);
         String sAlignRight = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 34);
@@ -99,7 +99,7 @@ public class UIControlArranger
         DefaultListModel imageModel = new DefaultListModel();
         for (int i = 0; i < HelpTexts.length; i++)
         {
-            imageModel.addElement(new Integer(i));
+            imageModel.addElement(Integer.valueOf(i));
         }
          String sMainArrangementHeader = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 41); // "Arrangement of the main form"
          m_aArrangeList[0] = new ArrangeButtonList(0, imageModel, sMainArrangementHeader);
@@ -122,7 +122,7 @@ public class UIControlArranger
             int ResId = UIConsts.RID_IMG_FORM + (2 * ((Integer) listitem).intValue());
             return new Integer[]
                     {
-                        new Integer(ResId), new Integer(ResId + 1)
+                        Integer.valueOf(ResId), Integer.valueOf(ResId + 1)
                     };
         }
 
@@ -166,7 +166,7 @@ public class UIControlArranger
         public ArrangeButtonList(int _formindex, ListModel model, String _sArrangementHeader)
         {
             formindex = _formindex;
-            Integer YPos = new Integer(SOBASEIMAGEYPOSITION + _formindex * SOIMAGELISTHEIGHT);
+            Integer YPos = Integer.valueOf(SOBASEIMAGEYPOSITION + _formindex * SOIMAGELISTHEIGHT);
             // Label ArrangementHeader ----------------------
             CurUnoDialog.insertFixedLine("lnLabelPlacment_" + (_formindex + 1),
                     new String[]

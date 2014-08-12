@@ -56,7 +56,7 @@ public class GroupFieldHandler extends FieldSelection
                     },
                     new Object[]
                     {
-                            Boolean.FALSE, 18, sNote, Boolean.TRUE, 95, 158, new Integer(ReportWizard.SOGROUPPAGE), 209
+                            Boolean.FALSE, 18, sNote, Boolean.TRUE, 95, 158, Integer.valueOf(ReportWizard.SOGROUPPAGE), 209
                     });
         }
         catch (Exception exception)

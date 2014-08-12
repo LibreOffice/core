@@ -123,7 +123,7 @@ public class StyleDemo
                     if ( xStylePropSetInfo.hasPropertyByName( "CharColor" ) )
                     {
                         xStylePropSet.setPropertyValue( "CharColor",
-                                                        new Integer( 0xff0000 ) );
+                                                        Integer.valueOf( 0xff0000 ) );
                     }
                 }
             }

@@ -151,10 +151,10 @@ public class SwXTextGraphicObject extends TestCase {
                 oProps.setPropertyValue("AnchorType",
                     TextContentAnchorType.AT_PARAGRAPH);
                 oProps.setPropertyValue("GraphicURL",wat);
-                oProps.setPropertyValue("HoriOrientPosition",new Integer(5500));
-                oProps.setPropertyValue("VertOrientPosition",new Integer(4200));
-                oProps.setPropertyValue("Width",new Integer(4400));
-                oProps.setPropertyValue("Height",new Integer(4000));
+                oProps.setPropertyValue("HoriOrientPosition",Integer.valueOf(5500));
+                oProps.setPropertyValue("VertOrientPosition",Integer.valueOf(4200));
+                oProps.setPropertyValue("Width",Integer.valueOf(4400));
+                oProps.setPropertyValue("Height",Integer.valueOf(4000));
             } catch (Exception e) {
                 System.out.println("Couldn't set property 'GraphicURL'");
                 e.printStackTrace();

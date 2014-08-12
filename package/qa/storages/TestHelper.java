@@ -1485,7 +1485,7 @@ public class TestHelper  {
 
                 if ( nRead1 != nRead2 )
                 {
-                    Error( "The encrypted stream '" + sStreamName + "' raw representations have different size! nRead1 - nRead2 = " + ( new Integer( nRead1 - nRead2 ) ).toString() );
+                    Error( "The encrypted stream '" + sStreamName + "' raw representations have different size! nRead1 - nRead2 = " + ( Integer.valueOf( nRead1 - nRead2 ) ).toString() );
                     return false;
                 }
 

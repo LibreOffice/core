@@ -97,7 +97,7 @@ public class _XTypeConverter extends MultiMethodTest {
     * was passed to method and no exceptions were thrown. <p>
     */
     public void _convertToSimpleType() {
-        Object value = new Integer(123) ;
+        Object value = Integer.valueOf(123) ;
         Object destValue = null ;
 
         try {

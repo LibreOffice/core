@@ -188,7 +188,7 @@ public class HelloTextTableShape {
                     table = xIndexedTables.getByIndex(i);
                     xTableProps = (XPropertySet) UnoRuntime.queryInterface(
                             XPropertySet.class, table);
-                    xTableProps.setPropertyValue("BackColor", new Integer(0xC8FFB9));
+                    xTableProps.setPropertyValue("BackColor", Integer.valueOf(0xC8FFB9));
             }
  */
         }
@@ -371,7 +371,7 @@ public class HelloTextTableShape {
                 XPropertySet.class, xCellRange);
         }
         // set cell background color
-        xCellProps.setPropertyValue(backColorPropertyName, new Integer(0x99CCFF));
+        xCellProps.setPropertyValue(backColorPropertyName, Integer.valueOf(0x99CCFF));
 
         // set table borders
         // create description for blue line, width 10
@@ -399,14 +399,14 @@ public class HelloTextTableShape {
 
     protected void manipulateShape(XShape xShape) throws com.sun.star.uno.Exception {
         XPropertySet xShapeProps = UnoRuntime.queryInterface(XPropertySet.class, xShape);
-        xShapeProps.setPropertyValue("FillColor", new Integer(0x99CCFF));
-        xShapeProps.setPropertyValue("LineColor", new Integer(0x000099));
-        xShapeProps.setPropertyValue("RotateAngle", new Integer(3000));
+        xShapeProps.setPropertyValue("FillColor", Integer.valueOf(0x99CCFF));
+        xShapeProps.setPropertyValue("LineColor", Integer.valueOf(0x000099));
+        xShapeProps.setPropertyValue("RotateAngle", Integer.valueOf(3000));
 
-        xShapeProps.setPropertyValue("TextLeftDistance", new Integer(0));
-        xShapeProps.setPropertyValue("TextRightDistance", new Integer(0));
-        xShapeProps.setPropertyValue("TextUpperDistance", new Integer(0));
-        xShapeProps.setPropertyValue("TextLowerDistance", new Integer(0));
+        xShapeProps.setPropertyValue("TextLeftDistance", Integer.valueOf(0));
+        xShapeProps.setPropertyValue("TextRightDistance", Integer.valueOf(0));
+        xShapeProps.setPropertyValue("TextUpperDistance", Integer.valueOf(0));
+        xShapeProps.setPropertyValue("TextLowerDistance", Integer.valueOf(0));
     }
 
 

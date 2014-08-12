@@ -119,8 +119,8 @@ public class SwXTextTable extends TestCase {
 
 
         //Adding relation for util.XTextTable
-        tEnv.addObjRelation("NROW", new Integer(nRow));
-        tEnv.addObjRelation("NCOL", new Integer(nCol));
+        tEnv.addObjRelation("NROW", Integer.valueOf(nRow));
+        tEnv.addObjRelation("NCOL", Integer.valueOf(nCol));
 
         //Adding ObjRelation for XCellRangeData
         Object[][] newData = new Object[6][];

@@ -90,13 +90,13 @@ public class ViewSample extends SpreadsheetDocHelper
         com.sun.star.table.XCellRange xRange = xRefer.getReferredCells();
         com.sun.star.beans.XPropertySet xRangeProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xRange );
         xRangeProp.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
-        xRangeProp.setPropertyValue( "CellBackColor", new Integer( 0xFFFFCC ) );
+        xRangeProp.setPropertyValue( "CellBackColor", Integer.valueOf( 0xFFFFCC ) );
 
         // --- View settings ---
         // change the view to display green grid lines
         com.sun.star.beans.XPropertySet xProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xController );
         xProp.setPropertyValue( "ShowGrid", Boolean.TRUE );
-        xProp.setPropertyValue( "GridColor", new Integer(0x00CC00) );
+        xProp.setPropertyValue( "GridColor", Integer.valueOf(0x00CC00) );
 
         // --- Range selection ---
         // let the user select a range and use it as the view's selection

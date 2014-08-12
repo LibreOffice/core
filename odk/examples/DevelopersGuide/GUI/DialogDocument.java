@@ -65,13 +65,13 @@ public class DialogDocument extends UnoDialogSample {
             XMultiComponentFactory xMCF = xContext.getServiceManager();
             oDialogDocument = new DialogDocument(xContext, xMCF);
             oDialogDocument.initialize( new String[] {"Height", "Moveable", "Name","PositionX","PositionY", "Step", "TabIndex","Title","Width"},
-                    new Object[] { new Integer(400), Boolean.TRUE, "Dialog1", new Integer(102),new Integer(41), new Integer(1), new Short((short) 0), "Document-Dialog", new Integer(300)});
+                    new Object[] { Integer.valueOf(400), Boolean.TRUE, "Dialog1", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(1), new Short((short) 0), "Document-Dialog", Integer.valueOf(300)});
             oDialogDocument.createWindowPeer();
             Object oFTHeaderModel = oDialogDocument.m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
             XMultiPropertySet xFTHeaderModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
             xFTHeaderModelMPSet.setPropertyValues(
                     new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Width"},
-                    new Object[] { new Integer(8), "This code-sample demonstrates how to display an office document in a dialog window", "HeaderLabel", new Integer(6), new Integer(6), new Integer(300)});
+                    new Object[] { Integer.valueOf(8), "This code-sample demonstrates how to display an office document in a dialog window", "HeaderLabel", Integer.valueOf(6), Integer.valueOf(6), Integer.valueOf(300)});
             // add the model to the NameContainer of the dialog model
             oDialogDocument.m_xDlgModelNameContainer.insertByName("Headerlabel", oFTHeaderModel);
             oDialogDocument.showDocumentinDialogWindow(oDialogDocument.m_xWindowPeer, new Rectangle(40, 50, 420, 550), "private:factory/swriter");

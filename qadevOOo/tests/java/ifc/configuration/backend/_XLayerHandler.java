@@ -56,7 +56,7 @@ public class _XLayerHandler extends MultiMethodTest {
             oObj.endProperty();
             oObj.overrideProperty("ooSetupFactoryIcon", (short) 0,
                                   new Type(java.lang.Long.class), false);
-            oObj.setPropertyValue(new Integer(13));
+            oObj.setPropertyValue(Integer.valueOf(13));
             oObj.endProperty();
             oObj.overrideProperty("ooSetupFactoryShortName", (short) 0,
                                   new Type(String.class), false);

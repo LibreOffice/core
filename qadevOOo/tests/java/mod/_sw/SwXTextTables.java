@@ -128,8 +128,8 @@ public class SwXTextTables extends TestCase {
 
         log.println( "adding TextDocument as mod relation to environment" );
         tEnv.addObjRelation( "TEXTDOC", xTextDoc );
-        tEnv.addObjRelation( "ROW", new Integer( nRow ) );
-        tEnv.addObjRelation( "COL", new Integer( nCol ) );
+        tEnv.addObjRelation( "ROW", Integer.valueOf( nRow ) );
+        tEnv.addObjRelation( "COL", Integer.valueOf( nCol ) );
         try {
             tEnv.addObjRelation( "INST", SOfficeFactory.createTextTable( xTextDoc ));
         }

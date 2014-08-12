@@ -85,7 +85,7 @@ public class UCB  {
                 }
         else if (type.equals(Integer.class))
                 {
-                    return new Integer(xrow.getInt(1));
+                    return Integer.valueOf(xrow.getInt(1));
                 }
         else if (type.equals(Short.class))
                 {

@@ -1025,8 +1025,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             setToPageStyles("IsLandscape", Boolean.TRUE);
             if (nWidth < nHeight)
             {
-                setToPageStyles(PropertyNames.PROPERTY_WIDTH, new Integer(nHeight));
-                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, new Integer(nWidth));
+                setToPageStyles(PropertyNames.PROPERTY_WIDTH, Integer.valueOf(nHeight));
+                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, Integer.valueOf(nWidth));
             }
         }
         else
@@ -1034,8 +1034,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             setToPageStyles("IsLandscape", Boolean.FALSE);
             if (nHeight < nWidth)
             {
-                setToPageStyles(PropertyNames.PROPERTY_WIDTH, new Integer(nHeight));
-                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, new Integer(nWidth));
+                setToPageStyles(PropertyNames.PROPERTY_WIDTH, Integer.valueOf(nHeight));
+                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, Integer.valueOf(nWidth));
             }
         }
         // dirty the PageWidth
@@ -1517,7 +1517,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 final Size aSize = getPreferredSize(_sLabel, xFont);
                 nWidth = aSize.Width;
                 // cache the found width
-                m_aLabelWidthMap.put(sKey, new Integer(nWidth));
+                m_aLabelWidthMap.put(sKey, Integer.valueOf(nWidth));
             }
             catch (com.sun.star.uno.Exception e)
             {

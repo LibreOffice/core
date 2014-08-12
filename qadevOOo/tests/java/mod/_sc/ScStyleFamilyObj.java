@@ -182,7 +182,7 @@ public class ScStyleFamilyObj extends TestCase {
         }
 
         log.println( "adding XNameReplaceINDEX as mod relation to environment" );
-        tEnv.addObjRelation("XNameReplaceINDEX", new Integer(2*THRCNT).toString());
+        tEnv.addObjRelation("XNameReplaceINDEX", Integer.valueOf(2*THRCNT).toString());
 
         // INSTANCEn : _XNameContainer; _XNameReplace
         log.println( "adding INSTANCEn as mod relation to environment" );

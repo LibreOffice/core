@@ -412,7 +412,7 @@ public class CellStyle extends Style implements Cloneable {
             node.setAttribute("style:text-position", "sub 58%");
 
         if (fmt.getFontSize() != 0) {
-            Integer fs = new Integer(fmt.getFontSize());
+            Integer fs = Integer.valueOf(fmt.getFontSize());
             node.setAttribute("fo:font-size", fs.toString() + "pt");
         }
 

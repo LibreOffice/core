@@ -67,7 +67,7 @@ public class RegressionTest_i61909 implements StorageTest {
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
-            pArgs[1] = new Integer( ElementModes.WRITE );
+            pArgs[1] = Integer.valueOf( ElementModes.WRITE );
 
             Object oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );

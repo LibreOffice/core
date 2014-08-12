@@ -182,7 +182,7 @@ public class SDraw  {
             com.sun.star.beans.XPropertySet.class, xShape);
 
         try {
-            xSPS.setPropertyValue("FillColor", new Integer(col));
+            xSPS.setPropertyValue("FillColor", Integer.valueOf(col));
         } catch (Exception e) {
             System.err.println("Can't change colors " + e);
             e.printStackTrace(System.err);
@@ -237,7 +237,7 @@ public class SDraw  {
                                       xShape);
 
             try {
-                xSPS.setPropertyValue("FillColor", new Integer(getCol(r,g,b)));
+                xSPS.setPropertyValue("FillColor", Integer.valueOf(getCol(r,g,b)));
                 xSPS.setPropertyValue("Shadow", Boolean.TRUE);
             } catch (Exception e) {
                 System.err.println("Can't change colors " + e);

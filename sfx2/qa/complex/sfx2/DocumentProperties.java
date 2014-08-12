@@ -206,9 +206,9 @@ public class DocumentProperties
 
             NamedValue[] ds = xDP.getDocumentStatistics();
             assertTrue("DocumentStatistics:WordCount", containsNV(ds,
-                        new NamedValue("WordCount", new Integer(23))));
+                        new NamedValue("WordCount", Integer.valueOf(23))));
             assertTrue("DocumentStatistics:PageCount", containsNV(ds,
-                        new NamedValue("PageCount", new Integer(1))));
+                        new NamedValue("PageCount", Integer.valueOf(1))));
 
             XPropertyContainer udpc = xDP.getUserDefinedProperties();
             XPropertySet udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
@@ -302,17 +302,17 @@ public class DocumentProperties
             assertTrue("setKeywords", fromArray(kws).containsAll(fromArray(kws2)));
 
             NamedValue[] ds2 = new NamedValue[] {
-                    new NamedValue("SyllableCount", new Integer(9)),
-                    new NamedValue("FrameCount", new Integer(2)),
-                    new NamedValue("SentenceCount", new Integer(7)) };
+                    new NamedValue("SyllableCount", Integer.valueOf(9)),
+                    new NamedValue("FrameCount", Integer.valueOf(2)),
+                    new NamedValue("SentenceCount", Integer.valueOf(7)) };
             xDP.setDocumentStatistics(ds2);
             ds = xDP.getDocumentStatistics();
             assertTrue("setDocumentStatistics:SyllableCount", containsNV(ds,
-                        new NamedValue("SyllableCount", new Integer(9))));
+                        new NamedValue("SyllableCount", Integer.valueOf(9))));
             assertTrue("setDocumentStatistics:FrameCount", containsNV(ds,
-                        new NamedValue("FrameCount", new Integer(2))));
+                        new NamedValue("FrameCount", Integer.valueOf(2))));
             assertTrue("setDocumentStatistics:SentenceCount", containsNV(ds,
-                        new NamedValue("SentenceCount", new Integer(7))));
+                        new NamedValue("SentenceCount", Integer.valueOf(7))));
 
             System.out.println("...done");
 

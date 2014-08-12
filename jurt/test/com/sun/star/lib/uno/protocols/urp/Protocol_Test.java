@@ -243,7 +243,7 @@ public final class Protocol_Test {
         iReceiver.readMessage();
         // send a reply
         iReceiver.writeReply(
-            false, new ThreadId(new byte[] { 0, 1 }), new Integer(501));
+            false, new ThreadId(new byte[] { 0, 1 }), Integer.valueOf(501));
         iMessage = iSender.readMessage();
         result = iMessage.getResult();
         assertEquals(501, result);

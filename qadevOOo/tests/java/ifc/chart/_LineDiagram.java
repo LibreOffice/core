@@ -104,8 +104,8 @@ public class _LineDiagram extends MultiPropertyTest {
             int a = com.sun.star.chart.ChartSymbolType.AUTO;
             int b = com.sun.star.chart.ChartSymbolType.NONE;
             if ( ((Integer) oldValue).intValue() == a)
-                return new Integer(b); else
-                return new Integer(a);
+                return Integer.valueOf(b); else
+                return Integer.valueOf(a);
         }
     } ;
 
@@ -117,8 +117,8 @@ public class _LineDiagram extends MultiPropertyTest {
             int a = 0;
             int b = 2;
             if ( ((Integer) oldValue).intValue() == a)
-                return new Integer(b); else
-                return new Integer(a);
+                return Integer.valueOf(b); else
+                return Integer.valueOf(a);
         }
     } ;
 
@@ -129,7 +129,7 @@ public class _LineDiagram extends MultiPropertyTest {
         log.println("Testing with custom Property tester") ;
         testProperty("SymbolType", SymbolTester) ;
         try {
-            oObj.setPropertyValue("SymbolType",new Integer(-2));
+            oObj.setPropertyValue("SymbolType",Integer.valueOf(-2));
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception while set property value");
             e.printStackTrace(log);
@@ -164,7 +164,7 @@ public class _LineDiagram extends MultiPropertyTest {
         log.println("Testing with custom Property tester") ;
         try {
             oObj.setPropertyValue("SymbolType",
-                new Integer(com.sun.star.chart.ChartSymbolType.BITMAPURL));
+                Integer.valueOf(com.sun.star.chart.ChartSymbolType.BITMAPURL));
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception while set property value");
             e.printStackTrace(log);

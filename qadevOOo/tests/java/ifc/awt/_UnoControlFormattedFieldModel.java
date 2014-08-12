@@ -85,7 +85,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
         testProperty("BorderColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(1234) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(1234) : null ;
             }
         }) ;
     }
@@ -98,7 +98,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
         testProperty("TextColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object v) {
-                return utils.isVoid(v) ? new Integer(123) :
+                return utils.isVoid(v) ? Integer.valueOf(123) :
                     super.getNewValue(p,v) ;
             }
         }) ;
@@ -112,7 +112,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
         testProperty("TextLineColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object v) {
-                return utils.isVoid(v) ? new Integer(123) :
+                return utils.isVoid(v) ? Integer.valueOf(123) :
                     super.getNewValue(p,v) ;
             }
         }) ;
@@ -126,7 +126,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
         testProperty("BackgroundColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object v) {
-                return utils.isVoid(v) ? new Integer(123) :
+                return utils.isVoid(v) ? Integer.valueOf(123) :
                     super.getNewValue(p,v) ;
             }
         }) ;
@@ -202,7 +202,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
         testProperty("FormatKey", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object v) {
-                return utils.isVoid(v) ? new Integer(0) :
+                return utils.isVoid(v) ? Integer.valueOf(0) :
                     super.getNewValue(p,v) ;
             }
         }) ;

@@ -102,7 +102,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
             sTableListBoxName = "lstTables_" + super.sIncSuffix;
             sTablePrefix = getTablePrefix();
             sQueryPrefix = getQueryPrefix();
-            Integer LabelWidth = new Integer(getListboxWidth().intValue() + 6);
+            Integer LabelWidth = Integer.valueOf(getListboxWidth().intValue() + 6);
             // Label 'Tables or Queries'
             xlblTable = CurUnoDialog.insertLabel(sTableLabelName,
                     new String[]

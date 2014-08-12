@@ -42,7 +42,7 @@ public class _ChartDataRowProperties extends MultiPropertyTest {
             } else {
                 newValue = 2;
             }
-            oObj.setPropertyValue("Axis", new Integer(newValue));
+            oObj.setPropertyValue("Axis", Integer.valueOf(newValue));
             axis = (Integer) oObj.getPropertyValue("Axis");
             tRes.tested("Axis",axis.intValue()==newValue);
         } catch (Exception e) {

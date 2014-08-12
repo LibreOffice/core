@@ -214,7 +214,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        new Integer(iDialogHeight - 26),
+                        Integer.valueOf(iDialogHeight - 26),
                         0,
                         0,
                         0,
@@ -268,7 +268,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             Object oRoadmapItem = xSSFRoadmap.createInstance();
             Helper.setUnoPropertyValue(oRoadmapItem, PropertyNames.PROPERTY_LABEL, _sLabel);
             Helper.setUnoPropertyValue(oRoadmapItem, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bEnabled));
-            Helper.setUnoPropertyValue(oRoadmapItem, "ID", new Integer(_CurItemID));
+            Helper.setUnoPropertyValue(oRoadmapItem, "ID", Integer.valueOf(_CurItemID));
             xIndexContRoadmap.insertByIndex(Index, oRoadmapItem);
             return Index + 1;
         }
@@ -343,7 +343,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     private void changeToStep(int nNewStep)
     {
-        Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, new Integer(nNewStep));
+        Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, Integer.valueOf(nNewStep));
         setCurrentRoadmapItemID((short) (nNewStep));
         enableNextButton(getNextAvailableStep() > 0);
         enableBackButton(nNewStep != 1);
@@ -383,9 +383,9 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         try
         {
             short curtabindex = UIConsts.SOFIRSTWIZARDNAVITABINDEX;
-            Integer IButtonWidth = new Integer(iButtonWidth);
+            Integer IButtonWidth = Integer.valueOf(iButtonWidth);
             int iButtonHeight = 14;
-            Integer IButtonHeight = new Integer(iButtonHeight);
+            Integer IButtonHeight = Integer.valueOf(iButtonHeight);
             Integer ICurStep = 0;
             int iDialogHeight = ((Integer) Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_HEIGHT)).intValue();
             int iDialogWidth = ((Integer) Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_WIDTH)).intValue();
@@ -403,7 +403,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        1, 0, 0, new Integer(iDialogHeight - 26), ICurStep, new Integer(iDialogWidth)
+                        1, 0, 0, Integer.valueOf(iDialogHeight - 26), ICurStep, Integer.valueOf(iDialogWidth)
                     });
 
             insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnRoadSep",
@@ -413,7 +413,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        new Integer(iBtnPosY - 6), 1, 85, 0, ICurStep, 1
+                        Integer.valueOf(iBtnPosY - 6), 1, 85, 0, ICurStep, 1
                     });
 
             String[] propNames = new String[]
@@ -428,30 +428,30 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        true, IButtonHeight, oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        true, IButtonHeight, oWizardResource.getResText(UIConsts.RID_COMMON + 15), Integer.valueOf(iHelpPosX), Integer.valueOf(iBtnPosY), new Short((short) PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
             insertButton("btnWizardBack", BACK_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        false, IButtonHeight, HelpIds.getHelpIdString(hid + 2), oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        false, IButtonHeight, HelpIds.getHelpIdString(hid + 2), oWizardResource.getResText(UIConsts.RID_COMMON + 13), Integer.valueOf(iBackPosX), Integer.valueOf(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardNext", NEXT_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 3), oWizardResource.getResText(UIConsts.RID_COMMON + 14), new Integer(iNextPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 3), oWizardResource.getResText(UIConsts.RID_COMMON + 14), Integer.valueOf(iNextPosX), Integer.valueOf(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardFinish", FINISH_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), new Integer(iFinishPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), Integer.valueOf(iFinishPosX), Integer.valueOf(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardCancel", CANCEL_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), new Integer(iCancelPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), Integer.valueOf(iCancelPosX), Integer.valueOf(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE);
@@ -616,7 +616,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        oFontDesc, 16, sRightPaneHeaders[i], Boolean.TRUE, 91, 8, new Integer(i + 1), new Short((short) 12), 212
+                        oFontDesc, 16, sRightPaneHeaders[i], Boolean.TRUE, 91, 8, Integer.valueOf(i + 1), new Short((short) 12), 212
                     });
         }
     }

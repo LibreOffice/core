@@ -45,7 +45,7 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
         final short sheet = (short)0;
         final short exchangeColumn = (short)1;  // B
         final short exchangeRow = (short)1;     // 2
-        final Integer backColor = new Integer( 0x00E0E0E0 );
+        final Integer backColor = Integer.valueOf( 0x00E0E0E0 );
 
 
         // a numeric control

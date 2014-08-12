@@ -97,10 +97,10 @@ public class UnoTreeControl extends TestCase {
             mxMSF.createInstance("com.sun.star.awt.UnoControlDialogModel"));
 
             XPropertySet xDialogPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xDialogModel);
-            xDialogPropertySet.setPropertyValue( "PositionX",   new Integer(50) );
-            xDialogPropertySet.setPropertyValue( "PositionY",   new Integer(50) );
-            xDialogPropertySet.setPropertyValue( "Width",       new Integer(256) );
-            xDialogPropertySet.setPropertyValue( "Height",      new Integer(256) );
+            xDialogPropertySet.setPropertyValue( "PositionX",   Integer.valueOf(50) );
+            xDialogPropertySet.setPropertyValue( "PositionY",   Integer.valueOf(50) );
+            xDialogPropertySet.setPropertyValue( "Width",       Integer.valueOf(256) );
+            xDialogPropertySet.setPropertyValue( "Height",      Integer.valueOf(256) );
             xDialogPropertySet.setPropertyValue( "Title",       "Tree Control Test");
 
             XMultiServiceFactory xDialogMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xDialogModel);
@@ -111,10 +111,10 @@ public class UnoTreeControl extends TestCase {
             XPropertySet XTreeControlModelSet = UnoRuntime.queryInterface(XPropertySet.class, xTreeControlModel);
 
             XTreeControlModelSet.setPropertyValue( "SelectionType",com.sun.star.view.SelectionType.NONE);
-            XTreeControlModelSet.setPropertyValue( "PositionX",     new Integer(3 ));
-            XTreeControlModelSet.setPropertyValue( "PositionY",     new Integer(3 ));
-            XTreeControlModelSet.setPropertyValue( "Width",         new Integer(253));
-            XTreeControlModelSet.setPropertyValue( "Height",        new Integer(253) );
+            XTreeControlModelSet.setPropertyValue( "PositionX",     Integer.valueOf(3 ));
+            XTreeControlModelSet.setPropertyValue( "PositionY",     Integer.valueOf(3 ));
+            XTreeControlModelSet.setPropertyValue( "Width",         Integer.valueOf(253));
+            XTreeControlModelSet.setPropertyValue( "Height",        Integer.valueOf(253) );
             XTreeControlModelSet.setPropertyValue( "DataModel",     mXTreeDataModel );
             XTreeControlModelSet.setPropertyValue( "ShowsRootHandles", Boolean.FALSE);
             XTreeControlModelSet.setPropertyValue( "ShowsHandles",  Boolean.FALSE);

@@ -229,7 +229,7 @@ public final class OfficeConnection {
         if (old) {
             t1.interrupt(); // reset old status
         }
-        return done ? new Integer(n) : null;
+        return done ? Integer.valueOf(n) : null;
     }
 
     private static final class Forward extends Thread {

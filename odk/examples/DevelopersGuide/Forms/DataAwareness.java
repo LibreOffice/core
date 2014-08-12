@@ -662,7 +662,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xColProps.setPropertyValue( "Name", sDataField );
 
         if ( nWidth > 0 )
-            xColProps.setPropertyValue( "Width", new Integer( nWidth * 10 ) );
+            xColProps.setPropertyValue( "Width", Integer.valueOf( nWidth * 10 ) );
 
         // insert
         xColumnContainer.insertByIndex( xColumnContainer.getCount(), xNewCol );
@@ -720,7 +720,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
 
         // set the data source signature at the form
         m_xMasterForm.setPropertyValue( "DataSourceName", m_database.getDocumentURL() );
-        m_xMasterForm.setPropertyValue( "CommandType", new Integer( CommandType.TABLE ) );
+        m_xMasterForm.setPropertyValue( "CommandType", Integer.valueOf( CommandType.TABLE ) );
         m_xMasterForm.setPropertyValue( "Command", "SALESMEN" );
 
 
@@ -743,7 +743,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         XPropertySet xSalesFormProps = UNO.queryPropertySet( xSalesForm );
 
         xSalesFormProps.setPropertyValue( "DataSourceName", m_database.getDocumentURL() );
-        xSalesFormProps.setPropertyValue( "CommandType", new Integer( CommandType.COMMAND ) );
+        xSalesFormProps.setPropertyValue( "CommandType", Integer.valueOf( CommandType.COMMAND ) );
 
         String sCommand = new String( "SELECT * FROM " );
         sCommand += s_tableNameSales;

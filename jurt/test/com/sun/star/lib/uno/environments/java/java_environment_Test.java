@@ -27,7 +27,7 @@ public final class java_environment_Test {
     @Test public void test() {
         java_environment env = new java_environment(null);
 
-        Object obj = new Integer(3);
+        Object obj = Integer.valueOf(3);
         String[] oid = new String[1];
 
         Object obj2 = env.registerInterface(obj, oid,

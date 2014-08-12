@@ -83,7 +83,7 @@ public class _ChartDataPointProperties extends MultiPropertyTest {
         try {
             oObj.setPropertyValue(
                 "SymbolType",
-                new Integer(com.sun.star.chart.ChartSymbolType.BITMAPURL) );
+                Integer.valueOf(com.sun.star.chart.ChartSymbolType.BITMAPURL) );
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception while set property value");
             e.printStackTrace(log);

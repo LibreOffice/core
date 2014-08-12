@@ -204,7 +204,7 @@ public class OTimeModel extends GenericModelTest {
                     lastTime = time.intValue() + 150000;
                 }
 
-                ps.setPropertyValue("Time", new Integer(lastTime));
+                ps.setPropertyValue("Time", Integer.valueOf(lastTime));
             }
 
             public void commit() throws com.sun.star.sdbc.SQLException {

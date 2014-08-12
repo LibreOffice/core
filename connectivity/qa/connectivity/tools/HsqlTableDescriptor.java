@@ -79,7 +79,7 @@ public class HsqlTableDescriptor
             try
             {
                 columnDesc.setPropertyValue( "Name", myColumns[i].getName() );
-                columnDesc.setPropertyValue( "IsNullable", new Integer( myColumns[i].isRequired() ? ColumnValue.NO_NULLS : ColumnValue.NULLABLE) );
+                columnDesc.setPropertyValue( "IsNullable", Integer.valueOf( myColumns[i].isRequired() ? ColumnValue.NO_NULLS : ColumnValue.NULLABLE) );
                 columnDesc.setPropertyValue( "TypeName", myColumns[i].getTypeName() );
                 if ( myColumns[i].isPrimaryKey() || myColumns[i].isForeignKey() )
                     // not yet implemented

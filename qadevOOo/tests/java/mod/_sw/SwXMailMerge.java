@@ -55,7 +55,7 @@ public class SwXMailMerge extends TestCase {
     @Override
     public void initialize( TestParameters Param, PrintWriter log ) {
         if (! Param.containsKey("uniqueSuffix")){
-            Param.put("uniqueSuffix", new Integer(0));
+            Param.put("uniqueSuffix", Integer.valueOf(0));
         }
     }
 
@@ -111,7 +111,7 @@ public class SwXMailMerge extends TestCase {
         try {
             oRowSetProps.setPropertyValue("DataSourceName",cDataSourceName);
             oRowSetProps.setPropertyValue("Command",cDataCommand);
-            oRowSetProps.setPropertyValue("CommandType", new Integer(CommandType.TABLE));
+            oRowSetProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
         } catch (UnknownPropertyException e) {
             throw new StatusException("Can't set properties on oRowSet", e);
         } catch (PropertyVetoException e) {
@@ -155,7 +155,7 @@ public class SwXMailMerge extends TestCase {
             oObjProps.setPropertyValue("ActiveConnection", getLocalXConnection(Param));
             oObjProps.setPropertyValue("DataSourceName", cDataSourceName);
             oObjProps.setPropertyValue("Command", cDataCommand);
-            oObjProps.setPropertyValue("CommandType", new Integer(CommandType.TABLE));
+            oObjProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
             oObjProps.setPropertyValue("OutputType", new Short(MailMergeType.FILE));
             oObjProps.setPropertyValue("DocumentURL", cTestDoc);
             oObjProps.setPropertyValue("OutputURL", cOutputURL);
@@ -185,7 +185,7 @@ public class SwXMailMerge extends TestCase {
         // first Arguments
         vXJobArg0[0] = new NamedValue("DataSourceName", cDataSourceName);
         vXJobArg0[1] = new NamedValue("Command", cDataCommand);
-        vXJobArg0[2] = new NamedValue("CommandType",new Integer(CommandType.TABLE));
+        vXJobArg0[2] = new NamedValue("CommandType",Integer.valueOf(CommandType.TABLE));
         vXJobArg0[3] = new NamedValue("OutputType",new Short(MailMergeType.FILE));
         vXJobArg0[4] = new NamedValue("DocumentURL", cTestDoc);
         vXJobArg0[5] = new NamedValue("OutputURL", cOutputURL);
@@ -195,7 +195,7 @@ public class SwXMailMerge extends TestCase {
         //second Arguments
         vXJobArg1[0] = new NamedValue("DataSourceName", cDataSourceName);
         vXJobArg1[1] = new NamedValue("Command", cDataCommand);
-        vXJobArg1[2] = new NamedValue("CommandType",new Integer(CommandType.TABLE));
+        vXJobArg1[2] = new NamedValue("CommandType",Integer.valueOf(CommandType.TABLE));
         vXJobArg1[3] = new NamedValue("OutputType",
                              new Short(MailMergeType.PRINTER));
         vXJobArg1[4] = new NamedValue("DocumentURL", cTestDoc);
@@ -206,7 +206,7 @@ public class SwXMailMerge extends TestCase {
         vXJobArg2[0] = new NamedValue("ActiveConnection", getLocalXConnection(Param));
         vXJobArg2[1] = new NamedValue("DataSourceName", cDataSourceName);
         vXJobArg2[2] = new NamedValue("Command", cDataCommand);
-        vXJobArg2[3] = new NamedValue("CommandType",new Integer(CommandType.TABLE));
+        vXJobArg2[3] = new NamedValue("CommandType",Integer.valueOf(CommandType.TABLE));
         vXJobArg2[4] = new NamedValue("OutputType",
                              new Short(MailMergeType.FILE));
         vXJobArg2[5] = new NamedValue("ResultSet", oResultSet);
@@ -247,7 +247,7 @@ public class SwXMailMerge extends TestCase {
         try {
             oRowSetProps.setPropertyValue("DataSourceName",cDataSourceName);
             oRowSetProps.setPropertyValue("Command",cDataCommand);
-            oRowSetProps.setPropertyValue("CommandType", new Integer(CommandType.TABLE));
+            oRowSetProps.setPropertyValue("CommandType", Integer.valueOf(CommandType.TABLE));
         } catch (UnknownPropertyException e) {
             throw new StatusException("Can't set properties on oRowSet", e);
         } catch (PropertyVetoException e) {
@@ -337,13 +337,13 @@ public class SwXMailMerge extends TestCase {
             dbt.reRegisterDB(databaseName, newSource) ;
 
             uniqueSuffix++;
-            Param.put("uniqueSuffix", new Integer(uniqueSuffix));
+            Param.put("uniqueSuffix", Integer.valueOf(uniqueSuffix));
 
             return dbt.connectToSource(newSource);
         }
         catch( Exception e ) {
             uniqueSuffix++;
-            Param.put("uniqueSuffix", new Integer(uniqueSuffix));
+            Param.put("uniqueSuffix", Integer.valueOf(uniqueSuffix));
             log.println("could not register new database" );
             e.printStackTrace();
             throw new StatusException("could not register new database", e) ;

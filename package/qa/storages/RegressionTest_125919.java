@@ -63,9 +63,9 @@ public class RegressionTest_125919 implements StorageTest {
 
             for ( int nInitInd = 0; nInitInd < 36000; nInitInd++ )
             {
-                pBytes36[nInitInd] = ( new Integer( nInitInd >> ( ( nInitInd % 2 ) * 8 ) ) ).byteValue();
+                pBytes36[nInitInd] = ( Integer.valueOf( nInitInd >> ( ( nInitInd % 2 ) * 8 ) ) ).byteValue();
                 if ( nInitInd < 18000 )
-                    pBytes18[nInitInd] = ( new Integer( 256  - pBytes36[nInitInd] ) ).byteValue();
+                    pBytes18[nInitInd] = ( Integer.valueOf( 256  - pBytes36[nInitInd] ) ).byteValue();
             }
 
             System.out.println( "This test can take up to some hours. The file size currently is about 50000." );
@@ -83,7 +83,7 @@ public class RegressionTest_125919 implements StorageTest {
                 // create storage based on the temporary stream
                 Object pArgs[] = new Object[2];
                 pArgs[0] = (Object) xBorderedStream;
-                pArgs[1] = new Integer( ElementModes.WRITE );
+                pArgs[1] = Integer.valueOf( ElementModes.WRITE );
 
                 Object oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
                 XStorage xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );

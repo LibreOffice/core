@@ -213,7 +213,7 @@ public class EuroAdaption {
 
                     // set the new numberformat to the cellrange DM->EUR
                     xCellProp.setPropertyValue( "NumberFormat",
-                                                new Integer( iNewNumberFormat ) );
+                                                Integer.valueOf( iNewNumberFormat ) );
 
                     // interate over all cells from the cellrange with an
                     // content and use the DM/EUR factor
@@ -297,7 +297,7 @@ public class EuroAdaption {
                 XPropertySet xCellProp = UnoRuntime.queryInterface(
                     XPropertySet.class, xCellRange );
                 xCellProp.setPropertyValue( "NumberFormat",
-                                            new Integer(iNumberFormatKey) );
+                                            Integer.valueOf(iNumberFormatKey) );
             }
         }
         catch( Exception e) {

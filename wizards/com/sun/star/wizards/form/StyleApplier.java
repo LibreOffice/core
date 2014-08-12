@@ -71,7 +71,7 @@ public class StyleApplier
             xPageStylePropertySet = oTextStyleHandler.getStyleByName("PageStyles", "Standard");
             this.CurUnoDialog = _CurUnoDialog;
             curtabindex = (short) (FormWizard.SOSTYLE_PAGE * 100);
-            Integer IStyleStep = new Integer(FormWizard.SOSTYLE_PAGE);
+            Integer IStyleStep = Integer.valueOf(FormWizard.SOSTYLE_PAGE);
             String sPageStyles = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 86);
             String sNoBorder = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 29);
             String s3DLook = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 30);
@@ -292,7 +292,7 @@ public class StyleApplier
                 {
                     if (_iStyleColors[SOLABELTEXTCOLOR] > -1)
                     {
-                        curControlForm.oGridControl.xPropertySet.setPropertyValue("TextColor", new Integer(_iStyleColors[SODBTEXTCOLOR]));
+                        curControlForm.oGridControl.xPropertySet.setPropertyValue("TextColor", Integer.valueOf(_iStyleColors[SODBTEXTCOLOR]));
                     }
                     curControlForm.oGridControl.xPropertySet.setPropertyValue("BackgroundColor", Integer.decode("#DDDDDD"));
                 }
@@ -327,12 +327,12 @@ public class StyleApplier
                     {
                         if (_iStyleColors[SOLABELTEXTCOLOR] > -1)
                         {
-                            LabelControls[n].xPropertySet.setPropertyValue("TextColor", new Integer(_iStyleColors[SOLABELTEXTCOLOR]));
+                            LabelControls[n].xPropertySet.setPropertyValue("TextColor", Integer.valueOf(_iStyleColors[SOLABELTEXTCOLOR]));
                         }
                     }
                 }
             }
-            xPageStylePropertySet.setPropertyValue("BackColor", new Integer(_iStyleColors[SOBACKGROUNDCOLOR]));
+            xPageStylePropertySet.setPropertyValue("BackColor", Integer.valueOf(_iStyleColors[SOBACKGROUNDCOLOR]));
         }
         catch (Exception e)
         {

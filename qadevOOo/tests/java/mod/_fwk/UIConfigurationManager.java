@@ -86,7 +86,7 @@ public class UIConfigurationManager extends TestCase {
             XSingleServiceFactory.class, o);
             Object[] props = new Object[2];
             props[0] = deleteCfg;
-            props[1] = new Integer(ElementModes.READWRITE);
+            props[1] = Integer.valueOf(ElementModes.READWRITE);
             XStorage xRootStorage = UnoRuntime.queryInterface(XStorage.class, xSSF.createInstanceWithArguments(props));
             xSubStorage = xRootStorage.openStorageElement("Configurations2", ElementModes.READWRITE);
 

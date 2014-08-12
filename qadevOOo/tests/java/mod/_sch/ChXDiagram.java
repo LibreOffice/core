@@ -349,8 +349,8 @@ public class ChXDiagram extends TestCase {
         int cols = da.getColumnDescriptions().length;
         int rows = da.getRowDescriptions().length;
 
-        tEnv.addObjRelation("ROWAMOUNT", new Integer(rows));
-        tEnv.addObjRelation("COLAMOUNT", new Integer(cols));
+        tEnv.addObjRelation("ROWAMOUNT", Integer.valueOf(rows));
+        tEnv.addObjRelation("COLAMOUNT", Integer.valueOf(cols));
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
         Object stock = SOF.createDiagram(xChartDoc,"StockDiagram");

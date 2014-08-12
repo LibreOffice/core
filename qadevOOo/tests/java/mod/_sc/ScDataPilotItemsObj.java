@@ -197,7 +197,7 @@ public class ScDataPilotItemsObj extends TestCase {
 
 
             oSheet.getCellByPosition(x, y);
-            new Integer(27);
+            Integer.valueOf(27);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace();
             throw new StatusException("Couldn't get cells for changing.", e);

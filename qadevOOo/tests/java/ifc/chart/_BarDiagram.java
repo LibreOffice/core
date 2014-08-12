@@ -111,8 +111,8 @@ public class _BarDiagram extends MultiPropertyTest {
             int a = 0;
             int b = 2;
             if ( ((Integer) oldValue).intValue() == a)
-                return new Integer(b); else
-                return new Integer(a);
+                return Integer.valueOf(b); else
+                return Integer.valueOf(a);
         }
     } ;
 

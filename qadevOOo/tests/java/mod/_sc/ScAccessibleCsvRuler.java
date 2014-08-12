@@ -129,7 +129,7 @@ public class ScAccessibleCsvRuler extends TestCase {
             }
         }
 
-        tEnv.addObjRelation("LimitedBounds", new Integer(lastone));
+        tEnv.addObjRelation("LimitedBounds", Integer.valueOf(lastone));
         tEnv.addObjRelation("PreviousUsed",new int[]{11,22,33,44,55,66,77,88,99});
 
         return tEnv;

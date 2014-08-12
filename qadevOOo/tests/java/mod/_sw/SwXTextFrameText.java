@@ -108,7 +108,7 @@ public class SwXTextFrameText extends TestCase {
                 (XPropertySet.class, oFrame1 );
             //AnchorTypes: 0 = paragraph, 1 = as char, 2 = page,
             // 3 = frame/paragraph 4= at char
-            oPropSet.setPropertyValue("AnchorType", new Integer(2));
+            oPropSet.setPropertyValue("AnchorType", Integer.valueOf(2));
             oText = xTextDoc.getText();
                     oCursor = oText.createTextCursor();
 

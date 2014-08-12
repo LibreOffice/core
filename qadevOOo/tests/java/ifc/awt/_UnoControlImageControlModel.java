@@ -67,7 +67,7 @@ public class _UnoControlImageControlModel extends MultiPropertyTest {
         testProperty("BackgroundColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String propName, Object oldValue) {
-                return utils.isVoid(oldValue) ? new Integer(8945) :
+                return utils.isVoid(oldValue) ? Integer.valueOf(8945) :
                     super.getNewValue(propName, oldValue) ;
             }
         }) ;
@@ -81,7 +81,7 @@ public class _UnoControlImageControlModel extends MultiPropertyTest {
         testProperty("BorderColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(1234) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(1234) : null ;
             }
         }) ;
     }

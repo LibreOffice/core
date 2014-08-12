@@ -204,7 +204,7 @@ public final class urp implements IProtocol {
             true, PROPERTIES_OID,
             TypeDescription.getTypeDescription(XProtocolProperties.class),
             PROPERTIES_FUN_REQUEST_CHANGE, propertiesTid,
-            new Object[] { new Integer(random) });
+            new Object[] { Integer.valueOf(random) });
         state = STATE_REQUESTED;
     }
 
@@ -225,7 +225,7 @@ public final class urp implements IProtocol {
                     case STATE_INITIAL0:
                     case STATE_INITIAL:
                         writeReply(
-                            false, message.getThreadId(), new Integer(1));
+                            false, message.getThreadId(), Integer.valueOf(1));
                         state = STATE_WAIT;
                         break;
                     case STATE_REQUESTED:
@@ -233,16 +233,16 @@ public final class urp implements IProtocol {
                             = ((Integer) message.getArguments()[0]).intValue();
                         if (random < n) {
                             writeReply(
-                                false, message.getThreadId(), new Integer(1));
+                                false, message.getThreadId(), Integer.valueOf(1));
                             state = STATE_WAIT;
                         } else if (random == n) {
                             writeReply(
-                                false, message.getThreadId(), new Integer(-1));
+                                false, message.getThreadId(), Integer.valueOf(-1));
                             state = STATE_INITIAL;
                             sendRequestChange();
                         } else {
                             writeReply(
-                                false, message.getThreadId(), new Integer(0));
+                                false, message.getThreadId(), Integer.valueOf(0));
                         }
                         break;
                     default:

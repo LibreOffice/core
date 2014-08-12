@@ -555,10 +555,10 @@ public class AnyConverter
             case TypeClass.LONG_value:
                 switch (tc) {
                 case TypeClass.BYTE_value:
-                    return new Integer( ((Byte)object).byteValue() );
+                    return Integer.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
                 case TypeClass.UNSIGNED_SHORT_value:
-                    return new Integer( ((Short)object).shortValue() );
+                    return Integer.valueOf( ((Short)object).shortValue() );
                 case TypeClass.LONG_value:
                     return object;
                 }
@@ -566,7 +566,7 @@ public class AnyConverter
             case TypeClass.UNSIGNED_LONG_value:
                 switch (tc) {
                 case TypeClass.UNSIGNED_SHORT_value:
-                    return new Integer( ((Short)object).shortValue() );
+                    return Integer.valueOf( ((Short)object).shortValue() );
                 case TypeClass.UNSIGNED_LONG_value:
                     return object;
                 }

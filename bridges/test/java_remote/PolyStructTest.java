@@ -82,15 +82,15 @@ public final class PolyStructTest extends ComplexTestCase {
                     new TestPolyStruct(new Short(Short.MAX_VALUE))).member);
 
             assertEquals(
-                new Integer(0), t.transportLong(new TestPolyStruct()).member);
+                Integer.valueOf(0), t.transportLong(new TestPolyStruct()).member);
             assertEquals(
-                new Integer(Integer.MIN_VALUE),
+                Integer.valueOf(Integer.MIN_VALUE),
                 t.transportLong(
-                    new TestPolyStruct(new Integer(Integer.MIN_VALUE))).member);
+                    new TestPolyStruct(Integer.valueOf(Integer.MIN_VALUE))).member);
             assertEquals(
-                new Integer(Integer.MAX_VALUE),
+                Integer.valueOf(Integer.MAX_VALUE),
                 t.transportLong(
-                    new TestPolyStruct(new Integer(Integer.MAX_VALUE))).member);
+                    new TestPolyStruct(Integer.valueOf(Integer.MAX_VALUE))).member);
 
             assertEquals(
                 new Long(0L), t.transportHyper(new TestPolyStruct()).member);
@@ -161,10 +161,10 @@ public final class PolyStructTest extends ComplexTestCase {
                 Any.VOID, t.transportAny(new TestPolyStruct(Any.VOID)).member);
             assertEquals(null, t.transportAny(new TestPolyStruct(null)).member);
             assertEquals(
-                new Any(Type.UNSIGNED_LONG, new Integer(5)),
+                new Any(Type.UNSIGNED_LONG, Integer.valueOf(5)),
                 t.transportAny(
                     new TestPolyStruct(
-                        new Any(Type.UNSIGNED_LONG, new Integer(5)))).member);
+                        new Any(Type.UNSIGNED_LONG, Integer.valueOf(5)))).member);
 
             assertEquals(
                 TestEnum.VALUE1, t.transportEnum(new TestPolyStruct()).member);

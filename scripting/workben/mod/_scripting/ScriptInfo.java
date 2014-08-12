@@ -77,7 +77,7 @@ public class ScriptInfo extends TestCase {
             access = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
             Object storageObj = xMSF.createInstanceWithArguments(
                 "drafts.com.sun.star.script.framework.storage.ScriptStorage",
-                new Object[]{ access, new Integer(99), docPath } );
+                new Object[]{ access, Integer.valueOf(99), docPath } );
             XScriptInfoAccess infoAccess = UnoRuntime.queryInterface(XScriptInfoAccess.class, storageObj);
             XScriptInfo[] infos = infoAccess.getImplementations("script://MemoryUtils.MemUsage?location=document");
            oObj = infos[0];

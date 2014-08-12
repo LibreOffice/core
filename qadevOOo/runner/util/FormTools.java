@@ -226,7 +226,7 @@ public class FormTools {
             XPropertySet formProps = UnoRuntime.queryInterface(XPropertySet.class, the_form);
             formProps.setPropertyValue("DataSourceName","Bibliography");
             formProps.setPropertyValue("Command","biblio");
-            formProps.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
+            formProps.setPropertyValue("CommandType",Integer.valueOf(com.sun.star.sdb.CommandType.TABLE));
             formLoader = UnoRuntime.queryInterface(XLoadable.class, the_form);
         }
         catch (Exception ex) {
@@ -255,7 +255,7 @@ public class FormTools {
         XPropertySet formProps = UnoRuntime.queryInterface(XPropertySet.class, the_form);
         formProps.setPropertyValue("DataSourceName",sourceName);
         formProps.setPropertyValue("Command",tableName);
-        formProps.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
+        formProps.setPropertyValue("CommandType",Integer.valueOf(com.sun.star.sdb.CommandType.TABLE));
 
         return UnoRuntime.queryInterface(XLoadable.class, the_form);
     }
@@ -281,7 +281,7 @@ public class FormTools {
         XPropertySet formProps = UnoRuntime.queryInterface(XPropertySet.class, the_form);
         formProps.setPropertyValue("DataSourceName",sourceName);
         formProps.setPropertyValue("Command",tableName);
-        formProps.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
+        formProps.setPropertyValue("CommandType",Integer.valueOf(com.sun.star.sdb.CommandType.TABLE));
 
         return UnoRuntime.queryInterface(XLoadable.class, the_form);
     }

@@ -81,7 +81,7 @@ public class IntArrayList {
         int needToAdd = minCapacity - list.size();
         if (needToAdd > 0) {
             for (int i = 0; i < needToAdd; i++) {
-                list.add(new Integer(fillValue));
+                list.add(Integer.valueOf(fillValue));
             }
         }
     }
@@ -97,7 +97,7 @@ public class IntArrayList {
      *                 selected element of the list.
      */
     public void set(int index, int value) {
-        list.set(index, new Integer(value));
+        list.set(index, Integer.valueOf(value));
     }
 
 
@@ -108,7 +108,7 @@ public class IntArrayList {
      *                 element that we are appending to the list.
      */
     public void add(int value) {
-        list.add(new Integer(value));
+        list.add(Integer.valueOf(value));
     }
 
 

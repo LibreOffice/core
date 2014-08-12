@@ -44,7 +44,7 @@ public class _GridControl extends MultiPropertyTest {
         testProperty("RowHeight", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return util.utils.isVoid(old) ? new Integer(11) :
+                return util.utils.isVoid(old) ? Integer.valueOf(11) :
                     super.getNewValue(prop, old) ;
             }
         }) ;
@@ -72,7 +72,7 @@ public class _GridControl extends MultiPropertyTest {
         testProperty("TextColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return util.utils.isVoid(old) ? new Integer(342) :
+                return util.utils.isVoid(old) ? Integer.valueOf(342) :
                     super.getNewValue(prop, old) ;
             }
         }) ;
@@ -86,7 +86,7 @@ public class _GridControl extends MultiPropertyTest {
         testProperty("BorderColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return util.utils.isVoid(old) ? new Integer(342) :
+                return util.utils.isVoid(old) ? Integer.valueOf(342) :
                     super.getNewValue(prop, old) ;
             }
         }) ;

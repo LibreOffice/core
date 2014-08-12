@@ -58,7 +58,7 @@ public class FieldFormatter implements XItemListener
     {
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (TableWizard.SOFIELDSFORMATPAGE * 100);
-        IFieldFormatStep = new Integer(TableWizard.SOFIELDSFORMATPAGE);
+        IFieldFormatStep = Integer.valueOf(TableWizard.SOFIELDSFORMATPAGE);
         String sFieldName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 23);
         String sFieldNames = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 25);
         String sfieldinfo = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 20);

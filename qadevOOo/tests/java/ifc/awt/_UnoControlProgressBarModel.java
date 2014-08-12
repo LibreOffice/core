@@ -50,7 +50,7 @@ public class _UnoControlProgressBarModel extends MultiPropertyTest {
         testProperty("BackgroundColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(1234) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(1234) : null ;
             }
         }) ;
     }
@@ -63,7 +63,7 @@ public class _UnoControlProgressBarModel extends MultiPropertyTest {
         testProperty("FillColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(4321) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(4321) : null ;
             }
         }) ;
     }
@@ -76,7 +76,7 @@ public class _UnoControlProgressBarModel extends MultiPropertyTest {
         testProperty("ProgressValue", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(10) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(10) : null ;
             }
         }) ;
     }

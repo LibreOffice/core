@@ -119,14 +119,14 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
     {
         m_masterForm = dbfTools.queryPropertySet( m_orb.createInstance( "com.sun.star.form.component.DataForm" ) );
         m_masterForm.setPropertyValue( "ActiveConnection", _databaseDocument.defaultConnection().getXConnection() );
-        m_masterForm.setPropertyValue( "CommandType", new Integer( com.sun.star.sdb.CommandType.TABLE ) );
+        m_masterForm.setPropertyValue( "CommandType", Integer.valueOf( com.sun.star.sdb.CommandType.TABLE ) );
         m_masterForm.setPropertyValue( "Command", "master" );
 
         m_masterResult = new ResultSet( m_masterForm );
 
         m_detailForm = dbfTools.queryPropertySet( m_orb.createInstance( "com.sun.star.form.component.DataForm" ) );
         m_detailForm.setPropertyValue( "ActiveConnection", _databaseDocument.defaultConnection().getXConnection() );
-        m_detailForm.setPropertyValue( "CommandType", new Integer( com.sun.star.sdb.CommandType.TABLE ) );
+        m_detailForm.setPropertyValue( "CommandType", Integer.valueOf( com.sun.star.sdb.CommandType.TABLE ) );
         m_detailForm.setPropertyValue( "Command", "detail" );
 
         m_detailResult = new ResultSet( m_detailForm );
@@ -241,12 +241,12 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
 
             m_masterForm = (XPropertySet)dbfTools.getParent( controlModel, XPropertySet.class );
             m_masterForm.setPropertyValue( "Command", "categories" );
-            m_masterForm.setPropertyValue( "CommandType", new Integer( CommandType.TABLE ) );
+            m_masterForm.setPropertyValue( "CommandType", Integer.valueOf( CommandType.TABLE ) );
 
             // create a detail form
             m_detailForm = UnoRuntime.queryInterface( XPropertySet.class, subDocument.createSubForm( m_masterForm, "products" ) );
             m_detailForm.setPropertyValue( "Command", "SELECT \"ID\", \"Name\", \"CategoryID\" FROM \"products\"" );
-            m_detailForm.setPropertyValue( "CommandType", new Integer( CommandType.COMMAND ) );
+            m_detailForm.setPropertyValue( "CommandType", Integer.valueOf( CommandType.COMMAND ) );
             m_detailForm.setPropertyValue( "MasterFields", new String[] { "ID" } );
             m_detailForm.setPropertyValue( "DetailFields", new String[] { "CategoryID" } );
 
@@ -256,7 +256,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             XIndexContainer gridColumns = UnoRuntime.queryInterface( XIndexContainer.class, gridControlModel );
                                       impl_createGridColumn( gridColumns, "TextField", "ID" );
             XPropertySet nameColumn = impl_createGridColumn( gridColumns, "TextField", "Name" );
-            nameColumn.setPropertyValue( "Width", new Integer( 600 ) ); // 6 cm
+            nameColumn.setPropertyValue( "Width", Integer.valueOf( 600 ) ); // 6 cm
             nameColumn.setPropertyValue( "DefaultText", "default text" );
 
             // go live

@@ -209,7 +209,7 @@ public class OSingleSelectQueryComposer extends TestCase {
             xSetProp.setPropertyValue("DataSourceName", "Bibliography") ;
             xSetProp.setPropertyValue("Command", "biblio") ;
             xSetProp.setPropertyValue("CommandType",
-                new Integer(CommandType.TABLE)) ;
+                Integer.valueOf(CommandType.TABLE)) ;
 
             com.sun.star.sdbc.XRowSet xORowSet = UnoRuntime.queryInterface(com.sun.star.sdbc.XRowSet.class,
             oRowSet) ;

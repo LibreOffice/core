@@ -56,7 +56,7 @@ public class FormConfiguration
     {
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (FormWizard.SOSUBFORM_PAGE * 100);
-        Integer ISubFormStep = new Integer(FormWizard.SOSUBFORM_PAGE);
+        Integer ISubFormStep = Integer.valueOf(FormWizard.SOSUBFORM_PAGE);
         String sOnExistingRelation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 5);
         String sOnManualRelation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 7);
         String sSelectManually = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 4);

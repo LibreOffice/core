@@ -306,7 +306,7 @@ public class DataAwareFields
                     }
                     else
                     {
-                        return new Integer(s);
+                        return Integer.valueOf(s);
                     }
                 }
                 else if (convertTo.equals(Double.class))
@@ -473,7 +473,7 @@ public class DataAwareFields
     {
         if (c.equals(Integer.class))
         {
-            return new Integer((int) i);
+            return Integer.valueOf((int) i);
         }
         else if (c.equals(Short.class))
         {

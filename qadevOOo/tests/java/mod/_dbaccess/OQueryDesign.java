@@ -208,7 +208,7 @@ public class OQueryDesign extends TestCase {
         ExceptionParams[1] = ExceptionParam2;
         PropertyValue ExceptionParam3 = new PropertyValue();
         ExceptionParam3.Name = "QueryDesignView";
-        ExceptionParam3.Value = new Integer(17);//Boolean.TRUE;
+        ExceptionParam3.Value = Integer.valueOf(17);//Boolean.TRUE;
         ExceptionParams[2] = ExceptionParam3;
 
         tEnv.addObjRelation("XInitialization.ExceptionArgs", ExceptionParams);

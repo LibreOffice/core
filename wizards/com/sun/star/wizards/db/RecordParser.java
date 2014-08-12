@@ -209,7 +209,7 @@ public class RecordParser extends QueryMetaData
             Helper.setUnoPropertyValue(xRowSet, "DataSourceName", DataSourceName);
             Helper.setUnoPropertyValue(xRowSet, PropertyNames.ACTIVE_CONNECTION, DBConnection);
             Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND, Command);
-            Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND_TYPE, new Integer(_nCommandType)); // CommandType
+            Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND_TYPE, Integer.valueOf(_nCommandType)); // CommandType
             xExecute.executeWithCompletion(xInteraction);
             com.sun.star.sdb.XResultSetAccess xResultAccess = UnoRuntime.queryInterface(com.sun.star.sdb.XResultSetAccess.class, xRowSet);
             ResultSet = xResultAccess.createResultSet();

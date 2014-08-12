@@ -99,7 +99,7 @@ public class FrameDsc extends InstDescr {
 
 
         try {
-            oPropSet.setPropertyValue("AnchorType", new Integer(2));
+            oPropSet.setPropertyValue("AnchorType", Integer.valueOf(2));
         }
         catch( com.sun.star.beans.UnknownPropertyException upE ){
         }

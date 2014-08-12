@@ -222,7 +222,7 @@ public final class Test extends ComplexTestCase {
         //TODO:
         Struct2 s = new Struct2(
             true, (byte) 1, (short) 2, (short) 3, 4, 5, 6L, 7L, 0.8f, 0.9, 'A',
-            "BCD", Type.UNSIGNED_HYPER, new Integer(22), Enum2.VALUE4,
+            "BCD", Type.UNSIGNED_HYPER, Integer.valueOf(22), Enum2.VALUE4,
             new Struct1(1), null, null, false, (byte) 0, (short) 0, (short) 0,
             0, 0, 0L, 0L, 0.0f, 0.0, '\u0000', "", Type.VOID, Any.VOID,
             Enum2.VALUE0, new Struct1(), null, null,
@@ -255,7 +255,7 @@ public final class Test extends ComplexTestCase {
         assure(s.p11 == 'A');
         assure(s.p12.equals("BCD"));
         assure(s.p13.equals(Type.UNSIGNED_HYPER));
-        assure(s.p14.equals(new Integer(22)));
+        assure(s.p14.equals(Integer.valueOf(22)));
         assure(s.p15 == Enum2.VALUE4);
         assure(s.p16.member1 == 1);
         assure(s.p17 == null);

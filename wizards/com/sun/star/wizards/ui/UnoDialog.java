@@ -281,7 +281,7 @@ public class UnoDialog implements EventNames
         {
             xButton.addActionListener(xActionListener);
         }
-        Integer ControlKey = new Integer(iControlKey);
+        Integer ControlKey = Integer.valueOf(iControlKey);
         if (ControlList != null)
         {
             ControlList.put(sName, ControlKey);
@@ -306,7 +306,7 @@ public class UnoDialog implements EventNames
             {
                 xScrollBar.addAdjustmentListener(xAdjustmentListener);
             }
-            Integer ControlKey = new Integer(iControlKey);
+            Integer ControlKey = Integer.valueOf(iControlKey);
             if (ControlList != null)
             {
                 ControlList.put(sName, ControlKey);
@@ -343,7 +343,7 @@ public class UnoDialog implements EventNames
             {
                 xTextBox.addTextListener(xTextListener);
             }
-            Integer ControlKey = new Integer(iControlKey);
+            Integer ControlKey = Integer.valueOf(iControlKey);
             ControlList.put(sName, ControlKey);
             return xTextBox;
         }
@@ -369,7 +369,7 @@ public class UnoDialog implements EventNames
         {
             xListBox.addActionListener(xActionListener);
         }
-        Integer ControlKey = new Integer(iControlKey);
+        Integer ControlKey = Integer.valueOf(iControlKey);
         ControlList.put(sName, ControlKey);
         return xListBox;
     }
@@ -400,7 +400,7 @@ public class UnoDialog implements EventNames
     public XRadioButton insertRadioButton(String sName, int iControlKey, String[] sProperties, Object[] sValues)
     {
         XRadioButton xRadioButton = insertRadioButton(sName, sProperties, sValues);
-        Integer ControlKey = new Integer(iControlKey);
+        Integer ControlKey = Integer.valueOf(iControlKey);
         ControlList.put(sName, ControlKey);
         return xRadioButton;
     }
@@ -439,7 +439,7 @@ public class UnoDialog implements EventNames
             int iCurDialogStep = AnyConverter.toInt(Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_STEP));
             if (bIsVisible)
             {
-                setControlProperty(controlname, PropertyNames.PROPERTY_STEP, new Integer(iCurDialogStep));
+                setControlProperty(controlname, PropertyNames.PROPERTY_STEP, Integer.valueOf(iCurDialogStep));
             }
             else
             {
@@ -461,7 +461,7 @@ public class UnoDialog implements EventNames
         {
             int ncurstep = AnyConverter.toInt(Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_STEP));
             Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, 99);
-            Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, new Integer(ncurstep));
+            Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, Integer.valueOf(ncurstep));
         }
         catch (com.sun.star.lang.IllegalArgumentException exception)
         {

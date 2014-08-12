@@ -119,7 +119,7 @@ public class HardFormatting {
                 com.sun.star.beans.XPropertySet.class, xWordCursor);
             xPropertySet.setPropertyValue("CharWeight",
                                           new Float(com.sun.star.awt.FontWeight.BOLD));
-            xPropertySet.setPropertyValue("CharColor", new Integer( 255 ) );
+            xPropertySet.setPropertyValue("CharColor", Integer.valueOf( 255 ) );
 
             System.out.println(
                 "Parastyle : "

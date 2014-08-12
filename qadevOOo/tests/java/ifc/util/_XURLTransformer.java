@@ -72,7 +72,7 @@ public class _XURLTransformer extends MultiMethodTest {
 
         url[0].Protocol = "http://";
         url[0].Server = server;
-        url[0].Port = new Integer(port).shortValue();
+        url[0].Port = Integer.valueOf(port).shortValue();
         url[0].Path = path;
         url[0].Name = name;
         url[0].Arguments = arguments;
@@ -99,7 +99,7 @@ public class _XURLTransformer extends MultiMethodTest {
         url[0].User = user;
         url[0].Password = password;
         url[0].Server = server;
-        url[0].Port = new Integer(port).shortValue();
+        url[0].Port = Integer.valueOf(port).shortValue();
         url[0].Path = path;
         url[0].Name = name;
         url[0].Main = "ftp://" + user + ":" + password + "@" + server + ":" +
@@ -164,7 +164,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (url[0].Port != new Integer(port).shortValue()) {
+        if (url[0].Port != Integer.valueOf(port).shortValue()) {
             log.println("parseStrict works wrong");
             log.println("port field : " + url[0].Port);
             log.println("expected : " + port);
@@ -235,7 +235,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (url[0].Port != new Integer(port).shortValue()) {
+        if (url[0].Port != Integer.valueOf(port).shortValue()) {
             log.println("parseStrict works wrong");
             log.println("port field : " + url[0].Port);
             log.println("expected : " + port);
@@ -304,7 +304,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (url[0].Port != new Integer(port).shortValue()) {
+        if (url[0].Port != Integer.valueOf(port).shortValue()) {
             log.println("parseSmart works wrong");
             log.println("port field : " + url[0].Port);
             log.println("expected : " + port);
@@ -377,7 +377,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (url[0].Port != new Integer(port).shortValue()) {
+        if (url[0].Port != Integer.valueOf(port).shortValue()) {
             log.println("parseSmart works wrong");
             log.println("port field : " + url[0].Port);
             log.println("expected : " + port);

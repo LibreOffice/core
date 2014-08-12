@@ -192,7 +192,7 @@ public class AccessibleTreeListBox extends TestCase {
         params[0] = param1;
         PropertyValue param2 = new PropertyValue();
         param2.Name = "CommandType";
-        param2.Value = new Integer(com.sun.star.sdb.CommandType.TABLE);
+        param2.Value = Integer.valueOf(com.sun.star.sdb.CommandType.TABLE);
         params[1] = param2;
         PropertyValue param3 = new PropertyValue();
         param3.Name = "Command";

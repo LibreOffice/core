@@ -278,7 +278,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         xNameReplace.replaceByName( "SecureURL", aSecureURLs );
 
         log.println("setting OfficeBasic");
-        xNameReplace.replaceByName( "OfficeBasic", new Integer(officeBasic) );
+        xNameReplace.replaceByName( "OfficeBasic", Integer.valueOf(officeBasic) );
 
         Boolean bConfirm = null;
         if( ( confirm != null ) && ( confirm.equals("true") ) )

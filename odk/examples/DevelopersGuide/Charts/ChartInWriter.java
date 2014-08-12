@@ -146,7 +146,7 @@ public class ChartInWriter
                                   X3DDisplay.class, maDiagram ).getWall();
 
         // change background color of area
-        aWall.setPropertyValue( "FillColor", new Integer( 0xeecc99 ));
+        aWall.setPropertyValue( "FillColor", Integer.valueOf( 0xeecc99 ));
         aWall.setPropertyValue( "FillStyle",  FillStyle.SOLID );
     }
 

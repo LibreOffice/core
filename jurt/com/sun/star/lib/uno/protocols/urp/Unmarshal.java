@@ -226,7 +226,7 @@ final class Unmarshal {
 
     private Integer readLongValue() {
         try {
-            return new Integer(input.readInt());
+            return Integer.valueOf(input.readInt());
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }

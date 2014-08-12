@@ -109,7 +109,7 @@ public class _BaseFrame extends MultiPropertyTest {
      * value must be defined.
      */
     public void _BackColorTransparency() {
-        testProperty("BackColorTransparency", new Integer(10), new Integer(50)) ;
+        testProperty("BackColorTransparency", Integer.valueOf(10), Integer.valueOf(50)) ;
     }
 
 } //finish class _BaseFrame

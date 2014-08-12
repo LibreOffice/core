@@ -242,7 +242,7 @@ public class BasicMacroTools {
         XPropertySet oScriptingSettings = UnoRuntime.queryInterface(XPropertySet.class, oScripting);
 
         oScriptingSettings.setPropertyValue("SecureURL", new String[]{secureURL});
-        oScriptingSettings.setPropertyValue("OfficeBasic", new Integer(2));
+        oScriptingSettings.setPropertyValue("OfficeBasic", Integer.valueOf(2));
 
         XChangesBatch oSecureChange = UnoRuntime.queryInterface(XChangesBatch.class, oSecure);
         oSecureChange.commitChanges();

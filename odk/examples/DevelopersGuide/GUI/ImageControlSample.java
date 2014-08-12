@@ -69,12 +69,12 @@ public class ImageControlSample extends UnoDialogSample{
             XMultiComponentFactory xMCF = xContext.getServiceManager();
             oImageControlSample = new ImageControlSample(xContext, xMCF);
             oImageControlSample.initialize( new String[] {"Height", "Moveable", "Name","PositionX","PositionY", "Step", "TabIndex","Title","Width"},
-                    new Object[] { new Integer(100), Boolean.TRUE, "MyTestDialog", new Integer(102),new Integer(41), new Integer(0), new Short((short) 0), "OpenOffice", new Integer(230)});
+                    new Object[] { Integer.valueOf(100), Boolean.TRUE, "MyTestDialog", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(0), new Short((short) 0), "OpenOffice", Integer.valueOf(230)});
             Object oFTHeaderModel = oImageControlSample.m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
             XMultiPropertySet xFTHeaderModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
             xFTHeaderModelMPSet.setPropertyValues(
                     new String[] {"Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Width"},
-                    new Object[] { new Integer(16), "This code-sample demonstrates how to create an ImageControlSample within a dialog", Boolean.TRUE, "HeaderLabel", new Integer(6), new Integer(6), new Integer(210)});
+                    new Object[] { Integer.valueOf(16), "This code-sample demonstrates how to create an ImageControlSample within a dialog", Boolean.TRUE, "HeaderLabel", Integer.valueOf(6), Integer.valueOf(6), Integer.valueOf(210)});
             // add the model to the NameContainer of the dialog model
             oImageControlSample.m_xDlgModelNameContainer.insertByName("Headerlabel", oFTHeaderModel);
             XPropertySet xICModelPropertySet = oImageControlSample.insertImageControl(68, 30, 32, 90);
@@ -116,7 +116,7 @@ public class ImageControlSample extends UnoDialogSample{
             // The image is not scaled
             xICModelMPSet.setPropertyValues(
                     new String[] {"Border", "Height", "Name", "PositionX", "PositionY", "ScaleImage", "Width"},
-                    new Object[] { new Short((short) 1), new Integer(_nHeight), sName, new Integer(_nPosX), new Integer(_nPosY), Boolean.FALSE, new Integer(_nWidth)});
+                    new Object[] { new Short((short) 1), Integer.valueOf(_nHeight), sName, Integer.valueOf(_nPosX), Integer.valueOf(_nPosY), Boolean.FALSE, Integer.valueOf(_nWidth)});
 
             // The controlmodel is not really available until inserted to the Dialog container
             m_xDlgModelNameContainer.insertByName(sName, oICModel);

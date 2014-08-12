@@ -100,7 +100,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             final int nListBoxHeight = nDialogHeight - 4*nControlMargin - nButtonHeight;
             oUnoDialogSample2 = new UnoDialogSample2(xContext, xMCF, oUnoObject);
             oUnoDialogSample2.initialize( new String[] {"Height", "Moveable", "Name","PositionX","PositionY", "Step", "TabIndex","Title","Width"},
-                                          new Object[] { new Integer(nDialogHeight), Boolean.TRUE, "Dialog1", new Integer(102),new Integer(41), new Integer(1), new Short((short) 0), "Inspect a Uno-Object", new Integer(nDialogWidth)});
+                                          new Object[] { Integer.valueOf(nDialogHeight), Boolean.TRUE, "Dialog1", Integer.valueOf(102),Integer.valueOf(41), Integer.valueOf(1), new Short((short) 0), "Inspect a Uno-Object", Integer.valueOf(nDialogWidth)});
             String sIntroLabel = "This Dialog lists information about a given Uno-Object.\nIt offers a view to inspect all suppported servicenames, exported interfaces, methods and properties.";
             oUnoDialogSample2.insertMultiLineFixedText(nControlPosX, 27, nControlWidth, 4, 1, sIntroLabel);
             // get the data from the UNO object...
@@ -220,7 +220,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             // Set the properties at the model - keep in mind to pass the property names in alphabetical order!
             xLBModelMPSet.setPropertyValues(
                 new String[]  {"Dropdown", "Height", "Name", "PositionX", "PositionY", "ReadOnly", "Step", "StringItemList", "Width" } ,
-                new Object[] {Boolean.FALSE, new Integer(_nHeight), sName, new Integer(_nPosX), new Integer(_nPosY), Boolean.TRUE, new Integer(_nStep), _sStringItemList, new Integer(_nWidth)});
+                new Object[] {Boolean.FALSE, Integer.valueOf(_nHeight), sName, Integer.valueOf(_nPosX), Integer.valueOf(_nPosY), Boolean.TRUE, Integer.valueOf(_nStep), _sStringItemList, Integer.valueOf(_nWidth)});
             m_xDlgModelNameContainer.insertByName(sName, xLBModelMPSet);
         }catch (com.sun.star.uno.Exception ex) {
             throw new java.lang.RuntimeException("cannot happen...");
@@ -240,7 +240,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             // Set the properties at the model - keep in mind to pass the property names in alphabetical order!
             xFTModelMPSet.setPropertyValues(
                 new String[] {"Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "Width"},
-                new Object[] { new Integer(nHeight), _sLabel, Boolean.TRUE, sName, new Integer(_nPosX), new Integer(_nPosY), new Integer(_nStep), new Integer(_nWidth)});
+                new Object[] { Integer.valueOf(nHeight), _sLabel, Boolean.TRUE, sName, Integer.valueOf(_nPosX), Integer.valueOf(_nPosY), Integer.valueOf(_nStep), Integer.valueOf(_nWidth)});
             // add the model to the NameContainer of the dialog model
             m_xDlgModelNameContainer.insertByName(sName, oFTModel);
         }catch (com.sun.star.uno.Exception ex){

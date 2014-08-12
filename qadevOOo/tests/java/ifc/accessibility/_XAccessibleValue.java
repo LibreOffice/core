@@ -80,7 +80,7 @@ public class _XAccessibleValue extends MultiMethodTest {
         double curVal ;
         val = oObj.getCurrentValue() ;
         if (util.utils.isVoid(val)) {
-            val = new Integer(0);
+            val = Integer.valueOf(0);
             curVal = 0;
         } else  {
             curVal = getDoubleValue(val);
@@ -211,7 +211,7 @@ public class _XAccessibleValue extends MultiMethodTest {
                 curValAnother);
             log.println("Set value of base component to " + curValAnother);
             if (tEnv.getTestCase().getObjectName().equals("AccessibleRadioButton")) {
-                anotherFromGroup.setCurrentValue(new Integer(curValBase));
+                anotherFromGroup.setCurrentValue(Integer.valueOf(curValBase));
             } else {
                 oObj.setCurrentValue(valAnotherFromGroup);
             }
@@ -317,7 +317,7 @@ public class _XAccessibleValue extends MultiMethodTest {
 
     private Object getObjectValue(double val, Class<?> clazz) {
         if (clazz.equals(Integer.class)) {
-            return new Integer((int)val);
+            return Integer.valueOf((int)val);
         }
         else if (clazz.equals(Short.class)) {
             return new Short((short)val);

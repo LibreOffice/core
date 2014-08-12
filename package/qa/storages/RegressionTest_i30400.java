@@ -63,7 +63,7 @@ public class RegressionTest_i30400 implements StorageTest {
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFileStream;
-            pArgs[1] = new Integer( ElementModes.WRITE );
+            pArgs[1] = Integer.valueOf( ElementModes.WRITE );
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
             String pPass1 = "1, 2, 3, 4, 5";
 
@@ -181,7 +181,7 @@ public class RegressionTest_i30400 implements StorageTest {
             // reopen the target storage readonly, and check the copying with renaming
 
 
-            pArgs[1] = new Integer( ElementModes.READ );
+            pArgs[1] = Integer.valueOf( ElementModes.READ );
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
             if ( xTempStorage == null )
@@ -244,7 +244,7 @@ public class RegressionTest_i30400 implements StorageTest {
 
         Object pArgs[] = new Object[2];
         pArgs[0] = (Object) xTempFileStream2;
-        pArgs[1] = new Integer( ElementModes.WRITE );
+        pArgs[1] = Integer.valueOf( ElementModes.WRITE );
         byte pBytes1[] = { 1, 1, 1, 1, 1 };
         String pPass1 = "1, 2, 3, 4, 5";
 
@@ -338,7 +338,7 @@ public class RegressionTest_i30400 implements StorageTest {
         // reopen the target storage readonly, and check the contents
 
 
-        pArgs[1] = new Integer( ElementModes.READ );
+        pArgs[1] = Integer.valueOf( ElementModes.READ );
         oTempStorage2 = m_xStorageFactory.createInstanceWithArguments( pArgs );
         xTempStorage2 = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage2 );
         if ( xTempStorage2 == null )

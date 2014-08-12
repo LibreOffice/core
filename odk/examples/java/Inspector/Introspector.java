@@ -172,7 +172,7 @@ public class Introspector extends WeakBase{
                 XIdlMethod mMethod = xIntrospectionAccessObject.getMethod("getByIndex", com.sun.star.beans.MethodConcept.INDEXCONTAINER);
                 for ( int i = 0; i < xIndexAccess.getCount(); i++ ) {
                     Object[][] aParamInfo = new Object[1][1];
-                    aParamInfo[0] = new Integer[] { new Integer(i) };
+                    aParamInfo[0] = new Integer[] { Integer.valueOf(i) };
                     oRetComponentsVector.add(mMethod.invoke(_oUnoParentObject, aParamInfo));
                 }
             }

@@ -137,7 +137,7 @@ public class NativeView extends java.awt.Canvas
     {
         if( maHandle == null )
         {
-            maHandle = new Integer( (int )getNativeWindow() );
+            maHandle = Integer.valueOf( (int )getNativeWindow() );
             maSystem = getNativeWindowSystemType();
         }
         return maHandle;

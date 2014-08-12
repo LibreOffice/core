@@ -83,7 +83,7 @@ public class RegressionTest_i27773 implements StorageTest {
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFileStream;
-            pArgs[1] = new Integer( ElementModes.WRITE );
+            pArgs[1] = Integer.valueOf( ElementModes.WRITE );
 
             Object oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
@@ -202,7 +202,7 @@ public class RegressionTest_i27773 implements StorageTest {
             // reopen the storage in readonly mode an check contents
 
 
-            pArgs[1] = new Integer( ElementModes.READ );
+            pArgs[1] = Integer.valueOf( ElementModes.READ );
 
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );

@@ -46,14 +46,14 @@ public class TitlesComponent extends ControlScroller
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
-                    8, _slblColumnNames, new Integer(iLabelPosX), new Integer(iCompPosY - 10), IStep, 60
+                    8, _slblColumnNames, Integer.valueOf(iLabelPosX), Integer.valueOf(iCompPosY - 10), IStep, 60
                 });
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnTitles", new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
-                    8, _slblColumnTitles, 90, new Integer(iCompPosY - 10), IStep, 152
+                    8, _slblColumnTitles, 90, Integer.valueOf(iCompPosY - 10), IStep, 152
                 });
     }
 
@@ -104,7 +104,7 @@ public class TitlesComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        16, Boolean.TRUE, new Integer(iLabelPosX), new Integer(_iCompPosY + 1), UIConsts.INVISIBLESTEP, new Short(curtabindex++), 30
+                        16, Boolean.TRUE, Integer.valueOf(iLabelPosX), Integer.valueOf(_iCompPosY + 1), UIConsts.INVISIBLESTEP, new Short(curtabindex++), 30
                     });
 
             xTextComponent = CurUnoDialog.insertTextField(stextfieldname, 0, null,
@@ -114,7 +114,7 @@ public class TitlesComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        12, HelpIds.getHelpIdString(curHelpIndex++), new Integer(iLabelPosX + 30), new Integer(_iCompPosY), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(iCompWidth - 90 - 20)
+                        12, HelpIds.getHelpIdString(curHelpIndex++), Integer.valueOf(iLabelPosX + 30), Integer.valueOf(_iCompPosY), UIConsts.INVISIBLESTEP, new Short(curtabindex++), Integer.valueOf(iCompWidth - 90 - 20)
                     });
         }
     }
@@ -147,9 +147,9 @@ public class TitlesComponent extends ControlScroller
         Size aSize = CurUnoDialog.getpreferredLabelSize(getColumnName(0), sLongestFieldName);
         double dblMAPConversion = CurUnoDialog.getMAPConversionFactor(getColumnName(0));
         int iFieldNameWidth = getFieldNameWidth(aSize.Width, dblMAPConversion) + 10;
-        Integer FieldNameWidth = new Integer(iFieldNameWidth);
-        Integer TitlePosX = new Integer(iLabelPosX + iFieldNameWidth + 2);
-        Integer TitleWidth = new Integer(iCompPosX + iCompWidth - TitlePosX.intValue() - iScrollBarWidth - 6);
+        Integer FieldNameWidth = Integer.valueOf(iFieldNameWidth);
+        Integer TitlePosX = Integer.valueOf(iLabelPosX + iFieldNameWidth + 2);
+        Integer TitleWidth = Integer.valueOf(iCompPosX + iCompWidth - TitlePosX.intValue() - iScrollBarWidth - 6);
         for (short i = 0; i <= ncurfieldcount; i++)
         {
             CurUnoDialog.setControlProperty(getColumnName(i), PropertyNames.PROPERTY_WIDTH, FieldNameWidth);

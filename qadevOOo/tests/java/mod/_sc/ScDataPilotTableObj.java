@@ -262,7 +262,7 @@ public class ScDataPilotTableObj extends TestCase {
         tEnv.addObjRelation("OUTPUTRANGE", sCellAddress);
         tEnv.addObjRelation("CELLFORCHANGE", oChangeCell);
         tEnv.addObjRelation("CELLFORCHECK", oCheckCell);
-        tEnv.addObjRelation("FIELDSAMOUNT", new Integer(5));
+        tEnv.addObjRelation("FIELDSAMOUNT", Integer.valueOf(5));
         tEnv.addObjRelation("SHEETDOCUMENT", xSheetDoc);
 
         createTable2(oSheet, sCellRangeAddress, tEnv);

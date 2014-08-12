@@ -61,7 +61,7 @@ public class UnoUrlResolver extends TestCase {
             if (os.equalsIgnoreCase("unxlngi"))
               port = 20006;
 
-            tEnv.addObjRelation("PORT", new Integer(port));
+            tEnv.addObjRelation("PORT", Integer.valueOf(port));
 
             return tEnv;
         } catch (Exception e) {

@@ -464,7 +464,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
         //change old attributes set
         for(int i = 0; i < attrs.length; i++) {
             if (attrs[i].Name.equals("CharColor")) {
-                attrs[i].Value = new Integer(-2);
+                attrs[i].Value = Integer.valueOf(-2);
             }
         }
 

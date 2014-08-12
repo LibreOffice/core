@@ -101,7 +101,7 @@ public class AccessiblePageShape extends TestCase {
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
                     try {
-                        PageProps.setPropertyValue("Height",new Integer(5000));
+                        PageProps.setPropertyValue("Height",Integer.valueOf(5000));
                     } catch (com.sun.star.beans.UnknownPropertyException upe) {
                         System.out.println("Don't no the Property Height");
                     } catch (com.sun.star.beans.PropertyVetoException pve) {

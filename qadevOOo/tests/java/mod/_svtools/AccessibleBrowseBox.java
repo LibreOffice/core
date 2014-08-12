@@ -142,7 +142,7 @@ public class AccessibleBrowseBox extends TestCase {
         params[0].Name = "DataSourceName";
         params[0].Value = "Bibliography";
         params[1].Name = "CommandType";
-        params[1].Value = new Integer(com.sun.star.sdb.CommandType.TABLE);
+        params[1].Value = Integer.valueOf(com.sun.star.sdb.CommandType.TABLE);
         params[2].Name = "Command";
         params[2].Value = "biblio";
 

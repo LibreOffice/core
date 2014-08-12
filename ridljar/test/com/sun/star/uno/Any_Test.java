@@ -35,7 +35,7 @@ public final class Any_Test {
     @Test public void testComplete() {
         assertSame(Any.VOID, Any.complete(Any.VOID));
         assertEquals(
-            new Any(Type.LONG, new Integer(10)), Any.complete(new Integer(10)));
+            new Any(Type.LONG, Integer.valueOf(10)), Any.complete(Integer.valueOf(10)));
         assertEquals(
             new Any(new Type(XInterface.class), null), Any.complete(null));
         XInterface x = new XInterface() {};

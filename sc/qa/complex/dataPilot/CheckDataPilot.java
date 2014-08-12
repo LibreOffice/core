@@ -249,7 +249,7 @@ public class CheckDataPilot {
             int y = sCellAdress.Row + 3;
             // cell of the data pilot output
             oCheckCell = oSheet.getCellByPosition(x, y);
-            aChangeValue = new Integer(27);
+            aChangeValue = Integer.valueOf(27);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace();
             throw new StatusException( "Couldn't get cells for changing.", e);
@@ -335,7 +335,7 @@ public class CheckDataPilot {
         param.put("CELLFORCHANGE", oChangeCell);
         param.put("CELLFORCHECK", oCheckCell);
         param.put("CHANGEVALUE", aChangeValue);
-        param.put("FIELDSAMOUNT", new Integer(5));
+        param.put("FIELDSAMOUNT", Integer.valueOf(5));
 
     }
 

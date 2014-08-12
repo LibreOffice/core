@@ -196,7 +196,7 @@ public class ScDataPilotFieldGroupObj extends TestCase
 
 
             oSheet.getCellByPosition (x, y);
-            new Integer (27);
+            Integer.valueOf(27);
         }
         catch (com.sun.star.lang.IndexOutOfBoundsException e)
         {

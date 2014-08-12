@@ -177,10 +177,10 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
                 if ( xThrobberProps != null )
                 {
                     xThrobberProps.setPropertyValue( "Name", "WikiThrobber" );
-                    xThrobberProps.setPropertyValue( "PositionX", new Integer( X ) );
-                    xThrobberProps.setPropertyValue( "PositionY", new Integer( Y ) );
-                    xThrobberProps.setPropertyValue( "Height", new Integer( Width ) );
-                    xThrobberProps.setPropertyValue( "Width", new Integer( Height ) );
+                    xThrobberProps.setPropertyValue( "PositionX", Integer.valueOf( X ) );
+                    xThrobberProps.setPropertyValue( "PositionY", Integer.valueOf( Y ) );
+                    xThrobberProps.setPropertyValue( "Height", Integer.valueOf( Width ) );
+                    xThrobberProps.setPropertyValue( "Width", Integer.valueOf( Height ) );
 
                     XNameContainer xDialogContainer = UnoRuntime.queryInterface( XNameContainer.class, xDialogModel );
                     xDialogContainer.insertByName( "WikiThrobber", xThrobberModel );

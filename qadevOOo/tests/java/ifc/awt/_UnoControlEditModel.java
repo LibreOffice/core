@@ -57,7 +57,7 @@ public class _UnoControlEditModel extends MultiPropertyTest {
         testProperty("BackgroundColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(1234) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(1234) : null ;
             }
         }) ;
     }
@@ -70,7 +70,7 @@ public class _UnoControlEditModel extends MultiPropertyTest {
         testProperty("BorderColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(1234) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(1234) : null ;
             }
         }) ;
     }
@@ -83,7 +83,7 @@ public class _UnoControlEditModel extends MultiPropertyTest {
         testProperty("TextColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(4321) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(4321) : null ;
             }
         }) ;
     }
@@ -107,10 +107,10 @@ public class _UnoControlEditModel extends MultiPropertyTest {
     protected PropertyTester ColorTester = new PropertyTester() {
         @Override
         protected Object getNewValue(String propName, Object oldValue) {
-            if (util.ValueComparer.equalValue(oldValue, new Integer(17)))
-                return new Integer(25);
+            if (util.ValueComparer.equalValue(oldValue, Integer.valueOf(17)))
+                return Integer.valueOf(25);
             else
-                return new Integer(17);
+                return Integer.valueOf(17);
         }
     };
 

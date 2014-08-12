@@ -147,7 +147,7 @@ public class _XPropertyAccess extends MultiMethodTest {
             PropertyValue[] newProps = new PropertyValue[1];
             PropertyValue failedProp = new PropertyValue();
             failedProp.Name = propertyToChange.Name;
-            failedProp.Value = new Integer(10);
+            failedProp.Value = Integer.valueOf(10);
             newProps[0] = failedProp;
             oObj.setPropertyValues(newProps);
         } catch (PropertyVetoException ex) {

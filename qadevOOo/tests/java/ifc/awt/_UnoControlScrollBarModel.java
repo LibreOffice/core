@@ -51,7 +51,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
         testProperty("BackgroundColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(32768) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(32768) : null ;
             }
         }) ;
     }
@@ -64,7 +64,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
         testProperty("BorderColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(1234) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(1234) : null ;
             }
         }) ;
     }
@@ -77,7 +77,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
         testProperty("SymbolColor", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(65324) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(65324) : null ;
             }
         }) ;
     }
@@ -90,7 +90,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
         testProperty("ScrollValue", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(10) : new Integer(15) ;
+                return utils.isVoid(old) ? Integer.valueOf(10) : Integer.valueOf(15) ;
             }
         }) ;
     }
@@ -103,7 +103,7 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
         testProperty("VisibleSize", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(10) : null ;
+                return utils.isVoid(old) ? Integer.valueOf(10) : null ;
             }
         }) ;
     }

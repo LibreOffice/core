@@ -87,7 +87,7 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
 
     public String name() {
         return NbBundle.getMessage(InstallationPathIterator.class, "TITLE_x_of_y",
-        new Integer(index + 1), new Integer(getPanels().length));
+        Integer.valueOf(index + 1), Integer.valueOf(getPanels().length));
     }
 
     public boolean hasNext() {

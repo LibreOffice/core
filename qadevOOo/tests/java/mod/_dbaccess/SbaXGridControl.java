@@ -348,7 +348,7 @@ public class SbaXGridControl extends TestCase {
         //Relations for XSelectionSupplier
         tEnv.addObjRelation("Selections",
                             new Object[] {
-            new Object[] { new Integer(0) }, new Object[] { new Integer(1) }
+            new Object[] { Integer.valueOf(0) }, new Object[] { Integer.valueOf(1) }
         });
         tEnv.addObjRelation("Comparer",
                             new Comparator<Integer>() {

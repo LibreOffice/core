@@ -108,7 +108,7 @@ public abstract class Configuration
 
     public static void set(int value, String name, Object parent) throws Exception
     {
-        set(new Integer(value), name, parent);
+        set(Integer.valueOf(value), name, parent);
     }
 
 

@@ -270,7 +270,7 @@ public class ToDo {
 
                     // Changing the background color of the cell to white
                     xpropertyset.setPropertyValue( "CellBackColor",
-                    new Integer( 16777215 ) );
+                    Integer.valueOf( 16777215 ) );
 
                     // Getting the cell of the bug id
                     XCell xcell = xcellrange.getCellByPosition(
@@ -503,7 +503,7 @@ public class ToDo {
                                     // Changing the background color of the cell
                                     // to red
                                     xpropertyset.setPropertyValue(
-                                        "CellBackColor", new Integer( 16711680 ) );
+                                        "CellBackColor", Integer.valueOf( 16711680 ) );
                                 } else {
                                     // Querying for the interface XColumnRowRange
                                     // on the XCellRange
@@ -720,7 +720,7 @@ public class ToDo {
                     // Getting the Easter sunday
                     Double dEasterSunday = ( Double )
                         xfunctionaccess.callFunction(
-                            "EASTERSUNDAY", new Object[] { new Integer(intYear) });
+                            "EASTERSUNDAY", new Object[] { Integer.valueOf(intYear) });
 
                     int intEasterSunday = (int)Math.round(
                         dEasterSunday.doubleValue());
@@ -729,9 +729,9 @@ public class ToDo {
                     vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
-                                                       new Integer( intYear ),
-                                                       new Integer( 1 ),
-                                                       new Integer( 1 ) } ));
+                                                       Integer.valueOf( intYear ),
+                                                       Integer.valueOf( 1 ),
+                                                       Integer.valueOf( 1 ) } ));
 
                     // Good Friday
                     vectorHolidays.add(
@@ -745,9 +745,9 @@ public class ToDo {
                     vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
-                                                       new Integer( intYear ),
-                                                       new Integer( 5 ),
-                                                       new Integer( 1 ) } ));
+                                                       Integer.valueOf( intYear ),
+                                                       Integer.valueOf( 5 ),
+                                                       Integer.valueOf( 1 ) } ));
 
                     // Ascension Day
                     vectorHolidays.add(new Double(intEasterSunday + 39 ));
@@ -759,25 +759,25 @@ public class ToDo {
                     vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
-                                                       new Integer( intYear ),
-                                                       new Integer( 10 ),
-                                                       new Integer( 3 ) } ));
+                                                       Integer.valueOf( intYear ),
+                                                       Integer.valueOf( 10 ),
+                                                       Integer.valueOf( 3 ) } ));
 
                     // Christmas Day First
                     vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
-                                                       new Integer( intYear ),
-                                                       new Integer( 12 ),
-                                                       new Integer( 25 ) } ));
+                                                       Integer.valueOf( intYear ),
+                                                       Integer.valueOf( 12 ),
+                                                       Integer.valueOf( 25 ) } ));
 
                     // Christmas Day Second
                     vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
-                                                       new Integer( intYear ),
-                                                       new Integer( 12 ),
-                                                       new Integer( 26 ) } ));
+                                                       Integer.valueOf( intYear ),
+                                                       Integer.valueOf( 12 ),
+                                                       Integer.valueOf( 26 ) } ));
                 }
             }
             catch( Exception exception ) {
@@ -805,14 +805,14 @@ public class ToDo {
                 Double dDate = ( Double ) xfunctionaccess.callFunction(
                     "DATE",
                     new Object[] {
-                        new Integer( gregCalStartDate.get( Calendar.YEAR ) ),
-                        new Integer( gregCalStartDate.get( Calendar.MONTH ) + 1 ),
-                        new Integer( gregCalStartDate.get( Calendar.DATE ) )
+                        Integer.valueOf( gregCalStartDate.get( Calendar.YEAR ) ),
+                        Integer.valueOf( gregCalStartDate.get( Calendar.MONTH ) + 1 ),
+                        Integer.valueOf( gregCalStartDate.get( Calendar.DATE ) )
                     } );
 
                 Double dWorkday = ( Double ) xfunctionaccess.callFunction(
                 "com.sun.star.sheet.addin.Analysis.getWorkday",
-                new Object[] { dDate, new Integer( intDays ), objectHolidays } );
+                new Object[] { dDate, Integer.valueOf( intDays ), objectHolidays } );
 
                 Double dYear = ( Double ) xfunctionaccess.callFunction(
                     "YEAR", new Object[] { dWorkday } );
@@ -854,7 +854,7 @@ public class ToDo {
                 while ( dHolidayStart != 0 ) {
                     if ( dHolidayEnd == 0 ) {
                         vectorHolidays.add(
-                            new Integer( (int) Math.round(
+                            Integer.valueOf( (int) Math.round(
                                              dHolidayStart ) ) );
                     }
                     else {

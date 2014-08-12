@@ -168,29 +168,29 @@ final class TestAny {
                               new CompareBoxed());
 
         // LONG:
-        success &= testMapAny(transport, new Integer(-2147483648),
+        success &= testMapAny(transport, Integer.valueOf(-2147483648),
                               new CompareBoxed());
-        success &= testMapAny(transport, new Integer(0),
+        success &= testMapAny(transport, Integer.valueOf(0),
                               new CompareBoxed());
-        success &= testMapAny(transport, new Integer(2147483647),
+        success &= testMapAny(transport, Integer.valueOf(2147483647),
                               new CompareBoxed());
         success &= testMapAny(transport,
-                              new Any(Type.LONG, new Integer(-2147483648)),
+                              new Any(Type.LONG, Integer.valueOf(-2147483648)),
                               new CompareUnboxed());
         success &= testMapAny(transport,
-                              new Any(Type.LONG, new Integer(0)),
+                              new Any(Type.LONG, Integer.valueOf(0)),
                               new CompareUnboxed());
         success &= testMapAny(transport,
-                              new Any(Type.LONG, new Integer(2147483647)),
+                              new Any(Type.LONG, Integer.valueOf(2147483647)),
                               new CompareUnboxed());
 
         // UNSIGNED LONG:
         success &= testMapAny(transport,
-                              new Any(Type.UNSIGNED_LONG, new Integer(0)),
+                              new Any(Type.UNSIGNED_LONG, Integer.valueOf(0)),
                               new CompareBoxed());
         success &= testMapAny(transport,
                               new Any(Type.UNSIGNED_LONG,
-                                      new Integer(-2147483648)),
+                                      Integer.valueOf(-2147483648)),
                               new CompareBoxed());
 
         // HYPER:

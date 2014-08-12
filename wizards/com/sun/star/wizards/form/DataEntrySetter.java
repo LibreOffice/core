@@ -42,7 +42,7 @@ public class DataEntrySetter
     {
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (FormWizard.SODATA_PAGE * 100);
-        Integer IDataStep = new Integer(FormWizard.SODATA_PAGE);
+        Integer IDataStep = Integer.valueOf(FormWizard.SODATA_PAGE);
         String sNewDataOnly = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 44);
         String sDisplayAllData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 46);
         String sNoModification = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 47); // AllowUpdates

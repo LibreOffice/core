@@ -237,10 +237,10 @@ XInitialization {
             "com.sun.star.awt.UnoControlDialogModel", _xComponentContext );
         XPropertySet xPSetDialog = UnoRuntime.queryInterface(
             XPropertySet.class, dialogModel );
-        xPSetDialog.setPropertyValue( "PositionX", new Integer( dialogX) );
-        xPSetDialog.setPropertyValue( "PositionY", new Integer( dialogY));
-        xPSetDialog.setPropertyValue( "Width", new Integer( dialogW+cbIncrW ));
-        xPSetDialog.setPropertyValue( "Height", new Integer( dialogH+cbIncrH ));
+        xPSetDialog.setPropertyValue( "PositionX", Integer.valueOf( dialogX) );
+        xPSetDialog.setPropertyValue( "PositionY", Integer.valueOf( dialogY));
+        xPSetDialog.setPropertyValue( "Width", Integer.valueOf( dialogW+cbIncrW ));
+        xPSetDialog.setPropertyValue( "Height", Integer.valueOf( dialogH+cbIncrH ));
         xPSetDialog.setPropertyValue( "Title", _title );
 
         // get the service manager from the dialog model
@@ -254,10 +254,10 @@ XInitialization {
             XPropertySet.class, runButtonModel );
         LogUtils.DEBUG("run: x="+(((dialogW+cbIncrW)/2)-runButtonW -1) );
         LogUtils.DEBUG("run: y="+(dialogH+cbIncrH-runButtonH-1));
-        xPSetButton.setPropertyValue( "PositionX", new Integer( (((dialogW+cbIncrW)/2)-runButtonW -1) ));
-        xPSetButton.setPropertyValue( "PositionY", new Integer( dialogH+cbIncrH-runButtonH-1));
-        xPSetButton.setPropertyValue( "Width", new Integer( runButtonW ));
-        xPSetButton.setPropertyValue( "Height", new Integer( runButtonH ));
+        xPSetButton.setPropertyValue( "PositionX", Integer.valueOf( (((dialogW+cbIncrW)/2)-runButtonW -1) ));
+        xPSetButton.setPropertyValue( "PositionY", Integer.valueOf( dialogH+cbIncrH-runButtonH-1));
+        xPSetButton.setPropertyValue( "Width", Integer.valueOf( runButtonW ));
+        xPSetButton.setPropertyValue( "Height", Integer.valueOf( runButtonH ));
         xPSetButton.setPropertyValue( "Name", _runButtonName );
         xPSetButton.setPropertyValue( "TabIndex", new Short( (short)1 ) );
         xPSetButton.setPropertyValue( "Label", _runMacro );
@@ -269,10 +269,10 @@ XInitialization {
             XPropertySet.class, doNotRunButtonModel );
         LogUtils.DEBUG("dontrun: x="+(((dialogW+cbIncrW)/2)-1) );
         LogUtils.DEBUG("dontrun: y="+(dialogH+cbIncrH-doNotRunButtonH-1 ));
-        xPSetButton.setPropertyValue( "PositionX", new Integer(  (((dialogW+cbIncrW)/2) + 1) ));
-        xPSetButton.setPropertyValue( "PositionY", new Integer(  (dialogH+cbIncrH-doNotRunButtonH-1 ) ));
-        xPSetButton.setPropertyValue( "Width", new Integer( doNotRunButtonW ));
-        xPSetButton.setPropertyValue( "Height", new Integer( doNotRunButtonH ));
+        xPSetButton.setPropertyValue( "PositionX", Integer.valueOf(  (((dialogW+cbIncrW)/2) + 1) ));
+        xPSetButton.setPropertyValue( "PositionY", Integer.valueOf(  (dialogH+cbIncrH-doNotRunButtonH-1 ) ));
+        xPSetButton.setPropertyValue( "Width", Integer.valueOf( doNotRunButtonW ));
+        xPSetButton.setPropertyValue( "Height", Integer.valueOf( doNotRunButtonH ));
         xPSetButton.setPropertyValue( "Name", _doNotRunButtonName );
         xPSetButton.setPropertyValue( "TabIndex", new Short( (short)0 ) );
         xPSetButton.setPropertyValue( "Label", _doNotRunMacro );
@@ -291,10 +291,10 @@ XInitialization {
                 "com.sun.star.awt.UnoControlFixedTextModel" );
             XPropertySet xPSetLabel = UnoRuntime.queryInterface(
                 XPropertySet.class, label2Model );
-            xPSetLabel.setPropertyValue( "PositionX", new Integer( label2X ));
-            xPSetLabel.setPropertyValue( "PositionY", new Integer( label2Y ));
-            xPSetLabel.setPropertyValue( "Width", new Integer( label2W ));
-            xPSetLabel.setPropertyValue( "Height", new Integer( label2H ));
+            xPSetLabel.setPropertyValue( "PositionX", Integer.valueOf( label2X ));
+            xPSetLabel.setPropertyValue( "PositionY", Integer.valueOf( label2Y ));
+            xPSetLabel.setPropertyValue( "Width", Integer.valueOf( label2W ));
+            xPSetLabel.setPropertyValue( "Height", Integer.valueOf( label2H ));
             xPSetLabel.setPropertyValue( "Name", _label2Name );
             xPSetLabel.setPropertyValue( "TabIndex", new Short( (short)1 ) );
             xPSetLabel.setPropertyValue( "Label", _label2String );
@@ -304,10 +304,10 @@ XInitialization {
                 "com.sun.star.awt.UnoControlFixedTextModel" );
             XPropertySet xPSetLabel3 = UnoRuntime.queryInterface(
                 XPropertySet.class, label3Model );
-            xPSetLabel3.setPropertyValue( "PositionX", new Integer( label3X ));
-            xPSetLabel3.setPropertyValue( "PositionY", new Integer( label3Y ));
-            xPSetLabel3.setPropertyValue( "Width", new Integer( label3W ));
-            xPSetLabel3.setPropertyValue( "Height", new Integer( label3H ));
+            xPSetLabel3.setPropertyValue( "PositionX", Integer.valueOf( label3X ));
+            xPSetLabel3.setPropertyValue( "PositionY", Integer.valueOf( label3Y ));
+            xPSetLabel3.setPropertyValue( "Width", Integer.valueOf( label3W ));
+            xPSetLabel3.setPropertyValue( "Height", Integer.valueOf( label3H ));
             xPSetLabel3.setPropertyValue( "Name", _label3Name );
             xPSetLabel3.setPropertyValue( "TabIndex", new Short( (short)1 ) );
             xPSetLabel3.setPropertyValue( "Label", _label3String );
@@ -317,10 +317,10 @@ XInitialization {
                 "com.sun.star.awt.UnoControlFixedTextModel" );
             XPropertySet xPSetLabel4 = UnoRuntime.queryInterface(
                 XPropertySet.class, label4Model );
-            xPSetLabel4.setPropertyValue( "PositionX", new Integer( label4X ));
-            xPSetLabel4.setPropertyValue( "PositionY", new Integer( label4Y ));
-            xPSetLabel4.setPropertyValue( "Width", new Integer( label4W ));
-            xPSetLabel4.setPropertyValue( "Height", new Integer( label4H ));
+            xPSetLabel4.setPropertyValue( "PositionX", Integer.valueOf( label4X ));
+            xPSetLabel4.setPropertyValue( "PositionY", Integer.valueOf( label4Y ));
+            xPSetLabel4.setPropertyValue( "Width", Integer.valueOf( label4W ));
+            xPSetLabel4.setPropertyValue( "Height", Integer.valueOf( label4H ));
             xPSetLabel4.setPropertyValue( "Name", _label4Name );
             xPSetLabel4.setPropertyValue( "TabIndex", new Short( (short)1 ) );
             xPSetLabel4.setPropertyValue( "Label", _label4String );
@@ -330,10 +330,10 @@ XInitialization {
                 "com.sun.star.awt.UnoControlCheckBoxModel" );
             XPropertySet xPSetCheckBox = UnoRuntime.queryInterface(
                 XPropertySet.class, checkBoxModel );
-            xPSetCheckBox.setPropertyValue( "PositionX", new Integer( checkBoxX ));
-            xPSetCheckBox.setPropertyValue( "PositionY", new Integer( checkBoxY ));
-            xPSetCheckBox.setPropertyValue( "Width", new Integer( checkBoxW ));
-            xPSetCheckBox.setPropertyValue( "Height", new Integer( checkBoxH ));
+            xPSetCheckBox.setPropertyValue( "PositionX", Integer.valueOf( checkBoxX ));
+            xPSetCheckBox.setPropertyValue( "PositionY", Integer.valueOf( checkBoxY ));
+            xPSetCheckBox.setPropertyValue( "Width", Integer.valueOf( checkBoxW ));
+            xPSetCheckBox.setPropertyValue( "Height", Integer.valueOf( checkBoxH ));
             xPSetCheckBox.setPropertyValue( "State", new Short((short)0) );
             xPSetCheckBox.setPropertyValue( "Name", _checkBoxName );
             xPSetCheckBox.setPropertyValue( "TabIndex", new Short( (short)1 ) );
@@ -352,10 +352,10 @@ XInitialization {
                 "com.sun.star.awt.UnoControlFixedTextModel" );
             XPropertySet xPSetLabel5 = UnoRuntime.queryInterface(
                 XPropertySet.class, label5Model );
-            xPSetLabel5.setPropertyValue( "PositionX", new Integer( label5X ));
-            xPSetLabel5.setPropertyValue( "PositionY", new Integer( label5Y ));
-            xPSetLabel5.setPropertyValue( "Width", new Integer( label5W ));
-            xPSetLabel5.setPropertyValue( "Height", new Integer( label5H ));
+            xPSetLabel5.setPropertyValue( "PositionX", Integer.valueOf( label5X ));
+            xPSetLabel5.setPropertyValue( "PositionY", Integer.valueOf( label5Y ));
+            xPSetLabel5.setPropertyValue( "Width", Integer.valueOf( label5W ));
+            xPSetLabel5.setPropertyValue( "Height", Integer.valueOf( label5H ));
             xPSetLabel5.setPropertyValue( "Name", _label5Name );
             xPSetLabel5.setPropertyValue( "TabIndex", new Short( (short)1 ) );
             xPSetLabel5.setPropertyValue( "Label", checkBoxPath2 );
@@ -369,10 +369,10 @@ XInitialization {
                 "com.sun.star.awt.UnoControlFixedTextModel" );
             XPropertySet xPSetLabel = UnoRuntime.queryInterface(
                 XPropertySet.class, labelModel );
-            xPSetLabel.setPropertyValue( "PositionX", new Integer( label1X ));
-            xPSetLabel.setPropertyValue( "PositionY", new Integer( label1Y ));
-            xPSetLabel.setPropertyValue( "Width", new Integer( label1W ));
-            xPSetLabel.setPropertyValue( "Height", new Integer( label1H ));
+            xPSetLabel.setPropertyValue( "PositionX", Integer.valueOf( label1X ));
+            xPSetLabel.setPropertyValue( "PositionY", Integer.valueOf( label1Y ));
+            xPSetLabel.setPropertyValue( "Width", Integer.valueOf( label1W ));
+            xPSetLabel.setPropertyValue( "Height", Integer.valueOf( label1H ));
             xPSetLabel.setPropertyValue( "Name", _label1Name );
             xPSetLabel.setPropertyValue( "TabIndex", new Short( (short)1 ) );
             xPSetLabel.setPropertyValue( "Label", _label1String );

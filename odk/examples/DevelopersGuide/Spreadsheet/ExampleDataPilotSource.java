@@ -269,12 +269,12 @@ class ExampleLevel implements
     public com.sun.star.sheet.MemberResult[] getResults()
     {
         int nDimensions = 0;
-        int nPosition = aSettings.aColDimensions.indexOf( new Integer(nDimension));
+        int nPosition = aSettings.aColDimensions.indexOf( Integer.valueOf(nDimension));
         if ( nPosition >= 0 )
             nDimensions = aSettings.aColDimensions.size();
         else
         {
-            nPosition = aSettings.aRowDimensions.indexOf( new Integer(nDimension));
+            nPosition = aSettings.aRowDimensions.indexOf( Integer.valueOf(nDimension));
             if ( nPosition >= 0 )
                 nDimensions = aSettings.aRowDimensions.size();
         }
@@ -604,7 +604,7 @@ class ExampleDimension implements
                  eNewOrient != com.sun.star.sheet.DataPilotFieldOrientation.DATA )
             {
                 // remove from list for old orientation and add for new one
-                Integer aDimInt = new Integer(nDimension);
+                Integer aDimInt = Integer.valueOf(nDimension);
                 if ( eOrientation == com.sun.star.sheet.DataPilotFieldOrientation.COLUMN )
                     aSettings.aColDimensions.remove( aDimInt );
                 else if ( eOrientation == com.sun.star.sheet.DataPilotFieldOrientation.ROW )
@@ -621,7 +621,7 @@ class ExampleDimension implements
         else if ( aPropertyName.equals( "Position" ) )
         {
             int nNewPos = ((Integer) aValue).intValue();
-            Integer aDimInt = new Integer(nDimension);
+            Integer aDimInt = Integer.valueOf(nDimension);
             if ( eOrientation == com.sun.star.sheet.DataPilotFieldOrientation.COLUMN )
             {
                 aSettings.aColDimensions.remove( aDimInt );
@@ -655,17 +655,17 @@ class ExampleDimension implements
         {
             int nPosition;
             if ( eOrientation == com.sun.star.sheet.DataPilotFieldOrientation.COLUMN )
-                nPosition = aSettings.aColDimensions.indexOf( new Integer(nDimension) );
+                nPosition = aSettings.aColDimensions.indexOf( Integer.valueOf(nDimension) );
             else if ( eOrientation == com.sun.star.sheet.DataPilotFieldOrientation.ROW )
-                nPosition = aSettings.aRowDimensions.indexOf( new Integer(nDimension) );
+                nPosition = aSettings.aRowDimensions.indexOf( Integer.valueOf(nDimension) );
             else
                 nPosition = nDimension;
-            return new Integer( nPosition );
+            return Integer.valueOf( nPosition );
         }
         else if ( aPropertyName.equals( "Function" ) )
             return com.sun.star.sheet.GeneralFunction.SUM;
         else if ( aPropertyName.equals( "UsedHierarchy" ) )
-            return new Integer(0);
+            return Integer.valueOf(0);
         else if ( aPropertyName.equals( "Filter" ) )
             return new com.sun.star.sheet.TableFilterField[0];
         else

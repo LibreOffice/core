@@ -219,7 +219,7 @@ public class FormLayer
         {
             xFieldModel.setPropertyValue( "Border", new Short( VisualEffect.FLAT ) );
             if ( xFieldModel.getPropertySetInfo().hasPropertyByName( "BorderColor" ) )
-                xFieldModel.setPropertyValue( "BorderColor", new Integer( 0x00C0C0C0 ) );
+                xFieldModel.setPropertyValue( "BorderColor", Integer.valueOf( 0x00C0C0C0 ) );
         }
         // knit it to it's label component
         xFieldModel.setPropertyValue( "LabelControl", xLabelModel );

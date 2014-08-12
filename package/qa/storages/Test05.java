@@ -60,7 +60,7 @@ public class Test05 implements StorageTest {
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
-            pArgs[1] = new Integer( ElementModes.WRITE );
+            pArgs[1] = Integer.valueOf( ElementModes.WRITE );
 
             Object oTempFileStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempFileStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oTempFileStorage );
@@ -249,7 +249,7 @@ public class Test05 implements StorageTest {
             // now check all the written and copied information
 
 
-            pArgs[1] = new Integer( ElementModes.READ );
+            pArgs[1] = Integer.valueOf( ElementModes.READ );
             Object oResultStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResultStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResultStorage );
             if ( xResultStorage == null )

@@ -69,15 +69,15 @@ public class SortingComponent
         {
             this.CurUnoDialog = CurUnoDialog;
             short curtabindex = UnoDialog.setInitialTabindex(iStep);
-            Integer IStep = new Integer(iStep);
-            Integer ICompPosX = new Integer(iCompPosX);
-            Integer ICompWidth = new Integer(iCompWidth);
+            Integer IStep = Integer.valueOf(iStep);
+            Integer ICompPosX = Integer.valueOf(iCompPosX);
+            Integer ICompWidth = Integer.valueOf(iCompWidth);
 
-            Integer IListBoxPosX = new Integer(iCompPosX + 6);
+            Integer IListBoxPosX = Integer.valueOf(iCompPosX + 6);
             int iOptButtonWidth = 65;
-            Integer IOptButtonWidth = new Integer(iOptButtonWidth);
-            Integer IListBoxWidth = new Integer(iCompWidth - iOptButtonWidth - 12);
-            Integer IOptButtonPosX = new Integer(IListBoxPosX.intValue() + IListBoxWidth.intValue() + 6);
+            Integer IOptButtonWidth = Integer.valueOf(iOptButtonWidth);
+            Integer IListBoxWidth = Integer.valueOf(iCompWidth - iOptButtonWidth - 12);
+            Integer IOptButtonPosX = Integer.valueOf(IListBoxPosX.intValue() + IListBoxWidth.intValue() + 6);
             getResources();
             boolean bDoEnable;
             String HIDString;
@@ -90,7 +90,7 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.ORIENTATION, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                                Boolean.valueOf(bDoEnable), 8, sSortHeader[i], 0, ICompPosX, new Integer(iCurPosY), IStep, new Short(curtabindex++), ICompWidth
+                                Boolean.valueOf(bDoEnable), 8, sSortHeader[i], 0, ICompPosX, Integer.valueOf(iCurPosY), IStep, new Short(curtabindex++), ICompWidth
                         });
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex);
@@ -99,7 +99,7 @@ public class SortingComponent
                             "Dropdown", PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            true, bDoEnable, 12, HIDString, new Short(UnoDialog.getListBoxLineCount()), "lstSort" + new Integer(i + 1), IListBoxPosX, new Integer(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
+                            true, bDoEnable, 12, HIDString, new Short(UnoDialog.getListBoxLineCount()), "lstSort" + Integer.valueOf(i + 1), IListBoxPosX, Integer.valueOf(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
                         }); //new Short((short) (17+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 1);
@@ -108,7 +108,7 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            bDoEnable, 10, HIDString, sSortAscend[i], IOptButtonPosX, new Integer(iCurPosY + 10), new Short((short) 1), IStep, new Short(curtabindex++), PropertyNames.ASC, IOptButtonWidth
+                            bDoEnable, 10, HIDString, sSortAscend[i], IOptButtonPosX, Integer.valueOf(iCurPosY + 10), new Short((short) 1), IStep, new Short(curtabindex++), PropertyNames.ASC, IOptButtonWidth
                         }); //, new Short((short) (18+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 2);
@@ -117,7 +117,7 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            bDoEnable, 10, HIDString, sSortDescend[i], IOptButtonPosX, new Integer(iCurPosY + 24), new Short((short) 0), IStep, new Short(curtabindex++), "DESC", IOptButtonWidth
+                            bDoEnable, 10, HIDString, sSortDescend[i], IOptButtonPosX, Integer.valueOf(iCurPosY + 24), new Short((short) 0), IStep, new Short(curtabindex++), "DESC", IOptButtonWidth
                         }); //, new Short((short) (19+i*4))
                 iCurPosY = iCurPosY + 36;
                 FirstHelpIndex += 3;

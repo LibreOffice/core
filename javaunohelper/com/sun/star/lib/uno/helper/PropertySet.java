@@ -216,7 +216,7 @@ XMultiPropertySet
      */
     protected Property getPropertyByHandle(int nHandle)
     {
-        return _handleToPropertyMap.get(new Integer(nHandle));
+        return _handleToPropertyMap.get(Integer.valueOf(nHandle));
     }
 
     /** Returns an array of all Property objects or an array of length null if there
@@ -246,7 +246,7 @@ XMultiPropertySet
     {
         _nameToPropertyMap.put(prop.Name, prop);
         if (prop.Handle != -1)
-            _handleToPropertyMap.put(new Integer(prop.Handle), prop);
+            _handleToPropertyMap.put(Integer.valueOf(prop.Handle), prop);
     }
 
     /** Assigns an identifyer object to a Property object so that the identifyer
@@ -739,7 +739,7 @@ XMultiPropertySet
         else if (cl.equals(short.class))
             retVal= new Short(AnyConverter.toShort(obj));
         else if (cl.equals(int.class))
-            retVal= new Integer(AnyConverter.toInt(obj));
+            retVal= Integer.valueOf(AnyConverter.toInt(obj));
         else if (cl.equals(long.class))
             retVal= new Long(AnyConverter.toLong(obj));
         else if (cl.equals(float.class))
@@ -761,7 +761,7 @@ XMultiPropertySet
         else if (cl.equals(Short.class))
             retVal= new Short(AnyConverter.toShort(obj));
         else if (cl.equals(Integer.class))
-            retVal= new Integer(AnyConverter.toInt(obj));
+            retVal= Integer.valueOf(AnyConverter.toInt(obj));
         else if (cl.equals(Long.class))
             retVal= new Long(AnyConverter.toLong(obj));
         else if (cl.equals(Float.class))

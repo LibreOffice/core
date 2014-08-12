@@ -121,10 +121,10 @@ public class FormDocument extends TextDocument
             {
                 nMargin = 1000;
             }
-            xPropPageStyle.setPropertyValue("RightMargin", new Integer(nMargin));
-            xPropPageStyle.setPropertyValue("LeftMargin", new Integer(nMargin));
-            xPropPageStyle.setPropertyValue("TopMargin", new Integer(nMargin));
-            xPropPageStyle.setPropertyValue("BottomMargin", new Integer(nMargin));
+            xPropPageStyle.setPropertyValue("RightMargin", Integer.valueOf(nMargin));
+            xPropPageStyle.setPropertyValue("LeftMargin", Integer.valueOf(nMargin));
+            xPropPageStyle.setPropertyValue("TopMargin", Integer.valueOf(nMargin));
+            xPropPageStyle.setPropertyValue("BottomMargin", Integer.valueOf(nMargin));
             aMainFormPoint = new Point(nMargin, nMargin);
             nFormWidth = (int) (0.8 * nPageWidth) - 2 * nMargin;
             nFormHeight = (int) (0.65 * nPageHeight) - 2 * nMargin;
@@ -482,7 +482,7 @@ public class FormDocument extends TextDocument
             {
                 xPropertySet.setPropertyValue("DataSourceName", getDataSourceName());
                 xPropertySet.setPropertyValue(PropertyNames.COMMAND, _oDBMetaData.getCommandName());
-                xPropertySet.setPropertyValue(PropertyNames.COMMAND_TYPE, new Integer(_oDBMetaData.getCommandType()));
+                xPropertySet.setPropertyValue(PropertyNames.COMMAND_TYPE, Integer.valueOf(_oDBMetaData.getCommandType()));
                 for (int i = 0; i < _aPropertySetList.length; i++)
                 {
                     xPropertySet.setPropertyValue(_aPropertySetList[i].Name, _aPropertySetList[i].Value);
