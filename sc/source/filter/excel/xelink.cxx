@@ -2454,8 +2454,13 @@ void XclExpLinkManagerImpl8::SaveXml( XclExpXmlStream& rStrm )
 {
     if( !maXtiVec.empty() )
     {
+        sax_fastparser::FSHelperPtr pWorkbook = rStrm.GetCurrentStream();
+        pWorkbook->startElement( XML_externalReferences, FSEND);
+
         // externalLink, externalBook, sheetNames, sheetDataSet, externalName
         maSBBuffer.SaveXml( rStrm );
+
+        pWorkbook->endElement( XML_externalReferences);
 
         // TODO: equivalent for EXTERNSHEET in OOXML?
 #if 0
