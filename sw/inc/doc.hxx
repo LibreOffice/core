@@ -22,7 +22,6 @@
 // SwDoc interfaces
 #include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <IDocumentExternalData.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>
@@ -191,6 +190,7 @@ class IDocumentStatistics;
 class IDocumentState;
 class IDocumentLayoutAccess;
 class IDocumentStylePoolAccess;
+class IDocumentExternalData;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -216,6 +216,7 @@ namespace sw {
     class DocumentStateManager;
     class DocumentLayoutManager;
     class DocumentStylePoolManager;
+    class DocumentExternalDataManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -252,8 +253,7 @@ void StartGrammarChecking( SwDoc &rDoc );
 
 // Represents the model of a Writer document.
 class SW_DLLPUBLIC SwDoc :
-    public IInterface,
-    public IDocumentExternalData
+    public IInterface
 {
     friend class ::sw::DocumentContentOperationsManager;
 
@@ -295,6 +295,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentStatisticsManager > m_pDocumentStatisticsManager;
     const ::boost::scoped_ptr< ::sw::DocumentLayoutManager > m_pDocumentLayoutManager;
     const ::boost::scoped_ptr< ::sw::DocumentStylePoolManager > m_pDocumentStylePoolManager;
+    const ::boost::scoped_ptr< ::sw::DocumentExternalDataManager > m_pDocumentExternalDataManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -603,10 +604,11 @@ public:
     IDocumentListsAccess const & getIDocumentListsAccess() const;
     IDocumentListsAccess & getIDocumentListsAccess();
 
-    // IDocumentExternalData
-    virtual void setExternalData(::sw::tExternalDataType eType,
-                                 ::sw::tExternalDataPointer pPayload) SAL_OVERRIDE;
-    virtual ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType) SAL_OVERRIDE;
+    //IDocumentExternalData
+    IDocumentExternalData const & getIDocumentExternalData() const;
+    IDocumentExternalData & getIDocumentExternalData();
+
+    //End of Interfaces
 
     virtual void setDocReadOnly( bool b) { mbReadOnly = b; }
     virtual bool getDocReadOnly() const { return mbReadOnly; }

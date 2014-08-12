@@ -62,6 +62,7 @@
 #include <IDocumentStatistics.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentExternalData.hxx>
 #include <viewopt.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -2832,7 +2833,7 @@ void WW8Export::WriteFkpPlcUsw()
 
         // Write SttbfAssoc
         WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
-            (pDoc->getExternalData(::sw::STTBF_ASSOC).get());
+            (pDoc->getIDocumentExternalData().getExternalData(::sw::STTBF_ASSOC).get());
 
         if ( pSttbfAssoc )                      // #i106057#
         {
@@ -2854,7 +2855,7 @@ void WW8Export::WriteFkpPlcUsw()
 
     // Reclaim stored FIB data from document.
     ::ww8::WW8FibData * pFibData = dynamic_cast<ww8::WW8FibData *>
-          (pDoc->getExternalData(::sw::FIB).get());
+          (pDoc->getIDocumentExternalData().getExternalData(::sw::FIB).get());
 
     if ( pFibData )
     {

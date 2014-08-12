@@ -76,6 +76,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentExternalData.hxx>
 #include <docufld.hxx>
 #include <swfltopt.hxx>
 #include <viewsh.hxx>
@@ -4898,12 +4899,12 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     ::sw::tExternalDataPointer pExternalFibData(pFibData);
 
-    rDoc.setExternalData(::sw::FIB, pExternalFibData);
+    rDoc.getIDocumentExternalData().setExternalData(::sw::FIB, pExternalFibData);
 
     ::sw::tExternalDataPointer pSttbfAsoc
           (new ::ww8::WW8Sttb<ww8::WW8Struct>(*pTableStream, pWwFib->fcSttbfAssoc, pWwFib->lcbSttbfAssoc));
 
-    rDoc.setExternalData(::sw::STTBF_ASSOC, pSttbfAsoc);
+    rDoc.getIDocumentExternalData().setExternalData(::sw::STTBF_ASSOC, pSttbfAsoc);
 
     if (pWwFib->fWriteReservation || pWwFib->fReadOnlyRecommended)
     {

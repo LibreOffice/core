@@ -34,6 +34,7 @@
 #include <DocumentStateManager.hxx>
 #include <DocumentStylePoolManager.hxx>
 #include <DocumentLayoutManager.hxx>
+#include <DocumentExternalDataManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -482,6 +483,17 @@ IDocumentStylePoolAccess const & SwDoc::getIDocumentStylePoolAccess() const
 IDocumentStylePoolAccess & SwDoc::getIDocumentStylePoolAccess()
 {
     return *m_pDocumentStylePoolManager;
+}
+
+//IDocumentExternalData
+IDocumentExternalData const & SwDoc::getIDocumentExternalData() const
+{
+    return *m_pDocumentExternalDataManager;
+}
+
+IDocumentExternalData & SwDoc::getIDocumentExternalData()
+{
+    return *m_pDocumentExternalDataManager;
 }
 
 /* Implementations the next Interface here */
@@ -1698,17 +1710,6 @@ SwDoc::GetVbaEventProcessor()
     }
 #endif
     return mxVbaEvents;
-}
-
-void SwDoc::setExternalData(::sw::tExternalDataType eType,
-                            ::sw::tExternalDataPointer pPayload)
-{
-    m_externalData[eType] = pPayload;
-}
-
-::sw::tExternalDataPointer SwDoc::getExternalData(::sw::tExternalDataType eType)
-{
-    return m_externalData[eType];
 }
 
 sal_uInt16 SwNumRuleTbl::GetPos(const SwNumRule* pRule) const

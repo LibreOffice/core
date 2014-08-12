@@ -103,6 +103,7 @@
 #include <DocumentStateManager.hxx>
 #include <DocumentLayoutManager.hxx>
 #include <DocumentStylePoolManager.hxx>
+#include <DocumentExternalDataManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -221,6 +222,7 @@ SwDoc::SwDoc()
     m_pDocumentStatisticsManager( new ::sw::DocumentStatisticsManager( *this ) ),
     m_pDocumentLayoutManager( new ::sw::DocumentLayoutManager( *this ) ),
     m_pDocumentStylePoolManager( new ::sw::DocumentStylePoolManager( *this ) ),
+    m_pDocumentExternalDataManager( new ::sw::DocumentExternalDataManager() ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
