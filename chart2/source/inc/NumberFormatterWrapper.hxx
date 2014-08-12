@@ -21,6 +21,7 @@
 
 #include "charttoolsdllapi.hxx"
 #include <svl/zforlist.hxx>
+#include <tools/solar.h>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 namespace chart

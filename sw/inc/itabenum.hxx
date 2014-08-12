@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_INC_ITABENUM_HXX
 #define INCLUDED_SW_INC_ITABENUM_HXX
 
-#include <tools/solar.h>
-
 namespace tabopts
 {
     const sal_uInt16 DEFAULT_BORDER     = 0x01;

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_INC_NDTYP_HXX
 #define INCLUDED_SW_INC_NDTYP_HXX
 
-#include <tools/solar.h>
-
 // IDs for different nodes. The member indicating the type of node is
 // in base class.
 const sal_uInt8 ND_ENDNODE      = 0x01;

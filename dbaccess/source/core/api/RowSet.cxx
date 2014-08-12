@@ -76,6 +76,7 @@
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/solar.h>
 #include <unotools/configmgr.hxx>
 
 using namespace utl;

@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_IMAP_HXX
 
 #include <svtools/svtdllapi.h>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <vector>
 

@@ -24,6 +24,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/nfversi.hxx>
 #include <svl/nfkeytab.hxx>
+#include <tools/solar.h>
 
 namespace utl {
     class DigitGroupingIterator;

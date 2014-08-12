@@ -33,6 +33,7 @@
 #include <tools/link.hxx>
 #include <tools/errcode.hxx>
 #include <tools/datetime.hxx>
+#include <tools/solar.h>
 
 namespace com
 {

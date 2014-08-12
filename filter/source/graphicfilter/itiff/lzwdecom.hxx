@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_LZWDECOM_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_LZWDECOM_HXX
 
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 
 struct LZWTableEntry {

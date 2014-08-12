@@ -36,6 +36,7 @@
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <iterator>
+#include <tools/solar.h>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>

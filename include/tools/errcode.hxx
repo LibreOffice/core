@@ -21,7 +21,7 @@
 #define INCLUDED_TOOLS_ERRCODE_HXX
 
 #ifndef __RSC
-#include <tools/solar.h>
+#include <sal/types.h>
 #endif
 
 /*

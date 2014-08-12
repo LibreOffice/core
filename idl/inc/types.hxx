@@ -22,6 +22,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <tools/ref.hxx>
+#include <tools/solar.h>
 #include <basobj.hxx>
 #include <map>
 

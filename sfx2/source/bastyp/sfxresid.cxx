@@ -20,8 +20,7 @@
 
 #include <sfx2/sfxresid.hxx>
 #include "tools/resmgr.hxx"
-
-
+#include <tools/solar.h>
 
 static ResMgr* pMgr=NULL;
 

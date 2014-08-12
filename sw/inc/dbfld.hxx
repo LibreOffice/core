@@ -22,6 +22,7 @@
 #include "swdllapi.h"
 #include "fldbas.hxx"
 #include "swdbdata.hxx"
+#include <tools/solar.h>
 
 class SwDoc;
 class SwTxtFld;

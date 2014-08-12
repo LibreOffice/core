@@ -22,6 +22,7 @@
 
 #include <svl/svldllapi.h>
 #include <com/sun/star/uno/Reference.h>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 
 namespace com { namespace sun { namespace star { namespace io {

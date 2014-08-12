@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 
 #define DXF_MAX_STRING_LEN 256 // Max Stringlaenge (ohne die 0)

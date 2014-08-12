@@ -22,6 +22,7 @@
 
 #include <svl/svldllapi.h>
 #include <tools/debug.hxx>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <vector>
 

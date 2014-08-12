@@ -22,6 +22,7 @@
 
 #include "address.hxx"
 #include <i18nlangtag/lang.h>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <osl/endian.h>
 #include <com/sun/star/uno/Reference.hxx>

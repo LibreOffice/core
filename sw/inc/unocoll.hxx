@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_INC_UNOCOLL_HXX
 #define INCLUDED_SW_INC_UNOCOLL_HXX
-#include <tools/solar.h>
+
 #include <flyenum.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

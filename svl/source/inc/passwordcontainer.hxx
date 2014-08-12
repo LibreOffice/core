@@ -33,6 +33,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
 
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <unotools/configitem.hxx>
 #include <ucbhelper/interactionrequest.hxx>
