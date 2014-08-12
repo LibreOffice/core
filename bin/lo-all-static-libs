@@ -54,9 +54,6 @@ IOS)
         $WORKDIR/UnpackedTarball/nss/nss/lib/ckfw/builtins/out/*.o \
         $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/Darwin_SINGLE_SHLIB/*.o
 
-    # Unfortunately NSS's build mechanism copies each static archive
-    # it constructs to another place, but we don't bother filtering
-    # out duplicates, it shouldn't hurt.
     nsslibs=`find $WORKDIR/UnpackedTarball/nss -name 'lib*.a'`
     ;;
 *)
