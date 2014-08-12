@@ -8278,7 +8278,11 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         if test "$enable_bundle_mariadb" = "yes"; then
             AC_MSG_RESULT([yes])
             BUNDLE_MARIADB=TRUE
-            LIBMARIADB=lib$(echo "${MARIADB_LIBS}" | sed -e 's/[[[:space:]]]\{1,\}-l/\n/g' -e 's/^-l/\n/g' | grep -E '(mysqlclient|mariadb)')
+            LIBMARIADB=lib$(echo "${MARIADB_LIBS}" | sed -e 's/[[[:space:]]]\{1,\}-l\([[^[:space:]]]\{1,\}\)/\
+\1\
+/g' -e 's/^-l\([[^[:space:]]]\{1,\}\)[[[:space:]]]*/\
+\1\
+/g' | grep -E '(mysqlclient|mariadb)')
             if test "$_os" = "Darwin"; then
                 LIBMARIADB=${LIBMARIADB}.dylib
             elif test "$_os" = "WINNT"; then
