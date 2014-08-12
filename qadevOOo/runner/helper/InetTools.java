@@ -65,7 +65,7 @@ public class InetTools {
 
             oInetProps.setPropertyValue("ooInetHTTPProxyName", HTTPProxyName);
             oInetProps.setPropertyValue("ooInetHTTPProxyPort", HTTPProxyPort);
-            oInetProps.setPropertyValue("ooInetProxyType", new Long(2));
+            oInetProps.setPropertyValue("ooInetProxyType", Long.valueOf(2));
 
             XChangesBatch oSecureChange = UnoRuntime.queryInterface(
                                                   XChangesBatch.class, oInet);

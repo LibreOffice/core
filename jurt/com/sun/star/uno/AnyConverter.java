@@ -574,13 +574,13 @@ public class AnyConverter
             case TypeClass.HYPER_value:
                 switch (tc) {
                 case TypeClass.BYTE_value:
-                    return new Long( ((Byte)object).byteValue() );
+                    return Long.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
                 case TypeClass.UNSIGNED_SHORT_value:
-                    return new Long( ((Short)object).shortValue() );
+                    return Long.valueOf( ((Short)object).shortValue() );
                 case TypeClass.LONG_value:
                 case TypeClass.UNSIGNED_LONG_value:
-                    return new Long( ((Integer)object).intValue() );
+                    return Long.valueOf( ((Integer)object).intValue() );
                 case TypeClass.HYPER_value:
                     return object;
                 }
@@ -588,9 +588,9 @@ public class AnyConverter
             case TypeClass.UNSIGNED_HYPER_value:
                 switch (tc) {
                 case TypeClass.UNSIGNED_SHORT_value:
-                    return new Long( ((Short)object).shortValue() );
+                    return Long.valueOf( ((Short)object).shortValue() );
                 case TypeClass.UNSIGNED_LONG_value:
-                    return new Long( ((Integer)object).intValue() );
+                    return Long.valueOf( ((Integer)object).intValue() );
                 case TypeClass.UNSIGNED_HYPER_value:
                     return object;
                 }

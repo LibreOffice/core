@@ -279,9 +279,9 @@ public class Protocol extends JComponent
 
             // insert line number
             if (m_nLine % MARK_DIFF == 0)
-                impl_generateColoredHTMLCell(sLine, new Long(m_nLine).toString(), BGCOLOR_LINECOL, FGCOLOR_LINECOL_MARKED, true);
+                impl_generateColoredHTMLCell(sLine, Long.valueOf(m_nLine).toString(), BGCOLOR_LINECOL, FGCOLOR_LINECOL_MARKED, true);
             else
-                impl_generateColoredHTMLCell(sLine, new Long(m_nLine).toString(), BGCOLOR_LINECOL, FGCOLOR_LINECOL_NORMAL, false);
+                impl_generateColoredHTMLCell(sLine, Long.valueOf(m_nLine).toString(), BGCOLOR_LINECOL, FGCOLOR_LINECOL_NORMAL, false);
 
             // add time stamp
             impl_generateColoredHTMLCell(sLine, m_aStamp.toString()+" ", BGCOLOR_TIMESTAMP, FGCOLOR_TIMESTAMP, false);

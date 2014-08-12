@@ -624,7 +624,7 @@ public class ODatabaseForm extends TestCase {
         params.add(new Byte((byte) 123)) ;
         params.add(new Short((short) 234)) ;
         params.add(Integer.valueOf(12345)) ;
-        params.add(new Long(23456)) ;
+        params.add(Long.valueOf(23456)) ;
         params.add(new Float(1.234)) ;
         params.add(new Double(2.345)) ;
         params.add(new byte[] {1, 2, 3}) ;

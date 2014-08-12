@@ -151,7 +151,7 @@ public class LocalOfficeWindow
             // set null parent
             XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(
                                XVclWindowPeer.class, mWindow);
-            xVclWindowPeer.setProperty( "PluginParent", new Long(0) );
+            xVclWindowPeer.setProperty( "PluginParent", Long.valueOf(0) );
             bPeer = false;
         }
     }
@@ -257,7 +257,7 @@ public class LocalOfficeWindow
     {
 
         NamedValue window = new NamedValue(
-            "WINDOW", new Any(new Type(Long.class), new Long(getNativeWindow())));
+            "WINDOW", new Any(new Type(Long.class), Long.valueOf(getNativeWindow())));
         NamedValue xembed = new NamedValue(
             "XEMBED", new Any(new Type(Boolean.class), Boolean.FALSE));
 

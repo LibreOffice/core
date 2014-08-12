@@ -117,7 +117,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropIntA", value);
             ret= cl.getPropertyValue("PropIntA");
             r[i++]= ((Integer) ret).equals(value);
-            value= new Long(115);
+            value= Long.valueOf(115);
             cl.setPropertyValue("PropLongA", value);
             ret= cl.getPropertyValue("PropLongA");
             r[i++]= ((Long) ret).equals(value);
@@ -192,7 +192,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropObjectA", value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Integer) ret).equals(value);
-            value= new Long(115);
+            value= Long.valueOf(115);
             cl.setPropertyValue("PropObjectA", value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Long) ret).equals(value);
@@ -249,7 +249,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new Long(115);
+            value= Long.valueOf(115);
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -303,7 +303,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropIntA", value);
             ret= cl.getPropertyValue("PropIntA");
             r[i++]= ret instanceof Integer && util.anyEquals(value, ret);
-            value= new Any(new  Type(long.class), new Long(115));
+            value= new Any(new  Type(long.class), Long.valueOf(115));
             cl.setPropertyValue("PropLongA", value);
             ret= cl.getPropertyValue("PropLongA");
             r[i++]= ret instanceof Long && util.anyEquals(value, ret);
@@ -358,7 +358,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new Any(new  Type(long.class), new Long(115));
+            value= new Any(new  Type(long.class), Long.valueOf(115));
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -414,7 +414,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropIntClass", value);
             ret= cl.getPropertyValue("PropIntClass");
             r[i++]= ((Integer) ret).equals(value);
-            value= new Long(115);
+            value= Long.valueOf(115);
             cl.setPropertyValue("PropLongClass", value);
             ret= cl.getPropertyValue("PropLongClass");
             r[i++]= ((Long) ret).equals(value);
@@ -450,7 +450,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropIntClass", value);
             ret= cl.getPropertyValue("PropIntClass");
             r[i++]= ret instanceof Integer && util.anyEquals(value, ret);
-            value= new Any(new  Type(long.class), new Long(115));
+            value= new Any(new  Type(long.class), Long.valueOf(115));
             cl.setPropertyValue("PropLongClass", value);
             ret= cl.getPropertyValue("PropLongClass");
             r[i++]= ret instanceof Long && util.anyEquals(value, ret);
@@ -1219,7 +1219,7 @@ class TestClass extends PropertySet
             value= Integer.valueOf( 113);
             r[i++]= convertPropertyValue(propIntA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Integer && outNewVal[0].equals(value);
-            value= new Long(114);
+            value= Long.valueOf(114);
             r[i++]= convertPropertyValue(propLongA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Long && outNewVal[0].equals(value);
             value= new Float(3.14);
@@ -1330,7 +1330,7 @@ class TestClass extends PropertySet
             value= Integer.valueOf( 113);
             r[i++]= convertPropertyValue(propIntClass, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Integer && outNewVal[0].equals(value);
-            value= new Long(114);
+            value= Long.valueOf(114);
             r[i++]= convertPropertyValue(propLongClass, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Long && outNewVal[0].equals(value);
             value= new Float(3.14);
@@ -1371,7 +1371,7 @@ class TestClass extends PropertySet
             value= Integer.valueOf( 113);
             setPropertyValueNoBroadcast(propIntA, value);
             r[i++]= intPropA == ((Integer) value).intValue();
-            value= new Long(114);
+            value= Long.valueOf(114);
             setPropertyValueNoBroadcast(propLongA, value);
             r[i++]= longPropA == ((Long) value).longValue();
             value= new Float(3.14);

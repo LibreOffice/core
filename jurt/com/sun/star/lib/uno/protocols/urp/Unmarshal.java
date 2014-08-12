@@ -234,7 +234,7 @@ final class Unmarshal {
 
     private Long readHyperValue() {
         try {
-            return new Long(input.readLong());
+            return Long.valueOf(input.readLong());
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }

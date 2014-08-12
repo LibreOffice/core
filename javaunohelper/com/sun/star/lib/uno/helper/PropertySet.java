@@ -741,7 +741,7 @@ XMultiPropertySet
         else if (cl.equals(int.class))
             retVal= Integer.valueOf(AnyConverter.toInt(obj));
         else if (cl.equals(long.class))
-            retVal= new Long(AnyConverter.toLong(obj));
+            retVal= Long.valueOf(AnyConverter.toLong(obj));
         else if (cl.equals(float.class))
             retVal= new Float(AnyConverter.toFloat(obj));
         else if (cl.equals(double.class))
@@ -763,7 +763,7 @@ XMultiPropertySet
         else if (cl.equals(Integer.class))
             retVal= Integer.valueOf(AnyConverter.toInt(obj));
         else if (cl.equals(Long.class))
-            retVal= new Long(AnyConverter.toLong(obj));
+            retVal= Long.valueOf(AnyConverter.toLong(obj));
         else if (cl.equals(Float.class))
             retVal= new Float(AnyConverter.toFloat(obj));
         else if (cl.equals(Double.class))

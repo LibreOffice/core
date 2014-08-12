@@ -58,7 +58,7 @@ public final class Marshaling_Test {
             Integer.valueOf(0xff00),
             Integer.valueOf(0xff0000),
             Integer.valueOf(0xff000000),
-            new Long(666L),
+            Long.valueOf(666L),
             new Short((short)444),
             new String("blabla"),
             Integer.valueOf(10),  // Any as object

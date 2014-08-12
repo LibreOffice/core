@@ -261,7 +261,7 @@ public class NumericalHelper
                 break;
             case TypeClass.HYPER_value:
                 aTypeObject.iType = LONG_TYPE;
-                aTypeObject.aValue = new Long(AnyConverter.toLong(aValue));
+                aTypeObject.aValue = Long.valueOf(AnyConverter.toLong(aValue));
                 break;
             case TypeClass.FLOAT_value:
                 aTypeObject.iType = FLOAT_TYPE;

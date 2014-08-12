@@ -315,7 +315,7 @@ public class UnoRuntime {
             return Integer.valueOf(0);
         case TypeClass.HYPER_value:
         case TypeClass.UNSIGNED_HYPER_value:
-            return new Long(0L);
+            return Long.valueOf(0L);
         case TypeClass.FLOAT_value:
             return new Float(0.0f);
         case TypeClass.DOUBLE_value:

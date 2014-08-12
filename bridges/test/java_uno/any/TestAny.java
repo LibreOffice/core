@@ -194,29 +194,29 @@ final class TestAny {
                               new CompareBoxed());
 
         // HYPER:
-        success &= testMapAny(transport, new Long(-9223372036854775808L),
+        success &= testMapAny(transport, Long.valueOf(-9223372036854775808L),
                               new CompareBoxed());
-        success &= testMapAny(transport, new Long(0L), new CompareBoxed());
-        success &= testMapAny(transport, new Long(9223372036854775807L),
+        success &= testMapAny(transport, Long.valueOf(0L), new CompareBoxed());
+        success &= testMapAny(transport, Long.valueOf(9223372036854775807L),
                               new CompareBoxed());
         success &= testMapAny(transport,
                               new Any(Type.HYPER,
-                                      new Long(-9223372036854775808L)),
+                                      Long.valueOf(-9223372036854775808L)),
                               new CompareUnboxed());
-        success &= testMapAny(transport, new Any(Type.HYPER, new Long(0L)),
+        success &= testMapAny(transport, new Any(Type.HYPER, Long.valueOf(0L)),
                               new CompareUnboxed());
         success &= testMapAny(transport,
                               new Any(Type.HYPER,
-                                      new Long(9223372036854775807L)),
+                                      Long.valueOf(9223372036854775807L)),
                               new CompareUnboxed());
 
         // UNSIGNED HYPER:
         success &= testMapAny(transport,
-                              new Any(Type.UNSIGNED_HYPER, new Long(0L)),
+                              new Any(Type.UNSIGNED_HYPER, Long.valueOf(0L)),
                               new CompareBoxed());
         success &= testMapAny(transport,
                               new Any(Type.UNSIGNED_HYPER,
-                                      new Long(-9223372036854775808L)),
+                                      Long.valueOf(-9223372036854775808L)),
                               new CompareBoxed());
 
         // FLOAT:

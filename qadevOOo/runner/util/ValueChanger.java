@@ -60,7 +60,7 @@ public class ValueChanger {
 
    if (oldValue instanceof Long) {
      long oldlong = ((Long) oldValue).longValue();
-     newValue = new Long(oldlong + 15);
+     newValue = Long.valueOf(oldlong + 15);
    } else
 
    if (oldValue instanceof Short) {

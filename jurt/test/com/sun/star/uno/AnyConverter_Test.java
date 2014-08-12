@@ -42,7 +42,7 @@ public final class AnyConverter_Test {
     Byte aByte= new Byte((byte) 111);
     Short aShort= new Short((short) 11111);
     Integer aInt= Integer.valueOf( 1111111);
-    Long aLong= new Long( 0xffffffff);
+    Long aLong= Long.valueOf( 0xffffffff);
     Float aFloat= new Float( 3.14);
     Double aDouble= new Double( 3.145);
     Object aObj= new ATypeProvider();
@@ -389,7 +389,7 @@ public final class AnyConverter_Test {
         a = new Any( Type.UNSIGNED_LONG, Integer.valueOf(5) );
         assertEquals(5, AnyConverter.toUnsignedLong(a));
         assertEquals(5, AnyConverter.toLong(a));
-        a = new Any( Type.UNSIGNED_HYPER, new Long(5) );
+        a = new Any( Type.UNSIGNED_HYPER, Long.valueOf(5) );
         assertEquals(5, AnyConverter.toUnsignedLong(a));
 
         // must fail
@@ -819,7 +819,7 @@ public final class AnyConverter_Test {
         assertTrue(AnyConverter.isLong(aLong));
         assertTrue(AnyConverter.isLong(anyLong));
         assertEquals(Type.HYPER, AnyConverter.getType(anyLong));
-        Any a = new Any( Type.UNSIGNED_HYPER, new Long(5) );
+        Any a = new Any( Type.UNSIGNED_HYPER, Long.valueOf(5) );
         assertEquals(Type.UNSIGNED_HYPER, AnyConverter.getType(a));
         assertFalse(AnyConverter.isLong(a));
         assertFalse(Type.HYPER.equals( AnyConverter.getType(a) ));

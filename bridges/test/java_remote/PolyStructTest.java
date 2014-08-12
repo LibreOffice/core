@@ -93,15 +93,15 @@ public final class PolyStructTest extends ComplexTestCase {
                     new TestPolyStruct(Integer.valueOf(Integer.MAX_VALUE))).member);
 
             assertEquals(
-                new Long(0L), t.transportHyper(new TestPolyStruct()).member);
+                Long.valueOf(0L), t.transportHyper(new TestPolyStruct()).member);
             assertEquals(
-                new Long(Long.MIN_VALUE),
+                Long.valueOf(Long.MIN_VALUE),
                 t.transportHyper(
-                    new TestPolyStruct(new Long(Long.MIN_VALUE))).member);
+                    new TestPolyStruct(Long.valueOf(Long.MIN_VALUE))).member);
             assertEquals(
-                new Long(Long.MAX_VALUE),
+                Long.valueOf(Long.MAX_VALUE),
                 t.transportHyper(
-                    new TestPolyStruct(new Long(Long.MAX_VALUE))).member);
+                    new TestPolyStruct(Long.valueOf(Long.MAX_VALUE))).member);
 
             assertEquals(
                 new Float(0.0f), t.transportFloat(new TestPolyStruct()).member);
