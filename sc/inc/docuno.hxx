@@ -450,7 +450,7 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::sheet::XSpreadsheetDocument > & xDocSrc,
         const OUString& srcName,
-        const sal_Int32 nDestPosition)
+        sal_Int32 nDestPosition)
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::lang::IndexOutOfBoundsException,
               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
