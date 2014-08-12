@@ -45,6 +45,12 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect,
     }
 }
 
+void SwRegionRects::operator+=( const SwRect &rRect )
+{
+    bool f = false;
+    InsertRect( rRect, 0, f );
+}
+
 /** Delete all overlaps of the Rects in array with the given <rRect>
 
     To do so, all existing rectangles have to be either split or deleted.

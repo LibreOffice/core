@@ -1973,6 +1973,12 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
         rRegion -= rRect;
 }
 
+inline void Add( SwRegionRects& rRegion, const SwRect& rRect )
+{
+    if( rRect.Width() > 1 && rRect.Height() > 1 )
+        rRegion += rRect;
+}
+
 /*
  * The following situations can happen:
  *  1. Start and end lie in one screen-row and in the same node
@@ -1990,6 +1996,7 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
  * Exceptions:  - The Fly in which the selection took place (if it took place
  *                 in a Fly)
  *              - The Flys which are underrun by the text
+ *              - The Flys which are anchored to somewhere inside the selection.
  * Functioning: First a SwRegion with a root gets initialized.
  *              Out of the region the inverted sections are cut out. The
  *              section gets compressed and finally inverted and thereby the
@@ -2549,6 +2556,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
     //   sit in it)
     // - if in the Z-order we have Flys above those in which the StartFrm is
     //   placed
+    // - if they are anchored to inside the selection and thus part of it
     const SwPageFrm *pPage      = pStartFrm->FindPageFrm();
     const SwPageFrm *pEndPage   = pEndFrm->FindPageFrm();
 
@@ -2565,7 +2573,23 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
                 const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
                 const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
-                if ( !pFly->IsAnLower( pStartFrm ) &&
+                SwPosition anchoredAt = *pAnchoredObj->GetFrmFmt().GetAnchor().GetCntntAnchor();
+                bool inSelection = ( *pStartPos <= anchoredAt && anchoredAt < *pEndPos );
+                if( anchoredAt == *pEndPos )
+                {
+                    const SwNodes& nodes = anchoredAt.GetDoc()->GetNodes();
+                    if( *pEndPos == SwPosition( nodes.GetEndOfContent()))
+                        inSelection = true;
+                    else
+                    {
+                        SwNodeIndex idx( nodes.GetEndOfContent());
+                     if( SwCntntNode* last = nodes.GoPrevious( &idx ))
+                        inSelection = *pEndPos == SwPosition( *last, last->Len());
+                    }
+                }
+                if( inSelection )
+                        Add( aRegion, pFly->Frm() );
+                else if ( !pFly->IsAnLower( pStartFrm ) &&
                     (rSur.GetSurround() != SURROUND_THROUGHT &&
                     !rSur.IsContour()) )
                 {

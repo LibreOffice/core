@@ -36,6 +36,7 @@ public:
 
     // For punching from aOrigin.
     void operator-=( const SwRect& rRect );
+    void operator+=( const SwRect& rRect );
 
     // From holes to areas, from areas to holes.
     void Invert();
