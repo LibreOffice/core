@@ -724,6 +724,12 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
     bool bFrame=IsTextFrame();
     EEControlBits nStat0=rOutliner.GetControlWord();
     Size aNullSize;
+
+    // FIXME(matteocam)
+    bool bChainedFrame = true; // XXX: should be returned from a method
+
+    if (!bChainedFrame) {
+
     if (!bContourFrame)
     {
         rOutliner.SetControlWord(nStat0|EEControlBits::AUTOPAGESIZE);
@@ -757,8 +763,6 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
             else
             {
                 nHgt = 1000000;
-                // FIXME(matteocam)
-                nHgt = 2000;
             }
 
             rOutliner.SetMaxAutoPaperSize(Size(nWdt,nHgt));
@@ -776,6 +780,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
             rOutliner.SetMinAutoPaperSize(Size(0, nAnkHgt));
         }
     }
+    } // END if (!bChainedFrame)
 
     rOutliner.SetPaperSize(aNullSize);
     if (bContourFrame)

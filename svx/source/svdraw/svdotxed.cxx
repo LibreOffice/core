@@ -251,6 +251,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
 
     // FIXME(matteocam)
     aPaperMax.Height() = 2000;
+    aPaperMin.Height() = 2000;
 
     if (pPaperMin!=NULL) *pPaperMin=aPaperMin;
     if (pPaperMax!=NULL) *pPaperMax=aPaperMax;
