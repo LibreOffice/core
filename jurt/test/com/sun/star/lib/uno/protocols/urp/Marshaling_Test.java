@@ -60,7 +60,7 @@ public final class Marshaling_Test {
             Integer.valueOf(0xff000000),
             Long.valueOf(666L),
             Short.valueOf((short)444),
-            new String("blabla"),
+            "blabla",
             Integer.valueOf(10),  // Any as object
             Integer.valueOf(10),  // Any as object
             new Any(new Type(Integer.class), Integer.valueOf(10)), // Any as Any
@@ -70,7 +70,7 @@ public final class Marshaling_Test {
             x,
             new byte[]{1,2,3,4,5,6,7}, // primitive sequence
             new int[]{7,6,5,4,3,2,1}, // primitive sequence
-            new Object[]{Integer.valueOf(123), new String("hallo")}, // any sequence
+            new Object[]{Integer.valueOf(123), "hallo"}, // any sequence
             new TestPrimitiveStruct[]{new TestPrimitiveStruct(), new TestPrimitiveStruct()}, // sequence of primitive structs
             new TestPrimitiveSeqStruct[]{new TestPrimitiveSeqStruct(), new TestPrimitiveSeqStruct()}, // sequence of primitive structs
             new TestNestedStruct(),

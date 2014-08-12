@@ -110,9 +110,9 @@ public class CellBinding extends complexlib.ComplexTestCase
     {
         final short col = 0;
         final short row = 2;
-        final String text = new String( "content" );
-        final String otherText = new String( "something else" );
-        final String yetAnotherText = new String( "yet another text" );
+        final String text = "content";
+        final String otherText = "something else";
+        final String yetAnotherText = "yet another text";
 
         // cretae a normal text control
         XPropertySet controlModel = m_formLayer.createControlAndShape( "DatabaseTextField", 30, 9, 30, 6 );
@@ -182,8 +182,8 @@ public class CellBinding extends complexlib.ComplexTestCase
         XPropertySet secondaryRadio = createRadio( 51, "radio button B", "radio ref group", "secodary" );
 
         // give the ref values
-        String refValueA = new String( "ref value A" );
-        String refValueB = new String( "ref value B" );
+        String refValueA = "ref value A";
+        String refValueB = "ref value B";
         primaryRadio.setPropertyValue( "RefValue", refValueA );
         secondaryRadio.setPropertyValue( "RefValue", refValueB );
 
@@ -241,7 +241,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     public void checkStringCheckBoxBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        String refValue = new String( "checked " );
+        String refValue = "checked ";
 
         XPropertySet checkBox = m_formLayer.createControlAndShape( "DatabaseCheckBox", 30, 68, 40, 4 );
         checkBox.setPropertyValue( "Label", "check box with ref value" );

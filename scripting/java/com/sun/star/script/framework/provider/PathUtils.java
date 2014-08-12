@@ -40,7 +40,7 @@ public class PathUtils {
     }
     public static String getOidForModel( XModel xModel )
     {
-        String oid = new String("");
+        String oid = "";
         if ( xModel != null )
         {
             try

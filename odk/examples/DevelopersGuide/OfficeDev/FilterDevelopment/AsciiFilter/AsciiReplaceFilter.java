@@ -144,7 +144,7 @@ public class AsciiReplaceFilter
             }
 
             // these are safe, thus no errorhandling needed:
-            m_sInternalName    = new String()       ;
+            m_sInternalName    = ""       ;
             m_xDocument        = null               ;
             m_bImport          = true               ;
             m_nFilterProcState = FILTERPROC_STOPPED ;

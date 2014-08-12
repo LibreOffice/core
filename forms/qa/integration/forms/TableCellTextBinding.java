@@ -55,7 +55,7 @@ public class TableCellTextBinding
     {
         m_cellText = UnoRuntime.queryInterface( XTextRange.class, cell );
 
-        m_newCellText = new String();
+        m_newCellText = "";
         m_listeners = new java.util.LinkedList<com.sun.star.util.XModifyListener>();
 
         start();

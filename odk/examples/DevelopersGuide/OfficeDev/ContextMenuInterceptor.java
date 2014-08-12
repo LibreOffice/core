@@ -69,7 +69,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
             com.sun.star.text.XTextDocument xDoc =UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
                                       xComponent);
 
-            String infoMsg = new String("All context menus of the created document frame contains now a 'Help' entry with the submenus 'Content', 'Help Agent' and 'Tips'.\n\nPress 'Return' in the shell to remove the context menu interceptor and finish the example!");
+            String infoMsg = "All context menus of the created document frame contains now a 'Help' entry with the submenus 'Content', 'Help Agent' and 'Tips'.\n\nPress 'Return' in the shell to remove the context menu interceptor and finish the example!";
             xDoc.getText().setString(infoMsg);
 
             // ensure that the document content is optimal visible
@@ -176,9 +176,9 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                             "com.sun.star.ui.ActionTriggerContainer" ));
 
                 // intialize root menu entry
-                xRootMenuEntry.setPropertyValue( "Text", new String( "Help" ));
-                xRootMenuEntry.setPropertyValue( "CommandURL", new String( "slot:5410" ));
-                xRootMenuEntry.setPropertyValue( "HelpURL", new String( "5410" ));
+                xRootMenuEntry.setPropertyValue( "Text", "Help");
+                xRootMenuEntry.setPropertyValue( "CommandURL", "slot:5410");
+                xRootMenuEntry.setPropertyValue( "HelpURL", "5410");
                 xRootMenuEntry.setPropertyValue( "SubContainer", xSubMenuContainer );
 
                 // create menu entries for the new sub menu
@@ -188,9 +188,9 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                                               XPropertySet.class, xMenuElementFactory.createInstance(
                                                   "com.sun.star.ui.ActionTrigger" ));
 
-                xMenuEntry.setPropertyValue( "Text", new String( "Content" ));
-                xMenuEntry.setPropertyValue( "CommandURL", new String( "slot:5401" ));
-                xMenuEntry.setPropertyValue( "HelpURL", new String( "5401" ));
+                xMenuEntry.setPropertyValue( "Text", "Content" );
+                xMenuEntry.setPropertyValue( "CommandURL", "slot:5401" );
+                xMenuEntry.setPropertyValue( "HelpURL", "5401" );
 
                 // insert menu entry to sub menu
                 xSubMenuContainer.insertByIndex( 0, xMenuEntry );
@@ -200,9 +200,9 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                                  com.sun.star.beans.XPropertySet.class,
                                      xMenuElementFactory.createInstance(
                                          "com.sun.star.ui.ActionTrigger" ));
-                xMenuEntry.setPropertyValue( "Text", new String( "Help Agent" ));
-                xMenuEntry.setPropertyValue( "CommandURL", new String( "slot:5962" ));
-                xMenuEntry.setPropertyValue( "HelpURL", new String( "5962" ));
+                xMenuEntry.setPropertyValue( "Text", "Help Agent" );
+                xMenuEntry.setPropertyValue( "CommandURL", "slot:5962" );
+                xMenuEntry.setPropertyValue( "HelpURL", "5962" );
 
                 // insert menu entry to sub menu
                 xSubMenuContainer.insertByIndex( 1, xMenuEntry );
@@ -212,9 +212,9 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                                  com.sun.star.beans.XPropertySet.class,
                                      xMenuElementFactory.createInstance(
                                          "com.sun.star.ui.ActionTrigger" ));
-                xMenuEntry.setPropertyValue( "Text", new String( "Tips" ));
-                xMenuEntry.setPropertyValue( "CommandURL", new String( "slot:5404" ));
-                xMenuEntry.setPropertyValue( "HelpURL", new String( "5404" ));
+                xMenuEntry.setPropertyValue( "Text", "Tips" );
+                xMenuEntry.setPropertyValue( "CommandURL", "slot:5404" );
+                xMenuEntry.setPropertyValue( "HelpURL", "5404" );
 
                 // insert menu entry to sub menu
                 xSubMenuContainer.insertByIndex( 2, xMenuEntry );

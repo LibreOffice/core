@@ -100,7 +100,7 @@ public class DocumentViewHelper
                     XURLTransformer.class, m_orb.createInstance( "com.sun.star.util.URLTransformer" ) );
             xTransformer.parseStrict( aURL );
 
-            xReturn = xProvider.queryDispatch( aURL[0], new String( ), 0 );
+            xReturn = xProvider.queryDispatch( aURL[0], "", 0 );
         }
         return xReturn;
     }

@@ -57,7 +57,7 @@ public class XSpellAlternatives_impl implements
         //!! none of these cases should ever occur!
         //!! values provided only for safety
         if (this.aWord == null)
-            this.aWord = new String();
+            this.aWord = "";
         if (this.aLanguage == null)
             this.aLanguage = new Locale();
 

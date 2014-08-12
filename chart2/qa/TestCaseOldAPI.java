@@ -504,7 +504,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
         try
         {
-            String aMyServiceName = new String( "com.sun.star.chart.BarDiagram" );
+            String aMyServiceName = "com.sun.star.chart.BarDiagram";
             String aServices[] = xFact.getAvailableServiceNames();
             boolean bServiceFound = false;
             for( int i = 0; i < aServices.length; ++i )
@@ -753,7 +753,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 XMultiServiceFactory.class, mxOldDoc );
             assure( "document is no factory", xFact != null );
 
-            String aMyServiceName = new String( "com.sun.star.chart.StockDiagram" );
+            String aMyServiceName = "com.sun.star.chart.StockDiagram";
             XDiagram xDia = UnoRuntime.queryInterface(
                 XDiagram.class, xFact.createInstance( aMyServiceName ));
             assure( aMyServiceName + " could not be created", xDia != null );

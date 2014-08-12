@@ -214,7 +214,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
                 GregorianCalendar aCal = new GregorianCalendar();
                 aCal.setTime( (java.util.Date)aDate );
 
-                sOdbcDate += new String( "{D '" );
+                sOdbcDate += "{D '";
                 sOdbcDate += (Integer.valueOf( aCal.get( Calendar.YEAR ) ) ).toString();
                 sOdbcDate += "-";
 

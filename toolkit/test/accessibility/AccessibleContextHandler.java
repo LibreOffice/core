@@ -54,7 +54,7 @@ class AccessibleContextHandler
         if (aParent instanceof AccTreeNode)
             xContext = ((AccTreeNode)aParent).getContext();
 
-        String sChild = new String();
+        String sChild = "";
         if (xContext != null)
         {
             switch( nIndex )

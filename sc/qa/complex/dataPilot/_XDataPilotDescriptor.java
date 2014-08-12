@@ -55,7 +55,7 @@ public class _XDataPilotDescriptor {
     private XDataPilotDescriptor oObj = null;
     private CellRangeAddress CRA = new CellRangeAddress((short)1, 0, 0, 5, 5);
 
-    private String sTag = new String ("XDataPilotDescriptor_Tag");
+    private String sTag = "XDataPilotDescriptor_Tag";
     private String fieldsNames[];
     private int fieldsAmount = 0;
     private int tEnvFieldsAmount = 0;

@@ -70,7 +70,7 @@ class PrintComponentTree extends ComponentTreeTraversal
 
     public PrintComponentTree()
     {
-        m_sPrefix = new String();
+        m_sPrefix = "";
     }
 
     @Override
@@ -186,11 +186,11 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
 
         XNamed xNameAcc = UnoRuntime.queryInterface( XNamed.class, xContainer );
         if ( null == xNameAcc )
-            sObjectName = new String( "<unnamed>" );
+            sObjectName = "<unnamed>";
         else
             sObjectName = xNameAcc.getName();
-        System.out.println( new String( "enumerating the container named \"" ) + sObjectName +
-            new String( "\"\n" ) );
+        System.out.println( "enumerating the container named \"" + sObjectName +
+            "\"\n" );
 
         PrintComponentTree aPrinter = new PrintComponentTree();
         aPrinter.handle( xContainer );
@@ -745,7 +745,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xSalesFormProps.setPropertyValue( "DataSourceName", m_database.getDocumentURL() );
         xSalesFormProps.setPropertyValue( "CommandType", Integer.valueOf( CommandType.COMMAND ) );
 
-        String sCommand = new String( "SELECT * FROM " );
+        String sCommand = "SELECT * FROM ";
         sCommand += s_tableNameSales;
         sCommand += " WHERE " + s_tableNameSales + ".SNR = :salesmen";
         xSalesFormProps.setPropertyValue( "Command", sCommand );

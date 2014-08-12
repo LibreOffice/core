@@ -337,7 +337,7 @@ XInitialization {
             xPSetCheckBox.setPropertyValue( "State", Short.valueOf((short)0) );
             xPSetCheckBox.setPropertyValue( "Name", _checkBoxName );
             xPSetCheckBox.setPropertyValue( "TabIndex", Short.valueOf( (short)1 ) );
-            xPSetCheckBox.setPropertyValue( "Label", new String(_checkBoxString +checkBoxPath) );
+            xPSetCheckBox.setPropertyValue( "Label", _checkBoxString +checkBoxPath );
 
             // insert the control models into the dialog model
             xNameCont.insertByName( _label2Name, label2Model );

@@ -58,7 +58,7 @@ public class _XDataPilotDescriptor extends MultiMethodTest {
     public XDataPilotDescriptor oObj = null;
     CellRangeAddress CRA = new CellRangeAddress((short)1, 1, 1, 5, 5);
     CellRangeAddress oldCRA = null ;
-    String sTag = new String ("XDataPilotDescriptor_Tag");
+    String sTag = "XDataPilotDescriptor_Tag";
     String fieldsNames[];
     int fieldsAmount = 0;
     int tEnvFieldsAmount = 0;

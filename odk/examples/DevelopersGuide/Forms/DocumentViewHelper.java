@@ -99,7 +99,7 @@ class DocumentViewHelper
                     XURLTransformer.class, m_orb.createInstance( "com.sun.star.util.URLTransformer" ) );
             xTransformer.parseStrict( aURL );
 
-            xReturn = xProvider.queryDispatch( aURL[0], new String( ), 0 );
+            xReturn = xProvider.queryDispatch( aURL[0], "", 0 );
         }
         return xReturn;
     }
@@ -151,7 +151,7 @@ class DocumentViewHelper
     {
         // get a dispatcher for the toggle URL
         URL[] aToggleURL = new URL[] { new URL() };
-        aToggleURL[0].Complete = new String( ".uno:SwitchControlDesignMode" );
+        aToggleURL[0].Complete = ".uno:SwitchControlDesignMode";
         XDispatch xDispatcher = getDispatcher( aToggleURL );
 
         // dispatch the URL - this will result in toggling the mode

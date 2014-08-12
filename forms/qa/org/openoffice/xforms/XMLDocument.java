@@ -91,7 +91,7 @@ public class XMLDocument extends integration.forms.DocumentHelper
             newModel.setID(_modelName);
             XFormsUIHelper1 modelHelper = UnoRuntime.queryInterface(
                 XFormsUIHelper1.class, newModel );
-            modelHelper.newInstance( "Instance 1", new String(), true );
+            modelHelper.newInstance( "Instance 1", "", true );
             newModel.initialize();
 
             m_forms.insertByName(_modelName, newModel);

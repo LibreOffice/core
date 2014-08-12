@@ -61,11 +61,11 @@ public class XHyphenatedWord_impl implements
         //!! none of these cases should ever occur!
         //!! values provided only for safety
         if (this.aWord == null)
-            this.aWord = new String();
+            this.aWord = "";
         if (this.aLang == null)
             this.aLang = new Locale();
         if (this.aHyphenatedWord == null)
-            this.aHyphenatedWord = new String();
+            this.aHyphenatedWord = "";
     }
 
 

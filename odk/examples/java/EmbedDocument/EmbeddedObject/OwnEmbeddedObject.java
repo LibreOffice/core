@@ -251,7 +251,7 @@ public final class OwnEmbeddedObject extends WeakBase
             XInputStream xInStream = xStream.getInputStream();
             byte[][] aData = new byte[1][];
             aData[0] = new byte[0];
-            String aResult = new String();
+            String aResult = "";
 
             int nLen = 0;
             do
@@ -661,7 +661,7 @@ public final class OwnEmbeddedObject extends WeakBase
         if ( m_bDisposed )
             throw new com.sun.star.lang.DisposedException();
 
-        return new String();
+        return "";
     }
 
 

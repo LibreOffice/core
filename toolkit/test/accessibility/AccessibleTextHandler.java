@@ -348,7 +348,7 @@ class AccessibleTextHandler extends NodeHandler
                 }
                 catch(com.sun.star.lang.IllegalArgumentException e)
                 {
-                    aPortion = new String ("");
+                    aPortion = "";
                 }
 
                 // get attributes and make node with attribute children

@@ -56,11 +56,11 @@ public class XPossibleHyphens_impl implements
         //!! none of these cases should ever occur!
         //!! values provided only for safety
         if (this.aWord == null)
-            this.aWord = new String();
+            this.aWord = "";
         if (this.aLang == null)
             this.aLang = new Locale();
         if (this.aHyphWord == null)
-            this.aHyphWord = new String();
+            this.aHyphWord = "";
 
         // having no hyphenation positions is OK though.
         // still for safety an empty existing array has to be provided.

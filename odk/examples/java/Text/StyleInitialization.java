@@ -212,7 +212,7 @@ public class StyleInitialization {
 
                     // To run the sample with StarOffice 5.2 you'll have to change 'ParaStyleName'
                     // to 'ParaStyle' in the next line
-                    xPropertySet.setPropertyValue("ParaStyleName", new String( sElementNames[iCounter] ) );
+                    xPropertySet.setPropertyValue("ParaStyleName", sElementNames[iCounter] );
                     System.out.println( "Apply the paragraph style : " + sElementNames[iCounter] );
                     break;
                 }

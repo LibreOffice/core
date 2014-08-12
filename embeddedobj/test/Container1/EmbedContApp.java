@@ -1524,23 +1524,6 @@ public class EmbedContApp extends Applet
             Object oEmbObj = null;
             if ( xNameAccess.hasByName( "LinkName" ) && xTargetStorage.isStreamElement( "LinkName" ) )
             {
-            /*
-                // OOo links will not be tested until they have correct persistence
-                XStream xLinkStream = xTargetStorage.openStreamElement( "LinkName", ElementModes.ELEMENT_READ );
-                if ( xLinkStream != null )
-                {
-                    XInputStream xInStream = xLinkStream.getInputStream();
-                    if ( xInStream != null )
-                    {
-                        byte[][] pBuff = new byte[1][0];
-                        int nRead = xInStream.readBytes( pBuff, 1000 );
-                        m_aLinkURI = new String( pBuff[0] );
-                        xInStream.closeInput();
-                        oEmbObj = xEmbedCreator.createInstanceLink( m_aLinkURI );
-                        m_bLinkObj = true;
-                    }
-                }
-            */
             }
             else
                 oEmbObj = xEmbedCreator.createInstanceInitFromEntry( xTargetStorage,

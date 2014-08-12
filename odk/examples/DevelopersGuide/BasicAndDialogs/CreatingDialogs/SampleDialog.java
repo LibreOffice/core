@@ -151,7 +151,7 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
         xPSetDialog.setPropertyValue( "PositionY", Integer.valueOf( 100 ) );
         xPSetDialog.setPropertyValue( "Width", Integer.valueOf( 150 ) );
         xPSetDialog.setPropertyValue( "Height", Integer.valueOf( 100 ) );
-        xPSetDialog.setPropertyValue( "Title", new String( "Runtime Dialog Demo" ) );
+        xPSetDialog.setPropertyValue( "Title", "Runtime Dialog Demo" );
 
         // get the service manager from the dialog model
         XMultiServiceFactory xMultiServiceFactory = ( XMultiServiceFactory )UnoRuntime.queryInterface(
@@ -168,7 +168,7 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
         xPSetButton.setPropertyValue( "Height", Integer.valueOf( 14 ) );
         xPSetButton.setPropertyValue( "Name", _buttonName );
         xPSetButton.setPropertyValue( "TabIndex", Short.valueOf( (short)0 ) );
-        xPSetButton.setPropertyValue( "Label", new String( "Click Me" ) );
+        xPSetButton.setPropertyValue( "Label", "Click Me" );
 
         // create the label model and set the properties
         Object labelModel = xMultiServiceFactory.createInstance(
@@ -195,7 +195,7 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
         xPSetCancelButton.setPropertyValue( "Name", _cancelButtonName );
         xPSetCancelButton.setPropertyValue( "TabIndex", Short.valueOf( (short)2 ) );
         xPSetCancelButton.setPropertyValue( "PushButtonType", Short.valueOf( (short)2 ) );
-        xPSetCancelButton.setPropertyValue( "Label", new String( "Cancel" ) );
+        xPSetCancelButton.setPropertyValue( "Label", "Cancel" );
 
         // insert the control models into the dialog model
         XNameContainer xNameCont = ( XNameContainer )UnoRuntime.queryInterface(

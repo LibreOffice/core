@@ -52,10 +52,10 @@ public class DisableCommandsTest extends java.lang.Object {
      */
     final static private String[] aCommandURLTestSet =
     {
-        new String( "Open" ),
-        new String( "About" ),
-        new String( "SelectAll" ),
-        new String( "Quit" ),
+        "Open",
+        "About",
+        "SelectAll",
+        "Quit",
     };
 
     private static XComponentContext xRemoteContext = null;
@@ -252,7 +252,7 @@ public class DisableCommandsTest extends java.lang.Object {
             new com.sun.star.beans.PropertyValue[1];
 
         lParams[0] = new com.sun.star.beans.PropertyValue();
-        lParams[0].Name  = new String("nodepath");
+        lParams[0].Name  = "nodepath";
         lParams[0].Value = "/org.openoffice.Office.Commands/Execute/Disabled";
 
         try {
@@ -308,7 +308,7 @@ public class DisableCommandsTest extends java.lang.Object {
             new com.sun.star.beans.PropertyValue[1];
 
         lParams[0] = new com.sun.star.beans.PropertyValue();
-        lParams[0].Name  = new String("nodepath");
+        lParams[0].Name  = "nodepath";
         lParams[0].Value = "/org.openoffice.Office.Commands/Execute/Disabled";
 
         try {
@@ -345,7 +345,7 @@ public class DisableCommandsTest extends java.lang.Object {
 
                         if ( xPropertySet != null ) {
                             // Create a unique node name.
-                            String aCmdNodeName = new String( "Command-" );
+                            String aCmdNodeName = "Command-";
                             aCmdNodeName += i;
 
                             // Insert the node into the Disabled set

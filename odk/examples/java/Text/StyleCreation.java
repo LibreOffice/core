@@ -89,7 +89,7 @@ public class StyleCreation {
             System.out.println( "create a PropertySet to set the properties for the new Paragraphstyle" );
 
             // set some properties from the Paragraph style
-            xPropertySet.setPropertyValue("CharFontName", new String( "Helvetica" ) );
+            xPropertySet.setPropertyValue("CharFontName", "Helvetica" );
             System.out.println( "set name of the font to 'Helvetica'" );
 
             xPropertySet.setPropertyValue("CharHeight", new Float( 36 ) );
@@ -129,7 +129,7 @@ public class StyleCreation {
             // To run the sample with StarOffice 5.2 you'll have to change
             // 'ParaStyleName' to 'ParaStyle' in the next line
             xParagraphPropertySet.setPropertyValue("ParaStyleName",
-                new String( "myheading" ) );
+                "myheading" );
             System.out.println( "apply the new paragraph style");
         }
         catch( Exception e) {

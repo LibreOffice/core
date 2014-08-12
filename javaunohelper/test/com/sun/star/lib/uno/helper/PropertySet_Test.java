@@ -129,7 +129,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropDoubleA",value);
             ret= cl.getPropertyValue("PropDoubleA");
             r[i++]= ((Double) ret).equals(value);
-            value= new String("string");
+            value= "string";
             cl.setPropertyValue("PropStringA",value);
             ret= cl.getPropertyValue("PropStringA");
             r[i++]= ((String) ret).equals(value);
@@ -204,7 +204,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropObjectA",value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Double) ret).equals(value);
-            value= new String("string");
+            value= "string";
             cl.setPropertyValue("PropObjectA",value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((String) ret).equals(value);
@@ -261,7 +261,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new String("string");
+            value= "string";
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -315,7 +315,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropDoubleA",value);
             ret= cl.getPropertyValue("PropDoubleA");
             r[i++]= ret instanceof Double && util.anyEquals(value, ret);
-            value= new Any(new Type(String.class), new String("string"));
+            value= new Any(new Type(String.class), "string");
             cl.setPropertyValue("PropStringA",value);
             ret= cl.getPropertyValue("PropStringA");
             r[i++]= ret instanceof String && util.anyEquals(value, ret);
@@ -370,7 +370,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-            value= new Any(new Type(String.class), new String("string"));
+            value= new Any(new Type(String.class), "string");
             cl.setPropertyValue("PropAnyA",value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -462,7 +462,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropDoubleClass",value);
             ret= cl.getPropertyValue("PropDoubleClass");
             r[i++]= ret instanceof Double && util.anyEquals(value, ret);
-            value= new Any(new Type(String.class), new String("string"));
+            value= new Any(new Type(String.class), "string");
 
 
 

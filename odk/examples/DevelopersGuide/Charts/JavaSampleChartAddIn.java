@@ -283,7 +283,7 @@ public class JavaSampleChartAddIn extends WeakBase implements
     // XServiceName
     public String getServiceName() throws RuntimeException
     {
-        return new String( smServiceName );
+        return smServiceName;
     }
 
     // XServiceInfo
@@ -312,7 +312,7 @@ public class JavaSampleChartAddIn extends WeakBase implements
     // XDiagram
     public String getDiagramType() throws RuntimeException
     {
-        return new String( smServiceName );
+        return smServiceName;
     }
 
     public XPropertySet getDataRowProperties( int nRow )
@@ -349,7 +349,7 @@ public class JavaSampleChartAddIn extends WeakBase implements
     // XShapeDescriptor : XShape : XDiagram
     public String getShapeType() throws RuntimeException
     {
-        return new String( "com.sun.star.comp.Chart.JavaSampleDiagramShape" );
+        return "com.sun.star.comp.Chart.JavaSampleDiagramShape";
     }
 
 

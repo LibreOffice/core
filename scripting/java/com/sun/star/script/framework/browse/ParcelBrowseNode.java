@@ -214,7 +214,7 @@ public class ParcelBrowseNode extends PropertySet
                 }
                 else
                 {
-                    String source = new String(provider.getScriptEditor().getTemplate().getBytes());
+                    String source = provider.getScriptEditor().getTemplate();
                     String languageName = newName + "." + provider.getScriptEditor().getExtension();
                     String language = container.getLanguage();
 

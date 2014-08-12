@@ -359,8 +359,8 @@ public class AcceleratorsConfigurationTest
             {
                 System.out.println("** get command by " + sKeys[i] + " **");
 
-                String sCmdFromCache = new String(); // get a value using XAcceleratorConfiguration API
-                String sCmdFromConfiguration = new String(); // get a value using configuration API
+                String sCmdFromCache = ""; // get a value using XAcceleratorConfiguration API
+                String sCmdFromConfiguration = ""; // get a value using configuration API
 
                 // GET shortcuts/commands using XAcceleratorConfiguration API
                 sCmdFromCache = xAccelCfg.getCommandByKeyEvent(convertShortcut2AWTKey(sKeys[i]));
@@ -538,7 +538,7 @@ public class AcceleratorsConfigurationTest
     private String getCommandFromConfiguration(XNameAccess xAccess, String sKey)
             throws java.lang.Exception
     {
-        String sCommand = new String();
+        String sCommand = "";
 
         if (xAccess.hasByName(sKey))
         {
@@ -690,7 +690,7 @@ public class AcceleratorsConfigurationTest
     private String getOfficeLocale()
             throws java.lang.Exception
     {
-        String sLocale = new String();
+        String sLocale = "";
 
         String sConfigPath = "org.openoffice.Setup";
         boolean bReadOnly = true;

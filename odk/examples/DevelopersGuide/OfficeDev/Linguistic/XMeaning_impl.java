@@ -48,7 +48,7 @@ public class XMeaning_impl implements
         //!! none of these cases should ever occur!
         //!! values provided only for safety
         if (this.aMeaning == null)
-            this.aMeaning = new String();
+            this.aMeaning = "";
 
         // a meaning without synonyms may be OK though.
         // still for safety an empty existing array has to be provided.

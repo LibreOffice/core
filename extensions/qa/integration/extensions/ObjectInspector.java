@@ -34,7 +34,7 @@ public class ObjectInspector extends complexlib.ComplexTestCase
     private XMultiServiceFactory    m_orb;
     private Frame                   m_desktop;
 
-    final private String    m_inspectorFrameName = new String( "ObjectInspector" );
+    final private String    m_inspectorFrameName = "ObjectInspector";
 
     /** Creates a new instance of ValueBinding */
     public ObjectInspector()

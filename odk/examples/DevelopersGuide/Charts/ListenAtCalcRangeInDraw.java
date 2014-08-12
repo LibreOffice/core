@@ -159,7 +159,7 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
     public void chartDataChanged( ChartDataChangeEvent aEvent )
     {
         // update subtitle
-        String aTitle = new String( "Last Update: " + new java.util.Date( System.currentTimeMillis() ));
+        String aTitle = "Last Update: " + new java.util.Date();
 
         try
         {

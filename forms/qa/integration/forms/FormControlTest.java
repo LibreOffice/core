@@ -186,7 +186,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         }
 
         // okay, now remove the image
-        xImageModel.setPropertyValue( "ImageURL", new String() );
+        xImageModel.setPropertyValue( "ImageURL", "" );
         if ( !verifyReferenceImage( new byte[0] ) )
         {
             failed( "image control failed to remove the image" );
@@ -563,8 +563,8 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         XPropertySet xRadio = m_formLayer.createControlAndShape( "DatabaseRadioButton", 106, nYPos, 25, 6 );
         xRadio.setPropertyValue( "Label", label );
         xRadio.setPropertyValue( "RefValue", refValue );
-        xRadio.setPropertyValue( "Name", new String( "radio_group" ) );
-        xRadio.setPropertyValue( "DataField", new String( "f_text_enum" ) );
+        xRadio.setPropertyValue( "Name", "radio_group" );
+        xRadio.setPropertyValue( "DataField", "f_text_enum");
     }
 
     /* ------------------------------------------------------------------ */

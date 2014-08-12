@@ -668,13 +668,13 @@ public class FunctionHelper
                 // Find out possible filter name.
                 String sFilter = null;
                 if(xInfo.supportsService("com.sun.star.text.TextDocument")==true)
-                    sFilter = new String("HTML (StarWriter)");
+                    sFilter = "HTML (StarWriter)";
                 else
                 if(xInfo.supportsService("com.sun.star.text.WebDocument")==true)
-                    sFilter = new String("HTML");
+                    sFilter = "HTML";
                 else
                 if(xInfo.supportsService("com.sun.star.sheet.SpreadsheetDocument")==true)
-                    sFilter = new String("HTML (StarCalc)");
+                    sFilter = "HTML (StarCalc)";
 
                 // Check for existing state of this filter.
                 if(sFilter!=null)
@@ -842,23 +842,23 @@ public class FunctionHelper
             for (int i=0; i<nCount; ++i )
             {
                 com.sun.star.frame.XFrame xFrame = (com.sun.star.frame.XFrame)AnyConverter.toObject(new com.sun.star.uno.Type(com.sun.star.frame.XFrame.class), xContainer.getByIndex(i));
-                                        sName  = new String(BASEFRAMENAME+mnViewCount);
+                                        sName  = BASEFRAMENAME+mnViewCount;
                 while(sName.equals(xFrame.getName()))
                 {
                     ++mnViewCount;
-                    sName = new String(BASEFRAMENAME+mnViewCount);
+                    sName = BASEFRAMENAME+mnViewCount;
                 }
             }
         }
         catch(com.sun.star.uno.Exception exCreateFailed)
         {
-            sName = new String(BASEFRAMENAME);
+            sName = BASEFRAMENAME;
         }
 
         if (sName==null)
         {
             System.out.println("invalid name!");
-            sName = new String(BASEFRAMENAME);
+            sName = BASEFRAMENAME;
         }
 
         return sName;

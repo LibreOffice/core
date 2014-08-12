@@ -246,7 +246,7 @@ public static class StateSetSetView
         XAccessibleStateSet xStateSet = mxContext.getAccessibleStateSet();
         if (xStateSet != null)
         {
-            String sStates = new String ();
+            String sStates = "";
             short aStates[] = xStateSet.getStates();
             for (int i=0; i<aStates.length; i++)
             {

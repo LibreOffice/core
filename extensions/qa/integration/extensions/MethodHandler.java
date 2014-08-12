@@ -119,7 +119,7 @@ public class MethodHandler implements XPropertyHandler
     {
         XIdlMethod method = impl_getMethod( _propertyName );
 
-        String signature = new String();
+        String signature = "";
         signature += method.getReturnType().getName();
         signature += " ";
         signature += method.getName();

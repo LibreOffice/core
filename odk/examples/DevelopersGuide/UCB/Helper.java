@@ -181,7 +181,7 @@ public class Helper {
         {
             e.printStackTrace();
         }
-        return new String();
+        return "";
     }
 
     public static String prependCurrentDirAsAbsoluteFileURL( String relativeURL )
@@ -217,8 +217,7 @@ public class Helper {
             try
             {
                 file.createNewFile();
-                String content = new String(
-                    "This is the content of a sample data file." );
+                String content = "This is the content of a sample data file.";
                 FileOutputStream stream = new FileOutputStream( file );
                 stream.write( content.getBytes() );
                 stream.close();
@@ -235,6 +234,6 @@ public class Helper {
             e.printStackTrace();
         }
 
-        return new String();
+        return "";
     }
 }

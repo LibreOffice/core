@@ -588,7 +588,7 @@ public class TextStyle extends Style implements Cloneable {
         v[0] = c.getRed();
         v[1] = c.getGreen();
         v[2] = c.getBlue();
-        String colorString = new String("#");
+        String colorString = "#";
         for (int i = 0; i <= 2; i++) {
             String xx = Integer.toHexString(v[i]);
             if (xx.length() < 2)

@@ -121,8 +121,8 @@ public class FilterOptions
         m_xOutput      = null        ;
         m_bStreamOwner = false       ;
         m_sURL         = null        ;
-        m_sOld         = new String();
-        m_sNew         = new String();
+        m_sOld         = "";
+        m_sNew         = "";
         m_bCaseChange  = false       ;
         m_bLower       = false       ;
 

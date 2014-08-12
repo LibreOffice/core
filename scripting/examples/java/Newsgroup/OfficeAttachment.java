@@ -104,11 +104,11 @@ public class OfficeAttachment
                 status.setStatus( 4, statusLine );
                        PropertyValue[] propertyvalue_html = new PropertyValue[2];
                     propertyvalue_html[0] = new PropertyValue();
-                        propertyvalue_html[0].Name = new String("Overwrite");
+                        propertyvalue_html[0].Name = "Overwrite";
                     propertyvalue_html[0].Value = Boolean.TRUE;
                        propertyvalue_html[1] = new PropertyValue();
                     propertyvalue_html[1].Name = ("FilterName");
-                    propertyvalue_html[1].Value = new String("swriter: HTML (StarWriter)");
+                    propertyvalue_html[1].Value = "swriter: HTML (StarWriter)";
                 storedDoc.storeAsURL( filenameURL + ".html", propertyvalue_html);
 
                 File homedir = new File( templocationSystem );
@@ -130,10 +130,10 @@ public class OfficeAttachment
                 status.setStatus( 4, statusLine );
                 PropertyValue[] propertyvalue_sxw = new PropertyValue[2];
                     propertyvalue_sxw[0] = new PropertyValue();
-                    propertyvalue_sxw[0].Name = new String("Overwrite");
+                    propertyvalue_sxw[0].Name = "Overwrite";
                     propertyvalue_sxw[0].Value = Boolean.TRUE;
                     propertyvalue_sxw[1] = new PropertyValue();
-                    propertyvalue_sxw[1].Name = new String("Overwrite");
+                    propertyvalue_sxw[1].Name = "Overwrite";
                     propertyvalue_sxw[1].Value = Boolean.TRUE;
                     storedDoc.storeAsURL( filenameURL + ".sxw", propertyvalue_sxw);
 

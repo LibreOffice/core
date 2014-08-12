@@ -126,7 +126,7 @@ class NodeFactory
             }
         }
         else
-            sDisplay = new String ("not accessible");
+            sDisplay = "not accessible";
 
 
         // create node, and add default handlers

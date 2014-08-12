@@ -38,7 +38,7 @@ public class BookSettings implements OfficeConstants {
     private org.w3c.dom.Document settings = null;
 
     private boolean hasColumnRowHeaders = true;
-    private String  activeSheet         = new String();
+    private String  activeSheet         = "";
     private ArrayList<SheetSettings>  worksheetSettings   = new ArrayList<SheetSettings>();
 
     /**

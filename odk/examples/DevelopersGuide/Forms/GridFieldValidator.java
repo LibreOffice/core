@@ -95,9 +95,9 @@ class GridFieldValidator implements XUpdateListener
             sMessage += "\" is not allowed to contain empty strings.";
 
             SQLContext aError = new SQLContext(
-                new String( "Invalid Value Entered" ),
+                "Invalid Value Entered",
                 null,
-                new String( "S1000" ),
+                "S1000",
                 0,
                 new Any( new Type(), null ),
                 sMessage

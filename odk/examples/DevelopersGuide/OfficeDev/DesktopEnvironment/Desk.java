@@ -60,8 +60,8 @@ public class Desk
     public static void main(String[] lArguments)
     {
         // Analyze command line parameters.
-        String  sMode  = new String("inplace");
-        String  sFile  = new String("private:factory/swriter");
+        String  sMode  = "inplace";
+        String  sFile  = "private:factory/swriter";
 
         for(int i=0; i<lArguments.length; ++i)
         {

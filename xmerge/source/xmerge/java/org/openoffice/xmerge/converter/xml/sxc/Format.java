@@ -369,7 +369,7 @@ public class Format implements Cloneable {
       */
      @Override
     public String toString() {
-         return new String("Value : " + getValue() + " Category : " + getCategory());
+         return "Value : " + getValue() + " Category : " + getCategory();
      }
 
     /**

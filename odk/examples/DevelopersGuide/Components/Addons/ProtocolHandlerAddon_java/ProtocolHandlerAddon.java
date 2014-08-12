@@ -206,7 +206,7 @@ public class ProtocolHandlerAddon {
                 // describe window properties.
                 WindowDescriptor aDescriptor = new WindowDescriptor();
                 aDescriptor.Type              = WindowClass.MODALTOP;
-                aDescriptor.WindowServiceName = new String( "infobox" );
+                aDescriptor.WindowServiceName = "infobox";
                 aDescriptor.ParentIndex       = -1;
                 aDescriptor.Parent            = UnoRuntime.queryInterface(
                     XWindowPeer.class, m_xFrame.getContainerWindow());

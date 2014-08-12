@@ -110,13 +110,13 @@ public class Main {
     }
 
     static void printUsage() {
-        String usage = new String(
+        String usage =
                 "Usage: \n" +
                 "java -jar httpserv [options] \n" +
                 "\n" +
                 "Options are: \n" +
                 "-h --help \t this help \n" +
-                "-a --accept port \t the port number to which this server listens \n");
+                "-a --accept port \t the port number to which this server listens \n";
         System.out.println(usage);
     }
 }

@@ -66,7 +66,7 @@ public class ConverterInfoList {
         bis.close();
 
         int i              = 1;
-        String jarFileName = new String();
+        String jarFileName = "";
         jars               = new ArrayList<String>();
 
         while ((jarFileName = props.getProperty("jarname" + i)) != null) {

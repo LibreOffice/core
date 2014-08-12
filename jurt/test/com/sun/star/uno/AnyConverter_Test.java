@@ -46,7 +46,7 @@ public final class AnyConverter_Test {
     Float aFloat= new Float( 3.14);
     Double aDouble= new Double( 3.145);
     Object aObj= new ATypeProvider();
-    String aStr= new String("I am a string");
+    String aStr= "I am a string";
     Type aType= new Type(String.class);
     byte[] arByte= new byte[] {1,2,3};
 

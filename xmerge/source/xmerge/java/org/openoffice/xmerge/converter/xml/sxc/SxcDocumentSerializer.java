@@ -365,7 +365,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 repeatedRows = Integer.parseInt(repeatStr);
             }
 
-            String styleName = new String("");
+            String styleName = "";
 
             if ( rowStyle != null) {
                 styleName = rowStyle.getNodeValue();
@@ -481,7 +481,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             col.setRepeated(repeatedColumns);
         }
 
-        String cellStyleName = new String("");
+        String cellStyleName = "";
 
         if(tableDefaultCellStyle!=null) {
             cellStyleName = tableDefaultCellStyle.getNodeValue();
@@ -502,7 +502,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             col.setFormat(defaultFmt);
         }
 
-        String styleName = new String("");
+        String styleName = "";
 
         if(tableStyleNode!=null) {
             styleName = tableStyleNode.getNodeValue();
@@ -568,7 +568,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         Node tableStyleNode =
             cellAtt.getNamedItem(ATTRIBUTE_TABLE_STYLE_NAME);
 
-        String styleName = new String("");
+        String styleName = "";
 
         if(tableStyleNode!=null) {
             styleName = tableStyleNode.getNodeValue();

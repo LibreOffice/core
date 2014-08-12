@@ -101,9 +101,9 @@ class UniqueColumnValue
     */
     private String composeUniqueyKeyStatement( XPropertySet xForm, String sFieldName ) throws com.sun.star.uno.Exception
     {
-        String sStatement = new String( "SELECT MAX( " );
+        String sStatement = "SELECT MAX( ";
         sStatement += sFieldName;
-        sStatement += new String( ") + 1 FROM " );
+        sStatement += ") + 1 FROM ";
         // the table name is a property of the form
         sStatement += extractTableName( xForm );
 

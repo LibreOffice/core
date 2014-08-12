@@ -303,7 +303,7 @@ public class CalcHelper
                     }
                     else
                     {
-                        aFormula = new String( "=" );
+                        aFormula = "=";
                         if( nCol % 2 == 0 )
                             aFormula += "SIN";
                         else

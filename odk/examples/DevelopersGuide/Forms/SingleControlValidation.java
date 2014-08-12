@@ -103,18 +103,18 @@ public class SingleControlValidation implements XFormComponentValidityListener
 
             controlPos += 4;
             XPropertySet xLabel = m_formLayer.createControlAndShape( "FixedText", columnPos, controlPos, 70, 4, null );
-            xLabel.setPropertyValue( "Label", new String( "Status:" ) );
+            xLabel.setPropertyValue( "Label", "Status:" );
             controlPos += 4;
             m_statusField = m_formLayer.createControlAndShape( "FixedText", columnPos, controlPos, 70, 4, null );
-            m_statusField.setPropertyValue( "Label", new String( "" ) );
+            m_statusField.setPropertyValue( "Label", "" );
 
 
             controlPos += 6;
             xLabel = m_formLayer.createControlAndShape( "FixedText", columnPos, controlPos, 70, 4, null );
-            xLabel.setPropertyValue( "Label", new String( "Explanation for invalidity:" ) );
+            xLabel.setPropertyValue( "Label", "Explanation for invalidity:" );
             controlPos += 4;
             m_explanationField = m_formLayer.createControlAndShape( "FixedText", columnPos, controlPos, 70, 4, null );
-            m_explanationField.setPropertyValue( "Label", new String( "" ) );
+            m_explanationField.setPropertyValue( "Label", "" );
 
             XValidatable xValidatable = UnoRuntime.queryInterface( XValidatable.class, m_inputField );
             xValidatable.setValidator( m_validator );
