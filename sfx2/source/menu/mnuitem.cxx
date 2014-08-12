@@ -51,7 +51,6 @@
 #include "virtmenu.hxx"
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include "arrdecl.hxx"
 #include <sfx2/module.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -272,20 +271,20 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
             {
                 SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
                 for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-                    if ( rFactories[nFactory]->nTypeId == aSlotType &&
-                         ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-                           ( rFactories[nFactory]->nSlotId == nId) ) )
-                        return rFactories[nFactory]->pCtor( nId, rMenu, rBindings );
+                    if ( rFactories[nFactory].nTypeId == aSlotType &&
+                         ( ( rFactories[nFactory].nSlotId == 0 ) ||
+                           ( rFactories[nFactory].nSlotId == nId) ) )
+                        return rFactories[nFactory].pCtor( nId, rMenu, rBindings );
             }
         }
 
         SfxMenuCtrlFactArr_Impl &rFactories = pApp->GetMenuCtrlFactories_Impl();
 
         for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-            if ( rFactories[nFactory]->nTypeId == aSlotType &&
-                 ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-                   ( rFactories[nFactory]->nSlotId == nId) ) )
-                return rFactories[nFactory]->pCtor( nId, rMenu, rBindings );
+            if ( rFactories[nFactory].nTypeId == aSlotType &&
+                 ( ( rFactories[nFactory].nSlotId == 0 ) ||
+                   ( rFactories[nFactory].nSlotId == nId) ) )
+                return rFactories[nFactory].pCtor( nId, rMenu, rBindings );
     }
     return 0;
 }

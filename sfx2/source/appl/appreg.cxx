@@ -22,7 +22,6 @@
 
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
-#include "arrdecl.hxx"
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/templdlg.hxx>
 #include "inettbc.hxx"
@@ -78,7 +77,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
 #ifdef DBG_UTIL
     for ( sal_uInt16 n=0; n<pAppData_Impl->pTbxCtrlFac->size(); n++ )
     {
-        SfxTbxCtrlFactory *pF = (*pAppData_Impl->pTbxCtrlFac)[n];
+        SfxTbxCtrlFactory *pF = &(*pAppData_Impl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
@@ -103,7 +102,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
 #ifdef DBG_UTIL
     for ( sal_uInt16 n=0; n<pAppData_Impl->pStbCtrlFac->size(); n++ )
     {
-        SfxStbCtrlFactory *pF = (*pAppData_Impl->pStbCtrlFac)[n];
+        SfxStbCtrlFactory *pF = &(*pAppData_Impl->pStbCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
@@ -128,7 +127,7 @@ void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFacto
 #ifdef DBG_UTIL
     for ( sal_uInt16 n=0; n<pAppData_Impl->pMenuCtrlFac->size(); n++ )
     {
-        SfxMenuCtrlFactory *pF = (*pAppData_Impl->pMenuCtrlFac)[n];
+        SfxMenuCtrlFactory *pF = &(*pAppData_Impl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {

@@ -21,47 +21,6 @@
 
 #include <vector>
 
-class SfxObjectShell;
-class SfxObjectShellArr_Impl : public std::vector<SfxObjectShell*> {};
-
-class SfxViewFrame;
-class SfxViewFrameArr_Impl : public std::vector<SfxViewFrame*> {};
-
-class SfxViewShell;
-class SfxViewShellArr_Impl : public std::vector<SfxViewShell*> {};
-
-struct SfxTbxCtrlFactory;
-class SfxTbxCtrlFactArr_Impl : public std::vector<SfxTbxCtrlFactory*>
-{
-public:
-    // de-allocates child objects
-    ~SfxTbxCtrlFactArr_Impl();
-};
-
-struct SfxStbCtrlFactory;
-class SfxStbCtrlFactArr_Impl : public std::vector<SfxStbCtrlFactory*>
-{
-public:
-    // de-allocates child objects
-    ~SfxStbCtrlFactArr_Impl();
-};
-
-struct SfxMenuCtrlFactory;
-class SfxMenuCtrlFactArr_Impl : public std::vector<SfxMenuCtrlFactory*>
-{
-public:
-    // de-allocates child objects
-    ~SfxMenuCtrlFactArr_Impl();
-};
-
-struct SfxChildWinFactory;
-class SfxChildWinFactArr_Impl : public std::vector<SfxChildWinFactory*>
-{
-public:
-    // de-allocates child objects
-    ~SfxChildWinFactArr_Impl();
-};
-
 class SfxModule;
 typedef ::std::vector<SfxModule*> SfxModuleArr_Impl;
 

@@ -53,7 +53,6 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
-#include "arrdecl.hxx"
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/mnuitem.hxx>
@@ -222,30 +221,6 @@ BitmapEx SfxApplication::GetApplicationLogo(long nWidth)
     SfxApplication::loadBrandSvg("flat_logo", aBitmap, nWidth);
     Application::LoadBrandBitmap ("about", aBitmap);
     return aBitmap;
-}
-
-SfxChildWinFactArr_Impl::~SfxChildWinFactArr_Impl()
-{
-    for( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
-}
-
-SfxMenuCtrlFactArr_Impl::~SfxMenuCtrlFactArr_Impl()
-{
-    for( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
-}
-
-SfxStbCtrlFactArr_Impl::~SfxStbCtrlFactArr_Impl()
-{
-    for( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
-}
-
-SfxTbxCtrlFactArr_Impl::~SfxTbxCtrlFactArr_Impl()
-{
-    for( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

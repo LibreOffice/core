@@ -25,7 +25,6 @@
 #include "appdata.hxx"
 #include "workwin.hxx"
 #include <sfx2/childwin.hxx>
-#include "arrdecl.hxx"
 #include <sfx2/templdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
@@ -50,7 +49,7 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
 
     for (sal_uInt16 nFactory=0; nFactory<pAppData_Impl->pFactArr->size(); ++nFactory)
     {
-        if (pFact->nId ==  (*pAppData_Impl->pFactArr)[nFactory]->nId)
+        if (pFact->nId ==  (*pAppData_Impl->pFactArr)[nFactory].nId)
         {
             pAppData_Impl->pFactArr->erase( pAppData_Impl->pFactArr->begin() + nFactory );
         }
@@ -73,7 +72,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
             sal_uInt16 nCount = pFactories->size();
             for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
             {
-                SfxChildWinFactory *pFac = (*pFactories)[nFactory];
+                SfxChildWinFactory *pFac = &(*pFactories)[nFactory];
                 if ( nId == pFac->nId )
                 {
                     // Factory found, registrer Context here.
@@ -94,7 +93,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
         sal_uInt16 nCount = pFactories->size();
         for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
         {
-            SfxChildWinFactory *pFac = (*pFactories)[nFactory];
+            SfxChildWinFactory *pFac = &(*pFactories)[nFactory];
             if ( nId == pFac->nId )
             {
                 if ( pMod )
