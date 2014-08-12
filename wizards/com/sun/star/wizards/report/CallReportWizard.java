@@ -27,159 +27,142 @@ import com.sun.star.wizards.common.PropertyNames;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/** This class capsulates the class, that implements the minimal component, a
- * factory for creating the service (<CODE>__getServiceFactory</CODE>).
+/** This class implements the component. At least the interfaces XServiceInfo,
+ * XTypeProvider, and XInitialization should be provided by the service.
  */
 public class CallReportWizard
+  extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
 {
 
-    private static boolean bWizardstartedalready;
+    private static boolean bWizardStartedAlready;
 
-
-
-    /** This class implements the component. At least the interfaces XServiceInfo,
-     * XTypeProvider, and XInitialization should be provided by the service.
+    /** The service name, that must be used to get an instance of this service.
      */
-    private static class ReportWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
+    private static final String __serviceName = "com.sun.star.wizards.report.CallReportWizard";
+
+    private PropertyValue[] m_wizardContext;
+
+    /** The constructor of the inner class has a XMultiServiceFactory parameter.
+     * @param xmultiservicefactoryInitialization A special service factory
+     * could be introduced while initializing.
+     */
+    public CallReportWizard(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
     {
+        super();
+        xmultiservicefactory = xmultiservicefactoryInitialization;
+    }
 
-        private PropertyValue[] m_wizardContext;
-
-        /** The constructor of the inner class has a XMultiServiceFactory parameter.
-         * @param xmultiservicefactoryInitialization A special service factory
-         * could be introduced while initializing.
-         */
-        public ReportWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
+    public void trigger(String sEvent)
+    {
+        try
         {
-            super();
-            xmultiservicefactory = xmultiservicefactoryInitialization;
-        }
-
-        public void trigger(String sEvent)
-        {
-            try
+            if (sEvent.equals(PropertyNames.START))
             {
-                if (sEvent.equals(PropertyNames.START))
+                if (!bWizardStartedAlready)
                 {
-                    if (!bWizardstartedalready)
-                    {
-                        ReportWizard CurReportWizard = new ReportWizard( xmultiservicefactory, m_wizardContext );
-                        CurReportWizard.startReportWizard();
-                    }
-                    bWizardstartedalready = false;
+                    ReportWizard CurReportWizard = new ReportWizard( xmultiservicefactory, m_wizardContext );
+                    CurReportWizard.startReportWizard();
                 }
-                else if (sEvent.equals("fill"))
+                bWizardStartedAlready = false;
+            }
+            else if (sEvent.equals("fill"))
+            {
+                Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
+                if (m_wizardContext != null)
                 {
-                    Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
-                    if (m_wizardContext != null)
+                    NamedValueCollection context = new NamedValueCollection( m_wizardContext );
+                    XTextDocument textDocument = context.queryOrDefault( "TextDocument", null, XTextDocument.class );
+                    XDatabaseDocumentUI documentUI = context.queryOrDefault( "DocumentUI", null, XDatabaseDocumentUI.class );
+                    if ( textDocument != null )
                     {
-                        NamedValueCollection context = new NamedValueCollection( m_wizardContext );
-                        XTextDocument textDocument = context.queryOrDefault( "TextDocument", null, XTextDocument.class );
-                        XDatabaseDocumentUI documentUI = context.queryOrDefault( "DocumentUI", null, XDatabaseDocumentUI.class );
-                        if ( textDocument != null )
-                        {
-                            CurDataimport.createReport(xmultiservicefactory, documentUI, textDocument, m_wizardContext);
-                        }
+                        CurDataimport.createReport(xmultiservicefactory, documentUI, textDocument, m_wizardContext);
                     }
                 }
             }
-            catch (Exception e)
-            {
-                Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
-            }
-            System.gc();
         }
-        /** The service name, that must be used to get an instance of this service.
-         */
-        private static final String __serviceName = "com.sun.star.wizards.report.CallReportWizard";
-        /** The service manager, that gives access to all registered services.
-         */
-        private com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
-
-        /** This method is a member of the interface for initializing an object
-         * directly after its creation.
-         * @param object This array of arbitrary objects will be passed to the
-         * component after its creation.
-         * @throws com.sun.star.uno.Exception Every exception will not be handled, but will be
-         * passed to the caller.
-         */
-        public void initialize(Object[] object) throws com.sun.star.uno.Exception
+        catch (Exception e)
         {
-            this.m_wizardContext = Properties.convertToPropertyValueArray(object);
-
+            Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
         }
+        System.gc();
+    }
 
-        /** This method returns an array of all supported service names.
-         * @return Array of supported service names.
-         */
-        public java.lang.String[] getSupportedServiceNames()
+    /** The service manager, that gives access to all registered services.
+     */
+    private com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
+
+    /** This method is a member of the interface for initializing an object
+     * directly after its creation.
+     * @param object This array of arbitrary objects will be passed to the
+     * component after its creation.
+     * @throws com.sun.star.uno.Exception Every exception will not be handled, but will be
+     * passed to the caller.
+     */
+    public void initialize(Object[] object) throws com.sun.star.uno.Exception
+    {
+        this.m_wizardContext = Properties.convertToPropertyValueArray(object);
+
+    }
+
+    /** This method returns an array of all supported service names.
+     * @return Array of supported service names.
+     */
+    public java.lang.String[] getSupportedServiceNames()
+    {
+        String[] stringSupportedServiceNames = new String[1];
+
+        stringSupportedServiceNames[ 0] = __serviceName;
+
+        return (stringSupportedServiceNames);
+    }
+
+    /** This method returns true, if the given service will be
+     * supported by the component.
+     * @param stringService Service name.
+     * @return True, if the given service name will be supported.
+     */
+    public boolean supportsService(String stringService)
+    {
+        boolean booleanSupportsService = false;
+
+        if (stringService.equals(__serviceName))
         {
-            String[] stringSupportedServiceNames = new String[1];
-
-            stringSupportedServiceNames[ 0] = __serviceName;
-
-            return (stringSupportedServiceNames);
+            booleanSupportsService = true;
         }
+        return (booleanSupportsService);
+    }
 
-        /** This method returns true, if the given service will be
-         * supported by the component.
-         * @param stringService Service name.
-         * @return True, if the given service name will be supported.
-         */
-        public boolean supportsService(String stringService)
-        {
-            boolean booleanSupportsService = false;
+    @Override
+    public byte[] getImplementationId()
+    {
+        return new byte[0];
+    }
 
-            if (stringService.equals(__serviceName))
-            {
-                booleanSupportsService = true;
-            }
-            return (booleanSupportsService);
-        }
+    /** Return the class name of the component.
+     * @return Class name of the component.
+     */
+    public java.lang.String getImplementationName()
+    {
+        return CallReportWizard.class.getName();
+    }
 
-        @Override
-        public byte[] getImplementationId()
-        {
-            return new byte[0];
-        }
+    /** Provides a sequence of all types (usually interface types)
+     * provided by the object.
+     * @return Sequence of all types (usually interface types) provided by the
+     * service.
+     */
+    @Override
+    public Type[] getTypes()
+    {
+        Type[] typeReturn = new Type[]
+                    {
+                        new Type(com.sun.star.task.XJobExecutor.class),
+                        new Type(com.sun.star.lang.XTypeProvider.class),
+                        new Type(com.sun.star.lang.XServiceInfo.class),
+                        new Type(com.sun.star.lang.XInitialization.class)
+                    };
 
-        /** Return the class name of the component.
-         * @return Class name of the component.
-         */
-        public java.lang.String getImplementationName()
-        {
-            return (ReportWizardImplementation.class.getName());
-        }
-
-        /** Provides a sequence of all types (usually interface types)
-         * provided by the object.
-         * @return Sequence of all types (usually interface types) provided by the
-         * service.
-         */
-        @Override
-        public Type[] getTypes()
-        {
-            Type[] typeReturn =
-            {
-            };
-
-            try
-            {
-                typeReturn = new Type[]
-                        {
-                            new Type(com.sun.star.task.XJobExecutor.class),
-                            new Type(com.sun.star.lang.XTypeProvider.class),
-                            new Type(com.sun.star.lang.XServiceInfo.class),
-                            new Type(com.sun.star.lang.XInitialization.class)
-                        };
-            }
-            catch (Exception e)
-            {
-                Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
-            }
-
-            return (typeReturn);
-        }
+        return typeReturn;
     }
 }
 

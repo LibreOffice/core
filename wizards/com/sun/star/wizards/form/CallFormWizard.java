@@ -22,7 +22,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 
-/** This class capsulates the class, that implements the minimal component, a
+/** This class encapsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
  */
 public class CallFormWizard
@@ -150,23 +150,18 @@ public class CallFormWizard
         @Override
         public Type[] getTypes()
         {
-            Type[] typeReturn =
-            {
-            };
-
-            try
-            {
-                typeReturn = new Type[]
+            Type[] typeReturn = new Type[]
                         {
-                            new Type(com.sun.star.task.XJobExecutor.class), new Type(com.sun.star.lang.XTypeProvider.class), new Type(com.sun.star.lang.XServiceInfo.class), new Type(com.sun.star.beans.XPropertySet.class), new Type(com.sun.star.beans.XFastPropertySet.class), new Type(com.sun.star.beans.XMultiPropertySet.class), new Type(com.sun.star.lang.XInitialization.class)
+                            new Type(com.sun.star.task.XJobExecutor.class),
+                            new Type(com.sun.star.lang.XTypeProvider.class),
+                            new Type(com.sun.star.lang.XServiceInfo.class),
+                            new Type(com.sun.star.beans.XPropertySet.class),
+                            new Type(com.sun.star.beans.XFastPropertySet.class),
+                            new Type(com.sun.star.beans.XMultiPropertySet.class),
+                            new Type(com.sun.star.lang.XInitialization.class)
                         };
-            }
-            catch (Exception exception)
-            {
-                System.err.println(exception);
-            }
 
-            return (typeReturn);
+            return typeReturn;
         }
     }
 }

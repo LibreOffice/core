@@ -24,7 +24,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 
-/** This class capsulates the class, that implements the minimal component, a
+/** This class encapsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
  */
 public class CallQueryWizard

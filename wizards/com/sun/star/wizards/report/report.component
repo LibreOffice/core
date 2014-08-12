@@ -20,7 +20,7 @@
 <component loader="com.sun.star.loader.Java2"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name=
-      "com.sun.star.wizards.report.CallReportWizard$ReportWizardImplementation">
+      "com.sun.star.wizards.report.CallReportWizard">
     <service name="com.sun.star.wizards.report.CallReportWizard"/>
   </implementation>
 </component>
