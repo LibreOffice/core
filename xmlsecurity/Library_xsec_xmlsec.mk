@@ -58,7 +58,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/biginteger \
 	xmlsecurity/source/xmlsec/certificateextension_xmlsecimpl \
 	xmlsecurity/source/xmlsec/certvalidity \
-	xmlsecurity/source/xmlsec/diagnose \
 	xmlsecurity/source/xmlsec/errorcallback \
 	xmlsecurity/source/xmlsec/saxhelper \
 	xmlsecurity/source/xmlsec/serialnumberadapter \

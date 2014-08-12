@@ -44,7 +44,6 @@
 #include <sal/log.hxx>
 
 #include "seinitializer_nssimpl.hxx"
-#include "../diagnose.hxx"
 
 #include "securityenvironment_nssimpl.hxx"
 #include "digestcontext.hxx"
@@ -62,7 +61,6 @@
 namespace cssu = css::uno;
 namespace cssl = css::lang;
 
-using namespace xmlsecurity;
 using namespace com::sun::star;
 
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.NSSInitializer_NssImpl"
@@ -124,9 +122,7 @@ void deleteRootsModule()
             {
                 if (PK11_HasRootCerts(slot))
                 {
-                    xmlsec_trace("The root certifificates module \"%s"
-                              "\" is already loaded: \n%s",
-                              module->commonName,  module->dllName);
+                    SAL_INFO("xmlsecurity.xmlsec", "The root certifificates module \"" << module->commonName << "\" is already loaded: " << module->dllName);
 
                     RootsModule = SECMOD_ReferenceModule(module);
                     break;
@@ -142,12 +138,11 @@ void deleteRootsModule()
         PRInt32 modType;
         if (SECSuccess == SECMOD_DeleteModule(RootsModule->commonName, &modType))
         {
-            xmlsec_trace("Deleted module \"%s\".", RootsModule->commonName);
+            SAL_INFO("xmlsecurity.xmlsec", "Deleted module \"" << RootsModule->commonName << "\".");
         }
         else
         {
-            xmlsec_trace("Failed to delete \"%s\" : \n%s",
-                      RootsModule->commonName, RootsModule->dllName);
+            SAL_INFO("xmlsecurity.xmlsec", "Failed to delete \"" << RootsModule->commonName << "\": " << RootsModule->dllName);
         }
         SECMOD_DestroyModule(RootsModule);
         RootsModule = 0;
@@ -256,7 +251,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
 #else
     (void) rxContext;
 #endif
-    xmlsec_trace( "Using profile: %s", sCertDir.getStr() );
+    SAL_INFO("xmlsecurity.xmlsec",  "Using profile: " << sCertDir.getStr() );
 
     PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 
@@ -266,13 +261,13 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
     {
         if( NSS_InitReadWrite( sCertDir.getStr() ) != SECSuccess )
         {
-            xmlsec_trace("Initializing NSS with profile failed.");
+            SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS with profile failed.");
             int errlen = PR_GetErrorTextLength();
             if(errlen > 0)
             {
                 boost::scoped_array<char> const error(new char[errlen + 1]);
                 PR_GetErrorText(error.get());
-                xmlsec_trace("%s", error.get());
+                SAL_INFO("xmlsecurity.xmlsec", error.get());
             }
             bSuccess = false;
         }
@@ -280,16 +275,16 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
 
     if( sCertDir.isEmpty() || !bSuccess )
     {
-        xmlsec_trace("Initializing NSS without profile.");
+        SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS without profile.");
         if ( NSS_NoDB_Init(NULL) != SECSuccess )
         {
-            xmlsec_trace("Initializing NSS without profile failed.");
+            SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS without profile failed.");
             int errlen = PR_GetErrorTextLength();
             if(errlen > 0)
             {
                 boost::scoped_array<char> const error(new char[errlen + 1]);
                 PR_GetErrorText(error.get());
-                xmlsec_trace("%s", error.get());
+                SAL_INFO("xmlsecurity.xmlsec", error.get());
             }
             return false ;
         }
@@ -330,26 +325,23 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
                 SECMOD_DestroyModule(RootsModule);
                 RootsModule = 0;
                 if (found)
-                    xmlsec_trace("Added new root certificate module "
-                              "\"" ROOT_CERTS "\" contained in \n%s", ospath.getStr());
+                    SAL_INFO("xmlsecurity.xmlsec", "Added new root certificate module " ROOT_CERTS " contained in " << ospath);
                 else
                 {
-                    xmlsec_trace("FAILED to load the new root certificate module "
-                              "\"" ROOT_CERTS "\" contained in \n%s", ospath.getStr());
+                    SAL_INFO("xmlsecurity.xmlsec", "FAILED to load the new root certificate module " ROOT_CERTS "contained in " << ospath);
                     return_value = false;
                 }
             }
             else
             {
-                xmlsec_trace("FAILED to add new root certifice module: "
-                          "\"" ROOT_CERTS "\" contained in \n%s", ospath.getStr());
+                SAL_INFO("xmlsecurity.xmlsec", "FAILED to add new root certifice module " ROOT_CERTS  " contained in " << ospath);
                 return_value = false;
 
             }
         }
         else
         {
-            xmlsec_trace("Adding new root certificate module failed.");
+            SAL_INFO("xmlsecurity.xmlsec", "Adding new root certificate module failed.");
             return_value = false;
         }
     }
@@ -370,18 +362,17 @@ extern "C" void nsscrypto_finalize()
 
         if (SECSuccess == SECMOD_UnloadUserModule(RootsModule))
         {
-            xmlsec_trace("Unloaded module \"" ROOT_CERTS "\".");
+            SAL_INFO("xmlsecurity.xmlsec", "Unloaded module \"" ROOT_CERTS "\".");
         }
         else
         {
-            xmlsec_trace("Failed unloading module \"" ROOT_CERTS "\".");
+            SAL_INFO("xmlsecurity.xmlsec", "Failed unloading module \"" ROOT_CERTS "\".");
         }
         SECMOD_DestroyModule(RootsModule);
     }
     else
     {
-        xmlsec_trace("Unloading module \"" ROOT_CERTS
-                  "\" failed because it was not found.");
+        SAL_INFO("xmlsecurity.xmlsec", "Unloading module \"" ROOT_CERTS "\" failed because it was not found.");
     }
     PK11_LogoutAll();
     NSS_Shutdown();

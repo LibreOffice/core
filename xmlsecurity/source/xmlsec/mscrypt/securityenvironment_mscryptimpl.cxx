@@ -40,13 +40,11 @@
 
 #include <xmlsecurity/biginteger.hxx>
 
+#include <sal/log.hxx>
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
 
-#include "../diagnose.hxx"
-
-using namespace xmlsecurity;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
@@ -94,13 +92,12 @@ CertErrorToString arErrStrings[] =
 
 void traceTrustStatus(DWORD err)
 {
-    xmlsec_trace("The certificate error status is: ");
     if (err == 0)
-        xmlsec_trace("%s", arErrStrings[0].name);
+        SAL_INFO("xmlsecurity.xmlsec", "  " << arErrStrings[0].name);
     for (int i = 1; i < SAL_N_ELEMENTS(arErrStrings); i++)
     {
         if (arErrStrings[i].error & err)
-            xmlsec_trace("%s", arErrStrings[i].name);
+            SAL_INFO("xmlsecurity.xmlsec", "  " << arErrStrings[i].name);
     }
 }
 
@@ -907,10 +904,7 @@ HCERTSTORE getCertStoreForIntermediatCerts(
 
     for (int i = 0; i < seqCerts.getLength(); i++)
     {
-        xmlsec_trace("Added temporary certificate: \n%s",
-                     OUStringToOString(seqCerts[i]->getSubjectName(),
-                                       osl_getThreadTextEncoding()).getStr());
-
+        SAL_INFO("xmlsecurity.xmlsec", "Added temporary certificate: " << seqCerts[i]->getSubjectName());
 
         Sequence<sal_Int8> data = seqCerts[i]->getEncoded();
         PCCERT_CONTEXT cert = CertCreateCertificateContext(
@@ -942,9 +936,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
         throw RuntimeException() ;
     }
 
-    xmlsec_trace("Start verification of certificate: \n %s",
-                 OUStringToOString(
-                     aCert->getSubjectName(), osl_getThreadTextEncoding()).getStr());
+    SAL_INFO("xmlsecurity.xmlsec", "Start verification of certificate: " << aCert->getSubjectName());
 
     xcert = ( X509Certificate_MSCryptImpl* )xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ) ;
     if( xcert == NULL ) {
@@ -1007,7 +999,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
         //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
         //We do not check revocation of the root. In most cases there are none.
         //Then we would get CERT_TRUST_REVOCATION_STATUS_UNKNOWN
-        xmlsec_trace("Verifying cert using revocation information.");
+        SAL_INFO("xmlsecurity.xmlsec", "Verifying cert using revocation information.");
         bChain = CertGetCertificateChain(
             NULL ,
             pCertContext ,
@@ -1020,11 +1012,11 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
 
         if (bChain && pChainContext->cChain > 0)
         {
-            xmlsec_trace("Overall error status (all chains):");
+            SAL_INFO("xmlsecurity.xmlsec", "Overall error status (all chains):");
             traceTrustStatus(pChainContext->TrustStatus.dwErrorStatus);
             //highest quality chains come first
             PCERT_SIMPLE_CHAIN pSimpleChain = pChainContext->rgpChain[0];
-            xmlsec_trace("Error status of first chain: ");
+            SAL_INFO("xmlsecurity.xmlsec", "Error status of first chain:");
             traceTrustStatus(pSimpleChain->TrustStatus.dwErrorStatus);
 
             //CERT_TRUST_REVOCATION_STATUS_UNKNOWN is also set if a certificate
@@ -1044,7 +1036,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
                     //we test again, without requiring revocation checking.
                     CertFreeCertificateChain(pChainContext);
                     pChainContext = NULL;
-                    xmlsec_trace("Checking again but without requiring revocation information.");
+                    SAL_INFO("xmlsecurity.xmlsec", "Checking again but without requiring revocation information.");
                     bChain = CertGetCertificateChain(
                         NULL ,
                         pCertContext ,
@@ -1058,31 +1050,31 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
                         && pChainContext->cChain > 0
                         && pChainContext->rgpChain[0]->TrustStatus.dwErrorStatus == CERT_TRUST_NO_ERROR)
                     {
-                        xmlsec_trace("Certificate is valid.\n");
+                        SAL_INFO("xmlsecurity.xmlsec", "Certificate is valid.");
                         validity = ::com::sun::star::security::CertificateValidity::VALID;
                     }
                     else
                     {
-                        xmlsec_trace("Certificate is invalid.\n");
+                        SAL_INFO("xmlsecurity.xmlsec", "Certificate is invalid.");
                     }
                 }
                 else
                 {
                     //valid and revocation information available
-                    xmlsec_trace("Certificate is valid.\n");
+                    SAL_INFO("xmlsecurity.xmlsec", "Certificate is valid.");
                     validity = ::com::sun::star::security::CertificateValidity::VALID;
                 }
             }
             else
             {
                 //invalid
-                xmlsec_trace("Certificate is invalid.\n");
+                SAL_INFO("xmlsecurity.xmlsec", "Certificate is invalid.");
                 validity = ::com::sun::star::security::CertificateValidity::INVALID ;
             }
         }
         else
         {
-            xmlsec_trace("CertGetCertificateChaine failed.\n");
+            SAL_INFO("xmlsecurity.xmlsec", "CertGetCertificateChaine failed.");
         }
     }
 

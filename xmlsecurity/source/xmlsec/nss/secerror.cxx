@@ -24,12 +24,9 @@
 #include "nspr.h"
 #include "nss.h"
 #include "certt.h"
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
-
-#include "../diagnose.hxx"
-
-using namespace xmlsecurity;
 
 struct ErrDesc {
     PRErrorCode  errNum;
@@ -73,19 +70,19 @@ printChainFailure(CERTVerifyLog *log)
 
     if (log->count > 0)
     {
-        xmlsec_trace("Bad certifcation path:");
+        SAL_INFO("xmlsecurity.xmlsec", "Bad certifcation path:");
         unsigned long errorFlags  = 0;
         for (node = log->head; node; node = node->next)
         {
             if (depth != node->depth)
             {
                 depth = node->depth;
-                xmlsec_trace("Certificate:  %d. %s %s:", depth,
-                        node->cert->subjectName,
-                        depth ? "[Certificate Authority]": "");
+                SAL_INFO("xmlsecurity.xmlsec", "Certificate:  " << depth <<
+                         node->cert->subjectName << ": " <<
+                         (depth ? "[Certificate Authority]": ""));
             }
-            xmlsec_trace("  ERROR %ld: %s", node->error,
-                    getCertError(node->error));
+            SAL_INFO("xmlsecurity.xmlsec", "  ERROR " << node->error << ": " <<
+                     getCertError(node->error));
             specificError = NULL;
             issuer = NULL;
             switch (node->error)
@@ -152,9 +149,9 @@ printChainFailure(CERTVerifyLog *log)
                 break;
             }
             if (specificError)
-                xmlsec_trace("%s", specificError);
+                SAL_INFO("xmlsecurity.xmlsec", specificError);
             if (issuer)
-                xmlsec_trace("%s", issuer);
+                SAL_INFO("xmlsecurity.xmlsec", issuer);
         }
     }
 }
