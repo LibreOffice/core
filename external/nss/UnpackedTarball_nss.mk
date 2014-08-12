@@ -25,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nspr-build-config.patch \
     external/nss/ubsan.patch.0 \
     $(if $(filter IOS,$(OS)), \
+        external/nss/nss-chromium-nss-static.patch \
         external/nss/nss-ios.patch) \
 ))
 
