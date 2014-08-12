@@ -533,14 +533,18 @@ void ImpEditEngine::CheckAutoPageSize()
     // FIXME(matteocam)
     /* fprintf( stderr, IsPageOverflow(aPaperSize, aPrevPaperSize)
                         ? "YES Overflow!\n"  : "NO Overflow!\n" ); */
-    fprintf( stderr, "aPaperSize.Height = %d\n", aPaperSize.Height() );
     // setting overflow status
-    sal_uInt32 nHeight = 1783; // XXX: hard coded for testing
+    sal_uInt32 nBoxHeight = 1783; // XXX: hard coded for testing
     //if ( IsPageOverflow( aPaperSize, aPrevPaperSize ) ) {
-    if (GetTextHeight() > 1783) // XXX: CalcTextHeight here??
+    if (GetTextHeight() > nBoxHeight) // XXX: CalcTextHeight here??
+    {
         // which paragraph is the first to cause higher size of the box?
-        UpdateOverflowingParaNum( 1783 /*aPrevPaperSize.Height()*/ ); // XXX: currently only for horizontal text
+        UpdateOverflowingParaNum( nBoxHeight /*aPrevPaperSize.Height()*/ ); // XXX: currently only for horizontal text
         aStatus.SetPageOverflow(true);
+    } else
+    {
+        // No overflow if withing box boundaries
+        aStatus.SetPageOverflow(false);
     }
 
     if ( aPaperSize != aPrevPaperSize )
