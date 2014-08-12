@@ -433,6 +433,9 @@ public:
     /** Writes all externalBook elements with their child elements to OOXML. */
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
+    /** Whether we need to write externalReferences or not. */
+    bool                HasExternalReferences() const;
+
     struct XclExpSBIndex
     {
         sal_uInt16          mnSupbook;          /// SUPBOOK index for an Excel sheet.
@@ -2086,6 +2089,16 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
     }
 }
 
+bool XclExpSupbookBuffer::HasExternalReferences() const
+{
+    for (size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos)
+    {
+        if (maSupbookList.GetRecord( nPos)->GetType() == EXC_SBTYPE_EXTERN)
+            return true;
+    }
+    return false;
+}
+
 bool XclExpSupbookBuffer::GetSupbookUrl(
         XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex, const OUString& rUrl ) const
 {
@@ -2452,7 +2465,7 @@ void XclExpLinkManagerImpl8::Save( XclExpStream& rStrm )
 
 void XclExpLinkManagerImpl8::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( !maXtiVec.empty() )
+    if (maSBBuffer.HasExternalReferences())
     {
         sax_fastparser::FSHelperPtr pWorkbook = rStrm.GetCurrentStream();
         pWorkbook->startElement( XML_externalReferences, FSEND);
@@ -2461,13 +2474,16 @@ void XclExpLinkManagerImpl8::SaveXml( XclExpXmlStream& rStrm )
         maSBBuffer.SaveXml( rStrm );
 
         pWorkbook->endElement( XML_externalReferences);
+    }
 
-        // TODO: equivalent for EXTERNSHEET in OOXML?
+    // TODO: equivalent for EXTERNSHEET in OOXML?
 #if 0
+    if( !maXtiVec.empty() )
+    {
         for( XclExpXtiVec::const_iterator aIt = maXtiVec.begin(), aEnd = maXtiVec.end(); aIt != aEnd; ++aIt )
             aIt->SaveXml( rStrm );
-#endif
     }
+#endif
 }
 
 sal_uInt16 XclExpLinkManagerImpl8::InsertXti( const XclExpXti& rXti )
