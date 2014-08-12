@@ -1252,7 +1252,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
 
         default:
-            OSL_ENSURE(!this, "wrong dispatcher");
+            OSL_ENSURE(false, "wrong dispatcher");
             return;
     }
     if(!bIgnore)
@@ -1518,7 +1518,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                     sStr = pTOX->GetTOXName();
                                 else
                                 {
-                                    OSL_ENSURE( !this,
+                                    OSL_ENSURE( false,
                                         "Unknown kind of section" );
                                     sStr = pCurrSect->GetSectionName();
                                 }
@@ -2146,7 +2146,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
         case SID_INSERTDOC:        bInsert = true;  break;
 
         default:
-            OSL_ENSURE( !this, "unknown SlotId!" );
+            OSL_ENSURE( false, "unknown SlotId!" );
             bInsert = true;
             nSlotId = SID_INSERTDOC;
             break;

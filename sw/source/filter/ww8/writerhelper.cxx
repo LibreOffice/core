@@ -236,7 +236,7 @@ namespace sw
                 }
                 else
                 {
-                    OSL_ENSURE(!this, "Impossible");
+                    OSL_ENSURE(false, "Impossible");
                     meWriterType = eTxtBox;
                 }
                 break;
@@ -251,7 +251,7 @@ namespace sw
                 }
                 else
                 {
-                    OSL_ENSURE(!this, "Impossible");
+                    OSL_ENSURE(false, "Impossible");
                     meWriterType = eDrawing;
                 }
                 break;

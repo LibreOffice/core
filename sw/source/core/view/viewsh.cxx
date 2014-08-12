@@ -549,7 +549,7 @@ void SwViewShell::MakeVisible( const SwRect &rRect )
             else
             {
                 //MA: 04. Nov. 94, no one needs this, does one?
-                OSL_ENSURE( !this, "Is MakeVisible still needed for printers?" );
+                OSL_ENSURE( false, "Is MakeVisible still needed for printers?" );
             }
 
 #endif

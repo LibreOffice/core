@@ -879,7 +879,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
     case RES_FRMFMT:
         break;
     default:
-        OSL_ENSURE( !this, "Which format is exported here?" );
+        OSL_ENSURE( false, "Which format is exported here?" );
         break;
     }
 
@@ -1846,7 +1846,7 @@ WW8_WrPlcFld* WW8Export::CurrentFieldPlc() const
             pFldP = pFldHFTxtBxs;
             break;
         default:
-            OSL_ENSURE( !this, "was ist das fuer ein SubDoc-Type?" );
+            OSL_ENSURE( false, "was ist das fuer ein SubDoc-Type?" );
     }
     return pFldP;
 }

@@ -123,7 +123,7 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
         else
         {
             pPos->nContent.Assign( 0, 0 );
-            OSL_ENSURE( !this, "CopyFlyFmt: Was fuer ein Anker?" );
+            OSL_ENSURE( false, "CopyFlyFmt: Was fuer ein Anker?" );
         }
     }
 
@@ -202,7 +202,7 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     SwFrmFmt* pFrmFmt = GetFlyCnt().GetFrmFmt();
     if( RES_DRAWFRMFMT == pFrmFmt->Which() )
     {
-        OSL_ENSURE(  !this, "SwTxtFlyCnt::_GetFlyFrm: DrawInCnt-Baustelle!" );
+        OSL_ENSURE(  false, "SwTxtFlyCnt::_GetFlyFrm: DrawInCnt-Baustelle!" );
         return NULL;
     }
 

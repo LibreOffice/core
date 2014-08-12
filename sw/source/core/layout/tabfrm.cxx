@@ -4805,7 +4805,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() && !Lower()->IsTabFrm() )
         {
             // OSL_ENSURE(for HTML-import!
-            OSL_ENSURE( !this, "VAlign to cell without content" );
+            OSL_ENSURE( false, "VAlign to cell without content" );
             return;
         }
         bool bVertDir = true;

@@ -2236,7 +2236,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
             break;
 
         default:
-            OSL_ENSURE( !this, "was ist das fuer ein SubDocType?" );
+            OSL_ENSURE( false, "was ist das fuer ein SubDocType?" );
     }
 
     pTxtPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));

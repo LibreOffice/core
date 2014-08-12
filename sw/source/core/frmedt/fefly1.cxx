@@ -184,7 +184,7 @@ static bool lcl_FindAnchorPos(
         break;
 
     default:
-        OSL_ENSURE( !&rDoc, "Falsche ID fuer neuen Anker." );
+        OSL_ENSURE( false, "Falsche ID fuer neuen Anker." );
     }
 
     rSet.Put( aNewAnch );
@@ -627,7 +627,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, bool bAnchValid,
         break;
 
     default:
-        OSL_ENSURE( !this, "What is the purpose of this Fly?" );
+        OSL_ENSURE( false, "What is the purpose of this Fly?" );
         break;
     }
 
@@ -978,7 +978,7 @@ bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         pFly = GetCurrFrm()->FindFlyFrm();
         if ( !pFly )
         {
-            OSL_ENSURE( !this, "GetFlyFrmAttr, no Fly selected." );
+            OSL_ENSURE( false, "GetFlyFrmAttr, no Fly selected." );
             return false;
         }
     }
@@ -1420,7 +1420,7 @@ void SwFEShell::SetFlyName( const OUString& rName )
     if( pFly )
         GetDoc()->SetFlyName( *(SwFlyFrmFmt*)pFly->GetFmt(), rName );
     else {
-        OSL_ENSURE( !this, "no FlyFrame selected" );
+        OSL_ENSURE( false, "no FlyFrame selected" );
     }
 }
 
@@ -1430,7 +1430,7 @@ OUString SwFEShell::GetFlyName() const
     if( pFly )
         return pFly->GetFmt()->GetName();
 
-    OSL_ENSURE( !this, "no FlyFrame selected" );
+    OSL_ENSURE( false, "no FlyFrame selected" );
     return OUString();
 }
 

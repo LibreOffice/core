@@ -515,7 +515,7 @@ bool SwHTMLParser::EndSection( bool bLFStripped )
         return true;
     }
 
-    OSL_ENSURE( !this, "Falsche PaM Position Beenden eines Bereichs" );
+    OSL_ENSURE( false, "Falsche PaM Position Beenden eines Bereichs" );
 
     return false;
 }

@@ -483,7 +483,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     aBox.SetDistance( std::max(rCoreBox.GetDistance(),(sal_uInt16)MIN_BORDER_DIST)  );
             }
             else
-                OSL_ENSURE( !this, "where is BoxItem?" );
+                OSL_ENSURE( false, "where is BoxItem?" );
 
             //since the drawing layer also supports borders the which id might be a different one
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
@@ -737,7 +737,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         aInfoBox.Execute();
                         break;
                     }
-                    default: OSL_ENSURE( !this, "unknown return value MergeTab.");
+                    default: OSL_ENSURE( false, "unknown return value MergeTab.");
                 }
         break;
         case FN_TABLE_ADJUST_CELLS:
@@ -809,7 +809,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
         case FN_NUMBER_BULLETS:
         case FN_NUM_BULLET_ON:
-            OSL_ENSURE( !this, "function may not be called now." );
+            OSL_ENSURE( false, "function may not be called now." );
         break;
 
         case FN_TABLE_INSERT_COL:
@@ -1146,7 +1146,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
 
         default:
-            OSL_ENSURE( !this, "wrong Dispatcher" );
+            OSL_ENSURE( false, "wrong Dispatcher" );
             return;
     }
     if(bCallDone)

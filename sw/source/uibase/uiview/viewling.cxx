@@ -213,7 +213,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
             HyphenateDocument();
             break;
         default:
-            OSL_ENSURE(!this, "wrong Dispatcher");
+            OSL_ENSURE(false, "wrong Dispatcher");
             return;
     }
 }
@@ -317,7 +317,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
             }
             break;
         default:
-            OSL_ENSURE( !this, "SpellStart with unknown Area" );
+            OSL_ENSURE( false, "SpellStart with unknown Area" );
     }
     m_pWrtShell->SpellStart( eStart, eEnde, eCurr, pConvArgs );
 }
@@ -408,7 +408,7 @@ void SwView::HyphStart( SvxSpellArea eWhich )
             m_pWrtShell->HyphStart( DOCPOS_OTHERSTART, DOCPOS_OTHEREND );
             break;
         default:
-            OSL_ENSURE( !this, "HyphStart with unknown Area" );
+            OSL_ENSURE( false, "HyphStart with unknown Area" );
     }
 }
 

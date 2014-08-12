@@ -5443,7 +5443,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         break;
 #if OSL_DEBUG_LEVEL > 0
         default:
-            OSL_ENSURE( !this, "unknown command." );
+            OSL_ENSURE( false, "unknown command." );
 #endif
     }
     if (bCallBase)

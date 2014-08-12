@@ -863,7 +863,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             break;
          default:
             // undefied value
-            OSL_ENSURE( !this, "Value of aLVL.nAlign is not supported" );
+            OSL_ENSURE( false, "Value of aLVL.nAlign is not supported" );
             // take default
             eAdj = SVX_ADJUST_LEFT;
             break;

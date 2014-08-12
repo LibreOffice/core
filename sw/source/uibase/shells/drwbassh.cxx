@@ -575,7 +575,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         }
 
         default:
-            OSL_ENSURE(!this, "wrong Dispatcher");
+            OSL_ENSURE(false, "wrong Dispatcher");
             return;
     }
     if(!bDone)

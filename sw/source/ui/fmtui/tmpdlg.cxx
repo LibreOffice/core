@@ -330,7 +330,7 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
         break;
 
         default:
-            OSL_ENSURE(!this, "wrong family");
+            OSL_ENSURE(false, "wrong family");
     }
 
     if (!sPage.isEmpty())

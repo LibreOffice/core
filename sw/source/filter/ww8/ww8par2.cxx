@@ -1404,7 +1404,7 @@ void WW8TabBandDesc::ProcessSpacing(const sal_uInt8* pParams)
             case 0:
                 break;
             default:
-                OSL_ENSURE(!this, "Impossible");
+                OSL_ENSURE(false, "Impossible");
                 break;
         }
     }
@@ -2781,7 +2781,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
     if ((sal_uInt16)nAktRow >= pTabLines->size())
     {
-        OSL_ENSURE(!this, "Actual row bigger than expected." );
+        OSL_ENSURE(false, "Actual row bigger than expected." );
         if (bPam)
             MoveOutsideTable();
         return false;

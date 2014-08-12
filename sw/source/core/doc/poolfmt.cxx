@@ -1130,7 +1130,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             //             -> return the first one
             if( RES_POOLCHR_BEGIN > nId || nId >= RES_POOLCHR_END )
             {
-                OSL_ENSURE( !this, "invalid Id" );
+                OSL_ENSURE( false, "invalid Id" );
                 nId = RES_POOLCHR_BEGIN;
             }
         }
@@ -1148,7 +1148,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             //             -> return the first one
             if( RES_POOLFRM_BEGIN > nId || nId >= RES_POOLFRM_END )
             {
-                OSL_ENSURE( !this, "invalid Id" );
+                OSL_ENSURE( false, "invalid Id" );
                 nId = RES_POOLFRM_BEGIN;
             }
         }
@@ -1473,7 +1473,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     if( RES_POOLPAGE_BEGIN > nId ||  nId >= RES_POOLPAGE_END )
     {
         // unknown page pool ID
-        OSL_ENSURE( !this, "<SwDoc::GetPageDescFromPool(..)> - unknown page pool ID" );
+        OSL_ENSURE( false, "<SwDoc::GetPageDescFromPool(..)> - unknown page pool ID" );
         nId = RES_POOLPAGE_BEGIN;
     }
 
@@ -1648,7 +1648,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     // error: unknown Pool style
     if( RES_POOLNUMRULE_BEGIN > nId ||  nId >= RES_POOLNUMRULE_END )
     {
-        OSL_ENSURE( !this, "invalid Id" );
+        OSL_ENSURE( false, "invalid Id" );
         nId = RES_POOLNUMRULE_BEGIN;
     }
 

@@ -1380,7 +1380,7 @@ void SwHTMLParser::StripTrailingPara()
                     SwCntntNode* pNd = pDoc->GetNodes().GoPrevious(&nNewNdIdx);
                     if(!pNd)
                     {
-                        OSL_ENSURE(!this, "Hoppla, wo ist mein Vorgaenger-Node");
+                        OSL_ENSURE(false, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
                     // #i81002# - refactoring

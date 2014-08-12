@@ -1413,7 +1413,7 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
             break;
 
         default:
-            OSL_ENSURE(!this, "wrong dispatcher");
+            OSL_ENSURE(false, "wrong dispatcher");
     }
 
     if( nMode )

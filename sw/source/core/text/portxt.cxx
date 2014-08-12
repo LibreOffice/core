@@ -493,7 +493,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 
 sal_Int32 SwTxtPortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 {
-    OSL_ENSURE( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
+    OSL_ENSURE( false, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
     return SwLinePortion::GetCrsrOfst( nOfst );
 }
 

@@ -1004,7 +1004,7 @@ bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
 
     if( nSttPos > nEndPos ) // parameters switched?
     {
-        OSL_ENSURE( !this, "Start > End for array access" );
+        OSL_ENSURE( false, "Start > End for array access" );
         sal_uInt16 nTmp = nSttPos;
         nSttPos = nEndPos;
         nEndPos = nTmp;
@@ -1887,7 +1887,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     GetDoc()->getIDocumentContentOperations().InsertItemSet( *m_pCurCrsr, aSet, 0 );
                 }
                 else {
-                    OSL_ENSURE( !this, "No CntntNode" );
+                    OSL_ENSURE( false, "No CntntNode" );
                 }
                 break;
 

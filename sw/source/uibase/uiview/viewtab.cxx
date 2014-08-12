@@ -944,7 +944,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         break;
 
     default:
-        OSL_ENSURE( !this, "wrong SlotId");
+        OSL_ENSURE( false, "wrong SlotId");
     }
     rSh.EndAllAction();
 
@@ -1916,7 +1916,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     if( nNum > rCols.size() )
                     {
-                        OSL_ENSURE( !this, "wrong FmtCol is being edited!" );
+                        OSL_ENSURE( false, "wrong FmtCol is being edited!" );
                         nNum = rCols.size();
                     }
 

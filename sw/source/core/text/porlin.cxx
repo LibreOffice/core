@@ -232,7 +232,7 @@ sal_Int32 SwLinePortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 
 SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
 {
-    OSL_ENSURE( !this, "SwLinePortion::GetTxtSize: don't ask me about sizes, "
+    OSL_ENSURE( false, "SwLinePortion::GetTxtSize: don't ask me about sizes, "
                    "I'm only a stupid SwLinePortion" );
     return SwPosSize();
 }

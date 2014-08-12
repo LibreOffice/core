@@ -327,7 +327,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             }
             if( !aDBColumns.insert( pNew ).second )
             {
-                OSL_ENSURE( !this, "Spaltenname mehrfach vergeben?" );
+                OSL_ENSURE( false, "Spaltenname mehrfach vergeben?" );
                 delete pNew;
             }
         }
@@ -994,19 +994,19 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             if (it != aDBColumns.end())
                 aColFlds.push_back(*it);
             else {
-                OSL_ENSURE( !this, "database column not found" );
+                OSL_ENSURE( false, "database column not found" );
             }
         }
 
         if( static_cast<size_t>(nCols) != aColFlds.size() )
         {
-            OSL_ENSURE( !this, "not all database columns found" );
+            OSL_ENSURE( false, "not all database columns found" );
             nCols = static_cast<sal_Int32>(aColFlds.size());
         }
 
         if(!nRows || !nCols)
         {
-            OSL_ENSURE( !this, "wrong parameters" );
+            OSL_ENSURE( false, "wrong parameters" );
             break;
         }
 

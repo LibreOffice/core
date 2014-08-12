@@ -547,7 +547,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                 break;
 
             default:
-                OSL_ENSURE( !this, "Load: new CreateMode?" );
+                OSL_ENSURE( false, "Load: new CreateMode?" );
         }
 
         UpdateFontList();

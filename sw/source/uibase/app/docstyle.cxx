@@ -699,7 +699,7 @@ bool  SwDocStyleSheet::HasFollowSupport() const
         case SFX_STYLE_FAMILY_CHAR :
         case SFX_STYLE_FAMILY_PSEUDO: return false;
         default:
-            OSL_ENSURE(!this, "unknown style family");
+            OSL_ENSURE(false, "unknown style family");
     }
     return false;
 }
@@ -1051,7 +1051,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
             break;
 
         default:
-            OSL_ENSURE(!this, "unknown style family");
+            OSL_ENSURE(false, "unknown style family");
     }
 
     if( bChg )
@@ -1093,7 +1093,7 @@ bool   SwDocStyleSheet::SetParent( const OUString& rStr)
         case SFX_STYLE_FAMILY_PSEUDO:
             break;
         default:
-            OSL_ENSURE(!this, "unknown style family");
+            OSL_ENSURE(false, "unknown style family");
     }
 
     bool bRet = false;
@@ -1162,7 +1162,7 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
     case SFX_STYLE_FAMILY_PSEUDO:
         break;
     default:
-        OSL_ENSURE(!this, "unknwown style family");
+        OSL_ENSURE(false, "unknwown style family");
     }
 
     return true;
@@ -1252,7 +1252,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
             break;
 
         default:
-            OSL_ENSURE(!this, "unknown style family");
+            OSL_ENSURE(false, "unknown style family");
     }
     // Member of Baseclass
     pSet = &aCoreSet;
@@ -1512,7 +1512,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             break;
 
         default:
-            OSL_ENSURE(!this, "unknown style family");
+            OSL_ENSURE(false, "unknown style family");
     }
 
     if( pFmt && rSet.Count())
@@ -2051,7 +2051,7 @@ bool  SwDocStyleSheet::IsUsed() const
             return pNumRule && rDoc.IsUsed( *pNumRule );
 
     default:
-        OSL_ENSURE(!this, "unknown style family");
+        OSL_ENSURE(false, "unknown style family");
         return false;
     }
     return rDoc.IsUsed( *pMod );
@@ -2125,7 +2125,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
         break;
 
     default:
-        OSL_ENSURE(!this, "unknown style family");
+        OSL_ENSURE(false, "unknown style family");
         return 0;
     }
 
@@ -2178,7 +2178,7 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
         break;
 
     default:
-        OSL_ENSURE(!this, "unknown style family");
+        OSL_ENSURE(false, "unknown style family");
         return ;
     }
     if( pTmpFmt )
@@ -2228,14 +2228,14 @@ SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
 
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOrg*/)
 {
-    OSL_ENSURE(!this , "Create im SW-Stylesheet-Pool geht nicht" );
+    OSL_ENSURE(false , "Create im SW-Stylesheet-Pool geht nicht" );
     return NULL;
 }
 
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const OUString &,
                                                   SfxStyleFamily, sal_uInt16 )
 {
-    OSL_ENSURE( !this, "Create im SW-Stylesheet-Pool geht nicht" );
+    OSL_ENSURE( false, "Create im SW-Stylesheet-Pool geht nicht" );
     return NULL;
 }
 
@@ -2390,7 +2390,7 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
         break;
 
     default:
-        OSL_ENSURE(!this, "unknown style family");
+        OSL_ENSURE(false, "unknown style family");
         bBroadcast = false;
     }
 
@@ -2424,7 +2424,7 @@ bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
         break;
 
     default:
-        OSL_ENSURE(!this, "unknown style family");
+        OSL_ENSURE(false, "unknown style family");
     }
 
     bool bRet = false;
@@ -2513,7 +2513,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
             break;
 
         default:
-            OSL_ENSURE(!this, "unknown style family");
+            OSL_ENSURE(false, "unknown style family");
         }
     }
 
@@ -3010,7 +3010,7 @@ void SwStyleSheetIterator::AppendStyleList(const ::std::vector<OUString>& rList,
                 }
                 break;
             default:
-                OSL_ENSURE( !this, "unknown PoolFmt-Id" );
+                OSL_ENSURE( false, "unknown PoolFmt-Id" );
         }
 
         bool bMatchHidden = ( bTestHidden && ( bHidden || !bOnlyHidden ) ) || ( !bTestHidden && ( !bHidden || bUsed ) );

@@ -2066,7 +2066,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         SotStorageStreamRef xStrm;
         if( !rData.GetSotStorageStream( SOT_FORMATSTR_ID_LINK, xStrm ))
         {
-            OSL_ENSURE( !&rWrtShell, "DDE Data not found." );
+            OSL_ENSURE( false, "DDE Data not found." );
             return false;
         }   // report useful error!!
 
@@ -2778,7 +2778,7 @@ bool SwTransferable::_CheckForURLOrLNKFile( TransferableDataHelper& rData,
             OUString sExt( rFileName.copy( nLen - 3 ));
             if( sExt.equalsIgnoreAsciiCase( "url" ))
             {
-                OSL_ENSURE( !&rFileName, "how do we read today .URL - Files?" );
+                OSL_ENSURE( false, "how do we read today .URL - Files?" );
             }
         }
     }

@@ -615,7 +615,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             }
             if( !HasPara() )
             {
-                OSL_ENSURE( !this, "+SwTxtFrm::Paint: missing format information" );
+                OSL_ENSURE( false, "+SwTxtFrm::Paint: missing format information" );
                 return;
             }
         }

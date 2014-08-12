@@ -1321,7 +1321,7 @@ bool SwFldMgr::InsertFld(
         }
         break;
         default:
-        {   OSL_ENSURE(!this, "wrong field type");
+        {   OSL_ENSURE(false, "wrong field type");
             return false;
         }
     }

@@ -737,7 +737,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pBox )
                 ::_DeleteBox( rTbl, pBox, 0, false, false );
             else {
-                OSL_ENSURE( !this, "Where is my box?" );
+                OSL_ENSURE( false, "Where is my box?" );
             }
         }
     }
@@ -958,7 +958,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
     {
         if( !pLn )
         {
-            OSL_ENSURE( !this, "Number of lines changed" );
+            OSL_ENSURE( false, "Number of lines changed" );
             break;
         }
 
@@ -1158,7 +1158,7 @@ void _SaveLine::RestoreAttr( SwTableLine& rLine, _SaveTable& rSTbl )
     {
         if( !pBx )
         {
-            OSL_ENSURE( !this, "Number of boxes changed" );
+            OSL_ENSURE( false, "Number of boxes changed" );
             break;
         }
         pBx->RestoreAttr( *rLine.GetTabBoxes()[ n ], rSTbl );
@@ -1242,7 +1242,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
     {
         if( !rBox.GetTabLines().size() )
         {
-            OSL_ENSURE( !this, "Number of lines changed" );
+            OSL_ENSURE( false, "Number of lines changed" );
         }
         else
         {
@@ -1251,7 +1251,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
             {
                 if( !pLn )
                 {
-                    OSL_ENSURE( !this, "Number of lines changed" );
+                    OSL_ENSURE( false, "Number of lines changed" );
                     break;
                 }
 
@@ -1290,7 +1290,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
     }
     else
     {
-        OSL_ENSURE( !this, "Box not anymore at the same node" );
+        OSL_ENSURE( false, "Box not anymore at the same node" );
     }
 }
 

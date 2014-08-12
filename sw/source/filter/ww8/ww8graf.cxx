@@ -167,7 +167,7 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
 {
     if (SVBT16ToShort(pHd->cb) < sizeof(WW8_DPHEAD) + nDataSiz)
     {
-        OSL_ENSURE( !this, "+Grafik-Element: Size ?" );
+        OSL_ENSURE( false, "+Grafik-Element: Size ?" );
         pStrm->SeekRel(SVBT16ToShort(pHd->cb) - sizeof(WW8_DPHEAD));
         return false;
     }
@@ -790,7 +790,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     WW8PLCFspecial* pT = pPlcxMan ? pPlcxMan->GetTxbx() : 0;
     if( !pT )
     {
-        OSL_ENSURE( !this, "+Wo ist der Grafik-Text (1) ?" );
+        OSL_ENSURE( false, "+Wo ist der Grafik-Text (1) ?" );
         return false;
     }
 
@@ -803,7 +803,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     void* pT0;
     if( !pT->Get( rStartCp, pT0 ) )
     {
-        OSL_ENSURE( !this, "+Wo ist der Grafik-Text (2) ?" );
+        OSL_ENSURE( false, "+Wo ist der Grafik-Text (2) ?" );
         return false;
     }
 
@@ -815,7 +815,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             pT->advance();
             if( !pT->Get( rStartCp, pT0 ) )
             {
-                OSL_ENSURE( !this, "+Wo ist der Grafik-Text (2-a) ?" );
+                OSL_ENSURE( false, "+Wo ist der Grafik-Text (2-a) ?" );
                 return false;
             }
             bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
@@ -824,7 +824,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     pT->advance();
     if( !pT->Get( rEndCp, pT0 ) )
     {
-        OSL_ENSURE( !this, "+Wo ist der Grafik-Text (3) ?" );
+        OSL_ENSURE( false, "+Wo ist der Grafik-Text (3) ?" );
         return false;
     }
 
@@ -845,7 +845,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             // den ersten Eintrag fuer diese TextBox-Story finden
             if( !pT->SeekPos( rStartCp ) )
             {
-                OSL_ENSURE( !this, "+Wo ist der Grafik-Text (4) ?" );
+                OSL_ENSURE( false, "+Wo ist der Grafik-Text (4) ?" );
                 return false;
             }
             // ggfs. entsprechende Anzahl Eintraege weitergehen
@@ -855,7 +855,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             if(    (!pT->Get( rStartCp, pT0 ))
                 || ( nMinStartCp > rStartCp  ) )
             {
-                OSL_ENSURE( !this, "+Wo ist der Grafik-Text (5) ?" );
+                OSL_ENSURE( false, "+Wo ist der Grafik-Text (5) ?" );
                 return false;
             }
             if( rStartCp >= nMaxEndCp )
@@ -865,7 +865,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
                 pT->advance();
                 if ( (!pT->Get(rEndCp, pT0)) || (nMaxEndCp < rEndCp-1) )
                 {
-                    OSL_ENSURE( !this, "+Wo ist der Grafik-Text (6) ?" );
+                    OSL_ENSURE( false, "+Wo ist der Grafik-Text (6) ?" );
                     return false;
                 }
                 rEndCp -= 1;
@@ -1355,7 +1355,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive( short& rLeft, const WW8_DO* pDo,
     }
     else
     {
-        OSL_ENSURE( !this, "+Grafik-Overlap" );
+        OSL_ENSURE( false, "+Grafik-Overlap" );
     }
     rLeft = rLeft - SVBT16ToShort( aHd.cb );
     return pRet;
@@ -1368,13 +1368,13 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     void* pF0;
     if( !pPF->Get( nStartFc, pF0 ) )
     {
-        OSL_ENSURE( !this, "+Wo ist die Grafik (2) ?" );
+        OSL_ENSURE( false, "+Wo ist die Grafik (2) ?" );
         return;
     }
     WW8_FDOA* pF = (WW8_FDOA*)pF0;
     if( !SVBT32ToUInt32( pF->fc ) )
     {
-        OSL_ENSURE( !this, "+Wo ist die Grafik (3) ?" );
+        OSL_ENSURE( false, "+Wo ist die Grafik (3) ?" );
         return;
     }
 
@@ -1513,7 +1513,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         break;
     // erroneously not implemented line style is set
     default:
-        OSL_ENSURE(!this, "eLineStyle is not (yet) implemented!");
+        OSL_ENSURE(false, "eLineStyle is not (yet) implemented!");
         break;
     }
 
@@ -2381,7 +2381,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     WW8PLCFspecial* pPF = pPlcxMan->GetFdoa();
     if( !pPF )
     {
-        OSL_ENSURE( !this, "Where is the grapic (1) ?" );
+        OSL_ENSURE( false, "Where is the grapic (1) ?" );
         return 0;
     }
 
@@ -2402,7 +2402,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     WW8_FC nStartFc;
     void* pF0;
     if( !pPF->Get( nStartFc, pF0 ) ){
-        OSL_ENSURE( !this, "+Wo ist die Grafik (2) ?" );
+        OSL_ENSURE( false, "+Wo ist die Grafik (2) ?" );
         return 0;
     }
 
@@ -2413,7 +2413,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     WW8FSPAShadowToReal( pFS, pF );
     if( !pF->nSpId )
     {
-        OSL_ENSURE( !this, "+Wo ist die Grafik (3) ?" );
+        OSL_ENSURE( false, "+Wo ist die Grafik (3) ?" );
         return 0;
     }
 
@@ -2438,7 +2438,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     if (!bOk)
     {
-        OSL_ENSURE( !this, "Where is the Shape ?" );
+        OSL_ENSURE( false, "Where is the Shape ?" );
         return 0;
     }
 

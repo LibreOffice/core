@@ -84,7 +84,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {
     if( !pCntntNode )
     {
-        OSL_ENSURE(!this, "DataChanged without ContentNode" );
+        OSL_ENSURE(false, "DataChanged without ContentNode" );
         return ERROR_GENERAL;
     }
 
@@ -399,7 +399,7 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
 
         if( bWaitForData && !GetObj() )
         {
-            OSL_ENSURE( !this, "The SvxFileObject was deleted in a GetData!" );
+            OSL_ENSURE( false, "The SvxFileObject was deleted in a GetData!" );
         }
         else
         {
@@ -458,7 +458,7 @@ const SwNode* SwBaseLink::GetAnchor() const
         }
     }
 
-    OSL_ENSURE( !this, "GetAnchor is not shadowed" );
+    OSL_ENSURE( false, "GetAnchor is not shadowed" );
     return 0;
 }
 

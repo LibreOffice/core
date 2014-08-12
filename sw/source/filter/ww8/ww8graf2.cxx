@@ -339,7 +339,7 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
     }
     else
     {
-        OSL_ENSURE( !this, "Impossible!");
+        OSL_ENSURE( false, "Impossible!");
     }
 }
 

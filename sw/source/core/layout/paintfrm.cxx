@@ -5529,7 +5529,7 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
         case FTNADJ_LEFT:
             /* do nothing */; break;
         default:
-            OSL_ENSURE( !this, "New adjustment for footnote lines?" );
+            OSL_ENSURE( false, "New adjustment for footnote lines?" );
     }
     SwTwips nLineWidth = rInf.GetLineWidth();
     const SwRect aLineRect = bVert ?
@@ -5568,7 +5568,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
         case COLADJ_BOTTOM:
             break;
         default:
-            OSL_ENSURE( !this, "New adjustment for column lines?" );
+            OSL_ENSURE( false, "New adjustment for column lines?" );
     }
 
     if( nTop )

@@ -41,7 +41,7 @@ SwUnoCrsr::~SwUnoCrsr()
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
         if( !rTbl.erase( this ) )
         {
-            OSL_ENSURE( !this, "UNO Cursor nicht mehr im Array" );
+            OSL_ENSURE( false, "UNO Cursor nicht mehr im Array" );
         }
     }
 

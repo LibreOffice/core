@@ -1446,17 +1446,17 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             break;
 
         case RES_TXTATR_FIELD:
-            OSL_ENSURE(!this, "What is a field doing in the control stack,"
+            OSL_ENSURE(false, "What is a field doing in the control stack,"
                 "probably should have been in the endstack");
             break;
 
         case RES_TXTATR_ANNOTATION:
-            OSL_ENSURE(!this, "What is a annotation doing in the control stack,"
+            OSL_ENSURE(false, "What is a annotation doing in the control stack,"
                 "probably should have been in the endstack");
             break;
 
         case RES_TXTATR_INPUTFIELD:
-            OSL_ENSURE(!this, "What is a input field doing in the control stack,"
+            OSL_ENSURE(false, "What is a input field doing in the control stack,"
                 "probably should have been in the endstack");
             break;
 
@@ -1646,7 +1646,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             break;
         default:
         case RES_FLTR_BOOKMARK:
-            OSL_ENSURE(!this, "EndStck used with non field, not what we want");
+            OSL_ENSURE(false, "EndStck used with non field, not what we want");
             SwFltEndStack::SetAttrInDoc(rTmpPos, rEntry);
             break;
     }
@@ -4269,7 +4269,7 @@ void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
     }
     else
     {
-        OSL_ENSURE( !this, "WW-Stack bereits geloescht" );
+        OSL_ENSURE( false, "WW-Stack bereits geloescht" );
     }
 }
 
@@ -5389,7 +5389,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
             break;
         default:
             // Program error!
-            OSL_ENSURE( !this, "We forgot to encode nVersion!" );
+            OSL_ENSURE( false, "We forgot to encode nVersion!" );
             nErrRet = ERR_SWG_READ_ERROR;
             break;
     }
@@ -6063,7 +6063,7 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
             break;
         default:
             nErrRet = ERR_WW8_NO_WW8_FILE_ERR;
-            OSL_ENSURE( !this, "We forgot to encode nVersion!" );
+            OSL_ENSURE( false, "We forgot to encode nVersion!" );
             break;
     }
 
@@ -6119,7 +6119,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
             nVersion = 6;
         else
         {
-            OSL_ENSURE(!this, "WinWord 95 Reader-Read without Stream");
+            OSL_ENSURE(false, "WinWord 95 Reader-Read without Stream");
             nRet = ERR_SWG_READ_ERROR;
         }
     }
@@ -6137,7 +6137,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
         }
         else
         {
-            OSL_ENSURE(!this, "WinWord 95/97 Reader-Read without Storage");
+            OSL_ENSURE(false, "WinWord 95/97 Reader-Read without Storage");
             nRet = ERR_SWG_READ_ERROR;
         }
     }

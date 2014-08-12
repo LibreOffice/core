@@ -106,7 +106,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
 
     if( nStart > GetInfo().GetTxt().getLength() )
     {
-        OSL_ENSURE( !this, "+SwTxtFormatter::CTOR: bad offset" );
+        OSL_ENSURE( false, "+SwTxtFormatter::CTOR: bad offset" );
         nStart = GetInfo().GetTxt().getLength();
     }
 

@@ -1150,7 +1150,7 @@ bool SwTableAutoFmtTbl::Load( SvStream& rStream )
                 rStream.ReadUChar( nCnt ).ReadUChar( nChrSet );
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
-                    OSL_ENSURE( !this, "The Header contains more or newer Data" );
+                    OSL_ENSURE( false, "The Header contains more or newer Data" );
                     rStream.Seek( nPos + nCnt );
                 }
                 rStream.SetStreamCharSet( (rtl_TextEncoding)nChrSet );

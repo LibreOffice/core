@@ -1725,7 +1725,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, OUString &rStr)
                 aReadParam.SkipToNextToken();
                 break;
             default:
-                OSL_ENSURE(!this, "unknown option in FileName field");
+                OSL_ENSURE(false, "unknown option in FileName field");
                 break;
         }
     }
@@ -3228,7 +3228,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                     }
                     break;
                 default:
-                    OSL_ENSURE(!this, "Unhandled toc options!");
+                    OSL_ENSURE(false, "Unhandled toc options!");
                     break;
             }
         }
@@ -3236,7 +3236,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     case TOX_USER:
         break;
     default:
-        OSL_ENSURE(!this, "Unhandled toc options!");
+        OSL_ENSURE(false, "Unhandled toc options!");
         break;
     } // ToxBase fertig
 
@@ -3394,7 +3394,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                     break;
                 case 'h':
                 case 'm':
-                    OSL_ENSURE( !this, "Auswertung fehlt noch - Daten unbekannt" );
+                    OSL_ENSURE( false, "Auswertung fehlt noch - Daten unbekannt" );
                     //fall-through
                 case 's':   //worthless fake anchor option
                     bOptions = true;

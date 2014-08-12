@@ -1764,7 +1764,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
         // (see bug: 29658)
         if( !--nLoopCnt )
         {
-            OSL_ENSURE( !this, "endless loop? CharRect != OldCharRect ");
+            OSL_ENSURE( false, "endless loop? CharRect != OldCharRect ");
             break;
         }
         aOld = m_aCharRect;
@@ -2778,7 +2778,7 @@ bool SwCrsrShell::FindValidCntntNode( bool bOnlyText )
 {
     if( m_pTblCrsr )
     {
-        OSL_ENSURE( !this, "Did not remove table selection!" );
+        OSL_ENSURE( false, "Did not remove table selection!" );
         return false;
     }
 

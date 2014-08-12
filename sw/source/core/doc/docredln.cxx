@@ -2759,7 +2759,7 @@ bool SwRedlineTbl::Insert( SwRangeRedline* p, bool bIns )
         bRet = InsertWithValidRanges( p );
     else
     {
-        OSL_ENSURE( !this, "Redline: wrong range" );
+        OSL_ENSURE( false, "Redline: wrong range" );
     }
     return bRet;
 }
@@ -2778,7 +2778,7 @@ bool SwRedlineTbl::Insert( SwRangeRedline* p, sal_uInt16& rP, bool bIns )
         bRet = InsertWithValidRanges( p, &rP );
     else
     {
-        OSL_ENSURE( !this, "Redline: wrong range" );
+        OSL_ENSURE( false, "Redline: wrong range" );
     }
     return bRet;
 }

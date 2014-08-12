@@ -1282,7 +1282,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
 
     if( USER_FMT & nTxtColl )       // eine vom Reader angelegte
     {
-        OSL_ENSURE( !this, "Wo kommt die Benutzer-Vorlage her?" );
+        OSL_ENSURE( false, "Wo kommt die Benutzer-Vorlage her?" );
         pColl = GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
     }
     else

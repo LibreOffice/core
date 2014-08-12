@@ -1257,7 +1257,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
             // index is after the index of the newly inserted, to place the new one correctly
             pSibling = (SwFtnFrm*)pParent->Lower();
             if ( !pSibling )
-            { OSL_ENSURE( !this, "Could not find space for footnote.");
+            { OSL_ENSURE( false, "Could not find space for footnote.");
                 return;
             }
             nCmpPos  = ::lcl_FindFtnPos( pDoc, pSibling->GetAttr() );
@@ -1527,7 +1527,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
     // For now, create a footnote and the corresponding content frames
     if ( !pAttr->GetStartNode() )
     {
-        OSL_ENSURE( !this, "no footnote content." );
+        OSL_ENSURE( false, "no footnote content." );
         return;
     }
 

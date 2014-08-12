@@ -711,7 +711,7 @@ bool SwFmtPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             }
             break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -744,7 +744,7 @@ bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
              * only be requested from the document using the name.
              */
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1086,7 +1086,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     case 0: m_eAdj = COLADJ_TOP;  break;  //VerticalAlignment_TOP
                     case 1: m_eAdj = COLADJ_CENTER;break; //VerticalAlignment_MIDDLE
                     case 2: m_eAdj = COLADJ_BOTTOM;break; //VerticalAlignment_BOTTOM
-                    default: OSL_ENSURE( !this, "unknown alignment" ); break;
+                    default: OSL_ENSURE( false, "unknown alignment" ); break;
                 }
             }
         }
@@ -1187,7 +1187,7 @@ bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
         }
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1222,7 +1222,7 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             SetOutside( *(sal_Bool*)rVal.getValue() );
             break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1299,7 +1299,7 @@ bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 rVal <<= (sal_Int32)convertTwipToMm100(GetPos());
                 break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1334,7 +1334,7 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1389,7 +1389,7 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
                 break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1428,7 +1428,7 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 SetPosToggle( *(sal_Bool*)rVal.getValue());
             break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1561,7 +1561,7 @@ bool SwFmtAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1629,7 +1629,7 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_ANCHOR_ANCHORFRAME:
         //no break here!;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1732,7 +1732,7 @@ bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
             break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -1785,7 +1785,7 @@ bool SwFmtURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bIsServerMap = *(sal_Bool*)rVal.getValue();
             break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -2020,7 +2020,7 @@ bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 aRet = GetNext()->GetName();
             break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     rVal <<= aRet;
@@ -2068,7 +2068,7 @@ bool SwFmtLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int32)GetStartValue();
             break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -2094,7 +2094,7 @@ bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         default:
-            OSL_ENSURE( !this, "unknown MemberId" );
+            OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -2505,7 +2505,7 @@ void SwFrmFmt::DelFrms()
 
 void SwFrmFmt::MakeFrms()
 {
-    OSL_ENSURE( !this, "Sorry not implemented." );
+    OSL_ENSURE( false, "Sorry not implemented." );
 }
 
 SwRect SwFrmFmt::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
@@ -2628,7 +2628,7 @@ bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
             }
             if( n >= rFmts.size() )
             {
-                OSL_ENSURE( !this, "Fly section but no format found" );
+                OSL_ENSURE( false, "Fly section but no format found" );
                 return false;
             }
         }
@@ -2846,7 +2846,7 @@ void SwFlyFrmFmt::MakeFrms()
                     pFly = new SwFlyInCntFrm( this, pFrm, pFrm );
                     break;
                 default:
-                    OSL_ENSURE( !this, "Neuer Ankertyp" );
+                    OSL_ENSURE( false, "Neuer Ankertyp" );
                     break;
                 }
                 pFrm->AppendFly( pFly );

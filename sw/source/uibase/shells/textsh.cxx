@@ -668,7 +668,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     break;
 
     default:
-        OSL_ENSURE(!this, "wrong  dispatcher");
+        OSL_ENSURE(false, "wrong  dispatcher");
         return;
     }
 }
@@ -894,7 +894,7 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
             rSh.DelLine();
             break;
         default:
-            OSL_ENSURE(!this, "wrong dispatcher");
+            OSL_ENSURE(false, "wrong dispatcher");
             return;
     }
     rReq.Done();
@@ -938,7 +938,7 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
         break;
 
     default:
-        OSL_ENSURE(!this, "wrong dispatcher");
+        OSL_ENSURE(false, "wrong dispatcher");
     }
 
     if( nMode )

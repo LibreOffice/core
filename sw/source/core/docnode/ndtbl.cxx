@@ -2487,7 +2487,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
     }
     else if( !pCrsr && !pBoxFrm )
     {
-        OSL_ENSURE( !this, "One of them needs to be specified!" );
+        OSL_ENSURE( false, "One of them needs to be specified!" );
         return ;
     }
 
@@ -2701,7 +2701,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     }
     else if( !pCrsr && !pBoxFrm )
     {
-        OSL_ENSURE( !this, "One of them needs to be specified!" );
+        OSL_ENSURE( false, "One of them needs to be specified!" );
         return ;
     }
 

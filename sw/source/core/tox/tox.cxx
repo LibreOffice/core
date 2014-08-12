@@ -283,7 +283,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     case TOX_AUTHORITIES  : nPoolId = STR_POOLCOLL_TOX_AUTHORITIESH;    break;
     case TOX_CITATION  : nPoolId = STR_POOLCOLL_TOX_CITATION; break;
     default:
-        OSL_ENSURE( !this, "invalid TOXTyp");
+        OSL_ENSURE( false, "invalid TOXTyp");
         return ;
     }
 

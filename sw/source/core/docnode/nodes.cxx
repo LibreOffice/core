@@ -363,7 +363,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
         if( !pFrmNd && aFrmNdIdx > rNds.GetEndOfExtras().GetIndex() )
         {
-            OSL_ENSURE( !this, "here, something wrong happened" );
+            OSL_ENSURE( false, "here, something wrong happened" );
             aFrmNdIdx = rNds.GetEndOfContent();
             pFrmNd = rNds.GoPrevSection( &aFrmNdIdx, true, false );
             if( pFrmNd && !((SwCntntNode*)pFrmNd)->GetDepends() )

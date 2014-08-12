@@ -2355,7 +2355,7 @@ bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
     SET_CURR_SHELL( this );
 
     if ( !rSet.Count() )
-    { OSL_ENSURE( !this, "SetObjAttr, empty set." );
+    { OSL_ENSURE( false, "SetObjAttr, empty set." );
         return false;
     }
 

@@ -469,7 +469,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         break;
 
         default:
-            OSL_ENSURE(!this, "wrong dispatcher");
+            OSL_ENSURE(false, "wrong dispatcher");
             return;
     }
 }
@@ -618,7 +618,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             break;
 
         default:
-            OSL_ENSURE(!this, "wrong dispatcher");
+            OSL_ENSURE(false, "wrong dispatcher");
         }
 
         if( aGrfSet.Count() )

@@ -682,7 +682,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
 {
     if( pFmt->ISA( SwTableBoxFmt ) || pFmt->ISA( SwTableLineFmt ))
     {
-        OSL_ENSURE( !this, "Format is not in the DocArray any more, "
+        OSL_ENSURE( false, "Format is not in the DocArray any more, "
                        "so it can be deleted with delete" );
         delete pFmt;
     }

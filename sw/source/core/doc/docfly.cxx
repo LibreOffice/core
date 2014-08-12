@@ -861,7 +861,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 }
                 break;
             default:
-                OSL_ENSURE( !this, "unexpected AnchorId." );
+                OSL_ENSURE( false, "unexpected AnchorId." );
             }
 
             if ( (FLY_AS_CHAR != _eAnchorType) &&

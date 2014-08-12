@@ -514,7 +514,7 @@ TextAndReading SwTOXPara::GetText_Impl() const
             if( pFly )
                 return TextAndReading(pFly->GetName(), OUString());
 
-            OSL_ENSURE( !this, "Graphic/object without name" );
+            OSL_ENSURE( false, "Graphic/object without name" );
             sal_uInt16 nId = nsSwTOXElement::TOX_OLE == eType
                             ? STR_OBJECT_DEFNAME
                             : nsSwTOXElement::TOX_GRAPHIC == eType
@@ -629,7 +629,7 @@ TextAndReading SwTOXTable::GetText_Impl() const
         }
     }
 
-    OSL_ENSURE( !this, "Where's my table?" );
+    OSL_ENSURE( false, "Where's my table?" );
     return TextAndReading(SW_RESSTR( STR_TABLE_DEFNAME ), OUString());
 }
 

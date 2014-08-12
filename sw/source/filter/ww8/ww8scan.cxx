@@ -1189,7 +1189,7 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
 
     if ( !pPcdI->Get(nCpStart, nCpEnd, pData) )
     {
-        OSL_ENSURE( !this, "AktPieceStartCp2Fc() with false Cp found (1)" );
+        OSL_ENSURE( false, "AktPieceStartCp2Fc() with false Cp found (1)" );
         return WW8_FC_MAX;
     }
 
@@ -1226,7 +1226,7 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
     void* pData;
     if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) )
     {
-        OSL_ENSURE( !this, "AktPieceStartFc2Cp() - error" );
+        OSL_ENSURE( false, "AktPieceStartFc2Cp() - error" );
         return WW8_CP_MAX;
     }
     bool bIsUnicode = false;
@@ -1400,7 +1400,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             void* pData;
             if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
             {   // outside PLCFfpcd ?
-                OSL_ENSURE( !this, "PLCFpcd-WW8Fc2Cp() went wrong" );
+                OSL_ENSURE( false, "PLCFpcd-WW8Fc2Cp() went wrong" );
                 break;
             }
             sal_Int32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
@@ -1484,7 +1484,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
             if( pTestFlag )
                 *pTestFlag = false;
             else {
-                OSL_ENSURE( !this, "Handed over wrong CP to WW8Cp2Fc()" );
+                OSL_ENSURE( false, "Handed over wrong CP to WW8Cp2Fc()" );
             }
             return WW8_FC_MAX;
         }
@@ -1495,7 +1495,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
             if( pTestFlag )
                 *pTestFlag = false;
             else {
-                OSL_ENSURE( !this, "PLCFfpcd-Get went wrong" );
+                OSL_ENSURE( false, "PLCFfpcd-Get went wrong" );
             }
             return WW8_FC_MAX;
         }
@@ -1730,7 +1730,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
 
             break;
         default:
-            OSL_ENSURE( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            OSL_ENSURE( false, "Es wurde vergessen, nVersion zu kodieren!" );
             break;
     }
 
@@ -2774,7 +2774,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
 
 void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 {
-    OSL_ENSURE( !this, "Called wrong GetSprms" );
+    OSL_ENSURE( false, "Called wrong GetSprms" );
     p->nStartPos = p->nEndPos = WW8_CP_MAX;
     p->pMemPos = 0;
     p->nSprmsLen = 0;
@@ -2784,7 +2784,7 @@ void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 
 long WW8PLCFx::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 {
-    OSL_ENSURE( !this, "Called wrong GetNoSprms" );
+    OSL_ENSURE( false, "Called wrong GetNoSprms" );
     rStart = rEnd = WW8_CP_MAX;
     rLen = 0;
     return 0;
@@ -2844,7 +2844,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
             break;
         default:
             // program error!
-            OSL_ENSURE( !this, "Someone forgot to encode nVersion!" );
+            OSL_ENSURE( false, "Someone forgot to encode nVersion!" );
             return false;
     }
 
@@ -3306,7 +3306,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                         {
                             if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
                             {
-                                OSL_ENSURE( !this, "piece iter broken!" );
+                                OSL_ENSURE( false, "piece iter broken!" );
                                 break;
                             }
                             bIsUnicode = false;
@@ -4076,14 +4076,14 @@ long WW8PLCFx_Book::GetLen() const
 {
     if( nIsEnd )
     {
-        OSL_ENSURE( !this, "Incorrect call (1) of PLCF_Book::GetLen()" );
+        OSL_ENSURE( false, "Incorrect call (1) of PLCF_Book::GetLen()" );
         return 0;
     }
     void * p;
     WW8_CP nStartPos;
     if( !pBook[0]->Get( nStartPos, p ) )
     {
-        OSL_ENSURE( !this, "Incorrect call (2) of PLCF_Book::GetLen()" );
+        OSL_ENSURE( false, "Incorrect call (2) of PLCF_Book::GetLen()" );
         return 0;
     }
     const sal_uInt16 nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
@@ -4138,7 +4138,7 @@ OUString WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
                 nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
             else
             {
-                OSL_ENSURE( !this, "Bookmark-EndIdx not readable" );
+                OSL_ENSURE( false, "Bookmark-EndIdx not readable" );
                 nEndIdx = i;
             }
 
@@ -4630,7 +4630,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
         pRes->nSprmId = p->pIdStk->top();       // get end position
     else
     {
-        OSL_ENSURE( !this, "No Id on the Stack" );
+        OSL_ENSURE( false, "No Id on the Stack" );
         pRes->nSprmId = 0;
     }
 }
@@ -4890,7 +4890,7 @@ bool WW8PLCFMan::Get(WW8PLCFManResult* pRes) const
 
     if( nIdx >= nPLCF )
     {
-        OSL_ENSURE( !this, "Position not found" );
+        OSL_ENSURE( false, "Position not found" );
         return true;
     }
 
@@ -4928,7 +4928,7 @@ sal_uInt16 WW8PLCFMan::GetColl() const
         return  pPap->pPLCFx->GetIstd();
     else
     {
-        OSL_ENSURE( !this, "GetColl ohne PLCF_Pap" );
+        OSL_ENSURE( false, "GetColl ohne PLCF_Pap" );
         return 0;
     }
 }
@@ -5188,7 +5188,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                 nFibMin = 0;            // Programm-Fehler!
                 nFibMax = 0;
                 nFib    = 1;
-                OSL_ENSURE( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+                OSL_ENSURE( false, "Es wurde vergessen, nVersion zu kodieren!" );
                 break;
         }
         if ( (nFib < nFibMin) || (nFib > nFibMax) )
@@ -6129,7 +6129,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
                     }
                     break;
                 default:
-                    OSL_ENSURE(!this, "Es wurde vergessen, nVersion zu kodieren!");
+                    OSL_ENSURE(false, "Es wurde vergessen, nVersion zu kodieren!");
                     break;
             }
         }
@@ -6230,7 +6230,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
     if( rFib.lcbSttbfffn <= 2 )
     {
-        OSL_ENSURE( !this, "Fonttabelle kaputt! (rFib.lcbSttbfffn < 2)" );
+        OSL_ENSURE( false, "Fonttabelle kaputt! (rFib.lcbSttbfffn < 2)" );
         return;
     }
 
@@ -7228,7 +7228,7 @@ sal_uInt16 WW8DopTypography::GetConvertedLang() const
             nLang = LANGUAGE_CHINESE_TRADITIONAL;
             break;
         default:
-            OSL_ENSURE(!this, "Unknown MS Asian Typography language, report");
+            OSL_ENSURE(false, "Unknown MS Asian Typography language, report");
             nLang = LANGUAGE_CHINESE_SIMPLIFIED_LEGACY;
             break;
         case 0:
@@ -7284,7 +7284,7 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
                     nL = static_cast< sal_uInt16 >(SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1);
                     break;
                 default:
-                    OSL_ENSURE(!this, "Unknown sprm variant");
+                    OSL_ENSURE(false, "Unknown sprm variant");
                     break;
             }
             break;

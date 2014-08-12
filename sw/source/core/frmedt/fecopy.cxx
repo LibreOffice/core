@@ -523,7 +523,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 aNewAnch = pPg->Frm().Pos();
         }
         else {
-            OSL_ENSURE( !this, "what anchor is it?" );
+            OSL_ENSURE( false, "what anchor is it?" );
         }
 
         if( bRet )

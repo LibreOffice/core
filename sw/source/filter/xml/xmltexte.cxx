@@ -619,7 +619,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         }
         break;
     default:
-        OSL_ENSURE( !this, "unknown object type! Base class should have been called!" );
+        OSL_ENSURE( false, "unknown object type! Base class should have been called!" );
     }
 
     {

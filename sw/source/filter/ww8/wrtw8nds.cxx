@@ -743,7 +743,7 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, sal_Int32 /*nPos*/, 
             cDirective = 'd';
             break;
         default:
-            OSL_ENSURE( !this,"Unhandled Ruby justication code" );
+            OSL_ENSURE( false,"Unhandled Ruby justication code" );
             break;
     }
     aStr += OUString::number( nJC );
@@ -1183,7 +1183,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
             }
             break;
         default:
-            OSL_ENSURE( !this, "Unhandled option for toc export" );
+            OSL_ENSURE( false, "Unhandled option for toc export" );
             break;
     }
 
@@ -3028,7 +3028,7 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
         }
         break;
     default:
-        OSL_ENSURE(!this, "Unhandled redline type for export");
+        OSL_ENSURE(false, "Unhandled redline type for export");
         break;
     }
 

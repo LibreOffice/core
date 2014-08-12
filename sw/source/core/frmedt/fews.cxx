@@ -456,7 +456,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, cons
             }
             break;
         default:
-            OSL_ENSURE( !this, "Crsr neither in table nor in fly." );
+            OSL_ENSURE( false, "Crsr neither in table nor in fly." );
         }
 
         if( nIdx )

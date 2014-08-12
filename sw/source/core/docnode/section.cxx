@@ -1524,7 +1524,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
         }
         break;
     default:
-        OSL_ENSURE( !this, "What kind of Link is this?" );
+        OSL_ENSURE( false, "What kind of Link is this?" );
     }
 
     switch( eCreateType )

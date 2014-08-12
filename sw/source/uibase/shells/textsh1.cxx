@@ -1368,7 +1368,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     }
     break;
     default:
-        OSL_ENSURE(!this, "wrong dispatcher");
+        OSL_ENSURE(false, "wrong dispatcher");
         return;
     }
 }

@@ -1053,7 +1053,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         }
         break;
 
-        default: OSL_ENSURE(!this,"You cannot get here!");
+        default: OSL_ENSURE(false,"You cannot get here!");
 
         }
         nWhich = aIter.NextWhich();

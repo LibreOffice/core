@@ -649,7 +649,7 @@ const SfxPoolItem* MSWordExportBase::HasItem( sal_uInt16 nWhich ) const
         pItem = pChpIter->HasTextItem( nWhich );
     else
     {
-        OSL_ENSURE( !this, "Where is my ItemSet / pChpIter ?" );
+        OSL_ENSURE( false, "Where is my ItemSet / pChpIter ?" );
         pItem = 0;
     }
     return pItem;
@@ -671,7 +671,7 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
         pItem = &pChpIter->GetItem( nWhich );
     else
     {
-        OSL_ENSURE( !this, "Where is my ItemSet / pChpIter ?" );
+        OSL_ENSURE( false, "Where is my ItemSet / pChpIter ?" );
         pItem = 0;
     }
     return *pItem;
@@ -912,7 +912,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
         aFkps.push_back( pF );
         if( !pF->Append( nEndFc, nVarLen, pNewSprms ) )
         {
-            OSL_ENSURE( !this, "Sprm liess sich nicht einfuegen" );
+            OSL_ENSURE( false, "Sprm liess sich nicht einfuegen" );
         }
     }
     if( pNewSprms != pSprms )   //Merge to new has created a new block
@@ -1053,7 +1053,7 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
 
     if( bCombined )
     {
-        OSL_ENSURE( !this, "Fkp::Append: Fkp is already combined" );
+        OSL_ENSURE( false, "Fkp::Append: Fkp is already combined" );
         return false;
     }
     sal_Int32 n = ((sal_Int32*)pFkp)[nIMax];        // last entry

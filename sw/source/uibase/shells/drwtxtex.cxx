@@ -580,7 +580,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         break;
 
         default:
-            assert(!this && "wrong dispatcher");
+            assert(false && "wrong dispatcher");
             return;
     }
     if(nEEWhich && pNewAttrs)

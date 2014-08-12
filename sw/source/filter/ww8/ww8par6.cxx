@@ -163,7 +163,7 @@ void wwSection::SetDirection()
     switch (maSep.wTextFlow)
     {
         default:
-            OSL_ENSURE(!this, "Unknown layout type");
+            OSL_ENSURE(false, "Unknown layout type");
             //fall-through
         case 0:
             meDir=FRMDIR_HORI_LEFT_TOP;
@@ -238,7 +238,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
             eType = GRID_NONE;
             break;
         default:
-            OSL_ENSURE(!this, "Unknown grid type");
+            OSL_ENSURE(false, "Unknown grid type");
             //fall-through
         case 3:
             eType = GRID_LINES_CHARS;
@@ -2979,7 +2979,7 @@ void SwWW8ImplReader::SetToggleBiDiAttr(sal_uInt8 nAttrId, bool bOn)
             }
             break;
         default:
-            OSL_ENSURE(!this, "Unhandled unknown bidi toggle attribute");
+            OSL_ENSURE(false, "Unhandled unknown bidi toggle attribute");
             break;
 
     }
@@ -3042,7 +3042,7 @@ void SwWW8ImplReader::SetToggleAttr(sal_uInt8 nAttrId, bool bOn)
                                                 : STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ) );
             break;
         default:
-            OSL_ENSURE(!this, "Unhandled unknown toggle attribute");
+            OSL_ENSURE(false, "Unhandled unknown toggle attribute");
             break;
     }
 }
@@ -4337,7 +4337,7 @@ void SwWW8ImplReader::Read_BoolItem( sal_uInt16 nId, const sal_uInt8* pData, sho
             nId = RES_PARATR_SCRIPTSPACE;
             break;
         default:
-            OSL_ENSURE( !this, "wrong Id" );
+            OSL_ENSURE( false, "wrong Id" );
             return ;
     }
 
@@ -4876,7 +4876,7 @@ void SwWW8ImplReader::Read_AlignFont( sal_uInt16, const sal_uInt8* pData, short 
                 break;
             default:
                 nVal = SvxParaVertAlignItem::AUTOMATIC;
-                OSL_ENSURE(!this,"Unknown paragraph vertical align");
+                OSL_ENSURE(false,"Unknown paragraph vertical align");
                 break;
         }
         NewAttr( SvxParaVertAlignItem( nVal, RES_PARATR_VERTALIGN ) );

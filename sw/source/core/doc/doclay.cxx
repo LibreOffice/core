@@ -191,7 +191,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 #endif
 
     default:
-        OSL_ENSURE( !this,
+        OSL_ENSURE( false,
                 "LayoutFormat was requested with an invalid Request." );
 
     }

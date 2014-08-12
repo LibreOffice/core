@@ -162,7 +162,7 @@ OUString HTMLReader::GetTemplateName() const
     if (aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE ))
         return sTemplate;
 
-    OSL_ENSURE( !this, "The default HTML template cannot be found in the defined template directories!");
+    OSL_ENSURE( false, "The default HTML template cannot be found in the defined template directories!");
 
     return OUString();
 }
@@ -1074,7 +1074,7 @@ void SwHTMLParser::NextToken( int nToken )
                 break;
 
             default:
-                OSL_ENSURE( !this, "SwHTMLParser::NextToken: invalid tag" );
+                OSL_ENSURE( false, "SwHTMLParser::NextToken: invalid tag" );
                 break;
             }
 
@@ -2737,7 +2737,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                         pAttr->nSttCntnt = 0;
                     else
                     {
-                        OSL_ENSURE( !this, "SetAttr: GoNext() failed!" );
+                        OSL_ENSURE( false, "SetAttr: GoNext() failed!" );
                         delete pAttr;
                         pAttr = pPrev;
                         continue; // break;
@@ -2763,7 +2763,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                             pAttr->nEndCntnt = pCNd->Len();
                         else
                         {
-                            OSL_ENSURE( !this, "SetAttr: GoPrevious() failed!" );
+                            OSL_ENSURE( false, "SetAttr: GoPrevious() failed!" );
                             pAttrPam->DeleteMark();
                             delete pAttr;
                             pAttr = pPrev;
@@ -2868,7 +2868,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                         pCNd->SetAttr( *pAttr->pItem );
                         break;
                     }
-                    OSL_ENSURE( !this,
+                    OSL_ENSURE( false,
                             "LRSpace ueber mehrere Absaetze gesetzt!" );
                     // no break (shouldn't reach this point anyway)
                 default:
@@ -4167,7 +4167,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
         eMode = AM_SOFTNOSPACE;
         break;
     default:
-        OSL_ENSURE( !this, "unbekannte Vorlage" );
+        OSL_ENSURE( false, "unbekannte Vorlage" );
         break;
     }
     if( pPam->GetPoint()->nContent.GetIndex() )
@@ -4220,7 +4220,7 @@ void SwHTMLParser::EndTxtFmtColl( int nToken )
         eMode = AM_SOFTNOSPACE;
         break;
     default:
-        OSL_ENSURE( !this, "unbekannte Vorlage" );
+        OSL_ENSURE( false, "unbekannte Vorlage" );
         break;
     }
     if( pPam->GetPoint()->nContent.GetIndex() )

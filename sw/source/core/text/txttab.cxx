@@ -395,7 +395,7 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 
                 break;
             }
-            default: OSL_ENSURE( !this, "SwTabPortion::PreFormat: unknown adjustment" );
+            default: OSL_ENSURE( false, "SwTabPortion::PreFormat: unknown adjustment" );
         }
     }
 

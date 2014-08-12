@@ -338,7 +338,7 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString
             aLong = *l;
         if( aNew.isEmpty() )
         {
-            OSL_ENSURE( !this, "Kein Kurzname in Rename angegeben" );
+            OSL_ENSURE( false, "Kein Kurzname in Rename angegeben" );
             nErr = ERR_SWG_INTERNAL_ERROR; return (sal_uInt16) -1;
         }
 
@@ -566,7 +566,7 @@ bool SwTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
         return IsOnlyTextBlock( nIdx );
     }
 
-    OSL_ENSURE( !this, "ungueltiger Name" );
+    OSL_ENSURE( false, "ungueltiger Name" );
     return false;
 }
 

@@ -38,7 +38,7 @@ void SwView::ExecColl(SfxRequest &rReq)
     {
         case FN_SET_PAGE:
         {
-            OSL_ENSURE(!this, "Not implemented");
+            OSL_ENSURE(false, "Not implemented");
         }
         break;
         case FN_SET_PAGE_STYLE:

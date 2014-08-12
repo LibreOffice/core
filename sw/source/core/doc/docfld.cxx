@@ -1332,7 +1332,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         SwTxtFld* pTxtFld = (SwTxtFld*)(*it)->GetTxtFld();
         if( !pTxtFld )
         {
-            OSL_ENSURE( !this, "what's wrong now'" );
+            OSL_ENSURE( false, "what's wrong now'" );
             continue;
         }
 
@@ -2547,7 +2547,7 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
         sFldName = ((SwSetExpFieldType&)rType).GetName();
         break;
     default:
-        OSL_ENSURE( !this, "kein gueltiger FeldTyp" );
+        OSL_ENSURE( false, "kein gueltiger FeldTyp" );
     }
 
     if( !sFldName.isEmpty() )

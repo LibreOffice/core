@@ -529,7 +529,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
         break;
     default:
-        OSL_ENSURE( !this,
+        OSL_ENSURE( false,
         "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: unknown family" );
         break;
     }

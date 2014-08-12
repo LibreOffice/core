@@ -475,7 +475,7 @@ void SwTxtFormatter::CalcDropHeight( const sal_uInt16 nLines )
     {
         if( !Next() )
         {
-            OSL_ENSURE( !this, "SwTxtFormatter::_CalcDropHeight: left Toulouse" );
+            OSL_ENSURE( false, "SwTxtFormatter::_CalcDropHeight: left Toulouse" );
             break;
         }
     }
