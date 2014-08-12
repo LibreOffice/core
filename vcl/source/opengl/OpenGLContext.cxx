@@ -844,7 +844,8 @@ void OpenGLContext::makeCurrent()
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent(): wglMakeCurrent failed: " << GetLastError());
     }
 #elif defined( MACOSX )
-    CGLSetCurrentContext(m_aGLWin.context);
+    CGLError nError = CGLSetCurrentContext(m_aGLWin.context);
+    SAL_WARN_IF(nError != kCGLNoError, "vcl.opengl", "error in makeCurrent");
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
@@ -857,7 +858,8 @@ void OpenGLContext::resetCurrent()
 #if defined( WNT )
     wglMakeCurrent( m_aGLWin.hDC, 0 );
 #elif defined( MACOSX )
-    CGLSetCurrentContext(NULL);
+    CGLError nError = CGLSetCurrentContext(NULL);
+    SAL_WARN_IF(nError != kCGLNoError, "vcl.opengl", "error in makeCurrent");
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
