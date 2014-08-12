@@ -106,8 +106,6 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
 
 ::std::vector< COMDLG_FILTERSPEC > lcl_buildFilterList(CFilterContainer& rContainer)
 {
-    const sal_Int32                          c      = rContainer.numFilter();
-          sal_Int32                          i      = 0;
           ::std::vector< COMDLG_FILTERSPEC > lList  ;
           CFilterContainer::FILTER_ENTRY_T   aFilter;
 
@@ -1101,7 +1099,6 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
 void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
 {
     ::sal_Int16 nId     = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
-    ::sal_Int16 nAction = rRequest->getArgumentOrDefault(PROP_CONTROL_ACTION, INVALID_CONTROL_ACTION);
 
     // dont check for right values here ...
     // most parameters are optional !
