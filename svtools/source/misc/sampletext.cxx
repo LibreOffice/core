@@ -90,7 +90,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
     static const sal_Unicode aImplSymbolFontText[] = {
         0xF021,0xF032,0xF043,0xF054,0xF065,0xF076,0xF0B7,0xF0C8,0};
     static const sal_Unicode aImplStarSymbolText[] = {
-        0x2706,0x2704,0x270D,0xE033,0x2211,0x2288,0};
+        0x2702,0x2708,0x270D,0xE033,0x2211,0x2288,0};
     const sal_Unicode* pText = bOpenSymbol ? aImplStarSymbolText : aImplSymbolFontText;
     OUString sSampleText(pText);
     bool bHasSampleTextGlyphs = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
