@@ -5823,46 +5823,25 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
             nLenFBSE = nLength;
             // is FBSE big enough for our data
             bool bOk = ( nSkipBLIPLen + 4 + nSkipBLIPPos + 4 <= nLenFBSE );
-            bool bBLIPIsDirectlyEmbedded(false);
 
-            if(bOk)
+            if( bOk )
             {
-                rSt.SeekRel(nSkipBLIPLen);
+                rSt.SeekRel( nSkipBLIPLen );
                 rSt.ReadUInt32( nBLIPLen );
-
-                // #i125187# do not simply skip these four bytes, but read them. This value
-                // is zero when the BLIP is embedded to the FBSE directly following in the
-                // stream, else 1. Use this as hint to be more reliable (see below)
-                rSt.ReadUInt32( nBLIPPos );
-
-                if (0 == nBLIPPos)
-                {
-                    bBLIPIsDirectlyEmbedded = true;
-                }
-
+                rSt.SeekRel( nSkipBLIPPos );
                 rSt.ReadUInt32( nBLIPPos );
                 bOk = rSt.GetError() == 0;
 
-                nLength -= nSkipBLIPLen + 4 + nSkipBLIPPos + 4;
+                nLength -= nSkipBLIPLen+ 4 + nSkipBLIPPos + 4;
             }
 
             if( bOk )
             {
-                // #i125187# the original check to test if the BLIP is following embeded in the FBSE was
-                // was (!nBLIPPos && nBLIPLen < nLenFBSE), but there are ppt documents
-                // where this is not sufficient (what means that for BLIPs in the picture
-                // stream the same conditions can be true sometimes). I experimented with various
-                // ppt files and detected that the four bytes before reading the nBLIPPos
-                // contain a flag which describes that embedding more reliable, thus I will
-                // use it here now in the form of the bBLIPIsDirectlyEmbedded variable (see above).
-                // This modification works with all ppt files I found which use directly embedded
-                // BLIPs and with the file which showed the error. More work may be needed when
-                // exceptions to this more strict schema may show up, though.
-                if (0 == nBLIPPos && nBLIPLen < nLenFBSE && bBLIPIsDirectlyEmbedded)
-                {
-                    // get BLIP file position as directly following embedded
+                // specialty:
+                // If nBLIPLen is less than nLenFBSE AND nBLIPPos is NULL,
+                // then we assume, that the image is in FBSE!
+                if( (!nBLIPPos) && (nBLIPLen < nLenFBSE) )
                     nBLIPPos = rSt.Tell() + 4;
-                }
 
                 // That worked great!
                 // We store, that we do have one FBSE more in the pointer array.
