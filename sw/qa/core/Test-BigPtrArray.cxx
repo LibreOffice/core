@@ -196,9 +196,10 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        sal_uLong oldCount = bparr.Count();
+        const sal_uLong oldCount = bparr.Count();
 
-        for (sal_uLong i = 0, j = -5; i < 5; i++, j++)
+        // insert 5 elements
+        for (sal_uLong i = 0, j = 30; i < 5; i++, j++)
             bparr.Insert(new BigPtrEntryMock(j), i);
 
         CPPUNIT_ASSERT_MESSAGE
@@ -207,12 +208,14 @@ public:
             (oldCount + 5 == bparr.Count())
         );
 
-        for (sal_uLong i = 0, j = -5; i < bparr.Count(); i++, j++)
+        // now, first 5 elements have counts: 30,31,..34
+        // next 10 elements have counts: 0,1,..9
+        for (sal_uLong i = 0, j = 30; i < bparr.Count(); i++, j++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_insert_at_already_used_index failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == j
+                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i < 5 ? j : i - 5)
             );
         }
 
