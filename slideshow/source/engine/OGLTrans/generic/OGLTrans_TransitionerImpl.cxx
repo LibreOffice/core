@@ -383,7 +383,9 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
+#ifdef UNX
     mbTextureFromPixmap = rGLWindow.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
+#endif
     mbGenerateMipmap = rGLWindow.HasGLExtension( "GL_SGIS_generate_mipmap" );
 
     glEnable(GL_CULL_FACE);
