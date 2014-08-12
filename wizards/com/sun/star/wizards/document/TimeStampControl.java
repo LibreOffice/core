@@ -41,7 +41,7 @@ public class TimeStampControl extends DatabaseControl
     private Resource oResource;
     private String sDateAppendix; // = GetResText(RID_FORM + 4)
     private String sTimeAppendix; // = GetResText(RID_FORM + 5)
-    XShapes xGroupShapes = null;
+
     private double nreldatewidth;
     private double nreltimewidth;
     private int nTimeWidth;

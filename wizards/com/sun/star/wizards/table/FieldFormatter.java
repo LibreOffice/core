@@ -47,11 +47,11 @@ public class FieldFormatter implements XItemListener
     private XButton btnShiftUp;
     private XButton btnShiftDown;
     private short curtabindex;
-    String TOGGLEBUTTONS = "toggleButtons";
-    String ADDFIELDNAME = "addFieldName";
-    String REMOVEFIELDNAME = "removeFieldName";
+
+
+
     private String MODIFYFIELDNAME = "modifyFieldName";
-    String[] fieldnames;
+
     private String suntitled;
     private Integer IFieldFormatStep;
 

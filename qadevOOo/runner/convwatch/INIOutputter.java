@@ -25,7 +25,7 @@ public class INIOutputter
 {
     private FileWriter m_aOut;
     private String m_sFilename;
-    private String m_sNamePrefix;              // the HTML files used a suffix to build it's right name
+
 
     /**
      * ls is the current line separator (carridge return)
@@ -52,7 +52,6 @@ public class INIOutputter
                 return null;
             }
             a.m_sFilename = sFilename;
-            a.m_sNamePrefix = _sNamePrefix;
 
             return a;
         }

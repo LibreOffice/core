@@ -26,7 +26,7 @@ public class StatusHelper
     final static public int DIFF_AFTER_MOVE_DONE_NO_PROBLEMS =       4;
     final static public int DIFF_AFTER_MOVE_DONE_DIFFERENCES_FOUND = 5;
 
-    public String m_sMainName;
+
 
     public String m_sOldGfx;
     public String m_sNewGfx;

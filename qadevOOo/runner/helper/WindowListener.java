@@ -30,16 +30,12 @@ package helper;
  */
 public class WindowListener implements com.sun.star.awt.XWindowListener {
 
-    // hidden called
-    private boolean hiddenTrigger;
-    // move called
-    private boolean movedTrigger;
+
+
     // resize called
     public boolean resizedTrigger;
-    // show called
-    private boolean shownTrigger;
-    // dispose called
-    private boolean disposeTrigger;
+
+
 
     /**
      * Creates a new WindowListener
@@ -52,14 +48,12 @@ public class WindowListener implements com.sun.star.awt.XWindowListener {
      * The window hidden event
      */
     public void windowHidden(com.sun.star.lang.EventObject eventObject) {
-        hiddenTrigger = true;
     }
 
     /**
      * The window move event
      */
     public void windowMoved(com.sun.star.awt.WindowEvent windowEvent) {
-        movedTrigger = true;
     }
 
     /**
@@ -73,24 +67,18 @@ public class WindowListener implements com.sun.star.awt.XWindowListener {
      * The window show event
      */
     public void windowShown(com.sun.star.lang.EventObject eventObject) {
-        shownTrigger = true;
     }
 
     /**
      * The dispose event
      */
     public void disposing(com.sun.star.lang.EventObject eventObject) {
-        disposeTrigger = true;
     }
 
     /**
      * Reset all triggers to "not fired".
      */
     public void resetTrigger() {
-        hiddenTrigger = false;
-        movedTrigger = false;
         resizedTrigger = false;
-        shownTrigger = false;
-        disposeTrigger = false;
     }
 }

@@ -42,9 +42,9 @@ public class ScriptContext extends PropertySet implements XScriptContext
 
     private XModel m_xModel = null;
     private XScriptInvocationContext m_xInvocationContext = null;
-    public String m_sDocURI = null;
+
     private XDesktop m_xDeskTop = null;
-    public Integer m_iStorageID = null;
+
     private XComponentContext m_xComponentContext = null;
 
     private ScriptContext( XComponentContext xmComponentContext,

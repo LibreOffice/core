@@ -40,7 +40,7 @@ import java.util.ArrayList;
 public class SQLQueryComposer
 {
 
-    public XColumnsSupplier xColSuppl;
+
     private QueryMetaData CurDBMetaData;
     public XSingleSelectQueryAnalyzer m_xQueryAnalyzer;
     private ArrayList<CommandName> composedCommandNames = new ArrayList<CommandName>(1);

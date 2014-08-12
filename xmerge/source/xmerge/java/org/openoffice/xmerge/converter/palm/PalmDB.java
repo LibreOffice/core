@@ -65,8 +65,7 @@ import java.io.UnsupportedEncodingException;
 
 public final class PalmDB {
 
-   /* Backup attribute for a PDB.  This corresponds to dmHdrAttrBackup.  */
-    public final static short PDB_HEADER_ATTR_BACKUP = 0x0008;
+
 
     /**  Number of bytes for the name field in the PDB. */
     public final static int NAME_LENGTH = 32;

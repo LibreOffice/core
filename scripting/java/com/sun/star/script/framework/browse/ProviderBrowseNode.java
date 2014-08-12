@@ -50,12 +50,12 @@ public class ProviderBrowseNode extends PropertySet
     private Collection<XBrowseNode> browsenodes;
     private String name;
     protected ParcelContainer container;
-    protected Parcel parcel;
+
     private XComponentContext m_xCtx;
 
-    public boolean deletable = true;
-    public boolean creatable = true;
-    public boolean editable = false;
+
+
+
 
     public ProviderBrowseNode( ScriptProvider provider, ParcelContainer container, XComponentContext xCtx ) {
         LogUtils.DEBUG("*** ProviderBrowseNode ctor");
@@ -78,11 +78,6 @@ public class ProviderBrowseNode extends PropertySet
                 xFac.createInstanceWithContext(
                     "com.sun.star.ucb.SimpleFileAccess",
                     xCtx ) );
-            if (  container.isUnoPkg() || xSFA.isReadOnly( container.getParcelContainerDir() ) )
-            {
-                deletable = false;
-                creatable = false;
-            }
         }
         // TODO propage errors
         catch( com.sun.star.uno.Exception e )

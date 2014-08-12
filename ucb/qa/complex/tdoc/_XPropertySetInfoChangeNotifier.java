@@ -26,10 +26,10 @@ import share.LogWriter;
  */
 public class _XPropertySetInfoChangeNotifier {
     public XPropertySetInfoChangeNotifier oObj = null;
-    public LogWriter log = null;
+
 
     private PropertySetInfoChangeListener listener = new PropertySetInfoChangeListener();
-    String[] args = null;
+
 
 
     public boolean _addPropertiesChangeListener() {

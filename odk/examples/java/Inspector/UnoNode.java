@@ -50,7 +50,7 @@ import com.sun.star.util.XURLTransformer;
 
 public class UnoNode{
 
-    String sPath = null;
+
     Object m_oUnoObject;
     private XMultiComponentFactory m_xMultiComponentFactory;
     private XComponentContext m_xComponentContext;

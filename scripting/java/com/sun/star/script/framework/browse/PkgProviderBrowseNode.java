@@ -33,10 +33,6 @@ public class PkgProviderBrowseNode extends ProviderBrowseNode
         LogUtils.DEBUG("*** PkgProviderBrowseNode ctor container name = " + container.getName());
         LogUtils.DEBUG("*** PkgProviderBrowseNode ctor container path = " + container.getParcelContainerDir());
         LogUtils.DEBUG("*** PkgProviderBrowseNode ctor, container has num parcels = " + container.getElementNames().length);
-        deletable = false;
-        editable  = false;
-        creatable = false;
-
     }
 
     @Override

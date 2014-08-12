@@ -27,7 +27,7 @@ import com.sun.star.uno.IQueryInterface;
 
 public class PathUtils {
 
-    private static String FILE_URL_PREFIX;
+
     public static String BOOTSTRAP_NAME;
     private static boolean m_windows = false;
 
@@ -36,7 +36,6 @@ public class PathUtils {
         if (System.getProperty("os.name").startsWith("Windows"))
             m_windows = true;
 
-        FILE_URL_PREFIX = m_windows ? "file:///" : "file://";
         BOOTSTRAP_NAME = m_windows ? "bootstrap.ini" : "bootstraprc";
     }
     public static String getOidForModel( XModel xModel )

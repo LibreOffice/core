@@ -54,7 +54,7 @@ public class _XDataPilotDescriptor {
 
     private XDataPilotDescriptor oObj = null;
     private CellRangeAddress CRA = new CellRangeAddress((short)1, 0, 0, 5, 5);
-    private CellRangeAddress oldCRA = null ;
+
     private String sTag = new String ("XDataPilotDescriptor_Tag");
     private String fieldsNames[];
     private int fieldsAmount = 0;
@@ -132,7 +132,6 @@ public class _XDataPilotDescriptor {
         executeMethod("getHiddenFields()") ;
         executeMethod("getPageFields()") ; */
 
-        oldCRA = oObj.getSourceRange() ;
         oObj.setSourceRange(CRA);
 
         return true;

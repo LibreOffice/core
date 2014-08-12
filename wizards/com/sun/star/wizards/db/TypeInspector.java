@@ -51,15 +51,10 @@ public class TypeInspector
 
     public class TypeInfo
     {
-
-        private int nDataType;
-        private String sDataTypeName;
         public boolean bisAutoIncrementable;
 
         private TypeInfo(int _nDataType, String _sDataTypeName, boolean _bisAutoIncrementable)
         {
-            nDataType = _nDataType;
-            sDataTypeName = _sDataTypeName;
             bisAutoIncrementable = _bisAutoIncrementable;
         }
     }

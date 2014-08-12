@@ -26,16 +26,16 @@ import java.util.ArrayList;
 public class SortingComponent
 {
 
-    private com.sun.star.lang.XMultiServiceFactory xMSF;
+
     private WizardDialog CurUnoDialog;
     private int MaxSortIndex = -1;
-    public String[][] FieldNames;
+
     private static String sNoSorting;
     private static String sSortCriteriaisduplicate;
     private static String[] sSortHeader = new String[4];
     private static String[] sSortAscend = new String[4];
     private static String[] sSortDescend = new String[4];
-    static short[] bOldSortValues = new short[4];
+
     private int MAXSORTCRITERIAINDEX = 3;
     private final int SOFIRSTSORTLST = 0;
     private final int SOSECSORTLST = 1;
@@ -69,7 +69,6 @@ public class SortingComponent
         {
             this.CurUnoDialog = CurUnoDialog;
             short curtabindex = UnoDialog.setInitialTabindex(iStep);
-            xMSF = CurUnoDialog.xMSF;
             Integer IStep = new Integer(iStep);
             Integer ICompPosX = new Integer(iCompPosX);
             Integer ICompWidth = new Integer(iCompWidth);

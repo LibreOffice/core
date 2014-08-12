@@ -52,8 +52,8 @@ public class ScriptBrowseNode extends PropertySet
 
     private Parcel parent;
     private String name;
-    private String uri;
-    private String description;
+
+
     private boolean editable  = false;
     private boolean deletable = false;
     private boolean renamable = false;
@@ -82,9 +82,6 @@ public class ScriptBrowseNode extends PropertySet
         {
             LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
         }
-
-        uri = data.getShortFormScriptURL();
-        description = data.getDescription();
 
         if (provider.hasScriptEditor() == true)
         {
@@ -155,7 +152,6 @@ public class ScriptBrowseNode extends PropertySet
         {
             LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
         }
-        uri = data.getShortFormScriptURL();
     }
     // implementation of XInvocation interface
     public XIntrospectionAccess getIntrospection() {
@@ -271,7 +267,6 @@ public class ScriptBrowseNode extends PropertySet
                 LogUtils.DEBUG("Now remove old script");
                 parent.removeByName( name );
 
-                uri = data.getShortFormScriptURL();
                 name = languageName;
                 result = new Any(new Type(XBrowseNode.class), this);
             }

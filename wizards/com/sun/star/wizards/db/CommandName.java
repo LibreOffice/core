@@ -34,7 +34,7 @@ public class CommandName
     private String AliasName = PropertyNames.EMPTY_STRING;
     private boolean bCatalogAtStart;
     private String sCatalogSep;
-    private String sIdentifierQuote;
+
     private boolean baddQuotation = true;
 
     public CommandName(CommandMetaData _CommandMetaData, String _DisplayName)
@@ -176,7 +176,6 @@ public class CommandName
         {
             bCatalogAtStart = oCommandMetaData.xDBMetaData.isCatalogAtStart();
             sCatalogSep = oCommandMetaData.xDBMetaData.getCatalogSeparator();
-            sIdentifierQuote = oCommandMetaData.xDBMetaData.getIdentifierQuoteString();
             return true;
         }
         catch (SQLException e)

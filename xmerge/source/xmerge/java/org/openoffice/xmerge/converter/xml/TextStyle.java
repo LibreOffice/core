@@ -35,7 +35,7 @@ import org.openoffice.xmerge.util.Debug;
  */
 public class TextStyle extends Style implements Cloneable {
 
-    final protected static int FIRST_ATTR = 0x01;
+
     /** Indicates <i>bold</i> text. */
     final private static int BOLD        = 0x01;
     /** Indicates <i>italic</i> text. */
@@ -48,8 +48,7 @@ public class TextStyle extends Style implements Cloneable {
     final private static int SUPERSCRIPT = 0x10;
     /** Indicates <i>subscripted</i> text. */
     final private static int SUBSCRIPT   = 0x20;
-    /** Indicates the last attribute. */
-    final protected static int LAST_ATTR = 0x20;
+
 
     /** Values of text attributes. */
     private int values = 0;

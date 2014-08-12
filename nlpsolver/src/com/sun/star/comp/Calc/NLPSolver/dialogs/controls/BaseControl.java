@@ -47,7 +47,7 @@ public abstract class BaseControl {
     private Object unoModel;
     protected Object unoControl;
     private XPropertySet properties;
-    private BaseControl parentControl;
+
 
     public abstract String getName();
 
@@ -79,7 +79,6 @@ public abstract class BaseControl {
             XControlContainer controlContainer = UnoRuntime.queryInterface(XControlContainer.class, parentControl.unoControl);
             unoControl = controlContainer.getControl(name);
 
-            this.parentControl = parentControl;
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(BaseControl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ElementExistException ex) {
@@ -93,7 +92,6 @@ public abstract class BaseControl {
         this.context = context;
         unoModel = null;
         unoControl = null;
-        parentControl = null;
     }
 
     protected void setProperty(String name, Object value) {

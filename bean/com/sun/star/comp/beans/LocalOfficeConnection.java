@@ -46,7 +46,7 @@ public class LocalOfficeConnection
     implements OfficeConnection
 {
     private static final String      OFFICE_APP_NAME     = "soffice";
-    public static final String      OFFICE_LIB_NAME     = "officebean";
+
     private static final String      OFFICE_ID_SUFFIX    = "_Office";
 
     private Process                 mProcess;

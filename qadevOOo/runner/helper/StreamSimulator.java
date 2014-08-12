@@ -51,8 +51,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     private com.sun.star.io.XOutputStream   m_xOutStream    ;
     private com.sun.star.io.XSeekable       m_xSeek         ;
 
-    private  boolean                         m_bInWasUsed    ;
-    private  boolean                         m_bOutWasUsed   ;
+
+
 
 
     /**
@@ -81,8 +81,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     {
         ////m_aProtocol = new ComplexTestEnvironment();
         m_sFileName     = sFileName ;
-        m_bInWasUsed    = false     ;
-        m_bOutWasUsed   = false     ;
 
         try
         {
@@ -128,8 +126,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                                                  com.sun.star.io.BufferSizeExceededException,
                                                                  com.sun.star.io.IOException
     {
-        m_bInWasUsed = true;
-
         if (m_xInStream == null)
         {
             throw new com.sun.star.io.NotConnectedException("stream not open");
@@ -160,7 +156,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                                                         com.sun.star.io.IOException
     {
         //m_aProtocol.log("readSomeBytes(lData["+lData.length+"]["+lData[0]+"],"+nMaxBytesToRead+")\n{\n");
-        m_bInWasUsed = true;
 
         if (m_xInStream == null)
         {
@@ -197,7 +192,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                                             com.sun.star.io.IOException
     {
         //m_aProtocol.log("skipBytes("+nBytesToSkip+")\n{\n");
-        m_bInWasUsed = true;
 
         if (m_xInStream == null)
         {
@@ -227,7 +221,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                   com.sun.star.io.IOException
     {
         //m_aProtocol.log("available()\n{\n");
-        m_bInWasUsed = true;
 
         if (m_xInStream == null)
         {
@@ -257,7 +250,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                     com.sun.star.io.IOException
     {
         //m_aProtocol.log("closeInput()\n{\n");
-        m_bInWasUsed = true;
 
         if (m_xInStream == null)
         {
@@ -291,7 +283,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                                         com.sun.star.io.IOException
     {
         //m_aProtocol.log("writeBytes(lData["+lData.length+"])\n{\n");
-        m_bOutWasUsed = true;
 
         if (m_xOutStream == null)
         {
@@ -322,7 +313,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                com.sun.star.io.IOException
     {
         //m_aProtocol.log("flush()\n{\n");
-        m_bOutWasUsed = true;
 
         if (m_xOutStream == null)
         {
@@ -352,7 +342,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                                      com.sun.star.io.IOException
     {
         //m_aProtocol.log("closeOutput()\n{\n");
-        m_bOutWasUsed = true;
 
         if (m_xOutStream == null)
         {
@@ -388,14 +377,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     {
         //m_aProtocol.log("seek("+nLocation+")\n{\n");
 
-        if (m_xInStream != null)
-            m_bInWasUsed = true;
-        else
-        if (m_xOutStream != null)
-            m_bOutWasUsed = true;
-        else
-            //m_aProtocol.log("\tno stream open!\n");
-
         if (m_xSeek == null)
         {
             //m_aProtocol.log("\tstream not seekable. throw IOException\n\tfailed\n}\n");
@@ -422,14 +403,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     {
         //m_aProtocol.log("getPosition()\n{\n");
 
-        if (m_xInStream != null)
-            m_bInWasUsed = true;
-        else
-        if (m_xOutStream != null)
-            m_bOutWasUsed = true;
-        else
-            //m_aProtocol.log("\tno stream open!\n");
-
         if (m_xSeek == null)
         {
             //m_aProtocol.log("\tstream not seekable. throw IOException\n\tfailed\n}\n");
@@ -455,14 +428,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     public long getLength() throws com.sun.star.io.IOException
     {
         //m_aProtocol.log("getLength()\n{\n");
-
-        if (m_xInStream != null)
-            m_bInWasUsed = true;
-        else
-        if (m_xOutStream != null)
-            m_bOutWasUsed = true;
-        else
-            //m_aProtocol.log("\tno stream open!\n");
 
         if (m_xSeek == null)
         {

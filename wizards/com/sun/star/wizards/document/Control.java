@@ -43,12 +43,12 @@ public class Control extends Shape
     XControlModel xControlModel;
     private XControl xControl;
     public XPropertySet xPropertySet;
-    private XPropertySet xControlPropertySet;
+
     XWindowPeer xWindowPeer;
-    Object oDefaultValue;
-    GridControl oGridControl;
+
+
     private String sServiceName;
-    XNamed xNamed;
+
     private final int SOMAXTEXTSIZE = 50;
     private int icontroltype;
     private XNameContainer xFormName;
@@ -108,7 +108,7 @@ public class Control extends Shape
                 _xGroupShapes.add(xShape);
             }
             xControl = oFormHandler.xControlAccess.getControl(xControlModel);
-            xControlPropertySet = UnoRuntime.queryInterface( XPropertySet.class, xControl );
+            UnoRuntime.queryInterface( XPropertySet.class, xControl );
             xWindowPeer = xControl.getPeer();
         }
         catch (Exception e)

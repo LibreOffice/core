@@ -37,13 +37,11 @@ import lib.TestParameters;
 public class _XTypeProvider {
 
 
-    private TestParameters tEnv = null;
+
     private static XTypeProvider oObj = null;
     private static Type[] types = null;
 
     public _XTypeProvider(TestParameters tEnv, XTypeProvider oObj) {
-
-        this.tEnv = tEnv;
         _XTypeProvider.oObj = oObj;
     }
 

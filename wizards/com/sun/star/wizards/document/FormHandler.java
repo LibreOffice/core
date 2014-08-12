@@ -97,9 +97,9 @@ public class FormHandler
 
         int DataType;
         private int ControlType;
-        private String ControlService;
+
         String GridColumnName;
-        private boolean bIsText;
+
     }
 
     /** Creates a new instance of FormHandler */
@@ -197,9 +197,7 @@ public class FormHandler
         ControlData curControlData = new ControlData();
         curControlData.DataType = _datatype;
         curControlData.ControlType = _controltype;
-        curControlData.ControlService = _scontrolservicename;
         curControlData.GridColumnName = _gridcolumnname;
-        curControlData.bIsText = _bIsTextControl;
         return curControlData;
     }
 

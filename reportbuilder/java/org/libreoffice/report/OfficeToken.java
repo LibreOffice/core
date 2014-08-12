@@ -44,7 +44,7 @@ public class OfficeToken
     public static final String IMAGE_DATA = "image-data";
     public static final String PRESERVE_IRI = "preserve-IRI";
     public static final String SCALE = "scale";
-    public static final String NAME = "name";
+
     public static final String SHAPES = "shapes";
     public static final String ISOTROPIC = "isotropic";
     public static final String ANISOTROPIC = "anisotropic";

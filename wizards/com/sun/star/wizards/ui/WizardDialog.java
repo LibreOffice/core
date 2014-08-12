@@ -48,13 +48,13 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private static final String FINISH_ACTION_PERFORMED = "finishWizard_1";
     private static final String CANCEL_ACTION_PERFORMED = "cancelWizard_1";
     private static final String HELP_ACTION_PERFORMED = "callHelp";
-    public VetoableChangeSupport vetos = new VetoableChangeSupport(this);
+
     private String[] sRightPaneHeaders;
     private int iButtonWidth = 50;
     private int nNewStep = 1;
     private int nOldStep = 1;
     private int nMaxStep = 1;
-    protected XItemListener RoadmapItemListener;
+
     private XControl xRoadmapControl;
     private XItemEventBroadcaster xRoadmapBroadcaster;
     private String[] sRMItemLabels;
@@ -62,7 +62,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private XSingleServiceFactory xSSFRoadmap;
     public XIndexContainer xIndexContRoadmap;
     private Resource oWizardResource;
-    private String sMsgEndAutopilot;
+
     private int hid;
     private boolean bTerminateListenermustberemoved = true;
 
@@ -80,7 +80,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         super(xMSF);
         hid = hid_;
         oWizardResource = new Resource(xMSF, "Common", "dbw");
-        sMsgEndAutopilot = oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33);
 
     //new Resource(xMSF,"Common","com");
     }

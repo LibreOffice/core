@@ -37,8 +37,7 @@ import helper.WindowListener;
 public class DocumentHandle {
     // the component loader to load a document
     private XComponentLoader xCompLoader = null;
-    // the document
-    private XComponent xComp = null;
+
     // the current window
     private XWindow xWin = null;
     // a own window listener
@@ -85,8 +84,7 @@ public class DocumentHandle {
 
             // load document in this frame
             XComponentLoader xFrameLoader = UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
-            xComp = xFrameLoader.loadComponentFromURL(
-                                                docName, "_self", 0, szArgs);
+            xFrameLoader.loadComponentFromURL(docName, "_self", 0, szArgs);
             // wait for the document to load.
             try {
                 Thread.sleep(10000);

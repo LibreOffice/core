@@ -30,7 +30,7 @@ public class QuerySummary extends QueryMetaData
 {
 
     final private int RID_QUERY = 2300;
-    final protected int RID_REPORT = 2400;
+
     private String sSummary;
     private Resource oResource;
     private String sSeparator;

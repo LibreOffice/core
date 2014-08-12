@@ -58,13 +58,13 @@ class OnewayExecutor extends Thread
      */
 
     public static final int     REQUEST_FRAMEACTION             = 1     ;
-    public static final int     REQUEST_STATUSCHANGED           = 2     ;
-    public static final int     REQUEST_ADDSTATUSLISTENER       = 3     ;
-    public static final int     REQUEST_REMOVESTATUSLISTENER    = 4     ;
+
+
+
     public static final int     REQUEST_DISPATCH                = 5     ;
 
-    public static final boolean ENCODE_PARAMS                   = true  ;
-    public static final boolean DECODE_PARAMS                   = false ;
+
+
 
 
 

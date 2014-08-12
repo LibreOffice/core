@@ -40,7 +40,7 @@ public class GridControl extends Shape
     public XGridColumnFactory xGridColumnFactory;
     public XPropertySet xPropertySet;
     XNameAccess xNameAccess;
-    final String SODEFAULTNAME = "Grid1";
+
     private XControlModel xControlModel;
     public XComponent xComponent;
 

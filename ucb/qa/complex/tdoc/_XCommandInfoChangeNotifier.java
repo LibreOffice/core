@@ -26,7 +26,7 @@ import share.LogWriter;
  */
 public class _XCommandInfoChangeNotifier {
     public XCommandInfoChangeNotifier oObj = null;
-    public LogWriter log = null;
+
     private CommandInfoChangeListener listener = new CommandInfoChangeListener();
 
     public boolean _addCommandInfoChangeListener() {

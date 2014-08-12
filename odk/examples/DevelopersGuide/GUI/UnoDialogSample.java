@@ -113,9 +113,9 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 //    protected XNameAccess m_xDlgModelNameAccess;
     protected XControl m_xDialogControl;
     protected XDialog xDialog;
-    private XReschedule mxReschedule;
+
     protected XWindowPeer m_xWindowPeer = null;
-    private XTopWindow m_xTopWindow = null;
+
     protected XFrame m_xFrame = null;
     protected XComponent m_xComponent = null;
 
@@ -254,7 +254,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             // The scope of the control container is public...
             m_xDlgContainer = UnoRuntime.queryInterface(XControlContainer.class, oUnoDialog);
 
-            m_xTopWindow = UnoRuntime.queryInterface(XTopWindow.class, m_xDlgContainer);
+            UnoRuntime.queryInterface(XTopWindow.class, m_xDlgContainer);
 
             // link the dialog and its model...
             XControlModel xControlModel = UnoRuntime.queryInterface(XControlModel.class, oDialogModel);
@@ -317,7 +317,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
                 xWindow.setVisible(false);
                 Object tk = m_xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", m_xContext);
                 XToolkit xToolkit = UnoRuntime.queryInterface(XToolkit.class, tk);
-                mxReschedule = UnoRuntime.queryInterface(XReschedule.class, xToolkit);
+                UnoRuntime.queryInterface(XReschedule.class, xToolkit);
                 m_xDialogControl.createPeer(xToolkit, _xWindowParentPeer);
                 m_xWindowPeer = m_xDialogControl.getPeer();
                 return m_xWindowPeer;

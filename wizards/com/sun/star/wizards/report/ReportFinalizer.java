@@ -32,13 +32,12 @@ public class ReportFinalizer
 
     private WizardDialog CurUnoDialog;
     private XTextComponent xTitleTextBox;
-    XTextComponent[] xSaveTextBox = new XTextComponent[2];
-    Object chkTemplate;
+
+
     private String CHANGEREPORTTITLE_FUNCNAME = "changeReportTitle";
     private String TOGGLESUBTEMPLATECONTROLS_FUNCNAME = "toggleSubTemplateControls";
-    String TemplatePath;
     private String StoreName;
-    boolean bfinalaskbeforeOverwrite;
+
     private String DefaultName;
     private String OldDefaultName;
     private IReportDocument CurReportDocument;

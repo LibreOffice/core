@@ -683,8 +683,6 @@ public  ParsedScriptUri parseScriptUri( String scriptURI ) throws com.sun.star.l
         }
 
         ParsedScriptUri parsedUri = new ParsedScriptUri();
-        // parse language
-        parsedUri.language = sfUri.getParameter("language");
         parsedUri.function= sfUri.getName();
         parsedUri.parcel = "";
 

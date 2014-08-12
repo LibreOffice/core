@@ -142,14 +142,10 @@ class alignment extends conversionAlgorithm {
  */
 public class ParaStyle extends Style implements Cloneable {
 
-    /**  The left margin property. */
-    public static final int MARGIN_LEFT      = 0;
-    /**  The right margin property. */
-    public static final int MARGIN_RIGHT     = 1;
-    /**  The top margin property. */
-    public static final int MARGIN_TOP       = 2;
-    /**  The bottom margin property. */
-    public static final int MARGIN_BOTTOM    = 3;
+
+
+
+
     /**  Indent left property. */
     private static final int TEXT_INDENT      = 4;
     /**  Indent right property. */
@@ -200,8 +196,7 @@ public class ParaStyle extends Style implements Cloneable {
 
     /**  Line height percentage.  */
     public static final int LH_PCT        = 0x40000000;
-    /**  Line height minimum value.  */
-    public static final int LH_ATLEAST    = 0x20000000;
+
     /**  Line height mask.  */
     private static final int LH_VALUEMASK  = 0x00FFFFFF;
 

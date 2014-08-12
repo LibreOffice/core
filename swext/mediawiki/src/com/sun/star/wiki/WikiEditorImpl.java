@@ -53,9 +53,8 @@ public final class WikiEditorImpl extends WeakBase
     private static final String m_implementationName = WikiEditorImpl.class.getName();
     private static final String[] m_serviceNames = {"com.sun.star.wiki.WikiEditor" };
 
-    // information needed for component registration
-    public static final String[] supportedServiceNames = {"com.sun.star.frame.ProtocolHandler"};
-    public static final Class implementationClass = WikiEditorImpl.class;
+
+
     // protocol name that this protocol handler handles
     private static final String protocolName = "vnd.com.sun.star.wiki:";
 

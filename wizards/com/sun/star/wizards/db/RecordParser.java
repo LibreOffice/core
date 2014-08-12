@@ -41,12 +41,12 @@ public class RecordParser extends QueryMetaData
 {
 
     private XNameAccess xColumns;
-    com.sun.star.sdbc.XRow xRow;
+
     private com.sun.star.sdbc.XRow xResultSetRow;
     public XResultSet ResultSet;
     private XInterface xRowSet;
     private XCompletedExecution xExecute;
-    private XColumnsSupplier xRowSetColumnsSupplier;
+
     private XComponent xRowSetComponent;
     private XInteractionHandler xInteraction;
     public FieldColumn[] GroupFieldColumns;
@@ -70,7 +70,7 @@ public class RecordParser extends QueryMetaData
         try
         {
             xRowSet = (XInterface) xMSF.createInstance("com.sun.star.sdb.RowSet");
-            xRowSetColumnsSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, xRowSet);
+            UnoRuntime.queryInterface(XColumnsSupplier.class, xRowSet);
             xRowSetComponent = UnoRuntime.queryInterface(XComponent.class, xRowSet);
             xExecute = UnoRuntime.queryInterface(XCompletedExecution.class, xRowSet);
             XInterface oInteraction = (XInterface) xMSF.createInstance("com.sun.star.task.InteractionHandler");

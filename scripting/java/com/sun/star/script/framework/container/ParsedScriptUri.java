@@ -19,7 +19,7 @@ package com.sun.star.script.framework.container;
 
 public class ParsedScriptUri
 {
-    public String language;
+
     public String location;
     public String function;
     public String parcel;

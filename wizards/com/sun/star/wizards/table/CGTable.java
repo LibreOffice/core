@@ -29,8 +29,8 @@ public class CGTable
     private XMultiServiceFactory xMSF;
     XNameAccess xNameAccessFieldsNode;
     private XNameAccess xNameAccessTableNode;
-    public String Index;
-    public String Name;
+
+
 
     public CGTable(XMultiServiceFactory _xMSF)
     {

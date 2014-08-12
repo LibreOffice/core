@@ -27,18 +27,18 @@ public interface PropertyName
     final public static String DOC_COMPARATOR_INCLUDE_SUBDIRS =            "DOC_COMPARATOR_INCLUDE_SUBDIRS";
     final public static String DOC_COMPARATOR_PRINT_MAX_PAGE =             "DOC_COMPARATOR_PRINT_MAX_PAGE";
     final public static String DOC_COMPARATOR_PRINT_ONLY_PAGE =            "DOC_COMPARATOR_PRINT_ONLY_PAGE";
-    final public static String DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION =  "DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION";
+
     final public static String DOC_COMPARATOR_OVERWRITE_REFERENCE =        "DOC_COMPARATOR_OVERWRITE_REFERENCE";
 
     final public static String DOC_COMPARATOR_HTML_OUTPUT_PREFIX =         "DOC_COMPARATOR_HTML_OUTPUT_PREFIX";
 
-    final public static String DOC_CONVERTER_IMPORT_FILTER_NAME =          "DOC_CONVERTER_IMPORT_FILTER_NAME";
+
     final public static String DOC_CONVERTER_EXPORT_FILTER_NAME =          "DOC_CONVERTER_EXPORT_FILTER_NAME";
-    final public static String DOC_CONVERTER_OFFICE_PROGRAM =              "DOC_CONVERTER_OFFICE_PROGRAM";
 
-    final public static String DOC_COMPARATOR_LEAVE_OUT_FILES =            "DOC_COMPARATOR_LEAVE_OUT_FILES";
 
-    final public static String DOC_COMPARATOR_DB_INFO_STRING =             "DOC_COMPARATOR_DB_INFO_STRING";
+
+
+
 
     final public static String OFFICE_VIEWABLE =                           "OFFICE_VIEWABLE";
 

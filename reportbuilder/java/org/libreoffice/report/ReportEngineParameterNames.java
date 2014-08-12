@@ -35,7 +35,7 @@ public class ReportEngineParameterNames
     public static final String INPUT_MASTER_COLUMNS = "input.master-columns";
     public static final String INPUT_MASTER_VALUES = "input.master-values";
     public static final String INPUT_DETAIL_COLUMNS = "input.detail-columns";
-    public static final String MIMETYPE = "output.mimetype";
+
     public static final String AUTHOR = "Author";
     public static final String TITLE = "Title";
     public static final String MAXROWS = "MaxRows";

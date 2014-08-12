@@ -29,7 +29,7 @@ import org.jfree.layouting.input.style.values.CSSNumericValue;
 public class PageContext
 {
 
-    public static final int KEEP_TOGETHER_OFF = 0;
+
     public static final int KEEP_TOGETHER_GROUP = 1;
     public static final int KEEP_TOGETHER_FIRST_DETAIL = 2;
     private PageContext parent;

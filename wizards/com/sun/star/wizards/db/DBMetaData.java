@@ -85,8 +85,8 @@ public class DBMetaData
     private XPropertySet m_dataSourceSettings;
     private XOfficeDatabaseDocument xModel;
     private XPropertySet xDataSourcePropertySet;
-    private String[] DataSourceNames;
-    public String[] CommandNames;
+
+
     private java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
     private Locale aLocale;
     private int[] CommandTypes;
@@ -201,7 +201,6 @@ public class DBMetaData
             this.xMSF = xMSF;
             xDatabaseContext = (XInterface) xMSF.createInstance("com.sun.star.sdb.DatabaseContext");
             xNameAccess = UnoRuntime.queryInterface( XNameAccess.class, xDatabaseContext );
-            DataSourceNames = xNameAccess.getElementNames();
         }
         catch (Exception e)
         {

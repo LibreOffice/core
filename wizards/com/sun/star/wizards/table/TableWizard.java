@@ -44,7 +44,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     private ScenarioSelector curScenarioSelector;
     private FieldFormatter curFieldFormatter;
     private PrimaryKeyHandler curPrimaryKeyHandler;
-    private String sMsgWizardName = PropertyNames.EMPTY_STRING;
+
     public HashMap<String, FieldDescription> fielditems;
     private int wizardmode;
     private String tablename;
@@ -52,13 +52,12 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     private String serrTableNameexists;
     private String scomposedtablename;
     private TableDescriptor curTableDescriptor;
-    public static final int SONULLPAGE = 0;
+
     public static final int SOMAINPAGE = 1;
     public static final int SOFIELDSFORMATPAGE = 2;
     public static final int SOPRIMARYKEYPAGE = 3;
     public static final int SOFINALPAGE = 4;
     private String sMsgColumnAlreadyExists = PropertyNames.EMPTY_STRING;
-    String WizardHeaderText[] = new String[8];
 
     private String m_tableName;
 
@@ -389,7 +388,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
 
     public boolean getTableResources()
     {
-        sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_TABLE + 1);
         slblFields = m_oResource.getResText(UIConsts.RID_TABLE + 19);
         slblSelFields = m_oResource.getResText(UIConsts.RID_TABLE + 25);
         serrToManyFields = m_oResource.getResText(UIConsts.RID_TABLE + 47);

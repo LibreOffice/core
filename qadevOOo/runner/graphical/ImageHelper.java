@@ -30,7 +30,7 @@ class ImageHelper
     private int[] m_aPixels;
     private int m_w = 0;
     private int m_h = 0;
-    private boolean m_bGrabbed = false;
+
 
     private ImageHelper(Image _aImage)
     {
@@ -57,7 +57,6 @@ class ImageHelper
              System.err.println("image fetch aborted or errored");
              return;
          }
-         m_bGrabbed = true;
     }
     public int getWidth() {return m_aImage.getWidth(null);}
     public int getHeight() {return m_aImage.getHeight(null);}

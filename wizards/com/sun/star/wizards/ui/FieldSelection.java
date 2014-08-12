@@ -35,10 +35,10 @@ public class FieldSelection
     protected boolean AppendMode = false;
     protected Integer IStep;
 
-    private int CompPosX;
+
     private int CompPosY;
     private int CompHeight;
-    private int CompWidth;
+
 
     private XFieldSelectionListener xFieldSelection;
     private int maxfieldcount = 10000000;
@@ -174,10 +174,8 @@ public class FieldSelection
             int ShiftButtonCount = 2;
             int a = 0;
             this.CurUnoDialog = CurUnoDialog;
-            this.CompPosX = CompPosX;
             this.CompPosY = CompPosY;
             this.CompHeight = CompHeight;
-            this.CompWidth = CompWidth;
             Object btnmoveall = null;
             Object btnremoveall = null;
 

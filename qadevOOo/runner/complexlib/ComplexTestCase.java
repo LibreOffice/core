@@ -44,8 +44,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
      **/
     private int m_nThreadTimeOut = 0;
 
-    /** End a test if it did fail **/
-    public static final boolean BREAK = true;
+
 
     private boolean m_bBeforeCalled;
 

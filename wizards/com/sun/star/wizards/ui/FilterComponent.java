@@ -72,7 +72,7 @@ public class FilterComponent
     private int iTimeFormat;
     private PropertyValue[][] filterconditions;
     private short curtabindex;
-    private XMultiServiceFactory xMSF;
+
     private final int SO_FIRSTFIELDNAME = 1;
     private final int SO_SECONDFIELDNAME = 2;
     private final int SO_THIRDFIELDNAME = 3;
@@ -101,13 +101,8 @@ public class FilterComponent
     private final int SO_SECONDBOOLFIELDNAME = 256 + 2;
     private final int SO_THIRDBOOLFIELDNAME = 256 + 3;
     private final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
-    int SO_BOOLEANLIST[] =
 
 
-    {
-        SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
-    };
-    final int SO_OPTQUERYMODE = 5;
     private int SOI_MATCHALL = 0;
     private int SOI_MATCHANY = 1;
     private int curHelpID;
@@ -373,7 +368,6 @@ public class FilterComponent
     public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int iWidth, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {
         this.curHelpID = _firstHelpID;
-        this.xMSF = _xMSF;
         this.IStep = Integer.valueOf(iStep);
 
         curtabindex = UnoDialog.setInitialTabindex(iStep);

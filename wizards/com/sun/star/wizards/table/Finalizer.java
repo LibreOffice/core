@@ -34,7 +34,7 @@ public class Finalizer
     private short curtabindex;
     private XRadioButton optModifyTable;
     private XRadioButton optWorkWithTable;
-    private XRadioButton optStartFormWizard;
+
     private XTextComponent txtTableName;
     private XListBox xCatalogListBox;
     private XListBox xSchemaListBox;
@@ -239,7 +239,7 @@ public class Finalizer
                     {
                         UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_MODIFYTABLE", sModifyTable, 101, new Integer(109 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 177
                     });
-            optStartFormWizard = CurUnoDialog.insertRadioButton("optStartFormWizard", null,
+            CurUnoDialog.insertRadioButton("optStartFormWizard", null,
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH

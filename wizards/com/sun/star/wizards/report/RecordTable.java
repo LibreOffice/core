@@ -33,14 +33,14 @@ import com.sun.star.wizards.text.ViewHandler;
 public class RecordTable
 {
 
-    String CurFieldName;
-    String LabelDescription;
+
+
     public XNamed xTableName;
     public XCellRange xCellRange;
     public XTextTable xTextTable;
     private TextTableHandler oTextTableHandler;
     public XTableColumns xTableColumns;
-    private XTableRows xTableRows;
+
 
     public RecordTable(TextTableHandler _oTextTableHandler)
     {
@@ -72,7 +72,7 @@ public class RecordTable
                 xTableName = UnoRuntime.queryInterface(XNamed.class, xTextTable);
                 xTableName.setName(ReportTextDocument.TBLRECORDSECTION);
             }
-            xTableRows = xTextTable.getRows();
+            xTextTable.getRows();
             xTableColumns = xTextTable.getColumns();
             xCellRange = UnoRuntime.queryInterface(XCellRange.class, xTextTable);
         }

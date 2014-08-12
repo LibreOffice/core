@@ -91,10 +91,10 @@ public class PRNCompare
             return nMaxNumber;
         }
 
-    private String m_sInputPath;
+
     private String m_sReferencePath;
     private String m_sOutputPath;
-    private String m_sDocFile;
+
     private String m_sReferenceFile;
     private String m_sPostScriptFile;
     private int m_nMaxPages = 0;
@@ -102,13 +102,9 @@ public class PRNCompare
     private TriState m_tUseBorderMove;
     private String m_sDocumentType;
 
-    public void setInputPath(String _sInputPath) { m_sInputPath = _sInputPath; }
-
     public void setReferencePath(String _sReferencePath) { m_sReferencePath = _sReferencePath; }
 
     public void setOutputPath(String _sOutPath) { m_sOutputPath = _sOutPath; }
-
-    public void setDocFile(String _sDocFile) { m_sDocFile = _sDocFile;}
 
     public void setReferenceFile(String _sPRNFile){ m_sReferenceFile = _sPRNFile;}
 

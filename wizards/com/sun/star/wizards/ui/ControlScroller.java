@@ -28,7 +28,7 @@ public abstract class ControlScroller
 {
 
     protected WizardDialog CurUnoDialog;
-    private XMultiServiceFactory xMSF;
+
     protected int ncurfieldcount;
     private int nblockincrement;
     private int nlineincrement;
@@ -36,13 +36,13 @@ public abstract class ControlScroller
     private int ntotfieldcount;
     private XScrollBar xScrollBar;
     private ArrayList<PropertyValue[]> scrollfields;
-    private Integer ICompPosX;
+
     protected int iCompPosX;
-    private Integer ICompPosY;
+
     protected int iCompPosY;
-    private Integer ICompWidth;
+
     protected int iCompWidth;
-    protected Integer ICompHeight;
+
     protected int iCompHeight;
     private int iStartPosY;
     protected short curtabindex;
@@ -54,7 +54,7 @@ public abstract class ControlScroller
     protected int curHelpIndex;
     private String sIncSuffix;
     protected ArrayList<Object> ControlGroupVector = new ArrayList<Object>();
-    protected PeerConfig oTitlePeerConfig;
+
 
     private class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
     {
@@ -82,7 +82,6 @@ public abstract class ControlScroller
     // TODO add parameters for tabindices and helpindex
     protected ControlScroller(WizardDialog _CurUnoDialog, XMultiServiceFactory _xMSF, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _nblockincrement, int _nlinedistance, int _firsthelpindex)
     {
-        this.xMSF = _xMSF;
         this.nblockincrement = _nblockincrement;
         this.CurUnoDialog = _CurUnoDialog;
         this.iStep = _iStep;
@@ -92,10 +91,7 @@ public abstract class ControlScroller
         IStep = new Integer(iStep);
         this.iCompPosX = _iCompPosX;
         this.iCompPosY = _iCompPosY;
-        this.ICompPosX = new Integer(iCompPosX);
-        this.ICompPosY = new Integer(iCompPosY);
         this.iCompWidth = _iCompWidth;
-        this.ICompWidth = new Integer(iCompWidth);
         this.iCompHeight = 2 * SORELFIRSTPOSY + nblockincrement * linedistance;
         iStartPosY = iCompPosY + SORELFIRSTPOSY;
         int ScrollHeight = iCompHeight - 2;

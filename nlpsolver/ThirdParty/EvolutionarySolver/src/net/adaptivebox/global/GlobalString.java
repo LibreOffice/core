@@ -28,7 +28,7 @@ import java.util.*;
 
 public class GlobalString {
   private static final String NEGLECT_TAG = "#$@";
-  public static final String EQUAL_TAG = "=";
+
 
 /**
   * Tokenize a String with given key.

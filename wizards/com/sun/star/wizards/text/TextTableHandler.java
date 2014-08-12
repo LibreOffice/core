@@ -46,7 +46,7 @@ public class TextTableHandler
     public XTextTablesSupplier xTextTablesSupplier;
     private XMultiServiceFactory xMSFDoc;
     private XTextDocument xTextDocument;
-    private XSimpleText xSimpleText;
+
     private NumberFormatter oNumberFormatter;
     private Locale aCharLocale;
 
@@ -58,7 +58,7 @@ public class TextTableHandler
             this.xMSFDoc = xMSF;
             this.xTextDocument = xTextDocument;
             xTextTablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
-            xSimpleText = UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
+            UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
             XNumberFormatsSupplier xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
             aCharLocale = (Locale) Helper.getUnoStructValue(xTextDocument, "CharLocale");
             oNumberFormatter = new NumberFormatter(xNumberFormatsSupplier, aCharLocale);

@@ -28,7 +28,7 @@ public class QueryMetaData extends CommandMetaData
 {
 
     private SQLQueryComposer oSQLQueryComposer = null;
-    FieldColumn CurFieldColumn;
+
     public String Command;
     // Vector CommandNamesV;
     private PropertyValue[][] m_aFilterConditions; /* = new PropertyValue[][] {}; */

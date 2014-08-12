@@ -33,7 +33,7 @@ public interface EventNames
     public static final String EVENT_KEY_PRESSED = "KPR";
     public static final String EVENT_KEY_RELEASED = "KRE";    //mouse events
     public static final String EVENT_MOUSE_PRESSED = "MPR";
-    public static final String EVENT_MOUSE_RELEASED = "MRE";
+
     public static final String EVENT_MOUSE_ENTERED = "MEN";
     public static final String EVENT_MOUSE_EXITED = "MEX";    //other events
 }

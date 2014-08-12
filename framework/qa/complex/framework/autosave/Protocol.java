@@ -72,16 +72,16 @@ public class Protocol extends JComponent
     private  static final int    TYPE_LINK               = 1024;
 
     public  static final int    FILTER_NONE             = 0;
-    public  static final int    FILTER_OK               = TYPE_OK;
-    public  static final int    FILTER_ERROR            = TYPE_ERROR;
-    public  static final int    FILTER_WARNING          = TYPE_WARNING;
-    public  static final int    FILTER_INFO             = TYPE_INFO;
-    public  static final int    FILTER_SCOPES           = TYPE_SCOPE_OPEN | TYPE_SCOPE_CLOSE;
-    public  static final int    FILTER_TESTMARK         = TYPE_TESTMARK;
-    public  static final int    FILTER_ERROR_INFO       = TYPE_ERROR_INFO;
-    public  static final int    FILTER_WARNING_INFO     = TYPE_WARNING_INFO;
-    public  static final int    FILTER_STATISTIC        = TYPE_STATISTIC;
-    public  static final int    FILTER_LINK             = TYPE_LINK;
+
+
+
+
+
+
+
+
+
+
 
 
     /**

@@ -51,8 +51,7 @@ public final class Debug {
 
     /**  To set a flag. */
     private final static boolean SET = true;
-    /**  To unset a flag. */
-    public final static boolean UNSET = false;
+
 
     private static int flags = 0;
     private static PrintWriter writer = null;

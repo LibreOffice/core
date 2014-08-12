@@ -50,7 +50,7 @@ public class UnoDialog implements EventNames
     public XComponent xComponent;
     public XInterface xDialogModel;
     private XInterface xUnoDialog;
-    private XPropertySet xPSetDlg;
+
     private XVclWindowPeer xVclWindowPeer;
     public HashMap<String, Integer> ControlList;
     public Resource m_oResource;
@@ -77,7 +77,7 @@ public class UnoDialog implements EventNames
             xControl = UnoRuntime.queryInterface(XControl.class, xUnoDialog);
             XControlModel xControlModel = UnoRuntime.queryInterface(XControlModel.class, xDialogModel);
             xControl.setModel(xControlModel);
-            xPSetDlg = UnoRuntime.queryInterface(XPropertySet.class, xDialogModel);
+            UnoRuntime.queryInterface(XPropertySet.class, xDialogModel);
             xDlgContainer = UnoRuntime.queryInterface(XControlContainer.class, xUnoDialog);
             xDlgNames = UnoRuntime.queryInterface(XNameContainer.class, xDialogModel);
             xComponent = UnoRuntime.queryInterface(XComponent.class, xUnoDialog);

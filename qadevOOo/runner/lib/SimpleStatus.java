@@ -58,10 +58,7 @@ class SimpleStatus {
      */
     public final static boolean FAILED = false;
 
-    /**
-     * The constant represents OK state.
-     */
-    public final static boolean OK = true;
+
 
     /**
      * The field is holding state of the status.

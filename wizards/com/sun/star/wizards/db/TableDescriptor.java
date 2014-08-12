@@ -65,7 +65,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private String[] sTableFilters = null;
     private ArrayList<ColumnDescriptor> columncontainer;
     private ArrayList<XPropertySet> keycolumncontainer;
-    public XHierarchicalNameAccess xTableHierarchicalNameAccess;
+
     private CommandName ComposedTableName;
     private XAppend xKeyColAppend;
     private XColumnsSupplier xKeyColumnSupplier;

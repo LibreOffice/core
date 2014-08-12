@@ -30,13 +30,13 @@ import com.sun.star.wizards.common.PropertyNames;
 public abstract class DBLimitedFieldSelection
 {
 
-    private XMultiServiceFactory xMSF;
+
     protected WizardDialog CurUnoDialog;
     private String sNoField;
     protected Integer IStep;
-    private Integer ICompPosX;
-    private Integer ICompPosY;
-    private Integer ICompWidth;
+
+
+
     protected final int rowcount = 4;
     private final int MAXSELINDEX = rowcount - 1;
     protected short curtabindex;
@@ -47,15 +47,11 @@ public abstract class DBLimitedFieldSelection
     public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int _iCompPosX, int iCompPosY, int iCompWidth, int _FirstHelpIndex)
     {
         this.CurUnoDialog = _CurUnoDialog;
-        xMSF = CurUnoDialog.xMSF;
         FirstHelpIndex = _FirstHelpIndex;
         curtabindex = (short) (iStep * 100);
         sNoField = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 8);
         IStep = new Integer(iStep);
         iCompPosX = _iCompPosX;
-        ICompPosX = new Integer(iCompPosX);
-        ICompPosY = new Integer(iCompPosY);
-        ICompWidth = new Integer(iCompWidth);
         iCurPosY = iCompPosY;
         for (int i = 0; i < rowcount; i++)
         {

@@ -30,7 +30,7 @@ import org.libreoffice.report.ReportJobDefinition;
 public class DefaultReportJobDefinition implements ReportJobDefinition
 {
 
-    public static final String OUTPUT_TYPE = "output-type";
+
     private final DefaultParameterMap parameters;
     private final DefaultJobProperties properties;
 

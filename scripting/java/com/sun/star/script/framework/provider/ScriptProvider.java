@@ -87,7 +87,7 @@ public abstract class ScriptProvider
         "com.sun.star.script.provider.LanguageScriptProvider"
     };
 
-    public final static String CLASSPATH = "classpath";
+
 
     protected String language;
 

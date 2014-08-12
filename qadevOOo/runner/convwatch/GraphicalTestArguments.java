@@ -91,9 +91,9 @@ public class GraphicalTestArguments
     private boolean m_bStoreFile = true;
     private boolean m_bResuseOffice = false;
 
-    boolean m_bDebugMode = false;
 
-    private String m_sLeaveOutNames = null;
+
+
 
     private String m_sDistinct = null;
 
@@ -241,10 +241,6 @@ public class GraphicalTestArguments
             }
 
             String sLeaveOutNames = (String)param.get(PropertyName.DOC_COMPARATOR_LEAVE_OUT_FILES);
-            if (sLeaveOutNames != null)
-            {
-                m_sLeaveOutNames = sLeaveOutNames;
-            }
 
             String sDBInfoString = (String)param.get(PropertyName.DOC_COMPARATOR_DB_INFO_STRING);
             if (sDBInfoString != null)

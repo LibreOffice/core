@@ -38,7 +38,7 @@ public interface XUnoPropertyNode extends XUnoNode {
 
     public static int nDEFAULT = 0;
     public static int nPROPERTYSETINFOTYPE = 1;
-    public static int nPROPERTYVALUETYPE = 2;
+
 
     public Object getUnoReturnObject();
 

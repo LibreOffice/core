@@ -44,9 +44,9 @@ public class NumericalHelper
     private static final int STRING_TYPE = -1;
     private static final int BOOLEAN_TYPE = -2;
     private static final int SEQUENCE_TYPE = -3;
-    public static final int ASCII_VALUE_0 = 48;
-    public static final int ASCII_VALUE_A = 65;
-    public static final int COUNT_CHARS_IN_ALPHABET = 26;
+
+
+
     private static final int HEX_BASE = 16;
     private static final int DEC_BASE = 10;
     private static final int ASCII_LETTER_A_OFFSET = 55;

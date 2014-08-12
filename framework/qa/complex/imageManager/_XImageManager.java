@@ -28,14 +28,12 @@ import lib.TestParameters;
  */
 public class _XImageManager {
 
-    private TestParameters tEnv = null;
+
     private String[]imageNames = null;
     private XGraphic[] xGraphicArray = null;
     private XImageManager oObj;
 
     public _XImageManager( TestParameters tEnv, XImageManager oObj) {
-
-        this.tEnv = tEnv;
         this.oObj = oObj;
     }
 

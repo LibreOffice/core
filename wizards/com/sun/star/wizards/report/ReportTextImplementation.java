@@ -127,19 +127,17 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     }
     private static String sMsgQueryCreationImpossible;
     private static String sReportFormNotExisting;
-    private static String sMsgHiddenControlMissing;
+
     private static String sMsgEndAutopilot;
-    static String sMsgConnectionImpossible;
-    private static String sMsgNoConnection;
-    static String[] ReportMessages = new String[4];
+
+
+
 
     private void initialResources()
     {
         sReportFormNotExisting = m_resource.getResText(UIConsts.RID_REPORT + 64);
         sMsgQueryCreationImpossible = m_resource.getResText(UIConsts.RID_REPORT + 65);
-        sMsgHiddenControlMissing = m_resource.getResText(UIConsts.RID_REPORT + 66);
         sMsgEndAutopilot = m_resource.getResText(UIConsts.RID_DB_COMMON + 33);
-        sMsgNoConnection = m_resource.getResText(UIConsts.RID_DB_COMMON + 14);
     }
 
     private void addTextSectionCopies()

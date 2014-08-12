@@ -166,7 +166,6 @@ public class ConvWatch
             String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
             String sReferencePath = FileHelper.getPath(_sAbsoluteReferenceFile);
 
-            a.setInputPath(     sInputPath );
             a.setReferencePath( sReferencePath );
             a.setOutputPath(    _sOutputPath );
             a.setReferenceFile( sReferenceFile );

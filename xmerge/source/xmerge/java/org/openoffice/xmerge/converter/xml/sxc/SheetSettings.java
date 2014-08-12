@@ -46,7 +46,7 @@ public class SheetSettings implements OfficeConstants {
     private int     posTop      = 0;
     private int     paneNumber  = 2;
 
-    final public static int NONE    = 0x00;
+
     final private static int SPLIT   = 0x01;
     final private static int FREEZE  = 0x02;
 

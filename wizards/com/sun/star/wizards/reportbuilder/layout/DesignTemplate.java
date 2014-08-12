@@ -33,8 +33,8 @@ public class DesignTemplate
 {
 
     private XReportDefinition m_xReportDefinition;
-    private XMultiServiceFactory m_xGlobalMSF;
-    private String m_sFilename;
+
+
 
     private DesignTemplate()
     {
@@ -291,8 +291,6 @@ public class DesignTemplate
 
     private void load(XMultiServiceFactory _xMSF, String _sPath) throws com.sun.star.uno.Exception
     {
-        m_xGlobalMSF = _xMSF;
-        m_sFilename = _sPath;
         final Object aObj = _xMSF.createInstance("com.sun.star.report.ReportDefinition");
         m_xReportDefinition = UnoRuntime.queryInterface(XReportDefinition.class, aObj);
 

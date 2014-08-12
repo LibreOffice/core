@@ -57,10 +57,10 @@ public class ParcelBrowseNode extends PropertySet
     private Collection<XBrowseNode> browsenodes;
     private ParcelContainer container;
     private Parcel parcel;
-    private boolean deletable = true;
-    private boolean editable  = false;
-    private boolean creatable = false;
-    private boolean renamable = true;
+
+
+
+
 
     public ParcelBrowseNode( ScriptProvider provider, ParcelContainer container, String parcelName ) {
         this.provider = provider;
@@ -86,10 +86,6 @@ public class ParcelBrowseNode extends PropertySet
             (short)0, "creatable");
         registerProperty("Renamable", new Type(boolean.class),
             (short)0, "renamable");
-        if (provider.hasScriptEditor() == true)
-        {
-            this.creatable = true;
-        }
 
         String parcelDirUrl = parcel.getPathToParcel();
         XComponentContext xCtx = provider.getScriptingContext().getComponentContext();
@@ -100,14 +96,6 @@ public class ParcelBrowseNode extends PropertySet
                 xFac.createInstanceWithContext(
                     "com.sun.star.ucb.SimpleFileAccess",
                     xCtx ) );
-            if ( xSFA != null && ( xSFA.isReadOnly( parcelDirUrl ) ||
-                container.isUnoPkg() ) )
-            {
-                deletable = false;
-                editable  = false;
-                creatable = false;
-                renamable = false;
-            }
         }
         catch ( com.sun.star.uno.Exception e )
         {

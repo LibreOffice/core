@@ -44,28 +44,28 @@ public class AggregateComponent extends ControlScroller
         "SUM", "AVG", "MIN", "MAX"
     };
     private QueryMetaData CurDBMetaData;
-    private XButton optDetailQuery;
-    private XButton optSummaryQuery;
+
+
     private String soptDetailQuery;
     private String soptSummaryQuery;
     private String slblAggregate;
     private String slblFieldNames;
     private String sDuplicateAggregateFunction;
     private int Count;
-    int iQueryType;
+
     private final int SOADDROW = 1;
     private final int SOREMOVEROW = 2;
-    final int CONTROLROWDIST = 18;
+
     private ArrayList<ControlRow> ControlRowVector;
-    String OPTIONBUTTONDETAILQUERY_ITEM_CHANGED = "toggleComponent";
-    String OPTIONBUTTONSUMMARYQUERY_ITEM_CHANGED = "toggleComponent";
-    String LISTBOXFUNCTIONS_ACTION_PERFORMED;
-    String LISTBOXFUNCTIONS_ITEM_CHANGED;
-    String LISTBOXFIELDNAMES_ACTION_PERFORMED;
-    String LISTBOXFIELDNAMES_ITEM_CHANGED;
-    String COMMANDBUTTONPLUS_ACTION_PERFORMED = "addRow";
-    String COMMANDBUTTONMINUS_ACTION_PERFORMED = "removeRow";
-    ArrayList<String> ControlRows;
+
+
+
+
+
+
+
+
+
     private int curHelpID;
     private int lastHelpIndex;
 
@@ -78,7 +78,7 @@ public class AggregateComponent extends ControlScroller
             curHelpID = _firstHelpID;
             this.CurDBMetaData = _CurDBMetaData;
             Count = 1;
-            optDetailQuery = CurUnoDialog.insertRadioButton("optDetailQuery", 0, new ActionListenerImpl(),
+            CurUnoDialog.insertRadioButton("optDetailQuery", 0, new ActionListenerImpl(),
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -88,7 +88,7 @@ public class AggregateComponent extends ControlScroller
                         8, HelpIds.getHelpIdString(curHelpID), soptDetailQuery, new Integer(_iPosX), new Integer(iCompPosY - 42), new Short((short) 1), IStep, new Short(curtabindex++), new Integer(iCompWidth)
                     });
 
-            optSummaryQuery = CurUnoDialog.insertRadioButton("optSummaryQuery", 0, new ActionListenerImpl(),
+            CurUnoDialog.insertRadioButton("optSummaryQuery", 0, new ActionListenerImpl(),
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH

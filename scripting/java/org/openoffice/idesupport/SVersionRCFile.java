@@ -41,9 +41,7 @@ public class SVersionRCFile {
         System.getProperty("os.name").startsWith("Windows") == true ?
             "file:///" : "file://";
 
-    public static final String PKGCHK =
-        System.getProperty("os.name").startsWith("Windows") == true ?
-            "pkgchk.exe" : "pkgchk";
+
 
     private static final String VERSIONS_LINE = "[Versions]";
 

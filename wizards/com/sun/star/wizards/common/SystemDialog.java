@@ -40,7 +40,7 @@ public class SystemDialog
     private XFilterManager xFilterManager;
     private XInitialization xInitialize;
     private XExecutableDialog xExecutable;
-    private XComponent xComponent;
+
     private XFilePickerControlAccess xFilePickerControlAccess;
     private XMultiServiceFactory xMSF;
     private XStringSubstitution xStringSubstitution;
@@ -61,7 +61,7 @@ public class SystemDialog
             xFilterManager = UnoRuntime.queryInterface(XFilterManager.class, systemDialog);
             xInitialize = UnoRuntime.queryInterface(XInitialization.class, systemDialog);
             xExecutable = UnoRuntime.queryInterface(XExecutableDialog.class, systemDialog);
-            xComponent = UnoRuntime.queryInterface(XComponent.class, systemDialog);
+            UnoRuntime.queryInterface(XComponent.class, systemDialog);
             xFilePickerControlAccess = UnoRuntime.queryInterface(XFilePickerControlAccess.class, systemDialog);
             xStringSubstitution = createStringSubstitution(xMSF);
             Short[] listAny = new Short[]

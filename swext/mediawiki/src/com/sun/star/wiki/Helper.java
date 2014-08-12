@@ -80,9 +80,9 @@ public class Helper
 
     public final static int DLG_SENDTITLE = 6;
     public final static int DLG_WIKIARTICLE = 7;
-    public final static int DLG_NO = 8;
+
     public final static int DLG_OK = 9;
-    public final static int DLG_YES = 10;
+
     // 11 is reserved
     public final static int DLG_ADDBUTTON = 12;
     public final static int DLG_EDITBUTTON = 13;
@@ -92,7 +92,7 @@ public class Helper
     public final static int DLG_EDITSETTING_URLLABEL = 16;
     public final static int DLG_EDITSETTING_USERNAMELABEL = 17;
     public final static int DLG_EDITSETTING_PASSWORDLABEL = 18;
-    public final static int DLG_NEWWIKIPAGE_LABEL1 = 19;
+
     public final static int DLG_SENDTOMEDIAWIKI_LABEL1 = 20;
     public final static int DLG_SENDTOMEDIAWIKI_LABEL2 = 21;
     public final static int DLG_SENDTOMEDIAWIKI_LABEL3 = 22;

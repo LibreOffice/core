@@ -98,10 +98,7 @@ public interface PropertyName {
      * parameter name: "NewOfficeInstance"
      */
     final public static String NEW_OFFICE_INSTANCE = "NewOfficeInstance";
-    /**
-     * parameter name: "KeepDocument"
-     */
-    final public static String KEEP_DOCUMENT = "KeepDocument";
+
     /**
      * parameter name: "SRC_ROOT"<p>
      * path to the source root of OpenOffice.org

@@ -26,7 +26,7 @@ import share.LogWriter;
  */
 public class _XPropertiesChangeNotifier {
     public XPropertiesChangeNotifier oObj = null;
-    public LogWriter log = null;
+
 
     private PropertiesChangeListener listener = new PropertiesChangeListener();
     private String[] args = null;

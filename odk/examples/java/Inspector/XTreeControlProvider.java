@@ -39,7 +39,7 @@ import com.sun.star.uno.Type;
 
 public interface XTreeControlProvider {
 
-    public static String sTitle = "User defined";
+
 
     public String enableFilterElements(XUnoNode _oUnoNode);
 

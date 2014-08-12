@@ -30,7 +30,7 @@ public class Format implements Cloneable {
     final public static int RIGHT_ALIGN     = 0x01;
     final public static int CENTER_ALIGN    = 0x02;
     final public static int LEFT_ALIGN      = 0x03;
-    final public static int JUST_ALIGN      = 0x04;
+
 
     /**  Vertical Alignment Constants. */
     final public static int TOP_ALIGN       = 0x01;
