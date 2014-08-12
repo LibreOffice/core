@@ -2138,12 +2138,20 @@ lcl_ApplyCellProperties(
                 xCellCurs->gotoEnd( sal_True );
                 const uno::Reference< beans::XPropertyState >
                     xCellTextPropState(xCellCurs, uno::UNO_QUERY);
-                const beans::PropertyState state = xCellTextPropState->getPropertyState(rName);
-                if (state == beans::PropertyState_DEFAULT_VALUE)
+                try
                 {
-                    const uno::Reference< beans::XPropertySet >
-                        xCellTextProps(xCellCurs, uno::UNO_QUERY);
-                    xCellTextProps->setPropertyValue(rName, rValue);
+                    const beans::PropertyState state = xCellTextPropState->getPropertyState(rName);
+                    if (state == beans::PropertyState_DEFAULT_VALUE)
+                    {
+                        const uno::Reference< beans::XPropertySet >
+                            xCellTextProps(xCellCurs, uno::UNO_QUERY);
+                        xCellTextProps->setPropertyValue(rName, rValue);
+                    }
+                }
+                catch (const uno::Exception& e)
+                {
+                    SAL_WARN( "sw.uno", "Exception when getting PropertyState: "
+                        + rName + ". Message: " + e.Message );
                 }
             }
         }
