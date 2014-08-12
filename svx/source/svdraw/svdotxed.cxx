@@ -63,8 +63,9 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     }
 
     // FIXME(matteocam)
-    nStat&=~EE_CNTRL_AUTOPAGESIZE;
-    rOutl.SetControlWord(nStat);
+    sal_uIntPtr nStat1=rOutl.GetControlWord();
+    nStat1 &=~EE_CNTRL_AUTOPAGESIZE;
+    rOutl.SetControlWord(nStat1);
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
     if(pOutlinerParaObject!=NULL)
@@ -138,7 +139,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     }
     Size aAnkSiz(aViewInit.GetSize());
     aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() adds 1
-    Size aMaxSiz(1000000,1000000);
+    Size aMaxSiz(100001000000,1000000);
     if (pModel!=NULL) {
         Size aTmpSiz(pModel->GetMaxObjSize());
         if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
@@ -193,7 +194,6 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
             else
             {
                 nMaxHgt = 1000000;
-                nMaxHgt = 2000;
             }
 
             aPaperMax.Width()=nMaxWdt;
@@ -248,6 +248,9 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     {
         aPaperMin.Height() = 0;
     }
+
+    // FIXME(matteocam)
+    aPaperMax.Height() = 2000;
 
     if (pPaperMin!=NULL) *pPaperMin=aPaperMin;
     if (pPaperMax!=NULL) *pPaperMax=aPaperMax;
