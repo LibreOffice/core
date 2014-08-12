@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XParagraphAppend.hpp>
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -158,8 +159,16 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
 
             if( bRemoveContent )
             {
-                OUString aText;
-                xText->setString( aText );
+                xText->setString(OUString());
+                // fdo#82165 shapes anchored at the beginning or end survive
+                // setString("") - kill them the hard way: SwDoc::DelFullPara()
+                uno::Reference<text::XParagraphAppend> const xAppend(
+                        xText, uno::UNO_QUERY_THROW);
+                uno::Reference<lang::XComponent> const xPara(
+                    xAppend->finishParagraph(
+                        uno::Sequence<beans::PropertyValue>()),
+                    uno::UNO_QUERY_THROW);
+                xPara->dispose();
             }
 
             rtl::Reference < XMLTextImportHelper > xTxtImport =
