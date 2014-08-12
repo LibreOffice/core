@@ -189,6 +189,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
             else
             {
                 nMaxHgt = 1000000;
+                nMaxHgt = 2000;
             }
 
             aPaperMax.Width()=nMaxWdt;

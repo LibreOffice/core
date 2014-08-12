@@ -757,6 +757,8 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
             else
             {
                 nHgt = 1000000;
+                // FIXME(matteocam)
+                nHgt = 2000;
             }
 
             rOutliner.SetMaxAutoPaperSize(Size(nWdt,nHgt));

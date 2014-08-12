@@ -533,6 +533,7 @@ void ImpEditEngine::CheckAutoPageSize()
     // FIXME(matteocam)
     /* fprintf( stderr, IsPageOverflow(aPaperSize, aPrevPaperSize)
                         ? "YES Overflow!\n"  : "NO Overflow!\n" ); */
+    fprintf( stderr, "aPaperSize.Height = %d\n", aPaperSize.Height() );
     // setting overflow status
     if ( IsPageOverflow( aPaperSize, aPrevPaperSize ) ) {
         // which paragraph is the first to cause higher size of the box?
