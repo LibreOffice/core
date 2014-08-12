@@ -1121,7 +1121,7 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
                 sMsg.append( nTab32 ).append(")\n");
                 sMsg.append("Cell: (").append(nCol).append(",").append(nRow).append(",").append(nTab32).append(")");
                 sal_uInt32 expectedKey(pValData->GetKey());
-                sal_uInt32 actualKey(-1);
+                sal_uInt32 actualKey(0);
                 if(pValDataTest)
                     actualKey = pValDataTest->GetKey();
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg.getStr(), expectedKey, actualKey);
