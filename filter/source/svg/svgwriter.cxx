@@ -1501,6 +1501,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 
     assert(mpVDev); //invalid virtual device
 
+#if 0
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
     bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != RELIEF_NONE);
@@ -1513,6 +1514,9 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
     {
         // to be implemented
     }
+#else
+    implWriteTextPortion( rPos, rText, mpVDev->GetTextColor(), bApplyMapping );
+#endif
 
 }
 
