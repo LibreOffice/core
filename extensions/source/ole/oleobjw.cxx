@@ -1298,7 +1298,6 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
     {
         DISPPARAMS      dispparams = {NULL, NULL, 0, 0};
 
-        DISPID idPropertyPut = DISPID_PROPERTYPUT;
         scoped_array<DISPID> arDispidNamedArgs;
         scoped_array<CComVariant> ptrArgs;
         scoped_array<CComVariant> ptrRefArgs; // referenced arguments
