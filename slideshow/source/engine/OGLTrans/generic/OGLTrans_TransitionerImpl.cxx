@@ -976,7 +976,7 @@ void OGLTransitionerImpl::impl_createTexture(
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); //TRILINEAR FILTERING
 
-            //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
+        //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
         GLfloat largest_supported_anisotropy;
         glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_supported_anisotropy);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy);
