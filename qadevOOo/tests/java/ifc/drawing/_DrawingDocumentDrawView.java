@@ -117,7 +117,7 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
     public void _IsMasterPageMode() {
         testProperty("IsMasterPageMode");
         try {
-            oObj.setPropertyValue("IsMasterPageMode", new Boolean(false));
+            oObj.setPropertyValue("IsMasterPageMode", Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
         } catch(com.sun.star.beans.UnknownPropertyException e) {
@@ -132,7 +132,7 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
     public void _IsLayerMode() {
         testProperty("IsLayerMode");
         try {
-            oObj.setPropertyValue("IsLayerMode", new Boolean(false));
+            oObj.setPropertyValue("IsLayerMode", Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
         } catch(com.sun.star.beans.UnknownPropertyException e) {

@@ -149,10 +149,10 @@ public class AccessibleMenu extends TestCase {
         tEnv.addObjRelation("LimitedBounds", "yes");
 
         tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
-                            new Boolean(false));
+                            Boolean.FALSE);
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                            new Boolean(false));
+                            Boolean.FALSE);
 
         return tEnv;
     }

@@ -66,7 +66,7 @@ public class _ChartAxisXSupplier extends MultiPropertyTest {
 
             tRes.tested("HasXAxis", !setVal);
             // leave axis untouched
-            oObj.setPropertyValue("HasXAxis", new Boolean(res));
+            oObj.setPropertyValue("HasXAxis", Boolean.valueOf(res));
         }
         catch (com.sun.star.lang.WrappedTargetException e) {
             log.println(e.getMessage());
@@ -101,7 +101,7 @@ public class _ChartAxisXSupplier extends MultiPropertyTest {
                                         "HasXAxisDescription")).booleanValue();
             log.println("Start value: " + res);
 
-            oObj.setPropertyValue("HasXAxisDescription", new Boolean(!res));
+            oObj.setPropertyValue("HasXAxisDescription", Boolean.valueOf(!res));
             boolean setValue = ((Boolean)oObj.getPropertyValue(
                                         "HasXAxisDescription")).booleanValue();
             log.println("Changed value: " + setValue);

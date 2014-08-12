@@ -41,10 +41,10 @@ public class _ParagraphPropertiesAsian extends MultiPropertyTest {
         @Override
         protected Object getNewValue(String propName, Object oldValue) {
             if ((oldValue != null) &&
-                    (oldValue.equals(new Boolean(false)))) {
-                return new Boolean(true);
+                    (oldValue.equals(Boolean.FALSE))) {
+                return Boolean.TRUE;
             } else {
-                return new Boolean(false);
+                return Boolean.FALSE;
             }
         }
     };

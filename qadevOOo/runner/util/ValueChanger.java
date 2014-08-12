@@ -50,7 +50,7 @@ public class ValueChanger {
 
    if (oldValue instanceof Boolean) {
      boolean oldbool = ((Boolean) oldValue).booleanValue();
-     newValue = new Boolean(!oldbool);
+     newValue = Boolean.valueOf(!oldbool);
    } else
 
    if (oldValue instanceof Integer) {

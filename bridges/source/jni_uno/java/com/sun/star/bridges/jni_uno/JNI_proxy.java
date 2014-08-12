@@ -210,7 +210,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
     }
 
     private Boolean isSame(Object obj) {
-        return new Boolean(obj != null
+        return Boolean.valueOf(obj != null
                            && m_oid.equals(UnoRuntime.generateOid(obj)));
     }
 }

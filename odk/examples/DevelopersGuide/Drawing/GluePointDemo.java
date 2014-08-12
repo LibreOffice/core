@@ -77,7 +77,7 @@ public class GluePointDemo
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
-            pPropValues[ 0 ].Value = new Boolean( true );
+            pPropValues[ 0 ].Value = Boolean.TRUE;
 
             xDrawDoc = Helper.createDocument( xOfficeContext,
                 "private:factory/sdraw", "_blank", 0, pPropValues );

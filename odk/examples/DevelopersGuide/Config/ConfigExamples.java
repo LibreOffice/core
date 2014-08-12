@@ -725,7 +725,7 @@ public class ConfigExamples
 
                 Boolean bOldValue = (Boolean)xHPS.getHierarchicalPropertyValue(sSetting);
 
-                Boolean bNewValue = new Boolean( ! bOldValue.booleanValue() );
+                Boolean bNewValue = Boolean.valueOf( ! bOldValue.booleanValue() );
 
                 xHPS.setHierarchicalPropertyValue(sSetting,bNewValue);
             }
@@ -767,7 +767,7 @@ public class ConfigExamples
                     boolean bNew = ! bOld;
 
                     System.out.println("Replacing boolean value: " + aItemNames [i]);
-                    aReplace.replaceByName( aItemNames [i], new Boolean( bNew ) );
+                    aReplace.replaceByName( aItemNames [i], Boolean.valueOf( bNew ) );
                 }
             }
 
@@ -866,7 +866,7 @@ public class ConfigExamples
         String sSampleDataSourceURL = "sdbc:flat:$(userurl)/database/SampleTextDatabase";
 
         com.sun.star.beans.NamedValue [] aSettings = new com.sun.star.beans.NamedValue [2];
-        aSettings[0] = new com.sun.star.beans.NamedValue("HeaderLine",new Boolean(true));
+        aSettings[0] = new com.sun.star.beans.NamedValue("HeaderLine",Boolean.TRUE);
         aSettings[1] = new com.sun.star.beans.NamedValue("FieldDelimiter",";");
 
         String [] aTableFilter = new String[2];
@@ -897,7 +897,7 @@ public class ConfigExamples
 
         xDataSourceProperties.setPropertyValue("URL",  sDataSourceURL  );
         xDataSourceProperties.setPropertyValue("User", sUser  );
-        xDataSourceProperties.setPropertyValue("IsPasswordRequired", new Boolean( bNeedsPassword ) );
+        xDataSourceProperties.setPropertyValue("IsPasswordRequired", Boolean.valueOf( bNeedsPassword ) );
         xDataSourceProperties.setPropertyValue("LoginTimeout", new Integer( nTimeout ) );
 
         if ( aTableFilter != null )

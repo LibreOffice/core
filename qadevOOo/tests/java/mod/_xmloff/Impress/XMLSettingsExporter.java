@@ -135,7 +135,7 @@ public class XMLSettingsExporter extends TestCase {
             NewDataValue = ! ((Boolean) xPropSet.getPropertyValue
                 ("IsLayerMode")).booleanValue();
             xPropSet.setPropertyValue("IsLayerMode",
-                new Boolean (NewDataValue));
+                Boolean.valueOf(NewDataValue));
 
 
         } catch (com.sun.star.uno.Exception e) {

@@ -132,7 +132,7 @@ public abstract class BaseControl {
     }
 
     public void setEnabled(boolean enabled) {
-        setProperty("Enabled", new Boolean(enabled));
+        setProperty("Enabled", Boolean.valueOf(enabled));
     }
 
     public void setVisible(boolean visible) {

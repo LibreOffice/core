@@ -158,7 +158,7 @@ public class SwXTextPortion extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         log.println("adding ObjRelation TRO for TextContent");
-        tEnv.addObjRelation("TRO", new Boolean(true));
+        tEnv.addObjRelation("TRO", Boolean.TRUE);
 
         log.println("adding ObjectRelation 'PARA' for CharacterProperties");
         tEnv.addObjRelation("PARA", paraP);

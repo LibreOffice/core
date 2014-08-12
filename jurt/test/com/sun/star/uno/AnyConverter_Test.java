@@ -37,7 +37,7 @@ public final class AnyConverter_Test {
     Any anyVoid;
     Any anyXTypeProvider;
 
-    Boolean aBool= new Boolean(true);
+    Boolean aBool= Boolean.TRUE;
     Character aChar= new Character('A');
     Byte aByte= new Byte((byte) 111);
     Short aShort= new Short((short) 11111);

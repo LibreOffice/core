@@ -267,7 +267,7 @@ class MyTableModel extends AbstractTableModel {
                 if ( pkgChk.exists() )
                 {
                     ArrayList<Object> row = new ArrayList<Object>();
-                    row.add(0, new Boolean(false));
+                    row.add(0, Boolean.FALSE);
 
                     row.add(1, key);
                     if (key.length() > ((String)longValues[1]).length()) {

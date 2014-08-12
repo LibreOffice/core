@@ -270,7 +270,7 @@ public class _XCellRangesQuery extends MultiMethodTest {
             XPropertySet rowProp = UnoRuntime.queryInterface(
                                            XPropertySet.class,
                                            oRows.getByIndex(0));
-            rowProp.setPropertyValue("IsVisible", new Boolean(vis));
+            rowProp.setPropertyValue("IsVisible", Boolean.valueOf(vis));
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("couldn't get Row " + e.getLocalizedMessage());
         } catch (com.sun.star.lang.WrappedTargetException e) {

@@ -162,7 +162,7 @@ public class ChartTypeChange {
 
         XPropertySet xPropSet = UnoRuntime.queryInterface(
             XPropertySet.class, xDiagram );
-        xPropSet.setPropertyValue( "Dim3D", new Boolean( booleanIs3D ) );
+        xPropSet.setPropertyValue( "Dim3D", Boolean.valueOf( booleanIs3D ) );
 
         xChartDoc.setDiagram(xDiagram);
     }

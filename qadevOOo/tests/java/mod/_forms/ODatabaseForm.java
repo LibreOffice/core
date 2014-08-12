@@ -254,7 +254,7 @@ public class ODatabaseForm extends TestCase {
             try {
                 tableName = "soffice_test_table";
                 srcInf.URL = "jdbc:" + dbURL;
-                srcInf.IsPasswordRequired = new Boolean(true);
+                srcInf.IsPasswordRequired = Boolean.TRUE;
                 srcInf.Password = dbPassword;
                 srcInf.User = dbUser;
 
@@ -620,7 +620,7 @@ public class ODatabaseForm extends TestCase {
         /*****  statement parameter types and their initial
                 values must be added here as relation. */
         params.add("SAU99") ;
-        params.add(new Boolean(false)) ;
+        params.add(Boolean.FALSE) ;
         params.add(new Byte((byte) 123)) ;
         params.add(new Short((short) 234)) ;
         params.add(new Integer(12345)) ;
@@ -644,7 +644,7 @@ public class ODatabaseForm extends TestCase {
         tEnv.addObjRelation("InteractionHandlerChecker", new InteractionHandlerImpl());
 
         // Adding for XWarningSupplier
-        tEnv.addObjRelation("CheckWarningsSupplier", new Boolean(isMySQLDB));
+        tEnv.addObjRelation("CheckWarningsSupplier", Boolean.valueOf(isMySQLDB));
 
         // Adding relation for XDatabaseParameterBroadcaster
         tEnv.addObjRelation("ParameterListenerChecker", new ODatabaseForm.ParameterListenerImpl());

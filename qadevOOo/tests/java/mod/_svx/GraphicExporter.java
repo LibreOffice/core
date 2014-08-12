@@ -207,7 +207,7 @@ public class GraphicExporter extends TestCase {
         log.println("adding ObjRelation for XFilter");
         log.println("This Component doesn't really support the cancel method");
         log.println("See #101725");
-        tEnv.addObjRelation("NoFilter.cancel()", new Boolean(true));
+        tEnv.addObjRelation("NoFilter.cancel()", Boolean.TRUE);
 
         final String hideMode = (String) tParam.get("soapi.test.hidewindows");
         tEnv.addObjRelation("XFilter.Checker",

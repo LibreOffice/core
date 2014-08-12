@@ -148,9 +148,9 @@ public class SwXHeadFootText extends TestCase {
         // changing/getting some properties
         try {
             log.println( "Switching on header" );
-            PropSet.setPropertyValue("HeaderIsOn", new Boolean(true));
+            PropSet.setPropertyValue("HeaderIsOn", Boolean.TRUE);
             log.println( "Switching on footer" );
-            PropSet.setPropertyValue("FooterIsOn", new Boolean(true));
+            PropSet.setPropertyValue("FooterIsOn", Boolean.TRUE);
             log.println( "Get header text" );
             oObj = UnoRuntime.queryInterface(
                         XText.class, PropSet.getPropertyValue("HeaderText"));

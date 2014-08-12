@@ -238,7 +238,7 @@ public class SDraw  {
 
             try {
                 xSPS.setPropertyValue("FillColor", new Integer(getCol(r,g,b)));
-                xSPS.setPropertyValue("Shadow", new Boolean(true));
+                xSPS.setPropertyValue("Shadow", Boolean.TRUE);
             } catch (Exception e) {
                 System.err.println("Can't change colors " + e);
                 e.printStackTrace(System.err);

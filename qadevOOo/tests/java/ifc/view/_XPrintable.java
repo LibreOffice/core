@@ -152,7 +152,7 @@ public class _XPrintable extends MultiMethodTest {
             PrintOptions[0] = firstProp;
             PrintOptions[1] = new PropertyValue();
             PrintOptions[1].Name = "Wait";
-            PrintOptions[1].Value = new Boolean(true);
+            PrintOptions[1].Value = Boolean.TRUE;
             oObj.print(PrintOptions);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex) {

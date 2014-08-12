@@ -820,7 +820,7 @@ public class ViewForwarder {
         }
 
         try {
-            xPropSet.setPropertyValue("PrintHeaders", new Boolean(true));
+            xPropSet.setPropertyValue("PrintHeaders", Boolean.TRUE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             fail(e.getMessage());
             return;

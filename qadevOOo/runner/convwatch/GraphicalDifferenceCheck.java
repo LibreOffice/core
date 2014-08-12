@@ -274,7 +274,7 @@ public class GraphicalDifferenceCheck
         }
 
         PropertyValue pvFilterName = new PropertyValue("FilterName", -1, exportFilter, com.sun.star.beans.PropertyState.getDefault());
-        PropertyValue pvOverwrite = new PropertyValue("Overwrite", -1, new Boolean(true), com.sun.star.beans.PropertyState.getDefault());
+        PropertyValue pvOverwrite = new PropertyValue("Overwrite", -1, Boolean.TRUE, com.sun.star.beans.PropertyState.getDefault());
 
         try
         {

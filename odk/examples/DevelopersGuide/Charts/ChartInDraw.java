@@ -170,7 +170,7 @@ public class ChartInDraw
         // change main title
         XPropertySet aDocProp = UnoRuntime.queryInterface(
             XPropertySet.class, maChartDocument );
-        aDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
+        aDocProp.setPropertyValue( "HasMainTitle", Boolean.TRUE);
 
         XShape aTitle = maChartDocument.getTitle();
         XPropertySet aTitleProp = UnoRuntime.queryInterface( XPropertySet.class, aTitle );
@@ -203,7 +203,7 @@ public class ChartInDraw
         com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
         XPropertySet aDiaProp = UnoRuntime.queryInterface( XPropertySet.class, maDiagram );
-        Boolean aTrue = new Boolean( true );
+        Boolean aTrue = Boolean.TRUE;
 
         aDiaProp.setPropertyValue( "Dim3D", aTrue );
         aDiaProp.setPropertyValue( "Deep", aTrue );
@@ -278,7 +278,7 @@ public class ChartInDraw
         aDirection.DirectionZ =  0.5;
 
         aDiaProp.setPropertyValue( "D3DSceneLightDirection1", aDirection );
-        aDiaProp.setPropertyValue( "D3DSceneLightOn1", new Boolean( true ));
+        aDiaProp.setPropertyValue( "D3DSceneLightOn1", Boolean.TRUE);
     }
 
 

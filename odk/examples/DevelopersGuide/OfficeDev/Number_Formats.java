@@ -175,7 +175,7 @@ public class Number_Formats
             UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
                                   xIndexAccess.getByIndex(1));
 
-        xColPropSet.setPropertyValue( "OptimalWidth", new Boolean(true) );
+        xColPropSet.setPropertyValue( "OptimalWidth", Boolean.TRUE );
     }
 
 

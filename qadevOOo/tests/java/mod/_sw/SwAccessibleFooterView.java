@@ -102,7 +102,7 @@ public class SwAccessibleFooterView extends TestCase {
         // changing/getting some properties
         try {
             log.println( "Switching on footer" );
-            PropSet.setPropertyValue("FooterIsOn", new Boolean(true));
+            PropSet.setPropertyValue("FooterIsOn", Boolean.TRUE);
 
             //change zoom value to 10%
             //footer should be in the vissible area of the document

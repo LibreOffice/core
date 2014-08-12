@@ -244,7 +244,7 @@ public class SvxGraphicObject extends TestCase {
         log.println( "    adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xDrawDoc, tDsc ) );
 
-        tEnv.addObjRelation("NoShear",new Boolean(true));
+        tEnv.addObjRelation("NoShear",Boolean.TRUE);
 
         return tEnv;
 

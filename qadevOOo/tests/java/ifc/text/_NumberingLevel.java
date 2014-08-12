@@ -82,27 +82,27 @@ public class _NumberingLevel {
         _NumberingLevel.log = log;
 
         //key = PropertyName, value = Ooptional
-        NumberingLevel.put("Adjust", new Boolean(false));
-        NumberingLevel.put("ParentNumbering", new Boolean(true));
-        NumberingLevel.put("Prefix", new Boolean(false));
-        NumberingLevel.put("Suffix", new Boolean(false));
-        NumberingLevel.put("CharStyleName", new Boolean(true));
-        NumberingLevel.put("BulletId", new Boolean(true));
-        NumberingLevel.put("BulletChar", new Boolean(false));
-        NumberingLevel.put("BulletFontName", new Boolean(false));
-        NumberingLevel.put("BulletFont", new Boolean(true));
-        NumberingLevel.put("GraphicURL", new Boolean(false));
-        NumberingLevel.put("GraphicBitmap", new Boolean(true));
-        NumberingLevel.put("GraphicSize", new Boolean(true));
-        NumberingLevel.put("VertOrient", new Boolean(true));
-        NumberingLevel.put("StartWith", new Boolean(true));
-        NumberingLevel.put("LeftMargin", new Boolean(false));
-        NumberingLevel.put("SymbolTextDistance", new Boolean(true));
-        NumberingLevel.put("FirstLineOffset", new Boolean(false));
-        NumberingLevel.put("NumberingType", new Boolean(false));
-        NumberingLevel.put("HeadingStyleName", new Boolean(false));
-        NumberingLevel.put("BulletColor", new Boolean(true));
-        NumberingLevel.put("BulletRelSize", new Boolean(true));
+        NumberingLevel.put("Adjust", Boolean.FALSE);
+        NumberingLevel.put("ParentNumbering", Boolean.TRUE);
+        NumberingLevel.put("Prefix", Boolean.FALSE);
+        NumberingLevel.put("Suffix", Boolean.FALSE);
+        NumberingLevel.put("CharStyleName", Boolean.TRUE);
+        NumberingLevel.put("BulletId", Boolean.TRUE);
+        NumberingLevel.put("BulletChar", Boolean.FALSE);
+        NumberingLevel.put("BulletFontName", Boolean.FALSE);
+        NumberingLevel.put("BulletFont", Boolean.TRUE);
+        NumberingLevel.put("GraphicURL", Boolean.FALSE);
+        NumberingLevel.put("GraphicBitmap", Boolean.TRUE);
+        NumberingLevel.put("GraphicSize", Boolean.TRUE);
+        NumberingLevel.put("VertOrient", Boolean.TRUE);
+        NumberingLevel.put("StartWith", Boolean.TRUE);
+        NumberingLevel.put("LeftMargin", Boolean.FALSE);
+        NumberingLevel.put("SymbolTextDistance", Boolean.TRUE);
+        NumberingLevel.put("FirstLineOffset", Boolean.FALSE);
+        NumberingLevel.put("NumberingType", Boolean.FALSE);
+        NumberingLevel.put("HeadingStyleName", Boolean.FALSE);
+        NumberingLevel.put("BulletColor", Boolean.TRUE);
+        NumberingLevel.put("BulletRelSize", Boolean.TRUE);
 
     }
 

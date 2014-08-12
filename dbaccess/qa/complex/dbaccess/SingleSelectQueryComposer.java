@@ -278,7 +278,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             final Object initArgs[] =
 
             {
-                new NamedValue("AutomaticAddition", Boolean.valueOf(true))
+                new NamedValue("AutomaticAddition", Boolean.TRUE)
             };
             final String serviceName = "com.sun.star.beans.PropertyBag";
             final XPropertyContainer filter = UnoRuntime.queryInterface(XPropertyContainer.class, getMSF().createInstanceWithArguments(serviceName, initArgs));

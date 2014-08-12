@@ -167,7 +167,7 @@ public class GeneralTableSample extends SpreadsheetDocHelper
 
         aColumnObj = xColumnsName.getByName( "D" );
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aColumnObj );
-        xPropSet.setPropertyValue( "IsVisible", new Boolean( false ) );
+        xPropSet.setPropertyValue( "IsVisible", Boolean.FALSE );
 
         // Get row 7 by index (interface XIndexAccess)
         Object aRowObj = xRows.getByIndex( 6 );

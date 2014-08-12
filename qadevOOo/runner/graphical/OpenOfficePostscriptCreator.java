@@ -475,7 +475,7 @@ public class OpenOfficePostscriptCreator implements IOffice
                         if (aSettings != null)
                         {
                             XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, aSettings );
-                            xPropSet.setPropertyValue( "PrintAllSheets", new Boolean( true ) );
+                            xPropSet.setPropertyValue( "PrintAllSheets", Boolean.TRUE );
                             GlobalLogWriter.println("PrintAllSheets := true");
                         }
                     }

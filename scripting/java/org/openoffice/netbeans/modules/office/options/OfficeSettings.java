@@ -91,7 +91,7 @@ public class OfficeSettings extends SystemOption {
     }
 
     public void setWarnBeforeDocDeploy(boolean value) {
-        putProperty(WARN_BEFORE_DOC_DEPLOY, new Boolean(value), true);
+        putProperty(WARN_BEFORE_DOC_DEPLOY, Boolean.valueOf(value), true);
     }
 
     public boolean getWarnBeforeParcelDelete() {
@@ -99,7 +99,7 @@ public class OfficeSettings extends SystemOption {
     }
 
     public void setWarnBeforeParcelDelete(boolean value) {
-        putProperty(WARN_BEFORE_PARCEL_DELETE, new Boolean(value), true);
+        putProperty(WARN_BEFORE_PARCEL_DELETE, Boolean.valueOf(value), true);
     }
 
     public boolean getWarnAfterDirDeploy() {
@@ -107,7 +107,7 @@ public class OfficeSettings extends SystemOption {
     }
 
     public void setWarnAfterDirDeploy(boolean value) {
-        putProperty(WARN_AFTER_DIR_DEPLOY, new Boolean(value), true);
+        putProperty(WARN_AFTER_DIR_DEPLOY, Boolean.valueOf(value), true);
     }
 
     public boolean getWarnBeforeMount() {
@@ -115,6 +115,6 @@ public class OfficeSettings extends SystemOption {
     }
 
     public void setWarnBeforeMount(boolean value) {
-        putProperty(WARN_BEFORE_MOUNT, new Boolean(value), true);
+        putProperty(WARN_BEFORE_MOUNT, Boolean.valueOf(value), true);
     }
 }

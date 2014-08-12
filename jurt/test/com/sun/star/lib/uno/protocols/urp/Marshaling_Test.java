@@ -43,7 +43,7 @@ public final class Marshaling_Test {
         Object data[] = new Object[] {
             new com.sun.star.uno.RuntimeException("testRuntimeException"),
             new com.sun.star.uno.Exception("testException"),
-            new Boolean(true),
+            Boolean.TRUE,
             new Byte((byte)47),
             new Character('k'),
             new Double(0.12345),

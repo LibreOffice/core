@@ -51,7 +51,7 @@ public class Test01 implements OLESimpleStorageTest
             //create OLESimpleStorage based on it
             Object pArgs[] = new Object[2];
             pArgs[0] = xTempFile;
-            pArgs[1] = new Boolean( true );
+            pArgs[1] = Boolean.TRUE;
             Object oOLESimpleStorage = m_xMSF.createInstanceWithArguments ( "com.sun.star.embed.OLESimpleStorage", pArgs );
             XOLESimpleStorage xOLESimpleStorage = UnoRuntime.queryInterface(XOLESimpleStorage.class, oOLESimpleStorage);
             m_aTestHelper.Message ( "OLESimpleStorage based on XStream created." );

@@ -150,7 +150,7 @@ public class SwXTextSection extends TestCase {
         log.println( "adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xTextDoc, tDsc ) );
 
-        tEnv.addObjRelation("TRO",new Boolean(true));
+        tEnv.addObjRelation("TRO",Boolean.TRUE);
 
         try {
             TC = UnoRuntime.queryInterface(XTextColumns.class,

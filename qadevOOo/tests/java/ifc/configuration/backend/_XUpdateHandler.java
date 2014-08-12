@@ -42,7 +42,7 @@ public class _XUpdateHandler extends MultiMethodTest {
             xLayerHandler.overrideProperty("ooSetupInstCompleted", (short) 0,
                                            new Type(String.class),
                                            false);
-            xLayerHandler.setPropertyValue(new Boolean(false));
+            xLayerHandler.setPropertyValue(Boolean.FALSE);
             xLayerHandler.endProperty();
             xLayerHandler.overrideNode("Factories", (short) 0, false);
             xLayerHandler.addOrReplaceNode("com.sun.star.chart.ChartDocument",

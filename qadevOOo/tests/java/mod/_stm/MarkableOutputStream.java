@@ -128,7 +128,7 @@ public class MarkableOutputStream extends TestCase {
 
         // all data types for writing to an XDataInputStream
         ArrayList<Object> data = new ArrayList<Object>() ;
-        data.add(new Boolean(true)) ;
+        data.add(Boolean.TRUE) ;
         data.add(new Byte((byte)123)) ;
         data.add(new Character((char)1234)) ;
         data.add(new Short((short)1234)) ;

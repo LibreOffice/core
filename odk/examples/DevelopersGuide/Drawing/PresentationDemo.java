@@ -82,7 +82,7 @@ public class PresentationDemo
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
-            pPropValues[ 0 ].Value = new Boolean( true );
+            pPropValues[ 0 ].Value = Boolean.TRUE;
 
             xDrawDoc = Helper.createDocument( xOfficeContext,
                 "private:factory/simpress", "_blank", 0, pPropValues );
@@ -116,8 +116,8 @@ public class PresentationDemo
             /* the following three properties provokes that the shape is dimmed
                to red
                after the animation has been finished */
-            xShapePropSet.setPropertyValue( "DimHide", new Boolean( false ) );
-            xShapePropSet.setPropertyValue( "DimPrevious", new Boolean( true ) );
+            xShapePropSet.setPropertyValue( "DimHide", Boolean.FALSE );
+            xShapePropSet.setPropertyValue( "DimPrevious", Boolean.TRUE );
             xShapePropSet.setPropertyValue( "DimColor", new Integer( 0xff0000 ) );
 
 
@@ -187,8 +187,8 @@ public class PresentationDemo
             XPresentationSupplier xPresSupplier = UnoRuntime.queryInterface( XPresentationSupplier.class, xDrawDoc );
             XPresentation xPresentation = xPresSupplier.getPresentation();
             XPropertySet xPresPropSet = UnoRuntime.queryInterface( XPropertySet.class, xPresentation );
-            xPresPropSet.setPropertyValue( "IsEndless", new Boolean( true ) );
-            xPresPropSet.setPropertyValue( "IsAlwaysOnTop", new Boolean( true ) );
+            xPresPropSet.setPropertyValue( "IsEndless", Boolean.TRUE );
+            xPresPropSet.setPropertyValue( "IsAlwaysOnTop", Boolean.TRUE );
             xPresPropSet.setPropertyValue( "Pause", new Integer( 0 ) );
             xPresentation.start();
         }

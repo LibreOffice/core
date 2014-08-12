@@ -99,7 +99,7 @@ public class StyleCreation {
                 new Float( com.sun.star.awt.FontWeight.BOLD ) );
             System.out.println( "set the font attribute 'Bold'" );
 
-            xPropertySet.setPropertyValue("CharAutoKerning", new Boolean( true ) );
+            xPropertySet.setPropertyValue("CharAutoKerning", Boolean.TRUE );
             System.out.println( "set the paragraph attribute 'AutoKerning'" );
             xPropertySet.setPropertyValue("ParaAdjust",
                 new Integer( com.sun.star.style.ParagraphAdjust.CENTER_value ) );

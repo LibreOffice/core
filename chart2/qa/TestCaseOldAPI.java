@@ -148,7 +148,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             XPropertySet xDocProp = UnoRuntime.queryInterface(
                 XPropertySet.class, mxOldDoc );
             assure( "Chart Document is no XPropertySet", xDocProp != null );
-            xDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
+            xDocProp.setPropertyValue( "HasMainTitle", Boolean.TRUE);
             assure( "Property HasMainTitle", AnyConverter.toBoolean(
                         xDocProp.getPropertyValue( "HasMainTitle" )));
 
@@ -198,7 +198,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             XPropertySet xDocProp = UnoRuntime.queryInterface(
                 XPropertySet.class, mxOldDoc );
             assure( "Chart Document is no XPropertySet", xDocProp != null );
-            xDocProp.setPropertyValue( "HasSubTitle", new Boolean( true ));
+            xDocProp.setPropertyValue( "HasSubTitle", Boolean.TRUE);
             assure( "Property HasSubTitle", AnyConverter.toBoolean(
                         xDocProp.getPropertyValue( "HasSubTitle" )));
 
@@ -267,14 +267,14 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
                 // y-axis
                 boolean bFirstYAxisText = false;
-                xProp.setPropertyValue( "HasYAxisDescription", new Boolean( bFirstYAxisText ));
+                xProp.setPropertyValue( "HasYAxisDescription", Boolean.valueOf( bFirstYAxisText ));
                 boolean bNewFirstYAxisText = AnyConverter.toBoolean(
                     xProp.getPropertyValue( "HasYAxisDescription" ));
                 assure( "Removing description of first y-axis", bNewFirstYAxisText == bFirstYAxisText );
 
                 // second y-axis
                 boolean bSecondaryYAxis = true;
-                xProp.setPropertyValue( "HasSecondaryYAxis", new Boolean( bSecondaryYAxis ));
+                xProp.setPropertyValue( "HasSecondaryYAxis", Boolean.valueOf( bSecondaryYAxis ));
                 boolean bNewSecYAxisValue = AnyConverter.toBoolean(
                     xProp.getPropertyValue( "HasSecondaryYAxis" ));
                 assure( "Adding a second y-axis does not work", bNewSecYAxisValue == bSecondaryYAxis );
@@ -347,7 +347,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             fMax1 = AnyConverter.toDouble( oMax );
             log.println( "Maximum retrieved: " + fMax1 );
             //todo: the view has to be built before there is an explicit value
-            xProp.setPropertyValue( "AutoMax", new Boolean( false ));
+            xProp.setPropertyValue( "AutoMax", Boolean.FALSE);
             oMax = xProp.getPropertyValue( "Max" );
             assure( "No Maximum set", AnyConverter.isDouble( oMax ));
             fMax2 = AnyConverter.toDouble( oMax );
@@ -365,7 +365,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                         AnyConverter.toDouble( xProp.getPropertyValue( "Max" )),
                         nNewMax ));
 
-            xProp.setPropertyValue( "AutoMin", new Boolean( true ));
+            xProp.setPropertyValue( "AutoMin", Boolean.TRUE);
             assure( "AutoMin is off", AnyConverter.toBoolean( xProp.getPropertyValue( "AutoMin" )) );
 
             xProp.setPropertyValue( "Origin", new Double( nNewOrigin ));
@@ -373,16 +373,16 @@ public class TestCaseOldAPI extends ComplexTestCase {
                     approxEqual(
                         AnyConverter.toDouble( xProp.getPropertyValue( "Origin" )),
                         nNewOrigin ));
-            xProp.setPropertyValue( "AutoOrigin", new Boolean( true ));
+            xProp.setPropertyValue( "AutoOrigin", Boolean.TRUE);
             assure( "AutoOrigin is off", AnyConverter.toBoolean( xProp.getPropertyValue( "AutoOrigin" )) );
             Object oOrigin = xProp.getPropertyValue( "Origin" );
             assure( "No Origin set", AnyConverter.isDouble( oOrigin ));
             log.println( "Origin retrieved: " + AnyConverter.toDouble( oOrigin ));
 
-            xProp.setPropertyValue( "Logarithmic", new Boolean( true ));
+            xProp.setPropertyValue( "Logarithmic", Boolean.TRUE);
             assure( "Scaling is not logarithmic",
                     AnyConverter.toBoolean( xProp.getPropertyValue( "Logarithmic" )) );
-            xProp.setPropertyValue( "Logarithmic", new Boolean( false ));
+            xProp.setPropertyValue( "Logarithmic", Boolean.FALSE);
             assure( "Scaling is not logarithmic",
                     ! AnyConverter.toBoolean( xProp.getPropertyValue( "Logarithmic" )) );
 
@@ -413,7 +413,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             assure( "Property StepHelp",
                     AnyConverter.toDouble( xProp.getPropertyValue( "StepHelp" )) == fStepHelp );
 
-            xProp.setPropertyValue( "DisplayLabels", new Boolean( false ));
+            xProp.setPropertyValue( "DisplayLabels", Boolean.FALSE);
             assure( "Property DisplayLabels", ! AnyConverter.toBoolean(
                         xProp.getPropertyValue( "DisplayLabels" )));
         }
@@ -529,17 +529,17 @@ public class TestCaseOldAPI extends ComplexTestCase {
                     XPropertySet.class, xDia );
                 assure( "Diagram is no XPropertySet", xDiaProp != null );
 
-                xDiaProp.setPropertyValue( "Stacked", new Boolean( true ));
+                xDiaProp.setPropertyValue( "Stacked", Boolean.TRUE);
                 assure( "StackMode could not be set correctly",
                         AnyConverter.toBoolean(
                             xDiaProp.getPropertyValue( "Stacked" )));
 
-                xDiaProp.setPropertyValue( "Dim3D", new Boolean( false ));
+                xDiaProp.setPropertyValue( "Dim3D", Boolean.FALSE);
                 assure( "Dim3D could not be set correctly",
                         ! AnyConverter.toBoolean(
                             xDiaProp.getPropertyValue( "Dim3D" )));
 
-                xDiaProp.setPropertyValue( "Vertical", new Boolean( true ));
+                xDiaProp.setPropertyValue( "Vertical", Boolean.TRUE);
                 assure( "Vertical could not be set correctly",
                         AnyConverter.toBoolean(
                             xDiaProp.getPropertyValue( "Vertical" )));
@@ -646,7 +646,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             xHatchTable.insertByName( aHatchName, aHatch );
             xProp.setPropertyValue( "FillHatchName", aHatchName );
             xProp.setPropertyValue( "FillStyle", FillStyle.HATCH );
-            xProp.setPropertyValue( "FillBackground", new Boolean( true ));
+            xProp.setPropertyValue( "FillBackground", Boolean.TRUE);
             String aNewHatchName = AnyConverter.toString( xProp.getPropertyValue( "FillHatchName" ));
             assure( "HatchName", aNewHatchName.equals( aHatchName ));
             Hatch aNewHatch = (Hatch) AnyConverter.toObject(
@@ -677,7 +677,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             XPropertySet xProp = xDia.getDataRowProperties( 0 );
             assure( "No DataRowProperties for first series", xProp != null );
 
-            xProp.setPropertyValue( "MeanValue", new Boolean( true ));
+            xProp.setPropertyValue( "MeanValue", Boolean.TRUE);
             assure( "No MeanValue", AnyConverter.toBoolean( xProp.getPropertyValue( "MeanValue" )) );
         }
         catch( Exception ex )
@@ -764,10 +764,10 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 XPropertySet.class, xDia );
             assure( "Diagram is no XPropertySet", xDiaProp != null );
 
-            xDiaProp.setPropertyValue( "Volume", new Boolean( true ));
+            xDiaProp.setPropertyValue( "Volume", Boolean.TRUE);
             assure( "Has Volume", AnyConverter.toBoolean( xDiaProp.getPropertyValue( "Volume" )));
 
-            xDiaProp.setPropertyValue( "UpDown", new Boolean( true ));
+            xDiaProp.setPropertyValue( "UpDown", Boolean.TRUE);
             assure( "Has UpDown", AnyConverter.toBoolean( xDiaProp.getPropertyValue( "UpDown" )));
 
             // MinMaxLine

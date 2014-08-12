@@ -61,8 +61,8 @@ public class _ChartAxis extends MultiPropertyTest {
         try {
             //if AutoOrigin isn't true then this property works only when
             //current Origin is less then new value of Max
-            oObj.setPropertyValue("AutoOrigin", new Boolean(true));
-            oObj.setPropertyValue("AutoMax",new Boolean(false));
+            oObj.setPropertyValue("AutoOrigin", Boolean.TRUE);
+            oObj.setPropertyValue("AutoMax",Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't set property value");
             e.printStackTrace(log);
@@ -93,8 +93,8 @@ public class _ChartAxis extends MultiPropertyTest {
         try {
             //if AutoOrigin isn't true then this property works only when
             //current Origin is greater then new value of Min
-            oObj.setPropertyValue("AutoOrigin", new Boolean(true));
-            oObj.setPropertyValue("AutoMin", new Boolean(false));
+            oObj.setPropertyValue("AutoOrigin", Boolean.TRUE);
+            oObj.setPropertyValue("AutoMin", Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't set property value");
             e.printStackTrace(log);
@@ -122,7 +122,7 @@ public class _ChartAxis extends MultiPropertyTest {
     */
     public void _Origin() {
         try {
-            oObj.setPropertyValue("Logarithmic",new Boolean(false));
+            oObj.setPropertyValue("Logarithmic",Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't set property value");
             e.printStackTrace(log);
@@ -162,8 +162,8 @@ public class _ChartAxis extends MultiPropertyTest {
     */
     public void _StepMain() {
         try {
-            oObj.setPropertyValue("AutoStepMain", new Boolean(false));
-            oObj.setPropertyValue("Logarithmic",new Boolean(false));
+            oObj.setPropertyValue("AutoStepMain", Boolean.FALSE);
+            oObj.setPropertyValue("Logarithmic",Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't set property value");
             e.printStackTrace(log);

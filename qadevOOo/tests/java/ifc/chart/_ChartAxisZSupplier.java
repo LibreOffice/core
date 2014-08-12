@@ -67,7 +67,7 @@ public class _ChartAxisZSupplier extends MultiPropertyTest {
         log.println("Set it to 3D");
         oObj = UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
         try {
-            oObj.setPropertyValue("Dim3D", new Boolean(true));
+            oObj.setPropertyValue("Dim3D", Boolean.TRUE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception while set property value");
             e.printStackTrace(log);
@@ -120,7 +120,7 @@ public class _ChartAxisZSupplier extends MultiPropertyTest {
 
             tRes.tested("HasZAxis", !setVal);
             // leave axis untouched
-            oObj.setPropertyValue("HasZAxis", new Boolean(res));
+            oObj.setPropertyValue("HasZAxis", Boolean.valueOf(res));
         }
         catch (com.sun.star.lang.WrappedTargetException e) {
             log.println(e.getMessage());
@@ -155,7 +155,7 @@ public class _ChartAxisZSupplier extends MultiPropertyTest {
                                         "HasZAxisDescription")).booleanValue();
             log.println("Start value: " + res);
 
-            oObj.setPropertyValue("HasZAxisDescription", new Boolean(!res));
+            oObj.setPropertyValue("HasZAxisDescription", Boolean.valueOf(!res));
             boolean setValue = ((Boolean)oObj.getPropertyValue(
                                         "HasZAxisDescription")).booleanValue();
             log.println("Changed value: " + setValue);

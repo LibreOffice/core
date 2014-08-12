@@ -98,7 +98,7 @@ public class AccessiblePresentationGraphicShape extends TestCase {
         try {
             oShapeProps.setPropertyValue(
                 "GraphicURL",util.utils.getFullTestURL("space-metal.jpg"));
-            oShapeProps.setPropertyValue("IsEmptyPresentationObject", new Boolean(false));
+            oShapeProps.setPropertyValue("IsEmptyPresentationObject", Boolean.FALSE);
         } catch (com.sun.star.lang.WrappedTargetException e) {
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         } catch (com.sun.star.beans.PropertyVetoException e) {

@@ -101,10 +101,10 @@ public class AccessibleMenuBar extends TestCase {
         });
 
         tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
-                            new Boolean(false));
+                            Boolean.FALSE);
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                            new Boolean(false));
+                            Boolean.FALSE);
 
         return tEnv;
     }

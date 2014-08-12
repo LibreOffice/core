@@ -76,7 +76,7 @@ public class LayerDemo
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
-            pPropValues[ 0 ].Value = new Boolean( true );
+            pPropValues[ 0 ].Value = Boolean.TRUE;
 
             xDrawDoc = Helper.createDocument( xOfficeContext,
                 "private:factory/sdraw", "_blank", 0, pPropValues );
@@ -122,8 +122,8 @@ public class LayerDemo
             xLayerPropSet = UnoRuntime.queryInterface(
                     XPropertySet.class, xNotVisibleAndEditable );
             xLayerPropSet.setPropertyValue( "Name", "NotVisibleAndEditable" );
-            xLayerPropSet.setPropertyValue( "IsVisible", new Boolean( false ) );
-            xLayerPropSet.setPropertyValue( "IsLocked", new Boolean( true ) );
+            xLayerPropSet.setPropertyValue( "IsVisible", Boolean.FALSE );
+            xLayerPropSet.setPropertyValue( "IsLocked", Boolean.TRUE );
 
             // create a second layer
             XLayer xNotEditable = xLayerManager.insertNewByIndex(
@@ -132,8 +132,8 @@ public class LayerDemo
             xLayerPropSet = UnoRuntime.queryInterface(
                     XPropertySet.class, xNotEditable );
             xLayerPropSet.setPropertyValue( "Name", "NotEditable" );
-            xLayerPropSet.setPropertyValue( "IsVisible", new Boolean( true ) );
-            xLayerPropSet.setPropertyValue( "IsLocked", new Boolean( true ) );
+            xLayerPropSet.setPropertyValue( "IsVisible", Boolean.TRUE );
+            xLayerPropSet.setPropertyValue( "IsLocked", Boolean.TRUE );
 
             // attach the layer to the rectangles
             xLayerManager.attachShapeToLayer( xRect1, xNotVisibleAndEditable );

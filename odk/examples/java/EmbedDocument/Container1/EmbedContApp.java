@@ -795,7 +795,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                 aMedDescr[0].Name = "URL";
                 aMedDescr[0].Value = (Object) aFileURI;
                 aMedDescr[1].Name = "ReadOnly";
-                aMedDescr[1].Value = (Object) new Boolean( false );
+                aMedDescr[1].Value = (Object) Boolean.FALSE;
                 Object oEmbObj = xEmbedFactory.createInstanceInitFromMediaDescriptor( m_xStorage,
                                                                                     "EmbedSub",
                                                                                     aMedDescr );

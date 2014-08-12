@@ -155,9 +155,9 @@ public class SWriter  {
 
         // Change the BackColor
         try {
-            xTTPS.setPropertyValue("BackTransparent", new Boolean(false));
+            xTTPS.setPropertyValue("BackTransparent", Boolean.FALSE);
             xTTPS.setPropertyValue("BackColor",new Integer(13421823));
-            xTTRowPS.setPropertyValue("BackTransparent", new Boolean(false));
+            xTTRowPS.setPropertyValue("BackTransparent", Boolean.FALSE);
             xTTRowPS.setPropertyValue("BackColor",new Integer(6710932));
 
         } catch (Exception e) {
@@ -206,7 +206,7 @@ public class SWriter  {
         // Change the CharColor and add a Shadow
         try {
             xTCPS.setPropertyValue("CharColor",new Integer(255));
-            xTCPS.setPropertyValue("CharShadowed", new Boolean(true));
+            xTCPS.setPropertyValue("CharShadowed", Boolean.TRUE);
         } catch (Exception e) {
             System.err.println("Couldn't change the color " + e);
             e.printStackTrace(System.err);
@@ -316,7 +316,7 @@ public class SWriter  {
         // Change the CharColor and add a Shadow
         try {
             xTCPS.setPropertyValue("CharColor",new Integer(65536));
-            xTCPS.setPropertyValue("CharShadowed", new Boolean(false));
+            xTCPS.setPropertyValue("CharShadowed", Boolean.FALSE);
         } catch (Exception e) {
             System.err.println("Couldn't change the color " + e);
             e.printStackTrace(System.err);

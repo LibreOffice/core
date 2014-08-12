@@ -152,7 +152,7 @@ public class MessageBox  {
             com.sun.star.beans.PropertyValue[] args = new com.sun.star.beans.PropertyValue [1];
             args[0] = new com.sun.star.beans.PropertyValue();
             args[0].Name = "Hidden";
-            args[0].Value = new Boolean(true);
+            args[0].Value = Boolean.TRUE;
             String strDoc = "private:factory/swriter";
 
             xComp = xCLoader.loadComponentFromURL(strDoc, "_blank", 0, args);

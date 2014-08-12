@@ -96,7 +96,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
             printProps[0].State = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
             printProps[1] = new PropertyValue();
             printProps[1].Name = "Wait";
-            printProps[1].Value = new Boolean(true);
+            printProps[1].Value = Boolean.TRUE;
         }
 
         /**

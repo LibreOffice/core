@@ -273,7 +273,7 @@ public class ListBox extends TestCase
             final String columnFKName = fieldTypes[i] + "_fk";
             final String columnPKName = fieldTypes[i] + "_pk";
             XPropertySet listBoxModel = m_formLayer.insertControlLine( "DatabaseListBox", columnFKName, null, 10, 20 + 10*i, 6 );
-            listBoxModel.setPropertyValue( "Dropdown", new Boolean( true ) );
+            listBoxModel.setPropertyValue( "Dropdown", Boolean.TRUE );
             listBoxModel.setPropertyValue( "ListSourceType", ListSourceType.SQL );
             listBoxModel.setPropertyValue( "ListSource", new String[] { "SELECT \"content\", \"" + columnPKName +
                 "\" FROM \"" + tableName + "\"" } );

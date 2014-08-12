@@ -78,7 +78,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
         try
         {
             m_inputLabel = m_formLayer.createControlAndShape( "FixedText", columnPos, rowPos, 70, 12, null );
-            m_inputLabel.setPropertyValue( "MultiLine", new Boolean( true ) );
+            m_inputLabel.setPropertyValue( "MultiLine", Boolean.TRUE );
 
             com.sun.star.awt.FontDescriptor font = (com.sun.star.awt.FontDescriptor)m_inputLabel.getPropertyValue( "FontDescriptor" );
             font.Weight = com.sun.star.awt.FontWeight.BOLD;

@@ -72,7 +72,7 @@ public class RegressionTest_i27773 implements StorageTest {
                     {
                         String sTempURL = AnyConverter.toString( xPropSet.getPropertyValue( "Uri" ) );
                         // m_aTestHelper.Message( "URL: " + sTempURL );
-                        xPropSet.setPropertyValue( "RemoveFile", new Boolean( false ) );
+                        xPropSet.setPropertyValue( "RemoveFile", Boolean.FALSE );
                     }
                     catch ( Exception e )
                     {

@@ -277,7 +277,7 @@ public class CodeSamples
         XPropertySet xProp = UnoRuntime.queryInterface(
             XPropertySet.class,xSingleFac.createInstance());
         xProp.setPropertyValue("Command","SELECT * FROM biblio");
-        xProp.setPropertyValue("EscapeProcessing",new Boolean(true));
+        xProp.setPropertyValue("EscapeProcessing",Boolean.TRUE);
 
         XNameContainer xCont = UnoRuntime.queryInterface(XNameContainer.class, xQDefs);
                 try

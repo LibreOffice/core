@@ -134,7 +134,7 @@ public class ScAccessibleCell extends TestCase {
             XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oColumns);
             XPropertySet column = UnoRuntime.queryInterface(
                                 XPropertySet.class,oIndexAccess.getByIndex(1));
-            column.setPropertyValue("OptimalWidth", new Boolean(true));
+            column.setPropertyValue("OptimalWidth", Boolean.TRUE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception creating relation :");
             e.printStackTrace(log);

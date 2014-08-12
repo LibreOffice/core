@@ -662,7 +662,7 @@ class ListItemAdapter implements ListAdapter{
                     PropertyValue renderProps[] = new PropertyValue[3];
                     renderProps[0] = new PropertyValue();
                     renderProps[0].Name = "IsPrinter";
-                    renderProps[0].Value = new Boolean(true);
+                    renderProps[0].Value = Boolean.TRUE;
                     renderProps[1] = new PropertyValue();
                     renderProps[1].Name = "RenderDevice";
                     renderProps[1].Value = dummySmallDevice;
@@ -781,13 +781,13 @@ class ListItemAdapter implements ListAdapter{
                     PropertyValue loadProps[] = new PropertyValue[3];
                     loadProps[0] = new PropertyValue();
                     loadProps[0].Name = "Hidden";
-                    loadProps[0].Value = new Boolean(true);
+                    loadProps[0].Value = Boolean.TRUE;
                     loadProps[1] = new PropertyValue();
                     loadProps[1].Name = "ReadOnly";
-                    loadProps[1].Value = new Boolean(true);
+                    loadProps[1].Value = Boolean.TRUE;
                     loadProps[2] = new PropertyValue();
                     loadProps[2].Name = "Preview";
-                    loadProps[2].Value = new Boolean(true);
+                    loadProps[2].Value = Boolean.TRUE;
 
                     t0 = System.currentTimeMillis();
                     doc = componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
@@ -812,7 +812,7 @@ class ListItemAdapter implements ListAdapter{
                     PropertyValue renderProps[] = new PropertyValue[3];
                     renderProps[0] = new PropertyValue();
                     renderProps[0].Name = "IsPrinter";
-                    renderProps[0].Value = new Boolean(true);
+                    renderProps[0].Value = Boolean.TRUE;
                     renderProps[1] = new PropertyValue();
                     renderProps[1].Name = "RenderDevice";
                     renderProps[1].Value = dummySmallDevice;

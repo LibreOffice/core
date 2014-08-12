@@ -213,7 +213,7 @@ public class AccessibleTreeListBox extends TestCase {
             });
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-            new Boolean(false));
+            Boolean.FALSE);
 
         return tEnv;
     }

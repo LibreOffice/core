@@ -55,7 +55,7 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
         numericControl.setPropertyValue( "ValueMax", new Short( (short)5 ) );
         numericControl.setPropertyValue( "Value", new Short( (short)1 ) );
         numericControl.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
-        numericControl.setPropertyValue( "Spin", new Boolean( true ) );
+        numericControl.setPropertyValue( "Spin", Boolean.TRUE );
 
         // bind the control model to cell B2
         implBind( numericControl, document.createCellBinding( sheet, exchangeColumn, exchangeRow ) );
@@ -64,7 +64,7 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
         // insert a list box
         XPropertySet listBox = m_formLayer.insertControlLine( "ListBox",
             "select  an entry", "", 2, 40, 20 );
-        listBox.setPropertyValue( "Dropdown", new Boolean( false ) );
+        listBox.setPropertyValue( "Dropdown", Boolean.FALSE );
 
         // a list binding for cell range C1-C5
         final short listSourceSheet = (short)1;

@@ -147,7 +147,7 @@ public abstract class BaseDialog extends BaseControl {
 
 
     public void setCloseable(boolean closeable) {
-        setProperty("Closeable", new Boolean(closeable));
+        setProperty("Closeable", Boolean.valueOf(closeable));
     }
 
     public void repaint() {

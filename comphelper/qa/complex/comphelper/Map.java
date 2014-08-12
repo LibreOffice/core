@@ -234,7 +234,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         Object someValue = null;
         switch ( _pos )
         {
-            case 0: someValue = new Boolean( false ); break;
+            case 0: someValue = Boolean.FALSE; break;
             case 1: someValue = new Short( (short)0 ); break;
             case 2: someValue = new Integer( 0 ); break;
             case 3: someValue = new Long( 0 ); break;

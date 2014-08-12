@@ -76,7 +76,7 @@ public class _BarDiagram extends MultiPropertyTest {
         oObj = UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
         log.println("Set it to 3D");
         try {
-            oObj.setPropertyValue("Dim3D", new Boolean(true));
+            oObj.setPropertyValue("Dim3D", Boolean.TRUE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception while set property value");
             e.printStackTrace(log);
@@ -125,8 +125,8 @@ public class _BarDiagram extends MultiPropertyTest {
     public void _NumberOfLines() {
         log.println("Set it to 2D");
         try {
-            oObj.setPropertyValue("Dim3D", new Boolean(false));
-            oObj.setPropertyValue("Vertical", new Boolean(false));
+            oObj.setPropertyValue("Dim3D", Boolean.FALSE);
+            oObj.setPropertyValue("Vertical", Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception while set property value");
             e.printStackTrace(log);

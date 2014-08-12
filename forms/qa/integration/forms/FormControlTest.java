@@ -487,7 +487,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
 
         XPropertySet dataSourceSettings = UnoRuntime.queryInterface( XPropertySet.class,
             m_dataSourceProps.getPropertyValue( "Settings" ) );
-        dataSourceSettings.setPropertyValue( "FormsCheckRequiredFields", new Boolean( false ) );
+        dataSourceSettings.setPropertyValue( "FormsCheckRequiredFields", Boolean.FALSE );
 
         return m_dataSource != null;
     }
@@ -527,13 +527,13 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
                                     m_formLayer.insertControlLine( "DatabaseTextField",     "dummy",            "", 150 );
 
         xIDField.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
-        xImageField.setPropertyValue( "ScaleImage", new Boolean( true) );
-        xImageField.setPropertyValue( "Tabstop", new Boolean( true ) );
-        xCheckBox.setPropertyValue( "TriState", new Boolean( true ) );
+        xImageField.setPropertyValue( "ScaleImage", Boolean.TRUE );
+        xImageField.setPropertyValue( "Tabstop", Boolean.TRUE );
+        xCheckBox.setPropertyValue( "TriState", Boolean.TRUE );
         xCheckBox.setPropertyValue( "DefaultState", new Short( (short)2 ) );
         xTimeField.setPropertyValue( "TimeFormat", new Short( (short)1 ) );
         xTimeField.setPropertyValue( "TimeMax", new Integer( 23595999 ) );
-        xReqField.setPropertyValue( "ConvertEmptyToNull", new Boolean( false ) );
+        xReqField.setPropertyValue( "ConvertEmptyToNull", Boolean.FALSE );
 
         // the logical form
         m_masterForm = (XPropertySet)dbfTools.getParent( xIDField, XPropertySet.class );

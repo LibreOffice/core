@@ -160,7 +160,7 @@ public class BookmarkInsertion {
                 com.sun.star.beans.XPropertySet.class, xSearchDescriptor);
 
             xPropertySet.setPropertyValue("SearchRegularExpression",
-                                          new Boolean( true ) );
+                                          Boolean.TRUE );
 
             xSearchInterface = (com.sun.star.uno.XInterface)
                 xSearchable.findFirst(xSearchDescriptor);

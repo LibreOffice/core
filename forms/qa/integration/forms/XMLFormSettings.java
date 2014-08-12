@@ -153,7 +153,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
 
         XPropertySet dateControl = m_formLayer.createControlAndShape(
             "DatabaseDateField", 40, 26, 25, 6 );
-        dateControl.setPropertyValue( "Dropdown", new Boolean( true ) );
+        dateControl.setPropertyValue( "Dropdown", Boolean.TRUE );
         impl_bind( dateControl, m_dateBinding );
 
         m_document.getCurrentView( ).toggleFormDesignMode( );

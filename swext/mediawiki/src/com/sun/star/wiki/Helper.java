@@ -220,7 +220,7 @@ public class Helper
             try
             {
                 XNameAccess xAccess = Helper.GetConfigNameAccess( xContext, "org.openoffice.Office.Custom.WikiExtension/Settings" );
-                m_bShowInBrowser = new Boolean( AnyConverter.toBoolean( xAccess.getByName( "PreselectShowBrowser" ) ) );
+                m_bShowInBrowser = Boolean.valueOf( AnyConverter.toBoolean( xAccess.getByName( "PreselectShowBrowser" ) ) );
             }
             catch( com.sun.star.uno.Exception e )
             {
@@ -235,10 +235,10 @@ public class Helper
     {
         try
         {
-            m_bShowInBrowser = new Boolean( bValue );
+            m_bShowInBrowser = Boolean.valueOf( bValue );
 
             XPropertySet xProps = Helper.GetConfigProps( xContext, "org.openoffice.Office.Custom.WikiExtension/Settings" );
-            xProps.setPropertyValue( "PreselectShowBrowser", new Boolean( bValue ) );
+            xProps.setPropertyValue( "PreselectShowBrowser", Boolean.valueOf( bValue ) );
             XChangesBatch xBatch = UnoRuntime.queryInterface( XChangesBatch.class, xProps );
             if ( xBatch != null )
                 xBatch.commitChanges();

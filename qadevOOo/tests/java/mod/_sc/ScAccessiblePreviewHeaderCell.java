@@ -197,7 +197,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
         }
 
         try {
-            xPropSet.setPropertyValue("PrintHeaders", new Boolean(true));
+            xPropSet.setPropertyValue("PrintHeaders", Boolean.TRUE);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(Status.failed(

@@ -89,13 +89,13 @@ public class ViewSample extends SpreadsheetDocHelper
         com.sun.star.sheet.XCellRangeReferrer xRefer = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeReferrer.class, aPane );
         com.sun.star.table.XCellRange xRange = xRefer.getReferredCells();
         com.sun.star.beans.XPropertySet xRangeProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xRange );
-        xRangeProp.setPropertyValue( "IsCellBackgroundTransparent", new Boolean( false ) );
+        xRangeProp.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
         xRangeProp.setPropertyValue( "CellBackColor", new Integer( 0xFFFFCC ) );
 
         // --- View settings ---
         // change the view to display green grid lines
         com.sun.star.beans.XPropertySet xProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xController );
-        xProp.setPropertyValue( "ShowGrid", new Boolean(true) );
+        xProp.setPropertyValue( "ShowGrid", Boolean.TRUE );
         xProp.setPropertyValue( "GridColor", new Integer(0x00CC00) );
 
         // --- Range selection ---
@@ -109,7 +109,7 @@ public class ViewSample extends SpreadsheetDocHelper
         aArguments[0].Value  = "Please select a cell range (e.g. C4:E6)";
         aArguments[1] = new com.sun.star.beans.PropertyValue();
         aArguments[1].Name   = "CloseOnMouseRelease";
-        aArguments[1].Value  = new Boolean(true);
+        aArguments[1].Value  = Boolean.TRUE;
         xRngSel.startRangeSelection( aArguments );
         synchronized (aListener)
         {

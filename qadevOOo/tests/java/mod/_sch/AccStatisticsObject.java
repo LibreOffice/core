@@ -54,7 +54,7 @@ public class AccStatisticsObject extends TestCase {
             xChartDoc = SOF.createChartDoc();
             log.println("Display MeanValue");
             XPropertySet diagProps = UnoRuntime.queryInterface(XPropertySet.class, xChartDoc.getDiagram());
-            diagProps.setPropertyValue("MeanValue",new Boolean(true));
+            diagProps.setPropertyValue("MeanValue",Boolean.TRUE);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occurs.FAILED
             e.printStackTrace( log );

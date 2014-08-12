@@ -163,8 +163,8 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
 
                 // Only matches whole words and case sensitive
                 descriptor.setPropertyValue(
-                    "SearchCaseSensitive", new Boolean(true));
-                descriptor.setPropertyValue("SearchWords", new Boolean(true));
+                    "SearchCaseSensitive", Boolean.TRUE);
+                descriptor.setPropertyValue("SearchWords", Boolean.TRUE);
             }
             catch (com.sun.star.beans.UnknownPropertyException upe) {
                 System.err.println("Error setting up search properties");

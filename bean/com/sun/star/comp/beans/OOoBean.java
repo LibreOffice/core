@@ -837,7 +837,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 }
 
                 // notify change
-                firePropertyChange( aProperty, new Boolean(bOldValue), new Boolean(bNewValue) );
+                firePropertyChange( aProperty, Boolean.valueOf(bOldValue), Boolean.valueOf(bNewValue) );
            }
         }
 

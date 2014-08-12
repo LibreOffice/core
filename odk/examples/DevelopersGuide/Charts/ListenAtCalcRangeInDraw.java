@@ -106,7 +106,7 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
         {
             UnoRuntime.queryInterface(
                 XPropertySet.class, maChartDocument ).setPropertyValue(
-                "HasSubTitle", new Boolean( true ));
+                "HasSubTitle", Boolean.TRUE);
 
             // start listening for death of spreadsheet
             UnoRuntime.queryInterface(
@@ -165,7 +165,7 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
         {
             XPropertySet aDocProp = UnoRuntime.queryInterface(
                 XPropertySet.class, maChartDocument );
-            aDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
+            aDocProp.setPropertyValue( "HasMainTitle", Boolean.TRUE);
 
             UnoRuntime.queryInterface(
                 XPropertySet.class, maChartDocument.getSubTitle()).setPropertyValue(

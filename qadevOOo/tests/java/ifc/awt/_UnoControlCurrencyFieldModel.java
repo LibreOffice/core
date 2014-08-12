@@ -69,7 +69,7 @@ public class _UnoControlCurrencyFieldModel extends MultiPropertyTest {
         testProperty("Tabstop", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return utils.isVoid(old) ? new Boolean(true) : null ;
+                return utils.isVoid(old) ? Boolean.TRUE : null ;
             }
         }) ;
     }

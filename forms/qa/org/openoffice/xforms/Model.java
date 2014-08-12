@@ -75,7 +75,7 @@ public class Model
     {
         try
         {
-            m_modelProps.setPropertyValue("ExternalData", new Boolean(!_internalData));
+            m_modelProps.setPropertyValue("ExternalData", Boolean.valueOf(!_internalData));
         }
         catch (Exception ex)
         {

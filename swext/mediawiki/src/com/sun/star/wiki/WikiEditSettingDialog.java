@@ -130,15 +130,15 @@ public class WikiEditSettingDialog extends WikiDialog
 
         try
         {
-            GetPropSet( "UsernameField" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
-            GetPropSet( "PasswordField" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
-            GetPropSet( "OkButton" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
-            GetPropSet( "HelpButton" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
+            GetPropSet( "UsernameField" ).setPropertyValue( "Enabled", Boolean.valueOf( bEnable ) );
+            GetPropSet( "PasswordField" ).setPropertyValue( "Enabled", Boolean.valueOf( bEnable ) );
+            GetPropSet( "OkButton" ).setPropertyValue( "Enabled", Boolean.valueOf( bEnable ) );
+            GetPropSet( "HelpButton" ).setPropertyValue( "Enabled", Boolean.valueOf( bEnable ) );
 
             if ( bEnable )
             {
-                GetPropSet( "UrlField" ).setPropertyValue( "Enabled", new Boolean( m_bAllowURLChange ) );
-                GetPropSet( "SaveBox" ).setPropertyValue( "Enabled", new Boolean( Helper.PasswordStoringIsAllowed( m_xContext ) ) );
+                GetPropSet( "UrlField" ).setPropertyValue( "Enabled", Boolean.valueOf( m_bAllowURLChange ) );
+                GetPropSet( "SaveBox" ).setPropertyValue( "Enabled", Boolean.valueOf( Helper.PasswordStoringIsAllowed( m_xContext ) ) );
                 if ( m_bAllowURLChange )
                     SetFocusTo( "UrlField" );
                 else
@@ -181,7 +181,7 @@ public class WikiEditSettingDialog extends WikiDialog
         try
         {
             xSaveCheck.setPropertyValue( "State", new Short( bInitSaveCheckBox ? (short)1 : (short)0 ) );
-            xSaveCheck.setPropertyValue( "Enabled", new Boolean( Helper.PasswordStoringIsAllowed( xContext ) ) );
+            xSaveCheck.setPropertyValue( "Enabled", Boolean.valueOf( Helper.PasswordStoringIsAllowed( xContext ) ) );
         }
         catch( Exception e )
         {

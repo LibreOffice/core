@@ -99,7 +99,7 @@ public class AccessiblePresentationShape extends TestCase {
 
         try {
             shapeProps.setPropertyValue(
-                                "IsEmptyPresentationObject", new Boolean(false));
+                                "IsEmptyPresentationObject", Boolean.FALSE);
         } catch (Exception e) {}
 
         new AccessibilityTools();

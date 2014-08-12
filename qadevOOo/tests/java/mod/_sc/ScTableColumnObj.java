@@ -157,7 +157,7 @@ public class ScTableColumnObj extends TestCase {
         tEnv.addObjRelation("ValidRange","K1:K1");
 
         //since TableColumnsNames are fixed XNamed::setName() should always be OK
-        tEnv.addObjRelation("setName",new Boolean(true));
+        tEnv.addObjRelation("setName",Boolean.TRUE);
         return tEnv;
     }
 }

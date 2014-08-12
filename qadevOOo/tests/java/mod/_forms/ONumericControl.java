@@ -230,7 +230,7 @@ public class ONumericControl extends TestCase {
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);
 
-        tEnv.addObjRelation("XTextComponent.onlyNumbers", new Boolean(true));
+        tEnv.addObjRelation("XTextComponent.onlyNumbers", Boolean.TRUE);
 
         return tEnv;
     } // finish method getTestEnvironment

@@ -3797,7 +3797,7 @@ public class TextPortionEnumerationTest
         PropertyValue[] loadProps = new PropertyValue[1];
         loadProps[0] = new PropertyValue();
         loadProps[0].Name = "Hidden";
-        loadProps[0].Value = new Boolean(true);
+        loadProps[0].Value = Boolean.TRUE;
 
         xComp = util.DesktopTools.loadDoc(m_xMSF, file, loadProps);
 

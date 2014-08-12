@@ -1266,7 +1266,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             }
             // Alternatively we could have done it also this way:
             // bdoEnable = (nState == 1);
-            xModelPropertySet.setPropertyValue("Enabled", new Boolean(bdoEnable));
+            xModelPropertySet.setPropertyValue("Enabled", Boolean.valueOf(bdoEnable));
         }catch (com.sun.star.uno.Exception ex){
             /* perform individual exception handling here.
              * Possible exception types are:
@@ -1352,7 +1352,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             XPropertySet xRMItemPSet = UnoRuntime.queryInterface(XPropertySet.class, oRoadmapItem);
             xRMItemPSet.setPropertyValue("Label", _sLabel);
             // sometimes steps are supposed to be set disabled depending on the program logic...
-            xRMItemPSet.setPropertyValue("Enabled", new Boolean(_bEnabled));
+            xRMItemPSet.setPropertyValue("Enabled", Boolean.valueOf(_bEnabled));
             // in this context the "ID" is meant to refer to a step of the dialog
             xRMItemPSet.setPropertyValue("ID", new Integer(_ID));
             m_xRMIndexCont.insertByIndex(Index, oRoadmapItem);

@@ -160,7 +160,7 @@ public class SwXMailMerge extends TestCase {
             oObjProps.setPropertyValue("DocumentURL", cTestDoc);
             oObjProps.setPropertyValue("OutputURL", cOutputURL);
             oObjProps.setPropertyValue("FileNamePrefix", "Author");
-            oObjProps.setPropertyValue("FileNameFromColumn", new Boolean(false));
+            oObjProps.setPropertyValue("FileNameFromColumn", Boolean.FALSE);
             oObjProps.setPropertyValue("Selection", new Object[0]);
 
         } catch (UnknownPropertyException e) {
@@ -190,7 +190,7 @@ public class SwXMailMerge extends TestCase {
         vXJobArg0[4] = new NamedValue("DocumentURL", cTestDoc);
         vXJobArg0[5] = new NamedValue("OutputURL", cOutputURL);
         vXJobArg0[6] = new NamedValue("FileNamePrefix", "Identifier");
-        vXJobArg0[7] = new NamedValue("FileNameFromColumn", new Boolean(true));
+        vXJobArg0[7] = new NamedValue("FileNameFromColumn", Boolean.TRUE);
 
         //second Arguments
         vXJobArg1[0] = new NamedValue("DataSourceName", cDataSourceName);
@@ -200,7 +200,7 @@ public class SwXMailMerge extends TestCase {
                              new Short(MailMergeType.PRINTER));
         vXJobArg1[4] = new NamedValue("DocumentURL", cTestDoc);
         vXJobArg1[5] = new NamedValue("FileNamePrefix", "Author");
-        vXJobArg1[6] = new NamedValue("FileNameFromColumn", new Boolean(true));
+        vXJobArg1[6] = new NamedValue("FileNameFromColumn", Boolean.TRUE);
 
         // third Arguments
         vXJobArg2[0] = new NamedValue("ActiveConnection", getLocalXConnection(Param));
@@ -212,7 +212,7 @@ public class SwXMailMerge extends TestCase {
         vXJobArg2[5] = new NamedValue("ResultSet", oResultSet);
         vXJobArg2[6] = new NamedValue("OutputURL", cOutputURL);
         vXJobArg2[7] = new NamedValue("FileNamePrefix", "Identifier");
-        vXJobArg2[8] = new NamedValue("FileNameFromColumn", new Boolean(true));
+        vXJobArg2[8] = new NamedValue("FileNameFromColumn", Boolean.TRUE);
         vXJobArg2[9] = new NamedValue("Selection", myBookMarks);
 
         vXJobArgs[0] = vXJobArg0;

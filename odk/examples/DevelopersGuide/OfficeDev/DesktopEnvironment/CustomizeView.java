@@ -229,7 +229,7 @@ public class CustomizeView extends    JPanel
             com.sun.star.beans.PropertyValue[] lProperties = new com.sun.star.beans.PropertyValue[1];
             lProperties[0]       = new com.sun.star.beans.PropertyValue();
             lProperties[0].Name  = m_sProp;
-            lProperties[0].Value = new Boolean(bState);
+            lProperties[0].Value = Boolean.valueOf(bState);
 
             // execute (dispatch) it into the frame
             if (m_xFrame==null)

@@ -111,8 +111,8 @@ public class SwXTextTable extends TestCase {
                                      XPropertySet.class, oObj);
 
         try {
-            props.setPropertyValue("ChartRowAsLabel", new Boolean(true));
-            props.setPropertyValue("ChartColumnAsLabel", new Boolean(true));
+            props.setPropertyValue("ChartRowAsLabel", Boolean.TRUE);
+            props.setPropertyValue("ChartColumnAsLabel", Boolean.TRUE);
         } catch (Exception e) {
             e.printStackTrace(log);
         }

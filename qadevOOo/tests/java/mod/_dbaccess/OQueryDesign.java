@@ -129,7 +129,7 @@ public class OQueryDesign extends TestCase {
         Args[0] = param1;
         PropertyValue param2 = new PropertyValue();
         param2.Name = "QueryDesignView";
-        param2.Value = new Boolean(false);
+        param2.Value = Boolean.FALSE;
         Args[1] = param2;
         param1.Name = "ActiveConnection";
         param1.Value = xConn;
@@ -186,7 +186,7 @@ public class OQueryDesign extends TestCase {
         params[1] = param2;
         PropertyValue param3 = new PropertyValue();
         param3.Name = "QueryDesignView";
-        param3.Value = new Boolean(true);
+        param3.Value = Boolean.TRUE;
         params[2] = param3;
 
 
@@ -208,7 +208,7 @@ public class OQueryDesign extends TestCase {
         ExceptionParams[1] = ExceptionParam2;
         PropertyValue ExceptionParam3 = new PropertyValue();
         ExceptionParam3.Name = "QueryDesignView";
-        ExceptionParam3.Value = new Integer(17);//new Boolean(true);
+        ExceptionParam3.Value = new Integer(17);//Boolean.TRUE;
         ExceptionParams[2] = ExceptionParam3;
 
         tEnv.addObjRelation("XInitialization.ExceptionArgs", ExceptionParams);

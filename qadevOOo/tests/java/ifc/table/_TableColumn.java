@@ -47,7 +47,7 @@ public class _TableColumn extends MultiPropertyTest {
             aRange.getCellByPosition(0,0).setFormula("Thats a pretty long text");
             Object width_before = oObj.getPropertyValue("Width");
             log.println("Before setting to optimal width: "+width_before);
-            oObj.setPropertyValue("OptimalWidth", new Boolean(true));
+            oObj.setPropertyValue("OptimalWidth", Boolean.TRUE);
             Object width_after = oObj.getPropertyValue("Width");
             log.println("After setting to optimal width: "+width_after);
             res = ! ValueComparer.equalValue(width_before,width_after);

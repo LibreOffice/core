@@ -104,7 +104,7 @@ public class SystemDialog  {
 
             // add a control to the dialog to add the extension automatically to the filename...
             XFilePickerControlAccess xFilePickerControlAccess = UnoRuntime.queryInterface(XFilePickerControlAccess.class, xFilePicker);
-            xFilePickerControlAccess.setValue(com.sun.star.ui.dialogs.ExtendedFilePickerElementIds.CHECKBOX_AUTOEXTENSION, (short) 0, new Boolean(true));
+            xFilePickerControlAccess.setValue(com.sun.star.ui.dialogs.ExtendedFilePickerElementIds.CHECKBOX_AUTOEXTENSION, (short) 0, Boolean.TRUE);
 
             xComponent = UnoRuntime.queryInterface(XComponent.class, xFilePicker);
 

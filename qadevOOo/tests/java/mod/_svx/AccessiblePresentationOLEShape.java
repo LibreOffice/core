@@ -94,7 +94,7 @@ public class AccessiblePresentationOLEShape extends TestCase {
 
         XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oShape);
         try {
-            oShapeProps.setPropertyValue("IsEmptyPresentationObject", new Boolean(false));
+            oShapeProps.setPropertyValue("IsEmptyPresentationObject", Boolean.FALSE);
         } catch (com.sun.star.lang.WrappedTargetException e) {
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         } catch (com.sun.star.beans.PropertyVetoException e) {
@@ -106,7 +106,7 @@ public class AccessiblePresentationOLEShape extends TestCase {
         try {
             oShapeProps.setPropertyValue(
                 "CLSID","12DCAE26-281F-416F-a234-c3086127382e");
-            oShapeProps.setPropertyValue("IsEmptyPresentationObject", new Boolean(false));
+            oShapeProps.setPropertyValue("IsEmptyPresentationObject", Boolean.FALSE);
         } catch (com.sun.star.lang.WrappedTargetException e) {
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         } catch (com.sun.star.beans.PropertyVetoException e) {

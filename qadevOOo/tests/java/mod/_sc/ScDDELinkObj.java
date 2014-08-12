@@ -226,7 +226,7 @@ public class ScDDELinkObj extends TestCase {
         tEnv.addObjRelation("APPLICATION", sAppl);
         tEnv.addObjRelation("ITEM", sItem);
         tEnv.addObjRelation("TOPIC", testdoc);
-        tEnv.addObjRelation("setName", new Boolean(true));
+        tEnv.addObjRelation("setName", Boolean.TRUE);
 
         return tEnv;
     }

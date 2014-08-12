@@ -519,7 +519,7 @@ public class OfficePrint {
                         if (aSettings != null)
                         {
                             XPropertySet xPropSet =  UnoRuntime.queryInterface( XPropertySet.class, aSettings );
-                            xPropSet.setPropertyValue( "PrintAllSheets", new Boolean( true ) );
+                            xPropSet.setPropertyValue( "PrintAllSheets", Boolean.TRUE );
                             GlobalLogWriter.get().println("PrintAllSheets := true");
                         }
                     }

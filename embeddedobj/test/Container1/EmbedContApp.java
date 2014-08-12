@@ -1314,7 +1314,7 @@ public class EmbedContApp extends Applet
                 aMedDescr[0].Name = "URL";
                 aMedDescr[0].Value = (Object) aLinkURL;
                 aMedDescr[1].Name = "ReadOnly";
-                aMedDescr[1].Value = (Object) new Boolean( false );
+                aMedDescr[1].Value = (Object) Boolean.FALSE;
                 Object oEmbObj = xLinkCreator.createInstanceLink( m_xStorage, "EmbedSub", aMedDescr, new PropertyValue[0] );
                 xEmbObj = (XEmbeddedObject)UnoRuntime.queryInterface( XEmbeddedObject.class, oEmbObj );
             }
@@ -1348,7 +1348,7 @@ public class EmbedContApp extends Applet
                 aMedDescr[0].Name = "URL";
                 aMedDescr[0].Value = (Object) aFileURI;
                 aMedDescr[1].Name = "ReadOnly";
-                aMedDescr[1].Value = (Object) new Boolean( false );
+                aMedDescr[1].Value = (Object) Boolean.FALSE;
                 Object oEmbObj = xEmbedCreator.createInstanceInitFromMediaDescriptor( m_xStorage,
                                                                                     "EmbedSub",
                                                                                     aMedDescr,
@@ -1460,7 +1460,7 @@ public class EmbedContApp extends Applet
 
                     PropertyValue aProps[] = { new PropertyValue() };
                     aProps[0].Name = "StoreVisualReplacement";
-                    aProps[0].Value = new Boolean( m_bStoreVisRepl );
+                    aProps[0].Value = Boolean.valueOf( m_bStoreVisRepl );
 
                     xPersist.storeAsEntry( xTargetStorage, "EmbedSub", new PropertyValue[0], aProps );
                     xPersist.saveCompleted( true );

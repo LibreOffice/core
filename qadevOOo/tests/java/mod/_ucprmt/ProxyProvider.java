@@ -64,7 +64,7 @@ public class ProxyProvider extends TestCase {
         tEnv.addObjRelation("CONTENT1","vnd.sun.star.pkg:///user/work");
         tEnv.addObjRelation("CONTENT1","vnd.sun.star.wfs://");
 
-        tEnv.addObjRelation("NoCONTENT",new Boolean(true));
+        tEnv.addObjRelation("NoCONTENT",Boolean.TRUE);
 
         return tEnv;
     } // finish method getTestEnvironment

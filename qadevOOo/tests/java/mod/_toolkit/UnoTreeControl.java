@@ -116,10 +116,10 @@ public class UnoTreeControl extends TestCase {
             XTreeControlModelSet.setPropertyValue( "Width",         new Integer(253));
             XTreeControlModelSet.setPropertyValue( "Height",        new Integer(253) );
             XTreeControlModelSet.setPropertyValue( "DataModel",     mXTreeDataModel );
-            XTreeControlModelSet.setPropertyValue( "ShowsRootHandles",new Boolean (false));
-            XTreeControlModelSet.setPropertyValue( "ShowsHandles",  new Boolean (false));
-            XTreeControlModelSet.setPropertyValue( "RootDisplayed", new Boolean (true));
-            XTreeControlModelSet.setPropertyValue( "Editable",      new Boolean (true ));
+            XTreeControlModelSet.setPropertyValue( "ShowsRootHandles", Boolean.FALSE);
+            XTreeControlModelSet.setPropertyValue( "ShowsHandles",  Boolean.FALSE);
+            XTreeControlModelSet.setPropertyValue( "RootDisplayed", Boolean.TRUE);
+            XTreeControlModelSet.setPropertyValue( "Editable",      Boolean.TRUE);
 
             XNameContainer xDialogModelContainer = UnoRuntime.queryInterface(XNameContainer.class, xDialogModel);
 

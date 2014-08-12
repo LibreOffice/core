@@ -304,7 +304,7 @@ public class _CharacterProperties extends MultiPropertyTest {
             testProperty("RubyIsAbove") ;
         } else {
             changeProp((XPropertySet) oPara, (XPropertySet) oPort,
-                "RubyIsAbove",new Boolean(true));
+                "RubyIsAbove",Boolean.TRUE);
         }
     }
 

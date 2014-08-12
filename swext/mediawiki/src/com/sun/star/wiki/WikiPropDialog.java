@@ -219,7 +219,7 @@ public class WikiPropDialog extends WikiDialog{
                                    "AddButton" };
 
             for ( int nInd = 0; nInd < pControls.length; nInd++ )
-                GetPropSet( pControls[nInd] ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
+                GetPropSet( pControls[nInd] ).setPropertyValue( "Enabled", Boolean.valueOf( bEnable ) );
 
             if ( bEnable )
             {
@@ -228,7 +228,7 @@ public class WikiPropDialog extends WikiDialog{
             }
             else
             {
-                GetPropSet( "SendButton" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
+                GetPropSet( "SendButton" ).setPropertyValue( "Enabled", Boolean.valueOf( bEnable ) );
                 SetFocusTo( "CancelButton" );
             }
         }

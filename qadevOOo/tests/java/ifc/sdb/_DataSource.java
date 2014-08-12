@@ -154,7 +154,7 @@ public class _DataSource extends MultiPropertyTest {
     @Override
     public void after() {
         try {
-            oObj.setPropertyValue("IsPasswordRequired",new Boolean(false));
+            oObj.setPropertyValue("IsPasswordRequired",Boolean.FALSE);
         } catch (Exception e) {
             log.println("Couldn't set 'IsPasswordRequired' to false");
         }

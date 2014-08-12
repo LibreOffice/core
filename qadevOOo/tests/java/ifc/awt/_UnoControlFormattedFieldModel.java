@@ -216,7 +216,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
         testProperty("StrictFromat", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object v) {
-                return utils.isVoid(v) ? new Boolean(true) :
+                return utils.isVoid(v) ? Boolean.TRUE :
                     super.getNewValue(p,v) ;
             }
         }) ;
@@ -230,7 +230,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
         testProperty("Tabstop", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object v) {
-                return utils.isVoid(v) ? new Boolean(true) :
+                return utils.isVoid(v) ? Boolean.TRUE :
                     null ;
             }
         }) ;

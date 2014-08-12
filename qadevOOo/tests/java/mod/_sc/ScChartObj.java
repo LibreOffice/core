@@ -241,7 +241,7 @@ public class ScChartObj extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oChart);
 
         //adding ObjRelation 'setName' for 'XNamed'
-        tEnv.addObjRelation("setName", new Boolean(true));
+        tEnv.addObjRelation("setName", Boolean.TRUE);
 
         return tEnv;
     }

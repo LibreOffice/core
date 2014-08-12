@@ -96,7 +96,7 @@ public class _UnoControlDateFieldModel extends MultiPropertyTest {
         testProperty("Tabstop", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return utils.isVoid(old) ? new Boolean(true) : null ;
+                return utils.isVoid(old) ? Boolean.TRUE : null ;
             }
         }) ;
     }
@@ -144,10 +144,10 @@ public class _UnoControlDateFieldModel extends MultiPropertyTest {
             Boolean dsc = null;
             if (util.utils.isVoid(oDsc)) {
                 log.println("Property is void, set it to true");
-                dsc = new Boolean(true);
+                dsc = Boolean.TRUE;
             } else {
                 dsc = (Boolean) oDsc;
-                dsc = new Boolean(!dsc.booleanValue());
+                dsc = Boolean.valueOf(!dsc.booleanValue());
                 log.println("Setting property to "+dsc);
             }
             oObj.setPropertyValue("DateShowCentury",dsc);

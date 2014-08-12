@@ -104,7 +104,7 @@ public class ChartLine extends TestCase {
         try {
             log.println( "getting Line" );
             XPropertySet RowProps = oDiagram.getDataRowProperties(1);
-            RowProps.setPropertyValue("MeanValue", new Boolean( true ));
+            RowProps.setPropertyValue("MeanValue", Boolean.TRUE);
             oObj = (XPropertySet) AnyConverter.toObject(
                 new Type(XPropertySet.class),
                     RowProps.getPropertyValue("DataMeanValueProperties"));

@@ -172,7 +172,7 @@ public class ChartInCalc
         if( aDiaProp != null )
         {
             // change chart type
-            aDiaProp.setPropertyValue( "Lines", new Boolean( true ));
+            aDiaProp.setPropertyValue( "Lines", Boolean.TRUE);
 
             // change attributes for all series
             // set line width to 0.5mm
@@ -308,7 +308,7 @@ public class ChartInCalc
         // change main title
         XPropertySet aDocProp = UnoRuntime.queryInterface(
             XPropertySet.class, maChartDocument );
-        aDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
+        aDocProp.setPropertyValue( "HasMainTitle", Boolean.TRUE);
 
         XShape aTitle = maChartDocument.getTitle();
         XPropertySet aTitleProp = UnoRuntime.queryInterface( XPropertySet.class, aTitle );

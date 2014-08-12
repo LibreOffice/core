@@ -184,7 +184,7 @@ public class ORowSet extends TestCase {
             //DataSource for mysql db
             tableName = "soffice_test_table";
             srcInf.URL = "jdbc:" + dbURL;
-            srcInf.IsPasswordRequired = new Boolean(true);
+            srcInf.IsPasswordRequired = Boolean.TRUE;
             srcInf.Password = dbPassword;
             srcInf.User = dbUser;
             PropertyValue[] propInfo = new PropertyValue[1];

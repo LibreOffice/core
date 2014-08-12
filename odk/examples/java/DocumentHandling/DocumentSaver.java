@@ -86,7 +86,7 @@ public class DocumentSaver {
                 new com.sun.star.beans.PropertyValue[1];
             propertyValue[0] = new com.sun.star.beans.PropertyValue();
             propertyValue[0].Name = "Hidden";
-            propertyValue[0].Value = new Boolean(true);
+            propertyValue[0].Value = Boolean.TRUE;
 
             Object oDocToStore = xCompLoader.loadComponentFromURL(
                 sLoadUrl.toString(), "_blank", 0, propertyValue );
@@ -97,7 +97,7 @@ public class DocumentSaver {
             propertyValue = new com.sun.star.beans.PropertyValue[ 2 ];
             propertyValue[0] = new com.sun.star.beans.PropertyValue();
             propertyValue[0].Name = "Overwrite";
-            propertyValue[0].Value = new Boolean(true);
+            propertyValue[0].Value = Boolean.TRUE;
             propertyValue[1] = new com.sun.star.beans.PropertyValue();
             propertyValue[1].Name = "FilterName";
             propertyValue[1].Value = "StarOffice XML (Writer)";

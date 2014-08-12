@@ -66,7 +66,7 @@ class EventQueue
 
     private EventQueue ()
     {
-        maMonitor = new Boolean (true);
+        maMonitor = Boolean.TRUE;
         maRegularQueue = new LinkedList<Runnable>();
         maDisposingQueue = new LinkedList<Runnable>();
         new Thread(this, "AWB.EventQueue").start();

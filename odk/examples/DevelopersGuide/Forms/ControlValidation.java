@@ -46,21 +46,21 @@ public class ControlValidation extends DocumentBasedExample
 
         validation = new SingleControlValidation( m_document, 5, 55, "DatabaseDateField", new DateValidator() );
         validation.setExplanatoryText( "Please enter a date in the current month" );
-        validation.getInputField().setPropertyValue( "Dropdown", new Boolean( true ) );
+        validation.getInputField().setPropertyValue( "Dropdown", Boolean.TRUE );
 
         validation = new SingleControlValidation( m_document, 90, 55, "DatabaseTimeField", new TimeValidator() );
         validation.setExplanatoryText( "Please enter a time. Valid values are all full hours." );
 
         validation = new SingleControlValidation( m_document, 5, 110, "DatabaseCheckBox", new BooleanValidator( false ) );
         validation.setExplanatoryText( "Please check (well, or uncheck) the box. Don't leave it in indetermined state." );
-        validation.getInputField().setPropertyValue( "TriState", new Boolean( true ) );
+        validation.getInputField().setPropertyValue( "TriState", Boolean.TRUE );
 
         validation = new SingleControlValidation( m_document, 90, 110, "DatabaseRadioButton", new BooleanValidator( true ), 3, 0 );
         validation.setExplanatoryText( "Please check any but the first button" );
 
         validation = new SingleControlValidation( m_document, 5, 165, "DatabaseListBox", new ListSelectionValidator( ), 1, 24 );
         validation.setExplanatoryText( "Please select not more than two entries." );
-        validation.getInputField().setPropertyValue( "MultiSelection", new Boolean( true ) );
+        validation.getInputField().setPropertyValue( "MultiSelection", Boolean.TRUE );
         validation.getInputField().setPropertyValue( "StringItemList", new String[] { "first", "second", "third", "forth", "fivth" } );
 
         // switch to alive mode

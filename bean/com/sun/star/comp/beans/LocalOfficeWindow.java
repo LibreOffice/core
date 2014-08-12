@@ -259,7 +259,7 @@ public class LocalOfficeWindow
         NamedValue window = new NamedValue(
             "WINDOW", new Any(new Type(Long.class), new Long(getNativeWindow())));
         NamedValue xembed = new NamedValue(
-            "XEMBED", new Any(new Type(Boolean.class), new Boolean(false)));
+            "XEMBED", new Any(new Type(Boolean.class), Boolean.FALSE));
 
         if (getNativeWindowSystemType() == SystemDependent.SYSTEM_XWINDOW )
         {
@@ -270,7 +270,7 @@ public class LocalOfficeWindow
             {
                 xembed = new NamedValue(
                     "XEMBED",
-                    new Any(new Type(Boolean.class), new Boolean(true)));
+                    new Any(new Type(Boolean.class), Boolean.TRUE));
             }
         }
         return new Any(

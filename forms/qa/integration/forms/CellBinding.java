@@ -215,7 +215,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     {
         XPropertySet checkBox = m_formLayer.createControlAndShape( "DatabaseCheckBox", 30, 59, 40, 4 );
         checkBox.setPropertyValue( "Label", "check box" );
-        checkBox.setPropertyValue( "TriState", new Boolean( true ) );
+        checkBox.setPropertyValue( "TriState", Boolean.TRUE );
 
         short col = (short)0;
         short row = (short)13;
@@ -245,7 +245,7 @@ public class CellBinding extends complexlib.ComplexTestCase
 
         XPropertySet checkBox = m_formLayer.createControlAndShape( "DatabaseCheckBox", 30, 68, 40, 4 );
         checkBox.setPropertyValue( "Label", "check box with ref value" );
-        checkBox.setPropertyValue( "TriState", new Boolean( true ) );
+        checkBox.setPropertyValue( "TriState", Boolean.TRUE );
         checkBox.setPropertyValue( "RefValue", refValue );
 
         short col = (short)0;
@@ -276,7 +276,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     public void checkListBoxBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
         XPropertySet listBox = m_formLayer.createControlAndShape( "DatabaseListBox", 30, 80, 40, 6 );
-        listBox.setPropertyValue( "Dropdown", new Boolean( true ) );
+        listBox.setPropertyValue( "Dropdown", Boolean.TRUE );
         listBox.setPropertyValue( "StringItemList", new String[] { "Apples", "Oranges", "Peaches" } );
 
         short col = (short)0;
@@ -317,7 +317,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     public void checkListBoxIndexBinding() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         XPropertySet listBox = m_formLayer.createControlAndShape( "DatabaseListBox", 30, 94, 40, 6 );
-        listBox.setPropertyValue( "Dropdown", new Boolean( true ) );
+        listBox.setPropertyValue( "Dropdown", Boolean.TRUE );
         listBox.setPropertyValue( "StringItemList", new String[] { "Pears", "Bananas", "Strawberries" } );
 
         short col = (short)0;

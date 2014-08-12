@@ -88,7 +88,7 @@ public class TabControllerModel extends TestCase {
 
 
         //Object Relation for XPersistObject
-        tEnv.addObjRelation("noPS", new Boolean(true));
+        tEnv.addObjRelation("noPS", Boolean.TRUE);
 
         System.out.println("ImplementationName: " + utils.getImplName(oObj));
 

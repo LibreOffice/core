@@ -618,9 +618,9 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xButton.setPropertyValue( "HelpText", sName );
         // don't want buttons to be accessible by the "tab" key - this would be uncomfortable when traveling
         // with records with "tab"
-        xButton.setPropertyValue( "Tabstop", new Boolean( false ) );
+        xButton.setPropertyValue( "Tabstop", Boolean.FALSE );
         // similar, they should not steal the focus when clicked
-        xButton.setPropertyValue( "FocusOnClick", new Boolean( false ) );
+        xButton.setPropertyValue( "FocusOnClick", Boolean.FALSE );
 
         m_aOperator.addButton( xButton, _formFeature );
 
@@ -804,7 +804,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xManualFilter.setPropertyValue( "Name", "ManualFilter" );
         XPropertySet xApplyFilter = m_formLayer.createControlAndShape( "CommandButton", 139, 125, 25, 6, xSalesFilterForm );
         xApplyFilter.setPropertyValue( "Name", "ApplyFilter" );
-        xApplyFilter.setPropertyValue( "DefaultButton", new Boolean( true ) );
+        xApplyFilter.setPropertyValue( "DefaultButton", Boolean.TRUE );
         new SalesFilter( m_document, xSalesFormProps, xFilterSelection,
             xManualFilter, xApplyFilter );
 

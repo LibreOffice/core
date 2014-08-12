@@ -803,7 +803,7 @@ class TextAttributeDialog extends TextActionDialog
             aSequence[4].Value = new Integer( aItalics.isSelected() ? 1 : 0 );
             aSequence[5] = new PropertyValue();
             aSequence[5].Name = "CharBackTransparent";
-            aSequence[5].Value = new Boolean( false );
+            aSequence[5].Value = Boolean.FALSE;
 
             bSuccess = xEdit.setAttributes( getSelectionStart(),
                                             getSelectionEnd(),

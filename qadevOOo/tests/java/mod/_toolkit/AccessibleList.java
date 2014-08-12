@@ -162,7 +162,7 @@ public class AccessibleList extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                            new Boolean(false));
+                            Boolean.FALSE);
 
         final XAccessibleComponent acomp = UnoRuntime.queryInterface(
                                                    XAccessibleComponent.class,

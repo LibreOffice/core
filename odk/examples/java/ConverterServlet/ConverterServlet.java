@@ -265,7 +265,7 @@ public class ConverterServlet extends HttpServlet {
             // Setting the flag for hidding the open document
             propertyvalue[ 0 ] = new PropertyValue();
             propertyvalue[ 0 ].Name = "Hidden";
-            propertyvalue[ 0 ].Value = new Boolean(true);
+            propertyvalue[ 0 ].Value = Boolean.TRUE;
 
             // Loading the wanted document
             Object objectDocumentToStore =
@@ -282,7 +282,7 @@ public class ConverterServlet extends HttpServlet {
             // Setting the flag for overwriting
             propertyvalue[ 0 ] = new PropertyValue();
             propertyvalue[ 0 ].Name = "Overwrite";
-            propertyvalue[ 0 ].Value = new Boolean(true);
+            propertyvalue[ 0 ].Value = Boolean.TRUE;
             // Setting the filter name
             propertyvalue[ 1 ] = new PropertyValue();
             propertyvalue[ 1 ].Name = "FilterName";

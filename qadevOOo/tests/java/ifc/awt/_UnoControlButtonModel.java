@@ -57,10 +57,10 @@ public class _UnoControlButtonModel extends MultiPropertyTest {
     protected PropertyTester BoolTester = new PropertyTester() {
         @Override
         protected Object getNewValue(String propName, Object oldValue) {
-            if (util.ValueComparer.equalValue(oldValue, new Boolean(true)))
-                return new Boolean(false);
+            if (util.ValueComparer.equalValue(oldValue, Boolean.TRUE))
+                return Boolean.FALSE;
             else
-                return new Boolean(true);
+                return Boolean.TRUE;
         }
     };
 

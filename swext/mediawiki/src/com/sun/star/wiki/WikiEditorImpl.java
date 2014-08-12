@@ -289,7 +289,7 @@ public final class WikiEditorImpl extends WeakBase
                     lProperties[0].Value = m_aFilterName;
                     lProperties[1]       = new PropertyValue();
                     lProperties[1].Name  = "Overwrite";
-                    lProperties[1].Value = new Boolean( true );
+                    lProperties[1].Value = Boolean.TRUE;
 
                     sTemp2Url = Helper.CreateTempFile( m_xContext );
 

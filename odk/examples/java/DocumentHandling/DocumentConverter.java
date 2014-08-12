@@ -103,7 +103,7 @@ public class DocumentConverter {
                         new com.sun.star.beans.PropertyValue[1];
                     propertyValues[0] = new com.sun.star.beans.PropertyValue();
                     propertyValues[0].Name = "Hidden";
-                    propertyValues[0].Value = new Boolean(true);
+                    propertyValues[0].Value = Boolean.TRUE;
 
                     Object oDocToStore =
                         DocumentConverter.xCompLoader.loadComponentFromURL(
@@ -120,7 +120,7 @@ public class DocumentConverter {
                     // Setting the flag for overwriting
                     propertyValues[0] = new com.sun.star.beans.PropertyValue();
                     propertyValues[0].Name = "Overwrite";
-                    propertyValues[0].Value = new Boolean(true);
+                    propertyValues[0].Value = Boolean.TRUE;
                     // Setting the filter name
                     propertyValues[1] = new com.sun.star.beans.PropertyValue();
                     propertyValues[1].Name = "FilterName";

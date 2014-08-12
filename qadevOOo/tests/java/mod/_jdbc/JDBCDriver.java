@@ -98,7 +98,7 @@ public class JDBCDriver extends TestCase {
         info[2].Value = password;
         info[3] = new PropertyValue();
         info[3].Name = "isPasswordRequired";
-        info[3].Value = new Boolean(true);
+        info[3].Value = Boolean.TRUE;
 
         tEnv.addObjRelation("XDriver.INFO", info);
 

@@ -439,7 +439,7 @@ public class TextDocuments {
         PropertyValue[] loadProps = new PropertyValue[1];
         loadProps[0] = new PropertyValue();
         loadProps[0].Name = "AsTemplate";
-        loadProps[0].Value = new Boolean(true);
+        loadProps[0].Value = Boolean.TRUE;
         // load
         return xComponentLoader.loadComponentFromURL(loadUrl, "_blank",
                                                      0, loadProps);
@@ -717,7 +717,7 @@ public class TextDocuments {
             XPropertySet xRow = UnoRuntime.queryInterface(
                 XPropertySet.class, xRows.getByIndex ( 0 ) );
             // If BackTransparant is false, then the background color is visible
-            xRow.setPropertyValue( "BackTransparent", new Boolean(false));
+            xRow.setPropertyValue( "BackTransparent", Boolean.FALSE);
             // Specify the color of the background to be dark blue
             xRow.setPropertyValue( "BackColor", new Integer(6710932));
 
@@ -725,7 +725,7 @@ public class TextDocuments {
             XPropertySet xTableProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xTable );
             // We want visible background colors
-            xTableProps.setPropertyValue( "BackTransparent", new Boolean(false));
+            xTableProps.setPropertyValue( "BackTransparent", Boolean.FALSE);
             // Set the background colour to light blue
             xTableProps.setPropertyValue( "BackColor", new Integer(13421823));
 
@@ -863,7 +863,7 @@ public class TextDocuments {
 
                 // We want a visible background
                 xTableProps.setPropertyValue( "BackTransparent",
-                                              new Boolean(false));
+                                              Boolean.FALSE);
 
                 // We want the background to be light blue
                 xTableProps.setPropertyValue( "BackColor", new Integer(13421823));
@@ -879,7 +879,7 @@ public class TextDocuments {
                     XPropertySet.class, xRows.getByIndex ( 0 ) );
 
                 // We want the background of the first row to be visible too
-                xRow.setPropertyValue( "BackTransparent", new Boolean(false));
+                xRow.setPropertyValue( "BackTransparent", Boolean.FALSE);
 
                 // And let's make it dark blue
                 xRow.setPropertyValue( "BackColor", new Integer(6710932));

@@ -138,7 +138,7 @@ public class SCalc  {
             oStyleFamilyNameContainer.insertByName("My Style", oInt1);
             XPropertySet oCPS1 = UnoRuntime.queryInterface(
                 XPropertySet.class, oInt1 );
-            oCPS1.setPropertyValue("IsCellBackgroundTransparent", new Boolean(false));
+            oCPS1.setPropertyValue("IsCellBackgroundTransparent", Boolean.FALSE);
             oCPS1.setPropertyValue("CellBackColor",new Integer(6710932));
             oCPS1.setPropertyValue("CharColor",new Integer(16777215));
             XInterface oInt2 = (XInterface) oDocMSF.createInstance(
@@ -146,7 +146,7 @@ public class SCalc  {
             oStyleFamilyNameContainer.insertByName("My Style2", oInt2);
             XPropertySet oCPS2 = UnoRuntime.queryInterface(
                 XPropertySet.class, oInt2 );
-            oCPS2.setPropertyValue("IsCellBackgroundTransparent", new Boolean(false));
+            oCPS2.setPropertyValue("IsCellBackgroundTransparent", Boolean.FALSE);
             oCPS2.setPropertyValue("CellBackColor",new Integer(13421823));
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -309,7 +309,7 @@ public class SCalc  {
             System.out.println("Change Diagramm to 3D");
             XPropertySet oCPS = UnoRuntime.queryInterface(
                 XPropertySet.class, oDiag );
-            oCPS.setPropertyValue("Dim3D", new Boolean(true));
+            oCPS.setPropertyValue("Dim3D", Boolean.TRUE);
             System.out.println("Change the title");
             Thread.sleep(200);
             XPropertySet oTPS = UnoRuntime.queryInterface(

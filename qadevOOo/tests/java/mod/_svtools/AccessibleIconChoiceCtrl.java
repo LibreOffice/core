@@ -225,9 +225,9 @@ public class AccessibleIconChoiceCtrl extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                            new Boolean(false));
+                            Boolean.FALSE);
         tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
-                            new Boolean(true));
+                            Boolean.TRUE);
 
         String[] expectedStateNames = new String[] {
             "com.sun.star.accessibility.AccessibleStateType.ENABLED",

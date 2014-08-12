@@ -250,10 +250,10 @@ public class AccessibleTabControl extends TestCase {
         });
 
         tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
-                            new Boolean(true));
+                            Boolean.TRUE);
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                            new Boolean(false));
+                            Boolean.FALSE);
 
         return tEnv;
     }

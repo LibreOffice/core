@@ -300,7 +300,7 @@ public class ODatasourceBrowser extends TestCase {
         tEnv.addObjRelation("SecondModel", aModel1);
         tEnv.addObjRelation("otherWindow", docWindow);
         tEnv.addObjRelation("SecondController", secondController);
-        tEnv.addObjRelation("HasViewData", new Boolean(false));
+        tEnv.addObjRelation("HasViewData", Boolean.FALSE);
 
 
         // Addig relation for XDispatchProvider

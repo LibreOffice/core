@@ -69,7 +69,7 @@ public class _ChartTwoAxisYSupplier extends MultiPropertyTest {
         log.println("Set it to 3D");
         oObj = UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
         try {
-            oObj.setPropertyValue("Dim3D", new Boolean(true));
+            oObj.setPropertyValue("Dim3D", Boolean.TRUE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception while set property value");
             e.printStackTrace(log);

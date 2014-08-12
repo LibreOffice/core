@@ -65,7 +65,7 @@ public class _Chart3DBarProperties extends MultiPropertyTest {
         log.println("Change Diagram to 3D");
         oObj = UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
         try {
-            oObj.setPropertyValue("Dim3D", new Boolean(true));
+            oObj.setPropertyValue("Dim3D", Boolean.TRUE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't change Diagram to 3D");
             e.printStackTrace(log);
@@ -98,7 +98,7 @@ public class _Chart3DBarProperties extends MultiPropertyTest {
         log.println("Change Diagram to 3D");
         oObj = UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
         try {
-            oObj.setPropertyValue("Dim3D", new Boolean(false));
+            oObj.setPropertyValue("Dim3D", Boolean.FALSE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't change Diagram back to 2D");
             e.printStackTrace(log);

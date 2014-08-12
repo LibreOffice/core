@@ -123,7 +123,7 @@ public class FirstLoadComponent {
             // instantiate PropertyValue struct and set its member fields
             PropertyValue asTemplate = new PropertyValue();
             asTemplate.Name = "AsTemplate";
-            asTemplate.Value = new Boolean(true);
+            asTemplate.Value = Boolean.TRUE;
 
             // assign PropertyValue struct to array of references for PropertyValue
             // structs

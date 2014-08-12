@@ -476,7 +476,7 @@ public class GenericModelTest extends TestCase {
                             DBTools.TST_DATE_F);
 
         //adding ObjRelation for XPersistObject
-        tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
+        tEnv.addObjRelation("PSEUDOPERSISTENT", Boolean.TRUE);
 
         // adding relation for XFastPropertySet
         java.util.HashSet<String> exclude = new java.util.HashSet<String>();

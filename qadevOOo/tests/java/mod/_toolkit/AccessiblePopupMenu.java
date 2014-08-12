@@ -191,7 +191,7 @@ public class AccessiblePopupMenu extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                            new Boolean(false));
+                            Boolean.FALSE);
 
         final XAccessibleSelection sel = UnoRuntime.queryInterface(
                                                  XAccessibleSelection.class,

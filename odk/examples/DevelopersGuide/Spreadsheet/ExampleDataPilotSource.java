@@ -143,7 +143,7 @@ class ExampleMember implements com.sun.star.container.XNamed,
         if ( aPropertyName.equals( "IsVisible" ) ||
              aPropertyName.equals( "ShowDetails" ) )
         {
-            return new Boolean( true );     // always true
+            return Boolean.TRUE;     // always true
         }
         else
             throw new com.sun.star.beans.UnknownPropertyException();
@@ -352,7 +352,7 @@ class ExampleLevel implements
         if ( aPropertyName.equals( "SubTotals" ) )
             return new com.sun.star.sheet.GeneralFunction[0];
         else if ( aPropertyName.equals( "ShowEmpty" ) )
-            return new Boolean( true );
+            return Boolean.TRUE;
         else
             throw new com.sun.star.beans.UnknownPropertyException();
     }
@@ -648,7 +648,7 @@ class ExampleDimension implements
         if ( aPropertyName.equals( "Original" ) )
             return null;
         else if ( aPropertyName.equals( "IsDataLayoutDimension" ) )
-            return new Boolean( nDimension == ExampleSettings.nDataDimension );
+            return Boolean.valueOf( nDimension == ExampleSettings.nDataDimension );
         else if ( aPropertyName.equals( "Orientation" ) )
             return eOrientation;
         else if ( aPropertyName.equals( "Position" ) )
@@ -903,7 +903,7 @@ public class ExampleDataPilotSource
             if ( aPropertyName.equals( "ColumnGrand" ) ||
                  aPropertyName.equals( "RowGrand" ) )
             {
-                return new Boolean( false );        // always false
+                return Boolean.FALSE;        // always false
             }
             else
                 throw new com.sun.star.beans.UnknownPropertyException();

@@ -114,7 +114,7 @@ public class SwXTableColumns extends TestCase {
         tEnv.addObjRelation("XTableColumns.XCellRange",
             UnoRuntime.queryInterface(XCellRange.class, oTable));
 
-        tEnv.addObjRelation("XIndexAccess.getByIndex.mustBeNull", new Boolean(true));
+        tEnv.addObjRelation("XIndexAccess.getByIndex.mustBeNull", Boolean.TRUE);
 
         return tEnv;
     } // finish method getTestEnvironment

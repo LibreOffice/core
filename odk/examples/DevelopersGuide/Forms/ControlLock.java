@@ -55,7 +55,7 @@ class LockControlModels extends ComponentTreeTraversal
     public LockControlModels( String sDataField, boolean bLockIt )
     {
         m_sDataField = sDataField;
-        m_aLockIt = new Boolean( bLockIt );
+        m_aLockIt = Boolean.valueOf( bLockIt );
         m_nLevel = 0;
     }
 

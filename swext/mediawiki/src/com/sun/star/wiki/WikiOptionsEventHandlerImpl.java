@@ -102,7 +102,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                 short [] pSel = (short []) xListProps.getPropertyValue( "SelectedItems" );
                 XPropertySet xEditProps = GetPropSet( "EditButton" );
                 XPropertySet xRemoveProps = GetPropSet( "RemoveButton" );
-                Boolean bState = new Boolean( pSel.length != 0 );
+                Boolean bState = Boolean.valueOf( pSel.length != 0 );
 
                 xEditProps.setPropertyValue( "Enabled", bState );
                 xRemoveProps.setPropertyValue( "Enabled", bState );

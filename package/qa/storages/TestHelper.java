@@ -87,7 +87,7 @@ public class TestHelper  {
         try
         {
             xPropSet.setPropertyValue( "MediaType", sMediaType );
-            xPropSet.setPropertyValue( "Compressed", new Boolean( bCompressed ) );
+            xPropSet.setPropertyValue( "Compressed", Boolean.valueOf( bCompressed ) );
         }
         catch( Exception e )
         {
@@ -313,7 +313,7 @@ public class TestHelper  {
         // set properties to the stream
         try
         {
-            xPropSet.setPropertyValue( "UseCommonStoragePasswordEncryption", new Boolean( bEncrypted ) );
+            xPropSet.setPropertyValue( "UseCommonStoragePasswordEncryption", Boolean.valueOf( bEncrypted ) );
         }
         catch( Exception e )
         {
@@ -503,7 +503,7 @@ public class TestHelper  {
         // set properties to the stream
         try
         {
-            xPropSet.setPropertyValue( "UseCommonStoragePasswordEncryption", new Boolean( bEncrypted ) );
+            xPropSet.setPropertyValue( "UseCommonStoragePasswordEncryption", Boolean.valueOf( bEncrypted ) );
         }
         catch( Exception e )
         {
@@ -1265,7 +1265,7 @@ public class TestHelper  {
         {
             try
             {
-                xTempFileProps.setPropertyValue( "RemoveFile", new Boolean( false ) );
+                xTempFileProps.setPropertyValue( "RemoveFile", Boolean.FALSE );
                 sResult = AnyConverter.toString( xTempFileProps.getPropertyValue( "Uri" ) );
             }
             catch( Exception e )

@@ -78,7 +78,7 @@ public class DrawViewDemo
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
-            pPropValues[ 0 ].Value = new Boolean( true );
+            pPropValues[ 0 ].Value = Boolean.TRUE;
 
             java.io.File sourceFile = new java.io.File(args[0]);
             StringBuffer sUrl = new StringBuffer("file:///");
@@ -125,7 +125,7 @@ public class DrawViewDemo
                 System.out.println( aPropSeq[ i ].Name );
             }
             System.out.println("*** change into masterpage mode");
-            xPropSet.setPropertyValue( "IsMasterPageMode", new Boolean( true ) );
+            xPropSet.setPropertyValue( "IsMasterPageMode", Boolean.TRUE );
 
         }
         catch( Exception ex )

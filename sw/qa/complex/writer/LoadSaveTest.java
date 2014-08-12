@@ -112,7 +112,7 @@ public class LoadSaveTest
             PropertyValue[] loadProps = new PropertyValue[1];
             loadProps[0] = new PropertyValue();
             loadProps[0].Name = "ReadOnly";
-            loadProps[0].Value = new Boolean(true);
+            loadProps[0].Value = Boolean.TRUE;
 
             String sourceFile = m_fileURL + m_SourceDir + fileName;
 

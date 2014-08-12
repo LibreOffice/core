@@ -81,7 +81,7 @@ public class ResourceRemover {
             // Destroy a resource physically...
 
 
-            Boolean deletePhysically = new Boolean( true );
+            Boolean deletePhysically = Boolean.TRUE;
 
             // Execute command "delete".
             m_helper.executeCommand( m_content, "delete", deletePhysically );

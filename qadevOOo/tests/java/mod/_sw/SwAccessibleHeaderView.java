@@ -100,7 +100,7 @@ public class SwAccessibleHeaderView extends TestCase {
         // changing/getting some properties
         try {
             log.println( "Switching on header" );
-            PropSet.setPropertyValue("HeaderIsOn", new Boolean(true));
+            PropSet.setPropertyValue("HeaderIsOn", Boolean.TRUE);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't set propertyValue...", e);

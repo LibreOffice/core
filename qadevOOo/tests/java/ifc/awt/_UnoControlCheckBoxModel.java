@@ -73,7 +73,7 @@ public class _UnoControlCheckBoxModel extends MultiPropertyTest {
         testProperty("Tabstop", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                if (utils.isVoid(old)) return new Boolean(true) ;
+                if (utils.isVoid(old)) return Boolean.TRUE ;
                 else return null ;
             }
         }) ;

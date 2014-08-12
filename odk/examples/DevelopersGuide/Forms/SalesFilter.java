@@ -83,7 +83,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         {
 
             // init control models
-            m_xFilterList.setPropertyValue( "Dropdown", new Boolean( true ) );
+            m_xFilterList.setPropertyValue( "Dropdown", Boolean.TRUE );
             m_xFilterList.setPropertyValue( "LineCount", new Short( (short)11 ) );
             m_xFilterList.setPropertyValue( "StringItemList", new String[] { "ever (means no filter)", "this morning", "1 week ago", "1 month ago", "1 year ago", "<other>" } );
             m_xFilterList.setPropertyValue( "DefaultSelection", new Short[] { new Short( (short)0 ) } );
@@ -239,7 +239,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     {
         try
         {
-            m_xApplyFilter.setPropertyValue( "Enabled", new Boolean( m_bSettingsDirty ) );
+            m_xApplyFilter.setPropertyValue( "Enabled", Boolean.valueOf( m_bSettingsDirty ) );
         }
         catch ( com.sun.star.uno.Exception e )
         {
@@ -306,7 +306,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
 
                 // custom filter?
                 boolean bCustomFilter = isManualFilter( m_nPreviousFilterIndex );
-                m_xManualFilter.setPropertyValue( "Enabled", new Boolean( bCustomFilter ) );
+                m_xManualFilter.setPropertyValue( "Enabled", Boolean.valueOf( bCustomFilter ) );
                 if ( bCustomFilter )
                     m_aDocument.getCurrentView().grabControlFocus( m_xManualFilter );
 
@@ -430,7 +430,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
                 sCompleteFilter += sOdbcDate;
             }
             m_xSalesForm.setPropertyValue( "Filter", sCompleteFilter );
-            m_xSalesForm.setPropertyValue( "ApplyFilter", new Boolean( true ) );
+            m_xSalesForm.setPropertyValue( "ApplyFilter", Boolean.TRUE );
 
             // and reload the form
             XLoadable xLoad = UnoRuntime.queryInterface(

@@ -45,7 +45,7 @@ public class _XLayerHandler extends MultiMethodTest {
             oObj.overrideNode("Office", (short) 0, false);
             oObj.overrideProperty("ooSetupInstCompleted", (short) 0,
                                   new Type(String.class), false);
-            oObj.setPropertyValue(new Boolean(false));
+            oObj.setPropertyValue(Boolean.FALSE);
             oObj.endProperty();
             oObj.overrideNode("Factories", (short) 0, false);
             oObj.addOrReplaceNode("com.sun.star.chart.ChartDocument",

@@ -116,7 +116,7 @@ public class UnoControlFormattedField extends TestCase {
             aDevice = the_kit.createScreenCompatibleDevice(200, 200);
             aGraphic = aDevice.createGraphics();
 
-            xPS.setPropertyValue("Spin", new Boolean(true));
+            xPS.setPropertyValue("Spin", Boolean.TRUE);
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get EditControl");
             e.printStackTrace(log);

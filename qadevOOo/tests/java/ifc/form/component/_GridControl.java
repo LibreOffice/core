@@ -58,7 +58,7 @@ public class _GridControl extends MultiPropertyTest {
         testProperty("Tabstop", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return util.utils.isVoid(old) ? new Boolean(true) :
+                return util.utils.isVoid(old) ? Boolean.TRUE :
                     super.getNewValue(prop, old) ;
             }
         }) ;

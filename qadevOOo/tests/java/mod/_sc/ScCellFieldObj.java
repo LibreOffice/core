@@ -173,7 +173,7 @@ public class ScCellFieldObj extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
 
         log.println ("Object created.") ;
-        tEnv.addObjRelation("TRO", new Boolean(true));
+        tEnv.addObjRelation("TRO", Boolean.TRUE);
 
         tEnv.addObjRelation("CONTENT",oContent);
         tEnv.addObjRelation("TEXT",oText);

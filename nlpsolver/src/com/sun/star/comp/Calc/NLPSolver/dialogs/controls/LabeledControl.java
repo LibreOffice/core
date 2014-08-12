@@ -40,7 +40,7 @@ public abstract class LabeledControl extends BaseControl {
     }
 
     public void setMultiLine(boolean multiLine) {
-        setProperty("MultiLine", new Boolean(multiLine));
+        setProperty("MultiLine", Boolean.valueOf(multiLine));
     }
 
 }

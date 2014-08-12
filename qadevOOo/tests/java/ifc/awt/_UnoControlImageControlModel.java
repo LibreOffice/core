@@ -94,7 +94,7 @@ public class _UnoControlImageControlModel extends MultiPropertyTest {
         testProperty("Tabstop", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object v) {
-                return utils.isVoid(v) ? new Boolean(true) :
+                return utils.isVoid(v) ? Boolean.TRUE :
                     null ;
             }
         }) ;

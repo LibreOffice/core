@@ -212,7 +212,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         // we don't want to cache the write
         PropertyValue aModeArg = new PropertyValue();
         aModeArg.Name="lazywrite";
-        aModeArg.Value=new Boolean(false);
+        aModeArg.Value=Boolean.FALSE;
 
         Object[]  aArgs = new Object[2];
         aArgs[0]=aPathArg;
@@ -253,7 +253,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         // we don't want to cache the write
         PropertyValue aModeArg = new PropertyValue();
         aModeArg.Name="lazywrite";
-        aModeArg.Value=new Boolean(false);
+        aModeArg.Value=Boolean.FALSE;
 
         Object[]  aArgs = new Object[2];
         aArgs[0]=aPathArg;
@@ -283,11 +283,11 @@ public class _XScriptSecurity extends MultiMethodTest {
         Boolean bConfirm = null;
         if( ( confirm != null ) && ( confirm.equals("true") ) )
         {
-            bConfirm = new Boolean( true );
+            bConfirm = Boolean.TRUE;
         }
         else
         {
-            bConfirm = new Boolean( false );
+            bConfirm = Boolean.FALSE;
         }
         log.println("setting Confirmation");
         xNameReplace.replaceByName( "Confirmation", bConfirm );
@@ -295,11 +295,11 @@ public class _XScriptSecurity extends MultiMethodTest {
         Boolean bWarning = null;
         if( ( warning != null ) && ( warning.equals("true") ) )
         {
-            bWarning = new Boolean( true );
+            bWarning = Boolean.TRUE;
         }
         else
         {
-            bWarning = new Boolean( false );
+            bWarning = Boolean.FALSE;
         }
         log.println("setting Warning");
         xNameReplace.replaceByName( "Warning", bWarning );

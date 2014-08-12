@@ -120,7 +120,7 @@ public class SmEditAccessible extends TestCase {
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("Destroy", new Boolean(true));
+        tEnv.addObjRelation("Destroy", Boolean.TRUE);
 
         final XAccessibleContext con = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
         tEnv.addObjRelation("EventProducer",

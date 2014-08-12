@@ -266,7 +266,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // from styles.ParagraphProperties
         xPropSet.setPropertyValue( "ParaLeftMargin", new Integer( 500 ) );
         // from table.CellProperties
-        xPropSet.setPropertyValue( "IsCellBackgroundTransparent", new Boolean( false ) );
+        xPropSet.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
         xPropSet.setPropertyValue( "CellBackColor", new Integer( 0x99CCFF ) );
 
 
@@ -317,7 +317,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // from com.sun.star.styles.ParagraphProperties
         xPropSet.setPropertyValue( "ParaLeftMargin", new Integer( 500 ) );
         // from com.sun.star.table.CellProperties
-        xPropSet.setPropertyValue( "IsCellBackgroundTransparent", new Boolean( false ) );
+        xPropSet.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
         xPropSet.setPropertyValue( "CellBackColor", new Integer( 0x99CCFF ) );
 
 
@@ -327,7 +327,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xReplaceDesc.setSearchString( "cell" );
         xReplaceDesc.setReplaceString( "text" );
         // property SearchWords searches for whole cells!
-        xReplaceDesc.setPropertyValue( "SearchWords", new Boolean( false ) );
+        xReplaceDesc.setPropertyValue( "SearchWords", Boolean.FALSE );
         int nCount = xReplace.replaceAll( xReplaceDesc );
         System.out.println( "Search text replaced " + nCount + " times." );
 
@@ -648,7 +648,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // modify properties of the new style
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aCellStyle );
         xPropSet.setPropertyValue( "CellBackColor", new Integer( 0x888888 ) );
-        xPropSet.setPropertyValue( "IsCellBackgroundTransparent", new Boolean( false ) );
+        xPropSet.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
 
 
 
@@ -848,7 +848,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         com.sun.star.beans.XPropertySet xValidPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
                                    xCellPropSet.getPropertyValue( "Validation" ));
         xValidPropSet.setPropertyValue( "Type", com.sun.star.sheet.ValidationType.DECIMAL );
-        xValidPropSet.setPropertyValue( "ShowErrorMessage", new Boolean( true ) );
+        xValidPropSet.setPropertyValue( "ShowErrorMessage", Boolean.TRUE );
         xValidPropSet.setPropertyValue( "ErrorMessage", "This is an invalid value!" );
         xValidPropSet.setPropertyValue( "ErrorAlertStyle", com.sun.star.sheet.ValidationAlertStyle.STOP );
         // condition
@@ -1117,7 +1117,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         aFilterFields[0].NumericValue = 1998;
         xFilterDesc.setFilterFields( aFilterFields );
         com.sun.star.beans.XPropertySet xFilterProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xFilterDesc );
-        xFilterProp.setPropertyValue( "ContainsHeader", new Boolean( true ) );
+        xFilterProp.setPropertyValue( "ContainsHeader", Boolean.TRUE );
         xFilter.filter( xFilterDesc );
 
 
@@ -1150,7 +1150,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         aSortDesc[0].Value  = aSortFields;
         aSortDesc[1] = new com.sun.star.beans.PropertyValue();
         aSortDesc[1].Name   = "ContainsHeader";
-        aSortDesc[1].Value  = new Boolean( true );
+        aSortDesc[1].Value  = Boolean.TRUE;
 
         com.sun.star.util.XSortable xSort = UnoRuntime.queryInterface( com.sun.star.util.XSortable.class, xRange );
         xSort.sort( aSortDesc );
@@ -1207,7 +1207,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
                     com.sun.star.sheet.XCellRangeReferrer xRef = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeReferrer.class, aRangeObj );
                     com.sun.star.table.XCellRange xResultRange = xRef.getReferredCells();
                     com.sun.star.beans.XPropertySet xResultProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xResultRange );
-                    xResultProp.setPropertyValue( "IsCellBackgroundTransparent", new Boolean( false ) );
+                    xResultProp.setPropertyValue( "IsCellBackgroundTransparent", Boolean.FALSE );
                     xResultProp.setPropertyValue( "CellBackColor", new Integer( 0xFFFFCC ) );
                 }
             }

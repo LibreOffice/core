@@ -254,7 +254,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         });
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                            new Boolean(false));
+                            Boolean.FALSE);
 
         tEnv.addObjRelation("XAccessibleText.Text", "Bibliography");
 

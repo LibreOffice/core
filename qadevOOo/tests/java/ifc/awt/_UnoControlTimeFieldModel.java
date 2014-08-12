@@ -126,7 +126,7 @@ public class _UnoControlTimeFieldModel extends MultiPropertyTest {
         testProperty("Tabstop", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Boolean(true) : null ;
+                return utils.isVoid(old) ? Boolean.TRUE : null ;
             }
         }) ;
     }

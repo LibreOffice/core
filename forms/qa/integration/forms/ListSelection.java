@@ -247,7 +247,7 @@ public class ListSelection extends integration.forms.TestCase
 
         // and a list box
         XPropertySet listBox = m_formLayer.createControlAndShape( "ListBox", 50, 10, 40, 6 );
-        listBox.setPropertyValue( "Dropdown", new Boolean( true ) );
+        listBox.setPropertyValue( "Dropdown", Boolean.TRUE );
         listBox.setPropertyValue( "StringItemList", newSheetNames );
         listBox.setPropertyValue( "Name", "ListBox" );
 

@@ -150,7 +150,7 @@ public class AccessibleMenuItem extends TestCase {
         tEnv.addObjRelation("EditOnly",
                             "Can't change or select Text in MenuBarItem");
 
-        tEnv.addObjRelation("Destroy", new Boolean(true));
+        tEnv.addObjRelation("Destroy", Boolean.TRUE);
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 

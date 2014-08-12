@@ -103,7 +103,7 @@ public class SimpleSystemMail extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        tEnv.addObjRelation("SystemMailExist", new Boolean(isSystemMailExist));
+        tEnv.addObjRelation("SystemMailExist", Boolean.valueOf(isSystemMailExist));
 
         return tEnv;
 

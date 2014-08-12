@@ -177,11 +177,11 @@ public class _XSortable extends MultiMethodTest {
             }
 
             if (oPV[i].Name.equals("isSortInTable")) {
-                oPV[i].Value = new Boolean(true);
+                oPV[i].Value = Boolean.TRUE;
             }
 
             if (oPV[i].Name.equals("IsSortColumns")) {
-                oPV[i].Value = new Boolean(false);
+                oPV[i].Value = Boolean.FALSE;
             }
         }
 

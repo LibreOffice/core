@@ -1222,7 +1222,7 @@ public class TestComponent {
                 context,
                 new TestPolyStruct(Type.LONG),
                 new TestPolyStruct(new Any(Type.BOOLEAN, Boolean.TRUE)),
-                new TestPolyStruct(new Boolean(true)),
+                new TestPolyStruct(Boolean.TRUE),
                 new TestPolyStruct(new Byte(Byte.MIN_VALUE)),
                 new TestPolyStruct(new Short(Short.MIN_VALUE)),
                 new TestPolyStruct(new Integer(Integer.MIN_VALUE)),

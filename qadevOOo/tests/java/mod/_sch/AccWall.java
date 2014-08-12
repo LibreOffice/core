@@ -61,7 +61,7 @@ public class AccWall extends TestCase {
         log.println("Change Diagram to 3D");
         XPropertySet ChartProps = UnoRuntime.queryInterface( XPropertySet.class, xChartDoc.getDiagram() );
         try {
-            ChartProps.setPropertyValue("Dim3D", new Boolean(true));
+            ChartProps.setPropertyValue("Dim3D", Boolean.TRUE);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't change Diagram to 3D");
             e.printStackTrace(log);

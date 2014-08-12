@@ -235,8 +235,8 @@ public class PathSubstitutionTest
                 boolean canResubst)
         {
             varName.add(var);
-            this.substAtBegin.add(new Boolean(onlySubstAtBegin));
-            this.resubst.add(new Boolean(canResubst));
+            this.substAtBegin.add(Boolean.valueOf(onlySubstAtBegin));
+            this.resubst.add(Boolean.valueOf(canResubst));
         }
 
         public void putValue(int i, String val)

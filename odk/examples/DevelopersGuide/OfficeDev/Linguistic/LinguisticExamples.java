@@ -174,7 +174,7 @@ public class LinguisticExamples
         PropertyValue[] aProps = new PropertyValue[1];
         aProps[0] = new PropertyValue();
         aProps[0].Name  = "IsGermanPreReform";
-        aProps[0].Value = new Boolean( true );
+        aProps[0].Value = Boolean.TRUE;
 
 
         GetSpell();
@@ -292,7 +292,7 @@ public class LinguisticExamples
 
         // set a spellchecker and hyphenator property value to a defined state
         try {
-            aLinguProps.setPropertyValue("IsGermanPreReform", new Boolean(true));
+            aLinguProps.setPropertyValue("IsGermanPreReform", Boolean.TRUE);
         } catch (Exception e) {
         }
 
@@ -305,7 +305,7 @@ public class LinguisticExamples
         // event that eventually results in the listeners
         // 'processLinguServiceEvent' function being called
         try {
-            aLinguProps.setPropertyValue("IsGermanPreReform", new Boolean(false));
+            aLinguProps.setPropertyValue("IsGermanPreReform", Boolean.FALSE);
         } catch (Exception e) {
         }
 

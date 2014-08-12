@@ -97,7 +97,7 @@ public class PropertySet_Test
             cl.resetPropertyMembers();
             Object value;
             Object ret;
-            value= new Boolean(true);
+            value= Boolean.TRUE;
             cl.setPropertyValue("PropBoolA", value);
             ret=  cl.getPropertyValue("PropBoolA");
             r[i++]= ((Boolean) ret).equals( value);
@@ -155,7 +155,7 @@ public class PropertySet_Test
             r[i++]= ((Type) ret).equals(value);
 
             // test protected,package,private members
-            value= new Boolean(true);
+            value= Boolean.TRUE;
             cl.setPropertyValue("PropBoolB", value);
             ret= cl.getPropertyValue("PropBoolB");
             r[i++]= ((Boolean) ret).equals(value);
@@ -172,7 +172,7 @@ public class PropertySet_Test
             }
             cl.resetPropertyMembers();
 
-            value= new Boolean(true);
+            value= Boolean.TRUE;
             cl.setPropertyValue("PropObjectA", value);
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Boolean) ret).equals(value);
@@ -229,7 +229,7 @@ public class PropertySet_Test
             r[i++]= ((Byte) ret).byteValue() == 1;
 
            cl.resetPropertyMembers();
-            value= new Boolean(true);
+            value= Boolean.TRUE;
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -283,7 +283,7 @@ public class PropertySet_Test
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
 
             cl.resetPropertyMembers();
-            value= new Any(new Type(boolean.class), new Boolean(true));
+            value= new Any(new Type(boolean.class), Boolean.TRUE);
             cl.setPropertyValue("PropBoolA", value);
             ret= cl.getPropertyValue("PropBoolA");
             r[i++]= ret instanceof Boolean && util.anyEquals(value, ret);
@@ -338,7 +338,7 @@ public class PropertySet_Test
 
 
             cl.resetPropertyMembers();
-            value= new Any(new Type(boolean.class), new Boolean(true));
+            value= new Any(new Type(boolean.class), Boolean.TRUE);
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
@@ -394,7 +394,7 @@ public class PropertySet_Test
 
 
             cl.resetPropertyMembers();
-            value= new Boolean(true);
+            value= Boolean.TRUE;
             cl.setPropertyValue("PropBoolClass", value);
             ret=  cl.getPropertyValue("PropBoolClass");
             r[i++]= ((Boolean) ret).equals( value);
@@ -430,7 +430,7 @@ public class PropertySet_Test
             cl.resetPropertyMembers();
 
             cl.resetPropertyMembers();
-            value= new Any(new Type(boolean.class), new Boolean(true));
+            value= new Any(new Type(boolean.class), Boolean.TRUE);
             cl.setPropertyValue("PropBoolClass", value);
             ret= cl.getPropertyValue("PropBoolClass");
             r[i++]= ret instanceof Boolean && util.anyEquals(value, ret);
@@ -469,7 +469,7 @@ public class PropertySet_Test
             // PropertyAttribute.READONLY
             cl.propBoolA.Attributes= PropertyAttribute.READONLY;
             try{
-                cl.setPropertyValue("PropBoolA", new Boolean(true));
+                cl.setPropertyValue("PropBoolA", Boolean.TRUE);
                 i++;
             }catch (com.sun.star.beans.PropertyVetoException e)
             {
@@ -510,10 +510,10 @@ public class PropertySet_Test
             Object objAny= cl.getPropertyValue("PropBoolClass");
             r[i++]= util.isVoidAny( objAny);
 
-            cl.boolClassProp= new Boolean(true);
+            cl.boolClassProp= Boolean.TRUE;
             cl.setPropertyValue("PropBoolClass", null);
             r[i++]= cl.boolClassProp == null;
-            cl.boolClassProp= new Boolean(false);
+            cl.boolClassProp= Boolean.FALSE;
             cl.setPropertyValue("PropBoolClass", new Any(new Type(boolean.class),null));
             r[i++]= cl.boolClassProp == null;
 
@@ -1199,11 +1199,11 @@ class TestClass extends PropertySet
         Object[] outOldVal= new Object[1];
         Object[] outNewVal= new Object[1];
 
-        Object value= new Boolean(true);
+        Object value= Boolean.TRUE;
         try
         {
             r[i++]= convertPropertyValue(propBoolA,  outNewVal, outOldVal, value);
-            r[i++]= outNewVal[0] instanceof Boolean && outNewVal[0].equals(value)  && outOldVal[0].equals(new Boolean(false));
+            r[i++]= outNewVal[0] instanceof Boolean && outNewVal[0].equals(value)  && outOldVal[0].equals(Boolean.FALSE);
             value= new Character('A');
             r[i++]= convertPropertyValue(propCharA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Character && outNewVal[0].equals(value) && outOldVal[0].equals(new Character((char)0));
@@ -1274,7 +1274,7 @@ class TestClass extends PropertySet
             value= new Any( new Type(Integer.class),new Integer(111));
             r[i++]= convertPropertyValue(propIntA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Integer && ((Integer)outNewVal[0]).equals( ((Any)value).getObject());
-            value= new Any(new Type(Boolean.class), new Boolean(true));
+            value= new Any(new Type(Boolean.class), Boolean.TRUE);
             r[i++]= convertPropertyValue(propBoolA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Boolean && ((Boolean)outNewVal[0]).equals(((Any) value).getObject());
             //Character, Byte, Short, Long
@@ -1300,7 +1300,7 @@ class TestClass extends PropertySet
 
 
             // test private, protected, package fields
-            value= new Boolean(true);
+            value= Boolean.TRUE;
             r[i++]= convertPropertyValue(propBoolB, outNewVal, outOldVal, value);
             r[i++]= ((Boolean)value).booleanValue() == ((Boolean) outNewVal[0]).booleanValue();
             r[i++]= convertPropertyValue(propBoolC, outNewVal,  outOldVal, value);
@@ -1315,7 +1315,7 @@ class TestClass extends PropertySet
             }
 
             // Properties member of type Byte,Short etc.
-            value= new Boolean(true);
+            value= Boolean.TRUE;
             r[i++]= convertPropertyValue(propBoolClass, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof Boolean && outNewVal[0].equals(value);
             value= new Character('A');
@@ -1356,7 +1356,7 @@ class TestClass extends PropertySet
         int i= 0;
         resetPropertyMembers();
         try {
-            Object value= new Boolean(true);
+            Object value= Boolean.TRUE;
             setPropertyValueNoBroadcast(propBoolA, value);
             r[i++]= boolPropA == ((Boolean) value).booleanValue();
             value= new Character('A');
@@ -1406,7 +1406,7 @@ class TestClass extends PropertySet
             value = com.sun.star.beans.PropertyState.AMBIGUOUS_VALUE;
             setPropertyValueNoBroadcast(propEnum, value);
             r[i++]= enumPropertyState == value;
-            value= new Boolean(true);
+            value= Boolean.TRUE;
             setPropertyValueNoBroadcast(propBoolB, value);
             r[i++]= boolPropB == ((Boolean) value).booleanValue();
             setPropertyValueNoBroadcast(propBoolC, value);

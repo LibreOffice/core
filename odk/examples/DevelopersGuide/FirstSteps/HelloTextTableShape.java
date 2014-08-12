@@ -134,7 +134,7 @@ public class HelloTextTableShape {
             XPropertySet xShapeProps = UnoRuntime.queryInterface(
                 XPropertySet.class, writerShape);
             // wrap text inside shape
-            xShapeProps.setPropertyValue("TextContourFrame", new Boolean(true));
+            xShapeProps.setPropertyValue("TextContourFrame", Boolean.TRUE);
 
 
             XText xShapeText = UnoRuntime.queryInterface(XText.class, writerShape);
@@ -217,7 +217,7 @@ public class HelloTextTableShape {
             XCell xCell = xSpreadsheetCells.getCellByPosition(0,1);
             XPropertySet xCellProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xCell);
-            xCellProps.setPropertyValue("IsTextWrapped", new Boolean(true));
+            xCellProps.setPropertyValue("IsTextWrapped", Boolean.TRUE);
 
             XText xCellText = UnoRuntime.queryInterface(XText.class, xCell);
 
@@ -244,7 +244,7 @@ public class HelloTextTableShape {
             XPropertySet xShapeProps = UnoRuntime.queryInterface(
                 XPropertySet.class, calcShape);
             // wrap text inside shape
-            xShapeProps.setPropertyValue("TextContourFrame", new Boolean(true));
+            xShapeProps.setPropertyValue("TextContourFrame", Boolean.TRUE);
 
 
             XText xShapeText = UnoRuntime.queryInterface(XText.class, calcShape);
@@ -291,7 +291,7 @@ public class HelloTextTableShape {
                 XPropertySet.class, drawShape);
 
             // wrap text inside shape
-            xShapeProps.setPropertyValue("TextContourFrame", new Boolean(true));
+            xShapeProps.setPropertyValue("TextContourFrame", Boolean.TRUE);
 
             manipulateText(xShapeText);
             manipulateShape(xDrawShape);
