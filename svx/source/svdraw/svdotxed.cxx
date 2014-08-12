@@ -186,16 +186,20 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nMaxHgt=1000000;
             }
 
-            // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
-            if(IsVerticalWriting())
-            {
-                nMaxWdt = 1000000;
-            }
-            else
-            {
-                nMaxHgt = 1000000;
-            }
+            // FIXME(matteocam)
+            bool bChainedFrame = true; // XXX: should be returned from a method
 
+            if ( !bChainedFrame ) {
+                // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
+                if(IsVerticalWriting())
+                {
+                    nMaxWdt = 1000000;
+                }
+                else
+                {
+                    nMaxHgt = 1000000;
+                }
+            }
             aPaperMax.Width()=nMaxWdt;
             aPaperMax.Height()=nMaxHgt;
         }
@@ -248,10 +252,6 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     {
         aPaperMin.Height() = 0;
     }
-
-    // FIXME(matteocam)
-    aPaperMax.Height() = 2000;
-    aPaperMin.Height() = 2000;
 
     if (pPaperMin!=NULL) *pPaperMin=aPaperMin;
     if (pPaperMax!=NULL) *pPaperMax=aPaperMax;

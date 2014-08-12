@@ -924,8 +924,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     rOutliner.SetFixedCellHeight(rSdrBlockTextPrimitive.isFixedCellHeight());
     rOutliner.SetControlWord(nOriginalControlWord|EEControlBits::AUTOPAGESIZE);
     rOutliner.SetMinAutoPaperSize(aNullSize);
-    //rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
-    rOutliner.SetMaxAutoPaperSize(Size(1000000,2000));
+    rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
     // Resolves: fdo#35779 set background color of this shape as the editeng background if there
     // is one. Check the shape itself, then the host page, then that page's master page.
