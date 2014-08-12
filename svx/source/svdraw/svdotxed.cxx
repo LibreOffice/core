@@ -62,6 +62,10 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         rOutl.SetControlWord(nStat);
     }
 
+    // FIXME(matteocam)
+    nStat&=~EE_CNTRL_AUTOPAGESIZE;
+    rOutl.SetControlWord(nStat);
+
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
     if(pOutlinerParaObject!=NULL)
     {
