@@ -105,17 +105,6 @@ struct CentralDirectoryEnd
 // This little lot performs in a truly appalling way without
 // buffering eg. on an IStream.
 
-static unsigned char readByte(StreamInterface *stream)
-{
-    if (!stream || stream->stell() == -1)
-        throw IOException(-1);
-    unsigned char tmpBuf;
-    unsigned long numBytesRead = stream->sread(&tmpBuf, 1);
-    if (numBytesRead != 1)
-        throw IOException(-1);
-    return tmpBuf;
-}
-
 static unsigned short readShort(StreamInterface *stream)
 {
     if (!stream || stream->stell() == -1)
