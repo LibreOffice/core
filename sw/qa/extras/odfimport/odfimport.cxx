@@ -345,6 +345,16 @@ DECLARE_ODFIMPORT_TEST(testFdo68839, "fdo68839.odt")
             getProperty<OUString>(xFrame2, "ChainNextName"));
 }
 
+DECLARE_ODFIMPORT_TEST(testFdo82165, "fdo82165.odt")
+{
+    // there was a duplicate shape in the left header
+    lcl_CheckShape(getShape(1), "Picture 9");
+    try {
+        uno::Reference<drawing::XShape> xShape = getShape(2);
+        CPPUNIT_FAIL("IndexOutOfBoundsException expected");
+    } catch (lang::IndexOutOfBoundsException const&) { }
+}
+
 DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
