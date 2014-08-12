@@ -25,7 +25,7 @@ Dim sLocal As String
 	Select Case psLocale
 		Case &quot;EN&quot;, &quot;DEFAULT&quot;
 			Select Case UCase(psShortlabel)
-				Case &quot;ERR&quot; &amp; ERRDBNOTCONNECTED		:	sLocal = &quot;Connection to the database is not active&quot;
+				Case &quot;ERR&quot; &amp; ERRDBNOTCONNECTED		:	sLocal = &quot;No active connection to a database found&quot;
 				Case &quot;ERR&quot; &amp; ERRMISSINGARGUMENTS	:	sLocal = &quot;Arguments are missing or are not initialized&quot;
 				Case &quot;ERR&quot; &amp; ERRWRONGARGUMENT		:	sLocal = &quot;Argument nr. %0 [Value = &apos;%1&apos;] is invalid&quot;
 				Case &quot;ERR&quot; &amp; ERRMAINFORM			:	sLocal = &quot;Document &apos;%0&apos; does not contain any form&quot;
@@ -129,7 +129,7 @@ Dim sLocal As String
 			End Select
 		Case &quot;FR&quot;
 			Select Case  UCase(psShortlabel)
-				Case &quot;ERR&quot; &amp; ERRDBNOTCONNECTED		:	sLocal = &quot;Pas de connexion active à la banque de données&quot;
+				Case &quot;ERR&quot; &amp; ERRDBNOTCONNECTED		:	sLocal = &quot;Pas de connexion active trouvée à une banque de données&quot;
 				Case &quot;ERR&quot; &amp; ERRMISSINGARGUMENTS	:	sLocal = &quot;Des arguments sont manquants ou non initialisés&quot;
 				Case &quot;ERR&quot; &amp; ERRWRONGARGUMENT		:	sLocal = &quot;L&apos;argument n° %0 [Valeur = &apos;%1&apos;] n&apos;est pas valable&quot;
 				Case &quot;ERR&quot; &amp; ERRMAINFORM			:	sLocal = &quot;Le document &apos;%0&apos; ne contient aucun formulaire&quot;

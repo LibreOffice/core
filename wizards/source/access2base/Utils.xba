@@ -600,6 +600,7 @@ REM ----------------------------------------------------------------------------
 Public Sub _SetCalledSub(ByVal psSub As String) As String
 &apos;	Called in top of each public function.
 &apos;	Used to trace routine in/outs and to clarify error messages
+		If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current LibO/AOO session
 		If _A2B_.CalledSub = &quot;&quot; Then _A2B_.CalledSub = psSub
 		If _A2B_.MinimalTraceLevel = 1 Then TraceLog(TRACEDEBUG, _GetLabel(&quot;Entering&quot;) &amp; &quot; &quot; &amp; psSub &amp; &quot; ...&quot;, False)
 End Sub			&apos;	SetCalledSub
