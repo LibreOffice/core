@@ -55,11 +55,11 @@ grep ::.*\( unusedcode.all \
 		  | grep -v ^cppu:: \
 		  | grep -v ^CppUnit:: \
 		  | grep -v ^Dde \
-		  | grep -v ^glTF:: \
 		  | grep -v ^graphite2:: \
 		  | grep -v ^jvmaccess:: \
 		  | grep -v ^libcdr:: \
 		  | grep -v ^libcmis:: \
+		  | grep -v ^libgltf:: \
 		  | grep -v ^libmspub:: \
 		  | grep -v ^libvisio:: \
 		  | grep -v ^libwpg:: \
@@ -87,9 +87,4 @@ grep ::.*\( unusedcode.all \
 		  | grep -v ^MathML:: \
 		  | grep -v ^GeneratedSaxParser:: \
 		  | grep -v ^GLTF:: \
-		  | grep -v ^FPSCounter:: \
-		  | grep -v ^CPhysicalCamera:: \
-		  | grep -v ^RenderScene:: \
-		  | grep -v ^ShaderProgram:: \
-		  | grep -v ^Texture:: \
 		  > ../unusedcode.easy
