@@ -40,6 +40,7 @@ bool isSymbolFont(const Font &rFont)
             rFont.GetName().equalsIgnoreAsciiCase("MusiQwik") ||
             rFont.GetName().equalsIgnoreAsciiCase("MusiSync") ||
             rFont.GetName().equalsIgnoreAsciiCase("stmary10") ||
+            rFont.GetName().startsWith("STIX") ||
             isOpenSymbolFont(rFont);
 }
 
