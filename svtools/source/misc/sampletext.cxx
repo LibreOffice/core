@@ -41,6 +41,7 @@ bool isSymbolFont(const Font &rFont)
             rFont.GetName().equalsIgnoreAsciiCase("MusiQwik") ||
             rFont.GetName().equalsIgnoreAsciiCase("MusiSync") ||
             rFont.GetName().equalsIgnoreAsciiCase("stmary10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("Symbol") ||
             rFont.GetName().startsWith("STIX") ||
             isOpenSymbolFont(rFont);
 }
@@ -53,6 +54,20 @@ bool canRenderNameOfSelectedFont(OutputDevice &rDevice)
 
 OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
 {
+    if (rDevice.GetFont().GetName() == "Symbol")
+    {
+        static const sal_Unicode aImplAppleSymbolText[] = {
+            0x03BC, 0x2202, 0x2211, 0x220F, 0x03C0, 0x222B, 0x03A9, 0x221A, 0};
+        OUString sSampleText(aImplAppleSymbolText);
+        bool bHasSampleTextGlyphs = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
+        //It's the Apple version
+        if (bHasSampleTextGlyphs)
+            return OUString(aImplAppleSymbolText);
+        static const sal_Unicode aImplAdobeSymbolText[] = {
+            0xF06D, 0xF0B6, 0xF0E5, 0xF0D5, 0xF070, 0xF0F2, 0xF057, 0xF0D6, 0};
+        return OUString(aImplAdobeSymbolText);
+    }
+
     const bool bOpenSymbol = isOpenSymbolFont(rDevice.GetFont());
 
     if (!bOpenSymbol)
