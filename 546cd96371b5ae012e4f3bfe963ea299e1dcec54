@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_556acc1b",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2674,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-08-13T09:38:51Z",
+      "side": 0,
+      "message": "I\u0027m uneasy with removing this. To me it seems there\u0027s no Undo of the collections contained in ScRefUndoData then, or am I missing something?",
+      "revId": "546cd96371b5ae012e4f3bfe963ea299e1dcec54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
