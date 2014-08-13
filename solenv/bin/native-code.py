@@ -41,6 +41,7 @@ core_factory_list = [
     ("libucb1.a", "ucb_component_getFactory"),
     ("libucpfile1.a", "ucpfile_component_getFactory"),
     ("libucphier1.a", "ucphier1_component_getFactory"),
+    ("libucptdoc1lo.a", "ucptdoc1_component_getFactory"),
     ("libunordflo.a", "unordf_component_getFactory"),
     ("libunoxmllo.a", "unoxml_component_getFactory"),
     ("libutllo.a", "utl_component_getFactory"),
