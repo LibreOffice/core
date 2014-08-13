@@ -539,6 +539,7 @@ STDMETHODIMP CAccTable::get_summary(IUnknown * * accessible)
     Reference<XAccessible> pRAcc = GetXInterface()->getAccessibleSummary();
 
     IAccessible* pRet = NULL;
+    CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
 
     if(pRet)
     {
