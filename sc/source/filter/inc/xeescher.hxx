@@ -324,6 +324,8 @@ public:
     virtual void        WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExpXmlStream& rStrm );
     void WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
 
+    const css::uno::Reference<css::chart::XChartDocument>& GetChartDoc() const;
+
 private:
     typedef boost::shared_ptr< XclExpChart > XclExpChartRef;
     XclExpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
