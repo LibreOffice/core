@@ -1082,12 +1082,12 @@ namespace
         {
             check( RTL_TEXTENCODING_ISO_8859_1, RTL_TEXTENCODING_MS_1252 );
         }
-
+#if 0
         void WindowsCharsetFromTextEncoding_ISO_8859_2()
         {
             check( RTL_TEXTENCODING_ISO_8859_2, RTL_TEXTENCODING_MS_1252 );
         }
-
+#endif
         void WindowsCharsetFromTextEncoding_ISO_8859_3()
         {
             check( RTL_TEXTENCODING_ISO_8859_3, RTL_TEXTENCODING_MS_1252 );
@@ -1097,7 +1097,7 @@ namespace
         {
             check( RTL_TEXTENCODING_ISO_8859_4, RTL_TEXTENCODING_MS_1257 );
         }
-
+#if 0
         void WindowsCharsetFromTextEncoding_ISO_8859_5()
         {
             check( RTL_TEXTENCODING_ISO_8859_5, RTL_TEXTENCODING_MS_1252 );
@@ -1122,7 +1122,7 @@ namespace
         {
             check( RTL_TEXTENCODING_ISO_8859_9, RTL_TEXTENCODING_MS_1252 );
         }
-
+#endif
         void WindowsCharsetFromTextEncoding_ISO_8859_14()
         {
             check( RTL_TEXTENCODING_ISO_8859_14, RTL_TEXTENCODING_MS_1252 );
@@ -1132,7 +1132,7 @@ namespace
         {
             check( RTL_TEXTENCODING_ISO_8859_15, RTL_TEXTENCODING_MS_1252 );
         }
-
+#if 0
         void WindowsCharsetFromTextEncoding_IBM_737()
         {
             check( RTL_TEXTENCODING_IBM_737, RTL_TEXTENCODING_MS_1252 );
@@ -1272,12 +1272,12 @@ namespace
         {
             check( RTL_TEXTENCODING_APPLE_HEBREW, RTL_TEXTENCODING_MS_1252 );
         }
-
+#endif
         void WindowsCharsetFromTextEncoding_APPLE_ICELAND()
         {
             check( RTL_TEXTENCODING_APPLE_ICELAND, RTL_TEXTENCODING_MS_1252 );
         }
-
+#if 0
         void WindowsCharsetFromTextEncoding_APPLE_ROMANIAN()
         {
             check( RTL_TEXTENCODING_APPLE_ROMANIAN, RTL_TEXTENCODING_MS_1252 );
@@ -1392,7 +1392,7 @@ namespace
         {
             check( RTL_TEXTENCODING_KOI8_R, RTL_TEXTENCODING_MS_1252 );
         }
-
+#endif
         void WindowsCharsetFromTextEncoding_UTF7()
         {
             check( RTL_TEXTENCODING_UTF7, RTL_TEXTENCODING_MS_1252 );
@@ -1402,7 +1402,7 @@ namespace
         {
             check( RTL_TEXTENCODING_UTF8, RTL_TEXTENCODING_MS_1252 );
         }
-
+#if 0
         void WindowsCharsetFromTextEncoding_ISO_8859_10()
         {
             check( RTL_TEXTENCODING_ISO_8859_10, RTL_TEXTENCODING_MS_1252 );
@@ -1467,7 +1467,7 @@ namespace
         {
             check( RTL_TEXTENCODING_ISCII_DEVANAGARI, RTL_TEXTENCODING_MS_1252 );
         }
-
+#endif
         void WindowsCharsetFromTextEncoding_JAVA_UTF8()
         {
             check( RTL_TEXTENCODING_JAVA_UTF8, RTL_TEXTENCODING_MS_1252 );
