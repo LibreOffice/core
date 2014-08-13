@@ -28,12 +28,6 @@ class TextLogger
         throws java.io.IOException
     {
         super ("http://localhost");
-        try
-        {
-            //            setPage (new URL ("http://www.spiegel.de"));
-        }
-        catch (Exception e)
-        {}
 
         setEditable (false);
         final JEditorPane finalPane = this;

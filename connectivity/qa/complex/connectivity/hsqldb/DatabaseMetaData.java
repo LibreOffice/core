@@ -64,8 +64,6 @@ public class DatabaseMetaData {
             assure("SQLException occurred: " + ex.getMessage() ,false);
         } catch( java.lang.reflect.InvocationTargetException ex ) {
             assure("IllegalAccessException!",false);
-        } finally {
-
         }
     }
 

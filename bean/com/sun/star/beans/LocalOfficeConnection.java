@@ -245,9 +245,6 @@ public class LocalOfficeConnection
                     }
                 }
             }
-            finally
-            {
-            }
 
             // XComponentContext
             if( null != aInitialObject )
