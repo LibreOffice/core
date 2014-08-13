@@ -1,0 +1,24 @@
+From 3355f5314cd01d8c264c91014d136a58f68d03f4 Mon Sep 17 00:00:00 2001
+From: osnola <alonso@loria.fr>
+Date: Wed, 13 Aug 2014 11:00:35 +0200
+Subject: [PATCH] MWAWDocument.cxx: remove an useless debug message.
+
+---
+ src/lib/MWAWDocument.cxx | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/lib/MWAWDocument.cxx b/src/lib/MWAWDocument.cxx
+index 5591f70..8246bf7 100644
+--- a/src/lib/MWAWDocument.cxx
++++ b/src/lib/MWAWDocument.cxx
+@@ -109,7 +109,6 @@ MWAWDocument::Confidence MWAWDocument::isFileFormatSupported(librevenge::RVNGInp
+   }
+ 
+   try {
+-    MWAW_DEBUG_MSG(("MWAWDocument::isFileFormatSupported()\n"));
+     MWAWInputStreamPtr ip(new MWAWInputStream(input, false, true));
+     MWAWInputStreamPtr rsrc=ip->getResourceForkStream();
+     shared_ptr<MWAWRSRCParser> rsrcParser;
+-- 
+1.8.4.5
+
