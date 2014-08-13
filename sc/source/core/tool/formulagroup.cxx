@@ -702,8 +702,8 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
 
 #if HAVE_FEATURE_OPENCL
 
-    size_t aDeviceId = -1;
-    size_t aPlatformId = -1;
+    size_t aDeviceId = static_cast<size_t>(-1);
+    size_t aPlatformId = static_cast<size_t>(-1);
 
 #ifndef DISABLE_DYNLOADING
     osl::Module* pModule = getOpenCLModule();
