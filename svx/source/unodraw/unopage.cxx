@@ -499,91 +499,91 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
     sal_uInt32 nInventor = 0;
 
     GetTypeAndInventor( nType, nInventor, xShape->getShapeType() );
+    if (!nType)
+        return NULL;
+
     SdrObject* pNewObj = 0;
 
-    if( nType != 0 )
+    awt::Size aSize = xShape->getSize();
+    aSize.Width += 1;
+    aSize.Height += 1;
+    awt::Point aPos = xShape->getPosition();
+    Rectangle aRect( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) );
+
+    // special cases
+    if( nInventor == SdrInventor )
     {
-        awt::Size aSize = xShape->getSize();
-        aSize.Width += 1;
-        aSize.Height += 1;
-        awt::Point aPos = xShape->getPosition();
-        Rectangle aRect( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) );
-
-        // special cases
-        if( nInventor == SdrInventor )
+        switch( nType )
         {
-            switch( nType )
+        case OBJ_MEASURE:
             {
-            case OBJ_MEASURE:
-                {
-                    pNewObj = new SdrMeasureObj( aRect.TopLeft(), aRect.BottomRight() );
-                    break;
-                }
-            case OBJ_LINE:
-                {
-                    basegfx::B2DPolygon aPoly;
-                    aPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Top()));
-                    aPoly.append(basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
-                    pNewObj = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
-                    break;
-                }
+                pNewObj = new SdrMeasureObj( aRect.TopLeft(), aRect.BottomRight() );
+                break;
+            }
+        case OBJ_LINE:
+            {
+                basegfx::B2DPolygon aPoly;
+                aPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Top()));
+                aPoly.append(basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
+                pNewObj = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
+                break;
             }
         }
+    }
 
-        if( pNewObj == NULL )
-            pNewObj = SdrObjFactory::MakeNewObject( nInventor, nType, mpPage );
+    if( pNewObj == NULL )
+        pNewObj = SdrObjFactory::MakeNewObject( nInventor, nType, mpPage );
 
-        if(pNewObj)
-        {
-            pNewObj->SetSnapRect(aRect);
+    if (!pNewObj)
+        return NULL;
 
-            if( pNewObj->ISA(E3dPolyScene))
-            {
-                // Szene initialisieren
-                E3dScene* pScene = (E3dScene*)pNewObj;
+    pNewObj->SetSnapRect(aRect);
 
-                double fW = (double)aSize.Width;
-                double fH = (double)aSize.Height;
+    if( pNewObj->ISA(E3dPolyScene))
+    {
+        // Szene initialisieren
+        E3dScene* pScene = (E3dScene*)pNewObj;
 
-                Camera3D aCam(pScene->GetCamera());
-                aCam.SetAutoAdjustProjection(false);
-                aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
-                basegfx::B3DPoint aLookAt;
-                basegfx::B3DPoint aCamPos(0.0, 0.0, 10000.0);
-                aCam.SetPosAndLookAt(aCamPos, aLookAt);
-                aCam.SetFocalLength(100.0);
-                aCam.SetDefaults(aCamPos, aLookAt, 10000.0);
-                pScene->SetCamera(aCam);
+        double fW = (double)aSize.Width;
+        double fH = (double)aSize.Height;
 
-                pScene->SetRectsDirty();
-            }
-            else if(pNewObj->ISA(E3dExtrudeObj))
-            {
-                E3dExtrudeObj* pObj = (E3dExtrudeObj*)pNewObj;
-                basegfx::B2DPolygon aNewPolygon;
-                aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
-                aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
-                aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
-                aNewPolygon.setClosed(true);
-                pObj->SetExtrudePolygon(basegfx::B2DPolyPolygon(aNewPolygon));
+        Camera3D aCam(pScene->GetCamera());
+        aCam.SetAutoAdjustProjection(false);
+        aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
+        basegfx::B3DPoint aLookAt;
+        basegfx::B3DPoint aCamPos(0.0, 0.0, 10000.0);
+        aCam.SetPosAndLookAt(aCamPos, aLookAt);
+        aCam.SetFocalLength(100.0);
+        aCam.SetDefaults(aCamPos, aLookAt, 10000.0);
+        pScene->SetCamera(aCam);
 
-                // #107245# pObj->SetExtrudeCharacterMode(sal_True);
-                pObj->SetMergedItem(Svx3DCharacterModeItem(true));
-            }
-            else if(pNewObj->ISA(E3dLatheObj))
-            {
-                E3dLatheObj* pObj = (E3dLatheObj*)pNewObj;
-                basegfx::B2DPolygon aNewPolygon;
-                aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
-                aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
-                aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
-                aNewPolygon.setClosed(true);
-                pObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
+        pScene->SetRectsDirty();
+    }
+    else if(pNewObj->ISA(E3dExtrudeObj))
+    {
+        E3dExtrudeObj* pObj = (E3dExtrudeObj*)pNewObj;
+        basegfx::B2DPolygon aNewPolygon;
+        aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+        aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
+        aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
+        aNewPolygon.setClosed(true);
+        pObj->SetExtrudePolygon(basegfx::B2DPolyPolygon(aNewPolygon));
 
-                // #107245# pObj->SetLatheCharacterMode(sal_True);
-                pObj->SetMergedItem(Svx3DCharacterModeItem(true));
-            }
-        }
+        // #107245# pObj->SetExtrudeCharacterMode(sal_True);
+        pObj->SetMergedItem(Svx3DCharacterModeItem(true));
+    }
+    else if(pNewObj->ISA(E3dLatheObj))
+    {
+        E3dLatheObj* pObj = (E3dLatheObj*)pNewObj;
+        basegfx::B2DPolygon aNewPolygon;
+        aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+        aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
+        aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
+        aNewPolygon.setClosed(true);
+        pObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
+
+        // #107245# pObj->SetLatheCharacterMode(sal_True);
+        pObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
 
     return pNewObj;

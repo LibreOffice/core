@@ -188,40 +188,44 @@ void SAL_CALL SvxShapeGroup::leaveGroup(  ) throw(uno::RuntimeException, std::ex
 
 void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape, sal_uIntPtr nPos )
 {
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
-
-    if( mpObj.is()&& mxPage.is() && pShape )
-    {
-        SdrObject* pSdrShape = pShape->GetSdrObject();
-        if( pSdrShape == NULL )
-            pSdrShape = mxPage->_CreateSdrObject( xShape );
-
-        if( pSdrShape->IsInserted() )
-            pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
-
-        mpObj->GetSubList()->InsertObject(pSdrShape, nPos);
-        pSdrShape->SetModel(mpObj->GetModel());
-
-        // #85922# It makes no sense to set the layer asked
-        // from the group object since these is an iteration
-        // over the contained objects. In consequence, this
-        // statement erases all layer information from the draw
-        // objects. Layers need to be set at draw objects directly
-        // and have nothing to do with grouping at all.
-        // pSdrShape->SetLayer(pObject->GetLayer());
-
-        // Establish connection between new SdrObject and its wrapper before
-        // inserting the new shape into the group.  There a new wrapper
-        // would be created when this connection would not already exist.
-        pShape->Create( pSdrShape, mxPage.get() );
-
-        if( mpModel )
-            mpModel->SetChanged();
-    }
-    else
+    if (!mpObj.is() || !mxPage.is())
     {
         OSL_FAIL("could not add XShape to group shape!");
+        return;
     }
+
+    SvxShape* pShape = SvxShape::getImplementation( xShape );
+    if (!pShape)
+    {
+        OSL_FAIL("could not add XShape to group shape!");
+        return;
+    }
+
+    SdrObject* pSdrShape = pShape->GetSdrObject();
+    if( pSdrShape == NULL )
+        pSdrShape = mxPage->_CreateSdrObject( xShape );
+
+    if( pSdrShape->IsInserted() )
+        pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
+
+    mpObj->GetSubList()->InsertObject(pSdrShape, nPos);
+    pSdrShape->SetModel(mpObj->GetModel());
+
+    // #85922# It makes no sense to set the layer asked
+    // from the group object since these is an iteration
+    // over the contained objects. In consequence, this
+    // statement erases all layer information from the draw
+    // objects. Layers need to be set at draw objects directly
+    // and have nothing to do with grouping at all.
+    // pSdrShape->SetLayer(pObject->GetLayer());
+
+    // Establish connection between new SdrObject and its wrapper before
+    // inserting the new shape into the group.  There a new wrapper
+    // would be created when this connection would not already exist.
+    pShape->Create( pSdrShape, mxPage.get() );
+
+    if( mpModel )
+        mpModel->SetChanged();
 }
 
 // XShapes
