@@ -73,6 +73,13 @@ private: //methods
                         , double fLogicZ, double fDepth, double fExplodePercentage
                         , tPropertyNameValueMap* pOverWritePropertiesMap );
 
+    void createTextLabelShape(
+        const css::uno::Reference<css::drawing::XShapes>& xTextTarget,
+        VDataSeries& rSeries, sal_Int32 nPointIndex,
+        double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
+        double fUnitCircleOuterRadius, double fUnitCircleInnerRadius, double fExplodePercentage,
+        double fLogicYSum, double fLogicZ );
+
     double              getMaxOffset();
     bool                detectLabelOverlapsAndMove(const ::com::sun::star::awt::Size& rPageSize);//returns true when there might be more to do
     void                resetLabelPositionsToPreviousState();

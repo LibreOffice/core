@@ -202,6 +202,75 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
     return xShape;
 }
 
+void PieChart::createTextLabelShape(
+    const uno::Reference<drawing::XShapes>& xTextTarget,
+    VDataSeries& rSeries, sal_Int32 nPointIndex,
+    double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
+    double fUnitCircleOuterRadius, double fUnitCircleInnerRadius, double fExplodePercentage,
+    double fLogicYSum, double fLogicZ )
+{
+    if (!rSeries.getDataPointLabelIfLabel(nPointIndex))
+        return;
+
+    if( !::rtl::math::approxEqual( fExplodePercentage, 0.0 ) )
+    {
+        double fExplodeOffset = (fUnitCircleOuterRadius-fUnitCircleInnerRadius)*fExplodePercentage;
+        fUnitCircleInnerRadius += fExplodeOffset;
+        fUnitCircleOuterRadius += fExplodeOffset;
+    }
+
+    sal_Int32 nLabelPlacement = rSeries.getLabelPlacement(
+        nPointIndex, m_xChartTypeModel, m_nDimension, m_pPosHelper->isSwapXAndY());
+
+    // AVOID_OVERLAP is in fact "Best fit" in the UI.
+    bool bMovementAllowed = ( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::AVOID_OVERLAP );
+    if( bMovementAllowed )
+        // Use center for "Best fit" for now. In the future we
+        // may want to implement a real best fit algorithm.
+        // But center is good enough, and close to what Excel
+        // does.
+        nLabelPlacement = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+
+    LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
+    sal_Int32 nScreenValueOffsetInRadiusDirection = 0 ;
+    if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE )
+        nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? 150 : 0;//todo maybe calculate this font height dependent
+    else if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::INSIDE )
+        nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? -150 : 0;//todo maybe calculate this font height dependent
+    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
+    awt::Point aScreenPosition2D(
+        aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
+        , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
+        , fUnitCircleInnerRadius, fUnitCircleOuterRadius, fLogicZ+0.5, 0 ));
+
+    PieLabelInfo aPieLabelInfo;
+    aPieLabelInfo.aFirstPosition = basegfx::B2IVector( aScreenPosition2D.X, aScreenPosition2D.Y );
+    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, fLogicZ+1.0 ) ) );
+    aPieLabelInfo.aOrigin = basegfx::B2IVector( aOrigin.X, aOrigin.Y );
+
+    //add a scaling independent Offset if requested
+    if( nScreenValueOffsetInRadiusDirection != 0)
+    {
+        basegfx::B2IVector aDirection( aScreenPosition2D.X- aOrigin.X, aScreenPosition2D.Y- aOrigin.Y );
+        aDirection.setLength(nScreenValueOffsetInRadiusDirection);
+        aScreenPosition2D.X += aDirection.getX();
+        aScreenPosition2D.Y += aDirection.getY();
+    }
+
+    double nVal = rSeries.getYValue(nPointIndex);
+    aPieLabelInfo.xTextShape = createDataLabel(
+        xTextTarget, rSeries, nPointIndex, nVal, fLogicYSum, aScreenPosition2D, eAlignment);
+
+    uno::Reference< container::XChild > xChild( aPieLabelInfo.xTextShape, uno::UNO_QUERY );
+    if( xChild.is() )
+        aPieLabelInfo.xLabelGroupShape = uno::Reference<drawing::XShape>( xChild->getParent(), uno::UNO_QUERY );
+    aPieLabelInfo.fValue = nVal;
+    aPieLabelInfo.bMovementAllowed = bMovementAllowed;
+    aPieLabelInfo.bMoved= false;
+    aPieLabelInfo.xTextTarget = xTextTarget;
+    m_aLabelInfoList.push_back(aPieLabelInfo);
+}
+
 void PieChart::addSeries( VDataSeries* pSeries, sal_Int32 /* zSlot */, sal_Int32 /* xSlot */, sal_Int32 /* ySlot */ )
 {
     VSeriesPlotter::addSeries( pSeries, 0, -1, 0 );
@@ -445,65 +514,11 @@ void PieChart::createShapes()
                 }
 
                 //create label
-                if( pSeries->getDataPointLabelIfLabel(nPointIndex) )
-                {
-                    if( !::rtl::math::approxEqual( fExplodePercentage, 0.0 ) )
-                    {
-                        double fExplodeOffset = (fUnitCircleOuterRadius-fUnitCircleInnerRadius)*fExplodePercentage;
-                        fUnitCircleInnerRadius += fExplodeOffset;
-                        fUnitCircleOuterRadius += fExplodeOffset;
-                    }
-
-                    sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nPointIndex, m_xChartTypeModel, m_nDimension, m_pPosHelper->isSwapXAndY() );
-
-                    // AVOID_OVERLAP is in fact "Best fit" in the UI.
-                    bool bMovementAllowed = ( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::AVOID_OVERLAP );
-                    if( bMovementAllowed )
-                        // Use center for "Best fit" for now. In the future we
-                        // may want to implement a real best fit algorithm.
-                        // But center is good enough, and close to what Excel
-                        // does.
-                        nLabelPlacement = ::com::sun::star::chart::DataLabelPlacement::CENTER;
-
-                    LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
-                    sal_Int32 nScreenValueOffsetInRadiusDirection = 0 ;
-                    if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE )
-                        nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? 150 : 0;//todo maybe calculate this font height dependent
-                    else if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::INSIDE )
-                        nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? -150 : 0;//todo maybe calculate this font height dependent
-                    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
-                    awt::Point aScreenPosition2D(
-                        aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
-                        , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
-                        , fUnitCircleInnerRadius, fUnitCircleOuterRadius, fLogicZ+0.5, 0 ));
-
-                    PieLabelInfo aPieLabelInfo;
-                    aPieLabelInfo.aFirstPosition = basegfx::B2IVector( aScreenPosition2D.X, aScreenPosition2D.Y );
-                    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, fLogicZ+1.0 ) ) );
-                    aPieLabelInfo.aOrigin = basegfx::B2IVector( aOrigin.X, aOrigin.Y );
-
-                    //add a scaling independent Offset if requested
-                    if( nScreenValueOffsetInRadiusDirection != 0)
-                    {
-                        basegfx::B2IVector aDirection( aScreenPosition2D.X- aOrigin.X, aScreenPosition2D.Y- aOrigin.Y );
-                        aDirection.setLength(nScreenValueOffsetInRadiusDirection);
-                        aScreenPosition2D.X += aDirection.getX();
-                        aScreenPosition2D.Y += aDirection.getY();
-                    }
-
-                    double nVal = pSeries->getYValue( nPointIndex );
-                    aPieLabelInfo.xTextShape = createDataLabel( xTextTarget, *pSeries, nPointIndex
-                                    , nVal, fLogicYSum, aScreenPosition2D, eAlignment );
-
-                    uno::Reference< container::XChild > xChild( aPieLabelInfo.xTextShape, uno::UNO_QUERY );
-                    if( xChild.is() )
-                        aPieLabelInfo.xLabelGroupShape = uno::Reference<drawing::XShape>( xChild->getParent(), uno::UNO_QUERY );
-                    aPieLabelInfo.fValue = nVal;
-                    aPieLabelInfo.bMovementAllowed = bMovementAllowed;
-                    aPieLabelInfo.bMoved= false;
-                    aPieLabelInfo.xTextTarget = xTextTarget;
-                    m_aLabelInfoList.push_back(aPieLabelInfo);
-                }
+                createTextLabelShape(
+                    xTextTarget, *pSeries, nPointIndex,
+                    fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree,
+                    fUnitCircleOuterRadius, fUnitCircleInnerRadius,
+                    fExplodePercentage, fLogicYSum, fLogicZ);
 
                 if(!bDoExplode)
                 {
