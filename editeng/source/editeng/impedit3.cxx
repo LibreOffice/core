@@ -541,6 +541,7 @@ void ImpEditEngine::CheckAutoPageSize()
         // which paragraph is the first to cause higher size of the box?
         UpdateOverflowingParaNum( nBoxHeight /*aPrevPaperSize.Height()*/ ); // XXX: currently only for horizontal text
         aStatus.SetPageOverflow(true);
+        aStatus.GetStatusWord() |= 0x00000100;
     } else
     {
         // No overflow if withing box boundaries

@@ -2121,7 +2121,7 @@ OutlinerParaObject *Outliner::GetOverflowingParaObject() const
         if ( pEditEngine->GetOverflowingParaNum() > GetParagraphCount()-1) {
             fprintf(stderr,
                     "[Overflowing] Ops, trying to retrieve para %d when max index is %d\n",
-                    nCount,
+                    pEditEngine->GetOverflowingParaNum(),
                     GetParagraphCount()-1);
             return NULL;
     }
