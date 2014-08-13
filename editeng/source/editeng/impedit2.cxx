@@ -2225,7 +2225,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     {
         sal_Int32 nEnd = pLeft->Len();
         sal_Int32 nInv = nEnd ? nEnd-1 : nEnd;
-        pLeft->GetWrongList()->ClearWrongs( nInv, -1, pLeft );  // Possibly remove one
+        pLeft->GetWrongList()->ClearWrongs( nInv, static_cast<size_t>(-1), pLeft );  // Possibly remove one
         pLeft->GetWrongList()->SetInvalidRange(nInv, nEnd+1);
         // Take over misspelled words
         WrongList* pRWrongs = pRight->GetWrongList();
