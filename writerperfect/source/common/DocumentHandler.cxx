@@ -20,6 +20,90 @@
 namespace writerperfect
 {
 
+static const unsigned char librvng_utf8_skip_data[256] =
+{
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+    3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
+};
+
+#define librvng_utf8_next_char(p) (char const *)((p) + librvng_utf8_skip_data[*((unsigned char const *)p)])
+
+static void unescapeXML(const char *s, const unsigned long sz, librevenge::RVNGString &res)
+{
+    const char *p = s;
+    const char *const end = p + sz;
+    while (p != end)
+    {
+        const char *const next = librvng_utf8_next_char(p);
+        if (next > end)
+        {
+            // oops, the string is invalid
+            break;
+        }
+        if (p+4 <= end && p+1==next && *p=='&')
+        {
+            // look for &amp; , &lt; , &gt; , &apos; , &quot;
+            bool escapedChar=false;
+            switch(*(p+1))
+                {
+                case 'a':
+                if (p+5 <= end && strncmp(p,"&amp;",5)==0)
+                {
+                    res.append('&');
+                    p+=5;
+                    escapedChar=true;
+                }
+                else if (p+6 <= end && strncmp(p,"&apos;",6)==0)
+                {
+                    res.append('\'');
+                    p+=6;
+                    escapedChar=true;
+                }
+                break;
+            case 'g':
+                if (strncmp(p,"&gt;",4)==0)
+                {
+                    res.append('>');
+                    p+=4;
+                    escapedChar=true;
+                }
+                break;
+            case 'l':
+                if (strncmp(p,"&lt;",4)==0)
+                {
+                    res.append('<');
+                    p+=4;
+                    escapedChar=true;
+                }
+                break;
+            case 'q':
+                if (p+6 <= end && strncmp(p,"&quot;",6)==0)
+                {
+                    res.append('"');
+                    p+=6;
+                    escapedChar=true;
+                }
+                break;
+            default:
+                break;
+            }
+            if (escapedChar) continue;
+        }
+
+        while (p != next) {
+            res.append(*p);
+            ++p;
+        }
+        p = next;
+    }
+}
+
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
@@ -49,8 +133,25 @@ void DocumentHandler::startElement(const char *psName, const librevenge::RVNGPro
         // filter out librevenge elements
         if (strncmp(i.key(), "librevenge", 10) != 0)
         {
-            OUString sName(i.key(), strlen(i.key()),  RTL_TEXTENCODING_UTF8);
+            size_t keyLength=strlen(i.key());
+            OUString sName(i.key(), keyLength,  RTL_TEXTENCODING_UTF8);
             OUString sValue(i()->getStr().cstr(), strlen(i()->getStr().cstr()), RTL_TEXTENCODING_UTF8);
+
+            // libodfgen xml-encodes some attribute's value, so check if the value is encoded or not
+            for (int j=0; j<9; ++j) {
+                // list of the encoded attributes followed by their lengths
+                static char const *(listEncoded[9])={
+                    "draw:name", "svg:font-family", "style:condition", "style:num-prefix", "style:num-suffix",
+                    "table:formula", "text:bullet-char", "text:label", "xlink:href"
+                };
+                static size_t const (listEncodedLength[9])={9,15,15,16,16,13,16,10,10};
+                if (keyLength==listEncodedLength[j] && strncmp(i.key(), listEncoded[j], keyLength)==0) {
+                    librevenge::RVNGString decodedValue("");
+                    unescapeXML(i()->getStr().cstr(), (unsigned long) strlen(i()->getStr().cstr()), decodedValue);
+                    sValue=OUString(decodedValue.cstr(), strlen(decodedValue.cstr()), RTL_TEXTENCODING_UTF8);
+                    break;
+                }
+            }
             pAttrList->AddAttribute(sName, sValue);
         }
     }
