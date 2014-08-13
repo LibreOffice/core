@@ -137,6 +137,8 @@ public:
     sal_uInt32 nHoriOrientRelationToken; ///< Horizontal dmapper token for Writer pictures.
     sal_uInt32 nVertOrientRelationToken; ///< Vertical dmapper token for Writer pictures.
     int nWrap;
+    /// If shape is below text (true) or text is below shape (false).
+    bool bInBackground;
 };
 
 /// Stores the properties of a drawing object.

@@ -887,20 +887,25 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         // wrap sprm
         RTFSprms aAnchorWrapAttributes;
         RTFSprms aAnchorAttributes;
+        aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_behindDoc, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.bInBackground)));
         RTFSprms aAnchorSprms;
         for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
         {
             if (i->first == NS_ooxml::LN_CT_WrapSquare_wrapText)
                 aAnchorWrapAttributes.set(i->first, i->second);
         }
+        sal_Int32 nWrap = -1;
         for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterSprms.begin(); i != m_aStates.top().aCharacterSprms.end(); ++i)
         {
             if (i->first == NS_ooxml::LN_EG_WrapType_wrapNone)
+            {
+                nWrap = NS_ooxml::LN_EG_WrapType_wrapNone;
                 aAnchorSprms.set(i->first, i->second);
+            }
         }
         RTFValue::Pointer_t pAnchorWrapValue(new RTFValue(aAnchorWrapAttributes));
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
-        if (aAnchorWrapAttributes.size())
+        if (aAnchorWrapAttributes.size() && nWrap != NS_ooxml::LN_EG_WrapType_wrapNone)
             aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue);
 
         // See OOXMLFastContextHandler::positionOffset(), we can't just put offset values in an RTFValue.
@@ -3966,6 +3971,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case 3:
             m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_THROUGHT;
+            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapNone, RTFValue::Pointer_t(new RTFValue()));
             break;
         case 4:
             m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_PARALLEL;
@@ -4469,12 +4475,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     break;
     case RTF_SHPFBLWTXT:
-        if (nParam == 1)
-        {
-            // Shape is below text -> send it to the background.
-            m_aStates.top().aCharacterAttributes.erase(NS_ooxml::LN_CT_WrapSquare_wrapText);
-            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapNone, RTFValue::Pointer_t(new RTFValue()));
-        }
+        // Shape is below text -> send it to the background.
+        m_aStates.top().aShape.bInBackground = nParam;
         break;
     case RTF_CLPADB:
     case RTF_CLPADL:
@@ -5934,7 +5936,8 @@ RTFShape::RTFShape()
       nVertOrientRelation(0),
       nHoriOrientRelationToken(0),
       nVertOrientRelationToken(0),
-      nWrap(-1)
+      nWrap(-1),
+      bInBackground(false)
 {
 }
 

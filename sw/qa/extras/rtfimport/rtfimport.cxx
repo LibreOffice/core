@@ -1893,6 +1893,15 @@ DECLARE_RTFIMPORT_TEST(testFdo82106, "fdo82106.rtf")
     getParagraph(2, "before\tafter");
 }
 
+DECLARE_RTFIMPORT_TEST(testBehindDoc, "behind-doc.rtf")
+{
+    // The problem was that "behind doc" didn't result in the shape being in the background, only in being wrapped as "through".
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xShape, "Surround"));
+    // This was true.
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xShape, "Opaque"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
