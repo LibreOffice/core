@@ -1189,6 +1189,11 @@ void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, 
     pFS->endElementNS( XML_xdr, XML_xfrm );
 }
 
+const css::uno::Reference<css::chart::XChartDocument>& XclExpChartObj::GetChartDoc() const
+{
+    return mxChartDoc;
+}
+
 XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         const ScPostIt* pScNote, const OUString& rAddText ) :
     XclExpRecord( EXC_ID_NOTE ),
