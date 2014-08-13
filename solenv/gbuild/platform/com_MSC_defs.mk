@@ -70,6 +70,8 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4127: conditional expression is constant
 
+# C4189: 'identifier' : local variable is initialized but not referenced
+
 # C4201: nonstandard extension used : nameless struct/union
 
 # C4242: 'identifier' : conversion from 'type1' to 'type2', possible
@@ -137,6 +139,7 @@ gb_CFLAGS := \
 	-nologo \
 	-W4 \
 	-wd4127 \
+	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
 	-wd4242 \
 	-wd4244 \
 	-wd4251 \
@@ -159,6 +162,7 @@ gb_CXXFLAGS := \
 	-nologo \
 	-W4 \
 	-wd4127 \
+	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
 	-wd4201 \
 	-wd4244 \
 	-wd4250 \
