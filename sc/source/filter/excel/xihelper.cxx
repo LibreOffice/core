@@ -125,7 +125,7 @@ void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
         const XclRangeList& rXclRanges, SCTAB nScTab, bool bWarn )
 {
     rScRanges.RemoveAll();
-    for( XclRangeList::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
+    for( XclRangeVector::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
     {
         ScRange aScRange( ScAddress::UNINITIALIZED );
         if( ConvertRange( aScRange, *aIt, nScTab, nScTab, bWarn ) )

@@ -72,9 +72,9 @@ void XclRange::Write( XclExpStream& rStrm, bool bCol16Bit ) const
 XclRange XclRangeList::GetEnclosingRange() const
 {
     XclRange aXclRange;
-    if( !empty() )
+    if( !mRanges.empty() )
     {
-        const_iterator aIt = begin(), aEnd = end();
+        XclRangeVector::const_iterator aIt = mRanges.begin(), aEnd = mRanges.end();
         aXclRange = *aIt;
         for( ++aIt; aIt != aEnd; ++aIt )
         {
@@ -94,29 +94,29 @@ void XclRangeList::Read( XclImpStream& rStrm, bool bCol16Bit, sal_uInt16 nCountI
         nCount = nCountInStream;
     else
         rStrm >> nCount;
-    size_t nOldSize = size();
-    resize( nOldSize + nCount );
-    for( iterator aIt = begin() + nOldSize; rStrm.IsValid() && (nCount > 0); --nCount, ++aIt )
+    size_t nOldSize = mRanges.size();
+    mRanges.resize( nOldSize + nCount );
+    for( XclRangeVector::iterator aIt = mRanges.begin() + nOldSize; rStrm.IsValid() && (nCount > 0); --nCount, ++aIt )
         aIt->Read( rStrm, bCol16Bit );
 }
 
 void XclRangeList::Write( XclExpStream& rStrm, bool bCol16Bit, sal_uInt16 nCountInStream ) const
 {
-    WriteSubList( rStrm, 0, size(), bCol16Bit, nCountInStream );
+    WriteSubList( rStrm, 0, mRanges.size(), bCol16Bit, nCountInStream );
 }
 
 void XclRangeList::WriteSubList( XclExpStream& rStrm, size_t nBegin, size_t nCount, bool bCol16Bit,
         sal_uInt16 nCountInStream ) const
 {
-    OSL_ENSURE( nBegin <= size(), "XclRangeList::WriteSubList - invalid start position" );
-    size_t nEnd = ::std::min< size_t >( nBegin + nCount, size() );
+    OSL_ENSURE( nBegin <= mRanges.size(), "XclRangeList::WriteSubList - invalid start position" );
+    size_t nEnd = ::std::min< size_t >( nBegin + nCount, mRanges.size() );
     if (!nCountInStream)
     {
         sal_uInt16 nXclCount = ulimit_cast< sal_uInt16 >( nEnd - nBegin );
         rStrm << nXclCount;
     }
     rStrm.SetSliceSize( bCol16Bit ? 8 : 6 );
-    for( const_iterator aIt = begin() + nBegin, aEnd = begin() + nEnd; aIt != aEnd; ++aIt )
+    for( XclRangeVector::const_iterator aIt = mRanges.begin() + nBegin, aEnd = mRanges.begin() + nEnd; aIt != aEnd; ++aIt )
         aIt->Write( rStrm, bCol16Bit );
 }
 

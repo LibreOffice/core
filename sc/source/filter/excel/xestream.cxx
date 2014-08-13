@@ -788,7 +788,7 @@ OString XclXmlUtils::ToOString( const XclRange& rRange )
 OString XclXmlUtils::ToOString( const XclRangeList& rRanges )
 {
     ScRangeList aRanges;
-    for( XclRangeList::const_iterator i = rRanges.begin(), end = rRanges.end();
+    for( XclRangeVector::const_iterator i = rRanges.begin(), end = rRanges.end();
             i != end; ++i )
     {
         aRanges.Append( lcl_ToRange( *i ) );

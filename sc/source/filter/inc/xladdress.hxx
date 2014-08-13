@@ -112,11 +112,23 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclRange& rXclRange 
     return rStrm;
 }
 
+typedef ::std::vector< XclRange > XclRangeVector;
+
 /** A 2D cell range address list with Excel column and row indexes. */
-class XclRangeList : public ::std::vector< XclRange >
+class XclRangeList
 {
+private:
+    XclRangeVector mRanges;
+
 public:
-    inline explicit     XclRangeList() {}
+    inline explicit     XclRangeList() : mRanges() {}
+
+    size_t size() const { return mRanges.size(); }
+    bool empty() const { return mRanges.empty(); }
+    XclRangeVector::const_iterator begin() const { return mRanges.begin(); }
+    XclRangeVector::const_iterator end() const { return mRanges.end(); }
+    void clear() { mRanges.clear(); }
+    void push_back(const XclRange &rRange) { mRanges.push_back(rRange); }
 
     XclRange            GetEnclosingRange() const;
 
