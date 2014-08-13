@@ -57,7 +57,6 @@ $(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/ReportExecutionException \
     reportbuilder/java/org/libreoffice/report/ReportExpression \
     reportbuilder/java/org/libreoffice/report/ReportExpressionMetaData \
-    reportbuilder/java/org/libreoffice/report/ReportFunction \
     reportbuilder/java/org/libreoffice/report/ReportJob \
     reportbuilder/java/org/libreoffice/report/ReportJobDefinition \
     reportbuilder/java/org/libreoffice/report/ReportJobFactory \

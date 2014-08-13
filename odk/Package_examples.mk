@@ -468,7 +468,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     java/Inspector/XDialogProvider.java \
     java/Inspector/XInstanceInspector.idl \
     java/Inspector/XLanguageSourceCodeGenerator.java \
-    java/Inspector/XMethodParametersDialog.java \
     java/Inspector/XTreeControlProvider.java \
     java/Inspector/XTreePathProvider.java \
     java/Inspector/XUnoFacetteNode.java \

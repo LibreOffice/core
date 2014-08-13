@@ -104,10 +104,6 @@ public class UCB  {
         return ucb.queryContent(id);
     }
 
-    public static interface Verifier {
-        public boolean verify(Object object);
-    }
-
     @Test public void checkWrongFtpConnection() {
         try {
             String acountUrl = "ftp://noname:nopasswd@*nohost.invalid";
