@@ -43,7 +43,6 @@ protected:
     SdPage*                         mpHandoutPage;
 
     bool                        mbPageListValid;
-    sal_uInt32                      mnVisiblePageCount;
 
     void ImpRecreateSortedPageListOnDemand();
     virtual sal_uInt32 ImpGetPageCount() const = 0;

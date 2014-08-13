@@ -29,7 +29,6 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
     maPageVectorStandard.clear();
     maPageVectorNotes.clear();
     mpHandoutPage = 0L;
-    mnVisiblePageCount = -1;
 
     // build up vectors again
     const sal_uInt32 nPageCount(ImpGetPageCount());
@@ -44,7 +43,6 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
             case PK_STANDARD:
             {
                 maPageVectorStandard.push_back(pCandidate);
-                if (!pCandidate->IsExcluded()) mnVisiblePageCount++;
                 break;
             }
             case PK_NOTES:
@@ -69,7 +67,6 @@ ImpPageListWatcher::ImpPageListWatcher(const SdrModel& rModel)
     : mrModel(rModel)
     , mpHandoutPage(0L)
     , mbPageListValid(false)
-    , mnVisiblePageCount(0)
 {
 }
 
