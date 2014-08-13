@@ -359,18 +359,8 @@ TabPage* WizardDialog::ImplGetPage( sal_uInt16 nLevel ) const
     return NULL;
 }
 
-
-
 WizardDialog::WizardDialog( Window* pParent, WinBits nStyle ) :
     ModalDialog( pParent, nStyle )
-{
-    ImplInitData();
-}
-
-
-
-WizardDialog::WizardDialog( Window* pParent, const ResId& rResId ) :
-    ModalDialog( pParent, rResId )
 {
     ImplInitData();
 }
@@ -382,8 +372,6 @@ WizardDialog::WizardDialog( Window* pParent, const OString& rID, const OUString&
 {
     ImplInitData();
 }
-
-
 
 WizardDialog::~WizardDialog()
 {

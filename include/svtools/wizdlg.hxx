@@ -253,7 +253,6 @@ private:
 
 public:
     WizardDialog( Window* pParent, WinBits nStyle = WB_STDTABDIALOG );
-    WizardDialog( Window* pParent, const ResId& rResId );
     WizardDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
     virtual ~WizardDialog();
 
