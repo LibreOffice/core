@@ -76,6 +76,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/correlationdialog \
 	sc/uiconfig/scalc/ui/covariancedialog \
 	sc/uiconfig/scalc/ui/createnamesdialog \
+	sc/uiconfig/scalc/ui/dapiservicedialog \
 	sc/uiconfig/scalc/ui/databaroptions \
 	sc/uiconfig/scalc/ui/datafielddialog \
 	sc/uiconfig/scalc/ui/datafieldoptionsdialog \

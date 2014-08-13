@@ -53,20 +53,11 @@ private:
 class ScDataPilotServiceDlg : public ModalDialog
 {
 private:
-    FixedLine       aFlFrame;
-    FixedText       aFtService;
-    ListBox         aLbService;
-    FixedText       aFtSource;
-    Edit            aEdSource;
-    FixedText       aFtName;
-    Edit            aEdName;
-    FixedText       aFtUser;
-    Edit            aEdUser;
-    FixedText       aFtPasswd;
-    Edit            aEdPasswd;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    ListBox         *m_pLbService;
+    Edit            *m_pEdSource;
+    Edit            *m_pEdName;
+    Edit            *m_pEdUser;
+    Edit            *m_pEdPasswd;
 
 public:
             ScDataPilotServiceDlg( Window* pParent,
