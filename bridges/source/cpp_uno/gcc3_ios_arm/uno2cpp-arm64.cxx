@@ -253,7 +253,7 @@ static void cpp_call(
     // push this
     void * pAdjustedThisPtr = reinterpret_cast< void ** >(pThis->getCppI())
         + aVtableSlot.offset;
-    INSERT_INT32( &pAdjustedThisPtr, nGPR, pGPR, pStack );
+    INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack );
 
     // stack space
     // args
@@ -339,7 +339,7 @@ static void cpp_call(
                 // no longer needed
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
-            INSERT_INT32( &(pCppArgs[nPos]), nGPR, pGPR, pStack );
+            INSERT_INT64( &(pCppArgs[nPos]), nGPR, pGPR, pStack );
         }
     }
 
