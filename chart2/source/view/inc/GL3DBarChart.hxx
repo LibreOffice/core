@@ -90,11 +90,11 @@ private:
     void updateDataUpdateFPS();
     DECL_LINK(updateTimer, void*);
     int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
-    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos = glm::vec3(0.0f, 0.0f, 0.0f), sal_uInt32 nEvent = 0);
+    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, const glm::vec3& rPos = glm::vec3(0.0f, 0.0f, 0.0f), sal_uInt32 nEvent = 0);
     void recordBarHistory(sal_uInt32 &nBarID, float &nVal);
     void updateClickEvent();
     void calcDistance(std::vector<sal_uInt32> &vectorNearest);
-    float calcScrollDistance(glm::mat4 &mvp, glm::vec3 pos);
+    float calcScrollDistance(const glm::mat4 &mvp, const glm::vec3& rPos);
     void initDistanceHeap(std::vector<sal_uInt32> &vectorNearest);
     void keepHeap(std::vector<sal_uInt32> &vectorNearest, int index);
     void swapVector(int i, int j, std::vector<sal_uInt32> &vectorNearest);
