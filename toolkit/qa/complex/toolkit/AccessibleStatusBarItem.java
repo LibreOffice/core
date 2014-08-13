@@ -281,9 +281,9 @@ public class AccessibleStatusBarItem {
             System.out.println("* Implementation Name: " + xSI.getImplementationName());
             String accName = object.getAccessibleContext().getAccessibleName();
             System.out.println("* Accessible Name: " + accName);
-            for (int j=0; i<services.length; i++)
+            for (int j=0; j<services.length; j++)
             {
-                System.out.println("* ServiceName "+i+": "+ services[j]);
+                System.out.println("* ServiceName "+j+": "+ services[j]);
             }
             System.out.println("*****");
 
