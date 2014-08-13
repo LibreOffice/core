@@ -28,5 +28,5 @@ import org.w3c.dom.Node;
 public interface XMLProvider
 {
 
-    public Node createDOM(Node parent);
+    Node createDOM(Node parent);
 }

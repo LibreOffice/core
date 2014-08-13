@@ -51,6 +51,6 @@ public interface DocumentSerializer {
      *  @throws  ConvertException  If any conversion error occurs.
      *  @throws  IOException       If any I/O error occurs.
      */
-    public ConvertData serialize() throws ConvertException, IOException;
+    ConvertData serialize() throws ConvertException, IOException;
 }
 

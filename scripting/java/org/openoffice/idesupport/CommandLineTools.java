@@ -86,7 +86,7 @@ public class CommandLineTools {
     }
 
     private interface Command {
-        public void execute() throws Exception;
+        void execute() throws Exception;
     }
 
     private void printUsage() {

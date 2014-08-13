@@ -70,12 +70,12 @@ public class _XChangeBroadcaster extends MultiMethodTest {
      * in relation if it doesn't support <code>XTextComponent</code>
      * interface. It used to change the content of component.
      */
-    public static interface Changer {
+    public interface Changer {
         /**
          * The method must change the component's content to
          * cause a listener call.
          */
-        public void change() ;
+        void change() ;
     }
 
     /**

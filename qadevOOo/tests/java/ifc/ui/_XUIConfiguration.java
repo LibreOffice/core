@@ -44,11 +44,11 @@ public class _XUIConfiguration extends MultiMethodTest {
      * <CODE>XUIConfiguration.XUIConfigurationListenerImpl</CODE>
      * @see com.sun.star.ui.XUIConfigurationListener
      */
-    public static interface XUIConfigurationListenerImpl
+    public interface XUIConfigurationListenerImpl
                                     extends XUIConfigurationListener {
-        public void reset();
-        public void fireEvent();
-        public boolean actionWasTriggered();
+        void reset();
+        void fireEvent();
+        boolean actionWasTriggered();
     }
 
 

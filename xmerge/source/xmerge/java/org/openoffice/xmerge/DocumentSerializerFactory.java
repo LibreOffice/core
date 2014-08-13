@@ -49,6 +49,6 @@ public interface DocumentSerializerFactory {
      *
      *  @return  A <code>DocumentSerializer</code> object.
      */
-    public DocumentSerializer createDocumentSerializer(Document doc);
+    DocumentSerializer createDocumentSerializer(Document doc);
 }
 

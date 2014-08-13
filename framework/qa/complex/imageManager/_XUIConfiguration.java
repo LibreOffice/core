@@ -32,11 +32,11 @@ public class _XUIConfiguration {
     private XUIConfiguration oObj;
     private XUIConfigurationListenerImpl xListener = null;
 
-    public static interface XUIConfigurationListenerImpl
+    public interface XUIConfigurationListenerImpl
                                     extends XUIConfigurationListener {
-        public void reset();
-        public void fireEvent();
-        public boolean actionWasTriggered();
+        void reset();
+        void fireEvent();
+        boolean actionWasTriggered();
     }
 
 

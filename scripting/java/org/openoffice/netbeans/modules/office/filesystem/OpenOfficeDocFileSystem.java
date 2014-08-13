@@ -783,7 +783,7 @@ System.out.println("    exception: " + ioe.getMessage());
      */
     private interface Strategy
     {
-        public boolean evaluate(Entry entry);
+        boolean evaluate(Entry entry);
     }
 
     /* -----------------------------------------------------------

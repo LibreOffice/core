@@ -51,6 +51,6 @@ public interface DocumentDeserializerFactory {
      *  @return  A <code>DocumentDeserializer</code> object.
      */
 
-    public DocumentDeserializer createDocumentDeserializer(ConvertData cd);
+    DocumentDeserializer createDocumentDeserializer(ConvertData cd);
 }
 

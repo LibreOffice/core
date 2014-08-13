@@ -116,7 +116,7 @@ public abstract class DataAware {
     }
 
     public interface Listener {
-        public void eventPerformed(Object event);
+        void eventPerformed(Object event);
     }
 
     /**
@@ -163,13 +163,13 @@ public abstract class DataAware {
          * @param target the object to get the value from.
          * @return the value from the given object.
          */
-        public Object get(Object target);
+        Object get(Object target);
         /**
          * sets a value to the given object.
          * @param value the value to set to the object.
          * @param target the object to set the value to.
          */
-        public void set(Object value, Object target);
+        void set(Object value, Object target);
         /**
          * checks if this Value object can handle
          * the given object type as a target.
@@ -177,7 +177,7 @@ public abstract class DataAware {
          * @return true if the given class is acceptable for
          * the Value object. False if not.
          */
-        public boolean isAssignable(Class<?> type);
+        boolean isAssignable(Class<?> type);
     }
 
     /**

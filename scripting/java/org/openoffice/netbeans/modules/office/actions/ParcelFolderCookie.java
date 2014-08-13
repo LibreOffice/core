@@ -22,12 +22,12 @@ import org.openide.nodes.Node;
 
 public interface ParcelFolderCookie extends Node.Cookie
 {
-    public void generate();
+    void generate();
 
-    public boolean configure();
+    boolean configure();
 
-    public void setClasspath(String value);
-    public String getClasspath();
+    void setClasspath(String value);
+    String getClasspath();
 
-    public String getLanguage();
+    String getLanguage();
 }

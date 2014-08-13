@@ -41,11 +41,10 @@ public class QueryMetaData extends CommandMetaData
     };
     public int Type = QueryType.SODETAILQUERY;
 
-    public static interface QueryType
+    public interface QueryType
     {
-
-        final static int SOSUMMARYQUERY = 0;
-        final static int SODETAILQUERY = 1;
+        int SOSUMMARYQUERY = 0;
+        int SODETAILQUERY = 1;
     }
 
     public QueryMetaData(XMultiServiceFactory xMSF, Locale CharLocale, NumberFormatter oNumberFormatter)

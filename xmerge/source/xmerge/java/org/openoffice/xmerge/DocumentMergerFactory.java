@@ -49,6 +49,6 @@ public interface DocumentMergerFactory {
      *  @return  A <code>DocumentMerger</code> object or null if none
      *           exists.
      */
-    public DocumentMerger createDocumentMerger(Document doc);
+    DocumentMerger createDocumentMerger(Document doc);
 }
 

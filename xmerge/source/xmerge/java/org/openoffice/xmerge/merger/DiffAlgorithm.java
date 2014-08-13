@@ -37,6 +37,6 @@ public interface DiffAlgorithm {
      *
      *  @return  A <code>Difference</code> array.
      */
-    public Difference[] computeDiffs(Iterator orgSeq, Iterator modSeq);
+    Difference[] computeDiffs(Iterator orgSeq, Iterator modSeq);
 }
 

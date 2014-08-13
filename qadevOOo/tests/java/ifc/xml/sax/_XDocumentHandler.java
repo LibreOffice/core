@@ -102,7 +102,7 @@ public class _XDocumentHandler extends MultiMethodTest {
     * This interface implementation must be passed by component test
     * for checking the whole import process.
     */
-    public static interface ImportChecker {
+    public interface ImportChecker {
         /**
         * Returns <code>true</code> if the XML data was successfully
         * imported, <code>false</code> in other case.
@@ -114,7 +114,7 @@ public class _XDocumentHandler extends MultiMethodTest {
     * This interface implementation must be passed by component test
     * for setting a target document to the import process
     */
-    public static interface TargetDocumentSetter {
+    public interface TargetDocumentSetter {
 
         void setTargetDocument();
     }

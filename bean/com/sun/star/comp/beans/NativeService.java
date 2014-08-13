@@ -22,7 +22,7 @@ package com.sun.star.comp.beans;
  * @deprecated
  */
 interface NativeService {
-    public String getIdentifier();
-    public void startupService() throws java.io.IOException;
-    public int getStartupTime();
+    String getIdentifier();
+    void startupService() throws java.io.IOException;
+    int getStartupTime();
 }

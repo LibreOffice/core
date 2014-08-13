@@ -21,19 +21,19 @@ public interface EventNames
 {
 
     //common listener events
-    public static final String EVENT_ACTION_PERFORMED = "APR";
-    public static final String EVENT_ITEM_CHANGED = "ICH";
-    public static final String EVENT_TEXT_CHANGED = "TCH";    //window events (XWindow)
-    public static final String EVENT_WINDOW_RESIZED = "WRE";
-    public static final String EVENT_WINDOW_MOVED = "WMO";
-    public static final String EVENT_WINDOW_SHOWN = "WSH";
-    public static final String EVENT_WINDOW_HIDDEN = "WHI";    //focus events (XWindow)
-    public static final String EVENT_FOCUS_GAINED = "FGA";
-    public static final String EVENT_FOCUS_LOST = "FLO";    //keyboard events
-    public static final String EVENT_KEY_PRESSED = "KPR";
-    public static final String EVENT_KEY_RELEASED = "KRE";    //mouse events
-    public static final String EVENT_MOUSE_PRESSED = "MPR";
+    String EVENT_ACTION_PERFORMED = "APR";
+    String EVENT_ITEM_CHANGED = "ICH";
+    String EVENT_TEXT_CHANGED = "TCH";    //window events (XWindow)
+    String EVENT_WINDOW_RESIZED = "WRE";
+    String EVENT_WINDOW_MOVED = "WMO";
+    String EVENT_WINDOW_SHOWN = "WSH";
+    String EVENT_WINDOW_HIDDEN = "WHI";    //focus events (XWindow)
+    String EVENT_FOCUS_GAINED = "FGA";
+    String EVENT_FOCUS_LOST = "FLO";    //keyboard events
+    String EVENT_KEY_PRESSED = "KPR";
+    String EVENT_KEY_RELEASED = "KRE";    //mouse events
+    String EVENT_MOUSE_PRESSED = "MPR";
 
-    public static final String EVENT_MOUSE_ENTERED = "MEN";
-    public static final String EVENT_MOUSE_EXITED = "MEX";    //other events
+    String EVENT_MOUSE_ENTERED = "MEN";
+    String EVENT_MOUSE_EXITED = "MEX";    //other events
 }

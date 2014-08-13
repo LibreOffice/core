@@ -38,7 +38,7 @@ public interface IThreadPool {
      *
      * @see                 #enter
      */
-    public void attach();
+    void attach();
 
     /**
      * As above, but hands in an already existing instance of the threadid of
@@ -49,13 +49,13 @@ public interface IThreadPool {
      * @return Returns a handle which can be used in enter and detach calls.
      * @see #attach
      */
-    public Object attach( ThreadId id );
+    Object attach( ThreadId id );
 
     /**
      * Detaches this thread from the thread pool.
      * @see                 #enter
      */
-    public void detach();
+    void detach();
 
     /**
      * As above, but hands in an already existing instance of the threadid of
@@ -66,7 +66,7 @@ public interface IThreadPool {
      * @see #attach()
      * @see #detach()
      */
-    public void detach( Object handle, ThreadId id );
+    void detach( Object handle, ThreadId id );
 
     /**
      * Lets this thread enter the thread pool.
@@ -76,7 +76,7 @@ public interface IThreadPool {
      *
      * @see                 #putJob
      */
-    public Object enter() throws Throwable;
+    Object enter() throws Throwable;
 
     /**
      * As above but hands in an already existing instance of the threadid of
@@ -87,7 +87,7 @@ public interface IThreadPool {
      *
      * @see                 #putJob
      */
-    public Object enter( Object handle, ThreadId id ) throws Throwable;
+    Object enter( Object handle, ThreadId id ) throws Throwable;
 
     /**
      * Queues a job into the jobQueue of the thread belonging to the jobs
@@ -95,7 +95,7 @@ public interface IThreadPool {
      *
      * @param job       the job
      */
-    public void putJob(Job job);
+    void putJob(Job job);
 
     /**
      * Disposes this thread pool, thus releasing all threads by throwing a
@@ -103,12 +103,12 @@ public interface IThreadPool {
      *
      * @param throwable   the cause
      */
-    public void dispose(Throwable throwable);
+    void dispose(Throwable throwable);
 
 
     /**
      * Destroys the thread pool and tries to join all created threads immediately.
      */
-    public void destroy();
+    void destroy();
 }
 

@@ -53,12 +53,12 @@ public class _XRowSetApproveBroadcaster extends MultiMethodTest {
     * on which <code>XRowSetApproveListener</code>s can react.
     * @see com.sun.star.sdb.XRowSetApproveListener
     */
-    public static interface RowSetApproveChecker {
+    public interface RowSetApproveChecker {
         /**
         * Moves cursor within row set. Method <code>approveCursorMove</code>
         * of <code>XRowSetApproveListener</code> must be called.
         */
-        public void moveCursor() ;
+        void moveCursor() ;
         /**
         * Change rows in row set. Method <code>approveRowChange</code>
         * of <code>XRowSetApproveListener</code> must be called.
@@ -66,12 +66,12 @@ public class _XRowSetApproveBroadcaster extends MultiMethodTest {
         * what type of change was made and how many rows it affected.
         * @see com.sun.star.sdb.RowChangeEvent
         */
-        public RowChangeEvent changeRow() ;
+        RowChangeEvent changeRow() ;
         /**
         * Change the whole row set. Method <code>approveRowSetChange</code>
         * of <code>XRowSetApproveListener</code> must be called.
         */
-        public void changeRowSet() ;
+        void changeRowSet() ;
     }
 
     /**

@@ -21,5 +21,5 @@
 package net.adaptivebox.space;
 
 public interface ILocationEngine{
-  abstract public double[] getLocation();
+  double[] getLocation();
 }

@@ -20,22 +20,12 @@ package util.compare;
 
 import java.io.IOException;
 
-/**
- *
- *
- */
-
 public interface DocComparator {
 
-    public boolean isReferenceExistent() throws IOException;
+    boolean isReferenceExistent() throws IOException;
 
+    boolean isDiffReferenceExistent() throws IOException;
 
-
-
-
-
-    public boolean isDiffReferenceExistent() throws IOException;
-
-    public boolean compareDiff() throws IOException;
+    boolean compareDiff() throws IOException;
 
 }

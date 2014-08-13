@@ -64,5 +64,5 @@ public interface IOnewayLink
      *          Note: Atomic types (e.g. int, long) will be transported as objects
      *          too (Integer, Long)!
      */
-    public abstract void execOneway( int nRequest, ArrayList<Object> lParams );
+    void execOneway( int nRequest, ArrayList<Object> lParams );
 }

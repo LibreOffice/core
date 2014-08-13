@@ -25,9 +25,9 @@ import org.openide.nodes.Node;
 public interface ParcelDescriptorParserCookie extends Node.Cookie
 {
     // should return a NodeList of org.w3c.dom.Element
-    public NodeList getScriptElements();
+    NodeList getScriptElements();
 
-    public void addChangeListener(ChangeListener cl);
+    void addChangeListener(ChangeListener cl);
 
-    public void removeChangeListener(ChangeListener cl);
+    void removeChangeListener(ChangeListener cl);
 }

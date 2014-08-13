@@ -41,5 +41,5 @@
  */
 public interface IShutdownListener
 {
-    public abstract void shutdown();
+    void shutdown();
 }

@@ -22,9 +22,9 @@ package share;
  */
 public interface ComplexTest {
 
-    public String[] getTestMethodNames();
+    String[] getTestMethodNames();
 
-    public String getTestObjectName();
+    String getTestObjectName();
 
 }
 

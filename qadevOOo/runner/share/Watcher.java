@@ -23,11 +23,11 @@ public interface Watcher {
     /**
      * pings the watcher to check for changes
      */
-    public void ping();
+    void ping();
 
     /**
      * returns the amount of pings
      */
-    public int getPing();
+    int getPing();
 
 }

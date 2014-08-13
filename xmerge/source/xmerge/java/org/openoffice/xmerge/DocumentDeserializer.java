@@ -50,6 +50,6 @@ public interface DocumentDeserializer {
      *  @throws  ConvertException  If any Convert error occurs.
      *  @throws  IOException       If any I/O error occurs.
      */
-    public Document deserialize() throws ConvertException, IOException;
+    Document deserialize() throws ConvertException, IOException;
 }
 

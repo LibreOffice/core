@@ -51,7 +51,7 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class _XAccessibleEventBroadcaster extends MultiMethodTest {
 
-    public static interface EventProducer {
+    public interface EventProducer {
         void fireEvent();
     }
 

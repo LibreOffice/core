@@ -21,15 +21,15 @@ package com.sun.star.wizards.ui;
 public interface XFieldSelectionListener
 {
 
-    public void shiftFromLeftToRight(String[] SelItems, String[] NewItems);
+    void shiftFromLeftToRight(String[] SelItems, String[] NewItems);
 
-    public void shiftFromRightToLeft(String[] OldSelItems, String[] NewItems);
+    void shiftFromRightToLeft(String[] OldSelItems, String[] NewItems);
 
-    public void moveItemUp(String Selitem);
+    void moveItemUp(String Selitem);
 
-    public void moveItemDown(String Selitem);
+    void moveItemDown(String Selitem);
 
-    public void setID(String sIncSuffix);
+    void setID(String sIncSuffix);
 
-    public int getID();
+    int getID();
 }

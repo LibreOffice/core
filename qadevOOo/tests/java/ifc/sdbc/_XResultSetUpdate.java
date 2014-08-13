@@ -61,26 +61,26 @@ public class _XResultSetUpdate extends MultiMethodTest {
     * test results. It's implementation must be passed
     * to this test.
     */
-    public static interface UpdateTester {
+    public interface UpdateTester {
         /**
         * @return Current number of rows.
         */
-        public int rowCount() throws SQLException ;
+        int rowCount() throws SQLException ;
         /**
         * Updates some data in the current row but doesn't commit
         * changes to the source.
         */
-        public void update() throws SQLException ;
+        void update() throws SQLException ;
         /**
         * Checks if updates made by method <code>update</code> was
         * committed to the data source.
         */
-        public boolean wasUpdated() throws SQLException ;
+        boolean wasUpdated() throws SQLException ;
         /**
         * Returns current row number. Really it must returns value
         * < 1 if the current position is on insert row.
         */
-        public int currentRow() throws SQLException ;
+        int currentRow() throws SQLException ;
     }
 
     /**

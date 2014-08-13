@@ -54,7 +54,7 @@ import com.sun.star.uno.UnoRuntime;
 */
 public class _XFilter extends MultiMethodTest {
 
-    public static interface FilterChecker {
+    public interface FilterChecker {
         boolean checkFilter() ;
     }
 

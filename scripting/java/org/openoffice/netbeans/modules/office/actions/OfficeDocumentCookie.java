@@ -24,10 +24,10 @@ import org.openide.nodes.Node;
 
 public interface OfficeDocumentCookie extends Node.Cookie
 {
-    public void mount();
-    public Enumeration getParcels();
-    public void removeParcel(String name);
+    void mount();
+    Enumeration getParcels();
+    void removeParcel(String name);
 
-    public void addChangeListener(ChangeListener cl);
-    public void removeChangeListener(ChangeListener cl);
+    void addChangeListener(ChangeListener cl);
+    void removeChangeListener(ChangeListener cl);
 }

@@ -27,12 +27,12 @@ public interface AppProvider {
     /**
      * Method to get the desired Manager
      */
-    public Object getManager(lib.TestParameters param);
+    Object getManager(lib.TestParameters param);
 
     /**
      * Method to dispose the desired Manager
      */
-    public boolean disposeManager(lib.TestParameters param);
+    boolean disposeManager(lib.TestParameters param);
 
     /**
      * Close an office.
@@ -41,6 +41,6 @@ public interface AppProvider {
      * it was running before the test
      * @return True, if close worked.
      */
-    public boolean closeExistingOffice(lib.TestParameters param,
+    boolean closeExistingOffice(lib.TestParameters param,
                                                 boolean closeIfPossible);
 }

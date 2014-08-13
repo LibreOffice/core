@@ -18,9 +18,9 @@
 package com.sun.star.script.framework.provider.beanshell;
 
 public interface ScriptSourceView {
-    public void clear();
-    public void update();
-    public boolean isModified();
-    public void setModified(boolean value);
-    public String getText();
+    void clear();
+    void update();
+    boolean isModified();
+    void setModified(boolean value);
+    String getText();
 }

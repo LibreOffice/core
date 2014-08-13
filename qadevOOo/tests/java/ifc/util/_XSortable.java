@@ -211,13 +211,13 @@ public class _XSortable extends MultiMethodTest {
     /**
     * The interface for sort checking.
     */
-    public static interface XSortChecker {
-        public void prepareToSort();
+    public interface XSortChecker {
+        void prepareToSort();
 
-        public boolean checkSort(boolean isSortNumbering,
+        boolean checkSort(boolean isSortNumbering,
                                  boolean isSortAscending);
 
-        public void setPrintWriter(PrintWriter log);
+        void setPrintWriter(PrintWriter log);
     }
 
     /**

@@ -27,90 +27,90 @@ public interface PropertyName {
      * The AppExecutionCmd contains the full qualified<br>
      * command to an Application to be started.
      */
-    final public static String APP_EXECUTION_COMMAND = "AppExecutionCommand";
+    String APP_EXECUTION_COMMAND = "AppExecutionCommand";
     /**
      * parameter name: "AppKillCommand"
      */
-    final public static String APP_KILL_COMMAND = "AppKillCommand";
+    String APP_KILL_COMMAND = "AppKillCommand";
     /**
      * parameter name: "ConnectionString"
      */
-    final public static String CONNECTION_STRING = "ConnectionString";
-    final public static String PIPE_CONNECTION_STRING = "PipeConnectionString";
-    final public static String USE_PIPE_CONNECTION = "UsePipeConnection";
+    String CONNECTION_STRING = "ConnectionString";
+    String PIPE_CONNECTION_STRING = "PipeConnectionString";
+    String USE_PIPE_CONNECTION = "UsePipeConnection";
 
     /**
      * parameter name: "TestBase"
      * The Testbase to be executed by the runner<br>
      * default is 'java_fat'
      */
-    final public static String TEST_BASE = "TestBase";
+    String TEST_BASE = "TestBase";
     /**
      * parameter name: "TestDocumentPath"
      */
-    final public static String TEST_DOCUMENT_PATH = "TestDocumentPath";
+    String TEST_DOCUMENT_PATH = "TestDocumentPath";
     /**
      * parameter name: "LoggingIsActive"
      * 'true' is a log should be written, 'false' elsewhere <br>
      * these will be provided by the testcases<br>
      * default is true
      */
-    final public static String LOGGING_IS_ACTIVE = "LoggingIsActive";
+    String LOGGING_IS_ACTIVE = "LoggingIsActive";
     /**
      * parameter name: "DebugIsActive"
      */
-    final public static String DEBUG_IS_ACTIVE = "DebugIsActive";
+    String DEBUG_IS_ACTIVE = "DebugIsActive";
     /**
      * parameter name: "OutProduceer"
      * This parameter contains the class used<br>
      * for Logging
      */
-    final public static String OUT_PRODUCER = "OutProducer";
+    String OUT_PRODUCER = "OutProducer";
     /**
      * parameter name: "ShortWait"
      * Short wait time for the Office: default is 500 milliseconds
      */
-    final public static String SHORT_WAIT= "ShortWait";
+    String SHORT_WAIT= "ShortWait";
     /**
      * internal only, no parameter
      * The OfficeProvider contains the full qualified
      * class that provides a connection to StarOffice<br>
      * default is helper.OfficeProvider
      */
-    final public static String OFFICE_PROVIDER = "OfficeProvider";
+    String OFFICE_PROVIDER = "OfficeProvider";
     /**
      * internal only, no parameter
      */
-    final public static String OFFICE_WATCHER = "Watcher";
+    String OFFICE_WATCHER = "Watcher";
     /**
      * internal only, no parameter
      * This parameter contains the class used<br>
      * for Logging
      */
-    final public static String LOG_WRITER = "LogWriter";
+    String LOG_WRITER = "LogWriter";
     /**
      * parameter name: "TimeOut"<p>
      * time out given in milli seconds
      * This parameter contains the timeout used<br>
      * by the watcher
      */
-    final public static String TIME_OUT = "TimeOut";
+    String TIME_OUT = "TimeOut";
     /**
      * parameter name: "ThreadTimeOut"
      * This parameter contains the timeout used<br>
      * by the complex tests
      */
-    final public static String THREAD_TIME_OUT = "ThreadTimeOut";
+    String THREAD_TIME_OUT = "ThreadTimeOut";
     /**
      * parameter name: "OfficeCloseTimeOut"
      * This parameter contains the time which the office could use to close for
      * itself before it is destroyed. Default is 15000 ms
      */
-    final public static String OFFICE_CLOSE_TIME_OUT = "OfficeCloseTimeOut";
+    String OFFICE_CLOSE_TIME_OUT = "OfficeCloseTimeOut";
     /**
      * parameter name: "OperatingSystem"
      */
-    final public static String OPERATING_SYSTEM = "OperatingSystem";
+    String OPERATING_SYSTEM = "OperatingSystem";
     /**
      * parameter name: "AutoRestart"
      * If this parameter is <CODE>true</CODE> the <CODE>OfficeProvider</CODE> tries
@@ -118,22 +118,22 @@ public interface PropertyName {
      * <CODE>AppExecutionCommand</CODE> with useful content if needed.
      * Default is false.
      */
-    final public static String AUTO_RESTART = "AutoRestart";
+    String AUTO_RESTART = "AutoRestart";
     /**
      * parameter name: "NewOfficeInstance"
      */
-    final public static String NEW_OFFICE_INSTANCE = "NewOfficeInstance";
+    String NEW_OFFICE_INSTANCE = "NewOfficeInstance";
 
     /**
      * parameter name: "SRC_ROOT"<p>
      * path to the source root of OpenOffice.org
      */
-    final public static String SRC_ROOT = "SRC_ROOT";
+    String SRC_ROOT = "SRC_ROOT";
     /**
      * parameter name: "Version"<p>
      * the name of the version to test
      */
-    final public static String VERSION = "Version";
+    String VERSION = "Version";
 
     /**
      * parameter name "Shell"<p>
@@ -141,42 +141,42 @@ public interface PropertyName {
      * This shell is used to run some commands outside of Java
      * example: /bin/tcsh c:\\myShell\\myShell.exe
      */
-    final public static String SHELL = "Shell";
+    String SHELL = "Shell";
     /**
      * parameter name "Cygwin"<p>
      * If Cygwin is set to TRUE it indicates if the runner runs in a Cygwin
      * environment
      */
-    final public static String CYGWIN = "Cygwin";
+    String CYGWIN = "Cygwin";
     /**
      * parameter name: "NoCwsAttach"<p>
      * If this parameter is set to "true" , a status of CWS-UnoAPI-Tests was not attached to EIS<p>
      * @see complex.unoapi.CheckModuleAPI
      */
-    final public static String NO_CWS_ATTACH = "NoCwsAttach";
+    String NO_CWS_ATTACH = "NoCwsAttach";
     /**
      * internal only, no parameter
      */
-    final public static String WNTMSCI = "wntmsci";
+    String WNTMSCI = "wntmsci";
     /**
      * internal only, no parameter
      */
-    final public static String UNXLNGI = "unxlngi";
+    String UNXLNGI = "unxlngi";
     /**
      * internal only, no parameter
      */
-    final public static String UNXSOLS = "unxsols";
+    String UNXSOLS = "unxsols";
     /**
      * internal only, no parameter
      */
-    final public static String UNXSOLI = "unxsoli";
+    String UNXSOLI = "unxsoli";
     /**
      * internal only, no parameter
      */
-    final public static String UNXMACXI = "unxmacxi";
+    String UNXMACXI = "unxmacxi";
 
     /**
      * can be used to dont backup the user layer, faster office start/stop but less secure default is to backup the user layer
      */
-    final public static String DONT_BACKUP_USERLAYER = "DontBackupUserLayer";
+    String DONT_BACKUP_USERLAYER = "DontBackupUserLayer";
 }

@@ -28,7 +28,7 @@ import org.jfree.report.flow.layoutprocessor.LayoutController;
 public interface OfficeRepeatingStructureLayoutController extends LayoutController
 {
 
-    public boolean isNormalFlowProcessing();
+    boolean isNormalFlowProcessing();
 
-    public VariablesCollection getVariablesCollection();
+    VariablesCollection getVariablesCollection();
 }

@@ -23,11 +23,11 @@ import org.openide.nodes.Node;
 
 public interface ParcelCookie extends Node.Cookie
 {
-    public File getFile();
+    File getFile();
 
-    public String getLanguage();
+    String getLanguage();
 
-    public void mount();
+    void mount();
 
-    public boolean deploy(File target);
+    boolean deploy(File target);
 }

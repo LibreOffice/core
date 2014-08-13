@@ -41,7 +41,7 @@ public interface MergeAlgorithm {
      *
      *  @throws  MergeException  If an error occurs during the merge.
      */
-    public void applyDifference(Iterator orgSeq, Iterator modSeq,
+    void applyDifference(Iterator orgSeq, Iterator modSeq,
                                 Difference[] differences) throws MergeException;
 }
 

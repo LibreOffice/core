@@ -35,16 +35,16 @@ public class _XCompletedExecution extends MultiMethodTest {
     /**
      * Interface to implement so the call of the listener can be checked.
      */
-    public static interface CheckInteractionHandler extends XInteractionHandler {
+    public interface CheckInteractionHandler extends XInteractionHandler {
         /**
          * Set a log of the listener, so messages of the listener get printed
          * into the file of the interface
          */
-        public void setLog(PrintWriter log);
+        void setLog(PrintWriter log);
         /**
          * Return True, when the listener was called correctly.
          */
-        public boolean checkInteractionHandler();
+        boolean checkInteractionHandler();
     }
 
     @Override

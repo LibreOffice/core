@@ -35,9 +35,9 @@ public interface ConfigNode
      * to be used in a tree like way, reading objects and subobjects and so on,
      * it might be practical to be able to pass an extra parameter, for a free use.
      */
-    public void readConfiguration(Object configurationView, Object param);
+    void readConfiguration(Object configurationView, Object param);
 
-    public void writeConfiguration(Object configurationView, Object param);
+    void writeConfiguration(Object configurationView, Object param);
 
-    public void setRoot(Object root);
+    void setRoot(Object root);
 }

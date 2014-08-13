@@ -28,21 +28,21 @@
 package com.sun.star.comp.Calc.NLPSolver.dialogs;
 
 public interface IEvolutionarySolverStatusDialog {
-    public final static int WAITING = 0;
-    public final static int OK = 1;
-    public final static int CONTINUE = 2;
-    public final static int CANCEL = 3;
+    int WAITING = 0;
+    int OK = 1;
+    int CONTINUE = 2;
+    int CANCEL = 3;
 
-    public int getUserState();
+    int getUserState();
 
-    public void setBestSolution(double solution, boolean feasible);
-    public void setMaxIterations(int maxIterations);
-    public void setMaxStagnation(int maxStagnation);
-    public void setIteration(int iteration);
-    public void setStagnation(int stagnation);
-    public void setRuntime(long runtime);
-    public int waitForUser();
+    void setBestSolution(double solution, boolean feasible);
+    void setMaxIterations(int maxIterations);
+    void setMaxStagnation(int maxStagnation);
+    void setIteration(int iteration);
+    void setStagnation(int stagnation);
+    void setRuntime(long runtime);
+    int waitForUser();
 
-    public void setVisible(boolean visible);
-    public void dispose();
+    void setVisible(boolean visible);
+    void dispose();
 }

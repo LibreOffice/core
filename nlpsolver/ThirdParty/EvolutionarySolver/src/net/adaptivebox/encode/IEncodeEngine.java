@@ -20,5 +20,5 @@
 package net.adaptivebox.encode;
 
 public interface IEncodeEngine{
-  abstract public double[] getEncodeInfo();
+  double[] getEncodeInfo();
 }

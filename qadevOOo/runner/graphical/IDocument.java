@@ -23,5 +23,5 @@ public interface IDocument
     /**
      * Call this for each document
      */
-    public void checkOneFile(String _sDocument, String _sResult, ParameterHelper _aParams) throws OfficeException;
+    void checkOneFile(String _sDocument, String _sResult, ParameterHelper _aParams) throws OfficeException;
 }

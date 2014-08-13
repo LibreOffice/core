@@ -51,7 +51,7 @@ public interface Document {
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    public void write(OutputStream os) throws IOException;
+    void write(OutputStream os) throws IOException;
 
 
     /**
@@ -68,7 +68,7 @@ public interface Document {
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-     public void read(InputStream is) throws IOException;
+    void read(InputStream is) throws IOException;
 
 
     /**
@@ -76,7 +76,7 @@ public interface Document {
      *
      *  @return  The <code>Document</code> name with no file extension.
      */
-    public String getName();
+    String getName();
 
 
     /**
@@ -84,6 +84,6 @@ public interface Document {
      *
      *  @return  The <code>Document</code> name with file extension.
      */
-    public String getFileName();
+    String getFileName();
 }
 

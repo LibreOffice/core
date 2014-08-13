@@ -23,21 +23,21 @@ public interface IOffice
     /**
      * start an Office, if need
      */
-    public void start() throws OfficeException;
+    void start() throws OfficeException;
 
     /**
      * Load a document by it's Name
      */
-    public void load(String Name) throws OfficeException;
+    void load(String Name) throws OfficeException;
 
     /**
      * Create a postscript file in the DOC_COMPARATOR_OUTPUT_DIR directory from a loaded document
      */
-    public void storeAsPostscript() throws OfficeException;
+    void storeAsPostscript() throws OfficeException;
 
 
     /**
      * Close the background office
      */
-    public void close() throws OfficeException;
+    void close() throws OfficeException;
 }

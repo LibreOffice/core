@@ -31,7 +31,7 @@ public interface TestIWorkAt extends XInterface {
 
     void notifyme();
 
-    public static final TypeInfo UNOTYPEINFO[] = {
+    TypeInfo UNOTYPEINFO[] = {
         new MethodTypeInfo("increment", 0, 0),
         new MethodTypeInfo("notifyme", 1, 0),
         new MethodTypeInfo("syncCall", 2, 0),

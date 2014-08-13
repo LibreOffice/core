@@ -22,14 +22,14 @@ import java.util.EventListener;
 public interface TaskListener extends EventListener
 {
 
-    public void taskStarted(TaskEvent te);
+    void taskStarted(TaskEvent te);
 
-    public void taskFinished(TaskEvent te);
+    void taskFinished(TaskEvent te);
 
     /**
      * is called when the status of the task has advanced.
      */
-    public void taskStatusChanged(TaskEvent te);
+    void taskStatusChanged(TaskEvent te);
 
-    public void subtaskNameChanged(TaskEvent te);
+    void subtaskNameChanged(TaskEvent te);
 }

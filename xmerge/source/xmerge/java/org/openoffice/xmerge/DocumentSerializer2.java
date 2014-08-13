@@ -57,7 +57,7 @@ public interface DocumentSerializer2 extends DocumentSerializer {
      *  @throws  ConvertException  If any conversion error occurs.
      *  @throws  IOException       If any I/O error occurs.
      */
-    public ConvertData serialize(String officeURL, String deviceURL) throws
+    ConvertData serialize(String officeURL, String deviceURL) throws
         ConvertException, IOException;
 }
 

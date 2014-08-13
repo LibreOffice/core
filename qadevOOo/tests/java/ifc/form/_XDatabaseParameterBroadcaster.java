@@ -36,16 +36,16 @@ public class _XDatabaseParameterBroadcaster extends MultiMethodTest {
     /**
      * Interface to implement so the call of the listener can be checked.
      */
-    public static interface CheckParameterListener extends XDatabaseParameterListener {
+    public interface CheckParameterListener extends XDatabaseParameterListener {
         /**
          * Set a log of the listener, so messages of the listener get printed
          * into the file of the interface
          */
-        public void setLog(PrintWriter log);
+        void setLog(PrintWriter log);
         /**
          * Return True, when the listener was called correctly.
          */
-        public boolean checkListener();
+        boolean checkListener();
     }
 
     /**

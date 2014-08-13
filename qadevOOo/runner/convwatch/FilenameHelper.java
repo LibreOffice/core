@@ -31,11 +31,11 @@ import helper.StringHelper;
 
 interface Filenamer
 {
-    public String getSuffix();
-    public String getFileURL();
-    public String getAbsoluteSystemFilename();
-    public String getFilename();
-    public String getSystemPath();
+    String getSuffix();
+    String getFileURL();
+    String getAbsoluteSystemFilename();
+    String getFilename();
+    String getSystemPath();
 }
 
 

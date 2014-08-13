@@ -354,7 +354,7 @@ public class Map /* extends complexlib.ComplexTestCase */
 
     private interface CompareEqual
     {
-        public boolean areEqual( Object _lhs, Object _rhs );
+        boolean areEqual( Object _lhs, Object _rhs );
     }
 
     private class DefaultCompareEqual implements CompareEqual

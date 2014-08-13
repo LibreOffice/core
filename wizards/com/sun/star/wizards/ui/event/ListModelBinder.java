@@ -134,10 +134,9 @@ public class ListModelBinder implements ListDataListener
         remove((short) lde.getIndex0(), (short) lde.getIndex1());
     }
 
-    private static interface Renderer
+    private interface Renderer
     {
-
-        public String render(Object item);
+        String render(Object item);
     }
 
     public static void fillList(Object list, Object[] items, Renderer renderer)

@@ -21,55 +21,55 @@ package com.sun.star.wizards.ui;
 public interface UIConsts
 {
 
-    public static final int RID_COMMON = 500;
-    public static final int RID_DB_COMMON = 1000;
-    public static final int RID_FORM = 2200;
-    public static final int RID_QUERY = 2300;
-    public static final int RID_REPORT = 2400;
-    public static final int RID_TABLE = 2600;
-    public static final int RID_IMG_FORM = 1100;
-    public static final Integer INVISIBLESTEP = 99;
-    public static final String INFOIMAGEURL = "private:resource/dbu/image/19205";
-    public static final String INFOIMAGEURL_HC = "private:resource/dbu/image/19230";
+    int RID_COMMON = 500;
+    int RID_DB_COMMON = 1000;
+    int RID_FORM = 2200;
+    int RID_QUERY = 2300;
+    int RID_REPORT = 2400;
+    int RID_TABLE = 2600;
+    int RID_IMG_FORM = 1100;
+    Integer INVISIBLESTEP = 99;
+    String INFOIMAGEURL = "private:resource/dbu/image/19205";
+    String INFOIMAGEURL_HC = "private:resource/dbu/image/19230";
     /**
      * The tabindex of the navigation buttons in a wizard must be assigned a very
      * high tabindex because on every step their taborder must appear at the end
      */
-    public static final short SOFIRSTWIZARDNAVITABINDEX = 30000;
-    public static final Integer INTEGER_12 = 12;
+    short SOFIRSTWIZARDNAVITABINDEX = 30000;
+    Integer INTEGER_12 = 12;
     /**Steps of the QueryWizard
      *
      */
-    public static final int SOGROUPSELECTIONPAGE = 5;
-    public static final int SOGROUPFILTERPAGE = 6;
-    public static final int SOTITLESPAGE = 7;
-    public static final Integer[] INTEGERS = new Integer[]
+    int SOGROUPSELECTIONPAGE = 5;
+    int SOGROUPFILTERPAGE = 6;
+    int SOTITLESPAGE = 7;
+    Integer[] INTEGERS = new Integer[]
     {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
     };
 
-    class CONTROLTYPE
+    public interface CONTROLTYPE
     {
 
-        public static final int BUTTON = 1;
-        public static final int IMAGECONTROL = 2;
-        public static final int LISTBOX = 3;
-        public static final int COMBOBOX = 4;
-        public static final int CHECKBOX = 5;
-        public static final int RADIOBUTTON = 6;
-        public static final int DATEFIELD = 7;
-        public static final int EDITCONTROL = 8;
-        public static final int FIXEDLINE = 10;
-        public static final int FIXEDTEXT = 11;
-        public static final int FORMATTEDFIELD = 12;
-        public static final int HYPERTEXT = 14;
-        public static final int NUMERICFIELD = 15;
-        public static final int PATTERNFIELD = 16;
-        public static final int PROGRESSBAR = 17;
-        public static final int ROADMAP = 18;
-        public static final int SCROLLBAR = 19;
-        public static final int TIMEFIELD = 20;
-        public static final int CURRENCYFIELD = 21;
-        public static final int UNKNOWN = -1;
+        int BUTTON = 1;
+        int IMAGECONTROL = 2;
+        int LISTBOX = 3;
+        int COMBOBOX = 4;
+        int CHECKBOX = 5;
+        int RADIOBUTTON = 6;
+        int DATEFIELD = 7;
+        int EDITCONTROL = 8;
+        int FIXEDLINE = 10;
+        int FIXEDTEXT = 11;
+        int FORMATTEDFIELD = 12;
+        int HYPERTEXT = 14;
+        int NUMERICFIELD = 15;
+        int PATTERNFIELD = 16;
+        int PROGRESSBAR = 17;
+        int ROADMAP = 18;
+        int SCROLLBAR = 19;
+        int TIMEFIELD = 20;
+        int CURRENCYFIELD = 21;
+        int UNKNOWN = -1;
     }
 }

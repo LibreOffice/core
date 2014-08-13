@@ -51,21 +51,21 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
     * Interface for relation. Updating, committing and checking
     * if data was committed is object dependent behaviour.
     */
-    public static interface UpdateChecker {
+    public interface UpdateChecker {
         /**
         * Method must make some data update in the object tested.
         */
-        public void update() throws com.sun.star.uno.Exception ;
+        void update() throws com.sun.star.uno.Exception ;
         /**
         * Method must commit data change made by method <code>update</code>.
         */
-        public void commit() throws com.sun.star.uno.Exception ;
+        void commit() throws com.sun.star.uno.Exception ;
         /**
         * Checks if the data committed by <code>commit</code> method
         * became permanent in data source.
         * @return <code>true</code> if data was committed.
         */
-        public boolean wasCommited() throws com.sun.star.uno.Exception ;
+        boolean wasCommited() throws com.sun.star.uno.Exception ;
     }
 
     /**

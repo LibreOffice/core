@@ -34,11 +34,7 @@ public interface Iterator {
      *  @return  The <code>Object</code> of the next element in the sequence.
      *           If there is no next element, then return null.
      */
-    public Object next();
-
-
-
-
+    Object next();
 
     /**
      * Move to the beginning of the sequence.
@@ -46,27 +42,21 @@ public interface Iterator {
      * @return  The <code>Object</code> of the first element in the sequence.
      *          If it is empty, then return null.
      */
-    public Object start();
-
-
-
-
+    Object start();
 
     /**
      * Return the current element <code>Object</code> content.
      *
      * @return  The <code>Object</code> at current position.
      */
-    public Object currentElement();
-
+    Object currentElement();
 
     /**
      * Return the total element count in the sequence.
      *
      * @return  The total element count.
      */
-    public int elementCount();
-
+    int elementCount();
 
     /**
      *  A method to allow the difference algorithm to test whether the
@@ -84,7 +74,7 @@ public interface Iterator {
      *
      *  @return  true if equal, false otherwise.
      */
-    public boolean equivalent(Object obj1, Object obj2);
+    boolean equivalent(Object obj1, Object obj2);
 
 
     /**
@@ -95,6 +85,6 @@ public interface Iterator {
      *  shot instead of dynamically transversing the tree.  The current
      *  position will be set to the beginning.</p>
      */
-    public void refresh();
+    void refresh();
 }
 

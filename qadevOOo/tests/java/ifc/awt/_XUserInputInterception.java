@@ -518,10 +518,10 @@ public class _XUserInputInterception extends MultiMethodTest {
     private interface EventTriggerType{
 
         /** klick the mouse into the scroll bar*/
-        final public static int MOUSE_KLICK_INTO_DOC = 1;
+        int MOUSE_KLICK_INTO_DOC = 1;
 
         /** write some text into a spread sheet*/
-        final public static int KEY_TEXT_INTO_DOC = 2;
+        int KEY_TEXT_INTO_DOC = 2;
     }
 }
 

@@ -179,7 +179,7 @@ public class FlatFileAccess extends ComplexTestCase
 
     private interface RowSetValueGetter
     {
-        public Object getValue( final RowSet i_rowSet ) throws SQLException;
+        Object getValue( final RowSet i_rowSet ) throws SQLException;
     }
 
     private abstract class RowSetColumnValueGetter implements RowSetValueGetter

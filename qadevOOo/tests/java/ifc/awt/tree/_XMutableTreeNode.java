@@ -47,8 +47,8 @@ public class _XMutableTreeNode extends MultiMethodTest {
 
     private XMutableTreeNodeCreator nodeCreator = null;
 
-    public static interface XMutableTreeNodeCreator{
-        public XMutableTreeNode createNode(String name);
+    public interface XMutableTreeNodeCreator{
+        XMutableTreeNode createNode(String name);
     }
 
     @Override

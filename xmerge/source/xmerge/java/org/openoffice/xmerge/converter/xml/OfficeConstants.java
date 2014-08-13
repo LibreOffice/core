@@ -26,321 +26,321 @@ package org.openoffice.xmerge.converter.xml;
 public interface OfficeConstants {
 
     /** Element tag for <i>office:document</i>, this is the root tag. */
-    public final static String TAG_OFFICE_DOCUMENT = "office:document";
+    String TAG_OFFICE_DOCUMENT = "office:document";
 
     /**
      *  Element tag for <i>office:document-content</i>, this is the root
      *  tag in content.xml.
      */
-    public final static String TAG_OFFICE_DOCUMENT_CONTENT = "office:document-content";
+    String TAG_OFFICE_DOCUMENT_CONTENT = "office:document-content";
 
     /**
      *  Element tag for <i>office:document-settings</i>, this is the root
      *  tag in content.xml.
      */
-    public final static String TAG_OFFICE_DOCUMENT_SETTINGS= "office:document-settings";
+    String TAG_OFFICE_DOCUMENT_SETTINGS= "office:document-settings";
 
      /**
      *  Element tag for <i>office:document-meta</i>, this is the root
      *  tag in content.xml.
      */
-    public final static String TAG_OFFICE_DOCUMENT_META= "office:document-meta";
+    String TAG_OFFICE_DOCUMENT_META= "office:document-meta";
 
     /**
      *  Element tag for <i>office:document-styles</i>, this is the root tag
      *  in styles.xml.
      */
-    public final static String TAG_OFFICE_DOCUMENT_STYLES = "office:document-styles";
+    String TAG_OFFICE_DOCUMENT_STYLES = "office:document-styles";
 
 
 
     /** Element tag for <i>office:styles</i>. */
-    public final static String TAG_OFFICE_STYLES = "office:styles";
+    String TAG_OFFICE_STYLES = "office:styles";
 
     /** Element tag for <i>office:meta</i>. */
-    public final static String TAG_OFFICE_META = "office:meta";
+    String TAG_OFFICE_META = "office:meta";
 
     /** Element tag for <i>office:automatic-styles</i>. */
-    public final static String TAG_OFFICE_AUTOMATIC_STYLES = "office:automatic-styles";
+    String TAG_OFFICE_AUTOMATIC_STYLES = "office:automatic-styles";
 
     /** Element tag for <i>office:master-styles</i>. */
-    public final static String TAG_OFFICE_MASTER_STYLES = "office:master-styles";
+    String TAG_OFFICE_MASTER_STYLES = "office:master-styles";
 
     /** Element tag for <i>office:body</i>. */
-    public final static String TAG_OFFICE_BODY = "office:body";
+    String TAG_OFFICE_BODY = "office:body";
 
     /** Element tag for <i>office:settings</i>. */
-    public final static String TAG_OFFICE_SETTINGS = "office:settings";
+    String TAG_OFFICE_SETTINGS = "office:settings";
 
     /** Element tag for <i>office:font-decls</i>. */
-    public final static String TAG_OFFICE_FONT_DECLS = "office:font-decls";
+    String TAG_OFFICE_FONT_DECLS = "office:font-decls";
 
     /** Element tag for <i>style:font-decl</i>. */
-    public final static String TAG_STYLE_FONT_DECL = "style:font-decl";
+    String TAG_STYLE_FONT_DECL = "style:font-decl";
 
     /** Attribute tag for <i>style:name</i> of element <i>style:name</i>. */
-    public final static String ATTRIBUTE_STYLE_NAME = "style:name";
+    String ATTRIBUTE_STYLE_NAME = "style:name";
 
     /**
      *  Attribute tag for <i>style:font-pitch</i> of element
      *  <i>style:font-pitch</i>.
      */
-    public final static String ATTRIBUTE_STYLE_FONT_PITCH = "style:font-pitch";
+    String ATTRIBUTE_STYLE_FONT_PITCH = "style:font-pitch";
 
     /**
      *  Attribute tag for <i>fo:font-family</i> of element
      *  <i>fo:font-family</i>.
      */
-    public final static String ATTRIBUTE_FO_FONT_FAMILY = "fo:font-family";
+    String ATTRIBUTE_FO_FONT_FAMILY = "fo:font-family";
 
     /**
      *  Attribute tag for <i>fo:font-family</i> of element
      *  <i>fo:font-family</i>.
      */
-    public final static String ATTRIBUTE_FO_FONT_FAMILY_GENERIC = "fo:font-family-generic";
+    String ATTRIBUTE_FO_FONT_FAMILY_GENERIC = "fo:font-family-generic";
 
     /** Element tag for <i>text:p</i>. */
-    public final static String TAG_PARAGRAPH = "text:p";
+    String TAG_PARAGRAPH = "text:p";
 
     /** Element tag for <i>text:h</i>. */
-    public final static String TAG_HEADING = "text:h";
+    String TAG_HEADING = "text:h";
 
     /** Element tag for <i>text:s</i>. */
-    public final static String TAG_SPACE = "text:s";
+    String TAG_SPACE = "text:s";
 
     /** Element tag for <i>text:tab-stop</i>. */
-    public final static String TAG_TAB_STOP = "text:tab-stop";
+    String TAG_TAB_STOP = "text:tab-stop";
 
     /** Element tag for <i>text:line-break</i>. */
-    public final static String TAG_LINE_BREAK = "text:line-break";
+    String TAG_LINE_BREAK = "text:line-break";
 
     /** Element tag for <i>text:span</i>. */
-    public final static String TAG_SPAN = "text:span";
+    String TAG_SPAN = "text:span";
 
     /** Element tag for <i>text:a</i>. */
-    public final static String TAG_HYPERLINK = "text:a";
+    String TAG_HYPERLINK = "text:a";
 
     /** Element tag for <i>text:unordered-list</i>. */
-    public final static String TAG_UNORDERED_LIST = "text:unordered-list";
+    String TAG_UNORDERED_LIST = "text:unordered-list";
 
     /** Element tag for <i>text:ordered-list</i>. */
-    public final static String TAG_ORDERED_LIST = "text:ordered-list";
+    String TAG_ORDERED_LIST = "text:ordered-list";
 
     /** Element tag for <i>text:list-header</i>. */
-    public final static String TAG_LIST_HEADER = "text:list-header";
+    String TAG_LIST_HEADER = "text:list-header";
 
     /** Element tag for <i>text:list-item</i>. */
-    public final static String TAG_LIST_ITEM = "text:list-item";
+    String TAG_LIST_ITEM = "text:list-item";
 
     /** Attribute tag for <i>text:c</i> of element <i>text:s</i>. */
-    public final static String ATTRIBUTE_SPACE_COUNT = "text:c";
+    String ATTRIBUTE_SPACE_COUNT = "text:c";
 
     /** Element tag for <i>table:table</i>. */
-    public final static String TAG_TABLE = "table:table";
+    String TAG_TABLE = "table:table";
 
     /** Element tag for <i>table:named-expression</i>. */
-    public final static String TAG_NAMED_EXPRESSIONS = "table:named-expressions";
+    String TAG_NAMED_EXPRESSIONS = "table:named-expressions";
 
     /** Element tag for <i>table:named-range</i>. */
-    public final static String TAG_TABLE_NAMED_RANGE= "table:named-range";
+    String TAG_TABLE_NAMED_RANGE= "table:named-range";
 
     /** Element tag for <i>table:named-expression</i>. */
-    public final static String TAG_TABLE_NAMED_EXPRESSION= "table:named-expression";
+    String TAG_TABLE_NAMED_EXPRESSION= "table:named-expression";
 
     /**
      *  Attribute tag for <i>table:name</i> of element
      *  <i>table:table</i>.
      */
-    public final static String ATTRIBUTE_TABLE_NAME = "table:name";
+    String ATTRIBUTE_TABLE_NAME = "table:name";
 
     /**
      *  Attribute tag for <i>table:expression</i> of element
      *  <i>table:named-range</i>.
      */
-    public final static String ATTRIBUTE_TABLE_EXPRESSION = "table:expression";
+    String ATTRIBUTE_TABLE_EXPRESSION = "table:expression";
 
     /**
      *  Attribute tag for <i>table:base-cell-address</i> of element
      *  <i>table:named-range</i>.
      */
-    public final static String ATTRIBUTE_TABLE_BASE_CELL_ADDRESS = "table:base-cell-address";
+    String ATTRIBUTE_TABLE_BASE_CELL_ADDRESS = "table:base-cell-address";
 
     /**
      *  Attribute tag for <i>table:cell-range-address</i> of element
      *  <i>table:named-range</i>.
      */
-    public final static String ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS = "table:cell-range-address";
+    String ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS = "table:cell-range-address";
 
     /** Element tag for <i>table:table-row</i>. */
-    public final static String TAG_TABLE_ROW = "table:table-row";
+    String TAG_TABLE_ROW = "table:table-row";
 
     /** Element tag for <i>table:table-column</i>. */
-    public final static String TAG_TABLE_COLUMN = "table:table-column";
+    String TAG_TABLE_COLUMN = "table:table-column";
 
     /**
     *  Attribute tag for <i>table:default-cell-style-name</i>
     *  of element <i>table:table-column</i>.
     */
-    public final static String ATTRIBUTE_DEFAULT_CELL_STYLE = "table:default-cell-style-name";
+    String ATTRIBUTE_DEFAULT_CELL_STYLE = "table:default-cell-style-name";
 
     /** Element tag for <i>table:scenario</i>. */
-    public final static String TAG_TABLE_SCENARIO = "table:scenario";
+    String TAG_TABLE_SCENARIO = "table:scenario";
 
     /** Element tag for <i>table:table-cell</i>. */
-    public final static String TAG_TABLE_CELL = "table:table-cell";
+    String TAG_TABLE_CELL = "table:table-cell";
 
     /**
      *  Attribute tag for <i>table:value-type</i> of element
      *  <i>table:table-cell</i>.
      */
-    public final static String ATTRIBUTE_TABLE_VALUE_TYPE = "table:value-type";
+    String ATTRIBUTE_TABLE_VALUE_TYPE = "table:value-type";
 
     /**
      *  Attribute tag for <i>table:number-columns-repeated</i>
      *  of element <i>table:table-cell</i>.
      */
-    public final static String ATTRIBUTE_TABLE_NUM_COLUMNS_REPEATED =
+    String ATTRIBUTE_TABLE_NUM_COLUMNS_REPEATED =
         "table:number-columns-repeated";
 
     /**
      *  Attribute tag for <i>table:number-rows-repeated</i>
      *  of element <i>table:table-row</i>.
      */
-    public final static String ATTRIBUTE_TABLE_NUM_ROWS_REPEATED =
+    String ATTRIBUTE_TABLE_NUM_ROWS_REPEATED =
         "table:number-rows-repeated";
 
     /**
      *  Attribute tag for <i>table:formula</i> of element
      *  <i>table:table-cell</i>.
      */
-    public final static String ATTRIBUTE_TABLE_FORMULA = "table:formula";
+    String ATTRIBUTE_TABLE_FORMULA = "table:formula";
 
     /**
      *  Attribute tag for <i>table:value</i> of element
      *  <i>table:table-cell</i>.
      */
-    public final static String ATTRIBUTE_TABLE_VALUE = "table:value";
+    String ATTRIBUTE_TABLE_VALUE = "table:value";
 
     /**
      *  Attribute tag for <i>table:date-value</i> of element
      *  <i>table:table-cell</i>.
      */
-    public final static String ATTRIBUTE_TABLE_DATE_VALUE = "table:date-value";
+    String ATTRIBUTE_TABLE_DATE_VALUE = "table:date-value";
 
     /**
      *  Attribute tag for <i>table:time-value</i> of element
      *  <i>table:table-cell</i>.
      */
-    public final static String ATTRIBUTE_TABLE_TIME_VALUE = "table:time-value";
+    String ATTRIBUTE_TABLE_TIME_VALUE = "table:time-value";
 
     /**
      *  Attribute tag for <i>table:string-value</i> of element
      *  <i>table:table-cell</i>.
      */
-    public final static String ATTRIBUTE_TABLE_STRING_VALUE =
+    String ATTRIBUTE_TABLE_STRING_VALUE =
         "table:string-value";
 
     /**
      *  Attribute tag for <i>table:time-boolean-value</i> of element
      *  <i>table:table-cell</i>.
      */
-    public final static String ATTRIBUTE_TABLE_BOOLEAN_VALUE =
+    String ATTRIBUTE_TABLE_BOOLEAN_VALUE =
         "table:boolean-value";
 
     /** Attribute tag for <i>table:style-name</i> of table elements. */
-    public final static String ATTRIBUTE_TABLE_STYLE_NAME = "table:style-name";
+    String ATTRIBUTE_TABLE_STYLE_NAME = "table:style-name";
 
     /**
      *  Attribute tag for <i>table:currency</i> of element
      *  <i>table:table-cell</i>.
      */
-    public final static String ATTRIBUTE_TABLE_CURRENCY = "table:currency";
+    String ATTRIBUTE_TABLE_CURRENCY = "table:currency";
 
     /** The cell contains data of type <i>string</i>. */
-    public final static String CELLTYPE_STRING = "string";
+    String CELLTYPE_STRING = "string";
 
     /** The cell contains data of type <i>float</i>. */
-    public final static String CELLTYPE_FLOAT = "float";
+    String CELLTYPE_FLOAT = "float";
 
     /** The cell contains data of type <i>time</i>. */
-    public final static String CELLTYPE_TIME = "time";
+    String CELLTYPE_TIME = "time";
 
     /** The cell contains data of type <i>date</i>. */
-    public final static String CELLTYPE_DATE = "date";
+    String CELLTYPE_DATE = "date";
 
     /** The cell contains data of type <i>currency</i>. */
-    public final static String CELLTYPE_CURRENCY = "currency";
+    String CELLTYPE_CURRENCY = "currency";
 
     /** The cell contains data of type <i>boolean</i>. */
-    public final static String CELLTYPE_BOOLEAN = "boolean";
+    String CELLTYPE_BOOLEAN = "boolean";
 
     /** The cell contains data of type <i>percent</i>. */
-    public final static String CELLTYPE_PERCENT = "percentage";
+    String CELLTYPE_PERCENT = "percentage";
 
     /** StarWriter XML file extension. */
-    public final static String SXW_FILE_EXTENSION = ".sxw";
+    String SXW_FILE_EXTENSION = ".sxw";
 
     /** StarWriter XML <i>office:class</i> value. */
-    public final static String SXW_TYPE = "text";
+    String SXW_TYPE = "text";
 
     /** StarCalc XML file extension. */
-    public final static String SXC_FILE_EXTENSION = ".sxc";
+    String SXC_FILE_EXTENSION = ".sxc";
 
     /** StarCalc XML <i>office:class</i> value. */
-    public final static String SXC_TYPE = "spreadsheet";
+    String SXC_TYPE = "spreadsheet";
 
     /** Element tag for <i>manifest:manifest</i>entry in Manifest XML */
-    public final static String TAG_MANIFEST_ROOT = "manifest:manifest";
+    String TAG_MANIFEST_ROOT = "manifest:manifest";
 
     /** Element tag for <i>manifest:file-entry</i> entry in Manifest XML. */
-    public final static String TAG_MANIFEST_FILE = "manifest:file-entry";
+    String TAG_MANIFEST_FILE = "manifest:file-entry";
 
     /**
      * Attribute tag for <i>manifest:media-type</i> of element
      * <i>manifest:file-entry</i>.
      */
-    public final static String ATTRIBUTE_MANIFEST_FILE_TYPE = "manifest:media-type";
+    String ATTRIBUTE_MANIFEST_FILE_TYPE = "manifest:media-type";
 
     /**
      * Attribute tag for <i>manifest:full-path</i> of element
      * <i>manifest:file-entry</i>.
      */
-    public final static String ATTRIBUTE_MANIFEST_FILE_PATH = "manifest:full-path";
+    String ATTRIBUTE_MANIFEST_FILE_PATH = "manifest:full-path";
 
     // Tags and Elements for the settings.xml
 
     /** Element tag for <i>config:config-item</i>. */
-    public final static String TAG_CONFIG_ITEM = "config:config-item";
+    String TAG_CONFIG_ITEM = "config:config-item";
 
     /** Element tag for <i>config:config-item-set</i>. */
-    public final static String TAG_CONFIG_ITEM_SET = "config:config-item-set";
+    String TAG_CONFIG_ITEM_SET = "config:config-item-set";
 
     /** Element tag for <i>config:config-item-map-indexed</i>. */
-    public final static String TAG_CONFIG_ITEM_MAP_INDEXED = "config:config-item-map-indexed";
+    String TAG_CONFIG_ITEM_MAP_INDEXED = "config:config-item-map-indexed";
 
     /** Element tag for <i>config:config-item-map-named</i>. */
-    public final static String TAG_CONFIG_ITEM_MAP_NAMED = "config:config-item-map-named";
+    String TAG_CONFIG_ITEM_MAP_NAMED = "config:config-item-map-named";
 
     /** Element tag for <i>config:config-item-map-entry</i>. */
-    public final static String TAG_CONFIG_ITEM_MAP_ENTRY= "config:config-item-map-entry";
+    String TAG_CONFIG_ITEM_MAP_ENTRY= "config:config-item-map-entry";
 
     /**
      *  Attribute tag for <i>config:name</i> of element
      *  <i>config:config-item</i>.
      */
-    public final static String ATTRIBUTE_CONFIG_NAME = "config:name";
+    String ATTRIBUTE_CONFIG_NAME = "config:name";
 
     /**
      *  Attribute tag for <i>config:type</i> of element
      *  <i>config:config-item</i>.
      */
-    public final static String ATTRIBUTE_CONFIG_TYPE = "config:type";
+    String ATTRIBUTE_CONFIG_TYPE = "config:type";
 
 
     /** StarWriter XML MIME type. */
-    public final static String SXW_MIME_TYPE = "application/vnd.sun.xml.writer";
+    String SXW_MIME_TYPE = "application/vnd.sun.xml.writer";
 
     /** StarCalc XML MIME type. */
-    public final static String SXC_MIME_TYPE = "application/vnd.sun.xml.calc";
+    String SXC_MIME_TYPE = "application/vnd.sun.xml.calc";
 
 }

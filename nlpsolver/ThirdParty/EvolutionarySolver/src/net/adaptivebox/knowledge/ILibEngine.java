@@ -23,7 +23,7 @@
 package net.adaptivebox.knowledge;
 
 public interface ILibEngine {
-  public void setLibrary(Library lib);
+  void setLibrary(Library lib);
 }
 
 

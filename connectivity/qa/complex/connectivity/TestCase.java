@@ -22,6 +22,6 @@ import share.LogWriter;
 
 public interface TestCase
 {
-    public void assure( final String i_message, final boolean i_condition );
-    public LogWriter getLog();
+    void assure( final String i_message, final boolean i_condition );
+    LogWriter getLog();
 }

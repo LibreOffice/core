@@ -20,5 +20,5 @@
 package net.adaptivebox.global;
 
 public interface IUpdateCycleEngine {
-  public void updateCycle(int t);
+  void updateCycle(int t);
 }

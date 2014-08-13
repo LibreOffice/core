@@ -435,12 +435,12 @@ public class ConfigExamples
 
 // BROWSE example
     /// Interface to procees information when browsing the configuration tree
-    public static interface IConfigurationProcessor
+    public interface IConfigurationProcessor
     {
         /// process a value item
-       public abstract void processValueElement( String sPath_, Object aValue_ );
+       void processValueElement( String sPath_, Object aValue_ );
         /// process a structural item
-       public abstract void processStructuralElement( String sPath_, XInterface xElement_);
+       void processStructuralElement( String sPath_, XInterface xElement_);
     }
 
     /// Internal method to recursively browse a structural element in preorder

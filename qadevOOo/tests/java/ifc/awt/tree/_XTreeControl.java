@@ -87,8 +87,8 @@ public class _XTreeControl extends MultiMethodTest {
     boolean mTreeNodeEditing2 = false;
     boolean mTreeNodeEdit2 = false;
 
-    public static interface XTreeDataModelListenerEvent{
-        public void fireEvent();
+    public interface XTreeDataModelListenerEvent{
+        void fireEvent();
     }
 
     public class TreeExpansionListenerImpl1 implements XTreeExpansionListener{

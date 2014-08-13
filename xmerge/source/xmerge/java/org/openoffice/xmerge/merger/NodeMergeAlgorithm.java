@@ -36,6 +36,6 @@ public interface NodeMergeAlgorithm {
      *  @param  modifyNode    The <code>Node</code> to be merged.  It may
      *                        be modified.
      */
-    public void merge(Node originalNode, Node modifyNode);
+    void merge(Node originalNode, Node modifyNode);
 }
 

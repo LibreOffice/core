@@ -23,21 +23,19 @@ public interface LogWriter {
     /**
      * Method to print
      */
-    public void println(String msg);
+    void println(String msg);
 
     /**
      * initialization
      *
      */
-
-    public boolean initialize(share.DescEntry entry, boolean active);
+    boolean initialize(share.DescEntry entry, boolean active);
 
     /**
      * will mostly be used by outproducers to sum up
      * the information, maybe write them to a db
      */
-
-    public boolean summary(share.DescEntry entry);
+    boolean summary(share.DescEntry entry);
 
 
     /**
@@ -45,7 +43,7 @@ public interface LogWriter {
      * @see share.Watcher
      * @return the associated <CODE>Watcher</CODE>
      */
-    public Object getWatcher();
+    Object getWatcher();
 
     /**
      * Set a <CODE>Watcher</CODE> to the <CODE>LogWriter</CODE>
@@ -54,6 +52,6 @@ public interface LogWriter {
      * @see share.Watcher
      * @param watcher the new <CODE>Watcher</CODE>
      */
-    public void setWatcher(Object watcher);
+    void setWatcher(Object watcher);
 
 }

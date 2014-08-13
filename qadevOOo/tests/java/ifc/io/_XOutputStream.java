@@ -51,9 +51,9 @@ public class _XOutputStream extends MultiMethodTest {
     StreamChecker checker = null;
     byte[] data = null;
 
-    public static interface StreamChecker {
-        public XInputStream getInStream();
-        public void resetStreams();
+    public interface StreamChecker {
+        XInputStream getInStream();
+        void resetStreams();
     }
 
     @Override

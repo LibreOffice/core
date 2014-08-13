@@ -25,6 +25,6 @@ package com.sun.star.wizards.common;
 
 public interface Indexable {
 
-    public int getIndex();
+    int getIndex();
 
 }

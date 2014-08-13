@@ -24,6 +24,6 @@ import java.io.IOException;
 import org.w3c.dom.Document;
 
 public interface XMLParser {
-    public Document parse(InputStream inputStream) throws IOException;
-    public void write(Document doc, OutputStream out) throws IOException;
+    Document parse(InputStream inputStream) throws IOException;
+    void write(Document doc, OutputStream out) throws IOException;
 }

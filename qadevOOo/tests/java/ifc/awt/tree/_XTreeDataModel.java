@@ -51,8 +51,8 @@ public class _XTreeDataModel extends MultiMethodTest {
 
     boolean mTreeStructureChanged2 = false;
 
-    public static interface XTreeDataModelListenerEvent{
-        public void fireEvent();
+    public interface XTreeDataModelListenerEvent{
+        void fireEvent();
     }
 
     public class myEventListener1 implements XTreeDataModelListener{
