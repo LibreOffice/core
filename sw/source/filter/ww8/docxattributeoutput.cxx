@@ -4030,8 +4030,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
                         if ("SdtEndBefore" == aGrabBag[nProp].Name && m_bStartedCharSdt && !m_bEndCharSdt)
                         {
                             aGrabBag[nProp].Value >>= m_bEndCharSdt;
+                            break;
                         }
-                        break;
                     }
                 }
             }
