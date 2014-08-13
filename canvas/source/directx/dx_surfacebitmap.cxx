@@ -552,7 +552,7 @@ namespace dxcanvas
 
             sal_uInt8 *pSrc = (sal_uInt8 *)((((BYTE *)aSurfaceDesc.lpSurface)+(rect.Y1*aSurfaceDesc.lPitch))+rect.X1);
             sal_uInt8 *pDst = (sal_uInt8 *)aRes.getArray();
-            sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
+            sal_uInt32 nSegmentSizeInBytes = nWidth*4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
                 memcpy(pDst,pSrc,nSegmentSizeInBytes);
@@ -568,7 +568,7 @@ namespace dxcanvas
 
             sal_uInt8 *pSrc = (sal_uInt8 *)((((BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
             sal_uInt8 *pDst = (sal_uInt8 *)aRes.getArray();
-            sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
+            sal_uInt32 nSegmentSizeInBytes = nWidth*4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
                 memcpy(pDst,pSrc,nSegmentSizeInBytes);
