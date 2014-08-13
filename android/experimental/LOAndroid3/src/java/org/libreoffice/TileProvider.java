@@ -10,4 +10,6 @@ public interface TileProvider {
     boolean isReady();
 
     SubTile createTile(int x, int y);
+
+    void changePart(int partIndex);
 }

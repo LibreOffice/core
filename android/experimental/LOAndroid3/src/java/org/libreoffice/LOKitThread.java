@@ -115,6 +115,13 @@ public class LOKitThread extends Thread {
         return true;
     }
 
+    private void changePart(int partIndex) throws InterruptedException {
+        mTileProvider.changePart(partIndex);
+        GeckoLayerClient layerClient = mApplication.getLayerClient();
+        layerClient.getTiles().clear();
+        LOKitShell.sendEvent(LOEvent.draw(new Rect()));
+    }
+
     private boolean initialize() {
         mApplication = LibreOfficeMainActivity.mAppContext;
         mTileProvider = new LOKitTileProvider(mApplication.getLayerController(), mInputFile);
@@ -143,6 +150,9 @@ public class LOKitThread extends Thread {
                 draw();
                 break;
             case LOEvent.SIZE_CHANGED:
+                break;
+            case LOEvent.CHANGE_PART:
+                changePart(event.getPartIndex());
                 break;
         }
     }

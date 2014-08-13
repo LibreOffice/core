@@ -8,6 +8,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -104,6 +106,7 @@ public class LibreOfficeMainActivity extends Activity {
 
         mDocumentPartViewListAdpater = new DocumentPartViewListAdpater(this, R.layout.document_part_list_layout, mDocumentPartView);
         mDrawerList.setAdapter(mDocumentPartViewListAdpater);
+        mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
 
         if (mLayerController == null) {
             mLayerController = new LayerController(this);
@@ -120,6 +123,15 @@ public class LibreOfficeMainActivity extends Activity {
         sLOKitThread.start();
 
         Log.w(LOGTAG, "UI almost up");
+    }
+
+    private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            DocumentPartView partView = mDocumentPartViewListAdpater.getItem(position);
+            LOKitShell.sendEvent(LOEvent.changePart(partView.getPartIndex()));
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
     }
 
     @Override

@@ -15,26 +15,13 @@ import java.nio.ByteBuffer;
 
 public class LOKitTileProvider implements TileProvider {
     private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
-
-    private final LayerController mLayerController;
-
     public static int TILE_SIZE = 256;
-    private final double mTileWidth;
-    private final double mTileHeight;
-
-
     public final Office mOffice;
     public final Document mDocument;
-
+    private final LayerController mLayerController;
+    private final double mTileWidth;
+    private final double mTileHeight;
     private double mDPI;
-
-    private double twipToPixel(double input, double dpi) {
-        return input / 1440.0 * dpi;
-    }
-
-    private double pixelToTwip(double input, double dpi) {
-        return (input / dpi) * 1440.0;
-    }
 
     public LOKitTileProvider(LayerController layerController, String input) {
         mLayerController = layerController;
@@ -61,7 +48,7 @@ public class LOKitTileProvider implements TileProvider {
                     partName = "Part " + (i + 1);
                 }
                 Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
-                final DocumentPartView partView = new DocumentPartView(partName);
+                final DocumentPartView partView = new DocumentPartView(i, partName);
                 LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
             }
 
@@ -74,8 +61,16 @@ public class LOKitTileProvider implements TileProvider {
         }
     }
 
+    private double twipToPixel(double input, double dpi) {
+        return input / 1440.0 * dpi;
+    }
+
+    private double pixelToTwip(double input, double dpi) {
+        return (input / dpi) * 1440.0;
+    }
+
     private boolean checkDocument() {
-        if(mDocument == null || !mOffice.getError().isEmpty()) {
+        if (mDocument == null || !mOffice.getError().isEmpty()) {
             Log.e(LOGTAG, "Error at loading: " + mOffice.getError());
             return false;
         }
@@ -108,7 +103,7 @@ public class LOKitTileProvider implements TileProvider {
         ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
         Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
 
-        mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) pixelToTwip(x, mDPI), (int) pixelToTwip(y, mDPI), (int)mTileWidth, (int)mTileHeight);
+        mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) pixelToTwip(x, mDPI), (int) pixelToTwip(y, mDPI), (int) mTileWidth, (int) mTileHeight);
 
         bitmap.copyPixelsFromBuffer(buffer);
 
@@ -116,5 +111,10 @@ public class LOKitTileProvider implements TileProvider {
         SubTile tile = new SubTile(image, x, y);
         tile.beginTransaction();
         return tile;
+    }
+
+    @Override
+    public void changePart(int partIndex) {
+        mDocument.setPart(partIndex);
     }
 }
