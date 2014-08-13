@@ -59,7 +59,7 @@ public class Assert
         catch ( NoSuchMethodException e )
         {
             StringBuilder message = new StringBuilder();
-            message.append( "no such method: " ).append( objectClass.getName() ).append( "." ).append( i_methodName ).append( "( " );
+            message.append( "no such method: " ).append( objectClass.getName() ).append( '.' ).append( i_methodName ).append( "( " );
             for ( int i=0; i<i_argClasses.length; ++i )
             {
                 message.append( i_argClasses[i].getName() );

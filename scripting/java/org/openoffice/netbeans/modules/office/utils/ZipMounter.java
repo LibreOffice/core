@@ -34,13 +34,9 @@ public class ZipMounter
     private ZipMounter() {
     }
 
-    public static ZipMounter getZipMounter() {
-        if (mounter == null) {
-            synchronized(ZipMounter.class) {
-                if (mounter == null)
-                    mounter = new ZipMounter();
-            }
-        }
+    public static synchronized ZipMounter getZipMounter() {
+        if (mounter == null)
+            mounter = new ZipMounter();
         return mounter;
     }
 

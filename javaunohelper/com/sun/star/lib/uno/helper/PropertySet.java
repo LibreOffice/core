@@ -358,16 +358,10 @@ XMultiPropertySet
         }
     }
     //XPropertySet ----------------------------------------------------
-    public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
+    public synchronized com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
     {
         if (propertySetInfo == null)
-        {
-            synchronized (this)
-            {
-                if (propertySetInfo == null)
-                    propertySetInfo= new PropertySetInfo();
-            }
-        }
+            propertySetInfo= new PropertySetInfo();
         return propertySetInfo;
     }
     //XPropertySet ----------------------------------------------------

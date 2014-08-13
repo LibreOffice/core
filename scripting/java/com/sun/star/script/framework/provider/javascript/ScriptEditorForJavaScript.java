@@ -82,18 +82,12 @@ public class ScriptEditorForJavaScript implements ScriptEditor
     /**
      *  Returns the global ScriptEditorForJavaScript instance.
      */
-    public static ScriptEditorForJavaScript getEditor()
+    public static synchronized ScriptEditorForJavaScript getEditor()
     {
         if (theScriptEditorForJavaScript == null)
         {
-            synchronized(ScriptEditorForJavaScript.class)
-            {
-                if (theScriptEditorForJavaScript == null)
-                {
-                    theScriptEditorForJavaScript =
-                        new ScriptEditorForJavaScript();
-                }
-            }
+            theScriptEditorForJavaScript =
+                new ScriptEditorForJavaScript();
         }
         return theScriptEditorForJavaScript;
     }

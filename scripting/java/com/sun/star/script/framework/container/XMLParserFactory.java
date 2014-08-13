@@ -36,13 +36,9 @@ public class XMLParserFactory {
 
     private XMLParserFactory() {}
 
-    public static XMLParser getParser() {
-        if (parser == null) {
-            synchronized (XMLParserFactory.class) {
-                if (parser == null)
-                    parser = new DefaultParser();
-            }
-        }
+    public static synchronized XMLParser getParser() {
+        if (parser == null)
+            parser = new DefaultParser();
         return parser;
     }
 

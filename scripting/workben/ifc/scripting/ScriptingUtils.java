@@ -34,13 +34,9 @@ public class ScriptingUtils {
     private ScriptingUtils() {
     }
 
-    public static ScriptingUtils getDefault() {
-        if (utils == null) {
-            synchronized (ScriptingUtils.class) {
-                if (utils == null)
-                    utils = new ScriptingUtils();
-            }
-        }
+    public static synchronized ScriptingUtils getDefault() {
+        if (utils == null)
+            utils = new ScriptingUtils();
         return utils;
     }
 

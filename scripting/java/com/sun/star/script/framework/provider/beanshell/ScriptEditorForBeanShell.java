@@ -94,18 +94,12 @@ public class ScriptEditorForBeanShell
     /**
      *  Returns the global ScriptEditorForBeanShell instance.
      */
-    public static ScriptEditorForBeanShell getEditor()
+    public static synchronized ScriptEditorForBeanShell getEditor()
     {
         if (theScriptEditorForBeanShell == null)
         {
-            synchronized(ScriptEditorForBeanShell.class)
-            {
-                if (theScriptEditorForBeanShell == null)
-                {
-                    theScriptEditorForBeanShell =
-                        new ScriptEditorForBeanShell();
-                }
-            }
+            theScriptEditorForBeanShell =
+                new ScriptEditorForBeanShell();
         }
         return theScriptEditorForBeanShell;
     }

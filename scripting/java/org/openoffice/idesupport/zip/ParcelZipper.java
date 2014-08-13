@@ -39,13 +39,9 @@ public class ParcelZipper
     private ParcelZipper() {
     }
 
-    public static ParcelZipper getParcelZipper() {
-        if (zipper == null) {
-            synchronized(ParcelZipper.class) {
-                if (zipper == null)
-                    zipper = new ParcelZipper();
-            }
-        }
+    public static synchronized ParcelZipper getParcelZipper() {
+        if (zipper == null)
+            zipper = new ParcelZipper();
         return zipper;
     }
 

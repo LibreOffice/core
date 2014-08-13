@@ -71,9 +71,9 @@ class BookmarkHashes {
                 XTextContent.class,
                 xBookmark);
             buffer.append(sBookmarkname);
-            buffer.append(":");
+            buffer.append(':');
             buffer.append(xBookmarkAsContent.getAnchor().getString());
-            buffer.append(";");
+            buffer.append(';');
         }
         java.security.MessageDigest sha1 = java.security.MessageDigest.getInstance("SHA-1");
         sha1.reset();

@@ -41,12 +41,9 @@ public class ManifestParser implements XMLParser {
     private ManifestParser() {
     }
 
-    public static ManifestParser getManifestParser() {
+    public static synchronized ManifestParser getManifestParser() {
         if (parser == null) {
-            synchronized(ManifestParser.class) {
-                if (parser == null)
-                    parser = new ManifestParser();
-            }
+            parser = new ManifestParser();
         }
         return parser;
     }

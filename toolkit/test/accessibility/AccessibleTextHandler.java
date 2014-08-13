@@ -249,11 +249,11 @@ class AccessibleTextHandler extends NodeHandler
         StringBuffer aChars = new StringBuffer();
         try
         {
-            aChars.append( "[" );
+            aChars.append( '[' );
             for( int i = 0; i < nChars; i++)
             {
                 aChars.append( xText.getCharacter(i) );
-                aChars.append( "," );
+                aChars.append( ',' );
             }
             if( nChars > 0)
             {
@@ -262,7 +262,7 @@ class AccessibleTextHandler extends NodeHandler
                 else
                     aChars.append( "..." );
             }
-            aChars.append( "]" );
+            aChars.append( ']' );
         }
         catch( IndexOutOfBoundsException e )
         {
