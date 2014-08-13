@@ -810,52 +810,57 @@ comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaultsPrope
 typedef ::boost::unordered_map< OUString, sal_uInt32, OUStringHash > UHashMapImpl;
 
 namespace {
-  static const UHashMapImpl &GetUHashImpl()
-  {
-      static UHashMapImpl aImpl(63);
-      static bool bInited = false;
-      if (!bInited) {
-          const struct { const char *name; sal_Int32 length; sal_uInt32 id; } aInit[] = {
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.RectangleShape"),      OBJ_RECT },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.EllipseShape"),            OBJ_CIRC },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape"),            OBJ_UNO  },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ConnectorShape"),      OBJ_EDGE },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MeasureShape"),            OBJ_MEASURE },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.LineShape"),           OBJ_LINE },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonShape"),        OBJ_POLY },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLineShape"),       OBJ_PLIN },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenBezierShape"),     OBJ_PATHLINE },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedBezierShape"),   OBJ_PATHFILL },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenFreeHandShape"),   OBJ_FREELINE },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedFreeHandShape"), OBJ_FREEFILL },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonPathShape"),    OBJ_PATHPOLY },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLinePathShape"),   OBJ_PATHPLIN },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape"),  OBJ_GRAF },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape"),          OBJ_GRUP },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TextShape"),           OBJ_TEXT },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape"),           OBJ_OLE2 },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PageShape"),           OBJ_PAGE },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CaptionShape"),            OBJ_CAPTION },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.FrameShape"),          OBJ_FRAME },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape"),         OBJ_OLE2_PLUGIN },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape"),         OBJ_OLE2_APPLET },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CustomShape"),         OBJ_CUSTOMSHAPE },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape"),          OBJ_MEDIA },
 
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"),  E3D_POLYSCENE_ID  | E3D_INVENTOR_FLAG },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject"),   E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSphereObject"), E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject"),  E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"),    E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"),    E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG },
-              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenGLObject"),        OBJ_OPENGL },
-          };
-          for (sal_uInt32 i = 0; i < sizeof(aInit)/sizeof(aInit[0]); i++)
-              aImpl[OUString( aInit[i].name, aInit[i].length, RTL_TEXTENCODING_ASCII_US ) ] = aInit[i].id;
-          bInited = true;
-        }
-      return aImpl;
-  }
+const UHashMapImpl& GetUHashImpl()
+{
+    static UHashMapImpl aImpl(63);
+    static bool bInited = false;
+    if (!bInited)
+    {
+        const struct { const char *name; sal_Int32 length; sal_uInt32 id; } aInit[] = {
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.RectangleShape"),       OBJ_RECT },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.EllipseShape"),         OBJ_CIRC },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape"),         OBJ_UNO  },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ConnectorShape"),       OBJ_EDGE },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MeasureShape"),         OBJ_MEASURE },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.LineShape"),            OBJ_LINE },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonShape"),     OBJ_POLY },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLineShape"),        OBJ_PLIN },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenBezierShape"),      OBJ_PATHLINE },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedBezierShape"),    OBJ_PATHFILL },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenFreeHandShape"),    OBJ_FREELINE },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedFreeHandShape"),  OBJ_FREEFILL },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonPathShape"), OBJ_PATHPOLY },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLinePathShape"),    OBJ_PATHPLIN },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape"),   OBJ_GRAF },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape"),           OBJ_GRUP },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TextShape"),            OBJ_TEXT },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape"),            OBJ_OLE2 },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PageShape"),            OBJ_PAGE },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CaptionShape"),         OBJ_CAPTION },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.FrameShape"),           OBJ_FRAME },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape"),          OBJ_OLE2_PLUGIN },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape"),          OBJ_OLE2_APPLET },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CustomShape"),          OBJ_CUSTOMSHAPE },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape"),           OBJ_MEDIA },
+
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"),   E3D_POLYSCENE_ID  | E3D_INVENTOR_FLAG },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject"),    E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSphereObject"),  E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject"),   E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"), E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"), E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG },
+            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenGLObject"),         OBJ_OPENGL },
+        };
+
+        for (sal_uInt32 i = 0; i < sizeof(aInit)/sizeof(aInit[0]); i++)
+            aImpl[OUString( aInit[i].name, aInit[i].length, RTL_TEXTENCODING_ASCII_US ) ] = aInit[i].id;
+        bInited = true;
+    }
+
+    return aImpl;
+}
+
 }
 
 
