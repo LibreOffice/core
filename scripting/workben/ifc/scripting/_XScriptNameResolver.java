@@ -112,10 +112,7 @@ public class _XScriptNameResolver extends MultiMethodTest {
         }
 
         log.println("expected: " + expected + ", output: " + output);
-        if (output.equals(expected))
-            return true;
-        else
-            return false;
+        return (output.equals(expected));
     }
 
     private int getStorageId(String location) {

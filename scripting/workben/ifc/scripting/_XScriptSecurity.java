@@ -181,14 +181,7 @@ public class _XScriptSecurity extends MultiMethodTest {
                     expectedPath = uri.substring(0,  uri.lastIndexOf('/'));
                 }
                 log.println("pathlist: expected: " + expectedPath + ", output: " + setPath);
-                if( setPath.equals( expectedPath ) )
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return setPath.equals( expectedPath );
             }
             return true;
         }

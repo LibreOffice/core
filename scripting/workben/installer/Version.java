@@ -314,11 +314,7 @@ class MyTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        if (col == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (col == 0);
     }
 
     @Override

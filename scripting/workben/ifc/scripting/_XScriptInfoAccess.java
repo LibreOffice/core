@@ -86,10 +86,7 @@ public class _XScriptInfoAccess extends MultiMethodTest {
             }
 
         log.println("expected: " + expected + ", output: " + output);
-        if (output.equals(expected))
-            return true;
-        else
-            return false;
+        return (output.equals(expected));
     }
 
     public void _getImplementations() {
@@ -143,10 +140,7 @@ public class _XScriptInfoAccess extends MultiMethodTest {
         }
 
         log.println("expected: " + expected + ", output: " + output);
-        if (output.equals(expected))
-            return true;
-        else
-            return false;
+        return (output.equals(expected));
     }
 
     public void _getAllImplementations() {
@@ -196,9 +190,6 @@ public class _XScriptInfoAccess extends MultiMethodTest {
         }
 
         log.println("expected: " + expected + ", output: " + output);
-        if (output.equals(expected))
-            return true;
-        else
-            return false;
+        return (output.equals(expected));
     }
 }

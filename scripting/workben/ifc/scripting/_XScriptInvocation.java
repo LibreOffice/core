@@ -133,10 +133,7 @@ public class _XScriptInvocation extends MultiMethodTest {
             ctx.dispose();
 
         log.println("expected: " + expected + ", output: " + output);
-        if (output.equals(expected))
-            return true;
-        else
-            return false;
+        return (output.equals(expected));
     }
 
     private int getStorageId(String location) {

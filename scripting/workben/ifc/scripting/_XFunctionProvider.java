@@ -77,9 +77,6 @@ public class _XFunctionProvider extends MultiMethodTest {
             output = "XFunction.class";
 
         log.println("expected: " + expected + ", output: " + output);
-        if (output.equals(expected))
-            return true;
-        else
-            return false;
+        return (output.equals(expected));
     }
 }

@@ -66,10 +66,7 @@ public class NagDialog {
     public boolean show() {
         TopManager.getDefault().notify(descriptor);
 
-        if (descriptor.getValue() == NotifyDescriptor.OK_OPTION)
-            return true;
-        else
-            return false;
+        return (descriptor.getValue() == NotifyDescriptor.OK_OPTION);
     }
 
     public boolean getState() {

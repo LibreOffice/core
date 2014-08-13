@@ -174,9 +174,6 @@ public class ParcelSupport implements ParcelCookie
             message, NotifyDescriptor.OK_CANCEL_OPTION);
         TopManager.getDefault().notify(d);
 
-        if (d.getValue() == NotifyDescriptor.CANCEL_OPTION)
-            return false;
-        else
-            return true;
+        return (d.getValue() != NotifyDescriptor.CANCEL_OPTION);
     }
 }

@@ -182,10 +182,7 @@ public class ScriptPanel extends JPanel {
 
         @Override
         public boolean isCellEditable(int row, int col) {
-            if (col == 0)
-                return false;
-            else
-                return true;
+            return (col != 0);
         }
 
         @Override

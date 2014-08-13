@@ -244,15 +244,8 @@ public class ParameterHelper
         String sOfficeViewable = (String)m_aCurrentParams.get(PropertyName.OFFICE_VIEWABLE);
         if (sOfficeViewable != null)
         {
-            if (sOfficeViewable.toLowerCase().equals("yes") ||
-                sOfficeViewable.toLowerCase().equals("true"))
-            {
-                return false; // setViewable();
-            }
-            else
-            {
-                return true; // setHidden();
-            }
+            return !(sOfficeViewable.toLowerCase().equals("yes") ||
+                     sOfficeViewable.toLowerCase().equals("true"));
         }
         return true; /* default: hidden */
     }
