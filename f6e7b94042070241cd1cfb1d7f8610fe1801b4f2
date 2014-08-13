@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_b53a40e6",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4032,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-08-13T22:13:43Z",
+      "side": 1,
+      "message": "by the way the \"break\" should go inside the \"if\", since this will check only the first entry in aGrabBag; fixed in commit d5642fe00cfd23d1470fa2062a93b30a612bbadd",
+      "revId": "f6e7b94042070241cd1cfb1d7f8610fe1801b4f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
