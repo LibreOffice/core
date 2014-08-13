@@ -38,7 +38,6 @@ $(eval $(call gb_Jar_add_sourcefiles,nlpsolver,\
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/controls/BaseControl \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/controls/ProgressBar \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/controls/Button \
-    nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/controls/TextAlign \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/controls/LabeledControl \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/controls/Label \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/ModalState \
