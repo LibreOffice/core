@@ -1917,6 +1917,41 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
 }
 
+void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
+{
+    if (pSdrObj)
+    {
+        uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
+        if( xShape.is() )
+        {
+            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+            if( xPropSet.is() )
+            {
+                xPropSetInfo = xPropSet->getPropertySetInfo();
+                uno::Sequence< beans::PropertyValue > aGrabBag;
+                if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+                {
+                    xPropSet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+                }
+                else if(xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+                {
+                    xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                }
+
+                for (sal_Int32 nProp=0; nProp < aGrabBag.getLength(); ++nProp)
+                {
+                    if ("SdtEndBefore" == aGrabBag[nProp].Name && m_bStartedCharSdt && !m_bEndCharSdt)
+                    {
+                        aGrabBag[nProp].Value >>= m_bEndCharSdt;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 void DocxAttributeOutput::WritePostponedGraphic()
 {
     for( std::list< PostponedGraphic >::const_iterator it = m_postponedGraphic->begin();
@@ -4011,32 +4046,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 {
     OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* pSdrObj  ) - some stuff still missing" );
 
-    if (pSdrObj)
-    {
-        uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
-        if( xShape.is() )
-        {
-            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-            uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-            if( xPropSet.is() )
-            {
-                xPropSetInfo = xPropSet->getPropertySetInfo();
-                if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
-                {
-                    uno::Sequence< beans::PropertyValue > aGrabBag;
-                    xPropSet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
-                    for (sal_Int32 nProp=0; nProp < aGrabBag.getLength(); ++nProp)
-                    {
-                        if ("SdtEndBefore" == aGrabBag[nProp].Name && m_bStartedCharSdt && !m_bEndCharSdt)
-                        {
-                            aGrabBag[nProp].Value >>= m_bEndCharSdt;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-    }
+    GetSdtEndBefore(pSdrObj);
 
     // detect mis-use of the API
     assert(pGrfNode || (pOLEFrmFmt && pOLENode));

@@ -810,6 +810,8 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
     if (!m_pImpl->isSupportedDMLShape(xShape))
         return;
 
+    m_pImpl->m_rExport.DocxAttrOutput().GetSdtEndBefore(pSdrObject);
+
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
     startDMLAnchorInline(pFrmFmt, aSize);
