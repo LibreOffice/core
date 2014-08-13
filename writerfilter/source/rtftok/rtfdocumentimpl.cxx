@@ -897,15 +897,15 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         sal_Int32 nWrap = -1;
         for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterSprms.begin(); i != m_aStates.top().aCharacterSprms.end(); ++i)
         {
-            if (i->first == NS_ooxml::LN_EG_WrapType_wrapNone)
+            if (i->first == NS_ooxml::LN_EG_WrapType_wrapNone || i->first == NS_ooxml::LN_EG_WrapType_wrapTight)
             {
-                nWrap = NS_ooxml::LN_EG_WrapType_wrapNone;
+                nWrap = i->first;
                 aAnchorSprms.set(i->first, i->second);
             }
         }
         RTFValue::Pointer_t pAnchorWrapValue(new RTFValue(aAnchorWrapAttributes));
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
-        if (aAnchorWrapAttributes.size() && nWrap != NS_ooxml::LN_EG_WrapType_wrapNone)
+        if (aAnchorWrapAttributes.size() && nWrap == -1)
             aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue);
 
         // See OOXMLFastContextHandler::positionOffset(), we can't just put offset values in an RTFValue.
@@ -3956,7 +3956,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         }
         RTFValue::Pointer_t pValue(new RTFValue(nValue));
-        m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_WrapSquare_wrapText, pValue);
+        RTFValue::Pointer_t pTight = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_EG_WrapType_wrapTight);
+        if (pTight)
+            pTight->getAttributes().set(NS_ooxml::LN_CT_WrapTight_wrapText, pValue);
+        else
+            m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_WrapSquare_wrapText, pValue);
     }
     break;
     case RTF_SHPWR:
@@ -3975,6 +3979,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case 4:
             m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_PARALLEL;
+            m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapTight, RTFValue::Pointer_t(new RTFValue()));
             break;
         case 5:
             m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_THROUGHT;
