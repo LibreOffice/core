@@ -341,6 +341,9 @@ DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
     int nInsideV = getXPathPosition(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblBorders", "insideV");
     CPPUNIT_ASSERT(nEnd < nInsideH);
     CPPUNIT_ASSERT(nInsideH < nInsideV);
+
+    // Make sure we write qFormat for well-known style names.
+    assertXPath(parseExport("word/styles.xml"), "//w:style[@w:styleId='Normal']/w:qFormat", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTablePosition, "table-position.docx")

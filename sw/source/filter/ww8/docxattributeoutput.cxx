@@ -5055,7 +5055,7 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
 }
 
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
-        sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId, bool bAutoUpdate )
+        sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId, bool bAutoUpdate )
 {
     bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
     OUString aLink, aRsid, aUiPriority;
@@ -5147,7 +5147,10 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
-    if (bQFormat)
+
+    // If the style has a dedicated STI number, then chances are high that Word
+    // will have qFormat enabled for it, so let's do the same.
+    if (bQFormat || nWwId != ww::stiUser)
         m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
     if (bLocked)
         m_pSerializer->singleElementNS(XML_w, XML_locked, FSEND);
