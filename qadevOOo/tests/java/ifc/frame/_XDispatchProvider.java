@@ -149,7 +149,6 @@ public class _XDispatchProvider extends MultiMethodTest {
         }
 
         tRes.tested("queryDispatches()", true);
-        return;
     }
 
 }

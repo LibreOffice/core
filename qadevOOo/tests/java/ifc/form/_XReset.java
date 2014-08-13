@@ -162,9 +162,6 @@ public class _XReset extends MultiMethodTest {
          shortWait();
          tRes.tested("removeResetListener()", !approveReset[0] && !resetted[0]);
          //removing the second listener here may avoid crashing the office
-
-         return;
-
     } // finished _removeResetListener()
 
     /**

@@ -118,8 +118,6 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
         exitButton.addActionListener(this);
 
         findDialog.execute();
-
-        return;
     }
 
     public void actionPerformed(ActionEvent e) {

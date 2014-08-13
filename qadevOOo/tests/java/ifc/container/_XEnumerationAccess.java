@@ -40,7 +40,6 @@ public class _XEnumerationAccess extends MultiMethodTest{
         log.println( "createing Enumeration" );
         XEnumeration oEnum = oObj.createEnumeration();
         tRes.tested( "createEnumeration()", oEnum != null );
-        return;
     } // end createEnumeration()
 }  // finish class _XEnumerationAccess
 

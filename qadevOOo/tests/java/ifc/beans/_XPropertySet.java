@@ -133,9 +133,6 @@ public class _XPropertySet extends MultiMethodTest {
             tRes.tested("getPropertySetInfo()", true );
             getPropsToTest(propertySetInfo);
         }
-
-        return;
-
     } // end of getPropertySetInfo()
 
     /**
@@ -194,9 +191,6 @@ public class _XPropertySet extends MultiMethodTest {
             }
             tRes.tested("addPropertyChangeListener()", !error);
         }
-
-        return;
-
     } // end of addPropertyChangeListener()
 
     /**
@@ -254,9 +248,6 @@ public class _XPropertySet extends MultiMethodTest {
             }
             tRes.tested("addVetoableChangeListener()",!error);
         }
-
-        return;
-
     } // end of addVetoableChangeListener()
 
 
@@ -322,9 +313,6 @@ public class _XPropertySet extends MultiMethodTest {
             }
             tRes.tested("setPropertyValue()",!error);
         } //endif
-
-        return;
-
     } // end of setPropertyValue()
 
     /**
@@ -390,8 +378,6 @@ public class _XPropertySet extends MultiMethodTest {
             }
             tRes.tested("getPropertyValue()", !error) ;
         }
-
-        return;
     }
 
     /**
@@ -464,9 +450,6 @@ public class _XPropertySet extends MultiMethodTest {
             }
             tRes.tested("removePropertyChangeListener()",!error);
         }
-
-        return;
-
     } // end of removePropertyChangeListener()
 
 
@@ -539,9 +522,6 @@ public class _XPropertySet extends MultiMethodTest {
             }
             tRes.tested("removeVetoableChangeListener()",!error);
         }
-
-        return;
-
     } // end of removeVetoableChangeListener()
 
     /**

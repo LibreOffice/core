@@ -211,7 +211,6 @@ public class _XPropertyContainer extends MultiMethodTest {
         ok &= test;
 
         tRes.tested("addProperty()", ok );
-        return;
     }
 
     /**
@@ -294,7 +293,6 @@ public class _XPropertyContainer extends MultiMethodTest {
         }
 
         tRes.tested("removeProperty()", ok );
-        return;
     }
 
 

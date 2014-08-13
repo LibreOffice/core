@@ -141,7 +141,6 @@ public class _XComponentLoader extends MultiMethodTest {
         }
 
         tRes.tested("loadComponentFromURL()", result);
-        return;
     }
 
 }

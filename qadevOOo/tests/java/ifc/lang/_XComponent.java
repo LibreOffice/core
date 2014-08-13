@@ -94,8 +94,6 @@ public class _XComponent extends MultiMethodTest {
 
         oObj.addEventListener( listener1 );
         oObj.addEventListener( listener2 );
-
-        return;
     } // finished _addEventListener()
 
     /**

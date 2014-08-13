@@ -207,8 +207,6 @@ public class _XValidatableFormComponent extends MultiMethodTest
             testPropsNames[i] = ST.nextToken();
 
         testPropsAmount = nr;
-
-        return;
     }
 
     protected class MyListener implements XFormComponentValidityListener

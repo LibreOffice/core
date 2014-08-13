@@ -956,7 +956,6 @@ public class DocumentLoader
                                                          Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
             outToLeft.setDuration(500);
             viewFlipper.setOutAnimation(outToLeft);
-            return;
         }
 
         private void setAnimationInFromLeft(){
@@ -969,7 +968,6 @@ public class DocumentLoader
                                                           Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
             outToRight.setDuration(500);
             viewFlipper.setOutAnimation(outToRight);
-            return;
         }
 
         private PageViewer fetch( int page ){

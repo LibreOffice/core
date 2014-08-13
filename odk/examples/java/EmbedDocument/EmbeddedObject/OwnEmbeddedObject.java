@@ -362,7 +362,6 @@ public final class OwnEmbeddedObject extends WeakBase
     public void reload(com.sun.star.beans.PropertyValue[] aMediaArgs, com.sun.star.beans.PropertyValue[] aObjectArgs) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.embed.WrongStateException, com.sun.star.io.IOException, com.sun.star.uno.Exception
     {
         // not implemented currently
-        return;
     }
 
     // com.sun.star.embed.XEmbedPersist:

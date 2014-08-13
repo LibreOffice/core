@@ -211,7 +211,6 @@ public class utils {
             //create the directory
             new_dir.mkdirs();
         }
-        return;
     }
 
 

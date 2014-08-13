@@ -241,8 +241,6 @@ public class _XNameContainer extends MultiMethodTest {
         }
 
         tRes.tested("removeByName()", result);
-
-        return;
     } // end removeByName()
 } //XNameContainer
 

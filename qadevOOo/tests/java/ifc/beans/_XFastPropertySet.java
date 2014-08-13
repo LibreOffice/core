@@ -150,7 +150,6 @@ public class _XFastPropertySet extends MultiMethodTest {
             e.printStackTrace(log);
             tRes.tested("getFastPropertyValue()",false);
         }
-        return;
     }
 
 

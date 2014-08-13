@@ -89,7 +89,6 @@ public class _XEnumeration extends MultiMethodTest {
             result &= locResult;
         }
         tRes.tested("hasMoreElements()", result);
-        return;
     } // end hasMoreElements
 
     /**
@@ -119,9 +118,6 @@ public class _XEnumeration extends MultiMethodTest {
         }
 
         tRes.tested("nextElement()", result);
-
-        return;
-
     } // end NextElement
 
 } //end XEnumeration

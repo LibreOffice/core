@@ -44,7 +44,6 @@ public class _XNameAccess extends MultiMethodTest {
 
         result = (Names != null);
         tRes.tested("getElementNames()", result);
-        return;
     } // end getElementNames()
 
     /**
@@ -86,8 +85,6 @@ public class _XNameAccess extends MultiMethodTest {
     result &= loc_result;
 
     tRes.tested("hasByName()", result);
-
-        return;
     } // end hasByName()
 
 
@@ -145,9 +142,6 @@ public class _XNameAccess extends MultiMethodTest {
 
         result &= loc_result;
         tRes.tested("getByName()", result);
-
-        return;
-
     } // end getByName()
 } /// finished class _XNameAccess
 

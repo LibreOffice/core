@@ -58,7 +58,6 @@ public class _XReplaceDescriptor extends MultiMethodTest {
         oObj.setReplaceString("XReplaceDescriptor");
         String cmpReplaceStr = oObj.getReplaceString();
         tRes.tested("setReplaceString()", !(cmpReplaceStr.equals(oldReplaceStr)));
-        return;
     }
 
 }  // finish class _XReplaceDescriptor

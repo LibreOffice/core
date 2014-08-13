@@ -132,7 +132,7 @@ public class SequenceOutputStreamUnitTest /* extends ComplexTestCase*/ {
             m_aTestHelper.Error ( "Exception: " + e );
             return /* false */;
         }
-        return /* true */;
+        // return /* true */;
     }
 
     private static XMultiServiceFactory getMSF()

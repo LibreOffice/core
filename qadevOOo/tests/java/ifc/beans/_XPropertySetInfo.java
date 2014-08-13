@@ -49,7 +49,6 @@ public class _XPropertySetInfo extends MultiMethodTest {
         Property[] properties = oObj.getProperties();
         IsThere = properties[0];
         tRes.tested("getProperties()", ( properties != null ));
-        return;
     }
 
     /**
@@ -88,7 +87,6 @@ public class _XPropertySetInfo extends MultiMethodTest {
             result = true;
         }
         tRes.tested("getPropertyByName()", result);
-        return;
     }
 
     /**

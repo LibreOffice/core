@@ -334,8 +334,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
         testPropsNames = new String[nr];
         for (int i=0; i<nr; i++) testPropsNames[i] = ST.nextToken();
         testPropsAmount = nr;
-        return;
-
     }
 
     /**

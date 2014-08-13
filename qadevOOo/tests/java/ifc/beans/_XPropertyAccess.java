@@ -89,7 +89,6 @@ public class _XPropertyAccess extends MultiMethodTest {
         }
 
         tRes.tested("getPropertyValues()", ok );
-        return;
     }
 
     /**
@@ -219,8 +218,6 @@ public class _XPropertyAccess extends MultiMethodTest {
         }
 
         tRes.tested("setPropertyValues()", ok);
-        return;
-
     }
 
 }    /// finish class XPropertyAccess

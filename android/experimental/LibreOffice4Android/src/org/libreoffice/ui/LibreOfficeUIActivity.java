@@ -387,7 +387,6 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
 				break;
 		}
 		this.onResume();
-		return;
     }
     
     public void readPreferences(){
