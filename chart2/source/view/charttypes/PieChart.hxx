@@ -30,7 +30,8 @@ class PiePositionHelper;
 
 class PieChart : public VSeriesPlotter
 {
-    // public methods
+    struct ShapeParam;
+
 public:
     PieChart( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >& xChartTypeModel
@@ -63,22 +64,16 @@ private: //methods
     //no default constructor
     PieChart();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createDataPoint(  const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShapes >& xTarget
-                        , const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::beans::XPropertySet >& xObjectProperties
-                        , double fUnitCircleStartAngleDegree, double fWidthAngleDegree
-                        , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
-                        , double fLogicZ, double fDepth, double fExplodePercentage
-                        , tPropertyNameValueMap* pOverWritePropertiesMap );
+    css::uno::Reference<css::drawing::XShape>
+        createDataPoint(
+            const css::uno::Reference<css::drawing::XShapes>& xTarget,
+            const css::uno::Reference<css::beans::XPropertySet>& xObjectProperties,
+            tPropertyNameValueMap* pOverWritePropertiesMap,
+            const ShapeParam& rParam );
 
     void createTextLabelShape(
         const css::uno::Reference<css::drawing::XShapes>& xTextTarget,
-        VDataSeries& rSeries, sal_Int32 nPointIndex,
-        double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
-        double fUnitCircleOuterRadius, double fUnitCircleInnerRadius, double fExplodePercentage,
-        double fLogicYSum, double fLogicZ );
+        VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam );
 
     double              getMaxOffset();
     bool                detectLabelOverlapsAndMove(const ::com::sun::star::awt::Size& rPageSize);//returns true when there might be more to do

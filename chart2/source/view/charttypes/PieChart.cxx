@@ -34,10 +34,32 @@
 
 #include <boost/scoped_ptr.hpp>
 
-namespace chart
-{
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+
+namespace chart {
+
+struct PieChart::ShapeParam
+{
+    double mfUnitCircleStartAngleDegree;
+    double mfUnitCircleWidthAngleDegree;
+    double mfUnitCircleOuterRadius;
+    double mfUnitCircleInnerRadius;
+    double mfExplodePercentage;
+    double mfLogicYSum;
+    double mfLogicZ;
+    double mfDepth;
+
+    ShapeParam() :
+        mfUnitCircleStartAngleDegree(0.0),
+        mfUnitCircleWidthAngleDegree(0.0),
+        mfUnitCircleOuterRadius(0.0),
+        mfUnitCircleInnerRadius(0.0),
+        mfExplodePercentage(0.0),
+        mfLogicYSum(0.0),
+        mfLogicZ(0.0),
+        mfDepth(0.0) {}
+};
 
 class PiePositionHelper : public PolarPlottingPositionHelper
 {
@@ -163,21 +185,19 @@ bool PieChart::shouldSnapRectToUsedArea()
 }
 
 uno::Reference< drawing::XShape > PieChart::createDataPoint(
-          const uno::Reference< drawing::XShapes >& xTarget
-        , const uno::Reference< beans::XPropertySet >& xObjectProperties
-        , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
-        , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
-        , double fLogicZ, double fDepth, double fExplodePercentage
-        , tPropertyNameValueMap* pOverwritePropertiesMap )
+    const uno::Reference<drawing::XShapes>& xTarget,
+    const uno::Reference<beans::XPropertySet>& xObjectProperties,
+    tPropertyNameValueMap* pOverwritePropertiesMap,
+    const ShapeParam& rParam )
 {
     //transform position:
     drawing::Direction3D aOffset;
-    if( !::rtl::math::approxEqual( fExplodePercentage, 0.0 ) )
+    if (!::rtl::math::approxEqual(rParam.mfExplodePercentage, 0.0))
     {
-        double fAngle  = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
-        double fRadius = (fUnitCircleOuterRadius-fUnitCircleInnerRadius)*fExplodePercentage;
-        drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene( 0, 0, fLogicZ );
-        drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, fRadius, fLogicZ );
+        double fAngle  = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree/2.0;
+        double fRadius = (rParam.mfUnitCircleOuterRadius-rParam.mfUnitCircleInnerRadius)*rParam.mfExplodePercentage;
+        drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
+        drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene(fAngle, fRadius, rParam.mfLogicZ);
         aOffset = aNewOrigin - aOrigin;
     }
 
@@ -186,16 +206,16 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
     if(m_nDimension==3)
     {
         xShape = m_pShapeFactory->createPieSegment( xTarget
-            , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
-            , fUnitCircleInnerRadius, fUnitCircleOuterRadius
+            , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
+            , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
             , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() )
-            , fDepth );
+            , rParam.mfDepth );
     }
     else
     {
         xShape = m_pShapeFactory->createPieSegment2D( xTarget
-            , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
-            , fUnitCircleInnerRadius, fUnitCircleOuterRadius
+            , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
+            , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
             , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() ) );
     }
     this->setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), pOverwritePropertiesMap );
@@ -204,19 +224,16 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
 
 void PieChart::createTextLabelShape(
     const uno::Reference<drawing::XShapes>& xTextTarget,
-    VDataSeries& rSeries, sal_Int32 nPointIndex,
-    double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
-    double fUnitCircleOuterRadius, double fUnitCircleInnerRadius, double fExplodePercentage,
-    double fLogicYSum, double fLogicZ )
+    VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam )
 {
     if (!rSeries.getDataPointLabelIfLabel(nPointIndex))
         return;
 
-    if( !::rtl::math::approxEqual( fExplodePercentage, 0.0 ) )
+    if (!rtl::math::approxEqual(rParam.mfExplodePercentage, 0.0))
     {
-        double fExplodeOffset = (fUnitCircleOuterRadius-fUnitCircleInnerRadius)*fExplodePercentage;
-        fUnitCircleInnerRadius += fExplodeOffset;
-        fUnitCircleOuterRadius += fExplodeOffset;
+        double fExplodeOffset = (rParam.mfUnitCircleOuterRadius-rParam.mfUnitCircleInnerRadius)*rParam.mfExplodePercentage;
+        rParam.mfUnitCircleInnerRadius += fExplodeOffset;
+        rParam.mfUnitCircleOuterRadius += fExplodeOffset;
     }
 
     sal_Int32 nLabelPlacement = rSeries.getLabelPlacement(
@@ -240,12 +257,12 @@ void PieChart::createTextLabelShape(
     PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
     awt::Point aScreenPosition2D(
         aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
-        , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
-        , fUnitCircleInnerRadius, fUnitCircleOuterRadius, fLogicZ+0.5, 0 ));
+        , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
+        , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius, rParam.mfLogicZ+0.5, 0 ));
 
     PieLabelInfo aPieLabelInfo;
     aPieLabelInfo.aFirstPosition = basegfx::B2IVector( aScreenPosition2D.X, aScreenPosition2D.Y );
-    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, fLogicZ+1.0 ) ) );
+    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, rParam.mfLogicZ+1.0 ) ) );
     aPieLabelInfo.aOrigin = basegfx::B2IVector( aOrigin.X, aOrigin.Y );
 
     //add a scaling independent Offset if requested
@@ -259,7 +276,7 @@ void PieChart::createTextLabelShape(
 
     double nVal = rSeries.getYValue(nPointIndex);
     aPieLabelInfo.xTextShape = createDataLabel(
-        xTextTarget, rSeries, nPointIndex, nVal, fLogicYSum, aScreenPosition2D, eAlignment);
+        xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum, aScreenPosition2D, eAlignment);
 
     uno::Reference< container::XChild > xChild( aPieLabelInfo.xTextShape, uno::UNO_QUERY );
     if( xChild.is() )
@@ -409,6 +426,8 @@ void PieChart::createShapes()
 
     for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); ++aXSlotIter, fSlotX+=1.0 )
     {
+        ShapeParam aParam;
+
         ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
         if( pSeriesList->size()<=0 )//there should be only one series in each x slot
             continue;
@@ -420,7 +439,6 @@ void PieChart::createShapes()
 
         m_pPosHelper->m_fAngleDegreeOffset = pSeries->getStartingAngle();
 
-        double fLogicYSum = 0.0;
         //iterate through all points to get the sum
         sal_Int32 nPointIndex=0;
         sal_Int32 nPointCount=pSeries->getTotalPointCount();
@@ -433,10 +451,12 @@ void PieChart::createShapes()
             }
             if( ::rtl::math::isNan(fY) )
                 continue;
-            fLogicYSum += fabs(fY);
+            aParam.mfLogicYSum += fabs(fY);
         }
-        if(fLogicYSum==0.0)
+
+        if (aParam.mfLogicYSum == 0.0)
             continue;
+
         double fLogicYForNextPoint = 0.0;
         //iterate through all points to create shapes
         for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
@@ -447,7 +467,7 @@ void PieChart::createShapes()
             if( !bIsVisible )
                 continue;
 
-            double fDepth  = this->getTransformedDepth() * (n3DRelativeHeight / 100.0);
+            aParam.mfDepth  = this->getTransformedDepth() * (n3DRelativeHeight / 100.0);
 
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
             //collect data point information (logic coordinates, style ):
@@ -464,14 +484,14 @@ void PieChart::createShapes()
             //iterate through all subsystems to create partial points
             {
                 //logic values on angle axis:
-                double fLogicStartAngleValue = fLogicYPos/fLogicYSum;
-                double fLogicEndAngleValue = (fLogicYPos+fLogicYValue)/fLogicYSum;
+                double fLogicStartAngleValue = fLogicYPos / aParam.mfLogicYSum;
+                double fLogicEndAngleValue = (fLogicYPos+fLogicYValue) / aParam.mfLogicYSum;
 
-                double fExplodePercentage=0.0;
+                aParam.mfExplodePercentage = 0.0;
                 bool bDoExplode = ( nExplodeableSlot == static_cast< ::std::vector< VDataSeriesGroup >::size_type >(fSlotX) );
                 if(bDoExplode) try
                 {
-                    xPointProperties->getPropertyValue( "Offset") >>= fExplodePercentage;
+                    xPointProperties->getPropertyValue( "Offset") >>= aParam.mfExplodePercentage;
                 }
                 catch( const uno::Exception& e )
                 {
@@ -479,10 +499,10 @@ void PieChart::createShapes()
                 }
 
                 //transforme to unit circle:
-                double fUnitCircleWidthAngleDegree = m_pPosHelper->getWidthAngleDegree( fLogicStartAngleValue, fLogicEndAngleValue );
-                double fUnitCircleStartAngleDegree = m_pPosHelper->transformToAngleDegree( fLogicStartAngleValue );
-                double fUnitCircleInnerRadius = m_pPosHelper->transformToRadius( fLogicInnerRadius );
-                double fUnitCircleOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
+                aParam.mfUnitCircleWidthAngleDegree = m_pPosHelper->getWidthAngleDegree( fLogicStartAngleValue, fLogicEndAngleValue );
+                aParam.mfUnitCircleStartAngleDegree = m_pPosHelper->transformToAngleDegree( fLogicStartAngleValue );
+                aParam.mfUnitCircleInnerRadius = m_pPosHelper->transformToRadius( fLogicInnerRadius );
+                aParam.mfUnitCircleOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
 
                 //point color:
                 boost::scoped_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(NULL);
@@ -496,12 +516,10 @@ void PieChart::createShapes()
                 }
 
                 //create data point
-                double fLogicZ = -1.0; // For 3D pie chart label position
-                uno::Reference<drawing::XShape> xPointShape(
-                    createDataPoint( xSeriesGroupShape_Shapes, xPointProperties
-                                    , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
-                                    , fUnitCircleInnerRadius, fUnitCircleOuterRadius
-                                    , fLogicZ, fDepth, fExplodePercentage, apOverwritePropertiesMap.get() ) );
+                aParam.mfLogicZ = -1.0; // For 3D pie chart label position
+                uno::Reference<drawing::XShape> xPointShape =
+                    createDataPoint(
+                        xSeriesGroupShape_Shapes, xPointProperties, apOverwritePropertiesMap.get(), aParam);
 
                 if(bHasFillColorMapping)
                 {
@@ -514,11 +532,7 @@ void PieChart::createShapes()
                 }
 
                 //create label
-                createTextLabelShape(
-                    xTextTarget, *pSeries, nPointIndex,
-                    fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree,
-                    fUnitCircleOuterRadius, fUnitCircleInnerRadius,
-                    fExplodePercentage, fLogicYSum, fLogicZ);
+                createTextLabelShape(xTextTarget, *pSeries, nPointIndex, aParam);
 
                 if(!bDoExplode)
                 {
@@ -529,12 +543,12 @@ void PieChart::createShapes()
                 {
                     //enable dragging of outer segments
 
-                    double fAngle  = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
-                    double fMaxDeltaRadius = fUnitCircleOuterRadius-fUnitCircleInnerRadius;
-                    drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, fUnitCircleOuterRadius, fLogicZ );
-                    drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, fUnitCircleOuterRadius + fMaxDeltaRadius, fLogicZ );
+                    double fAngle  = aParam.mfUnitCircleStartAngleDegree + aParam.mfUnitCircleWidthAngleDegree/2.0;
+                    double fMaxDeltaRadius = aParam.mfUnitCircleOuterRadius-aParam.mfUnitCircleInnerRadius;
+                    drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius, aParam.mfLogicZ );
+                    drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius + fMaxDeltaRadius, aParam.mfLogicZ );
 
-                    sal_Int32 nOffsetPercent( static_cast<sal_Int32>(fExplodePercentage * 100.0) );
+                    sal_Int32 nOffsetPercent( static_cast<sal_Int32>(aParam.mfExplodePercentage * 100.0) );
 
                     awt::Point aMinimumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
                         aOrigin, m_xLogicTarget, m_pShapeFactory, m_nDimension ) );
