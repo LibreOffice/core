@@ -4413,7 +4413,7 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
                 {
                     if(aCharGrabBag[j].Name == "SdtEndBefore")
                     {
-                        bool bIsSdtEndBefore;
+                        bool bIsSdtEndBefore = false;
                         aCharGrabBag[j].Value >>= bIsSdtEndBefore;
                         if (bIsSdtEndBefore)
                         {
