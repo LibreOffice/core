@@ -10487,12 +10487,7 @@ AC_MSG_CHECKING([whether to build the OpenGL Transitions component])
 ENABLE_OPENGL=
 
 if test -z "$enable_opengl"; then
-    if test $_os = WINNT; then
-        # By default disable the OpenGL transitions for Windows (the code compiles but works very
-        # badly and crashes). In other words, use --enable-opengl only if you plan to hack on that
-        # code for Windows.
-        enable_opengl=yes
-    elif test $_os = iOS; then
+    if test $_os = iOS; then
         # As such with some suitable minor tweaks the Mac OpenGL transitions code would presumably
         # build fine for iOS, too, but let's leave that for later
         enable_opengl=no
