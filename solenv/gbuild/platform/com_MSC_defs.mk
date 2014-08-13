@@ -70,8 +70,6 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4127: conditional expression is constant
 
-# C4189: 'identifier' : local variable is initialized but not referenced
-
 # C4201: nonstandard extension used : nameless struct/union
 
 # C4242: 'identifier' : conversion from 'type1' to 'type2', possible
@@ -79,9 +77,6 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4244: nonstandard extension used : formal parameter 'identifier'
 #   was previously defined as a type
-
-# C4245: 'conversion' : conversion from 'type1' to 'type2',
-#   signed/unsigned mismatch
 
 # C4250: 'class1' : inherits 'class2::member' via dominance
 
@@ -100,10 +95,6 @@ gb_AFLAGS := $(AFLAGS)
 #   initialized
 
 # C4355: 'this' : used in base member initializer list
-
-# C4373: '%$S': virtual function overrides '%$pS', previous versions
-#   of the compiler did not override when parameters only differed by
-#   const/volatile qualifiers.
 
 # C4481: nonstandard extension used: override specifier 'override'
 # (MSVC 2010 warns about this, even though it's C++11 keyword)
@@ -140,10 +131,8 @@ gb_CFLAGS := \
 	-nologo \
 	-W4 \
 	-wd4127 \
-	-wd4189 \
 	-wd4242 \
 	-wd4244 \
-	-wd4245 \
 	-wd4251 \
 	-wd4355 \
 	-wd4505 \
@@ -164,17 +153,14 @@ gb_CXXFLAGS := \
 	-nologo \
 	-W4 \
 	-wd4127 \
-	-wd4189 \
 	-wd4201 \
 	-wd4244 \
-	-wd4245 \
 	-wd4250 \
 	-wd4251 \
 	-wd4275 \
 	-wd4290 \
 	-wd4351 \
 	-wd4355 \
-	-wd4373 \
 	-wd4481 \
 	-wd4505 \
 	-wd4512 \
