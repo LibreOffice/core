@@ -2188,11 +2188,26 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     }
 }
 
+DrawViewShell* SdXImpressDocument::GetViewShell()
+{
+    DrawViewShell* pViewSh = dynamic_cast<DrawViewShell*>(mpDocShell->GetViewShell());
+    if (!pViewSh)
+    {
+        SAL_WARN("sd", "DrawViewShell not available!");
+        return NULL;
+    }
+    return pViewSh;
+}
+
 void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
                             int nOutputWidth, int nOutputHeight,
                             int nTilePosX, int nTilePosY,
                             long nTileWidth, long nTileHeight )
 {
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return;
+
     // Scaling. Must convert from pixels to twips. We know
     // that VirtualDevices use a DPI of 96.
     // We specifically calculate these scales first as we're still
@@ -2221,26 +2236,27 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     rDevice.SetMapMode( aMapMode );
 
     rDevice.SetOutputSizePixel( Size(nOutputWidth, nOutputHeight) );
-    mpDoc->GetDocSh()->GetViewShell()->GetView()->CompleteRedraw(
-        &rDevice,
-        Region(
-            Rectangle( Point( nTilePosX, nTilePosY ),
-                       Size( nTileWidth, nTileHeight ) ) ) );
+
+    Point aPoint(nTilePosX, nTilePosY);
+    Size aSize(nTileWidth, nTileHeight);
+    Rectangle aRect(aPoint, aSize);
+
+    pViewSh->GetView()->CompleteRedraw(&rDevice, Region(aRect));
 }
 
 void SdXImpressDocument::setPart( int nPart )
 {
-    DrawViewShell* pViewSh = dynamic_cast< DrawViewShell* >( mpDoc->GetDocSh()->GetViewShell() );
-    if (pViewSh)
-    {
-        // TODO: have an API to allow selecting between PK_STANDARD (just slide)
-        // and PK_NOTES (which shows the combined slide above notes). There is alo
-        // a PK_HANDOUT -- that however just shows multiple empty pages (it's also
-        // only possible to select page 0 in this mode, I have no idea how you
-        // then actually select what is on the handout page, which defaults to
-        // a 4x4 grid of empty pages).
-        pViewSh->SwitchPage( nPart );
-    }
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return;
+
+    // TODO: have an API to allow selecting between PK_STANDARD (just slide)
+    // and PK_NOTES (which shows the combined slide above notes). There is alo
+    // a PK_HANDOUT -- that however just shows multiple empty pages (it's also
+    // only possible to select page 0 in this mode, I have no idea how you
+    // then actually select what is on the handout page, which defaults to
+    // a 4x4 grid of empty pages).
+    pViewSh->SwitchPage( nPart );
 }
 
 int SdXImpressDocument::getParts()
@@ -2252,29 +2268,31 @@ int SdXImpressDocument::getParts()
 
 int SdXImpressDocument::getPart()
 {
-    DrawViewShell* pViewSh = dynamic_cast< DrawViewShell* >( mpDoc->GetDocSh()->GetViewShell() );
-    if (pViewSh)
-    {
-        // curPageId seems to start at 1
-        return pViewSh->GetCurPageId() - 1;
-    }
-    return 0;
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return 0;
+
+    // curPageId seems to start at 1
+    return pViewSh->GetCurPageId() - 1;
 }
 
 OUString SdXImpressDocument::getPartName( int nPart )
 {
     SdPage* pPage = mpDoc->GetSdPage( nPart, PK_STANDARD );
-    assert( pPage );
+    if (!pPage)
+    {
+        SAL_WARN("sd", "DrawViewShell not available!");
+        return OUString();
+    }
+
     return pPage->GetName();
 }
 
 void SdXImpressDocument::setPartMode( LibreOfficeKitPartMode ePartMode )
 {
-    DrawViewShell* pViewSh = dynamic_cast< DrawViewShell* >( mpDoc->GetDocSh()->GetViewShell() );
+    DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
-    {
         return;
-    }
 
     PageKind aPageKind( PK_STANDARD );
     switch ( ePartMode )
@@ -2303,14 +2321,12 @@ void SdXImpressDocument::setPartMode( LibreOfficeKitPartMode ePartMode )
 
 Size SdXImpressDocument::getDocumentSize()
 {
-    DrawViewShell* pViewSh = dynamic_cast<DrawViewShell*>(mpDoc->GetDocSh()->GetViewShell());
+    DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
-    {
-        SAL_WARN("sd", "DrawViewShell not available!");
         return Size();
-    }
 
     SdrPageView* pCurPageView = pViewSh->GetView()->GetSdrPageView();
+
     Size aSize = pCurPageView->GetPageRect().GetSize();
     // Convert the size in 100th mm to TWIP
     // See paintTile above for further info.

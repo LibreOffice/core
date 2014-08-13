@@ -56,6 +56,7 @@ class SdPage;
 
 namespace sd {
 class DrawDocShell;
+class DrawViewShell;
 }
 
 extern OUString getPageApiName( SdPage* pPage );
@@ -123,6 +124,9 @@ private:
     OUString   maBuildId;
 
     void initializeDocument();
+
+    sd::DrawViewShell* GetViewShell();
+
 public:
     SdXImpressDocument( ::sd::DrawDocShell* pShell, bool bClipBoard = false ) throw();
     SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard = false ) throw();
