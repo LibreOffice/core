@@ -584,8 +584,6 @@ void SplashScreen::Paint( const Rectangle&)
     if(!_bVisible) return;
 
     //native drawing
-    bool bNativeOK = false;
-
     // in case of native controls we need to draw directly to the window
     if( _bNativeProgress && IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
     {
@@ -604,7 +602,7 @@ void SplashScreen::Paint( const Rectangle&)
               aDrawRect.Bottom() += (nProgressHeight - _barheight)/2;
         }
 
-        if( (bNativeOK = DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
+        if( (DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
                                             CTRL_STATE_ENABLED, aValue, _sProgressText )) )
         {
             return;
