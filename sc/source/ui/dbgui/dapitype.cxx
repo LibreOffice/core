@@ -22,7 +22,6 @@
 #include "dapitype.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
-#include "dapitype.hrc"
 
 using namespace com::sun::star;
 
@@ -96,33 +95,22 @@ IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, RadioButton*, pBtn )
 
 ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
                                 const uno::Sequence<OUString>& rServices ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPISERVICE ) ),
-
-    aFlFrame        ( this, ScResId( FL_FRAME ) ),
-    aFtService      ( this, ScResId( FT_SERVICE ) ),
-    aLbService      ( this, ScResId( LB_SERVICE ) ),
-    aFtSource       ( this, ScResId( FT_SOURCE ) ),
-    aEdSource       ( this, ScResId( ED_SOURCE ) ),
-    aFtName         ( this, ScResId( FT_NAME ) ),
-    aEdName         ( this, ScResId( ED_NAME ) ),
-    aFtUser         ( this, ScResId( FT_USER ) ),
-    aEdUser         ( this, ScResId( ED_USER ) ),
-    aFtPasswd       ( this, ScResId( FT_PASSWD ) ),
-    aEdPasswd       ( this, ScResId( ED_PASSWD ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) )
+    ModalDialog     ( pParent, "DapiserviceDialog", "modules/scalc/ui/dapiservicedialog.ui" )
 {
+    get(m_pLbService, "service");
+    get(m_pEdSource, "source");
+    get(m_pEdName, "name");
+    get(m_pEdUser, "user");
+    get(m_pEdPasswd, "password");
+
     long nCount = rServices.getLength();
     const OUString* pArray = rServices.getConstArray();
     for (long i=0; i<nCount; i++)
     {
         OUString aName = pArray[i];
-        aLbService.InsertEntry( aName );
+        m_pLbService->InsertEntry( aName );
     }
-    aLbService.SelectEntryPos( 0 );
-
-    FreeResource();
+    m_pLbService->SelectEntryPos( 0 );
 }
 
 ScDataPilotServiceDlg::~ScDataPilotServiceDlg()
@@ -131,27 +119,27 @@ ScDataPilotServiceDlg::~ScDataPilotServiceDlg()
 
 OUString ScDataPilotServiceDlg::GetServiceName() const
 {
-    return aLbService.GetSelectEntry();
+    return m_pLbService->GetSelectEntry();
 }
 
 OUString ScDataPilotServiceDlg::GetParSource() const
 {
-    return aEdSource.GetText();
+    return m_pEdSource->GetText();
 }
 
 OUString ScDataPilotServiceDlg::GetParName() const
 {
-    return aEdName.GetText();
+    return m_pEdName->GetText();
 }
 
 OUString ScDataPilotServiceDlg::GetParUser() const
 {
-    return aEdUser.GetText();
+    return m_pEdUser->GetText();
 }
 
 OUString ScDataPilotServiceDlg::GetParPass() const
 {
-    return aEdPasswd.GetText();
+    return m_pEdPasswd->GetText();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
