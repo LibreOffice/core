@@ -81,8 +81,8 @@ public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
                     new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
             // get the first sheet name
-            XNamed m_xNamed = (XNamed) AnyConverter.toObject(new Type(XNamed.class),m_xSpreadSheet);
-            sSheetName = m_xNamed.getName();
+            XNamed xNamed = (XNamed) AnyConverter.toObject(new Type(XNamed.class),m_xSpreadSheet);
+            sSheetName = xNamed.getName();
 
             // get the cell
             System.out.println("Getting a cell from sheet") ;

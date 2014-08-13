@@ -310,15 +310,15 @@ public class IniFile implements Enumeration<String>
     public String getValue(String _sSection, String _sKey)
         {
             String sValue = "";
-            int m_nCurrentPosition = findKey(_sSection, _sKey);
-            if (m_nCurrentPosition == -1)
+            int nCurrentPosition = findKey(_sSection, _sKey);
+            if (nCurrentPosition == -1)
             {
                 // Section not found, therefore the value can't exist
                 return "";
             }
 
             // m_sOldKey = _sKey;
-            sValue = getValue(m_nCurrentPosition);
+            sValue = getValue(nCurrentPosition);
 
             return sValue;
         }

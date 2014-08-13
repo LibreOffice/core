@@ -473,14 +473,14 @@ public class CheckXComponentLoader
      * all possible exceptions and try to leave the office without any forgotten
      * but opened documents.
      */
-    private void loadURL(XComponentLoader m_xLoader, int nRequiredResult,
+    private void loadURL(XComponentLoader xLoader, int nRequiredResult,
                          String sURL, String sTarget, int nFlags,
                          PropertyValue[] lProps) {
         int nResult = RESULT_EMPTY_DOC;
         XComponent xDoc = null;
 
         try {
-            xDoc = m_xLoader.loadComponentFromURL(sURL, sTarget, nFlags,
+            xDoc = xLoader.loadComponentFromURL(sURL, sTarget, nFlags,
                                                      lProps);
 
             if (xDoc != null) {

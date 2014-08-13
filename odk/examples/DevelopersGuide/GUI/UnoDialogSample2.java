@@ -70,10 +70,10 @@ public class UnoDialogSample2 extends UnoDialogSample {
         try {
             m_oUnoObject = _oUnoObject;
             Object o = m_xMCF.createInstanceWithContext("com.sun.star.beans.Introspection", m_xContext);
-            XIntrospection m_xIntrospection = UnoRuntime.queryInterface(XIntrospection.class, o );
+            XIntrospection xIntrospection = UnoRuntime.queryInterface(XIntrospection.class, o );
             // the variable m_xIntrospectionAccess offers functionality to access all methods and properties
             // of a variable
-            m_xIntrospectionAccess = m_xIntrospection.inspect(_oUnoObject);
+            m_xIntrospectionAccess = xIntrospection.inspect(_oUnoObject);
         } catch (com.sun.star.uno.Exception ex) {
             ex.printStackTrace();
         }

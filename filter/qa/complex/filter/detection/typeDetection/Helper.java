@@ -238,12 +238,12 @@ public class Helper  {
         ArrayList<String> vReturn = new ArrayList<String>();
 
         ArrayList<String> placeHolders = new ArrayList<String>();
-        Iterator<String> m_params = m_param.keySet().iterator();
+        Iterator<String> paramsIter = m_param.keySet().iterator();
         String placeHolder = (String)m_param.get("placeHolder");
 
         // get all place holders from typeDetection.csv
-        while (m_params.hasNext()){
-                String holderKey = m_params.next();
+        while (paramsIter.hasNext()){
+                String holderKey = paramsIter.next();
                 if (holderKey.startsWith(placeHolder)){
                     placeHolders.add(holderKey);
                 }

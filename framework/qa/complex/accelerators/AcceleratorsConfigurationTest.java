@@ -81,11 +81,11 @@ public class AcceleratorsConfigurationTest
 
         String sConfigPath = "org.openoffice.Office.Accelerators";
         boolean bReadOnly = false;
-        XNameAccess m_xConfig2 = openConfig(sConfigPath, bReadOnly);
-        if (m_xConfig2 != null)
+        XNameAccess xConfig2 = openConfig(sConfigPath, bReadOnly);
+        if (xConfig2 != null)
         {
-            m_xPrimaryKeys = UnoRuntime.queryInterface(XNameAccess.class, m_xConfig2.getByName("PrimaryKeys"));
-            m_xSecondaryKeys = UnoRuntime.queryInterface(XNameAccess.class, m_xConfig2.getByName("SecondaryKeys"));
+            m_xPrimaryKeys = UnoRuntime.queryInterface(XNameAccess.class, xConfig2.getByName("PrimaryKeys"));
+            m_xSecondaryKeys = UnoRuntime.queryInterface(XNameAccess.class, xConfig2.getByName("SecondaryKeys"));
         }
     }
 

@@ -52,9 +52,9 @@ public class SOImageService implements ImageService
         }
 
 
-        final XMultiComponentFactory m_xMCF = xCompContext.getServiceManager();
+        final XMultiComponentFactory xMCF = xCompContext.getServiceManager();
         m_xGraphicProvider = UnoRuntime.queryInterface(XGraphicProvider.class,
-                m_xMCF.createInstanceWithContext("com.sun.star.graphic.GraphicProvider", xCompContext));
+                xMCF.createInstanceWithContext("com.sun.star.graphic.GraphicProvider", xCompContext));
 
         if (m_xGraphicProvider == null)
         {

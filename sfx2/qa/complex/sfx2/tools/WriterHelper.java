@@ -42,10 +42,10 @@ public class WriterHelper {
     private XMultiServiceFactory m_xMSF = null;
 
     /** Creates a new instance of WriterHelper
-     * @param m_xMSF The MultiServiceFactory gained from the office
+     * @param xMSF The MultiServiceFactory gained from the office
      */
-    public WriterHelper(XMultiServiceFactory m_xMSF) {
-        this.m_xMSF = m_xMSF;
+    public WriterHelper(XMultiServiceFactory xMSF) {
+        this.m_xMSF = xMSF;
     }
 
     /** Opens an empty document

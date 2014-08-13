@@ -148,7 +148,7 @@ public class ReportLayouter
                         8, sOrientationHeader, 95, 148, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 74
                     });
 
-            short m_nLandscapeState = CurReportDocument.getDefaultPageOrientation() == SOOPTLANDSCAPE ? (short) 1 : 0;
+            short nLandscapeState = CurReportDocument.getDefaultPageOrientation() == SOOPTLANDSCAPE ? (short) 1 : 0;
             CurUnoDialog.insertRadioButton("optLandscape", SOOPTLANDSCAPE, new ItemListenerImpl(),
                     new String[]
                     {
@@ -156,10 +156,10 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        10, "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, 101, 158, Short.valueOf(m_nLandscapeState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 60
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, 101, 158, Short.valueOf(nLandscapeState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 60
                     });
 
-            short m_nPortraitState = CurReportDocument.getDefaultPageOrientation() == SOOPTPORTRAIT ? (short) 1 : (short) 0;
+            short nPortraitState = CurReportDocument.getDefaultPageOrientation() == SOOPTPORTRAIT ? (short) 1 : (short) 0;
             CurUnoDialog.insertRadioButton("optPortrait", SOOPTPORTRAIT, new ItemListenerImpl(),
                     new String[]
                     {
@@ -167,7 +167,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        10, "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, 101, 171, Short.valueOf(m_nPortraitState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 60
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, 101, 171, Short.valueOf(nPortraitState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 60
                     });
 
             aOrientationImage = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgOrientation",
@@ -190,7 +190,7 @@ public class ReportLayouter
                     {
                         34, sNote, Boolean.TRUE, 205, 148, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), 99
                     });
-            if (m_nLandscapeState == 1)
+            if (nLandscapeState == 1)
             {
                 CurUnoDialog.getPeerConfiguration().setImageUrl(aOrientationImage, 1002, 1003);
             }

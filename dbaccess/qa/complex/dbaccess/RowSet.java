@@ -243,10 +243,10 @@ public class RowSet extends TestCase
     }
 
 
-    void testPosition(XResultSet m_resultSet, XRow m_row, int expectedValue, String location) throws SQLException
+    void testPosition(XResultSet resultSet, XRow row, int expectedValue, String location) throws SQLException
     {
-        final int val = m_row.getInt(1);
-        final int pos = m_resultSet.getRow();
+        final int val = row.getInt(1);
+        final int pos = resultSet.getRow();
         assertTrue(location + ": value/position do not match: " + pos + " (pos) != " + val + " (val)", val == pos);
         assertTrue(location + ": value/position are not as expected: " + val + " (val) != " + expectedValue + " (expected)", val == expectedValue);
     }
