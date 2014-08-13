@@ -57,8 +57,7 @@ public final class Debug {
 
         try {
 
-            Class<? extends Debug> c = new Debug().getClass();
-            InputStream is = c.getResourceAsStream("Debug.properties");
+            InputStream is = Debug.class.getResourceAsStream("Debug.properties");
             Properties props = new Properties();
             props.load(is);
 
