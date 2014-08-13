@@ -2080,6 +2080,15 @@ OutlinerParaObject *Outliner::GetNonOverflowingParaObject() const
     sal_Int32 nCount = pEditEngine->GetOverflowingParaNum();
     //sal_Int32 nCount = 1;
 
+    // Defensive check: oveflowing para index beyond actual # of paragraphs?
+    if ( nCount > GetParagraphCount()-1) {
+        fprintf(stderr,
+                "[Overflowing] Ops, trying to retrieve para %d when max index is %d\n",
+                nCount,
+                GetParagraphCount()-1);
+        return NULL;
+    }
+
     if ( nCount == 0 ) // Only overflowing text
         return NULL;
     else if (nCount < 0) // No overflowing Text
@@ -2107,8 +2116,17 @@ OutlinerParaObject *Outliner::GetNonOverflowingParaObject() const
 }
 OutlinerParaObject *Outliner::GetOverflowingParaObject() const
 {
-    if ( pEditEngine->GetOverflowingParaNum() >= 0)
+    if ( pEditEngine->GetOverflowingParaNum() >= 0) {
+        // Defensive check: oveflowing para index beyond actual # of paragraphs?
+        if ( pEditEngine->GetOverflowingParaNum() > GetParagraphCount()-1) {
+            fprintf(stderr,
+                    "[Overflowing] Ops, trying to retrieve para %d when max index is %d\n",
+                    nCount,
+                    GetParagraphCount()-1);
+            return NULL;
+    }
         return CreateParaObject( pEditEngine->GetOverflowingParaNum() );
+    }
 
     return NULL;
     /*
