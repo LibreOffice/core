@@ -768,8 +768,11 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get(), true ));
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            if ( ( bSuccess = ( RET_OK == pDialog->Execute() ) ) )
+            if ( RET_OK == pDialog->Execute() )
+            {
+                bSuccess = true;
                 lcl_fillItemsToShape(_xShape,*pDialog->GetOutputItemSet());
+            }
         }
     }
     catch(uno::Exception&)
