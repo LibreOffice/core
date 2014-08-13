@@ -295,12 +295,15 @@ public class UnoUrl {
 
     private static UnoUrlPart parseUnoUrlPart(String thePart)
         throws com.sun.star.lang.IllegalArgumentException {
-        String partName = thePart;
-        String theParamPart = "";
+        String partName;
+        String theParamPart;
         int index = thePart.indexOf(",");
         if (index != -1) {
             partName = thePart.substring(0, index).trim();
             theParamPart = thePart.substring(index + 1).trim();
+        } else {
+            partName = thePart.trim();
+            theParamPart = "";
         }
 
         if (!isAlphaNumeric(partName)) {
@@ -354,46 +357,46 @@ public class UnoUrl {
     public static UnoUrl parseUnoUrl(String unoUrl)
         throws com.sun.star.lang.IllegalArgumentException {
 
-        String url = unoUrl;
+        if (!unoUrl.matches("^(\\s*)uno(\\s*):"
+                // connection-type,params;
+                + "(\\s*)(socket|pipe)((\\s*),(\\s*)([0-9a-zA-Z])+(\\s*)=(\\s*)([0-9a-zA-Z\\!$&'()*+-./:?@_~]|([\\%][a-fA-F0-9][a-fA-F0-9])+)+)*(\\s*);"
+                // protocol-name,params;
+                + "(\\s*)([0-9a-zA-Z])+((\\s*),(\\s*)([0-9a-zA-Z])+(\\s*)=(\\s*)([0-9a-zA-Z\\!$&'()*+,-./:?=@_~]|([\\%][a-fA-F0-9][a-fA-F0-9]))+)*(\\s*);"
+                // ObjectName
+                + "(\\s*)([0-9a-zA-Z\\!$&'()*+,-./:?=@_~])+")) {
+            throw new com.sun.star.lang.IllegalArgumentException("'"+unoUrl+"' is an invalid Uno Url. " + FORMAT_ERROR);
+        }
 
-        int index = url.indexOf(':');
+        String[] parts = unoUrl.substring(unoUrl.indexOf(':') + 1).split(";");
+        int index;
+
+        String connectionPartName;
+        String connectionPartArgs;
+        index = parts[0].indexOf(",");
         if (index != -1) {
-            String unoStr = url.substring(0, index).trim();
-            if (!"uno".equals(unoStr)) {
-                throw new com.sun.star.lang.IllegalArgumentException(
-                    "Uno Urls must start with 'uno:'. " + FORMAT_ERROR);
-            }
+            connectionPartName = parts[0].substring(0, index).trim();
+            connectionPartArgs = parts[0].substring(index + 1).trim();
+        } else {
+            connectionPartName = parts[0].trim();
+            connectionPartArgs = "";
         }
+        HashMap<String,String> connectionParams = buildParamHashMap(connectionPartArgs);
+        UnoUrlPart connectionPart = new UnoUrlPart(connectionPartArgs, connectionPartName, connectionParams);
 
-        url = url.substring(index + 1).trim();
-
-        index = url.indexOf(';');
-        if (index == -1) {
-            throw new com.sun.star.lang.IllegalArgumentException("'"+unoUrl+"' is an invalid Uno Url. " + FORMAT_ERROR);
+        String protocolPartName;
+        String protocolPartArgs;
+        index = parts[1].indexOf(",");
+        if (index != -1) {
+            protocolPartName = parts[1].substring(0, index).trim();
+            protocolPartArgs = parts[1].substring(index + 1).trim();
+        } else {
+            protocolPartName = parts[1].trim();
+            protocolPartArgs = "";
         }
+        HashMap<String,String> protocolParams = buildParamHashMap(protocolPartArgs);
+        UnoUrlPart protocolPart = new UnoUrlPart(protocolPartArgs, protocolPartName, protocolParams);
 
-        String connection = url.substring(0, index).trim();
-        url = url.substring(index + 1).trim();
-
-        UnoUrlPart connectionPart = parseUnoUrlPart(connection);
-
-        index = url.indexOf(';');
-        if (index == -1) {
-            throw new com.sun.star.lang.IllegalArgumentException("'"+unoUrl+"' is an invalid Uno Url. " + FORMAT_ERROR);
-        }
-
-        String protocol = url.substring(0, index).trim();
-        url = url.substring(index + 1).trim();
-
-        UnoUrlPart protocolPart = parseUnoUrlPart(protocol);
-
-        String rootOid = url.trim();
-        if (!isValidString(rootOid, OID_CHAR_SET)) {
-            throw new com.sun.star.lang.IllegalArgumentException(
-                "Root OID '"+ rootOid + "' contains illegal characters.");
-        }
-
-        return new UnoUrl(connectionPart, protocolPart, rootOid);
+        return new UnoUrl(connectionPart, protocolPart, parts[2].trim());
 
     }
 
