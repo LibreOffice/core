@@ -166,10 +166,13 @@ bool GIFLZWDecompressor::ProcessOneCode()
         }
         else if ( ( nCode > nEOICode ) && ( nCode <= nTableSize ) )
         {
-            if ( nCode == nTableSize )
-                AddToTable( nOldCode, nOldCode );
-            else
-                AddToTable( nOldCode, nCode );
+            if ( nOldCode != 0xffff )
+            {
+                if ( nCode == nTableSize )
+                    AddToTable( nOldCode, nOldCode );
+                else
+                    AddToTable( nOldCode, nCode );
+            }
         }
         else
         {
