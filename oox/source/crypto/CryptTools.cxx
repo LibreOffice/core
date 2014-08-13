@@ -63,7 +63,7 @@ const EVP_CIPHER* Crypto::getCipher(CryptoType type)
 #if USE_TLS_NSS
 void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type, CK_ATTRIBUTE_TYPE operation)
 {
-    CK_MECHANISM_TYPE mechanism = -1;
+    CK_MECHANISM_TYPE mechanism = static_cast<CK_ULONG>(-1);
 
     SECItem ivItem;
     ivItem.type = siBuffer;
