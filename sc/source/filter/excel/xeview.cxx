@@ -208,7 +208,7 @@ XclExpSelection::XclExpSelection( const XclTabViewData& rData, sal_uInt8 nPane )
     // find the cursor position in the selection list (or add it)
     XclRangeList& rXclSel = maSelData.maXclSelection;
     bool bFound = false;
-    for( XclRangeList::const_iterator aIt = rXclSel.begin(), aEnd = rXclSel.end(); !bFound && (aIt != aEnd); ++aIt )
+    for( XclRangeVector::const_iterator aIt = rXclSel.begin(), aEnd = rXclSel.end(); !bFound && (aIt != aEnd); ++aIt )
         if( (bFound = aIt->Contains( maSelData.maXclCursor )) == true )
             maSelData.mnCursorIdx = static_cast< sal_uInt16 >( aIt - rXclSel.begin() );
     /*  Cursor cell not found in list? (e.g. inactive pane, or removed in
