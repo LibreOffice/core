@@ -67,7 +67,7 @@ public class TerminationTest extends java.lang.Object {
             // try to terminate while we are at work
             boolean terminated = xDesktop.terminate();
             System.out.println("The Office " +
-                (terminated == true ?
+                (terminated ?
                  "has been terminated" :
                  "is still running, we are at work"));
 
@@ -76,7 +76,7 @@ public class TerminationTest extends java.lang.Object {
             // once more: try to terminate
             terminated = xDesktop.terminate();
             System.out.println("The Office " +
-                (terminated == true ?
+                (terminated ?
                     "has been terminated" :
                     "is still running. Someone else prevents termination, " +
                     "e.g. the quickstarter"));

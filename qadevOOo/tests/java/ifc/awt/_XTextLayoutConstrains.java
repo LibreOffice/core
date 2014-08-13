@@ -45,7 +45,7 @@ public class _XTextLayoutConstrains extends MultiMethodTest {
         short nLines = 0;
         Size mSize = oObj.getMinimumSize(nCols,nLines);
         boolean res = ( (mSize.Height != 0) && (mSize.Width != 0) );
-        if (res == false) {
+        if (!res) {
             log.println("mSize.height: " + mSize.Height);
             log.println("mSize.width: " + mSize.Width);
         }
@@ -61,7 +61,7 @@ public class _XTextLayoutConstrains extends MultiMethodTest {
         short[] nLines = new short[1];
         oObj.getColumnsAndLines(nCols,nLines);
         boolean res = ( (nCols[0] != 0) && (nLines[0] != 0) );
-        if (res == false) {
+        if (!res) {
             log.println("nCols: " + nCols[0]);
             log.println("nLines: " + nLines[0]);
         }

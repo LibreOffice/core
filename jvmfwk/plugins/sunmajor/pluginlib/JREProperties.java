@@ -63,7 +63,7 @@ public class JREProperties
             //can be done by providing a sunjavaplugin.ini with
             //the bootstrap parameter JFW_PLUGIN_NO_NOT_CHECK_ACCESSIBILITY
             //set to "1"
-            if (bNoAccess == false && ! bW98)
+            if (!bNoAccess && ! bW98)
             {
                 try{
                     //This line is needed to get the accessibility properties

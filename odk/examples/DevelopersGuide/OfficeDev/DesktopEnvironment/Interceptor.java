@@ -128,7 +128,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                 return;
             if (m_xFrame==null)
                 return;
-            if (m_bIsActionListener==true)
+            if (m_bIsActionListener)
                 return;
             xFrame = m_xFrame;
         }
@@ -423,7 +423,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         // intercept loading empty documents into new created frames
         if(
             (sTarget.compareTo       ("_blank"         ) == 0   ) &&
-            (aURL.Complete.startsWith("private:factory") == true)
+            (aURL.Complete.startsWith("private:factory"))
           )
         {
             System.out.println("intercept private:factory");
@@ -431,7 +431,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
 
         // intercept opening the SaveAs dialog
-        if (aURL.Complete.startsWith(".uno:SaveAs") == true)
+        if (aURL.Complete.startsWith(".uno:SaveAs"))
         {
             System.out.println("intercept SaveAs by returning null!");
             return null;
@@ -439,8 +439,8 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
         // intercept "File->Exit" inside the menu
         if (
-            (aURL.Complete.startsWith("slot:5300") == true)  ||
-            (aURL.Complete.startsWith(".uno:Quit") == true)
+            (aURL.Complete.startsWith("slot:5300"))  ||
+            (aURL.Complete.startsWith(".uno:Quit"))
            )
         {
             System.out.println("intercept File->Exit");
@@ -500,14 +500,14 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
 
         if (
-            (aURL.Complete.startsWith("slot:5300") == true) ||
-            (aURL.Complete.startsWith(".uno:Quit") == true)
+            (aURL.Complete.startsWith("slot:5300")) ||
+            (aURL.Complete.startsWith(".uno:Quit"))
            )
         {
             System.exit(0);
         }
         else
-        if (aURL.Complete.startsWith("private:factory") == true)
+        if (aURL.Complete.startsWith("private:factory"))
         {
             // Create view frame for showing loaded documents on demand.
             // The visible state is necessary for JNI functionality to get the HWND and plug office

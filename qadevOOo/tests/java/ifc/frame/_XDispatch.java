@@ -183,7 +183,7 @@ public class _XDispatch extends MultiMethodTest {
 
         result = listener.statusChangedCalled;
 
-        if (result == false) {
+        if (!result) {
             result = checkXDispatchWithNotification();
         }
 

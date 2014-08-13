@@ -359,7 +359,7 @@ public class IniFile implements Enumeration<String>
     // TODO: make private
     private void store()
         {
-            if (m_bListContainUnsavedChanges == false)
+            if (!m_bListContainUnsavedChanges)
             {
                 // nothing has changed, so no need to store
                 return;

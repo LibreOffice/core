@@ -314,7 +314,7 @@ public class InterfaceContainer implements Cloneable
             while (it.hasNext())
             {
                 Object obj= it.next();
-                if (false == contains(obj))
+                if (!contains(obj))
                 {
                     retVal= false;
                     break;
@@ -556,7 +556,7 @@ public class InterfaceContainer implements Cloneable
                         break;
                     }
                 }
-                if (bExists == false)
+                if (!bExists)
                 {
                     itColl= collection.iterator();
                     while (itColl.hasNext())
@@ -572,7 +572,7 @@ public class InterfaceContainer implements Cloneable
                         }
                     }
                 }
-                if (bExists == true)
+                if (bExists)
                     arRetained[indexRetained++]= curElem;
             }
             retVal= size != indexRetained;

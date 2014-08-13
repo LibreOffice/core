@@ -131,7 +131,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
             parcelBase.getName() + "." + ParcelZipper.PARCEL_EXTENSION);
 
         boolean proceed = configure();
-        if (proceed == false) {
+        if (!proceed) {
             return;
         }
 

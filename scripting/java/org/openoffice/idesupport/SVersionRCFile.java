@@ -31,14 +31,14 @@ import java.util.StringTokenizer;
 public class SVersionRCFile {
 
     private static final String DEFAULT_NAME =
-        System.getProperty("os.name").startsWith("Windows") == true ?
+        System.getProperty("os.name").startsWith("Windows") ?
             System.getProperty("user.home") + File.separator +
             "Application Data" + File.separator + "sversion.ini" :
             System.getProperty("user.home") + File.separator +
             ".sversionrc";
 
     public static final String FILE_URL_PREFIX =
-        System.getProperty("os.name").startsWith("Windows") == true ?
+        System.getProperty("os.name").startsWith("Windows") ?
             "file:///" : "file://";
 
 
@@ -124,10 +124,10 @@ public class SVersionRCFile {
         String s;
 
         while ((s = br.readLine()) != null &&
-              (s.equals(VERSIONS_LINE)) != true) {}
+              !(s.equals(VERSIONS_LINE))) {}
 
         while ((s = br.readLine()) != null &&
-              (s.equals("")) != true) {
+              !(s.equals(""))) {
             StringTokenizer tokens = new StringTokenizer(s, "=");
             int count = tokens.countTokens();
 

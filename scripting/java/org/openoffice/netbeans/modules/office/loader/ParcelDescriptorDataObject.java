@@ -46,7 +46,7 @@ public class ParcelDescriptorDataObject extends MultiDataObject {
 
         CookieSet cookies = getCookieSet();
         cookies.add(new ParcelDescriptorEditorSupport(this));
-        if (canParse == true)
+        if (canParse)
             cookies.add(new ParcelDescriptorParserSupport(getPrimaryFile()));
     }
 
@@ -55,7 +55,7 @@ public class ParcelDescriptorDataObject extends MultiDataObject {
     }
 
     protected Node createNodeDelegate() {
-        if (canParse == true)
+        if (canParse)
             return new ParcelDescriptorDataNode(this);
         else
             return new ParcelDescriptorDataNode(this, Children.LEAF);

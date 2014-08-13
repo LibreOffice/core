@@ -314,7 +314,7 @@ public class ScriptEditorForBeanShell
             else if (result == JOptionPane.YES_OPTION)
             {
                 boolean saveSuccess = saveTextArea();
-                if (saveSuccess == false)
+                if (!saveSuccess)
                 {
                     return;
                 }

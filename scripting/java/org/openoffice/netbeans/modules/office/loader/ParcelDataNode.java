@@ -66,7 +66,7 @@ public class ParcelDataNode extends DataNode {
                 (ParcelCookie)sourceParcel.getCookie(ParcelCookie.class);
             parcelCookie.deploy(targetDocument);
 
-            if (isCut == true) {
+            if (isCut) {
                 FileObject fo = sourceParcel.getDataObject().getPrimaryFile();
                 try {
                     fo.delete();

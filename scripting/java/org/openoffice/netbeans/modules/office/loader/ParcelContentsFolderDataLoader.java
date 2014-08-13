@@ -45,8 +45,8 @@ public class ParcelContentsFolderDataLoader extends UniFileLoader {
     }
 
     protected FileObject findPrimaryFile(FileObject fo) {
-        if (fo.isFolder() == false ||
-            fo.getName().equals(ParcelZipper.CONTENTS_DIRNAME) == false ||
+        if (!fo.isFolder() ||
+            !fo.getName().equals(ParcelZipper.CONTENTS_DIRNAME) ||
             fo.getFileObject(ParcelZipper.PARCEL_DESCRIPTOR_XML) == null)
             return null;
 

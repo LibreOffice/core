@@ -264,7 +264,7 @@ XMultiPropertySet
      */
     protected void assignPropertyId(Property prop, Object id)
     {
-       if (id instanceof String && ((String) id).equals("") == false)
+       if (id instanceof String && !((String) id).equals(""))
             _propertyToIdMap.put(prop, id);
     }
 

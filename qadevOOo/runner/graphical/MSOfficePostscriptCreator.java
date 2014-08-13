@@ -211,7 +211,7 @@ public class MSOfficePostscriptCreator implements IOffice
                 throw new WrongSuffixException("No Mircosoft Office document format found.");
             }
 
-            if (aStartCommand.isEmpty() == false)
+            if (!aStartCommand.isEmpty())
             {
                 String sPrinterName = m_sPrinterName;
                 if (sPrinterName == null)
@@ -290,7 +290,7 @@ public class MSOfficePostscriptCreator implements IOffice
             String sPrintViaWord = "printViaWord.pl";
 
             ArrayList<String> aList = searchLocalFile(sPrintViaWord);
-            if (aList.isEmpty() == false)
+            if (!aList.isEmpty())
             {
                 return aList;
             }
@@ -421,7 +421,7 @@ public class MSOfficePostscriptCreator implements IOffice
             String sPrintViaExcel = "printViaExcel.pl";
 
             ArrayList<String> aList = searchLocalFile(sPrintViaExcel);
-            if (aList.isEmpty() == false)
+            if (!aList.isEmpty())
             {
                 return aList;
             }
@@ -519,7 +519,7 @@ public class MSOfficePostscriptCreator implements IOffice
             String sPrintViaPowerPoint = "printViaPowerPoint.pl";
 
             ArrayList<String> aList = searchLocalFile(sPrintViaPowerPoint);
-            if (aList.isEmpty() == false)
+            if (!aList.isEmpty())
             {
                 return aList;
             }

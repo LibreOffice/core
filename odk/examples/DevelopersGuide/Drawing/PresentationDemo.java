@@ -211,7 +211,7 @@ public class PresentationDemo
         // if the com.sun.star.presentation.DrawPage service is supported
         XServiceInfo xInfo = UnoRuntime.queryInterface(
                 XServiceInfo.class, xPage );
-        if ( xInfo.supportsService( "com.sun.star.presentation.DrawPage" ) == true )
+        if ( xInfo.supportsService( "com.sun.star.presentation.DrawPage" ) )
         {
             try
             {

@@ -72,7 +72,7 @@ public class DocumentMerge implements MergeAlgorithm {
                 if (difference.getOperation() == Difference.DELETE) {
                     haveDeleteOperation = true;
                 } else if (difference.getOperation() == Difference.ADD &&
-                            haveDeleteOperation == true) {
+                            haveDeleteOperation) {
                     throw new MergeException(
                          "Differences array is not sorted. Delete before Add");
                 }

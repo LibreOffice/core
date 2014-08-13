@@ -105,7 +105,7 @@ public class _XImplementationLoader extends MultiMethodTest {
             throw new StatusException("Can not register implementation", e) ;
         }
 
-        if (rc == false)
+        if (!rc)
             log.println("Method returned false value") ;
 
         String[] keys ;

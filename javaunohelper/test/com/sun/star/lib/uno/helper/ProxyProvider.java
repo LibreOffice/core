@@ -43,7 +43,7 @@ public class ProxyProvider
     {
 
         Object retVal= null;
-        if (obj == null || iface == null || iface.isInstance(obj) == false )
+        if (obj == null || iface == null || !iface.isInstance(obj) )
             return retVal;
 
         Type type= new Type(TypeDescription.getTypeDescription(iface));

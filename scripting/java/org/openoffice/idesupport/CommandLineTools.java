@@ -63,7 +63,7 @@ public class CommandLineTools {
         }
 
         File officeDir = new File(officePath);
-        if (officeDir.exists() == false || officeDir.isDirectory() == false)
+        if (!officeDir.exists() || !officeDir.isDirectory())
         {
             driver.fatalUsage(
                 "Error: Office Installation path not valid: " + officePath);
@@ -249,20 +249,20 @@ public class CommandLineTools {
 
         public void execute() throws Exception {
 
-            if (basedir.isDirectory() != true) {
+            if (!basedir.isDirectory()) {
                 throw new Exception(basedir.getName() + " is not a directory");
             }
-            else if (contents.exists() != true) {
+            else if (!contents.exists()) {
                 throw new Exception(basedir.getName() +
                     " does not contain a Contents directory");
             }
 
-            if (language == null && parcelxml.exists() == false) {
+            if (language == null && !parcelxml.exists()) {
                 throw new Exception(parcelxml.getName() + " not found and language " +
                     "not specified");
             }
 
-            if (language != null && parcelxml.exists() == true) {
+            if (language != null && parcelxml.exists()) {
                 ParcelDescriptor desc;
                 String desclang = "";
 
@@ -308,7 +308,7 @@ public class CommandLineTools {
                 desc.write();
             }
             else {
-                if (parcelxml.exists() == false)
+                if (!parcelxml.exists())
                     throw new Exception("No valid scripts found");
             }
 

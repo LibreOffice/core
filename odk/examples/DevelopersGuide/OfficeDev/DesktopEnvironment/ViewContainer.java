@@ -92,7 +92,7 @@ public class ViewContainer extends Thread
     {
         synchronized(mlViews)
         {
-            if(mlViews.contains(aView)==false)
+            if(!mlViews.contains(aView))
                 mlViews.add(aView);
         }
     }
@@ -115,7 +115,7 @@ public class ViewContainer extends Thread
         int nViewCount = 0;
         synchronized(mlViews)
         {
-            if(mlViews.contains(aView)==true)
+            if(mlViews.contains(aView))
                 mlViews.remove(aView);
 
             nViewCount = mlViews.size();
@@ -130,10 +130,10 @@ public class ViewContainer extends Thread
         synchronized(mlListener)
         {
             bShutdownView = mlListener.contains(aView);
-            if (bShutdownView==true)
+            if (bShutdownView)
                 mlListener.remove(aView);
         }
-        if (bShutdownView==true)
+        if (bShutdownView)
             ((IShutdownListener)aView).shutdown();
 
         // We use a system.exit() to finish the whole application.
@@ -150,7 +150,7 @@ public class ViewContainer extends Thread
             {
                 bNecessary = ! mbShutdownActive;
             }
-            if (bNecessary==true)
+            if (bNecessary)
             {
                 System.out.println("call exit(0)!");
                 System.exit(0);

@@ -85,7 +85,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
                 if (!langdir.exists()) {
                     boolean response = askIfCreateDirectory(langdir);
-                    if (response == false) {
+                    if (!response) {
                         return;
                     }
                 }
@@ -141,7 +141,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
             public void run() {
                 boolean result = parcelCookie.deploy(target);
 
-                if (result == true && target.isDirectory()) {
+                if (result && target.isDirectory()) {
                     showNagDialog();
                 }
             }
@@ -167,7 +167,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
             result = false;
         }
 
-        if (result == false) {
+        if (!result) {
             String tmp = "Error creating: " + directory.getAbsolutePath();
             NotifyDescriptor d2 = new NotifyDescriptor.Message(
                 tmp, NotifyDescriptor.ERROR_MESSAGE);
@@ -190,13 +190,13 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
         OfficeSettings settings = OfficeSettings.getDefault();
 
-        if (settings.getWarnAfterDirDeploy() == true) {
+        if (settings.getWarnAfterDirDeploy()) {
             NagDialog warning = NagDialog.createInformationDialog(
                 message, "Show this message in future", true);
 
             warning.show();
 
-            if (warning.getState() == false)
+            if (!warning.getState())
                 settings.setWarnAfterDirDeploy(false);
         }
     }

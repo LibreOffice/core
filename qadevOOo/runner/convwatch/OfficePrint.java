@@ -532,7 +532,7 @@ public class OfficePrint {
                     aPrintProps.add(Arg);
                     showProperty(Arg);
 
-                    if (_aGTA.printAllPages() == false)
+                    if (!_aGTA.printAllPages())
                     {
                         String sPages = "";
                         if (_aGTA.getMaxPages() > 0)
@@ -603,7 +603,7 @@ public class OfficePrint {
                 bBack = false;
             }
 
-            if (bFailed == true)
+            if (bFailed)
             {
                 GlobalLogWriter.get().println("convwatch.OfficePrint: FAILED");
             }
@@ -645,7 +645,7 @@ public class OfficePrint {
             String sPrintFilename = FileHelper.getNameNoSuffix(sInputFileBasename);
 
             String sAbsolutePrintFilename = sOutputPath + fs + sPrintFilename + ".prn";
-            if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
+            if (FileHelper.exists(sAbsolutePrintFilename) && !_aGTA.getOverwrite())
             {
                 GlobalLogWriter.get().println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
                 return true;
@@ -693,7 +693,7 @@ public class OfficePrint {
             String sPrintFileURL;
 
             String sAbsolutePrintFilename = sOutputPath + fs + sPrintFilename + ".prn";
-            if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
+            if (FileHelper.exists(sAbsolutePrintFilename) && !_aGTA.getOverwrite())
             {
                 GlobalLogWriter.get().println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
                 return true;
@@ -1084,7 +1084,7 @@ public class OfficePrint {
                     GlobalLogWriter.get().println("Service from FilterName '" + sServiceName + "' is not supported by loaded document.");
                     bServiceFailed = true;
                 }
-                if (bServiceFailed == true)
+                if (bServiceFailed)
                 {
                     GlobalLogWriter.get().println("Please check '" + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + "' in the property file.");
                     return;
@@ -1130,7 +1130,7 @@ public class OfficePrint {
                     sOutputFile += sInputFileBasename;
                 }
 
-                if (FileHelper.exists(sOutputFile) && _aGTA.getOverwrite() == false)
+                if (FileHelper.exists(sOutputFile) && !_aGTA.getOverwrite())
                 {
                     GlobalLogWriter.get().println("File already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
                     return;

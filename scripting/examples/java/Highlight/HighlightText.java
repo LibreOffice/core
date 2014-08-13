@@ -80,8 +80,8 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
         }
 
         if (findDialog == null) {
-            if (tryLoadingLibrary(xmcf, context, "Dialog") == false ||
-                tryLoadingLibrary(xmcf, context, "Script") == false)
+            if (!tryLoadingLibrary(xmcf, context, "Dialog") ||
+                !tryLoadingLibrary(xmcf, context, "Script"))
             {
                 System.err.println("Error loading ScriptBindingLibrary");
                 return;

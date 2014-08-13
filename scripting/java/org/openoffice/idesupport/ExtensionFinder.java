@@ -39,8 +39,8 @@ public class ExtensionFinder implements MethodFinder {
         ArrayList<ScriptEntry> files = new ArrayList<ScriptEntry>(10);
         ScriptEntry[] empty = new ScriptEntry[0];
 
-        if (basedir == null || basedir.exists() == false ||
-            basedir.isDirectory() == false)
+        if (basedir == null || !basedir.exists() ||
+            !basedir.isDirectory())
             return empty;
 
         parcelName = basedir.getName();

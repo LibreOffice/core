@@ -279,7 +279,7 @@ class ScriptSelectorPanel extends JPanel {
 
 
     private void initNodes(XBrowseNode parent, DefaultMutableTreeNode top) {
-        if ( parent == null || parent.hasChildNodes() == false )
+        if ( parent == null || !parent.hasChildNodes() )
         {
             return;
         }

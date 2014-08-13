@@ -234,7 +234,7 @@ public class LocalOfficeConnection
     public void dispose()
     {
         Iterator<XEventListener> itr = mComponents.iterator();
-        while (itr.hasNext() == true) {
+        while (itr.hasNext()) {
             // ignore runtime exceptions in dispose
             try { itr.next().disposing(null); }
             catch ( RuntimeException aExc ) {}

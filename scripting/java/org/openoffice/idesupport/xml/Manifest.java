@@ -66,7 +66,7 @@ public class Manifest {
     }
 
     private void ensureBaseElementsExist() {
-        if (baseElementsExist == false) {
+        if (!baseElementsExist) {
             baseElementsExist = true;
             add("Scripts/", "application/script-parcel");
         }

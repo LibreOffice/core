@@ -660,7 +660,7 @@ public class ProcessHandler
             }
         }
 
-        if (bKillProcessAfterTimeout == true)
+        if (bKillProcessAfterTimeout)
         {
             if (!isFinished)
             {

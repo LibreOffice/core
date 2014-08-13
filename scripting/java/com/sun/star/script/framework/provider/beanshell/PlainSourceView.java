@@ -55,7 +55,7 @@ public class PlainSourceView extends JScrollPane
            so we don't get a storm of DocumentEvents during loading */
         ta.getDocument().removeDocumentListener(this);
 
-        if (isModified == false)
+        if (!isModified)
         {
             int pos = ta.getCaretPosition();
             ta.setText(model.getText());

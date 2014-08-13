@@ -167,7 +167,7 @@ public class DocumentView extends    JFrame
         JScrollPane paScroll = new JScrollPane();
         paScroll.getViewport().add(paTest,null);
 
-        if(ViewContainer.mbInplace==true)
+        if(ViewContainer.mbInplace)
         {
             // create view to show opened documents
             // This special view is necessary for inplace mode only!
@@ -209,7 +209,7 @@ public class DocumentView extends    JFrame
         // create view frame (as a XFrame!) here
         // Look for right view mode setted by user command line parameter.
         // First try to get a new unambigous frame name from our global ViewContainer.
-        if(ViewContainer.mbInplace==true)
+        if(ViewContainer.mbInplace)
         {
             // inplace document view can't be initialized without a visible parent window hierarchy!
             // So make sure that we are visible in every case!

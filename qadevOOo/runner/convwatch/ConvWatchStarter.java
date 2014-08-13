@@ -109,7 +109,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                 m_sOutputPath = sOUT;
             }
 
-            if (bQuit == true)
+            if (bQuit)
             {
                 assure("Must quit", false);
             }

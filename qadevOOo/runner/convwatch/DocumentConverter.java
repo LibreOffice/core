@@ -110,7 +110,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
                 m_sReferencePath = sREF;
             }
 
-            if (bQuit == true)
+            if (bQuit)
             {
                 assure("Must quit, Parameter problems.", false);
             }

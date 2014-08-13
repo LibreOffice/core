@@ -590,7 +590,7 @@ public class GraphicalTestArguments
 
     public boolean restartOffice()
         {
-            if (m_bResuseOffice == false)
+            if (!m_bResuseOffice)
             {
                 return true;
             }

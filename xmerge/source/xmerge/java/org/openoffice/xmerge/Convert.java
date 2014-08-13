@@ -89,7 +89,7 @@ public class Convert implements Cloneable {
 
         Document inputDoc;
 
-        if (toOffice == true) {
+        if (toOffice) {
             inputDoc = ci.getPluginFactory().createDeviceDocument(name, is);
         } else {
             inputDoc = ci.getPluginFactory().createOfficeDocument(name, is);
@@ -115,7 +115,7 @@ public class Convert implements Cloneable {
 
         Document inputDoc;
 
-        if (toOffice == true) {
+        if (toOffice) {
             inputDoc = ci.getPluginFactory().createDeviceDocument(name, is);
         } else {
             inputDoc = ci.getPluginFactory().createOfficeDocument(name, is, isZip);

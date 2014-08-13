@@ -357,7 +357,7 @@ public class ParameterHelper
         {
             // boolean bCreateSmallPictures = true;
             boolean bNoSmallPictures = m_aCurrentParams.getBool( PropertyName.NO_SMALL_PICTURES);
-            if (bNoSmallPictures == true)
+            if (bNoSmallPictures)
             {
                 return false;
             }

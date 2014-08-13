@@ -184,7 +184,7 @@ public class ParcelBrowseNode extends PropertySet
                 String newName;
 
                 if (aParams == null || aParams.length < 1 ||
-                    AnyConverter.isString(aParams[0]) == false)
+                    !AnyConverter.isString(aParams[0]))
                 {
                     String prompt = "Enter name for new Script";
                     String title = "Create Script";
@@ -269,7 +269,7 @@ public class ParcelBrowseNode extends PropertySet
             {
 
                 if (aParams == null || aParams.length < 1 ||
-                    AnyConverter.isString(aParams[0]) == false)
+                    !AnyConverter.isString(aParams[0]))
                 {
                     String prompt = "Enter new name for Library";
                     String title = "Rename Library";

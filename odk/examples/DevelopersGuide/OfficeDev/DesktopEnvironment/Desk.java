@@ -66,10 +66,10 @@ public class Desk
         for(int i=0; i<lArguments.length; ++i)
         {
             lArguments[i] = lArguments[i].toLowerCase();
-            if(lArguments[i].startsWith("mode=")==true)
+            if(lArguments[i].startsWith("mode="))
                 sMode = lArguments[i].substring(5);
             else
-            if(lArguments[i].startsWith("file=")==true)
+            if(lArguments[i].startsWith("file="))
                 sFile = lArguments[i].substring(5);
         }
 

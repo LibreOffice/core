@@ -162,7 +162,7 @@ public class _XDictionaryList extends MultiMethodTest {
 
         tRes.tested(
             "removeDictionaryListEventListener()",
-            listenerCalled == false && res == true );
+            !listenerCalled && res );
     }
 
     /**

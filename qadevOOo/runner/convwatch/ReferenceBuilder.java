@@ -109,7 +109,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 m_sReferencePath = sREF;
             }
 
-            if (bQuit == true)
+            if (bQuit)
             {
                 assure("Must quit, Parameter problems.", false);
             }
@@ -197,7 +197,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             // first do a check if the reference not already exist, this is a big speedup, due to the fact,
             // we don't need to start a new office.
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
-            if (GraphicalDifferenceCheck.isReferenceExists(_sInputPath, _sReferencePath, aGTA) == false)
+            if (!GraphicalDifferenceCheck.isReferenceExists(_sInputPath, _sReferencePath, aGTA))
             {
             // start a fresh Office
                 OfficeProvider aProvider = null;

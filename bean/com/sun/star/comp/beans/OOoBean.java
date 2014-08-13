@@ -582,7 +582,7 @@ public class OOoBean
                         {
 
                             if ( aFrame != null && xOldController != null )
-                                if (xOldController.suspend(true) == false)
+                                if (!xOldController.suspend(true))
                                     throw new com.sun.star.util.CloseVetoException(
                                             "Dokument is still being used and cannot be closed.", this);
 
@@ -1187,7 +1187,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
             // continue to trying to connect the OOo instance
             long n = 0;
-            while ( isInterrupted() == false
+            while ( !isInterrupted()
                     && iConnection != null
                     && iConnection.getComponentContext() != null )
             {

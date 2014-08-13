@@ -391,7 +391,7 @@ final class InstallationFinder {
                         new FileInputStream( fSVersion ), "UTF-8" ) );
                     String line = null;
                     while ( ( line = br.readLine() ) != null &&
-                            ( line.equals( VERSIONS ) ) != true ) {
+                            !line.equals( VERSIONS ) ) {
                         // read lines until [Versions] is found
                     }
                     while ( ( line = br.readLine() ) != null &&

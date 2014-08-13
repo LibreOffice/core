@@ -608,7 +608,7 @@ public class FunctionHelper
                 com.sun.star.util.XModifiable xModified = UnoRuntime.queryInterface(
                     com.sun.star.util.XModifiable.class,
                     xModel);
-                if(xModified.isModified()==true)
+                if(xModified.isModified())
                 {
                     com.sun.star.frame.XStorable xStore = UnoRuntime.queryInterface(
                         com.sun.star.frame.XStorable.class,
@@ -667,13 +667,13 @@ public class FunctionHelper
             {
                 // Find out possible filter name.
                 String sFilter = null;
-                if(xInfo.supportsService("com.sun.star.text.TextDocument")==true)
+                if(xInfo.supportsService("com.sun.star.text.TextDocument"))
                     sFilter = "HTML (StarWriter)";
                 else
-                if(xInfo.supportsService("com.sun.star.text.WebDocument")==true)
+                if(xInfo.supportsService("com.sun.star.text.WebDocument"))
                     sFilter = "HTML";
                 else
-                if(xInfo.supportsService("com.sun.star.sheet.SpreadsheetDocument")==true)
+                if(xInfo.supportsService("com.sun.star.sheet.SpreadsheetDocument"))
                     sFilter = "HTML (StarCalc)";
 
                 // Check for existing state of this filter.
@@ -688,7 +688,7 @@ public class FunctionHelper
                         xCtx.getServiceManager().createInstanceWithContext(
                             "com.sun.star.document.FilterFactory", xCtx));
 
-                    if(xFilterContainer.hasByName(sFilter)==false)
+                    if(!xFilterContainer.hasByName(sFilter))
                         sFilter=null;
                 }
 
@@ -890,7 +890,7 @@ public class FunctionHelper
             aChooser = new JFileChooser(maLastDir);
 
         // decide between file open/save dialog
-        if( bOpen==true )
+        if( bOpen )
             nDecision = aChooser.showOpenDialog(aParent);
         else
             nDecision = aChooser.showSaveDialog(aParent);
@@ -914,8 +914,8 @@ public class FunctionHelper
             // => correct this problem first, otherwise office can't use these URL's
             if(
                 ( sFileURL                      !=null  ) &&
-                ( sFileURL.startsWith("file:/") ==true  ) &&
-                ( sFileURL.startsWith("file://")==false )
+                ( sFileURL.startsWith("file:/")  ) &&
+                ( !sFileURL.startsWith("file://") )
               )
             {
                 StringBuffer sWorkBuffer = new StringBuffer(sFileURL);

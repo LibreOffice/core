@@ -111,7 +111,7 @@ public class FrameworkJarChecker {
     private static void warnBeforeMount() {
         OfficeSettings settings = OfficeSettings.getDefault();
 
-        if (settings.getWarnBeforeMount() == false)
+        if (!settings.getWarnBeforeMount())
             return;
 
         String message = "The Office Scripting Framework support jar file " +
@@ -123,7 +123,7 @@ public class FrameworkJarChecker {
         NagDialog warning = NagDialog.createInformationDialog(
             message, prompt, true);
 
-        if (warning.getState() == false) {
+        if (!warning.getState()) {
             settings.setWarnBeforeMount(false);
         }
     }

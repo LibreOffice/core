@@ -221,7 +221,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      */
     @Override
     void write(OfficeZip zip) throws IOException {
-        if (hasChanged == true) {
+        if (hasChanged) {
             if (contentDOM != null) {
                 zip.setNamedBytes((objName + "/content.xml"),
                                         OfficeDocument.docToBytes(contentDOM));

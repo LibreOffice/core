@@ -83,7 +83,7 @@ public class ScriptBrowseNode extends PropertySet
             LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
         }
 
-        if (provider.hasScriptEditor() == true)
+        if (provider.hasScriptEditor())
         {
 
             this.editable  = true;

@@ -345,7 +345,7 @@ XInitialization {
             xNameCont.insertByName( _label4Name, label4Model );
             xNameCont.insertByName( _checkBoxName, checkBoxModel );
 
-            if ( extraPathLine == true )
+            if ( extraPathLine )
             {
             // create the label model and set the properties
             Object label5Model = xMultiServiceFactory.createInstance(

@@ -85,7 +85,7 @@ public class ConverterInfo {
     String xsltDeserial)
         throws RegistryException {
 
-        if (isValidOfficeType(officeMime.trim()) == false) {
+        if (!isValidOfficeType(officeMime.trim())) {
             RegistryException re = new RegistryException(
                 "Invalid office type");
             throw re;
@@ -162,7 +162,7 @@ public class ConverterInfo {
         String version, String vendor, String impl)
         throws RegistryException {
 
-        if (isValidOfficeType(officeMime.trim()) == false) {
+        if (!isValidOfficeType(officeMime.trim())) {
             RegistryException re = new RegistryException(
                 "Invalid office type");
             throw re;

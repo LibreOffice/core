@@ -56,7 +56,7 @@ public class ZipData {
 
         System.out.println("Unzipping " + entry + " to " + destination);
 
-        if (entry.startsWith("/") == false)
+        if (!entry.startsWith("/"))
             entry = "/" + entry;
 
         in = this.getClass().getResourceAsStream(entry);

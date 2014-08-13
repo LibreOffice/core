@@ -43,7 +43,7 @@ public class BooleanValidator extends integration.forms.ControlValidator
             if ( AnyConverter.isVoid( Value ) )
                 return "'indetermined' is not an allowed state";
             boolean value = ((Boolean)Value).booleanValue();
-            if ( m_preventChecked && ( value == true ) )
+            if ( m_preventChecked && ( value ) )
                 return "no no no. Don't check it.";
         }
         catch( java.lang.Exception e )
@@ -61,7 +61,7 @@ public class BooleanValidator extends integration.forms.ControlValidator
                 return false;
 
             boolean value = ((Boolean)Value).booleanValue();
-            if ( m_preventChecked && ( value == true ) )
+            if ( m_preventChecked && ( value ) )
                 return false;
             return true;
         }

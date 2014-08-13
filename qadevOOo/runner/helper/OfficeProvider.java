@@ -702,7 +702,7 @@ public class OfficeProvider implements AppProvider
         String command = (String) param.get(util.PropertyName.APP_EXECUTION_COMMAND);
 
         String connectionString;
-        if (param.getBool(util.PropertyName.USE_PIPE_CONNECTION) == true)
+        if (param.getBool(util.PropertyName.USE_PIPE_CONNECTION))
         {
             // This is the default behaviour
             connectionString = (String) param.get(util.PropertyName.PIPE_CONNECTION_STRING);

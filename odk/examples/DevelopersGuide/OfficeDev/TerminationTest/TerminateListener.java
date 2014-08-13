@@ -45,7 +45,7 @@ public class TerminateListener implements XTerminateListener {
         throws TerminationVetoException {
 
         // test if we can terminate now
-        if (TerminationTest.isAtWork() == true) {
+        if (TerminationTest.isAtWork()) {
             System.out.println("Terminate while we are at work? You can't mean it serious ;-)!");
             throw new TerminationVetoException();
         }

@@ -180,7 +180,7 @@ public final class ConverterInfoMgr {
     public static ConverterInfo findConverterInfo(String deviceMime, String officeMime) {
 
         if (deviceMime == null ||
-            ConverterInfo.isValidOfficeType(officeMime) == false) {
+            !ConverterInfo.isValidOfficeType(officeMime)) {
             return null;
         }
 
@@ -284,7 +284,7 @@ public final class ConverterInfoMgr {
         char                c   = ' ';
 
         boolean exitFlag = false;
-        while (exitFlag == false) {
+        while (!exitFlag) {
 
             System.out.println("\nMenu:");
             System.out.println("(L)oad plug-ins from a jar file");
@@ -340,7 +340,7 @@ public final class ConverterInfoMgr {
             // Unload by Display Name or Jarfile
 
             } else if (c == 'T') {
-                if (validate== true){
+                if (validate){
                     System.out.println("Validation switched off");
                     validate=false;
                 } else {
@@ -366,7 +366,7 @@ public final class ConverterInfoMgr {
                         rc = ConverterInfoMgr.removeByJar(name);
                     }
 
-                    if (rc == true) {
+                    if (rc) {
                         System.out.println("Remove successful.");
                     } else {
                         System.out.println("Remove failed.");

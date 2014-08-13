@@ -155,7 +155,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         int len = tableModel.data.size();
         for (int i = 0; i < len; i++) {
             ArrayList<?> list = tableModel.data.get(i);
-            if (((Boolean)list.get(0)).booleanValue() == true)
+            if (((Boolean)list.get(0)).booleanValue())
                 InstallWizard.storeLocation((String)list.get(2));
         }
     }
@@ -319,7 +319,7 @@ class MyTableModelIDE extends AbstractTableModel {
         Iterator iter = data.iterator();
         while (iter.hasNext()) {
             ArrayList<?> row = (ArrayList<?>)iter.next();
-            if (((Boolean)row.get(0)).booleanValue() == true) {
+            if (((Boolean)row.get(0)).booleanValue()) {
             return true;
             }
         }

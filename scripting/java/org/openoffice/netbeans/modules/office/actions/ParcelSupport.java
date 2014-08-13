@@ -96,16 +96,16 @@ public class ParcelSupport implements ParcelCookie
                 "Office, please close it before continuing. Click OK to " +
                 "continue deployment.";
 
-            if (settings.getWarnBeforeDocDeploy() == true) {
+            if (settings.getWarnBeforeDocDeploy()) {
                 NagDialog warning = NagDialog.createConfirmationDialog(
                     message, "Show this message in future", true);
 
                 boolean result = warning.show();
 
-                if (warning.getState() == false)
+                if (!warning.getState())
                     settings.setWarnBeforeDocDeploy(false);
 
-                if (result == false)
+                if (!result)
                     return false;
             }
         }
@@ -114,8 +114,8 @@ public class ParcelSupport implements ParcelCookie
             getOutputWindowWriter(fo.getName() + " (deploying)");
 
         try {
-            if (zipper.isOverwriteNeeded(source, target) == true)
-                if (promptForOverwrite(source, target) == false)
+            if (!zipper.isOverwriteNeeded(source, target))
+                if (!promptForOverwrite(source, target))
                     return false;
         }
         catch (IOException ioe) {

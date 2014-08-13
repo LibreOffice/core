@@ -224,7 +224,7 @@ class ScriptImpl implements XScript
 
                 }
 
-                if (editor != null && editor.isModified() == true)
+                if (editor != null && editor.isModified())
                 {
                     LogUtils.DEBUG("GOT A MODIFIED SOURCE");
                     source = editor.getText();

@@ -52,7 +52,7 @@ public class ParcelFolderDataLoader extends UniFileLoader {
     }
 
     protected FileObject findPrimaryFile(FileObject fo) {
-        if (fo.isFolder() == false)
+        if (!fo.isFolder())
             return null;
 
         FileObject contents = fo.getFileObject(ParcelZipper.CONTENTS_DIRNAME);

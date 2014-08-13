@@ -42,7 +42,7 @@ class WriterFrame extends java.awt.Frame
 
         try
         {
-            if (loadBeforeVisible == false)
+            if (!loadBeforeVisible)
             {
                 m_bean = new com.sun.star.comp.beans.OOoBean(new PrivateLocalOfficeConnection(_xConn));
                 add(m_bean, BorderLayout.CENTER);

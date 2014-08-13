@@ -67,7 +67,7 @@ public class InstUtil {
         boolean result = false;
         result = checkForSupportedVersion( getNetbeansLocation(), versions );
 
-        if (result == false)
+        if (!result)
             System.out.println("No supported version of NetBeans found.");
         return result;
     }

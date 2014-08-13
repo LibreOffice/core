@@ -490,7 +490,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
 
                     // generate pages string
-                    if (_aGTA.printAllPages() == false)
+                    if (!_aGTA.printAllPages())
                     {
                         String sPages = "";
                         if (_aGTA.getMaxPages() > 0)
@@ -561,7 +561,7 @@ public class OpenOfficePostscriptCreator implements IOffice
                 bBack = false;
             }
 
-            if (bFailed == true)
+            if (bFailed)
             {
                 GlobalLogWriter.println("convwatch.OfficePrint: FAILED");
             }

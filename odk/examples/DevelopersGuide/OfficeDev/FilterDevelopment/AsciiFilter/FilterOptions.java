@@ -208,7 +208,7 @@ public class FilterOptions
                 m_xMCF.createInstanceWithContext("com.sun.star.ucb.SimpleFileAccess", m_Ctx));
             if (xHelper!=null)
             {
-                if (bImport==true)
+                if (bImport)
                     m_xInput = xHelper.openFileRead(m_sURL);
                 else
                     m_xOutput = xHelper.openFileWrite(m_sURL);

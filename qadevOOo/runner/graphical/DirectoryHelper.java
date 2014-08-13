@@ -99,7 +99,7 @@ public class DirectoryHelper
             {
                 if ( aDirEntries[ i ].isDirectory() )
                 {
-                    if (m_bRecursiveIsAllowed == true)
+                    if (m_bRecursiveIsAllowed)
                     {
                         // Recursive call for the new directory
                         traverse_impl( aDirEntries[ i ].getAbsolutePath(), _aFileFilter );

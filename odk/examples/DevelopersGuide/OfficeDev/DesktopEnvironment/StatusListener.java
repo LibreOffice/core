@@ -135,7 +135,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
                 return;
             if (m_xFrame==null)
                 return;
-            if (m_bIsActionListener==true)
+            if (m_bIsActionListener)
                 return;
             xFrame = m_xFrame;
         }

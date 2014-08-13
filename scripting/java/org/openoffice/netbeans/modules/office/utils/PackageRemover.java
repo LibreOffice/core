@@ -62,7 +62,7 @@ public class PackageRemover {
             }
         }
 
-        if (source.delete() == false) {
+        if (!source.delete()) {
             tmp.delete();
             throw new IOException("Could not overwrite " + source);
         }

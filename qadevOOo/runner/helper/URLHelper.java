@@ -64,8 +64,8 @@ public class URLHelper
         // => correct this problem first, otherwise office can't use these URL's
         if(
             (sFileURL                       != null ) &&
-            (sFileURL.startsWith("file:/")  == true ) &&
-            (sFileURL.startsWith("file://") == false)
+            sFileURL.startsWith("file:/") &&
+            !sFileURL.startsWith("file://")
           )
         {
             StringBuffer sWorkBuffer = new StringBuffer(sFileURL);

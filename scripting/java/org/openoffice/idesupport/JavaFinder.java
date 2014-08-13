@@ -60,8 +60,8 @@ public class JavaFinder implements MethodFinder {
         ArrayList<ScriptEntry> result = new ArrayList<ScriptEntry>(10);
         ScriptEntry[] empty = new ScriptEntry[0];
 
-        if (basedir == null || basedir.exists() == false ||
-            basedir.isDirectory() == false)
+        if (basedir == null || !basedir.exists() ||
+            !basedir.isDirectory())
             return empty;
 
         parcelName = basedir.getName();
@@ -213,7 +213,7 @@ public class JavaFinder implements MethodFinder {
             boolean finished = false;
 
 
-            for (int j = 0; j < javaFiles.size() && finished == false; j++)
+            for (int j = 0; j < javaFiles.size() && !finished; j++)
             {
                 File javaFile = javaFiles.get(j);
                 String javaName = javaFile.getName();

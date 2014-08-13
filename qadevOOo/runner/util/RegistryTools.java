@@ -203,8 +203,8 @@ public class RegistryTools {
                         return false ;
                 } else {
 
-                    if (compareKeyTrees(tree1.openKey(keyName),
-                          tree2.openKey(keyName), true) == false) return false ;
+                    if (!compareKeyTrees(tree1.openKey(keyName),
+                          tree2.openKey(keyName), true)) return false ;
                 }
             }
         } catch (InvalidRegistryException e) {

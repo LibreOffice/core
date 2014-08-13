@@ -166,7 +166,7 @@ public class OpenOfficeDocFileSystem
         throws java.beans.PropertyVetoException, java.io.IOException
     {
 System.out.println("OpenOfficeDocFileSystem.setDocument: file=\"" + file.toString() + "\"");
-        if((file.exists() == false) || (file.isFile() == false)) {
+        if(!file.exists() || !file.isFile()) {
             IOException ioe = new IOException(
                 file.toString() + " does not exist");
             ErrorManager.getDefault().annotate(ioe, NbBundle.getMessage(
@@ -372,8 +372,7 @@ System.out.println("    exception: " + ioe.getMessage());
         synchronized(cache) {
             ModifiedStrategy modifiedStrategy = new ModifiedStrategy();
             scanDocument(modifiedStrategy);
-            if((isModified == true) ||
-                (modifiedStrategy.isModified() == true))
+            if(isModified || modifiedStrategy.isModified())
             {
                 File tmpFile = null;
                 try {
@@ -448,7 +447,7 @@ System.out.println("    exception: " + ioe.getMessage());
                 ZipEntry    zEntry = new ZipEntry(name);
                 zEntry.setTime(new Date().getTime());
                 cEntry = new Entry(zEntry);
-                if(editableStrategy.evaluate(cEntry) == false) {
+                if(!editableStrategy.evaluate(cEntry)) {
                     throw new IOException(
                         "cannot create/edit readonly file");    // I18N
                 }
@@ -478,7 +477,7 @@ System.out.println("    exception: " + ioe.getMessage());
                 zEntry.setCrc(crc.getValue());
                 zEntry.setTime(new Date().getTime());
                 cEntry  = new Entry(zEntry);
-                if(editableStrategy.evaluate(cEntry) == false) {
+                if(!editableStrategy.evaluate(cEntry)) {
                     throw new IOException(
                         "cannot create folder");    // I18N
                 }
@@ -487,7 +486,7 @@ System.out.println("    exception: " + ioe.getMessage());
                 cache.put(cEntry.getName(), cEntry);
                 isModified = true;
             } else {
-                if(cEntry.isFolder() == false)
+                if(!cEntry.isFolder())
                     cEntry = null;
             }
         } // synchronized
@@ -669,12 +668,12 @@ System.out.println("    exception: " + ioe.getMessage());
                     throw new IOException(
                         "there is no such a file/folder " + oldName);   // I18N
                 }
-                if(entry.isReadOnly() == true) {
+                if(entry.isReadOnly()) {
                     throw new IOException(
                         "file/folder " + oldName + " is readonly");     // I18N
                 }
                 entry.rename(nname);
-                if(editableStrategy.evaluate(entry) == false) {
+                if(!editableStrategy.evaluate(entry)) {
                     entry.rename(oname);
                     throw new IOException(
                         "cannot create file/folder");                   // I18N
@@ -833,7 +832,7 @@ System.out.println("    exception: " + ioe.getMessage());
         {
             // do not accept "children" of a file
             // ignore "read only" part of the filesystem
-            if(entry.isReadOnly() == false) {
+            if(!entry.isReadOnly()) {
                 // identify a child
                 if( (entry.getName().length() > 0) &&
                     (entry.getName().startsWith(parent)))
@@ -972,7 +971,7 @@ System.out.println("    exception: " + ioe.getMessage());
                 size   = entry.getSize();
                 time   = entry.getTime();
                 // removes tail file separator from a folder name
-                if((folder == true) && (name.endsWith(SEPARATOR))) {
+                if(folder && name.endsWith(SEPARATOR)) {
                     name = name.substring(
                         0, name.length() - SEPARATOR.length());
                 }
@@ -1019,7 +1018,7 @@ System.out.println("    exception: " + ioe.getMessage());
         public InputStream getInputStream()
             throws FileNotFoundException
         {
-            return (isFolder() == false)? new FileInputStream(getFile()): null;
+            return !isFolder() ? new FileInputStream(getFile()) : null;
         }
 
         public OutputStream getOutputStream()
@@ -1053,7 +1052,7 @@ System.out.println("    exception: " + ioe.getMessage());
                     arch.putNextEntry(entry);
                 } else {
                     // file
-                    if(isModified() == false)
+                    if(!isModified())
                         entry.setTime(getTime());
                     else
                         entry.setTime(node.lastModified());
@@ -1171,7 +1170,7 @@ System.out.println("    exception: " + ioe.getMessage());
             throws IOException
         {
             modified = true;
-            return (isFolder() == false)? new FileOutputStream(getFile()): null;
+            return !isFolder() ? new FileOutputStream(getFile()) : null;
         }
     }
 }

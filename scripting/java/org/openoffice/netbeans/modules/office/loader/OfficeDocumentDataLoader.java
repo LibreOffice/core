@@ -59,7 +59,7 @@ public class OfficeDocumentDataLoader extends UniFileLoader {
 
     protected FileObject findPrimaryFile(FileObject fo) {
         ExtensionList extensions = getExtensions();
-        if (extensions.isRegistered(fo) == false)
+        if (!extensions.isRegistered(fo))
             return null;
 
         File document = FileUtil.toFile(fo);

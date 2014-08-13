@@ -193,7 +193,7 @@ public abstract class ScriptProvider
                 contextUrl = getDocUrlFromModel( m_xModel );
                 m_container = new ParcelContainer( m_xContext, contextUrl, language  );
             }
-            else if (AnyConverter.isString(aArguments[0]) == true)
+            else if (AnyConverter.isString(aArguments[0]))
             {
                 String originalContextURL = AnyConverter.toString(aArguments[0]);
                 LogUtils.DEBUG("creating Application, path: " + originalContextURL );

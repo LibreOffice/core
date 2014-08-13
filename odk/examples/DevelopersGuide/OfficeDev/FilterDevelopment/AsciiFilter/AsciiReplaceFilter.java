@@ -344,7 +344,7 @@ public class AsciiReplaceFilter
 
             measure("options analyzed");
 
-            if (aOptions.isValid()==false)
+            if (!aOptions.isValid())
                 return false;
 
             // start real filtering
@@ -503,7 +503,7 @@ public class AsciiReplaceFilter
                 xRefresh.refresh();
 
                 // If we created used stream - we must close it too.
-                if (aOptions.m_bStreamOwner==true)
+                if (aOptions.m_bStreamOwner)
                 {
                     aOptions.m_xInput.closeInput();
                     measure("stream close");
@@ -577,7 +577,7 @@ public class AsciiReplaceFilter
                 measure("written to file");
 
                 // If we created used stream - we must close it too.
-                if (aOptions.m_bStreamOwner==true)
+                if (aOptions.m_bStreamOwner)
                 {
                     aOptions.m_xOutput.closeOutput();
                     measure("stream close");
@@ -617,9 +617,9 @@ public class AsciiReplaceFilter
             // convert buffer into return format [string]
             // and convert to lower or upper case if required.
             String sResult = rBuffer.toString();
-            if (aOptions.m_bCaseChange==true)
+            if (aOptions.m_bCaseChange)
             {
-                if (aOptions.m_bLower==true)
+                if (aOptions.m_bLower)
                     sResult = sResult.toLowerCase();
                 else
                     sResult = sResult.toUpperCase();

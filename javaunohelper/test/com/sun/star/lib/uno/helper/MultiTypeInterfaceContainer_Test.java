@@ -107,7 +107,7 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (bOk == false)
+        if (!bOk)
             System.out.println("Failed");
         else
             System.out.println("Ok");
@@ -153,7 +153,7 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (bOk == false)
+        if (!bOk)
             System.out.println("Failed");
         else
             System.out.println("Ok");
@@ -186,7 +186,7 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (bOk == false)
+        if (!bOk)
             System.out.println("Failed");
         else
             System.out.println("Ok");
@@ -221,7 +221,7 @@ public class MultiTypeInterfaceContainer_Test
           boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (bOk == false)
+        if (!bOk)
             System.out.println("Failed");
         else
             System.out.println("Ok");
@@ -254,7 +254,7 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (bOk == false)
+        if (!bOk)
             System.out.println("Failed");
         else
             System.out.println("Ok");
@@ -288,7 +288,7 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (bOk == false)
+        if (!bOk)
             System.out.println("Failed");
         else
             System.out.println("Ok");

@@ -74,17 +74,17 @@ public class PropChgHelper_Spell extends PropChgHelper
             }
             else if (aEvt.PropertyName.equals( "IsSpellUpperCase" ))
             {
-                bSCWA = false == bVal;          // FALSE->TRUE change?
+                bSCWA = !bVal;          // FALSE->TRUE change?
                 bSWWA = !bSCWA;                 // TRUE->FALSE change?
             }
             else if (aEvt.PropertyName.equals( "IsSpellWithDigits" ))
             {
-                bSCWA = false == bVal;          // FALSE->TRUE change?
+                bSCWA = !bVal;          // FALSE->TRUE change?
                 bSWWA = !bSCWA;                 // TRUE->FALSE change?
             }
             else if (aEvt.PropertyName.equals( "IsSpellCapitalization" ))
             {
-                bSCWA = false == bVal;      // FALSE->TRUE change?
+                bSCWA = !bVal;      // FALSE->TRUE change?
                 bSWWA = !bSCWA;             // TRUE->FALSE change?
             }
 

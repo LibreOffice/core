@@ -149,7 +149,7 @@ public class ConvWatch
                 throw new ConvWatchCancelException("createPostscriptStartCheck: Printed file " + sAbsolutePrintFile + " does not exist.");
             }
 
-            if (bAbsoluteReferenceFile == false)
+            if (!bAbsoluteReferenceFile)
             {
                 // copy AbsolutePrintFile to AbsoluteReferenceFile
                 String sDestinationFile = sAbsolutePrintFile; // URLHelper.getSystemPathFromFileURL(...)
@@ -170,7 +170,7 @@ public class ConvWatch
             a.setOutputPath(    _sOutputPath );
             a.setReferenceFile( sReferenceFile );
             a.setPostScriptFile(sPostScriptFile );
-            if (_aGTA.printAllPages() == true)
+            if (_aGTA.printAllPages())
             {
                 a.setMaxPages(9999);
             }
@@ -365,7 +365,7 @@ public class ConvWatch
 
             createINIStatus_DiffDiff(aDiffDiffList, "DiffDiff_", _sOutputPath, _sAbsoluteInputFile, _aGTA.getBuildID());
 
-            if (bFoundAOldDiff == false)
+            if (!bFoundAOldDiff)
             {
                 throw new ConvWatchCancelException("No old difference file found." );
             }

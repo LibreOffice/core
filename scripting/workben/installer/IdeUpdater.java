@@ -44,7 +44,7 @@ public class IdeUpdater extends Thread {
 
     public IdeUpdater(String installPath, JLabel statusLabel, JProgressBar pBar) {
 
-        if (installPath.endsWith(File.separator) == false)
+        if (!installPath.endsWith(File.separator))
             installPath += File.separator;
 
     File netbeansLauncher = new File( installPath + "bin" );

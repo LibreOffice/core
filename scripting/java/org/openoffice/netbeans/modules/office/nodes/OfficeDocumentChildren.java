@@ -48,7 +48,7 @@ public class OfficeDocumentChildren extends Children.Keys
         }
 
         Enumeration parcels = document.getParcels();
-        if (parcels.hasMoreElements() != true) {
+        if (!parcels.hasMoreElements()) {
             setKeys(Collections.EMPTY_SET);
             return;
         }
@@ -119,16 +119,16 @@ public class OfficeDocumentChildren extends Children.Keys
                 "Office, please close it before continuing. Click OK to " +
                 "delete this parcel.";
 
-            if (settings.getWarnBeforeParcelDelete() == true) {
+            if (settings.getWarnBeforeParcelDelete()) {
                 NagDialog warning = NagDialog.createConfirmationDialog(
                     message, "Show this message in future", true);
 
                 boolean result = warning.show();
 
-                if (warning.getState() == false)
+                if (!warning.getState())
                     settings.setWarnBeforeParcelDelete(false);
 
-                if (result == false)
+                if (!result)
                     return;
             }
             super.destroy();

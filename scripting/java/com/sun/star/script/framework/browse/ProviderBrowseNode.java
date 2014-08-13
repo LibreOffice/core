@@ -183,7 +183,7 @@ public class ProviderBrowseNode extends PropertySet
                 String name;
 
                 if (aParams == null || aParams.length < 1 ||
-                    AnyConverter.isString(aParams[0]) == false)
+                    !AnyConverter.isString(aParams[0]))
                 {
                     String prompt = "Enter name for new Parcel";
                     String title = "Create Parcel";

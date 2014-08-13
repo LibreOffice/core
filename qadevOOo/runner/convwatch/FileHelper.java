@@ -252,7 +252,7 @@ public class FileHelper
             File aFile = new File(sName);
             if (aFile.exists())
             {
-                if (m_bDebugTextShown == false)
+                if (!m_bDebugTextShown)
                 {
                     GlobalLogWriter.get().println("Found file: " + sName);
                     GlobalLogWriter.get().println("Activate debug mode.");

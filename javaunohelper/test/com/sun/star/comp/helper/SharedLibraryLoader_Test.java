@@ -142,7 +142,7 @@ public class SharedLibraryLoader_Test {
         result = SharedLibraryLoader.writeRegistryServiceInfo( null,  regKey );
 
         System.out.print("Test - ");
-        System.out.println( result==false ? "failed" : "successful");
+        System.out.println( !result ? "failed" : "successful");
         System.out.println("*******************************************************************");
         System.out.println();
         return result;
@@ -163,7 +163,7 @@ public class SharedLibraryLoader_Test {
     }
 
     static public void main(String args[]) throws java.lang.Exception {
-        System.exit( test() == true ? 0: -1 );
+        System.exit( test() ? 0: -1 );
     }
 }
 

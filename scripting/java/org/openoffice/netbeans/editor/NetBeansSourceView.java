@@ -151,7 +151,7 @@ public class NetBeansSourceView extends JPanel
            so we don't get a storm of DocumentEvents during loading */
         pane.getDocument().removeDocumentListener(this);
 
-        if (isModified == false)
+        if (!isModified)
         {
             pane.setText(model.getText());
         }

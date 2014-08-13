@@ -95,7 +95,7 @@ public class ParcelZipper
                             manifestStream.close();
                     }
                 }
-                else if (inEntry.isDirectory() == false) {
+                else if (!inEntry.isDirectory()) {
                     while ((len = documentStream.read(bytes)) != -1)
                         outStream.write(bytes, 0, len);
                 }
@@ -115,7 +115,7 @@ public class ParcelZipper
                 outStream.close();
         }
 
-        if (document.delete() == false) {
+        if (!document.delete()) {
             tmpfile.delete();
             throw new IOException("Could not overwrite " + document);
         }

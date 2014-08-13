@@ -126,7 +126,7 @@ public final class Test extends ComplexTestCase {
 
     public void testEmptyStruct2() {
         Struct2 s = new Struct2();
-        assure(s.p1 == false);
+        assure(!s.p1);
         assure(s.p2 == 0);
         assure(s.p3 == 0);
         assure(s.p4 == 0);
@@ -144,7 +144,7 @@ public final class Test extends ComplexTestCase {
         assure(s.p16.member1 == 0);
         assure(s.p17 == null);
         assure(s.p18 == null);
-        assure(s.t1 == false);
+        assure(!s.t1);
         assure(s.t2 == 0);
         assure(s.t3 == 0);
         assure(s.t4 == 0);
@@ -242,7 +242,7 @@ public final class Test extends ComplexTestCase {
             new char[0][], new String[0][], new Type[0][], new Object[0][],
             new Enum2[0][], new Struct1[0][], new Object[0][],
             new XNamingService[0][]);
-        assure(s.p1 == true);
+        assure(s.p1);
         assure(s.p2 == 1);
         assure(s.p3 == 2);
         assure(s.p4 == 3);
@@ -260,7 +260,7 @@ public final class Test extends ComplexTestCase {
         assure(s.p16.member1 == 1);
         assure(s.p17 == null);
         assure(s.p18 == null);
-        assure(s.t1 == false);
+        assure(!s.t1);
         assure(s.t2 == 0);
         assure(s.t3 == 0);
         assure(s.t4 == 0);
@@ -279,8 +279,8 @@ public final class Test extends ComplexTestCase {
         assure(s.t17 == null);
         assure(s.t18 == null);
         assure(s.a1.length == 2);
-        assure(s.a1[0] == false);
-        assure(s.a1[1] == true);
+        assure(!s.a1[0]);
+        assure(s.a1[1]);
         assure(s.a2.length == 2);
         assure(s.a2[0] == 1);
         assure(s.a2[1] == 2);
