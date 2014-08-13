@@ -390,8 +390,19 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent, const OUString& aDatName,
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
     pLbCharSet->InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
-    pLbCharSet->SelectTextEncoding( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW ?
-            osl_getThreadTextEncoding() : ePreselectUnicode );
+    if ( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW )
+    {
+        rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
+        // Prefer UTF-8, as UTF-16 would have already been detected from the stream.
+        // This gives a better chance that the file is going to be opened correctly.
+        if ( ( eSystemEncoding == RTL_TEXTENCODING_UNICODE ) && mpDatStream )
+            eSystemEncoding = RTL_TEXTENCODING_UTF8;
+        pLbCharSet->SelectTextEncoding( eSystemEncoding );
+    }
+    else
+    {
+        pLbCharSet->SelectTextEncoding( ePreselectUnicode );
+    }
 
     if( nCharSet >= 0 && ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW )
         pLbCharSet->SelectEntryPos( static_cast<sal_uInt16>(nCharSet) );
