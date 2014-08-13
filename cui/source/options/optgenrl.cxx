@@ -66,7 +66,7 @@ namespace Lang
     unsigned const Russian = 2;
     unsigned const Eastern = 4;
     unsigned const US = 8;
-    unsigned const All = -1;
+    unsigned const All = static_cast<unsigned>(-1);
 }
 
 
