@@ -1025,7 +1025,7 @@ namespace
         {
             const sal_uInt8 nCharSet = rtl_getBestWindowsCharsetFromTextEncoding(nIn);
             rtl_TextEncoding eTextEnc = rtl_getTextEncodingFromWindowsCharset(nCharSet);
-            CPPUNIT_ASSERT_MESSAGE("rtl_getBestUnixCharsetFromTextEncoding && rtl_getTextEncodingFromWindowsCharset differ", eTextEnc = nOut);
+            CPPUNIT_ASSERT_MESSAGE("rtl_getBestWindowsCharsetFromTextEncoding && rtl_getTextEncodingFromWindowsCharset differ", eTextEnc == nOut);
         }
 
         void WindowsCharsetFromTextEncoding_MS_1252()
