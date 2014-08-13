@@ -959,6 +959,7 @@ public:
     bool GetWritingHeaderFooter( )  {   return m_bWritingHeaderFooter;  }
     void SetAlternateContentChoiceOpen( bool bAltContentChoiceOpen ) { m_bAlternateContentChoiceOpen = bAltContentChoiceOpen; }
     bool IsAlternateContentChoiceOpen( ) { return m_bAlternateContentChoiceOpen; }
+    void GetSdtEndBefore(const SdrObject* pSdrObj);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX

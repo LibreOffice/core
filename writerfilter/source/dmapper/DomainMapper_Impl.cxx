@@ -1906,6 +1906,24 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         m_vTextFramesForChaining.push_back(xShape);
                     }
                 }
+
+                if(IsSdtEndBefore())
+                {
+                    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+                    if(xShapePropertySet.is())
+                    {
+                        xPropSetInfo = xShapePropertySet->getPropertySetInfo();
+                        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+                        {
+                            uno::Sequence<beans::PropertyValue> aShapeGrabBag(1);
+                            beans::PropertyValue aRet;
+                            aRet.Name = "SdtEndBefore";
+                            aRet.Value <<= uno::makeAny(true);
+                            aShapeGrabBag[0] = aRet;
+                            xShapePropertySet->setPropertyValue("InteropGrabBag",uno::makeAny(aShapeGrabBag));
+                        }
+                    }
+                }
             }
             if (!m_bInHeaderFooterImport && !checkZOrderStatus)
                 xProps->setPropertyValue(
@@ -1979,6 +1997,32 @@ void DomainMapper_Impl::PopShapeContext()
         m_aAnchoredStack.pop();
     }
     m_bFrameBtLr = false;
+}
+
+bool DomainMapper_Impl::IsSdtEndBefore()
+{
+    bool bIsSdtEndBefore = false;;
+    PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
+    if(pContext)
+    {
+        uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
+        for (int i =0; i< currentCharProps.getLength(); i++)
+        {
+            if (currentCharProps[i].Name == "CharInteropGrabBag")
+            {
+                uno::Sequence<beans::PropertyValue> aCharGrabBag;
+                currentCharProps[i].Value >>= aCharGrabBag;
+                for (int j=0; j < aCharGrabBag.getLength();j++)
+                {
+                    if(aCharGrabBag[j].Name == "SdtEndBefore")
+                    {
+                        aCharGrabBag[j].Value >>= bIsSdtEndBefore;
+                    }
+                }
+            }
+        }
+    }
+    return bIsSdtEndBefore;
 }
 
 sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
@@ -4399,43 +4443,22 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
      * there is no text/space/tab in between two runs.
      * In this case "SdtEndBefore" property needs to be set on Drawing.
      */
-    PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
-    if(pContext)
+    if(IsSdtEndBefore())
     {
-        uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
-        for (int i =0; i< currentCharProps.getLength(); i++)
+        uno::Reference< beans::XPropertySet > xGraphicObjectProperties(xTextContent,
+                    uno::UNO_QUERY_THROW);
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+        if(xGraphicObjectProperties.is())
         {
-            if (currentCharProps[i].Name == "CharInteropGrabBag")
+            xPropSetInfo = xGraphicObjectProperties->getPropertySetInfo();
+            if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
             {
-                uno::Sequence<beans::PropertyValue> aCharGrabBag;
-                currentCharProps[i].Value >>= aCharGrabBag;
-                for (int j=0; j < aCharGrabBag.getLength();j++)
-                {
-                    if(aCharGrabBag[j].Name == "SdtEndBefore")
-                    {
-                        bool bIsSdtEndBefore = false;
-                        aCharGrabBag[j].Value >>= bIsSdtEndBefore;
-                        if (bIsSdtEndBefore)
-                        {
-                            uno::Reference< beans::XPropertySet > xGraphicObjectProperties(xTextContent,
-                                        uno::UNO_QUERY_THROW);
-                            uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-                            if(xGraphicObjectProperties.is())
-                            {
-                                xPropSetInfo = xGraphicObjectProperties->getPropertySetInfo();
-                                if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
-                                {
-                                    uno::Sequence<beans::PropertyValue> aFrameGrabBag(1);
-                                    beans::PropertyValue aRet;
-                                    aRet.Name = "SdtEndBefore";
-                                    aRet.Value <<= uno::makeAny(true);
-                                    aFrameGrabBag[0] = aRet;
-                                    xGraphicObjectProperties->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aFrameGrabBag));
-                                }
-                            }
-                        }
-                    }
-                }
+                uno::Sequence<beans::PropertyValue> aFrameGrabBag(1);
+                beans::PropertyValue aRet;
+                aRet.Name = "SdtEndBefore";
+                aRet.Value <<= uno::makeAny(true);
+                aFrameGrabBag[0] = aRet;
+                xGraphicObjectProperties->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aFrameGrabBag));
             }
         }
     }

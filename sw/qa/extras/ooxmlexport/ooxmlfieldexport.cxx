@@ -610,6 +610,16 @@ DECLARE_OOXMLEXPORT_TEST(testfdo81946, "fdo81946.docx")
     assertXPath(pXmlDoc, "/w:hdr[1]/w:p[1]/w:sdt[1]/w:sdtContent[1]/w:r[2]/mc:AlternateContent[1]",0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo82492, "fdo82492.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    // make sure there is only one run inside first SDT after RT as in the Original file.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent/w:r",1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testSdtHeader, "sdt-header.docx")
 {
     // Problem was that w:sdt elements in headers were lost on import.
