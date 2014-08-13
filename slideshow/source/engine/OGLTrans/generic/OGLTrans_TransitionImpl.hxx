@@ -33,11 +33,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
-#ifdef _WIN32
-#include <prewin.h>
-#include <postwin.h>
-#endif
-
 #include <GL/gl.h>
 
 #include <basegfx/vector/b2dvector.hxx>
