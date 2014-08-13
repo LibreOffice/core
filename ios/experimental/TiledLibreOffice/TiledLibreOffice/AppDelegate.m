@@ -55,10 +55,14 @@
     return YES;
 }
 
+const char *ptyl_test_encryption_pathname;
+
 - (void)startDisplaying:(NSString*)documentPath;
 {
     ViewController *vc = [[ViewController alloc] init];
     self.window.rootViewController = vc;
+
+    ptyl_test_encryption_pathname = [documentPath UTF8String];
 
     [[[NSThread alloc] initWithTarget:self selector:@selector(threadMainMethod:) object:documentPath] start];
     vc.view = [[View alloc] initWithFrame:[self.window frame]];
