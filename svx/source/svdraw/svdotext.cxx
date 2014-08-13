@@ -1975,6 +1975,8 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         {
             // set the need for chaining
             SetToBeChained( pEditStatus->IsPageOverflow() );
+            fprintf(stderr, "[CHAINING] Need for Chaining is %s\n",
+                pEditStatus->IsPageOverflow() ? "TRUE" : "FALSE");
             //impDecomposeChainedTextPrimitive();
         }
     }
