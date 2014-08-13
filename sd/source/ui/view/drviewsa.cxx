@@ -362,11 +362,20 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    mxScannerManager = scanner::ScannerManager::create( xContext );
+    try
+    {
+        mxScannerManager = scanner::ScannerManager::create( xContext );
 
-    mxScannerListener = uno::Reference< lang::XEventListener >(
-                        static_cast< ::cppu::OWeakObject* >( new ScannerEventListener( this ) ),
-                        uno::UNO_QUERY );
+        mxScannerListener = uno::Reference< lang::XEventListener >(
+                            static_cast< ::cppu::OWeakObject* >( new ScannerEventListener( this ) ),
+                            uno::UNO_QUERY );
+    }
+    catch (Exception& exception)
+    {
+        // Eat the exception and log it
+        // We can still continue if scanner manager is not available.
+        SAL_WARN("sd", "Scanner manager exception: " << exception.Message);
+    }
 
     mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );
     mpViewOverlayManager.reset( new ViewOverlayManager( GetViewShellBase() ) );
