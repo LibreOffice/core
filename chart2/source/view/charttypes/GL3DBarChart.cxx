@@ -324,8 +324,8 @@ void RenderBenchMarkThread::ProcessClickFlyBack()
     if (!mbNeedFlyBack)
         return;
     osl_getSystemTime(&maClickFlyBackEndTime);
-    int aDeltaMs = mpChart->calcTimeInterval(maClickFlyBackStartTime, maClickFlyBackEndTime);
-    if(aDeltaMs >= 10000)
+    int nDeltaMs = mpChart->calcTimeInterval(maClickFlyBackStartTime, maClickFlyBackEndTime);
+    if(nDeltaMs >= 10000)
     {
         mpChart->maRenderEvent = EVENT_MOVE_TO_DEFAULT;
     }
@@ -647,10 +647,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         mnCornerId = 0;
         mbCameraInit = true;
         float pi = 3.1415926f;
-        float angleX = -pi / 6.5f;
-        float angleZ = -pi / 8.0f;
-        glm::mat4 maDefaultRotateMatrix = glm::eulerAngleYXZ(0.0f, angleX, angleZ);
-        maDefaultCameraPosition = glm::vec3(maDefaultRotateMatrix * glm::vec4(maDefaultCameraPosition, 1.0f));
+        float nAngleX = -pi / 6.5f;
+        float nAngleZ = -pi / 8.0f;
+        glm::mat4 aDefaultRotateMatrix = glm::eulerAngleYXZ(0.0f, nAngleX, nAngleZ);
+        maDefaultCameraPosition = glm::vec3(aDefaultRotateMatrix * glm::vec4(maDefaultCameraPosition, 1.0f));
         maCameraPosition = maDefaultCameraPosition;
         maCameraDirection = maDefaultCameraDirection;
         mpCamera->setPosition(maCameraPosition);
@@ -690,7 +690,6 @@ void GL3DBarChart::update()
     mpRenderThread = rtl::Reference<RenderThread>(new RenderOneFrameThread(this));
     mrWindow.getContext().resetCurrent();
     mpRenderThread->launch();
-
 }
 
 namespace {
@@ -791,21 +790,21 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
         return;
 
     const BarInformation& rBarInfo = itr->second;
-    glm::vec3 textPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
+    glm::vec3 aTextPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
                                   rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
                                   rBarInfo.maPos.z);
     maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
                 OUString("Value: ") + OUString::number(rBarInfo.mnVal), CALC_POS_EVENT_ID));
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
-    pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f), textPos);
+    pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f), aTextPos);
     pScreenText->render();
 
-    glm::vec3 maTargetPosition = rBarInfo.maPos;
-    maTargetPosition.z += 240;
-    maTargetPosition.y += BAR_SIZE_Y / 2.0f;
+    glm::vec3 aTargetPosition = rBarInfo.maPos;
+    aTargetPosition.z += 240;
+    aTargetPosition.y += BAR_SIZE_Y / 2.0f;
     Size aSize = mrWindow.GetSizePixel();
     mrWindow.getContext().setWinSize(aSize);
-    mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, maCameraPosition, maTargetPosition, STEPS));
+    mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, maCameraPosition, aTargetPosition, STEPS));
     mrWindow.getContext().resetCurrent();
     mpRenderThread->launch();
 
@@ -830,16 +829,16 @@ void GL3DBarChart::render()
 
 void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 )
 {
-    long direction = rEndPos.X() - rStartPos.X();
+    long nDirection = rEndPos.X() - rStartPos.X();
     osl::MutexGuard aGuard(maMutex);
     if ((maRenderEvent == EVENT_NONE) || (maRenderEvent == EVENT_SHOW_SCROLL))
-        maRenderEvent = direction > 0 ? EVENT_DRAG_RIGHT : EVENT_DRAG_LEFT;
-    if(direction < 0)
+        maRenderEvent = nDirection > 0 ? EVENT_DRAG_RIGHT : EVENT_DRAG_LEFT;
+    if(nDirection < 0)
     {
         mnCornerId = (mnCornerId + 1) % 4;
         moveToCorner();
     }
-    else if(direction > 0)
+    else if(nDirection > 0)
     {
         mnCornerId = mnCornerId - 1;
         if(mnCornerId < 0)
@@ -932,20 +931,20 @@ void GL3DBarChart::contextDestroyed()
 void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, glm::vec3 rPos, sal_uInt32 nEvent)
 {
     maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, nEvent));
-    opengl3D::TextCacheItem tmpTextCache = mpTextCache->getText(nStr);
-    float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.05;
+    opengl3D::TextCacheItem aTextCache = mpTextCache->getText(nStr);
+    float nRectWidth = (float)aTextCache.maSize.Width() / (float)aTextCache.maSize.Height() * 0.05;
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
-    pScreenText->setPosition(rLeftTop, glm::vec2(rLeftTop.x + rectWidth, rLeftTop.y - nTextHeight), rPos);
+    pScreenText->setPosition(rLeftTop, glm::vec2(rLeftTop.x + nRectWidth, rLeftTop.y - nTextHeight), rPos);
 }
 
 void GL3DBarChart::updateRenderFPS()
 {
-    int aDeltaMs = calcTimeInterval(maFPSRenderStartTime, maFPSRenderEndTime);
-    if(aDeltaMs >= FPS_TIME)
+    int nDeltaMs = calcTimeInterval(maFPSRenderStartTime, maFPSRenderEndTime);
+    if(nDeltaMs >= FPS_TIME)
     {
         osl_getSystemTime(&maFPSRenderEndTime);
-        aDeltaMs = calcTimeInterval(maFPSRenderStartTime, maFPSRenderEndTime);
-        int iFPS = miFrameCount * 1000 / aDeltaMs;
+        nDeltaMs = calcTimeInterval(maFPSRenderStartTime, maFPSRenderEndTime);
+        int iFPS = miFrameCount * 1000 / nDeltaMs;
         maFPS = OUString("Render FPS: ") + OUString::number(iFPS);
         miFrameCount = 0;
         osl_getSystemTime(&maFPSRenderStartTime);
@@ -978,17 +977,17 @@ void GL3DBarChart::updateScreenText()
 
 void GL3DBarChart::updateDataUpdateFPS()
 {
-    int aDeltaMs = calcTimeInterval(maDataUpdateStartTime, maDataUpdateEndTime);
-    if(aDeltaMs >= DATAUPDATE_FPS_TIME)
+    int nDeltaMs = calcTimeInterval(maDataUpdateStartTime, maDataUpdateEndTime);
+    if(nDeltaMs >= DATAUPDATE_FPS_TIME)
     {
-        int iFPS = miDataUpdateCounter * 1000 / aDeltaMs;
+        int iFPS = miDataUpdateCounter * 1000 / nDeltaMs;
         if (iFPS)
         {
             maDataUpdateFPS = OUString("Data Update FPS: ") + OUString::number(iFPS);
         }
         else
         {
-            float fFPS = (float)miDataUpdateCounter * 1000 / (float)aDeltaMs;
+            float fFPS = (float)miDataUpdateCounter * 1000 / (float)nDeltaMs;
             maDataUpdateFPS = OUString("Data Update FPS: ") + OUString::number(fFPS);
         }
         miDataUpdateCounter = 0;
@@ -1000,125 +999,125 @@ void GL3DBarChart::updateDataUpdateFPS()
 
 void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
 {
-    std::list<float> &alist = maBarHistory[nBarID];
-    if(alist.size() == HISTORY_NUM)
-        alist.pop_front();
-    alist.push_back(nVal);
+    std::list<float>& aList = maBarHistory[nBarID];
+    if(aList.size() == HISTORY_NUM)
+        aList.pop_front();
+    aList.push_back(nVal);
 }
 
 void GL3DBarChart::updateClickEvent()
 {
     if (maRenderEvent == EVENT_CLICK)
     {
-        std::list<float> &alist = maBarHistory[mSelectBarId];
+        std::list<float>& aList = maBarHistory[mSelectBarId];
         sal_uInt32 idex = 0;
-        for (std::list<float>::iterator it = alist.begin();it != alist.end();it++)
+        for (std::list<float>::iterator it = aList.begin();it != aList.end();it++)
         {
-            OUString barValue;
-            if (idex + 1 == alist.size())
+            OUString aBarValue;
+            if (idex + 1 == aList.size())
             {
-                barValue = OUString("Value: ") + OUString::number(*it);
-                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, barValue, CALC_POS_EVENT_ID));
-                opengl3D::TextCacheItem tmpTextCache = mpTextCache->getText(barValue);
-                float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.03;
+                aBarValue = OUString("Value: ") + OUString::number(*it);
+                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, CALC_POS_EVENT_ID));
+                opengl3D::TextCacheItem aTextCache = mpTextCache->getText(aBarValue);
+                float nRectWidth = (float)aTextCache.maSize.Width() / (float)aTextCache.maSize.Height() * 0.03;
                 std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(mSelectBarId);
                 const BarInformation& rBarInfo = itr->second;
-                glm::vec3 textPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
+                glm::vec3 aTextPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
                                               rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
                                               rBarInfo.maPos.z);
                 opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
-                pScreenText->setPosition(glm::vec2(-rectWidth / 2, 0.03f), glm::vec2(rectWidth / 2, -0.03f), textPos);
+                pScreenText->setPosition(glm::vec2(-nRectWidth / 2, 0.03f), glm::vec2(nRectWidth / 2, -0.03f), aTextPos);
             }
             else
             {
-                barValue = OUString("History_") + OUString::number(idex) + OUString(": ") + OUString::number(*it);
-                addScreenTextShape(barValue, glm::vec2(0.65f, 0.99f - (idex * 0.1f)), 0.1f);
+                aBarValue = OUString("History_") + OUString::number(idex) + OUString(": ") + OUString::number(*it);
+                addScreenTextShape(aBarValue, glm::vec2(0.65f, 0.99f - (idex * 0.1f)), 0.1f);
             }
             idex++;
         }
     }
 }
 
-float GL3DBarChart::calcScrollDistance(glm::mat4 &mvp, glm::vec3 pos)
+float GL3DBarChart::calcScrollDistance(glm::mat4& rMVP, glm::vec3 aPos)
 {
-    glm::vec4 screenPos = mvp * glm::vec4(pos, 1.0);
-    glm::vec3 actualPos = glm::vec3(screenPos.x / screenPos.w, screenPos.y / screenPos.w, 0.0);
-    return glm::length(actualPos);
+    glm::vec4 aScreenPos = rMVP * glm::vec4(aPos, 1.0);
+    glm::vec3 aActualPos = glm::vec3(aScreenPos.x / aScreenPos.w, aScreenPos.y / aScreenPos.w, 0.0);
+    return glm::length(aActualPos);
 }
 
-void GL3DBarChart::calcDistance(std::vector<sal_uInt32> & vectorNearest)
+void GL3DBarChart::calcDistance(std::vector<sal_uInt32> & rVectorNearest)
 {
     int i =0;
-    glm::mat4 projection = mpRenderer->GetProjectionMatrix();
-    glm::mat4 view = mpRenderer->GetViewMatrix();
-    glm::mat4 scale = mpRenderer->GetGlobalScaleMatrix();
-    glm::mat4 mvp = projection * view * scale;
+    glm::mat4 aProjection = mpRenderer->GetProjectionMatrix();
+    glm::mat4 aView = mpRenderer->GetViewMatrix();
+    glm::mat4 aScale = mpRenderer->GetGlobalScaleMatrix();
+    glm::mat4 aMVP = aProjection * aView * aScale;
     std::map<sal_uInt32, const BarInformation>::iterator it;
     for(it= maBarMap.begin(); it!= maBarMap.end(); ++it)
     {
         sal_uInt32 nId = it->first;
         if(i < SHOW_VALUE_COUNT)
         {
-            vectorNearest.push_back(nId);
+            rVectorNearest.push_back(nId);
             i++;
         }
-        maDistanceMap[nId] = calcScrollDistance(mvp, glm::vec3(it->second.maPos.x + BAR_SIZE_X / 2.0f,
+        maDistanceMap[nId] = calcScrollDistance(aMVP, glm::vec3(it->second.maPos.x + BAR_SIZE_X / 2.0f,
                                                                it->second.maPos.y + BAR_SIZE_Y / 2.0f,
                                                                it->second.maPos.z));
     }
 }
 
-void GL3DBarChart::initDistanceHeap(std::vector<sal_uInt32> &vectorNearest)
+void GL3DBarChart::initDistanceHeap(std::vector<sal_uInt32> &rVectorNearest)
 {
-    for(int i= (vectorNearest.size()-2)/2; i>= 0; i--)
+    for(int i= (rVectorNearest.size()-2)/2; i>= 0; i--)
     {
-        keepHeap(vectorNearest, i);
+        keepHeap(rVectorNearest, i);
     }
 }
 
-void GL3DBarChart::keepHeap(std::vector<sal_uInt32> &vectorNearest, int index)
+void GL3DBarChart::keepHeap(std::vector<sal_uInt32> &rVectorNearest, int nIndex)
 {
-    size_t parentindex = index;
-    while(parentindex < vectorNearest.size())
+    size_t nParentIndex = nIndex;
+    while(nParentIndex < rVectorNearest.size())
     {
-        size_t leftindex = parentindex * 2 + 1;
-        size_t rightindex = leftindex +1;
-        if(leftindex >= vectorNearest.size())
+        size_t nLeftIndex = nParentIndex * 2 + 1;
+        size_t nRightIndex = nLeftIndex +1;
+        if(nLeftIndex >= rVectorNearest.size())
             break;
-        size_t farthestindex = leftindex;
-        float farthest = maDistanceMap[vectorNearest[leftindex]];
-        if(rightindex < vectorNearest.size())
+        size_t nFarthestIndex = nLeftIndex;
+        float nFarthest = maDistanceMap[rVectorNearest[nLeftIndex]];
+        if(nRightIndex < rVectorNearest.size())
         {
-            float right = maDistanceMap[vectorNearest[rightindex]];
-            if(right > farthest)
+            float nRight = maDistanceMap[rVectorNearest[nRightIndex]];
+            if(nRight > nFarthest)
             {
-                farthest = right;
-                farthestindex = rightindex;
+                nFarthest = nRight;
+                nFarthestIndex = nRightIndex;
             }
         }
-        float parent = maDistanceMap[vectorNearest[parentindex]];
-        if(parent >= farthest)
+        float nParent = maDistanceMap[rVectorNearest[nParentIndex]];
+        if(nParent >= nFarthest)
             break;
         else
         {
-            swapVector(parentindex , farthestindex, vectorNearest);
-            parentindex = farthestindex;
+            swapVector(nParentIndex , nFarthestIndex, rVectorNearest);
+            nParentIndex = nFarthestIndex;
         }
     }
 
 }
 
-void GL3DBarChart::swapVector(int i, int j, std::vector<sal_uInt32> &vectorNearest)
+void GL3DBarChart::swapVector(int i, int j, std::vector<sal_uInt32> &rVectorNearest)
 {
-    sal_uInt32 tmp = vectorNearest[i];
-    vectorNearest[i] = vectorNearest[j];
-    vectorNearest[j] = tmp;
+    sal_uInt32 nTmp = rVectorNearest[i];
+    rVectorNearest[i] = rVectorNearest[j];
+    rVectorNearest[j] = nTmp;
 }
 
-void GL3DBarChart::getNearestBars(std::vector<sal_uInt32> &vectorNearest)
+void GL3DBarChart::getNearestBars(std::vector<sal_uInt32> &rVectorNearest)
 {
-    calcDistance(vectorNearest);
-    initDistanceHeap(vectorNearest);
+    calcDistance(rVectorNearest);
+    initDistanceHeap(rVectorNearest);
     std::map<sal_uInt32, float>::iterator it;
     int i = 0;
     for(it= maDistanceMap.begin(); it!= maDistanceMap.end(); ++it)
@@ -1126,12 +1125,12 @@ void GL3DBarChart::getNearestBars(std::vector<sal_uInt32> &vectorNearest)
         i++;
         if(i <= SHOW_VALUE_COUNT)
             continue;
-        float distance = it->second;
-        float Heaphead = maDistanceMap[vectorNearest[0]];
-        if(distance < Heaphead)
+        float nDistance = it->second;
+        float nHeaphead = maDistanceMap[rVectorNearest[0]];
+        if(nDistance < nHeaphead)
         {
-            vectorNearest[0] = it->first;
-            keepHeap(vectorNearest, 0);
+            rVectorNearest[0] = it->first;
+            keepHeap(rVectorNearest, 0);
         }
     }
 }
@@ -1140,32 +1139,33 @@ void GL3DBarChart::updateScroll()
 {
     if ((maRenderEvent == EVENT_SCROLL) || (maRenderEvent == EVENT_SHOW_SCROLL))
     {
-        float minDistance = 0.0f;
-        std::vector<BarInformation> barInfoList;
+        float fMinDistance = 0.0f;
+        std::vector<BarInformation> aBarInfoList;
         for(size_t i= 0;i < maVectorNearest.size(); i++)
         {
             //get bar height position
             std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(maVectorNearest[i]);
             const BarInformation& rBarInfo = itr->second;
-            barInfoList.push_back(rBarInfo);
-            glm::vec3 pos = rBarInfo.maPos;
-            minDistance = (minDistance == 0.0f) ? glm::length(pos - maCameraPosition) :
-                                 std::min(glm::length(pos - maCameraPosition), minDistance);
+            aBarInfoList.push_back(rBarInfo);
+            glm::vec3 aPos = rBarInfo.maPos;
+            fMinDistance = (fMinDistance == 0.0f) ? glm::length(aPos - maCameraPosition) :
+                                 std::min(glm::length(aPos - maCameraPosition), fMinDistance);
         }
-        if (minDistance <= SHOW_SCROLL_TEXT_DISTANCE)
+
+        if (fMinDistance <= SHOW_SCROLL_TEXT_DISTANCE)
         {
             //update scroll value
-            for(size_t i = 0; i < barInfoList.size(); i++)
+            for(size_t i = 0; i < aBarInfoList.size(); i++)
             {
-                OUString barValue = OUString("Value: ") + OUString::number(barInfoList[i].mnVal);
-                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, barValue, CALC_POS_EVENT_ID));
-                opengl3D::TextCacheItem tmpTextCache = mpTextCache->getText(barValue);
-                float rectWidth = (float)tmpTextCache.maSize.Width() / (float)tmpTextCache.maSize.Height() * 0.03;
-                glm::vec3 textPos = glm::vec3(barInfoList[i].maPos.x + BAR_SIZE_X / 2.0f,
-                                      barInfoList[i].maPos.y + BAR_SIZE_Y / 2.0f,
-                                      barInfoList[i].maPos.z);
+                OUString aBarValue = OUString("Value: ") + OUString::number(aBarInfoList[i].mnVal);
+                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, CALC_POS_EVENT_ID));
+                opengl3D::TextCacheItem aTextCache = mpTextCache->getText(aBarValue);
+                float nRectWidth = (float)aTextCache.maSize.Width() / (float)aTextCache.maSize.Height() * 0.03;
+                glm::vec3 aTextPos = glm::vec3(aBarInfoList[i].maPos.x + BAR_SIZE_X / 2.0f,
+                                      aBarInfoList[i].maPos.y + BAR_SIZE_Y / 2.0f,
+                                      aBarInfoList[i].maPos.z);
                 opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
-                pScreenText->setPosition(glm::vec2(-rectWidth / 2, 0.03f), glm::vec2(rectWidth / 2, -0.03f), textPos);
+                pScreenText->setPosition(glm::vec2(-nRectWidth / 2, 0.03f), glm::vec2(nRectWidth / 2, -0.03f), aTextPos);
             }
         }
     }
