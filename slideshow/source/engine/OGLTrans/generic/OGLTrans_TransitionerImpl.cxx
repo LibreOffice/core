@@ -442,9 +442,9 @@ void OGLTransitionerImpl::impl_prepareSlides()
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
 
-    GLWindow& rGLWindow(mpContext->getOpenGLWindow());
-
 #if defined( GLX_EXT_texture_from_pixmap )
+
+    GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
     if( mbTextureFromPixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
         Sequence< Any > leaveArgs;
@@ -1245,9 +1245,9 @@ void OGLTransitionerImpl::disposeTextures()
 {
     mpContext->makeCurrent();
 
+#if defined( GLX_EXT_texture_from_pixmap )
     GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
-#if defined( GLX_EXT_texture_from_pixmap )
     PFNGLXRELEASETEXIMAGEEXTPROC myglXReleaseTexImageEXT = (PFNGLXRELEASETEXIMAGEEXTPROC) glXGetProcAddress( (const GLubyte*) "glXReleaseTexImageEXT" );
     if( mbUseLeavingPixmap ) {
         myglXReleaseTexImageEXT( rGLWindow.dpy, maLeavingPixmapGL, GLX_FRONT_LEFT_EXT );
