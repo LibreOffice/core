@@ -164,7 +164,7 @@ private:
     TimeValue maFPSRenderEndTime;
     TimeValue maDataUpdateStartTime;
     TimeValue maDataUpdateEndTime;
-    std::map<sal_uInt32, std::list<float>> maBarHistory;
+    std::map<sal_uInt32, std::list<float> > maBarHistory;
     std::vector<sal_uInt32> maVectorNearest;
     std::map<sal_uInt32, float> maDistanceMap;
 };
