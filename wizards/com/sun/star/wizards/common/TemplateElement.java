@@ -20,5 +20,5 @@ package com.sun.star.wizards.common;
 
 interface TemplateElement
 {
-    void write(Object any) throws Exception;
+
 }

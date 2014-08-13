@@ -20,28 +20,15 @@ package org.libreoffice.report;
 public interface ReportEngineMetaData
 {
 
-    /**
-     * Checks, whether a certain output type is available.
-     * Feed the mime-type of the output type in and you'll get
-     * a true or false back.
-     *
-     * @param mimeType
-     * @return true, if the output type is supported; false otherwise.
-     */
-    boolean isOutputSupported(String mimeType);
 
-    /**
-     * Lists all supported output parameters for the given mime-type.
-     * This listing can be used to build a generic user interface for
-     * configuring a certain output.
-     */
-    String[] getOutputParameters(String mimeType);
+
+
 
     Class getParameterType(String parameter);
 
-    boolean isMandatory(String parameter);
 
-    boolean isEnumeration(String parameter);
 
-    Object[] getEnumerationValues(String parameter);
+
+
+
 }

@@ -61,20 +61,7 @@ public class ParcelContainer implements XNameAccess
      * @return    <tt>true</tt> if has parent <tt>false</tt> otherwise
      */
     public boolean isUnoPkg() { return isPkgContainer; }
-    /**
-     * Tests if this <tt>ParcelContainer</tt> has a parent
-     * a parent.
-     *
-     * @return    <tt>true</tt> if has parent <tt>false</tt> otherwise
-     */
-    public boolean hasParent()
-    {
-        if ( parent == null )
-        {
-            return false;
-        }
-        return true;
-    }
+
 
     /**
      * Returns this <tt>ParcelContainer</tt>'s  parent

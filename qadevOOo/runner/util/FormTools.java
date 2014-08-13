@@ -260,24 +260,7 @@ public class FormTools {
         return UnoRuntime.queryInterface(XLoadable.class, the_form);
     }
 
-    public static XLoadable bindForm( XTextDocument aDoc, String formName ) {
-        XLoadable formLoader = null;
 
-        try {
-            XForm the_form = (XForm) FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName(formName);
-            XPropertySet formProps = UnoRuntime.queryInterface(XPropertySet.class, the_form);
-            formProps.setPropertyValue("DataSourceName","Bibliography");
-            formProps.setPropertyValue("Command","biblio");
-            formProps.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
-            formLoader = UnoRuntime.queryInterface(XLoadable.class, the_form);
-        }
-        catch (Exception ex) {
-            System.out.println("Exception: "+ex);
-            ex.printStackTrace(System.err);
-        }
-
-        return formLoader;
-    }
 
     /**
     * Binds the form with the name specified of <code>aDoc</code> Writer document

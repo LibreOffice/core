@@ -152,18 +152,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         initializeCategory(BUSINESS);
     }
 
-    public void selectCategory()
-    {
-        if (optBusiness.getState())
-        {
-            initializeCategory(BUSINESS);
-        }
-        else
-        {
-            initializeCategory(PRIVATE);
-        }
-    }
-
     private void initializeCategory(int _iCategory)
     {
         try
@@ -267,16 +255,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         }
         return smytable;
     }
-
-    public void fillupTables()
-    {
-    }
-
-    public void fillupFieldsListbox()
-    {
-        super.emptyFieldsListBoxes();
-    }
-
 
     /* (non-Javadoc)
      * @see com.sun.star.awt.XItemListener#itemStateChanged(com.sun.star.awt.ItemEvent)

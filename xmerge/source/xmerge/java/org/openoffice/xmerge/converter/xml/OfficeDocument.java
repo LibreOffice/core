@@ -338,52 +338,6 @@ public abstract class OfficeDocument
     }
 
     /**
-     * Returns the embedded object corresponding to the name provided.
-     * The name should be stripped of any preceding path characters, such as
-     * '/', '.' or '#'.
-     *
-     * @param   name    The name of the embedded object to retrieve.
-     *
-     * @return  An <code>EmbeddedObject</code> instance representing the named
-     *          object.
-     */
-    public EmbeddedObject getEmbeddedObject(String name) {
-        if (name == null) {
-            return null;
-        }
-
-        if (embeddedObjects == null) {
-            getEmbeddedObjects();
-        }
-
-        if (embeddedObjects.containsKey(name)) {
-            return embeddedObjects.get(name);
-        }
-        else {
-            return null;
-        }
-    }
-
-
-    /**
-     * Adds a new embedded object to the document.
-     *
-     * @param   embObj  An instance of <code>EmbeddedObject</code>.
-     */
-    public void addEmbeddedObject(EmbeddedObject embObj) {
-        if (embObj == null) {
-            return;
-        }
-
-        if (embeddedObjects == null) {
-            embeddedObjects = new HashMap<String, EmbeddedObject>();
-        }
-
-        embeddedObjects.put(embObj.getName(), embObj);
-    }
-
-
-    /**
      *  Read the Office <code>Document</code> from the given
      *  <code>InputStream</code>.
      *

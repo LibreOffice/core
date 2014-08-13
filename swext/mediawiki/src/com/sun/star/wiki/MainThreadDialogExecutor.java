@@ -42,11 +42,7 @@ public class MainThreadDialogExecutor implements XCallback
         return GetCallback( xContext, aExecutor );
     }
 
-    static public boolean Execute( XComponentContext xContext, XDialog xDialog )
-    {
-        MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xDialog );
-        return GetCallback( xContext, aExecutor );
-    }
+
 
     static public boolean Execute( XComponentContext xContext, XMessageBox xMessageBox )
     {

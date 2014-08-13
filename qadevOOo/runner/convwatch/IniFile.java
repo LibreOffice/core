@@ -267,91 +267,10 @@ class IniFile
             return sValue;
         }
 
-    /**
-       write back the ini file to the disk, only if there exist changes
-    */
-    public void store()
-        {
-            if (m_bListContainUnsavedChanges == false)
-            {
-                // nothing has changed, so no need to store
-                return;
-            }
-
-            File aFile = new File(m_sFilename);
-            if (aFile.exists())
-            {
-                aFile.delete();
-                if (aFile.exists())
-                {
-                    GlobalLogWriter.get().println("Couldn't delete the file " + m_sFilename);
-                    return;
-                }
-            }
-            try
-            {
-                RandomAccessFile aWriter = new RandomAccessFile(aFile, "rw");
-                for (int i=0; i<m_aList.size();i++)
-                {
-                    String sLine = getItem(i);
-                    aWriter.writeBytes(sLine);
-                    aWriter.writeByte('\n');
-                }
-                aWriter.close();
-            }
-
-            catch (java.io.FileNotFoundException fne)
-            {
-                GlobalLogWriter.get().println("couldn't open file for writing " + m_sFilename);
-                GlobalLogWriter.get().println("Message: " + fne.getMessage());
-            }
-            catch(java.io.IOException ie)
-            {
-                GlobalLogWriter.get().println("Exception occurs while writing to file " + m_sFilename);
-                GlobalLogWriter.get().println("Message: " + ie.getMessage());
-            }
-        }
 
 
 
-    /**
-       insert a value
-       there are 3 cases
-       1. section doesn't exist, goto end and insert a new section, insert a new key value pair
-       2. section exist but key not, search section, search key, if key is -1 get last known key position and insert new key value pair there
-       3. section exist and key exist, remove the old key and insert the key value pair at the same position
-    */
-    public void insertValue(String _sSection, String _sKey, String _sValue)
-        {
-            int i = findSection(_sSection);
-            if (i == -1)
-            {
-                // case 1: section doesn't exist
-                String sFindSection = buildSectionName(_sSection);
 
-                m_aList.add(sFindSection);
-                String sKeyValuePair = _sKey + "=" + _sValue;
-                m_aList.add(sKeyValuePair);
-                m_bListContainUnsavedChanges = true;
-                return;
-            }
-            int j = findKeyFromKnownSection(i, _sKey);
-            if (j == -1)
-            {
-                // case 2: section exist, but not the key
-                j = findLastKnownKeyIndex(i, _sKey);
-                String sKeyValuePair = _sKey + "=" + _sValue;
-                m_aList.add(j, sKeyValuePair);
-                m_bListContainUnsavedChanges = true;
-                return;
-            }
-            else
-            {
-                // case 3: section exist, and also the key
-                String sKeyValuePair = _sKey + "=" + _sValue;
-                m_aList.set(j, sKeyValuePair);
-                m_bListContainUnsavedChanges = true;
-            }
-        }
+
 
 }

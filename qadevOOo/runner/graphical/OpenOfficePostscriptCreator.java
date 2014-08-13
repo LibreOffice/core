@@ -576,74 +576,12 @@ public class OpenOfficePostscriptCreator implements IOffice
         }
 
 
-    /**
-     * @return true, if the reference (*.prrn file) based on given output path and given input path exist.
-     *               If OVERWRITE_REFERENCE is set, always return false.
-     */
-    public boolean isReferenceExists(ParameterHelper _aGTA,
-                                            String _sAbsoluteOutputPath,
-                                            String _sAbsoluteInputFile)
-        {
-            if (! FileHelper.exists(_sAbsoluteInputFile))
-            {
-                return false;
-            }
 
-            String sInputFileBasename = FileHelper.getBasename(_sAbsoluteInputFile);
-            String sOutputPath;
-            if (_sAbsoluteOutputPath != null)
-            {
-                sOutputPath    = _sAbsoluteOutputPath;
-            }
-            else
-            {
-                String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
-                sOutputPath    = sInputPath;
-            }
-
-            String sPrintFilename = FileHelper.getNameNoSuffix(sInputFileBasename);
-
-            String sAbsolutePrintFilename = FileHelper.appendPath(sOutputPath, sPrintFilename + ".prn");
-            if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
-            {
-                GlobalLogWriter.println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
-                return true;
-            }
-            return false;
-        }
 
 
     // TODO: move this away!
 
-    void showType(String _sInputURL, XMultiServiceFactory _xMSF)
-        {
-            if (_sInputURL.length() == 0)
-            {
-                return;
-            }
 
-            if (_xMSF == null)
-            {
-                GlobalLogWriter.println("MultiServiceFactory not set.");
-                return;
-            }
-            XTypeDetection aTypeDetection = null;
-            try
-            {
-                Object oObj = _xMSF.createInstance("com.sun.star.document.TypeDetection");
-                aTypeDetection = UnoRuntime.queryInterface(XTypeDetection.class, oObj);
-            }
-            catch(com.sun.star.uno.Exception e)
-            {
-                GlobalLogWriter.println("Can't get com.sun.star.document.TypeDetection.");
-                return;
-            }
-            if (aTypeDetection != null)
-            {
-                String sType = aTypeDetection.queryTypeByURL(_sInputURL);
-                GlobalLogWriter.println("Type is: " + sType);
-            }
-        }
 
 
 
@@ -875,133 +813,7 @@ public class OpenOfficePostscriptCreator implements IOffice
         }
 
 
-    public void convertDocument(String _sInputFile, String _sOutputPath, ParameterHelper _aGTA)
-        {
-            XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();
-            if (xMSF == null)
-            {
-                GlobalLogWriter.println("MultiServiceFactory in GraphicalTestArgument not set.");
-                return;
-            }
 
-            String sInputURL = URLHelper.getFileURLFromSystemPath(_sInputFile);
-            XComponent aDoc = loadFromURL( _aGTA, sInputURL);
-            if (aDoc == null)
-            {
-                GlobalLogWriter.println("Can't load document '"+ sInputURL + "'");
-                return;
-            }
-
-            if (_sOutputPath == null)
-            {
-                GlobalLogWriter.println("Outputpath not set.");
-                return;
-            }
-
-            if (! isStoreAllowed())
-            {
-                GlobalLogWriter.println("It's not allowed to store, check Input/Output path.");
-                return;
-            }
-
-            XServiceInfo xServiceInfo =  UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
-
-            // store the document in an other directory
-            XStorable xStorable =  UnoRuntime.queryInterface( XStorable.class, aDoc);
-            if (xStorable == null)
-            {
-                GlobalLogWriter.println("com.sun.star.frame.XStorable is null");
-                return;
-            }
-
-            String sFilterName = _aGTA.getExportFilterName();
-
-            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
-
-            String sExtension = "";
-
-            if (sFilterName != null && sFilterName.length() > 0)
-            {
-                String sInternalFilterName = getInternalFilterName(sFilterName, xMSF);
-                String sServiceName = getServiceNameFromFilterName(sFilterName, xMSF);
-
-                GlobalLogWriter.println("Filter detection:");
-                // check if service name from file filter is the same as from the loaded document
-                boolean bServiceFailed = false;
-                if (sServiceName == null || sInternalFilterName == null)
-                {
-                    GlobalLogWriter.println("Given FilterName '" + sFilterName + "' seems to be unknown.");
-                    bServiceFailed = true;
-                }
-                if (! xServiceInfo.supportsService(sServiceName))
-                {
-                    GlobalLogWriter.println("Service from FilterName '" + sServiceName + "' is not supported by loaded document.");
-                    bServiceFailed = true;
-                }
-                if (bServiceFailed == true)
-                {
-                    GlobalLogWriter.println("Please check '" + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + "' in the property file.");
-                    return;
-                }
-
-                if (sInternalFilterName != null && sInternalFilterName.length() > 0)
-                {
-                    // get the FileExtension, by the filter name, if we don't get a file extension
-                    // we assume the is also no right filter name.
-                    sExtension = getFileExtension(sInternalFilterName, xMSF);
-                    if (sExtension == null)
-                    {
-                        GlobalLogWriter.println("Can't found an extension for filtername, take it from the source.");
-                    }
-                }
-
-                PropertyValue Arg = new PropertyValue();
-                Arg.Name = "FilterName";
-                Arg.Value = sFilterName;
-                aPropertyList.add(Arg);
-                showProperty(Arg);
-                GlobalLogWriter.println("FilterName is set to: " + sFilterName);
-            }
-
-            String sOutputURL = "";
-            try
-            {
-                // create the new filename with the extension, which is ok to the file format
-                String sInputFileBasename = FileHelper.getBasename(_sInputFile);
-                String sInputFileNameNoSuffix = FileHelper.getNameNoSuffix(sInputFileBasename);
-                String fs = System.getProperty("file.separator");
-                String sOutputFile = _sOutputPath;
-                if (! sOutputFile.endsWith(fs))
-                {
-                    sOutputFile += fs;
-                }
-                if (sExtension != null && sExtension.length() > 0)
-                {
-                    sOutputFile += sInputFileNameNoSuffix + "." + sExtension;
-                }
-                else
-                {
-                    sOutputFile += sInputFileBasename;
-                }
-
-                if (FileHelper.exists(sOutputFile) && _aGTA.getOverwrite() == false)
-                {
-                    GlobalLogWriter.println("File already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
-                    return;
-                }
-
-                sOutputURL = URLHelper.getFileURLFromSystemPath(sOutputFile);
-
-                GlobalLogWriter.println("Store document as '" + sOutputURL + "'");
-                xStorable.storeAsURL(sOutputURL, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
-                GlobalLogWriter.println("Document stored.");
-            }
-            catch (com.sun.star.io.IOException e)
-            {
-                GlobalLogWriter.println("Can't store document '" + sOutputURL + "'. Message is :'" + e.getMessage() + "'");
-            }
-
-        }
 
     private OfficeProvider m_aProvider = null;
     private void startOffice()
@@ -1041,12 +853,8 @@ public class OpenOfficePostscriptCreator implements IOffice
         }
     }
 
-    public void disallowStore()
-        {
-        }
-    public void allowStore()
-        {
-        }
+
+
     public boolean isStoreAllowed()
         {
         return false;

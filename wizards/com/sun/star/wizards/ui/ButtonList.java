@@ -357,20 +357,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         return pageStart + i;
     }
 
-    public void intervalAdded(ListDataEvent event)
-    {
-        if (event.getIndex0() <= m_nCurrentSelection)
-        {
-            if (event.getIndex1() <= m_nCurrentSelection)
-            {
-                m_nCurrentSelection += event.getIndex1() - event.getIndex0() + 1;
-            }
-        }
-        if (event.getIndex0() < pageStart || event.getIndex1() < (pageStart + getRows() + getCols()))
-        {
-            refreshImages();
-        }
-    }
+
 
     /** Registers ItemListener to receive events.
      * @param listener The listener to register.
@@ -553,27 +540,9 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         showButtons = b;
     }
 
-    public void nextPage()
-    {
-        if (pageStart < getListModel().getSize() - rows * cols)
-        {
-            setPageStart(pageStart + rows * cols);
-        }
-    }
 
-    public void prevPage()
-    {
-        if (pageStart == 0)
-        {
-            return;
-        }
-        int i = pageStart - rows * cols;
-        if (i < 0)
-        {
-            i = 0;
-        }
-        setPageStart(i);
-    }
+
+
 
     private void enableButtons()
     {
@@ -649,16 +618,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
 
-    /**
-     * jump to the given item (display the screen
-     * that contains the given item).
-     */
-    public void display(int i)
-    {
-        int is = (getCols() * getRows());
-        int ps = (listModel.getSize() / is) * is;
-        setPageStart(ps);
-    }
+
 
     public boolean isenabled()
     {

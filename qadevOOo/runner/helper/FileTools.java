@@ -92,19 +92,7 @@ public class FileTools {
         in.close();
         out.close();
     }
-    /**
-     * Deletes all files and subdirectories under dir and the directory itself.
-     * Returns true if all deletions were successful.
-     * If the deletion fails, the method the method continues to delete rest
-     * of the files and returns false.
-     * @return Returns true if all deletions were successful, else false.
-     * @param dir the directory to delete
-     */
-    public static boolean deleteDir(File dir) {
 
-        // The directory is now empty so delete it
-        return cleanDir(dir);
-    }
 
    public static boolean cleanDir(File dir)
         {

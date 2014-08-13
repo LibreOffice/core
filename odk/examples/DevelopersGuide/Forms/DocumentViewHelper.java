@@ -104,15 +104,7 @@ class DocumentViewHelper
         return xReturn;
     }
 
-    /* ------------------------------------------------------------------ */
-    /** retrieves a dispatcher for the given URL, obtained at the current view of the document
-    */
-    public XDispatch getDispatcher( String sURL ) throws java.lang.Exception
-    {
-        URL[] aURL = new URL[] { new URL() };
-        aURL[0].Complete = sURL;
-        return getDispatcher( aURL );
-    }
+
 
     /* ------------------------------------------------------------------ */
     /* retrieves the form controller belonging to a given logical form

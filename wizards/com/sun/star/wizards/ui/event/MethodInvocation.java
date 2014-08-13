@@ -77,12 +77,5 @@ public class MethodInvocation
         }
     }
 
-    /**
-     * This method is a convenience method.
-     * It is the same as calling invoke(null);
-     */
-    public Object invoke() throws IllegalAccessException, InvocationTargetException
-    {
-        return invoke(null);
-    }
+
 }

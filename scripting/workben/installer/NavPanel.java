@@ -103,15 +103,9 @@ public class NavPanel extends JPanel implements ActionListener {
         navCancel.addActionListener(listener);
     }
 
-    public void removeNextListener(ActionListener listener)
-    {
-        navNext.removeActionListener(listener);
-    }
 
-    public void removeBackListener(ActionListener listener)
-    {
-        navBack.removeActionListener(listener);
-    }
+
+
 
     public void removeCancelListener(ActionListener listener)
     {

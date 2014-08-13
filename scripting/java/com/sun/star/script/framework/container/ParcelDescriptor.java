@@ -57,21 +57,9 @@ public class ParcelDescriptor {
     private String language = null;
     private Map<String,String> languagedepprops = new HashMap<String,String>(3);
 
-    public static synchronized void removeParcelDescriptor(File parent) {
-        File path = new File(parent, PARCEL_DESCRIPTOR_NAME);
-        PARCEL_DESCRIPTOR_MAP.remove(path);
-    }
 
-    public static synchronized void renameParcelDescriptor(File oldFile, File newFile) {
-        File oldPath = new File(oldFile, PARCEL_DESCRIPTOR_NAME);
-        ParcelDescriptor pd = PARCEL_DESCRIPTOR_MAP.get(oldPath);
-        if(pd != null) {
-            PARCEL_DESCRIPTOR_MAP.remove(oldPath);
-            File newPath = new File(newFile, PARCEL_DESCRIPTOR_NAME);
-            pd.file = newPath;
-            PARCEL_DESCRIPTOR_MAP.put(newPath, pd);
-        }
-    }
+
+
 
     // returns the ParcelDescriptor in the corresponding directory
     // returns null if no ParcelDescriptor is found in the directory
@@ -93,24 +81,7 @@ public class ParcelDescriptor {
         return pd;
     }
 
-    // returns a ParcelDescriptor for the corresponding directory
-    // if no ParcelDescriptor exists, one is created
-    public static synchronized ParcelDescriptor
-        createParcelDescriptor(File parent) throws IOException {
 
-        ParcelDescriptor pd = getParcelDescriptor(parent);
-
-        if (pd == null) {
-            if (parent == null || !parent.exists() || !parent.isDirectory()) {
-                throw new IOException("Cannot create Parcel Descriptor");
-            }
-
-            File path = new File(parent, PARCEL_DESCRIPTOR_NAME);
-            pd = new ParcelDescriptor(path);
-            PARCEL_DESCRIPTOR_MAP.put(path, pd);
-        }
-        return pd;
-    }
 
     public ParcelDescriptor() throws IOException {
         ByteArrayInputStream bis = null;
@@ -172,12 +143,7 @@ public class ParcelDescriptor {
         fos.close();
     }
 
-    public void write() throws IOException {
-        if (file == null)
-            throw new FileNotFoundException("No file specified");
 
-        write(file);
-    }
 
     public void write(OutputStream out) throws IOException {
         XMLParserFactory.getParser().write(document, out);
@@ -301,10 +267,7 @@ public class ParcelDescriptor {
         return languagedepprops.get(name);
     }
 
-    public void setLanguageProperty(String name, String value) {
-        languagedepprops.put(name, value);
-        setScriptEntries(getScriptEntries());
-    }
+
 
     private void initLanguageProperties() {
         NodeList nl = document.getElementsByTagName("languagedepprops");

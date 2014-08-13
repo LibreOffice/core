@@ -47,18 +47,7 @@ public class Instance
         return createElement( m_domInstance, _elementName, null );
     }
 
-    /** creates a new element in the instance
-     *
-     * The element will be inserted immediately below a given XNode.
-     *
-     * @param _parentElement the node whose child shall be created
-     * @param _elementName the name of the to-be-created element
-     * @return the node of the newly created element
-     */
-    public XNode createElement( XNode _parentElement, String _elementName ) throws DOMException
-    {
-        return createElement( _parentElement, _elementName, null );
-    }
+
 
     /** creates a new element in the instance
      *
@@ -115,31 +104,9 @@ public class Instance
         throw new NoSuchElementException();
     }
 
-    /** creates an attribute for the root node of the instance
-     *
-     * @param _attribName
-     *      the name of the to-be-created attribute
-     * @return
-     *      the DOM node, which has already been inserted into the DOM tree
-     */
-    public XNode createAttribute( String _attribName ) throws DOMException
-    {
-        return createAttribute( m_domInstance, _attribName, null );
-    }
 
-    /** creates an attribute for the root node of the instance
-     *
-     * @param _attribName
-     *      the name of the to-be-created attribute
-     * @param _initialNodeValue
-     *      the initial value to set at the node. Might be null, in this case no value is set.
-     * @return
-     *      the DOM node, which has already been inserted into the DOM tree
-     */
-    public XNode createAttribute( String _attribName, String _initialNodeValue ) throws DOMException
-    {
-        return createAttribute( m_domInstance, _attribName, _initialNodeValue );
-    }
+
+
 
     /** creates an attribute for the given node
      *

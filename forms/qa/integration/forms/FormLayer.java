@@ -276,29 +276,7 @@ public class FormLayer
         return null;
     }
 
-    /* ------------------------------------------------------------------ */
-    /** retrieves the radio button model with the given name and the given tag
-     *  @param form
-     *      the parent form of the radio button model to find
-     *  @param name
-     *      the name of the radio button
-     *  @param tag
-     *      the tag of the radio button
-    */
-    public XPropertySet getRadioModelByTag( XPropertySet form, String name, String tag ) throws com.sun.star.uno.Exception, java.lang.Exception
-    {
-        XIndexAccess indexAccess = UnoRuntime.queryInterface( XIndexAccess.class, form );
 
-        for ( int i=0; i<indexAccess.getCount(); ++i )
-        {
-            XPropertySet control = dbfTools.queryPropertySet( indexAccess.getByIndex( i ) );
-
-            if ( ((String)control.getPropertyValue( "Name" )).equals( name ) )
-                if ( ((String)control.getPropertyValue( "Tag" )).equals( tag ) )
-                    return control;
-        }
-        return null;
-    }
 
     /* ------------------------------------------------------------------ */
     /** retrieves a control model with a given (integer) access path
@@ -320,24 +298,7 @@ public class FormLayer
         return controlModel;
     }
 
-    /* ------------------------------------------------------------------ */
-    /** retrieves a control model with a given (string) access path
-     */
-    public XPropertySet getControlModel( String[] _accessPath ) throws com.sun.star.uno.Exception
-    {
-        XNameAccess nameAcc = m_document.getFormComponentTreeRoot();
-        XPropertySet controlModel = null;
-        int i=0;
-        while ( ( nameAcc != null ) && ( i < _accessPath.length ) )
-        {
-            controlModel = UnoRuntime.queryInterface( XPropertySet.class,
-                nameAcc.getByName( _accessPath[i] ) );
-            nameAcc = UnoRuntime.queryInterface( XNameAccess.class,
-                controlModel );
-            ++i;
-        }
-        return controlModel;
-    }
+
 
     /* ------------------------------------------------------------------ */
     /** simulates a user's text input into a control given by control model

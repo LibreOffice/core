@@ -29,10 +29,7 @@ public class DesignDim {
   public BasicBound paramBound = new BasicBound(); //the range of a parameter
 
 
-  public void importData(DesignDim ipr) {
-    this.grain = ipr.grain;
-    this.paramBound = ipr.paramBound;
-  }
+
 
   public boolean isDiscrete() {
     return grain!=0;

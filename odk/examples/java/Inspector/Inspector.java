@@ -441,17 +441,6 @@ public class Inspector{
         return xFactory;
     }
 
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey the registryKey
-     * @see     com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return (Factory.writeRegistryServiceInfo(_Inspector.class.getName(), _Inspector.getServiceNames(), regKey)
-                && InspectorAddon.__writeRegistryServiceInfo(regKey));
-    }
+
 }
 

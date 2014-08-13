@@ -787,35 +787,7 @@ public class OfficePrint {
 
     // TODO: move this away!
 
-    static void showType(String _sInputURL, XMultiServiceFactory _xMSF)
-        {
-            if (_sInputURL.length() == 0)
-            {
-                return;
-            }
 
-            if (_xMSF == null)
-            {
-                GlobalLogWriter.get().println("MultiServiceFactory not set.");
-                return;
-            }
-            XTypeDetection aTypeDetection = null;
-            try
-            {
-                Object oObj = _xMSF.createInstance("com.sun.star.document.TypeDetection");
-                aTypeDetection = UnoRuntime.queryInterface(XTypeDetection.class, oObj);
-            }
-            catch(com.sun.star.uno.Exception e)
-            {
-                GlobalLogWriter.get().println("Can't get com.sun.star.document.TypeDetection.");
-                return;
-            }
-            if (aTypeDetection != null)
-            {
-                String sType = aTypeDetection.queryTypeByURL(_sInputURL);
-                GlobalLogWriter.get().println("Type is: " + sType);
-            }
-        }
 
 
 

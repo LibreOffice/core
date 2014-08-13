@@ -55,27 +55,4 @@ public interface ReportJob
     void execute()
             throws ReportExecutionException, IOException;
 
-    /**
-     * Interrupt the job.
-     */
-    void interrupt();
-
-    /**
-     * Queries the jobs execution status.
-     *
-     * @return true, if the job is currently running, false otherwise.
-     */
-    boolean isRunning();
-
-    /**
-     * Queries the jobs result status.
-     *
-     * @return true, if the job is finished (or has been interrupted), false
-     * if the job waits for activation.
-     */
-    boolean isFinished();
-
-    void addProgressIndicator(JobProgressIndicator indicator);
-
-    void removeProgressIndicator(JobProgressIndicator indicator);
 }

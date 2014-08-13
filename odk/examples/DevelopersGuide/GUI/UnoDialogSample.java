@@ -205,37 +205,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    /**
-     * @param _sRegistryPath the path a registryNode
-     * @param _sImageName the name of the image
-     */
-    public String getImageUrl(String _sRegistryPath, String _sImageName) {
-        String sImageUrl = "";
-        try {
-            // retrieve the configuration node of the extension
-            XNameAccess xNameAccess = getRegistryKeyContent(_sRegistryPath);
-            if (xNameAccess != null){
-                if (xNameAccess.hasByName(_sImageName)){
-                    // get the Image Url and process the Url by the macroexpander...
-                    sImageUrl = (String) xNameAccess.getByName(_sImageName);
-                    Object oMacroExpander = this.m_xContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander");
-                    XMacroExpander xMacroExpander = UnoRuntime.queryInterface(XMacroExpander.class, oMacroExpander);
-                    sImageUrl = xMacroExpander.expandMacros(sImageUrl);
-                    sImageUrl = sImageUrl.substring(new String("vnd.sun.star.expand:").length(), sImageUrl.length());
-                    sImageUrl = sImageUrl.trim();
-                    sImageUrl += "/" + _sImageName;
-                }
-            }
-        } catch (Exception ex) {
-        /* perform individual exception handling here.
-         * Possible exception types are:
-         * com.sun.star.lang.IllegalArgumentException,
-         * com.sun.star.lang.WrappedTargetException,
-         */
-            ex.printStackTrace(System.err);
-        }
-        return sImageUrl;
-    }
+
 
     protected void createDialog(XMultiComponentFactory _xMCF) {
         try {
@@ -266,16 +236,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
 
 
 
-    public short executeDialogWithembeddedExampleSnippets() {
-        if (m_xWindowPeer == null){
-            createWindowPeer();
-        }
-        addRoadmap();
-        insertRoadmapItem(0, true, "Introduction", 1);
-        insertRoadmapItem(1, true, "Documents", 2);
-        xDialog = UnoRuntime.queryInterface(XDialog.class, m_xDialogControl);
-        return xDialog.execute();
-    }
+
 
 
     public short executeDialog() {
@@ -329,17 +290,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 
-    public void calculateDialogPosition(XWindow _xWindow) {
-        Rectangle aFramePosSize = m_xModel.getCurrentController().getFrame().getComponentWindow().getPosSize();
-        Rectangle CurPosSize = _xWindow.getPosSize();
-        int WindowHeight = aFramePosSize.Height;
-        int WindowWidth = aFramePosSize.Width;
-        int DialogWidth = CurPosSize.Width;
-        int DialogHeight = CurPosSize.Height;
-        int iXPos = ((WindowWidth / 2) - (DialogWidth / 2));
-        int iYPos = ((WindowHeight / 2) - (DialogHeight / 2));
-        _xWindow.setPosSize(iXPos, iYPos, DialogWidth, DialogHeight, PosSize.POS);
-    }
+
 
 
 
@@ -352,23 +303,10 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
         return createWindowPeer(null);
     }
 
-    public void endExecute() {
-        xDialog.endExecute();
-    }
 
 
-    public Object insertControlModel(String ServiceName, String sName, String[] sProperties, Object[] sValues) {
-        try {
-            Object oControlModel = m_xMSFDialogModel.createInstance(ServiceName);
-            XMultiPropertySet xControlMultiPropertySet = UnoRuntime.queryInterface(XMultiPropertySet.class, oControlModel);
-            xControlMultiPropertySet.setPropertyValues(sProperties, sValues);
-            m_xDlgModelNameContainer.insertByName(sName, oControlModel);
-            return oControlModel;
-        } catch (com.sun.star.uno.Exception exception) {
-            exception.printStackTrace(System.err);
-            return null;
-        }
-    }
+
+
 
 
     private XFixedText insertFixedText(XMouseListener _xMouseListener, int _nPosX, int _nPosY, int _nWidth, int _nStep, String _sLabel){
@@ -1094,9 +1032,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
         return xFFModelPSet;
     }
 
-    public void convertUnits(){
-    //    iXPixelFactor = (int) (100000/xDevice.getInfo().PixelPerMeterX);
-    }
+
 
 
     private XTextComponent insertFileControl(XTextListener _xTextListener, int _nPosX, int _nPosY, int _nWidth){
@@ -1184,17 +1120,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
         return xButton;
     }
 
-    /** gets the WindowPeer of a frame
-     *  @param _xTextDocument the instance of a textdocument
-     *  @return the windowpeer of the frame
-     */
-    public XWindowPeer getWindowPeer(XTextDocument _xTextDocument){
-        XModel xModel =  UnoRuntime.queryInterface(XModel.class, _xTextDocument);
-        XFrame xFrame = xModel.getCurrentController().getFrame();
-        XWindow xWindow = xFrame.getContainerWindow();
-        XWindowPeer xWindowPeer =  UnoRuntime.queryInterface(XWindowPeer.class, xWindow);
-        return xWindowPeer;
-    }
+
 
     public XFrame getCurrentFrame(){
         XFrame xRetFrame = null;

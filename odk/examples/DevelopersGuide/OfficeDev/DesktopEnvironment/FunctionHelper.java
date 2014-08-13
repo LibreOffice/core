@@ -490,50 +490,7 @@ public class FunctionHelper
 
 
 
-    /**
-     * Dispatch an URL to given frame.
-     * Caller can register himself for following result events for dispatched
-     * URL too. Notifications are guaranteed (instead of dispatch())
-     * Returning of the dispatch object isn't necessary.
-     * Nobody must hold it alive longer the dispatch needs.
-     *
-     * @param   xFrame      frame which should be the target of this dispatch
-     * @param   aURL        full parsed and converted office URL for dispatch
-     * @param   lProperties optional arguments for dispatch
-     * @param   xListener   optional listener which is registered automatically for status events
-     *                      (Note: Deregistration is not supported. Dispatcher does it automatically.)
-     */
-    public static void executeWithNotification(com.sun.star.frame.XFrame                  xFrame     ,
-                                               com.sun.star.util.URL                      aURL       ,
-                                               com.sun.star.beans.PropertyValue[]         lProperties,
-                                               com.sun.star.frame.XDispatchResultListener xListener  )
-    {
-        try
-        {
-            // Query the frame for right interface which provides access to all available dispatch objects.
-            com.sun.star.frame.XDispatchProvider xProvider = UnoRuntime.queryInterface(
-                com.sun.star.frame.XDispatchProvider.class,
-                xFrame);
 
-            // Ask himn for right dispatch object for given URL.
-            // Force THIS frame as target for following dispatch.
-            // Attention: The interface XNotifyingDispatch is an optional one!
-            com.sun.star.frame.XDispatch xDispatcher = xProvider.queryDispatch(aURL,"",0);
-            com.sun.star.frame.XNotifyingDispatch xNotifyingDispatcher = UnoRuntime.queryInterface(
-                com.sun.star.frame.XNotifyingDispatch.class,
-                xDispatcher);
-
-            // Dispatch the URL.
-            if(xNotifyingDispatcher!=null)
-                xNotifyingDispatcher.dispatchWithNotification(aURL,lProperties,xListener);
-        }
-        catch(com.sun.star.uno.RuntimeException exUno)
-        {
-            // Any UNO method of this scope can throw this exception.
-            // But there is nothing we can do then.
-            exUno.printStackTrace();
-        }
-    }
 
 
 
@@ -782,78 +739,7 @@ public class FunctionHelper
 
 
 
-    /**
-     * Try to close the document without any saving of modifications.
-     * We can try it only! Controller and/or model of this document
-     * can disagree with that. But mostly they doesn't do so.
-     *
-     * @param   xDocument   document which should be clcosed
-     */
-    public static void closeDocument(com.sun.star.lang.XComponent xDocument)
-    {
-        try
-        {
-            // Check supported functionality of the document (model or controller).
-            com.sun.star.frame.XModel xModel =
-                UnoRuntime.queryInterface(
-                com.sun.star.frame.XModel.class, xDocument);
 
-            if(xModel!=null)
-            {
-                // It's a full featured office document.
-                // Reset the modify state of it and close it.
-                // Note: Model can disgree by throwing a veto exception.
-                com.sun.star.util.XModifiable xModify =
-                    UnoRuntime.queryInterface(
-                    com.sun.star.util.XModifiable.class, xModel);
-
-                xModify.setModified(false);
-                xDocument.dispose();
-            }
-            else
-            {
-                // It's a document which supports a controller .. or may by a pure
-                // window only. If it's at least a controller - we can try to
-                // suspend him. But - he can disagree with that!
-                com.sun.star.frame.XController xController =
-                    UnoRuntime.queryInterface(
-                    com.sun.star.frame.XController.class, xDocument);
-
-                if(xController!=null)
-                {
-                    if(xController.suspend(true)==true)
-                    {
-                        // Note: Don't dispose the controller - destroy the frame
-                        // to make it right!
-                        com.sun.star.frame.XFrame xFrame = xController.getFrame();
-                        xFrame.dispose();
-                    }
-                }
-            }
-        }
-        catch(com.sun.star.beans.PropertyVetoException exVeto)
-        {
-            // Can be thrown by "setModified()" call on model.
-            // He disagree with our request.
-            // But there is nothing to do then. Following "dispose()" call wasn't
-            // never called (because we catch it before). Closing failed -that's it.
-            exVeto.printStackTrace();
-        }
-        catch(com.sun.star.lang.DisposedException exDisposed)
-        {
-            // If an UNO object was already disposed before - he throw this special
-            // runtime exception. Of course every UNO call must be look for that -
-            // but it's a question of error handling.
-            // For demonstration this exception is handled here.
-            exDisposed.printStackTrace();
-        }
-        catch(com.sun.star.uno.RuntimeException exRuntime)
-        {
-            // Every uno call can throw that.
-            // Do nothing - closing failed - that's it.
-            exRuntime.printStackTrace();
-        }
-    }
 
 
 

@@ -50,10 +50,7 @@ public class MethodHandler implements XPropertyHandler
         }
     }
 
-    static public XSingleComponentFactory getFactory()
-    {
-        return new ComponentFactory( MethodHandler.class );
-    }
+
 
     public void actuatingPropertyChanged(String _propertyName, Object _newValue, Object _oldValue, com.sun.star.inspection.XObjectInspectorUI _objectInspectorUI, boolean _firstTimeInit) throws com.sun.star.lang.NullPointerException
     {

@@ -201,15 +201,7 @@ public class Introspector extends WeakBase{
     }}
 
 
-    protected XIdlField[] getFieldsOfType(Type _aType){
-    try{
-        XIdlClass xIdlClass = mxIdlReflection.forName(_aType.getTypeName());
-        return xIdlClass.getFields();
-    }
-    catch( Exception e ) {
-        System.err.println( e );
-        return null;
-    }}
+
 
 
     public boolean hasMethods(Object _oUnoObject){
@@ -552,12 +544,7 @@ public class Introspector extends WeakBase{
     }
 
 
-    public static boolean isValid(Object _oObject){
-        if (_oObject != null){
-            return (!AnyConverter.isVoid(_oObject));
-        }
-        return false;
-    }
+
 
 
     public static boolean isArray(Object _oObject){

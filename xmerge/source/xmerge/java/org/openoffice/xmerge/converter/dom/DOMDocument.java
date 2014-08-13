@@ -337,16 +337,7 @@ public class DOMDocument
     }
 
 
-    /**
-     *  Initializes a new DOM <code>Document</code> with the content
-     *  containing minimum XML tags.
-     *
-     *  @throws  IOException  If any I/O error occurs.
-     */
-    public final void initContentDOM() throws IOException {
-        contentDoc = createDOM("");
 
-    }
 
     /**
      *  <p>Creates a new DOM <code>Document</code> containing minimum

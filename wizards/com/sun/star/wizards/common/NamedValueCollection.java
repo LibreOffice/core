@@ -45,20 +45,7 @@ public class NamedValueCollection
         m_values.put( i_name, i_value );
     }
 
-    @SuppressWarnings("unchecked")
-    public final < T  > T getOrDefault( final String i_key, final T i_default )
-    {
-        if ( m_values.containsKey( i_key ) )
-        {
-            final Object value = m_values.get( i_key );
-            try
-            {
-                return (T)value;
-            }
-            catch ( ClassCastException e ) { }
-        }
-        return i_default;
-    }
+
 
     public final < T extends XInterface > T queryOrDefault( final String i_key, final T i_default, Class<T> i_interfaceClass )
     {
@@ -68,11 +55,6 @@ public class NamedValueCollection
             return UnoRuntime.queryInterface( i_interfaceClass, value );
         }
         return i_default;
-    }
-
-    public final boolean has( final String i_key )
-    {
-        return m_values.containsKey( i_key );
     }
 
     public final PropertyValue[] getPropertyValues()

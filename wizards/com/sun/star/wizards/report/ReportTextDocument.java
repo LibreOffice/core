@@ -119,29 +119,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         return oNumberFormatter;
     }
 
-    public boolean checkReportLayoutMode(String[] GroupFieldNames)
-    {
-        try
-        {
-            XNameAccess xTextSections = oTextSectionHandler.xTextSectionsSupplier.getTextSections();
-            Object oTextSection;
-            if (GroupFieldNames.length > 0)
-            {
-                oTextSection = xTextSections.getByName(GROUPSECTION + String.valueOf(1));
-            }
-            else
-            {
-                oTextSection = xTextSections.getByName(RECORDSECTION);
-            }
-            return AnyConverter.toBoolean(Helper.getUnoPropertyValue(oTextSection, ISVISIBLE));
-        }
-        catch (Exception e)
-        {
-            Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
-            // In doubt we rather suggest this is LayoutMode...
-            return true;
-        }
-    }
+
 
     public void swapContentTemplate(String ContentTemplatePath)
     {
@@ -211,10 +189,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "RecordFieldNames", JavaTools.ArraytoString(CurDBMetaData.getRecordFieldNames()));
     }
 
-    public void updateReportTitle(String _sTitleName)
-    {
-        m_xDocProps.setTitle(_sTitleName);
-    }
+
 
     private void getReportPageStyles()
     {
@@ -335,15 +310,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         }
     }
 
-    public void replaceFieldValueInRecordSection()
-    {
-        int GroupCount = CurDBMetaData.GroupFieldNames.length;
-        int FieldCount = CurDBMetaData.getFieldNames().length;
-        for (int i = GroupCount; i < FieldCount; i++)
-        {
-            DBColumnsVector.get(i).insertColumnData(oTextFieldHandler, this.bIsCurLandscape);
-        }
-    }
+
 
     private void updateTextSections(String[] SelGroupNames)
     {
@@ -376,21 +343,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         CurDBColumn.setCellFont();
     }
 
-    public void replaceFieldValueInRecordTable()
-    {
-        String TableName = TBLRECORDSECTION;
-        String OldTableName = CurRecordTable.xTableName.getName();
-        if (OldTableName.compareTo(TableName) != 0)
-        {
-            CurRecordTable.xTableName.setName(TableName);
-        }
-        int GroupCount = CurDBMetaData.GroupFieldNames.length;
-        int RecordCount = CurDBMetaData.getRecordFieldNames().length;
-        for (int i = GroupCount; i < RecordCount; i++)
-        {
-            DBColumnsVector.get(i).insertColumnData(oTextFieldHandler, this.bIsCurLandscape);
-        }
-    }
+
 
     private void insertColumnstoRecordTable()
     {

@@ -198,24 +198,7 @@ public class UnoDialog implements EventNames
         }
     }
 
-    public void printControlProperties(String ControlName)
-    {
-        try
-        {
-            Object xControlModel = getDlgNameAccess().getByName(ControlName);
-            XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, xControlModel);
-            Property[] allProps = xPSet.getPropertySetInfo().getProperties();
-            for (int i = 0; i < allProps.length; i++)
-            {
-                String sName = allProps[i].Name;
-                System.out.println(sName);
-            }
-        }
-        catch (com.sun.star.uno.Exception exception)
-        { // com.sun.star.container.NoSuchElementException, com.sun.star.beans.UnknownPropertyException,
-            exception.printStackTrace(System.err); // com.sun.star.lang.WrappedTargetException, com.sun.star.beans.PropertyVetoException
-        }
-    }
+
 
     public double getMAPConversionFactor(String ControlName)
     {
@@ -269,14 +252,7 @@ public class UnoDialog implements EventNames
         return ipos.length > 0;
     }
 
-    public void addSingleItemtoListbox(XListBox xListBox, String ListItem, short iSelIndex)
-    {
-        xListBox.addItem(ListItem, xListBox.getItemCount());
-        if (iSelIndex != -1)
-        {
-            xListBox.selectItemPos(iSelIndex, true);
-        }
-    }
+
 
     public XFixedText insertLabel(String sName, String[] sPropNames, Object[] oPropValues)
     {
@@ -314,41 +290,9 @@ public class UnoDialog implements EventNames
         return xButton;
     }
 
-    public void insertCheckBox(String sName, int iControlKey, XItemListener xItemListener, String[] sProperties, Object[] sValues) throws com.sun.star.uno.Exception
-    {
-        Object oButtonModel = insertControlModel("com.sun.star.awt.UnoControlCheckBoxModel", sName, sProperties, sValues);
-        XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, oButtonModel);
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
-        Object objectCheckBox = xDlgContainer.getControl(sName);
-        XCheckBox xCheckBox = UnoRuntime.queryInterface(XCheckBox.class, objectCheckBox);
-        if (xItemListener != null)
-        {
-            xCheckBox.addItemListener(xItemListener);
-        }
-        Integer ControlKey = new Integer(iControlKey);
-        if (ControlList != null)
-        {
-            ControlList.put(sName, ControlKey);
-        }
-    }
 
-    public void insertNumericField(String sName, int iControlKey, XTextListener xTextListener, String[] sProperties, Object[] sValues) throws com.sun.star.uno.Exception
-    {
-        Object oNumericFieldModel = insertControlModel("com.sun.star.awt.UnoControlNumericFieldModel", sName, sProperties, sValues);
-        XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, oNumericFieldModel);
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
-        Object objectNumericField = xDlgContainer.getControl(sName);
-        XTextComponent xNumericField = UnoRuntime.queryInterface(XTextComponent.class, objectNumericField);
-        if (xTextListener != null)
-        {
-            xNumericField.addTextListener(xTextListener);
-        }
-        Integer ControlKey = new Integer(iControlKey);
-        if (ControlList != null)
-        {
-            ControlList.put(sName, ControlKey);
-        }
-    }
+
+
 
     public XScrollBar insertScrollBar(String sName, int iControlKey, XAdjustmentListener xAdjustmentListener, String[] sProperties, Object[] sValues)
     {
@@ -431,30 +375,7 @@ public class UnoDialog implements EventNames
         return xListBox;
     }
 
-    public XComboBox insertComboBox(String sName, int iControlKey, XActionListener xActionListener, XTextListener xTextListener, XItemListener xItemListener, String[] sProperties, Object[] sValues) throws com.sun.star.uno.Exception
-    {
-        XInterface xComboBoxModel = insertControlModel("com.sun.star.awt.UnoControlComboBoxModel", sName, sProperties, sValues);
-        XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, xComboBoxModel);
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
-        XControl xControlComboBox = xDlgContainer.getControl(sName);
-        XComboBox xComboBox = UnoRuntime.queryInterface(XComboBox.class, xControlComboBox);
-        if (xItemListener != null)
-        {
-            xComboBox.addItemListener(xItemListener);
-        }
-        if (xTextListener != null)
-        {
-            XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, xComboBox);
-            xTextComponent.addTextListener(xTextListener);
-        }
-        if (xActionListener != null)
-        {
-            xComboBox.addActionListener(xActionListener);
-        }
-        Integer ControlKey = new Integer(iControlKey);
-        ControlList.put(sName, ControlKey);
-        return xComboBox;
-    }
+
 
     public XRadioButton insertRadioButton(String sName, int iControlKey, XItemListener xItemListener, String[] sProperties, Object[] sValues)
     {
@@ -572,25 +493,7 @@ public class UnoDialog implements EventNames
         xWindow.setFocus();
     }
 
-    public static String[] combineListboxList(String sFirstEntry, String[] MainList)
-    {
-        try
-        {
-            String[] FirstList = new String[]
-            {
-                sFirstEntry
-            };
-            String[] ResultList = new String[MainList.length + 1];
-            System.arraycopy(FirstList, 0, ResultList, 0, 1);
-            System.arraycopy(MainList, 0, ResultList, 1, MainList.length);
-            return ResultList;
-        }
-        catch (java.lang.Exception jexception)
-        {
-            jexception.printStackTrace(System.err);
-            return null;
-        }
-    }
+
 
     public void selectListBoxItem(XListBox xListBox, short iFieldsSelIndex)
     {
@@ -670,14 +573,7 @@ public class UnoDialog implements EventNames
         this.xWindow.setVisible(true);
     }
 
-    /**
-     * @return 0 for cancel, 1 for ok.
-     */
-    public short executeDialog(UnoDialog parent)
-            throws com.sun.star.uno.Exception
-    {
-        return executeDialog(parent.xWindow.getPosSize());
-    }
+
 
     /**
      * @return 0 for cancel, 1 for ok.
@@ -708,14 +604,7 @@ public class UnoDialog implements EventNames
         return executeDialog(Desktop.getActiveFrame(xMSF));
     }
 
-    public void setAutoMnemonic(String ControlName, boolean bValue)
-    {
-        Object oControl = xDlgContainer.getControl(ControlName);
-        xControl = UnoRuntime.queryInterface(XControl.class, oControl);
-        XWindowPeer xWindowPeer = xControl.getPeer();
-        XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
-        xVclWindowPeer.setProperty("AutoMnemonics", Boolean.valueOf(bValue));
-    }
+
 
     public void modifyFontWeight(String ControlName, float FontWeight)
     {
@@ -755,33 +644,9 @@ public class UnoDialog implements EventNames
         return createWindowPeer(null);
     }
 
-    // deletes the first entry when this is equal to "DelEntryName"
-    // returns true when a new item is selected
-    public void deletefirstListboxEntry(String ListBoxName, String DelEntryName)
-    {
-        XControl xListControl = xDlgContainer.getControl(ListBoxName);
-        XListBox xListBox = UnoRuntime.queryInterface(XListBox.class, xListControl);
-        String FirstItem = xListBox.getItem((short) 0);
-        if (FirstItem.equals(DelEntryName))
-        {
-            short SelPos = xListBox.getSelectedItemPos();
-            xListBox.removeItems((short) 0, (short) 1);
-            if (SelPos > 0)
-            {
-                setControlProperty(ListBoxName, PropertyNames.SELECTED_ITEMS, new short[SelPos]);
-                xListBox.selectItemPos((short) (SelPos - 1), true);
-            }
-        }
-    }
 
-    public void setPeerProperty(String ControlName, String PropertyName, Object PropertyValue)
-    {
-        Object oControl = xDlgContainer.getControl(ControlName);
-        XControl xControl = UnoRuntime.queryInterface(XControl.class, oControl);
-        XWindowPeer xControlPeer = xControl.getPeer();
-        XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, xControlPeer);
-        xVclWindowPeer.setProperty(PropertyName, PropertyValue);
-    }
+
+
 
     public static Object getModel(Object control)
     {

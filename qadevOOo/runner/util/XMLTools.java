@@ -98,23 +98,9 @@ public class XMLTools {
             attrByName.put(attr.Name, attr) ;
         }
 
-        /**
-         * Adds an attribute with value specified. As a type of
-         * value 'CDATA' string specified.
-         * @param name The attribute name.
-         * @param value Attribute value.
-         */
-        public void add(String name, String value) {
-            add(name, "CDATA", value) ;
-        }
 
-        /**
-         * Clears all attributes added before.
-         */
-        public void clear() {
-            attrByName.clear() ;
-            attributes.clear() ;
-        }
+
+
 
         /***************************************
         * XAttributeList methods
@@ -392,12 +378,7 @@ public class XMLTools {
         public void addTagEnclosed(String tag, String outerTag) {
             tags.put(tag, outerTag) ;
         }
-        /**
-        * Adds a character data which must be contained in the XML data.
-        */
-        public void addCharacters(String ch) {
-            chars.put(ch, "") ;
-        }
+
         /**
         * Adds a character data which must be contained in the XML data and
         * must be inside the tag with name <code>outerTag</code>.
@@ -647,9 +628,7 @@ public class XMLTools {
             tagSet.add(tag.name) ;
         }
 
-        public void addCharacters(String ch) {
-            chars.add(new Object[] {ch.trim(), null}) ;
-        }
+
 
         public void addCharactersEnclosed(String ch, Tag outerTag) {
             chars.add(new Object[] {ch.trim(), outerTag}) ;
@@ -760,36 +739,7 @@ public class XMLTools {
         }
     }
 
-    /**
-    * Creates <code>XDocumentHandler</code> implementation in form
-    * of <code>com.sun.star.xml.sax.Writer</code> service, which
-    * writes XML data into a <code>com.sun.star.io.Pipe</code>
-    * created.
-    * @return Single element array which contains the handler
-    * contained in <code>Any</code> structure.
-    */
-    public static Object[] getDocumentHandler(XMultiServiceFactory xMSF) {
-        Object[] ret = new Object[1];
-        try {
-            XInterface Writer = (XInterface) xMSF.createInstance(
-                                    "com.sun.star.xml.sax.Writer");
-            XInterface oPipe = (XInterface) xMSF.createInstance
-                ( "com.sun.star.io.Pipe" );
-            XOutputStream xPipeOutput = UnoRuntime.
-                queryInterface(XOutputStream.class, oPipe) ;
 
-            XActiveDataSource xADS = UnoRuntime.queryInterface(XActiveDataSource.class,Writer);
-            xADS.setOutputStream(xPipeOutput);
-            XDocumentHandler handler = UnoRuntime.queryInterface(XDocumentHandler.class,Writer);
-
-            Any arg = new Any(new Type(XDocumentHandler.class),handler);
-
-            ret[0] = arg;
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace();
-        }
-        return ret;
-    }
 
     public static PropertyValue[] createMediaDescriptor(String[] propNames, Object[] values) {
         PropertyValue[] props = new PropertyValue[propNames.length] ;
@@ -863,73 +813,7 @@ public class XMLTools {
         oIn.closeInput();
     }
 
-    /**
-     * Exports document (the whole or a part) into the file specified
-     * in XML format.
-     * @param xMSF Soffice <code>ServiceManager</code> factory.
-     * @param xDoc Document to be exported.
-     * @param docType Type of document (for example 'Calc', 'Writer', 'Draw')
-     * The type must start with <b>capital</b> letter.
-     * @param exportType The type of export specifies if the whole
-     * document will be exported or one of its parts (Meta info, Styles, etc.).
-     * The following types supported (it also depends of document type) :
-     *  "" (empty string) - for the whole document ;
-     *  "Content" - only content exported ;
-     *  "Meta" - meta document info exported ;
-     *  "Settings" - view settings of document exported ;
-     *  "Styles" - document styles exported ;
-     * @param fileURL XML file name (in form file:///<path>) to be exported to.
-     */
-    public static void exportDocument(XMultiServiceFactory xMSF, XComponent xDoc,
-        String docType, String exportType, String fileURL)
-        throws com.sun.star.uno.Exception {
 
-        XDocumentHandler xDocHandWriter = XMLTools.getFileXMLWriter(xMSF, fileURL) ;
 
-        Any arg = new Any(new Type(XDocumentHandler.class), xDocHandWriter);
-        XInterface oExp = (XInterface)xMSF.createInstanceWithArguments(
-            "com.sun.star.comp." + docType + ".XML" + exportType + "Exporter",
-            new Object[] {arg});
 
-        XExporter xExp = UnoRuntime.queryInterface
-            (XExporter.class, oExp) ;
-        xExp.setSourceDocument(xDoc) ;
-
-        XFilter filter = UnoRuntime.queryInterface(XFilter.class, oExp) ;
-        filter.filter(XMLTools.createMediaDescriptor(
-            new String[] {"FilterName"},
-            new Object[] {"Custom filter"})) ;
-    }
-
-    /**
-     * Imports document (the whole or a part) from the file specified
-     * in XML format.
-     * @param xMSF Soffice <code>ServiceManager</code> factory.
-     * @param xDoc Target document to be imported.
-     * @param docType Type of document (for example 'Calc', 'Writer', 'Draw')
-     * The type must start with <b>capital</b> letter.
-     * @param importType The type of export specifies if the whole
-     * document will be exported or one of its parts (Meta info, Styles, etc.).
-     * The following types supported (it hardly depends of XML data in file) :
-     *  "" (empty string) - for the whole document ;
-     *  "Content" - only content exported ;
-     *  "Meta" - meta document info exported ;
-     *  "Settings" - view settings of document exported ;
-     *  "Styles" - document styles exported ;
-     * @param fileURL XML file name (in form file:///<path>) to be imported from.
-     */
-    public static void importDocument(XMultiServiceFactory xMSF, XComponent xDoc,
-        String docType, String importType, String fileURL)
-        throws com.sun.star.uno.Exception {
-
-        XInterface oImp = (XInterface)xMSF.createInstance(
-            "com.sun.star.comp." + docType + ".XML" + importType + "Importer");
-        XImporter xImp = UnoRuntime.queryInterface
-            (XImporter.class, oImp) ;
-        XDocumentHandler xDocHandImp = UnoRuntime.queryInterface
-            (XDocumentHandler.class, oImp) ;
-
-        xImp.setTargetDocument(xDoc) ;
-        parseXMLFile(xMSF, fileURL, xDocHandImp) ;
-    }
 }

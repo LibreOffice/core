@@ -95,16 +95,7 @@ public class PageHelper
         return xDrawPages.insertNewByIndex( nIndex );
     }
 
-    /** removes the given page
-    */
-    static public void removeDrawPage( XComponent xComponent, XDrawPage xDrawPage )
-    {
-        XDrawPagesSupplier xDrawPagesSupplier =
-            UnoRuntime.queryInterface(
-                    XDrawPagesSupplier.class, xComponent );
-        XDrawPages xDrawPages = xDrawPagesSupplier.getDrawPages();
-        xDrawPages.remove( xDrawPage );
-    }
+
 
     /** get size of the given page
     */
@@ -156,26 +147,9 @@ public class PageHelper
         return xDrawPages.insertNewByIndex( nIndex );
     }
 
-    /** removes the given page
-    */
-    static public void removeMasterPage( XComponent xComponent, XDrawPage xDrawPage )
-    {
-        XMasterPagesSupplier xMasterPagesSupplier =
-            UnoRuntime.queryInterface(
-                    XMasterPagesSupplier.class, xComponent );
-        XDrawPages xDrawPages = xMasterPagesSupplier.getMasterPages();
-        xDrawPages.remove( xDrawPage );
-    }
 
-    /** return the corresponding masterpage for the giving drawpage
-    */
-    static public XDrawPage getMasterPage( XDrawPage xDrawPage )
-    {
-        XMasterPageTarget xMasterPageTarget =
-            UnoRuntime.queryInterface(
-                    XMasterPageTarget.class, xDrawPage );
-        return xMasterPageTarget.getMasterPage();
-    }
+
+
 
     /** sets given masterpage at the drawpage
     */

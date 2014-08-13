@@ -46,9 +46,7 @@ public class XMLParserFactory {
         return parser;
     }
 
-    public static void setParser(XMLParser p) {
-        parser = p;
-    }
+
 
     public static void setOfficeDTDURL(String url) {
         officedtdurl = url;

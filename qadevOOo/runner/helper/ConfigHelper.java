@@ -181,28 +181,10 @@ public class ConfigHelper
     }
 
 
-    public static Object readDirectKey(XMultiServiceFactory xSMGR      ,
-                                       String               sConfigFile,
-                                       String               sRelPath   ,
-                                       String               sKey       )
-        throws com.sun.star.uno.Exception
-    {
-        ConfigHelper aConfig = new ConfigHelper(xSMGR, sConfigFile, true);
-        return aConfig.readRelativeKey(sRelPath, sKey);
-    }
 
 
-    public static void writeDirectKey(XMultiServiceFactory xSMGR      ,
-                                      String               sConfigFile,
-                                      String               sRelPath   ,
-                                      String               sKey       ,
-                                      Object               aValue     )
-        throws com.sun.star.uno.Exception
-    {
-        ConfigHelper aConfig = new ConfigHelper(xSMGR, sConfigFile, false);
-        aConfig.writeRelativeKey(sRelPath, sKey, aValue);
-        aConfig.flush();
-    }
+
+
 
 
     /**

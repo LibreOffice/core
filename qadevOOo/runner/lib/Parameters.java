@@ -170,47 +170,9 @@ public class Parameters implements XPropertySet {
         }
     }
 
-    public static String getString(XPropertySet props, String name) {
-        try {
-            return (String)props.getPropertyValue(name);
-        } catch (UnknownPropertyException e) {
-            return null;
-        } catch (WrappedTargetException e) {
-            return null;
-        }
-    }
 
-    public static Object get(XPropertySet props, String name) {
-        try {
-            return props.getPropertyValue(name);
-        } catch (UnknownPropertyException e) {
-            return null;
-        } catch (WrappedTargetException e) {
-            return null;
-        }
-    }
 
-    public static Map<String, Object> toMap(XPropertySet props) {
-        HashMap<String, Object> result = new HashMap<String, Object>(10);
 
-        XPropertySetInfo setInfo = props.getPropertySetInfo();
-        Property[] properties = setInfo.getProperties();
 
-        for (int i = 0; i < properties.length; i++) {
-            String name = properties[i].Name;
-            Object value;
 
-            try {
-                value = props.getPropertyValue(name);
-            } catch (WrappedTargetException e) {
-                continue;
-            } catch (UnknownPropertyException e) {
-                continue;
-            }
-
-            result.put(name, value);
-        }
-
-        return result;
-    }
 }

@@ -181,25 +181,7 @@ public class OOoBean
         xConnectionListener = this.new EventListener("setOOoConnection");
     }
 
-    // @requirement FUNC.CON.STRT/0.4
-    /** Starts a connection to an OOo instance which is lauched if not running.
 
-        @throws HasConnectionException
-            if a connection was already established.
-
-        @throws NoConnectionException
-            if the specified connection cannot be established
-     */
-    public void startOOoConnection( String aConnectionURL )
-        throws  java.net.MalformedURLException,
-            HasConnectionException,
-            NoConnectionException
-    {
-        // create a new connection from the given connection URL
-        LocalOfficeConnection aConnection = new LocalOfficeConnection();
-        aConnection.setUnoUrl( aConnectionURL );
-        setOOoConnection( aConnection );
-    }
 
     // @requirement FUNC.CON.CHK/0.7
     /** Returns true if this OOoBean is connected to an OOo instance,
@@ -331,31 +313,7 @@ public class OOoBean
         return xDesktop;
     }
 
-    /** Resets this bean to an empty document.
 
-       If a document is loaded and the content modified,
-       the changes are dismissed.  Otherwise nothing happens.
-
-       This method is intended to be overridden in derived classes.
-       This implementation simply calls clear.
-
-       @param bClearStateToo
-           Not only the document content but also the state of the bean,
-        like visibility of child components is cleared.
-
-        @deprecated There is currently no way to dismiss changes, except for loading
-        of the unchanged initial document. Furthermore it is unclear how derived classes
-        handle this and what exactly their state is (e.g. what members make up their state).
-        Calling this method on a derived class requires knowledge about their implementation.
-        Therefore a deriving class should declare their own clearDocument if needed. Clients
-        should call the clearDocument of the deriving class or {@link #clear} which discards
-        the currently displayed document.
-     */
-    public synchronized void clearDocument( boolean bClearStateToo )
-    {
-        // TBD
-        clear();
-    }
 
     /** Resets the OOoBean to an empty status.
 
@@ -696,79 +654,9 @@ public class OOoBean
         }
     }
 
-    /** Loads a document from a Java stream.
 
-           See loadFromURL() for further information.
-     */
-    public void loadFromStream(
-            final java.io.InputStream iInStream,
-            final com.sun.star.beans.PropertyValue aArguments[] )
-        throws
-            // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException,
-            java.io.IOException,
-            com.sun.star.lang.IllegalArgumentException,
-            com.sun.star.util.CloseVetoException
-    {
-        // wrap Java stream into UNO stream
 
-                 // copy stream....
-                 int s = 4096;
-                 int r=0 ,n = 0;
-                 byte[] buffer = new byte[s];
-                 byte[] newBuffer = null;
-                 while ((r = iInStream.read(buffer, n, buffer.length-n))>0) {
-                     n += r;
-                     if (iInStream.available() > buffer.length - n) {
-                         newBuffer = new byte[buffer.length*2];
-                         System.arraycopy(buffer, 0, newBuffer, 0, n);
-                         buffer = newBuffer;
-                     }
-                }
-                if (buffer.length != n) {
-                    newBuffer = new byte[n];
-                    System.arraycopy(buffer, 0, newBuffer, 0, n);
-                    buffer = newBuffer;
-                }
-                com.sun.star.io.XInputStream xStream =
-                    new com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter(buffer);
 
-        // add stream to arguments
-        com.sun.star.beans.PropertyValue[] aExtendedArguments =
-            addArgument( aArguments, new com.sun.star.beans.PropertyValue(
-                "InputStream", -1, xStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
-
-        // call normal load method
-        loadFromURL( "private:stream", aExtendedArguments );
-    }
-
-    /** Loads a document from a byte array.
-
-           See loadFromURL() for further information.
-     */
-    public void loadFromByteArray(
-            final byte aInBuffer[],
-            final com.sun.star.beans.PropertyValue aArguments[] )
-        throws
-            // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException,
-            java.io.IOException,
-            com.sun.star.lang.IllegalArgumentException,
-            com.sun.star.util.CloseVetoException
-    {
-        // wrap byte arrray into UNO stream
-        com.sun.star.io.XInputStream xStream =
-                new com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter(
-                    aInBuffer );
-
-        // add stream to arguments
-        com.sun.star.beans.PropertyValue[] aExtendedArguments =
-            addArgument( aArguments, new com.sun.star.beans.PropertyValue(
-                "InputStream", -1, xStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
-
-        // call normal load method
-        loadFromURL( "private:stream", aExtendedArguments );
-    }
 
     /** Stores a document to the given URL.
         <p>
@@ -831,84 +719,9 @@ public class OOoBean
         { throw new NoConnectionException(); }
     }
 
-    /** Stores a document to a stream.
 
-           See {@link #storeToURL storeToURL} for further information.
-        @see #storeToURL storeToURL
-     */
-    public java.io.OutputStream storeToStream(
-            java.io.OutputStream aOutStream,
-            final com.sun.star.beans.PropertyValue aArguments[] )
-        throws
-            // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException,
-            NoDocumentException,
-            java.io.IOException,
-            com.sun.star.lang.IllegalArgumentException
 
-    {
-        // wrap Java stream into UNO stream
-        com.sun.star.lib.uno.adapter.OutputStreamToXOutputStreamAdapter aStream =
-                new com.sun.star.lib.uno.adapter.OutputStreamToXOutputStreamAdapter(
-                    aOutStream );
 
-        // add stream to arguments
-        com.sun.star.beans.PropertyValue[] aExtendedArguments =
-            addArgument( aArguments, new com.sun.star.beans.PropertyValue(
-                "OutputStream", -1, aStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
-
-        // call normal store method
-        storeToURL( "private:stream", aExtendedArguments );
-
-        // get byte array from document stream
-        try { aStream.closeOutput(); }
-        catch ( com.sun.star.io.NotConnectedException aExc )
-        { /* TDB */ }
-        catch ( com.sun.star.io.BufferSizeExceededException aExc )
-        { /* TDB */ }
-        catch ( com.sun.star.io.IOException aExc )
-        { throw new java.io.IOException(); }
-        return aOutStream;
-    }
-
-    /** Stores a document to a byte array.
-
-           See {@link #storeToURL storeToURL} for further information.
-        @see #storeToURL storeToURL
-     */
-    public byte[] storeToByteArray(
-            byte aOutBuffer[],
-            final com.sun.star.beans.PropertyValue aArguments[] )
-        throws
-            // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException,
-            NoDocumentException,
-            java.io.IOException,
-            com.sun.star.lang.IllegalArgumentException
-    {
-        // wrap byte arrray into UNO stream
-        com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter aStream =
-                new com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter(
-                    aOutBuffer );
-
-        // add stream to arguments
-        com.sun.star.beans.PropertyValue[] aExtendedArguments =
-            addArgument( aArguments, new com.sun.star.beans.PropertyValue(
-                "OutputStream", -1, aStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
-
-        // call normal store method
-        storeToURL( "private:stream", aExtendedArguments );
-
-        // get byte array from document stream
-        try { aStream.closeOutput(); }
-        catch ( com.sun.star.io.NotConnectedException aExc )
-        { /* TDB */ }
-        catch ( com.sun.star.io.BufferSizeExceededException aExc )
-        { /* TDB */ }
-        catch ( com.sun.star.io.IOException aExc )
-        { throw new java.io.IOException(); }
-        return aStream.getBuffer();
-    }
 
     // @requirement FUNC.BEAN.PROG/0.5
     // @requirement API.SIM.SEAP/0.2

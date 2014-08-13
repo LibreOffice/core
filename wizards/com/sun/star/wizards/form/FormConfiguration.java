@@ -132,13 +132,7 @@ public class FormConfiguration
         return ((chkcreateSubForm.getState() == 1) && (optOnExistingRelation.getState()));
     }
 
-    public void toggleSubFormMode()
-    {
-        boolean bdoEnable = (this.chkcreateSubForm.getState() == 1);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable && bsupportsRelations));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optSelectManually), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable));
-        toggleSteps();
-    }
+
 
     public void initialize(CommandFieldSelection _CurSubFormFieldSelection, RelationController _oRelationController)
     {

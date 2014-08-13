@@ -383,37 +383,5 @@ public class SOReportJobFactory
         }
     }
 
-    /**
-     * Gives a factory for creating the service. This method is called by the <code>JavaLoader</code>
-     * <p/>
-     *
-     * @param sImplName the name of the implementation for which a service is desired
-     * @return returns a <code>XSingleComponentFactory</code> for creating the component
-     * @see com.sun.star.comp.loader.JavaLoader
-     */
-    public static XSingleComponentFactory __getComponentFactory(final String sImplName)
-    {
-        XSingleComponentFactory xFactory = null;
 
-        try
-        {
-            if (sImplName.equals(_SOReportJobFactory.class.getName()))
-            {
-                xFactory = Factory.createComponentFactory(_SOReportJobFactory.class, _SOReportJobFactory.getServiceNames());
-            }
-            else if (sImplName.equals(SOFunctionManager.class.getName()))
-            {
-                xFactory = Factory.createComponentFactory(SOFunctionManager.class, SOFunctionManager.getServiceNames());
-            }
-            else if (sImplName.equals(SOFormulaParser.class.getName()))
-            {
-                xFactory = Factory.createComponentFactory(SOFormulaParser.class, SOFormulaParser.getServiceNames());
-            }
-        }
-        catch (java.lang.IncompatibleClassChangeError e2)
-        {
-        }
-
-        return xFactory;
-    }
 }

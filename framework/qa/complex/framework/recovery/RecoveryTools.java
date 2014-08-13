@@ -191,30 +191,7 @@ public class RecoveryTools {
         }
 
     }
-    /**
-     * This function close the office while calling terminate on the desktop. If
-     * this failed, the <CODE>ProcessHandler</CODE> kills the process.
-     * @param xMSF the <CODE>XMultiServiceFactory</CODE>
-     * @return <CODE>TRUE</CODE> if no exception was thrown, otherwise <CODE>FALSE</CODE>
-     */
-    public boolean closeOffice(XMultiServiceFactory xMSF) {
-        try {
-            XDesktop desk = UnoRuntime.queryInterface(
-                    XDesktop.class, xMSF.createInstance(
-                    "com.sun.star.frame.Desktop"));
-            xMSF = null;
 
-            desk.terminate();
-            log.println("Waiting until ProcessHandler loses the office...");
-
-        }
-        catch (java.lang.Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        waitForClosedOffice();
-        return true;
-    }
 
     /**
      * This function waits until the office is closed. If the closing time reach
@@ -237,10 +214,7 @@ public class RecoveryTools {
         if (ph != null) ph.kill();
     }
 
-    public void killOffice(){
-        helper.ProcessHandler ph = (helper.ProcessHandler) param.get("AppProvider");
-        ph.kill();
-    }
+
 
     /**
      * The office must be started WITH restore and crashreporter functionality.

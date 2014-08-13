@@ -143,45 +143,7 @@ public class PropertySetHelper
         return nValue;
     }
 
-    /**
-    get a property and convert it to a short value
-    @param _sName the string name of the property
-    @param _nDefault if an error occur, return this value
-    @return the int value of the property
-     */
-    public short getPropertyValueAsShort(String _sName, short _nDefault)
-    {
-        Object aObject = null;
-        short nValue = _nDefault;
 
-        if (m_xPropertySet != null)
-        {
-            try
-            {
-                aObject = m_xPropertySet.getPropertyValue(_sName);
-            }
-            catch (com.sun.star.beans.UnknownPropertyException e)
-            {
-                DebugHelper.writeInfo(e.getMessage());
-            }
-            catch (com.sun.star.lang.WrappedTargetException e)
-            {
-                DebugHelper.writeInfo(e.getMessage());
-            }
-        }
-        if (aObject != null)
-        {
-            try
-            {
-                nValue = NumericalHelper.toShort(aObject);
-            }
-            catch (com.sun.star.lang.IllegalArgumentException e)
-            {
-                DebugHelper.writeInfo("can't convert a object to short.");
-            }
-        }
-        return nValue;
-    }
 
     /**
     get a property and convert it to a double value
@@ -230,46 +192,7 @@ public class PropertySetHelper
         return nValue;
     }
 
-    /**
-    get a property and convert it to a boolean value
-    @param _sName the string name of the property
-    @param _bDefault if an error occur, return this value
-    @return the boolean value of the property
-     */
-    public boolean getPropertyValueAsBoolean(String _sName, boolean _bDefault)
-    {
-        Object aObject = null;
-        boolean bValue = _bDefault;
 
-        if (m_xPropertySet != null)
-        {
-            try
-            {
-                aObject = m_xPropertySet.getPropertyValue(_sName);
-            }
-            catch (com.sun.star.beans.UnknownPropertyException e)
-            {
-                DebugHelper.writeInfo(e.getMessage());
-                DebugHelper.writeInfo("UnknownPropertyException caught: Name:=" + _sName);
-            }
-            catch (com.sun.star.lang.WrappedTargetException e)
-            {
-                DebugHelper.writeInfo(e.getMessage());
-            }
-        }
-        if (aObject != null)
-        {
-            try
-            {
-                bValue = NumericalHelper.toBoolean(aObject);
-            }
-            catch (com.sun.star.lang.IllegalArgumentException e)
-            {
-                DebugHelper.writeInfo("can't convert a object to boolean.");
-            }
-        }
-        return bValue;
-    }
 
     /**
     get a property and convert it to a string value
@@ -338,15 +261,7 @@ public class PropertySetHelper
         return aObject;
     }
 
-    /**
-     * Debug helper, to show all properties which are available in the given object.
-     * @param _xObj the object of which the properties should shown
-     */
-    public static void showProperties(Object _xObj)
-    {
-        PropertySetHelper aHelper = new PropertySetHelper(_xObj);
-        aHelper.showProperties();
-    }
+
 
     /**
     Debug helper, to show all properties which are available in the current object.

@@ -135,19 +135,7 @@ public class ScriptDescriptor
     }
 
 
-    /**
-     * Adds the given array of <code>Class</code> to the list of argument types
-     * stored in this ScriptDescriptor
-     *
-     * @param  classes  The feature to be added to the ArgumentTypes attribute
-     */
-    public synchronized void addArgumentTypes( Class<?>[] classes )
-    {
-        for ( int i = 0; i < classes.length; i++ )
-        {
-            addArgumentType( classes[ i ] );
-        }
-    }
+
 
 
     /**

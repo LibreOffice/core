@@ -130,21 +130,4 @@ public class DrawTools {
         return oShape;
     }
 
-    /**
-     * creates a XShape and adds it to the documents
-     * first drawpage
-     * @param oDoc the document
-     * @param height the height of the shape
-     * @param width the width of the shape
-     * @param x the x-position of the shape
-     * @param y the y-position of the shape
-     * @param kind the kind of the shape ('Ellipse', 'Line' or 'Rectangle')
-    */
-    public void addShape(  XComponent oDoc, int height, int width, int x,
-                                                         int y, String kind ) {
-
-        getShapes(getDrawPage(oDoc,0)).add(createShape( oDoc, height, width, x,
-                                                                    y, kind ) );
-    }
-
 }

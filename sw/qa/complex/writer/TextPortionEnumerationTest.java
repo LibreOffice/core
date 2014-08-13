@@ -463,7 +463,6 @@ class Range
     private short m_End;
     private TreeNode m_Node;
     short getStart()    { return m_Start; }
-    short getEnd()      { return m_End  ; }
     short getExtent()   { return (short) (m_End - m_Start); }
     TreeNode getNode()  { return m_Node; }
     Range(int start, int end, TreeNode node)

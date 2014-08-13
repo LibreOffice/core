@@ -69,13 +69,7 @@ public class ImageElementContext
         colStyles[pos] = styleName;
     }
 
-    public String getRowStyle(final int pos)
-    {
-        return rowStyles[pos];
-    }
 
-    public String getColStyle(final int pos)
-    {
-        return colStyles[pos];
-    }
+
+
 }

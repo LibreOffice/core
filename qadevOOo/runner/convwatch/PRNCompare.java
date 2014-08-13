@@ -39,18 +39,6 @@ public class PRNCompare
             fs = System.getProperty("file.separator");
         }
 
-    String executeSynchronously(String _sCommand)
-        {
-            ProcessHandler aHandler = new ProcessHandler(_sCommand);
-            aHandler.executeSynchronously();
-
-            String sText = aHandler.getOutputText();
-
-            GlobalLogWriter.get().println("Exitcode: " + String.valueOf(aHandler.getExitCode()));
-            return sText;
-        }
-
-
     private int getMaxNumOfFileEntry(String _sDirectory, String _sBasename)
         {
 //  TODO: check if directory exist should be done earlier
@@ -140,18 +128,7 @@ public class PRNCompare
             return aList;
         }
 
-    public StatusHelper[] compare_new()
-        {
-            String[] aRefList = createJPEGFromPostscript(m_sOutputPath, m_sReferencePath, m_sReferenceFile, getResolutionInDPI());
-//  TODO: Assume, that Postscript is already in the OutputPath, this may change.
-            String[] aPSList = createJPEGFromPostscript(m_sOutputPath, m_sOutputPath, m_sPostScriptFile, getResolutionInDPI());
-            StatusHelper[] aList = createDiffs(aRefList,
-                                               aPSList,
-                                               getMaxPages(),
-                                               m_tUseBorderMove);
 
-            return aList;
-        }
 
     private static String getJPEGName(String _sOutputPath, String _sBasename, String _sGS_PageOutput)
         {

@@ -84,18 +84,7 @@ public class Resource
         }
     }
 
-    public PropertyValue[] getStringList(int nID)
-    {
-        try
-        {
-            return (PropertyValue[])this.xStringListIndexAccess.getByIndex(nID);
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            throw new java.lang.IllegalArgumentException("Resource with ID not " + String.valueOf(nID) + "not found");
-        }
-    }
+
 
     public String[] getResArray(int nID, int iCount)
     {

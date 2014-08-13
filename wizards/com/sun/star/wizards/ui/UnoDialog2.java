@@ -127,10 +127,7 @@ public class UnoDialog2 extends UnoDialog
         return xComboBox;
     }
 
-    public XComboBox insertComboBox(String sName, String actionPerformed, String itemChanged, String textChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertComboBox(sName, actionPerformed, textChanged, itemChanged, this, sPropNames, oPropValues);
-    }
+
 
     public XListBox insertListBox(String sName, String actionPerformed, String itemChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
@@ -169,21 +166,14 @@ public class UnoDialog2 extends UnoDialog
         return insertRadioButton(sName, itemChanged, this, sPropNames, oPropValues);
     }
 
-    public XControl insertTitledBox(String sName, String[] sPropNames, Object[] oPropValues)
-    {
-        Object oTitledBox = insertControlModel2("com.sun.star.awt.UnoControlGroupBoxModel", sName, sPropNames, oPropValues);
-        return UnoRuntime.queryInterface(XControl.class, oTitledBox);
-    }
+
 
     public XTextComponent insertTextField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XTextComponent) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlEditModel", sPropNames, oPropValues, XTextComponent.class);
     }
 
-    public XTextComponent insertTextField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertTextField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
+
 
     public XControl insertImage(String sName, String[] sPropNames, Object[] oPropValues)
     {
@@ -225,70 +215,49 @@ public class UnoDialog2 extends UnoDialog
         return (XControl) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFileControlModel", sPropNames, oPropValues, XControl.class);
     }
 
-    public XControl insertFileControl(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertFileControl(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
+
 
     private XCurrencyField insertCurrencyField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XCurrencyField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlCurrencyFieldModel", sPropNames, oPropValues, XCurrencyField.class);
     }
 
-    public XCurrencyField insertCurrencyField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertCurrencyField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
+
 
     private XDateField insertDateField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XDateField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlDateFieldModel", sPropNames, oPropValues, XDateField.class);
     }
 
-    public XDateField insertDateField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertDateField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
+
 
     private XNumericField insertNumericField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XNumericField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlNumericFieldModel", sPropNames, oPropValues, XNumericField.class);
     }
 
-    public XNumericField insertNumericField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertNumericField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
+
 
     private XTimeField insertTimeField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XTimeField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlTimeFieldModel", sPropNames, oPropValues, XTimeField.class);
     }
 
-    public XTimeField insertTimeField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertTimeField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
+
 
     private XPatternField insertPatternField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XPatternField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlPatternFieldModel", sPropNames, oPropValues, XPatternField.class);
     }
 
-    public XPatternField insertPatternField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertPatternField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
+
 
     private XTextComponent insertFormattedField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         return (XTextComponent) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFormattedFieldModel", sPropNames, oPropValues, XTextComponent.class);
     }
 
-    public XTextComponent insertFormattedField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertFormattedField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
+
 
     public XControl insertFixedLine(String sName, String[] sPropNames, Object[] oPropValues)
     {
@@ -296,23 +265,11 @@ public class UnoDialog2 extends UnoDialog
         return UnoRuntime.queryInterface(XControl.class, oLine);
     }
 
-    public XScrollBar insertScrollBar(String sName, String[] sPropNames, Object[] oPropValues)
-    {
-        Object oScrollBar = insertControlModel2("com.sun.star.awt.UnoControlScrollBarModel", sName, sPropNames, oPropValues);
-        return UnoRuntime.queryInterface(XScrollBar.class, oScrollBar);
-    }
 
-    public XProgressBar insertProgressBar(String sName, String[] sPropNames, Object[] oPropValues)
-    {
-        Object oProgressBar = insertControlModel2("com.sun.star.awt.UnoControlProgressBarModel", sName, sPropNames, oPropValues);
-        return UnoRuntime.queryInterface(XProgressBar.class, oProgressBar);
-    }
 
-    public XControl insertGroupBox(String sName, String[] sPropNames, Object[] oPropValues)
-    {
-        Object oGroupBox = insertControlModel2("com.sun.star.awt.UnoControlGroupBoxModel", sName, sPropNames, oPropValues);
-        return UnoRuntime.queryInterface(XControl.class, oGroupBox);
-    }
+
+
+
 
     private Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues)
     {
@@ -338,10 +295,7 @@ public class UnoDialog2 extends UnoDialog
         return UnoRuntime.queryInterface(type, insertControlModel2(serviceName, componentName, sPropNames, oPropValues));
     }
 
-    public static Object getControlModel(Object unoControl)
-    {
-        return UnoRuntime.queryInterface(XControl.class, unoControl).getModel();
-    }
+
 
     public int showMessageBox(String windowServiceName, int windowAttribute, String MessageText)
     {

@@ -26,5 +26,5 @@ public interface XTreePathProvider {
 
     public XTreePathProvider getParentPath();
 
-    public XTreePathProvider pathByAddingChild(XUnoNode _oUnoNode);
+
 }

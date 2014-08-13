@@ -66,25 +66,7 @@ public class OfficeDocument
     {
     }
 
-    public static void attachEventCall(XComponent xComponent, String EventName, String EventType, String EventURL)
-    {
-        try
-        {
-            XEventsSupplier xEventssSuppl = UnoRuntime.queryInterface(XEventsSupplier.class, xComponent);
-            PropertyValue[] oEventProperties = new PropertyValue[2];
-            oEventProperties[0] = new PropertyValue();
-            oEventProperties[0].Name = "EventType";
-            oEventProperties[0].Value = EventType; // "Service", "StarBasic"
-            oEventProperties[1] = new PropertyValue();
-            oEventProperties[1].Name = "Script"; //PropertyNames.URL;
-            oEventProperties[1].Value = EventURL;
-            xEventssSuppl.getEvents().replaceByName(EventName, oEventProperties);
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
+
 
     public static void dispose(XMultiServiceFactory xMSF, XComponent xComponent)
     {
@@ -108,51 +90,7 @@ public class OfficeDocument
         }
     }
 
-    /**
-     * Create a new office document, attached to the given frame.
-     * @param sDocumentType e.g. swriter, scalc, ( simpress, scalc : not tested)
-     * @return the document Component (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
-     */
-    public static Object createNewDocument(XFrame frame, String sDocumentType, boolean preview, boolean readonly)
-    {
 
-        PropertyValue[] loadValues = new PropertyValue[2];
-        loadValues[0] = new PropertyValue();
-        loadValues[0].Name = PropertyNames.READ_ONLY;
-        loadValues[0].Value = readonly ? Boolean.TRUE : Boolean.FALSE;
-        loadValues[1] = new PropertyValue();
-        loadValues[1].Name = "Preview";
-        loadValues[1].Value = preview ? Boolean.TRUE : Boolean.FALSE;
-
-        Object oDocument = null;
-        com.sun.star.frame.XComponentLoader xComponentLoader = null;
-        String sURL = "private:factory/" + sDocumentType;
-
-        try
-        {
-            xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, frame);
-            /*if (frame.getName() == null || frame.getName().equals(PropertyNames.EMPTY_STRING));
-            frame.setName("T" + System.currentTimeMillis());*/
-            XComponent xComponent = xComponentLoader.loadComponentFromURL(sURL, "_self", 0, loadValues);
-
-            if (sDocumentType.equals("swriter"))
-            {
-                oDocument = UnoRuntime.queryInterface(XTextDocument.class, xComponent);
-            }
-            else if (sDocumentType.equals("scalc"))
-            {
-                oDocument = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
-            //TODO:
-            //                else if (sDocumentType == "simpress")
-            //                else if (sDocumentType == "sdraw")
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-        return oDocument;
-    }
 
     public static XFrame createNewFrame(XMultiServiceFactory xMSF, XTerminateListener listener)
     {
@@ -273,43 +211,7 @@ public class OfficeDocument
         return oDocument;
     }
 
-    public static boolean store(XMultiServiceFactory xMSF, XComponent xComponent, String StorePath, String FilterName, boolean bStoreToUrl)
-    {
-        try
-        {
-            XStorable xStoreable = UnoRuntime.queryInterface(XStorable.class, xComponent);
-            PropertyValue[] oStoreProperties;
-            if (FilterName.length() > 0)
-            {
-                oStoreProperties = new PropertyValue[2];
-                oStoreProperties[0] = new PropertyValue();
-                oStoreProperties[0].Name = "FilterName";
-                oStoreProperties[0].Value = FilterName;
-                oStoreProperties[1] = new PropertyValue();
-                oStoreProperties[1].Name = "InteractionHandler";
-                oStoreProperties[1].Value = UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
-            }
-            else
-            {
-                oStoreProperties = new PropertyValue[0];
-            }
-            if (bStoreToUrl)
-            {
-                xStoreable.storeToURL(StorePath, oStoreProperties);
-            }
-            else
-            {
-                xStoreable.storeAsURL(StorePath, oStoreProperties);
-            }
-            return true;
-        }
-        catch (Exception exception)
-        {
 
-            exception.printStackTrace(System.err);
-            return false;
-        }
-    }
 
     public static boolean close(XComponent xComponent)
     {
@@ -366,59 +268,15 @@ public class OfficeDocument
         }
     }
 
-    public static PropertyValue[] getFileMediaDecriptor(XMultiServiceFactory xmsf, String url)
-            throws Exception
-    {
-        Object typeDetect = xmsf.createInstance("com.sun.star.document.TypeDetection");
 
-        PropertyValue[][] mediaDescr = new PropertyValue[1][1];
-        mediaDescr[0][0] = new PropertyValue();
-        mediaDescr[0][0].Name = PropertyNames.URL;
-        mediaDescr[0][0].Value = url;
 
-        String type = UnoRuntime.queryInterface(XTypeDetection.class, typeDetect).queryTypeByDescriptor(mediaDescr, true);
 
-        XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
-        if (type.equals(PropertyNames.EMPTY_STRING))
-        {
-            return null;
-        }
-        else
-        {
-            return (PropertyValue[]) xNameAccess.getByName(type);
-        }
-    }
 
-    public static PropertyValue[] getTypeMediaDescriptor(XMultiServiceFactory xmsf, String type)
-            throws Exception
-    {
-        Object typeDetect = xmsf.createInstance("com.sun.star.document.TypeDetection");
-        XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
-        return (PropertyValue[]) xNameAccess.getByName(type);
-    }
 
-    /**
-     * returns the count of slides in a presentation,
-     * or the count of pages in a draw document.
-     * @param model a presentation or a draw document
-     * @return the number of slides/pages in the given document.
-     */
-    public static int getSlideCount(Object model)
-    {
-        XDrawPagesSupplier xDrawPagesSupplier = UnoRuntime.queryInterface(XDrawPagesSupplier.class, model);
-        return xDrawPagesSupplier.getDrawPages().getCount();
-    }
 
-    public static XDocumentProperties getDocumentProperties(Object document)
-    {
-        XDocumentPropertiesSupplier xDocumentPropertiesSupplier = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, document);
-        return xDocumentPropertiesSupplier.getDocumentProperties();
-    }
 
-    public static int showMessageBox(XMultiServiceFactory xMSF, String windowServiceName, int windowAttribute, String MessageText)
-    {
-        return SystemDialog.showMessageBox(xMSF, windowServiceName, windowAttribute, MessageText);
-    }
+
+
 
     /**
      * @return Returns the xWindowPeer.

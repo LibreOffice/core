@@ -333,29 +333,7 @@ public class TextDocument
     // to make it really safe you must acquire the Tablenames before the insertion and after the insertion of the new Table. By comparing the
     // two sequences of tablenames you can find out the tablename of the last inserted Table
 
-    // Todo: This method is  unsecure because the last index is not necessarily the last section
-    public int getCharWidth(String ScaleString)
-    {
-        int iScale = 200;
-        xTextDocument.lockControllers();
-        int iScaleLen = ScaleString.length();
-        com.sun.star.text.XTextCursor xTextCursor = createTextCursor(xTextDocument.getText());
-        xTextCursor.gotoStart(false);
-        com.sun.star.wizards.common.Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
-        xTextCursor.setString(ScaleString);
-        XTextViewCursorSupplier xViewCursor = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
-        XTextViewCursor xTextViewCursor = xViewCursor.getViewCursor();
-        xTextViewCursor.gotoStart(false);
-        int iFirstPos = xTextViewCursor.getPosition().X;
-        xTextViewCursor.gotoEnd(false);
-        int iLastPos = xTextViewCursor.getPosition().X;
-        iScale = (iLastPos - iFirstPos) / iScaleLen;
-        xTextCursor.gotoStart(false);
-        xTextCursor.gotoEnd(true);
-        xTextCursor.setString(PropertyNames.EMPTY_STRING);
-        unlockallControllers();
-        return iScale;
-    }
+
 
     public void unlockallControllers()
     {
@@ -365,102 +343,13 @@ public class TextDocument
         }
     }
 
-    public void refresh()
-    {
-        XRefreshable xRefreshable = UnoRuntime.queryInterface(XRefreshable.class, xTextDocument);
-        xRefreshable.refresh();
-    }
 
-    /**
-     * This method sets the Author of a Wizard-generated template correctly
-     * and adds a explanatory sentence to the template description.
-     * @param WizardName The name of the Wizard.
-     * @param TemplateDescription The old Description which is being appended with another sentence.
-     */
-    public void setWizardTemplateDocInfo(String WizardName, String TemplateDescription)
-    {
-        try
-        {
-            Object uD = Configuration.getConfigurationRoot(xMSF, "/org.openoffice.UserProfile/Data", false);
-            XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, uD);
-            Object gn = xNA.getByName("givenname");
-            Object sn = xNA.getByName("sn");
-            String fullname = gn + PropertyNames.SPACE + sn;
 
-            Calendar cal = new GregorianCalendar();
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-            DateTime currentDate = new DateTime();
-            currentDate.Day = (short) day;
-            currentDate.Month = (short) month;
-            currentDate.Year = (short) year;
-            DateUtils du = new DateUtils(xMSF, this.xTextDocument);
-            int ff = du.getFormat(NumberFormatIndex.DATE_SYS_DDMMYY);
-            String myDate = du.format(ff, currentDate);
 
-            XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
-            XDocumentProperties xDocProps2 = xDocPropsSuppl.getDocumentProperties();
-            xDocProps2.setAuthor(fullname);
-            xDocProps2.setModifiedBy(fullname);
-            String description = xDocProps2.getDescription();
-            description = description + PropertyNames.SPACE + TemplateDescription;
-            description = JavaTools.replaceSubString(description, WizardName, "<wizard_name>");
-            description = JavaTools.replaceSubString(description, myDate, "<current_date>");
-            xDocProps2.setDescription(description);
-        }
-        catch (NoSuchElementException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (WrappedTargetException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 
-    /**
-     * removes an arbitrary Object which supports the  'XTextContent' interface
-     */
-    public boolean removeTextContent(Object oTextContent)
-    {
-        try
-        {
-            XTextContent xTextContent = UnoRuntime.queryInterface(XTextContent.class, oTextContent);
-            xText.removeTextContent(xTextContent);
-            return true;
-        }
-        catch (NoSuchElementException e)
-        {
-            e.printStackTrace(System.err);
-            return false;
-        }
-    }
 
-    /**
-     * Apparently there is no other way to get the
-     * page count of a text document other than using a cursor and
-     * making it jump to the last page...
-     * @param model the document model.
-     * @return the page count of the document.
-     */
-    public static int getPageCount(Object model)
-    {
-        XModel xModel = UnoRuntime.queryInterface(XModel.class, model);
-        XController xController = xModel.getCurrentController();
-        XTextViewCursorSupplier xTextVCS = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController);
-        XTextViewCursor xTextVC = xTextVCS.getViewCursor();
-        XPageCursor xPC = UnoRuntime.queryInterface(XPageCursor.class, xTextVC);
-        xPC.jumpToLastPage();
-        return xPC.getPage();
-    }
+
+
 
     /* Possible Values for "OptionString" are: "LoadCellStyles", "LoadTextStyles", "LoadFrameStyles",
     "LoadPageStyles", "LoadNumberingStyles", "OverwriteStyles" */

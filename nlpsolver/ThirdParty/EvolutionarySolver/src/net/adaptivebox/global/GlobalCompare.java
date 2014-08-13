@@ -26,19 +26,5 @@ public class GlobalCompare {
       return CompareValue.EQUAL_TO;
   }
 
-/* check the magnitude of two array, the frontial is more important
- **/
-  public static int compareArray(double[] fit1, double[] fit2) {
-    if (fit1.length!=fit2.length) {
-      return CompareValue.INVALID;  //error
-    }
-    for (int i=0; i<fit1.length; i++) {
-      if (fit1[i]>fit2[i]) {
-        return CompareValue.LARGER_THAN; //Large than
-      } else if (fit1[i]<fit2[i]){
-        return CompareValue.LESS_THAN; //Less than
-      }
-    }
-    return CompareValue.EQUAL_TO; //same
-  }
+
 }

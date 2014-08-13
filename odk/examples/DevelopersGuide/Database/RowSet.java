@@ -74,17 +74,7 @@ public class RowSet
         System.exit(0);
     }
 
-    public static void printDataSources() throws com.sun.star.uno.Exception
-    {
-        // create a DatabaseContext and print all DataSource names
-        XNameAccess xNameAccess = UnoRuntime.queryInterface(
-            XNameAccess.class,
-            xMCF.createInstanceWithContext("com.sun.star.sdb.DatabaseContext",
-                                           xContext));
-        String aNames [] = xNameAccess.getElementNames();
-        for(int i=0;i<aNames.length;++i)
-            System.out.println(aNames[i]);
-    }
+
 
     private static void useRowSet() throws com.sun.star.uno.Exception
     {

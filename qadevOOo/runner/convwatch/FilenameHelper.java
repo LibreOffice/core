@@ -175,13 +175,7 @@ abstract class FilenameHelper_impl implements Filenamer
             return FileHelper.isDir(getSystemPath());
         }
 
-    /**
-     * @return true, if the file really exist.
-     */
-    public boolean exists()
-        {
-            return FileHelper.exists(createAbsoluteFilename());
-        }
+
 
     /**
      * @return the current suffix

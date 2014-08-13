@@ -372,41 +372,7 @@ public class Helper
 
     }
 
-    protected static XInputStream SaveHTMLTemp( XComponentContext xContext, String sArticle )
-    {
-        XInputStream xResult = null;
 
-        if ( xContext != null )
-        {
-            try
-            {
-                Object oTempFile = xContext.getServiceManager().createInstanceWithContext( "com.sun.star.io.TempFile", xContext );
-                XStream xStream = UnoRuntime.queryInterface( XStream.class, oTempFile );
-                XSeekable xSeekable = UnoRuntime.queryInterface( XSeekable.class, oTempFile );
-                if ( xStream != null && xSeekable != null )
-                {
-                    XOutputStream xOutputStream = xStream.getOutputStream();
-                    XInputStream xInputStream = xStream.getInputStream();
-                    if ( xOutputStream != null && xInputStream != null )
-                    {
-                        String sHTML = sHTMLHeader.concat( sArticle );
-                        sHTML = sHTML.concat( sHTMLFooter );
-                        xOutputStream.writeBytes( sHTML.getBytes( "UTF-8" ) );
-                        // xOutputStream.closeOutput();
-                        xSeekable.seek( 0 );
-
-                        xResult = xInputStream;
-                    }
-                }
-            }
-            catch ( Exception ex )
-            {
-                ex.printStackTrace();
-            }
-        }
-
-        return xResult;
-    }
 
 
     protected static String CreateTempFile( XComponentContext xContext )
@@ -874,22 +840,7 @@ public class Helper
         return null;
     }
 
-    protected static void SetControlPropInDialog( XDialog xDialog, String aControlName, String aPropName, Object aPropValue )
-    {
-        if ( xDialog != null && aControlName != null && aPropName != null && aPropValue != null )
-        {
-            try
-            {
-                XPropertySet xPropSet = GetSubControlPropSet( xDialog, aControlName );
-                if ( xPropSet != null )
-                    xPropSet.setPropertyValue( aPropName, aPropValue );
-            }
-            catch ( com.sun.star.uno.Exception e )
-            {
-                e.printStackTrace();
-            }
-        }
-    }
+
 
     protected static String[] GetPasswordsForURLAndUser( XComponentContext xContext, String sURL, String sUserName )
     {

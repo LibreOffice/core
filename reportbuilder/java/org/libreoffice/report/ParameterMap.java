@@ -19,17 +19,6 @@ package org.libreoffice.report;
 
 public interface ParameterMap
 {
-
-    /**
-     * Adds a property to this properties collection. If a property with the given name
-     * exist, the property will be replaced with the new value. If the value is null, the
-     * property will be removed.
-     *
-     * @param key   the property key.
-     * @param value the property value.
-     */
-    public void put(final String key, final Object value);
-
     /**
      * Retrieves the value stored for a key in this properties collection.
      *
@@ -39,21 +28,5 @@ public interface ParameterMap
      */
     Object get(final String key);
 
-    /**
-     * Retrieves the value stored for a key in this properties collection, and returning the
-     * default value if the key was not stored in this properties collection.
-     *
-     * @param key          the property key.
-     * @param defaultValue the default value to be returned when the key is not stored in
-     *                     this properties collection.
-     * @return The stored value, or the default value if the key does not exist in this
-     *         collection.
-     */
-    Object get(final String key, final Object defaultValue);
-
     String[] keys();
-
-    void clear();
-
-    int size();
 }

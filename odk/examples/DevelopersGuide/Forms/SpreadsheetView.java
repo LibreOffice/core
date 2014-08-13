@@ -36,28 +36,5 @@ public class SpreadsheetView extends DocumentViewHelper
         super( orb, document, controller );
     }
 
-    /** activates the sheet with the given index
-     */
-    void activateSheet( int sheetIndex )
-    {
-        try
-        {
-            // get the sheet to activate
-            XSpreadsheetDocument doc = UnoRuntime.queryInterface(
-                XSpreadsheetDocument.class, getDocument().getDocument() );
-            XIndexAccess sheets = UnoRuntime.queryInterface(
-                XIndexAccess.class, doc.getSheets() );
 
-            XSpreadsheet sheet = UnoRuntime.queryInterface(
-                XSpreadsheet.class, sheets.getByIndex( sheetIndex ) );
-
-            // activate
-            XSpreadsheetView view = UnoRuntime.queryInterface(
-                XSpreadsheetView.class, getController() );
-            view.setActiveSheet( sheet );
-        }
-        catch( com.sun.star.uno.Exception e )
-        {
-        }
-    }
 }

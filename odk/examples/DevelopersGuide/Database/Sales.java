@@ -106,40 +106,7 @@ public class Sales
         }
     }
 
-    // create a scrollable resultset.
-    public void retrieveSalesData2() throws com.sun.star.uno.Exception
-    {
-        // example for a programmatic way to do updates.
-        XStatement stmt = con.createStatement();
-        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
 
-        xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
-        xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.UPDATABLE));
-
-        XResultSet srs = stmt.executeQuery("SELECT NAME, PRICE FROM SALES");
-        XRow       row = UnoRuntime.queryInterface(XRow.class,srs);
-
-        srs.afterLast();
-        while (srs.previous()) {
-            String name = row.getString(1);
-            float price = row.getFloat(2);
-            System.out.println(name + "     " + price);
-        }
-
-        srs.last();
-        XRowUpdate updateRow = UnoRuntime.queryInterface(XRowUpdate.class,srs);
-        updateRow.updateFloat(2, (float)0.69);
-
-        XResultSetUpdate updateRs = UnoRuntime.queryInterface(
-            XResultSetUpdate.class,srs);
-        updateRs.updateRow(); // this call updates the data in DBMS
-
-        srs.last();
-        updateRow.updateFloat(2, (float)0.99);
-        updateRs.cancelRowUpdates();
-        updateRow.updateFloat(2, (float)0.79);
-        updateRs.updateRow();
-    }
 
     // inserts a row programmatically.
     private void insertRow() throws com.sun.star.uno.Exception
@@ -186,38 +153,7 @@ public class Sales
         updateRs.deleteRow();
     }
 
-    // refresh a row
-    public void refreshRow() throws com.sun.star.uno.Exception
-    {
-        // example for a programmatic way to do updates.
-        // first we need the 4 row
-        insertRow();
 
-        XStatement stmt = con.createStatement();
-        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
-        xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
-        xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.READ_ONLY));
-        XResultSet rs = stmt.executeQuery("SELECT NAME, PRICE FROM SALES");
-        XRow       row = UnoRuntime.queryInterface(XRow.class, rs);
-        rs.absolute(4);
-        float price1 = row.getFloat(2);
-
-        // modifiy the 4 row
-        XRowUpdate updateRow = UnoRuntime.queryInterface(XRowUpdate.class,rs);
-        XResultSetUpdate updateRs = UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
-        updateRow.updateFloat(2, 150);
-        updateRs.updateRow();
-        // repositioning
-        rs.absolute(4);
-        rs.refreshRow();
-        float price2 = row.getFloat(2);
-        if (price2 != price1) {
-            System.out.println("Prices are different.");
-        }
-        else
-            System.out.println("Prices are equal.");
-        deleteRow();
-    }
 
     // displays the column names
     public void displayColumnNames() throws com.sun.star.uno.Exception

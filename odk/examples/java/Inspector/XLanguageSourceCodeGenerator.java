@@ -67,7 +67,7 @@ public interface XLanguageSourceCodeGenerator {
 
     public String getshortTypeDescription();
 
-    public String getunsignedshortTypeDescription();
+
 
     public String getlongTypeDescription();
 
@@ -85,11 +85,11 @@ public interface XLanguageSourceCodeGenerator {
 
     public String getstringTypeDescription(boolean _bAsHeaderSourceCode);
 
-    public String gettypeTypeDescription(boolean _bAsHeaderSourceCode);
+
 
     public String getanyTypeDescription(boolean _bAsHeaderSourceCode);
 
-    public String getArrayDeclaration(String sVariableDeclaration);
+
 
     public String getVariableDeclaration(String _sTypeString, String _sVariableName, boolean _bIsArray, TypeClass aTypeClass, boolean _bInitialize);
 

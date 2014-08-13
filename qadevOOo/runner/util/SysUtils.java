@@ -32,82 +32,15 @@ import com.sun.star.datatransfer.*;
 
 public class SysUtils {
 
-    public static String getJavaPath() {
-        String cp = System.getProperty("java.class.path");
-        String jh = System.getProperty("java.home");
-        String fs = System.getProperty("file.separator");
-        jh = jh + fs + "bin" + fs;
-        jh = jh + "java -classpath "+cp;
-        return jh;
-    }
+
 
   private static ArrayList<String> files = new ArrayList<String>();
 
-  public static Object[] traverse( String afileDirectory ) {
 
-    File fileDirectory = new File(afileDirectory);
-    // Testing, if the file is a directory, and if so, it throws an exception
-    if ( !fileDirectory.isDirectory() ) {
-      throw new IllegalArgumentException(
-      "not a directory: " + fileDirectory.getName()
-      );
-    }
 
-    // Getting all files and directories in the current directory
-    File[] entries = fileDirectory.listFiles(
-    new FileFilter() {
-      public boolean accept( File pathname ) {
-        return true;
-      }
-    }
-    );
 
-    // Iterating for each file and directory
-    for ( int i = 0; i < entries.length; ++i ) {
-      // Testing, if the entry in the list is a directory
-      if ( entries[ i ].isDirectory() ) {
-        // Recursive call for the new directory
-        traverse( entries[ i ].getAbsolutePath() );
-      } else {
-        // adding file to List
-        try {
-          // Composing the URL by replacing all backslashs
-          String stringUrl = "file:///"
-          + entries[ i ].getAbsolutePath().replace( '\\', '/' );
-          files.add(stringUrl);
-        }
-        catch( Exception exception ) {
-          exception.printStackTrace();
-        }
 
-      }
-    }
-    return files.toArray();
-  }
 
-  public static XComponent getActiveComponent(XMultiServiceFactory msf) {
-    XComponent ac = null;
-    try {
-        Object desk = msf.createInstance("com.sun.star.frame.Desktop");
-        XDesktop xDesk = UnoRuntime.queryInterface(XDesktop.class,desk);
-        ac = xDesk.getCurrentComponent();
-    } catch (com.sun.star.uno.Exception e) {
-        System.out.println("Couldn't get active Component");
-    }
-    return ac;
-  }
-
-  public static XFrame getActiveFrame(XMultiServiceFactory msf) {
-    try {
-        Object desk = msf.createInstance("com.sun.star.frame.Desktop");
-        XDesktop xDesk = UnoRuntime.queryInterface(XDesktop.class,desk);
-        return xDesk.getCurrentFrame();
-    } catch (com.sun.star.uno.Exception e) {
-        System.out.println("Couldn't get active Component");
-    }
-
-    return null;
-  }
 
   /**
    * Tries to obtain text data from cliboard if such one exists.

@@ -67,61 +67,7 @@ public class DialogFactory
         return factory;
     }
 
-    public boolean showConfirmDialog(String title, String prompt)
-    {
-        final XDialog xDialog;
-        try
-        {
-            xDialog = createConfirmDialog(title, prompt);
-        }
-        catch (com.sun.star.uno.Exception e)
-        {
-            return false;
-        }
 
-        // add an action listener to the button controls
-        XControlContainer controls = UnoRuntime.queryInterface(XControlContainer.class, xDialog);
-
-        XButton okButton = UnoRuntime.queryInterface(
-            XButton.class, controls.getControl("Ok"));
-        okButton.setActionCommand("Ok");
-
-        XButton cancelButton = UnoRuntime.queryInterface(
-            XButton.class, controls.getControl("Cancel"));
-        cancelButton.setActionCommand("Cancel");
-
-        final ResultHolder resultHolder = new ResultHolder();
-
-        com.sun.star.awt.XActionListener listener =
-            new com.sun.star.awt.XActionListener()
-            {
-                public void actionPerformed(com.sun.star.awt.ActionEvent e) {
-                    if (e.ActionCommand.equals("Cancel"))
-                    {
-                        resultHolder.setResult(Boolean.FALSE);
-                        xDialog.endExecute();
-                    }
-                    else
-                    {
-                        resultHolder.setResult(Boolean.TRUE);
-                        xDialog.endExecute();
-                    }
-                }
-
-                public void disposing(EventObject o) {
-                    // does nothing
-                }
-            };
-
-        okButton.addActionListener(listener);
-        cancelButton.addActionListener(listener);
-
-        xDialog.execute();
-
-        Boolean result = (Boolean)resultHolder.getResult();
-
-        return result == null ? false : result.booleanValue();
-    }
 
     public String showInputDialog(String title, String prompt)
     {

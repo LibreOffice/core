@@ -640,32 +640,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
-    public boolean addColumn(String _columnname, XPropertySet _xNewColPropertySet)
-    {
-        try
-        {
-            if (!hasByName(_columnname))
-            {
-                if (_columnname.equals(PropertyNames.EMPTY_STRING))
-                {
-                    return false;
-                }
-                else
-                {
-                    ColumnPropertySet oPropertySet = new ColumnPropertySet(oTypeInspector, xColumnDataDescriptorFactory.createDataDescriptor());
-                    oPropertySet.assignNewPropertySet(_columnname, _xNewColPropertySet);
-                    ColumnDescriptor oColumnDescriptor = new ColumnDescriptor(oPropertySet.xPropertySet, _columnname);
-                    columncontainer.add(oColumnDescriptor);
-                    return true;
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-        return false;
-    }
+
 
     private XPropertySet addPrimaryKeyColumn(String _columnname)
     {

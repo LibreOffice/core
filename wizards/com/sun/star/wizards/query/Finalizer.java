@@ -117,11 +117,7 @@ public class Finalizer
                 });
     }
 
-    public void changeTitle()
-    {
-        final String TitleName = m_aTxtTitle.getText();
-        m_queryWizard.enableFinishButton( TitleName.length() > 0 );
-    }
+
 
     /* TODO: The title textbox always has to be updated when
     a new Table has been selected if it is clear that the user has not made any input meanwhile

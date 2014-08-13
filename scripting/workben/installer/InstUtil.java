@@ -91,15 +91,7 @@ public class InstUtil {
     }
 
 
-    public static boolean hasJeditInstallation() {
-        boolean result = false;
-        result = checkForSupportedVersion( getJeditLocation(), versions );
-        if ( !result )
-        {
-            System.out.println("No supported version for JEdit found.");
-        }
-        return result;
-    }
+
 
 
 

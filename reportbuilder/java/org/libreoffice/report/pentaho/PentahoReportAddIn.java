@@ -17,8 +17,6 @@
  */
 package org.libreoffice.report.pentaho;
 
-import org.libreoffice.report.ReportAddIn;
-import org.libreoffice.report.ReportExpression;
 import org.libreoffice.report.ReportExpressionMetaData;
 import org.libreoffice.report.pentaho.expressions.SumExpression;
 
@@ -26,14 +24,14 @@ import org.libreoffice.report.pentaho.expressions.SumExpression;
  * This class is a dummy implementation. Ignore it for now, we may extend this
  * one later.
  */
-public class PentahoReportAddIn implements ReportAddIn
+public class PentahoReportAddIn
 {
 
     public PentahoReportAddIn()
     {
     }
 
-    public ReportExpression createExpression(final int expression)
+    public SumExpression createExpression(final int expression)
     {
         return (expression == 0) ? new SumExpression() : null;
     }

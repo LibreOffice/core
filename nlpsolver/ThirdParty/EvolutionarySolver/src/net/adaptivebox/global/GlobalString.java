@@ -45,13 +45,9 @@ public class GlobalString {
     return v.toArray(new String[v.size()]);
   }
 
-  public static String[] getMeaningfulLines(String srcStr) throws Exception {
-    return getMeaningfulLines(srcStr, NEGLECT_TAG);
-  }
 
-  public static String getMeaningfulLine(BufferedReader outReader) throws Exception {
-    return getMeaningfulLine(outReader, NEGLECT_TAG);
-  }
+
+
 
   private static int getCharLoc(char data, String str) {
     for(int i=0; i<str.length(); i++) {
@@ -126,18 +122,8 @@ public class GlobalString {
     return nObj.toString();
   }
 
-  static public int toInteger(Object oVal) throws Exception {
-    if(oVal==null) throw new Exception("Null string");
-    return Integer.parseInt(oVal.toString());
-  }
 
-  static public double toDouble(Object oVal) throws Exception {
-    if(oVal==null) throw new Exception("Null string");
-    return Double.parseDouble(oVal.toString());
-  }
 
-  public static Object toObject(String key) throws Exception{
-    Class cls = Class.forName(key);
-    return cls.newInstance();
-  }
+
+
 }

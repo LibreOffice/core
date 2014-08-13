@@ -144,22 +144,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         nNewStep = nOldStep;
     }
 
-    public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent)
-    {
-        try
-        {
-            nNewStep = itemEvent.ItemId;
-            nOldStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP));
-            if (nNewStep != nOldStep)
-            {
-                switchToStep();
-            }
-        }
-        catch (com.sun.star.lang.IllegalArgumentException exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
+
 
     public void setRoadmapInteractive(boolean _bInteractive)
     {
@@ -494,25 +479,9 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    protected void insertRoadMapItems(String[] items, int[] steps, boolean[] enabled)
-    {
-        for (int i = 0; i < items.length; i++)
-        {
-            insertRoadmapItem(i, enabled[i], items[i], steps[i]);
-        }
-    }
 
-    /** This method also enables and disables the "next" button,
-     * if the step currently dis/enabled is the one of the next steps.
-     */
-    public void setStepEnabled(int _nStep, boolean bEnabled, boolean enableNextButton)
-    {
-        setStepEnabled(_nStep, bEnabled);
-        if (getNextAvailableStep() > 0)
-        {
-            enableNextButton(bEnabled);
-        }
-    }
+
+
 
     public void enableNavigationButtons(boolean _bEnableBack, boolean _bEnableNext, boolean _bEnableFinish)
     {
@@ -586,29 +555,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    public synchronized void gotoPreviousAvailableStep()
-    {
-        boolean bIsEnabled;
-        if (nNewStep > 1)
-        {
-            nOldStep = nNewStep;
-            nNewStep--;
-            while (nNewStep > 0)
-            {
-                bIsEnabled = isStepEnabled(nNewStep);
-                if (bIsEnabled)
-                {
-                    break;
-                }
-                nNewStep--;
-            }
-            if (nNewStep == 0) // Exception???
-            {
-                nNewStep = nOldStep;
-            }
-            switchToStep();
-        }
-    }
+
 
     //TODO discuss with rp
     private int getNextAvailableStep()
@@ -626,37 +573,11 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         return -1;
     }
 
-    public synchronized void gotoNextAvailableStep()
-    {
-        nOldStep = nNewStep;
-        nNewStep = getNextAvailableStep();
-        if (nNewStep > -1)
-        {
-            switchToStep();
-        }
-    }
+
 
     public abstract boolean finishWizard();
 
-    /**
-     * This function will call if the finish button is pressed on the UI.
-     */
-    public void finishWizard_1()
-    {
-        enableFinishButton(false);
-        boolean success = false;
-        try
-        {
-            success = finishWizard();
-        }
-        finally
-        {
-            if ( !success )
-                enableFinishButton( true );
-        }
-        if ( success )
-            removeTerminateListener();
-    }
+
 
     public int getMaximalStep()
     {
@@ -715,10 +636,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         xDialog.endExecute();
     }
 
-    public void callHelp()
-    {
-        //should be overwritten by extending class
-    }
+
 
     private void removeTerminateListener()
     {
@@ -741,10 +659,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         removeTerminateListener();
     }
 
-    public void windowHidden()
-    {
-        cancelWizard_1();
-    }
+
 
     public void notifyTermination(EventObject arg0)
     {

@@ -51,24 +51,7 @@ class GraphicalComparator implements DocComparator
             return a;
         }
 
-    /**
-     * return a (FileFilter) function, which returns true, if the filename is a '*.prn' file
-     */
-    FileFilter getTrueIfPRNFile_FileFilter()
-        {
-            FileFilter aFileFilter = new FileFilter()
-                {
-                    public boolean accept( File pathname )
-                        {
-                            if (pathname.getName().endsWith(".prn"))
-                            {
-                                return true;
-                            }
-                            return false;
-                        }
-                };
-            return aFileFilter;
-        }
+
 
     /**
      * build a new file from _sEntry by

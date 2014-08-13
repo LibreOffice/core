@@ -331,31 +331,10 @@ public class ParaStyle extends Style implements Cloneable {
     }
 
 
-    /**
-     *  Check whether an attribute is set in this <code>Style</code>.
-     *
-     *  @param  attrIndex  The attribute index to check.
-     *
-     *  @return  true if the attribute at specified index is set,
-     *           false otherwise.
-     */
-    public boolean isAttributeSet(int attrIndex) {
-        return isSet[attrIndex];
-    }
 
 
-    /**
-     *  Get the value of an integer attribute.
-     *
-     *  @param  attrIndex  Index of the attribute.
-     *
-     *  @return  Value of the attribute, 0 if not set.
-     */
-    public int getAttribute(int attrIndex) {
-        if (isSet[attrIndex])
-            return  value[attrIndex];
-        else return 0;
-    }
+
+
 
 
     /**

@@ -106,25 +106,9 @@ public class HsqlDatabase
         return m_connection;
     }
 
-    /** executes the given SQL statement via the defaultConnection
-     */
-    public void executeSQL( String statementString ) throws SQLException
-    {
-        XStatement statement = defaultConnection().createStatement();
-        statement.execute( statementString );
-    }
 
-    /** stores the database document
-    */
-    public void store() throws IOException
-    {
-        if ( m_databaseDocument != null )
-        {
-            XStorable storeDoc = UnoRuntime.queryInterface( XStorable.class,
-                m_databaseDocument );
-            storeDoc.store();
-        }
-    }
+
+
 
     /** closes the database document
      *
@@ -198,12 +182,7 @@ public class HsqlDatabase
         return m_databaseDocument.getDataSource();
     }
 
-    /** returns the model interface of the underlying database document
-    */
-    XModel getModel()
-    {
-        return UnoRuntime.queryInterface( XModel.class, m_databaseDocument );
-    }
+
 
     /** returns the URL of the ODB document represented by this instance
      */
@@ -212,12 +191,7 @@ public class HsqlDatabase
         return m_databaseDocumentFile;
     }
 
-    /** creates a row set operating the database, with a given command/type
-     */
-    public RowSet createRowSet( int _commandType, String _command )
-    {
-        return new RowSet( m_context, getDocumentURL(), _commandType, _command );
-    }
+
 
     @Override
     protected void finalize() throws Throwable

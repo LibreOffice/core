@@ -52,28 +52,7 @@ import com.sun.star.document.XDocumentProperties;
 public class FileAccess
 {
 
-    public static void addOfficePath(XMultiServiceFactory xMSF, String sPath, String sAddPath)
-    {
-        XSimpleFileAccess xSimpleFileAccess = null;
-        String ResultPath = getOfficePath(xMSF, sPath, xSimpleFileAccess);
-        // As there are several conventions about the look of Url  (e.g. with " " or with "%20") you cannot make a
-        // simple String comparison to find out, if a path is already in "ResultPath"
-        String[] PathList = JavaTools.ArrayoutofString(ResultPath, PropertyNames.SEMI_COLON);
-        int MaxIndex = PathList.length - 1;
-        String CompCurPath;
-        String CompAddPath = JavaTools.replaceSubString(sAddPath, PropertyNames.EMPTY_STRING, "/");
-        String CurPath;
-        for (int i = 0; i <= MaxIndex; i++)
-        {
-            CurPath = JavaTools.convertfromURLNotation(PathList[i]);
-            CompCurPath = JavaTools.replaceSubString(CurPath, PropertyNames.EMPTY_STRING, "/");
-            if (CompCurPath.equals(CompAddPath))
-            {
-                return;
-            }
-        }
-        ResultPath += PropertyNames.SEMI_COLON + sAddPath;
-        }
+
 
     private static String deleteLastSlashfromUrl(String _sPath)
     {
@@ -395,148 +374,6 @@ public class FileAccess
         }
     }
 
-    // checks if the root of a path exists. if the parameter xWindowPeer is not null then also the directory is
-    // created when it does not exists and the user
-    public static boolean PathisValid(XMultiServiceFactory xMSF, String Path, String sMsgFilePathInvalid, boolean baskbeforeOverwrite)
-    {
-        try
-        {
-            String SubDir;
-            String SubDirPath = PropertyNames.EMPTY_STRING;
-            int SubLen;
-            int NewLen;
-            int RestLen;
-            boolean bexists;
-            boolean bSubDirexists = true;
-            String LowerCasePath;
-            String NewPath = Path;
-            XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
-            if (baskbeforeOverwrite)
-            {
-                if (xSimpleFileAccess.exists(Path))
-                {
-                    Resource oResource = new Resource(xMSF, "ImportWizard", "imp");
-                    String sFileexists = oResource.getResText(1053);
-                    String NewString = JavaTools.convertfromURLNotation(Path);
-                    sFileexists = JavaTools.replaceSubString(sFileexists, NewString, "<1>");
-                    sFileexists = JavaTools.replaceSubString(sFileexists, String.valueOf((char) 13), "<CR>");
-                    int iLeave = SystemDialog.showMessageBox(xMSF, "QueryBox", VclWindowPeerAttribute.YES_NO, sFileexists);
-                    if (iLeave == 3)
-                    {
-                        return false;
-                    }
-                }
-            }
-            String[] DirArray = JavaTools.ArrayoutofString(Path, "/");
-            int MaxIndex = DirArray.length - 1;
-            if (MaxIndex > 0)
-            {
-                for (int i = MaxIndex; i >= 0; i--)
-                {
-                    SubDir = DirArray[i];
-                    SubLen = SubDir.length();
-                    NewLen = NewPath.length();
-                    RestLen = NewLen - SubLen;
-                    if (RestLen > 0)
-                    {
-                        NewPath = NewPath.substring(0, NewLen - SubLen - 1);
-                        if (i == MaxIndex)
-                        {
-                            SubDirPath = NewPath;
-                        }
-                        bexists = xSimpleFileAccess.exists(NewPath);
-                        if (bexists)
-                        {
-                            LowerCasePath = NewPath.toLowerCase();
-                            bexists = (!((LowerCasePath.equals("file:///")) || (LowerCasePath.equals("file://")) || (LowerCasePath.equals("file:/")) || (LowerCasePath.equals("file:"))));
-                        }
-                        if (bexists)
-                        {
-                            if (!bSubDirexists)
-                            {
-                                return createSubDirectory(xMSF, xSimpleFileAccess, SubDirPath);
-                            }
-                            return true;
-                        }
-                        else
-                        {
-                            bSubDirexists = false;
-                        }
-                    }
-                }
-            }
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgFilePathInvalid);
-            return false;
-        }
-        catch (com.sun.star.uno.Exception exception)
-        {
-            exception.printStackTrace(System.err);
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgFilePathInvalid);
-            return false;
-        }
-    }
-
-    /**
-     * searches a directory for files which start with a certain
-     * prefix, and returns their URLs and document-titles.
-     * @param FilterName the prefix of the filename. a "-" is added to the prefix !
-     * @param FolderName the folder (URL) to look for files...
-     * @return an array with two array members. The first one, with document titles,
-     * the second with the corresponding URLs.
-     * @deprecated please use the getFolderTitles() with ArrayList
-     */
-    public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String FilterName, String FolderName)
-    {
-        String[][] LocLayoutFiles = new String[2][];
-        try
-        {
-            java.util.ArrayList<String> TitleVector = null;
-            java.util.ArrayList<String> NameVector = null;
-
-            XInterface xDocInterface = (XInterface) xMSF.createInstance("com.sun.star.document.DocumentProperties");
-            XDocumentProperties xDocProps = UnoRuntime.queryInterface(XDocumentProperties.class, xDocInterface);
-
-            XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
-
-            String[] nameList = xSimpleFileAccess.getFolderContents(FolderName, false);
-
-            TitleVector = new java.util.ArrayList<String>(/*nameList.length*/);
-            NameVector = new java.util.ArrayList<String>(nameList.length);
-
-            FilterName = FilterName == null || FilterName.equals(PropertyNames.EMPTY_STRING) ? null : FilterName + "-";
-
-            String fileName = PropertyNames.EMPTY_STRING;
-            PropertyValue[] noArgs = { };
-            for (int i = 0; i < nameList.length; i++)
-            {
-                fileName = getFilename(nameList[i]);
-
-                if (FilterName == null || fileName.startsWith(FilterName))
-                {
-                    xDocProps.loadFromMedium(nameList[i], noArgs);
-                    NameVector.add(nameList[i]);
-                    TitleVector.add(xDocProps.getTitle());
-                }
-            }
-            String[] LocNameList = new String[NameVector.size()];
-            String[] LocTitleList = new String[TitleVector.size()];
-
-            NameVector.toArray(LocNameList);
-            TitleVector.toArray(LocTitleList);
-            LocLayoutFiles[1] = LocNameList;
-            LocLayoutFiles[0] = LocTitleList;
-
-            JavaTools.bubblesortList(LocLayoutFiles);
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-        return LocLayoutFiles;
-    }
-
     /**
      * We search in all given path for a given file
      */
@@ -704,12 +541,6 @@ public class FileAccess
         return filenameConverter.getFileURLFromSystemPath(parentPath, f.getAbsolutePath());
     }
 
-    public String getURL(String path)
-    {
-        File f = new File(path);
-        return filenameConverter.getFileURLFromSystemPath(path, f.getAbsolutePath());
-    }
-
     public String getPath(String parentURL, String childURL)
     {
         return filenameConverter.getSystemPathFromFileURL(parentURL + (((childURL == null || childURL.equals(PropertyNames.EMPTY_STRING)) ? PropertyNames.EMPTY_STRING : "/" + childURL)));
@@ -775,72 +606,12 @@ public class FileAccess
         return def;
     }
 
-    public boolean isDirectory(String filename)
-    {
-        try
-        {
-            return fileAccess.isFolder(filename);
-        }
-        catch (CommandAbortedException e)
-        {
-        }
-        catch (Exception e)
-        {
-        }
-
-        return false;
-    }
-
-    /**
-     * lists the files in a given directory
-     */
-    public String[] listFiles(String dir, boolean includeFolders)
-    {
-        try
-        {
-            return fileAccess.getFolderContents(dir, includeFolders);
-        }
-        catch (CommandAbortedException e)
-        {
-        }
-        catch (Exception e)
-        {
-        }
-
-        return new String[0];
-    }
-
-    public boolean delete(String file)
-    {
-        try
-        {
-            fileAccess.kill(file);
-            return true;
-        }
-        catch (CommandAbortedException e)
-        {
-            e.printStackTrace(System.err);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-
-        return false;
-    }
-
     public static String getFilename(String path)
     {
         return getFilename(path, "/");
     }
 
-    /**
-     * return the filename out of a system-dependent path
-     */
-    public static String getPathFilename(String path)
-    {
-        return getFilename(path, File.separator);
-    }
+
 
     private static String getFilename(String path, String pathSeparator)
     {
@@ -855,37 +626,9 @@ public class FileAccess
         return filename.substring(0, filename.length() - (sExtension.length() + 1));
     }
 
-    public boolean copy(String source, String target)
-    {
-        try
-        {
-            fileAccess.copy(source, target);
-            return true;
-        }
-        catch (CommandAbortedException e)
-        {
-        }
-        catch (Exception e)
-        {
-        }
 
-        return false;
-    }
 
-    public DateTime getLastModified(String url)
-    {
-        try
-        {
-            return fileAccess.getDateTimeModified(url);
-        }
-        catch (CommandAbortedException e)
-        {
-        }
-        catch (Exception e)
-        {
-        }
-        return null;
-    }
+
 
     /**
      * @return the parent dir of the given url.
@@ -906,18 +649,7 @@ public class FileAccess
         return url.substring(0, lastPos);
     }
 
-    public String createNewDir(String parentDir, String name)
-    {
-        String s = getNewFile(parentDir, name, PropertyNames.EMPTY_STRING);
-        if (mkdir(s))
-        {
-            return s;
-        }
-        else
-        {
-            return null;
-        }
-    }
+
 
     private String getNewFile(String parentDir, String name, String extension)
     {
@@ -937,18 +669,6 @@ public class FileAccess
     private static String filename(String name, String ext, int i)
     {
         return name + (i == 0 ? PropertyNames.EMPTY_STRING : String.valueOf(i)) + (ext.equals(PropertyNames.EMPTY_STRING) ? PropertyNames.EMPTY_STRING : "." + ext);
-    }
-
-    public int getSize(String url)
-    {
-        try
-        {
-            return fileAccess.getSize(url);
-        }
-        catch (Exception ex)
-        {
-            return -1;
-        }
     }
 
     public static String connectURLs(String urlFolder, String urlFilename)
@@ -989,33 +709,4 @@ public class FileAccess
         return sFileData;
     }
 
-    /**
-     * shortens a filename to a user displayable representation.
-     */
-    public static String getShortFilename(String path, int maxLength)
-    {
-        int firstPart = 0;
-
-        if (path.length() > maxLength)
-        {
-            if (path.startsWith("/"))
-            { // unix
-                int nextSlash = path.indexOf("/", 1) + 1;
-                firstPart = Math.min(nextSlash, (maxLength - 3) / 2);
-            }
-            else
-            { //windows
-                firstPart = Math.min(10, (maxLength - 3) / 2);
-            }
-
-            String s1 = path.substring(0, firstPart);
-            String s2 = path.substring(path.length() - (maxLength - (3 + firstPart)));
-
-            return s1 + "..." + s2;
-        }
-        else
-        {
-            return path;
-        }
-    }
 }

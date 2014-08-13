@@ -58,17 +58,7 @@ public class TwipsConverter {
         return twips;
     }
 
-    /**
-     * <p>Convert from twips to cm's</p>
-     *
-     * @param   value   The <code>short</code> to be converted.
-     *
-     * @return   float containing the converted
-     */
-    public static float twips2inches(int value) {
 
-        return (float) value/1440;
-    }
 
 
 

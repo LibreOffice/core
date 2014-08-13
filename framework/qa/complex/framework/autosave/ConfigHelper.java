@@ -61,20 +61,7 @@ class ConfigHelper
     }
 
 
-    public Object readRelativeKey(String sRelPath,
-                                  String sKey    )
-        throws com.sun.star.container.NoSuchElementException
-    {
-        try
-        {
-            XPropertySet xPath = UnoRuntime.queryInterface(XPropertySet.class, m_xConfig.getByHierarchicalName(sRelPath));
-            return xPath.getPropertyValue(sKey);
-        }
-        catch(com.sun.star.uno.Exception ex)
-        {
-            throw new com.sun.star.container.NoSuchElementException(ex.getMessage());
-        }
-    }
+
 
 
     public void writeRelativeKey(String sRelPath,

@@ -142,16 +142,9 @@ public abstract class BaseDialog extends BaseControl {
         super.finalize();
     }
 
-    public ModalState showModal() {
-        xWindow.setVisible(true);
-        xDialog.execute();
-        return modalState;
-    }
 
-    public void close() {
-        xDialog.endExecute();
-        xWindow.setVisible(false);
-    }
+
+
 
     public void setCloseable(boolean closeable) {
         setProperty("Closeable", new Boolean(closeable));

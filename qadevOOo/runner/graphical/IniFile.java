@@ -409,10 +409,7 @@ public class IniFile implements Enumeration<String>
             insertValue(_sSection, _sKey, String.valueOf(_nValue));
         }
 
-    public void insertValue(String _sSection, String _sKey, long _nValue)
-        {
-            insertValue(_sSection, _sKey, String.valueOf(_nValue));
-        }
+
 
     /**
        insert a value

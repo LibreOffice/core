@@ -108,11 +108,7 @@ public class DocumentHelper
         return blankDocument( orb, DocumentType.WRITER );
     }
 
-    /* ------------------------------------------------------------------ */
-    public static DocumentHelper blankXMLForm( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
-    {
-        return blankDocument( orb, DocumentType.XMLFORM );
-    }
+
 
     /* ------------------------------------------------------------------ */
     public static DocumentHelper blankDocument( XMultiServiceFactory orb, DocumentType eType ) throws com.sun.star.uno.Exception
@@ -260,22 +256,7 @@ public class DocumentHelper
         return createSubForm( xContainer, sInitialName );
     }
 
-    /* ------------------------------------------------------------------ */
-    /** retrieves the document model which a given form component belongs to
-    */
-    static public DocumentHelper getDocumentForComponent( Object aFormComponent, XMultiServiceFactory orb )
-    {
-        XChild xChild = UnoRuntime.queryInterface( XChild.class, aFormComponent );
-        XModel xModel = null;
-        while ( ( null != xChild ) && ( null == xModel ) )
-        {
-            XInterface xParent = (XInterface)xChild.getParent();
-            xModel = UnoRuntime.queryInterface( XModel.class, xParent );
-            xChild = UnoRuntime.queryInterface( XChild.class, xParent );
-        }
 
-        return new DocumentHelper( orb, xModel );
-    }
 
     /* ------------------------------------------------------------------ */
     /** returns a URL which can be used to create a document of a certain type

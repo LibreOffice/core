@@ -179,10 +179,7 @@ public class CheckOGroupBoxModel
             return propertiesChanged;
         }
 
-        public void reset()
-        {
-            propertiesChanged = false;
-        }
+
     }
 
     private XMultiServiceFactory getMSF()

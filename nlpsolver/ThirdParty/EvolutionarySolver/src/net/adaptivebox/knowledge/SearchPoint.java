@@ -68,10 +68,5 @@ public class SearchPoint extends BasicPoint implements IEncodeEngine {
       return encodeInfo[0] == 0; //no constraint violations
   }
 
-  public void outputSelf() {
-    System.out.println("#--> Location:");
-    OutputMethods.outputVector(getLocation());
-    System.out.println("#--> (CON & OPTIM):");
-    OutputMethods.outputVector(getEncodeInfo());
-  }
+
 }

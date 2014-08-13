@@ -258,36 +258,10 @@ public class TextStyle extends Style implements Cloneable {
     }
 
 
-    /**
-     *  Return true if text <code>attribute</code> is set in this
-     *  <code>Style</code>.  An attribute that is set may have a
-     *  value of <i>on</i> or <i>off</i>.
-     *
-     *  @param  attribute  The attribute to check ({@link #BOLD},
-     *                     {@link #ITALIC}, etc.).
-     *
-     *  @return  true if text <code>attribute</code> is set in this
-     *           <code>Style</code>, false otherwise.
-     */
-    public boolean isSet(int attribute) {
-        return (!((mask & attribute) == 0));
-    }
 
 
-    /**
-     *  Return true if the <code>attribute</code> is set to <i>on</i>
-     *
-     *  @param  attribute  Attribute to check ({@link #BOLD},
-     *                     {@link #ITALIC}, etc.)
-     *
-     *  @return  true if <code>attribute</code> is set to <i>on</i>,
-     *           otherwise false.
-     */
-    public boolean getAttribute(int attribute) {
-        if ((mask & attribute) == 0)
-            return false;
-        return (!((values & attribute) == 0));
-    }
+
+
 
 
     /**
@@ -335,19 +309,7 @@ public class TextStyle extends Style implements Cloneable {
     }
 
 
-    /**
-     *  Set the font and/or background <code>Color</code> for this
-     *  <code>Style</code>.
-     *
-     *  @param  fontColor        The font <code>Color</code> to set.
-     *  @param  backgroundColor  The background <code>Color</code> to set.
-     */
-    public void setColors(Color fontColor, Color backgroundColor) {
-        if (fontColor != null)
-            this.fontColor = fontColor;
-        if (backgroundColor != null)
-            this.bgColor = backgroundColor;
-    }
+
 
 
     /**

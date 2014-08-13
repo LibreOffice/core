@@ -71,14 +71,7 @@ public class ConfigurationRead {
         this(xMSF, "org.openoffice.Setup");
     }
 
-    /**
-     * Does the node with this hierarchical name exist?
-     * @param name The hierarchical name of a subnode.
-     * @return True, if the node exists.
-     */
-    public boolean hasByHieracrhicalName(String name) {
-        return root.hasByHierarchicalName(name);
-    }
+
 
 
     /**
@@ -91,28 +84,7 @@ public class ConfigurationRead {
         return names;
     }
 
-    /**
-     * Get all elements of this node
-     * @param name The name of the node
-     * @return All elements of this node (as hierarchical names).
-     */
-    public String[] getSubNodeNames(String name) {
-        String[]names = null;
-        try {
 
-            Object next = root.getByHierarchicalName(name);
-            XNameAccess x = UnoRuntime.queryInterface(
-                                                XNameAccess.class, next);
-            names = x.getElementNames();
-            for (int i=0; i< names.length; i++) {
-                names[i] = name + "/" + names[i];
-            }
-        }
-        catch(Exception e) {
-            //just return null, if there are no further nodes
-        }
-        return names;
-    }
 
     /**
      * Get contents of a node by its hierarchical name.

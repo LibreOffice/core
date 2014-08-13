@@ -38,10 +38,7 @@ public class Model
             m_model );
     }
 
-    protected XModel getXModel()
-    {
-        return m_model;
-    }
+
 
     protected XFormsUIHelper1 getUIHelper()
     {

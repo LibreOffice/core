@@ -31,17 +31,7 @@ public class JPEGCreator extends EnhancedComplexTestCase
         return new String[]{"PostscriptOrPDFToJPEG"};
     }
 
-    /**
-     * test function.
-     */
-    public void PostscriptOrPDFToJPEG()
-    {
-        GlobalLogWriter.set(log);
-        ParameterHelper aParam = new ParameterHelper(param);
 
-        // run through all documents found in Inputpath
-        foreachPSorPDFinInputPath(aParam);
-    }
 
 
     public void checkOneFile(String _sDocumentName, String _sResult, ParameterHelper _aParams) throws OfficeException

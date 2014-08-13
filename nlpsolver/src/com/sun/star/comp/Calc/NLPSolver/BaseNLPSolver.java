@@ -360,10 +360,7 @@ public abstract class BaseNLPSolver extends WeakBase
         return null;
     }
 
-    protected XCellRangeData getCellRangeData(CellRangeAddress cellRangeAddress) {
-        return getCellRangeData(cellRangeAddress.Sheet, cellRangeAddress.StartColumn,
-                cellRangeAddress.StartRow, cellRangeAddress.EndColumn, cellRangeAddress.EndRow);
-    }
+
 
     private XCellRangeData getCellRangeData(int sheet, int startCol, int startRow, int endCol, int endRow) {
         try {

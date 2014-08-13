@@ -34,29 +34,7 @@ import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
  */
 public class ConverterFactory {
 
-   /**
-    *  Confirms whether or not a particular conversion can be done
-    *  based on the Mime types of the files to be converted to and
-    *  from.
-    *
-    *  @param  mimeTypeIn   The mime input type.
-    *  @param  mimeTypeOut  The mime output type.
-    *
-    *  @return  true if the conversion is possible, false otherwise.
-    */
-    public boolean canConvert(String mimeTypeIn, String mimeTypeOut) {
 
-        ConverterInfo foundInfo;
-
-        // findConverterInfo expects the second paramenter to be the
-        // destination MimeType
-        if (ConverterInfo.isValidOfficeType(mimeTypeOut))
-            foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeIn, mimeTypeOut);
-        else
-            foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeOut, mimeTypeIn);
-
-        return foundInfo != null;
-    }
 
 
    /**

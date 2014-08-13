@@ -64,21 +64,7 @@ public class BasicBound {
     return value;
   }
 
-  public static BasicBound getBound(double[] data) {
-    BasicBound bound = new BasicBound();
-    if(data!=null) {
-      if(data.length>0) {
-        bound.minValue = data[0];
-        bound.maxValue = data[0];
-        for(int i=1; i<data.length; i++) {
-          bound.minValue = Math.min(bound.minValue, data[i]);
-          bound.maxValue = Math.max(bound.maxValue, data[i]);
-        }
 
-      }
-    }
-    return bound;
-  }
 
   public double randomAdjust (double value){
     if(value > maxValue || value < minValue) {

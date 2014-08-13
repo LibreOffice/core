@@ -75,23 +75,7 @@ class CountNotBlack extends CountPixel
 
 class graphics_stuff
 {
-    public int stuff()
-        {
-// (1) decoding
-            int rgba = 0; // ...; // comes from PixelGrabber, BufferedImage.getRGB etc.
-            int red = (rgba >> 16) & 0xff;
-            int green = (rgba >> 8) & 0xff;
-            int blue = rgba & 0xff;
-            int alpha = (rgba >> 24) & 0xff;
-// (2) now modify red, green, blue and alpha as you like;
-//     make sure that each of the four values stays in the
-//     interval 0 to 255
-//            ...
-// (3) and encode back to an int, e.g. to give it to MemoryImageSource or
-//     BufferedImage.setRGB
-                rgba = (alpha << 24) | (red << 16) | (green << 8) | blue;
-                return 0;
-        }
+
 
     private static void countPixel(ImageHelper img, int _w, int _h, CountPixel _aPixelCounter)
         {

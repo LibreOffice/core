@@ -661,18 +661,7 @@ public class FormControlArranger
         cYOffset = _aPoint.Y;
     }
 
-    public void adjustYPositions(int _diffY)
-    {
-        for (int i = 0; i < DBControlList.length; i++)
-        {
-            Point aPoint = DBControlList[i].getPosition();
-            DBControlList[i].setPosition(new Point(aPoint.X, aPoint.Y - _diffY));
-            aPoint = LabelControlList[i].getPosition();
-            LabelControlList[i].setPosition(new Point(aPoint.X, aPoint.Y - _diffY));
-        }
-        m_controlMaxPosY = -_diffY;
-        cYOffset = -_diffY;
-    }
+
 
     public void setFormSize(Size _FormSize)
     {

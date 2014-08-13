@@ -324,9 +324,7 @@ public class UnoNode{
     }
 
 
-    public static String getNodeDescription(Object _oUnoObject, int _nIndex){
-        return getNodeDescription(_oUnoObject) + "[" + (_nIndex + 1) + "]";
-    }
+
 
 
     public static String getNodeDescription(Object _oUnoObject){

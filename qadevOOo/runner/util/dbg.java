@@ -83,29 +83,7 @@ public class dbg {
         return types;
     }
 
-    /**
-     * Returns true if a specified target implements the interface with the
-     * given name. Note that the comparison is not case sensitive.
-     * @param xTarget The implementation which should be analysed.
-     * @param ifcName The name of the interface that is tested. The name can
-     * be full qualified, such as 'com.sun.star.io.XInputStream', or only
-     * consist of the interface name, such as 'XText'.
-     * @return True, if xTarget implements the interface named ifcType
-     * @see com.sun.star.uno.XInterface
-     */
-    public static boolean implementsInterface(
-                                    XInterface xTarget, String ifcName) {
-        Type[] types = getInterfaceTypes(xTarget);
-        if( null != types ) {
-            int nLen = types.length;
-            for( int i = 0; i < nLen ; i++ ) {
-                if(types[i].getTypeName().toLowerCase().endsWith(
-                                                    ifcName.toLowerCase()))
-                    return true;
-            }
-        }
-        return false;
-    }
+
 
     /**
      * Prints information about an interface type.
@@ -203,18 +181,7 @@ public class dbg {
         }
     }
 
-    /**
-     * Print the names and the values of a sequnze of <code>PropertyValue</code>
-     * to to standard out.
-     * @param ps The property which should displayed
-     * @see com.sun.star.beans.PropertyValue
-     */
 
-    public static void printProperyValueSequenzePairs(PropertyValue[] ps){
-        for( int i = 0; i < ps.length; i++){
-            printProperyValuePairs(ps[i], new PrintWriter(System.out));
-        }
-    }
 
     /**
      * Print the names and the values of a sequenze of <code>PropertyValue</code>
@@ -229,14 +196,7 @@ public class dbg {
         }
     }
 
-    /**
-     * Print the name and the value of a <code>PropertyValue</code> to to standard out.
-     * @param ps The property which should displayed
-     * @see com.sun.star.beans.PropertyValue
-     */
-    public static void printProperyValuePairs(PropertyValue ps){
-        printProperyValuePairs(ps, new PrintWriter(System.out));
-    }
+
 
     /**
      * Print the name and the value of a <code>PropertyValue</code> to a print writer.

@@ -200,83 +200,9 @@ public class StyleApplier
         }
     }
 
-    public void changeLayout()
-    {
-        short iPos = lstStyles.getSelectedItemPos();
-        if (iPos != iOldLayoutPos)
-        {
-            iOldLayoutPos = iPos;
-            String sFileName = FileNames[iPos];
-            int[] iStyles = getStyleColors(sFileName);
-            applyDBControlProperties(iStyles);
-        }
-        curFormDocument.unlockallControllers();
-    }
-
     public Short getBorderType()
     {
         return IBorderValue;
-    }
-
-    public void changeBorderLayouts()
-    {
-        try
-        {
-            curFormDocument.xTextDocument.lockControllers();
-
-            if (optNoBorder.getState())
-            {
-                IBorderValue = new Short((short) 0);
-            }
-            else if (opt3DLook.getState())
-            {
-                IBorderValue = new Short((short) 1);
-            }
-            else
-            {
-                IBorderValue = new Short((short) 2);
-            }
-            for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
-            {
-                FormDocument.ControlForm curControlForm = curFormDocument.oControlForms.get(m);
-                if (curControlForm.getArrangemode() == FormWizard.AS_GRID)
-                {
-                    GridControl oGridControl = curControlForm.getGridControl();
-                    oGridControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
-                }
-                else
-                {
-                    DatabaseControl[] DBControls = curControlForm.getDatabaseControls();
-                    for (int n = 0; n < DBControls.length; n++)
-                    {
-                        if (DBControls[n].xServiceInfo.supportsService("com.sun.star.drawing.ShapeCollection"))
-                        {
-                            TimeStampControl oTimeStampControl = (TimeStampControl) DBControls[n];
-                            for (int i = 0; i < 2; i++)
-                            {
-                                XPropertySet xPropertySet = oTimeStampControl.getControlofGroupShapeByIndex(i);
-                                if (xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
-                                {
-                                    xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (DBControls[n].xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
-                            {
-                                DBControls[n].xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-        curFormDocument.unlockallControllers();
     }
 
     private int getStyleColor(String[] _sDataList, String _sHeader, String _sPropertyDescription)

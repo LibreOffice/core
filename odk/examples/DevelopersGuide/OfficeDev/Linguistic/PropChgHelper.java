@@ -72,10 +72,7 @@ public class PropChgHelper implements
         return xPropSet;
     }
 
-    public String[] GetPropNames()
-    {
-        return aPropNames;
-    }
+
 
     public void LaunchEvent( LinguServiceEvent aEvt )
     {

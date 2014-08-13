@@ -188,44 +188,7 @@ public class DBHelper
                 aSQLThread.start();
             }
 
-    public int QueryIntFromSQL(Connection _aCon, String _sSQL, String _sColumnName)
-        throws ValueNotFoundException
-        {
-            Statement oStmt = null;
-            int nValue = 0;
-            try
-            {
-                oStmt = _aCon.createStatement();
 
-                ResultSet oResult = oStmt.executeQuery(_sSQL);
-                oResult.next();
-
-                try
-                {
-                    if (_sColumnName.length() == 0)
-                    {
-                        // take the first row value (started with 1)
-                        nValue = oResult.getInt(1);
-                    }
-                    else
-                    {
-                        nValue = oResult.getInt(_sColumnName);
-                    }
-                }
-                catch (SQLException e)
-                {
-                    String sError = e.getMessage();
-                    GlobalLogWriter.get().println("DB: Original SQL error: " + sError);
-                    throw new ValueNotFoundException("Can't execute SQL: " + _sSQL);
-                }
-            }
-            catch(SQLException e)
-            {
-                String sError = e.getMessage();
-                GlobalLogWriter.get().println("DB: Couldn't execute sql string " + _sSQL + "\n" + sError);
-            }
-            return nValue;
-        }
 
     public String Quote(String _sToQuote)
         {

@@ -159,19 +159,6 @@ public class LocalOfficeConnection
     }
 
     /**
-     * Creates an office window.
-     * The window is either a sub-class of java.awt.Canvas (local) or
-     * java.awt.Container (RVP).
-     *
-     * @param container This is an AWT container.
-     * @return The office window instance.
-     */
-    public OfficeWindow createOfficeWindow(Container container)
-    {
-        return new LocalOfficeWindow(this);
-    }
-
-    /**
      * Closes the connection.
      */
     public void dispose()

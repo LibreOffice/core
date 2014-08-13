@@ -59,14 +59,7 @@ public String getErrorMessage()
     return errorMsg;
 }
 
-/**
- * Is there an error message available?
- * @return true, if an error happened
- */
-public boolean hasErrorMessage()
-{
-    return !errorMsg.equals("");
-}
+
 
 /**
  * Press the named button in the currently visible dialog box.

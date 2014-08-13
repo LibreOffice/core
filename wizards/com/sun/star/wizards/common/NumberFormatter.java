@@ -108,10 +108,7 @@ public class NumberFormatter
     }
 
 
-    public static String convertNumberToString(XNumberFormatter _xNumberFormatter, int _nkey, double _dblValue)
-    {
-        return _xNumberFormatter.convertNumberToString(_nkey, _dblValue);
-    }
+
 
 
     public double convertStringToNumber(int _nkey, String _sString)throws Exception

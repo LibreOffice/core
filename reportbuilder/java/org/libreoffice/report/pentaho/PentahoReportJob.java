@@ -21,7 +21,6 @@ import org.libreoffice.report.DataSourceFactory;
 import org.libreoffice.report.ImageService;
 import org.libreoffice.report.InputRepository;
 import org.libreoffice.report.JobDefinitionException;
-import org.libreoffice.report.JobProgressIndicator;
 import org.libreoffice.report.JobProperties;
 import org.libreoffice.report.OutputRepository;
 import org.libreoffice.report.ParameterMap;
@@ -77,7 +76,6 @@ public class PentahoReportJob implements ReportJob
 
     private static final Log LOGGER = LogFactory.getLog(PentahoReportJob.class);
     private boolean finished;
-    private final List<JobProgressIndicator> listeners;
     private final DataSourceFactory dataSourceFactory;
     private final OutputRepository outputRepository;
     private final JobProperties jobProperties;
@@ -104,7 +102,6 @@ public class PentahoReportJob implements ReportJob
         }
 
         this.definition = definition;
-        this.listeners = new ArrayList<JobProgressIndicator>();
         this.jobProperties = definition.getProcessingParameters().copy();
 
         this.dataSourceFactory = (DataSourceFactory) jobProperties.getProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY);
@@ -182,11 +179,6 @@ public class PentahoReportJob implements ReportJob
         return tempReport;
     }
 
-    public void addProgressIndicator(final JobProgressIndicator indicator)
-    {
-        listeners.add(indicator);
-    }
-
     /**
      * Interrupt the job.
      */
@@ -206,10 +198,7 @@ public class PentahoReportJob implements ReportJob
         return finished;
     }
 
-    public void finish()
-    {
-        finished = true;
-    }
+
 
     /**
      * Queries the jobs execution status.
@@ -219,11 +208,6 @@ public class PentahoReportJob implements ReportJob
     public boolean isRunning()
     {
         return !finished;
-    }
-
-    public void removeProgressIndicator(final JobProgressIndicator indicator)
-    {
-        listeners.remove(indicator);
     }
 
     private void collectGroupExpressions(final Node[] nodes, final List<Object[]> expressions, final FormulaParser parser, final Expression reportFunctions[])

@@ -146,22 +146,7 @@ public class ReportFinalizer
     }
 
 
-    /*
-     * This function is called if one of the radio buttons is pressed
-     */
-    public void toggleSubTemplateControls()
-    {
-        // String sStorePath = PropertyNames.EMPTY_STRING;
-        Short iState = (Short) CurUnoDialog.getControlProperty("optCreateReportTemplate", PropertyNames.PROPERTY_STATE);
-        boolean bDoTemplateEnable = iState.shortValue() == 1;
-        CurUnoDialog.setControlProperty("optEditTemplate", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
-        CurUnoDialog.setControlProperty("optUseTemplate", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
-        CurUnoDialog.setControlProperty("lblHowProceed", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
 
-        String sTitle = xTitleTextBox.getText();
-        boolean bDoEnable = sTitle.equals(PropertyNames.EMPTY_STRING);
-        CurUnoDialog.enableFinishButton(!bDoEnable);
-    }
     public void initialize(RecordParser _CurDBMetaData)
     {
         String FirstCommandName = (_CurDBMetaData.getIncludedCommandNames())[0];
@@ -204,12 +189,7 @@ public class ReportFinalizer
         }
     }
 
-    public void changeReportTitle()
-    {
-        final String TitleName = xTitleTextBox.getText();
-        CurReportDocument.liveupdate_updateReportTitle(TitleName);
-        CurUnoDialog.enableFinishButton(!PropertyNames.EMPTY_STRING.equals(TitleName));
-    }
+
 
     public int getReportOpenMode()
     {

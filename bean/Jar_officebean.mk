@@ -27,7 +27,6 @@ $(eval $(call gb_Jar_add_sourcefiles,officebean,\
 	bean/com/sun/star/beans/NativeConnection \
 	bean/com/sun/star/beans/NativeService \
 	bean/com/sun/star/beans/OfficeConnection \
-	bean/com/sun/star/beans/OfficeWindow \
 	bean/com/sun/star/comp/beans/ContainerFactory \
 	bean/com/sun/star/comp/beans/Controller \
 	bean/com/sun/star/comp/beans/Frame \

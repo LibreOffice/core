@@ -51,35 +51,11 @@ public class ParcelZipper
         return zipper;
     }
 
-    public String zipParcel(File basedir) throws IOException {
-        File targetfile, targetdir;
 
-        if (basedir.getName().equals(CONTENTS_DIRNAME))
-            targetdir = basedir.getParentFile();
-        else
-            targetdir = basedir;
 
-        targetfile = new File(targetdir, targetdir.getName() + "." + PARCEL_EXTENSION);
 
-        return zipParcel(basedir, targetfile, DEFAULT_FILTER);
-    }
 
-    public String zipParcel(File basedir, File targetfile) throws IOException {
-        return zipParcel(basedir, targetfile, DEFAULT_FILTER);
-    }
 
-    public String zipParcel(File basedir, FileFilter filter) throws IOException {
-        File targetfile, targetdir;
-
-        if (basedir.getName().equals(CONTENTS_DIRNAME))
-            targetdir = basedir.getParentFile();
-        else
-            targetdir = basedir;
-
-        targetfile = new File(targetdir, targetdir.getName() + "." + PARCEL_EXTENSION);
-
-        return zipParcel(basedir, targetfile, filter);
-    }
 
     private String zipParcel(File basedir, File targetfile, FileFilter filter)
         throws IOException {
@@ -155,18 +131,7 @@ public class ParcelZipper
         }
     }
 
-    public boolean isOverwriteNeeded(File parcel, File target)
-        throws IOException
-    {
-        boolean result;
 
-        if (target.isDirectory())
-            result = isDirectoryOverwriteNeeded(parcel, target);
-        else
-            result = isDocumentOverwriteNeeded(parcel, target);
-
-        return result;
-    }
 
     private boolean isDirectoryOverwriteNeeded(File parcel, File target) {
         String parcelDir = getParcelDirFromParcelZip(parcel.getName());
@@ -218,16 +183,7 @@ public class ParcelZipper
         return result;
     }
 
-    public String deployParcel(File parcel, File target)
-        throws IOException {
 
-        String output = null;
-        if (target.isDirectory())
-            output = unzipToDirectory(parcel, target);
-        else
-            output = unzipToZip(parcel, target);
-        return output;
-    }
 
     private String getParcelDirFromParcelZip(String zipname) {
         String result = zipname.substring(0, zipname.lastIndexOf("."));

@@ -99,23 +99,7 @@ public class SOfficeFactory {
 
     } // finished createTextDoc
 
-    /**
-     * method which opens a new TextDocument
-     *
-     * @see XTextDocument
-     */
-    public XTextDocument createTextDoc(String frameName, PropertyValue[] mediaDescriptor)
-        throws com.sun.star.uno.Exception {
 
-        XComponent oDoc = openDoc("swriter", frameName, mediaDescriptor);
-
-        if (oDoc != null) {
-            DesktopTools.bringWindowToFront(oDoc);
-            return UnoRuntime.queryInterface(XTextDocument.class, oDoc);
-        } else {
-            return null;
-        }
-    } // finished createTextDoc
 
     /**
      * method which opens a new SpreadsheetDocument
@@ -135,23 +119,7 @@ public class SOfficeFactory {
         }
     } // finished createCalcDoc
 
-    /**
-     * method which opens a new SpreadsheetDocument
-     *
-     * @see XSpreadsheetDocument
-     */
-    public XSpreadsheetDocument createCalcDoc(String frameName, PropertyValue[] mediaDescriptor)
-        throws com.sun.star.uno.Exception {
 
-        XComponent oDoc = openDoc("scalc", frameName, mediaDescriptor);
-
-        if (oDoc != null) {
-            DesktopTools.bringWindowToFront(oDoc);
-            return UnoRuntime.queryInterface(XSpreadsheetDocument.class, oDoc);
-        } else {
-            return null;
-        }
-    } // finished createCalcDoc
 
     /**
      * method which opens a new DrawDocument
@@ -162,17 +130,7 @@ public class SOfficeFactory {
         return openDoc("sdraw", frameName);
     } // finished createDrawDoc
 
-    /**
-     * method which opens a new ImpressDocument
-     */
-    /**
-     * method which opens a new DrawDocument
-     */
-    public XComponent createDrawDoc(String frameName, PropertyValue[] mediaDescriptor)
-        throws com.sun.star.uno.Exception {
 
-        return openDoc("sdraw", frameName, mediaDescriptor);
-    } // finished createDrawDoc
 
     /**
      * method which opens a new ImpressDocument
@@ -183,14 +141,7 @@ public class SOfficeFactory {
         return openDoc("simpress", frameName);
     } // finished createImpressDoc
 
-    /**
-     * method which opens a new ImpressDocument
-     */
-    public XComponent createImpressDoc(String frameName, PropertyValue[] mediaDescriptor)
-        throws com.sun.star.uno.Exception {
 
-        return openDoc("simpress", frameName, mediaDescriptor);
-    } // finished createImpressDoc
 
     /**
      * method which opens a new MathDocument
@@ -201,14 +152,7 @@ public class SOfficeFactory {
         return openDoc("smath", frameName);
     } // finished createMathDoc
 
-    /**
-     * method which opens a new MathDocument
-     */
-    public XComponent createMathDoc(String frameName, PropertyValue[] mediaDescriptor)
-        throws com.sun.star.uno.Exception {
 
-        return openDoc("smath", frameName, mediaDescriptor);
-    } // finished createMathDoc
 
     /**
      * method which opens a new ChartDocument
@@ -261,19 +205,7 @@ public class SOfficeFactory {
         return oTable;
     }
 
-    /**
-     * creates a simple TextFrame
-     * ... to be continued
-     */
-    public static XTextFrame createTextFrame(XTextDocument xTextDoc)
-    {
 
-        FrameDsc tDsc = new FrameDsc();
-        InstCreator instCreate = new InstCreator(xTextDoc, tDsc);
-
-        XTextFrame oFrame = (XTextFrame) instCreate.getInstance();
-        return oFrame;
-    }
 
     /**
      * creates a simple TextFrame
@@ -289,15 +221,7 @@ public class SOfficeFactory {
         return oFrame;
     }
 
-    public static void insertString(XTextDocument xTextDoc, String cString)
-    {
-        XText xText = xTextDoc.getText();
-        XText oText = UnoRuntime.queryInterface(
-            XText.class, xText);
 
-        XTextCursor oCursor = oText.createTextCursor();
-        oText.insertString(oCursor, cString, false);
-    }
 
     public static void insertTextContent(XTextDocument xTextDoc,
         XTextContent xCont)
@@ -335,33 +259,9 @@ public class SOfficeFactory {
 
     } /// finish createBookmark
 
-    /**
-     * the method createReferenceMark
-     */
-    public static XTextContent createReferenceMark(XTextDocument xTextDoc)
-    {
 
-        ReferenceMarkDsc tDsc = new ReferenceMarkDsc();
-        InstCreator instCreate = new InstCreator(xTextDoc, tDsc);
 
-        XTextContent oReferenceMark = (XTextContent) instCreate.getInstance();
-        return oReferenceMark;
 
-    } /// finish createReferenceMark
-
-    /**
-     * the method createFootnote
-     */
-    public static XTextContent createFootnote(XTextDocument xTextDoc)
-    {
-
-        FootnoteDsc tDsc = new FootnoteDsc();
-        InstCreator instCreate = new InstCreator(xTextDoc, tDsc);
-
-        XTextContent oFootnote = (XTextContent) instCreate.getInstance();
-        return oFootnote;
-
-    } /// finish createFootnote
 
     /**
      * the method create Index
@@ -403,16 +303,7 @@ public class SOfficeFactory {
         return oIA;
     }
 
-    public static String getUniqueName(XInterface oInterface, String prefix) {
-        XNameAccess oNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oInterface);
-        if (oNameAccess == null) {
-            return null;
-        }
-        int i;
-        for (i = 0; oNameAccess.hasByName(prefix + i); i++) {
-        }
-        return prefix + i;
-    }
+
 
     public XShape createShape(XComponent oDoc, int height, int width, int x, int y, String kind) {
         //possible values for kind are 'Ellipse', 'Line' and 'Rectangle'
@@ -482,45 +373,7 @@ public class SOfficeFactory {
         return oInstance;
     }
 
-    public XControlShape createControlShape(XComponent oDoc, int height, int width, int x, int y, String kind) {
 
-        Size size = new Size();
-        Point position = new Point();
-        XControlShape oCShape = null;
-        XControlModel aControl = null;
-
-        //get MSF
-        XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, oDoc);
-
-        try {
-            Object oInt = oDocMSF.createInstance("com.sun.star.drawing.ControlShape");
-            Object aCon = oDocMSF.createInstance("com.sun.star.form.component." + kind);
-            aControl = UnoRuntime.queryInterface(XControlModel.class, aCon);
-            oCShape = UnoRuntime.queryInterface(XControlShape.class, oInt);
-            size.Height = height;
-            size.Width = width;
-            position.X = x;
-            position.Y = y;
-            oCShape.setSize(size);
-            oCShape.setPosition(position);
-
-
-        } catch (Exception e) {
-            // Some exception occurs.FAILED
-            System.out.println("Couldn't create instance " + e);
-        }
-
-        try {
-            oCShape.setControl(aControl);
-        } catch (Exception e) {
-            // Some exception occurs.FAILED
-            System.out.println("Couldn't get Control " + e);
-        }
-
-
-        return oCShape;
-
-    }
 
     public XComponent loadDocument(String fileName)
         throws com.sun.star.lang.IllegalArgumentException,
@@ -607,15 +460,5 @@ public class SOfficeFactory {
 
     } // finished openDoc
 
-    // query for XServiceInfo
-    public Object queryXServiceInfo(Object oObj) {
-        if (oObj != null) {
-            UnoRuntime.queryInterface(
-                XServiceInfo.class, oObj);
-            System.out.println("!!!! XServiceInfo n.a. !!!! ");
-        } else {
-            System.out.println("Object is empty!!!! ");
-        }
-        return null;
-    } // finish queryXServiceInfo
+
 }

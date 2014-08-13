@@ -56,11 +56,11 @@ public class NativeStorageAccess {
 
     public native int read(String name,String key,byte[] b, int off, int len) throws java.io.IOException;
 
-    public native int readInt(String name,String key) throws java.io.IOException;
+
 
     public native void seek(String name,String key,long position) throws java.io.IOException;
 
     public native void write(String name,String key,byte[] b, int offset, int length) throws java.io.IOException;
 
-    public native void writeInt(String name,String key,int v) throws java.io.IOException;
+
 }

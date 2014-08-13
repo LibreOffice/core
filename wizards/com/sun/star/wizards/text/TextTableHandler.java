@@ -109,24 +109,7 @@ public class TextTableHandler
         }
     }
 
-    public void insertTextTable(com.sun.star.text.XTextCursor xTextCursor)
-    {
-        try
-        {
-            com.sun.star.uno.XInterface xTextTable = (XInterface) xMSFDoc.createInstance("com.sun.star.text.TextTable");
-            XTextContent xTextContentTable = UnoRuntime.queryInterface(XTextContent.class, xTextTable);
-            if (xTextCursor == null)
-            {
-                xTextCursor = xTextDocument.getText().createTextCursor();
-                xTextCursor.gotoEnd(false);
-            }
-            xTextCursor.getText().insertTextContent(xTextCursor, xTextContentTable, false);
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
+
 
     public void removeAllTextTables()
     {
@@ -206,12 +189,7 @@ public class TextTableHandler
         }
     }
 
-    public static BreakType resetBreakTypeofTextTable(Object oTextTable)
-    {
-        BreakType BreakValue = (BreakType) com.sun.star.wizards.common.Helper.getUnoStructValue(oTextTable, "BreakType");
-        Helper.setUnoPropertyValue(oTextTable, "BreakType", BreakType.NONE);
-        return BreakType.NONE;
-    }
+
 
     public void adjustOptimalTableWidths(XMultiServiceFactory _xMSF, XTextTable xTextTable)
     {

@@ -39,12 +39,7 @@ public class FileHelper
 
         }
 
-    public static void MessageBox(String _sStr)
-        {
-            String sVersion = System.getProperty("java.version");
-            String sOSName  = System.getProperty("os.name");
-            JOptionPane.showMessageDialog( null, _sStr, sVersion + " " + sOSName + " Hello World Debugger", JOptionPane.INFORMATION_MESSAGE );
-        }
+
 
     public static boolean exists(String _sFile)
         {

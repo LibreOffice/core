@@ -262,53 +262,6 @@ public class AccessibilityTools {
         return null;
     }
 
-    /**
-     * This methods retunrs the <CODE>XAccessibleContext</CODE> of a named Sheet-Cell like "G5".<p>
-     * @param xSheetAcc The <CODE>XAccessibleContext</CODE> of a Sheet
-     * @param cellName The name of a cell like "A5"
-     * @return the <CODE>XAccessiblecontext</CODE> of the named cell
-     */
-    public static XAccessibleContext getSheetCell(XAccessibleContext xSheetAcc, String cellName){
-
-        int cellIndex = 0;
-        int column =0;
-        int charMem = 0;
-        for (int n=0; n<cellName.length(); n++){
-            String cha = cellName.substring(n,n+1);
-            System.out.println("char: " + cha + " ");
-
-            byte[] bytes = cha.getBytes();
-
-            if ((bytes[0] >= 'A') && (bytes[0] <= 'Z')){
-                charMem = bytes[0]-64;
-                column++;
-                if ( column == 2 ){
-                    cellIndex += charMem * 26;
-                }
-                cellIndex= cellIndex+ (bytes[0]-65);
-            } else {
-                String sNumb = cellName.substring(n, cellName.length());
-                int iNumb = Integer.valueOf(sNumb).intValue();
-                cellIndex += (iNumb-1) * 256;
-                System.out.println("numb:" + (iNumb-1) * 256);
-            }
-
-        }
-
-        try {
-            XAccessibleContext ac = xSheetAcc.getAccessibleChild(cellIndex).getAccessibleContext();
-            System.out.println(ac.getAccessibleRole() + "," +
-                ac.getAccessibleName() + "(" +
-                ac.getAccessibleDescription() + "):" +
-                utils.getImplName(ac));
-
-            return ac;
-        } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
-            System.out.println("ERROR: could not get child at index " + cellIndex +"': " + ex.toString());
-            return null;
-        }
-    }
-
     public static void printAccessibleTree(PrintWriter log, XAccessible xacc, boolean debugIsActive) {
         debug = debugIsActive;
         if (debug) printAccessibleTree(log, xacc, "");

@@ -64,52 +64,6 @@ public class IdeUpdater extends Thread {
     }// XmlUpdater
 
 
-    public boolean checkStop()
-    {
-            if (internalThread == Thread.currentThread())
-                return false;
-            return true;
-    }// checkStop
-
-
-    public void checkSuspend()
-    {
-            if (threadSuspended)
-            {
-        synchronized(this)
-        {
-                    while (threadSuspended)
-                    {
-                        try {
-                            wait();
-                        } catch (InterruptedException eInt) {
-
-                        }
-                    }
-        }
-            }
-    }// checkSuspend
-
-
-    public void setSuspend()
-    {
-            threadSuspended = true;
-    }// setSuspend
-
-
-    public void setResume()
-    {
-            threadSuspended = false;
-            notify();
-    }// setResume
-
-
-    public void setStop()
-    {
-            internalThread = null;
-    }// setStop
-
-
     @Override
     public void run() {
 

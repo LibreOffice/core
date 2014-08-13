@@ -37,13 +37,7 @@ public interface Iterator {
     public Object next();
 
 
-    /**
-     *  Move to previous element in the sequence.
-     *
-     *  @return  The <code>Object</code> of the previous element in the sequence.
-     *           If there is no previous element, then return null.
-     */
-    public Object previous();
+
 
 
     /**
@@ -55,13 +49,7 @@ public interface Iterator {
     public Object start();
 
 
-    /**
-     * Move to the end of the sequence.
-     *
-     * @return  The <code>Object</code> of the last element in the sequence.
-     *          If it is empty, then return null.
-     */
-    public Object end();
+
 
 
     /**

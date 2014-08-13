@@ -333,30 +333,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         return bischecked;
     }
 
-    public void onPrimeKeySelected()
-    {
-        try
-        {
-            String selfieldname = lstSinglePrimeKey.getSelectedItem();
-            boolean bdoenable = isAutoIncrementatable(selfieldname);
-            CurUnoDialog.setcompleted(TableWizard.SOPRIMARYKEYPAGE, lstSinglePrimeKey.getSelectedItemPos() != -1);
-            Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoenable));
-            XPropertySet xColPropertySet = curTableDescriptor.getByName(selfieldname);
-            boolean bIsAutoIncremented = ((Boolean) xColPropertySet.getPropertyValue("IsAutoIncrement")).booleanValue();
-            if (bIsAutoIncremented)
-            {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), PropertyNames.PROPERTY_STATE, new Short((short) 1));
-            }
-            else
-            {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), PropertyNames.PROPERTY_STATE, new Short((short) 0));
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-    }
+
 
     private void toggleAutomaticAutoValueCheckBox()
     {

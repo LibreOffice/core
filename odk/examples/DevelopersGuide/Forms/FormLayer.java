@@ -43,21 +43,9 @@ public class FormLayer
         m_insertPage = -1;
     }
 
-    /* ------------------------------------------------------------------ */
-    /** sets the page which is to be used for subsequent insertions of controls/shapes
-     */
-    void setInsertPage( int page )
-    {
-        m_insertPage = page;
-    }
 
-    /* ------------------------------------------------------------------ */
-    /** retrieves the page which is to be used for subsequent insertions of controls/shapes
-     */
-    final int getInsertPage( )
-    {
-        return m_insertPage;
-    }
+
+
 
     /* ------------------------------------------------------------------ */
     /** creates a control in the document

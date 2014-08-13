@@ -230,130 +230,15 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, blistispopulated);
     }
 
-    public void addFieldName()
-    {
-        String snewfieldname = Desktop.getUniqueName(xlstFieldNames.getItems(), suntitled, PropertyNames.EMPTY_STRING);
-        short icount = xlstFieldNames.getItemCount();
-        if (CurUnoDialog.verifyfieldcount(icount))
-        {
-            xlstFieldNames.addItem(snewfieldname, icount);
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
-                    {
-                        icount
-                    });
-            toggleButtons();
-            FieldDescription curfielddescription = new FieldDescription(snewfieldname);
-            CurUnoDialog.fielditems.put(snewfieldname, curfielddescription);
-            curTableDescriptor.addColumn(curfielddescription.getPropertyValues());
-            updateColumnDescriptor(snewfieldname, curTableDescriptor.getByName(snewfieldname));
-            CurUnoDialog.setControlVisible("oColumnDescriptor", true);
-            CurUnoDialog.repaintDialogStep();
-        }
-    }
 
-    public void removeFieldName()
-    {
-        String[] fieldnames = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST);
-        short ipos = UnoDialog.getSelectedItemPos(xlstFieldNames);
-        String fieldname = fieldnames[ipos];
-        xlstFieldNames.removeItems(ipos, (short) 1);
-        CurUnoDialog.fielditems.remove(fieldname);
-        int ilistcount = /* xlstFieldNames.getItemCount();*/ UnoDialog.getListBoxItemCount(xlstFieldNames);
-        if ((ipos) < ilistcount)
-        {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
-                    {
-                        ipos
-                    });
-        }
-        else
-        {
-            if (ilistcount > -1)
-            {
-                ipos = (short) ((short) ilistcount - (short) 1);
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
-                        {
-                            ipos
-                        });
-            }
-        }
-        curTableDescriptor.dropColumnbyName(fieldname);
-        fieldnames = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST);
-        boolean benable = ((ipos > -1) && (ipos < fieldnames.length));
-        if (benable)
-        {
-            String snewfieldname = fieldnames[ipos];
-            updateColumnDescriptor(snewfieldname, curTableDescriptor.getByName(snewfieldname));
-            toggleButtons();
-        }
-        else
-        {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(txtfieldname), "Text", PropertyNames.EMPTY_STRING);
-            Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benable));
-            CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, benable);
-        }
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benable));
-        CurUnoDialog.setControlVisible("oColumnDescriptor", benable);
-        CurUnoDialog.repaintDialogStep();
-    }
 
-    public void modifyFieldName()
-    {
-        String newfieldname = txtfieldname.getText();
-        String oldfieldname = xlstFieldNames.getSelectedItem();
-        if (!newfieldname.equals(oldfieldname))
-        {
-            if (curTableDescriptor.modifyColumnName(oldfieldname, newfieldname))
-            {
-                Object oColumn = Helper.getUnoPropertyValue(oColumnDescriptorModel, "Column");
-                Helper.setUnoPropertyValue(oColumn, PropertyNames.PROPERTY_NAME, newfieldname);
-                FieldDescription curfielddescription = CurUnoDialog.fielditems.get(oldfieldname);
-                CurUnoDialog.fielditems.remove(oldfieldname);
-                curfielddescription.setName(newfieldname);
-                CurUnoDialog.fielditems.put(newfieldname, curfielddescription);
-                String[] fieldnames = xlstFieldNames.getItems();
-                short ipos = xlstFieldNames.getSelectedItemPos();
-                fieldnames[ipos] = newfieldname;
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST, fieldnames);
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
-                        {
-                            ipos
-                        });
-            }
-        }
-    }
 
-    public void shiftFieldNameUp()
-    {
-        short ipos = xlstFieldNames.getSelectedItemPos();
-        String[] snewlist = shiftArrayItem(xlstFieldNames.getItems(), ipos, -1);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST, snewlist);
-        if ((ipos - 1) > -1)
-        {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
-                    {
-                        (short) (ipos - 1)
-                    });
-            curTableDescriptor.moveColumn(ipos, ipos - 1);
-        }
-        toggleButtons();
-    }
 
-    public void shiftFieldNameDown()
-    {
-        short ipos = xlstFieldNames.getSelectedItemPos();
-        String[] snewlist = shiftArrayItem(xlstFieldNames.getItems(), ipos, 1);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST, snewlist);
-        if ((ipos + 1) < xlstFieldNames.getItemCount())
-        {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
-                    {
-                        (short) (ipos + 1)
-                    });
-            curTableDescriptor.moveColumn(ipos, ipos + 1);
-        }
-        toggleButtons();
-    }
+
+
+
+
+
 
     private String[] shiftArrayItem(String[] _slist, int _oldindex, int _shiftcount)
     {

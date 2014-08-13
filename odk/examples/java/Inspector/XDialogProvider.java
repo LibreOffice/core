@@ -56,7 +56,7 @@ public interface XDialogProvider {
 
     public void selectSourceCodeLanguage(int _nLanguage);
 
-    public void paint();
+
 
     // returns one of the constants defined in XLanguageSourceCodeGenerator
     public int getLanguage();

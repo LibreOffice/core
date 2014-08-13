@@ -64,7 +64,7 @@ public interface InputRepository
      */
     long getVersion(final String name);
 
-    boolean exists(final String name);
+
 
     boolean isReadable(final String name);
 

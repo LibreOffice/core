@@ -65,11 +65,7 @@ public abstract class ProblemEncoder {
     designSpace.setElemAt(dd, i);
   }
 
-  protected void setDefaultXAt(int i,  double min, double max) {
-    DesignDim dd = new DesignDim();
-    dd.paramBound = new BasicBound(min, max);
-    designSpace.setElemAt(dd, i);
-  }
+
 
   //set the default information for evaluation each response
   protected void setDefaultYAt(int i,  double min, double max) {
@@ -78,12 +74,7 @@ public abstract class ProblemEncoder {
     evalStruct.setElemAt(ee, i);
   }
 
-  protected void setDefaultYAt(int i,  double min, double max, double weight) {
-    EvalElement ee = new EvalElement();
-    ee.targetBound = new BasicBound(min, max);
-    ee.weight = weight;
-    evalStruct.setElemAt(ee, i);
-  }
+
 
   //get a fresh point
   public SearchPoint getFreshSearchPoint() {

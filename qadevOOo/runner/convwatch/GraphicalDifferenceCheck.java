@@ -191,16 +191,7 @@ public class GraphicalDifferenceCheck
             return bOk;
         }
 
-    /**
-     * Used for the comparance of graphical differences.
-     * Method compares one document (_sInputFile) with an older document of the same name in the provided directory (_sReferencePath).
-     *
-     * The path _sOutputPath must be writeable
-     */
-    public static boolean checkOneFile(String _sInputFile, String _sOutputPath, String _sReferencePath, GraphicalTestArguments _aGTA)  throws ConvWatchException
-    {
-        return checkOneFile( _sInputFile, _sOutputPath, _sReferencePath, null, _aGTA);
-    }
+
 
 
     /**

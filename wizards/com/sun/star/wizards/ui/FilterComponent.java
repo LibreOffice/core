@@ -923,16 +923,8 @@ public class FilterComponent
             return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue"));
         }
 
-        protected Object getText()
-        {
-            return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Text"));
-        }
 
-        protected String getDateTimeString()
-        {
-            double dblValue = ((Double) getValue()).doubleValue();
-            NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();
-            return oNumberFormatter.convertNumberToString(iDateTimeFormat, dblValue);
-        }
+
+
     }
 }

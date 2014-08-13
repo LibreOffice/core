@@ -142,18 +142,7 @@ public class SheetSettings implements OfficeConstants {
         return (new Point(splitTypeX, splitTypeY));
     }
 
-    /**
-     * Sets the top row visible in the lower pane and the leftmost column
-     * visibile in the right pane.
-     *
-     * @param top The top row visible in the lower pane
-     * @param left The leftmost column visibile in the right pane
-     */
-    public void setTopLeft(int top, int left) {
 
-        posLeft = left;
-        posTop = top;
-    }
 
     /**
      * Gets the leftmost column visibile in the right pane.

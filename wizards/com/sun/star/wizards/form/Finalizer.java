@@ -106,10 +106,7 @@ public class Finalizer
         }
     }
 
-    public void toggleFinishButton()
-    {
-        CurUnoDialog.enableFinishButton(txtFormName.getText().length() > 0);
-    }
+
 
     public String getName()
     {

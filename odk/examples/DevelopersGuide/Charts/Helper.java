@@ -81,10 +81,7 @@ public class Helper
 
 
 
-    public XModel createPresentationDocument()
-    {
-        return createDocument( "simpress" );
-    }
+
 
 
 

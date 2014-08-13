@@ -71,25 +71,7 @@ public class StringHelper
             return sNewPath;
         }
 
-    public static String doubleQuoteIfNeed(String _sStr)
-        {
-            if (_sStr.startsWith("\"") && _sStr.endsWith("\""))
-            {
-                // don't quote twice
-                return _sStr;
-            }
-            if (_sStr.indexOf(" ") == -1)
-            {
-                // don't quote, if there is no space in name
-                return _sStr;
-            }
-            if (_sStr.indexOf("%") != -1)
-            {
-                return singleQuote(_sStr);
-            }
 
-            return doubleQuote(_sStr);
-        }
 
     /**
      * Convert a value to a string with a given length, if the len is greater the len of the value string representation

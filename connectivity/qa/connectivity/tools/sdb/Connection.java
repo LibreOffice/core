@@ -48,24 +48,6 @@ public class Connection
         return m_connection;
     }
 
-    public boolean execute( final String _sql ) throws SQLException
-    {
-        XStatement statement = createStatement();
-        return statement.execute( _sql );
-    }
-
-    public XResultSet executeQuery( final String _sql ) throws SQLException
-    {
-        XStatement statement = createStatement();
-        return statement.executeQuery( _sql );
-    }
-
-    public int executeUpdate( final String _sql ) throws SQLException
-    {
-        XStatement statement = createStatement();
-        return statement.executeUpdate( _sql );
-    }
-
     public void refreshTables()
     {
         final XTablesSupplier suppTables = UnoRuntime.queryInterface(XTablesSupplier.class, m_connection);

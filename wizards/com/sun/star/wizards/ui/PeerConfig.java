@@ -163,25 +163,9 @@ public class PeerConfig implements XWindowListener
                 });
     }
 
-    public void setAccessibleName(XControl _xControl, String _saccessname)
-    {
-        setPeerProperties(_xControl, new String[]
-                {
-                    "AccessibleName"
-                }, new String[]
-                {
-                    _saccessname
-                });
-    }
 
-    /**
-     * @param oAPIControl an API control that the interface XControl can be derived from
-     */
-    public void setPeerProperties(Object oAPIControl, String[] _propnames, Object[] _propvalues)
-    {
-        XControl xControl = UnoRuntime.queryInterface(XControl.class, oAPIControl);
-        setPeerProperties(xControl, _propnames, _propvalues);
-    }
+
+
 
     public void setPeerProperties(XControl _xControl, String[] propnames, Object[] propvalues)
     {
@@ -189,15 +173,7 @@ public class PeerConfig implements XWindowListener
         this.m_aPeerTasks.add(oPeerTask);
     }
 
-    /**
-     * assigns an arbitrary property to a control as soon as the peer is created
-     * Note: The property 'ImageUrl' should better be assigned with 'setImageurl(...)', to consider the High Contrast Mode
-     */
-    public void setControlProperty(Object _ocontrolmodel, String _spropname, Object _propvalue)
-    {
-        ControlTask oControlTask = new ControlTask(_ocontrolmodel, _spropname, _propvalue);
-        this.aControlTasks.add(oControlTask);
-    }
+
 
     /**
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file

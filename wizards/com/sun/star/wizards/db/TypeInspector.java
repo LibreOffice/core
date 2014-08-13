@@ -145,28 +145,7 @@ public class TypeInspector
         return _nNullable;
     }
 
-    public int getNullability(XPropertySet _xColPropertySet)
-    {
-        try
-        {
-            int i = getDataTypeIndex(_xColPropertySet, false);
-            if (i == -1)
-            {
-                return ColumnValue.NO_NULLS;
-            }
-            int nNullable = AnyConverter.toInt(_xColPropertySet.getPropertyValue("IsNullable"));
-            if (nNullable == ColumnValue.NULLABLE)
-            {
-                return nNullableInfos[i];
-            }
-            return nNullable;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-        return ColumnValue.NO_NULLS;
-    }
+
 
     public boolean isColumnOrderable(XPropertySet _xColPropertySet)
     {

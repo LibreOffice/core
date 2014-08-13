@@ -332,60 +332,9 @@ public final class PalmDB {
     }
 
 
-    /**
-     *  Write out the number of Records followed by what
-     *  will be written out by each <code>Record</code> object.
-     *
-     *  @param  os  The <code>OutputStream</code> to write the
-     *              object.
-     *
-     *  @throws  IOException  If any I/O error occurs.
-     */
-    public void write(OutputStream os) throws IOException {
 
-        DataOutputStream out = new DataOutputStream(os);
 
-        // write out PDB name
-        out.write(bName);
 
-        // write out 2 bytes for number of records
-        out.writeShort(records.length);
-
-        // let each Record object write out its own info.
-        for (Record record : records) {
-            record.write(out);
-        }
-    }
-
-    /**
-     *  Read the necessary data to create a PDB from
-     *  the <code>InputStream</code>.
-     *
-     *  @param  is  The <code>InputStream</code> to read data
-     *              in order to restore the object.
-     *
-     *  @throws  IOException  If any I/O error occurs.
-     */
-    public void read(InputStream is) throws IOException {
-
-        DataInputStream in = new DataInputStream(is);
-
-        // read in the PDB name.
-        byte[] bytes = new byte[NAME_LENGTH];
-        in.readFully(bytes);
-        store(bytes);
-
-        // read in number of records
-        int nrec = in.readUnsignedShort();
-        records = new Record[nrec];
-
-        // read in the Record infos
-        for (int i = 0; i < nrec; i++) {
-
-            records[i] = new Record();
-            records[i].read(in);
-        }
-    }
 
     /**
      *  Override equals method of <code>Object</code>.

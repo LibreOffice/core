@@ -49,15 +49,7 @@ public class JavaFinder implements MethodFinder {
         this.classpath = classpath;
     }
 
-    public static JavaFinder getInstance() {
-        if (finder == null) {
-            synchronized(JavaFinder.class) {
-                if (finder == null)
-                    finder = new JavaFinder();
-            }
-        }
-        return finder;
-    }
+
 
     public static JavaFinder getInstance(List<String> classpath) {
         return new JavaFinder(classpath);

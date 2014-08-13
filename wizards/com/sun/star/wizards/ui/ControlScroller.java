@@ -116,10 +116,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected void setScrollBarOrientationHorizontal()
-    {
-        Helper.setUnoPropertyValue(xScrollBar, PropertyNames.ORIENTATION, new Integer(ScrollBarOrientation.HORIZONTAL));
-    }
+
 
     /**
      * @param _ntotfieldcount The number of fields that are to be administered by the ControlScroller
@@ -278,29 +275,11 @@ public abstract class ControlScroller
         return nscrollvalue;
     }
 
-    protected void setLineIncrementation(int _nlineincrement)
-    {
-        this.nlineincrement = _nlineincrement;
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "LineIncrement", new Integer(nlineincrement));
 
-    }
 
-    protected int getLineIncrementation()
-    {
-        return nlineincrement;
-    }
 
-    protected void setBlockIncrementation(int _nblockincrement)
-    {
-        this.nblockincrement = _nblockincrement;
-        Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
-                {
-                    PropertyNames.PROPERTY_ENABLED, "BlockIncrement", "ScrollValueMax"
-                }, new Object[]
-                {
-                        Boolean.valueOf(ntotfieldcount > nblockincrement), new Integer(nblockincrement), new Integer(ntotfieldcount - nblockincrement)
-                });
-    }
+
+
 
     protected int getBlockIncrementation()
     {
@@ -396,10 +375,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected PropertyValue[] getControlGroupInfo(int _i)
-    {
-        return scrollfields.get(_i);
-    }
+
 
     private void setControlData(String controlname, Object newvalue)
     {

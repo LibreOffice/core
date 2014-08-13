@@ -55,109 +55,27 @@ public class Assurance
         assure(msg, s, false);
     }
 
-    /**
-     * Assure that two boolean values are equal
-     * @param expected specifies the expected boolean value
-     * @param actual specifies the actual boolean value
-     */
-    protected void assureEquals( boolean expected, boolean actual ) {
-        assureEquals( "Equality test failed", expected, new Boolean( actual ), false );
-    }
 
-    /**
-     * Assure that two boolean values are equal
-     * @param message the message to print when the equality test fails
-     * @param expected specifies the expected boolean value
-     * @param actual specifies the actual boolean value
-     */
-    protected void assureEquals( String message, boolean expected, boolean actual ) {
-        assureEquals( message, expected, actual, false );
-    }
 
-    /**
-     * Assure that two byte values are equal
-     * @param expected specifies the expected byte value
-     * @param actual specifies the actual byte value
-     */
-    protected void assureEquals( byte expected, byte actual ) {
-        assureEquals( "Equality test failed", new Byte( expected ), new Byte( actual ), false );
-    }
 
-    /**
-     * Assure that two byte values are equal
-     * @param message the message to print when the equality test fails
-     * @param expected specifies the expected byte value
-     * @param actual specifies the actual byte value
-     */
-    protected void assureEquals( String message, byte expected, byte actual ) {
-        assureEquals( message, new Byte( expected ), new Byte( actual ), false );
-    }
 
-    /**
-     * Assure that two double values are equal
-     * @param expected specifies the expected double value
-     * @param actual specifies the actual double value
-     */
-    protected void assureEquals( double expected, double actual ) {
-        assureEquals( "Equality test failed", new Double( expected ), new Double( actual ), false );
-    }
 
-    /**
-     * Assure that two double values are equal
-     * @param message the message to print when the equality test fails
-     * @param expected specifies the expected double value
-     * @param actual specifies the actual double value
-     */
-    protected void assureEquals( String message, double expected, double actual ) {
-        assureEquals( message, new Double( expected ), new Double( actual ), false );
-    }
 
-    /**
-     * Assure that two float values are equal
-     * @param expected specifies the expected float value
-     * @param actual specifies the actual float value
-     */
-    protected void assureEquals( float expected, float actual ) {
-        assureEquals( "Equality test failed", new Float( expected ), new Float( actual ), false );
-    }
 
-    /**
-     * Assure that two float values are equal
-     * @param message the message to print when the equality test fails
-     * @param expected specifies the expected float value
-     * @param actual specifies the actual float value
-     */
-    protected void assureEquals( String message, float expected, float actual ) {
-        assureEquals( message, new Float( expected ), new Float( actual ), false );
-    }
 
-    /**
-     * Assure that two short values are equal
-     * @param expected specifies the expected short value
-     * @param actual specifies the actual short value
-     */
-    protected void assureEquals( short expected, short actual ) {
-        assureEquals( "Equality test failed", new Short( expected ), new Short( actual ), false );
-    }
 
-    /**
-     * Assure that two short values are equal
-     * @param message the message to print when the equality test fails
-     * @param expected specifies the expected short value
-     * @param actual specifies the actual short value
-     */
-    protected void assureEquals( String message, short expected, short actual ) {
-        assureEquals( message, new Short( expected ), new Short( actual ), false );
-    }
 
-    /**
-     * Assure that two int values are equal
-     * @param expected specifies the expected int value
-     * @param actual specifies the actual int value
-     */
-    protected void assureEquals( int expected, int actual ) {
-        assureEquals( "Equality test failed", new Integer( expected ), new Integer( actual ), false );
-    }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Assure that two int values are equal
@@ -169,33 +87,11 @@ public class Assurance
         assureEquals( message, new Integer( expected ), new Integer( actual ), false );
     }
 
-    /**
-     * Assure that two long values are equal
-     * @param expected specifies the expected long value
-     * @param actual specifies the actual long value
-     */
-    protected void assureEquals( long expected, long actual ) {
-        assureEquals( "Equality test failed", new Long( expected ), new Long( actual ), false );
-    }
 
-    /**
-     * Assure that two long values are equal
-     * @param message the message to print when the equality test fails
-     * @param expected specifies the expected long value
-     * @param actual specifies the actual long value
-     */
-    protected void assureEquals( String message, long expected, long actual ) {
-        assureEquals( message, new Long( expected ), new Long( actual ), false );
-    }
 
-    /**
-     * Assure that two string values are equal
-     * @param expected specifies the expected string value
-     * @param actual specifies the actual string value
-     */
-    protected void assureEquals( String expected, String actual ) {
-        assureEquals( "Equality test failed", expected, actual, false );
-    }
+
+
+
 
     /**
      * Assure that two string values are equal
@@ -207,24 +103,9 @@ public class Assurance
         assureEquals( message, expected, actual, false );
     }
 
-    /**
-     * Assure that two object are equal
-     * @param expected specifies the expected object value
-     * @param actual specifies the actual object value
-     */
-    protected void assureEquals( Object expected, Object actual ) {
-        assureEquals( "Equality test failed", expected, actual, false );
-    }
 
-    /**
-     * Assure that two objects are equal
-     * @param message the message to print when the equality test fails
-     * @param expected specifies the expected object value
-     * @param actual specifies the actual object value
-     */
-    protected void assureEquals( String message, Object expected, Object actual ) {
-        assureEquals( message, expected, actual, false );
-    }
+
+
 
     /**
      * assures the two given sequences are of equal length, and have equal content
@@ -239,13 +120,7 @@ public class Assurance
         }
     }
 
-    /**
-     * assures the two given sequences are of equal length, and have equal content
-     */
-    public <T> void assureEquals( String i_message, T[] i_expected, T[] i_actual )
-    {
-        assureEquals( i_message, i_expected, i_actual, false );
-    }
+
 
     /** invokes a given method on a given object, and assures a certain exception is caught
      * @param _message is the message to print when the check fails
@@ -301,49 +176,11 @@ public class Assurance
         assureException( _message, _object, _methodName, argClasses, _methodArgs, _expectedExceptionClass );
     }
 
-    /** invokes a given method on a given object, and assures a certain exception is caught
-     * @param _object is the object to invoke the method on
-     * @param _methodName is the name of the method to invoke
-     * @param _methodArgs are the arguments to pass to the method. Those implicitly define
-     *      the classes of the arguments of the method which is called.
-     * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
-     *          it means that <em>no</em> exception must be throw by invoking the method.
-    */
-    protected void assureException( final Object _object, final String _methodName, final Object[] _methodArgs,
-        final Class<?> _expectedExceptionClass )
-    {
-        assureException(
-            "did not catch the expected exception (" +
-                ( ( _expectedExceptionClass == null ) ? "none" : _expectedExceptionClass.getName() ) +
-                ") while calling " + _object.getClass().getName() + "." + _methodName,
-            _object, _methodName, _methodArgs, _expectedExceptionClass );
-    }
 
-    /** invokes a given method on a given object, and assures a certain exception is caught
-     * @param _object is the object to invoke the method on
-     * @param _methodName is the name of the method to invoke
-     * @param _methodArgs are the arguments to pass to the method
-     * @param _argClasses are the classes to assume for the arguments of the methods
-     * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
-     *          it means that <em>no</em> exception must be throw by invoking the method.
-    */
-    protected void assureException( final Object _object, final String _methodName, final Class<?>[] _argClasses,
-        final Object[] _methodArgs, final Class<?> _expectedExceptionClass )
-    {
-        assureException(
-            "did not catch the expected exception (" +
-                ( ( _expectedExceptionClass == null ) ? "none" : _expectedExceptionClass.getName() ) +
-                ") while calling " + _object.getClass().getName() + "." + _methodName,
-            _object, _methodName, _argClasses, _methodArgs, _expectedExceptionClass );
-    }
 
-    /**
-     * Mark the currently executed method as failed.
-     * This function generates "Test did fail." as standard message.
-     */
-    protected void failed() {
-        assure("Test did fail.", false, false);
-    }
+
+
+
 
     /**
      * Mark the currently executed method as failed.

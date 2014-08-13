@@ -328,9 +328,7 @@ class MyTableModel extends AbstractTableModel {
         fireTableCellUpdated(row, col);
     }
 
-    String [] getSelected() {
-        return null;
-    }
+
 
     public boolean isAnySelected() {
         Iterator iter = data.iterator();

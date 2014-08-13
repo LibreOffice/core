@@ -45,33 +45,9 @@ import com.sun.star.form.*;
 */
 public class FLTools
 {
-    /* ------------------------------------------------------------------ */
-    static void dump_Object( Object aObject )
-    {
-        XServiceInfo xSI = UNO.queryServiceInfo( aObject );
-        if ( null != xSI )
-            System.out.println( "dumping object with name \"" + xSI.getImplementationName() + "\"" );
-        else
-            System.out.println( "object has no service info!" );
-    }
 
-    /* ------------------------------------------------------------------ */
-    /** translates a string containing an URL into a complete
-        <type scope="com.sun.star.util">URL</type> object.
-    */
-    static public URL parseURL( String sURL, XComponentContext xCtx ) throws java.lang.Exception
-    {
-        URL[] aURL = new URL[] { new URL() };
-        aURL[0].Complete = sURL;
-        // need an URLTransformer
-        XURLTransformer xTransformer = UnoRuntime.queryInterface(
-            XURLTransformer.class,
-            xCtx.getServiceManager().createInstanceWithContext(
-                "com.sun.star.util.URLTransformer", xCtx ) );
-        xTransformer.parseStrict( aURL );
 
-        return aURL[0];
-    }
+
 
     /* ------------------------------------------------------------------ */
     /** returns the name of the given form component
@@ -122,39 +98,7 @@ public class FLTools
         return sLabel;
     }
 
-    /* ------------------------------------------------------------------ */
-    /** retrieves the index of a form component within its parent
-    */
-    static public int getIndexInParent( Object aContainer, Object aElement ) throws com.sun.star.uno.Exception
-    {
-        int nIndex = -1;
 
-        // norm the element
-        XInterface xElement = UnoRuntime.queryInterface(
-            XInterface.class, aElement );
-
-        // get the container
-        XIndexContainer xIndexCont = UNO.queryIndexContainer( aContainer );
-        if ( null != xIndexCont )
-        {
-            // loop through all children
-            int nCount = xIndexCont.getCount();
-            for ( int i = 0; i < nCount; ++i )
-            {
-                // compare with the element
-                XInterface xCurrent = UnoRuntime.queryInterface(
-                    XInterface.class, xIndexCont.getByIndex( 0 ) );
-                if ( xCurrent.equals( xElement ) )
-                {   // found
-                    nIndex = i;
-                    break;
-                }
-            }
-        }
-
-        // outta here
-        return nIndex;
-    }
 
     /* ------------------------------------------------------------------ */
     /** retrieves the parent of the given object

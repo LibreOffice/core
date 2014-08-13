@@ -169,20 +169,7 @@ public class Format implements Cloneable {
         return (!((attributes & attribute) == 0));
     }
 
-    /**
-     *  Return true if text <code>attribute</code> is set in this
-     *  <code>Style</code>.An attribute that is set may have a
-     *  value of <i>on</i> or <i>off</i>.
-     *
-     *  @param  attribute  The attribute to check ({@link #BOLD},
-     *                     {@link #ITALIC}, etc.).
-     *
-     *  @return  true if text <code>attribute</code> is set in this
-     *           <code>Style</code>, false otherwise.
-     */
-    public boolean isSet(int attribute) {
-        return (!((mask & attribute) == 0));
-    }
+
 
     /**
      *  Set the formatting category of this object, ie number, date,

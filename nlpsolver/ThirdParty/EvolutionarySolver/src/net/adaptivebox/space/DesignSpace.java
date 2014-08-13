@@ -35,9 +35,7 @@ public class DesignSpace {
     dimProps = new DesignDim[dim];
   }
 
-  public DesignDim getDimAt(int index) {
-    return dimProps[index];
-  }
+
 
   public void setElemAt(DesignDim elem, int index) {
     dimProps[index] = elem;
@@ -60,56 +58,26 @@ public class DesignSpace {
     }
   }
 
-  public void randomAdjust (double[] location){
-    for (int i=0; i<getDimension(); i++) {
-      location[i] = dimProps[i].paramBound.randomAdjust(location[i]);
-    }
-  }
 
-  public boolean satisfyCondition(double[] location){
-    for (int i=0; i<getDimension(); i++) {
-      if (!dimProps[i].paramBound.isSatisfyCondition(location[i])) {
-        return false;
-      }
-    }
-    /*If the limits are not violated, return TRUE*/
-    return(true);
-  }
+
+
 
   public void mutationAt(double[] location, int i){
     location[i] = dimProps[i].paramBound.getRandomValue();
   }
 
-  public double mutationUniformAtPointAsCenter (double pointX, int i){
-    double length = this.getMagnitudeIn(i)/2;
-    pointX += RandomGenerator.doubleRangeRandom(-1*length, length);
 
-    return pointX;
-  }
 
-  public double getUpValueAt(int dimensionIndex) {
-    return dimProps[dimensionIndex].paramBound.maxValue;
-  }
 
-  public double getLowValueAt(int dimensionIndex) {
-    return dimProps[dimensionIndex].paramBound.minValue;
-  }
+
+
 
   public double getMagnitudeIn(int dimensionIndex) {
     return dimProps[dimensionIndex].paramBound.getLength();
   }
 
 
-  public boolean initilizeGeneAtPointAsCenter(double[] tempX){
-    if (tempX.length!=this.getDimension()) {
-      return false;
-    }
-    for(int i=0;i<tempX.length;i++) {
-      double length = this.getMagnitudeIn(i)/2;
-      tempX[i]+=RandomGenerator.doubleRangeRandom(-1*length, length);
-    }
-    return true;
-  }
+
 
   public void initializeGene(double[] tempX){
     for(int i=0;i<tempX.length;i++) tempX[i] =  dimProps[i].paramBound.getRandomValue(); //Global.RandomGenerator.doubleRangeRandom(9.8, 10);
@@ -129,11 +97,5 @@ public class DesignSpace {
     }
   }
 
-  public double[] getRealLoc(double[] imageLoc) {
-    double[] realLoc = new double[imageLoc.length];
-    System.arraycopy(imageLoc, 0, realLoc, 0, imageLoc.length);
-    annulusAdjust(realLoc);
-    return realLoc;
-  }
 }
 

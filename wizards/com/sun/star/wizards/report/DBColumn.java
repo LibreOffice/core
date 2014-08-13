@@ -250,14 +250,7 @@ public class DBColumn
         oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
     }
 
-    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler, XCell xCell)
-    {
-        XTextCursor xTextCursor = TextDocument.createTextCursor(xCell);
-        xTextCursor.gotoStart(false);
-        xTextCursor.gotoEnd(true);
-        xTextCursor.setString(PropertyNames.EMPTY_STRING);
-        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
-    }
+
 
     public void formatValueCell()
     {

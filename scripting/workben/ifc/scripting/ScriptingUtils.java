@@ -44,11 +44,9 @@ public class ScriptingUtils {
         return utils;
     }
 
-    public static void cleanUserDir() {
-    }
 
-    public static void cleanShareDir() {
-    }
+
+
 
     public Object getScriptStorage(XMultiServiceFactory xMSF, String location) {
         int id = getStorageId(xMSF, location);

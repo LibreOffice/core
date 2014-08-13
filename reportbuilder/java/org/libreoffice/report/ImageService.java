@@ -24,11 +24,7 @@ import java.io.InputStream;
 public interface ImageService
 {
 
-    /**
-     * @param image
-     * @return the mime-type of the image as string.
-     */
-    String getMimeType(final InputStream image) throws ReportExecutionException;
+
 
     /**
      * @param image
@@ -36,12 +32,7 @@ public interface ImageService
      */
     String getMimeType(final byte[] image) throws ReportExecutionException;
 
-    /**
-     * @param image
-     * @returns the dimension in 100th mm.
-     * @throws ReportExecutionException
-     **/
-    Size getImageSize(final InputStream image) throws ReportExecutionException;
+
 
     /**
      * @param image

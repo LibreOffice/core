@@ -29,14 +29,12 @@ public interface DocComparator {
 
     public boolean isReferenceExistent() throws IOException;
 
-    public void createReference() throws IOException;
 
-    public boolean compare() throws IOException;
+
+
 
 
     public boolean isDiffReferenceExistent() throws IOException;
-
-    public void createDiffReference() throws IOException;
 
     public boolean compareDiff() throws IOException;
 

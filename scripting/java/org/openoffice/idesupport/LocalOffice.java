@@ -32,41 +32,7 @@ import java.util.ArrayList;
  */
 public class LocalOffice
 {
-    /**
-     * Creates an instance of the local office connection.
-     *
-     * @param parent is an application specific class loader.
-     * @param officePath is a platform specific path string
-     *   to the office distribution.
-     * @param port is a communication port.
-     */
-    public static final LocalOffice create(
-        ClassLoader parent, String officePath, int port)
-    {
-        ArrayList<String>      path    = new ArrayList<String>();
-        path.add(officePath + "/program/classes/ridl.jar");
-        path.add(officePath + "/program/classes/jurt.jar");
-        path.add(officePath + "/program/classes/unoil.jar");
-        path.add(officePath + "/program/classes/juh.jar");
-        path.add(System.getProperties().getProperty("netbeans.home") +
-            File.separator + "modules" +
-            File.separator + "ext" +
-            File.separator + "localoffice.jar");
-        // commented out so code will compile
-        // ClassLoader appcl   = new DefaultScriptClassLoader(parent, path);
-        ClassLoader appcl = path.getClass().getClassLoader();
-        Class       clazz   = null;
-        LocalOffice office  = null;
-        try {
-            clazz   = appcl.loadClass(
-                "org.openoffice.idesupport.localoffice.LocalOfficeImpl");
-            office  = (LocalOffice)clazz.newInstance();
-            office.connect(officePath, port);
-        } catch (java.lang.Exception exp) {
-            office  = null;
-        }
-        return office;
-    }
+
 
     /**
      * Connects to the running office.

@@ -71,10 +71,7 @@ public class OfficeConnect
 
 
 
-    public static synchronized OfficeConnect getConnection()
-    {
-        return maConnection;
-    }
+
 
 
 
@@ -127,32 +124,7 @@ public class OfficeConnect
 
 
 
-    /**
-     * same as "createRemoteInstance()" but supports additional parameter for initializing created object
-     *
-     * @param  lArguments         optional arguments
-     *                      They are used to initialize new created service.
-     * @param  aType              Description of Parameter
-     * @param  sServiceSpecifier  Description of Parameter
-     * @return                    Description of the Returned Value
-     */
-    public <T> T createRemoteInstanceWithArguments(Class<T> aType, String sServiceSpecifier, Any[] lArguments)
-    {
-        T aResult = null;
-        try
-        {
-            aResult = UnoRuntime.queryInterface(
-                aType, mxServiceManager.createInstanceWithArgumentsAndContext(
-                    sServiceSpecifier, lArguments, mxOfficeContext));
-        }
-        catch (com.sun.star.uno.Exception ex)
-        {
-            System.err.println("Couldn't create Service of type " + sServiceSpecifier + ": " + ex);
-            ex.printStackTrace();
-            System.exit(0);
-        }
-        return aResult;
-    }
+
 
 
 

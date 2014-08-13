@@ -86,13 +86,7 @@ public class Status extends SimpleStatus {
         return new Status( SKIPPED, state );
     }
 
-    /**
-     * This is a factory method for creating a Status representing that the
-     * result of the activity was excluded. It always has FAILED state.
-     */
-    public static Status excluded() {
-        return new Status( EXCLUDED, false );
-    }
+
 
     /**
      * Creates a Status representing an activity failed for an arbitrary reason.

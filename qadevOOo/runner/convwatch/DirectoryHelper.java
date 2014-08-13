@@ -71,13 +71,7 @@ public class DirectoryHelper
             return a.m_aFileList.toArray();
         }
 
-    public static Object[] traverse( String _sDirectory, boolean _bRecursiveIsAllowed )
-        {
-            DirectoryHelper a = new DirectoryHelper();
-            a.setRecursiveIsAllowed(_bRecursiveIsAllowed);
-            a.traverse_impl(_sDirectory, null);
-            return a.m_aFileList.toArray();
-        }
+
 
     private void traverse_impl( String afileDirectory, FileFilter _aFileFilter )
         {

@@ -55,7 +55,7 @@ public interface OutputRepository
 
     boolean existsStorage(final String name);
 
-    boolean isWritable(final String name);
+
 
     void closeOutputRepository();
 }

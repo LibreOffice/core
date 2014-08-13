@@ -473,24 +473,7 @@ public class Protocol extends JComponent
     }
 
 
-    /**
-     * For some modes it's necessary, that we write some additional
-     * information to the log. E.g. for html we must generate close targets.
-     */
-    public synchronized void finish()
-    {
-        // Preferr HTML ... because we can't write ASCII and HTML contents to the same log file!
-        String sContent;
-        if ((m_nMode & MODE_HTML) == MODE_HTML)
-            sContent = impl_generateHTMLFooter();
-        else
-        if ((m_nMode & MODE_ASCII) == MODE_ASCII)
-            sContent = impl_generateAsciiFooter();
-        else
-            return;
 
-        impl_writeToLogFile(m_sFileName, true, sContent);
-    }
 
 
     /**
@@ -533,47 +516,13 @@ public class Protocol extends JComponent
     }
 
 
-    /**
-     * log different property arrays.
-     *
-     * @param   lProps
-     *              the array of properties
-     */
-    public synchronized void log( /*IN*/ com.sun.star.beans.NamedValue[] lProps )
-    {
-        StringBuffer sValues = new StringBuffer(1000);
-        impl_logPropertyArray(sValues, lProps);
 
-        log(TYPE_SCOPE_OPEN  | TYPE_INFO, "property array ["+lProps.length+"]:");
-        log(TYPE_SCOPE_CLOSE | TYPE_INFO, sValues.toString()                   );
-    }
 
-    public synchronized void log( /*IN*/ com.sun.star.beans.PropertyValue[] lProps )
-    {
-        StringBuffer sValues = new StringBuffer(1000);
-        impl_logPropertyArray(sValues, lProps);
 
-        log(TYPE_SCOPE_OPEN  | TYPE_INFO, "property array ["+lProps.length+"]:");
-        log(TYPE_SCOPE_CLOSE | TYPE_INFO, sValues.toString()                   );
-    }
 
-    public synchronized void log( /*IN*/ com.sun.star.beans.NamedValue aProp )
-    {
-        StringBuffer sValue = new StringBuffer(1000);
-        impl_logProperty(sValue, aProp);
 
-        log(TYPE_SCOPE_OPEN  | TYPE_INFO, "property:"      );
-        log(TYPE_SCOPE_CLOSE | TYPE_INFO, sValue.toString());
-    }
 
-    public synchronized void log( /*IN*/ com.sun.star.beans.PropertyValue aProp )
-    {
-        StringBuffer sValue = new StringBuffer(1000);
-        impl_logProperty(sValue, aProp);
 
-        log(TYPE_SCOPE_OPEN  | TYPE_INFO, "property:"      );
-        log(TYPE_SCOPE_CLOSE | TYPE_INFO, sValue.toString());
-    }
 
     public synchronized void log( /*IN*/ Object aAny )
     {
@@ -672,21 +621,7 @@ public class Protocol extends JComponent
     }
 
 
-    public synchronized void defineHyperlink( /*IN*/ String sTarget     ,
-                                              /*IN*/ String sDescription)
-    {
-        if ((m_nMode & MODE_HTML) != MODE_HTML)
-            return;
 
-        StringBuffer sLog = new StringBuffer(1000);
-        sLog.append("<a href=\"");
-        sLog.append(sTarget     );
-        sLog.append("\">"       );
-        sLog.append(sDescription);
-        sLog.append("</a>"      );
-
-        log(TYPE_LINK, sLog.toString());
-    }
 
 
     /**

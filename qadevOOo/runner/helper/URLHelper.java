@@ -144,84 +144,11 @@ public class URLHelper
 
 
 
-    /**
-     * The same as getURLWithProtocolFromSystemPath() before but uses string parameter instead
-     * of a File types. It exist to supress converting of necessary parameters in the
-     * outside code. But of course getURLWithProtocolFromSystemPath(File,File,String) will be
-     * a little bit faster then this method ...
-     *
-     * @param sSystemPath
-     *          represent the file in system notation
-     *
-     * @param sBasePath
-     *          define the base path of the aSystemPath value,
-     *          which must be replaced with the value of "sServerPath".
-     *
-     * @param sServerPath
-     *          Will be used to replace sBasePath.
-     *
-     * @example
-     *          System Path = "d:\test\file.txt"
-     *          Base Path   = "d:\test"
-     *          Server Path = "http://alaska:8000"
-     *          => "http://alaska:8000/file.txt"
-     *
-     * @return [String]
-     *          an url which represent the given system path
-     *          and uses the given protocol
-     */
-    public static String getURLWithProtocolFromSystemPath( String sSystemPath, String sBasePath, String sServerPath )
-    {
-        return getURLWithProtocolFromSystemPath(new File(sSystemPath), new File(sBasePath), sServerPath);
-    }
 
 
 
-    /**
-     * This convert an URL (formated as a string) to a struct com.sun.star.util.URL.
-     * It use a special service to do that: the URLTransformer.
-     * Because some API calls need it and it's not allowed to set "Complete"
-     * part of the util struct only. The URL must be parsed.
-     *
-     * @param sURL
-     *          URL for parsing in string notation
-     *
-     * @return [com.sun.star.util.URL]
-     *              URL in UNO struct notation
-     */
-    public static com.sun.star.util.URL parseURL(XURLTransformer xParser, String sURL)
-    {
-        com.sun.star.util.URL aURL = null;
 
-        if (sURL==null || sURL.equals(""))
-            return null;
 
-        try
-        {
-            // Create special service for parsing of given URL.
-/*            com.sun.star.util.XURLTransformer xParser = (com.sun.star.util.XURLTransformer)OfficeConnect.createRemoteInstance(
-                                                            com.sun.star.util.XURLTransformer.class,
-                                                            "com.sun.star.util.URLTransformer");
-*/
-            // Because it's an in/out parameter we must use an array of URL objects.
-            com.sun.star.util.URL[] aParseURL = new com.sun.star.util.URL[1];
-            aParseURL[0]          = new com.sun.star.util.URL();
-            aParseURL[0].Complete = sURL;
-
-            // Parse the URL
-            xParser.parseStrict(aParseURL);
-
-            aURL = aParseURL[0];
-        }
-        catch(com.sun.star.uno.RuntimeException exRuntime)
-        {
-            // Any UNO method of this scope can throw this exception.
-            // Reset the return value only.
-            aURL = null;
-        }
-
-        return aURL;
-    }
 
 
     /**

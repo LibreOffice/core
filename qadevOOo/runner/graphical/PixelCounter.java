@@ -34,19 +34,7 @@ class CountNotWhite extends CountPixel
         {
         }
 
-    public void countold(final int pixel)
-        {
-            // final int alpha = (pixel >> 24) & 0xff;
-            final int red   = (pixel >> 16) & 0xff;
-            final int green = (pixel >>  8) & 0xff;
-            final int blue  = (pixel      ) & 0xff;
 
-            if (red == 0xff && green == 0xff && blue == 0xff)
-            {
-                return;
-            }
-            ++m_nCount;
-        }
     @Override
     public void count(final int pixel)
         {
@@ -79,19 +67,7 @@ class CountNotBlack extends CountPixel
         {
         }
 
-    public void countold(final int pixel)
-        {
-            // final int alpha = (pixel >> 24) & 0xff;
-            final int red   = (pixel >> 16) & 0xff;
-            final int green = (pixel >>  8) & 0xff;
-            final int blue  = (pixel      ) & 0xff;
 
-            if (red == 0x00 && green == 0x00 && blue == 0x00)
-            {
-                return;
-            }
-            ++m_nCount;
-        }
     @Override
     public void count(final int pixel)
         {

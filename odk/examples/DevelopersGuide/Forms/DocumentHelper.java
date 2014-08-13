@@ -76,11 +76,7 @@ public class DocumentHelper
         );
     }
 
-    /* ------------------------------------------------------------------ */
-    public static DocumentHelper blankTextDocument( XComponentContext xCtx ) throws com.sun.star.uno.Exception
-    {
-        return blankDocument( xCtx, DocumentType.WRITER );
-    }
+
 
     /* ------------------------------------------------------------------ */
     public static DocumentHelper blankDocument( XComponentContext xCtx, DocumentType eType ) throws com.sun.star.uno.Exception

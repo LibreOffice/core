@@ -41,15 +41,7 @@ public abstract class SpreadsheetEncoder {
     public abstract void createWorksheet(String sheetName) throws IOException;
 
 
-    /**
-     *  Set a cell's formatting options via a separately create
-     *  <code>Format</code> object.
-     *
-     *  @param  row     The row number of the cell to be changed
-     *  @param  column  The column number of the cell to be changed
-     *  @param  fmt     Object containing formatting settings for this cell.
-     */
-    public abstract void setCellFormat(int row, int column, Format fmt);
+
 
 
     /**
@@ -73,12 +65,7 @@ public abstract class SpreadsheetEncoder {
     public abstract int getNumberOfSheets();
 
 
-    /**
-     *  Get the names of the sheets in the WorkBook.
-     *
-     *  @param  sheet  The required sheet.
-     */
-    public abstract String getSheetName(int sheet);
+
 
 
     /**

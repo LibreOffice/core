@@ -231,20 +231,7 @@ public class StyleCatalog {
     }
 
 
-    /**
-     *  Given a <code>Style</code> <code>s</code>, return the
-     *  <code>style</code> that is the closest match.  Not currently
-     *  implemented.
-     *
-     *  @param  s  <code>Style</code> to match.
-     *
-     *  @return  The <code>Style</code> that most closely matches.
-     */
-    public Style getBestMatch(Style s) {
-        // DJP: is this needed?
-        // DJP ToDo: implement this
-        return null;
-    }
+
 
 
     /**
@@ -290,33 +277,7 @@ public class StyleCatalog {
     }
 
 
-    /**
-     *  Dump the <code>Style</code> table in Comma Separated Value (CSV)
-     *  format
-     *
-     *  @param  para  If true, dump in paragraph <code>Style</code>,
-     *                otherwise dump in text style.
-     */
-    public void dumpCSV(boolean para) {
-        if (!para) {
-            TextStyle.dumpHdr();
-            int nStyles = styles.size();
-            for (int i = 0; i < nStyles; i++) {
-                Style s = styles.get(i);
-                if (s.getClass().equals(TextStyle.class))
-                    ((TextStyle)s).dumpCSV();
-            }
-        } else {
-            ParaStyle.dumpHdr();
-            int nStyles = styles.size();
-            for (int i = 0; i < nStyles; i++) {
-                Style s = styles.get(i);
-                if (s.getClass().equals(ParaStyle.class))
-                    ((ParaStyle)s).dumpCSV();
-            }
-        }
 
-    }
 
 
     /**

@@ -84,9 +84,7 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-    public void reload() {
-            reload(getRoot());
-    }
+
 
 
         private void reload(Object node) {
@@ -101,9 +99,7 @@ public class HideableTreeModel implements TreeModel {
             nodeChanged(path.getLastPathComponent());
     }
 
-    public void nodeInserted(Object node, Object child) {
-            nodeInserted(node, child, -1);
-    }
+
 
 
         public void nodeInserted(Object node, Object child, int index) {
@@ -164,11 +160,7 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-        public ArrayList<TreePath> getExpandedPaths(JTree tree) {
-        ArrayList<TreePath> expandedPaths = new ArrayList<TreePath>();
-        addExpandedPaths(tree, tree.getPathForRow(0), expandedPaths);
-        return expandedPaths;
-    }
+
 
 
         private void addExpandedPaths(JTree tree, TreePath path, ArrayList<TreePath> pathlist) {
@@ -181,11 +173,7 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-        public void expandPaths(JTree tree, ArrayList<TreePath> pathlist) {
-            for(int i = 0; i < pathlist.size(); i++) {
-                tree.expandPath(pathlist.get(i));
-            }
-    }
+
 
 
         public boolean isLeaf(Object _oNode) {
@@ -241,23 +229,10 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-        public boolean isPathToNodeVisible(Object node) {
-            Object[] path = getPathToRoot(node);
-            for(int i = 0; i < path.length; i++) {
-                if(!isNodeVisible(path[i])) {
-                    return false;
-                }
-            }
-            return true;
-    }
 
 
-        public void ensurePathToNodeVisible(Object node) {
-            Object[] path = getPathToRoot(node);
-            for(int i = 0; i < path.length; i++) {
-                setNodeVisible(path[i], true);
-            }
-    }
+
+
 
 
         public Object getChild(Object parent, int index) {

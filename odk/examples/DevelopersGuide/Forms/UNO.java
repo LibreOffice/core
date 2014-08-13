@@ -73,10 +73,7 @@ public class UNO
         return UnoRuntime.queryInterface( XComponent.class, aObject );
     }
 
-    public static XTablesSupplier queryTablesSupplier( Object aObject )
-    {
-        return UnoRuntime.queryInterface( XTablesSupplier.class, aObject );
-    }
+
 
 /*  replace Foo with the identifier of your choice.
 

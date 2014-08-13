@@ -122,20 +122,7 @@ public class SQLQueryComposer
         }
     }
 
-    public void appendFilterConditions()
-    {
-        try
-        {
-            for (int i = 0; i < CurDBMetaData.getFilterConditions().length; i++)
-            {
-                m_queryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
+
 
     public void prependSortingCriteria() throws SQLException
     {

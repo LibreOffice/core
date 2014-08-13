@@ -133,94 +133,10 @@ public class WriterHelper {
         closeDoc(xLocalDoc);
         xLocalDoc = null;
     }
-    public void kill()
-    {
-        XDesktop xDesktop = getDesktop();
-        xDesktop.terminate();
-    }
 
 
-    public XTextDocument DocByAutopilot(XMultiServiceFactory msf,
-                                        int[] indexes, boolean destroyLocal,
-                                        String bName) {
-        XTextDocument xTextDoc = WriterTools.createTextDoc(m_xMSF);
-        Object toolkit = null;
 
-        try {
-            toolkit = msf.createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( System.err );
-        }
 
-        XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, toolkit);
-
-        shortWait();
-
-        Object atw = tk.getActiveTopWindow();
-
-        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
-
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-        XAccessibleContext ARoot = AccessibilityTools.getAccessibleObjectForRole(xRoot,
-                                                                 AccessibleRole.MENU_BAR);
-        XAccessibleSelection sel = UnoRuntime.queryInterface(XAccessibleSelection.class, ARoot);
-
-        for (int k = 0; k < indexes.length; k++) {
-            try {
-                sel.selectAccessibleChild(indexes[k]);
-                shortWait();
-                ARoot = ARoot.getAccessibleChild(indexes[k])
-                             .getAccessibleContext();
-                sel = UnoRuntime.queryInterface(XAccessibleSelection.class, ARoot);
-            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            }
-        }
-
-        shortWait();
-
-        atw = tk.getActiveTopWindow();
-
-        xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
-
-        xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-        XAccessibleAction action = UnoRuntime.queryInterface(XAccessibleAction.class, AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, bName));
-
-        try {
-            action.doAccessibleAction(0);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-        }
-
-        shortWait();
-
-        atw = tk.getActiveTopWindow();
-
-        xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
-
-        xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-        AccessibilityTools.printAccessibleTree(new PrintWriter(System.out),xRoot);
-
-        action = UnoRuntime.queryInterface(XAccessibleAction.class, AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, "Yes"));
-
-        try {
-            if (action != null) action.doAccessibleAction(0);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-        }
-
-        shortWait();
-
-        XDesktop xDesktop = getDesktop();
-
-        XTextDocument returnDoc = UnoRuntime.queryInterface(XTextDocument.class, xDesktop.getCurrentComponent());
-
-        if (destroyLocal) {
-            closeDoc(xTextDoc);
-        }
-
-        return returnDoc;
-    }
 
     /**
     * Sleeps for 2 sec. to allow StarOffice to react

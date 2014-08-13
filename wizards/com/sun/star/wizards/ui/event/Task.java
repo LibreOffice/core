@@ -37,15 +37,9 @@ public class Task
         max = max_;
     }
 
-    public void start()
-    {
-        fireTaskStarted();
-    }
 
-    public void fail()
-    {
-        fireTaskFailed();
-    }
+
+
 
     public int getMax()
     {
@@ -75,26 +69,16 @@ public class Task
         }
     }
 
-    public void advance(boolean success_, String nextSubtaskName)
-    {
-        advance(success_);
-        setSubtaskName(nextSubtaskName);
-    }
+
 
     public int getStatus()
     {
         return successful + failed;
     }
 
-    public void addTaskListener(TaskListener tl)
-    {
-        listeners.add(tl);
-    }
 
-    public void removeTaskListener(TaskListener tl)
-    {
-        listeners.remove(tl);
-    }
+
+
 
     private void fireTaskStatusChanged()
     {

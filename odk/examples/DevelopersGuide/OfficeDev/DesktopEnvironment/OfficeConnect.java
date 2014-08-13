@@ -67,18 +67,7 @@ public class OfficeConnect
 
 
 
-    /**
-     * close connection to remote office if it exist
-     */
-    public static synchronized void disconnect()
-    {
-        if(maConnection!=null)
-        {
-            mxServiceManager=null;
-            mxOfficeContext=null;
-            maConnection=null;
-        }
-    }
+
 
 
 
@@ -112,69 +101,7 @@ public class OfficeConnect
 
 
 
-    /**
-     * create uno components inside remote office process
-     * After connection of these process to a running office we have access to
-     * remote service manager of it.
-     * So we can use it to create all existing services. Use this method to create
-     * components by name and get her interface. Casting of it to right target
-     * interface is part of your implementation.
-     *
-     * @param  aType  describe class type of created service
-     *                Returned object can be casted directly to this one.
-     *                Uno query was done by this method automatically.
-     * @param  sServiceSpecifier  name of service which should be created
-     * @return  the new created service object
-     */
-    public static synchronized <T> T createRemoteInstance(
-        Class<T> aType, String sServiceSpecifier)
-    {
-        T aResult = null;
-        try
-        {
-            aResult = UnoRuntime.queryInterface(aType,
-                    mxServiceManager.createInstanceWithContext(
-                        sServiceSpecifier, mxOfficeContext));
-        }
-        catch (com.sun.star.uno.Exception ex)
-        {
-            System.err.println("Couldn't create Service of type "
-                               + sServiceSpecifier + ": " + ex);
-            System.exit(0);
-        }
-        return aResult;
-    }
 
-
-
-    /**
-     * same as "createRemoteInstance()" but supports additional parameter for
-     * initializing created object
-     *
-     * @param  lArguments         optional arguments
-     *                            They are used to initialize new created service.
-     * @param  aType              Description of Parameter
-     * @param  sServiceSpecifier  Description of Parameter
-     * @return                    the new create service object
-     */
-    public static synchronized <T> T createRemoteInstanceWithArguments(
-        Class<T> aType, String sServiceSpecifier, Any[] lArguments)
-    {
-        T aResult = null;
-        try
-        {
-            aResult = UnoRuntime.queryInterface(aType,
-                    mxServiceManager.createInstanceWithArgumentsAndContext(
-                        sServiceSpecifier, lArguments, mxOfficeContext));
-        }
-        catch (com.sun.star.uno.Exception ex)
-        {
-            System.err.println("Couldn't create Service of type "
-                               + sServiceSpecifier + ": " + ex);
-            System.exit(0);
-        }
-        return aResult;
-    }
 
 
 

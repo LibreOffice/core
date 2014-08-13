@@ -23,71 +23,7 @@ import javax.swing.JLabel;
 
 public class FileUpdater {
 
-    public static boolean updateProtocolHandler( String installPath, JLabel statusLabel ) {
-            File in_file = null;
-            File out_file = null;
-            FileWriter out = null;
-            int count = 0;
 
-            try {
-                in_file = new File( installPath+File.separator+"share"+File.separator+"registry"+File.separator+"data"+File.separator+"org"+File.separator+"openoffice"+File.separator+"Office"+File.separator+"ProtocolHandler.xcu" );
-
-        String[] xmlArray = new String[50];
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(in_file));
-            count = -1;
-            for (String s = reader.readLine(); s != null; s = reader.readLine()) { //</oor:node>
-                count = count + 1;
-                xmlArray[count] = s;
-            }
-            reader.close();
-        }
-        catch( IOException ioe ) {
-            String message = "\nError reading ProtocolHandler.xcu, please view SFrameworkInstall.log.";
-            System.out.println(message);
-            ioe.printStackTrace();
-            statusLabel.setText(message);
-            return false;
-        }
-
-        in_file.delete();
-
-                out_file = new File( installPath+File.separator+"share"+File.separator+"registry"+File.separator+"data"+File.separator+"org"+File.separator+"openoffice"+File.separator+"Office"+File.separator+"ProtocolHandler.xcu" );
-                out_file.createNewFile();
-                out = new FileWriter( out_file );
-
-        for(int i=0; i<count + 1; i++) {
-                    out.write(xmlArray[i]+"\n");
-                    if( ( xmlArray[i].indexOf( "<node oor:name=\"HandlerSet\">" ) != -1 ) && ( xmlArray[i+1].indexOf( "ScriptProtocolHandler" ) == -1 ) ) {
-                        out.write( "        <node oor:name=\"com.sun.star.comp.ScriptProtocolHandler\" oor:op=\"replace\">\n" );
-                        out.write( "            <prop oor:name=\"Protocols\">\n" );
-                        out.write( "                <value>script:*</value>\n" );
-                        out.write( "            </prop>\n" );
-                        out.write( "        </node>\n" );
-                     }
-                }
-            }
-            catch( Exception e ) {
-        String message = "\nError updating ProtocolHandler.xcu, please view SFrameworkInstall.log.";
-                System.out.println(message);
-        e.printStackTrace();
-        statusLabel.setText(message);
-        return false;
-            }
-            finally {
-                try {
-                    out.close();
-                    System.out.println("File closed");
-                }
-                catch(Exception e) {
-                    System.out.println("Update ProtocolHandler Failed, please view SFrameworkInstall.log.");
-            System.err.println(e);
-            e.printStackTrace();
-                }
-            }
-        return true;
-
-    }// updateProtocolHandler
 
 
         public static boolean updateScriptXLC( String installPath, JLabel statusLabel ) {

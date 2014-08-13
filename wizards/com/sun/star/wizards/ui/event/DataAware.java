@@ -178,33 +178,11 @@ public abstract class DataAware {
         return a.equals(b);
     }
 
-    /**
-     * given a collection containing DataAware objects,
-     * calls updateUI() on each memebr of the collection.
-     * @param dataAwares a collection containing DataAware objects.
-     */
-    public static void updateUI(Collection<DataAware> dataAwares) {
-        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
-             i.next().updateUI();
-    }
 
-    public static void updateData(Collection<DataAware> dataAwares) {
-        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
-             i.next().updateData();
-    }
 
-    /**
-     * /**
-     * Given a collection containing DataAware objects,
-     * sets the given DataObject to each DataAware object
-     * in the given collection
-     * @param dataAwares a collection of DataAware objects.
-     * @param dataObject new data object to set to the DataAware objects in the given collection.
-     * @param updateUI if true, calls updateUI() on each DataAware object.
-     */public static void setDataObject(Collection<DataAware> dataAwares, Object dataObject, boolean updateUI) {
-        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
-             i.next().setDataObject(dataObject, updateUI);
-    }
+
+
+
 
     /**
      * Value objects read and write a value from and

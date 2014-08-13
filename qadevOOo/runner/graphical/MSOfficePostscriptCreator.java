@@ -162,57 +162,7 @@ public class MSOfficePostscriptCreator implements IOffice
         return false;
     }
 
-    public void storeToFileWithMSOffice( ParameterHelper _aGTA,
-                                         String _sInputFile,
-                                         String _sOutputFile) throws OfficeException, java.io.IOException
-        {
-            String sDocumentSuffix = FileHelper.getSuffix(_sInputFile);
-            String sFilterName = _aGTA.getExportFilterName();
-            ArrayList<String> aStartCommand = new ArrayList<String>();
-            if (isWordDocument(sDocumentSuffix))
-            {
-                aStartCommand = createWordStoreHelper();
-            }
-            else if (isExcelDocument(sDocumentSuffix))
-            {
-                aStartCommand = createExcelStoreHelper();
-            }
-            else if (isPowerPointDocument(sDocumentSuffix))
-            {
-            }
-            else if (sDocumentSuffix.toLowerCase().equals(".xml"))
-            {
-                // special case, if xml we prefer word, but with DEFAULT_XML_FORMAT_APP=excel it's changeable.
-                String sDocFormat = getXMLDocumentFormat(_sInputFile);
-                if (sDocFormat.equals("excel"))
-                {
-                    aStartCommand = createExcelStoreHelper();
-                }
-                else
-                {
-                    aStartCommand = createWordStoreHelper();
-                }
-            }
-            else
-            {
-                GlobalLogWriter.println("No Microsoft Office document format found.");
 
-                throw new WrongSuffixException("No MS office document format found.");
-            }
-            if (aStartCommand != null)
-            {
-                if (sFilterName == null)
-                {
-// TODO: hardcoded FilterName in perl script
-                    sFilterName = ""; // xlXMLSpreadsheet";
-                }
-
-                aStartCommand.add(_sInputFile);
-                aStartCommand.add(sFilterName);
-                aStartCommand.add(_sOutputFile);
-                realStartCommand(aStartCommand);
-            }
-        }
 
 
     /**

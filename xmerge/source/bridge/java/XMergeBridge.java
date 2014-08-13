@@ -280,25 +280,7 @@ public class XMergeBridge {
         return true;
        }
 
-    public String replace(String origString, String origChar, String replaceChar){
-           String tmp="";
-           int index=origString.indexOf(origChar);
-           if(index !=-1){
-           while (index !=-1){
-               String first =origString.substring(0,index);
-               first=first.concat(replaceChar);
-               tmp=tmp.concat(first);
-               origString=origString.substring(index+1,origString.length());
-               index=origString.indexOf(origChar);
-               if(index==-1) {
-               tmp=tmp.concat(origString);
-               }
 
-           }
-
-           }
-           return tmp;
-    }
 
     private String needsMask(String origString){
         if (origString.contains("&")) {

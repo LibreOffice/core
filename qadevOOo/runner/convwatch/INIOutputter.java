@@ -98,10 +98,7 @@ public class INIOutputter
             }
         }
 
-    public void startSection(int _nNumber)
-        {
-            writeSection( "page" + String.valueOf(_nNumber));
-        }
+
 
     public void close()
         {

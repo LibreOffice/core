@@ -152,10 +152,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         return xTopWindow;
     }
 
-    public void addMenuBar(XWindow _xWindow){
-        XTopWindow xTopWindow = UnoRuntime.queryInterface(XTopWindow.class, _xWindow);
-        addMenuBar(xTopWindow, this);
-    }
+
 
     public void itemSelected(MenuEvent menuEvent){
         // find out which menu item has been triggered,

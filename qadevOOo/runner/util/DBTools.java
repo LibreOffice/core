@@ -280,12 +280,7 @@ public class DBTools {
     */
     public DataSourceInfo newDataSourceInfo() { return new DataSourceInfo() ;}
 
-    /**
-    * Returns new instance of <code>DataSourceInfo</code> class.
-    */
-    public DataSourceInfo newDataSourceInfo(Object dataSource) {
-        return new DataSourceInfo(dataSource);
-    }
+
 
     /**
     * Registers the datasource on the specified name in
@@ -324,75 +319,9 @@ public class DBTools {
         registerDB(name, dataSource) ;
     }
 
-    /**
-    * RESERVED. Not used.
-    */
-    public XConnection connectToTextDB(String contextName,
-        String dbDir, String fileExtension)
-                            throws com.sun.star.uno.Exception {
 
-        try {
-            XInterface newSource = (XInterface) xMSF.createInstance
-                ("com.sun.star.sdb.DataSource") ;
 
-            XPropertySet xSrcProp = UnoRuntime.queryInterface(XPropertySet.class, newSource);
 
-            xSrcProp.setPropertyValue("URL", "sdbc:text:" + dirToUrl(dbDir));
-
-            PropertyValue extParam = new PropertyValue() ;
-            extParam.Name = "EXT" ;
-            extParam.Value = fileExtension ;
-
-            xSrcProp.setPropertyValue("Info", new PropertyValue[] {extParam}) ;
-
-            dbContext.registerObject(contextName, newSource) ;
-
-            Object handler = xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
-            XInteractionHandler xHandler = UnoRuntime.queryInterface(XInteractionHandler.class, handler) ;
-
-            XCompletedConnection xSrcCon = UnoRuntime.queryInterface(XCompletedConnection.class, newSource) ;
-
-            XConnection con = xSrcCon.connectWithCompletion(xHandler) ;
-
-            return con ;
-        } finally {
-            try {
-                dbContext.revokeObject(contextName) ;
-            } catch (Exception e) {}
-        }
-    }
-
-    /**
-    * Registers DBase database (directory with DBF files) in the
-    * global DB context, then connects to it.
-    * @param contextName Name under which DB will be registered.
-    * @param dbDir The directory with DBF tables.
-    * @return Connection to the DB.
-    */
-    public XConnection connectToDBase(String contextName,
-        String dbDir)
-        throws com.sun.star.uno.Exception {
-
-        try {
-            XInterface newSource = (XInterface) xMSF.createInstance
-                ("com.sun.star.sdb.DataSource") ;
-
-            XPropertySet xSrcProp = UnoRuntime.queryInterface(XPropertySet.class, newSource);
-            xSrcProp.setPropertyValue("URL", "sdbc:dbase:" + dirToUrl(dbDir));
-
-            dbContext.registerObject(contextName, newSource) ;
-
-            XConnection con = connectToSource(newSource) ;
-
-            return con ;
-        } catch(com.sun.star.uno.Exception e) {
-            try {
-                dbContext.revokeObject(contextName) ;
-            } catch (Exception ex) {}
-
-            throw e ;
-        }
-    }
 
     /**
     * Performs connection to DataSource specified.
@@ -461,23 +390,7 @@ public class DBTools {
         return src ;
     }
 
-    /**
-    * Connects to <code>DataSource</code> specially created for testing.
-    * This source always has name <code>'APITestDatabase'</code> and it
-    * is registered in subdirectory <code>TestDB</code> of directory
-    * <code>docPath</code> which is supposed to be a directory with test
-    * documents, but can be any other (it must have subdirectory with DBF
-    * tables). If such data source doesn't exists or exists with
-    * different URL it is recreated and reregistered. Finally connection
-    * performed.
-    * @param docPath Path to database <code>TestDB</code> directory.
-    * @return Connection to test database.
-    */
-    public XConnection connectToTestDB(String docPath)
-        throws com.sun.star.uno.Exception {
 
-        return connectToSource(registerTestDB(docPath)) ;
-    }
 
     /**
     * Empties the table in the specified source.
@@ -584,44 +497,9 @@ public class DBTools {
         xClose.close() ;
     }
 
-    /**
-    * Initializes test table specified of the connection specified.
-    * Deletes all record from table, and then inserts data from
-    * <code>TST_TABLE_VALUES</code> constant array. <p>
-    * Test table has some predefined format which includes as much
-    * field types as possible. For every column type constants
-    * {@link #TST_STRING TST_STRING}, {@link #TST_INT TST_INT}, etc.
-    * are declared for column index fast find.
-    * @param con Connection to data source where test table exists.
-    * @param table Test table name.
-    */
-    public void initializeTestTable(XConnection con, String table)
-        throws com.sun.star.sdbc.SQLException {
 
-        deleteAllRows(con, table) ;
 
-        for (int i = 0; i < TST_TABLE_VALUES.length; i++) {
-            addRowToTestTable(con, table, TST_TABLE_VALUES[i], TST_STREAM_LENGTHS[i]) ;
-        }
-    }
 
-    /**
-    * Prints full info about currently registered DataSource's.
-    */
-    public void printRegisteredDatabasesInfo(PrintWriter out) {
-        XEnumerationAccess dbContEA = UnoRuntime.queryInterface(XEnumerationAccess.class, dbContext) ;
-
-        XEnumeration xEnum = dbContEA.createEnumeration() ;
-
-        out.println("DatabaseContext registered DataSource's :") ;
-        while (xEnum.hasMoreElements()) {
-            try {
-                DataSourceInfo inf = new DataSourceInfo(xEnum.nextElement()) ;
-                inf.printInfo(out) ;
-            } catch (com.sun.star.container.NoSuchElementException e) {}
-            catch (com.sun.star.lang.WrappedTargetException e) {}
-        }
-    }
 
     /**
     * Convert system pathname to SOffice URL string

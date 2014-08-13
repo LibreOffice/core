@@ -163,30 +163,9 @@ public class ExampleAddIn
 
         //  XExampleAddIn
 
-        public int getIncremented( int nValue )
-        {
-            return nValue + 1;
-        }
 
-        public com.sun.star.sheet.XVolatileResult getCounter(String aName)
-        {
-            if ( aResults == null )
-            {
-                // create the table of results, and start a thread to increment
-                // all counters
-                aResults = new java.util.HashMap<String, ExampleAddInResult>();
-                ExampleAddInThread aThread = new ExampleAddInThread( aResults );
-                aThread.start();
-            }
 
-            ExampleAddInResult aResult = aResults.get(aName);
-            if ( aResult == null )
-            {
-                aResult = new ExampleAddInResult(aName);
-                aResults.put( aName, aResult );
-            }
-            return aResult;
-        }
+
 
         //  XAddIn
 

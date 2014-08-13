@@ -181,19 +181,7 @@ public class Style {
     }
 
 
-    /**
-     *  Write this <code>Style</code> object's attributes to the given
-     *  <code>Node</code>.  This may involve writing child
-     *  <code>Node</code> objects as well.  This is similar to the
-     *  <code>writeNode</code> method, but the <code>Node</code>
-     *  already exists, and this does  <b>not</b> write the name,
-     *  family, and parent attributes, which are assumed to already
-     *  exist in the <code>Node</code>.
-     *
-     *  @param  node  The <code>Node</code> to add style attributes.
-     */
-    public void writeAttributes(Node node) {
-    }
+
 
 
     /**

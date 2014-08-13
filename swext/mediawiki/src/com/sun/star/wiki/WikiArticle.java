@@ -111,10 +111,7 @@ public class WikiArticle
         return m_sTitle;
     }
 
-    public String GetViewURL()
-    {
-        return m_aMainURI.toString() + "index.php?title=" + m_sTitle;
-    }
+
 
     private String getArticleWiki()
         throws java.io.IOException, WikiCancelException
@@ -244,31 +241,7 @@ public class WikiArticle
         return ( m_aHostConfig != null );
     }
 
-    protected void cleanHTML()
-    {
-        if ( m_sHTMLCode != null )
-        {
-            //Welcome to regex hell ;)
 
-            //strip comments
-            m_sHTMLCode = m_sHTMLCode.replaceAll("\\<![ \\r\\n\\t]*(--([^\\-]|[\\r\\n]|-[^\\-])*--[ \\r\\n\\t]*)\\>","");
-
-            //strip edit section links
-            m_sHTMLCode = m_sHTMLCode.replaceAll("\\<div class=\"editsection\".*?\\</div\\>","");
-
-            //strip huge spaces
-            m_sHTMLCode = m_sHTMLCode.replaceAll("\\<p\\>\\<br /\\>[ \r\n\t]*?\\</p\\>","");
-
-            //strip toc
-            m_sHTMLCode = m_sHTMLCode.replaceAll("\\<table.*id=\"toc\"(.|[\r\n])*?\\</table\\>","");
-
-            //strip jump-to-nav
-            m_sHTMLCode = m_sHTMLCode.replaceAll("\\<div id=\"jump-to-nav\".*?\\</div\\>","");
-
-            //strip Javascript
-            m_sHTMLCode = m_sHTMLCode.replaceAll("\\<script(.|[\r\n])*?\\</script\\>","");
-        }
-    }
 
 
     protected boolean NotExist()

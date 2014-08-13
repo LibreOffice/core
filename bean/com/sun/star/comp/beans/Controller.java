@@ -83,13 +83,7 @@ public class Controller
     // com.sun.star.frame.XDispatchProvider
 
 
-    public com.sun.star.frame.XDispatch queryDispatch(
-            /*IN*/ com.sun.star.util.URL aURL,
-            /*IN*/ String aTargetFrameName,
-            /*IN*/ int nSearchFlags )
-    {
-        return xDispatchProvider.queryDispatch( aURL, aTargetFrameName, nSearchFlags );
-    }
+
 
     public com.sun.star.frame.XDispatch[] queryDispatches(
             /*IN*/ com.sun.star.frame.DispatchDescriptor[] aRequests )

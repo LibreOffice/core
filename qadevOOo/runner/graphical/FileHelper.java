@@ -44,12 +44,7 @@ public class FileHelper
 
         }
 
-    public static void MessageBox(String _sStr)
-        {
-            String sVersion = System.getProperty("java.version");
-            String sOSName  = System.getProperty("os.name");
-            JOptionPane.showMessageDialog( null, _sStr, sVersion + " " + sOSName + " Hello World Debugger", JOptionPane.INFORMATION_MESSAGE );
-        }
+
 
     public static boolean exists(String _sFile)
         {
@@ -66,27 +61,7 @@ public class FileHelper
             return false;
         }
 
-    public static boolean isDir(String _sDir)
-        {
-            if (_sDir == null)
-            {
-                return false;
-            }
-            try
-            {
-                File aFile = new File(_sDir);
-                if (aFile.exists() && aFile.isDirectory())
-                {
-                    return true;
-                }
-            }
-            catch (NullPointerException e)
-            {
-                GlobalLogWriter.println("Exception caught. FileHelper.isDir('" + _sDir + "')");
-                e.printStackTrace();
-            }
-            return false;
-        }
+
 
     public static String getBasename(String _sFilename)
         {
@@ -456,33 +431,7 @@ public class FileHelper
                 };
             return aFileFilter;
         }
-    /**
-     * Within the directory run through, it's possible to say which file extension types should not
-     * consider like '*.ini' because it's not a document.
-     *
-     * @return a FileFilter function
-     */
-    public static FileFilter getFileFilterINI()
-        {
-            FileFilter aFileFilter = new FileFilter()
-                {
-                    public boolean accept( File pathname )
-                        {
-                            String sPathname = pathname.getName().toLowerCase();
-                            if (sPathname.endsWith("index.ini"))
-                            {
-                                // don't consider the index.ini file
-                                return false;
-                            }
-                            if (sPathname.endsWith(".ini"))
-                            {
-                                return true;
-                            }
-                            return false;
-                        }
-                };
-            return aFileFilter;
-        }
+
 
         public static String appendPath(String _sPath, String _sRelativePathToAdd)
         {
@@ -616,12 +565,6 @@ public class FileHelper
             aIniFile.close();
         }
 
-        public static void addBasenameToPostscript(String _sOutputFilename)
-        {
-            String sIndexFilename = FileHelper.appendPath(_sOutputFilename, "postscript.ini");
-            String sBasename = FileHelper.getBasename(_sOutputFilename);
-            addBasenameToFile(sIndexFilename, sBasename, "", "", "");
-        }
         public static void addBasenameToIndex(String _sOutputFilename, String _sBasename, String _sCreator, String _sType, String _sSource)
         {
             String sIndexFilename = FileHelper.appendPath(_sOutputFilename, "index.ini");

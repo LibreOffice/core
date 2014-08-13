@@ -139,25 +139,8 @@ public class BuildID
             return sBuildID;
         }
 
-            public static String getMinor(String _sOfficePath)
-            {
-                final String sOfficePath = getOfficePath(_sOfficePath);
-                final String sMinor = "m" + getBuildID(sOfficePath, "ProductMinor");
-                return sMinor;
-            }
 
-            public static String getCWSName(String _sOfficePath)
-            {
-                final String sOfficePath = getOfficePath(_sOfficePath);
-                final String sBuildID = getBuildID(sOfficePath, "buildid");
-                String sCWSName = "MWS";
-                int nIdx = sBuildID.indexOf("[CWS:");
-                if (nIdx > 0)
-                {
-                    int nIdx2 = sBuildID.indexOf("]", nIdx);
-                    sCWSName = sBuildID.substring(nIdx + 5, nIdx2);
-                }
-                return sCWSName;
-            }
+
+
 
 }

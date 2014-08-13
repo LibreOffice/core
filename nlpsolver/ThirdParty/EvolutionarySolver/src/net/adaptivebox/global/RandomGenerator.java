@@ -45,49 +45,13 @@ public static double doubleRangeRandom(double lowLimit,double upLimit){
   return(num);
 }
 
-/**This function returns true or false with a random probability.
- * @return int return value
-  */
-  public static boolean booleanRandom(){
-    boolean value = true;
-    double temp=Math.random();
-    if (temp<0.5) value=false;
-    return value;
-  }
 
-  public static int[] randomSelection(boolean[] types, int times) {
-    int validNum = 0;
-    for(int i=0; i<types.length; i++) {
-      if(!types[i]) {
-        validNum++;
-      }
-    }
-    int[] totalIndices = new int[validNum];
-    validNum = 0;
-    for(int i=0; i<types.length; i++) {
-      if(!types[i]) {
-        totalIndices[validNum] = i;
-        validNum++;
-        if(validNum==totalIndices.length) break;
-      }
-    }
-    return randomSelection(totalIndices, times);
-  }
 
-  public static int[] randomSelection(int low, int up, int times){
-    int[] totalIndices = new int[up-low];
-    for (int i=low; i<up; i++) {
-      totalIndices[i] = i;
-    }
-    return randomSelection(totalIndices, times);
-  }
 
-  public static int getRealV(double randTypeV) {
-    if(randTypeV<=0) return 0;
-    int realV = (int)Math.ceil(randTypeV);
-    if(Math.random()<(randTypeV-realV)) realV++;
-    return realV;
-  }
+
+
+
+
 
   private static int[] randomSelection(int[] totalIndices, int times) {
     if (times>=totalIndices.length) {

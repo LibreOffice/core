@@ -112,27 +112,11 @@ public abstract class Configuration
         set(new Integer(value), name, parent);
     }
 
-    public static void set(short value, String name, Object parent) throws Exception
-    {
-        set(new Short(value), name, parent);
-    }
 
-    public static void set(String value, String name, Object parent) throws Exception
-    {
-        set((Object) value, name, parent);
-    }
 
-    public static void set(boolean value, String name, Object parent) throws Exception
-    {
-        if (value)
-        {
-            set(Boolean.TRUE, name, parent);
-        }
-        else
-        {
-            set(Boolean.FALSE, name, parent);
-        }
-    }
+
+
+
 
     public static void set(Object value, String name, Object parent) throws com.sun.star.lang.IllegalArgumentException, PropertyVetoException, UnknownPropertyException, WrappedTargetException
     {
@@ -233,20 +217,11 @@ public abstract class Configuration
         return getLocale(xMSF, "org.openoffice.Setup/L10N/", "ooSetupSystemLocale");
     }
 
-    public static Locale getUILocale(XMultiServiceFactory xMSF)
-    {
-        return getLocale(xMSF, "org.openoffice.Setup/L10N/", "ooLocale");
-    }
 
-    public static String getLocaleString(XMultiServiceFactory xMSF)
-    {
-        return getLocaleString(xMSF, "org.openoffice.Setup/L10N/", "ooSetupSystemLocale");
-    }
 
-    public static String getUILocaleString(XMultiServiceFactory xMSF)
-    {
-        return getLocaleString(xMSF, "org.openoffice.Setup/L10N/", "ooLocale");
-    }
+
+
+
 
     /**
      * This method creates a new configuration node and adds it
@@ -290,28 +265,11 @@ public abstract class Configuration
         }
     }
 
-    public static void commit(Object configView) throws WrappedTargetException
-    {
-        XChangesBatch xUpdateControl = UnoRuntime.queryInterface(XChangesBatch.class, configView);
-        xUpdateControl.commitChanges();
-    }
 
-    public static void updateConfiguration(XMultiServiceFactory xmsf, String path, String name, ConfigNode node, Object param) throws com.sun.star.uno.Exception, com.sun.star.container.ElementExistException, NoSuchElementException, WrappedTargetException
-    {
-        Object view = Configuration.getConfigurationRoot(xmsf, path, true);
-        addConfigNode(path, name);
-        node.writeConfiguration(view, param);
-        XChangesBatch xUpdateControl = UnoRuntime.queryInterface(XChangesBatch.class, view);
-        xUpdateControl.commitChanges();
-    }
 
-    public static void removeNode(XMultiServiceFactory xmsf, String path, String name) throws com.sun.star.uno.Exception, com.sun.star.container.ElementExistException, NoSuchElementException, WrappedTargetException
-    {
-        Object view = Configuration.getConfigurationRoot(xmsf, path, true);
-        removeNode(view, name);
-        XChangesBatch xUpdateControl = UnoRuntime.queryInterface(XChangesBatch.class, view);
-        xUpdateControl.commitChanges();
-    }
+
+
+
 
     public static String[] getNodeDisplayNames(XNameAccess _xNameAccessNode)
     {
@@ -377,10 +335,7 @@ public abstract class Configuration
         return null;
     }
 
-    public static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname)
-    {
-        return getChildNodebyDisplayName(_xNameAccessNode, _displayname, PropertyNames.PROPERTY_NAME);
-    }
+
 
     private static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname, String _nodename)
     {

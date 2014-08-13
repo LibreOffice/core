@@ -35,30 +35,7 @@ public class CallReportWizard
 
     private static boolean bWizardstartedalready;
 
-    /** Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return Returns a <code>XSingleServiceFactory</code> for creating the component.
-     * @see com.sun.star.comp.loader.JavaLoader
-     * @param stringImplementationName The implementation name of the component.
-     * @param xMSF The service manager, who gives access to every known service.
-     * @param xregistrykey Makes structural information (except regarding treestructures) of a single
-     *    registry key accessible.
-     */
-    public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(String stringImplementationName, com.sun.star.lang.XMultiServiceFactory xMSF, com.sun.star.registry.XRegistryKey xregistrykey)
-    {
-        com.sun.star.lang.XSingleServiceFactory xsingleservicefactory = null;
-        if (stringImplementationName.equals(
-                ReportWizardImplementation.class.getName()))
-        {
-            xsingleservicefactory = com.sun.star.comp.loader.FactoryHelper.getServiceFactory(
-                    ReportWizardImplementation.class,
-                    ReportWizardImplementation.__serviceName,
-                    xMSF,
-                    xregistrykey);
-        }
-        return xsingleservicefactory;
-    }
+
 
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.

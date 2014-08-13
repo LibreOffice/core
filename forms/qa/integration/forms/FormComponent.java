@@ -108,13 +108,7 @@ public class FormComponent
         return new String[]{};
     }
 
-    /* ------------------------------------------------------------------ */
-    public boolean hasByName( String name )
-    {
-        if ( m_nameAccess != null )
-            return m_nameAccess.hasByName( name );
-        return false;
-    }
+
 
     /* ------------------------------------------------------------------ */
     public int getCount()
@@ -150,15 +144,7 @@ public class FormComponent
         return new com.sun.star.uno.Type( String.class );
     }
 
-    /* ------------------------------------------------------------------ */
-    public boolean hasElements()
-    {
-        if ( m_indexAccess != null )
-            return m_indexAccess.hasElements();
-        else if ( m_nameAccess != null )
-            return m_nameAccess.hasElements();
-        return false;
-    }
+
 
     /* ------------------------------------------------------------------ */
     public FormComponent getParent()

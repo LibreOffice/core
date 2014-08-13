@@ -290,25 +290,13 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         System.err.println("-bindings will only install the menu & key bindings in user/config/soffice.cfg.");
     }
 
-    public static synchronized boolean isPatchedTypes()
-    {
-        return bPatchedTypes;
-    }
 
-    public static synchronized boolean isPatchedJava()
-    {
-        return bPatchedJava;
-    }
 
-    public static synchronized boolean isPatchedRDB()
-    {
-        return bPatchedRDB;
-    }
 
-    public static synchronized boolean isInstallStarted()
-    {
-        return bInstallStarted;
-    }
+
+
+
+
 
     public static synchronized void setPatchedTypes(boolean value)
     {
@@ -330,25 +318,13 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         bInstallStarted = value;
     }
 
-    public static synchronized void setTypesPath(String path)
-    {
-        typesPath = path;
-    }
 
-    public static synchronized void setJavaPath(String path)
-    {
-        javaPath = path;
-    }
 
-    public static synchronized String getTypesPath()
-    {
-        return typesPath;
-    }
 
-    public static synchronized String getJavaPath()
-    {
-        return javaPath;
-    }
+
+
+
+
 
     private javax.swing.JPanel  navigation;
     private javax.swing.JButton navBack;

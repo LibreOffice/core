@@ -149,29 +149,7 @@ public class UIControlArranger
         return optAlignLeft.getState() ? (short)0 : (short)2;
     }
 
-    public void alignLabelControls()
-    {
-        try
-        {
-            short iAlignValue = getAlignValue();
-            for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
-            {
-                FormDocument.ControlForm curControlForm = curFormDocument.oControlForms.get(m);
-                if (curControlForm.getArrangemode() == FormWizard.COLUMNAR_LEFT)
-                {
-                    Control[] LabelControls = curControlForm.getLabelControls();
-                    for (int n = 0; n < LabelControls.length; n++)
-                    {
-                        LabelControls[n].xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, new Short(iAlignValue));
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-    }
+
 
     private void enableAlignControlGroup(boolean _bEnableAlignControlGroup)
     {

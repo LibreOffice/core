@@ -101,17 +101,7 @@ public class DesktopTools
         return xDesktop.getComponents().createEnumeration();
     }
 
-    /**
-     * returns the current component on the desktop
-     * @param xMSF the XMultiServiceFactory
-     * @return XComponent of the current component on the desktop
-     */
-    public static XComponent getCurrentComponent(XMultiServiceFactory xMSF)
-    {
-        XDesktop xDesktop = UnoRuntime.queryInterface(
-                XDesktop.class, createDesktop(xMSF));
-        return xDesktop.getCurrentComponent();
-    }
+
 
     /**
      * returns the current component on the desktop
@@ -460,15 +450,7 @@ public class DesktopTools
         }
     }
 
-    /**
-     * Due to typo deprecated
-     * @deprecated
-     */
-    @Deprecated
-    public static void bringWindowToFromt(XModel xModel)
-    {
-        bringWindowToFront(xModel);
-    }
+
 
     /**
      * This function brings a document to the front.<P>

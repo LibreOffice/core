@@ -129,11 +129,4 @@ public class DataEntrySetter
 
     }
 
-    public void toggleCheckBoxes()
-    {
-        boolean bdisplayalldata = optDisplayAllData.getState();
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknodeletion), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknoaddition), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));
-    }
 }

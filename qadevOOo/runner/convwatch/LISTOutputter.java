@@ -56,17 +56,7 @@ public class LISTOutputter
         }
     public String getFilename() {return m_sFilename;}
 
-    public void createHeader()
-        {
-            try
-            {
-                m_aOut.write("# This file is automatically created by a convwatch run" + ls);
-                m_aOut.write("# " + ls);
-            }
-            catch (java.io.IOException e)
-            {
-            }
-        }
+
 
     public void writeValue(String _sValue)
         {

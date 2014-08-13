@@ -274,25 +274,9 @@ class ScriptSelectorPanel extends JPanel {
         add(textField, BorderLayout.SOUTH);
     }
 
-    public void removeNode(DefaultMutableTreeNode node) {
-        MutableTreeNode parent = (MutableTreeNode)(node.getParent());
-        if (parent != null) {
-            treeModel.removeNodeFromParent(node);
-        }
-    }
 
-    public void addNode(DefaultMutableTreeNode parent, XBrowseNode xbn) {
-        DefaultMutableTreeNode newNode =
-            new DefaultMutableTreeNode(xbn) {
-                @Override
-                public String toString() {
-                    return ((XBrowseNode)getUserObject()).getName();
-                }
-            };
 
-        treeModel.insertNodeInto(newNode, parent, parent.getChildCount());
-        tree.scrollPathToVisible(new TreePath(newNode.getPath()));
-    }
+
 
     private void initNodes(XBrowseNode parent, DefaultMutableTreeNode top) {
         if ( parent == null || parent.hasChildNodes() == false )

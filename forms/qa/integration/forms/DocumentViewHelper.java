@@ -213,36 +213,6 @@ public class DocumentViewHelper
         xControlWindow.setFocus();
     }
 
-    /* ------------------------------------------------------------------ */
-    /** sets the focus to the first control
-    */
-    protected void grabControlFocus( ) throws java.lang.Exception
-    {
-        // the forms container of our document
-        XIndexContainer xForms = dbfTools.queryIndexContainer( m_document.getFormComponentTreeRoot( ) );
-        // the first form
-        XIndexContainer xForm = dbfTools.queryIndexContainer( xForms.getByIndex( 0 ) );
 
-        // the first control model which is no FixedText (FixedText's can't have the focus)
-        for ( int i = 0; i<xForm.getCount(); ++i )
-        {
-            XPropertySet xControlProps = dbfTools.queryPropertySet( xForm.getByIndex( i ) );
-            if ( FormComponentType.FIXEDTEXT != ((Short)xControlProps.getPropertyValue( "ClassId" )).shortValue() )
-            {
-                XControlModel xControlModel = UnoRuntime.queryInterface(
-                    XControlModel.class, xControlProps );
-                // set the focus to this control
-                grabControlFocus( xControlModel );
-                // outta here
-                break;
-            }
-        }
-
-        // Note that we simply took the first control model from the hierarchy. This does state nothing
-        // about the location of the respective control in the view. A control model is tied to a control
-        // shape, and the shapes are where the geometry information such as position and size is hung up.
-        // So you could easily have a document where the first control model is bound to a shape which
-        // has a greater ordinate than any other control model.
-    }
 }
 

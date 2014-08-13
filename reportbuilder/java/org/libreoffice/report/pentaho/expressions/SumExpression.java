@@ -18,9 +18,8 @@
 package org.libreoffice.report.pentaho.expressions;
 
 import org.libreoffice.report.DataRow;
-import org.libreoffice.report.ReportExpression;
 
-public class SumExpression implements ReportExpression
+public class SumExpression
 {
 
     private Object[] parameters;

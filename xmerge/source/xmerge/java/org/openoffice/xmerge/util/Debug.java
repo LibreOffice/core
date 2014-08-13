@@ -192,37 +192,10 @@ public final class Debug {
     }
 
 
-    /**
-     *  Prints out information regarding platform.
-     */
-    public static void logSystemInfo() {
-
-        if (writer != null) {
-
-            writer.println();
-            writer.println("Platform Information:");
-            writer.println("OS          : " + System.getProperty("os.name"));
-            writer.println("Version     : " + System.getProperty("os.version"));
-            writer.println("Platform    : " + System.getProperty("os.arch"));
-            writer.println("JDK Version : " + System.getProperty("java.version"));
-            writer.println("JDK Vendor  : " + System.getProperty("java.vendor"));
-            writer.println();
-        }
-    }
 
 
-    /**
-     *  Prints out timestamp.
-     */
-    public static void logTime() {
 
-        if (writer != null) {
 
-            Date time = Calendar.getInstance().getTime();
-            DateFormat dt = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
-            writer.println(dt.format(time));
-        }
-    }
 
 
     /**
@@ -300,29 +273,6 @@ public final class Debug {
     }
 
 
-    /**
-     *  Converts the given bytes to a <code>String</code> of
-     *  Hex digits.
-     *
-     *  @param  bytes  <code>byte</code> array.
-     *
-     *  @return  Hex representation in a <code>String</code>.
-     */
-    public static String byteArrayToHexString(byte bytes[]) {
 
-        StringBuffer buff = new StringBuffer();
-
-        for (int i = 0; i < bytes.length; i++) {
-
-            int ch = (bytes[i] & 0xff);
-            String str = Integer.toHexString(ch);
-            if (str.length() < 2)
-                buff.append('0');
-            buff.append(str);
-            buff.append(' ');
-        }
-
-        return buff.toString();
-    }
 }
 

@@ -29,10 +29,5 @@ import java.awt.Container;
 
 public interface ContainerFactory
 {
-    /**
-     * Creates an AWT container.
-     *
-     * @return An AWT container.
-     */
-    Container createContainer();
+
 }

@@ -92,21 +92,7 @@ public class Helper
         }
     }
 
-    public static Object getPropertyValue(PropertyValue[] CurPropertyValue, String PropertyName)
-    {
-        int MaxCount = CurPropertyValue.length;
-        for (int i = 0; i < MaxCount; i++)
-        {
-            if (CurPropertyValue[i] != null)
-            {
-                if (CurPropertyValue[i].Name.equals(PropertyName))
-                {
-                    return CurPropertyValue[i].Value;
-                }
-            }
-        }
-        throw new RuntimeException();
-    }
+
 
     public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName, java.lang.Class<?> xClass)
     {
@@ -134,53 +120,9 @@ public class Helper
         }
     }
 
-    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName)
-    {
-        if (CurPropertyValue != null)
-        {
-            int MaxCount = CurPropertyValue.length;
-            for (int i = 0; i < MaxCount; i++)
-            {
-                if (CurPropertyValue[i] != null)
-                {
-                    PropertyValue aValue = (PropertyValue) CurPropertyValue[i];
-                    if (aValue != null && aValue.Name.equals(PropertyName))
-                    {
-                        return aValue.Value;
-                    }
-                }
-            }
-        }
-        return null;
-    }
 
-    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName, java.lang.Class<?> xClass)
-    {
-        try
-        {
-            if (CurPropertyValue != null)
-            {
-                int MaxCount = CurPropertyValue.length;
-                for (int i = 0; i < MaxCount; i++)
-                {
-                    if (CurPropertyValue[i] != null)
-                    {
-                        PropertyValue aValue = (PropertyValue) CurPropertyValue[i];
-                        if (aValue != null && aValue.Name.equals(PropertyName))
-                        {
-                            return com.sun.star.uno.AnyConverter.toObject(new com.sun.star.uno.Type(xClass), aValue.Value);
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-            return null;
-        }
-    }
+
+
 
     public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName)
     {
@@ -382,20 +324,14 @@ public class Helper
 
         }
 
-        public String format(int formatIndex, int date)
-        {
-            return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date));
-        }
+
 
         public String format(int formatIndex, DateTime date)
         {
             return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date));
         }
 
-        public String format(int formatIndex, long javaTimeInMillis)
-        {
-            return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(javaTimeInMillis));
-        }
+
     }
 
     public static XComponentContext getComponentContext(XMultiServiceFactory _xMSF)

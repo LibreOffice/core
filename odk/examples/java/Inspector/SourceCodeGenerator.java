@@ -659,13 +659,7 @@ private class UnoObjectDefinition{
         }
 
 
-        public boolean hasParameterObjects(){
-            boolean breturn = false;
-            if (m_oParameterObjects != null){
-                breturn = m_oParameterObjects.length > 0;
-            }
-            return breturn;
-        }
+
 
 
         private String getVariableStemName(TypeClass _aTypeClass){

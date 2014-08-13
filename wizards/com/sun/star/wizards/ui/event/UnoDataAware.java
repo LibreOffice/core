@@ -112,10 +112,7 @@ public class UnoDataAware extends DataAware
         }
     }
 
-    public void disableControls(Object[] controls)
-    {
-        disableObjects = controls;
-    }
+
 
     @Override
     protected Object getFromUI()
@@ -150,37 +147,15 @@ public class UnoDataAware extends DataAware
         return uda;
     }
 
-    public static UnoDataAware attachEditControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
-    {
-        return attachTextControl(data, prop, unoControl, listener, "Text", field, PropertyNames.EMPTY_STRING);
-    }
 
-    public static UnoDataAware attachDateControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
-    {
-        return attachTextControl(data, prop, unoControl, listener, "Date", field, 0);
-    }
 
-    public static UnoDataAware attachTimeControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
-    {
-        return attachTextControl(data, prop, unoControl, listener, "Time", field, 0);
-    }
 
-    public static UnoDataAware attachNumericControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
-    {
-        return attachTextControl(data, prop, unoControl, listener, "Value", field, new Double(0));
-    }
 
-    public static UnoDataAware attachCheckBox(Object data, String prop, Object checkBox, final Listener listener, boolean field)
-    {
-        XCheckBox xcheckBox = UnoRuntime.queryInterface(XCheckBox.class, checkBox);
-        final UnoDataAware uda = new UnoDataAware(data,
-                field
-                ? DataAwareFields.getFieldValueFor(data, prop, new Short((short) 0))
-                : new DataAware.PropertyValue(prop, data),
-                checkBox, PropertyNames.PROPERTY_STATE);
-        xcheckBox.addItemListener(itemListener(uda, listener));
-        return uda;
-    }
+
+
+
+
+
 
     static XItemListener itemListener(final DataAware da, final Listener listener)
     {
@@ -202,35 +177,16 @@ public class UnoDataAware extends DataAware
         };
     }
 
-    public static UnoDataAware attachLabel(Object data, String prop, Object label, boolean field)
-    {
-        return new UnoDataAware(data,
-                field ? DataAwareFields.getFieldValueFor(data, prop, PropertyNames.EMPTY_STRING)
-                : new DataAware.PropertyValue(prop, data),
-                label, PropertyNames.PROPERTY_LABEL);
-    }
 
-    public static UnoDataAware attachListBox(Object data, String prop, Object listBox, final Listener listener, boolean field)
-    {
-        XListBox xListBox = UnoRuntime.queryInterface(XListBox.class, listBox);
-        final UnoDataAware uda = new UnoDataAware(data,
-                field
-                ? DataAwareFields.getFieldValueFor(data, prop, new short[0])
-                : new DataAware.PropertyValue(prop, data),
-                listBox, PropertyNames.SELECTED_ITEMS);
-        xListBox.addItemListener(itemListener(uda, listener));
-        return uda;
-    }
+
+
 
     public static Object getModel(Object control)
     {
         return UnoRuntime.queryInterface(XControl.class, control).getModel();
     }
 
-    public static void setEnabled(Object control, boolean enabled)
-    {
-        setEnabled(control, enabled ? Boolean.TRUE : Boolean.FALSE);
-    }
+
 
     private static void setEnabled(Object control, Boolean enabled)
     {

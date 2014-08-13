@@ -65,30 +65,15 @@ public class OfficeInstallation implements java.io.Serializable {
         return path;
     }
 
-    public String getPath(String name) {
-        if (!name.startsWith(File.separator))
-            name = File.separator + name;
 
-        return path + name;
-    }
 
     public String getURL() {
         return url;
     }
 
-    public String getURL(String name) {
-        if (System.getProperty("os.name").startsWith("Windows"))
-            name = name.replace(File.separatorChar, '/');
 
-        if (!name.startsWith("/"))
-            name = "/" + name;
 
-        return url + name;
-    }
 
-    public boolean hasFramework() {
-        return hasFW;
-    }
 
     public boolean supportsFramework() {
         return true;

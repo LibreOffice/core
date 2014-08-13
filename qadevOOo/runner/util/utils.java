@@ -215,38 +215,7 @@ public class utils {
         return;
     }
 
-    /**
-     *
-     * This method get the version for a given TestBase/platform combination
-     *
-     */
-    public static String getVersion(String aFile, String aPlatform, String aTestbase) {
-        if ((aFile == null) || (aPlatform == null) || (aTestbase == null)) {
-            return "/";
-        }
 
-        File the_file = new File(aFile);
-        try {
-            RandomAccessFile raf = new RandomAccessFile(the_file, "r");
-            String res = "";
-            while (!res.equals("[" + aTestbase.toUpperCase() + "]")) {
-                res = raf.readLine();
-            }
-            res = "=/";
-            while ((!res.startsWith(aPlatform)) || (res.startsWith("["))) {
-                res = raf.readLine();
-            }
-            raf.close();
-            if (res.startsWith("[")) {
-                res = "/";
-            }
-            return res.substring(res.indexOf("=") + 1);
-
-        } catch (Exception e) {
-            System.out.println("Couldn't find version");
-            return "/";
-        }
-    }
 
     /**
      *
@@ -307,24 +276,7 @@ public class utils {
         return settingPath;
     }
 
-    public static void setOfficeSettingsValue(XMultiServiceFactory msf, String setting, String value) {
 
-        try {
-            Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
-            XPropertySet pthSettings = null;
-            try {
-                pthSettings = (XPropertySet) AnyConverter.toObject(
-                    new Type(XPropertySet.class), settings);
-            } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                System.out.println("### couldn't get Office Settings");
-            }
-            pthSettings.setPropertyValue(setting, value);
-
-        } catch (Exception e) {
-            System.out.println("Couldn't set '" + setting + "' to value '" + value + "'");
-            e.printStackTrace();
-        }
-    }
 
     /**
      * This method returns the temp dicrectory of the user.
@@ -570,15 +522,7 @@ public class utils {
         return true;
     }
 
-    public static void doOverwriteFile(
-        XMultiServiceFactory xMsf, String oldF, String newF)
-    {
-        try {
-            overwriteFile_impl(xMsf, oldF, newF);
-        } catch (InteractiveAugmentedIOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     public static boolean hasPropertyByName(XPropertySet props, String aName) {
         Property[] list = props.getPropertySetInfo().getProperties();
@@ -687,20 +631,7 @@ public class utils {
         return null;
     }
 
-    /** returns the path to the office binary folder
-     *
-     * @param msf The XMultiSeriveFactory
-     * @return the path to the office binrary or an empty string on any error
-     */
-    public static String getOfficeBinPath(XMultiServiceFactory msf) {
-        String sysBinDir = "";
-        try {
-            sysBinDir = utils.getSystemURL(utils.expandMacro(msf, "$SYSBINDIR"));
-        } catch (java.lang.Exception e) {
-        }
 
-        return sysBinDir;
-    }
 
     /**
      * Get an array of all property names from the property set. With the include
@@ -871,37 +802,7 @@ public class utils {
 
     }
 
-    /**
-     * returns the platform of the office.<br>
-     * Since the runner and the office could run on different platform this function delivers the
-     * platform the office is running.
-     * @param xMSF the XMultiServiceFactory
-     * @return unxsols, unxsoli, unxlngi, wntmsci
-     */
-    public static String getOfficeOS(XMultiServiceFactory xMSF) {
-        String platform = "unknown";
 
-        try {
-            String theOS = expandMacro(xMSF, "$_OS");
-
-            if (theOS.equals("Windows")) {
-                platform = "wntmsci";
-            } else if (theOS.equals("Linux")) {
-                platform = "unxlngi";
-            } else {
-                if (theOS.equals("Solaris")) {
-                    String theArch = expandMacro(xMSF, "$_ARCH");
-                    if (theArch.equals("SPARC")) {
-                        platform = "unxsols";
-                    } else if (theArch.equals("x86")) {
-                        platform = "unxsoli";
-                    }
-                }
-            }
-        } catch (Exception ex) {
-        }
-        return platform;
-    }
 
     /**
      * dispatches given <CODE>URL</CODE> to the document <CODE>XComponent</CODE>

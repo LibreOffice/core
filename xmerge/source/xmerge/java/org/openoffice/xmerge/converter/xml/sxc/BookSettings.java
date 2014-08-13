@@ -69,14 +69,7 @@ public class BookSettings implements OfficeConstants {
         this.hasColumnRowHeaders = hasColumnRowHeaders;
     }
 
-    /**
-     * Get the flag indicating whether we have row/column headers.
-     *
-     * @return Flag indicating whether we have row/column headers.
-     */
-    public boolean hasColumnRowHeaders() {
-        return hasColumnRowHeaders;
-    }
+
 
     /**
      * Gets the <code>Vector</code> of <code>SheetSettings</code>

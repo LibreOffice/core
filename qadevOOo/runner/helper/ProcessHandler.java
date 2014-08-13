@@ -576,18 +576,7 @@ public class ProcessHandler
         flushInput();
     }
 
-    /**
-     * This method is useful when the process was executed
-     * asynchronously. Waits for process to exit and return
-     * its result.
-     *
-     * @return <code>true</code> if process correctly exited
-     * (exit code doesn't affect to this result).
-     */
-    public boolean waitFor()
-    {
-        return waitFor(0);
-    }
+
 
     /**
      * This method is useful when the process was executed
@@ -737,20 +726,7 @@ public class ProcessHandler
         }
     }
 
-    /**
-     * Prints the string specified to sdtin of external
-     * command. '\n' is not added so if you need you
-     * should terminate the string with '\n'. <p>
-     *
-     * The method can also be called before the command
-     * starts its execution. Then the text is buffered
-     * and transferred to command when it will be started.
-     */
-    public void printInputText(String str)
-    {
-        stdInBuff += str;
-        flushInput();
-    }
+
 
     /**
      * Returns information about was the command started or
@@ -940,15 +916,5 @@ public class ProcessHandler
         }
     }
 
-    /**
-     * to stop the extra thread, before he will kill a running office. This will stop the thread.
-     */
-    public void stopWatcher()
-    {
-        if (m_aWatcher != null)
-        {
-            m_aWatcher.holdOn();
-            shortWait(5000);
-        }
-    }
+
 }

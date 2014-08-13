@@ -61,23 +61,6 @@ public class DynamicClassLoader {
 
     /**
      * Get an instance of a class. The constructor matching to the
-     * arguments is used and the arguments are given to this constructor.
-     * @param className The class to instantiate.
-     * @param ctorArgs Arguments for the constructor.
-     * @return The instance of the class.
-     */
-    public Object getInstance(String className, Object[] ctorArgs)
-                                        throws IllegalArgumentException {
-        Class<?>[] ctorType = new Class[ctorArgs.length];
-        for(int i=0; i<ctorType.length; i++) {
-            ctorType[i] = ctorArgs[i].getClass();
-        }
-        return getInstance(className, ctorType, ctorArgs);
-
-    }
-
-    /**
-     * Get an instance of a class. The constructor matching to the
      * given calss types is used and the instance is created using the arguments
      * for the constructor.
      * @param className The class to instantiate.

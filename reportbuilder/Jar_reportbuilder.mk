@@ -46,16 +46,13 @@ $(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/ImageService \
     reportbuilder/java/org/libreoffice/report/InputRepository \
     reportbuilder/java/org/libreoffice/report/JobDefinitionException \
-    reportbuilder/java/org/libreoffice/report/JobProgressIndicator \
     reportbuilder/java/org/libreoffice/report/JobProperties \
     reportbuilder/java/org/libreoffice/report/OfficeToken \
     reportbuilder/java/org/libreoffice/report/OutputRepository \
     reportbuilder/java/org/libreoffice/report/ParameterMap \
-    reportbuilder/java/org/libreoffice/report/ReportAddIn \
     reportbuilder/java/org/libreoffice/report/ReportEngineMetaData \
     reportbuilder/java/org/libreoffice/report/ReportEngineParameterNames \
     reportbuilder/java/org/libreoffice/report/ReportExecutionException \
-    reportbuilder/java/org/libreoffice/report/ReportExpression \
     reportbuilder/java/org/libreoffice/report/ReportExpressionMetaData \
     reportbuilder/java/org/libreoffice/report/ReportJob \
     reportbuilder/java/org/libreoffice/report/ReportJobDefinition \

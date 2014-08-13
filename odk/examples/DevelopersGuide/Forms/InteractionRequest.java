@@ -52,12 +52,7 @@ class InteractionRequest implements XInteractionRequest
         m_aContinuations = new ArrayList<XInteractionContinuation>();
     }
 
-    /* ------------------------------------------------------------------ */
-    public void addContinuation( XInteractionContinuation xCont )
-    {
-        if ( null != xCont )
-            m_aContinuations.add( xCont );
-    }
+
 
     /* ------------------------------------------------------------------ */
     public Object getRequest(  )

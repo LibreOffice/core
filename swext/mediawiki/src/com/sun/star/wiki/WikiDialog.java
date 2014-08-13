@@ -158,39 +158,7 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
         return xPS;
     }
 
-    public static XDialog CreateSimpleDialog( XComponentContext xContext, String sURL, int nTitleID, String[] pControls, int[] pStringIDs )
-    {
-        XDialog xResult = null;
 
-        if ( xContext != null && sURL != null && sURL.length() > 0 )
-        {
-            try
-            {
-                Object oDialogProvider = xContext.getServiceManager().createInstanceWithContext("com.sun.star.awt.DialogProvider2", xContext );
-                XDialogProvider2 xDialogProvider = UnoRuntime.queryInterface( XDialogProvider2.class, oDialogProvider );
-
-                if ( xDialogProvider != null )
-                    xResult = xDialogProvider.createDialog( sURL );
-
-                if ( xResult != null )
-                {
-                    SetTitle( xResult, Helper.GetLocalizedString( xContext, nTitleID ) );
-                    if ( pControls != null && pStringIDs != null && pControls.length == pStringIDs.length )
-                    {
-                        XControlContainer xControlContainer = UnoRuntime.queryInterface( XControlContainer.class, xResult );
-                        for ( int nInd = 0; nInd < pControls.length; nInd++ )
-                            GetPropSet( xControlContainer, pControls[nInd] ).setPropertyValue( "Label", new Integer( pStringIDs[nInd] ) );
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-
-        return xResult;
-    }
 
     protected void InsertThrobber( int X, int Y, int Width, int Height )
     {
