@@ -78,7 +78,7 @@ void AccTopWindowListener::HandleWindowOpened( com::sun::star::accessibility::XA
         AddAllListeners(pAccessible,NULL,(HWND)systemdata->hWnd);
 
         if( window->GetStyle() & WB_MOVEABLE )
-            accManagerAgent.IncreaseState( pAccessible, -1 /* U_MOVEBLE */ );
+            accManagerAgent.IncreaseState( pAccessible, (unsigned short) -1 /* U_MOVEBLE */ );
 
         short role = pAccessibleContext->getAccessibleRole();
 
