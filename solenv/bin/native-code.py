@@ -198,8 +198,12 @@ if options.groups:
         for (factory_name,factory_function) in factory_map[factory_group]:
             if factory_function == 'sb_component_getFactory':
                 print ('#ifdef ANDROID')
+            if factory_function == 'xsec_xmlsec_component_getFactory':
+                print ('#ifndef ANDROID')
             print ('void * '+factory_function+'( const char* , void* , void* );')
             if factory_function == 'sb_component_getFactory':
+                print ('#endif')
+            if factory_function == 'xsec_xmlsec_component_getFactory':
                 print ('#endif')
 
 print ('')
@@ -219,8 +223,12 @@ if options.groups:
         for (factory_name,factory_function) in factory_map[factory_group]:
             if factory_function == 'sb_component_getFactory':
                 print ('#ifdef ANDROID')
+            if factory_function == 'xsec_xmlsec_component_getFactory':
+                print ('#ifndef ANDROID')
             print ('        { "'+factory_name+'", '+factory_function+' },')
             if factory_function == 'sb_component_getFactory':
+                print ('#endif')
+            if factory_function == 'xsec_xmlsec_component_getFactory':
                 print ('#endif')
 
 print ("""
