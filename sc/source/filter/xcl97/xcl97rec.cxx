@@ -71,6 +71,8 @@
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <oox/token/tokens.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
@@ -163,6 +165,8 @@ void XclExpObjList::Save( XclExpStream& rStrm )
         pSolverContainer->Save( rStrm );
 }
 
+namespace {
+
 static bool IsVmlObject( const XclObj *rObj )
 {
     switch( rObj->GetObjType() )
@@ -186,10 +190,61 @@ static sal_Int32 GetVmlObjectCount( XclExpObjList& rList )
     return nNumVml;
 }
 
+bool IsValidObject( const XclObj& rObj )
+{
+    if (rObj.GetObjType() == EXC_OBJTYPE_CHART)
+    {
+        // Chart object.  Make sure it's a valid chart object.  We skip
+        // invalid chart objects from exporting to prevent Excel from
+        // complaining on load.
+
+        const XclExpChartObj& rChartObj = static_cast<const XclExpChartObj&>(rObj);
+        uno::Reference<chart2::XChartDocument> xChartDoc(rChartObj.GetChartDoc(), uno::UNO_QUERY);
+        if (!xChartDoc.is())
+            return false;
+
+        uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+        if (!xDiagram.is())
+            return false;
+
+        uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, uno::UNO_QUERY);
+        if (!xCooSysContainer.is())
+            return false;
+
+        uno::Sequence<uno::Reference<chart2::XCoordinateSystem> > xCooSysSeq = xCooSysContainer->getCoordinateSystems();
+        if (!xCooSysSeq.getLength())
+            return false;
+
+        for (sal_Int32 nCooSys = 0; nCooSys < xCooSysSeq.getLength(); ++nCooSys)
+        {
+            Reference<chart2::XChartTypeContainer> xChartTypeCont(xCooSysSeq[nCooSys], uno::UNO_QUERY);
+            if (!xChartTypeCont.is())
+                return false;
+
+            uno::Sequence<uno::Reference<chart2::XChartType> > xChartTypeSeq = xChartTypeCont->getChartTypes();
+            if (!xChartTypeSeq.getLength())
+                // No chart type.  Not good.
+                return false;
+        }
+    }
+
+    return true;
+}
+
 static void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nDrawingMLCount )
 {
-    sal_Int32 nVmlObjects = GetVmlObjectCount( rList );
-    if( (rList.size() - nVmlObjects) == 0 )
+    std::vector<XclObj*> aList;
+    aList.reserve(rList.size());
+    std::vector<XclObj*>::iterator it = rList.begin(), itEnd = rList.end();
+    for (; it != itEnd; ++it)
+    {
+        if (IsVmlObject(*it) || !IsValidObject(**it))
+            continue;
+
+        aList.push_back(*it);
+    }
+
+    if (aList.empty())
         return;
 
     sal_Int32 nDrawing = ++nDrawingMLCount;
@@ -213,13 +268,8 @@ static void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, 
             FSNS( XML_xmlns, XML_r ),   "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
             FSEND );
 
-    std::vector<XclObj*>::iterator pIter;
-    for ( pIter = rList.begin(); pIter != rList.end(); ++pIter )
-    {
-        if( IsVmlObject( *pIter ) )
-            continue;
-        (*pIter)->SaveXml( rStrm );
-    }
+    for (it = aList.begin(), itEnd = aList.end(); it != itEnd; ++it)
+        (*it)->SaveXml(rStrm);
 
     pDrawing->endElement( FSNS( XML_xdr, XML_wsDr ) );
 
@@ -264,6 +314,8 @@ static void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_In
     pVmlDrawing->endElement( XML_xml );
 
     rStrm.PopStream();
+}
+
 }
 
 void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
