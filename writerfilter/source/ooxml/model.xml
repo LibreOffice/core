@@ -16744,7 +16744,7 @@
       <value tokenid="0">none</value>
     </resource>
     <resource name="CT_Underline" resource="Properties">
-      <attribute name="val" tokenid="ooxml:CT_Underline_val" default="single"/>
+      <attribute name="val" tokenid="ooxml:CT_Underline_val"/>
       <attribute name="color" tokenid="ooxml:CT_Underline_color"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Underline_themeColor"/>
       <attribute name="themeTint" tokenid="ooxml:CT_Underline_themeTint"/>
