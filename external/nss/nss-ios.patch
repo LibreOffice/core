@@ -77,6 +77,17 @@
  endif
  
  MKDEPEND_DIR    = $(CORE_DEPTH)/coreconf/mkdepend
+--- a/a/nspr/pr/include/md/_darwin.h
++++ a/a/nspr/pr/include/md/_darwin.h
+@@ -26,6 +26,8 @@
+ #define _PR_SI_ARCHITECTURE "ppc"
+ #elif defined(__arm__)
+ #define _PR_SI_ARCHITECTURE "arm"
++#elif defined(__arm64__)
++#define _PR_SI_ARCHITECTURE "arm64"
+ #else
+ #error "Unknown CPU architecture"
+ #endif
 --- a/a/nspr/pr/src/Makefile.in
 +++ a/a/nspr/pr/src/Makefile.in
 @@ -180,7 +180,7 @@
