@@ -50,7 +50,6 @@ enum RenderEventType
     EVENT_DIE
 };
 
-
 class RenderThread;
 class RenderOneFrameThread;
 class RenderAnimationThread;

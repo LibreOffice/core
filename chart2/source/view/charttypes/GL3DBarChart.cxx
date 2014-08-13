@@ -409,12 +409,12 @@ GL3DBarChart::GL3DBarChart(
     maRenderEvent(EVENT_NONE),
     mSelectBarId(0),
     miScrollRate(0),
-    miFrameCount(0),
-    miDataUpdateCounter(0),
     mbScrollFlg(false),
     mbScreenTextNewRender(false),
     maFPS(OUString("Render FPS: 0")),
-    maDataUpdateFPS(OUString("Data Update FPS: 0"))
+    maDataUpdateFPS(OUString("Data Update FPS: 0")),
+    miFrameCount(0),
+    miDataUpdateCounter(0)
 {
     if (BENCH_MARK_MODE)
     {
@@ -1062,7 +1062,6 @@ void GL3DBarChart::calcDistance(std::vector<sal_uInt32> & vectorNearest)
             vectorNearest.push_back(nId);
             i++;
         }
-        glm::vec3 distancePosition = it->second.maPos;
         maDistanceMap[nId] = calcScrollDistance(mvp, glm::vec3(it->second.maPos.x + BAR_SIZE_X / 2.0f,
                                                                it->second.maPos.y + BAR_SIZE_Y / 2.0f,
                                                                it->second.maPos.z));
