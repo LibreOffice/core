@@ -64,7 +64,7 @@ AreaPropertyPanel::AreaPropertyPanel(
     const cssu::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame),
-      meLastXFS(-1),
+      meLastXFS(static_cast<sal_uInt16>(-1)),
       maLastColor(Color(COL_DEFAULT_SHAPE_FILLING)),
       mnLastPosGradient(0),
       mnLastPosHatch(0),
@@ -808,7 +808,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpLbFillAttr->Disable();
                 mpLbFillAttr->SetNoSelection();
                 mpToolBoxColor->Hide();
-                meLastXFS = -1;
+                meLastXFS = static_cast<sal_uInt16>(-1);
                 mpStyleItem.reset();
             }
 
@@ -841,7 +841,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
             mpLbFillAttr->Disable();
             mpLbFillAttr->SetNoSelection();
             mpToolBoxColor->Hide();
-            meLastXFS = -1;
+            meLastXFS = static_cast<sal_uInt16>(-1);
             mpStyleItem.reset();
             break;
         }
