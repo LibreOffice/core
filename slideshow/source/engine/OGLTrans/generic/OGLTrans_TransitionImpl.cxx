@@ -1473,7 +1473,7 @@ private:
 
 GLuint StaticNoiseTransition::makeShader_()
 {
-    return OpenGLHelper::LoadShaders( "basicVertexShader.glsl", "staticFragmentShader.glsl" );
+    return OpenGLHelper::LoadShaders( "basicVertexShader", "staticFragmentShader" );
 }
 
 shared_ptr<OGLTransitionImpl>
@@ -1524,7 +1524,7 @@ private:
 
 GLuint DissolveTransition::makeShader_()
 {
-    return OpenGLHelper::LoadShaders( "basicVertexShader.glsl", "dissolveFragmentShader.glsl" );
+    return OpenGLHelper::LoadShaders( "basicVertexShader", "dissolveFragmentShader" );
 }
 
 shared_ptr<OGLTransitionImpl>

@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,slideshow))
 $(eval $(call gb_Module_add_targets,slideshow,\
     $(if $(filter TRUE,$(ENABLE_OPENGL)),Library_OGLTrans) \
     Library_slideshow \
+	Package_opengl \
 ))
 
 # not working

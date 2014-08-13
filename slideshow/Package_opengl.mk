@@ -10,9 +10,9 @@
 $(eval $(call gb_Package_Package,slideshow_opengl_shader,$(SRCDIR)/slideshow/opengl))
 
 $(eval $(call gb_Package_add_files,slideshow_opengl_shader,$(LIBO_BIN_FOLDER)/opengl,\
-		slideshow/opengl/basicVertexShader.glsl \
-		slideshow/opengl/dissolveFragmentShader.glsl \
-		slideshow/opengl/staticFragmentShader.glsl \
+		basicVertexShader.glsl \
+		dissolveFragmentShader.glsl \
+		staticFragmentShader.glsl \
 ))
 
 # vim: set noet sw=4 ts=4:
