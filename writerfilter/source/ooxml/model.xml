@@ -18897,9 +18897,7 @@
       <element name="proofErr" tokenid="ooxml:EG_RunLevelElts_proofErr"/>
       <element name="permStart" tokenid="ooxml:EG_RunLevelElts_permStart"/>
       <element name="permEnd" tokenid="ooxml:EG_RunLevelElts_permEnd"/>
-      <element name="ins" tokenid="ooxml:EG_RunLevelElts_ins">
-        <action name="newProperty" id="ooxml:ins" value="1"/>
-      </element>
+      <element name="ins" tokenid="ooxml:EG_RunLevelElts_ins"/>
       <element name="del" tokenid="ooxml:EG_RunLevelElts_del"/>
       <element name="moveFrom" tokenid="ooxml:EG_RunLevelElts_moveFrom"/>
       <element name="moveTo" tokenid="ooxml:EG_RunLevelElts_moveTo"/>
