@@ -16,7 +16,15 @@
 #include <vector>
 #include <string>
 
+#ifdef _MSC_VER
+#pragma warning (push, 1)
+#pragma warning (disable: 4245)
+#endif
 #include <boost/crc.hpp>
+#ifdef _MSC_VER
+#pragma warning (pop)
+#endif
+
 
 #include "po.hxx"
 #include "helper.hxx"
