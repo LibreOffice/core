@@ -143,8 +143,9 @@ inline SwTwips CalcArea( const SwRect &rRect )
 // combine all adjacent rectangles
 void SwRegionRects::Compress( bool bFuzzy )
 {
-    for ( size_type i = 0; i < size(); ++i )
+    for (size_type i = 0; i < size(); )
     {
+        bool bRestart(false);
         for ( size_type j = i+1; j < size(); ++j )
         {
             // If one rectangle contains a second completely than the latter
@@ -158,7 +159,7 @@ void SwRegionRects::Compress( bool bFuzzy )
             {
                 (*this)[i] = (*this)[j];
                 erase( begin() + j );
-                i = -1;
+                bRestart = true;
                 break;
             }
             else
@@ -180,11 +181,12 @@ void SwRegionRects::Compress( bool bFuzzy )
                 {
                     (*this)[i] = aUnion;
                     erase( begin() + j );
-                    i = -1;
+                    bRestart = true;
                     break;
                 }
             }
         }
+        i = (bRestart) ? 0 : i+1;
     }
 }
 
