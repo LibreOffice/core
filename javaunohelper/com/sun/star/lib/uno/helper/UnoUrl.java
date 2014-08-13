@@ -295,12 +295,14 @@ public class UnoUrl {
 
     private static UnoUrlPart parseUnoUrlPart(String thePart)
         throws com.sun.star.lang.IllegalArgumentException {
-        String partName = thePart;
+        String partName;
         String theParamPart = "";
         int index = thePart.indexOf(",");
         if (index != -1) {
             partName = thePart.substring(0, index).trim();
             theParamPart = thePart.substring(index + 1).trim();
+        } else {
+            partName = thePart.trim();
         }
 
         if (!isAlphaNumeric(partName)) {
@@ -354,46 +356,20 @@ public class UnoUrl {
     public static UnoUrl parseUnoUrl(String unoUrl)
         throws com.sun.star.lang.IllegalArgumentException {
 
-        String url = unoUrl;
-
-        int index = url.indexOf(':');
-        if (index != -1) {
-            String unoStr = url.substring(0, index).trim();
-            if (!"uno".equals(unoStr)) {
-                throw new com.sun.star.lang.IllegalArgumentException(
-                    "Uno Urls must start with 'uno:'. " + FORMAT_ERROR);
-            }
-        }
-
-        url = url.substring(index + 1).trim();
-
-        index = url.indexOf(';');
-        if (index == -1) {
+        if (!unoUrl.matches("^(\\s*)uno(\\s*):"
+                // connection-type,params;
+                + "(\\s*)(socket|pipe)((\\s*),(\\s*)([0-9a-zA-Z])+(\\s*)=(\\s*)([0-9a-zA-Z\\!$&'()*+-./:?@_~]|([\\%][a-fA-F0-9][a-fA-F0-9])+)+)*(\\s*);"
+                // protocol-name,params;
+                + "(\\s*)([0-9a-zA-Z])+((\\s*),(\\s*)([0-9a-zA-Z])+(\\s*)=(\\s*)([0-9a-zA-Z\\!$&'()*+,-./:?=@_~]|([\\%][a-fA-F0-9][a-fA-F0-9]))+)*(\\s*);"
+                // ObjectName
+                + "(\\s*)([0-9a-zA-Z\\!$&'()*+,-./:?=@_~])+")) {
             throw new com.sun.star.lang.IllegalArgumentException("'"+unoUrl+"' is an invalid Uno Url. " + FORMAT_ERROR);
         }
 
-        String connection = url.substring(0, index).trim();
-        url = url.substring(index + 1).trim();
-
-        UnoUrlPart connectionPart = parseUnoUrlPart(connection);
-
-        index = url.indexOf(';');
-        if (index == -1) {
-            throw new com.sun.star.lang.IllegalArgumentException("'"+unoUrl+"' is an invalid Uno Url. " + FORMAT_ERROR);
-        }
-
-        String protocol = url.substring(0, index).trim();
-        url = url.substring(index + 1).trim();
-
-        UnoUrlPart protocolPart = parseUnoUrlPart(protocol);
-
-        String rootOid = url.trim();
-        if (!isValidString(rootOid, OID_CHAR_SET)) {
-            throw new com.sun.star.lang.IllegalArgumentException(
-                "Root OID '"+ rootOid + "' contains illegal characters.");
-        }
-
-        return new UnoUrl(connectionPart, protocolPart, rootOid);
+        String[] parts = unoUrl.substring(unoUrl.indexOf(':') + 1).split(";");
+        UnoUrlPart connectionPart = parseUnoUrlPart(parts[0]);
+        UnoUrlPart protocolPart = parseUnoUrlPart(parts[1]);
+        return new UnoUrl(connectionPart, protocolPart, parts[2].trim());
 
     }
 
