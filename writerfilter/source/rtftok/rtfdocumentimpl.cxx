@@ -887,7 +887,7 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         // wrap sprm
         RTFSprms aAnchorWrapAttributes;
         RTFSprms aAnchorAttributes;
-        aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_behindDoc, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.bInBackground)));
+        aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_behindDoc, RTFValue::Pointer_t(new RTFValue((m_aStates.top().aShape.bInBackground) ? 1 : 0)));
         RTFSprms aAnchorSprms;
         for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
         {
