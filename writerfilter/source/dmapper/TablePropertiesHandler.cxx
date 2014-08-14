@@ -384,6 +384,14 @@ namespace dmapper {
                }
            }
             break;
+            case NS_ooxml::LN_CT_TcPrBase_hideMark:
+            if (nIntValue)
+            {
+                TablePropertyMapPtr pPropMap(new TablePropertyMap());
+                pPropMap->Insert(PROP_CELL_HIDE_MARK, uno::makeAny(nIntValue));
+                cellProps(pPropMap);
+            }
+            break;
             default:
             // Not handled here, give the next handler a chance.
             bRet = false;

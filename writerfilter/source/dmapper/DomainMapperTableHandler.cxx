@@ -29,9 +29,11 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <dmapperLoggers.hxx>
 #include <TablePositionHandler.hxx>
+#include <ConversionHelper.hxx>
 
 #ifdef DEBUG_DOMAINMAPPER
 #include <PropertyMapHelper.hxx>
@@ -804,12 +806,50 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
     return aCellProperties;
 }
 
+/// Do all cells in this row have a CellHideMark property?
+bool lcl_hideMarks(PropertyMapVector1& rCellProperties)
+{
+    for (size_t nCell = 0; nCell < rCellProperties.size(); ++nCell)
+        if (!rCellProperties[nCell]->isSet(PROP_CELL_HIDE_MARK))
+            return false;
+    return true;
+}
+
+/// Are all cells in this row empty?
+bool lcl_emptyRow(TableSequence_t& rTableSeq, sal_Int32 nRow)
+{
+    if (nRow >= rTableSeq.getLength())
+    {
+        SAL_WARN("writerfilter", "m_aCellProperties not in sync with m_pTableSeq?");
+        return false;
+    }
+
+    RowSequence_t rRowSeq = rTableSeq[nRow];
+    uno::Reference<text::XTextRangeCompare> xTextRangeCompare(rRowSeq[0][0]->getText(), uno::UNO_QUERY);
+    try
+    {
+        for (sal_Int32 nCell = 0; nCell < rRowSeq.getLength(); ++nCell)
+            // See SwXText::Impl::ConvertCell(), we need to compare the start of
+            // the start and the end of the end. However for our text ranges, only
+            // the starts are set, so compareRegionStarts() does what we need.
+            if (xTextRangeCompare->compareRegionStarts(rRowSeq[nCell][0], rRowSeq[nCell][1]) != 0)
+                return false;
+    }
+    catch (lang::IllegalArgumentException& e)
+    {
+        SAL_WARN("writerfilter", "compareRegionStarts() failed: " << e.Message);
+        return false;
+    }
+    return true;
+}
+
 RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("getRowProperties");
 #endif
 
+    static const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
     RowPropertyValuesSeq_t aRowProperties( m_aRowProperties.size() );
     PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
     PropertyMapVector1::const_iterator aRowIterEnd = m_aRowProperties.end();
@@ -825,6 +865,14 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
             (*aRowIter)->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(sal_True ), false );
             // tblHeader is only our property, remove before the property map hits UNO
             (*aRowIter)->Erase(PROP_TBL_HEADER);
+
+            if (lcl_hideMarks(m_aCellProperties[nRow]) && lcl_emptyRow(*m_pTableSeq, nRow))
+            {
+                // We have CellHideMark on all cells, and also all cells are empty:
+                // Set the row height to minimal as Word does.
+                (*aRowIter)->Insert(PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
+                (*aRowIter)->Insert(PROP_HEIGHT, uno::makeAny(static_cast<sal_Int32>(ConversionHelper::convertTwipToMM100(MINLAY))));
+            }
 
             aRowProperties[nRow] = (*aRowIter)->GetPropertyValues();
 #ifdef DEBUG_DOMAINMAPPER
