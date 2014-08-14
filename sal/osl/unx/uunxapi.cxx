@@ -37,11 +37,36 @@ inline rtl::OString OUStringToOString(const rtl_uString* s)
 
 #if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
 
-static NSUserDefaults *userDefaults = NULL;
+#include <Foundation/Foundation.h>
+#include <Security/Security.h>
+#include <mach-o/dyld.h>
 
-static void get_user_defaults()
+static NSUserDefaults *userDefaults = NULL;
+static bool isSandboxed = false;
+
+static void do_once()
 {
-    userDefaults = [NSUserDefaults standardUserDefaults];
+    SecCodeRef code;
+    OSStatus rc = SecCodeCopySelf(kSecCSDefaultFlags, &code);
+
+    SecStaticCodeRef staticCode;
+    if (rc == errSecSuccess)
+        rc = SecCodeCopyStaticCode(code, kSecCSDefaultFlags, &staticCode);
+
+    CFDictionaryRef signingInformation;
+    if (rc == errSecSuccess)
+        rc = SecCodeCopySigningInformation(staticCode, kSecCSRequirementInformation, &signingInformation);
+
+    CFDictionaryRef entitlements = NULL;
+    if (rc == errSecSuccess)
+        entitlements = (CFDictionaryRef) CFDictionaryGetValue(signingInformation, kSecCodeInfoEntitlementsDict);
+
+    if (entitlements != NULL)
+        if (CFDictionaryGetValue(entitlements, CFSTR("com.apple.security.app-sandbox")) != NULL)
+            isSandboxed = true;
+
+    if (isSandboxed)
+        userDefaults = [NSUserDefaults standardUserDefaults];
 }
 
 typedef struct {
@@ -53,11 +78,14 @@ static accessFilePathState *
 prepare_to_access_file_path( const char *cpFilePath )
 {
     static pthread_once_t once = PTHREAD_ONCE_INIT;
-    pthread_once(&once, &get_user_defaults);
+    pthread_once(&once, &do_once);
     NSURL *fileURL = nil;
     NSData *data = nil;
     BOOL stale;
     accessFilePathState *state;
+
+    if (!isSandboxed)
+        return NULL;
 
     // If malloc() fails we are screwed anyway
     state = (accessFilePathState*) malloc(sizeof(accessFilePathState));
@@ -86,6 +114,9 @@ prepare_to_access_file_path( const char *cpFilePath )
 static void
 done_accessing_file_path( const char * /*cpFilePath*/, accessFilePathState *state )
 {
+    if (!isSandboxed)
+        return;
+
     int saved_errno = errno;
 
     if (state->scopeURL != nil)
@@ -259,7 +290,7 @@ int open_c(const char *cpPath, int oflag, int mode)
     int result = open(cpPath, oflag, mode);
 
 #if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
-    if (result != -1 && (oflag & O_CREAT) && (oflag & O_EXCL))
+    if (isSandboxed && result != -1 && (oflag & O_CREAT) && (oflag & O_EXCL))
     {
         // A new file was created. Check if it is outside the sandbox.
         // (In that case it must be one the user selected as export or
