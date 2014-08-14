@@ -17,7 +17,7 @@
 
 module com {  module sun {  module star {  module style {
 
-/** extends XStyleLoader interface to import styles from an already opened calc or writer component.
+/** extends XStyleLoader interface to import styles from an already opened component.
 
     @see com::sun::star::style::XStyleLoader
 
@@ -28,7 +28,7 @@ interface XStyleLoader2: com::sun::star::style::XStyleLoader
     /** loads styles from a given document
         <p>
          @param aSourceComponent
-             a valid XComponent reference to source doc (calc or writer)
+             a valid XComponent reference to source document
          @param aOptions
              Specifies which of the Style families the method should load.
          The <code>sequence<PropertyValue></code> has the following, optional items:
