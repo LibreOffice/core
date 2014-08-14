@@ -37,9 +37,9 @@ public:
 
     sal_uInt16      GetInsContentsCmdBits() const;
     sal_uInt16      GetFormulaCmdBits() const;
-    bool            IsSkipEmptyCells() const {return mpBtnSkipEmptyCells->IsChecked();}
-    bool            IsTranspose() const {return mpBtnTranspose->IsChecked();}
-    bool            IsLink() const {return mpBtnLink->IsChecked();}
+    bool            IsSkipEmptyCells() const;
+    bool            IsTranspose() const;
+    bool            IsLink() const;
     InsCellCmd      GetMoveMode();
 
     void    SetOtherDoc( bool bSet );
@@ -71,11 +71,23 @@ private:
     RadioButton*     mpRbMoveDown;
     RadioButton*     mpRbMoveRight;
 
+    PushButton*      mpBtnShortCutPasteValuesOnly;
+    PushButton*      mpBtnShortCutPasteValuesFormats;
+    PushButton*      mpBtnShortCutPasteTranspose;
+
     bool              bOtherDoc;
     bool              bFillMode;
     bool              bChangeTrack;
     bool              bMoveDownDisabled;
     bool              bMoveRightDisabled;
+    bool              bUsedShortCut;
+
+    sal_uInt16        nShortCutInsContentsCmdBits;
+    sal_uInt16        nShortCutFormulaCmdBits;
+    bool              bShortCutSkipEmptyCells;
+    bool              bShortCutTranspose;
+    bool              bShortCutIsLink;
+    InsCellCmd        nShortCutMoveMode;
 
     static bool         bPreviousAllCheck;
     static sal_uInt16   nPreviousChecks;
@@ -89,6 +101,7 @@ private:
     // Handler
     DECL_LINK( InsAllHdl, void* );
     DECL_LINK( LinkBtnHdl, void* );
+    DECL_LINK( ShortCutHdl, PushButton* );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_INSCODLG_HXX
