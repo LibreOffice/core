@@ -253,10 +253,6 @@ namespace dbp
         OControlWizardPage_Base::initializePage();
     }
 
-
-    //= OControlWizard
-
-
     OControlWizard::OControlWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OWizardMachine(_pParent, WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH)
@@ -266,16 +262,13 @@ namespace dbp
         initContext();
 
         SetPageSizePixel(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
-        ShowButtonFixedLine(true);
         defaultButton(WZB_NEXT);
         enableButtons(WZB_FINISH, false);
     }
 
-
     OControlWizard::~OControlWizard()
     {
     }
-
 
     short OControlWizard::Execute()
     {

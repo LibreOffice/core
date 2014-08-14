@@ -85,7 +85,6 @@ namespace svt { namespace uno
         SetPageSizePixel( pStartPage->GetSizePixel() );
 
         // some defaults
-        ShowButtonFixedLine( true );
         SetRoadmapInteractive( true );
         enableAutomaticNextButtonState();
     }

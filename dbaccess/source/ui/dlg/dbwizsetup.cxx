@@ -149,7 +149,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(WIZARD_PAGE_X, WIZARD_PAGE_Y), MAP_APPFONT));
-    ShowButtonFixedLine(true);
     defaultButton(WZB_NEXT);
     enableButtons(WZB_FINISH, true);
     enableAutomaticNextButtonState();

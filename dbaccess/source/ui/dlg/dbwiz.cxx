@@ -83,7 +83,6 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     m_eType = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(PAGE_X, PAGE_Y), MAP_APPFONT));
-    ShowButtonFixedLine(true);
     defaultButton(WZB_NEXT);
     enableButtons(WZB_FINISH, false);
     enableAutomaticNextButtonState( true );

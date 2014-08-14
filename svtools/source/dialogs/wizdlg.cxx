@@ -52,7 +52,6 @@ void WizardDialog::ImplInitData()
 {
     mpFirstPage     = NULL;
     mpFirstBtn      = NULL;
-    mpFixedLine     = NULL;
     mpCurTabPage    = NULL;
     mpPrevBtn       = NULL;
     mpNextBtn       = NULL;
@@ -95,8 +94,6 @@ void WizardDialog::ImplCalcSize( Size& rSize )
     }
     if ( nMaxHeight )
         nMaxHeight += WIZARDDIALOG_BUTTON_OFFSET_Y*2;
-    if ( mpFixedLine && mpFixedLine->IsVisible() )
-        nMaxHeight += mpFixedLine->GetSizePixel().Height();
     rSize.Height() += nMaxHeight;
 
     // View-Window-Groesse dazurechnen
@@ -192,13 +189,6 @@ void WizardDialog::ImplPosCtrls()
         nOffY -= WIZARDDIALOG_BUTTON_OFFSET_Y;
     }
 
-    if ( mpFixedLine && mpFixedLine->IsVisible() )
-    {
-        nOffY -= mpFixedLine->GetSizePixel().Height();
-        mpFixedLine->setPosSizePixel( 0, nOffY, aDlgSize.Width(), 0,
-                                      WINDOW_POSSIZE_POS | WINDOW_POSSIZE_WIDTH );
-    }
-
     if ( mpViewWindow && mpViewWindow->IsVisible() )
     {
         long    nViewOffX = 0;
@@ -285,8 +275,6 @@ void WizardDialog::ImplPosTabPage()
     }
     if ( nMaxHeight )
         nMaxHeight += WIZARDDIALOG_BUTTON_OFFSET_Y*2;
-    if ( mpFixedLine && mpFixedLine->IsVisible() )
-        nMaxHeight += mpFixedLine->GetSizePixel().Height();
 
     // TabPage positionieren
     Size aDlgSize = GetOutputSizePixel();
@@ -376,8 +364,6 @@ WizardDialog::WizardDialog( Window* pParent, const OString& rID, const OUString&
 WizardDialog::~WizardDialog()
 {
     maWizardLayoutTimer.Stop();
-
-    delete mpFixedLine;
 
     // Remove all buttons
     while ( mpFirstBtn )
@@ -682,21 +668,6 @@ void WizardDialog::RemoveButton( Button* pButton )
     }
 
     OSL_FAIL( "WizardDialog::RemoveButton() - Button not in list" );
-}
-
-
-
-void WizardDialog::ShowButtonFixedLine( bool bVisible )
-{
-    if ( !mpFixedLine )
-    {
-        if ( !bVisible )
-            return;
-
-        mpFixedLine = new FixedLine( this );
-    }
-
-    mpFixedLine->Show( bVisible );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

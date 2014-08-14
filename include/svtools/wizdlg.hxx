@@ -27,7 +27,6 @@
 class TabPage;
 class Button;
 class PushButton;
-class FixedLine;
 struct ImplWizPageData;
 struct ImplWizButtonData;
 
@@ -88,9 +87,6 @@ den Buttons bei allen Dialogen gleich ist, gibt es das Define
 WIZARDDIALOG_BUTTON_STDOFFSET_X, welches als Standard-Offset genommen
 werden sollte.
 
-Mit ShowButtonFixedLine() kann gesteuert werden, ob die zwischen den
-Buttons und der TabPage eine Trennlinie angezeigt werden soll.
-
 Mit SetViewWindow() und SetViewAlign() kann ein Control gesetzt werden,
 welches als Preview-Window oder fuer die Anzeige von schoenen Bitmaps
 genutzt werden kann.
@@ -134,9 +130,6 @@ maNextBtn.SetClickHdl( LINK( this, MyWizardDlg, ImplNextHdl ) );
 
 // Set PreviewWindow
 SetViewWindow( &maPreview );
-
-// Show line between Buttons and Page
-ShowButtonFixedLine( sal_True );
 
 // Call ActivatePage, because the first page should be created an activated
 ActivatePage();
@@ -214,7 +207,6 @@ private:
     Size                maPageSize;
     ImplWizPageData*    mpFirstPage;
     ImplWizButtonData*  mpFirstBtn;
-    FixedLine*          mpFixedLine;
     TabPage*            mpCurTabPage;
     PushButton*         mpPrevBtn;
     PushButton*         mpNextBtn;
@@ -283,8 +275,6 @@ public:
     PushButton*         GetPrevButton() const { return mpPrevBtn; }
     void                SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
     PushButton*         GetNextButton() const { return mpNextBtn; }
-
-    void                ShowButtonFixedLine( bool bVisible );
 
     void                SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
     Window*             GetViewWindow() const { return mpViewWindow; }

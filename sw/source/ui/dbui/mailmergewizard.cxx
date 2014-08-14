@@ -58,7 +58,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
         m_sFinish(          SW_RES( ST_FINISH       )),
         m_nRestartPage( MM_DOCUMENTSELECTPAGE )
 {
-    ShowButtonFixedLine(true);
     defaultButton(WZB_NEXT);
     enableButtons(WZB_FINISH, false);
 

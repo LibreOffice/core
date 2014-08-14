@@ -81,8 +81,6 @@ namespace svt
         void            SetRoadmapHelpId( const OString& _rId );
 
         void            SetRoadmapInteractive( bool _bInteractive );
-        virtual void    Resize() SAL_OVERRIDE;
-        virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
         // returns whether a given state is enabled
         bool            isStateEnabled( WizardState _nState ) const;
@@ -223,8 +221,6 @@ protected:
 #endif
 
     private:
-        SVT_DLLPRIVATE void ResizeFixedLine();
-
         DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, void* );
 
         /** updates the roadmap control to show the given path, as far as possible

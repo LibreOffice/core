@@ -69,7 +69,6 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
                 , m_bCanTravel( true )
 {
     m_pDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
-    ShowButtonFixedLine( true );
     defaultButton( WZB_FINISH );
 
     if( m_nOnePageOnlyIndex < 0 || m_nOnePageOnlyIndex >= nPageCount )

@@ -61,20 +61,17 @@ namespace svt
         StateDescriptions   aStateDescriptors;
         StateSet            aDisabledStates;
         bool                bActivePathIsDefinite;
-           FixedLine*           pFixedLine;
 
         RoadmapWizardImpl()
             :pRoadmap( NULL )
             ,nActivePath( -1 )
             ,bActivePathIsDefinite( false )
-            ,pFixedLine(NULL)
         {
         }
 
         ~RoadmapWizardImpl()
         {
             delete pRoadmap;
-            delete pFixedLine;
         }
 
         /// returns the index of the current state in given path, or -1
@@ -192,11 +189,6 @@ namespace svt
         Size aRoadmapSize =( LogicToPixel( Size( 85, 0 ), MAP_APPFONT ) );
         aRoadmapSize.Height() = GetSizePixel().Height();
         m_pImpl->pRoadmap->SetSizePixel( aRoadmapSize );
-
-        m_pImpl->pFixedLine = new FixedLine( this, WB_VERT );
-        m_pImpl->pFixedLine->Show();
-        m_pImpl->pFixedLine->SetPosPixel( Point( aRoadmapSize.Width() + 1, 0 ) );
-        m_pImpl->pFixedLine->SetSizePixel( Size( LogicToPixel( Size( 2, 0 ) ).Width(), aRoadmapSize.Height() ) );
 
         SetViewWindow( m_pImpl->pRoadmap );
         SetViewAlign( WINDOWALIGN_LEFT );
@@ -634,39 +626,10 @@ namespace svt
         return false;
     }
 
-
     bool RoadmapWizard::isStateEnabled( WizardState _nState ) const
     {
         return m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
     }
-
-
-    void RoadmapWizard::Resize()
-    {
-        OWizardMachine::Resize();
-
-        if ( IsReallyShown() && !IsInInitShow() )
-            ResizeFixedLine();
-    }
-
-
-
-    void RoadmapWizard::StateChanged( StateChangedType nType )
-    {
-        WizardDialog::StateChanged( nType );
-
-        if ( nType == STATE_CHANGE_INITSHOW )
-            ResizeFixedLine();
-    }
-
-
-    void RoadmapWizard::ResizeFixedLine()
-    {
-        Size aSize( m_pImpl->pRoadmap->GetSizePixel() );
-        aSize.Width() = m_pImpl->pFixedLine->GetSizePixel().Width();
-        m_pImpl->pFixedLine->SetSizePixel( aSize );
-    }
-
 
     void RoadmapWizard::updateRoadmapItemLabel( WizardState _nState )
     {

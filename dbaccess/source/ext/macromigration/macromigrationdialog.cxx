@@ -144,7 +144,6 @@ namespace dbmm
         declarePath( PATH_DEFAULT, STATE_CLOSE_SUB_DOCS, STATE_BACKUP_DBDOC, STATE_MIGRATE, STATE_SUMMARY, WZS_INVALID_STATE );
 
         SetPageSizePixel( LogicToPixel( ::Size( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT ), MAP_APPFONT ) );
-        ShowButtonFixedLine( true );
         SetRoadmapInteractive( true );
         enableAutomaticNextButtonState();
         defaultButton( WZB_NEXT );

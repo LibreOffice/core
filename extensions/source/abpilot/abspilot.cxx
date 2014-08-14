@@ -67,8 +67,6 @@ namespace abp
     {
         SetPageSizePixel(LogicToPixel(Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
 
-        ShowButtonFixedLine(true);
-
         declarePath( PATH_COMPLETE,
             STATE_SELECT_ABTYPE,
             STATE_INVOKE_ADMIN_DIALOG,
