@@ -50,7 +50,6 @@ namespace com { namespace sun { namespace star {
         struct DocumentSignatureInformation;
     }
     namespace task {
-        class FutureDocumentVersionProductUpdateRequest;
         class XInteractionContinuation;
         class XInteractionHandler2;
         class XInteractionRequest;
@@ -254,15 +253,6 @@ private:
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::security::DocumentSignatureInformation >&
                 aSignInfo,
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > const &
-                    rContinuations);
-
-    void
-    handleFutureDocumentVersionUpdateRequest(
-        const ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest&
-            _rRequest,
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<
                 com::sun::star::task::XInteractionContinuation > > const &

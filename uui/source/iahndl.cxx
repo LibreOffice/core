@@ -33,7 +33,6 @@
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
-#include <com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -82,7 +81,6 @@
 
 #include "getcontinuations.hxx"
 #include "secmacrowarnings.hxx"
-#include "newerverwarn.hxx"
 
 #include "iahndl.hxx"
 #include "nameclashdlg.hxx"
@@ -96,7 +94,6 @@ using ::com::sun::star::task::XInteractionContinuation;
 using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionApprove;
 using ::com::sun::star::task::XInteractionAskLater;
-using ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::XInitialization;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -876,17 +873,6 @@ UUIInteractionHelper::handleRequest_impl(
                 return true;
             }
 
-            task::FutureDocumentVersionProductUpdateRequest
-                aProductUpdateRequest;
-            if (aAnyRequest >>= aProductUpdateRequest)
-            {
-                handleFutureDocumentVersionUpdateRequest(
-                    aProductUpdateRequest,
-                    rRequest->getContinuations());
-                return true;
-            }
-
-
             // Last chance: interaction handlers registered in the configuration
 
 
@@ -1255,75 +1241,6 @@ UUIInteractionHelper::handleMacroConfirmRequest(
         xApprove->select();
     else if ( xAbort.is() )
         xAbort->select();
-}
-
-void
-UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
-    const task::FutureDocumentVersionProductUpdateRequest& _rRequest,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
-        rContinuations )
-{
-    uno::Reference< task::XInteractionAbort > xAbort;
-    uno::Reference< task::XInteractionApprove > xApprove;
-    uno::Reference< task::XInteractionAskLater > xAskLater;
-    getContinuations( rContinuations, &xApprove, &xAbort, &xAskLater );
-
-    short nResult = RET_CANCEL;
-
-    static bool s_bDeferredToNextSession = false;
-    // TODO: this static variable is somewhat hacky. Formerly (before the dialog was moved from SFX2 to the
-    // interaction handler implementation), this was stored in SfxGetpApp()'s impl structure, in member
-    // bODFVersionWarningLater. Of course, we do not have access to it here.
-
-    // A proper solution which I would envision would be:
-    // - There's a central implementation (this one here) of css.task.InteractionHandler
-    // - There's a configuration which maps UNO names to service names
-    // - If the handler is confronted with a request, it tries to find the name of the UNO structure describing
-    //   the request in the said configuration.
-    //   - If an entry is found, then
-    //     - the respective service is instantiated
-    //     - the component is queried for css.task.XInteractionHandler, and the request is delegated
-    //   - if no entry is found, then the request is silenced (with calling the AbortContinuation, if possible)
-    // This way, the FutureDocumentVersionProductUpdateRequest could be handled in SFX (or any other
-    // suitable place), again, and we would only have one place where we remember the s_bDeferredToNextSession
-    // flag.
-
-    // Note: The above pattern has been implemented in CWS autorecovery. Now the remaining task is to move the
-    // handling of this interaction to SFX, again.
-
-    if ( !s_bDeferredToNextSession )
-    {
-        boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( "uui" ) );
-        if ( pResMgr.get() )
-        {
-            ::uui::NewerVersionWarningDialog aDialog(
-                getParentProperty(),
-                _rRequest.DocumentODFVersion,
-                *pResMgr.get() );
-            nResult = aDialog.Execute();
-        }
-    }
-
-    switch ( nResult )
-    {
-    case RET_OK:
-        if ( xApprove.is() )
-            xApprove->select();
-        break;
-    case RET_CANCEL:
-        if ( xAbort.is() )
-            xAbort->select();
-        break;
-    case RET_ASK_LATER:
-        if ( xAskLater.is() )
-            xAskLater->select();
-        s_bDeferredToNextSession = true;
-        break;
-    default:
-        OSL_FAIL( "UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest: "
-                    "unexpected dialog return value!" );
-        break;
-    }
 }
 
 void

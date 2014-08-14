@@ -53,7 +53,6 @@ $(eval $(call gb_Library_add_exception_objects,uui,\
 	uui/source/masterpasscrtdlg \
 	uui/source/masterpassworddlg \
 	uui/source/nameclashdlg \
-	uui/source/newerverwarn \
 	uui/source/openlocked \
 	uui/source/passwordcontainer \
 	uui/source/passworddlg \
