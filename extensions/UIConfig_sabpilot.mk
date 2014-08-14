@@ -19,6 +19,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sabpilot,\
 	extensions/uiconfig/sabpilot/ui/gridfieldsselectionpage \
 	extensions/uiconfig/sabpilot/ui/groupradioselectionpage \
 	extensions/uiconfig/sabpilot/ui/invokeadminpage \
+	extensions/uiconfig/sabpilot/ui/optiondbfieldpage \
 	extensions/uiconfig/sabpilot/ui/optionsfinalpage \
 	extensions/uiconfig/sabpilot/ui/optionvaluespage \
 	extensions/uiconfig/sabpilot/ui/selecttablepage \

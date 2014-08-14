@@ -46,19 +46,13 @@
 #define RID_STR_FIELDINFO_COMBOBOX      (RID_STRING_START + 12 )
 #define RID_STR_GRIDWIZARD_TITLE        (RID_STRING_START + 13 )
 #define RID_STR_GROUPWIZARD_TITLE       (RID_STRING_START + 14 )
+#define RID_STR_OPTION_DB_FIELD_TITLE   (RID_STRING_START + 15 )
 
 // please adjust RID_STRING_END (below) when adding new strings
-#define RID_STRING_END                  RID_STR_TIMEPOSTFIX
+#define RID_STRING_END                  RID_STR_OPTION_DB_FIELD_TITLE
 
 // please adjust RID_DIALOG_END (below) when adding new dialogs
 #define RID_DIALOG_END                  ( RID_DIALOG_START +  3 )
-
-// tab pages
-
-#define RID_PAGE_OPTION_DBFIELD             ( RID_PAGE_START +  5 )
-
-// please adjust RID_PAGE_END (below) when adding new tab pages
-#define RID_PAGE_END                        RID_PAGE_OPTION_DBFIELD
 
 // ErrorBox
 
@@ -75,9 +69,6 @@
 #if RID_DIALOG_END > RID_DBP_END
     #error "please adjust the resource id ranges!!"
 #endif
-#if RID_PAGE_END > RID_DBP_END
-    #error "please adjust the resource id ranges!!"
-#endif
 #if RID_ERRORBOX_END > RID_DBP_END
     #error "please adjust the resource id ranges!!"
 #endif
@@ -85,23 +76,8 @@
 // local ids
 
 // FixedLine
-#define FL_DATABASEFIELD_EXPL       4
 #define FL_FRAME                    6
 #define FL_FORMSETINGS              7
-
-// FixedText
-
-#define FT_DATABASEFIELD_EXPL        8
-#define FT_DATABASEFIELD_QUEST       9
-
-// ListBox
-
-#define LB_STOREINFIELD             4
-
-// RadioButton
-
-#define RB_STOREINFIELD_YES         3
-#define RB_STOREINFIELD_NO          4
 
 // Image
 

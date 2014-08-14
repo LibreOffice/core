@@ -106,18 +106,16 @@ namespace dbp
     class ODBFieldPage : public OMaybeListSelectionPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aDescription;
-        FixedText       m_aQuestion;
-        RadioButton     m_aStoreYes;
-        RadioButton     m_aStoreNo;
-        ListBox         m_aStoreWhere;
+        FixedText*      m_pDescription;
+        RadioButton*    m_pStoreYes;
+        RadioButton*    m_pStoreNo;
+        ListBox*        m_pStoreWhere;
 
     public:
         ODBFieldPage( OControlWizard* _pParent );
 
     protected:
-        void setDescriptionText(const OUString& _rDesc) { m_aDescription.SetText(_rDesc); }
+        void setDescriptionText(const OUString& _rDesc) { m_pDescription->SetText(_rDesc); }
 
         // OWizardPage overridables
         virtual void initializePage() SAL_OVERRIDE;
