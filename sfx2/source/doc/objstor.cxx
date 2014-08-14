@@ -34,7 +34,6 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

@@ -60,6 +60,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
+#include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

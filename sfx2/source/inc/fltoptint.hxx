@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_FLTOPTINT_HXX
 #define INCLUDED_SFX2_SOURCE_INC_FLTOPTINT_HXX
 
-#include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/interaction.hxx>
