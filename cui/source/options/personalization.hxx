@@ -51,7 +51,7 @@ public:
     /// Reset to default settings ([Revert] button).
     virtual void Reset( const SfxItemSet *rSet ) SAL_OVERRIDE;
 
-    void SetPersonaSettings( const OUString );
+    void SetPersonaSettings( const OUString& );
 
     void LoadDefaultImages();
     void LoadExtensionThemes();

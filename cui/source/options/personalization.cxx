@@ -356,7 +356,7 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet * )
         m_pDefaultPersona->Check();
 }
 
-void SvxPersonalizationTabPage::SetPersonaSettings( const OUString aPersonaSettings )
+void SvxPersonalizationTabPage::SetPersonaSettings( const OUString& aPersonaSettings )
 {
     m_aPersonaSettings = aPersonaSettings;
     m_pOwnPersona->Check();
