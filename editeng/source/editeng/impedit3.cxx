@@ -499,12 +499,14 @@ void ImpEditEngine::FormatDoc()
 
 void ImpEditEngine::CallStatusHdlChaining()
 {
+    // only if it's the right ImpEditEngine (with right info on changes in text)
     if ( aStatusHdlLinkChaining.IsSet() /* && aStatus.GetStatusWord() */)
     {
+        CheckPageOverflow();
         // The Status has to be reset before the Call,
         // since other Flags might be set in the handler...
         EditStatus aTmpStatus( aStatus );
-        //aStatus.Clear(); // No need for this with chaining. It does not affect it either way.
+        aStatus.Clear();
         aStatusHdlLinkChaining.Call( &aTmpStatus );
         aStatusTimer.Stop();    // If called by hand ...
     }
@@ -545,24 +547,6 @@ void ImpEditEngine::CheckAutoPageSize()
         aPaperSize.Height() = !IsVertical() ? GetTextHeight() : CalcTextWidth( true );
 
     SetValidPaperSize( aPaperSize );    // consider Min, Max
-
-    // FIXME(matteocam)
-    /* fprintf( stderr, IsPageOverflow(aPaperSize, aPrevPaperSize)
-                        ? "YES Overflow!\n"  : "NO Overflow!\n" ); */
-    // setting overflow status
-    sal_uInt32 nBoxHeight = 1783; // XXX: hard coded for testing
-    //if ( IsPageOverflow( aPaperSize, aPrevPaperSize ) ) {
-    if (CalcTextHeight(NULL) > nBoxHeight) // XXX: CalcTextHeight here??
-    {
-        // which paragraph is the first to cause higher size of the box?
-        UpdateOverflowingParaNum( nBoxHeight /*aPrevPaperSize.Height()*/ ); // XXX: currently only for horizontal text
-        aStatus.SetPageOverflow(true);
-        aStatus.GetStatusWord() |= 0x00000100;
-    } else
-    {
-        // No overflow if withing box boundaries
-        aStatus.SetPageOverflow(false);
-    }
 
     if ( aPaperSize != aPrevPaperSize )
     {
@@ -607,6 +591,28 @@ void ImpEditEngine::CheckAutoPageSize()
             pView->pImpEditView->RecalcOutputArea();
         }
     }
+}
+
+void ImpEditEngine::CheckPageOverflow()
+{
+    // FIXME(matteocam)
+    /* fprintf( stderr, IsPageOverflow(aPaperSize, aPrevPaperSize)
+                        ? "YES Overflow!\n"  : "NO Overflow!\n" ); */
+    // setting overflow status
+    sal_uInt32 nBoxHeight = 1783; // XXX: hard coded for testing
+    //if ( IsPageOverflow( aPaperSize, aPrevPaperSize ) ) {
+    if (CalcTextHeight(NULL) > nBoxHeight) // XXX: CalcTextHeight here??
+    {
+        // which paragraph is the first to cause higher size of the box?
+        UpdateOverflowingParaNum( nBoxHeight /*aPrevPaperSize.Height()*/ ); // XXX: currently only for horizontal text
+        aStatus.SetPageOverflow(true);
+        aStatus.GetStatusWord() |= 0x00000100;
+    } else
+    {
+        // No overflow if withing box boundaries
+        aStatus.SetPageOverflow(false);
+    }
+
 }
 
 static sal_Int32 ImplCalculateFontIndependentLineSpacing( const sal_Int32 nFontHeight )
