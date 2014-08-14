@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_d86291ad",
+        "filename": "offapi/com/sun/star/style/XStyleLoader2.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-14T16:54:13Z",
+      "side": 1,
+      "message": "I think the description should not talk about specific components at all. The description is about the interface--it does not matter where the interface is implemented.",
+      "revId": "463c426ee8817126759603089bbc54ac242efc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
