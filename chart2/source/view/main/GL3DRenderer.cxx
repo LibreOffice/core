@@ -256,8 +256,10 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DBatchVertexID = glGetAttribLocation(m_3DBatchProID, "vertexPositionModelspace");
         m_3DBatchNormalID = glGetAttribLocation(m_3DBatchProID, "vertexNormalModelspace");
         m_3DBatchColorID = glGetAttribLocation(m_3DBatchProID, "barColor");
+#if !defined MACOSX
         //check whether the texture array is support
         mbTexBatchSupport = GLEW_EXT_texture_array == 1;
+#endif
         if (mbTexBatchSupport)
         {
             m_BatchTextProID = OpenGLHelper::LoadShaders("textVertexShaderBatch", "textFragmentShaderBatch");
