@@ -9,7 +9,8 @@ export APACHE_COMMONS_LANG_TARBALL := $(if $(filter TRUE,$(HAVE_JAVA6))\
   ,8ab049135b2d15313da5d9f0656894a1-commons-lang3-3.3.1-src.tar.gz\
   ,625ff5f2f968dd908bca43c9469d6e6b-commons-lang-2.4-src.tar.gz\
 )
-export APACHE_COMMONS_LOGGING_TARBALL := e8e197d628436490886d17cffa108fe3-commons-logging-1.1.3-src.tar.gz
+export APACHE_COMMONS_LOGGING_MD5SUM := ce977548f1cbf46918e93cd38ac35163
+export APACHE_COMMONS_LOGGING_TARBALL := commons-logging-1.2-src.tar.gz
 export APR_MD5SUM := eff9d741b0999a9bbab96862dd2a2a3d
 export APR_TARBALL := apr-1.4.8.tar.gz
 export APR_UTIL_MD5SUM := 71a11d037240b292f824ba1eb537b4e3
