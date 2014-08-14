@@ -31,12 +31,12 @@ String RID_SVXSTR_SELECTEDPERSONA
 
 String RID_SVXSTR_SEARCHING
 {
-    Text [ en-US ] = "Searching.. Please Wait..";
+    Text [ en-US ] = "Searching, please wait...";
 };
 
 String RID_SVXSTR_SEARCHERROR
 {
-    Text [ en-US ] = "Something went wrong. Please try again.";
+    Text [ en-US ] = "Cannot open %1, please try again later.";
 };
 
 String RID_SVXSTR_NORESULTS
