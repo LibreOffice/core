@@ -1428,12 +1428,12 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
         long nWidthFactor = pSalLayout->GetUnitsPerPixel();
         long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
         nTextWidth *= nWidthFactor * nSubPixelFactor;
-        long nTextPixelWidth = ImplLogicWidthToDevicePixel( nTextWidth );
-        long nExtraPixelWidth = 0;
+        DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
+        DeviceCoordinate nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
         {
             nCharExtra *= nWidthFactor * nSubPixelFactor;
-            nExtraPixelWidth = ImplLogicWidthToDevicePixel( nCharExtra );
+            nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
         }
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
@@ -1462,12 +1462,12 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
         long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
 
         nTextWidth *= nWidthFactor * nSubPixelFactor;
-        long nTextPixelWidth = ImplLogicWidthToDevicePixel( nTextWidth );
-        long nExtraPixelWidth = 0;
+        DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
+        DeviceCoordinate nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
         {
             nCharExtra *= nWidthFactor * nSubPixelFactor;
-            nExtraPixelWidth = ImplLogicWidthToDevicePixel( nCharExtra );
+            nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
         }
 
         // calculate un-hyphenated break position
