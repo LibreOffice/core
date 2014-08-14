@@ -434,8 +434,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
-	postgresql-sdbc \
-	postgresql-sdbc-impl \
+	$(if $(BUILD_POSTGRESQL_SDBC), \
+		postgresql-sdbc \
+		postgresql-sdbc-impl) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,pdfimport, \
