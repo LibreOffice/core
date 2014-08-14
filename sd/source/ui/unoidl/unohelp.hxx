@@ -29,10 +29,6 @@ inline void bool2any( bool bBool, ::com::sun::star::uno::Any& rAny )
 
 }
 
-#define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
-        aAny <<= uno::Reference< xint >(this)
-
 #endif // INCLUDED_SD_SOURCE_UI_UNOIDL_UNOHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

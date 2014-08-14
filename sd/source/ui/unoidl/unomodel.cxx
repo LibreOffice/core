@@ -251,24 +251,36 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) 
 {
     uno::Any aAny;
 
-    QUERYINT(lang::XServiceInfo);
-    else QUERYINT(beans::XPropertySet);
-    else QUERYINT(lang::XMultiServiceFactory);
-    else QUERYINT(drawing::XDrawPageDuplicator);
-    else QUERYINT(drawing::XLayerSupplier);
-    else QUERYINT(drawing::XMasterPagesSupplier);
-    else QUERYINT(drawing::XDrawPagesSupplier);
-    else QUERYINT(presentation::XHandoutMasterSupplier);
-    else QUERYINT(document::XLinkTargetSupplier);
-    else QUERYINT(style::XStyleFamiliesSupplier);
-    else QUERYINT(com::sun::star::ucb::XAnyCompareFactory);
-    else QUERYINT(view::XRenderable);
-    else if( mbImpressDoc && rType == cppu::UnoType<presentation::XPresentationSupplier>::get() )
-            aAny <<= uno::Reference< presentation::XPresentationSupplier >(this);
-    else if( mbImpressDoc && rType == cppu::UnoType<presentation::XCustomPresentationSupplier>::get() )
-            aAny <<= uno::Reference< presentation::XCustomPresentationSupplier >(this);
+    if (rType == cppu::UnoType<lang::XServiceInfo>::get())
+        aAny <<= uno::Reference<lang::XServiceInfo>(this);
+    else if (rType == cppu::UnoType<beans::XPropertySet>::get())
+        aAny <<= uno::Reference<beans::XPropertySet>(this);
+    else if (rType == cppu::UnoType<lang::XMultiServiceFactory>::get())
+        aAny <<= uno::Reference<lang::XMultiServiceFactory>(this);
+    else if (rType == cppu::UnoType<drawing::XDrawPageDuplicator>::get())
+        aAny <<= uno::Reference<drawing::XDrawPageDuplicator>(this);
+    else if (rType == cppu::UnoType<drawing::XLayerSupplier>::get())
+        aAny <<= uno::Reference<drawing::XLayerSupplier>(this);
+    else if (rType == cppu::UnoType<drawing::XMasterPagesSupplier>::get())
+        aAny <<= uno::Reference<drawing::XMasterPagesSupplier>(this);
+    else if (rType == cppu::UnoType<drawing::XDrawPagesSupplier>::get())
+        aAny <<= uno::Reference<drawing::XDrawPagesSupplier>(this);
+    else if (rType == cppu::UnoType<presentation::XHandoutMasterSupplier>::get())
+        aAny <<= uno::Reference<presentation::XHandoutMasterSupplier>(this);
+    else if (rType == cppu::UnoType<document::XLinkTargetSupplier>::get())
+        aAny <<= uno::Reference<document::XLinkTargetSupplier>(this);
+    else if (rType == cppu::UnoType<style::XStyleFamiliesSupplier>::get())
+        aAny <<= uno::Reference<style::XStyleFamiliesSupplier>(this);
+    else if (rType == cppu::UnoType<css::ucb::XAnyCompareFactory>::get())
+        aAny <<= uno::Reference<css::ucb::XAnyCompareFactory>(this);
+    else if (rType == cppu::UnoType<view::XRenderable>::get())
+        aAny <<= uno::Reference<view::XRenderable>(this);
+    else if (mbImpressDoc && rType == cppu::UnoType<presentation::XPresentationSupplier>::get())
+        aAny <<= uno::Reference< presentation::XPresentationSupplier >(this);
+    else if (mbImpressDoc && rType == cppu::UnoType<presentation::XCustomPresentationSupplier>::get())
+        aAny <<= uno::Reference< presentation::XCustomPresentationSupplier >(this);
     else
-        return SfxBaseModel::queryInterface( rType );
+        return SfxBaseModel::queryInterface(rType);
 
     return aAny;
 }

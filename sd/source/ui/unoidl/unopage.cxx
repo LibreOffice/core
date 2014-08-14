@@ -534,27 +534,48 @@ Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
 {
     Any aAny;
 
-    QUERYINT( beans::XPropertySet );
-    else QUERYINT( container::XNamed );
-    else QUERYINT( util::XReplaceable );
-    else QUERYINT( util::XSearchable );
-    else QUERYINT( document::XLinkTargetSupplier );
-    else QUERYINT( drawing::XShapeCombiner );
-    else QUERYINT( drawing::XShapeBinder );
-    else QUERYINT( beans::XMultiPropertySet );
-    else if( rType == cppu::UnoType<office::XAnnotationAccess>::get() )
+    if (rType == cppu::UnoType<beans::XPropertySet>::get())
     {
-        return Any( Reference< office::XAnnotationAccess >( this ) );
+        aAny <<= Reference<beans::XPropertySet>(this);
     }
-    else if( rType == cppu::UnoType<XAnimationNodeSupplier>::get() )
+    else if (rType == cppu::UnoType<container::XNamed>::get())
     {
-        if( mbIsImpressDocument )
-        {
-            const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
+        aAny <<= Reference<container::XNamed>(this);
+    }
+    else if (rType == cppu::UnoType<util::XReplaceable>::get())
+    {
+        aAny <<= Reference<util::XReplaceable>(this);
+    }
+    else if (rType == cppu::UnoType<util::XSearchable>::get())
+    {
+        aAny <<= Reference<util::XSearchable>(this);
+    }
+    else if (rType == cppu::UnoType<document::XLinkTargetSupplier>::get())
+    {
+        aAny <<= Reference<document::XLinkTargetSupplier>(this);
+    }
+    else if (rType == cppu::UnoType<drawing::XShapeCombiner>::get())
+    {
+        aAny <<= Reference<drawing::XShapeCombiner>(this);
+    }
+    else if (rType == cppu::UnoType<drawing::XShapeBinder>::get())
+    {
+        aAny <<= Reference<drawing::XShapeBinder>(this);
+    }
+    else if (rType == cppu::UnoType<beans::XMultiPropertySet>::get())
+    {
+        aAny <<= Reference<beans::XMultiPropertySet>(this);
+    }
+    else if (rType == cppu::UnoType<office::XAnnotationAccess>::get())
+    {
+        aAny <<= Reference<office::XAnnotationAccess>(this);
+    }
+    else if (mbIsImpressDocument && rType == cppu::UnoType<XAnimationNodeSupplier>::get())
+    {
+        const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
 
-            if( ePageKind == PK_STANDARD )
-                return makeAny( Reference< XAnimationNodeSupplier >( this ) );
-        }
+        if( ePageKind == PK_STANDARD )
+            return makeAny( Reference< XAnimationNodeSupplier >( this ) );
     }
     else
         return SvxDrawPage::queryInterface( rType );
