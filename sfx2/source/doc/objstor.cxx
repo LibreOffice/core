@@ -39,7 +39,6 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionAskLater.hpp>
-#include <com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>

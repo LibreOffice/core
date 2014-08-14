@@ -321,7 +321,6 @@
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
-#include <com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/StatusIndicatorFactory.hpp>
