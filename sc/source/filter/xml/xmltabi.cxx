@@ -459,7 +459,7 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
                 bSelectUnprotectedCells = IsXMLToken(aValue, XML_TRUE);
             break;
             default:
-                ;
+                SAL_WARN("sc", "unknown attribute: " << aAttrName);
         }
     }
 
