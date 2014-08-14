@@ -188,7 +188,7 @@ bool ContentInfo::isWrongListEqual(const ContentInfo& rCompare) const
 void ContentInfo::Dump() const
 {
     cout << "--" << endl;
-    cout << "text: '" << OUString(maText.getData()) << "'" << endl;
+    cout << "text: '" << OUString(const_cast<rtl_uString*>(maText.getData())) << "'" << endl;
     cout << "style: '" << aStyle << "'" << endl;
 
     XEditAttributesType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
