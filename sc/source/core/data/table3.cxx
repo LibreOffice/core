@@ -62,6 +62,7 @@
 #include <sharedformula.hxx>
 #include <refhint.hxx>
 #include <listenerquery.hxx>
+#include <bcaslot.hxx>
 
 #include "svl/sharedstringpool.hxx"
 
@@ -721,6 +722,21 @@ void ScTable::SortReorderByColumn(
 
     // Collect all listeners within sorted range ahead of time.
     std::vector<SvtListener*> aListeners;
+
+    // Get all area listeners that listen on one column within the range and
+    // end their listening.
+    ScRange aMoveRange( nStart, nRow1, nTab, nLast, nRow2, nTab);
+    std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
+            aMoveRange, sc::OneColumnInsideArea);
+    {
+        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+        for (; it != itEnd; ++it)
+        {
+            pDocument->EndListeningArea(it->maArea, it->mpListener);
+            aListeners.push_back( it->mpListener);
+        }
+    }
+
     for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
         aCol[nCol].CollectListeners(aListeners, nRow1, nRow2);
 
@@ -731,6 +747,22 @@ void ScTable::SortReorderByColumn(
     aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
     ColReorderNotifier aFunc(aColMap, nTab, nRow1, nRow2);
     std::for_each(aListeners.begin(), aListeners.end(), aFunc);
+
+    // Re-start area listeners on the reordered columns.
+    {
+        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+        for (; it != itEnd; ++it)
+        {
+            ScRange aNewRange = it->maArea;
+            sc::ColRowReorderMapType::const_iterator itCol = aColMap.find( aNewRange.aStart.Col());
+            if (itCol != aColMap.end())
+            {
+                aNewRange.aStart.SetCol( itCol->second);
+                aNewRange.aEnd.SetCol( itCol->second);
+            }
+            pDocument->StartListeningArea(aNewRange, it->mpListener);
+        }
+    }
 
     // Re-join formulas at row boundaries now that all the references have
     // been adjusted for column reordering.
@@ -807,8 +839,7 @@ void ScTable::SortReorderByRow(
                     assert(rCell.mpAttr);
                     ScAddress aOldPos = rCell.maCell.mpFormula->aPos;
 
-                    ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone(
-                        aCellPos, SC_CLONECELL_DEFAULT | SC_CLONECELL_ADJUST3DREL);
+                    ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone( aCellPos, SC_CLONECELL_DEFAULT);
                     pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
                     pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
 
@@ -948,6 +979,22 @@ void ScTable::SortReorderByRow(
 
     // Collect all listeners within sorted range ahead of time.
     std::vector<SvtListener*> aListeners;
+
+    // Get all area listeners that listen on one row within the range and end
+    // their listening.
+    ScRange aMoveRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+    std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
+            aMoveRange, sc::OneRowInsideArea);
+    {
+        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+        for (; it != itEnd; ++it)
+        {
+            pDocument->EndListeningArea(it->maArea, it->mpListener);
+            aListeners.push_back( it->mpListener);
+        }
+    }
+
+    // Collect listeners of cell broadcasters.
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         aCol[nCol].CollectListeners(aListeners, nRow1, nRow2);
 
@@ -979,6 +1026,22 @@ void ScTable::SortReorderByRow(
     // Notify the listeners.
     RowReorderNotifier aFunc(aRowMap, nTab, nCol1, nCol2);
     std::for_each(aListeners.begin(), aListeners.end(), aFunc);
+
+    // Re-start area listeners on the reordered rows.
+    {
+        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+        for (; it != itEnd; ++it)
+        {
+            ScRange aNewRange = it->maArea;
+            sc::ColRowReorderMapType::const_iterator itRow = aRowMap.find( aNewRange.aStart.Row());
+            if (itRow != aRowMap.end())
+            {
+                aNewRange.aStart.SetRow( itRow->second);
+                aNewRange.aEnd.SetRow( itRow->second);
+            }
+            pDocument->StartListeningArea(aNewRange, it->mpListener);
+        }
+    }
 
     // Re-group formulas in affected columns.
     for (itGroupTab = rGroupTabs.begin(); itGroupTab != itGroupTabEnd; ++itGroupTab)
