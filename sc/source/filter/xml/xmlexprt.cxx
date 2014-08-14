@@ -2945,12 +2945,12 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     if (pProtect && pProtect->isProtected() && getDefaultVersion() > SvtSaveOptions::ODFVER_012)
     {
         if (pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS))
-            AddAttribute(XML_NAMESPACE_OFFICE_EXT, XML_SELECT_PROTECTED_CELLS, XML_TRUE);
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_SELECT_PROTECTED_CELLS, XML_TRUE);
         if (pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS))
-            AddAttribute(XML_NAMESPACE_OFFICE_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TRUE);
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TRUE);
 
         OUString aElemName = GetNamespaceMap().GetQNameByKey(
-            XML_NAMESPACE_OFFICE_EXT, GetXMLToken(XML_TABLE_PROTECTION));
+            XML_NAMESPACE_LO_EXT, GetXMLToken(XML_TABLE_PROTECTION));
 
         SvXMLElementExport aElemProtected(*this, aElemName, true, true);
     }
