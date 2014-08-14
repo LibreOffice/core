@@ -68,7 +68,7 @@ gb_AFLAGS := $(AFLAGS)
 # cleaning away from the code, to avoid warnings when building with
 # gcc or Clang and -Wall -Werror.
 
-# C4100: 'identifier' : unreferenced format parameter
+# C4100: 'identifier' : unreferenced formal parameter
 
 # C4127: conditional expression is constant
 
