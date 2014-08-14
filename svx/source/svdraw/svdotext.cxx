@@ -2035,9 +2035,9 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
     SdrTextObj *pNextTextObj = NULL;
 
     if ( pPage && pPage->GetObjCount() > 1) {
-        pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj(1) );
-        if ( pNextTextObj == NULL)
-            return NULL;
+        int nextIndex = (GetOrdNum()+1) % pPage->GetObjCount();
+        pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj( nextIndex ) );
+
         return pNextTextObj;
     } else {
         fprintf(stderr, "Make New Object please\n");
