@@ -171,7 +171,7 @@ public:
     int             GetOrientation() const                  { return mnOrientation; }
 
     // methods using string indexing
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra=0, int nFactor=1) const = 0;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra=0, int nFactor=1) const = 0;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual long    GetTextWidth() const { return FillDXArray( NULL ); }
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
@@ -229,7 +229,7 @@ class VCL_PLUGIN_PUBLIC MultiSalLayout : public SalLayout
 {
 public:
     virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
@@ -331,7 +331,7 @@ public:
     // used by upper layers
     virtual long    GetTextWidth() const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
 
     // used by display layers

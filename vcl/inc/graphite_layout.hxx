@@ -123,7 +123,7 @@ public:
     virtual void  AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;  // adjusting positions
 
     // methods using string indexing
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual void  ApplyDXArray(ImplLayoutArgs &rArgs, std::vector<int> & rDeltaWidth);
 

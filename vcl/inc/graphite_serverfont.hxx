@@ -76,7 +76,7 @@ public:
         {
             return maImpl.FillDXArray(dxa);
         }
-        virtual sal_Int32 GetTextBreak(long mw, long ce, int f) const SAL_OVERRIDE
+        virtual sal_Int32 GetTextBreak(DeviceCoordinate mw, long ce, int f) const SAL_OVERRIDE
         {
             return maImpl.GetTextBreak(mw, ce, f);
         }

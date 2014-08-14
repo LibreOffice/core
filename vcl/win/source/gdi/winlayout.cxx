@@ -146,7 +146,7 @@ public:
                                    const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
 
     // for glyph+font+script fallback
@@ -644,7 +644,7 @@ DeviceCoordinate SimpleWinLayout::FillDXArray( DeviceCoordinate* pDXArray ) cons
     return mnWidth;
 }
 
-sal_Int32 SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 SimpleWinLayout::GetTextBreak( DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor ) const
 // NOTE: the nFactor is used to prevent rounding errors for small nCharExtra values
 {
     if( mnWidth )
@@ -967,7 +967,7 @@ public:
                                    const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
     virtual bool    IsKashidaPosValid ( int nCharPos ) const;
 
@@ -2115,7 +2115,7 @@ DeviceCoordinate UniscribeLayout::FillDXArray( DeviceCoordinate* pDXArray ) cons
     return nWidth;
 }
 
-sal_Int32 UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 UniscribeLayout::GetTextBreak( DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor ) const
 {
     long nWidth = 0;
     for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
@@ -2640,7 +2640,7 @@ public:
     virtual void  DrawText( SalGraphics& ) const;
 
     // methods using string indexing
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
 
     virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
@@ -2776,8 +2776,7 @@ void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
           DeleteFont( SelectFont( aHDC, hOrigFont ) );
 }
 
-sal_Int32 GraphiteWinLayout::GetTextBreak(
-        long nMaxWidth, long nCharExtra, int nFactor) const
+sal_Int32 GraphiteWinLayout::GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor) const
 {
     sal_Int32 nBreak = maImpl.GetTextBreak(nMaxWidth, nCharExtra, nFactor);
     return nBreak;

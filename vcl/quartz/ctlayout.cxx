@@ -44,7 +44,7 @@ public:
 
     virtual long    GetTextWidth() const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const SAL_OVERRIDE;
 
@@ -762,13 +762,16 @@ DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
     return nPixWidth;
 }
 
-sal_Int32 CTLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 CTLayout::GetTextBreak( DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor ) const
 {
     if( !mpCTLine )
+    {
+        SAL_INFO("vcl.ct", "GetTextBreak mpCTLine == NULL");
         return -1;
-
+    }
     CTTypesetterRef aCTTypeSetter = CTTypesetterCreateWithAttributedString( mpAttrString );
     CFIndex nBestGuess = (nCharExtra >= 0) ? 0 : mnCharCount;
+    SAL_INFO("vcl.ct", "GetTextBreak nMaxWidth:" << nMaxWidth << " nBestGuess:" << nBestGuess << " nCharExtra:" << nCharExtra << " nFactor:" << nFactor);
     for( int i = 1; i <= mnCharCount; i *= 2 )
     {
         // guess the target width considering char-extra expansion/condensation
@@ -776,7 +779,9 @@ sal_Int32 CTLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
         const double fCTMaxWidth = nTargetWidth / nFactor;
         // calculate the breaking index for the guessed target width
         const CFIndex nNewIndex = CTTypesetterSuggestClusterBreak( aCTTypeSetter, 0, fCTMaxWidth );
-        if( nNewIndex >= mnCharCount ) {
+        SAL_INFO("vcl.ct", "GetTextBreak nTargetWidth:" << nTargetWidth << " fCTMaxWidth:" << fCTMaxWidth << " nNewIndex:" << nNewIndex);
+        if( nNewIndex >= mnCharCount )
+        {
             CFRelease( aCTTypeSetter );
             return -1;
         }
@@ -795,6 +800,7 @@ sal_Int32 CTLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
     // suggest the best fitting cluster break as breaking position
     CFRelease( aCTTypeSetter );
     const int nIndex = nBestGuess + mnMinCharPos;
+    SAL_INFO("vcl.ct", "GetTextBreak nIndex:" << nIndex);
     return nIndex;
 }
 
