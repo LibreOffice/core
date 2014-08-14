@@ -89,11 +89,14 @@ done
 # (bootstraprc and similar that the user might adjust and image files)
 # See also https://developer.apple.com/library/mac/technotes/tn2206/
 
-if test "$ENABLE_MACOSX_SANDBOX" = "TRUE"; then
+id=`echo ${MACOSX_APP_NAME} | tr ' ' '-'`
+
+if test -n "$ENABLE_MACOSX_SANDBOX"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
+else
+    resource_rules="--resource-rules $SRCDIR/setup_native/source/mac/CodesignRules.plist"
 fi
 
-id=`echo ${MACOSX_APP_NAME} | tr ' ' '-'`
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" --resource-rules "$SRCDIR/setup_native/source/mac/CodesignRules.plist" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" $resource_rules --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
 
 exit 0
