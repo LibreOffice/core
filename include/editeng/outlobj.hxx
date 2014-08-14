@@ -26,12 +26,11 @@
 #include <rsc/rscsfx.hxx>
 
 class EditTextObject;
-class ImplOutlinerParaObject;
 
 class EDITENG_DLLPUBLIC OutlinerParaObject
 {
-private:
-    ImplOutlinerParaObject*        mpImplOutlinerParaObject;
+    struct Impl;
+    Impl* mpImpl;
 
     void ImplMakeUnique();
 
