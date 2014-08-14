@@ -1300,75 +1300,75 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
 {
     const SdrObject* pObj = GetDragObj();
 
-    if(pObj)
+    if (!pObj)
+        // No object to drag.  Bail out.
+        return;
+
+    Point aPnt(rNoSnapPnt);
+    SdrPageView* pPV = GetDragPV();
+
+    if (!pPV)
+        // No page view available.  Bail out.
+        return;
+
+    if(!DragStat().IsNoSnap())
     {
-        Point aPnt(rNoSnapPnt);
-        SdrPageView* pPV = GetDragPV();
+        SnapPos(aPnt);
+    }
 
-        if(pPV)
+    if(getSdrDragView().IsOrtho())
+    {
+        if (DragStat().IsOrtho8Possible())
         {
-            if(!DragStat().IsNoSnap())
-            {
-                SnapPos(aPnt);
-            }
-
-            if(getSdrDragView().IsOrtho())
-            {
-                if (DragStat().IsOrtho8Possible())
-                {
-                    OrthoDistance8(DragStat().GetStart(),aPnt,getSdrDragView().IsBigOrtho());
-                }
-                else if (DragStat().IsOrtho4Possible())
-                {
-                    OrthoDistance4(DragStat().GetStart(),aPnt,getSdrDragView().IsBigOrtho());
-                }
-            }
-
-            if(DragStat().CheckMinMoved(rNoSnapPnt))
-            {
-                if(aPnt != DragStat().GetNow())
-                {
-                    Hide();
-                    DragStat().NextMove(aPnt);
-
-                    // since SdrDragObjOwn currently supports no transformation of
-                    // existing SdrDragEntries but only their recreation, a recreation
-                    // after every move is needed in this mode. Delete existing
-                    // SdrDragEntries here  to force their recreation in the following Show().
-                    clearSdrDragEntries();
-
-                    // delete current clone (after the last reference to it is deleted above)
-                    if(mpClone)
-                    {
-                        SdrObject::Free(mpClone);
-                        mpClone = 0;
-                    }
-
-                    // create a new clone and modify to current drag state
-                    if(!mpClone)
-                    {
-                        mpClone = pObj->getFullDragClone();
-                        mpClone->applySpecialDrag(DragStat());
-
-                        // #120999# AutoGrowWidth may change for SdrTextObj due to the automatism used
-                        // with bDisableAutoWidthOnDragging, so not only geometry changes but
-                        // also this (pretty indirect) property change is possible. If it gets
-                        // changed, it needs to be copied to the original since nothing will
-                        // happen when it only changes in the drag clone
-                        const bool bOldAutoGrowWidth(((SdrOnOffItem&)pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
-                        const bool bNewAutoGrowWidth(((SdrOnOffItem&)mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
-
-                        if(bOldAutoGrowWidth != bNewAutoGrowWidth)
-                        {
-                            GetDragObj()->SetMergedItem(makeSdrTextAutoGrowWidthItem(bNewAutoGrowWidth));
-                        }
-                    }
-
-                    Show();
-                }
-            }
+            OrthoDistance8(DragStat().GetStart(),aPnt,getSdrDragView().IsBigOrtho());
+        }
+        else if (DragStat().IsOrtho4Possible())
+        {
+            OrthoDistance4(DragStat().GetStart(),aPnt,getSdrDragView().IsBigOrtho());
         }
     }
+
+    if (!DragStat().CheckMinMoved(rNoSnapPnt))
+        // Not moved by the minimum threshold.  Nothing to do.
+        return;
+
+    Hide();
+    DragStat().NextMove(aPnt);
+
+    // since SdrDragObjOwn currently supports no transformation of
+    // existing SdrDragEntries but only their recreation, a recreation
+    // after every move is needed in this mode. Delete existing
+    // SdrDragEntries here  to force their recreation in the following Show().
+    clearSdrDragEntries();
+
+    // delete current clone (after the last reference to it is deleted above)
+    if(mpClone)
+    {
+        SdrObject::Free(mpClone);
+        mpClone = 0;
+    }
+
+    // create a new clone and modify to current drag state
+    if(!mpClone)
+    {
+        mpClone = pObj->getFullDragClone();
+        mpClone->applySpecialDrag(DragStat());
+
+        // #120999# AutoGrowWidth may change for SdrTextObj due to the automatism used
+        // with bDisableAutoWidthOnDragging, so not only geometry changes but
+        // also this (pretty indirect) property change is possible. If it gets
+        // changed, it needs to be copied to the original since nothing will
+        // happen when it only changes in the drag clone
+        const bool bOldAutoGrowWidth(((SdrOnOffItem&)pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
+        const bool bNewAutoGrowWidth(((SdrOnOffItem&)mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
+
+        if(bOldAutoGrowWidth != bNewAutoGrowWidth)
+        {
+            GetDragObj()->SetMergedItem(makeSdrTextAutoGrowWidthItem(bNewAutoGrowWidth));
+        }
+    }
+
+    Show();
 }
 
 bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
