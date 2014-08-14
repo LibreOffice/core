@@ -1723,6 +1723,19 @@ DECLARE_OOXMLIMPORT_TEST(testTableBtlrCenter, "table-btlr-center.docx")
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xTable->getCellByName("A2"), "VertOrient"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testHidemark, "hidemark.docx")
+{
+    // Problem was that <w:hideMark> cell property was ignored.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // Height should be minimal
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(TWIP_TO_MM100(MINLAY)), getProperty<sal_Int32>(xTableRows->getByIndex(1), "Height"));
+    // Size type was MIN, should be FIX to avoid considering the end of paragraph marker.
+    CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xTableRows->getByIndex(1), "SizeType"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

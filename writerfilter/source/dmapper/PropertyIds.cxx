@@ -347,6 +347,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_HORIZONTAL_MERGE: sName = "HorizontalMerge"; break;
             case PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING : sName = "ApplyParagraphMarkFormatToNumbering"; break;
             case PROP_CELL_DIRECTION: sName = "CellDirection"; break;
+            case PROP_CELL_HIDE_MARK: sName = "CellHideMark"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

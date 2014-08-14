@@ -318,6 +318,7 @@ enum PropertyIds
         ,PROP_HORIZONTAL_MERGE
         ,PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING
         ,PROP_CELL_DIRECTION
+        ,PROP_CELL_HIDE_MARK
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
