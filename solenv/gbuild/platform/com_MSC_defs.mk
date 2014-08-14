@@ -68,6 +68,8 @@ gb_AFLAGS := $(AFLAGS)
 # cleaning away from the code, to avoid warnings when building with
 # gcc or Clang and -Wall -Werror.
 
+# C4100: 'identifier' : unreferenced format parameter
+
 # C4127: conditional expression is constant
 
 # C4189: 'identifier' : local variable is initialized but not referenced
@@ -138,6 +140,7 @@ gb_CFLAGS := \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
+	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
 	-wd4127 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
 	-wd4242 \
@@ -161,6 +164,7 @@ gb_CXXFLAGS := \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
+	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
 	-wd4127 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
 	-wd4201 \
