@@ -100,6 +100,14 @@ struct RangeMatrix
 
 typedef boost::unordered_map<SCCOLROW,SCCOLROW> ColRowReorderMapType;
 
+enum AreaOverlapType
+{
+    AreaInside,
+    AreaPartialOverlap,
+    OneRowInsideArea,
+    OneColumnInsideArea
+};
+
 }
 
 #endif
