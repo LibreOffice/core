@@ -83,7 +83,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
             std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
             glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
             VertexShaderErrorMessage.push_back('\0');
-            SAL_WARN("vcl.opengl", "vertex shader compile failed : " << &VertexShaderErrorMessage[0]);
+            SAL_WARN("vcl.opengl", "vertex shader compile for " << rVertexShaderName << " failed : " << &VertexShaderErrorMessage[0]);
         }
         else
             SAL_WARN("vcl.opengl", "vertex shader compile failed without error log");
@@ -107,7 +107,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
             std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
             glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
             FragmentShaderErrorMessage.push_back('\0');
-            SAL_WARN("vcl.opengl", "fragment shader compile failed : " << &FragmentShaderErrorMessage[0]);
+            SAL_WARN("vcl.opengl", "fragment shader compile for " << rFragmentShaderName << " failed : " << &FragmentShaderErrorMessage[0]);
         }
         else
             SAL_WARN("vcl.opengl", "fragment shader compile failed without error log");
