@@ -17,7 +17,6 @@
 #include "libxml/parserInternals.h"
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_array.hpp>
-#include <cert.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>

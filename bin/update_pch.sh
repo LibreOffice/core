@@ -133,6 +133,7 @@ function filter_ignore()
 # - sores.hxx provides BMP_PLUGIN, which is redefined
 # - some sources play ugly #define tricks with editeng/eeitemid.hxx
 # - objbase.h and oledb.h break ado
+# - NSS cert.h may need to be mangled by nssrenam.h
 # - xmlreader.h breaks cppuhelper
 # - jerror.h and jpeglib.h are not self-contained
 # - service1.hxx/service2.hxx are inside comments in frameworks/
@@ -147,6 +148,7 @@ function filter_ignore()
     grep -v -F -e '#include <service2.hxx>' | \
     grep -v -F -e '#include <objbase.h>' | \
     grep -v -F -e '#include <oledb.h>' | \
+    grep -v -F -e '#include <cert.h>' | \
     grep -v -F -e '#include <xmlreader/xmlreader.hxx>' | \
     grep -v -F -e '#include "jerror.h"' | \
     grep -v -F -e '#include "jpeglib.h"'
