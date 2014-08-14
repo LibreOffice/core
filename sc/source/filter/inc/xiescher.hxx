@@ -202,10 +202,17 @@ private:
     bool                mbCustomDff;    /// true = Recreate SdrObject in DFF import.
 };
 
-class XclImpDrawObjVector : public ::std::vector< XclImpDrawObjRef >
+class XclImpDrawObjVector
 {
+private:
+    ::std::vector< XclImpDrawObjRef > mObjs;
+
 public:
-    inline explicit     XclImpDrawObjVector() {}
+    inline explicit     XclImpDrawObjVector() : mObjs() {}
+
+    ::std::vector< XclImpDrawObjRef >::const_iterator begin() const { return mObjs.begin(); }
+    ::std::vector< XclImpDrawObjRef >::const_iterator end() const { return mObjs.end(); }
+    void push_back(const XclImpDrawObjRef& rObj) { mObjs.push_back(rObj); }
 
     /** Tries to insert the passed object into the last group or appends it. */
     void                InsertGrouped( XclImpDrawObjRef xDrawObj );

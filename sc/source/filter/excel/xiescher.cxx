@@ -965,17 +965,17 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
 
 void XclImpDrawObjVector::InsertGrouped( XclImpDrawObjRef xDrawObj )
 {
-    if( !empty() )
-        if( XclImpGroupObj* pGroupObj = dynamic_cast< XclImpGroupObj* >( back().get() ) )
+    if( !mObjs.empty() )
+        if( XclImpGroupObj* pGroupObj = dynamic_cast< XclImpGroupObj* >( mObjs.back().get() ) )
             if( pGroupObj->TryInsert( xDrawObj ) )
                 return;
-    push_back( xDrawObj );
+    mObjs.push_back( xDrawObj );
 }
 
 sal_Size XclImpDrawObjVector::GetProgressSize() const
 {
     sal_Size nProgressSize = 0;
-    for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+    for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = mObjs.begin(), aEnd = mObjs.end(); aIt != aEnd; ++aIt )
         nProgressSize += (*aIt)->GetProgressSize();
     return nProgressSize;
 }
@@ -1036,7 +1036,7 @@ SdrObject* XclImpGroupObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const R
     TSdrObjectPtr< SdrObjGroup > xSdrObj( new SdrObjGroup );
     // child objects in BIFF2-BIFF5 have absolute size, not needed to pass own anchor rectangle
     SdrObjList& rObjList = *xSdrObj->GetSubList();  // SdrObjGroup always returns existing sublist
-    for( XclImpDrawObjVector::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end(); aIt != aEnd; ++aIt )
+    for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end(); aIt != aEnd; ++aIt )
         rDffConv.ProcessObject( rObjList, **aIt );
     rDffConv.Progress();
     return xSdrObj.release();
@@ -3299,7 +3299,7 @@ void XclImpDffConverter::ProcessObject( SdrObjList& rObjList, const XclImpDrawOb
 void XclImpDffConverter::ProcessDrawing( const XclImpDrawObjVector& rDrawObjs )
 {
     SdrPage& rSdrPage = GetConvData().mrSdrPage;
-    for( XclImpDrawObjVector::const_iterator aIt = rDrawObjs.begin(), aEnd = rDrawObjs.end(); aIt != aEnd; ++aIt )
+    for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = rDrawObjs.begin(), aEnd = rDrawObjs.end(); aIt != aEnd; ++aIt )
         ProcessObject( rSdrPage, **aIt );
 }
 
