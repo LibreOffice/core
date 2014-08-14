@@ -32,59 +32,9 @@ Image IMG_QUERY
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
-TabPage RID_PAGE_OPTION_DBFIELD
+String RID_STR_OPTION_DB_FIELD_TITLE
 {
-    HelpID = "extensions:TabPage:RID_PAGE_OPTION_DBFIELD";
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
     Text [ en-US ] = "Database Field";
-
-    FixedLine FL_DATABASEFIELD_EXPL
-    {
-        Pos = MAP_APPFONT ( 4 , 3  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
-    };
-    FixedText FT_DATABASEFIELD_EXPL
-    {
-        Pos = MAP_APPFONT ( 7 , 15  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
-        WordBreak = TRUE;
-    };
-    FixedText FT_DATABASEFIELD_QUEST
-    {
-        Pos = MAP_APPFONT ( 7 , 34  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
-        WordBreak = TRUE;
-        Text [ en-US ] = "Do you want to save the value in a database field?";
-    };
-    RadioButton RB_STOREINFIELD_YES
-    {
-        HelpID = "extensions:RadioButton:RID_PAGE_OPTION_DBFIELD:RB_STOREINFIELD_YES";
-        Pos = MAP_APPFONT ( 7 , 53  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 20, 10 ) ;
-        Group = TRUE;
-        TabStop = TRUE;
-        Text [ en-US ] = "~Yes, I want to save it in the following database field:";
-    };
-    ListBox LB_STOREINFIELD
-    {
-        HelpID = "extensions:ListBox:RID_PAGE_OPTION_DBFIELD:LB_STOREINFIELD";
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 23, 51 ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 30, 14 ) ;
-        TabStop = TRUE;
-        SVLook = TRUE ;
-        Border = TRUE ;
-        DropDown = TRUE;
-        AutoHScroll = TRUE ;
-    };
-    RadioButton RB_STOREINFIELD_NO
-    {
-        HelpID = "extensions:RadioButton:RID_PAGE_OPTION_DBFIELD:RB_STOREINFIELD_NO";
-        Pos = MAP_APPFONT ( 7 , 68 ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
-        TabStop = FALSE;
-        Text [ en-US ] = "~No, I only want to save the value in the form.";
-    };
 };
 
 String RID_STR_TYPE_TABLE
