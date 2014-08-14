@@ -1971,7 +1971,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
             ImpAutoFitText(*pEdtOutl);
             mbInDownScale = false;
         }
-        else if ( GetNextLinkInChain() != NULL && !nStat ) // do it only if it is a call explicitly for chaining (status word already cleared)
+        else if ( GetNextLinkInChain() != NULL && bOverflow ) // do it only if it is a call explicitly for chaining (status word already cleared)
         {
             // set the need for chaining
             SetToBeChained( pEditStatus->IsPageOverflow() );
