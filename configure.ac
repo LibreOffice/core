@@ -3114,7 +3114,7 @@ if test $_os = iOS; then
 
     xcode_developer=`xcode-select -print-path`
 
-    pref_sdk_ver=7.1
+    current_sdk_ver=7.1
     for sdkver in 8.0 7.1 7.0 6.1 6.0; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
@@ -3125,7 +3125,7 @@ if test $_os = iOS; then
     done
 
     if test -z "$sysroot"; then
-        AC_MSG_ERROR([Could not find iOS SDK, expected something like $xcode_developer/Platforms/$platform.platform/Developer/SDKs/${platform}${pref_sdk_ver}])
+        AC_MSG_ERROR([Could not find iOS SDK, expected something like $xcode_developer/Platforms/$platform.platform/Developer/SDKs/${platform}${current_sdk_ver}])
     fi
 
     AC_MSG_RESULT($sysroot)
