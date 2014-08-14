@@ -83,7 +83,6 @@
     #define GID_DIR_URE_JAVA gid_Dir_Classes
     #define GID_DIR_URE_LIB gid_Dir_Frameworks
     #define GID_DIR_URE_SHARE gid_Brand_Dir_Share_Ure
-    #define GID_DIR_URE_SHARE_MISC gid_Brand_Dir_Share_Ure
 #else
     #define GID_BRAND_DIR_ETC gid_Brand_Dir_Program
     #define GID_DIR_PY gid_Brand_Dir_Program
@@ -92,7 +91,6 @@
     #define GID_DIR_URE_JAVA gid_Dir_Ure_Java
     #define GID_DIR_URE_LIB gid_Dir_Ure_Lib
     #define GID_DIR_URE_SHARE gid_Dir_Ure_Share
-    #define GID_DIR_URE_SHARE_MISC gid_Dir_Ure_Misc
 #endif
 
 #define RESFILENAME(name,lang)                STRING(CONCAT3(name,lang,.res))
