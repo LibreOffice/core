@@ -21,28 +21,17 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-
 namespace pcr
 {
-
-
-
-    //= ListSelectionDialog
-
     class ListSelectionDialog : public ModalDialog
     {
     private:
-        FixedText       m_aLabel;
-        ListBox         m_aEntries;
-        OKButton        m_aOK;
-        CancelButton    m_aCancel;
-        HelpButton      m_aHelp;
+        ListBox*        m_pEntries;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xListBox;

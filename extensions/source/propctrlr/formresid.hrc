@@ -274,11 +274,6 @@
 
 #define RID_STR_CONFIRM_DELETE_DATA_TYPE    ( RID_FORMBROWSER_START + 500 )
 
-// - dialogs
-
-#define RID_DLG_TABORDER                    ( RID_PROPCONTROLLER_START +  1 )
-#define RID_DLG_SELECTION                   ( RID_PROPCONTROLLER_START +  3 )
-
 // - ImageLists
 
 #define RID_IL_FORMEXPLORER                 ( RID_PROPCONTROLLER_START +  0 )

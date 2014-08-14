@@ -15,6 +15,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/spropctrlr,\
 	extensions/uiconfig/spropctrlr/ui/fieldlinkrow \
 	extensions/uiconfig/spropctrlr/ui/formlinksdialog \
 	extensions/uiconfig/spropctrlr/ui/labelselectiondialog \
+	extensions/uiconfig/spropctrlr/ui/listselectdialog \
 	extensions/uiconfig/spropctrlr/ui/taborder \
 ))
 
