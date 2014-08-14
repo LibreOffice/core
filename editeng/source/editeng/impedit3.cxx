@@ -491,7 +491,23 @@ void ImpEditEngine::FormatDoc()
 
     CallStatusHdl();    // If Modified...
 
+    //FIXME(matteocam)
+    CallStatusHdlChaining(); // XXX: hard coded for chaining
+
     LeaveBlockNotifications();
+}
+
+void ImpEditEngine::CallStatusHdlChaining()
+{
+    if ( aStatusHdlLinkChaining.IsSet() && aStatus.GetStatusWord() )
+    {
+        // The Status has to be reset before the Call,
+        // since other Flags might be set in the handler...
+        EditStatus aTmpStatus( aStatus );
+        aStatus.Clear(); // No need for this with chaining. It does not affect it either way.
+        //aStatusHdlLinkChaining.Call( &aTmpStatus );
+        aStatusTimer.Stop();    // If called by hand ...
+    }
 }
 
 bool ImpEditEngine::ImpCheckRefMapMode()

@@ -368,6 +368,8 @@ public:
     void            SetStatusEventHdl( const Link<>& rLink );
     Link<>          GetStatusEventHdl() const;
 
+    void            SetStatusEventHdl1( const Link<>& rLink ); // for chaining
+
     void            SetNotifyHdl( const Link<>& rLink );
     Link<>          GetNotifyHdl() const;
 

@@ -728,6 +728,8 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
+            // FIXME(matteocam) // For chaining
+            pTextEditOutliner->SetStatusEventHdl1(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
 #ifdef DBG_UTIL
             if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
