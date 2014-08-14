@@ -499,7 +499,7 @@ void ImpEditEngine::FormatDoc()
 
 void ImpEditEngine::CallStatusHdlChaining()
 {
-    if ( aStatusHdlLinkChaining.IsSet() && aStatus.GetStatusWord() )
+    if ( aStatusHdlLinkChaining.IsSet() /* && aStatus.GetStatusWord() */)
     {
         // The Status has to be reset before the Call,
         // since other Flags might be set in the handler...
