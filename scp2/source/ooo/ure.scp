@@ -85,12 +85,16 @@ Directory gid_Dir_Ure_Java
 End
 #endif
 
-Directory gid_Dir_Ure_Misc
-    ParentID = SCP2_URE_SHARE_DIR;
+#endif // !ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+
+Directory gid_Dir_Ure_Share_Misc
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Brand_Dir_Share_Ure_Share;
+#else
+    ParentID = gir_Dir_Ure_Share;
+#endif
     DosName = "misc";
 End
-
-#endif // !ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 
 // Public Dynamic Libraries:
 
@@ -220,9 +224,7 @@ ProfileItem gid_Profileitem_Dl_Uno_Uno_Services
     ProfileID = gid_Profile_Dl_Uno_Ini;
     Section = "Bootstrap";
     Key = "UNO_SERVICES";
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-    Value = "${ORIGIN}/services.rdb ${URE_MORE_SERVICES}";
-#elif defined WNT
+#if defined WNT
     Value = "${ORIGIN}/../misc/services.rdb ${URE_MORE_SERVICES}";
 #else
     Value = "${ORIGIN}/../share/misc/services.rdb ${URE_MORE_SERVICES}";
@@ -410,14 +412,14 @@ End
 
 File gid_File_Misc_TypesRdb
     TXT_FILE_BODY;
-    Dir = GID_DIR_URE_SHARE_MISC;
+    Dir = gid_Dir_Ure_Share_Misc;
     Name = "types.rdb";
     Styles = (PACKED);
 End
 
 File gid_File_Misc_ServicesRdb
     TXT_FILE_BODY;
-    Dir = GID_DIR_URE_SHARE_MISC;
+    Dir = gid_Dir_Ure_Share_Misc;
     Name = "services.rdb";
     Styles = (PACKED);
 End
@@ -437,7 +439,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_Dir_Ure_Lib,
             gid_Dir_Ure_Share,
             gid_Dir_Ure_Java,
-            gid_Dir_Ure_Misc);
+            gid_Dir_Ure_Share_Misc);
     Files = (auto_ure_ALL,
             gid_File_ThirdpartylicensereadmeHtml_Ure,
             gid_File_Readme_Ure,
