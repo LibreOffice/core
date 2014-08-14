@@ -32,24 +32,25 @@
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 
+#include <boost/intrusive_ptr.hpp>
+
 /**
  * This is the guts of OutlinerParaObject, refcounted and shared among
  * multiple instances of OutlinerParaObject.
  */
-class OutlinerParaObjData
+struct OutlinerParaObjData
 {
-public:
     // data members
     EditTextObject*                 mpEditTextObject;
     ParagraphDataVector             maParagraphDataVector;
     bool                            mbIsEditDoc;
 
     // refcounter
-    sal_uInt32                      mnRefCount;
+    mutable size_t mnRefCount;
 
     // constuctor
-    OutlinerParaObjData(EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc)
-    :   mpEditTextObject(pEditTextObject),
+    OutlinerParaObjData( EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
+        mpEditTextObject(pEditTextObject),
         maParagraphDataVector(rParagraphDataVector),
         mbIsEditDoc(bIsEditDoc),
         mnRefCount(0)
@@ -57,6 +58,11 @@ public:
         if( maParagraphDataVector.empty() && (pEditTextObject->GetParagraphCount() != 0) )
             maParagraphDataVector.resize(pEditTextObject->GetParagraphCount());
     }
+
+    OutlinerParaObjData( const OutlinerParaObjData& r ) :
+        mpEditTextObject(r.mpEditTextObject->Clone()),
+        maParagraphDataVector(r.maParagraphDataVector),
+        mbIsEditDoc(r.mbIsEditDoc) {}
 
     // destructor
     ~OutlinerParaObjData()
@@ -78,41 +84,37 @@ public:
     }
 };
 
+inline void intrusive_ptr_add_ref(const OutlinerParaObjData* p)
+{
+    ++p->mnRefCount;
+}
+
+inline void intrusive_ptr_release(const OutlinerParaObjData* p)
+{
+    --p->mnRefCount;
+    if (!p->mnRefCount)
+        delete p;
+}
+
 struct OutlinerParaObject::Impl
 {
-    OutlinerParaObjData* mpData;
+    typedef boost::intrusive_ptr<OutlinerParaObjData> DataRef;
+    DataRef mxData;
 
     Impl( const EditTextObject& rTextObj, const ParagraphDataVector& rParaData, bool bIsEditDoc ) :
-        mpData(new OutlinerParaObjData(rTextObj.Clone(), rParaData, bIsEditDoc)) {}
+        mxData(new OutlinerParaObjData(rTextObj.Clone(), rParaData, bIsEditDoc)) {}
 
     Impl( const EditTextObject& rTextObj ) :
-        mpData(new OutlinerParaObjData(rTextObj.Clone(), ParagraphDataVector(), true)) {}
+        mxData(new OutlinerParaObjData(rTextObj.Clone(), ParagraphDataVector(), true)) {}
 
-    Impl( const Impl& r ) : mpData(r.mpData)
-    {
-        mpData->mnRefCount++;
-    }
+    Impl( const Impl& r ) : mxData(r.mxData) {}
 
-    ~Impl()
-    {
-        if (mpData->mnRefCount)
-            mpData->mnRefCount--;
-        else
-            delete mpData;
-    }
+    ~Impl() {}
 };
 
 void OutlinerParaObject::ImplMakeUnique()
 {
-    if (mpImpl->mpData->mnRefCount)
-    {
-        OutlinerParaObjData* pNew = new OutlinerParaObjData(
-            mpImpl->mpData->mpEditTextObject->Clone(),
-            mpImpl->mpData->maParagraphDataVector,
-            mpImpl->mpData->mbIsEditDoc);
-        mpImpl->mpData->mnRefCount--;
-        mpImpl->mpData = pNew;
-    }
+    mpImpl->mxData.reset(new OutlinerParaObjData(*mpImpl->mxData));
 }
 
 OutlinerParaObject::OutlinerParaObject(
@@ -124,86 +126,72 @@ OutlinerParaObject::OutlinerParaObject( const EditTextObject& rTextObj ) :
 {
 }
 
-OutlinerParaObject::OutlinerParaObject(const OutlinerParaObject& rCandidate) :
-    mpImpl(new Impl(*rCandidate.mpImpl)) {}
+OutlinerParaObject::OutlinerParaObject( const OutlinerParaObject& r ) :
+    mpImpl(new Impl(*r.mpImpl)) {}
 
 OutlinerParaObject::~OutlinerParaObject()
 {
     delete mpImpl;
 }
 
-OutlinerParaObject& OutlinerParaObject::operator=(const OutlinerParaObject& rCandidate)
+OutlinerParaObject& OutlinerParaObject::operator=( const OutlinerParaObject& r )
 {
-    if(rCandidate.mpImpl->mpData != mpImpl->mpData)
-    {
-        if (mpImpl->mpData->mnRefCount)
-        {
-            mpImpl->mpData->mnRefCount--;
-        }
-        else
-        {
-            delete mpImpl->mpData;
-        }
-
-        mpImpl->mpData = rCandidate.mpImpl->mpData;
-        mpImpl->mpData->mnRefCount++;
-    }
-
+    mpImpl->mxData = r.mpImpl->mxData;
     return *this;
 }
 
-bool OutlinerParaObject::operator==(const OutlinerParaObject& rCandidate) const
+bool OutlinerParaObject::operator==( const OutlinerParaObject& r ) const
 {
-    if (rCandidate.mpImpl->mpData == mpImpl->mpData)
+    if (r.mpImpl->mxData.get() == mpImpl->mxData.get())
     {
         return true;
     }
 
-    return (*rCandidate.mpImpl->mpData == *mpImpl->mpData);
+    return (*r.mpImpl->mxData == *mpImpl->mxData);
 }
 
 // #i102062#
-bool OutlinerParaObject::isWrongListEqual(const OutlinerParaObject& rCompare) const
+bool OutlinerParaObject::isWrongListEqual( const OutlinerParaObject& r ) const
 {
-    if (rCompare.mpImpl->mpData == mpImpl->mpData)
+    if (r.mpImpl->mxData.get() == mpImpl->mxData.get())
     {
         return true;
     }
 
-    return mpImpl->mpData->isWrongListEqual(*rCompare.mpImpl->mpData);
+    return mpImpl->mxData->isWrongListEqual(*r.mpImpl->mxData);
 }
 
 sal_uInt16 OutlinerParaObject::GetOutlinerMode() const
 {
-    return mpImpl->mpData->mpEditTextObject->GetUserType();
+    return mpImpl->mxData->mpEditTextObject->GetUserType();
 }
 
 void OutlinerParaObject::SetOutlinerMode(sal_uInt16 nNew)
 {
-    if (mpImpl->mpData->mpEditTextObject->GetUserType() != nNew)
+    if (mpImpl->mxData->mpEditTextObject->GetUserType() != nNew)
     {
         ImplMakeUnique();
-        mpImpl->mpData->mpEditTextObject->SetUserType(nNew);
+        mpImpl->mxData->mpEditTextObject->SetUserType(nNew);
     }
 }
 
 bool OutlinerParaObject::IsVertical() const
 {
-    return mpImpl->mpData->mpEditTextObject->IsVertical();
+    return mpImpl->mxData->mpEditTextObject->IsVertical();
 }
 
 void OutlinerParaObject::SetVertical(bool bNew)
 {
-    if((bool)mpImpl->mpData->mpEditTextObject->IsVertical() != bNew)
+    if (mpImpl->mxData->mpEditTextObject->IsVertical() != bNew)
     {
         ImplMakeUnique();
-        mpImpl->mpData->mpEditTextObject->SetVertical(bNew);
+        mpImpl->mxData->mpEditTextObject->SetVertical(bNew);
     }
 }
 
 sal_Int32 OutlinerParaObject::Count() const
 {
-    size_t nSize = mpImpl->mpData->maParagraphDataVector.size();
+    size_t nSize = mpImpl->mxData->maParagraphDataVector.size();
     if (nSize > EE_PARA_MAX_COUNT)
     {
         SAL_WARN( "editeng", "OutlinerParaObject::Count - overflow " << nSize);
@@ -214,9 +202,9 @@ sal_Int32 OutlinerParaObject::Count() const
 
 sal_Int16 OutlinerParaObject::GetDepth(sal_Int32 nPara) const
 {
-    if(0 <= nPara && static_cast<size_t>(nPara) < mpImpl->mpData->maParagraphDataVector.size())
+    if(0 <= nPara && static_cast<size_t>(nPara) < mpImpl->mxData->maParagraphDataVector.size())
     {
-        return mpImpl->mpData->maParagraphDataVector[nPara].getDepth();
+        return mpImpl->mxData->maParagraphDataVector[nPara].getDepth();
     }
     else
     {
@@ -226,19 +214,19 @@ sal_Int16 OutlinerParaObject::GetDepth(sal_Int32 nPara) const
 
 const EditTextObject& OutlinerParaObject::GetTextObject() const
 {
-    return *mpImpl->mpData->mpEditTextObject;
+    return *mpImpl->mxData->mpEditTextObject;
 }
 
 bool OutlinerParaObject::IsEditDoc() const
 {
-    return mpImpl->mpData->mbIsEditDoc;
+    return mpImpl->mxData->mbIsEditDoc;
 }
 
 const ParagraphData& OutlinerParaObject::GetParagraphData(sal_Int32 nIndex) const
 {
-    if(0 <= nIndex && static_cast<size_t>(nIndex) < mpImpl->mpData->maParagraphDataVector.size())
+    if(0 <= nIndex && static_cast<size_t>(nIndex) < mpImpl->mxData->maParagraphDataVector.size())
     {
-        return mpImpl->mpData->maParagraphDataVector[nIndex];
+        return mpImpl->mxData->maParagraphDataVector[nIndex];
     }
     else
     {
@@ -251,21 +239,21 @@ const ParagraphData& OutlinerParaObject::GetParagraphData(sal_Int32 nIndex) cons
 void OutlinerParaObject::ClearPortionInfo()
 {
     ImplMakeUnique();
-    mpImpl->mpData->mpEditTextObject->ClearPortionInfo();
+    mpImpl->mxData->mpEditTextObject->ClearPortionInfo();
 }
 
 bool OutlinerParaObject::ChangeStyleSheets(const OUString& rOldName,
     SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily)
 {
     ImplMakeUnique();
-    return mpImpl->mpData->mpEditTextObject->ChangeStyleSheets(rOldName, eOldFamily, rNewName, eNewFamily);
+    return mpImpl->mxData->mpEditTextObject->ChangeStyleSheets(rOldName, eOldFamily, rNewName, eNewFamily);
 }
 
 void OutlinerParaObject::ChangeStyleSheetName(SfxStyleFamily eFamily,
     const OUString& rOldName, const OUString& rNewName)
 {
     ImplMakeUnique();
-    mpImpl->mpData->mpEditTextObject->ChangeStyleSheetName(eFamily, rOldName, rNewName);
+    mpImpl->mxData->mpEditTextObject->ChangeStyleSheetName(eFamily, rOldName, rNewName);
 }
 
 void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewName,
@@ -282,7 +270,7 @@ void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewN
         {
             if(GetDepth(--nDecrementer) == nLevel)
             {
-                mpImpl->mpData->mpEditTextObject->SetStyleSheet(nDecrementer, rNewName, rNewFamily);
+                mpImpl->mxData->mpEditTextObject->SetStyleSheet(nDecrementer, rNewName, rNewFamily);
             }
         }
     }
