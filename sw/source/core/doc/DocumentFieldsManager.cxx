@@ -1207,6 +1207,7 @@ void DocumentFieldsManager::LockExpFlds()
 
 void DocumentFieldsManager::UnlockExpFlds()
 {
+    assert(mnLockExpFld != 0);
     if( mnLockExpFld )
         --mnLockExpFld;
 }
