@@ -456,17 +456,16 @@ namespace dbp
 
 
     ODBFieldPage::ODBFieldPage( OControlWizard* _pParent )
-        :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_OPTION_DBFIELD))
-        ,m_aFrame           (this, ModuleRes(FL_DATABASEFIELD_EXPL))
-        ,m_aDescription     (this, ModuleRes(FT_DATABASEFIELD_EXPL))
-        ,m_aQuestion        (this, ModuleRes(FT_DATABASEFIELD_QUEST))
-        ,m_aStoreYes        (this, ModuleRes(RB_STOREINFIELD_YES))
-        ,m_aStoreNo         (this, ModuleRes(LB_STOREINFIELD))
-        ,m_aStoreWhere      (this, ModuleRes(RB_STOREINFIELD_NO))
+        :OMaybeListSelectionPage(_pParent, "OptionDBField", "modules/sabpilot/ui/optiondbfieldpage.ui")
     {
-        FreeResource();
-        announceControls(m_aStoreYes, m_aStoreNo, m_aStoreWhere);
-        m_aStoreWhere.SetDropDownLineCount(10);
+        get(m_pDescription, "explLabel");
+        get(m_pStoreYes, "yesRadiobutton");
+        get(m_pStoreNo, "noRadiobutton");
+        get(m_pStoreWhere, "storeInFieldCombobox");
+        SetText(ModuleRes(RID_STR_OPTION_DB_FIELD_TITLE));
+
+        announceControls(*m_pStoreYes, *m_pStoreNo, *m_pStoreWhere);
+        m_pStoreWhere->SetDropDownLineCount(10);
     }
 
 
@@ -475,7 +474,7 @@ namespace dbp
         OMaybeListSelectionPage::initializePage();
 
         // fill the fields page
-        fillListBox(m_aStoreWhere, getContext().aFieldNames);
+        fillListBox(*m_pStoreWhere, getContext().aFieldNames);
 
         implInitialize(getDBFieldSetting());
     }
