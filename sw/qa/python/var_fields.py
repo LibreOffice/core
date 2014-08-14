@@ -74,35 +74,35 @@ class TestVarFields(unittest.TestCase):
         xBodyText.insertControlCharacter(xCursor, PARAGRAPH_BREAK, False )
         xBodyText.insertString(xCursor, "new paragraph", False)
         # 13. Access fields to refresh the document
-        xEnumerationAccess = xDoc.getTextFields()
+        xTextFields = xDoc.getTextFields()
         # 14. refresh document to update the fields
-        xEnumerationAccess.refresh()
+        xTextFields.refresh()
         # 15. retrieve the field
-        xFieldEnum = xEnumerationAccess.createEnumeration()
+        xFieldEnum = xTextFields.createEnumeration()
         # Note: we have only one field here, that why nextElement() is just fine here
-        xPropSet = xFieldEnum.nextElement()
+        xField = xFieldEnum.nextElement()
         # check
-        readContent = xPropSet.getPropertyValue("Content")
+        readContent = xField.getPropertyValue("Content")
         self.assertEqual("0", readContent)
-        readContent = xPropSet.getPropertyValue("Value")
+        readContent = xField.getPropertyValue("Value")
         self.assertEqual(0.0, readContent)
         # 16. change the value of the field from 0 to 1 and check
         self.__class__._uno.checkProperties(
-            xPropSet,
+            xField,
             {"Value": 1.0,
              "Content": "1"
              },
             self
             )
         # 17. refresh document to update the fields again
-        xEnumerationAccess.refresh()
+        xTextFields.refresh()
         # 18. store document
         url = os.path.join(os.environ["TestUserDir"], "VarFields.odt")
         xDoc.storeToURL(url, tuple(list(range(0))))
         # 19. retrieve the section
-        xPropSet = xDoc.getTextSections().getByIndex(0)
+        xSection = xDoc.getTextSections().getByIndex(0)
         # 20. retrieve the condition property of that section
-        readContent = xPropSet.getPropertyValue("Condition")
+        readContent = xSection.getPropertyValue("Condition")
         # 21. check
         # expected:
         #self.assertEqual("foo EQ 1", readContent)
