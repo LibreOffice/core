@@ -28,6 +28,7 @@
 #include "xiroot.hxx"
 #include "xistring.hxx"
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <oox/ole/olehelper.hxx>
 #include <rtl/ustring.hxx>
 
@@ -1229,7 +1230,7 @@ public:
     void                FillToItemSet( SfxItemSet& rItemSet ) const;
 
 private:
-    typedef ::std::auto_ptr< SvMemoryStream > SvMemoryStreamPtr;
+    typedef ::boost::scoped_ptr<SvMemoryStream> SvMemoryStreamPtr;
 
     SvMemoryStream      maDummyStrm;    /// Dummy DGG stream for DFF manager.
     XclImpSimpleDffConverter maDffConv; /// DFF converter used to resolve palette colors.
