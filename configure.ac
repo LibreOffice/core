@@ -10926,8 +10926,8 @@ if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
         fi
         if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
             if test -z $COMMONS_LOGGING_JAR; then
-                AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.3.jar,
-                   [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.3.jar ],
+                AC_CHECK_FILE(/usr/share/java/commons-logging-1.2.jar,
+                   [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.2.jar ],
                    [
                         AC_CHECK_FILE(/usr/share/java/commons-logging.jar,
                             [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar ],
