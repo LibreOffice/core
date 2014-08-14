@@ -168,6 +168,7 @@ void Test::testFormulaCreateStringFromTokens()
         "{1;TRUE;3|FALSE;5;\"Text\"|;;}", // inline matrix
         "SUM('file:///path/to/fake.file'#$Sheet.A1:B10)",
     };
+    (void) aTests;
 
     boost::scoped_ptr<ScTokenArray> pArray;
 
