@@ -260,6 +260,7 @@ SwDoc::SwDoc()
     mReferenceCount(0),
     mbGlossDoc(false),
     mbDtor(false),
+    mbCopyIsMove(false),
     mbInReading(false),
     mbInXMLImport(false),
     mbUpdateTOX(false),
