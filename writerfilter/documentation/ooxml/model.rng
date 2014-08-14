@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<!--
+This file is both a relax-ng schema for writerfilter/source/ooxml/model.xml and
+documentation for that file. The schema has two parts:
+
+- first part: a subset of the relax-ng grammar to define *what* we expect as
+  the input in a DOCX file
+- second part: additional annotation on top of that to define *how* to handle
+  that expected input
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <!--
+  First part: a subset of the relax-ng XML markup.
+
+  The order of elements in this part follow a bottom-up approach.
+  -->
+
+  <!-- Basic building blocks: element, attribute and their contents. -->
+
+  <!--
+  Describes an XML element.
+
+  Example:
+
+  <element name="charset">
+    <ref name="CT_Charset"/>
+  </element>
+  -->
+  <define name="element-element">
+    <element name="element" ns="http://relaxng.org/ns/structure/1.0">
+      <optional>
+        <attribute name="name"/>
+      </optional>
+      <oneOrMore>
+        <choice>
+          <ref name="attribute-element"/>
+          <ref name="data-element"/>
+          <ref name="ref-element"/>
+          <ref name="text-element"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <!--
+  Describes an attribute.
+
+  Example:
+
+  <attribute name="name">
+    <text/>
+  </attribute>
+  -->
+  <define name="attribute-element">
+    <element name="attribute" ns="http://relaxng.org/ns/structure/1.0">
+      <optional>
+        <attribute name="name"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="data-element"/>
+          <ref name="ref-element"/>
+          <ref name="text-element"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <!--
+  Describes the type of the data contained in an attribute. Possible values:
+  boolean, integer or string. See also <text>.
+  -->
+  <define name="data-element">
+    <element name="data" ns="http://relaxng.org/ns/structure/1.0">
+      <attribute name="type"/>
+    </element>
+  </define>
+
+  <!--
+  Describes that the data used inside the parent (element or attribute) is a
+  string. It is just a short-hand for <data type="string"/>.
+  -->
+  <define name="text-element">
+    <element name="text" ns="http://relaxng.org/ns/structure/1.0">
+      <empty/>
+    </element>
+  </define>
+
+  <!--
+  Describes an enumeration element: a possible value for an attribute.
+  -->
+  <define name="value-element">
+    <element name="value" ns="http://relaxng.org/ns/structure/1.0">
+      <text/>
+    </element>
+  </define>
+
+  <!--
+  This element is ignored during parsing, it just helps readability.
+
+  Example:
+
+  <choice>
+    <value>true</value>
+    <value>false</value>
+  </choice>
+  -->
+  <define name="choice-element">
+    <element name="choice" ns="http://relaxng.org/ns/structure/1.0">
+      <oneOrMore>
+        <choice>
+          <ref name="data-element"/>
+          <ref name="element-element"/>
+          <ref name="ref-element"/>
+          <ref name="text-element"/>
+          <ref name="value-element"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <!-- Grouping elements: define and grammar. -->
+
+  <!--
+  A define is named definition of its contents, so that multiple <ref> elements
+  can refer to it, to avoid copy&paste. OOXML named (complex and simple) types
+  are described using defines.
+  -->
+  <define name="define-element">
+    <element name="define" ns="http://relaxng.org/ns/structure/1.0">
+      <attribute name="name"/>
+      <oneOrMore>
+        <choice>
+          <ref name="choice-element"/>
+          <ref name="attribute-element"/>
+          <ref name="element-element"/>
+          <ref name="data-element"/>
+          <ref name="ref-element"/>
+          <empty/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <!--
+  A reference to a define.
+  -->
+  <define name="ref-element">
+    <element name="ref" ns="http://relaxng.org/ns/structure/1.0">
+      <attribute name="name"/>
+    </element>
+  </define>
+
+  <!--
+  A grammar is a set of defines, one grammar is equivalent to one .xsd file
+  from the OOXML spec.
+  -->
+  <define name="grammar-element">
+    <element name="grammar" ns="http://relaxng.org/ns/structure/1.0">
+      <attribute name="ns"/>
+      <optional>
+        <attribute name="datatypeLibrary"/>
+      </optional>
+      <optional>
+        <attribute name="attributeFormDefault"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="include-element"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="define-element"/>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <!--
+  Controls the resolution of <ref> elements. The order is:
+
+  - the current grammar
+  - included grammars, if there are any
+  - the first define in the whole model
+  -->
+  <define name="include-element">
+    <element name="include" ns="http://relaxng.org/ns/structure/1.0">
+      <attribute name="href"/>
+    </element>
+  </define>
+
+  <!--
+  Second part: custom markup, building on top of the first one.
+
+  The order of elements in this part follow a top-down approach.
+
+  The output of the code generated from these elements is a token stream. There
+  are two types of tokens: SPRM tokens and attribute ones. SPRM refers to
+  Single PRoperty Modifier, in this context it means a token that contains other
+  tokens. It's used to represent an XML element. That means that SPRM tokens
+  can contain other SPRM tokens, and also attribute tokens, while attribute
+  tokens only contain simple types (boolean, integer, string).
+
+  More terminology: the types in the OOXML schema have two typical prefixes:
+
+  - CT_something: complex type, used to describe an XML element
+  - ST_something: simple type, used to describe the contents of an attribute
+
+  For tokens the following abbreviations are used:
+
+  - NS_something: namespace
+  - LN_something: local name
+  -->
+
+  <!--
+  The model element is the toplevel container for the XML element /
+  attribute mapping definition. It contains namespace aliases, direct token
+  definitions and mapping definitions for each namespace.
+  -->
+  <define name="model-element">
+    <element name="model">
+      <oneOrMore>
+        <ref name="namespace-alias-element"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="token-element"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="namespace-element"/>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <!--
+  A namespace-alias element defines an alias for an URI. Multiple URI's
+  can have the same alias, that's how both strict and transitional OOXML is
+  supported by the same tokenizer.
+  -->
+  <define name="namespace-alias-element">
+    <element name="namespace-alias">
+      <!-- The URI of the namespace, e.g. http://schemas.openxmlformats.org/wordprocessingml/2006/main -->
+      <attribute name="name"/>
+      <!-- The alias of the namespace, e.g. w14 -->
+      <attribute name="alias"/>
+    </element>
+  </define>
+
+  <!--
+  A token element can explicitly define a token. This allows generating
+  such a token in the tokenizers and handling it in the domain mapper. Ideally
+  tokens are *not* defined this way, they are mapped to an XML element or
+  attribute from the OOXML specification.
+  -->
+  <define name="token-element">
+    <element name="token">
+      <!--
+      The token name must be ooxml:something, then in C++ it'll be the
+      NS_ooxml::LN_something ("OOXML namespace, something local name")
+      constant.
+      -->
+      <attribute name="tokenid"/>
+    </element>
+  </define>
+
+  <!--
+  A namespace element is a container for a subset of the relax-ng grammar
+  of a part of the OOXML specification. It also contains the resource
+  definitions, which specify how XML elements and attributes are mapped to
+  tokens.
+  -->
+  <define name="namespace-element">
+    <element name="namespace">
+      <attribute name="name"/>
+      <optional>
+        <attribute name="file"/>
+      </optional>
+      <optional>
+        <attribute name="url"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="start-element"/>
+      </zeroOrMore>
+      <ref name="grammar-element"/>
+      <zeroOrMore>
+        <ref name="resource-element"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <!--
+  A start element is similar to the relax-ng start element, but this one has a
+  name attribute to refer to a define, while the relax-ng one has a ref child
+  element to do the same.
+  -->
+  <define name="start-element">
+    <element name="start">
+      <attribute name="name"/>
+    </element>
+  </define>
+
+  <!--
+  A resource element always matches (by its name attribute) a define from the
+  grammar of the namespace. It describes how that (simple or complex) type is
+  parsed during import.
+
+  Example:
+
+  <resource name="CT_Font" resource="Properties">
+    ...
+  </resource>
+
+  or
+
+  <resource name="CT_OMathPara" resource="Stream"/>
+  -->
+  <define name="resource-element">
+    <element name="resource">
+      <!-- There should be a define element with the same name attribute. -->
+      <attribute name="name"/>
+      <!--
+      This means the resource element will be handled by the
+      OOXMLFastContextHandler<resource> class.
+
+      The two most important resources:
+
+      - Properties: this maps elements/attributes to SPRM/attribute tokens
+      - Stream: If the element itself does not require any special handling,
+        but the subelemenents are interesting, use this resource.  If no
+        explicit resource element is available, then a null context will be
+        created and the element and all its subelements will be ignored.
+      -->
+      <attribute name="resource"/>
+      <optional>
+        <attribute name="tokenid"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="resource-element-element"/>
+          <ref name="resource-attribute-element"/>
+          <ref name="resource-value-element"/>
+          <ref name="resource-action-element"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <!--
+  The <element> child of a <resource> defines what element name will be handled
+  via what token.
+
+  Example:
+
+  <element name="charset" tokenid="ooxml:CT_Font_charset"/>
+
+  Means the <charset> element will be handled in the sprm() function of the handler
+  class as a NS_ooxml::LN_CT_Font_charset case. (sprm() is a logging wrapper
+  around lcl_sprm(), which is the real implementation.)
+  -->
+  <define name="resource-element-element">
+    <element name="element">
+      <attribute name="name"/>
+      <attribute name="tokenid"/>
+    </element>
+  </define>
+
+  <!--
+  The <attribute> child of a <resource> defines what attribute name will be
+  handled via what token.
+
+  Example:
+
+  <attribute name="name" tokenid="ooxml:CT_Font_name"/>
+
+  Means the <name> attribute will be handled in the attribute() (real
+  implementation in lcl_attribute()) function of the handler class as a
+  NS_ooxml::LN_CT_Font_name case.
+  -->
+  <define name="resource-attribute-element">
+    <element name="attribute">
+      <attribute name="name"/>
+      <optional>
+        <attribute name="tokenid"/>
+      </optional>
+      <optional>
+        <attribute name="action"/>
+      </optional>
+    </element>
+  </define>
+
+  <!--
+  A <value> inside a <resource> defines how to map the string data of a value
+  to a token. The tokenid attribute defines the token name, the text of the
+  element defines the string. This is useful in case the value of an attribute
+  is a choice from a predefined list.
+  -->
+  <define name="resource-value-element">
+    <element name="value">
+      <attribute name="tokenid"/>
+      <text/>
+    </element>
+  </define>
+
+  <!--
+  An <action> inside a <resource> can perform additional actions in the
+  following situations:
+
+  - start of the element
+  - end of the element
+  - character data of the element
+
+  Example:
+
+  <resource name="CT_TxbxContent" resource="Stream">
+    <action name="start" action="startTxbxContent"/>
+    <action name="end" action="endTxbxContent"/>
+  </resource>
+
+  That means that when:
+
+  - <txbxContent> starts, OOXMLFastContextHandler::startTxbxContent() will be called
+  - <txbxContent> ends, OOXMLFastContextHandler::endTxbxContent() will be called
+  -->
+  <define name="resource-action-element">
+    <element name="action">
+      <attribute name="name"/>
+      <attribute name="action"/>
+      <optional>
+        <attribute name="tokenid"/>
+      </optional>
+      <optional>
+        <attribute name="sendtokenid"/>
+      </optional>
+      <optional>
+        <ref name="resource-action-cond-element"/>
+      </optional>
+    </element>
+  </define>
+
+  <!--
+  Some actions take parameters, which can be defined by the <cond> element.
+
+  Example:
+
+  <resource name="CT_FldChar" resource="Stream">
+    <action name="start" action="fieldstart">
+      <cond tokenid="ooxml:CT_FldChar_fldCharType" value="ooxml:Value_ST_FldCharType_begin"/>
+    </action>
+  </resource>
+
+  That means:
+
+  - if the <fldChar> starts with an fldCharType attribute being "begin"
+  - then perform the "fieldstart" action.
+  -->
+  <define name="resource-action-cond-element">
+    <element name="cond">
+      <attribute name="tokenid"/>
+      <attribute name="value"/>
+    </element>
+  </define>
+
+  <!-- The entry point of the schema. -->
+  <start>
+    <ref name="model-element"/>
+  </start>
+</grammar>
+<!-- vim: ft=xml shiftwidth=2 softtabstop=2 expandtab:
+-->
