@@ -3479,6 +3479,7 @@ void ScTokenArray::AdjustReferenceOnMovedOrigin( const ScAddress& rOldPos, const
         switch ((*p)->GetType())
         {
             case svSingleRef:
+            case svExternalSingleRef:
             {
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScSingleRefData& rRef = pToken->GetSingleRef();
@@ -3487,6 +3488,7 @@ void ScTokenArray::AdjustReferenceOnMovedOrigin( const ScAddress& rOldPos, const
             }
             break;
             case svDoubleRef:
+            case svExternalDoubleRef:
             {
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
