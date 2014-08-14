@@ -444,14 +444,31 @@ void ScBroadcastAreaSlot::GetAllListeners(
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
 
-        if (eType == sc::AreaInside && !rRange.In(rAreaRange))
-            // The range needs to be fully inside specified range.
-            continue;
-
-        if (eType == sc::AreaPartialOverlap &&
-            (!rRange.Intersects(rAreaRange) || rRange.In(rAreaRange)))
-            // The range needs to be only partially overlapping.
-            continue;
+        switch (eType)
+        {
+            case sc::AreaInside:
+                if (!rRange.In(rAreaRange))
+                    // The range needs to be fully inside specified range.
+                    continue;
+                break;
+            case sc::AreaPartialOverlap:
+                if (!rRange.Intersects(rAreaRange) || rRange.In(rAreaRange))
+                    // The range needs to be only partially overlapping.
+                    continue;
+                break;
+            case sc::OneRowInsideArea:
+                if (rAreaRange.aStart.Row() != rAreaRange.aEnd.Row() || !rRange.In(rAreaRange))
+                    // The range needs to be one single row and fully inside
+                    // specified range.
+                    continue;
+                break;
+            case sc::OneColumnInsideArea:
+                if (rAreaRange.aStart.Col() != rAreaRange.aEnd.Col() || !rRange.In(rAreaRange))
+                    // The range needs to be one single column and fully inside
+                    // specified range.
+                    continue;
+                break;
+        }
 
         SvtBroadcaster::ListenersType& rLst = pArea->GetBroadcaster().GetAllListeners();
         SvtBroadcaster::ListenersType::iterator itLst = rLst.begin(), itLstEnd = rLst.end();

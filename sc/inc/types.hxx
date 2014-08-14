@@ -103,7 +103,9 @@ typedef boost::unordered_map<SCCOLROW,SCCOLROW> ColRowReorderMapType;
 enum AreaOverlapType
 {
     AreaInside,
-    AreaPartialOverlap
+    AreaPartialOverlap,
+    OneRowInsideArea,
+    OneColumnInsideArea
 };
 
 }
