@@ -505,7 +505,7 @@ void ImpEditEngine::CallStatusHdlChaining()
         // since other Flags might be set in the handler...
         EditStatus aTmpStatus( aStatus );
         aStatus.Clear(); // No need for this with chaining. It does not affect it either way.
-        //aStatusHdlLinkChaining.Call( &aTmpStatus );
+        aStatusHdlLinkChaining.Call( &aTmpStatus );
         aStatusTimer.Stop();    // If called by hand ...
     }
 }
