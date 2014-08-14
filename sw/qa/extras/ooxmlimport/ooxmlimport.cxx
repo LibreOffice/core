@@ -2220,6 +2220,19 @@ DECLARE_OOXMLIMPORT_TEST(testFloatingTableSectionColumns, "floating-table-sectio
     CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testHidemark, "hidemark.docx")
+{
+    // Problem was that <w:hideMark> cell property was ignored.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // Height should be minimal
+    CPPUNIT_ASSERT_EQUAL(convertTwipToMm100(MINLAY), getProperty<sal_Int64>(xTableRows->getByIndex(1), "Height"));
+    // Size type was MIN, should be FIX to avoid considering the end of paragraph marker.
+    CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xTableRows->getByIndex(1), "SizeType"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
