@@ -2144,11 +2144,12 @@ long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
 
 DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
 {
+    if ( !mbMap )
+        return (DeviceCoordinate)nWidth;
+
 #if VCL_FLOAT_DEVICE_PIXEL
     return (double)nWidth * maMapRes.mfScaleX * mnDPIX;
 #else
-    if ( !mbMap )
-        return nWidth;
 
     return ImplLogicToPixel( nWidth, mnDPIX,
                              maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
@@ -2158,11 +2159,11 @@ DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
 
 DeviceCoordinate OutputDevice::LogicHeightToDeviceCoordinate( long nHeight ) const
 {
+    if ( !mbMap )
+        return (DeviceCoordinate)nHeight;
 #if VCL_FLOAT_DEVICE_PIXEL
     return (double)nHeight * maMapRes.mfScaleY * mnDPIY;
 #else
-    if ( !mbMap )
-        return nHeight;
 
     return ImplLogicToPixel( nHeight, mnDPIY,
                              maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
