@@ -16,6 +16,24 @@
       "revId": "f6e7b94042070241cd1cfb1d7f8610fe1801b4f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_78137d5d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4032,
+      "author": {
+        "id": 1000275
+      },
+      "writtenOn": "2014-08-14T05:58:47Z",
+      "side": 1,
+      "message": "Yes..I have corrected it in a new patch : https://gerrit.libreoffice.org/#/c/10912/1/sw/source/filter/ww8/docxattributeoutput.cxx,cm\n\nThanks for your input :)",
+      "parentUuid": "5ad0253b_b53a40e6",
+      "revId": "f6e7b94042070241cd1cfb1d7f8610fe1801b4f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
