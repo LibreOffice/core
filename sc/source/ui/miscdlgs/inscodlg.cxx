@@ -38,7 +38,8 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     bFillMode       ( false ),
     bChangeTrack    ( false ),
     bMoveDownDisabled( false ),
-    bMoveRightDisabled( false )
+    bMoveRightDisabled( false ),
+    bUsedShortCut   ( false )
 {
     get( mpBtnInsAll, "paste_all" );
     get( mpBtnInsStrings, "text" );
@@ -59,6 +60,9 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     get( mpRbMoveNone, "no_shift" );
     get( mpRbMoveDown, "move_down" );
     get( mpRbMoveRight, "move_right" );
+    get( mpBtnShortCutPasteValuesOnly, "paste_values_only");
+    get( mpBtnShortCutPasteValuesFormats, "paste_values_formats");
+    get( mpBtnShortCutPasteTranspose, "paste_transpose");
 
     if ( pStrTitle )
         SetText( *pStrTitle );
@@ -111,6 +115,9 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     mpBtnInsAll->SetClickHdl( LINK( this, ScInsertContentsDlg, InsAllHdl ) );
     mpBtnLink->SetClickHdl( LINK( this, ScInsertContentsDlg, LinkBtnHdl ) );
 
+    mpBtnShortCutPasteValuesOnly->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );;
+    mpBtnShortCutPasteValuesFormats->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );;
+    mpBtnShortCutPasteTranspose->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
 }
 
 sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
@@ -134,6 +141,9 @@ sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
 
     ScInsertContentsDlg::bPreviousAllCheck = mpBtnInsAll->IsChecked();
 
+    if (bUsedShortCut)
+        return nShortCutInsContentsCmdBits;
+
     return ( (ScInsertContentsDlg::bPreviousAllCheck)
                 ? IDF_ALL
                 : ScInsertContentsDlg::nPreviousChecks );
@@ -141,12 +151,35 @@ sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
 
 InsCellCmd ScInsertContentsDlg::GetMoveMode()
 {
+    if (bUsedShortCut)
+        return nShortCutMoveMode;
     if ( mpRbMoveDown->IsChecked() )
         return INS_CELLSDOWN;
     if ( mpRbMoveRight->IsChecked() )
         return INS_CELLSRIGHT;
 
     return INS_NONE;
+}
+
+bool ScInsertContentsDlg::IsSkipEmptyCells() const
+{
+    if (bUsedShortCut)
+        return bShortCutSkipEmptyCells;
+    return mpBtnSkipEmptyCells->IsChecked();
+}
+
+bool ScInsertContentsDlg::IsTranspose() const
+{
+    if (bUsedShortCut)
+        return bShortCutTranspose;
+    return mpBtnTranspose->IsChecked();
+}
+
+bool ScInsertContentsDlg::IsLink() const
+{
+    if (bUsedShortCut)
+        return bShortCutIsLink;
+    return mpBtnLink->IsChecked();
 }
 
 void ScInsertContentsDlg::DisableChecks( bool bInsAllChecked )
@@ -267,6 +300,45 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
     }
 }
 
+IMPL_LINK( ScInsertContentsDlg, ShortCutHdl, PushButton*, pBtn )
+{
+    if ( pBtn == mpBtnShortCutPasteValuesOnly )
+    {
+        bUsedShortCut = true;
+        nShortCutInsContentsCmdBits = IDF_STRING | IDF_VALUE | IDF_DATETIME;
+        nShortCutFormulaCmdBits = PASTE_NOFUNC;
+        bShortCutSkipEmptyCells = false;
+        bShortCutTranspose = false;
+        bShortCutIsLink = false;
+        nShortCutMoveMode = INS_NONE;
+        EndDialog(RET_OK);
+    }
+    else if ( pBtn == mpBtnShortCutPasteValuesFormats )
+    {
+        bUsedShortCut = true;
+        nShortCutInsContentsCmdBits = IDF_STRING | IDF_VALUE | IDF_DATETIME | IDF_ATTRIB;
+        nShortCutFormulaCmdBits = PASTE_NOFUNC;
+        bShortCutSkipEmptyCells = false;
+        bShortCutTranspose = false;
+        bShortCutIsLink = false;
+        nShortCutMoveMode = INS_NONE;
+        EndDialog(RET_OK);
+    }
+    else if ( pBtn == mpBtnShortCutPasteTranspose )
+    {
+        bUsedShortCut = true;
+        nShortCutInsContentsCmdBits = IDF_ALL;
+        nShortCutFormulaCmdBits = PASTE_NOFUNC;
+        bShortCutSkipEmptyCells = false;
+        bShortCutTranspose = true;
+        bShortCutIsLink = false;
+        nShortCutMoveMode = INS_NONE;
+        EndDialog(RET_OK);
+    }
+    return 0;
+}
+
+
 IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl)
 {
     DisableChecks( mpBtnInsAll->IsChecked() );
@@ -314,6 +386,8 @@ sal_uInt16  ScInsertContentsDlg::GetFormulaCmdBits() const
     else if(mpRbDiv->IsChecked())
         ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_DIV;
     // Bits fuer Checkboxen ausblenden
+    if (bUsedShortCut)
+        return nShortCutFormulaCmdBits;
     return ScInsertContentsDlg::nPreviousFormulaChecks;
 }
 
