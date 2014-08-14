@@ -527,7 +527,8 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #ifdef _MSC_VER
 #define SAL_WNOUNREACHABLE_CODE_PUSH \
     __pragma(warning(push)) \
-    __pragma(warning(disable:4702))
+    __pragma(warning(disable:4702)) \
+    __pragma(warning(disable:4722))
 #define SAL_WNOUNREACHABLE_CODE_POP \
     __pragma(warning(pop))
 #else
