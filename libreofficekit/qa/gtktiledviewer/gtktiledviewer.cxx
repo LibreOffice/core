@@ -280,7 +280,8 @@ int main( int argc, char* argv[] )
     gtk_widget_show_all( pWindow );
 
     pFileName = argv[2];
-    assert( lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] ) );
+    int bOpened = lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
+    assert( bOpened ); (void)bOpened;
     assert( LOK_DOCVIEW(pDocView)->pDocument );
 
     // GtkComboBox requires gtk 2.24 or later
