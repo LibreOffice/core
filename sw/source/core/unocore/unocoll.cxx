@@ -1002,6 +1002,12 @@ namespace
     {
         typedef SwXTextFrame core_frame_t;
         typedef XTextFrame uno_frame_t;
+        static inline uno::Any wrapFrame(SwFrmFmt & rFrmFmt)
+        {
+            uno::Reference<text::XTextFrame> const xRet(
+                SwXTextFrame::CreateXTextFrame(*rFrmFmt.GetDoc(), &rFrmFmt));
+            return uno::makeAny(xRet);
+        }
         static inline bool filter(const SwNode* const pNode) { return !pNode->IsNoTxtNode(); };
     };
 
@@ -1010,6 +1016,12 @@ namespace
     {
         typedef SwXTextGraphicObject core_frame_t;
         typedef XTextContent uno_frame_t;
+        static inline uno::Any wrapFrame(SwFrmFmt & rFrmFmt)
+        {
+            uno::Reference<text::XTextContent> const xRet(
+                SwXTextGraphicObject::CreateXTextGraphicObject(*rFrmFmt.GetDoc(), &rFrmFmt));
+            return uno::makeAny(xRet);
+        }
         static inline bool filter(const SwNode* const pNode) { return pNode->IsGrfNode(); };
     };
 
@@ -1018,18 +1030,19 @@ namespace
     {
         typedef SwXTextEmbeddedObject core_frame_t;
         typedef XEmbeddedObjectSupplier uno_frame_t;
+        static inline uno::Any wrapFrame(SwFrmFmt & rFrmFmt)
+        {
+            uno::Reference<text::XTextContent> const xRet(
+                SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rFrmFmt.GetDoc(), &rFrmFmt));
+            return uno::makeAny(xRet);
+        }
         static inline bool filter(const SwNode* const pNode) { return pNode->IsOLENode(); };
     };
 
     template<FlyCntType T>
     static uno::Any lcl_UnoWrapFrame(SwFrmFmt* pFmt)
     {
-        SwXFrame* pFrm = SwIterator<SwXFrame,SwFmt>::FirstElement( *pFmt );
-        if(!pFrm)
-            pFrm = new typename UnoFrameWrap_traits<T>::core_frame_t(*pFmt);
-        Reference< typename UnoFrameWrap_traits<T>::uno_frame_t > xFrm =
-            static_cast< typename UnoFrameWrap_traits<T>::core_frame_t* >(pFrm);
-        return uno::makeAny(xFrm);
+        return UnoFrameWrap_traits<T>::wrapFrame(*pFmt);
     }
 
     // runtime adapter for lcl_UnoWrapFrame
