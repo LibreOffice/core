@@ -535,7 +535,15 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     pNumFmtShell->GetInitSettings( nCatLbSelPos, eLangType, nFmtLbSelPos,
                                    aFmtEntryList, aPrevString, pDummy );
 
-    m_pLbCurrency->SelectEntryPos((sal_Int32)pNumFmtShell->GetCurrencySymbol());
+    if (nCatLbSelPos==CAT_CURRENCY)
+    {
+        sal_Int32 nPos = pNumFmtShell->GetCurrencySymbol();
+        if (nPos == 0)
+            // Enable "Automatically" if currently used so it is selectable.
+            m_pLbCurrency->SetEntryFlags( nPos, 0);
+
+        m_pLbCurrency->SelectEntryPos(nPos);
+    }
 
     nFixedCategory=nCatLbSelPos;
     if(bOneAreaFlag)
@@ -1682,6 +1690,11 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
     for(std::vector<OUString>::iterator i = aList.begin() + 1;i != aList.end(); ++i)
         m_pLbCurrency->InsertEntry(*i);
 
+    // Initially disable the "Automatically" entry. First ensure that nothing
+    // is selected, else if the to be disabled (first) entry was selected it
+    // would be sticky when disabled and could not be deselected!
+    m_pLbCurrency->SetNoSelection();
+    m_pLbCurrency->SetEntryFlags( 0, LISTBOX_ENTRY_FLAG_DISABLE_SELECTION | LISTBOX_ENTRY_FLAG_DRAW_DISABLED);
     m_pLbCurrency->SelectEntryPos(nSelPos);
 }
 
