@@ -455,38 +455,37 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     m_pBox = get_content_area();
     assert(m_pBox);
     m_pUIBuilder->get(m_pTabCtrl, "tabcontrol");
-    assert(m_pTabCtrl);
 
     pImpl = new TabDlg_Impl(m_pTabCtrl->GetPageCount());
 
     m_pActionArea = get_action_area();
     assert(m_pActionArea);
 
-    m_pUIBuilder->get(m_pOKBtn, "ok");
+    m_pOKBtn = m_pUIBuilder->get<PushButton>("ok");
     m_bOwnsOKBtn = m_pOKBtn == NULL;
     if (m_bOwnsOKBtn)
         m_pOKBtn = new OKButton(m_pActionArea);
 
-    m_pUIBuilder->get(m_pApplyBtn, "apply");
-    m_pUIBuilder->get(m_pUserBtn, "user");
-    m_pUIBuilder->get(m_pCancelBtn, "cancel");
+    m_pApplyBtn = m_pUIBuilder->get<PushButton>("apply");
+    m_pUserBtn = m_pUIBuilder->get<PushButton>("user");
+    m_pCancelBtn = m_pUIBuilder->get<CancelButton>("cancel");
     m_bOwnsCancelBtn = m_pCancelBtn == NULL;
     if (m_bOwnsCancelBtn)
         m_pCancelBtn = new CancelButton(m_pActionArea);
 
-    m_pUIBuilder->get(m_pHelpBtn, "help");
+    m_pHelpBtn = m_pUIBuilder->get<HelpButton>("help");
     m_bOwnsHelpBtn = m_pHelpBtn == NULL;
     if (m_bOwnsHelpBtn)
         m_pHelpBtn = new HelpButton(m_pActionArea);
 
-    m_pUIBuilder->get(m_pResetBtn, "reset");
+    m_pResetBtn = m_pUIBuilder->get<PushButton>("reset");
     m_bOwnsResetBtn = m_pResetBtn == NULL;
     if (m_bOwnsResetBtn)
         m_pResetBtn = new PushButton(m_pActionArea);
     else
         pImpl->bHideResetBtn = !m_pResetBtn->IsVisible();
 
-    m_pUIBuilder->get(m_pBaseFmtBtn, "standard");
+    m_pBaseFmtBtn = m_pUIBuilder->get<PushButton>("standard");
     m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == NULL;
     if (m_bOwnsBaseFmtBtn)
         m_pBaseFmtBtn = new PushButton(m_pActionArea);
