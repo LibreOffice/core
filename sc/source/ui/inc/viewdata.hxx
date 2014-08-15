@@ -241,7 +241,7 @@ public:
     const ScMarkData& GetMarkData() const;
 
     Window*         GetDialogParent();          // forwarded from tabvwsh
-    ScGridWindow*   GetActiveWin();             // from View
+    ScGridWindow*   GetActiveWin() const;             // from View
     ScDrawView*     GetScDrawView();            // from View
     bool            IsMinimized();              // from View
 
