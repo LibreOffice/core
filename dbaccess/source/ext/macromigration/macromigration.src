@@ -131,10 +131,9 @@ String STR_EXCEPTION
     Text [ en-US ] = "caught exception:";
 };
 
-ErrorBox ERR_INVALID_BACKUP_LOCATION
+String STR_INVALID_BACKUP_LOCATION
 {
-    Buttons = WB_OK;
-    Message [ en-US ] = "You need to choose a backup location other than the document location itself.";
+    Text [ en-US ] = "You need to choose a backup location other than the document location itself.";
 };
 
 String STR_INVALID_NUMBER_ARGS
