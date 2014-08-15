@@ -88,7 +88,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     OUString            aDdeTextFmt;
 
-    double              nPrtToScreenFactor;
+    Fraction            nPrtToScreenFactor;
     DocShell_Impl*      pImpl;
     ScDocFunc*          pDocFunc;
 
@@ -370,7 +370,7 @@ public:
     void            SetInUndo(bool bSet);
 
     void            CalcOutputFactor();
-    double          GetOutputFactor() const { return nPrtToScreenFactor;}
+    Fraction        GetOutputFactor() const { return nPrtToScreenFactor;}
     void            GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
                                                SCTAB             nCurTab,
                                                bool&             rbHeader,

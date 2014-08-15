@@ -49,7 +49,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
     nPPTY = aLogic.Y() / 1000.0;
 
     if ( !bTextWysiwyg )
-        nPPTX /= pDocSh->GetOutputFactor();
+        nPPTX /= static_cast< double >( pDocSh->GetOutputFactor() );
 }
 
 ScSizeDeviceProvider::~ScSizeDeviceProvider()
