@@ -391,8 +391,8 @@ void PieChart::createShapes()
         // No series to plot.
         return;
 
-    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"PieChart is not proper initialized");
-    if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
+    OSL_ENSURE(m_pShapeFactory && m_xLogicTarget.is() && m_xFinalTarget.is(), "PieChart is not properly initialized.");
+    if (!m_pShapeFactory || !m_xLogicTarget.is() || !m_xFinalTarget.is())
         return;
 
     //the text labels should be always on top of the other series shapes
