@@ -46,7 +46,7 @@ struct PieChart::ShapeParam
     double mfUnitCircleOuterRadius;
     double mfUnitCircleInnerRadius;
     double mfExplodePercentage;
-    double mfLogicYSum;
+    double mfLogicYSum; // sum of all Y values in a single series.
     double mfLogicZ;
     double mfDepth;
 
@@ -227,6 +227,7 @@ void PieChart::createTextLabelShape(
     VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam )
 {
     if (!rSeries.getDataPointLabelIfLabel(nPointIndex))
+        // There is no text label for this data point.  Nothing to do.
         return;
 
     if (!rtl::math::approxEqual(rParam.mfExplodePercentage, 0.0))
@@ -254,6 +255,7 @@ void PieChart::createTextLabelShape(
         nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? 150 : 0;//todo maybe calculate this font height dependent
     else if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::INSIDE )
         nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? -150 : 0;//todo maybe calculate this font height dependent
+
     PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
     awt::Point aScreenPosition2D(
         aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
@@ -438,6 +440,7 @@ void PieChart::createShapes()
 
         bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
 
+        // Counter-clockwise offset from the 3 o'clock position.
         m_pPosHelper->m_fAngleDegreeOffset = pSeries->getStartingAngle();
 
         //iterate through all points to get the sum
@@ -456,6 +459,7 @@ void PieChart::createShapes()
         }
 
         if (aParam.mfLogicYSum == 0.0)
+            // Total sum of all Y values in this series is zero. Skip the whole series.
             continue;
 
         double fLogicYForNextPoint = 0.0;
@@ -507,13 +511,11 @@ void PieChart::createShapes()
 
                 //point color:
                 boost::scoped_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(NULL);
+                if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
                 {
-                    if(!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
-                    {
-                        apOverwritePropertiesMap.reset( new tPropertyNameValueMap() );
-                        (*apOverwritePropertiesMap)["FillColor"] = uno::makeAny(
-                            m_xColorScheme->getColorByIndex( nPointIndex ));
-                    }
+                    apOverwritePropertiesMap.reset( new tPropertyNameValueMap() );
+                    (*apOverwritePropertiesMap)["FillColor"] = uno::makeAny(
+                        m_xColorScheme->getColorByIndex( nPointIndex ));
                 }
 
                 //create data point
