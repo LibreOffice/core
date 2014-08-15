@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include "browserids.hxx"
 #include "SelectionBrowseBox.hxx"
 #include "dbu_qry.hrc"
