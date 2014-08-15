@@ -30,6 +30,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>
@@ -384,8 +385,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     SwTxtNode* pRet = 0;
     if ( mbAutomatic )
     {
-        SwViewShell* pViewShell = 0;
-        mpDoc->GetEditShell( &pViewShell );
+        SwViewShell* pViewShell = mpDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
 
         SwPageFrm* pCurrentPage = pViewShell ? pViewShell->Imp()->GetFirstVisPage() : 0;
         SwPageFrm* pStartPage = pCurrentPage;

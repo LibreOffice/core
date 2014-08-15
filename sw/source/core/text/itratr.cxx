@@ -325,7 +325,7 @@ class SwMinMaxArgs
 {
 public:
     OutputDevice* pOut;
-    SwViewShell* pSh;
+    SwViewShell const * pSh;
     sal_uLong &rMin;
     sal_uLong &rMax;
     sal_uLong &rAbsMin;
@@ -333,7 +333,7 @@ public:
     long nWordWidth;
     long nWordAdd;
     sal_Int32 nNoLineBreak;
-    SwMinMaxArgs( OutputDevice* pOutI, SwViewShell* pShI, sal_uLong& rMinI, sal_uLong &rMaxI, sal_uLong &rAbsI )
+    SwMinMaxArgs( OutputDevice* pOutI, SwViewShell const * pShI, sal_uLong& rMinI, sal_uLong &rMaxI, sal_uLong &rAbsI )
         : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
         { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = COMPLETE_STRING; }
     void Minimum( long nNew ) const { if( (long)rMin < nNew ) rMin = nNew; }
@@ -550,8 +550,7 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
 void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
                                sal_uLong& rAbsMin, OutputDevice* pOut ) const
 {
-    SwViewShell* pSh = 0;
-    GetDoc()->GetEditShell( &pSh );
+    SwViewShell const * pSh = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     if( !pOut )
     {
         if( pSh )
@@ -781,9 +780,8 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
 sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     const
 {
-    SwViewShell* pSh = NULL;
+    SwViewShell const * pSh = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     OutputDevice* pOut = NULL;
-    GetDoc()->GetEditShell( &pSh );
 
     if ( pSh )
         pOut = &pSh->GetRefDev();

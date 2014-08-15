@@ -23,6 +23,7 @@
 #include <doc.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <ndindex.hxx>
 #include <swtable.hxx>
@@ -86,8 +87,7 @@ bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
 
 void SwDoc::DoUpdateAllCharts()
 {
-    SwViewShell* pVSh;
-    GetEditShell( &pVSh );
+    SwViewShell* pVSh = getIDocumentLayoutAccess().GetCurrentViewShell();
     if( pVSh )
     {
         const SwFrmFmts& rTblFmts = *GetTblFrmFmts();
@@ -107,7 +107,7 @@ void SwDoc::DoUpdateAllCharts()
     }
 }
 
-void SwDoc::_UpdateCharts( const SwTable& rTbl, SwViewShell& rVSh ) const
+void SwDoc::_UpdateCharts( const SwTable& rTbl, SwViewShell const & rVSh ) const
 {
     OUString aName( rTbl.GetFrmFmt()->GetName() );
     SwOLENode *pONd;
@@ -135,8 +135,7 @@ void SwDoc::UpdateCharts( const OUString &rName ) const
     SwTable* pTmpTbl = SwTable::FindTable( FindTblFmtByName( rName ) );
     if( pTmpTbl )
     {
-        SwViewShell* pVSh;
-        GetEditShell( &pVSh );
+        SwViewShell const * pVSh = getIDocumentLayoutAccess().GetCurrentViewShell();
 
         if( pVSh )
             _UpdateCharts( *pTmpTbl, *pVSh );
@@ -175,9 +174,6 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
         if( pNd && aOldName == pNd->GetChartTblName() )
         {
             pNd->SetChartTblName( rNewName );
-
-            SwViewShell* pVSh;
-            GetEditShell( &pVSh );
 
             SwTable* pTable = SwTable::FindTable( &rTblFmt );
             SwChartDataProvider *pPCD = getIDocumentChartDataProviderAccess().GetChartDataProvider();

@@ -97,8 +97,8 @@ public:
     // no dependencies left?
     if( rFldType.GetDepends() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
     {
-        SwViewShell* pSh;
-        SwEditShell* pESh = rFldType.GetDoc()->GetEditShell( &pSh );
+        SwViewShell* pSh = rFldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwEditShell* pESh = rFldType.GetDoc()->GetEditShell();
 
         // Search for fields. If no valid found, disconnect.
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
@@ -147,8 +147,8 @@ void SwIntrnlRefLink::Closed()
     if( rFldType.GetDoc() && !rFldType.GetDoc()->IsInDtor() )
     {
         // advise goes, convert all fields into text?
-        SwViewShell* pSh;
-        SwEditShell* pESh = rFldType.GetDoc()->GetEditShell( &pSh );
+        SwViewShell* pSh = rFldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwEditShell* pESh = rFldType.GetDoc()->GetEditShell();
         if( pESh )
         {
             pESh->StartAllAction();

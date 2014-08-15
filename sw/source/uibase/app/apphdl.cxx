@@ -68,6 +68,7 @@
 #include <glosdoc.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
@@ -802,9 +803,8 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
         {
             if( pObjSh->IsA(TYPE(SwDocShell)) )
             {
-                const SwDoc* pDoc = ((SwDocShell*)pObjSh)->GetDoc();
-                SwViewShell* pVSh = 0;
-                pDoc->GetEditShell( &pVSh );
+                SwDoc* pDoc = ((SwDocShell*)pObjSh)->GetDoc();
+                SwViewShell* pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
                 if ( pVSh )
                     pVSh->ChgNumberDigits();
             }

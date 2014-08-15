@@ -2248,7 +2248,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
                         GetUndoManager().RemoveLastUndo());
                 if (pU && pU->GetRedlSaveCount())
                 {
-                    SwEditShell *const pEditShell(GetEditShell(0));
+                    SwEditShell *const pEditShell(GetEditShell());
                     OSL_ASSERT(pEditShell);
                     ::sw::UndoRedoContext context(*this, *pEditShell);
                     static_cast<SfxUndoAction *>(pU)->UndoWithContext(context);

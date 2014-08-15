@@ -31,6 +31,7 @@
 #include <frmtool.hxx>
 #include <doc.hxx>
 #include <poolfmt.hrc>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <poolfmt.hxx>
 #include <switerator.hxx>
@@ -176,8 +177,7 @@ void SwPageDesc::RegisterChange()
     {
         return;
     }
-    SwViewShell* pSh = 0L;
-    pDoc->GetEditShell( &pSh );
+    SwViewShell* pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if ( !pSh )
     {
         return;

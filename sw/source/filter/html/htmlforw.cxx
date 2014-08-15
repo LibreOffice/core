@@ -54,6 +54,7 @@
 #include <viewsh.hxx>
 #include "pam.hxx"
 #include "doc.hxx"
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include "ndtxt.hxx"
 #include "flypos.hxx"
@@ -671,8 +672,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
 static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
                             SwDoc *pDoc )
 {
-    SwViewShell *pVSh = 0;
-    pDoc->GetEditShell( &pVSh );
+    SwViewShell *pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if( !pVSh )
         return;
 

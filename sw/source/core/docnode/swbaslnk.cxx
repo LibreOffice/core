@@ -36,6 +36,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
 #include <swtable.hxx>
@@ -191,8 +192,8 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     else if( pCntntNode->IsOLENode() )
         bUpdate = true;
 
-    SwViewShell *pSh = 0;
-    SwEditShell* pESh = pDoc->GetEditShell( &pSh );
+    SwViewShell *pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwEditShell* pESh = pDoc->GetEditShell();
 
     if ( bUpdate && bGraphicPieceArrived && !(bSwapIn || bDontNotify) )
     {
@@ -288,9 +289,9 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
 {
     bool bRet = false;
-    SwViewShell *pSh;
+    SwViewShell *pSh = pGrfNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CurrShell *pCurr = 0;
-    if ( pGrfNd->GetDoc()->GetEditShell( &pSh ) )
+    if ( pGrfNd->GetDoc()->GetEditShell() )
         pCurr = new CurrShell( pSh );
 
     Size aSz = pGrfNd->GetTwipSize();

@@ -21,6 +21,7 @@
 #include <rtfexport.hxx>
 
 #include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <editsh.hxx>
 #include <unotxdoc.hxx>
 
@@ -60,8 +61,7 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aD
     }
 
     // fdo#37161 - update layout (if present), for SwWriteTable
-    SwViewShell* pViewShell = NULL;
-    pDoc->GetEditShell(&pViewShell);
+    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if (pViewShell != NULL)
         pViewShell->CalcLayout();
 

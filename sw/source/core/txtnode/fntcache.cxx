@@ -92,7 +92,7 @@ void SwFntCache::Flush( )
     SwCache::Flush( );
 }
 
-SwFntObj::SwFntObj(const SwSubFont &rFont, const void *pOwn, SwViewShell *pSh)
+SwFntObj::SwFntObj(const SwSubFont &rFont, const void *pOwn, SwViewShell const *pSh)
     : SwCacheObj((void*)pOwn)
     , aFont(rFont)
     , pScrFont(NULL)
@@ -2183,7 +2183,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 }
 
 SwFntAccess::SwFntAccess( const void* &rMagic,
-                sal_uInt16 &rIndex, const void *pOwn, SwViewShell *pSh,
+                sal_uInt16 &rIndex, const void *pOwn, SwViewShell const *pSh,
                 bool bCheck ) :
   SwCacheAccess( *pFntCache, rMagic, rIndex ),
   pShell( pSh )

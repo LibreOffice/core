@@ -3414,8 +3414,7 @@ void WW8Export::PrepareStorage()
 sal_uLong SwWW8Writer::WriteStorage()
 {
     // #i34818# - update layout (if present), for SwWriteTable
-    SwViewShell* pViewShell = NULL;
-    pDoc->GetEditShell( &pViewShell );
+    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if( pViewShell != NULL )
         pViewShell->CalcLayout();
 

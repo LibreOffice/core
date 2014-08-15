@@ -345,8 +345,7 @@ void SwHTMLTableLayout::GetAvail( sal_uInt16 nCol, sal_uInt16 nColSpan,
 
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByVisArea( const SwDoc& rDoc )
 {
-    SwViewShell *pVSh = 0;
-    rDoc.GetEditShell( &pVSh );
+    SwViewShell const *pVSh = rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
     if( pVSh )
     {
         return (sal_uInt16)pVSh->GetBrowseWidth();

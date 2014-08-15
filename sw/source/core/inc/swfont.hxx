@@ -70,7 +70,7 @@ class SwSubFont : public SvxFont
 
     short _CheckKerning( );
 
-    bool ChgFnt( SwViewShell *pSh, OutputDevice& rOut );
+    bool ChgFnt( SwViewShell const *pSh, OutputDevice& rOut );
     bool IsSymbol( SwViewShell *pSh );
     sal_uInt16 GetAscent( SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetHeight( SwViewShell *pSh, const OutputDevice& rOut );
@@ -173,7 +173,7 @@ public:
     SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
     SwFont( const SwFont& rFont );
 
-    inline void ChgFnt( SwViewShell *pSh, OutputDevice& rOut )
+    inline void ChgFnt( SwViewShell const *pSh, OutputDevice& rOut )
         { bPaintBlank = aSub[nActual].ChgFnt( pSh, rOut ); }
 
     ~SwFont();
@@ -340,7 +340,7 @@ public:
     Size GetCapitalSize( SwDrawTextInfo& rInf )
         { return aSub[nActual].GetCapitalSize( rInf ); }
 
-    sal_Int32 GetCapitalBreak( SwViewShell* pSh,  const OutputDevice* pOut,
+    sal_Int32 GetCapitalBreak( SwViewShell const* pSh,  const OutputDevice* pOut,
         const SwScriptInfo* pScript, const OUString& rTxt,
         long nTextWidth, const sal_Int32 nIdx,
         const sal_Int32 nLen );
