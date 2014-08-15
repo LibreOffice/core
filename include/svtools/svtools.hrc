@@ -261,9 +261,6 @@
 #define RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX         (RID_SVTOOLS_IMAGELIST_START +  3)
 
 // Java message boxes
-//These strings come from project desktop
-//There was no time for translation, therefore the defines needed to
-//remain the same.
 #define QBX_JAVADISABLED                    (RID_SVTOOLS_START+20)
 #define ERRORBOX_JVMCREATIONFAILED          (RID_SVTOOLS_START+21)
 #define WARNINGBOX_JAVANOTFOUND             (RID_SVTOOLS_START+22)
