@@ -32,6 +32,7 @@
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
