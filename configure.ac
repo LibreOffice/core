@@ -4798,8 +4798,18 @@ for a in "$MAKE" "$GNUMAKE" make gmake gnumake; do
     if test -n "$a"; then
         $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
         if test $? -eq 0;  then
-            GNUMAKE=`which $a`
-            break
+            if test "$build_os" = "cygwin"; then
+                if test -n "$($a -v | grep 'Built for Windows')" ; then
+                    AC_MSG_NOTICE([$a is a native Win32 make, which is not supported on this old branch.])
+                    unset GNUMAKE
+                else
+                    GNUMAKE=`which $a`
+                    break
+                fi
+            else
+                GNUMAKE=`which $a`
+                break
+            fi
         fi
     fi
 done
