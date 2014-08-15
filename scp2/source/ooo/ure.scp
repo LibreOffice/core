@@ -98,6 +98,13 @@ Directory gid_Dir_Ure_Share_Misc
 End
 #endif
 
+#ifdef WNT
+Directory gid_Dir_Ure_Misc
+    ParentID = SCP2_URE_SHARE_DIR;
+    DosName = "misc";
+End
+#endif
+
 // Public Dynamic Libraries:
 
 #ifdef AIX
@@ -447,6 +454,7 @@ Module gid_Module_Root_Ure_Hidden
 	Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Ure_Bin,
             gid_Dir_Ure_Lib,
+            gid_Dir_Ure_Misc,
             gid_Dir_Ure_Share,
             gid_Dir_Ure_Java,
             gid_Dir_Ure_Share_Misc);
