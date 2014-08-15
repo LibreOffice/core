@@ -108,11 +108,9 @@ String SID_SIDEBAR
     Text [ en-US ] = "Sidebar";
 };
 
-ErrorBox MSG_ERROR_WRONG_CONFIRM
+String STR_ERROR_WRONG_CONFIRM
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Faulty password confirmation";
+    Text [ en-US ] = "Faulty password confirmation";
 };
 
 String STR_PDF_EXPORT_SEND

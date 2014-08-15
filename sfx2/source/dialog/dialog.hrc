@@ -47,7 +47,7 @@
 
 #define STR_VIEWVERSIONCOMMENT          ( RC_DIALOG_BEGIN + 71 )
 
-#define MSG_ERROR_WRONG_CONFIRM         ( RC_DIALOG_BEGIN + 76 )
+#define STR_ERROR_WRONG_CONFIRM         ( RC_DIALOG_BEGIN + 76 )
 
 #define STR_APPLY                       ( RC_DIALOG_BEGIN + 87 )
 

@@ -19,7 +19,7 @@
 
 
 // Include ---------------------------------------------------------------
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 #include <sfx2/passwd.hxx>
 #include "sfxtypes.hxx"
@@ -71,7 +71,7 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
         bConfirmFailed = true;
     if ( bConfirmFailed )
     {
-        ErrorBox aBox( this, SfxResId( MSG_ERROR_WRONG_CONFIRM ) );
+        MessageDialog aBox(this, SfxResId(STR_ERROR_WRONG_CONFIRM));
         aBox.Execute();
         mpConfirm1ED->SetText( OUString() );
         mpConfirm1ED->GrabFocus();
