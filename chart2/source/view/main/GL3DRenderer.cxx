@@ -354,7 +354,6 @@ void OpenGL3DRenderer::SetCameraInfo(const glm::vec3& pos, const glm::vec3& dire
 
 void OpenGL3DRenderer::init()
 {
-    glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
