@@ -229,7 +229,7 @@ void OpenGL3DRenderer::CheckGLSLVersion()
 
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
 {
-
+    CHECK_GL_ERROR();
     if (m_b330Support)
     {
         m_3DProID = OpenGLHelper::LoadShaders("shape3DVertexShader", "shape3DFragmentShader");
@@ -238,7 +238,10 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DModelID = glGetUniformLocation(m_3DProID, "M");
         m_3DNormalMatrixID = glGetUniformLocation(m_3DProID, "normalMatrix");
         m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
+        SAL_DEBUG("first " << m_3DVertexID);
         m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
+        SAL_DEBUG("second " << m_3DNormalID);
+        CHECK_GL_ERROR();
         if (m_bScrollFlag)
         {
             m_3DBatchProID = OpenGLHelper::LoadShaders("shape3DVertexShaderBatchScroll", "shape3DFragmentShaderBatchScroll");
@@ -249,6 +252,8 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         }
         else
             m_3DBatchProID = OpenGLHelper::LoadShaders("shape3DVertexShaderBatch", "shape3DFragmentShaderBatch");
+
+        CHECK_GL_ERROR();
         m_3DBatchProjectionID = glGetUniformLocation(m_3DBatchProID, "P");
         m_3DBatchViewID = glGetUniformLocation(m_3DBatchProID, "V");
         m_3DBatchModelID = glGetAttribLocation(m_3DBatchProID, "M");
@@ -260,6 +265,7 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         //check whether the texture array is support
         mbTexBatchSupport = GLEW_EXT_texture_array == 1;
 #endif
+        CHECK_GL_ERROR();
         if (mbTexBatchSupport)
         {
             m_BatchTextProID = OpenGLHelper::LoadShaders("textVertexShaderBatch", "textFragmentShaderBatch");
@@ -269,9 +275,11 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
             m_BatchTextTexCoordID = glGetAttribLocation(m_BatchTextProID, "texCoord");
         }
         mbTexBatchSupport = m_BatchTextProID ? true : false;
+        CHECK_GL_ERROR();
     }
     else
     {
+        CHECK_GL_ERROR();
         //use 300
         m_3DProID = OpenGLHelper::LoadShaders("shape3DVertexShaderV300", "shape3DFragmentShaderV300");
         m_3DProjectionID = glGetUniformLocation(m_3DProID, "P");
@@ -295,25 +303,36 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
         m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
     }
+    CHECK_GL_ERROR();
     if (!mbTexBatchSupport)
     {
         m_TextProID = OpenGLHelper::LoadShaders("textVertexShader", "textFragmentShader");
         m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
         m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
+        SAL_DEBUG(m_TextVertexID);
         m_TextTexCoordID = glGetAttribLocation(m_TextProID, "texCoord");
+        SAL_DEBUG(m_TextTexCoordID);
         m_TextTexID = glGetUniformLocation(m_TextProID, "TextTex");
     }
+    CHECK_GL_ERROR();
 
     m_ScreenTextProID = OpenGLHelper::LoadShaders("screenTextVertexShader", "screenTextFragmentShader");
     m_ScreenTextVertexID = glGetAttribLocation(m_ScreenTextProID, "vPosition");
+    SAL_DEBUG(m_ScreenTextVertexID);
     m_ScreenTextTexCoordID = glGetAttribLocation(m_ScreenTextProID, "texCoord");
+    SAL_DEBUG(m_ScreenTextTexCoordID);
     m_ScreenTextTexID = glGetUniformLocation(m_ScreenTextProID, "TextTex");
     m_ScreenTextColorID = glGetUniformLocation(m_ScreenTextProID, "textColor");
+    CHECK_GL_ERROR();
 
     m_CommonProID = OpenGLHelper::LoadShaders("commonVertexShader", "commonFragmentShader");
+    SAL_DEBUG(m_CommonProID);
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
-    m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
+    SAL_DEBUG(m_MatrixID);
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
+    SAL_DEBUG(m_2DColorID);
+    m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
+    SAL_DEBUG(m_2DVertexID);
 
     CHECK_GL_ERROR();
 }
@@ -354,21 +373,33 @@ void OpenGL3DRenderer::SetCameraInfo(const glm::vec3& pos, const glm::vec3& dire
 
 void OpenGL3DRenderer::init()
 {
+    CHECK_GL_ERROR();
     glEnable(GL_CULL_FACE);
+    CHECK_GL_ERROR();
     glCullFace(GL_BACK);
+    CHECK_GL_ERROR();
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     // Enable depth test
+    CHECK_GL_ERROR();
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
+    CHECK_GL_ERROR();
     glDepthFunc(GL_LESS);
+    CHECK_GL_ERROR();
     glEnable(GL_LINE_SMOOTH);
+    CHECK_GL_ERROR();
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    CHECK_GL_ERROR();
     glEnable(GL_BLEND);
+    CHECK_GL_ERROR();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    CHECK_GL_ERROR();
 
     glEnable(GL_MULTISAMPLE);
 
+    CHECK_GL_ERROR();
     ClearBuffer();
+    CHECK_GL_ERROR();
 
     glGenBuffers(1, &m_CubeVertexBuf);
     glGenBuffers(1, &m_CubeNormalBuf);
@@ -383,16 +414,19 @@ void OpenGL3DRenderer::init()
     glBindBuffer(GL_ARRAY_BUFFER, m_BoundBox);
     glBufferData(GL_ARRAY_BUFFER, sizeof(boundBox), boundBox, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    CHECK_GL_ERROR();
 
     glGenBuffers(1, &m_BoundBoxNormal);
     glBindBuffer(GL_ARRAY_BUFFER, m_BoundBoxNormal);
     glBufferData(GL_ARRAY_BUFFER, sizeof(boundBoxNormal), boundBoxNormal, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    CHECK_GL_ERROR();
 
     m_fViewAngle = 30.0f;
     m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 6000.0f);
 
     CheckGLSLVersion();
+    CHECK_GL_ERROR();
     maResources.LoadShaders();
     maPickingResources.LoadShaders();
 
@@ -410,6 +444,7 @@ void OpenGL3DRenderer::init()
     glBindBuffer(GL_ARRAY_BUFFER, m_RenderVertexBuf);
     glBufferData(GL_ARRAY_BUFFER, sizeof(squareVertices), squareVertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    CHECK_GL_ERROR();
 
     OpenGLHelper::createFramebuffer(m_iWidth, m_iHeight, mnPickingFbo, mnPickingRboDepth, mnPickingRboColor);
 
@@ -836,6 +871,7 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
 
 void OpenGL3DRenderer::RenderLine3D(const Polygon3DInfo& polygon)
 {
+    CHECK_GL_ERROR();
     glUseProgram(maResources.m_CommonProID);
     PosVecf3 trans = {0.0f, 0, 0.0};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
@@ -858,10 +894,14 @@ void OpenGL3DRenderer::RenderLine3D(const Polygon3DInfo& polygon)
         else
             glUniform4fv(maResources.m_2DColorID, 1, &polygon.polygonColor[0]);
         glUniformMatrix4fv(maResources.m_MatrixID, 1, GL_FALSE, &m_3DMVP[0][0]);
+        CHECK_GL_ERROR();
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(maResources.m_2DVertexID);
+        SAL_DEBUG(maResources.m_2DVertexID);
+        CHECK_GL_ERROR();
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        CHECK_GL_ERROR();
         glVertexAttribPointer(maResources.m_2DVertexID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
@@ -870,16 +910,23 @@ void OpenGL3DRenderer::RenderLine3D(const Polygon3DInfo& polygon)
                                 (void*)0            // array buffer offset
                                 );
 
+        CHECK_GL_ERROR();
         glLineWidth(polygon.lineWidth);
+        CHECK_GL_ERROR();
         glDrawArrays(GL_LINE_STRIP, 0, pointList->size());
+        CHECK_GL_ERROR();
         glDisableVertexAttribArray(maResources.m_2DVertexID);
+        CHECK_GL_ERROR();
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        CHECK_GL_ERROR();
     }
     glUseProgram(0);
+    CHECK_GL_ERROR();
 }
 
 void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
 {
+    CHECK_GL_ERROR();
     size_t verticesNum = polygon.verticesList.size();
     size_t normalsNum = polygon.normalsList.size();
     //check whether the number of vertices and normals are equal
@@ -887,11 +934,13 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
         glPolygonOffset(1.0, 1.0);
     else
         glPolygonOffset(-1.0, -1.0);
+    CHECK_GL_ERROR();
     if (verticesNum != normalsNum)
     {
         return ;
     }
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    CHECK_GL_ERROR();
     if(mbPickingMode)
     {
         glUseProgram(maPickingResources.m_CommonProID);
@@ -905,6 +954,7 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
         glUseProgram(maResources.m_3DProID);
         glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
         glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+        CHECK_GL_ERROR();
         if (maResources.m_b330Support)
         {
             //update ubo
@@ -920,12 +970,14 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
             glUniform1fv(maResources.m_3DMinCoordXID, 1, &minCoordX);
             glUniform1fv(maResources.m_3DMaxCoordXID, 1, &maxCoordX);
             glUniform1i(maResources.m_3DUndrawID, m_bUndrawFlag);
+            CHECK_GL_ERROR();
             //update light information
             glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, (GLfloat*)m_LightColor);
             glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, (GLfloat*)m_PositionWorldspace);
             glUniform1fv(maResources.m_3DLightPowerID, m_iLightNum, m_fLightPower);
             glUniform1i(maResources.m_3DLightNumID, m_iLightNum);
             glUniform4fv(maResources.m_3DLightAmbientID, 1, &m_Ambient[0]);
+            CHECK_GL_ERROR();
             //update meterial information
             glUniform4fv(maResources.m_3DMaterialAmbientID, 1, &polygon.material.ambient[0]);
             glUniform4fv(maResources.m_3DMaterialDiffuseID, 1, &polygon.material.diffuse[0]);
@@ -959,9 +1011,13 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
         {
             //fill normal buffer
             glBindBuffer(GL_ARRAY_BUFFER, m_NormalBuffer);
+            CHECK_GL_ERROR();
             glBufferData(GL_ARRAY_BUFFER, normalList->size() * sizeof(glm::vec3), &normalList[0][0], GL_STATIC_DRAW);
+            CHECK_GL_ERROR();
             glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+            CHECK_GL_ERROR();
             glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+            CHECK_GL_ERROR();
         }
         else
         {
@@ -969,10 +1025,13 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
             glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
             glUniform4fv(maPickingResources.m_2DColorID, 1, &polygon.id[0]);
         }
+        CHECK_GL_ERROR();
         GLint maVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(maVertexID);
+        CHECK_GL_ERROR();
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        CHECK_GL_ERROR();
         glVertexAttribPointer(maVertexID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
@@ -980,11 +1039,14 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
                                 0,                  // stride
                                 (void*)0            // array buffer offset
                                 );
+        CHECK_GL_ERROR();
         if(!mbPickingMode)
         {
             // 2nd attribute buffer : normals
             glEnableVertexAttribArray(maResources.m_3DNormalID);
+            CHECK_GL_ERROR();
             glBindBuffer(GL_ARRAY_BUFFER, m_NormalBuffer);
+            CHECK_GL_ERROR();
             glVertexAttribPointer(maResources.m_3DNormalID, // attribute
                     3,                  // size
                     GL_FLOAT,           // type
@@ -993,14 +1055,20 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
                     (void*)0            // array buffer offset
                     );
         }
+        CHECK_GL_ERROR();
         glDrawArrays(GL_POLYGON, 0, pointList->size());
+        CHECK_GL_ERROR();
         glDisableVertexAttribArray(maVertexID);
+        CHECK_GL_ERROR();
         if(!mbPickingMode)
             glDisableVertexAttribArray(maResources.m_3DNormalID);
 
+        CHECK_GL_ERROR();
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        CHECK_GL_ERROR();
     }
     glUseProgram(0);
+    CHECK_GL_ERROR();
 }
 
 namespace {
@@ -1034,6 +1102,7 @@ void OpenGL3DRenderer::ReleasePolygonShapes()
 void OpenGL3DRenderer::RenderPolygon3DObject()
 {
     glDepthMask(GL_FALSE);
+    CHECK_GL_ERROR();
     for (size_t i = 0; i < m_Polygon3DInfoList.size(); i++)
     {
         Polygon3DInfo &polygon = m_Polygon3DInfoList[i];
@@ -1041,6 +1110,7 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
         {
             //just use the common shader is ok for lines
             RenderLine3D(polygon);
+            CHECK_GL_ERROR();
         }
         else
         {
@@ -1310,7 +1380,9 @@ void OpenGL3DRenderer::UpdateBatch3DUniformBlock()
     if(mbPickingMode)
         return;
 
+    CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, m_Batch3DUBOBuffer);
+    CHECK_GL_ERROR();
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLint), &m_LightsInfo.lightNum);
     CHECK_GL_ERROR();
     //current std140 alignment: 16
@@ -1327,7 +1399,9 @@ void OpenGL3DRenderer::Update3DUniformBlock()
     if(mbPickingMode)
         return;
 
+    CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
+    CHECK_GL_ERROR();
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLint), &m_LightsInfo.lightNum);
     CHECK_GL_ERROR();
     //current std140 alignment: 16
@@ -1555,9 +1629,11 @@ void OpenGL3DRenderer::ReleaseExtrude3DShapes()
 
 void OpenGL3DRenderer::RenderExtrude3DObject()
 {
+    CHECK_GL_ERROR();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    CHECK_GL_ERROR();
     if(mbPickingMode)
     {
         glUseProgram(maPickingResources.m_CommonProID);
@@ -1569,6 +1645,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         glUseProgram(maResources.m_3DProID);
         glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
         glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+        CHECK_GL_ERROR();
         if (maResources.m_b330Support)
         {
             //update ubo
@@ -1980,6 +2057,7 @@ void OpenGL3DRenderer::RenderTextShapeBatch()
     CHECK_GL_ERROR();
     glEnableVertexAttribArray(maResources.m_BatchTextTexCoordID);
     glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBufBatch);
+    CHECK_GL_ERROR();
     glVertexAttribPointer(
         maResources.m_BatchTextTexCoordID,
         3,                  // size
@@ -1993,8 +2071,10 @@ void OpenGL3DRenderer::RenderTextShapeBatch()
     {
         int vertexNum = m_TextInfoBatch.texture[i].subTextureNum;
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        CHECK_GL_ERROR();
         glBufferData(GL_ARRAY_BUFFER, 4 * vertexNum * sizeof(glm::vec3), &m_TextInfoBatch.vertexList[4 * i * m_TextInfoBatch.batchNum], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBufBatch);
+        CHECK_GL_ERROR();
         glBufferData(GL_ARRAY_BUFFER, 4 * vertexNum * sizeof(glm::vec3), &m_TextInfoBatch.textureCoordList[4 * i * m_TextInfoBatch.batchNum], GL_STATIC_DRAW);
         glBindTexture(GL_TEXTURE_2D_ARRAY, m_TextInfoBatch.texture[i].textureID);
         CHECK_GL_ERROR();
@@ -2008,6 +2088,7 @@ void OpenGL3DRenderer::RenderTextShapeBatch()
     glDisableVertexAttribArray(maResources.m_BatchTextTexCoordID);
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+    CHECK_GL_ERROR();
     glUseProgram(0);
 }
 void OpenGL3DRenderer::RenderTextShape()
@@ -2083,10 +2164,14 @@ void OpenGL3DRenderer::CreateSceneBoxView()
 
 void OpenGL3DRenderer::ClearBuffer()
 {
+    CHECK_GL_ERROR();
     glDisable(GL_DEPTH_TEST);
+    CHECK_GL_ERROR();
 
     glClearDepth(1.0f);
+    CHECK_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    CHECK_GL_ERROR();
 
     /*
      * TODO: moggi: use a shader!!!
@@ -2102,15 +2187,20 @@ void OpenGL3DRenderer::ClearBuffer()
     */
 
     glEnable(GL_DEPTH_TEST);
+    CHECK_GL_ERROR();
 }
 
 void OpenGL3DRenderer::ProcessUnrenderedShape(bool bNewScene)
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
+    CHECK_GL_ERROR();
     ClearBuffer();
+    CHECK_GL_ERROR();
     CreateSceneBoxView();
+    CHECK_GL_ERROR();
     CalcScrollMoveMatrix(bNewScene);
     //Polygon
+    CHECK_GL_ERROR();
     RenderPolygon3DObject();
     //Shape3DExtrudeObject
     if(mbPickingMode)
