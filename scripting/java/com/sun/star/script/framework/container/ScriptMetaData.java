@@ -90,10 +90,6 @@ public class ScriptMetaData extends ScriptEntry {
         }
 
     }
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 
     public boolean equals(ScriptMetaData other) {
         if (super.equals(other) &&
