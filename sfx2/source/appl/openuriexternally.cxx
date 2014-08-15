@@ -45,11 +45,9 @@ bool sfx2::openUriExternally(
                  + e.Message);
         }
         SolarMutexGuard g;
-        ErrorBox eb(
-            SfxGetpApp()->GetTopWindow(), SfxResId(MSG_ERR_NO_ABS_URI_REF));
-        OUString msg(eb.GetMessText());
-        msg = msg.replaceFirst("$(ARG1)", uri);
-        eb.SetMessText(msg);
+        MessageDialog eb(
+            SfxGetpApp()->GetTopWindow(), SfxResId(STR_NO_ABS_URI_REF));
+        eb.set_primary_text(eb.get_primary_text().replaceFirst("$(ARG1)", uri));
         eb.Execute();
     } catch (css::system::SystemShellExecuteException &) {
         if (!handleSystemShellExecuteException) {

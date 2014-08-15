@@ -65,11 +65,9 @@ String STR_NO_WEBBROWSER_FOUND
     Text [ en-US ] = "%PRODUCTNAME could not find a web browser on your system. Please check your Desktop Preferences or install a web browser (for example, Firefox) in the default  location requested during the browser installation." ;
 };
 
-ErrorBox MSG_ERR_NO_ABS_URI_REF
+String STR_NO_ABS_URI_REF
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message[ en-US ] = "\"$(ARG1)\" is not an absolute URL that can be passed to an external application to open it." ;
+    Text [ en-US ] = "\"$(ARG1)\" is not an absolute URL that can be passed to an external application to open it." ;
 };
 
 Resource SID_UNKNOWN
