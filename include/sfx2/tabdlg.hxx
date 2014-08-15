@@ -76,11 +76,7 @@ friend class SfxTabDialogController;
     PushButton* m_pResetBtn;
     PushButton* m_pBaseFmtBtn;
 
-    bool m_bOwnsVBox;
-    bool m_bOwnsTabCtrl;
-    bool m_bOwnsActionArea;
     bool m_bOwnsOKBtn;
-    bool m_bOwnsApplyBtn;
     bool m_bOwnsUserBtn;
     bool m_bOwnsCancelBtn;
     bool m_bOwnsHelpBtn;
@@ -102,7 +98,7 @@ friend class SfxTabDialogController;
     DECL_DLLPRIVATE_LINK(BaseFmtHdl, void *);
     DECL_DLLPRIVATE_LINK(UserHdl, void *);
     DECL_DLLPRIVATE_LINK(CancelHdl, void *);
-    SAL_DLLPRIVATE void Init_Impl(bool bFmtFlag, const OUString* pUserButtonText, const ResId* pResId);
+    SAL_DLLPRIVATE void Init_Impl(bool bFmtFlag);
 
 protected:
     virtual short               Ok();

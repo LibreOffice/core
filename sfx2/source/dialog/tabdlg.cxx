@@ -359,7 +359,7 @@ SfxTabDialog::SfxTabDialog
     , bStandardPushed(false)
     , pExampleSet(0)
 {
-    Init_Impl(bEditFmt, NULL, NULL);
+    Init_Impl(bEditFmt);
 }
 
 
@@ -388,7 +388,7 @@ SfxTabDialog::SfxTabDialog
     , bStandardPushed(false)
     , pExampleSet(0)
 {
-    Init_Impl(bEditFmt, NULL, NULL);
+    Init_Impl(bEditFmt);
     DBG_WARNING( "Please use the Construtor with the ViewFrame" );
 }
 
@@ -442,90 +442,51 @@ SfxTabDialog::~SfxTabDialog()
         delete m_pHelpBtn;
     if (m_bOwnsCancelBtn)
         delete m_pCancelBtn;
-    if (m_bOwnsUserBtn)
-        delete m_pUserBtn;
-    if (m_bOwnsApplyBtn)
-        delete m_pApplyBtn;
     if (m_bOwnsOKBtn)
         delete m_pOKBtn;
-    if (m_bOwnsActionArea)
-        delete m_pActionArea;
-    if (m_bOwnsTabCtrl)
-        delete m_pTabCtrl;
-    if (m_bOwnsVBox)
-        delete m_pBox;
 }
 
-
-
-void SfxTabDialog::Init_Impl(bool bFmtFlag, const OUString* pUserButtonText, const ResId *pResId)
-
+void SfxTabDialog::Init_Impl(bool bFmtFlag)
 /*  [Description]
 
     internal initialization of the dialogue
 */
-
 {
     m_pBox = get_content_area();
-    m_bOwnsVBox = m_pBox == NULL;
-    if (m_bOwnsVBox)
-    {
-        m_pBox = new VclVBox(this, false, 7);
-        m_pBox->set_expand(true);
-        set_content_area(m_pBox);
-    }
-
-    m_pTabCtrl = m_pUIBuilder ? m_pUIBuilder->get<TabControl>("tabcontrol") : NULL;
-    m_bOwnsTabCtrl = m_pTabCtrl == NULL;
-    if (m_bOwnsTabCtrl)
-    {
-        m_pTabCtrl = new TabControl(m_pBox, ResId(ID_TABCONTROL, *pResId->GetResMgr()));
-        m_pTabCtrl->set_expand(true);
-    }
+    assert(m_pBox);
+    m_pUIBuilder->get(m_pTabCtrl, "tabcontrol");
+    assert(m_pTabCtrl);
 
     pImpl = new TabDlg_Impl(m_pTabCtrl->GetPageCount());
 
     m_pActionArea = get_action_area();
-    m_bOwnsActionArea = m_pActionArea == NULL;
-    if (m_bOwnsActionArea)
-    {
-        m_pActionArea = new VclHButtonBox(m_pBox);
-        set_action_area(m_pActionArea);
-    }
+    assert(m_pActionArea);
 
-    m_pOKBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("ok") : NULL;
+    m_pUIBuilder->get(m_pOKBtn, "ok");
     m_bOwnsOKBtn = m_pOKBtn == NULL;
     if (m_bOwnsOKBtn)
         m_pOKBtn = new OKButton(m_pActionArea);
 
-    m_pApplyBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("apply") : NULL;
-    m_bOwnsApplyBtn = m_pApplyBtn == NULL;
-    if (m_bOwnsApplyBtn)
-        m_pApplyBtn = NULL;
-
-    m_pUserBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("user") : NULL;
-    m_bOwnsUserBtn = m_pUserBtn == NULL;
-    if (m_bOwnsUserBtn)
-        m_pUserBtn = pUserButtonText ? new PushButton(m_pActionArea) : NULL;
-
-    m_pCancelBtn = m_pUIBuilder ? m_pUIBuilder->get<CancelButton>("cancel") : NULL;
+    m_pUIBuilder->get(m_pApplyBtn, "apply");
+    m_pUIBuilder->get(m_pUserBtn, "user");
+    m_pUIBuilder->get(m_pCancelBtn, "cancel");
     m_bOwnsCancelBtn = m_pCancelBtn == NULL;
     if (m_bOwnsCancelBtn)
         m_pCancelBtn = new CancelButton(m_pActionArea);
 
-    m_pHelpBtn = m_pUIBuilder ? m_pUIBuilder->get<HelpButton>("help") : NULL;
+    m_pUIBuilder->get(m_pHelpBtn, "help");
     m_bOwnsHelpBtn = m_pHelpBtn == NULL;
     if (m_bOwnsHelpBtn)
         m_pHelpBtn = new HelpButton(m_pActionArea);
 
-    m_pResetBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("reset") : NULL;
+    m_pUIBuilder->get(m_pResetBtn, "reset");
     m_bOwnsResetBtn = m_pResetBtn == NULL;
     if (m_bOwnsResetBtn)
         m_pResetBtn = new PushButton(m_pActionArea);
     else
         pImpl->bHideResetBtn = !m_pResetBtn->IsVisible();
 
-    m_pBaseFmtBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("standard") : NULL;
+    m_pUIBuilder->get(m_pBaseFmtBtn, "standard");
     m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == NULL;
     if (m_bOwnsBaseFmtBtn)
         m_pBaseFmtBtn = new PushButton(m_pActionArea);
@@ -549,8 +510,6 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag, const OUString* pUserButtonText, con
 
     if ( m_pUserBtn )
     {
-        if (pUserButtonText)
-            m_pUserBtn->SetText(*pUserButtonText);
         m_pUserBtn->SetClickHdl( LINK( this, SfxTabDialog, UserHdl ) );
         m_pUserBtn->Show();
     }
