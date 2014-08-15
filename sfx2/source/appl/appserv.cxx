@@ -878,6 +878,13 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChoose
 
 #endif
 
+ResMgr* SfxApplication::GetOffResManager_Impl()
+{
+    if ( !pAppData_Impl->pOfaResMgr )
+        pAppData_Impl->pOfaResMgr = ResMgr::CreateResMgr( "ofa");
+    return pAppData_Impl->pOfaResMgr;
+}
+
 namespace
 {
 #ifndef DISABLE_SCRIPTING
