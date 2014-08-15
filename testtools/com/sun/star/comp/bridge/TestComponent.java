@@ -917,16 +917,9 @@ public class TestComponent {
         public int getRuntimeException()
             throws com.sun.star.uno.RuntimeException
         {
-            try
-            {
-                dothrow( new com.sun.star.uno.RuntimeException(
-                             _string, _xInterface ) );
-                return 0; // dummy
-            }
-            catch (com.sun.star.uno.RuntimeException t)
-            {
-                throw t;
-            }
+            dothrow( new com.sun.star.uno.RuntimeException(
+                         _string, _xInterface ) );
+            return 0; // dummy
         }
 
         public void setRuntimeException(int _runtimeexception) throws com.sun.star.uno.RuntimeException {

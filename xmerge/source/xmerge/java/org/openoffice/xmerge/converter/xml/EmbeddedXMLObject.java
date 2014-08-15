@@ -200,12 +200,6 @@ public class EmbeddedXMLObject extends EmbeddedObject {
             }
 
         }
-        catch (SAXException se) {
-            throw se;
-        }
-        catch (IOException ioe) {
-            throw ioe;
-        }
         catch (ParserConfigurationException pce) {
             throw new SAXException(pce);
         }

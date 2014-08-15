@@ -134,8 +134,6 @@ public class OptionsEventHandler {
             if (sMethod.equals("external_event") ){
                 try {
                     return handleExternalEvent(aWindow, aEventObject);
-                } catch (com.sun.star.uno.RuntimeException re) {
-                    throw re;
                 } catch (com.sun.star.uno.Exception e) {
                     throw new WrappedTargetException(sMethod, this, e);
                 }

@@ -218,37 +218,30 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     {
         if ( sMethod.equals( sExternalEvent ) )
         {
-            try
+            String sEvent = AnyConverter.toString( aEventObject );
+            if ( sEvent != null )
             {
-                String sEvent = AnyConverter.toString( aEventObject );
-                if ( sEvent != null )
+                if ( sEvent.equals( sOk ) )
                 {
-                    if ( sEvent.equals( sOk ) )
-                    {
-                        if ( m_aSettings != null )
-                            m_aSettings.storeConfiguration();
-                    }
-                    else if ( sEvent.equals( sInitialize ) || sEvent.equals( sBack ) )
-                    {
-                        if ( sEvent.equals( sInitialize ) )
-                        {
-                            m_xDialog = UnoRuntime.queryInterface( XDialog.class, xWindow );
-                            m_xControlContainer = UnoRuntime.queryInterface( XControlContainer.class, m_xDialog );
-                            m_aSettings = Settings.getSettings( m_xContext );
-                            m_aSettings.loadConfiguration(); // throw away all the noncommited changes
-                            InitStrings();
-                        }
-                        else if ( m_aSettings != null )
-                            m_aSettings.loadConfiguration(); // throw away all the noncommited changes
-
-                        RefreshView();
-                        CheckButtonState();
-                    }
+                    if ( m_aSettings != null )
+                        m_aSettings.storeConfiguration();
                 }
-            }
-            catch ( com.sun.star.uno.RuntimeException r )
-            {
-                throw r;
+                else if ( sEvent.equals( sInitialize ) || sEvent.equals( sBack ) )
+                {
+                    if ( sEvent.equals( sInitialize ) )
+                    {
+                        m_xDialog = UnoRuntime.queryInterface( XDialog.class, xWindow );
+                        m_xControlContainer = UnoRuntime.queryInterface( XControlContainer.class, m_xDialog );
+                        m_aSettings = Settings.getSettings( m_xContext );
+                        m_aSettings.loadConfiguration(); // throw away all the noncommited changes
+                        InitStrings();
+                    }
+                    else if ( m_aSettings != null )
+                        m_aSettings.loadConfiguration(); // throw away all the noncommited changes
+
+                    RefreshView();
+                    CheckButtonState();
+                }
             }
         }
         else if ( sMethod.equals( sAdd ) )

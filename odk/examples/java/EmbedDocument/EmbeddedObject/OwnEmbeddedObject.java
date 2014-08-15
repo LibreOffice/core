@@ -32,6 +32,7 @@ import com.sun.star.io.XTruncate;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
+import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -109,17 +110,13 @@ public final class OwnEmbeddedObject extends WeakBase
                 XStorage xOwnStorage = xParentStorage.openStorageElement( aEntryName, com.sun.star.embed.ElementModes.READWRITE );
                 SwitchOwnPersistence( xParentStorage, xOwnStorage, aEntryName );
             }
-            catch( com.sun.star.uno.RuntimeException e )
-            {
-                throw e;
-            }
             catch( com.sun.star.io.IOException e )
             {
                 throw e;
             }
             catch( com.sun.star.uno.Exception e )
             {
-                throw new com.sun.star.io.IOException( "Error while switching object storage!" );
+                throw ExceptionHelper.initCause(new com.sun.star.io.IOException( "Error while switching object storage!" ), e);
             }
         }
     }
@@ -170,17 +167,13 @@ public final class OwnEmbeddedObject extends WeakBase
 
             xStreamComp.dispose();
         }
-        catch( com.sun.star.uno.RuntimeException e )
-        {
-            throw e;
-        }
         catch( com.sun.star.io.IOException e )
         {
             throw e;
         }
         catch( com.sun.star.uno.Exception e )
         {
-            throw new com.sun.star.io.IOException( "Error while switching object storage!" );
+            throw ExceptionHelper.initCause(new com.sun.star.io.IOException( "Error while switching object storage!" ), e);
         }
     }
 
@@ -266,17 +259,13 @@ public final class OwnEmbeddedObject extends WeakBase
 
             return aResult;
         }
-        catch( com.sun.star.uno.RuntimeException e )
-        {
-            throw e;
-        }
         catch( com.sun.star.io.IOException e )
         {
             throw e;
         }
         catch( com.sun.star.uno.Exception e )
         {
-            throw new com.sun.star.io.IOException( "Error while reading one of object streams!" );
+            throw ExceptionHelper.initCause(new com.sun.star.io.IOException( "Error while reading one of object streams!" ), e);
         }
     }
 
