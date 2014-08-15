@@ -196,22 +196,16 @@
 #define STR_SVT_INDEXENTRY_END              (STR_SVT_INDEXENTRY_PHONETIC_LC)
 
 //String - Ids for Java errors, messages
-//These strings come from project desktop
-//There was no time for translation, therefore the defines needed to
-//remain the same.
 #define STR_SVT_JAVAERROR_START             (STR_SVT_INDEXENTRY_END + 1)
 #define STR_QUESTION_JAVADISABLED           (STR_SVT_JAVAERROR_START+0)
 #define STR_ERROR_JVMCREATIONFAILED         (STR_SVT_JAVAERROR_START+1)
 #define STR_WARNING_JAVANOTFOUND            (STR_SVT_JAVAERROR_START+2)
 #define STR_WARNING_INVALIDJAVASETTINGS     (STR_SVT_JAVAERROR_START+3)
-// STR_SVT_JAVAERROR_START + 4 unused
-#define STR_SVT_JAVAERROR_END               (STR_SVT_JAVAERROR_START+4)
+#define STR_SVT_JAVAERROR_END               (STR_WARNING_INVALIDJAVASETTINGS)
 
 // String array to match UI language names to LanguageType values and vice versa
 #define STR_ARR_SVT_LANGUAGE_TABLE_START    (STR_SVT_JAVAERROR_END + 1)
 #define STR_ARR_SVT_LANGUAGE_TABLE          (STR_ARR_SVT_LANGUAGE_TABLE_START + 0)
-//due to some horror wizards/com/sun/star/wizards/letter/LocaleCodes.java needs to be kept
-//manually in sync with STR_ARR_SVT_LANGUAGE_TABLE
 #define STR_ARR_SVT_LANGUAGE_TABLE_END      (STR_ARR_SVT_LANGUAGE_TABLE)
 
 #define STR_SVT_ADDRESSTEMPLATE_START       (STR_ARR_SVT_LANGUAGE_TABLE_END+1)

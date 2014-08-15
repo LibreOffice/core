@@ -129,20 +129,10 @@ SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     return aRes;
 }
 
-
-
-namespace {
-    BOOST_STATIC_ASSERT(
-        16642 == STR_ARR_SVT_LANGUAGE_TABLE);
-//        "The value of STR_ARR_SVT_LANGUAGE_TABLE has changed. wizards/com/sun/star/wizards/letter/LocaleCodes.java has this value hard coded, please adapt it to your change."
-}
-
 SvtLanguageTableImpl::SvtLanguageTableImpl() :
     ResStringArray( SvtResId( STR_ARR_SVT_LANGUAGE_TABLE ) )
 {
 }
-
-
 
 SvtLanguageTableImpl::~SvtLanguageTableImpl()
 {
