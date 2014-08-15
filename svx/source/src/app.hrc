@@ -25,10 +25,6 @@
 #include <svl/solar.hrc>
 #include <sfx2/sfxsids.hrc>
 
-// Errors ----------------------------------------------------------------
-
-#define RID_ERRBOX_MODULENOTINSTALLED   (RID_OFA_START + 72)
-
 // Dialoge ---------------------------------------------------------------
 
 #define RID_OFAPAGE_HTMLOPT             (RID_OFA_START + 100)

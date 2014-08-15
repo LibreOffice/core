@@ -27,12 +27,6 @@ String RID_APPTITLE
 
 #define MASKCOLOR       MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
-ErrorBox RID_ERRBOX_MODULENOTINSTALLED
-{
-    Buttons = WB_OK ;
-    Message [ en-US ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
-};
-
 #define IMAGE_ID_LIST\
     IdList = {\
         SID_HLINKBAR_LINK; \

@@ -54,7 +54,7 @@
 
 #include <unotools/configmgr.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -878,16 +878,6 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChoose
 
 #endif
 
-
-#define RID_ERRBOX_MODULENOTINSTALLED     (RID_OFA_START + 72)
-
-ResMgr* SfxApplication::GetOffResManager_Impl()
-{
-    if ( !pAppData_Impl->pOfaResMgr )
-        pAppData_Impl->pOfaResMgr = ResMgr::CreateResMgr( "ofa");
-    return pAppData_Impl->pOfaResMgr;
-}
-
 namespace
 {
 #ifndef DISABLE_SCRIPTING
@@ -1277,7 +1267,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SvtModuleOptions aModuleOpt;
             if ( !aModuleOpt.IsImpress() )
             {
-                ErrorBox( 0, ResId( RID_ERRBOX_MODULENOTINSTALLED, *GetOffResManager_Impl() )).Execute();
+                MessageDialog( 0, SFX2_RESSTR( STR_MODULENOTINSTALLED )).Execute();
                 return;
             }
 
