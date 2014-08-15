@@ -695,6 +695,7 @@ void SearchAndParseThread::execute()
         catch ( const uno::Exception & )
         {
             sProgress = CUI_RES( RID_SVXSTR_SEARCHERROR );
+            sProgress = sProgress.replaceAll("%1", m_aURL);
             m_pPersonaDialog->SetProgress( sProgress );
             return;
         }
@@ -723,6 +724,7 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPrev
     catch (...)
     {
         OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHERROR ) );
+        sProgress = sProgress.replaceAll("%1", m_aURL);
         m_pPersonaDialog->SetProgress( sProgress );
         return;
     }
