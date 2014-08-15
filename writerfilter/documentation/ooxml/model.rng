@@ -167,9 +167,6 @@ documentation for that file. The schema has two parts:
     <element name="grammar" ns="http://relaxng.org/ns/structure/1.0">
       <attribute name="ns"/>
       <optional>
-        <attribute name="datatypeLibrary"/>
-      </optional>
-      <optional>
         <attribute name="attributeFormDefault"/>
       </optional>
       <zeroOrMore>
