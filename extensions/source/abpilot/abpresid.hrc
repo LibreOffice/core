@@ -27,7 +27,6 @@
 
 #define RID_PAGE_START                  RID_ABP_START
 #define RID_STRING_START                RID_ABP_START
-#define RID_ERRORBOX_START              RID_ABP_START
 #define RID_UNTYPED_START               RID_ABP_START
 #define RID_QUERYBOX_START              RID_ABP_START
 #define RID_BITMAP_START                RID_ABP_START
@@ -46,16 +45,10 @@
 #define RID_STR_TABLE_SELECTION         ( RID_STRING_START +  9 )
 #define RID_STR_MANUAL_FIELD_MAPPING    ( RID_STRING_START +  10 )
 #define RID_STR_FINAL_CONFIRM           ( RID_STRING_START +  11 )
+#define RID_STR_NEEDTYPESELECTION       ( RID_STRING_START +  12 )
 // please adjust RID_STRING_END (below) when adding new strings
 
-#define RID_STRING_END                  RID_STR_FINAL_CONFIRM
-
-// error boxes
-
-#define RID_ERR_NEEDTYPESELECTION       ( RID_ERRORBOX_START +  0 )
-// please adjust RID_ERRORBOX_END (below) when adding new error boxes
-
-#define RID_ERRORBOX_END                RID_ERR_NEEDTYPESELECTION
+#define RID_STRING_END                  RID_STR_NEEDTYPESELECTION
 
 // query boxes
 
@@ -83,9 +76,6 @@
 //= range checks
 
 #if RID_STRING_END > RID_ABP_END
-    #error "please adjust the resource id ranges!!"
-#endif
-#if RID_ERRORBOX_END > RID_ABP_END
     #error "please adjust the resource id ranges!!"
 #endif
 #if RID_QUERYBOX_END > RID_ABP_END

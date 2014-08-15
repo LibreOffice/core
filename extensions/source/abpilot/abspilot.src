@@ -49,12 +49,9 @@ String RID_STR_FINAL_CONFIRM
     Text [ en-US ] = "Data Source Title";
 };
 
-
-ErrorBox RID_ERR_NEEDTYPESELECTION
+String RID_STR_NEEDTYPESELECTION
 {
-    Buttons = WB_OK;
-
-    Message [ en-US ] = "Please select a type of address book.";
+    Text [ en-US ] = "Please select a type of address book.";
 };
 
 QueryBox RID_QRY_NOTABLES

@@ -20,7 +20,7 @@
 #include "typeselectionpage.hxx"
 #include "addresssettings.hxx"
 #include "abspilot.hxx"
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/processfactory.hxx>
@@ -226,7 +226,7 @@ namespace abp
 
         if (AST_INVALID == getSelectedType( ))
         {
-            ErrorBox aError(this, ModuleRes(RID_ERR_NEEDTYPESELECTION));
+            MessageDialog aError(this, ModuleRes(RID_STR_NEEDTYPESELECTION));
             aError.Execute();
             return false;
         }
