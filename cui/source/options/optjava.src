@@ -20,18 +20,14 @@
 #include <cuires.hrc>
 #include "helpid.hrc"
 
-ErrorBox RID_SVXERR_JRE_NOT_RECOGNIZED
+String RID_SVXSTR_JRE_NOT_RECOGNIZED
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "The folder you selected does not contain a Java runtime environment.\nPlease select a different folder." ;
+    Text [ en-US ] = "The folder you selected does not contain a Java runtime environment.\nPlease select a different folder." ;
 };
 
-ErrorBox RID_SVXERR_JRE_FAILED_VERSION
+String RID_SVXSTR_JRE_FAILED_VERSION
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "The Java runtime environment you selected is not the required version.\nPlease select a different folder." ;
+    Text [ en-US ] = "The Java runtime environment you selected is not the required version.\nPlease select a different folder." ;
 };
 
 WarningBox RID_SVX_MSGBOX_OPTIONS_RESTART

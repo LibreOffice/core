@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
@@ -614,12 +615,12 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
     }
     else if ( JFW_E_NOT_RECOGNIZED == eErr )
     {
-        ErrorBox aErrBox( this, CUI_RES( RID_SVXERR_JRE_NOT_RECOGNIZED ) );
+        MessageDialog aErrBox( this, CUI_RES( RID_SVXSTR_JRE_NOT_RECOGNIZED ) );
         aErrBox.Execute();
     }
     else if ( JFW_E_FAILED_VERSION == eErr )
     {
-        ErrorBox aErrBox( this, CUI_RES( RID_SVXERR_JRE_FAILED_VERSION ) );
+        MessageDialog aErrBox( this, CUI_RES( RID_SVXSTR_JRE_FAILED_VERSION ) );
         aErrBox.Execute();
     }
 
