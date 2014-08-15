@@ -214,11 +214,11 @@ public class UnoUrl {
                     int ch = s.charAt(i);
 
                     if (ch == '%') {
-                        if (i+3 > length)
-                            throw new com.sun.star.lang.IllegalArgumentException(
-                                "Incomplete trailing escape (%) pattern");
                         try {
                             ch = Integer.parseInt(s.substring(i+1,i+3),16);
+                        } catch (IndexOutOfBoundsException e) {
+                            throw new com.sun.star.lang.IllegalArgumentException(
+                                "Incomplete trailing escape (%) pattern");
                         } catch (NumberFormatException e) {
                             throw new com.sun.star.lang.IllegalArgumentException(e.toString());
                         }
