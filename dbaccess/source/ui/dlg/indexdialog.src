@@ -58,13 +58,9 @@ Image IMG_PKEYICON
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
-ErrorBox ERR_NEED_INDEX_FIELDS
+String STR_NEED_INDEX_FIELDS
 {
-    Title [ en-US ] = "Save Index";
-
-    Message [ en-US ] = "The index must contain at least one field.";
-
-    Buttons = WB_OK;
+    Text [ en-US ] = "The index must contain at least one field.";
 };
 
 QueryBox QUERY_SAVE_CURRENT_INDEX

@@ -26,6 +26,7 @@
 #include "dbaccess_helpid.hrc"
 #include "indexfieldscontrol.hxx"
 #include "indexcollection.hxx"
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -676,7 +677,7 @@ namespace dbaui
         // need at least one field
         if (0 == _rPos->aFields.size())
         {
-            ErrorBox aError(this, ModuleRes(ERR_NEED_INDEX_FIELDS));
+            MessageDialog aError(this, ModuleRes(STR_NEED_INDEX_FIELDS));
             aError.Execute();
             m_pFields->GrabFocus();
             return false;
