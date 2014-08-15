@@ -1672,6 +1672,8 @@ void handleExceptionType(
                 i->name, index++);
         }
     }
+
+    // create default constructor
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -1702,6 +1704,72 @@ void handleExceptionType(
     cf->addMethod(
         ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
         std::vector< OString >(), "");
+
+
+    // create (Throwable Cause) constructor
+    code.reset(cf->newCode());
+    code->loadLocalReference(0);
+    code->loadLocalReference(1);
+    code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/Throwable;)V");
+    stack = 0;
+    if (baseRuntimeException) {
+        stack = std::max(
+            stack,
+            addFieldInit(
+                manager, className, "Context", false,
+                "com.sun.star.uno.XInterface", dependencies, code.get()));
+    }
+    for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
+        if (!baseException || i != entity->getDirectMembers().begin()) {
+            stack = std::max(
+                stack,
+                addFieldInit(
+                    manager, className, i->name, false, i->type, dependencies,
+                    code.get()));
+        }
+    }
+    code->instrReturn();
+    code->setMaxStackAndLocals(stack + 2, 2);
+    cf->addMethod(
+        ClassFile::ACC_PUBLIC, "<init>", "(Ljava/lang/Throwable;)V", code.get(),
+        std::vector< OString >(), "");
+
+    // create (Throwable Cause, String Message) constructor
+    code.reset(cf->newCode());
+    code->loadLocalReference(0);
+    code->loadLocalReference(2);
+    code->loadLocalReference(1);
+    code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/String;Ljava/lang/Throwable;)V");
+    stack = 0;
+    if (baseRuntimeException) {
+        stack = std::max(
+            stack,
+            addFieldInit(
+                manager, className, "Context", false,
+                "com.sun.star.uno.XInterface", dependencies, code.get()));
+    }
+    for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
+        if (!baseException || i != entity->getDirectMembers().begin()) {
+            stack = std::max(
+                stack,
+                addFieldInit(
+                    manager, className, i->name, false, i->type, dependencies,
+                    code.get()));
+        }
+    }
+    code->instrReturn();
+    code->setMaxStackAndLocals(stack + 3, 3);
+    cf->addMethod(
+        ClassFile::ACC_PUBLIC, "<init>", "(Ljava/lang/Throwable;Ljava/lang/String;)V", code.get(),
+        std::vector< OString >(), "");
+
+    // create (String Message) constructor
     code.reset(cf->newCode());
     code->loadLocalReference(0);
     code->loadLocalReference(1);
@@ -1731,6 +1799,9 @@ void handleExceptionType(
     cf->addMethod(
         ClassFile::ACC_PUBLIC, "<init>", "(Ljava/lang/String;)V", code.get(),
         std::vector< OString >(), "");
+
+
+    // create (String Message, Object Context, T1 m1, ..., Tn mn) constructor
     MethodDescriptor desc(manager, dependencies, "void", 0, 0);
     code.reset(cf->newCode());
     code->loadLocalReference(0);
@@ -1769,6 +1840,49 @@ void handleExceptionType(
     cf->addMethod(
         ClassFile::ACC_PUBLIC, "<init>", desc.getDescriptor(), code.get(),
         std::vector< OString >(), desc.getSignature());
+
+    // create (Throwable Cause, String Message, Object Context, T1 m1, ..., Tn mn) constructor
+    MethodDescriptor desc2(manager, dependencies, "void", 0, 0);
+    code.reset(cf->newCode());
+    code->loadLocalReference(0);
+    sal_uInt16 index3 = 1;
+    desc2.addTypeParameter("java.lang.Throwable");
+    code->loadLocalReference(index3++);
+    desc2.addParameter("string", false, true, 0);
+    code->loadLocalReference(index3++);
+    if (!(baseException || baseRuntimeException)) {
+        addExceptionBaseArguments(
+            manager, dependencies, &desc2, code.get(), entity->getDirectBase(),
+            &index3);
+    }
+    code->instrInvokespecial(superClass, "<init>", desc2.getDescriptor());
+    sal_uInt16 maxSize2 = index3;
+    if (baseRuntimeException) {
+        maxSize2 = std::max(
+            maxSize2,
+            addDirectArgument(
+                manager, dependencies, &desc2, code.get(), &index3, className,
+                "Context", false, "com.sun.star.uno.XInterface"));
+    }
+    for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
+        if (!baseException || i != entity->getDirectMembers().begin()) {
+            maxSize2 = std::max(
+                maxSize2,
+                addDirectArgument(
+                    manager, dependencies, &desc2, code.get(), &index3,
+                    className, codemaker::convertString(i->name), false,
+                    i->type));
+        }
+    }
+    code->instrReturn();
+    code->setMaxStackAndLocals(maxSize2, index3);
+    cf->addMethod(
+        ClassFile::ACC_PUBLIC, "<init>", desc2.getDescriptor(), code.get(),
+        std::vector< OString >(), desc2.getSignature());
+
     addTypeInfo(className, typeInfo, dependencies, cf.get());
     writeClassFile(options, className, *cf.get());
 }

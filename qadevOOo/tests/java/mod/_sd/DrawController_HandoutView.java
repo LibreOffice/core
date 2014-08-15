@@ -208,7 +208,7 @@ public class DrawController_HandoutView extends TestCase {
             utils.dispatchURL(xMSF, xDrawDoc, ".uno:HandoutMode");
         } catch (Exception e){
             e.printStackTrace(log);
-            throw new StatusException(Status.failed(e.toString()));
+            throw new StatusException(e, Status.failed(e.getMessage())));
         }
 
         utils.shortWait(500);

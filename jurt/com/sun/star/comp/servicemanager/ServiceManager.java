@@ -192,7 +192,7 @@ public class ServiceManager implements XMultiServiceFactory,
             return factoriesByServiceNames.keySet().toArray(
                 new String[ factoriesByServiceNames.size() ] );
         } catch(Exception ex) {
-            throw new com.sun.star.uno.RuntimeException(ex.toString());
+            throw new com.sun.star.uno.RuntimeException(ex);
         }
     }
 

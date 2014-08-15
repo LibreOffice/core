@@ -205,7 +205,7 @@ public class DrawController_NotesView extends TestCase {
             utils.dispatchURL(xMSF, xDrawDoc, ".uno:NotesMode");
         } catch (Exception e){
             e.printStackTrace(log);
-            throw new StatusException(Status.failed(e.toString()));
+            throw new StatusException(e, Status.failed(e.getMessage())));
         }
 
         utils.shortWait(500);

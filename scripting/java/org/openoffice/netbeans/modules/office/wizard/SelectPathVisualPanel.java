@@ -72,17 +72,6 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
 
         // Provide a name in the title bar.
         setName(NbBundle.getMessage(SelectPathVisualPanel.class, "TITLE_SelectPathVisualPanel"));
-        /*
-        // Optional: provide a special description for this pane.
-        // You must have turned on WizardDescriptor.WizardPanel_helpDisplayed
-        // (see descriptor in standard iterator template for an example of this).
-        try {
-            putClientProperty("WizardPanel_helpURL", // NOI18N
-                new URL("nbresloc:/org/openoffice/netbeans/modules/office/wizard/SelectPathVisualHelp.html")); // NOI18N
-        } catch (MalformedURLException mfue) {
-            throw new IllegalStateException(mfue.toString());
-        }
-         */
     }
 
     private void installationsComboBoxActionPerformed(

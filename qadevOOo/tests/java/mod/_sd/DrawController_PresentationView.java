@@ -205,7 +205,7 @@ public class DrawController_PresentationView extends TestCase {
             utils.dispatchURL(xMSF, xDrawDoc, ".uno:DiaMode");
         } catch (Exception e){
             e.printStackTrace(log);
-            throw new StatusException(Status.failed(e.toString()));
+            throw new StatusException(e, Status.failed(e.getMessage())));
         }
 
         utils.shortWait(500);

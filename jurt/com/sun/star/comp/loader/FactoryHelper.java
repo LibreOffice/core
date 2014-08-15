@@ -29,9 +29,7 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XTypeProvider;
-
 import com.sun.star.registry.XRegistryKey;
-
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Type;
 
@@ -207,11 +205,11 @@ public class FactoryHelper {
                 else if (targetException instanceof com.sun.star.uno.RuntimeException)
                     throw (com.sun.star.uno.RuntimeException)targetException;
                 else
-                    throw new com.sun.star.uno.Exception( targetException.toString() );
+                    throw new com.sun.star.uno.Exception( targetException );
             } catch (IllegalAccessException illegalAccessException) {
-                throw new com.sun.star.uno.Exception( illegalAccessException.toString() );
+                throw new com.sun.star.uno.Exception( illegalAccessException );
             } catch (InstantiationException instantiationException) {
-                throw new com.sun.star.uno.Exception( instantiationException.toString() );
+                throw new com.sun.star.uno.Exception( instantiationException );
             }
         }
 
@@ -283,11 +281,11 @@ public class FactoryHelper {
                 else if (targetException instanceof com.sun.star.uno.RuntimeException)
                     throw (com.sun.star.uno.RuntimeException)targetException;
                 else
-                    throw new com.sun.star.uno.Exception( targetException.toString() );
+                    throw new com.sun.star.uno.Exception( targetException );
             } catch (IllegalAccessException illegalAccessException) {
-                throw new com.sun.star.uno.Exception( illegalAccessException.toString() );
+                throw new com.sun.star.uno.Exception( illegalAccessException );
             } catch (InstantiationException instantiationException) {
-                throw new com.sun.star.uno.Exception( instantiationException.toString() );
+                throw new com.sun.star.uno.Exception( instantiationException );
             }
         }
 

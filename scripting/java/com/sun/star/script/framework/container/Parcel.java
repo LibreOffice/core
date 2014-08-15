@@ -16,16 +16,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 package com.sun.star.script.framework.container;
+
 import  com.sun.star.script.framework.log.*;
 import  com.sun.star.script.framework.io.*;
 import  com.sun.star.script.framework.provider.PathUtils;
-
 import com.sun.star.container.*;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.ucb.XSimpleFileAccess2;
+
 import java.io.*;
 
 public class Parcel implements XNameContainer
@@ -84,7 +84,7 @@ public class Parcel implements XNameContainer
         // catch unknown or un-checked exceptions
         catch ( Exception e )
         {
-            throw new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
         if ( script == null )
         {
@@ -205,7 +205,7 @@ public class Parcel implements XNameContainer
         catch ( Exception e )
         {
             LogUtils.DEBUG("Failed to insert entry " + aName + ": " + e.getMessage());
-            throw new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
     }
 
@@ -272,7 +272,7 @@ public class Parcel implements XNameContainer
         catch ( Exception e )
         {
             LogUtils.DEBUG("** Parcel.removeByName Exception: " + e );
-            throw new  com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
 
     }

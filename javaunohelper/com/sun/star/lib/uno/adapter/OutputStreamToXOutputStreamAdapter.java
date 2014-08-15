@@ -19,7 +19,9 @@
 package com.sun.star.lib.uno.adapter;
 
 import java.io.IOException;
+
 import com.sun.star.io.XOutputStream;
+
 import java.io.OutputStream;
 
 /** The <code>OutputStreamToXOutputStreamAdapter</code> wraps
@@ -50,7 +52,7 @@ public class OutputStreamToXOutputStreamAdapter implements XOutputStream {
         try {
             iOut.close();
         } catch (IOException e) {
-            throw new com.sun.star.io.IOException(e.toString());
+            throw new com.sun.star.io.IOException(e);
         }
     }
 
@@ -60,7 +62,7 @@ public class OutputStreamToXOutputStreamAdapter implements XOutputStream {
         try {
             iOut.flush();
         } catch (IOException e) {
-            throw new com.sun.star.io.IOException(e.toString());
+            throw new com.sun.star.io.IOException(e);
         }
     }
 
@@ -71,7 +73,7 @@ public class OutputStreamToXOutputStreamAdapter implements XOutputStream {
         try {
                 iOut.write(b);
             } catch (IOException e) {
-                throw new com.sun.star.io.IOException(e.toString());
+                throw new com.sun.star.io.IOException(e);
             }
     }
 

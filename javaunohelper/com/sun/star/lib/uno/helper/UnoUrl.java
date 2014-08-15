@@ -220,7 +220,7 @@ public class UnoUrl {
                         try {
                             ch = Integer.parseInt(s.substring(i+1,i+3),16);
                         } catch (NumberFormatException e) {
-                            throw new com.sun.star.lang.IllegalArgumentException(e.toString());
+                            throw new com.sun.star.lang.IllegalArgumentException(e);
                         }
                         if (ch < 0)
                             throw new com.sun.star.lang.IllegalArgumentException(

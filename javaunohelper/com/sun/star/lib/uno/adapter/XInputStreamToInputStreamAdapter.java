@@ -18,7 +18,9 @@
 package com.sun.star.lib.uno.adapter;
 
 import java.io.IOException;
+
 import com.sun.star.io.XInputStream;
+
 import java.io.InputStream;
 
 /**
@@ -53,7 +55,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             bytesAvail = xin.available();
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
 
         return(bytesAvail);
@@ -64,7 +66,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             xin.closeInput();
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
     }
 
@@ -85,7 +87,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
             }
 
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
     }
 
@@ -105,7 +107,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
                 System.arraycopy(tmp[0], 0, b, 0, b.length);
             }
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
 
         return (bytesRead);
@@ -139,7 +141,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
 
 
         } catch (Exception e) {
-            throw new IOException("reader error: "+e.toString());
+            throw new IOException(e, "reader error");
         }
     }
 
@@ -153,7 +155,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             avail = xin.available();
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
 
         do {
@@ -168,7 +170,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
             try {
                 xin.skipBytes(tmpIntVal);
             } catch (Exception e) {
-                throw new IOException(e.toString());
+                throw new IOException(e);
             }
         } while (tmpLongVal > 0);
 

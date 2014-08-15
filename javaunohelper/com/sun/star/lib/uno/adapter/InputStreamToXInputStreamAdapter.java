@@ -18,7 +18,9 @@
 package com.sun.star.lib.uno.adapter;
 
 import java.io.IOException;
+
 import com.sun.star.io.XInputStream;
+
 import java.io.InputStream;
 
 /** The <code>InputStreamToInputXStreamAdapter</code> wraps the
@@ -54,7 +56,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
         try {
             bytesAvail = iIn.available();
         } catch (IOException e) {
-            throw new com.sun.star.io.IOException(e.toString());
+            throw new com.sun.star.io.IOException(e);
         }
 
         return(bytesAvail);
@@ -66,7 +68,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
         try {
             iIn.close();
         } catch (IOException e) {
-            throw new com.sun.star.io.IOException(e.toString());
+            throw new com.sun.star.io.IOException(e);
         }
     }
 
@@ -92,7 +94,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
 
 
         } catch (IOException e) {
-            throw new com.sun.star.io.IOException("reader error: "+e.toString());
+            throw new com.sun.star.io.IOException("reader error", e);
         }
     }
 
@@ -118,7 +120,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
 
 
         } catch (IOException e) {
-            throw new com.sun.star.io.IOException("reader error: "+e.toString());
+            throw new com.sun.star.io.IOException("reader error", e);
         }
     }
 
@@ -131,7 +133,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
         try {
             iIn.available();
         } catch (IOException e) {
-            throw new com.sun.star.io.IOException(e.toString());
+            throw new com.sun.star.io.IOException(e);
         }
 
         do {
@@ -146,7 +148,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
             try {
                 iIn.skip(tmpIntVal);
             } catch (IOException e) {
-                throw new com.sun.star.io.IOException(e.toString());
+                throw new com.sun.star.io.IOException(e);
             }
         } while (tmpLongVal > 0);
     }

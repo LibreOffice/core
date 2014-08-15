@@ -32,7 +32,6 @@ import com.sun.star.io.XTruncate;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -116,7 +115,7 @@ public final class OwnEmbeddedObject extends WeakBase
             }
             catch( com.sun.star.uno.Exception e )
             {
-                throw ExceptionHelper.initCause(new com.sun.star.io.IOException( "Error while switching object storage!" ), e);
+                throw new com.sun.star.io.IOException( e, "Error while switching object storage!" );
             }
         }
     }
@@ -173,7 +172,7 @@ public final class OwnEmbeddedObject extends WeakBase
         }
         catch( com.sun.star.uno.Exception e )
         {
-            throw ExceptionHelper.initCause(new com.sun.star.io.IOException( "Error while switching object storage!" ), e);
+            throw new com.sun.star.io.IOException( e, "Error while switching object storage!" );
         }
     }
 
@@ -265,7 +264,7 @@ public final class OwnEmbeddedObject extends WeakBase
         }
         catch( com.sun.star.uno.Exception e )
         {
-            throw ExceptionHelper.initCause(new com.sun.star.io.IOException( "Error while reading one of object streams!" ), e);
+            throw new com.sun.star.io.IOException( e, "Error while reading one of object streams!" );
         }
     }
 

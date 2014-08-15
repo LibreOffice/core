@@ -310,7 +310,7 @@ public class Bootstrap {
                     // Wait 500 ms, then try to connect again, but do not wait
                     // longer than 5 min (= 600 * 500 ms) total:
                     if (i == 600) {
-                        throw new BootstrapException(ex.toString());
+                        throw new BootstrapException(ex);
                     }
                     Thread.sleep( 500 );
                 }

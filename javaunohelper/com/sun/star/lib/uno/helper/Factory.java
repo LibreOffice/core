@@ -22,7 +22,6 @@ import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.registry.XRegistryKey;
-
 import com.sun.star.uno.UnoRuntime;
 
 
@@ -197,15 +196,15 @@ public class Factory
             else if (targetException instanceof com.sun.star.uno.Exception)
                 throw (com.sun.star.uno.Exception)targetException;
             else
-                throw new com.sun.star.uno.Exception( targetException.toString(), this );
+                throw new com.sun.star.uno.Exception(targetException, this);
         }
         catch (IllegalAccessException exc)
         {
-            throw new com.sun.star.uno.RuntimeException( exc.toString(), this );
+            throw new com.sun.star.uno.RuntimeException( exc, this);
         }
         catch (InstantiationException exc)
         {
-            throw new com.sun.star.uno.RuntimeException( exc.toString(), this );
+            throw new com.sun.star.uno.RuntimeException( exc, this);
         }
     }
     // XSingleComponentFactory impl

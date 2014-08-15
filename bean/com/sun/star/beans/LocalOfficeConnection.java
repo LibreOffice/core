@@ -285,7 +285,7 @@ public class LocalOfficeConnection
             System.out.println( e );
             e.printStackTrace();
             System.out.println( "--- end." );
-            throw new com.sun.star.uno.RuntimeException( e.toString() );
+            throw new com.sun.star.uno.RuntimeException(e);
         }
 
         return null;

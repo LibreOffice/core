@@ -21,19 +21,19 @@ package com.sun.star.script.framework.container;
 import  com.sun.star.script.framework.log.*;
 import  com.sun.star.script.framework.io.*;
 import  com.sun.star.script.framework.provider.PathUtils;
-
 import com.sun.star.container.*;
 import com.sun.star.uno.Type;
 import com.sun.star.lang.*;
 import com.sun.star.io.*;
+
 import java.io.*;
 import java.util.*;
+
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.ucb.XSimpleFileAccess2;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-
 import com.sun.star.uri.XUriReference;
 import com.sun.star.uri.XUriReferenceFactory;
 import com.sun.star.uri.XVndSunStarScriptUrl;
@@ -316,7 +316,7 @@ public class ParcelContainer implements XNameAccess
         }
         catch ( Exception e)
         {
-            throw new WrappedTargetException( e.toString() );
+            throw new WrappedTargetException(e);
         }
         if ( parcel == null )
         {
@@ -404,13 +404,13 @@ public class ParcelContainer implements XNameAccess
         {
             LogUtils.DEBUG("ParcelContainer.loadParcels caught exception processing folders for " + getParcelContainerDir()  );
             LogUtils.DEBUG("TRACE: " + LogUtils.getTrace(e) );
-            throw new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
         catch ( com.sun.star.uno.Exception e )
         {
             LogUtils.DEBUG("ParcelContainer.loadParcels caught exception processing folders for " + getParcelContainerDir()  );
             LogUtils.DEBUG("TRACE: " + LogUtils.getTrace(e) );
-            throw new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
     }
 
@@ -451,7 +451,7 @@ public class ParcelContainer implements XNameAccess
         {
 
             LogUtils.DEBUG("createParcel() Exception while attempting to create = " + name );
-            throw  new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
         return p;
     }
@@ -510,18 +510,18 @@ public class ParcelContainer implements XNameAccess
         {
 
             LogUtils.DEBUG("loadParcel() Exception while accessing filesystem url = " + parcelDescUrl + e );
-            throw  new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
         catch ( java.io.IOException e )
         {
             LogUtils.DEBUG("ParcelContainer.loadParcel() caught IOException while accessing " + parcelDescUrl + ": " + e );
-            throw  new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
         catch (  com.sun.star.uno.Exception e )
         {
 
             LogUtils.DEBUG("loadParcel() Exception while accessing filesystem url = " + parcelDescUrl + e );
-            throw  new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
 
         finally
@@ -567,7 +567,7 @@ public class ParcelContainer implements XNameAccess
             if (!m_xSFA.isFolder( oldParcelDirUrl ) )
             {
                 Exception e = new com.sun.star.io.IOException("Invalid Parcel directory: " + oldName );
-                throw new com.sun.star.lang.WrappedTargetException( e.toString() );
+                throw new com.sun.star.lang.WrappedTargetException(e);
             }
             LogUtils.DEBUG(" ** ParcelContainer Renaming folder " + oldParcelDirUrl + " to " + newParcelDirUrl );
             m_xSFA.move( oldParcelDirUrl, newParcelDirUrl );
@@ -575,12 +575,12 @@ public class ParcelContainer implements XNameAccess
         catch ( com.sun.star.ucb.CommandAbortedException ce )
         {
             LogUtils.DEBUG(" ** ParcelContainer Renaming failed with " + ce  );
-            throw new com.sun.star.lang.WrappedTargetException( ce.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(ce);
         }
         catch ( com.sun.star.uno.Exception e )
         {
             LogUtils.DEBUG(" ** ParcelContainer Renaming failed with " + e  );
-            throw new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
 
         p.rename( newName );
@@ -617,7 +617,7 @@ public class ParcelContainer implements XNameAccess
         catch( Exception e )
         {
             LogUtils.DEBUG("Error deleteing parcel " + name );
-            throw new com.sun.star.lang.WrappedTargetException( e.toString() );
+            throw new com.sun.star.lang.WrappedTargetException(e);
         }
 
         result =  parcels.remove( p );
@@ -652,12 +652,12 @@ public  ParsedScriptUri parseScriptUri( String scriptURI ) throws com.sun.star.l
         catch( com.sun.star.uno.Exception e )
         {
             LogUtils.DEBUG("Problems parsing  URL:" + e.toString() );
-            throw new  com.sun.star.lang.IllegalArgumentException( "Problems parsing  URL reason: " + e.toString() );
+            throw new com.sun.star.lang.IllegalArgumentException(e, "Problems parsing URL");
         }
         if ( xFac == null )
         {
             LogUtils.DEBUG("Failed to create UrlReference factory");
-            throw new  com.sun.star.lang.IllegalArgumentException( "Failed to create UrlReference factory for url " + scriptURI );
+            throw new com.sun.star.lang.IllegalArgumentException( "Failed to create UrlReference factory for url " + scriptURI );
         }
 
         XUriReference uriRef = xFac.parse( scriptURI );
@@ -666,7 +666,7 @@ public  ParsedScriptUri parseScriptUri( String scriptURI ) throws com.sun.star.l
         if ( sfUri == null )
         {
             LogUtils.DEBUG("Failed to parse url");
-            throw new  com.sun.star.lang.IllegalArgumentException( "Failed to parse url " + scriptURI );
+            throw new com.sun.star.lang.IllegalArgumentException( "Failed to parse url " + scriptURI );
         }
 
         ParsedScriptUri parsedUri = new ParsedScriptUri();

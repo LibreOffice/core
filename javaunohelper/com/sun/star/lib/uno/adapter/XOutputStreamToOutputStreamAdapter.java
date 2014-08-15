@@ -19,7 +19,9 @@
 package com.sun.star.lib.uno.adapter;
 
 import java.io.IOException;
+
 import com.sun.star.io.XOutputStream;
+
 import java.io.OutputStream;
 
 /**
@@ -51,7 +53,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         try {
             xout.closeOutput();
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
     }
 
@@ -60,7 +62,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         try {
             xout.flush();
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
     }
 
@@ -70,7 +72,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
     try {
             xout.writeBytes(b);
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
     }
 
@@ -86,7 +88,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         try {
             xout.writeBytes(tmp);
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
     }
 
@@ -99,7 +101,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
         try {
             xout.writeBytes(oneByte);
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
     }
 }

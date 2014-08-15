@@ -24,11 +24,9 @@ import java.io.StringWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.stream.StreamResult;
@@ -37,7 +35,6 @@ import javax.xml.transform.dom.DOMSource;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
 import org.openoffice.xmerge.util.Debug;
 
 /**
@@ -321,13 +318,10 @@ public class DOMDocument
                 }
             }
         }
-        catch (ClassNotFoundException cnfe) {
-            throw new IOException(cnfe.toString());
-        }
         catch (Exception e) {
             // We may get some other errors, but the bottom line is that
             // the steps being executed no longer work
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
 
         byte bytes[] = baos.toByteArray();

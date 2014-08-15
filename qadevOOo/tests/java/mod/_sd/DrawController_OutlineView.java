@@ -205,7 +205,7 @@ public class DrawController_OutlineView extends TestCase {
             utils.dispatchURL(xMSF, xDrawDoc, ".uno:OutlineMode");
         } catch (Exception e){
             e.printStackTrace(log);
-            throw new StatusException(Status.failed(e.toString()));
+            throw new StatusException(e, Status.failed(e.getMessage())));
         }
 
         utils.shortWait(500);

@@ -886,17 +886,14 @@ public abstract class OfficeDocument
             }
                 catch (Exception e) {
                     // We don't have another parser
-                    throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
+                    throw new IOException(e, "No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
                 }
             }
-        }
-        catch (ClassNotFoundException cnfe) {
-            throw new IOException(cnfe.toString());
         }
         catch (Exception e) {
             // We may get some other errors, but the bottom line is that
             // the steps being executed no longer work
-            throw new IOException(e.toString());
+            throw new IOException(e);
         }
 
         byte bytes[] = baos.toByteArray();

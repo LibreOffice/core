@@ -26,6 +26,7 @@ import com.sun.star.connection.XConnector;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -113,7 +114,7 @@ public final class socketConnector implements XConnector {
         try {
             desc = new ConnectionDescriptor(connectionDescription);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            throw new ConnectionSetupException(e.toString());
+            throw new ConnectionSetupException(e);
         }
 
         if (desc.getHost() == null)
@@ -127,7 +128,7 @@ public final class socketConnector implements XConnector {
         try {
             adr = InetAddress.getAllByName(desc.getHost());
         } catch (UnknownHostException e) {
-            throw new ConnectionSetupException(e.toString());
+            throw new ConnectionSetupException(e);
         }
         Socket socket = null;
         for (int i = 0; i < adr.length; ++i) {
@@ -136,7 +137,7 @@ public final class socketConnector implements XConnector {
                 break;
             } catch (IOException e) {
                 if (i == adr.length - 1)
-                    throw new NoConnectException(e.toString());
+                    throw new NoConnectException(e);
             }
         }
         XConnection con;
@@ -146,7 +147,7 @@ public final class socketConnector implements XConnector {
 
             con = new SocketConnection(connectionDescription, socket);
         } catch (IOException e) {
-            throw new NoConnectException(e.toString());
+            throw new NoConnectException(e);
         }
         connected = true;
         return con;
