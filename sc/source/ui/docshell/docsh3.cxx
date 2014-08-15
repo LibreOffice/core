@@ -338,14 +338,14 @@ void ScDocShell::CalcOutputFactor()
 {
     if (bIsInplace)
     {
-        nPrtToScreenFactor = 1.0;           // passt sonst nicht zur inaktiven Darstellung
+        nPrtToScreenFactor = Fraction( 1, 1 );           // passt sonst nicht zur inaktiven Darstellung
         return;
     }
 
     bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
     if (bTextWysiwyg)
     {
-        nPrtToScreenFactor = 1.0;
+        nPrtToScreenFactor = Fraction( 1, 1 );
         return;
     }
 
@@ -376,11 +376,13 @@ void ScDocShell::CalcOutputFactor()
     nWindowWidth = (long) ( nWindowWidth / ScGlobal::nScreenPPTX * HMM_PER_TWIPS );
 
     if (nPrinterWidth && nWindowWidth)
-        nPrtToScreenFactor = nPrinterWidth / (double) nWindowWidth;
+    {
+        nPrtToScreenFactor = Fraction( nPrinterWidth, nWindowWidth );
+    }
     else
     {
         OSL_FAIL("GetTextSize gibt 0 ??");
-        nPrtToScreenFactor = 1.0;
+        nPrtToScreenFactor = Fraction( 1, 1 );
     }
 }
 
