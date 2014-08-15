@@ -28,6 +28,7 @@
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
 #include <com/sun/star/java/RestartRequiredException.hpp>
 #include <comphelper/processfactory.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <osl/mutex.hxx>
@@ -182,11 +183,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bVMCreationFailure_Handled = true;
 #ifdef MACOSX
-            ErrorBox aErrorBox( NULL, SvtResId( ERRORBOX_JVMCREATIONFAILED_MAC ) );
+            MessageDialog aErrorBox(NULL, SvtResId(STR_ERROR_JVMCREATIONFAILED_MAC));
 #else
-            ErrorBox aErrorBox( NULL, SvtResId( ERRORBOX_JVMCREATIONFAILED ) );
+            MessageDialog aErrorBox(NULL, SvtResId(STR_ERROR_JVMCREATIONFAILED));
 #endif
-            aErrorBox.SetText(SvtResId( STR_ERROR_JVMCREATIONFAILED ).toString());
+            aErrorBox.SetText(SvtResId(STR_ERROR_JVMCREATIONFAILED_TITLE));
             nResult = aErrorBox.Execute();
         }
         else
