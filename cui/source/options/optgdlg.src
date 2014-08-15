@@ -20,11 +20,9 @@
 #include <cuires.hrc>
 #include "helpid.hrc"
 
-// *******************************************************************
-
-InfoBox RID_SVX_MSGBOX_LANGUAGE_RESTART
+String RID_SVXSTR_LANGUAGE_RESTART
 {
-    Message [ en-US ] = "The language setting of the user interface has been updated and will take effect the next time you start %PRODUCTNAME %PRODUCTVERSION";
+    Text [ en-US ] = "The language setting of the user interface has been updated and will take effect the next time you start %PRODUCTNAME %PRODUCTVERSION";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

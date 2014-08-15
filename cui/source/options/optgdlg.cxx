@@ -27,7 +27,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <vcl/configsettings.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -1231,7 +1231,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             xProp->setPropertyValue(sUserLocaleKey, makeAny(aLangString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
             // display info
-            InfoBox aBox(this, CUI_RES(RID_SVX_MSGBOX_LANGUAGE_RESTART));
+            MessageDialog aBox(this, CUI_RES(RID_SVXSTR_LANGUAGE_RESTART), VCL_MESSAGE_INFO);
             aBox.Execute();
 
             // tell quickstarter to stop being a veto listener

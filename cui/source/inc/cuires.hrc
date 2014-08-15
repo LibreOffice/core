@@ -27,7 +27,7 @@
 
 // RID_SVX_START + 0 unused
 #define RID_SVX_MSGBOX_OPTIONS_RESTART      (RID_SVX_START + 1)
-#define RID_SVX_MSGBOX_LANGUAGE_RESTART     (RID_SVX_START + 2)
+#define RID_SVXSTR_LANGUAGE_RESTART         (RID_SVX_START + 2)
 
 #define RID_CUIIMG_HARDDISK                 (RID_SVX_START + 4)
 #define RID_CUIIMG_LIB                      (RID_SVX_START + 5)
