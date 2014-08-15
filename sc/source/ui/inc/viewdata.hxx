@@ -155,6 +155,7 @@ class SC_DLLPUBLIC ScViewData
 {
 private:
     double              nPPTX, nPPTY;               // Scaling factors
+    MapMode             maPaintMapMode;
 
     ::std::vector<ScViewDataTable*> maTabData;
     boost::scoped_ptr<ScMarkData> mpMarkData;
