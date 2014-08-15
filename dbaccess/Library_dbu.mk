@@ -280,6 +280,4 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
 ))
 endif
 
-$(call gb_Library_get_headers_target,dbu) : $(call gb_SrsTemplateTarget_get_include_dir,dbaccess)/AutoControls.hrc
-
 # vim: set noet sw=4 ts=4:

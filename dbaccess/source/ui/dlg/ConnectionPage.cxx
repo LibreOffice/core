@@ -68,7 +68,6 @@
 #include "adodatalinks.hxx"
 #endif //_ADO_DATALINK_BROWSE_
 
-#include "AutoControls.hrc"
 
 namespace dbaui
 {

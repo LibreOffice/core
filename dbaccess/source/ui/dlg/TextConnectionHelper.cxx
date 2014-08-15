@@ -24,7 +24,6 @@
 #include "sqlmessage.hxx"
 #include "dbu_dlg.hrc"
 #include "dbu_resource.hrc"
-#include "AutoControls.hrc"
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>

@@ -19,7 +19,6 @@
 
 #include "dsnItem.hxx"
 #include "ConnectionHelper.hxx"
-#include "AutoControls.hrc"
 #include "dbu_dlg.hrc"
 #include "dbu_misc.hrc"
 #include <svl/itemset.hxx>

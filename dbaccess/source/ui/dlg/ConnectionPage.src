@@ -19,7 +19,6 @@
 
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
-#include "AutoControls.hrc"
 
 String STR_CONNECTION_TEST
 {

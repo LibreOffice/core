@@ -18,7 +18,6 @@
  */
 
 #include "dbaccess_helpid.hrc"
-#include "AutoControls.hrc"
 #include "dbu_dlg.hrc"
 #include "browserids.hxx"
 

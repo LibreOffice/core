@@ -51,7 +51,6 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include "AutoControls.hrc"
 
 namespace dbaui
 {

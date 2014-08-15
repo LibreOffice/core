@@ -45,7 +45,6 @@
 #include "DriverSettings.hxx"
 #include "dbadmin.hxx"
 #include <comphelper/types.hxx>
-#include "AutoControls.hrc"
 
 namespace dbaui
 {
