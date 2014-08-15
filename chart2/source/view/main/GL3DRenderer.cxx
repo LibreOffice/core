@@ -2088,6 +2088,8 @@ void OpenGL3DRenderer::ClearBuffer()
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    /*
+     * TODO: moggi: use a shader!!!
     glBegin (GL_QUADS);
     glColor3f (0.3f, 0.3f, 0.3f);
     glVertex3f (-1.0f, -1.0f, -1.0f);
@@ -2097,6 +2099,7 @@ void OpenGL3DRenderer::ClearBuffer()
     glVertex3f (1.0f, 1.0f, -1.0f);
     glVertex3f (-1.0f, 1.0f, -1.0f);
     glEnd ();
+    */
 
     glEnable(GL_DEPTH_TEST);
 }
