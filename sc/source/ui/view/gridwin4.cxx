@@ -533,7 +533,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
 
-    ScOutputData aOutputData( pOutDev, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
+    ScOutputData aOutputData( pOutDev, OUTTYPE_WINDOW, pViewData, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
 
