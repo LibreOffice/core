@@ -387,7 +387,8 @@ bool PieChart::isSeparateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex
 
 void PieChart::createShapes()
 {
-    if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
+    if (m_aZSlots.empty())
+        // No series to plot.
         return;
 
     OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"PieChart is not proper initialized");
