@@ -499,6 +499,24 @@ void ScChartListenerCollection::ChangeListening( const OUString& rName,
         pCL->SetDirty( true );
 }
 
+namespace {
+
+class InsertChartListener : public std::unary_function<ScChartListener*, void>
+{
+    ScChartListenerCollection::ListenersType& mrListeners;
+public:
+    InsertChartListener(ScChartListenerCollection::ListenersType& rListeners) :
+        mrListeners(rListeners) {}
+
+    void operator() (ScChartListener* p)
+    {
+        OUString aName = p->GetName();
+        mrListeners.insert(aName, p);
+    }
+};
+
+}
+
 void ScChartListenerCollection::FreeUnused()
 {
     ListenersType aUsed, aUnused;
@@ -532,21 +550,29 @@ void ScChartListenerCollection::FreeUnused()
 void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
                                          const uno::Reference< chart::XChartData >& rSource )
 {
-    ListenersType aUsed, aUnused;
+    std::vector<ScChartListener*> aUsed, aUnused;
 
     // First, filter each listener into 'used' and 'unused' categories.
     {
-        while(!maListeners.empty())
+        ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
+        for (; it != itEnd; ++it)
         {
-            ScChartListener* p = maListeners.begin()->second;
+            ScChartListener* p = it->second;
             if (p->IsUno() && p->GetUnoListener() == rListener && p->GetUnoSource() == rSource)
-                aUnused.transfer(maListeners.begin(), maListeners);
+                aUnused.push_back(p);
             else
-                aUsed.transfer(maListeners.begin(), maListeners);
+                aUsed.push_back(p);
         }
     }
 
-    std::swap(aUsed, maListeners);
+    // Release all pointers currently managed by the ptr_map container.
+    maListeners.release().release();
+
+    // Re-insert the listeners we need to keep.
+    std::for_each(aUsed.begin(), aUsed.end(), InsertChartListener(maListeners));
+
+    // Now, delete the ones no longer needed.
+    std::for_each(aUnused.begin(), aUnused.end(), boost::checked_deleter<ScChartListener>());
 }
 
 void ScChartListenerCollection::StartTimer()
