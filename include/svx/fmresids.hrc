@@ -94,13 +94,12 @@
 #define RID_QRY_REMOVE_SUBMISSION                   (RID_FORMS_START + 7)
 #define RID_QRY_REMOVE_BINDING                      (RID_FORMS_START + 8)
 
-// ErrorBox-Id's -----------------------------------------------------------
-#define RID_ERR_INVALID_XMLNAME                     (RID_FORMS_START + 1)
-#define RID_ERR_INVALID_XMLPREFIX                   (RID_FORMS_START + 2)
-#define RID_ERR_DOUBLE_MODELNAME                    (RID_FORMS_START + 3)
-#define RID_ERR_EMPTY_SUBMISSIONNAME                (RID_FORMS_START + 4)
-
 // String-Id's -----------------------------------------------------------
+#define RID_STR_INVALID_XMLNAME                     (RID_FORMS_START + 1)
+#define RID_STR_INVALID_XMLPREFIX                   (RID_FORMS_START + 2)
+#define RID_STR_DOUBLE_MODELNAME                    (RID_FORMS_START + 3)
+#define RID_STR_EMPTY_SUBMISSIONNAME                (RID_FORMS_START + 4)
+
 #define RID_STR_FORMSHELL                           (RID_FORMS_START +  10)
 #define RID_STR_STDFORMNAME                         (RID_FORMS_START +  11)
 #define RID_STR_REC_TEXT                            (RID_FORMS_START +  12)

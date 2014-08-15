@@ -1484,10 +1484,8 @@ namespace svxform
                         if ( m_pModelsBox->GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
                         {
                             // error: model name already exists
-                            ErrorBox aErrBox( this, SVX_RES( RID_ERR_DOUBLE_MODELNAME ) );
-                            OUString sMessText = aErrBox.GetMessText();
-                            sMessText = sMessText.replaceFirst( MSG_VARIABLE, sNewName );
-                            aErrBox.SetMessText( sMessText );
+                            MessageDialog aErrBox( this, SVX_RES( RID_STR_DOUBLE_MODELNAME ) );
+                            aErrBox.set_primary_text(aErrBox.get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
                             aErrBox.Execute();
                             bShowDialog = true;
                         }
@@ -2445,10 +2443,8 @@ namespace svxform
              ( bIsHandleBinding && sNewName.isEmpty() ) )
         {
             // Error and don't close the dialog
-            ErrorBox aErrBox( this, SVX_RES( RID_ERR_INVALID_XMLNAME ) );
-            OUString sMessText = aErrBox.GetMessText();
-            sMessText = sMessText.replaceFirst( MSG_VARIABLE, sNewName );
-            aErrBox.SetMessText( sMessText );
+            MessageDialog aErrBox( this, SVX_RES( RID_STR_INVALID_XMLNAME ) );
+            aErrBox.set_primary_text(aErrBox.get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
             aErrBox.Execute();
             return 0;
         }
@@ -3063,10 +3059,8 @@ namespace svxform
         {
             if ( !m_pConditionDlg->GetUIHelper()->isValidPrefixName( sPrefix ) )
             {
-                ErrorBox aErrBox( this, SVX_RES( RID_ERR_INVALID_XMLPREFIX ) );
-                OUString sMessText = aErrBox.GetMessText();
-                sMessText = sMessText.replaceFirst( MSG_VARIABLE, sPrefix );
-                aErrBox.SetMessText( sMessText );
+                MessageDialog aErrBox( this, SVX_RES( RID_STR_INVALID_XMLPREFIX ) );
+                aErrBox.set_primary_text(aErrBox.get_primary_text().replaceFirst(MSG_VARIABLE, sPrefix));
                 aErrBox.Execute();
                 return 0;
             }
@@ -3132,8 +3126,8 @@ namespace svxform
         OUString sName(m_pNameED->GetText());
         if(sName.isEmpty()) {
 
-            ErrorBox aErrorBox(this,SVX_RES(RID_ERR_EMPTY_SUBMISSIONNAME));
-            aErrorBox.SetText( Application::GetDisplayName() );
+            MessageDialog aErrorBox(this,SVX_RES(RID_STR_EMPTY_SUBMISSIONNAME));
+            aErrorBox.set_primary_text( Application::GetDisplayName() );
             aErrorBox.Execute();
             return 0;
         }
