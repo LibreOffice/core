@@ -25,7 +25,7 @@
 
 #include "global.hxx"
 #include "rangelst.hxx"
-#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 class ScTableProtectionImpl;
@@ -108,7 +108,7 @@ public:
     void setOption(Option eOption, bool bEnabled);
 
 private:
-    ::boost::shared_ptr<ScTableProtectionImpl> mpImpl;
+    ::boost::scoped_ptr<ScTableProtectionImpl> mpImpl;
 };
 
 /** Container for the Excel EnhancedProtection feature.
@@ -200,7 +200,7 @@ public:
     bool isSelectionEditable( const ScRangeList& rRangeList ) const;
 
 private:
-    ::boost::shared_ptr<ScTableProtectionImpl> mpImpl;
+    ::boost::scoped_ptr<ScTableProtectionImpl> mpImpl;
 };
 
 #endif
