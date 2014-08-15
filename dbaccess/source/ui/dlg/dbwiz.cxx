@@ -18,7 +18,6 @@
  */
 
 #include "dbwiz.hxx"
-#include "dbadmin.hrc"
 #include "dbu_dlg.hrc"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"

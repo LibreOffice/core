@@ -61,7 +61,6 @@ $(eval $(call gb_SrsTarget_add_nonlocalizable_files,dbaccess/dbu,\
 ))
 
 $(eval $(call gb_SrsTarget_add_templates,dbaccess/dbu,\
-    dbaccess/source/ui/dlg/AutoControls_tmpl.hrc \
     dbaccess/source/ui/inc/toolbox_tmpl.hrc \
 ))
 

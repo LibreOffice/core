@@ -21,7 +21,6 @@
 #include "generalpage.hxx"
 #include <connectivity/dbexception.hxx>
 #include "dbu_dlg.hrc"
-#include "dbadmin.hrc"
 #include "dsitems.hxx"
 #include "dbustrings.hrc"
 #include "dbadmin.hxx"

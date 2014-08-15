@@ -19,7 +19,6 @@
 
 #include "tablespage.hxx"
 #include "dbu_dlg.hrc"
-#include "dbadmin.hrc"
 #include "dsitems.hxx"
 #include "browserids.hxx"
 #include "datasourceconnector.hxx"

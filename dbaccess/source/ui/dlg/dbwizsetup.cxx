@@ -42,7 +42,6 @@
 #include "dbaccess_helpid.hrc"
 #include "ConnectionPageSetup.hxx"
 #include "UITools.hxx"
-#include "dbadmin.hrc"
 #include <dbaccess/AsyncronousLink.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>

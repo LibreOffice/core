@@ -19,7 +19,6 @@
 
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
-#include "dbadmin.hrc"
 #include "browserids.hxx"
 #include "toolbox.hrc"
 #include "AutoControls.hrc"

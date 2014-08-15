@@ -31,7 +31,6 @@
 #include <osl/process.h>
 #include <vcl/msgbox.hxx>
 #include "dbadmin.hxx"
-#include "dbadmin.hrc"
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>
 #include "sqlmessage.hxx"

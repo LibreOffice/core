@@ -30,7 +30,6 @@
 
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
-#include "dbadmin.hrc"
 
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
@@ -58,66 +57,8 @@ namespace dbaui
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
 
-    // OCommonBehaviourTabPage
-    OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs,
-        sal_uInt32 nControlFlags,bool _bFreeResource)
-
-        :OGenericAdministrationPage(pParent, ModuleRes(nResId), _rCoreAttrs)
-        ,m_pOptionsLabel(NULL)
-        ,m_pOptions(NULL)
-        ,m_pDataConvertFixedLine(NULL)
-        ,m_pDataConvertLabel(NULL)
-        ,m_pCharsetLabel(NULL)
-        ,m_pCharset(NULL)
-        ,m_pAutoFixedLine(NULL)
-        ,m_pAutoRetrievingEnabled(NULL)
-        ,m_pAutoIncrementLabel(NULL)
-        ,m_pAutoIncrement(NULL)
-        ,m_pAutoRetrievingLabel(NULL)
-        ,m_pAutoRetrieving(NULL)
-        ,m_nControlFlags(nControlFlags)
-        ,m_bDelete(true)
-    {
-
-        if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
-        {
-            m_pOptionsLabel = new FixedText(this, ModuleRes(FT_OPTIONS));
-            m_pOptions = new Edit(this, ModuleRes(ET_OPTIONS));
-            m_pOptions->SetModifyHdl(getControlModifiedLink());
-        }
-
-        if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
-        {
-            m_pDataConvertFixedLine = new FixedLine(this, ModuleRes(FL_DATACONVERT));
-            m_pCharsetLabel = new FixedText(this, ModuleRes(FT_CHARSET));
-            m_pCharset = new CharSetListBox(this, ModuleRes(LB_CHARSET));
-            m_pCharset->SetSelectHdl(getControlModifiedLink());
-        }
-
-        Window* pWindows[] = {  m_pAutoRetrievingEnabled, m_pAutoFixedLine,
-                                m_pAutoIncrementLabel, m_pAutoIncrement,
-                                m_pAutoRetrievingLabel, m_pAutoRetrieving };
-
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
-        for (sal_Int32 i=1; i < nCount; ++i)
-        {
-            if ( pWindows[i] )
-            {
-                Window* pPrev = pWindows[i-1];
-                for (sal_Int32 j = i-1; pPrev == NULL && j >= 0 ; --j)
-                {
-                    pPrev = pWindows[j];
-                }
-                if ( pPrev )
-                    pWindows[i]->SetZOrder(pPrev, WINDOW_ZORDER_BEHIND);
-            }
-        }
-
-        if ( _bFreeResource )
-            FreeResource();
-    }
-
-    OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, const OString& rId, const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs,
+    OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, const OString& rId,
+        const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs,
         sal_uInt32 nControlFlags)
 
         :OGenericAdministrationPage(pParent, rId, rUIXMLDescription, _rCoreAttrs)

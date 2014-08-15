@@ -26,7 +26,6 @@
 #include "optionalboolitem.hxx"
 #include "dbu_resource.hrc"
 #include "dbu_dlg.hrc"
-#include "dbadmin.hrc"
 
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

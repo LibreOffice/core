@@ -18,7 +18,6 @@
  */
 
 #include "adminpages.hxx"
-#include "dbadmin.hrc"
 #include "dbadmin.hxx"
 #include "dbu_dlg.hrc"
 #include <svl/stritem.hxx>
