@@ -26,7 +26,7 @@ using com::sun::star::uno::XComponentContext;
 
 using libebook::EBOOKDocument;
 
-bool EBookImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &rFilterName, librevenge::RVNGTextInterface &rGenerator )
+bool EBookImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, const rtl::OUString &rFilterName, librevenge::RVNGTextInterface &rGenerator)
 {
     EBOOKDocument::Type type = EBOOKDocument::TYPE_UNKNOWN;
 
@@ -49,7 +49,7 @@ bool EBookImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, c
     return false;
 }
 
-bool EBookImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool EBookImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     rTypeName = "";
 
@@ -59,39 +59,39 @@ bool EBookImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUS
     {
         switch (type)
         {
-            case EBOOKDocument::TYPE_FICTIONBOOK2 :
-                rTypeName = "writer_FictionBook_2";
-                break;
-            case EBOOKDocument::TYPE_PALMDOC :
-                rTypeName = "writer_PalmDoc";
-                break;
-            case EBOOKDocument::TYPE_PLUCKER :
-                rTypeName = "writer_Plucker_eBook";
-                break;
-            case EBOOKDocument::TYPE_PEANUTPRESS :
-                rTypeName = "writer_eReader_eBook";
-                break;
-            case EBOOKDocument::TYPE_TEALDOC :
-                rTypeName = "writer_TealDoc";
-                break;
-            case EBOOKDocument::TYPE_ZTXT :
-                rTypeName = "writer_zTXT";
-                break;
-            default :
-                SAL_WARN_IF(type != EBOOKDocument::TYPE_UNKNOWN, "writerperfect", "EBookImportFilter::doDetectFormat: document type " << type << " detected, but ignored");
+        case EBOOKDocument::TYPE_FICTIONBOOK2 :
+            rTypeName = "writer_FictionBook_2";
+            break;
+        case EBOOKDocument::TYPE_PALMDOC :
+            rTypeName = "writer_PalmDoc";
+            break;
+        case EBOOKDocument::TYPE_PLUCKER :
+            rTypeName = "writer_Plucker_eBook";
+            break;
+        case EBOOKDocument::TYPE_PEANUTPRESS :
+            rTypeName = "writer_eReader_eBook";
+            break;
+        case EBOOKDocument::TYPE_TEALDOC :
+            rTypeName = "writer_TealDoc";
+            break;
+        case EBOOKDocument::TYPE_ZTXT :
+            rTypeName = "writer_zTXT";
+            break;
+        default :
+            SAL_WARN_IF(type != EBOOKDocument::TYPE_UNKNOWN, "writerperfect", "EBookImportFilter::doDetectFormat: document type " << type << " detected, but ignored");
         }
     }
 
     return !rTypeName.isEmpty();
 }
 
-OUString EBookImportFilter_getImplementationName ()
+OUString EBookImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString (  "org.libreoffice.comp.Writer.EBookImportFilter"  );
+    return OUString("org.libreoffice.comp.Writer.EBookImportFilter");
 }
 
-Sequence< OUString > SAL_CALL EBookImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL EBookImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -103,24 +103,24 @@ throw (RuntimeException)
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-Reference< XInterface > SAL_CALL EBookImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL EBookImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new EBookImportFilter( rContext );
+    return (cppu::OWeakObject *) new EBookImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL EBookImportFilter::getImplementationName(  )
+OUString SAL_CALL EBookImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return EBookImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL EBookImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL EBookImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL EBookImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL EBookImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return EBookImportFilter_getSupportedServiceNames();

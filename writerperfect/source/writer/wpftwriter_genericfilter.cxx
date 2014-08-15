@@ -37,33 +37,46 @@
 #include "MSWorksImportFilter.hxx"
 #include "MWAWImportFilter.hxx"
 
-namespace {
+namespace
+{
 
-static cppu::ImplementationEntry const services[] = {
-    { &AbiWordImportFilter_createInstance, &AbiWordImportFilter_getImplementationName,
-      &AbiWordImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &WordPerfectImportFilter_createInstance, &WordPerfectImportFilter_getImplementationName,
-      &WordPerfectImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &MSWorksImportFilter_createInstance, &MSWorksImportFilter_getImplementationName,
-      &MSWorksImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &MWAWImportFilter_createInstance, &MWAWImportFilter_getImplementationName,
-      &MWAWImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &EBookImportFilter_createInstance, &EBookImportFilter_getImplementationName,
-      &EBookImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 } };
+static cppu::ImplementationEntry const services[] =
+{
+    {
+        &AbiWordImportFilter_createInstance, &AbiWordImportFilter_getImplementationName,
+        &AbiWordImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &WordPerfectImportFilter_createInstance, &WordPerfectImportFilter_getImplementationName,
+        &WordPerfectImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &MSWorksImportFilter_createInstance, &MSWorksImportFilter_getImplementationName,
+        &MSWorksImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &MWAWImportFilter_createInstance, &MWAWImportFilter_getImplementationName,
+        &MWAWImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &EBookImportFilter_createInstance, &EBookImportFilter_getImplementationName,
+        &EBookImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL wpftwriter_component_getFactory(
-    char const * pImplName, void * pServiceManager, void * pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void *SAL_CALL wpftwriter_component_getFactory(
+    char const *pImplName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, services);
+               pImplName, pServiceManager, pRegistryKey, services);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

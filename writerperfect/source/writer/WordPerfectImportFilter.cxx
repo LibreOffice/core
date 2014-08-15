@@ -91,24 +91,24 @@ static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, libr
     return true;
 }
 
-bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException, std::exception)
+bool SAL_CALL WordPerfectImportFilter::importImpl(const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
+throw (RuntimeException, std::exception)
 {
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
     Reference < XInputStream > xInputStream;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
+    for (sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name == "InputStream" )
+        if (pValue[i].Name == "InputStream")
             pValue[i].Value >>= xInputStream;
     }
-    if ( !xInputStream.is() )
+    if (!xInputStream.is())
     {
-        OSL_ASSERT( false );
+        OSL_ASSERT(false);
         return false;
     }
 
-    WPXSvInputStream input( xInputStream );
+    WPXSvInputStream input(xInputStream);
 
     OString aUtf8Passwd;
 
@@ -117,11 +117,11 @@ bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::s
     if (libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence)
     {
         int unsuccessfulAttempts = 0;
-        while (true )
+        while (true)
         {
-            SfxPasswordDialog aPasswdDlg( 0 );
+            SfxPasswordDialog aPasswdDlg(0);
             aPasswdDlg.SetMinLen(0);
-            if(!aPasswdDlg.Execute())
+            if (!aPasswdDlg.Execute())
                 return false;
             OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
@@ -150,33 +150,33 @@ bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::s
 
     OdtGenerator collector;
     collector.addDocumentHandler(&xHandler, ODF_FLAT_XML);
-	collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
-	collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
+    collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
+    collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
     if (libwpd::WPD_OK == libwpd::WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? 0 : aUtf8Passwd.getStr()))
         return true;
     return false;
 }
 
-sal_Bool SAL_CALL WordPerfectImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL WordPerfectImportFilter::filter(const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
 throw (RuntimeException, std::exception)
 {
-    return importImpl ( aDescriptor );
+    return importImpl(aDescriptor);
 }
-void SAL_CALL WordPerfectImportFilter::cancel(  )
+void SAL_CALL WordPerfectImportFilter::cancel()
 throw (RuntimeException, std::exception)
 {
 }
 
 // XImporter
-void SAL_CALL WordPerfectImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
+void SAL_CALL WordPerfectImportFilter::setTargetDocument(const Reference< ::com::sun::star::lang::XComponent > &xDoc)
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL WordPerfectImportFilter::detect( Sequence< PropertyValue >& Descriptor )
-throw( RuntimeException, std::exception )
+OUString SAL_CALL WordPerfectImportFilter::detect(Sequence< PropertyValue > &Descriptor)
+throw(RuntimeException, std::exception)
 {
     libwpd::WPDConfidence confidence = libwpd::WPD_CONFIDENCE_NONE;
     OUString sTypeName;
@@ -184,18 +184,18 @@ throw( RuntimeException, std::exception )
     sal_Int32 location = nLength;
     const PropertyValue *pValue = Descriptor.getConstArray();
     Reference < XInputStream > xInputStream;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
+    for (sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name == "TypeName" )
+        if (pValue[i].Name == "TypeName")
             location=i;
-        else if ( pValue[i].Name == "InputStream" )
+        else if (pValue[i].Name == "InputStream")
             pValue[i].Value >>= xInputStream;
     }
 
     if (!xInputStream.is())
         return OUString();
 
-    WPXSvInputStream input( xInputStream );
+    WPXSvInputStream input(xInputStream);
 
     confidence = libwpd::WPDocument::isFileFormatSupported(&input);
 
@@ -204,7 +204,7 @@ throw( RuntimeException, std::exception )
 
     if (!sTypeName.isEmpty())
     {
-        if ( location == nLength )
+        if (location == nLength)
         {
             Descriptor.realloc(nLength+1);
             Descriptor[location].Name = "TypeName";
@@ -218,18 +218,18 @@ throw( RuntimeException, std::exception )
 
 
 // XInitialization
-void SAL_CALL WordPerfectImportFilter::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL WordPerfectImportFilter::initialize(const Sequence< Any > &aArguments)
 throw (Exception, RuntimeException, std::exception)
 {
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
-    if ( nLength && ( aArguments[0] >>= aAnySeq ) )
+    if (nLength && (aArguments[0] >>= aAnySeq))
     {
         const PropertyValue *pValue = aAnySeq.getConstArray();
         nLength = aAnySeq.getLength();
-        for ( sal_Int32 i = 0 ; i < nLength; i++)
+        for (sal_Int32 i = 0 ; i < nLength; i++)
         {
-            if ( pValue[i].Name == "Type" )
+            if (pValue[i].Name == "Type")
             {
                 pValue[i].Value >>= msFilterName;
                 break;
@@ -237,13 +237,13 @@ throw (Exception, RuntimeException, std::exception)
         }
     }
 }
-OUString WordPerfectImportFilter_getImplementationName ()
+OUString WordPerfectImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString (  "com.sun.star.comp.Writer.WordPerfectImportFilter"  );
+    return OUString("com.sun.star.comp.Writer.WordPerfectImportFilter");
 }
 
-Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -253,38 +253,38 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new WordPerfectImportFilter( rContext );
+    return (cppu::OWeakObject *) new WordPerfectImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL WordPerfectImportFilter::getImplementationName(  )
+OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return WordPerfectImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL WordPerfectImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return WordPerfectImportFilter_getSupportedServiceNames();
 }
 
 
-WordPerfectImportFilterDialog::WordPerfectImportFilterDialog( const Reference< XComponentContext > & rContext) :
-    mxContext( rContext ) {}
+WordPerfectImportFilterDialog::WordPerfectImportFilterDialog(const Reference< XComponentContext > &rContext) :
+    mxContext(rContext) {}
 
 WordPerfectImportFilterDialog::~WordPerfectImportFilterDialog()
 {
 }
 
-void SAL_CALL WordPerfectImportFilterDialog::setTitle( const OUString & )
+void SAL_CALL WordPerfectImportFilterDialog::setTitle(const OUString &)
 throw (RuntimeException, std::exception)
 {
 }
@@ -292,7 +292,7 @@ throw (RuntimeException, std::exception)
 sal_Int16 SAL_CALL WordPerfectImportFilterDialog::execute()
 throw (RuntimeException, std::exception)
 {
-    WPXSvInputStream input( mxInputStream );
+    WPXSvInputStream input(mxInputStream);
 
     OString aUtf8Passwd;
 
@@ -301,11 +301,11 @@ throw (RuntimeException, std::exception)
     if (libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence)
     {
         int unsuccessfulAttempts = 0;
-        while (true )
+        while (true)
         {
             SfxPasswordDialog aPasswdDlg(0);
             aPasswdDlg.SetMinLen(0);
-            if(!aPasswdDlg.Execute())
+            if (!aPasswdDlg.Execute())
                 return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
             msPassword = aPasswdDlg.GetPassword().getStr();
             aUtf8Passwd = OUStringToOString(msPassword, RTL_TEXTENCODING_UTF8);
@@ -331,7 +331,7 @@ Sequence<PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValue
     return aRet;
 }
 
-void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const Sequence<PropertyValue>& aProps)
+void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues(const Sequence<PropertyValue> &aProps)
 throw(com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::PropertyVetoException,
       com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception)
 {
@@ -342,40 +342,40 @@ throw(com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::Pr
         const PropertyValue &rProp = pPropArray[i];
         OUString aPropName = rProp.Name;
 
-        if ( aPropName == "Password" )
+        if (aPropName == "Password")
             rProp.Value >>= msPassword;
-        else if ( aPropName == "InputStream" )
+        else if (aPropName == "InputStream")
             rProp.Value >>= mxInputStream;
     }
 }
 
 
 // XServiceInfo
-OUString SAL_CALL WordPerfectImportFilterDialog::getImplementationName(  )
+OUString SAL_CALL WordPerfectImportFilterDialog::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return WordPerfectImportFilterDialog_getImplementationName();
 }
 
-sal_Bool SAL_CALL WordPerfectImportFilterDialog::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL WordPerfectImportFilterDialog::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return WordPerfectImportFilterDialog_getSupportedServiceNames();
 }
 
-OUString WordPerfectImportFilterDialog_getImplementationName ()
+OUString WordPerfectImportFilterDialog_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString (  "com.sun.star.comp.Writer.WordPerfectImportFilterDialog"  );
+    return OUString("com.sun.star.comp.Writer.WordPerfectImportFilterDialog");
 }
 
-Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
@@ -384,10 +384,10 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new WordPerfectImportFilterDialog( rContext );
+    return (cppu::OWeakObject *) new WordPerfectImportFilterDialog(rContext);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -179,7 +179,7 @@ void OLEStorageImpl::initialize(SvStream *const pStream)
     if (!pStream)
         return;
 
-    mxRootStorage.ref = new SotStorage( pStream, true );
+    mxRootStorage.ref = new SotStorage(pStream, true);
 
     traverse(mxRootStorage.ref, "");
 
@@ -401,8 +401,8 @@ Reference<XInputStream> ZipStorageImpl::createStream(const rtl::OUString &rPath)
 class WPXSvInputStreamImpl
 {
 public :
-    WPXSvInputStreamImpl( ::com::sun::star::uno::Reference<
-                      ::com::sun::star::io::XInputStream > xStream );
+    WPXSvInputStreamImpl(::com::sun::star::uno::Reference<
+                         ::com::sun::star::io::XInputStream > xStream);
     ~WPXSvInputStreamImpl();
 
     bool isStructured();
@@ -444,7 +444,7 @@ public:
     unsigned long mnReadBufferPos;
 };
 
-WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) :
+WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference< XInputStream > xStream) :
     mxStream(xStream),
     mxSeekable(xStream, UNO_QUERY),
     maData(0),
@@ -471,7 +471,7 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) 
                 if (0 < mxSeekable->getPosition())
                     mxSeekable->seek(0);
             }
-            catch ( ... )
+            catch (...)
             {
                 SAL_WARN("writerperfect", "mnLength = mxSeekable->getLength() threw exception");
                 mnLength = 0;
@@ -491,7 +491,7 @@ const unsigned char *WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned
     if (numBytes == 0 || isEnd())
         return 0;
 
-    numBytesRead = mxStream->readSomeBytes (maData, numBytes);
+    numBytesRead = mxStream->readSomeBytes(maData, numBytes);
     if (numBytesRead == 0)
         return 0;
 
@@ -737,8 +737,8 @@ librevenge::RVNGInputStream *WPXSvInputStreamImpl::createWPXStream(const SotStor
 {
     if (rxStorage.Is())
     {
-        Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( rxStorage ));
-        return new WPXSvInputStream( xContents );
+        Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper(rxStorage));
+        return new WPXSvInputStream(xContents);
     }
     return 0;
 }
@@ -746,7 +746,7 @@ librevenge::RVNGInputStream *WPXSvInputStreamImpl::createWPXStream(const SotStor
 librevenge::RVNGInputStream *WPXSvInputStreamImpl::createWPXStream(const Reference<XInputStream> &rxStream)
 {
     if (rxStream.is())
-        return new WPXSvInputStream( rxStream );
+        return new WPXSvInputStream(rxStream);
     else
         return 0;
 }
@@ -757,7 +757,7 @@ bool WPXSvInputStreamImpl::isOLE()
     {
         assert(0 == mxSeekable->getPosition());
 
-        boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( mxStream ));
+        boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(mxStream));
         if (pStream && SotStorage::IsOLEStorage(pStream.get()))
             mpOLEStorage.reset(new OLEStorageImpl());
 
@@ -780,8 +780,8 @@ bool WPXSvInputStreamImpl::isZip()
 
             const Reference<XComponentContext> xContext(comphelper::getProcessComponentContext(), UNO_QUERY_THROW);
             const Reference<packages::zip::XZipFileAccess2> xZip(
-                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.packages.zip.ZipFileAccess", aArgs, xContext),
-                    UNO_QUERY_THROW);
+                xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.packages.zip.ZipFileAccess", aArgs, xContext),
+                UNO_QUERY_THROW);
             mpZipStorage.reset(new ZipStorageImpl(xZip));
         }
         catch (const Exception &)
@@ -800,7 +800,7 @@ void WPXSvInputStreamImpl::ensureOLEIsInitialized()
     assert(mpOLEStorage);
 
     if (!mpOLEStorage->mbInitialized)
-        mpOLEStorage->initialize(utl::UcbStreamHelper::CreateStream( mxStream ));
+        mpOLEStorage->initialize(utl::UcbStreamHelper::CreateStream(mxStream));
 }
 
 void WPXSvInputStreamImpl::ensureZipIsInitialized()
@@ -811,15 +811,15 @@ void WPXSvInputStreamImpl::ensureZipIsInitialized()
         mpZipStorage->initialize();
 }
 
-WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
+WPXSvInputStream::WPXSvInputStream(Reference< XInputStream > xStream) :
     mpImpl(new WPXSvInputStreamImpl(xStream))
 {
 }
 
 WPXSvInputStream::~WPXSvInputStream()
 {
-   if (mpImpl)
-       delete mpImpl;
+    if (mpImpl)
+        delete mpImpl;
 }
 
 #define BUFFER_MAX 65536

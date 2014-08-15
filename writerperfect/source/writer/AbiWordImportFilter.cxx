@@ -24,12 +24,12 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool AbiWordImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator )
+bool AbiWordImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator)
 {
     return libabw::AbiDocument::parse(&rInput, &rGenerator);
 }
 
-bool AbiWordImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool AbiWordImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     if (libabw::AbiDocument::isFileFormatSupported(&rInput))
     {
@@ -40,13 +40,13 @@ bool AbiWordImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, O
     return false;
 }
 
-OUString AbiWordImportFilter_getImplementationName ()
+OUString AbiWordImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString (  "com.sun.star.comp.Writer.AbiWordImportFilter"  );
+    return OUString("com.sun.star.comp.Writer.AbiWordImportFilter");
 }
 
-Sequence< OUString > SAL_CALL AbiWordImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL AbiWordImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -58,24 +58,24 @@ throw (RuntimeException)
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-Reference< XInterface > SAL_CALL AbiWordImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL AbiWordImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new AbiWordImportFilter( rContext );
+    return (cppu::OWeakObject *) new AbiWordImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL AbiWordImportFilter::getImplementationName(  )
+OUString SAL_CALL AbiWordImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return AbiWordImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL AbiWordImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL AbiWordImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL AbiWordImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL AbiWordImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return AbiWordImportFilter_getSupportedServiceNames();

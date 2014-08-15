@@ -32,24 +32,31 @@
 #include "MSWorksCalcImportFilter.hxx"
 #include "MWAWCalcImportFilter.hxx"
 
-namespace {
+namespace
+{
 
-static cppu::ImplementationEntry const services[] = {
-    { &MSWorksCalcImportFilter_createInstance, &MSWorksCalcImportFilter_getImplementationName,
-      &MSWorksCalcImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &MWAWCalcImportFilter_createInstance, &MWAWCalcImportFilter_getImplementationName,
-      &MWAWCalcImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 } };
+static cppu::ImplementationEntry const services[] =
+{
+    {
+        &MSWorksCalcImportFilter_createInstance, &MSWorksCalcImportFilter_getImplementationName,
+        &MSWorksCalcImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &MWAWCalcImportFilter_createInstance, &MWAWCalcImportFilter_getImplementationName,
+        &MWAWCalcImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL wpftcalc_component_getFactory(
-    char const * pImplName, void * pServiceManager, void * pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void *SAL_CALL wpftcalc_component_getFactory(
+    char const *pImplName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, services);
+               pImplName, pServiceManager, pRegistryKey, services);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

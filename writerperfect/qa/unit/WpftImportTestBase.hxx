@@ -19,13 +19,35 @@
 
 #include <unotest/filters-test.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace beans { struct PropertyValue; }
-    namespace container { class XNameAccess; }
-    namespace document { class XFilter; }
-    namespace frame { class XDesktop2; }
-    namespace ucb { class XSimpleFileAccess; }
-} } }
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace beans
+{
+struct PropertyValue;
+}
+namespace container
+{
+class XNameAccess;
+}
+namespace document
+{
+class XFilter;
+}
+namespace frame
+{
+class XDesktop2;
+}
+namespace ucb
+{
+class XSimpleFileAccess;
+}
+}
+}
+}
 
 namespace writerperfect
 {
@@ -47,7 +69,7 @@ protected:
 
 private:
     virtual bool load(const OUString &, const OUString &rURL, const OUString &,
-        unsigned int, unsigned int, unsigned int) SAL_OVERRIDE;
+                      unsigned int, unsigned int, unsigned int) SAL_OVERRIDE;
 
     void impl_detectFilterName(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName);
 

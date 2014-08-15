@@ -30,12 +30,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool WPGImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
+bool WPGImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator)
 {
     return libwpg::WPGraphics::parse(&rInput, &rGenerator);
 }
 
-bool WPGImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool WPGImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     if (libwpg::WPGraphics::isSupported(&rInput))
     {
@@ -46,13 +46,13 @@ bool WPGImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUStr
     return false;
 }
 
-OUString WPGImportFilter_getImplementationName ()
+OUString WPGImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString (  "com.sun.star.comp.Draw.WPGImportFilter"  );
+    return OUString("com.sun.star.comp.Draw.WPGImportFilter");
 }
 
-Sequence< OUString > SAL_CALL WPGImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL WPGImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -62,24 +62,24 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL WPGImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL WPGImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new WPGImportFilter( rContext );
+    return (cppu::OWeakObject *) new WPGImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL WPGImportFilter::getImplementationName(  )
+OUString SAL_CALL WPGImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return WPGImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL WPGImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL WPGImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL WPGImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL WPGImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return WPGImportFilter_getSupportedServiceNames();

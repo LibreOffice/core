@@ -1,0 +1,12 @@
+# formatting options
+style=allman
+indent=spaces=4
+align-pointer=name
+break-closing-brackets
+pad-header
+unpad-paren
+max-instatement-indent=120
+
+# processing options
+recursive
+suffix=none

@@ -23,12 +23,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool VisioImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
+bool VisioImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator)
 {
     return libvisio::VisioDocument::parse(&rInput, &rGenerator);
 }
 
-bool VisioImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool VisioImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     if (libvisio::VisioDocument::isSupported(&rInput))
     {
@@ -39,13 +39,13 @@ bool VisioImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUS
     return false;
 }
 
-OUString VisioImportFilter_getImplementationName ()
+OUString VisioImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString ( "com.sun.star.comp.Draw.VisioImportFilter" );
+    return OUString("com.sun.star.comp.Draw.VisioImportFilter");
 }
 
-Sequence< OUString > SAL_CALL VisioImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL VisioImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -55,24 +55,24 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL VisioImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL VisioImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new VisioImportFilter( rContext );
+    return (cppu::OWeakObject *) new VisioImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL VisioImportFilter::getImplementationName(  )
+OUString SAL_CALL VisioImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return VisioImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL VisioImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL VisioImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL VisioImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL VisioImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return VisioImportFilter_getSupportedServiceNames();

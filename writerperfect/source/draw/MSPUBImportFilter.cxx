@@ -25,12 +25,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool MSPUBImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
+bool MSPUBImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator)
 {
     return libmspub::MSPUBDocument::parse(&rInput, &rGenerator);
 }
 
-bool MSPUBImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool MSPUBImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     if (libmspub::MSPUBDocument::isSupported(&rInput))
     {
@@ -41,13 +41,13 @@ bool MSPUBImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUS
     return false;
 }
 
-OUString MSPUBImportFilter_getImplementationName ()
+OUString MSPUBImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString ( "com.sun.star.comp.Draw.MSPUBImportFilter" );
+    return OUString("com.sun.star.comp.Draw.MSPUBImportFilter");
 }
 
-Sequence< OUString > SAL_CALL MSPUBImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MSPUBImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -57,24 +57,24 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL MSPUBImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL MSPUBImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new MSPUBImportFilter( rContext );
+    return (cppu::OWeakObject *) new MSPUBImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL MSPUBImportFilter::getImplementationName(  )
+OUString SAL_CALL MSPUBImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return MSPUBImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL MSPUBImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL MSPUBImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL MSPUBImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MSPUBImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return MSPUBImportFilter_getSupportedServiceNames();

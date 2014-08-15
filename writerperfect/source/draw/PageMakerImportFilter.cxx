@@ -25,12 +25,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool PageMakerImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
+bool PageMakerImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator)
 {
     return libpagemaker::PMDocument::parse(&rInput, &rGenerator);
 }
 
-bool PageMakerImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool PageMakerImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     if (libpagemaker::PMDocument::isSupported(&rInput))
     {
@@ -41,13 +41,13 @@ bool PageMakerImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput,
     return false;
 }
 
-OUString PageMakerImportFilter_getImplementationName ()
+OUString PageMakerImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString( "org.libreoffice.comp.Draw.PageMakerImportFilter" );
+    return OUString("org.libreoffice.comp.Draw.PageMakerImportFilter");
 }
 
-Sequence< OUString > SAL_CALL PageMakerImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL PageMakerImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence< OUString > aRet(2);
@@ -57,24 +57,24 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL PageMakerImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL PageMakerImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new PageMakerImportFilter( rContext );
+    return (cppu::OWeakObject *) new PageMakerImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL PageMakerImportFilter::getImplementationName(  )
+OUString SAL_CALL PageMakerImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return PageMakerImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL PageMakerImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL PageMakerImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL PageMakerImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return PageMakerImportFilter_getSupportedServiceNames();

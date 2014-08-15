@@ -27,12 +27,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool CMXImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
+bool CMXImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator)
 {
     return libcdr::CMXDocument::parse(&rInput, &rGenerator);
 }
 
-bool CMXImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool CMXImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     if (libcdr::CMXDocument::isSupported(&rInput))
     {
@@ -43,13 +43,13 @@ bool CMXImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUStr
     return false;
 }
 
-OUString CMXImportFilter_getImplementationName ()
+OUString CMXImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString ( "com.sun.star.comp.Draw.CMXImportFilter" );
+    return OUString("com.sun.star.comp.Draw.CMXImportFilter");
 }
 
-Sequence< OUString > SAL_CALL CMXImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL CMXImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -59,24 +59,24 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL CMXImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL CMXImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new CMXImportFilter( rContext );
+    return (cppu::OWeakObject *) new CMXImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL CMXImportFilter::getImplementationName(  )
+OUString SAL_CALL CMXImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return CMXImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL CMXImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL CMXImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL CMXImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL CMXImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return CMXImportFilter_getSupportedServiceNames();

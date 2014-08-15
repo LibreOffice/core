@@ -50,8 +50,8 @@ using com::sun::star::xml::sax::XParser;
 using writerperfect::DocumentHandler;
 using writerperfect::WPXSvInputStream;
 
-ImportFilterImpl::ImportFilterImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext )
-    : mxContext( rxContext )
+ImportFilterImpl::ImportFilterImpl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    : mxContext(rxContext)
 {
 }
 
@@ -59,20 +59,20 @@ ImportFilterImpl::~ImportFilterImpl()
 {
 }
 
-sal_Bool SAL_CALL ImportFilterImpl::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL ImportFilterImpl::filter(const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
 throw (RuntimeException, std::exception)
 {
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
     Reference < XInputStream > xInputStream;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
+    for (sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name == "InputStream" )
+        if (pValue[i].Name == "InputStream")
             pValue[i].Value >>= xInputStream;
     }
-    if ( !xInputStream.is() )
+    if (!xInputStream.is())
     {
-        OSL_ASSERT( false );
+        OSL_ASSERT(false);
         return sal_False;
     }
 
@@ -84,13 +84,13 @@ throw (RuntimeException, std::exception)
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
     Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
-    xImporter->setTargetDocument( mxDoc );
+    xImporter->setTargetDocument(mxDoc);
 
     // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
     // writes to in-memory target doc
     DocumentHandler xHandler(xInternalHandler);
 
-    WPXSvInputStream input( xInputStream );
+    WPXSvInputStream input(xInputStream);
 
     OdsGenerator exporter;
     exporter.addDocumentHandler(&xHandler, ODF_FLAT_XML);
@@ -100,45 +100,45 @@ throw (RuntimeException, std::exception)
     return doImportDocument(input, exporter);
 }
 
-void SAL_CALL ImportFilterImpl::cancel(  )
+void SAL_CALL ImportFilterImpl::cancel()
 throw (RuntimeException, std::exception)
 {
 }
 
 // XImporter
-void SAL_CALL ImportFilterImpl::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
+void SAL_CALL ImportFilterImpl::setTargetDocument(const Reference< ::com::sun::star::lang::XComponent > &xDoc)
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL ImportFilterImpl::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-throw( com::sun::star::uno::RuntimeException, std::exception )
+OUString SAL_CALL ImportFilterImpl::detect(com::sun::star::uno::Sequence< PropertyValue > &Descriptor)
+throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
     const PropertyValue *pValue = Descriptor.getConstArray();
     Reference < XInputStream > xInputStream;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
+    for (sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name == "TypeName" )
+        if (pValue[i].Name == "TypeName")
             location=i;
-        else if ( pValue[i].Name == "InputStream" )
+        else if (pValue[i].Name == "InputStream")
             pValue[i].Value >>= xInputStream;
     }
 
     if (!xInputStream.is())
         return OUString();
 
-    WPXSvInputStream input( xInputStream );
+    WPXSvInputStream input(xInputStream);
 
-    if ( doDetectFormat( input, sTypeName ) )
+    if (doDetectFormat(input, sTypeName))
     {
-        assert (!sTypeName.isEmpty());
+        assert(!sTypeName.isEmpty());
 
-        if ( location == nLength )
+        if (location == nLength)
         {
             Descriptor.realloc(nLength+1);
             Descriptor[location].Name = "TypeName";
@@ -152,18 +152,18 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
 
 
 // XInitialization
-void SAL_CALL ImportFilterImpl::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL ImportFilterImpl::initialize(const Sequence< Any > &aArguments)
 throw (Exception, RuntimeException, std::exception)
 {
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
-    if ( nLength && ( aArguments[0] >>= aAnySeq ) )
+    if (nLength && (aArguments[0] >>= aAnySeq))
     {
         const PropertyValue *pValue = aAnySeq.getConstArray();
         nLength = aAnySeq.getLength();
-        for ( sal_Int32 i = 0 ; i < nLength; i++)
+        for (sal_Int32 i = 0 ; i < nLength; i++)
         {
-            if ( pValue[i].Name == "Type" )
+            if (pValue[i].Name == "Type")
             {
                 pValue[i].Value >>= msFilterName;
                 break;
@@ -172,7 +172,7 @@ throw (Exception, RuntimeException, std::exception)
     }
 }
 
-void ImportFilterImpl::doRegisterHandlers( OdsGenerator & )
+void ImportFilterImpl::doRegisterHandlers(OdsGenerator &)
 {
 }
 

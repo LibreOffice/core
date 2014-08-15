@@ -27,12 +27,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool CDRImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
+bool CDRImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator)
 {
     return libcdr::CDRDocument::parse(&rInput, &rGenerator);
 }
 
-bool CDRImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool CDRImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     if (libcdr::CDRDocument::isSupported(&rInput))
     {
@@ -43,13 +43,13 @@ bool CDRImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUStr
     return false;
 }
 
-OUString CDRImportFilter_getImplementationName ()
+OUString CDRImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString ( "com.sun.star.comp.Draw.CDRImportFilter" );
+    return OUString("com.sun.star.comp.Draw.CDRImportFilter");
 }
 
-Sequence< OUString > SAL_CALL CDRImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL CDRImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -59,24 +59,24 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL CDRImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL CDRImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new CDRImportFilter( rContext );
+    return (cppu::OWeakObject *) new CDRImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL CDRImportFilter::getImplementationName(  )
+OUString SAL_CALL CDRImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return CDRImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL CDRImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL CDRImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL CDRImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL CDRImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return CDRImportFilter_getSupportedServiceNames();

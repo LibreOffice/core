@@ -39,12 +39,12 @@ static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData
     return MWAWDocument::decodeSpreadsheet(data, &exporter);
 }
 
-bool MWAWDrawImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
+bool MWAWDrawImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator)
 {
     return MWAWDocument::MWAW_R_OK == MWAWDocument::parse(&rInput, &rGenerator);
 }
 
-bool MWAWDrawImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     rTypeName = "";
 
@@ -54,7 +54,7 @@ bool MWAWDrawImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, 
 
     if (confidence == MWAWDocument::MWAW_C_EXCELLENT)
     {
-        if ( docKind == MWAWDocument::MWAW_K_DRAW || docKind == MWAWDocument::MWAW_K_PAINT )
+        if (docKind == MWAWDocument::MWAW_K_DRAW || docKind == MWAWDocument::MWAW_K_PAINT)
         {
             switch (docType)
             {
@@ -143,19 +143,19 @@ bool MWAWDrawImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, 
     return !rTypeName.isEmpty();
 }
 
-void MWAWDrawImportFilter::doRegisterHandlers( OdgGenerator &rGenerator )
+void MWAWDrawImportFilter::doRegisterHandlers(OdgGenerator &rGenerator)
 {
     rGenerator.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWGraphicObject);
     rGenerator.registerEmbeddedObjectHandler("image/mwaw-ods", &handleEmbeddedMWAWSpreadsheetObject);
 }
 
-OUString MWAWDrawImportFilter_getImplementationName ()
+OUString MWAWDrawImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString (  "com.sun.star.comp.Draw.MWAWDrawImportFilter"  );
+    return OUString("com.sun.star.comp.Draw.MWAWDrawImportFilter");
 }
 
-Sequence< OUString > SAL_CALL MWAWDrawImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MWAWDrawImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -165,24 +165,24 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL MWAWDrawImportFilter_createInstance( const Reference< XComponentContext > &rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL MWAWDrawImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new MWAWDrawImportFilter( rContext );
+    return (cppu::OWeakObject *) new MWAWDrawImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL MWAWDrawImportFilter::getImplementationName(  )
+OUString SAL_CALL MWAWDrawImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return MWAWDrawImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL MWAWDrawImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL MWAWDrawImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL MWAWDrawImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MWAWDrawImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return MWAWDrawImportFilter_getSupportedServiceNames();

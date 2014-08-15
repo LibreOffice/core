@@ -38,47 +38,66 @@
 #include "VisioImportFilter.hxx"
 #include "WPGImportFilter.hxx"
 
-namespace {
+namespace
+{
 
-static cppu::ImplementationEntry const services[] = {
-    { &CDRImportFilter_createInstance, &CDRImportFilter_getImplementationName,
-      &CDRImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &CMXImportFilter_createInstance, &CMXImportFilter_getImplementationName,
-      &CMXImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &FreehandImportFilter_createInstance,
-      &FreehandImportFilter_getImplementationName,
-      &FreehandImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &PageMakerImportFilter_createInstance,
-      &PageMakerImportFilter_getImplementationName,
-      &PageMakerImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &MSPUBImportFilter_createInstance,
-      &MSPUBImportFilter_getImplementationName,
-      &MSPUBImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &MWAWDrawImportFilter_createInstance,
-      &MWAWDrawImportFilter_getImplementationName,
-      &MWAWDrawImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &VisioImportFilter_createInstance,
-      &VisioImportFilter_getImplementationName,
-      &VisioImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { &WPGImportFilter_createInstance, &WPGImportFilter_getImplementationName,
-      &WPGImportFilter_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 } };
+static cppu::ImplementationEntry const services[] =
+{
+    {
+        &CDRImportFilter_createInstance, &CDRImportFilter_getImplementationName,
+        &CDRImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &CMXImportFilter_createInstance, &CMXImportFilter_getImplementationName,
+        &CMXImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &FreehandImportFilter_createInstance,
+        &FreehandImportFilter_getImplementationName,
+        &FreehandImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &PageMakerImportFilter_createInstance,
+        &PageMakerImportFilter_getImplementationName,
+        &PageMakerImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &MSPUBImportFilter_createInstance,
+        &MSPUBImportFilter_getImplementationName,
+        &MSPUBImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &MWAWDrawImportFilter_createInstance,
+        &MWAWDrawImportFilter_getImplementationName,
+        &MWAWDrawImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &VisioImportFilter_createInstance,
+        &VisioImportFilter_getImplementationName,
+        &VisioImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &WPGImportFilter_createInstance, &WPGImportFilter_getImplementationName,
+        &WPGImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL wpftdraw_component_getFactory(
-    char const * pImplName, void * pServiceManager, void * pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void *SAL_CALL wpftdraw_component_getFactory(
+    char const *pImplName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, services);
+               pImplName, pServiceManager, pRegistryKey, services);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

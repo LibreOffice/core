@@ -50,9 +50,9 @@ static void unescapeXML(const char *s, const unsigned long sz, librevenge::RVNGS
         {
             // look for &amp; , &lt; , &gt; , &apos; , &quot;
             bool escapedChar=false;
-            switch(*(p+1))
-                {
-                case 'a':
+            switch (*(p+1))
+            {
+            case 'a':
                 if (p+5 <= end && strncmp(p,"&amp;",5)==0)
                 {
                     res.append('&');
@@ -96,7 +96,8 @@ static void unescapeXML(const char *s, const unsigned long sz, librevenge::RVNGS
             if (escapedChar) continue;
         }
 
-        while (p != next) {
+        while (p != next)
+        {
             res.append(*p);
             ++p;
         }
@@ -128,7 +129,7 @@ void DocumentHandler::startElement(const char *psName, const librevenge::RVNGPro
     SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
     Reference < XAttributeList > xAttrList(pAttrList);
     librevenge::RVNGPropertyList::Iter i(xPropList);
-    for (i.rewind(); i.next(); )
+    for (i.rewind(); i.next();)
     {
         // filter out librevenge elements
         if (strncmp(i.key(), "librevenge", 10) != 0)
@@ -138,14 +139,17 @@ void DocumentHandler::startElement(const char *psName, const librevenge::RVNGPro
             OUString sValue(i()->getStr().cstr(), strlen(i()->getStr().cstr()), RTL_TEXTENCODING_UTF8);
 
             // libodfgen xml-encodes some attribute's value, so check if the value is encoded or not
-            for (int j=0; j<9; ++j) {
+            for (int j=0; j<9; ++j)
+            {
                 // list of the encoded attributes followed by their lengths
-                static char const *(listEncoded[9])={
+                static char const *(listEncoded[9])=
+                {
                     "draw:name", "svg:font-family", "style:condition", "style:num-prefix", "style:num-suffix",
                     "table:formula", "text:bullet-char", "text:label", "xlink:href"
                 };
-                static size_t const (listEncodedLength[9])={9,15,15,16,16,13,16,10,10};
-                if (keyLength==listEncodedLength[j] && strncmp(i.key(), listEncoded[j], keyLength)==0) {
+                static size_t const(listEncodedLength[9])= {9,15,15,16,16,13,16,10,10};
+                if (keyLength==listEncodedLength[j] && strncmp(i.key(), listEncoded[j], keyLength)==0)
+                {
                     librevenge::RVNGString decodedValue("");
                     unescapeXML(i()->getStr().cstr(), (unsigned long) strlen(i()->getStr().cstr()), decodedValue);
                     sValue=OUString(decodedValue.cstr(), strlen(decodedValue.cstr()), RTL_TEXTENCODING_UTF8);

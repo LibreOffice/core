@@ -60,7 +60,7 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content &rContent, const 
     try
     {
         const uno::Reference<sdbc::XResultSet> xResultSet(
-                rContent.createCursor(lPropNames, ucbhelper::INCLUDE_DOCUMENTS_ONLY));
+            rContent.createCursor(lPropNames, ucbhelper::INCLUDE_DOCUMENTS_ONLY));
         if (xResultSet->first())
         {
             const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY_THROW);
@@ -75,7 +75,8 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content &rContent, const 
                     xInputStream = aSubContent.openStream();
                     break;
                 }
-            } while (xResultSet->next());
+            }
+            while (xResultSet->next());
         }
     }
     catch (const uno::RuntimeException &)
@@ -140,7 +141,7 @@ DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Ref
 }
 catch (...)
 {
-return 0;
+    return 0;
 }
 
 bool DirectoryStream::isDirectory(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent) try
@@ -170,7 +171,7 @@ unsigned DirectoryStream::subStreamCount()
     return 0;
 }
 
-const char * DirectoryStream::subStreamName(unsigned /* id */)
+const char *DirectoryStream::subStreamName(unsigned /* id */)
 {
     // TODO: implement me
     return 0;

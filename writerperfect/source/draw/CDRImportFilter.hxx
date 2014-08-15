@@ -19,33 +19,33 @@
 class CDRImportFilter : public writerperfect::draw::ImportFilterBase
 {
 public:
-    CDRImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext )
-        : writerperfect::draw::ImportFilterBase( rxContext )
+    CDRImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+        : writerperfect::draw::ImportFilterBase(rxContext)
     {
     }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString &ServiceName )
+    virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName)
     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    virtual bool doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName ) SAL_OVERRIDE;
-    virtual bool doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator ) SAL_OVERRIDE;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) SAL_OVERRIDE;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator) SAL_OVERRIDE;
 };
 
 OUString CDRImportFilter_getImplementationName()
-throw ( ::com::sun::star::uno::RuntimeException );
+throw (::com::sun::star::uno::RuntimeException);
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL CDRImportFilter_getSupportedServiceNames(  )
-throw ( ::com::sun::star::uno::RuntimeException );
+::com::sun::star::uno::Sequence< OUString > SAL_CALL CDRImportFilter_getSupportedServiceNames()
+throw (::com::sun::star::uno::RuntimeException);
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL CDRImportFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
-throw ( ::com::sun::star::uno::Exception );
+SAL_CALL CDRImportFilter_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext)
+throw (::com::sun::star::uno::Exception);
 
 #endif
 

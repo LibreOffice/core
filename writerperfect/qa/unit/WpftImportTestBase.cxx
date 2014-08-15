@@ -60,8 +60,8 @@ void WpftImportTestBase::setUp()
     m_xDesktop = frame::theDesktop::get(m_xContext);
 
     const uno::Reference<document::XTypeDetection> xTypeDetection(
-            m_xFactory->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
-            uno::UNO_QUERY_THROW);
+        m_xFactory->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
+        uno::UNO_QUERY_THROW);
     m_xTypeMap.set(xTypeDetection, uno::UNO_QUERY_THROW);
 }
 
@@ -73,12 +73,12 @@ void WpftImportTestBase::tearDown()
 }
 
 bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUString &,
-    unsigned int, unsigned int, unsigned int)
+                              unsigned int, unsigned int, unsigned int)
 {
     // create an empty frame
     const uno::Reference<lang::XComponent> xDoc(
-            m_xDesktop->loadComponentFromURL(m_aFactoryURL, "_blank", 0, uno::Sequence<beans::PropertyValue>()),
-            uno::UNO_QUERY_THROW);
+        m_xDesktop->loadComponentFromURL(m_aFactoryURL, "_blank", 0, uno::Sequence<beans::PropertyValue>()),
+        uno::UNO_QUERY_THROW);
 
     // Find the model and frame. We need them later.
     uno::Reference<frame::XFrame> xFrame(xDoc, uno::UNO_QUERY);

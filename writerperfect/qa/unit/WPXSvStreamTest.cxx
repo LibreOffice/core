@@ -73,7 +73,7 @@ shared_ptr<RVNGInputStream> lcl_createStream()
 {
     using comphelper::SequenceInputStream;
 
-    const css::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aText), sizeof aText);
+    const css::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8 *>(aText), sizeof aText);
     const uno::Reference<io::XInputStream> xInputStream(new SequenceInputStream(aData));
 
     shared_ptr<RVNGInputStream> pInputStream;
@@ -90,8 +90,8 @@ const shared_ptr<RVNGInputStream> lcl_createStreamForURL(const rtl::OUString &rU
 
     const Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(), UNO_QUERY_THROW);
     const Reference<ucb::XSimpleFileAccess> xFileAccess(
-            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.ucb.SimpleFileAccess", xContext),
-            UNO_QUERY_THROW);
+        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.ucb.SimpleFileAccess", xContext),
+        UNO_QUERY_THROW);
     const Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(rURL), UNO_QUERY_THROW);
 
     const shared_ptr<RVNGInputStream> pInput(new WPXSvInputStream(xInputStream));
@@ -122,9 +122,9 @@ void WPXSvStreamTest::testRead()
     const unsigned long nLen = sizeof aText;
 
     unsigned long nReadBytes = 0;
-    const unsigned char* pData = 0;
-    const unsigned char* const pTextOrig = reinterpret_cast<const unsigned char*>(aText);
-    const unsigned char* pText = pTextOrig;
+    const unsigned char *pData = 0;
+    const unsigned char *const pTextOrig = reinterpret_cast<const unsigned char *>(aText);
+    const unsigned char *pText = pTextOrig;
 
     // reading by small pieces
     pData = pInput->read(1UL, nReadBytes);
@@ -176,7 +176,7 @@ void WPXSvStreamTest::testRead()
     pData = pInput->read(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
-    CPPUNIT_ASSERT_EQUAL(pData, static_cast<const unsigned char*>(0));
+    CPPUNIT_ASSERT_EQUAL(pData, static_cast<const unsigned char *>(0));
     CPPUNIT_ASSERT(!pInput->isEnd());
 }
 

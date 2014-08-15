@@ -69,15 +69,15 @@ namespace
 {
 
 template<class T>
-bool lcl_queryIsPackage( const Sequence<T> &lComponentData )
+bool lcl_queryIsPackage(const Sequence<T> &lComponentData)
 {
     bool bIsPackage = false;
 
     const sal_Int32 nLength = lComponentData.getLength();
     const T *pValue = lComponentData.getConstArray();
-    for ( sal_Int32 i = 0; i < nLength; ++i)
+    for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        if ( pValue[i].Name == "IsPackage" )
+        if (pValue[i].Name == "IsPackage")
         {
             pValue[i].Value >>= bIsPackage;
             break;
@@ -87,21 +87,21 @@ bool lcl_queryIsPackage( const Sequence<T> &lComponentData )
     return bIsPackage;
 }
 
-bool lcl_isPackage( const Any &rComponentData )
+bool lcl_isPackage(const Any &rComponentData)
 {
     Sequence < beans::NamedValue > lComponentDataNV;
     Sequence < beans::PropertyValue > lComponentDataPV;
 
-    if ( rComponentData >>= lComponentDataNV )
-        return lcl_queryIsPackage( lComponentDataNV );
-    else if ( rComponentData >>= lComponentDataPV )
-        return lcl_queryIsPackage( lComponentDataPV );
+    if (rComponentData >>= lComponentDataNV)
+        return lcl_queryIsPackage(lComponentDataNV);
+    else if (rComponentData >>= lComponentDataPV)
+        return lcl_queryIsPackage(lComponentDataPV);
 
     return false;
 }
 }
 
-sal_Bool SAL_CALL KeynoteImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL KeynoteImportFilter::filter(const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
 throw (RuntimeException, std::exception)
 {
     sal_Int32 nLength = aDescriptor.getLength();
@@ -109,22 +109,22 @@ throw (RuntimeException, std::exception)
     Reference < XInputStream > xInputStream;
     Reference < ucb::XContent > xContent;
     bool bIsPackage = false;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
+    for (sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name == "ComponentData" )
-            bIsPackage = lcl_isPackage( pValue[i].Value );
-        else if ( pValue[i].Name == "InputStream" )
+        if (pValue[i].Name == "ComponentData")
+            bIsPackage = lcl_isPackage(pValue[i].Value);
+        else if (pValue[i].Name == "InputStream")
             pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name == "UCBContent" )
+        else if (pValue[i].Name == "UCBContent")
             pValue[i].Value >>= xContent;
     }
-    if ( !xInputStream.is() )
+    if (!xInputStream.is())
     {
-        OSL_ASSERT( false );
+        OSL_ASSERT(false);
         return sal_False;
     }
 
-    if ( bIsPackage && !xContent.is() )
+    if (bIsPackage && !xContent.is())
     {
         SAL_WARN("writerperfect", "the input claims to be a package, but does not have UCBContent");
         bIsPackage = false;
@@ -138,17 +138,17 @@ throw (RuntimeException, std::exception)
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
     Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
-    xImporter->setTargetDocument( mxDoc );
+    xImporter->setTargetDocument(mxDoc);
 
     // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
     // writes to in-memory target doc
     DocumentHandler xHandler(xInternalHandler);
 
     shared_ptr< librevenge::RVNGInputStream > input;
-    if ( bIsPackage )
-        input.reset( new writerperfect::DirectoryStream( xContent ) );
+    if (bIsPackage)
+        input.reset(new writerperfect::DirectoryStream(xContent));
     else
-        input.reset( new WPXSvInputStream( xInputStream ) );
+        input.reset(new WPXSvInputStream(xInputStream));
 
     OdpGenerator exporter;
     exporter.addDocumentHandler(&xHandler, ODF_FLAT_XML);
@@ -156,21 +156,21 @@ throw (RuntimeException, std::exception)
     return tmpParseResult;
 }
 
-void SAL_CALL KeynoteImportFilter::cancel(  )
+void SAL_CALL KeynoteImportFilter::cancel()
 throw (RuntimeException, std::exception)
 {
 }
 
 // XImporter
-void SAL_CALL KeynoteImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
+void SAL_CALL KeynoteImportFilter::setTargetDocument(const Reference< ::com::sun::star::lang::XComponent > &xDoc)
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL KeynoteImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-throw( com::sun::star::uno::RuntimeException, std::exception )
+OUString SAL_CALL KeynoteImportFilter::detect(com::sun::star::uno::Sequence< PropertyValue > &Descriptor)
+throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 nNewLength = nLength + 2;
@@ -186,14 +186,14 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
     Sequence < beans::PropertyValue > lComponentDataPV;
     bool bComponentDataNV = true;
 
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
+    for (sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name == "TypeName" )
+        if (pValue[i].Name == "TypeName")
         {
             nTypeNameLocation = i;
             --nNewLength;
         }
-        if ( pValue[i].Name == "ComponentData" )
+        if (pValue[i].Name == "ComponentData")
         {
             bComponentDataNV = pValue[i].Value >>= lComponentDataNV;
             if (!bComponentDataNV)
@@ -201,11 +201,11 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
             nComponentDataLocation = i;
             --nNewLength;
         }
-        else if ( pValue[i].Name == "InputStream" )
+        else if (pValue[i].Name == "InputStream")
         {
             pValue[i].Value >>= xInputStream;
         }
-        else if ( pValue[i].Name == "UCBContent" )
+        else if (pValue[i].Name == "UCBContent")
         {
             pValue[i].Value >>= xContent;
             nUCBContentLocation = i;
@@ -217,7 +217,7 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
     if (!xInputStream.is())
         return OUString();
 
-    shared_ptr< librevenge::RVNGInputStream > input( new WPXSvInputStream( xInputStream ) );
+    shared_ptr< librevenge::RVNGInputStream > input(new WPXSvInputStream(xInputStream));
 
     /* Apple Keynote documents come in two variants:
      * * actual files (zip), only produced by Keynote 5 (at least with
@@ -232,14 +232,14 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
      * from a package was passed and pass the whole package to the
      * filter instead.
      */
-    if ( xContent.is() )
+    if (xContent.is())
     {
-        ucbhelper::Content aContent( xContent, Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ucbhelper::Content aContent(xContent, Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
         try
         {
-            if ( aContent.isFolder() )
+            if (aContent.isFolder())
             {
-                input.reset( new writerperfect::DirectoryStream( xContent ) );
+                input.reset(new writerperfect::DirectoryStream(xContent));
                 bIsPackage = true;
             }
         }
@@ -250,23 +250,23 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
     }
 
     libetonyek::EtonyekDocument::Type type = libetonyek::EtonyekDocument::TYPE_UNKNOWN;
-    const libetonyek::EtonyekDocument::Confidence confidence = libetonyek::EtonyekDocument::isSupported( input.get(), &type );
+    const libetonyek::EtonyekDocument::Confidence confidence = libetonyek::EtonyekDocument::isSupported(input.get(), &type);
     if ((libetonyek::EtonyekDocument::CONFIDENCE_NONE == confidence) || (libetonyek::EtonyekDocument::TYPE_KEYNOTE != type))
         return OUString();
 
-    if ( confidence == libetonyek::EtonyekDocument::CONFIDENCE_SUPPORTED_PART )
+    if (confidence == libetonyek::EtonyekDocument::CONFIDENCE_SUPPORTED_PART)
     {
-       if ( bIsPackage ) // we passed a directory stream, but the filter claims it's APXL file?
-           return OUString();
+        if (bIsPackage)   // we passed a directory stream, but the filter claims it's APXL file?
+            return OUString();
 
-        const Reference < container::XChild > xChild( xContent, UNO_QUERY );
-        if ( xChild.is() )
+        const Reference < container::XChild > xChild(xContent, UNO_QUERY);
+        if (xChild.is())
         {
-            const Reference < ucb::XContent > xPackageContent( xChild->getParent(), UNO_QUERY );
-            if ( xPackageContent.is() )
+            const Reference < ucb::XContent > xPackageContent(xChild->getParent(), UNO_QUERY);
+            if (xPackageContent.is())
             {
-                input.reset( new writerperfect::DirectoryStream( xPackageContent ) );
-                if ( libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT == libetonyek::EtonyekDocument::isSupported( input.get() ) )
+                input.reset(new writerperfect::DirectoryStream(xPackageContent));
+                if (libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT == libetonyek::EtonyekDocument::isSupported(input.get()))
                 {
                     xContent = xPackageContent;
                     bUCBContentChanged = true;
@@ -283,32 +283,32 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
     }
 
     // we do not need to insert ComponentData if this is not a package
-    if ( !bIsPackage && ( nComponentDataLocation == -1 ) )
+    if (!bIsPackage && (nComponentDataLocation == -1))
         --nNewLength;
 
-    if ( nNewLength > nLength )
-        Descriptor.realloc( nNewLength );
+    if (nNewLength > nLength)
+        Descriptor.realloc(nNewLength);
 
-    if ( nTypeNameLocation == -1 )
+    if (nTypeNameLocation == -1)
     {
-        assert( nLength < nNewLength );
+        assert(nLength < nNewLength);
         nTypeNameLocation = nLength++;
         Descriptor[nTypeNameLocation].Name = "TypeName";
     }
 
-    if ( bIsPackage && ( nComponentDataLocation == -1 ) )
+    if (bIsPackage && (nComponentDataLocation == -1))
     {
-        assert( nLength < nNewLength );
+        assert(nLength < nNewLength);
         nComponentDataLocation = nLength++;
         Descriptor[nComponentDataLocation].Name = "ComponentData";
     }
 
-    if ( bIsPackage )
+    if (bIsPackage)
     {
         if (bComponentDataNV)
         {
             const sal_Int32 nCDSize = lComponentDataNV.getLength();
-            lComponentDataNV.realloc( nCDSize + 1 );
+            lComponentDataNV.realloc(nCDSize + 1);
             beans::NamedValue aValue;
             aValue.Name = "IsPackage";
             aValue.Value = comphelper::makeBoolAny(true);
@@ -318,7 +318,7 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
         else
         {
             const sal_Int32 nCDSize = lComponentDataPV.getLength();
-            lComponentDataPV.realloc( nCDSize + 1 );
+            lComponentDataPV.realloc(nCDSize + 1);
             beans::PropertyValue aProp;
             aProp.Name = "IsPackage";
             aProp.Value = comphelper::makeBoolAny(true);
@@ -329,7 +329,7 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
         }
     }
 
-    if ( bUCBContentChanged )
+    if (bUCBContentChanged)
         Descriptor[nUCBContentLocation].Value <<= xContent;
 
     const OUString sTypeName("impress_AppleKeynote");
@@ -339,18 +339,18 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
 }
 
 // XInitialization
-void SAL_CALL KeynoteImportFilter::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL KeynoteImportFilter::initialize(const Sequence< Any > &aArguments)
 throw (Exception, RuntimeException, std::exception)
 {
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
-    if ( nLength && ( aArguments[0] >>= aAnySeq ) )
+    if (nLength && (aArguments[0] >>= aAnySeq))
     {
         const PropertyValue *pValue = aAnySeq.getConstArray();
         nLength = aAnySeq.getLength();
-        for ( sal_Int32 i = 0 ; i < nLength; i++)
+        for (sal_Int32 i = 0 ; i < nLength; i++)
         {
-            if ( pValue[i].Name == "Type" )
+            if (pValue[i].Name == "Type")
             {
                 pValue[i].Value >>= msFilterName;
                 break;
@@ -359,48 +359,48 @@ throw (Exception, RuntimeException, std::exception)
     }
 }
 
-OUString KeynoteImportFilter_getImplementationName ()
+OUString KeynoteImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString ( "org.libreoffice.comp.Impress.KeynoteImportFilter" );
+    return OUString("org.libreoffice.comp.Impress.KeynoteImportFilter");
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
 
-Sequence< OUString > SAL_CALL KeynoteImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL KeynoteImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME1 );
-    pArray[1] =  OUString ( SERVICE_NAME2 );
+    pArray[0] =  OUString(SERVICE_NAME1);
+    pArray[1] =  OUString(SERVICE_NAME2);
     return aRet;
 }
 
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-Reference< XInterface > SAL_CALL KeynoteImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL KeynoteImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new KeynoteImportFilter( rContext );
+    return (cppu::OWeakObject *) new KeynoteImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL KeynoteImportFilter::getImplementationName(  )
+OUString SAL_CALL KeynoteImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return KeynoteImportFilter_getImplementationName();
 }
 
-sal_Bool SAL_CALL KeynoteImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL KeynoteImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return KeynoteImportFilter_getSupportedServiceNames();

@@ -24,12 +24,12 @@ using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 
-bool MSWorksCalcImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGSpreadsheetInterface &rGenerator )
+bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGSpreadsheetInterface &rGenerator)
 {
     return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator);
 }
 
-bool MSWorksCalcImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool MSWorksCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
     const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&rInput, kind);
@@ -43,17 +43,17 @@ bool MSWorksCalcImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInpu
     return false;
 }
 
-void MSWorksCalcImportFilter::doRegisterHandlers( OdsGenerator & )
+void MSWorksCalcImportFilter::doRegisterHandlers(OdsGenerator &)
 {
 }
 
-OUString MSWorksCalcImportFilter_getImplementationName ()
+OUString MSWorksCalcImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString (  "com.sun.star.comp.Calc.MSWorksCalcImportFilter"  );
+    return OUString("com.sun.star.comp.Calc.MSWorksCalcImportFilter");
 }
 
-Sequence< OUString > SAL_CALL MSWorksCalcImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MSWorksCalcImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -65,24 +65,24 @@ throw (RuntimeException)
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-Reference< XInterface > SAL_CALL MSWorksCalcImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL MSWorksCalcImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new MSWorksCalcImportFilter( rContext );
+    return (cppu::OWeakObject *) new MSWorksCalcImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL MSWorksCalcImportFilter::getImplementationName(  )
+OUString SAL_CALL MSWorksCalcImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return MSWorksCalcImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL MSWorksCalcImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL MSWorksCalcImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL MSWorksCalcImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MSWorksCalcImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return MSWorksCalcImportFilter_getSupportedServiceNames();

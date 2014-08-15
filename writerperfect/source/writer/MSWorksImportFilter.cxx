@@ -31,12 +31,12 @@ static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData &data, OdfD
     return libwps::WPSDocument::parse(data.getDataStream(), &exporter)==libwps::WPS_OK;
 }
 
-bool MSWorksImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator )
+bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator)
 {
     return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator);
 }
 
-bool MSWorksImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool MSWorksImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
     const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&rInput, kind);
@@ -50,18 +50,18 @@ bool MSWorksImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, O
     return false;
 }
 
-void MSWorksImportFilter::doRegisterHandlers( OdtGenerator &rGenerator )
+void MSWorksImportFilter::doRegisterHandlers(OdtGenerator &rGenerator)
 {
     rGenerator.registerEmbeddedObjectHandler("image/wks-ods", &handleEmbeddedWKSObject);
 }
 
-OUString MSWorksImportFilter_getImplementationName ()
+OUString MSWorksImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString (  "com.sun.star.comp.Writer.MSWorksImportFilter"  );
+    return OUString("com.sun.star.comp.Writer.MSWorksImportFilter");
 }
 
-Sequence< OUString > SAL_CALL MSWorksImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MSWorksImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -73,24 +73,24 @@ throw (RuntimeException)
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-Reference< XInterface > SAL_CALL MSWorksImportFilter_createInstance( const Reference< XComponentContext > & rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL MSWorksImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new MSWorksImportFilter( rContext );
+    return (cppu::OWeakObject *) new MSWorksImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL MSWorksImportFilter::getImplementationName(  )
+OUString SAL_CALL MSWorksImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return MSWorksImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL MSWorksImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL MSWorksImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL MSWorksImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MSWorksImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return MSWorksImportFilter_getSupportedServiceNames();

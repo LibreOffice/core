@@ -39,12 +39,12 @@ static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData
     return MWAWDocument::decodeSpreadsheet(data, &exporter);
 }
 
-bool MWAWCalcImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGSpreadsheetInterface &rGenerator )
+bool MWAWCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGSpreadsheetInterface &rGenerator)
 {
     return MWAWDocument::MWAW_R_OK == MWAWDocument::parse(&rInput, &rGenerator);
 }
 
-bool MWAWCalcImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
+bool MWAWCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     rTypeName = "";
 
@@ -54,7 +54,7 @@ bool MWAWCalcImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, 
 
     if (confidence == MWAWDocument::MWAW_C_EXCELLENT)
     {
-        if ( docKind == MWAWDocument::MWAW_K_SPREADSHEET || docKind == MWAWDocument::MWAW_K_DATABASE )
+        if (docKind == MWAWDocument::MWAW_K_SPREADSHEET || docKind == MWAWDocument::MWAW_K_DATABASE)
         {
             switch (docType)
             {
@@ -143,19 +143,19 @@ bool MWAWCalcImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, 
     return !rTypeName.isEmpty();
 }
 
-void MWAWCalcImportFilter::doRegisterHandlers( OdsGenerator &rGenerator )
+void MWAWCalcImportFilter::doRegisterHandlers(OdsGenerator &rGenerator)
 {
     rGenerator.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWGraphicObject);
     rGenerator.registerEmbeddedObjectHandler("image/mwaw-ods", &handleEmbeddedMWAWSpreadsheetObject);
 }
 
-OUString MWAWCalcImportFilter_getImplementationName ()
+OUString MWAWCalcImportFilter_getImplementationName()
 throw (RuntimeException)
 {
-    return OUString (  "com.sun.star.comp.Calc.MWAWCalcImportFilter"  );
+    return OUString("com.sun.star.comp.Calc.MWAWCalcImportFilter");
 }
 
-Sequence< OUString > SAL_CALL MWAWCalcImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MWAWCalcImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -165,24 +165,24 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL MWAWCalcImportFilter_createInstance( const Reference< XComponentContext > &rContext)
-throw( Exception )
+Reference< XInterface > SAL_CALL MWAWCalcImportFilter_createInstance(const Reference< XComponentContext > &rContext)
+throw(Exception)
 {
-    return (cppu::OWeakObject *) new MWAWCalcImportFilter( rContext );
+    return (cppu::OWeakObject *) new MWAWCalcImportFilter(rContext);
 }
 
 // XServiceInfo
-OUString SAL_CALL MWAWCalcImportFilter::getImplementationName(  )
+OUString SAL_CALL MWAWCalcImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
     return MWAWCalcImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL MWAWCalcImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL MWAWCalcImportFilter::supportsService(const OUString &rServiceName)
 throw (RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL MWAWCalcImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL MWAWCalcImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return MWAWCalcImportFilter_getSupportedServiceNames();
