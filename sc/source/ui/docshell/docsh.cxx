@@ -1458,7 +1458,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     if ( bRet && (bSetColWidths || bSetRowHeights) )
     {   // Adjust column width/row height; base 100% zoom
         Fraction aZoom( 1, 1 );
-        double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / GetOutputFactor(); // Factor is printer display ratio
+        double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom /
+            static_cast< double >( GetOutputFactor() ); // Factor is printer display ratio
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
         VirtualDevice aVirtDev;
         //  all sheets (for Excel import)
@@ -2633,7 +2634,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     SfxListener(),
     aDocument       ( SCDOCMODE_DOCUMENT, this ),
     aDdeTextFmt(OUString("TEXT")),
-    nPrtToScreenFactor( 1.0 ),
+    nPrtToScreenFactor( 1, 1 ),
     pImpl           ( new DocShell_Impl ),
     bHeaderOn       ( true ),
     bFooterOn       ( true ),
@@ -2678,7 +2679,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     SfxObjectShell( i_nSfxCreationFlags ),
     aDocument       ( SCDOCMODE_DOCUMENT, this ),
     aDdeTextFmt(OUString("TEXT")),
-    nPrtToScreenFactor( 1.0 ),
+    nPrtToScreenFactor( 1, 1 ),
     pImpl           ( new DocShell_Impl ),
     bHeaderOn       ( true ),
     bFooterOn       ( true ),
