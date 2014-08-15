@@ -168,7 +168,7 @@ struct DocxSdrExport::Impl
     sal_Int32 m_nSeq ;
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
-    std::set<SwFrmFmt*> m_aTextBoxes;
+    std::set<const SwFrmFmt*> m_aTextBoxes;
     /// Preserved rotation for TextFrames.
     sal_Int32 m_nDMLandVMLTextFrameRotation;
 

@@ -1085,7 +1085,7 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     // #i104937#
     SwFrmFmt* pFmt( 0 );
 
-    std::set<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+    std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
 
     for( size_t i = 0; i < nSize; ++i )
     {

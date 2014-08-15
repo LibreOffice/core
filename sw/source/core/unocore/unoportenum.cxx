@@ -691,7 +691,7 @@ lcl_ExportHints(
     const bool bRightMoveForbidden,
     bool & o_rbCursorMoved,
     sal_Int32 & o_rNextAttrPosition,
-    std::set<SwFrmFmt*>& rTextBoxes)
+    std::set<const SwFrmFmt*>& rTextBoxes)
 {
     // if the attribute has a dummy character, then xRef is set (except META)
     // otherwise, the portion for the attribute is inserted into rPortions!
@@ -1243,7 +1243,7 @@ static void lcl_CreatePortions(
     PortionStack_t PortionStack;
     PortionStack.push( PortionList_t(&i_rPortions, (const SwTxtAttr *)0) );
 
-    std::set<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+    std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
 
     bool bAtEnd( false );
     while (!bAtEnd) // every iteration consumes at least current character!
