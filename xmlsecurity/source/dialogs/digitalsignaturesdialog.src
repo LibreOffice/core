@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*r Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -21,11 +21,9 @@
 #include "helpids.hrc"
 #include "digitalsignaturesdialog.hrc"
 
-ErrorBox RID_XMLSECDLG_OLD_ODF_FORMAT
+String STR_XMLSECDLG_OLD_ODF_FORMAT
 {
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message [ en-US ] =
+    Text [ en-US ] =
         "This document contains signatures in ODF 1.1 (OpenOffice.org 2.x) format. "
         "Signing documents in %PRODUCTNAME %PRODUCTVERSION requires ODF 1.2 format version. "
         "Thus no signatures can be added or removed to this document.\n\n"

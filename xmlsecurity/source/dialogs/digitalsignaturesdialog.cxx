@@ -54,7 +54,7 @@
 #include "helpids.hrc"
 #include "resourcemanager.hxx"
 
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <unotools/configitem.hxx>
 
 using namespace ::com::sun::star::security;
@@ -289,7 +289,7 @@ bool DigitalSignaturesDialog::canAddRemove()
     if ( (!bSave1_1  && bDoc1_1) || (bSave1_1 && bDoc1_1) )
     {
         //#4
-        ErrorBox err(NULL, XMLSEC_RES(RID_XMLSECDLG_OLD_ODF_FORMAT));
+        MessageDialog err(NULL, XMLSEC_RES(STR_XMLSECDLG_OLD_ODF_FORMAT));
         err.Execute();
         ret = false;
     }
