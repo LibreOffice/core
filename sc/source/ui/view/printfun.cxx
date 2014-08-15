@@ -509,7 +509,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     long nAddY = (long)( aLines.Top() * nScaleY );
     nScrY += ( nAddY ? nAddY : 1 );
 
-    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pDoc, nTab,
+    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, pViewData, aTabInfo, pDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
     aOutputData.SetMetaFileMode(bMetaFile);
     aOutputData.SetShowNullValues(bNullVal);
@@ -1344,7 +1344,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
         aTabInfo.mpRowInfo[0].pCellInfo[1].nWidth =
             aTabInfo.mpRowInfo[1].pCellInfo[1].nWidth = (sal_uInt16) nEffWidth;
 
-        ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc.get(), 0,
+        ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, 0, aTabInfo, pBorderDoc.get(), 0,
                                     nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
         aOutputData.SetUseStyleColor( bUseStyleColor );
 
@@ -1559,7 +1559,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     if (bEmbed)
         pDoc->SetEmbedded(aERange);
 
-    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pDoc, nPrintTab,
+    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, 0, aTabInfo, pDoc, nPrintTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
 
     // #114135#
