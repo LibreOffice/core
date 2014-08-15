@@ -3099,4 +3099,28 @@ void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
     rPosY = nRow;
 }
 
+long ScViewData::LogicToPixelVertical( long nTwips )
+{
+    return GetActiveWin()->LogicToPixel( Point( 0, nTwips ),
+                                         maPaintMapMode ).getY();
+}
+
+long ScViewData::LogicToPixelHorizontal( long nTwips )
+{
+    return GetActiveWin()->LogicToPixel( Point( nTwips, 0 ),
+                                         maPaintMapMode ).getX();
+}
+
+long ScViewData::PixelToLogicVertical( long nPix )
+{
+    return GetActiveWin()->PixelToLogic( Point( 0, nPix ),
+                                         maPaintMapMode ).getY();
+}
+
+long ScViewData::PixelToLogicHorizontal( long nPix )
+{
+    return GetActiveWin()->PixelToLogic( Point( nPix, 0 ),
+                                         maPaintMapMode ).getX();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
