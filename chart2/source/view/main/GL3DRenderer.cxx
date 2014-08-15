@@ -2084,7 +2084,6 @@ void OpenGL3DRenderer::CreateSceneBoxView()
 void OpenGL3DRenderer::ClearBuffer()
 {
     glDisable(GL_DEPTH_TEST);
-    glDisable(GL_LIGHTING);
 
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -2099,7 +2098,6 @@ void OpenGL3DRenderer::ClearBuffer()
     glVertex3f (-1.0f, 1.0f, -1.0f);
     glEnd ();
 
-    glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 }
 
