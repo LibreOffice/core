@@ -30,11 +30,9 @@ String RID_SVXSTR_JRE_FAILED_VERSION
     Text [ en-US ] = "The Java runtime environment you selected is not the required version.\nPlease select a different folder." ;
 };
 
-WarningBox RID_SVX_MSGBOX_OPTIONS_RESTART
+String RID_SVXSTR_OPTIONS_RESTART
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "You have to restart %PRODUCTNAME so the new or modified values can take effect.\nPlease restart %PRODUCTNAME now." ;
+    Text [ en-US ] = "You have to restart %PRODUCTNAME so the new or modified values can take effect.\nPlease restart %PRODUCTNAME now." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

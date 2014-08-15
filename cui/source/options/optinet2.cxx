@@ -776,7 +776,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl)
 
     if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
     {
-        WarningBox aWarnBox(this, CUI_RES(RID_SVX_MSGBOX_OPTIONS_RESTART));
+        MessageDialog aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
         aWarnBox.Execute();
     }
 

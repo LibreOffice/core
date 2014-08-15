@@ -32,7 +32,6 @@
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
@@ -322,7 +321,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_OPTIONS_RESTART ) );
+                MessageDialog aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
                 aWarnBox.Execute();
             }
         }
@@ -367,7 +366,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_OPTIONS_RESTART ) );
+                MessageDialog aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
                 aWarnBox.Execute();
             }
         }
