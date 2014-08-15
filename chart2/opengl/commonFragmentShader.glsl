@@ -10,10 +10,11 @@
 #version 150 core
 
 in vec4 fragmentColor;
+out vec4 actualColor;
 
 void main()
 {
-    gl_FragColor = fragmentColor;
+    actualColor = fragmentColor;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
