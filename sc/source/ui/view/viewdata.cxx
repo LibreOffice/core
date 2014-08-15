@@ -2112,7 +2112,7 @@ vcl::Window* ScViewData::GetDialogParent()
     return pViewShell->GetDialogParent();
 }
 
-ScGridWindow* ScViewData::GetActiveWin()
+ScGridWindow* ScViewData::GetActiveWin() const
 {
     OSL_ENSURE( pView, "GetActiveWin() ohne View" );
     return pView->GetActiveWin();
