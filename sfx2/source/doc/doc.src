@@ -112,12 +112,6 @@ String STR_ERROR_SAVE_TEMPLATE
 {
     Text [ en-US ] = "Error saving template " ;
 };
-ErrorBox MSG_ERROR_RENAME_TEMPLATE
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Error renaming template." ;
-};
 String STR_QUERY_DEFAULT_TEMPLATE
 {
     Text [ en-US ] = "Should the template \"$(TEXT)\" become the default template?" ;
