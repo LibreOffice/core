@@ -21,56 +21,6 @@
 #include "newhelp.hrc"
 #include "helpid.hrc"
 
-Window WIN_HELPINDEX
-{
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( 120 , 200 ) ;
-    DialogControl = TRUE;
-    ListBox LB_ACTIVE
-    {
-        HelpId = HID_HELP_LISTBOX;
-        Border = TRUE ;
-        DropDown = TRUE;
-        Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( 114 , 40 ) ;
-    };
-    FixedLine FL_ACTIVE
-    {
-        Hide = True;
-        Pos = MAP_APPFONT ( 2, 19 ) ;
-        Size = MAP_APPFONT ( 118 , 1 ) ;
-    };
-    TabControl TC_INDEX
-    {
-        HelpId = HID_HELP_TABCONTROL;
-        Pos = MAP_APPFONT ( 3, 19 ) ;
-        TabStop = TRUE;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = HELP_INDEX_PAGE_CONTENTS ;
-                Text [ en-US ] = "Contents";
-            };
-            PageItem
-            {
-                Identifier = HELP_INDEX_PAGE_INDEX ;
-                Text [ en-US ] = "Index";
-            };
-            PageItem
-            {
-                Identifier = HELP_INDEX_PAGE_SEARCH ;
-                Text [ en-US ] = "Find";
-            };
-            PageItem
-            {
-                Identifier = HELP_INDEX_PAGE_BOOKMARKS ;
-                Text [ en-US ] = "Bookmarks";
-            };
-        };
-    };
-};
-
 #define MASKCOLOR_MAGENTA \
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 

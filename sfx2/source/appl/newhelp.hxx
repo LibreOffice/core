@@ -268,13 +268,12 @@ public:
 
 class SfxHelpWindow_Impl;
 
-class SfxHelpIndexWindow_Impl : public Window
+class SfxHelpIndexWindow_Impl : public Window, public VclBuilderContainer
 {
 private:
-    ListBox             aActiveLB;
-    FixedLine           aActiveLine;
+    ListBox*            m_pActiveLB;
+    TabControl*         m_pTabCtrl;
 
-    TabControl          aTabCtrl;
     Timer               aTimer;
 
     Link                aSelectFactoryLink;
@@ -313,6 +312,7 @@ public:
     virtual ~SfxHelpIndexWindow_Impl();
 
     virtual void        Resize() SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
@@ -323,8 +323,8 @@ public:
     OUString            GetSelectEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     bool                IsValidFactory( const OUString& _rFactory );
-    inline OUString     GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
-    inline void         UpdateTabControl() { aTabCtrl.Invalidate(); }
+    inline OUString     GetActiveFactoryTitle() const { return m_pActiveLB->GetSelectEntry(); }
+    inline void         UpdateTabControl() { m_pTabCtrl->Invalidate(); }
     void                ClearSearchPage();
     void                GrabFocusBack();
     bool            HasFocusOnEdit() const;
@@ -341,7 +341,7 @@ ContentTabPage_Impl* SfxHelpIndexWindow_Impl::GetContentPage()
 {
     if ( !pCPage )
     {
-        pCPage = new ContentTabPage_Impl( &aTabCtrl, this );
+        pCPage = new ContentTabPage_Impl( m_pTabCtrl, this );
         pCPage->SetOpenHdl( aPageDoubleClickLink );
     }
     return pCPage;
@@ -350,7 +350,7 @@ IndexTabPage_Impl* SfxHelpIndexWindow_Impl::GetIndexPage()
 {
     if ( !pIPage )
     {
-        pIPage = new IndexTabPage_Impl( &aTabCtrl, this );
+        pIPage = new IndexTabPage_Impl( m_pTabCtrl, this );
         pIPage->SetDoubleClickHdl( aPageDoubleClickLink );
         pIPage->SetKeywordHdl( aIndexKeywordLink );
     }
@@ -361,7 +361,7 @@ SearchTabPage_Impl* SfxHelpIndexWindow_Impl::GetSearchPage()
 {
     if ( !pSPage )
     {
-        pSPage = new SearchTabPage_Impl( &aTabCtrl, this );
+        pSPage = new SearchTabPage_Impl( m_pTabCtrl, this );
         pSPage->SetDoubleClickHdl( aPageDoubleClickLink );
     }
     return pSPage;
@@ -371,7 +371,7 @@ BookmarksTabPage_Impl* SfxHelpIndexWindow_Impl::GetBookmarksPage()
 {
     if ( !pBPage )
     {
-        pBPage = new BookmarksTabPage_Impl( &aTabCtrl, this );
+        pBPage = new BookmarksTabPage_Impl( m_pTabCtrl, this );
         pBPage->SetDoubleClickHdl( aPageDoubleClickLink );
     }
     return pBPage;

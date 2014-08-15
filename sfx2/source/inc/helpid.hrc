@@ -39,8 +39,6 @@
 #define HID_STYLIST_EDIT                                      "SFX2_HID_STYLIST_EDIT"
 #define HID_STYLIST_DELETE                                    "SFX2_HID_STYLIST_DELETE"
 #define HID_HELP_WINDOW                                       "SFX2_HID_HELP_WINDOW"
-#define HID_HELP_LISTBOX                                      "SFX2_HID_HELP_LISTBOX"
-#define HID_HELP_TABCONTROL                                   "SFX2_HID_HELP_TABCONTROL"
 #define HID_HELP_TOOLBOX                                      "SFX2_HID_HELP_TOOLBOX"
 #define HID_HELP_TOOLBOXITEM_INDEX                            "SFX2_HID_HELP_TOOLBOXITEM_INDEX"
 #define HID_HELP_TOOLBOXITEM_START                            "SFX2_HID_HELP_TOOLBOXITEM_START"

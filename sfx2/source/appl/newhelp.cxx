@@ -93,6 +93,7 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
@@ -418,7 +419,6 @@ OUString ContentListBox_Impl::GetSelectEntry() const
 }
 
 // class HelpTabPage_Impl ------------------------------------------------
-
 HelpTabPage_Impl::HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
     const OString& rID, const OUString& rUIXMLDescription)
     : TabPage( pParent, rID, rUIXMLDescription)
@@ -427,7 +427,6 @@ HelpTabPage_Impl::HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pI
 }
 
 // class ContentTabPage_Impl ---------------------------------------------
-
 ContentTabPage_Impl::ContentTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpContentPage",
         "sfx/ui/helpcontentpage.ui")
@@ -917,11 +916,7 @@ bool SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
 SearchTabPage_Impl::SearchTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpSearchPage",
         "sfx/ui/helpsearchpage.ui")
-
-    ,
-
-    xBreakIterator  ( vcl::unohelper::CreateBreakIterator() )
-
+    , xBreakIterator(vcl::unohelper::CreateBreakIterator())
 {
     get(m_pSearchED, "search");
     get(m_pSearchBtn, "find");
@@ -1397,45 +1392,39 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, bool bAddToHi
         LeaveWait();
 }
 
-SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent ) :
-
-    Window( _pParent, SfxResId( WIN_HELPINDEX ) ),
-
-    aActiveLB           ( this, SfxResId( LB_ACTIVE ) ),
-    aActiveLine         ( this, SfxResId( FL_ACTIVE ) ),
-    aTabCtrl            ( this, SfxResId( TC_INDEX ) ),
-
-    aIndexKeywordLink   ( LINK( this, SfxHelpIndexWindow_Impl, KeywordHdl ) ),
-    pParentWin          ( _pParent ),
-
-    pCPage              ( NULL ),
-    pIPage              ( NULL ),
-    pSPage              ( NULL ),
-    pBPage              ( NULL ),
-
-    bWasCursorLeftOrRight( false ),
-    bIsInitDone          ( false )
-
+SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
+    : Window(_pParent, 0)
+    , aIndexKeywordLink(LINK(this, SfxHelpIndexWindow_Impl, KeywordHdl))
+    , pParentWin(_pParent)
+    , pCPage(NULL)
+    , pIPage(NULL)
+    , pSPage(NULL)
+    , pBPage(NULL)
+    , bWasCursorLeftOrRight(false)
+    , bIsInitDone(false)
 {
-    FreeResource();
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "sfx/ui/helpcontrol.ui", "HelpControl");
+    get(m_pActiveLB, "active");
+    get(m_pTabCtrl, "tabcontrol");
 
     sfx2::AddToTaskPaneList( this );
 
-    aTabCtrl.SetActivatePageHdl( LINK( this, SfxHelpIndexWindow_Impl, ActivatePageHdl ) );
-    aTabCtrl.Show();
+    m_pTabCtrl->SetActivatePageHdl( LINK( this, SfxHelpIndexWindow_Impl, ActivatePageHdl ) );
 
-    sal_Int32 nPageId = HELP_INDEX_PAGE_INDEX;
+    sal_Int32 nPageId = m_pTabCtrl->GetPageId("index");
     SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
     if ( aViewOpt.Exists() )
         nPageId = aViewOpt.GetPageID();
-    aTabCtrl.SetCurPageId( (sal_uInt16)nPageId );
-    ActivatePageHdl( &aTabCtrl );
-    aActiveLB.SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
-    nMinWidth = ( aActiveLB.GetSizePixel().Width() / 2 );
+    m_pTabCtrl->SetCurPageId( (sal_uInt16)nPageId );
+    ActivatePageHdl( m_pTabCtrl );
+    m_pActiveLB->SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
+    nMinWidth = ( m_pActiveLB->GetSizePixel().Width() / 2 );
 
     aTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
     aTimer.SetTimeout( 200 );
     aTimer.Start();
+
+    Show();
 }
 
 
@@ -1449,11 +1438,11 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
     DELETEZ( pSPage );
     DELETEZ( pBPage );
 
-    for ( sal_uInt16 i = 0; i < aActiveLB.GetEntryCount(); ++i )
-        delete (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
+    for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
+        delete (OUString*)(sal_uIntPtr)m_pActiveLB->GetEntryData(i);
 
     SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
-    aViewOpt.SetPageID( (sal_Int32)aTabCtrl.GetCurPageId() );
+    aViewOpt.SetPageID( (sal_Int32)m_pTabCtrl->GetCurPageId() );
 }
 
 
@@ -1471,12 +1460,12 @@ void SfxHelpIndexWindow_Impl::Initialize()
         nIdx = 0;
         OUString aURL = rRow.getToken( 2, '\t', nIdx );
         OUString* pFactory = new OUString( INetURLObject( aURL ).GetHost() );
-        sal_uInt16 nPos = aActiveLB.InsertEntry( aTitle );
-        aActiveLB.SetEntryData( nPos, pFactory );
+        sal_uInt16 nPos = m_pActiveLB->InsertEntry( aTitle );
+        m_pActiveLB->SetEntryData( nPos, pFactory );
     }
 
-    aActiveLB.SetDropDownLineCount( (sal_uInt16)aFactories.size() );
-    if ( aActiveLB.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+    m_pActiveLB->SetDropDownLineCount( (sal_uInt16)aFactories.size() );
+    if ( m_pActiveLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         SetActiveFactory();
 }
 
@@ -1485,21 +1474,21 @@ void SfxHelpIndexWindow_Impl::Initialize()
 void SfxHelpIndexWindow_Impl::SetActiveFactory()
 {
     DBG_ASSERT( pIPage, "index page not initialized" );
-    if ( !bIsInitDone && !aActiveLB.GetEntryCount() )
+    if ( !bIsInitDone && !m_pActiveLB->GetEntryCount() )
     {
         aTimer.Stop();
         InitHdl( NULL );
     }
 
-    for ( sal_uInt16 i = 0; i < aActiveLB.GetEntryCount(); ++i )
+    for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
     {
-        OUString* pFactory = (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
+        OUString* pFactory = (OUString*)(sal_uIntPtr)m_pActiveLB->GetEntryData(i);
         *pFactory = pFactory->toAsciiLowerCase();
         if ( *pFactory == pIPage->GetFactory() )
         {
-            if ( aActiveLB.GetSelectEntryPos() != i )
+            if ( m_pActiveLB->GetSelectEntryPos() != i )
             {
-                aActiveLB.SelectEntryPos(i);
+                m_pActiveLB->SelectEntryPos(i);
                 aSelectFactoryLink.Call( NULL );
             }
             break;
@@ -1511,41 +1500,31 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
 
 HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( sal_uInt16& rCurId )
 {
-    rCurId = aTabCtrl.GetCurPageId();
+    rCurId = m_pTabCtrl->GetCurPageId();
     HelpTabPage_Impl* pPage = NULL;
 
-    switch ( rCurId )
+    OString sName(m_pTabCtrl->GetPageName(rCurId));
+
+    if (sName == "contents")
     {
-        case HELP_INDEX_PAGE_CONTENTS:
-        {
-            pPage = GetContentPage();
-            break;
-        }
-
-        case HELP_INDEX_PAGE_INDEX:
-        {
-            pPage = GetIndexPage();
-            break;
-        }
-
-        case HELP_INDEX_PAGE_SEARCH:
-        {
-            pPage = GetSearchPage();
-            break;
-        }
-
-        case HELP_INDEX_PAGE_BOOKMARKS:
-        {
-            pPage = GetBookmarksPage();
-            break;
-        }
+        pPage = GetContentPage();
+    }
+    else if (sName == "index")
+    {
+        pPage = GetIndexPage();
+    }
+    else if (sName == "find")
+    {
+        pPage = GetSearchPage();
+    }
+    else if (sName == "bookmarks")
+    {
+        pPage = GetBookmarksPage();
     }
 
     DBG_ASSERT( pPage, "SfxHelpIndexWindow_Impl::GetCurrentPage(): no current page" );
     return pPage;
 }
-
-
 
 IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
 {
@@ -1555,16 +1534,12 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl)
 {
     aTimer.Start();
 
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
 {
@@ -1578,11 +1553,9 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
 {
-    OUString* pFactory = (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData( aActiveLB.GetSelectEntryPos() );
+    OUString* pFactory = (OUString*)(sal_uIntPtr)m_pActiveLB->GetEntryData( m_pActiveLB->GetSelectEntryPos() );
     if ( pFactory )
     {
         SetFactory( OUString( *pFactory ).toAsciiLowerCase(), false );
@@ -1592,8 +1565,6 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
 {
     // keyword found on index?
@@ -1602,11 +1573,11 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
     if( !bIndex)
         bIndex = pIPage->HasKeywordIgnoreCase();
     // then set index or search page as current.
-    sal_uInt16 nPageId = ( bIndex ) ? HELP_INDEX_PAGE_INDEX :  HELP_INDEX_PAGE_SEARCH;
-    if ( nPageId != aTabCtrl.GetCurPageId() )
+    sal_uInt16 nPageId = ( bIndex ) ? m_pTabCtrl->GetPageId("index") : m_pTabCtrl->GetPageId("find");
+    if ( nPageId != m_pTabCtrl->GetCurPageId() )
     {
-        aTabCtrl.SetCurPageId( nPageId );
-        ActivatePageHdl( &aTabCtrl );
+        m_pTabCtrl->SetCurPageId( nPageId );
+        ActivatePageHdl( m_pTabCtrl );
     }
 
     // at last we open the keyword
@@ -1618,32 +1589,23 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
     return 0;
 }
 
-
-
 void SfxHelpIndexWindow_Impl::Resize()
 {
-    Size aSize = GetOutputSizePixel();
-    if ( aSize.Width() < nMinWidth )
-        aSize.Width() = nMinWidth;
-
-    Point aPnt = aActiveLB.GetPosPixel();
-    Size aNewSize = aActiveLB.GetSizePixel();
-    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-    aActiveLB.SetSizePixel( aNewSize );
-    aPnt = aActiveLine.GetPosPixel();
-    aNewSize = aActiveLine.GetSizePixel();
-    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-    aActiveLine.SetSizePixel( aNewSize );
-    aPnt = aTabCtrl.GetPosPixel();
-    aNewSize = aSize;
-    aSize.Width() -= aPnt.X();
-    aSize.Height() -= aPnt.Y();
-    aTabCtrl.SetSizePixel( aSize );
+    Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    if (!pChild)
+        return;
+    VclContainer::setLayoutAllocation(*pChild, Point(0,0), GetSizePixel());
 }
 
+Size SfxHelpIndexWindow_Impl::GetOptimalSize() const
+{
+    const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    if (!pChild)
+        return Window::GetOptimalSize();
+    return VclContainer::getLayoutRequisition(*pChild);
+}
 
-
-bool SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
 {
     bool nDone = false;
     sal_uInt16 nType = rNEvt.GetType();
@@ -1660,29 +1622,32 @@ bool SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             Control* pControl = pCurPage->GetLastFocusControl();
             bool bShift = rKeyCode.IsShift();
             bool bCtrl = rKeyCode.IsMod1();
-            if ( !bCtrl && bShift && aActiveLB.HasChildPathFocus() )
+            if ( !bCtrl && bShift && m_pActiveLB->HasChildPathFocus() )
             {
                 pControl->GrabFocus();
                 nDone = true;
             }
             else if ( !bCtrl && !bShift && pControl->HasChildPathFocus() )
             {
-                aActiveLB.GrabFocus();
+                m_pActiveLB->GrabFocus();
                 nDone = true;
             }
             else if ( bCtrl )
             {
+                sal_uInt16 nPagePos = m_pTabCtrl->GetPagePos(nPageId);
+                sal_uInt16 nPageCount = m_pTabCtrl->GetPageCount();
+
+                ++nPageId;
                 // <CTRL><TAB> moves through the pages
-                if ( nPageId < HELP_INDEX_PAGE_LAST )
-                    nPageId++;
-                else
-                    nPageId = HELP_INDEX_PAGE_FIRST;
-                aTabCtrl.SetCurPageId( (sal_uInt16)nPageId );
-                ActivatePageHdl( &aTabCtrl );
+                if (nPagePos >= nPageCount)
+                    nPagePos = 0;
+
+                m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId(nPagePos));
+                ActivatePageHdl( m_pTabCtrl );
                 nDone = true;
             }
          }
-        else if ( aTabCtrl.HasFocus() && ( KEY_LEFT == nCode || KEY_RIGHT == nCode ) )
+        else if ( m_pTabCtrl->HasFocus() && ( KEY_LEFT == nCode || KEY_RIGHT == nCode ) )
         {
             bWasCursorLeftOrRight = true;
         }
@@ -1735,35 +1700,31 @@ void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, bool bActive
     }
 }
 
-
-
 OUString SfxHelpIndexWindow_Impl::GetSelectEntry() const
 {
     OUString sRet;
 
-    switch ( aTabCtrl.GetCurPageId() )
+    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
+
+    if (sName == "contents")
     {
-        case HELP_INDEX_PAGE_CONTENTS:
-            sRet = pCPage->GetSelectEntry();
-            break;
-
-        case HELP_INDEX_PAGE_INDEX:
-            sRet = pIPage->GetSelectEntry();
-            break;
-
-        case HELP_INDEX_PAGE_SEARCH:
-            sRet = pSPage->GetSelectEntry();
-            break;
-
-        case HELP_INDEX_PAGE_BOOKMARKS:
-            sRet = pBPage->GetSelectEntry();
-            break;
+        sRet = pCPage->GetSelectEntry();
+    }
+    else if (sName == "index")
+    {
+        sRet = pIPage->GetSelectEntry();
+    }
+    else if (sName == "find")
+    {
+        sRet = pSPage->GetSelectEntry();
+    }
+    else if (sName == "bookmarks")
+    {
+        sRet = pBPage->GetSelectEntry();
     }
 
     return sRet;
 }
-
-
 
 void SfxHelpIndexWindow_Impl::AddBookmarks( const OUString& rTitle, const OUString& rURL )
 {
@@ -1775,9 +1736,9 @@ void SfxHelpIndexWindow_Impl::AddBookmarks( const OUString& rTitle, const OUStri
 bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
 {
     bool bValid = false;
-    for ( sal_uInt16 i = 0; i < aActiveLB.GetEntryCount(); ++i )
+    for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
     {
-        OUString* pFactory = (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
+        OUString* pFactory = (OUString*)(sal_uIntPtr)m_pActiveLB->GetEntryData(i);
         if ( *pFactory == _rFactory )
         {
             bValid = true;
@@ -1795,53 +1756,49 @@ void SfxHelpIndexWindow_Impl::ClearSearchPage()
         pSPage->ClearPage();
 }
 
-
-
 void SfxHelpIndexWindow_Impl::GrabFocusBack()
 {
-    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_CONTENTS && pCPage )
+    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
+
+    if (sName == "contents" && pCPage)
         pCPage->SetFocusOnBox();
-    else if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_INDEX && pIPage )
+    else if (sName == "index" && pIPage)
         pIPage->SetFocusOnBox();
-    else if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
+    else if (sName == "find" && pSPage)
         pSPage->SetFocusOnBox();
-    else if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_BOOKMARKS && pBPage )
+    else if (sName == "bookmarks" && pBPage)
         pBPage->SetFocusOnBox();
 }
-
-
 
 bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
 {
     bool bRet = false;
-    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_INDEX && pIPage )
+    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
+    if (sName == "index" && pIPage)
         bRet = pIPage->HasFocusOnEdit();
-    else if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
+    else if (sName == "find" && pSPage)
         bRet = pSPage->HasFocusOnEdit();
     return bRet;
 }
 
 
-
 OUString SfxHelpIndexWindow_Impl::GetSearchText() const
 {
     OUString sRet;
-    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
+    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
+    if (sName == "find" && pSPage)
         sRet = pSPage->GetSearchText();
     return sRet;
 }
 
-
-
 bool SfxHelpIndexWindow_Impl::IsFullWordSearch() const
 {
     bool bRet = false;
-    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
+    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
+    if (sName == "find" && pSPage)
         bRet = pSPage->IsFullWordSearch();
     return bRet;
 }
-
-
 
 void SfxHelpIndexWindow_Impl::OpenKeyword( const OUString& rKeyword )
 {
@@ -1850,11 +1807,10 @@ void SfxHelpIndexWindow_Impl::OpenKeyword( const OUString& rKeyword )
     pIPage->SetKeyword( sKeyword );
 }
 
-
-
 void SfxHelpIndexWindow_Impl::SelectExecutableEntry()
 {
-    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_INDEX && pIPage )
+    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
+    if (sName == "index" && pIPage )
         pIPage->SelectExecutableEntry();
 }
 
@@ -2722,17 +2678,16 @@ void SfxHelpWindow_Impl::MakeLayout()
 {
     if ( nHeight > 0 && xWindow.is() )
     {
-           Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
+        Window* pScreenWin = VCLUnoHelper::GetWindow(xWindow);
 
         /* #i55528#
-            Hide() / Show() will produce starnge effects.
+            Hide() / Show() will produce strange effects.
             The returned size (used later to be written back into the configuration)
             isnt the right after a resize during the window is hidden.
             If this resize is done if the window is visible evyrthing works as aspected.
             Some VCL-patches could not solve this problem so I've established the
             workaround: resize the help window if it's visible .-)
         */
-
         ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
         sal_Int32 nOldWidth = bIndex ? nCollapseWidth : nExpandWidth;
         sal_Int32 nWidth = bIndex ? nExpandWidth : nCollapseWidth;
@@ -3037,6 +2992,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pIndexWin = new SfxHelpIndexWindow_Impl( this );
     pIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
     pIndexWin->SetSelectFactoryHdl( LINK( this, SfxHelpWindow_Impl, SelectFactoryHdl ) );
+    pIndexWin->SetSizePixel(LogicToPixel(Size(120, 200), MAP_APPFONT));
     pIndexWin->Show();
     pTextWin = new SfxHelpTextWindow_Impl( this );
     Reference < XFrames > xFrames = rFrame->getFrames();
@@ -3060,8 +3016,6 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
     pTextWin->CloseFrame();
     delete pTextWin;
 }
-
-
 
 bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -3087,15 +3041,11 @@ bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     return bHandled || Window::PreNotify( rNEvt );
 }
 
-
-
 void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::XWindow > xWin )
 {
     xWindow = xWin;
     MakeLayout();
 }
-
-
 
 void SfxHelpWindow_Impl::SetFactory( const OUString& rFactory )
 {
