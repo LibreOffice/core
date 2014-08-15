@@ -112,7 +112,7 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
             public:
                 inline void free()
                 {
-                    StatusBarHashMap().swap( *this );
+                    StatusBarHashMap().swap( *this );// get rid of reserved capacity
                 }
         };
 

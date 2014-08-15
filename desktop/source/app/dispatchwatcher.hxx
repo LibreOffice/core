@@ -44,7 +44,7 @@ class DispatchWatcherHashMap : public ::boost::unordered_map< OUString, sal_Int3
     public:
         inline void free()
         {
-            DispatchWatcherHashMap().swap( *this );
+            DispatchWatcherHashMap().swap( *this ); // get rid of reserved capacity
         }
 };
 

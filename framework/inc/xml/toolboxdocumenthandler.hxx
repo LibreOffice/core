@@ -117,7 +117,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
             public:
                 inline void free()
                 {
-                    ToolBoxHashMap().swap( *this );
+                    ToolBoxHashMap().swap( *this );// get rid of reserved capacity
                 }
         };
 

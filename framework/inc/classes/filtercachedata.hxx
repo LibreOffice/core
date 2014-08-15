@@ -337,7 +337,7 @@ class SetNodeHash : public ::boost::unordered_map< OUString                    ,
 
         inline void free()
         {
-            SetNodeHash().swap( *this );
+            SetNodeHash().swap( *this ); // get rid of reserved capacity
             lAddedItems.free  ();
             lChangedItems.free();
             lRemovedItems.free();
@@ -372,7 +372,7 @@ class PerformanceHash   :   public  ::boost::unordered_map<    OUString         
 
         inline void free()
         {
-            PerformanceHash().swap( *this );
+            PerformanceHash().swap( *this ); // get rid of reserved capacity
         }
 
         //  normaly a complete string must match our hash key values ...

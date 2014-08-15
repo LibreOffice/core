@@ -116,7 +116,7 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper1< ::com::sun::s
             public:
                 inline void free()
                 {
-                    ImageHashMap().swap( *this );
+                    ImageHashMap().swap( *this );// get rid of reserved capacity
                 }
         };
 

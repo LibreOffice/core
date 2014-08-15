@@ -80,7 +80,7 @@ private:
     {
         inline void free()
         {
-            MenuControllerMap().swap( *this );
+            MenuControllerMap().swap( *this );// get rid of reserved capacity
         }
     };
 

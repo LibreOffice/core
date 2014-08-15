@@ -63,7 +63,7 @@ namespace framework {
         {
             inline void free()
             {
-                FactoryManagerMap().swap( *this );
+                FactoryManagerMap().swap( *this );// get rid of reserved capacity
             }
         };
 

@@ -108,7 +108,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< OUString >
         // the only way to free used memory really!
         void free()
         {
-            OUStringList().swap( *this );
+            OUStringList().swap( *this );// get rid of reserved capacity
         }
 };
 
@@ -135,7 +135,7 @@ class BaseHash : public ::boost::unordered_map< OUString                    ,
         // the only way to free used memory really!
         void free()
         {
-            BaseHash().swap( *this );
+            BaseHash().swap( *this );// get rid of reserved capacity
         }
 };
 

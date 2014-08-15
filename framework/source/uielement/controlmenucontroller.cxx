@@ -229,7 +229,7 @@ private:
         public:
             inline void free()
             {
-                UrlToDispatchMap().swap( *this );
+                UrlToDispatchMap().swap( *this );// get rid of reserved capacity
             }
     };
 
