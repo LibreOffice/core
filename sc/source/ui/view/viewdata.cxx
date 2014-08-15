@@ -616,25 +616,34 @@ void ScViewData::SetZoomType( SvxZoomType eNew, bool bAll )
     SetZoomType( eNew, vTabs );
 }
 
-void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs )
+void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY,
+                          std::vector< SCTAB >& tabs,
+                          const bool bIgnoreLimits )
 {
     bool bAll = ( tabs.empty() );
     if ( !bAll ) // create associated table data
         CreateTabData( tabs );
-    Fraction aFrac20( 1,5 );
-    Fraction aFrac400( 4,1 );
 
     Fraction aValidX = rNewX;
-    if (aValidX<aFrac20)
-        aValidX = aFrac20;
-    if (aValidX>aFrac400)
-        aValidX = aFrac400;
-
     Fraction aValidY = rNewY;
-    if (aValidY<aFrac20)
-        aValidY = aFrac20;
-    if (aValidY>aFrac400)
-        aValidY = aFrac400;
+
+    // We probably don't want these limits for tiled rendering, hence
+    // we make them optional.
+    if ( !bIgnoreLimits )
+    {
+        const Fraction aFrac20( 1, 5 );
+        const Fraction aFrac400( 4, 1 );
+
+        if ( aValidX < aFrac20 )
+            aValidX = aFrac20;
+        else if ( aValidX > aFrac400 )
+            aValidX = aFrac400;
+
+        if ( aValidY < aFrac20 )
+            aValidY = aFrac20;
+        else if ( aValidY > aFrac400 )
+            aValidY = aFrac400;
+    }
 
     if ( bAll )
     {
@@ -690,7 +699,8 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
     RefreshZoom();
 }
 
-void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll )
+void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY,
+                          bool bAll, const bool bIgnoreLimits )
 {
     std::vector< SCTAB > vTabs;
     if ( !bAll ) // get selected tabs
@@ -698,7 +708,7 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAl
         ScMarkData::iterator itr = mpMarkData->begin(), itrEnd = mpMarkData->end();
         vTabs.insert(vTabs.begin(), itr, itrEnd);
     }
-    SetZoom( rNewX, rNewY, vTabs );
+    SetZoom( rNewX, rNewY, vTabs, bIgnoreLimits );
 }
 
 void ScViewData::SetShowGrid( bool bShow )
