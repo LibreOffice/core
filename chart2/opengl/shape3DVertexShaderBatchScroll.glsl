@@ -6,7 +6,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 #version 330 core
+
 in vec3 vertexPositionModelspace;
 in vec3 vertexNormalModelspace;
 in mat4 M;
