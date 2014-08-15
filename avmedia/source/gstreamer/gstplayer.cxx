@@ -74,7 +74,9 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mpXOverlay( NULL ),
     mnDuration( 0 ),
     mnWidth( 0 ),
-    mnHeight( 0 )
+    mnHeight( 0 ),
+    mnWatchID( 0 ),
+    mbWatchID( false )
 {
     // Initialize GStreamer library
     int argc = 1;
@@ -127,10 +129,14 @@ void SAL_CALL Player::disposing()
             g_object_unref( G_OBJECT ( mpXOverlay ) );
             mpXOverlay = NULL;
         }
+
+    }
+    if (mbWatchID)
+    {
+        g_source_remove(mnWatchID);
+        mbWatchID = false;
     }
 }
-
-
 
 static gboolean pipeline_bus_callback( GstBus *, GstMessage *message, gpointer data )
 {
@@ -357,7 +363,13 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
         g_object_set( G_OBJECT( mpPlaybin ), "uri", ascURL.getStr() , NULL );
 
         pBus = gst_element_get_bus( mpPlaybin );
-        gst_bus_add_watch( pBus, pipeline_bus_callback, this );
+        if (mbWatchID)
+        {
+            g_source_remove(mnWatchID);
+            mbWatchID = false;
+        }
+        mnWatchID = gst_bus_add_watch( pBus, pipeline_bus_callback, this );
+        mbWatchID = true;
         DBG( "%p set sync handler", this );
 #ifdef AVMEDIA_GST_0_10
         gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this );

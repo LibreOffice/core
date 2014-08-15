@@ -97,6 +97,9 @@ protected:
     int                     mnWidth;
     int                     mnHeight;
 
+    guint                   mnWatchID;
+    bool                    mbWatchID;
+
     osl::Condition          maSizeCondition;
 };
 
