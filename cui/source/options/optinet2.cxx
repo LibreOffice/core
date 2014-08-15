@@ -35,6 +35,7 @@
 #include <sfx2/objsh.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/help.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
@@ -132,7 +133,7 @@ void SvxNoSpaceEdit::Modify()
 
         if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
             // the maximum value of a port number is USHRT_MAX
-            ErrorBox( this, CUI_RES( RID_SVXERR_OPT_PROXYPORTS ) ).Execute();
+            MessageDialog( this, CUI_RES( RID_SVXSTR_OPT_PROXYPORTS ) ).Execute();
     }
 }
 

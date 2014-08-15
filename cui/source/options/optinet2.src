@@ -21,10 +21,9 @@
 #include "helpid.hrc"
 #include <cuires.hrc>
 
-ErrorBox RID_SVXERR_OPT_PROXYPORTS
+String RID_SVXSTR_OPT_PROXYPORTS
 {
-    BUTTONS = WB_OK ;
-    Message [ en-US ] = "Invalid value!\n\nThe maximum value for a port number is 65535.";
+    Text [ en-US ] = "Invalid value!\n\nThe maximum value for a port number is 65535.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
