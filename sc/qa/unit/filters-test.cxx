@@ -36,6 +36,7 @@
 #include <globalnames.hxx>
 #include <dbdata.hxx>
 #include <sortparam.hxx>
+#include "scopetools.hxx"
 
 #include <svx/svdpage.hxx>
 
@@ -77,6 +78,8 @@ public:
     void testEnhancedProtectionXLS();
     void testEnhancedProtectionXLSX();
     void testSortWithSharedFormulasODS();
+    void testSortWithSheetExternalReferencesODS();
+    void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef xDocShRef, SCROW nRow1, SCROW nRow2 );
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -94,6 +97,7 @@ public:
     CPPUNIT_TEST(testEnhancedProtectionXLS);
     CPPUNIT_TEST(testEnhancedProtectionXLSX);
     CPPUNIT_TEST(testSortWithSharedFormulasODS);
+    CPPUNIT_TEST(testSortWithSheetExternalReferencesODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -597,6 +601,84 @@ void ScFiltersTest::testSortWithSharedFormulasODS()
 
     xDocSh->DoClose();
 }
+
+// https://bugs.freedesktop.org/attachment.cgi?id=100089 from fdo#77018
+// mentioned also in fdo#79441
+// Document contains cached external references.
+void ScFiltersTest::testSortWithSheetExternalReferencesODS()
+{
+    ScDocShellRef xDocSh = loadDoc("sort-with-sheet-external-references.", ODS, true);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    sc::AutoCalcSwitch aACSwitch(rDoc, true); // turn auto calc on.
+    rDoc.CalcAll();
+
+    // Sort A15:D20 with relative row references.
+    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 14, 19);
+
+    // Sort A23:D28 with absolute row references.
+    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 22, 27);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef xDocSh, SCROW nRow1, SCROW nRow2 )
+{
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Check the original data is there.
+    for (SCROW nRow=nRow1+1; nRow <= nRow2; ++nRow)
+    {
+        double aCheck[] = { 1, 2, 3, 4, 5 };
+        CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(0,nRow,0)));
+    }
+    for (SCROW nRow=nRow1+1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol=1; nCol <= 3; ++nCol)
+        {
+            double aCheck[] = { 1, 12, 123, 1234, 12345 };
+            CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(nCol,nRow,0)));
+        }
+    }
+
+    // Set as an anonymous database range to sort.
+    ScDBData* pDBData = new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, nRow1, 3, nRow2, true, true);
+    rDoc.SetAnonymousDBData(0, pDBData);
+
+    // Sort descending by Column A.
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 3;
+    aSortData.nRow1 = nRow1;
+    aSortData.nRow2 = nRow2;
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = false;
+
+    // Do the sorting.
+    ScDBDocFunc aFunc(*xDocSh);
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+    rDoc.CalcAll();
+
+    // Check the sort and that all sheet references and external references are
+    // adjusted to point to the original location.
+    for (SCROW nRow=nRow1+1; nRow <= nRow2; ++nRow)
+    {
+        double aCheck[] = { 5, 4, 3, 2, 1 };
+        CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(0,nRow,0)));
+    }
+    for (SCROW nRow=nRow1+1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol=1; nCol <= 3; ++nCol)
+        {
+            double aCheck[] = { 12345, 1234, 123, 12, 1 };
+            CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(nCol,nRow,0)));
+        }
+    }
+}
+
 
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
