@@ -247,7 +247,7 @@ public class UnoRuntime {
                 fs = TypeDescription.getTypeDescription(t).
                     getFieldDescriptions();
             } catch (ClassNotFoundException e) {
-                throw new java.lang.RuntimeException(e.toString());
+                throw new java.lang.RuntimeException(e);
             }
             for (int i = 0; i< fs.length; ++i) {
                 Type ft = new Type(fs[i].getTypeDescription());
@@ -263,7 +263,7 @@ public class UnoRuntime {
                         return false;
                     }
                 } catch (IllegalAccessException e) {
-                    throw new java.lang.RuntimeException(e.toString());
+                    throw new java.lang.RuntimeException(e);
                 }
             }
             return true;
@@ -338,7 +338,7 @@ public class UnoRuntime {
             } catch (java.lang.RuntimeException e) {
                 throw e;
             } catch (java.lang.Exception e) {
-                throw new java.lang.RuntimeException(e.toString());
+                throw new java.lang.RuntimeException(e);
             }
         case TypeClass.ENUM_value:
             try {
@@ -347,7 +347,7 @@ public class UnoRuntime {
             } catch (java.lang.RuntimeException e) {
                 throw e;
             } catch (java.lang.Exception e) {
-                throw new java.lang.RuntimeException(e.toString());
+                throw new java.lang.RuntimeException(e);
             }
         default:
             throw new IllegalArgumentException(

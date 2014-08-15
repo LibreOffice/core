@@ -41,6 +41,14 @@ public class StatusException extends RuntimeException {
     }
 
     /**
+     * Constructs a StatusException containing an exception Status.
+     */
+    public StatusException( Throwable t, Status st ) {
+        super( t );
+        this.status = st;
+    }
+
+    /**
      * Creates a StatusException containing a Status.
      */
     public StatusException( Status st ) {

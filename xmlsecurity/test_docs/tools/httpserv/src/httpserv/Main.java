@@ -130,10 +130,10 @@ class MyHandler implements HttpHandler {
             System.out.println("requested: " + sRequestPath);
             File fileRequest = new File(new File(".").getCanonicalPath(), sRequestPath);
             if (!fileRequest.exists()) {
-                throw new Exception("The file " + fileRequest.toString() + " does not exist!\n");
+                throw new IOException("The file " + fileRequest + " does not exist!");
             }
             else if (fileRequest.isDirectory()) {
-                throw new Exception(fileRequest.toString() + " is a directory!\n");
+                throw new IOException(fileRequest + " is a directory!\n");
             }
 
 

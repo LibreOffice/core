@@ -795,7 +795,7 @@ public class utils {
                 xContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander"));
             return xME.expandMacros(expand);
         } catch (Exception e) {
-            throw new Exception("could not expand macro: " + e.toString(), e);
+            throw new Exception("could not expand macro", e);
         }
 
     }
@@ -848,7 +848,7 @@ public class utils {
             utils.shortWait(3000);
 
         } catch (Exception e) {
-            throw new Exception("ERROR: could not dispatch URL '" + URL + "': " + e.toString());
+            throw new Exception("ERROR: could not dispatch URL '" + URL + "'", e);
         }
     }
 

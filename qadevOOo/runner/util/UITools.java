@@ -257,7 +257,7 @@ public class UITools {
 
             return cMessage;
          } catch (Exception e) {
-            throw new Exception("Could not get message from Basic-MessageBox: " + e.toString());
+            throw new Exception("Could not get message from Basic-MessageBox:", e);
         }
      }
 

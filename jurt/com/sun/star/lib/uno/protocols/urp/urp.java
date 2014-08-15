@@ -136,7 +136,7 @@ public final class urp implements IProtocol {
                     monitor.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    throw new RuntimeException(e.toString());
+                    throw new RuntimeException(e);
                 }
             }
             if (state == STATE_TERMINATED) {

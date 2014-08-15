@@ -26,6 +26,7 @@ import com.sun.star.connection.XConnection;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -133,7 +134,7 @@ public final class socketAcceptor implements XAcceptor {
                                               host == null ? null
                                               : InetAddress.getByName(host));
                 } catch (IOException e) {
-                    throw new ConnectionSetupException(e.toString());
+                    throw new ConnectionSetupException(e);
                 }
                 acceptingDescription = connectionDescription;
                 tcpNoDelay = desc.getTcpNoDelay();
@@ -157,7 +158,7 @@ public final class socketAcceptor implements XAcceptor {
             return new SocketConnection(acceptingDescription, socket);
         }
         catch(IOException e) {
-            throw new ConnectionSetupException(e.toString());
+            throw new ConnectionSetupException(e);
         }
     }
 
@@ -174,7 +175,7 @@ public final class socketAcceptor implements XAcceptor {
             serv.close();
         }
         catch (IOException e) {
-            throw new com.sun.star.uno.RuntimeException(e.toString());
+            throw new com.sun.star.uno.RuntimeException(e);
         }
     }
 
