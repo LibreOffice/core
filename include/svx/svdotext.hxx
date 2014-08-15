@@ -613,6 +613,10 @@ public:
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
 
     void impCopyTextInTextObj(SdrTextObj *pNextTextObj) const;
+
+    // Handler for Chained Text
+    DECL_LINK(ImpDecomposeChainedText,EditStatus*);
+
     void embedText() const;
 
     // timing generators

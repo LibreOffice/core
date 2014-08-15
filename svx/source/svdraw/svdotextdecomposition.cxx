@@ -740,12 +740,13 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
             )
      );
     rOutliner.SetUpdateMode(true);
-    rOutliner.SetStatusEventHdl1(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
+    rOutliner.SetStatusEventHdl1(LINK(this,SdrTextObj,ImpDecomposeChainedText));
     rOutliner.SetText(*mpOverflowingText);  // XXX: copies overflown text
     Size aNewSize(rOutliner.CalcTextSize());
     // create OutlinerParaObject for pNextTextObj
     OutlinerParaObject* pNewParaObject=rOutliner.CreateParaObject();
     rOutliner.Clear();
+    rOutliner.SetStatusEventHdl1(Link());
 
     aNewSize.Width()++; // because of possible rounding errors
     aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
