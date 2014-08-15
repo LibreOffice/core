@@ -1,0 +1,12 @@
+diff -ur collada2gltf.org/shaders/commonProfileShaders.cpp collada2gltf/shaders/commonProfileShaders.cpp
+--- collada2gltf.org/shaders/commonProfileShaders.cpp	2014-08-15 15:21:51.839323947 +0200
++++ collada2gltf/shaders/commonProfileShaders.cpp	2014-08-15 15:23:36.931327850 +0200
+@@ -367,7 +367,7 @@
+     public:
+         
+         GLSLShader(shared_ptr <GLTFProfile> profile) {
+-            this->_declarations = "precision highp float;\n";;
++            this->_declarations = "#ifdef GL_ES_VERSION_2_0\n#version 100\n#else\n#version 130\n#endif\nprecision highp float;\n";
+             this->_body = "void main(void) {\n";
+             this->_profile = profile;
+         }
