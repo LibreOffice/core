@@ -444,14 +444,37 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 
                         if (pThisRowInfo->bChanged && !bHOver)
                         {
-                            aGrid.AddVerLine( nPosX-nSignedOneX, nPosY, nNextY-nOneY );
-                        }
+                            if ( mpViewData )
+                            {
+                                aGrid.AddVerLine( mpViewData->LogicToPixelHorizontal( nPosX - nSignedOneX ),
+                                                  mpViewData->LogicToPixelVertical( nPosY ),
+                                                  mpViewData->LogicToPixelVertical( nNextY - nOneY ) );
+                            }
+                            else
+                            {
+                                aGrid.AddVerLine( nPosX - nSignedOneX,
+                                                  nPosY,
+                                                  nNextY - nOneY );
+                            }
+                         }
                         nPosY = nNextY;
                     }
                 }
                 else
                 {
-                    aGrid.AddVerLine( nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY );
+                    if ( mpViewData )
+                    {
+                        aGrid.AddVerLine( mpViewData->LogicToPixelHorizontal( nPosX - nSignedOneX ),
+                                          mpViewData->LogicToPixelVertical( nScrY ),
+                                          mpViewData->LogicToPixelVertical( nScrY + nScrH - nOneY ) );
+                    }
+                    else
+                    {
+                        aGrid.AddVerLine( nPosX - nSignedOneX,
+                                          nScrY,
+                                          nScrY + nScrH - nOneY );
+
+                    }
                 }
             }
         }
