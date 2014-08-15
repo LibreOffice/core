@@ -78,7 +78,6 @@ InfoBox MSG_ERROR_SEND_MAIL
     Message [ en-US ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings." ;
 };
 
- // QueryBoxen ------------------------------------------------------------
 QueryBox MSG_QUERY_OPENASTEMPLATE
 {
     Buttons = WB_YES_NO ;

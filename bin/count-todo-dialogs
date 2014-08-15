@@ -24,5 +24,13 @@ num=$(($dialogs + $tabpages))
 echo An estimated additional $num .ui are required
 
 percent=$(($converted * 100 / ($num + $converted)))
-echo We are $percent% of the way through.
+echo We are $percent% of the way through the .ui conversion.
 
+errorboxes=`git grep -h ErrorBox -- *.src|cut -d' ' -f2- |sort|uniq|wc -l`
+infoboxes=`git grep -h InfoBox -- *.src|cut -d' ' -f2- |sort|uniq|wc -l`
+queryboxes=`git grep -h QueryBox -- *.src|cut -d' ' -f2- |sort|uniq|wc -l`
+
+echo
+echo We need to reduce $errorboxes ErrorBox to basic strings as arguments to MessageDialog
+echo We need to reduce $infoboxes InfoBox to basic strings as arguments to MessageDialog
+echo We need to reduce $queryboxes QueryBox to basic strings as arguments to MessageDialog
