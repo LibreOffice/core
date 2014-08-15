@@ -23,7 +23,6 @@ $(eval $(call gb_AllLangResTarget_set_reslocation,fwe,framework))
 
 $(eval $(call gb_AllLangResTarget_add_srs,fwe,\
     fwe/fwk_classes \
-    fwe/fwk_services \
 ))
 
 

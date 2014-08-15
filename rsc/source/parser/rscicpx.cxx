@@ -1622,58 +1622,6 @@ RscTop * RscTypCont::InitClassFloatingWindow( RscTop * pSuper,
     return pClassFloatingWindow;
 }
 
-RscTop * RscTypCont::InitClassTabControlItem( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassTabControlItem;
-
-    // Klasse anlegen
-    nId = pHS->getID( "PageItem" );
-    pClassTabControlItem = new RscClass( nId, RSC_TABCONTROLITEM, pSuper );
-    aNmTb.Put( nId, CLASSNAME, pClassTabControlItem );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "Identifier", VARNAME );
-    pClassTabControlItem->SetVariable( nId, &aIdNoZeroUShort, NULL, 0,
-                                       RSC_TABCONTROLITEM_ID );
-    nId = aNmTb.Put( "Text", VARNAME );
-    pClassTabControlItem->SetVariable( nId, &aLangString, NULL, 0,
-                                       RSC_TABCONTROLITEM_TEXT );
-    nId = aNmTb.Put( "PageResID", VARNAME );
-    pClassTabControlItem->SetVariable( nId, &aIdLong, NULL, 0,
-                                       RSC_TABCONTROLITEM_PAGERESID );
-
-    return pClassTabControlItem;
-}
-
-RscTop * RscTypCont::InitClassTabControl( RscTop * pSuper,
-                                          RscTop * pClassTabControlItem )
-{
-    Atom        nId;
-    RscTop *    pClassTabControl;
-
-    // Klasse anlegen
-    nId = pHS->getID( "TabControl" );
-    pClassTabControl = new RscClass( nId, RSC_TABCONTROL, pSuper );
-    pClassTabControl->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-    aNmTb.Put( nId, CLASSNAME, pClassTabControl );
-
-    // Variablen anlegen
-    {
-        RscCont * pCont;
-
-        aBaseLst.push_back( pCont = new RscCont( pHS->getID( "ContTabControlItem" ), RSC_NOTYPE ) );
-        pCont->SetTypeClass( pClassTabControlItem );
-        nId = aNmTb.Put( "PageList", VARNAME );
-        pClassTabControl->SetVariable( nId, pCont, NULL, 0,
-                                       RSC_TABCONTROL_ITEMLIST );
-
-        INS_WINBIT( pClassTabControl, DropDown );
-    }
-
-    return pClassTabControl;
-}
-
 RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                                   RscTop * pClassBitmap,
                                                   RscTop * pClassImage,

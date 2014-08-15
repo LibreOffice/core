@@ -73,7 +73,6 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
 
     virtual void                FillLayoutData() const SAL_OVERRIDE;
     virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
@@ -83,7 +82,6 @@ protected:
 public:
                         TabControl( Window* pParent,
                                     WinBits nStyle = WB_STDTABCONTROL );
-                        TabControl( Window* pParent, const ResId& rResId );
                         virtual ~TabControl();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

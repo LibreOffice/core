@@ -100,7 +100,7 @@
 #define RSC_DOCKINGWINDOW       (RSC_NOTYPE + 0x72)
 
 #define RSC_TABPAGE             (RSC_NOTYPE + 0x74)
-#define RSC_TABCONTROL          (RSC_NOTYPE + 0x75)
+
 #define RSC_TABCONTROLITEM      (RSC_NOTYPE + 0x77)
 
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)

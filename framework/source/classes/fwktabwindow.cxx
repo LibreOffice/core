@@ -20,7 +20,6 @@
 // autogen include statement, do not remove
 
 #include <classes/fwktabwindow.hxx>
-#include "framework.hrc"
 #include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
@@ -49,9 +48,8 @@ namespace framework
 {
 
 // class FwkTabControl ---------------------------------------------------
-FwkTabControl::FwkTabControl( Window* pParent, const ResId& rResId ) :
-
-    TabControl( pParent, rResId )
+FwkTabControl::FwkTabControl(Window* pParent)
+    : TabControl(pParent)
 {
 }
 
@@ -174,12 +172,9 @@ void FwkTabPage::Resize()
 }
 
 // class FwkTabWindow ---------------------------------------------
-
-FwkTabWindow::FwkTabWindow( Window* pParent ) :
-
-    Window( pParent, FwkResId( WIN_TABWINDOW ) ),
-
-    m_aTabCtrl  ( this, FwkResId( TC_TABCONTROL ) )
+FwkTabWindow::FwkTabWindow( Window* pParent )
+    : Window(pParent)
+    , m_aTabCtrl(this)
 {
     m_xWinProvider = awt::ContainerWindowProvider::create( ::comphelper::getProcessComponentContext() );
 

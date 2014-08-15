@@ -224,9 +224,6 @@ class RscTypCont
                                   RscTop * pClassImageList );
     RscTop *    InitClassFloatingWindow( RscTop * pSuper,
                                          RscEnum * pMapUnit );
-    RscTop *    InitClassTabControlItem( RscTop * pSuper );
-    RscTop *    InitClassTabControl(  RscTop * pSuper,
-                                     RscTop * pClassTabControlItem );
     RscTop *    InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                              RscTop * pClassBitmap,
                                              RscTop * pClassImage,

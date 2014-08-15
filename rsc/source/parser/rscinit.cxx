@@ -116,8 +116,6 @@ void RscTypCont::Init()
     RscTop   *  pClassToolBox;
     RscTop   *  pClassFloatingWindow;
     RscTop   *  pClassTabPage;
-    RscTop   *  pClassTabControlItem;
-    RscTop   *  pClassTabControl;
     RscTop   *  pClassFixedLine;
     RscTop *    pClassSfxStyleFamilyItem;
     RscTop *    pClassSfxTemplateDialog;
@@ -608,13 +606,6 @@ void RscTypCont::Init()
     pClassTabPage->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassTabPage );
     pRoot->Insert( pClassTabPage );
-
-    pClassTabControlItem = InitClassTabControlItem( pClassMgr );
-    pRoot->Insert( pClassTabControlItem );
-
-    pClassTabControl = InitClassTabControl( pClassControl,
-                                            pClassTabControlItem );
-    pRoot->Insert( pClassTabControl );
 
     // Klasse anlegen
     nId = pHS->getID( "FixedLine" );

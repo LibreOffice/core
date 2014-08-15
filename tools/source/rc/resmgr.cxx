@@ -1479,7 +1479,6 @@ OString ResMgr::GetAutoHelpId()
                 // intentionally no breaks!
                 // auto help ids for controls
                 switch( pRC->pResource->GetRT() ) {
-                    case RSC_TABCONTROL:        aHID.append( "TabControl" );       break;
                     case RSC_RADIOBUTTON:       aHID.append( "RadioButton" );      break;
                     case RSC_CHECKBOX:          aHID.append( "CheckBox" );         break;
                     case RSC_TRISTATEBOX:       aHID.append( "TriStateBox" );      break;

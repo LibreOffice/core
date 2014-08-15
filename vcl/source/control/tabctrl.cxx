@@ -190,37 +190,6 @@ TabControl::TabControl( Window* pParent, WinBits nStyle ) :
     OSL_TRACE("*** TABCONTROL no notabs? %s", ( GetStyle() & WB_NOBORDER ) ? "true" : "false" );
 }
 
-TabControl::TabControl( Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_TABCONTROL )
-{
-    rResId.SetRT( RSC_TABCONTROL );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-void TabControl::ImplLoadRes( const ResId& rResId )
-{
-    Control::ImplLoadRes( rResId );
-
-    sal_uLong nObjMask = ReadLongRes();
-
-    if ( nObjMask & RSC_TABCONTROL_ITEMLIST )
-    {
-        sal_uLong nEle = ReadLongRes();
-
-        // add item
-        for( sal_uLong i = 0; i < nEle; i++ )
-        {
-            InsertPage( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-        }
-    }
-}
-
 TabControl::~TabControl()
 {
     if ( GetParent()->IsDialog() )

@@ -44,9 +44,9 @@ namespace framework
 class FwkTabControl : public TabControl
 {
 public:
-    FwkTabControl( Window* pParent, const ResId& rResId );
+    FwkTabControl(Window* pParent);
 
-    void    BroadcastEvent( sal_uLong nEvent );
+    void BroadcastEvent( sal_uLong nEvent );
 };
 
 class FwkTabPage : public TabPage

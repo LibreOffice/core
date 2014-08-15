@@ -170,9 +170,6 @@ typedef short RSWND_STYLE;
 #define RSC_TABCONTROLITEM_TEXT         0x0002
 #define RSC_TABCONTROLITEM_PAGERESID    0x0008
 
-// For "TabControl" resources:
-#define RSC_TABCONTROL_ITEMLIST         0x01
-
 // For "ImageButtons":
 #define RSC_IMAGEBUTTON_IMAGE           0x01
 #define RSC_IMAGEBUTTON_SYMBOL          0x02
