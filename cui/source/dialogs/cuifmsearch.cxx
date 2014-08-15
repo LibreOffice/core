@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/shl.hxx>
 #include <dialmgr.hxx>
@@ -719,9 +719,9 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
         case FmSearchProgress::STATE_NOTHINGFOUND:
         {
             sal_uInt16 nErrorId = (FmSearchProgress::STATE_ERROR == pProgress->aSearchState)
-                ? RID_SVXERR_SEARCH_GENERAL_ERROR
-                : RID_SVXERR_SEARCH_NORECORD;
-            ErrorBox(this, CUI_RES(nErrorId)).Execute();
+                ? RID_STR_SEARCH_GENERAL_ERROR
+                : RID_STR_SEARCH_NORECORD;
+            MessageDialog(this, CUI_RES(nErrorId)).Execute();
         }
             // NO break !
         case FmSearchProgress::STATE_CANCELED:

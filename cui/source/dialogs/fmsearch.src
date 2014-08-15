@@ -49,16 +49,14 @@ String RID_STR_FROM_BOTTOM
     Text [ en-US ] = "From bottom";
 };
 
-ErrorBox RID_SVXERR_SEARCH_NORECORD
+String RID_STR_SEARCH_NORECORD
 {
-    Buttons = WB_OK;
-    Message [ en-US ] = "No records corresponding to your data found.";
+    Text [ en-US ] = "No records corresponding to your data found.";
 };
 
-ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
+String RID_STR_SEARCH_GENERAL_ERROR
 {
-    Buttons = WB_OK;
-    Message [ en-US ] = "An unknown error occurred. The search could not be finished.";
+    Text [ en-US ] = "An unknown error occurred. The search could not be finished.";
 };
 
 String RID_STR_OVERFLOW_FORWARD
