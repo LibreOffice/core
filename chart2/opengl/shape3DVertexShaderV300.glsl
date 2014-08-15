@@ -9,11 +9,11 @@
 
 #version 150 core
 
-attribute vec3 vertexPositionModelspace;
-attribute vec3 vertexNormalModelspace;
+in vec3 vertexPositionModelspace;
+in vec3 vertexNormalModelspace;
 
-varying vec3 positionWorldspace;
-varying vec3 normalCameraspace;
+out vec3 positionWorldspace;
+out vec3 normalCameraspace;
 
 uniform mat4 P;
 uniform mat4 M;

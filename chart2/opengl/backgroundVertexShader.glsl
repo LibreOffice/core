@@ -9,10 +9,10 @@
 
 #version 150 core
 
-attribute vec3 vPosition;
+in vec3 vPosition;
 uniform mat4 MVP;
-attribute vec4 vColor;
-varying vec4 fragmentColor;
+in vec4 vColor;
+out vec4 fragmentColor;
 
 void main()
 {

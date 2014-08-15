@@ -9,7 +9,7 @@
 
 #version 150 core
 
-varying vec4 fragmentColor;
+in vec4 fragmentColor;
 uniform int shape;
 
 void main()

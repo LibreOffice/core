@@ -11,8 +11,8 @@
 
 #define MAX_LIGHT_NUM 8
 
-varying vec3 positionWorldspace;
-varying vec3 normalCameraspace;
+in vec3 positionWorldspace;
+in vec3 normalCameraspace;
 
 uniform mat4 V;
 uniform vec4 materialAmbient;
