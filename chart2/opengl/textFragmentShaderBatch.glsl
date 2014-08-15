@@ -17,7 +17,7 @@ in vec3 vTexCoord;
 out vec4 actualColor;
 void main()
 {
-    vec3 color = texture2DArray(texArray, vTexCoord.xyz).rgb;
+    vec3 color = texture(texArray, vTexCoord.xyz).rgb;
     actualColor = vec4(color, 1.0 - color.r);
 }
 
