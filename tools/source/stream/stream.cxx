@@ -783,7 +783,7 @@ bool SvStream::WriteLine(const OString& rStr)
 bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet )
 {
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
-        WriteChar(ch);
+        WriteUnicode(ch);
     else
     {
         OString aStr(&ch, 1, eDestCharSet);
