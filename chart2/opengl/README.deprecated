@@ -1,0 +1,15 @@
+deprecated features
+
+GL_LIGHTING
+GL_TEXTURE_2D
+GL_POINT_SMOOTH
+GL_TEXTURE_WRAP_S
+GL_TEXTURE_WRAP_T
+
+
+GLSL
+
+texture*D
+varying
+attribute
+missing version string
