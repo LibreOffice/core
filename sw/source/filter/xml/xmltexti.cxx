@@ -357,11 +357,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             pOLENd->SetOLESizeInvalid( true );
     }
 
-    SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
-    xPropSet = pXFrame;
+    xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                *pDoc, pFrmFmt), uno::UNO_QUERY);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
-        SwXFrame::GetOrCreateSdrObject(*
-                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+    {
+        // req for z-order
+        SwXFrame::GetOrCreateSdrObject(*static_cast<SwFlyFrmFmt*>(pFrmFmt));
+    }
     if( !rTblName.isEmpty() )
     {
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
@@ -595,11 +597,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
             // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
 
-            SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
-            xPropSet = pXFrame;
+            xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                            *pDoc, pFrmFmt), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+            {
                 SwXFrame::GetOrCreateSdrObject(*
-                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+                        static_cast<SwFlyFrmFmt*>(pFrmFmt)); // req for z-order
+            }
         }
     }
     catch ( uno::Exception& )
@@ -652,11 +656,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
                                        &aAppletImpl.GetItemSet(),
                                        NULL,
                                        NULL);
-    SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
-    xPropSet = pXFrame;
+    xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                *pDoc, pFrmFmt), uno::UNO_QUERY);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
-        SwXFrame::GetOrCreateSdrObject(*
-                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+    {
+        // req for z-order
+        SwXFrame::GetOrCreateSdrObject(*static_cast<SwFlyFrmFmt*>(pFrmFmt));
+    }
 
     return xPropSet;
 }
@@ -725,11 +731,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                                             &aItemSet,
                                             NULL,
                                             NULL);
-            SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
-            xPropSet = pXFrame;
+            xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                            *pDoc, pFrmFmt), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+            {
                 SwXFrame::GetOrCreateSdrObject(*
-                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+                        static_cast<SwFlyFrmFmt*>(pFrmFmt)); // req for z-order
+            }
         }
     }
     catch ( uno::Exception& )
@@ -876,11 +884,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                                             &aItemSet,
                                             NULL,
                                             NULL);
-            SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
-            xPropSet = pXFrame;
+            xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                            *pDoc, pFrmFmt), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+            {
+                // req for z-order
                 SwXFrame::GetOrCreateSdrObject(*
-                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+                        static_cast<SwFlyFrmFmt*>(pFrmFmt));
+            }
         }
     }
     catch ( uno::Exception& )

@@ -1231,6 +1231,28 @@ SwXFrame::~SwXFrame()
     delete pProps;
 }
 
+template<class Interface, class Impl>
+uno::Reference<Interface>
+CreateXFrame(SwDoc & rDoc, SwFrmFmt *const pFrmFmt)
+{
+    assert(!pFrmFmt || &rDoc == pFrmFmt->GetDoc());
+    uno::Reference<Interface> xFrame;
+    if (pFrmFmt)
+    {
+        xFrame.set(pFrmFmt->GetXObject(), uno::UNO_QUERY); // cached?
+    }
+    if (!xFrame.is())
+    {
+        Impl *const pNew((pFrmFmt) ? new Impl(*pFrmFmt) : new Impl(&rDoc));
+        xFrame.set(pNew);
+        if (pFrmFmt)
+        {
+            pFrmFmt->SetXObject(xFrame);
+        }
+    }
+    return xFrame;
+}
+
 OUString SwXFrame::getName(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -3084,6 +3106,12 @@ SwXTextFrame::~SwXTextFrame()
 {
 }
 
+uno::Reference<text::XTextFrame>
+SwXTextFrame::CreateXTextFrame(SwDoc & rDoc, SwFrmFmt *const pFrmFmt)
+{
+    return CreateXFrame<text::XTextFrame, SwXTextFrame>(rDoc, pFrmFmt);
+}
+
 void SAL_CALL SwXTextFrame::acquire(  )throw()
 {
     SwXFrame::acquire();
@@ -3362,6 +3390,12 @@ SwXTextGraphicObject::~SwXTextGraphicObject()
 
 }
 
+uno::Reference<text::XTextContent>
+SwXTextGraphicObject::CreateXTextGraphicObject(SwDoc & rDoc, SwFrmFmt *const pFrmFmt)
+{
+    return CreateXFrame<text::XTextContent, SwXTextGraphicObject>(rDoc, pFrmFmt);
+}
+
 void SAL_CALL SwXTextGraphicObject::acquire(  )throw()
 {
     SwXFrame::acquire();
@@ -3487,6 +3521,13 @@ SwXTextEmbeddedObject::~SwXTextEmbeddedObject()
 {
 
 }
+
+uno::Reference<text::XTextContent>
+SwXTextEmbeddedObject::CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrmFmt *const pFrmFmt)
+{
+    return CreateXFrame<text::XTextContent, SwXTextEmbeddedObject>(rDoc, pFrmFmt);
+}
+
 void SAL_CALL SwXTextEmbeddedObject::acquire()throw()
 {
     SwXFrame::acquire();

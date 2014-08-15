@@ -311,7 +311,6 @@ uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) 
         SwFlyDrawContact* pFlyContact = (SwFlyDrawContact*)pObj->GetUserCall();
         if(pFlyContact)
         {
-            FlyCntType eType = FLYCNTTYPE_ALL;
             SwFrmFmt* pFlyFmt = pFlyContact->GetFmt();
             SwDoc* pDoc = pFlyFmt->GetDoc();
             const SwNodeIndex* pIdx;
@@ -322,19 +321,26 @@ uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) 
             {
                 const SwNode* pNd = pDoc->GetNodes()[ pIdx->GetIndex() + 1 ];
                 if(!pNd->IsNoTxtNode())
-                    eType = FLYCNTTYPE_FRM;
+                {
+                    xRet.set(SwXTextFrame::CreateXTextFrame(*pDoc, pFlyFmt),
+                            uno::UNO_QUERY);
+                }
                 else if( pNd->IsGrfNode() )
-                    eType = FLYCNTTYPE_GRF;
+                {
+                    xRet.set(SwXTextGraphicObject::CreateXTextGraphicObject(
+                                *pDoc, pFlyFmt), uno::UNO_QUERY);
+                }
                 else if( pNd->IsOLENode() )
-                    eType = FLYCNTTYPE_OLE;
+                {
+                    xRet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                                *pDoc, pFlyFmt), uno::UNO_QUERY);
+                }
             }
             else
             {
                 OSL_FAIL( "<SwFmDrawPage::_CreateShape(..)> - could not retrieve type. Thus, no shape created." );
                 return xRet;
             }
-            OSL_ENSURE( eType != FLYCNTTYPE_ALL, "unexpected FlyCntType value for eType" );
-            xRet = SwXFrames::GetObject( *pFlyFmt, eType );
         }
      }
     else

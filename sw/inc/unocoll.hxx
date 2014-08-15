@@ -338,7 +338,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     FlyCntType          GetType()const{return eType;}
-    static SwXFrame*    GetObject( SwFrmFmt& rFmt, FlyCntType eType );
 
 };
 

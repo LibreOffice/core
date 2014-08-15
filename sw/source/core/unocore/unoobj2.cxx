@@ -1776,12 +1776,22 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
         SwNode const*const pNd =
             i_rUnoCrsr.GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
 
-        const FlyCntType eType = (!pNd->IsNoTxtNode()) ? FLYCNTTYPE_FRM
-            : ( (pNd->IsGrfNode()) ? FLYCNTTYPE_GRF : FLYCNTTYPE_OLE );
-
-        const uno::Reference< container::XNamed >  xFrame =
-            SwXFrames::GetObject(*pFormat, eType);
-        o_rNextObject.set(xFrame, uno::UNO_QUERY);
+        if (!pNd->IsNoTxtNode())
+        {
+            o_rNextObject.set(SwXTextFrame::CreateXTextFrame(
+                        *pFormat->GetDoc(), pFormat));
+        }
+        else if (pNd->IsGrfNode())
+        {
+            o_rNextObject.set(SwXTextGraphicObject::CreateXTextGraphicObject(
+                        *pFormat->GetDoc(), pFormat));
+        }
+        else
+        {
+            assert(pNd->IsOLENode());
+            o_rNextObject.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                        *pFormat->GetDoc(), pFormat));
+        }
     }
 
     return o_rNextObject.is();

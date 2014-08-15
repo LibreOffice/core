@@ -7523,7 +7523,11 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
     }
     else if (m_oFillStyle && *m_oFillStyle == drawing::FillStyle_GRADIENT && m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
-        uno::Reference<beans::XPropertySet> xPropertySet = SwXFrames::GetObject(const_cast<SwFrmFmt&>(m_rExport.mpParentFrame->GetFrmFmt()), FLYCNTTYPE_FRM);
+        SwFrmFmt & rFormat(
+                const_cast<SwFrmFmt&>(m_rExport.mpParentFrame->GetFrmFmt()));
+        uno::Reference<beans::XPropertySet> const xPropertySet(
+            SwXTextFrame::CreateXTextFrame(*rFormat.GetDoc(), &rFormat),
+            uno::UNO_QUERY);
         m_rDrawingML.SetFS(m_pSerializer);
         m_rDrawingML.WriteGradientFill(xPropertySet);
     }

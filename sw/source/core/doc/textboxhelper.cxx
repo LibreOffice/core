@@ -225,7 +225,9 @@ void lcl_queryInterface(SwFrmFmt* pShape, uno::Any& rAny)
 {
     if (SwFrmFmt* pFmt = SwTextBoxHelper::findTextBox(pShape))
     {
-        uno::Reference<T> xInterface(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
+        uno::Reference<T> const xInterface(
+            SwXTextFrame::CreateXTextFrame(*pFmt->GetDoc(), pFmt),
+            uno::UNO_QUERY);
         rAny <<= xInterface;
     }
 }
@@ -419,7 +421,9 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             case MID_ANCHOR_ANCHORTYPE:
                 if (aValue.get<text::TextContentAnchorType>() == text::TextContentAnchorType_AS_CHARACTER)
                 {
-                    uno::Reference<beans::XPropertySet> xPropertySet(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySet> const xPropertySet(
+                        SwXTextFrame::CreateXTextFrame(*pFmt->GetDoc(), pFmt),
+                        uno::UNO_QUERY);
                     xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGHT));
                     return;
                 }
@@ -483,7 +487,9 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
                 }
             }
 
-            uno::Reference<beans::XPropertySet> xPropertySet(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> const xPropertySet(
+                SwXTextFrame::CreateXTextFrame(*pFmt->GetDoc(), pFmt),
+                uno::UNO_QUERY);
             xPropertySet->setPropertyValue(aPropertyName, aValue);
         }
     }

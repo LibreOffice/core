@@ -570,8 +570,9 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    uno::Reference< XTextFrame >  xFrm = (SwXTextFrame*) SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM);
-                    pAny->setValue(&xFrm, cppu::UnoType<XTextFrame>::get());
+                    uno::Reference<XTextFrame> const xFrame(
+                        SwXTextFrame::CreateXTextFrame(*pFmt->GetDoc(), pFmt));
+                    (*pAny) <<= xFrame;
                 }
             }
             else

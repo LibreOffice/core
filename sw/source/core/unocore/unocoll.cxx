@@ -1287,22 +1287,6 @@ sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException, std::exceptio
     return GetDoc()->GetFlyCount(eType) > 0;
 }
 
-SwXFrame* SwXFrames::GetObject(SwFrmFmt& rFmt, FlyCntType eType)
-{
-    SwXFrame* pFrm = SwIterator<SwXFrame,SwFmt>::FirstElement( rFmt );
-    if(pFrm) return pFrm;
-    switch(eType)
-    {
-        case FLYCNTTYPE_FRM:
-            return new SwXTextFrame(rFmt);
-        case FLYCNTTYPE_GRF:
-            return new SwXTextGraphicObject(rFmt);
-        case FLYCNTTYPE_OLE:
-            return new SwXTextEmbeddedObject(rFmt);
-        default:
-            return NULL;
-    }
-}
 
 OUString SwXTextFrames::getImplementationName(void) throw( RuntimeException, std::exception )
 {

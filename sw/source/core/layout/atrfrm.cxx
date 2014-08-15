@@ -1554,8 +1554,8 @@ bool SwFmtAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 SwFrmFmt* pFmt = m_pCntntAnchor->nNode.GetNode().GetFlyFmt();
                 if(pFmt)
                 {
-                    uno::Reference<container::XNamed> xNamed = SwXFrames::GetObject( *pFmt, FLYCNTTYPE_FRM );
-                    uno::Reference<text::XTextFrame> xRet(xNamed, uno::UNO_QUERY);
+                    uno::Reference<text::XTextFrame> const xRet(
+                        SwXTextFrame::CreateXTextFrame(*pFmt->GetDoc(), pFmt));
                     rVal <<= xRet;
                 }
             }

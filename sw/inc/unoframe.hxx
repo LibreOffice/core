@@ -78,13 +78,14 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
     virtual ~SwXFrame();
-public:
+
     SwXFrame(FlyCntType eSet,
                 const SfxItemPropertySet*    pPropSet,
                 SwDoc *pDoc ); //Descriptor-If
     SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet,
                 const SfxItemPropertySet*    pPropSet);
 
+public:
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
@@ -174,6 +175,9 @@ public:
     SwXTextFrame(SwDoc *pDoc);
     SwXTextFrame(SwFrmFmt& rFmt);
 
+    static SW_DLLPUBLIC css::uno::Reference<css::text::XTextFrame>
+            CreateXTextFrame(SwDoc & rDoc, SwFrmFmt * pFrmFmt);
+
     // FIXME: EVIL HACK:  make available for SwXFrame::attachToRange
     void SetDoc(SwDoc *const pDoc) { SwXText::SetDoc(pDoc); };
 
@@ -241,6 +245,9 @@ public:
     SwXTextGraphicObject( SwDoc *pDoc );
     SwXTextGraphicObject(SwFrmFmt& rFmt);
 
+    static css::uno::Reference<css::text::XTextContent>
+        CreateXTextGraphicObject(SwDoc & rDoc, SwFrmFmt * pFrmFmt);
+
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire(  ) throw() SAL_OVERRIDE;
     virtual void SAL_CALL release(  ) throw() SAL_OVERRIDE;
@@ -286,6 +293,9 @@ protected:
 public:
     SwXTextEmbeddedObject( SwDoc *pDoc );
     SwXTextEmbeddedObject(SwFrmFmt& rFmt);
+
+    static css::uno::Reference<css::text::XTextContent>
+        CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrmFmt * pFrmFmt);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire(  ) throw() SAL_OVERRIDE;
