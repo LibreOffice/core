@@ -573,18 +573,6 @@ void PieChart::createShapes()
             }//next series in x slot (next y slot)
         }//next category
     }//next x slot
-    /* @todo remove series shapes if empty
-    //remove and delete point-group-shape if empty
-    if(!xSeriesGroupShape_Shapes->getCount())
-    {
-        (*aSeriesIter)->m_xShape.set(NULL);
-        m_xLogicTarget->remove(xSeriesGroupShape_Shape);
-    }
-    */
-
-    //remove and delete series-group-shape if empty
-
-    //... todo
 }
 
 namespace
