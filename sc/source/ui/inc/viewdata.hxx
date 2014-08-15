@@ -304,8 +304,13 @@ public:
 
     void            SetZoomType( SvxZoomType eNew, bool bAll );
     void            SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs );
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs );
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll );
+    // bIgnoreLimits in this context disables checking that our zoom is within the
+    // range of 20%-400% -- i.e. should be used for tiled rendering where such checks
+    // should be done by the client.
+    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY,
+                             std::vector< SCTAB >& tabs, const bool bIgnoreLimits = false  );
+    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY,
+                             bool bAll, const bool bIgnoreLimits = false );
     void            RefreshZoom();
 
     void            SetSelCtrlMouseClick( bool bTmp ) { bSelCtrlMouseClick = bTmp; }
