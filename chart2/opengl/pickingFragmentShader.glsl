@@ -12,12 +12,13 @@
 uniform float minCoordX;
 in vec3 positionWorldspace;
 in vec4 fragmentColor;
+out vec4 actualColor;
 
 void main()
 {
     if (positionWorldspace.x <= minCoordX)
         discard;
-    gl_FragColor = fragmentColor;
+    actualColor = fragmentColor;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
