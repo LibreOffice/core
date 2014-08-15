@@ -3773,7 +3773,7 @@ if test "$_os" = "WINNT"; then
                     COMPATH=`echo $VC_PRODUCT_DIR`
                 fi
             fi
-            if test "$BITNESS_OVERRIDE" = ""; then
+            if test "$BITNESS_OVERRIDE" = "" -a "$vcnum" != "100"; then
                 CC="$CC -arch:SSE" # MSVC 2012 default for x86 is -arch:SSE2
             fi
             export INCLUDE=`cygpath -d "$COMPATH/Include"`
