@@ -28,62 +28,6 @@ String STR_DATABASE_TYPE_CHANGE
     Text [ en-US ] = "Database properties" ;
 };
 
-TabPage PAGE_USERDRIVER
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
-    Hide = TRUE;
-    HelpId = HID_DSADMIN_PAGE_USERDRIVER;
-
-    FixedText FT_HOSTNAME
-    {
-        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "~Hostname";
-    };
-    Edit ET_HOSTNAME
-    {
-        HelpID = "dbaccess:Edit:PAGE_USERDRIVER:ET_HOSTNAME";
-        TabStop = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( EDIT_X , UNRELATED_CONTROLS -1 ) ;
-        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
-    };
-
-    FixedText FT_PORTNUMBER
-    {
-        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text[ en-US ] = "~Port number";
-    };
-
-    NumericField NF_PORTNUMBER
-    {
-        HelpID = "dbaccess:NumericField:PAGE_USERDRIVER:NF_PORTNUMBER";
-        TabStop = TRUE ;
-        Border = TRUE ;
-        NoThousandSep = TRUE;
-
-        Pos = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT -1 ) ;
-        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
-    };
-
-    FixedText FT_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT ) ;
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "~Driver settings" ;
-    };
-    Edit ET_OPTIONS
-    {
-        HelpID = "dbaccess:Edit:PAGE_USERDRIVER:ET_OPTIONS";
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-    AUTO_CHARSET( 4*UNRELATED_CONTROLS+ 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS, PAGE_X)
-};
-
 String STR_PARENTTITLE_GENERAL
 {
     Text [ en-US ] = "Data Source Properties: #" ;

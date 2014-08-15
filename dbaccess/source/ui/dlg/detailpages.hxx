@@ -149,11 +149,11 @@ namespace dbaui
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     private:
-        FixedText           m_aFTHostname;
-        Edit                m_aEDHostname;
-        FixedText           m_aPortNumber;
-        NumericField        m_aNFPortNumber;
-        CheckBox            m_aUseCatalog;
+        FixedText*          m_pFTHostname;
+        Edit*               m_pEDHostname;
+        FixedText*          m_pPortNumber;
+        NumericField*       m_pNFPortNumber;
+        CheckBox*           m_pUseCatalog;
     };
 
     // OMySQLODBCDetailsPage

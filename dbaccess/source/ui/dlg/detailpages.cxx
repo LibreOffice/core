@@ -369,16 +369,16 @@ namespace dbaui
     }
     // OOdbcDetailsPage
     OUserDriverDetailsPage::OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_USERDRIVER, _rCoreAttrs,
-        CBTP_USE_CHARSET | CBTP_USE_OPTIONS ,false)
-        ,m_aFTHostname      (this, ModuleRes(FT_HOSTNAME))
-        ,m_aEDHostname      (this, ModuleRes(ET_HOSTNAME))
-        ,m_aPortNumber      (this, ModuleRes(FT_PORTNUMBER))
-        ,m_aNFPortNumber    (this, ModuleRes(NF_PORTNUMBER))
-        ,m_aUseCatalog      (this, ModuleRes(CB_USECATALOG))
+        : OCommonBehaviourTabPage(pParent, "UserDetailsPage", "dbaccess/ui/userdetailspage.ui", _rCoreAttrs,
+            CBTP_USE_CHARSET | CBTP_USE_OPTIONS)
     {
-        m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
-        FreeResource();
+        get(m_pFTHostname, "hostnameft");
+        get(m_pEDHostname, "hostname");
+        get(m_pPortNumber, "portnumberft");
+        get(m_pNFPortNumber, "portnumber");
+        m_pNFPortNumber->SetUseThousandSep(false);
+        get(m_pUseCatalog, "usecatalog");
+        m_pUseCatalog->SetToggleHdl(getControlModifiedLink());
     }
 
     SfxTabPage* ODriversSettings::CreateUser( Window* pParent, const SfxItemSet* _rAttrSet )
@@ -390,24 +390,24 @@ namespace dbaui
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        fillInt32(*_rSet,&m_aNFPortNumber,DSID_CONN_PORTNUMBER,bChangedSomething);
-        fillString(*_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
-        fillBool(*_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
+        fillInt32(*_rSet,m_pNFPortNumber,DSID_CONN_PORTNUMBER,bChangedSomething);
+        fillString(*_rSet,m_pEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
+        fillBool(*_rSet,m_pUseCatalog,DSID_USECATALOG,bChangedSomething);
 
         return bChangedSomething;
     }
     void OUserDriverDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDHostname));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aUseCatalog));
-        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pEDHostname));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pUseCatalog));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pNFPortNumber));
     }
     void OUserDriverDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHostname));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pPortNumber));
     }
     void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
@@ -421,13 +421,13 @@ namespace dbaui
 
         if ( bValid )
         {
-            m_aEDHostname.SetText(pHostName->GetValue());
-            m_aEDHostname.ClearModifyFlag();
+            m_pEDHostname->SetText(pHostName->GetValue());
+            m_pEDHostname->ClearModifyFlag();
 
-            m_aNFPortNumber.SetValue(pPortNumber->GetValue());
-            m_aNFPortNumber.ClearModifyFlag();
+            m_pNFPortNumber->SetValue(pPortNumber->GetValue());
+            m_pNFPortNumber->ClearModifyFlag();
 
-            m_aUseCatalog.Check(pUseCatalogItem->GetValue());
+            m_pUseCatalog->Check(pUseCatalogItem->GetValue());
         }
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
