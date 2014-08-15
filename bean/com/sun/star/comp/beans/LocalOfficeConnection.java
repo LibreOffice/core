@@ -35,6 +35,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lib.uno.helper.UnoUrl;
+import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.lib.util.NativeLibraryLoader;
 
 /**
@@ -367,7 +368,7 @@ public class LocalOfficeConnection
             System.out.println( e );
             e.printStackTrace();
             System.out.println( "--- end." );
-            throw new com.sun.star.uno.RuntimeException( e.toString() );
+            throw ExceptionHelper.initCause(new com.sun.star.uno.RuntimeException(), e);
         }
 
         return null;

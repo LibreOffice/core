@@ -20,6 +20,8 @@ package com.sun.star.uno;
 
 import java.util.HashMap;
 
+import com.sun.star.lib.util.ExceptionHelper;
+
 /**
  * Represents the UNO built-in type <code>TYPE</code>.
  *
@@ -284,7 +286,7 @@ public class Type {
                 Class.forName(i < 0 ? typeName : typeName.substring(0, i)),
                 false, i >= 0);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e.toString());
+            throw ExceptionHelper.initCause(new RuntimeException(), e);
         }
     }
 

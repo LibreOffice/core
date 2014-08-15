@@ -18,9 +18,11 @@
 
 package com.sun.star.script.framework.io;
 
-import com.sun.star.io.XInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
+import com.sun.star.io.XInputStream;
+import com.sun.star.lib.util.ExceptionHelper;
 
 public class XInputStreamImpl implements XInputStream
 {
@@ -47,11 +49,11 @@ public class XInputStreamImpl implements XInputStream
         }
         catch ( IOException e )
         {
-            throw new com.sun.star.io.IOException( e.toString() );
+            throw ExceptionHelper.initCause(new com.sun.star.io.IOException(), e);
         }
         catch ( IndexOutOfBoundsException aie )
         {
-            throw new com.sun.star.io.BufferSizeExceededException( aie.toString() );
+            throw ExceptionHelper.initCause(new com.sun.star.io.BufferSizeExceededException(), aie);
         }
         return totalBytesRead;
     }
@@ -76,7 +78,7 @@ public class XInputStreamImpl implements XInputStream
         }
         catch ( IOException e )
         {
-            throw new com.sun.star.io.IOException( e.toString() );
+            throw ExceptionHelper.initCause(new com.sun.star.io.IOException(), e );
         }
     }
 
@@ -89,7 +91,7 @@ public class XInputStreamImpl implements XInputStream
         }
         catch ( IOException e )
         {
-            throw new com.sun.star.io.IOException( e.toString() );
+            throw ExceptionHelper.initCause(new com.sun.star.io.IOException(), e);
         }
         return bytesAvail;
     }
@@ -102,7 +104,7 @@ public class XInputStreamImpl implements XInputStream
         }
         catch( IOException e )
         {
-            throw new com.sun.star.io.IOException( e.toString() );
+            throw ExceptionHelper.initCause(new com.sun.star.io.IOException(), e);
         }
     }
 

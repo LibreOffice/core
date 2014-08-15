@@ -17,6 +17,13 @@
  */
 package com.sun.star.lib.uno.protocols.urp;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+
 import com.sun.star.lib.uno.environments.remote.ThreadId;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.Any;
@@ -26,12 +33,6 @@ import com.sun.star.uno.IFieldDescription;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 
 final class Unmarshal {
     public Unmarshal(IBridge bridge, int cacheSize) {
@@ -46,7 +47,7 @@ final class Unmarshal {
         try {
             return input.readUnsignedByte();
         } catch (IOException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         }
     }
 
@@ -54,25 +55,29 @@ final class Unmarshal {
         try {
             return input.readUnsignedShort();
         } catch (IOException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         }
     }
 
     public String readObjectId() {
-        String id = readStringValue();
-        int index = read16Bit();
-        if (index == 0xFFFF) {
-            if (id.length() == 0) {
-                id = null;
-            }
-        } else {
-            if (id.length() == 0) {
-                id = objectIdCache[index];
+        try {
+            String id = readStringValue();
+            int index = read16Bit();
+            if (index == 0xFFFF) {
+                if (id.length() == 0) {
+                    id = null;
+                }
             } else {
-                objectIdCache[index] = id;
+                if (id.length() == 0) {
+                    id = objectIdCache[index];
+                } else {
+                    objectIdCache[index] = id;
+                }
             }
+            return id;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return id;
     }
 
     public Object readInterface(Type type) {
@@ -81,23 +86,27 @@ final class Unmarshal {
     }
 
     public ThreadId readThreadId() {
-        int len = readCompressedNumber();
-        byte[] data  ;
-        ThreadId id = null;
-        if (len != 0) {
-            data = new byte[len];
-            readBytes(data);
-            id = new ThreadId(data);
-        }
-        int index = read16Bit();
-        if (index != 0xFFFF) {
-            if (len == 0) {
-                id = threadIdCache[index];
-            } else {
-                threadIdCache[index] = id;
+        try {
+            int len = readCompressedNumber();
+            byte[] data  ;
+            ThreadId id = null;
+            if (len != 0) {
+                data = new byte[len];
+                readBytes(data);
+                id = new ThreadId(data);
             }
+            int index = read16Bit();
+            if (index != 0xFFFF) {
+                if (len == 0) {
+                    id = threadIdCache[index];
+                } else {
+                    threadIdCache[index] = id;
+                }
+            }
+            return id;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return id;
     }
 
     public TypeDescription readType() {
@@ -112,8 +121,10 @@ final class Unmarshal {
                 try {
                     type = TypeDescription.getTypeDescription(
                         readStringValue());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e.toString());
+                    throw new RuntimeException(e);
                 }
             }
             if (index != 0xFFFF) {
@@ -128,63 +139,67 @@ final class Unmarshal {
     }
 
     public Object readValue(TypeDescription type) {
-        switch (type.getTypeClass().getValue()) {
-        case TypeClass.VOID_value:
-            return null;
+        try {
+            switch (type.getTypeClass().getValue()) {
+            case TypeClass.VOID_value:
+                return null;
 
-        case TypeClass.BOOLEAN_value:
-            return readBooleanValue();
+            case TypeClass.BOOLEAN_value:
+                return readBooleanValue();
 
-        case TypeClass.BYTE_value:
-            return readByteValue();
+            case TypeClass.BYTE_value:
+                return readByteValue();
 
-        case TypeClass.SHORT_value:
-        case TypeClass.UNSIGNED_SHORT_value:
-            return readShortValue();
+            case TypeClass.SHORT_value:
+            case TypeClass.UNSIGNED_SHORT_value:
+                return readShortValue();
 
-        case TypeClass.LONG_value:
-        case TypeClass.UNSIGNED_LONG_value:
-            return readLongValue();
+            case TypeClass.LONG_value:
+            case TypeClass.UNSIGNED_LONG_value:
+                return readLongValue();
 
-        case TypeClass.HYPER_value:
-        case TypeClass.UNSIGNED_HYPER_value:
-            return readHyperValue();
+            case TypeClass.HYPER_value:
+            case TypeClass.UNSIGNED_HYPER_value:
+                return readHyperValue();
 
-        case TypeClass.FLOAT_value:
-            return readFloatValue();
+            case TypeClass.FLOAT_value:
+                return readFloatValue();
 
-        case TypeClass.DOUBLE_value:
-            return readDoubleValue();
+            case TypeClass.DOUBLE_value:
+                return readDoubleValue();
 
-        case TypeClass.CHAR_value:
-            return readCharValue();
+            case TypeClass.CHAR_value:
+                return readCharValue();
 
-        case TypeClass.STRING_value:
-            return readStringValue();
+            case TypeClass.STRING_value:
+                return readStringValue();
 
-        case TypeClass.TYPE_value:
-            return readTypeValue();
+            case TypeClass.TYPE_value:
+                return readTypeValue();
 
-        case TypeClass.ANY_value:
-            return readAnyValue();
+            case TypeClass.ANY_value:
+                return readAnyValue();
 
-        case TypeClass.SEQUENCE_value:
-            return readSequenceValue(type);
+            case TypeClass.SEQUENCE_value:
+                return readSequenceValue(type);
 
-        case TypeClass.ENUM_value:
-            return readEnumValue(type);
+            case TypeClass.ENUM_value:
+                return readEnumValue(type);
 
-        case TypeClass.STRUCT_value:
-            return readStructValue(type);
+            case TypeClass.STRUCT_value:
+                return readStructValue(type);
 
-        case TypeClass.EXCEPTION_value:
-            return readExceptionValue(type);
+            case TypeClass.EXCEPTION_value:
+                return readExceptionValue(type);
 
-        case TypeClass.INTERFACE_value:
-            return readInterfaceValue(type);
+            case TypeClass.INTERFACE_value:
+                return readInterfaceValue(type);
 
-        default:
-            throw new IllegalArgumentException("Bad type descriptor " + type);
+            default:
+                throw new IllegalArgumentException("Bad type descriptor " + type);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -192,7 +207,7 @@ final class Unmarshal {
         try {
             return input.available() > 0;
         } catch (IOException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         }
     }
 
@@ -200,78 +215,46 @@ final class Unmarshal {
         input = new DataInputStream(new ByteArrayInputStream(data));
     }
 
-    private Boolean readBooleanValue() {
-        try {
-            return input.readBoolean() ? Boolean.TRUE : Boolean.FALSE;
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+    private Boolean readBooleanValue() throws IOException {
+       return input.readBoolean() ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    private Byte readByteValue() {
-        try {
-            return Byte.valueOf(input.readByte());
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+    private Byte readByteValue() throws IOException {
+       return Byte.valueOf(input.readByte());
     }
 
-    private Short readShortValue() {
-        try {
-            return Short.valueOf(input.readShort());
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+    private Short readShortValue() throws IOException {
+        return Short.valueOf(input.readShort());
     }
 
-    private Integer readLongValue() {
-        try {
-            return Integer.valueOf(input.readInt());
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+    private Integer readLongValue() throws IOException {
+        return Integer.valueOf(input.readInt());
     }
 
-    private Long readHyperValue() {
-        try {
-            return Long.valueOf(input.readLong());
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+    private Long readHyperValue() throws IOException {
+        return Long.valueOf(input.readLong());
     }
 
-    private Float readFloatValue() {
-        try {
-            return new Float(input.readFloat());
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+    private Float readFloatValue() throws IOException {
+        return new Float(input.readFloat());
     }
 
-    private Double readDoubleValue() {
-        try {
-            return new Double(input.readDouble());
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+    private Double readDoubleValue() throws IOException {
+        return new Double(input.readDouble());
     }
 
-    private Character readCharValue() {
-        try {
-            return new Character(input.readChar());
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+    private Character readCharValue() throws IOException {
+        return new Character(input.readChar());
     }
 
-    private String readStringValue() {
+    private String readStringValue() throws IOException {
         int len = readCompressedNumber();
         byte[] data = new byte[len];
         readBytes(data);
         try {
             return new String(data, "UTF8");
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         }
     }
 
@@ -279,7 +262,7 @@ final class Unmarshal {
         return new Type(readType());
     }
 
-    private Object readAnyValue() {
+    private Object readAnyValue() throws IOException {
         TypeDescription type = readType();
         switch (type.getTypeClass().getValue()) {
         case TypeClass.VOID_value:
@@ -373,7 +356,7 @@ final class Unmarshal {
         }
     }
 
-    private Object readSequenceValue(TypeDescription type) {
+    private Object readSequenceValue(TypeDescription type) throws IOException {
         int len = readCompressedNumber();
         TypeDescription ctype = (TypeDescription) type.getComponentType();
         if (ctype.getTypeClass() == TypeClass.BYTE) {
@@ -391,18 +374,18 @@ final class Unmarshal {
         }
     }
 
-    private Enum readEnumValue(TypeDescription type) {
+    private Enum readEnumValue(TypeDescription type) throws IOException {
         try {
             return (Enum)
                 type.getZClass().getMethod(
                     "fromInt", new Class[] { int.class }).
                 invoke(null, new Object[] { readLongValue() });
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         }
     }
 
@@ -411,28 +394,28 @@ final class Unmarshal {
         try {
             value = type.getZClass().newInstance();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         } catch (InstantiationException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         }
         readFields(type, value);
         return value;
     }
 
-    private Exception readExceptionValue(TypeDescription type) {
+    private Exception readExceptionValue(TypeDescription type) throws IOException {
         Exception value;
         try {
             value = (Exception)
                 type.getZClass().getConstructor(new Class[] { String.class }).
                 newInstance(new Object[] { readStringValue() });
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         } catch (InstantiationException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         }
         readFields(type, value);
         return value;
@@ -442,21 +425,13 @@ final class Unmarshal {
         return readInterface(new Type(type));
     }
 
-    private int readCompressedNumber() {
+    private int readCompressedNumber() throws IOException {
         int number = read8Bit();
-        try {
-            return number < 0xFF ? number : input.readInt();
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+        return number < 0xFF ? number : input.readInt();
     }
 
-    private void readBytes(byte[] data) {
-        try {
-            input.readFully(data);
-        } catch (IOException e) {
-            throw new RuntimeException(e.toString());
-        }
+    private void readBytes(byte[] data) throws IOException {
+        input.readFully(data);
     }
 
     private void readFields(TypeDescription type, Object value) {
@@ -468,7 +443,7 @@ final class Unmarshal {
                     readValue(
                         (TypeDescription) fields[i].getTypeDescription()));
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(e.toString());
+                throw new RuntimeException(e);
             }
         }
     }

@@ -30,6 +30,7 @@ import com.sun.star.connection.XAcceptor;
 import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -43,9 +44,9 @@ public final class Relay implements XRelay, XSource {
         } catch (RuntimeException e) {
             throw e;
         } catch (com.sun.star.uno.Exception e) {
-            throw new WrappedTargetRuntimeException(e.toString(), this, e);
+            throw new WrappedTargetRuntimeException(e.getMessage(), this, e);
         } catch (Exception e) {
-            throw new com.sun.star.uno.RuntimeException(e.toString(), this);
+            throw ExceptionHelper.initCause(new com.sun.star.uno.RuntimeException(e.getMessage(), this), e);
         }
         final XAcceptor acceptor = Acceptor.create(context);
         final XBridgeFactory factory;
@@ -55,7 +56,7 @@ public final class Relay implements XRelay, XSource {
                 context.getServiceManager().createInstanceWithContext(
                     "com.sun.star.bridge.BridgeFactory", context));
         } catch (com.sun.star.uno.Exception e) {
-            throw new WrappedTargetRuntimeException(e.toString(), this, e);
+            throw new WrappedTargetRuntimeException(e.getMessage(), this, e);
         }
         new Thread() {
             @Override
@@ -85,7 +86,7 @@ public final class Relay implements XRelay, XSource {
             Thread.sleep(3000); // wait for new thread to accept connection
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new com.sun.star.uno.RuntimeException(e.toString(), this);
+            throw ExceptionHelper.initCause(new com.sun.star.uno.RuntimeException(e.getMessage(), this), e);
         }
     }
 

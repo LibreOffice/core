@@ -28,12 +28,10 @@ import java.io.OutputStream;
 import java.io.InputStream;
 
 import com.sun.star.uno.XComponentContext;
-
 import com.sun.star.uno.UnoRuntime;
-
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
-
+import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.deployment.XPackage;
 
 public class UnoPkgContainer extends ParcelContainer
@@ -242,7 +240,7 @@ public class UnoPkgContainer extends ParcelContainer
         {
             LogUtils.DEBUG("getUnoPackagesDB() caught Exception: " + e  );
             LogUtils.DEBUG( LogUtils.getTrace( e ) );
-            throw new com.sun.star.lang.WrappedTargetException( e.toString());
+            throw ExceptionHelper.initCause(new com.sun.star.lang.WrappedTargetException(), e);
         }
         finally
         {
@@ -296,7 +294,7 @@ public class UnoPkgContainer extends ParcelContainer
         catch( Exception e )
         {
             LogUtils.DEBUG("In writeUnoPackageDB() Exception: " + e  );
-            throw new com.sun.star.lang.WrappedTargetException( e.toString());
+            throw ExceptionHelper.initCause(new com.sun.star.lang.WrappedTargetException(), e);
         }
         finally
         {
@@ -335,7 +333,7 @@ public class UnoPkgContainer extends ParcelContainer
         }
         catch (com.sun.star.deployment.ExtensionRemovedException e)
         {
-            throw new com.sun.star.lang.WrappedTargetException(e.toString(), this, e);
+            throw new com.sun.star.lang.WrappedTargetException(e.getMessage(), this, e);
         }
 
         processUnoPackage( uri, language );
@@ -349,7 +347,7 @@ public class UnoPkgContainer extends ParcelContainer
             }
             catch ( java.io.IOException ioe )
             {
-                throw new com.sun.star.lang.WrappedTargetException( ioe.toString());
+                throw ExceptionHelper.initCause(new com.sun.star.lang.WrappedTargetException(), ioe);
             }
         }
         db.addPackage( language, uri );

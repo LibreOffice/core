@@ -31,6 +31,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
@@ -192,7 +193,7 @@ public class ServiceManager implements XMultiServiceFactory,
             return factoriesByServiceNames.keySet().toArray(
                 new String[ factoriesByServiceNames.size() ] );
         } catch(Exception ex) {
-            throw new com.sun.star.uno.RuntimeException(ex.toString());
+            throw ExceptionHelper.initCause(new com.sun.star.uno.RuntimeException(), ex);
         }
     }
 

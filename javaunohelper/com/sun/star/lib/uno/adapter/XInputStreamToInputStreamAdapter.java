@@ -18,7 +18,10 @@
 package com.sun.star.lib.uno.adapter;
 
 import java.io.IOException;
+
 import com.sun.star.io.XInputStream;
+import com.sun.star.lib.util.ExceptionHelper;
+
 import java.io.InputStream;
 
 /**
@@ -53,7 +56,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             bytesAvail = xin.available();
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw ExceptionHelper.initCause(new IOException(e.getMessage()), e);
         }
 
         return(bytesAvail);
@@ -64,7 +67,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             xin.closeInput();
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw ExceptionHelper.initCause(new IOException(e.getMessage()), e);
         }
     }
 
@@ -85,7 +88,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
             }
 
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw ExceptionHelper.initCause(new IOException(e.getMessage()), e);
         }
     }
 
@@ -105,7 +108,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
                 System.arraycopy(tmp[0], 0, b, 0, b.length);
             }
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw ExceptionHelper.initCause(new IOException(e.getMessage()), e);
         }
 
         return (bytesRead);
@@ -139,7 +142,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
 
 
         } catch (Exception e) {
-            throw new IOException("reader error: "+e.toString());
+            throw ExceptionHelper.initCause(new IOException("reader error"), e);
         }
     }
 
@@ -153,7 +156,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             avail = xin.available();
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw ExceptionHelper.initCause(new IOException(e.getMessage()), e);
         }
 
         do {
@@ -168,7 +171,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
             try {
                 xin.skipBytes(tmpIntVal);
             } catch (Exception e) {
-                throw new IOException(e.toString());
+                throw ExceptionHelper.initCause(new IOException(e.getMessage()), e);
             }
         } while (tmpLongVal > 0);
 

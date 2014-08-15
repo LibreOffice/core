@@ -22,13 +22,17 @@ import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
 import helper.FileTools;
 import helper.UnoProvider;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
+
 import lib.TestParameters;
 import share.LogWriter;
 import util.PropertyName;
@@ -155,7 +159,7 @@ public class RecoveryTools {
             }
 
         } catch (Exception e){
-            throw new com.sun.star.io.IOException("could not remove old recovery data: " + e.toString());
+            throw new com.sun.star.io.IOException("could not remove old recovery data", e);
         }
     }
 
@@ -186,7 +190,7 @@ public class RecoveryTools {
             return recFiles;
 
         } catch (Exception e){
-            throw new com.sun.star.io.IOException("could not get recovery folder: " + e.toString());
+            throw new com.sun.star.io.IOException("could not get recovery folder", e);
         }
 
     }
@@ -265,7 +269,7 @@ public class RecoveryTools {
             log.println("click ' " + buttonName + "' button..");
             oUITools.clickButton(buttonName);
         } catch ( java.lang.Exception e){
-            throw new com.sun.star.accessibility.IllegalAccessibleComponentStateException("Could not click '"+buttonName +"' at modal dialog: " + e.toString());
+            throw new com.sun.star.accessibility.IllegalAccessibleComponentStateException("Could not click '"+buttonName +"' at modal dialog", e);
         }
         pause();
     }
@@ -285,7 +289,7 @@ public class RecoveryTools {
         try{
             recFiles = getRecoveryFiles();
         } catch ( com.sun.star.io.IOException e){
-            throw new  com.sun.star.io.IOException("Could not get recovery files: " + e.toString());
+            throw new  com.sun.star.io.IOException("Could not get recovery files", e);
         }
 
         try{
@@ -307,7 +311,7 @@ public class RecoveryTools {
 
             }
         } catch (java.io.IOException e){
-            throw new java.io.IOException("Could not copy recovery files: " + e.toString());
+            throw ExceptionHelper.initCause(new java.io.IOException("Could not copy recovery files"), e);
         }
    }
 

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.sun.star.connection.XConnection;
+import com.sun.star.lib.util.ExceptionHelper;
 
 
 class XConnectionInputStream_Adapter extends InputStream {
@@ -46,7 +47,7 @@ class XConnectionInputStream_Adapter extends InputStream {
         try {
             len = _xConnection.read(_bytes, 1);
         } catch(com.sun.star.io.IOException ioException) {
-            throw new IOException(ioException.toString());
+            throw ExceptionHelper.initCause(new IOException(ioException.getMessage()), ioException);
         }
 
         if(DEBUG) System.err.println("#### " + getClass().getName()  + " - one byte read:" +  _bytes[0][0]);
@@ -61,7 +62,7 @@ class XConnectionInputStream_Adapter extends InputStream {
         try {
             len = _xConnection.read(_bytes, len - off);
         } catch(com.sun.star.io.IOException ioException) {
-            throw new IOException(ioException.toString());
+            throw ExceptionHelper.initCause(new IOException(ioException.getMessage()), ioException);
         }
 
         System.arraycopy(_bytes[0], 0, b, off, len);

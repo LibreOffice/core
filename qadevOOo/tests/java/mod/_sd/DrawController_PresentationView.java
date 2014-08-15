@@ -43,6 +43,7 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
@@ -205,7 +206,7 @@ public class DrawController_PresentationView extends TestCase {
             utils.dispatchURL(xMSF, xDrawDoc, ".uno:DiaMode");
         } catch (Exception e){
             e.printStackTrace(log);
-            throw new StatusException(Status.failed(e.toString()));
+            throw ExceptionHelper.initCause(new StatusException(Status.failed(e.getMessage())), e);
         }
 
         utils.shortWait(500);

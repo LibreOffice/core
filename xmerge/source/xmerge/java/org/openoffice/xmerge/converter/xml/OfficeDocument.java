@@ -52,6 +52,8 @@ import javax.xml.transform.stream.*;
 
 import org.openoffice.xmerge.util.Debug;
 
+import com.sun.star.lib.util.ExceptionHelper;
+
 /**
  *  An implementation of <code>Document</code> for
  *  StarOffice documents.
@@ -886,17 +888,14 @@ public abstract class OfficeDocument
             }
                 catch (Exception e) {
                     // We don't have another parser
-                    throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
+                    throw ExceptionHelper.initCause(new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl), e);
                 }
             }
-        }
-        catch (ClassNotFoundException cnfe) {
-            throw new IOException(cnfe.toString());
         }
         catch (Exception e) {
             // We may get some other errors, but the bottom line is that
             // the steps being executed no longer work
-            throw new IOException(e.toString());
+            throw ExceptionHelper.initCause(new IOException(e.getMessage()), e);
         }
 
         byte bytes[] = baos.toByteArray();

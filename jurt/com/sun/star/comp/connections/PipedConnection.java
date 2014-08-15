@@ -20,12 +20,10 @@ package com.sun.star.comp.connections;
 
 
 import com.sun.star.comp.loader.FactoryHelper;
-
 import com.sun.star.connection.XConnection;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-
+import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.registry.XRegistryKey;
 
 /**
@@ -121,7 +119,7 @@ public class PipedConnection implements XConnection {
                     wait(__waitTime);
                 }
                 catch(InterruptedException interruptedException) {
-                    throw new com.sun.star.io.IOException(interruptedException.toString());
+                    throw ExceptionHelper.initCause(new com.sun.star.io.IOException(), interruptedException);
                 }
             }
 
@@ -175,7 +173,7 @@ public class PipedConnection implements XConnection {
                     wait(__waitTime); // we wait for data or for the pipe to be closed
                 }
                 catch(InterruptedException interruptedException) {
-                    throw new com.sun.star.io.IOException(interruptedException.toString());
+                    throw ExceptionHelper.initCause(new com.sun.star.io.IOException(), interruptedException);
                 }
             }
 

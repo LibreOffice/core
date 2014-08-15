@@ -21,6 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
+import com.sun.star.lib.util.ExceptionHelper;
+
 /**
  * Object representation and parsing of Uno Urls,
  * which allow to locate a named Uno object in a
@@ -220,7 +222,7 @@ public class UnoUrl {
                         try {
                             ch = Integer.parseInt(s.substring(i+1,i+3),16);
                         } catch (NumberFormatException e) {
-                            throw new com.sun.star.lang.IllegalArgumentException(e.toString());
+                            throw ExceptionHelper.initCause(new com.sun.star.lang.IllegalArgumentException(), e);
                         }
                         if (ch < 0)
                             throw new com.sun.star.lang.IllegalArgumentException(

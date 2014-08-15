@@ -28,6 +28,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
+import com.sun.star.lib.util.ExceptionHelper;
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.PathUtils;
 
@@ -126,12 +127,12 @@ public class UCBStreamHandler extends URLStreamHandler {
             catch ( com.sun.star.ucb.CommandAbortedException cae )
             {
                 LogUtils.DEBUG("caught exception: " + cae.toString() + " getting writable stream from " + url );
-                throw new IOException( cae.toString() );
+                throw ExceptionHelper.initCause(new IOException( cae.getMessage() ), cae);
             }
             catch ( com.sun.star.uno.Exception e )
             {
                 LogUtils.DEBUG("caught unknown exception: " + e.toString() + " getting writable stream from " + url );
-                throw new IOException( e.toString() );
+                throw ExceptionHelper.initCause(new IOException( e.getMessage() ), e);
             }
             return os;
         }
