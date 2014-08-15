@@ -357,36 +357,32 @@ uno::Any SwXTextView::getSelection()
             }
             break;
             case SHELL_MODE_FRAME           :
-            case SHELL_MODE_GRAPHIC         :
-            case SHELL_MODE_OBJECT          :
             {
-                //Get FlyFrameFormat; for UI-Macro connection to flys
-                const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt();
+                SwFrmFmt *const pFmt = rSh.GetFlyFrmFmt();
                 if (pFmt)
                 {
-                    SwXFrame* pxFrame = SwIterator<SwXFrame,SwFmt>::FirstElement(*pFmt);
-                    if(pxFrame)                //The only common interface for all frames.
-                    {
-                        aRef = uno::Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
-                    }
-                    else
-                    {
-                        if(SHELL_MODE_FRAME == eSelMode)
-                        {
-                            uno::Reference< text::XTextFrame >  xFrm =  new SwXTextFrame((SwFrmFmt&)*pFmt);
-                            aRef = uno::Reference< uno::XInterface >(xFrm, uno::UNO_QUERY);
-                        }
-                        else if(SHELL_MODE_GRAPHIC == eSelMode)
-                        {
-                            uno::Reference< text::XTextContent >  xFrm = new SwXTextGraphicObject((SwFrmFmt&)*pFmt);
-                            aRef = xFrm;
-                        }
-                        else
-                        {
-                            uno::Reference< text::XTextContent >  xFrm =  new SwXTextEmbeddedObject((SwFrmFmt&)*pFmt);
-                            aRef = xFrm;
-                        }
-                    }
+                    aRef = SwXTextFrame::CreateXTextFrame(
+                            *pFmt->GetDoc(), pFmt);
+                }
+            }
+            break;
+            case SHELL_MODE_GRAPHIC         :
+            {
+                SwFrmFmt *const pFmt = rSh.GetFlyFrmFmt();
+                if (pFmt)
+                {
+                    aRef = SwXTextGraphicObject::CreateXTextGraphicObject(
+                            *pFmt->GetDoc(), pFmt);
+                }
+            }
+            break;
+            case SHELL_MODE_OBJECT          :
+            {
+                SwFrmFmt *const pFmt = rSh.GetFlyFrmFmt();
+                if (pFmt)
+                {
+                    aRef = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                            *pFmt->GetDoc(), pFmt);
                 }
             }
             break;

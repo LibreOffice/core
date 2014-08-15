@@ -1190,8 +1190,8 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
             SwFrmFmt *const pFmt = pSttNode->GetFlyFmt();
             if (0 != pFmt)
             {
-                SwXTextFrame* pFrame = SwIterator<SwXTextFrame,SwFmt>::FirstElement( *pFmt );
-                xParentText = pFrame ? pFrame : new SwXTextFrame( *pFmt );
+                xParentText.set(SwXTextFrame::CreateXTextFrame(rDoc, pFmt),
+                        uno::UNO_QUERY);
             }
         }
         break;
