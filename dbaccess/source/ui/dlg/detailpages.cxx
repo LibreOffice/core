@@ -451,6 +451,7 @@ namespace dbaui
     {
         get(m_pEDHostname, "hostNameEntry");
         get(m_pNFPortNumber, "portNumberSpinbutton");
+        m_pNFPortNumber->SetUseThousandSep(false);
         get(m_pFTSocket, "socketLabel");
         get(m_pEDSocket, "socketEntry");
         get(m_pFTDriverClass, "driverClassLabel");
@@ -664,6 +665,7 @@ namespace dbaui
         get(m_pETBaseDN, "baseDNEntry");
         get(m_pCBUseSSL, "useSSLCheckbutton");
         get(m_pNFPortNumber, "portNumberSpinbutton");
+        m_pNFPortNumber->SetUseThousandSep(false);
         get(m_pNFRowCount, "LDAPRowCountspinbutton");
 
         m_pETBaseDN->SetModifyHdl(getControlModifiedLink());

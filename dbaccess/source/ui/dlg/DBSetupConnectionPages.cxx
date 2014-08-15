@@ -140,6 +140,7 @@ using namespace ::com::sun::star;
         get(m_pETBaseDN, "baseDNEntry");
         get(m_pFTPortNumber, "portNumLabel");
         get(m_pNFPortNumber, "portNumEntry");
+        m_pNFPortNumber->SetUseThousandSep(false);
         get(m_pFTDefaultPortNumber, "portNumDefLabel");
         get(m_pCBUseSSL, "useSSLCheckbutton");
 
@@ -355,6 +356,7 @@ using namespace ::com::sun::star;
         get(m_pFTPortNumber, "portNumLabel");
         get(m_pFTDefaultPortNumber, "portNumDefLabel");
         get(m_pNFPortNumber, "portNumEntry");
+        m_pNFPortNumber->SetUseThousandSep(false);
         get(m_pFTDriverClass, "jdbcDriverLabel");
         get(m_pETDriverClass, "jdbcDriverEntry");
         get(m_pPBTestJavaDriver, "testDriverButton");
