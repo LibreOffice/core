@@ -10,8 +10,8 @@
 #version 150 core
 
 uniform float minCoordX;
-varying vec3 positionWorldspace;
-varying vec4 fragmentColor;
+in vec3 positionWorldspace;
+in vec4 fragmentColor;
 
 void main()
 {

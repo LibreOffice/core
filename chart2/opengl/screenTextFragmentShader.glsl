@@ -9,7 +9,7 @@
 
 #version 150 core
 
-varying vec2 vTexCoord;
+in vec2 vTexCoord;
 uniform sampler2D TextTex;
 uniform vec4 textColor;
 void main()

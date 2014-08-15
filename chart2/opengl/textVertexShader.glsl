@@ -9,10 +9,10 @@
 
 #version 150 core
 
-attribute vec3 vPosition;
+in vec3 vPosition;
 uniform mat4 MVP;
-attribute vec2 texCoord;
-varying vec2 vTexCoord;
+in vec2 texCoord;
+out vec2 vTexCoord;
 void main()
 {
     gl_Position =  MVP * vec4(vPosition, 1);

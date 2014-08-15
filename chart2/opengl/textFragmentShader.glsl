@@ -10,7 +10,7 @@
 #version 150 core
 
 uniform sampler2D TextTex;
-varying vec2 vTexCoord;
+in vec2 vTexCoord;
 void main()
 {
     vec3 color = texture2D(TextTex, vTexCoord).rgb;

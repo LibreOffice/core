@@ -9,9 +9,9 @@
 
 #version 150 core
 
-attribute vec4 vPosition;
-attribute vec2 texCoord;
-varying vec2 vTexCoord;
+in vec4 vPosition;
+in vec2 texCoord;
+out vec2 vTexCoord;
 void main()
 {
     gl_Position =  vPosition;

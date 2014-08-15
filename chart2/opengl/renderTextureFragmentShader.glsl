@@ -10,11 +10,12 @@
 #version 150 core
 
 uniform sampler2D RenderTex;
-varying vec2 vTexCoord;
+in vec2 vTexCoord;
+out vec4 actualColor;
 
 void main()
 {
-    gl_FragColor = vec4(texture2D(RenderTex, vTexCoord).rgb, 1.0);
+    actualColor = vec4(texture(RenderTex, vTexCoord).rgb, 1.0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
