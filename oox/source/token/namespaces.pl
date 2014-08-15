@@ -82,7 +82,7 @@ $shift = 16;
 print ( IDFILE "const size_t NMSP_SHIFT = $shift;\n" );
 
 $i = 1;
-foreach( keys( %namespaces ) )
+foreach( sort( keys( %namespaces ) ) )
 {
     print( IDFILE "const sal_Int32 NMSP_$_ = $i << NMSP_SHIFT;\n" );
     $id = $i << $shift;
