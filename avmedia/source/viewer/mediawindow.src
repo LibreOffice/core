@@ -49,11 +49,9 @@ Bitmap AVMEDIA_BMP_EMPTYLOGO
     file = "avemptylogo.png";
 };
 
-ErrorBox AVMEDIA_ERR_URL
+String AVMEDIA_STR_ERR_URL
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message[en-US] = "The format of the selected file is not supported.";
+    Text[en-US] = "The format of the selected file is not supported.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,7 +25,7 @@
 #include "mediamisc.hxx"
 #include "mediawindow.hrc"
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -322,7 +322,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
 
 void MediaWindow::executeFormatErrorBox( Window* pParent )
 {
-    ErrorBox aErrBox( pParent, AVMEDIA_RESID( AVMEDIA_ERR_URL ) );
+    MessageDialog aErrBox( pParent, AVMEDIA_RESID( AVMEDIA_STR_ERR_URL ) );
 
     aErrBox.Execute();
 }
