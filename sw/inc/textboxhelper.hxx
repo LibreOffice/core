@@ -61,7 +61,7 @@ public:
     static void syncFlyFrmAttr(SwFrmFmt& rShape, SfxItemSet& rSet);
 
     /// If we have an associated TextFrame, then return that.
-    static SwFrmFmt* findTextBox(SwFrmFmt* pShape);
+    static SwFrmFmt* findTextBox(const SwFrmFmt* pShape);
     static SwFrmFmt* findTextBox(css::uno::Reference<css::drawing::XShape> xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
     static Rectangle getTextRectangle(SwFrmFmt* pShape, bool bAbsolute = true);

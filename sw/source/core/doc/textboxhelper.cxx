@@ -196,7 +196,7 @@ SwFrmFmt* SwTextBoxHelper::findTextBox(uno::Reference<drawing::XShape> xShape)
     return findTextBox(pShape->GetFrmFmt());
 }
 
-SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)
+SwFrmFmt* SwTextBoxHelper::findTextBox(const SwFrmFmt* pShape)
 {
     SwFrmFmt* pRet = 0;
 
@@ -204,8 +204,8 @@ SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)
     if (pShape->Which() == RES_DRAWFRMFMT && pShape->GetAttrSet().HasItem(RES_CNTNT))
     {
         const SwFmtCntnt& rCntnt = pShape->GetCntnt();
-        SwFrmFmts& rSpzFrmFmts = *pShape->GetDoc()->GetSpzFrmFmts();
-        for (SwFrmFmts::iterator it = rSpzFrmFmts.begin(); it != rSpzFrmFmts.end(); ++it)
+        const SwFrmFmts& rSpzFrmFmts = *pShape->GetDoc()->GetSpzFrmFmts();
+        for (SwFrmFmts::const_iterator it = rSpzFrmFmts.begin(); it != rSpzFrmFmts.end(); ++it)
         {
             SwFrmFmt* pFmt = *it;
             // Only a fly frame can be a TextBox.
