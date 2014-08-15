@@ -20,13 +20,6 @@
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
 
-ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "The configuration and mail directories must be specified as separate directories.\nPlease choose a new path." ;
-};
-
 String RID_SVXSTR_KEY_CONFIG_DIR
 {
     Text [ en-US ] = "Configuration" ;
