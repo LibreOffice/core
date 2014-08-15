@@ -54,6 +54,7 @@
 #include "helpids.hrc"
 #include "resourcemanager.hxx"
 
+#include <vcl/msgbox.hxx>
 #include <vcl/layout.hxx>
 #include <unotools/configitem.hxx>
 
