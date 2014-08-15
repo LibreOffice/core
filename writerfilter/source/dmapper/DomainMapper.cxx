@@ -1150,7 +1150,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                         "unsupported numbering level " << nIntValue);
                 break;
             }
-            if( m_pImpl->IsStyleSheetImport() )
+            if( IsStyleSheetImport() )
             {
                 //style sheets cannot have a numbering rule attached
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
@@ -1165,7 +1165,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             //convert the ListTable entry to a NumberingRules propery and apply it
             ListsManager::Pointer pListTable = m_pImpl->GetListTable();
             ListDef::Pointer pList = pListTable->GetList( nIntValue );
-            if( m_pImpl->IsStyleSheetImport() )
+            if( IsStyleSheetImport() )
             {
                 //style sheets cannot have a numbering rule attached
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
@@ -1174,7 +1174,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             }
             if( pList.get( ) )
             {
-                if( !m_pImpl->IsStyleSheetImport() )
+                if( !IsStyleSheetImport() )
                 {
                     uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
                     rContext->Insert( PROP_NUMBERING_RULES, aRules );
@@ -1184,7 +1184,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             }
             else
             {
-                if( m_pImpl->IsStyleSheetImport() )
+                if( IsStyleSheetImport() )
                 {
                     // set the number id for AbstractNum references
                     StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
@@ -1376,7 +1376,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_PPrBase_outlineLvl:
         {
             sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
-            if( m_pImpl->IsStyleSheetImport() )
+            if( IsStyleSheetImport() )
             {
 
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
@@ -1600,7 +1600,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                 }
             }
             // Make sure char sizes defined in the stylesheets don't affect char props from direct formatting.
-            if (!m_pImpl->IsStyleSheetImport())
+            if (!IsStyleSheetImport())
                 m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_ooxml::LN_EG_RPrBase_sz ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
         }
@@ -1773,7 +1773,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         // fdo#81033: for RTF, a tab stop is inherited from the style if it
         // is also applied to the paragraph directly, and cleared if it is
         // not applied to the paragraph directly => don't InitTabStopFromStyle
-        if (!m_pImpl->IsStyleSheetImport() && !IsRTFImport())
+        if (!IsStyleSheetImport() && !IsRTFImport())
         {
             uno::Any aValue = m_pImpl->GetPropertyFromStyleSheet(PROP_PARA_TAB_STOPS);
             uno::Sequence< style::TabStop > aStyleTabStops;

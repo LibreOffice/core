@@ -217,6 +217,5 @@ svt::CheckInvariants(void const*)
 svt::table::TableControl_Impl::impl_checkInvariants() const
 svt::table::UnoControlTableModel::checkInvariants() const
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)
-writerfilter::dmapper::DomainMapper::IsStyleSheetImport() const
 writerfilter::dmapper::StyleSheetTable::GetStyleIdFromIndex(unsigned int)
 writerfilter::ooxml::OOXMLBooleanValue::OOXMLBooleanValue(char const*)
