@@ -21,7 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 
 #include "openuriexternally.hxx"
@@ -56,9 +56,9 @@ bool sfx2::openUriExternally(
             throw;
         }
         SolarMutexGuard g;
-        ErrorBox(
+        MessageDialog(
             SfxGetpApp()->GetTopWindow(),
-            SfxResId(MSG_ERR_NO_WEBBROWSER_FOUND)).
+            SfxResId(STR_NO_WEBBROWSER_FOUND)).
             Execute();
     }
     return false;

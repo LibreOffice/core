@@ -23,7 +23,7 @@
 
 // #defines *****************************************************************
 
-#define MSG_ERR_NO_WEBBROWSER_FOUND                 (RID_SFX_APP_START+7)
+#define STR_NO_WEBBROWSER_FOUND                 (RID_SFX_APP_START+7)
 #define MSG_ERR_NO_ABS_URI_REF                  (RID_SFX_APP_START+8)
 #define MSG_CANT_QUIT                           (RID_SFX_APP_START+10)
 #define STR_ISMODIFIED                          (RID_SFX_APP_START+11)
