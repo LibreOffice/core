@@ -151,11 +151,9 @@ String STR_TITLE_USERDATALOCKED
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
-ErrorBox EBX_ERR_PRINTDISABLED
+String STR_ERR_PRINTDISABLED
 {
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message [ en-US ] = "Printing is disabled. No documents can be printed.";
+    Text [ en-US ] = "Printing is disabled. No documents can be printed.";
 };
 
 String STR_TITLE_EXPIRED

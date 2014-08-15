@@ -92,7 +92,7 @@
 #include <svtools/menuoptions.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/help.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
@@ -2434,7 +2434,7 @@ void Desktop::OpenClients()
             ResMgr* pDtResMgr = GetDesktopResManager();
             if( pDtResMgr )
             {
-                ErrorBox aBox( NULL, ResId( EBX_ERR_PRINTDISABLED, *pDtResMgr ) );
+                MessageDialog aBox( NULL, ResId( STR_ERR_PRINTDISABLED, *pDtResMgr ) );
                 aBox.Execute();
             }
         }
