@@ -42,6 +42,8 @@ File gid_File_Pyuno_Rdb
 End
 
 #ifndef SYSTEM_PYTHON
+
+#if !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 File gid_File_Py_Bin_Python
     BIN_FILE_BODY;
 #ifdef WNT
@@ -54,6 +56,7 @@ File gid_File_Py_Bin_Python
     Styles = (FILELIST, PACKED);
 #endif
 End
+#endif
 
 #ifndef MACOSX
 Directory gid_Dir_Py_PythonCore
