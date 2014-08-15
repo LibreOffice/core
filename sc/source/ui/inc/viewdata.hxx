@@ -170,7 +170,7 @@ private:
 
     Size                aScenButSize;
 
-    Size                aScrSize;
+    mutable Size        aScrSize;
     MapMode             aLogicMode;                 // skalierter 1/100mm-MapMode
 
     SvxZoomType         eDefZoomType;               // default zoom and type for missing TabData

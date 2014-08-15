@@ -1518,8 +1518,8 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
     if (pView)
     {
-        ((ScViewData*)this)->aScrSize.Width()  = pView->GetGridWidth(eWhichX);
-        ((ScViewData*)this)->aScrSize.Height() = pView->GetGridHeight(eWhichY);
+        aScrSize.Width()  = pView->GetGridWidth(eWhichX);
+        aScrSize.Height() = pView->GetGridHeight(eWhichY);
     }
 
     sal_uInt16 nTSize;
@@ -1612,7 +1612,7 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
     OSL_ENSURE( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
 
     if (pView)
-        ((ScViewData*)this)->aScrSize.Width()  = pView->GetGridWidth(eWhichX);
+        aScrSize.Width() = pView->GetGridWidth(eWhichX);
 
     SCsCOL  nX;
     sal_uInt16  nScrPosX = 0;
@@ -1654,7 +1654,7 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_
     OSL_ENSURE( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
 
     if (pView)
-        ((ScViewData*)this)->aScrSize.Height() = pView->GetGridHeight(eWhichY);
+        aScrSize.Height() = pView->GetGridHeight(eWhichY);
 
     if (nScrSizeY == SC_SIZE_NONE) nScrSizeY = (sal_uInt16) aScrSize.Height();
 
