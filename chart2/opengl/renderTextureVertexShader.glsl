@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#version 130
+#version 150 core
 
 attribute vec4 vPosition;
 attribute vec2 texCoord;

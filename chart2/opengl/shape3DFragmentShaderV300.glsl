@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#version 130
+#version 150 core
 
 #define MAX_LIGHT_NUM 8
 
