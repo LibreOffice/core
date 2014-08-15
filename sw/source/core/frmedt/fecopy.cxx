@@ -75,6 +75,7 @@
 #include <docsh.hxx>
 #include <pagedesc.hxx>
 #include <mvsave.hxx>
+#include <textboxhelper.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdundo.hxx>
 
@@ -884,6 +885,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
             if( !Imp()->GetDrawView() )
                 MakeDrawView();
 
+            std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pClpDoc);
             for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->size(); ++i )
             {
                 bool bInsWithFmt = true;
@@ -952,6 +954,10 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                             if (pCpyObj && CheckControlLayer(pCpyObj))
                                 continue;
                         }
+
+                        // Ignore TextBoxes, they are already handled in sw::DocumentLayoutManager::CopyLayoutFmt().
+                        if (aTextBoxes.find(&rCpyFmt) != aTextBoxes.end())
+                            continue;
 
                         aAnchor.SetAnchor( pPos );
                     }

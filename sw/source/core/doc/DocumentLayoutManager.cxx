@@ -39,6 +39,7 @@
 #include <unoframe.hxx>
 #include <docary.hxx>
 #include <dcontact.hxx>
+#include <textboxhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -492,6 +493,16 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
 
     if( bMakeFrms )
         pDest->MakeFrms();
+
+    // If the draw format has a TextBox, then copy its fly format as well.
+    if (SwFrmFmt* pSourceTextBox = SwTextBoxHelper::findTextBox(&rSource))
+    {
+        SwFrmFmt* pDestTextBox = CopyLayoutFmt(*pSourceTextBox, rNewAnchor, bSetTxtFlyAtt, bMakeFrms);
+        SwAttrSet aSet(pDest->GetAttrSet());
+        SwFmtCntnt aCntnt(pDestTextBox->GetCntnt().GetCntntIdx()->GetNode().GetStartNode());
+        aSet.Put(aCntnt);
+        pDest->SetFmtAttr(aSet);
+    }
 
     return pDest;
 }

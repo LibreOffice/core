@@ -18,6 +18,7 @@
 #include <section.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
+#include <textboxhelper.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -46,6 +47,7 @@ public:
     void testCp1000071();
     void testShapeTextboxVertadjust();
     void testShapeTextboxAutosize();
+    void testFdo82191();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -62,6 +64,7 @@ public:
     CPPUNIT_TEST(testCp1000071);
     CPPUNIT_TEST(testShapeTextboxVertadjust);
     CPPUNIT_TEST(testShapeTextboxAutosize);
+    CPPUNIT_TEST(testFdo82191);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -388,6 +391,27 @@ void SwUiWriterTest::testShapeTextboxAutosize()
     // same height as the first, even though the first contained 1 paragraph
     // and the other 2 ones.
     CPPUNIT_ASSERT(pFirst->GetSnapRect().getHeight() < pSecond->GetSnapRect().getHeight());
+}
+
+void SwUiWriterTest::testFdo82191()
+{
+    SwDoc* pDoc = createDoc("fdo82191.odt");
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+    // Make sure we have a single draw shape.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), SwTextBoxHelper::getCount(pPage, aTextBoxes));
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrObject* pObject = pPage->GetObj(0);
+    // Select it, then copy and paste.
+    pWrtShell->SelectObj(Point(), 0, pObject);
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Paste(&aClipboard);
+
+    aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+    // This was one: the textbox of the shape wasn't copied.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aTextBoxes.size());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
