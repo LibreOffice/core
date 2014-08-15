@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#version 130
+#version 150 core
 
 uniform sampler2D RenderTex;
 varying vec2 vTexCoord;
