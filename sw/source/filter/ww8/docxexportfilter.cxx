@@ -25,6 +25,7 @@
 #include <editsh.hxx>
 #include <pam.hxx>
 #include <unotxdoc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
 
@@ -51,8 +52,7 @@ bool DocxExportFilter::exportDocument()
         return false;
 
     // update layout (if present), for SwWriteTable
-    SwViewShell* pViewShell = NULL;
-    pDoc->GetEditShell(&pViewShell);
+    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if (pViewShell != NULL)
         pViewShell->CalcLayout();
 

@@ -47,6 +47,7 @@ public:
     // get and set TxtNode pointer
     const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
     inline const SwTxtNode& GetTxtNode() const;
+    inline SwTxtNode& GetTxtNode();
     void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
           SwCharFmt* GetCharFmt();
@@ -66,6 +67,11 @@ inline const SwTxtNode& SwTxtINetFmt::GetTxtNode() const
 {
     assert( m_pTxtNode );
     return *m_pTxtNode;
+}
+
+inline SwTxtNode& SwTxtINetFmt::GetTxtNode()
+{
+    return const_cast<SwTxtNode&>( const_cast<SwTxtINetFmt const*>(this)->GetTxtNode() );
 }
 
 #endif

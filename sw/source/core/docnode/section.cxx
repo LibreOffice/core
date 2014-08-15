@@ -39,6 +39,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmtool.hxx>
@@ -1195,8 +1196,8 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     pDoc->getIDocumentLinksAdministration().SetVisibleLinks( false );
 
     SwPaM* pPam;
-    SwViewShell* pVSh = 0;
-    SwEditShell* pESh = pDoc->GetEditShell( &pVSh );
+    SwViewShell* pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwEditShell* pESh = pDoc->GetEditShell();
     pDoc->getIDocumentFieldsAccess().LockExpFlds();
     {
         // Insert an empty TextNode at the Section's start
@@ -1446,8 +1447,8 @@ void SwIntrnlSectRefLink::Closed()
         for( sal_uInt16 n = rFmts.size(); n; )
             if( rFmts[ --n ] == &rSectFmt )
             {
-                SwViewShell* pSh;
-                SwEditShell* pESh = pDoc->GetEditShell( &pSh );
+                SwViewShell* pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+                SwEditShell* pESh = pDoc->GetEditShell();
 
                 if( pESh )
                     pESh->StartAllAction();

@@ -1063,7 +1063,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     SwRootFrm *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
     {
-        pDoc->GetEditShell( &pOrg );
+        pOrg = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
         pSh = pOrg;
         if ( pSh )
             do

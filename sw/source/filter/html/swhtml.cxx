@@ -79,6 +79,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -2543,7 +2544,7 @@ SwViewShell *SwHTMLParser::CallStartAction( SwViewShell *pVSh, bool bChkPtr )
 #if OSL_DEBUG_LEVEL > 0
         SwViewShell *pOldVSh = pVSh;
 #endif
-        pDoc->GetEditShell( &pVSh );
+        pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
 #if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Wer hat die SwViewShell ausgetauscht?" );
         if( pOldVSh && !pVSh )
@@ -2567,8 +2568,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
 {
     if( bChkPtr )
     {
-        SwViewShell *pVSh = 0;
-        pDoc->GetEditShell( &pVSh );
+        SwViewShell *pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
         OSL_ENSURE( !pVSh || pActionViewShell == pVSh,
                 "CallEndAction: Wer hat die SwViewShell ausgetauscht?" );
 #if OSL_DEBUG_LEVEL > 0
@@ -2633,8 +2633,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
 
 SwViewShell *SwHTMLParser::CheckActionViewShell()
 {
-    SwViewShell *pVSh = 0;
-    pDoc->GetEditShell( &pVSh );
+    SwViewShell *pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     OSL_ENSURE( !pVSh || pActionViewShell == pVSh,
             "CheckActionViewShell: Wer hat die SwViewShell ausgetauscht?" );
 #if OSL_DEBUG_LEVEL > 0

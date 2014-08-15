@@ -39,14 +39,14 @@
 #define PCURSH ((SwCrsrShell*)_pStartShell)
 #define FOREACHSHELL_START( pEShell ) \
     {\
-        SwViewShell *_pStartShell = pEShell; \
+        SwViewShell const *_pStartShell = pEShell; \
         do { \
             if( _pStartShell->IsA( TYPE( SwCrsrShell )) ) \
             {
 
 #define FOREACHSHELL_END( pEShell ) \
             } \
-        } while((_pStartShell=(SwViewShell*)_pStartShell->GetNext())!= pEShell ); \
+        } while((_pStartShell=(SwViewShell const*)_pStartShell->GetNext())!= pEShell ); \
     }
 
 namespace
@@ -259,7 +259,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
 
     const sal_Int32 nCntIdx = rNewPos.nContent.GetIndex() + nOffset;
 
-    SwCrsrShell* pShell = pDoc->GetEditShell();
+    SwCrsrShell const* pShell = pDoc->GetEditShell();
     if( pShell )
     {
         FOREACHSHELL_START( pShell )
@@ -322,32 +322,33 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
         ::PaMCorrRel(rOldNode, rNewPos, nOffset);
 }
 
-SwEditShell* SwDoc::GetEditShell( SwViewShell** ppSh ) const
+SwEditShell const * SwDoc::GetEditShell() const
 {
-    SwViewShell *pCurrentView = const_cast<SwViewShell*>( getIDocumentLayoutAccess().GetCurrentViewShell() );
+    SwViewShell const *pCurrentView = getIDocumentLayoutAccess().GetCurrentViewShell();
     // Layout and OLE shells should be available
     if( pCurrentView )
     {
-        SwViewShell *pSh = pCurrentView, *pVSh = pSh;
-        if( ppSh )
-            *ppSh = pSh;
-
+        SwViewShell const *pFirstVSh = pCurrentView;
+        SwViewShell const *pCurrentVSh = pFirstVSh;
         // look for an EditShell (if it exists)
         do {
-            if( pSh->IsA( TYPE( SwEditShell ) ) )
-                return (SwEditShell*)pSh;
-
-        } while( pVSh != ( pSh = (SwViewShell*)pSh->GetNext() ));
+            if( pCurrentVSh->IsA( TYPE( SwEditShell ) ) )
+            {
+                return (SwEditShell*)pCurrentVSh;
+            }
+        } while( pFirstVSh != ( pCurrentVSh = (SwViewShell*)pCurrentVSh->GetNext() ));
     }
-    else if( ppSh )
-        *ppSh = 0;
-
     return 0;
+}
+
+SwEditShell* SwDoc::GetEditShell()
+{
+    return const_cast<SwEditShell*>( const_cast<SwDoc const *>( this )->GetEditShell() );
 }
 
 ::sw::IShellCursorSupplier * SwDoc::GetIShellCursorSupplier()
 {
-    return GetEditShell(0);
+    return GetEditShell();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

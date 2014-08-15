@@ -621,8 +621,7 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
             if ( pTmp->getIDocumentLayoutAccess().GetCurrentViewShell() )
             {
                 pTmp->SpellItAgainSam( bInvalid, bOnlyWrong, bSmartTags );
-                SwViewShell* pViewShell = 0;
-                pTmp->GetEditShell( &pViewShell );
+                SwViewShell* pViewShell = pTmp->getIDocumentLayoutAccess().GetCurrentViewShell();
                 if ( bSmartTags && pViewShell && pViewShell->GetWin() )
                     pViewShell->GetWin()->Invalidate();
             }

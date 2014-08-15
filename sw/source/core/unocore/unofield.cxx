@@ -31,6 +31,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
 #include <hints.hxx>
 #include <fmtfld.hxx>
@@ -2309,7 +2310,13 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 // (has to be already formatted)
                 SwDoc *pDoc = m_pImpl->m_pDoc;
                 SwViewShell *pViewShell = 0;
-                SwEditShell *pEditShell = pDoc ? pDoc->GetEditShell( &pViewShell ) : 0;
+                SwEditShell *pEditShell = 0;
+                if( pDoc )
+                {
+                    pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+                    pEditShell = pDoc->GetEditShell();
+                }
+
                 if (pEditShell)
                     pEditShell->CalcLayout();
                 else if (pViewShell) // a page preview has no SwEditShell it should only have a view shell

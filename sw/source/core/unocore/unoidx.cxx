@@ -39,6 +39,7 @@
 #include <shellres.hxx>
 #include <viewsh.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <poolfmt.hxx>
 #include <poolfmt.hrc>
@@ -1245,7 +1246,13 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 void lcl_CalcLayout(SwDoc *pDoc)
 {
     SwViewShell *pViewShell = 0;
-    SwEditShell* pEditShell = pDoc ? pDoc->GetEditShell(&pViewShell) : 0;
+    SwEditShell* pEditShell = 0;
+    if( pDoc )
+    {
+        pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+        pEditShell = pDoc->GetEditShell();
+    }
+
     if (pEditShell)
     {
         pEditShell->CalcLayout();

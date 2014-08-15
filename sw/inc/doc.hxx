@@ -444,7 +444,7 @@ private:
                         const SwTxtFmtColl* pSplitColl, int nOutlineLevel = 0 );
 
     // Update charts of given table.
-    void _UpdateCharts( const SwTable& rTbl, SwViewShell& rVSh ) const;
+    void _UpdateCharts( const SwTable& rTbl, SwViewShell const & rVSh ) const;
 
     bool _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
                                 sal_uInt16 nMode );
@@ -1345,8 +1345,9 @@ public:
     const SwAttrPool& GetAttrPool() const   { return *mpAttrPool; }
           SwAttrPool& GetAttrPool()         { return *mpAttrPool; }
 
-    // Search an EditShell or, if appropriate, a SwViewShell via layout.
-    SwEditShell* GetEditShell( SwViewShell** ppSh = 0 ) const;
+    // Search for an EditShell.
+    SwEditShell const * GetEditShell() const;
+    SwEditShell* GetEditShell();
     ::sw::IShellCursorSupplier * GetIShellCursorSupplier();
 
     // OLE 2.0-notification.
@@ -1413,7 +1414,7 @@ public:
     // Query if URL was visited.
     // Query via Doc, if only a Bookmark has been given.
     // In this case the document name has to be set in front.
-    bool IsVisitedURL( const OUString& rURL ) const;
+    bool IsVisitedURL( const OUString& rURL );
 
     // Save current values for automatic registration of exceptions in Autocorrection.
     void SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew );

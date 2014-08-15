@@ -970,7 +970,7 @@ bool SwSubFont::IsSymbol( SwViewShell *pSh )
     return aFntAccess.Get()->IsSymbol();
 }
 
-bool SwSubFont::ChgFnt( SwViewShell *pSh, OutputDevice& rOut )
+bool SwSubFont::ChgFnt( SwViewShell const *pSh, OutputDevice& rOut )
 {
     if ( pLastFont )
         pLastFont->Unlock();

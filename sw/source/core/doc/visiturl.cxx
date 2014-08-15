@@ -29,7 +29,7 @@
 #include <editsh.hxx>
 #include <docsh.hxx>
 
-SwURLStateChanged::SwURLStateChanged( const SwDoc* pD )
+SwURLStateChanged::SwURLStateChanged( SwDoc* pD )
     : pDoc( pD )
 {
     StartListening( *INetURLHistory::GetOrCreate() );
@@ -98,7 +98,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 // Check if the URL has been visited before. Via the Doc, if only one Bookmark is set
 // We need to put the Doc's name before it!
-bool SwDoc::IsVisitedURL( const OUString& rURL ) const
+bool SwDoc::IsVisitedURL( const OUString& rURL )
 {
     bool bRet = false;
     if( !rURL.isEmpty() )

@@ -216,7 +216,6 @@ void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
             SFX_CREATE_MODE_PREVIEW != eMode &&
             !m_rSwdoc.GetDocShell()->IsPreview() )
         {
-            SwViewShell* pVSh = 0;
             bool bAskUpdate = nLinkMode == MANUAL;
             bool bUpdate = true;
             switch(nUpdateDocMode)
@@ -230,15 +229,8 @@ void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
                 SfxMedium* pMedium = m_rSwdoc.GetDocShell()->GetMedium();
                 SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
                 Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
-                if( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() && !m_rSwdoc.GetEditShell( &pVSh ) && !pVSh )
-                {
-                    SwViewShell aVSh( m_rSwdoc, 0, 0 );
 
-                    SET_CURR_SHELL( &aVSh );
-                    GetLinkManager().UpdateAllLinks( bAskUpdate , true, false, pDlgParent );
-                }
-                else
-                    GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
+                GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
             }
         }
     }

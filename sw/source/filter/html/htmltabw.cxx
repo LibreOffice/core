@@ -40,6 +40,7 @@
 #include <fmtsrnd.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swrect.hxx>
@@ -1111,8 +1112,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
 #ifdef DBG_UTIL
     {
-    SwViewShell *pSh;
-    rWrt.pDoc->GetEditShell( &pSh );
+    SwViewShell *pSh = rWrt.pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if ( pSh && pSh->GetViewOptions()->IsTest1() )
         pLayout = 0;
     }

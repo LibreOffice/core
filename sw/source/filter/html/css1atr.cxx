@@ -77,6 +77,7 @@
 // FOOTNOTES
 #include "doc.hxx"
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include "swerror.h"
 #include "charatr.hxx"
 #include "paratr.hxx"
@@ -2250,8 +2251,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
         if( pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) ||
             pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE))
         {
-            SwViewShell *pVSh = 0;
-            pDoc->GetEditShell( &pVSh );
+            SwViewShell *pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
             if ( pVSh &&
                  COL_TRANSPARENT != pVSh->GetViewOptions()->GetRetoucheColor().GetColor())
                 aColor = pVSh->GetViewOptions()->GetRetoucheColor().GetColor();

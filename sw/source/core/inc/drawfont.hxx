@@ -39,7 +39,7 @@ class SwDrawTextInfo
 {
     const SwTxtFrm* pFrm;
     OutputDevice* pOut;
-    SwViewShell* pSh;
+    SwViewShell const * pSh;
     const SwScriptInfo* pScriptInfo;
     Point m_aPos;
     OUString m_aText;
@@ -102,7 +102,7 @@ public:
     bool m_bDrawSp: 1;
 #endif
 
-    SwDrawTextInfo( SwViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
+    SwDrawTextInfo( SwViewShell const *pS, OutputDevice &rO, const SwScriptInfo* pSI,
                     const OUString &rSt, sal_Int32 nI, sal_Int32 nL,
                     sal_uInt16 nW = 0, bool bB = false )
     {
@@ -164,7 +164,7 @@ public:
         pFrm = pNewFrm;
     }
 
-    SwViewShell *GetShell() const
+    SwViewShell const *GetShell() const
     {
         return pSh;
     }

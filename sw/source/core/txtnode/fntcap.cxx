@@ -207,7 +207,7 @@ void SwDoGetCapitalBreak::Do()
     }
 }
 
-sal_Int32 SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
+sal_Int32 SwFont::GetCapitalBreak( SwViewShell const * pSh, const OutputDevice* pOut,
     const SwScriptInfo* pScript, const OUString& rTxt, long const nTextWidth,
     const sal_Int32 nIdx, const sal_Int32 nLen )
 {

@@ -88,7 +88,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
 
     SwFntObj( const SwSubFont &rFont, const void* pOwner,
-              SwViewShell *pSh );
+              SwViewShell const *pSh );
 
     virtual ~SwFntObj();
 
@@ -122,13 +122,13 @@ public:
 
 class SwFntAccess : public SwCacheAccess
 {
-    SwViewShell *pShell;
+    SwViewShell const *pShell;
 protected:
     virtual SwCacheObj *NewObj( ) SAL_OVERRIDE;
 
 public:
     SwFntAccess( const void * &rMagic, sal_uInt16 &rIndex, const void *pOwner,
-                 SwViewShell *pShell,
+                 SwViewShell const *pShell,
                  bool bCheck = false  );
     inline SwFntObj* Get() { return (SwFntObj*) SwCacheAccess::Get(); };
 };

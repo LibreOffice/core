@@ -121,7 +121,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 
     if (!rFmt.GetValue().isEmpty())
     {
-        const SwDoc* pDoc = GetTxtNode().GetDoc();
+        SwDoc* pDoc = GetTxtNode().GetDoc();
         if( !IsVisitedValid() )
         {
             SetVisited( pDoc->IsVisitedURL( rFmt.GetValue() ) );

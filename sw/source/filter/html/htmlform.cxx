@@ -60,6 +60,7 @@
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <doc.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <fmtanchr.hxx>
@@ -645,8 +646,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     // das auch vom SwXShape implementiert wird.
     uno::Reference< beans::XPropertySet > xPropSet( rShape, UNO_QUERY );
 
-    SwViewShell *pVSh;
-    pDoc->GetEditShell( &pVSh );
+    SwViewShell *pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if( !pVSh && !nEventId )
     {
         // If there is no view shell by now and the doc shell is an internal
@@ -664,7 +664,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 
             pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, 0 );
             CallStartAction();
-            pDoc->GetEditShell( &pVSh );
+            pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
         }
     }
 

@@ -42,6 +42,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
 #include <frmtool.hxx>
@@ -579,8 +580,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             bComplete = false;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
-            SwViewShell *pVSh = 0;
-            pNd->GetDoc()->GetEditShell( &pVSh );
+            SwViewShell *pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
             if( pVSh )
             {
                 GraphicAttr aAttr;
@@ -642,8 +642,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
             SwRect aRect( Frm() );
 
-            SwViewShell *pVSh = 0;
-            pNd->GetDoc()->GetEditShell( &pVSh );
+            SwViewShell *pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
             if( !pVSh )
                 break;
 

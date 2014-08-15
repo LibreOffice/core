@@ -357,7 +357,7 @@ SwTableNode* SwNode::FindTableNode()
 }
 
 /// Is the node located in the visible area of the Shell?
-bool SwNode::IsInVisibleArea( SwViewShell* pSh ) const
+bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
 {
     bool bRet = false;
     const SwCntntNode* pNd;
@@ -377,7 +377,7 @@ bool SwNode::IsInVisibleArea( SwViewShell* pSh ) const
 
     if( !pSh )
         // Get the Shell from the Doc
-        GetDoc()->GetEditShell( &pSh );
+        pSh = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
 
     if( pSh )
     {
