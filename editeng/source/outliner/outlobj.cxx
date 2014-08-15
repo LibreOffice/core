@@ -62,7 +62,9 @@ struct OutlinerParaObjData
     OutlinerParaObjData( const OutlinerParaObjData& r ) :
         mpEditTextObject(r.mpEditTextObject->Clone()),
         maParagraphDataVector(r.maParagraphDataVector),
-        mbIsEditDoc(r.mbIsEditDoc) {}
+        mbIsEditDoc(r.mbIsEditDoc),
+        mnRefCount(0)
+    {}
 
     // destructor
     ~OutlinerParaObjData()
