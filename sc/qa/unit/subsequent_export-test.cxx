@@ -116,6 +116,7 @@ public:
 #endif
 
     void testRelativePaths();
+    void testSheetProtection();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -152,6 +153,7 @@ public:
 #if !defined(WNT)
     CPPUNIT_TEST(testRelativePaths);
 #endif
+    CPPUNIT_TEST(testSheetProtection);
 
     /* TODO: export to ODS currently (2014-04-28) makes the validator stumble,
      * probably due to a loext:fill-character attribute in a
@@ -1930,6 +1932,37 @@ void ScExportTest::testRelativePaths()
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "href");
     // make sure that the URL is relative
     CPPUNIT_ASSERT(aURL.startsWith(".."));
+}
+
+namespace {
+
+void testSheetProtection_Impl(ScDocument& rDoc)
+{
+    CPPUNIT_ASSERT(rDoc.IsTabProtected(0));
+
+    ScTableProtection* pTabProtection = rDoc.GetTabProtection(0);
+    CPPUNIT_ASSERT(pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS));
+    CPPUNIT_ASSERT(!pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS));
+}
+
+}
+void ScExportTest::testSheetProtection()
+{
+    ScDocShellRef xDocSh = loadDoc("sheet-protection.", ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    {
+        ScDocument& rDoc = xDocSh->GetDocument();
+        testSheetProtection_Impl(rDoc);
+    }
+
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, ODS);
+    {
+        ScDocument& rDoc = xDocSh2->GetDocument();
+        testSheetProtection_Impl(rDoc);
+    }
+
+    xDocSh2->DoClose();
 }
 
 #if 0
