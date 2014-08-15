@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#version 130
+
 uniform sampler2D TextTex;
 varying vec2 vTexCoord;
 void main()

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#version 120
+#version 130
 
 attribute vec3 vPosition;
 uniform mat4 MVP;
