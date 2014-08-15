@@ -20,11 +20,6 @@ package integration.forms;
 public class TextValidator extends integration.forms.ControlValidator
 {
 
-    /** Creates a new instance of NumericValidator */
-    public TextValidator( )
-    {
-    }
-
     public String explainInvalid( Object Value )
     {
         try

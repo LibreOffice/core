@@ -51,10 +51,6 @@ public class OfficeGroupLayoutController extends SectionLayoutController
     private boolean repeatHeader;
     private boolean repeatFooter;
 
-    public OfficeGroupLayoutController()
-    {
-    }
-
     /**
      * Initializes the layout controller. This method is called exactly once. It
      * is the creators responsibility to call this method.

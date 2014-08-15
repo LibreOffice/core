@@ -32,10 +32,6 @@ public class FormattedTextElement extends ReportElement
 
     private FormulaExpression valueExpression;
 
-    public FormattedTextElement()
-    {
-    }
-
     public FormulaExpression getValueExpression()
     {
         return valueExpression;

@@ -27,10 +27,6 @@ import com.sun.star.inspection.XPropertyHandler;
  */
 public class PropertyHandlerImpl implements XPropertyHandler{
 
-    /** Creates a new instance of PropertyHandlerImpl */
-    public PropertyHandlerImpl() {
-    }
-
     /**
      * This method currently does nothing
      * @param ActuatingPropertyName the id of the actuating property.

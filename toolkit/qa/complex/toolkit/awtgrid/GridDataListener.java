@@ -25,10 +25,6 @@ import static org.junit.Assert.*;
 
 final public class GridDataListener implements XGridDataListener
 {
-    public GridDataListener()
-    {
-    }
-
     public void rowsInserted( GridDataEvent i_event )
     {
         assertNull( m_rowInsertionEvent );

@@ -123,10 +123,6 @@ public class TextDocuments {
     private XTextContent mxFishSection = null;
     private Random maRandom = null;
 
-    /** Creates a new instance of TextDocuments */
-    public TextDocuments() {
-    }
-
     /**
      * @param args the command line arguments
      */

@@ -32,10 +32,6 @@ public class StyleMapperXmlFactoryModule implements XmlFactoryModule
     public static final String NAMESPACE =
             "http://jfreereport.sourceforge.net/namespaces/engine/openoffice/stylemapper";
 
-    public StyleMapperXmlFactoryModule()
-    {
-    }
-
     public XmlReadHandler createReadHandler(final XmlDocumentInfo documentInfo)
     {
         return new StyleMappingDocumentReadHandler();

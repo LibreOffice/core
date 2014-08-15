@@ -51,12 +51,6 @@ public class Beamer extends TestCase
 
     private XModel docModel;
 
-    public Beamer()
-    {
-        super();
-    }
-
-
     @Before
     @Override
     public void before() throws Exception, java.lang.Exception

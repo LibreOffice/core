@@ -24,11 +24,6 @@ public class TestSkeleton extends complexlib.ComplexTestCase
 {
     private XMultiServiceFactory    m_orb;
 
-    /** Creates a new instance of ValueBinding */
-    public TestSkeleton()
-    {
-    }
-
     /* ------------------------------------------------------------------ */
     @Override
     public String[] getTestMethodNames()

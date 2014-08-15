@@ -31,10 +31,6 @@ import org.jfree.report.structure.Section;
 public class OfficeGroupSection extends Section
 {
 
-    public OfficeGroupSection()
-    {
-    }
-
     public boolean isRepeatSection()
     {
         final Object repeatFlag =

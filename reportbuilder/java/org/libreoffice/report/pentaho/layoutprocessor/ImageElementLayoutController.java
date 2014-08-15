@@ -62,10 +62,6 @@ public class ImageElementLayoutController
     private static final Log LOGGER = LogFactory.getLog(ImageElementLayoutController.class);
     private ImageElementContext context;
 
-    public ImageElementLayoutController()
-    {
-    }
-
     @Override
     protected LayoutController delegateContentGeneration(final ReportTarget target)
             throws ReportProcessingException, ReportDataFactoryException,

@@ -32,10 +32,6 @@ public class PageSection extends Section
 
     private static final String NOT_WITH_REPORT_HEADER_NOR_FOOTER = "not-with-report-header-nor-footer";
 
-    public PageSection()
-    {
-    }
-
     public static boolean isPrintWithReportHeader(final AttributeMap attrs)
     {
         final String pagePrintOption = (String) attrs.getAttribute(OfficeNamespaces.OOREPORT_NS, "page-print-option");

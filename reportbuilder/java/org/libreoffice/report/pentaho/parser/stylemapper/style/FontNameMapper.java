@@ -27,10 +27,6 @@ import org.jfree.layouting.input.style.values.CSSStringValue;
 public class FontNameMapper implements StyleMapper
 {
 
-    public FontNameMapper()
-    {
-    }
-
     public void updateStyle(final String uri, final String attrName, final String attrValue,
             final CSSDeclarationRule targetRule)
     {

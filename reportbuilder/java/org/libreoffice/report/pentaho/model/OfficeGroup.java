@@ -33,10 +33,6 @@ import org.jfree.report.structure.Section;
 public class OfficeGroup extends Section
 {
 
-    public OfficeGroup()
-    {
-    }
-
     public boolean isStartNewColumn()
     {
         return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, "start-new-column"));

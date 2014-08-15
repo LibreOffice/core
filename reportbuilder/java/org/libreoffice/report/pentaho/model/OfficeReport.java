@@ -62,10 +62,6 @@ public class OfficeReport extends Element
         this.preBodySection = preBodySection;
     }
 
-    public OfficeReport()
-    {
-    }
-
     public Node getPageHeader()
     {
         return pageHeader;

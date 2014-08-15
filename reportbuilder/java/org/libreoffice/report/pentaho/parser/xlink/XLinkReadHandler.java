@@ -36,10 +36,6 @@ public class XLinkReadHandler extends AbstractXmlReadHandler
     private String show;
     private String actuate;
 
-    public XLinkReadHandler()
-    {
-    }
-
     /**
      * Starts parsing.
      *

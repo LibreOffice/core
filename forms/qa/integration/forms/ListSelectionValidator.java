@@ -20,11 +20,6 @@ package integration.forms;
 
 public class ListSelectionValidator extends integration.forms.ControlValidator
 {
-    /** Creates a new instance of ListSelectionValidator */
-    public ListSelectionValidator()
-    {
-    }
-
     public String explainInvalid( Object Value )
     {
         try

@@ -38,10 +38,6 @@ import org.jfree.report.util.IntegerCache;
 public class OfficeTableLayoutController extends SectionLayoutController
 {
 
-    public OfficeTableLayoutController()
-    {
-    }
-
     @Override
     protected AttributeMap computeAttributes(final FlowController fc, final Element element, final ReportTarget target)
             throws DataSourceException

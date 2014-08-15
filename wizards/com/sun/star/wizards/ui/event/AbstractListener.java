@@ -43,11 +43,6 @@ public class AbstractListener
 
     private HashMap<String,MethodInvocation> mHashtable = new HashMap<String,MethodInvocation>();
 
-    /** Creates a new instance of AbstractListener */
-    public AbstractListener()
-    {
-    }
-
     public void add(String componentName, String eventName, String methodName, Object target)
     {
         try

@@ -52,13 +52,6 @@ public class OfficeDocument
 
     private XWindowPeer xWindowPeer;
 
-    /** Creates a new instance of OfficeDocument */
-    public OfficeDocument()
-    {
-    }
-
-
-
     public static void dispose(XMultiServiceFactory xMSF, XComponent xComponent)
     {
         try

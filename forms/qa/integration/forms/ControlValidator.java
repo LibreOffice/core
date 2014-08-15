@@ -22,11 +22,6 @@ package integration.forms;
 public abstract class ControlValidator implements com.sun.star.form.validation.XValidator
 {
 
-    /** Creates a new instance of ControlValidator */
-    public ControlValidator()
-    {
-    }
-
     public void addValidityConstraintListener(com.sun.star.form.validation.XValidityConstraintListener xValidityConstraintListener)
     {
     }

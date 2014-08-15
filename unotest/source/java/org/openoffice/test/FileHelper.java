@@ -23,9 +23,6 @@ package org.openoffice.test;
  */
 public class FileHelper
 {
-    public FileHelper()
-        {
-        }
     /**
      * Concat a _sRelativePathToAdd to a _sPath and append a '/' to the _sPath only if need.
      *

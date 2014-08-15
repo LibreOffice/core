@@ -27,10 +27,6 @@ import org.jfree.layouting.util.ColorUtil;
 public class ColorMapper implements StyleMapper
 {
 
-    public ColorMapper()
-    {
-    }
-
     public void updateStyle(final String uri, final String attrName, final String attrValue,
             final CSSDeclarationRule targetRule)
     {

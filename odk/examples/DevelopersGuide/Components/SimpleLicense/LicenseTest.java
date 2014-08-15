@@ -53,11 +53,6 @@ public class LicenseTest {
         static private final String __serviceName =
         "org.openoffice.LicenseTest";
 
-        /** The constructor of the inner class has a XMultiServiceFactory parameter.
-         */
-        public _LicenseTest() {
-        }
-
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */

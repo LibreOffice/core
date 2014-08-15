@@ -22,9 +22,6 @@ public class XLayerImpl implements com.sun.star.configuration.backend.XLayer {
 
     private boolean wasCalled = false;
 
-    public XLayerImpl() {
-    }
-
     public void readData(com.sun.star.configuration.backend.XLayerHandler xLayerHandler) throws com.sun.star.lang.NullPointerException, com.sun.star.lang.WrappedTargetException, com.sun.star.configuration.backend.MalformedDataException {
         wasCalled = true;
     }

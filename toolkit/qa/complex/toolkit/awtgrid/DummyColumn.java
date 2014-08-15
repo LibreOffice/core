@@ -30,10 +30,6 @@ import com.sun.star.util.XCloneable;
  */
 public class DummyColumn implements XGridColumn
 {
-    public DummyColumn()
-    {
-    }
-
     public Object getIdentifier()
     {
         throw new UnsupportedOperationException( "Not supported yet." );

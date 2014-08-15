@@ -24,10 +24,6 @@ import org.jfree.layouting.input.style.CSSDeclarationRule;
 public class TextEmphasizeMapper implements StyleMapper
 {
 
-    public TextEmphasizeMapper()
-    {
-    }
-
     public void updateStyle(final String uri, final String attrName, final String attrValue,
             final CSSDeclarationRule targetRule)
     {

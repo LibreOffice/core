@@ -35,11 +35,6 @@ import com.sun.star.util.XNumberFormatter;
 public class Helper
 {
 
-    /** Creates a new instance of Helper */
-    public Helper()
-    {
-    }
-
     public static long convertUnoDatetoInteger(com.sun.star.util.Date DateValue)
     {
         java.util.Calendar oCal = java.util.Calendar.getInstance();

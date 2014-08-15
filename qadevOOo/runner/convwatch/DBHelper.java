@@ -29,8 +29,6 @@ import java.util.StringTokenizer;
 class ShareConnection
 {
     private Connection m_aConnection = null;
-    public ShareConnection()
-        {}
 
     public Connection getConnection()
         {

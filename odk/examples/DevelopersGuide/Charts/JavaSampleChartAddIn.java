@@ -69,8 +69,6 @@ public class JavaSampleChartAddIn extends WeakBase implements
     XServiceName,
     XServiceInfo
 {
-    public JavaSampleChartAddIn()
-    {}
 
     // __________ interface methods __________
 

@@ -25,11 +25,6 @@ package net.adaptivebox.global;
 
 public class OutputMethods {
 
-  public OutputMethods() {
-  }
-
-
-
   public static void outputVector(double[] vector){
     for(int i=0;i<vector.length;i++){
       System.out.print(vector[i]+" \t");

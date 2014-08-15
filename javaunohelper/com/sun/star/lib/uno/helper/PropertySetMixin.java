@@ -525,10 +525,6 @@ public final class PropertySetMixin {
        @see #prepareSet(String, Object, Object, PropertySetMixin.BoundListeners)
     */
     public static final class BoundListeners {
-        /**
-           The constructor.
-        */
-        public BoundListeners() {}
 
         /**
            Notifies any

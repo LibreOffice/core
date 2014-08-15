@@ -28,10 +28,6 @@ import org.openide.util.actions.CookieAction;
  */
 public class MountParcelAction extends CookieAction
 {
-    public MountParcelAction()
-    {
-    }
-
     public String getName()
     {
         return "Mount Parcel"; //NOI18N

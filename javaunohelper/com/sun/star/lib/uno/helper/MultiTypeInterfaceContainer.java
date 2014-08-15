@@ -28,11 +28,6 @@ public class MultiTypeInterfaceContainer
 
     private Map<Object,InterfaceContainer> map= new HashMap<Object,InterfaceContainer>();
 
-    /** Creates a new instance of MultiTypeInterfaceContainer */
-    public MultiTypeInterfaceContainer()
-    {
-    }
-
     /** only returns types which have at least one value in InterfaceContainer
      *  return value can contain an element null, if someone called
      *  addInterface (null, interf)

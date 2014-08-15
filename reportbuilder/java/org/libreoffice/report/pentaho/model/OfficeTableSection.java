@@ -26,7 +26,4 @@ import org.jfree.report.structure.Section;
 public class OfficeTableSection extends Section
 {
 
-    public OfficeTableSection()
-    {
-    }
 }

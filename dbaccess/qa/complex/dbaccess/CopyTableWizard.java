@@ -53,13 +53,6 @@ public class CopyTableWizard extends CRMBasedTestCase
     private DbaseDatabase destinationDB = null;
     private DatabaseApplication dest;
 
-    public CopyTableWizard()
-    {
-        super();
-    }
-
-
-
     @After
     @Override
     public void after()

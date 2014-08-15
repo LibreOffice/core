@@ -43,10 +43,6 @@ public class ParcelPropertiesPanel implements WizardDescriptor.FinishPanel {
      */
     private ParcelPropertiesVisualPanel component;
 
-    /** Create the wizard panel descriptor. */
-    public ParcelPropertiesPanel() {
-    }
-
     // Get the visual component for the panel. In this template, the component
     // is kept separate. This can be more efficient: if the wizard is created
     // but never displayed, or not all panels are displayed, it is better to

@@ -27,10 +27,6 @@ import org.jfree.layouting.util.ColorUtil;
 public class TextUnderlineColorMapper implements StyleMapper
 {
 
-    public TextUnderlineColorMapper()
-    {
-    }
-
     public void updateStyle(final String uri,
             final String attrName,
             final String attrValue,

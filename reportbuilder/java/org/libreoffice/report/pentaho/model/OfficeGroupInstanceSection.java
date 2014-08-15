@@ -29,10 +29,6 @@ public class OfficeGroupInstanceSection extends Group
 
     private String sortingExpression;
 
-    public OfficeGroupInstanceSection()
-    {
-    }
-
     public void setSortingExpression(String s)
     {
         sortingExpression=s;

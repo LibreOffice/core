@@ -58,11 +58,6 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
     final private Object            m_waitForLoad = new Object();
     private boolean                 m_loaded = false;
 
-    /** Creates a new instance of MasterDetailForms */
-    public MasterDetailForms()
-    {
-    }
-
     /* ------------------------------------------------------------------ */
     @Override
     public String[] getTestMethodNames()

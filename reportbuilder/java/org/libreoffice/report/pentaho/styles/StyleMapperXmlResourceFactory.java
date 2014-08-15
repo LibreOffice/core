@@ -30,10 +30,6 @@ import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
 public class StyleMapperXmlResourceFactory extends AbstractXmlResourceFactory
 {
 
-    public StyleMapperXmlResourceFactory()
-    {
-    }
-
     @Override
     protected Configuration getConfiguration()
     {

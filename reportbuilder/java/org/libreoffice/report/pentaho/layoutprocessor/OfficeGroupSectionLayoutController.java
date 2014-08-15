@@ -44,10 +44,6 @@ import org.jfree.report.structure.Element;
 public class OfficeGroupSectionLayoutController extends SectionLayoutController
 {
 
-    public OfficeGroupSectionLayoutController()
-    {
-    }
-
     @Override
     protected LayoutController startElement(final ReportTarget target)
             throws DataSourceException, ReportProcessingException, ReportDataFactoryException

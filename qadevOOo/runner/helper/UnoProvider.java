@@ -49,10 +49,6 @@ import com.sun.star.uno.XComponentContext;
  */
 public class UnoProvider implements AppProvider {
 
-    public UnoProvider(){
-
-    }
-
     /**
      * Close existing office: calls disposeManager()
      * @param param The test parameters.

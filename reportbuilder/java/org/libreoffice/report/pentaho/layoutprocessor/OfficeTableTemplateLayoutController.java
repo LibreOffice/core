@@ -45,10 +45,6 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
 
     private Node[] nodes;
 
-    public OfficeTableTemplateLayoutController()
-    {
-    }
-
     /**
      * Initializes the layout controller. This method is called exactly once. It is the creators responsibility to call
      * this method.

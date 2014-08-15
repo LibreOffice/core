@@ -41,9 +41,6 @@ public class TestComponentA extends WeakBase implements XServiceInfo, XSomething
 
        static byte[] _implementationId;
 
-    public TestComponentA() {
-    }
-
     // XSomethingA
     public String methodOne(String val) {
         return val;

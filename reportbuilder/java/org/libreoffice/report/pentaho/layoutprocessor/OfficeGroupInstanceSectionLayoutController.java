@@ -50,10 +50,6 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
     private int state;
     private boolean waitForJoin;
 
-    public OfficeGroupInstanceSectionLayoutController()
-    {
-    }
-
     @Override
     public void initialize(final Object node, final FlowController flowController, final LayoutController parent)
             throws DataSourceException, ReportDataFactoryException, ReportProcessingException

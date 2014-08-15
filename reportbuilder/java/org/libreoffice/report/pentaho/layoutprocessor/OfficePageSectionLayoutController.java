@@ -33,10 +33,6 @@ import org.jfree.report.structure.Element;
 public class OfficePageSectionLayoutController extends SectionLayoutController
 {
 
-    public OfficePageSectionLayoutController()
-    {
-    }
-
     @Override
     protected AttributeMap computeAttributes(final FlowController flowController, final Element element, final ReportTarget reportTarget) throws DataSourceException
     {

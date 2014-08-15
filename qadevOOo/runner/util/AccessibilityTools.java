@@ -34,10 +34,6 @@ public class AccessibilityTools {
     public static XAccessible SearchedAccessible = null;
     private static boolean debug = false;
 
-    public AccessibilityTools() {
-        //done = false;
-    }
-
     public static XAccessible getAccessibleObject(XInterface xObject) {
         return UnoRuntime.queryInterface(XAccessible.class, xObject);
     }

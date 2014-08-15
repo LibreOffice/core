@@ -63,10 +63,6 @@ public class HelloTextTableShape {
     private XComponentContext xRemoteContext = null;
     private XMultiComponentFactory xRemoteServiceManager = null;
 
-    /** Creates a new instance of HelloTextTableShape */
-    public HelloTextTableShape() {
-    }
-
     /**
      * @param args the command line arguments
      */

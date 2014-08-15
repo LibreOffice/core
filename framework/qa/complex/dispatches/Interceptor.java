@@ -96,15 +96,6 @@ public class Interceptor implements XDispatch,
 
 
 
-    /** ctor
-     *  It's initialize an object of this class with default values.
-     */
-    public Interceptor()
-    {
-    }
-
-
-
     /** XInterceptorInfo */
     public synchronized String[] getInterceptedURLs()
     {

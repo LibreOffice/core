@@ -39,11 +39,6 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
     protected int m_nNoArticleInd = -1;
     protected int m_nErrorInd = -1;
 
-    /** Creates a new instance of WikiHTMLParser */
-    public EditPageParser()
-    {
-    }
-
     @Override
     public void handleComment( char[] data,int pos )
     {

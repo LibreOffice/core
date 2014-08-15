@@ -46,11 +46,6 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     private XPropertySet            m_booleanBinding;
     private XPropertySet            m_dateBinding;
 
-    /** Creates a new instance of XMLFormSettings */
-    public XMLFormSettings()
-    {
-    }
-
     /* ------------------------------------------------------------------ */
     @Override
     public String[] getTestMethodNames()

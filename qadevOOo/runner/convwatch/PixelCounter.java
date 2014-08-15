@@ -31,10 +31,6 @@ abstract class CountPixel
 
 class CountNotWhite extends CountPixel
 {
-    public CountNotWhite()
-        {
-        }
-
     @Override
     public void count(int pixel)
         {
@@ -53,10 +49,6 @@ class CountNotWhite extends CountPixel
 
 class CountNotBlack extends CountPixel
 {
-    public CountNotBlack()
-        {
-        }
-
     @Override
     public void count(int pixel)
         {

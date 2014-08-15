@@ -48,10 +48,6 @@ public class VariablesDeclarationLayoutController
 
     private boolean processed;
 
-    public VariablesDeclarationLayoutController()
-    {
-    }
-
     private OfficeRepeatingStructureLayoutController getRepeatingParent()
     {
         LayoutController parent = getParent();

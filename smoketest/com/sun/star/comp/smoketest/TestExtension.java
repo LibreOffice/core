@@ -40,11 +40,6 @@ public class TestExtension {
         static private final String __serviceName =
         "com.sun.star.comp.smoketest.TestExtension";
 
-        /** The constructor of the inner class has a XMultiServiceFactory parameter.
-         */
-        public _TestExtension() {
-        }
-
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */

@@ -43,10 +43,6 @@ public class OfficeDocument extends JFreeReport
         this.jobProperties = jobProperties;
     }
 
-    public OfficeDocument()
-    {
-    }
-
     public OfficeStylesCollection getStylesCollection()
     {
         return stylesCollection;

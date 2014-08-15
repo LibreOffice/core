@@ -39,11 +39,6 @@ class WikiProtocolSocketFactory implements SecureProtocolSocketFactory
 {
     private SSLContext m_aSSLContext;
 
-    public WikiProtocolSocketFactory()
-    {
-        super();
-    }
-
     private synchronized SSLContext GetNotSoSecureSSLContext()
     {
         if ( m_aSSLContext == null )

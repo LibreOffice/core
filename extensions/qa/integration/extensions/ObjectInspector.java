@@ -36,11 +36,6 @@ public class ObjectInspector extends complexlib.ComplexTestCase
 
     final private String    m_inspectorFrameName = "ObjectInspector";
 
-    /** Creates a new instance of ValueBinding */
-    public ObjectInspector()
-    {
-    }
-
     /* ------------------------------------------------------------------ */
     @Override
     public String[] getTestMethodNames()

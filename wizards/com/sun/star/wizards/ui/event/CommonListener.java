@@ -23,11 +23,6 @@ import com.sun.star.lang.EventObject;
 public class CommonListener extends AbstractListener implements XActionListener, XItemListener, XTextListener, EventNames, XWindowListener, XMouseListener, XFocusListener, XKeyListener
 {
 
-    /** Creates a new instance of CommonListener */
-    public CommonListener()
-    {
-    }
-
     /**
      * Implementation of com.sun.star.awt.XActionListener
      */

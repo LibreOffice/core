@@ -637,7 +637,6 @@ public final class TypeDescription implements ITypeDescription {
     }
 
     private static final class List {
-        public List() {}
 
         public void add(TypeDescription desc) {
             if (!list.contains(desc)) {
@@ -654,7 +653,6 @@ public final class TypeDescription implements ITypeDescription {
     }
 
     private static final class Cache {
-        public Cache() {}
 
         public TypeDescription get(String typeName) {
             synchronized (map) {

@@ -29,10 +29,6 @@ import org.jfree.layouting.input.style.values.CSSValueList;
 public class FontFamilyMapper implements StyleMapper
 {
 
-    public FontFamilyMapper()
-    {
-    }
-
     public void updateStyle(final String uri, final String attrName, final String attrValue,
             final CSSDeclarationRule targetRule)
     {

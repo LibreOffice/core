@@ -27,10 +27,6 @@ import org.libreoffice.report.pentaho.expressions.SumExpression;
 public class PentahoReportAddIn
 {
 
-    public PentahoReportAddIn()
-    {
-    }
-
     public SumExpression createExpression(final int expression)
     {
         return (expression == 0) ? new SumExpression() : null;

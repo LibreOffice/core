@@ -42,10 +42,6 @@ import com.sun.star.accessibility.XAccessibleStateSet;
 
 public class InformationWriter
 {
-    public InformationWriter ()
-    {
-    }
-
     public void drawPageTest (XInterface xPage)
     {
         try

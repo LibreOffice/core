@@ -37,11 +37,6 @@ import com.sun.star.beans.XPropertiesChangeListener;
 public class PropertySet_Test
 {
 
-    /** Creates a new instance of PropertySet_Test */
-    public PropertySet_Test()
-    {
-    }
-
     public boolean convertPropertyValue()
     {
         System.out.println("PropertySet.convertPropertyValue");

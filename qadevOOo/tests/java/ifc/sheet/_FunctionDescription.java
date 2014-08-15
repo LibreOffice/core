@@ -45,9 +45,6 @@ public class _FunctionDescription extends MultiMethodTest {
 
     public XPropertySet oObj = null;    // oObj filled by MultiMethodTest
 
-    public _FunctionDescription() {
-    }
-
     public void _Arguments() {
         // check if Service is available
         XServiceInfo xInfo = UnoRuntime.queryInterface(XServiceInfo.class, oObj );

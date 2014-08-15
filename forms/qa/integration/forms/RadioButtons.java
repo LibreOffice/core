@@ -37,11 +37,6 @@ public class RadioButtons extends complexlib.ComplexTestCase
     private XPropertySet            m_secondaryForm;    /// the secondary form, to be used in the second page of spreadsheets
 
     /* ------------------------------------------------------------------ */
-    public RadioButtons()
-    {
-    }
-
-    /* ------------------------------------------------------------------ */
     @Override
     public String[] getTestMethodNames()
     {

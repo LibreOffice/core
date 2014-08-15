@@ -816,10 +816,6 @@ System.out.println("    exception: " + ioe.getMessage());
         private String     parent;
         private Collection children = new HashSet();
 
-        public ChildrenStrategy()
-        {
-        }
-
         public void setParent(String name)
         {
             parent = (name.length() > 0)? (name + SEPARATOR): "";

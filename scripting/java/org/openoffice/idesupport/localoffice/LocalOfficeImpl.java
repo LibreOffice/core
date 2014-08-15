@@ -47,12 +47,6 @@ public final class LocalOfficeImpl
 
     private transient XMultiComponentFactory    mComponentFactory;
     private transient XComponentContext         mComponentContext;
-    /**
-     * Constructor.
-     */
-    public LocalOfficeImpl()
-    {
-    }
 
     /**
      * Connects to the running office.

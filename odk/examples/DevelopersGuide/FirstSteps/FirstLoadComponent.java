@@ -54,10 +54,6 @@ import com.sun.star.uno.UnoRuntime;
 
 public class FirstLoadComponent {
 
-    /** Creates a new instance of FirstLoadComponent */
-    public FirstLoadComponent() {
-    }
-
     /**
      * @param args the command line arguments
      */

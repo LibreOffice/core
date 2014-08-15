@@ -34,7 +34,6 @@
 
 class MyUnoObject implements com.sun.star.uno.XInterface
 {
-    public MyUnoObject() {}
 
     @Override
     protected void finalize() throws Throwable {

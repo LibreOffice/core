@@ -22,11 +22,6 @@ import java.util.ArrayList;
 
 public class ShowTargets
 {
-    /** Creates a new instance of ShowTargets */
-    public ShowTargets()
-    {
-    }
-
     public static void main( String[] args )
     {
         ArrayList<String> targets = new ArrayList<String>();

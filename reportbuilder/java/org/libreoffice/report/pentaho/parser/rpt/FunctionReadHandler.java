@@ -40,10 +40,6 @@ public class FunctionReadHandler extends AbstractXmlReadHandler
 
     private Expression expression;
 
-    public FunctionReadHandler()
-    {
-    }
-
     /**
      * Starts parsing.
      *

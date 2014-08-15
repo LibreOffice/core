@@ -21,10 +21,6 @@ import com.sun.star.frame.XFrameActionListener;
 public class   FrameActionListener
     implements XFrameActionListener
 {
-    public FrameActionListener ()
-    {
-    }
-
     public void frameAction (com.sun.star.frame.FrameActionEvent aEvent)
     {
         System.out.println ("frame action");

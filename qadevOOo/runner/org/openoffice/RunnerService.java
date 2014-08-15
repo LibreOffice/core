@@ -56,13 +56,6 @@ public class RunnerService implements XJob, XServiceInfo,
     static public final String __implName = "org.openoffice.RunnerService";
     static private XMultiServiceFactory xMSF = null;
 
-    /**
-     * ct'tor
-     * Construct an own office provider for tests
-     */
-    public RunnerService() {
-    }
-
     public Object execute(NamedValue[] args) {
         // construct valid arguments from the given stuff
         int arg_length=args.length;

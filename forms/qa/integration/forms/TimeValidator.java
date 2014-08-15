@@ -20,11 +20,6 @@ package integration.forms;
 public class TimeValidator extends integration.forms.ControlValidator
 {
 
-    /** Creates a new instance of NumericValidator */
-    public TimeValidator( )
-    {
-    }
-
     public String explainInvalid( Object Value )
     {
         try

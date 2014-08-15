@@ -42,10 +42,6 @@ class AccessibleUNOHandler
         }
     }
 
-    public AccessibleUNOHandler()
-    {
-    }
-
     private XServiceInfo GetServiceInfo (AccessibleTreeNode aNode)
     {
         XServiceInfo xServiceInfo = null;

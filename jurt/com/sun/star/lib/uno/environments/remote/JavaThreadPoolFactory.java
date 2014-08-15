@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.WeakHashMap;
 
 final class JavaThreadPoolFactory {
-    public JavaThreadPoolFactory() {}
 
     public IThreadPool createThreadPool() {
         return new JavaThreadPool(this);

@@ -31,10 +31,6 @@ import org.xml.sax.SAXException;
 public abstract class ElementReadHandler extends AbstractXmlReadHandler
 {
 
-    public ElementReadHandler()
-    {
-    }
-
     /**
      * Starts parsing.
      *

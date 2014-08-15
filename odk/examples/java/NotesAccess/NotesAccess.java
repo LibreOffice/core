@@ -125,11 +125,6 @@ public class NotesAccess implements Runnable {
         thread.start();
     }
 
-    /** This is the default constructor without arguments.
-     */
-    public NotesAccess() {
-    }
-
     /** Reading all documents from the given database and writing the data to
      * an OpenOffice.org Calc spreadsheet document.
      */

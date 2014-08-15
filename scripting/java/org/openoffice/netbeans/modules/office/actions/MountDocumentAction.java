@@ -28,10 +28,6 @@ import org.openide.util.actions.CookieAction;
  */
 public class MountDocumentAction extends CookieAction
 {
-    public MountDocumentAction()
-    {
-    }
-
     public String getName()
     {
         return "Mount Document"; //NOI18N

@@ -33,7 +33,6 @@ import test.lib.TestBed;
  * the process hanging if it has not terminated by then.
  */
 public final class StopMessageDispatcherTest extends ComplexTestCase {
-    public StopMessageDispatcherTest() {}
 
     @Override
     public String[] getTestMethodNames() {

@@ -39,11 +39,6 @@ public class OfficeResourceLoader
     XResourceBundleLoader   m_loader;
     XResourceBundle         m_bundle;
 
-    /** Creates a new instance of ValueBinding */
-    public OfficeResourceLoader()
-    {
-    }
-
     /* ------------------------------------------------------------------ */
     @Before public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {

@@ -45,10 +45,6 @@ public class FixedTextLayoutController
         extends AbstractReportElementLayoutController
 {
 
-    public FixedTextLayoutController()
-    {
-    }
-
     @Override
     public boolean isValueChanged()
     {

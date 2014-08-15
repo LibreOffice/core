@@ -30,10 +30,6 @@ import org.jfree.report.structure.Section;
 public class OfficeMasterPage extends Section
 {
 
-    public OfficeMasterPage()
-    {
-    }
-
     public String getStyleName()
     {
         return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");

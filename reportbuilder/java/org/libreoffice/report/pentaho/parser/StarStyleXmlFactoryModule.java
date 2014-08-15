@@ -27,10 +27,6 @@ import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
 public class StarStyleXmlFactoryModule implements XmlFactoryModule
 {
 
-    public StarStyleXmlFactoryModule()
-    {
-    }
-
     public XmlReadHandler createReadHandler(final XmlDocumentInfo documentInfo)
     {
         return new DocumentStylesReadHandler();

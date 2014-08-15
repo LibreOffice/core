@@ -46,11 +46,6 @@ public class CellBinding extends complexlib.ComplexTestCase
     /** our service factory */
     private XMultiServiceFactory    m_orb;
 
-    /** Creates a new instance of CellBinding */
-    public CellBinding()
-    {
-    }
-
     @Override
     public String[] getTestMethodNames()
     {

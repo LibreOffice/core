@@ -51,12 +51,6 @@ public class ApplicationController extends TestCase
     private XOfficeDatabaseDocument m_databaseDocument;
     private XDatabaseDocumentUI m_documentUI;
 
-    public ApplicationController()
-    {
-        super();
-    }
-
-
     public String getTestObjectName()
     {
         return getClass().getName();

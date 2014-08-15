@@ -39,9 +39,6 @@ public class TimeHelper
     private int m_nMilliSeconds;
     private long m_nRealMilliSeconds;
 
-    public TimeHelper()
-    {}
-
     public void start()
         {
             Calendar cal = Calendar.getInstance();

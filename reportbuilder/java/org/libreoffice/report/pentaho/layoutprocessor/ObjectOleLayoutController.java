@@ -40,10 +40,6 @@ import org.jfree.report.structure.Element;
 public class ObjectOleLayoutController extends AbstractReportElementLayoutController
 {
 
-    public ObjectOleLayoutController()
-    {
-    }
-
     @Override
     public boolean isValueChanged()
     {

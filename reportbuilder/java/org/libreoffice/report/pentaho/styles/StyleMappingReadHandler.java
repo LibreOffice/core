@@ -33,10 +33,6 @@ public class StyleMappingReadHandler extends AbstractXmlReadHandler
 
     private StyleMappingRule rule;
 
-    public StyleMappingReadHandler()
-    {
-    }
-
     /**
      * Starts parsing.
      *

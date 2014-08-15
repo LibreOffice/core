@@ -28,17 +28,6 @@ import java.net.URL;
 public class JavaTools
 {
 
-    /** Creates a new instance of JavaTools */
-    public JavaTools()
-    {
-    }
-
-
-
-
-
-
-
     public static String[] ArrayOutOfMultiDimArray(String _sMultiDimArray[][], int _index)
     {
         String[] sRetArray = null;

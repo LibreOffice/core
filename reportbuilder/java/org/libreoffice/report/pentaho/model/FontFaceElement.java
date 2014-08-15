@@ -29,10 +29,6 @@ import org.jfree.report.structure.Section;
 public class FontFaceElement extends Section
 {
 
-    public FontFaceElement()
-    {
-    }
-
     public String getStyleName()
     {
         return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");

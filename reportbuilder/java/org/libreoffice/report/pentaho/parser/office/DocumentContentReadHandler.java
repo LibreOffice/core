@@ -55,10 +55,6 @@ public class DocumentContentReadHandler extends AbstractXmlReadHandler
     private BodyReadHandler bodyReadHandler;
     private OfficeStylesCollection officeStylesCollection;
 
-    public DocumentContentReadHandler()
-    {
-    }
-
     /**
      * Starts parsing.
      *

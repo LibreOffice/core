@@ -47,10 +47,6 @@ public class FormattedTextLayoutController
 
     private static final Log LOGGER = LogFactory.getLog(FormattedTextLayoutController.class);
 
-    public FormattedTextLayoutController()
-    {
-    }
-
     @Override
     public boolean isValueChanged()
     {

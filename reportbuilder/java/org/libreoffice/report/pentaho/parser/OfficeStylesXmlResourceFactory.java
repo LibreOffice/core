@@ -33,10 +33,6 @@ import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
 public class OfficeStylesXmlResourceFactory extends AbstractXmlResourceFactory
 {
 
-    public OfficeStylesXmlResourceFactory()
-    {
-    }
-
     @Override
     protected Configuration getConfiguration()
     {

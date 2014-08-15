@@ -36,10 +36,6 @@ public class LengthCalculator
     private double point;
     private double pixel;
 
-    public LengthCalculator()
-    {
-    }
-
     public void add(final CSSNumericValue value)
     {
         if (value == null)

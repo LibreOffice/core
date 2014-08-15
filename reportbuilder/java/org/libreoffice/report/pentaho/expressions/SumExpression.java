@@ -24,10 +24,6 @@ public class SumExpression
 
     private Object[] parameters;
 
-    public SumExpression()
-    {
-    }
-
     public Object getParameters()
     {
         return parameters;

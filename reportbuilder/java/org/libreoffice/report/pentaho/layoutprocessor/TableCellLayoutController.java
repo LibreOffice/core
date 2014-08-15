@@ -52,10 +52,6 @@ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
 public class TableCellLayoutController extends SectionLayoutController
 {
 
-    public TableCellLayoutController()
-    {
-    }
-
     @Override
     protected AttributeMap computeAttributes(final FlowController fc,
             final Element element,

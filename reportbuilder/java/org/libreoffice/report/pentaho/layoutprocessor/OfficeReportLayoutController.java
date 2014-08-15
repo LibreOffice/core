@@ -56,10 +56,6 @@ public class OfficeReportLayoutController extends ElementLayoutController
     private int state;
     private VariablesCollection variablesCollection;
 
-    public OfficeReportLayoutController()
-    {
-    }
-
     /**
      * Initializes the layout controller. This method is called exactly once. It
      * is the creators responsibility to call this method.

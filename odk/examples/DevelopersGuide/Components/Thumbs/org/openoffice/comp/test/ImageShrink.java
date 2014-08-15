@@ -61,12 +61,7 @@ public class ImageShrink extends WeakBase
     boolean cancel = false;
     com.sun.star.awt.Size dimension = new com.sun.star.awt.Size();
 
-    /** Creates a new instance of ImageShrink */
-    public ImageShrink() {
-    }
-
-
-        // static __getServiceFactory() Implementation
+    // static __getServiceFactory() Implementation
     public static XSingleServiceFactory __getServiceFactory(String implName,
             XMultiServiceFactory multiFactory,
             com.sun.star.registry.XRegistryKey regKey)    {

@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Stack;
 
 final class PendingRequests {
-    public PendingRequests() {}
 
     public synchronized void push(ThreadId tid, Item item) {
         Stack<Item> s = map.get(tid);

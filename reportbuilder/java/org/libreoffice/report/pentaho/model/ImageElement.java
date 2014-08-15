@@ -32,10 +32,6 @@ public class ImageElement extends ReportElement
 
     private FormulaExpression formula;
 
-    public ImageElement()
-    {
-    }
-
     public FormulaExpression getFormula()
     {
         return formula;

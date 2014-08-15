@@ -25,10 +25,6 @@ import org.jfree.layouting.input.style.keys.font.FontStyleKeys;
 public class FontSizeMapper implements StyleMapper
 {
 
-    public FontSizeMapper()
-    {
-    }
-
     public void updateStyle(final String uri, final String attrName, final String attrValue,
             final CSSDeclarationRule targetRule)
     {

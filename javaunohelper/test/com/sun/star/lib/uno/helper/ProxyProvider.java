@@ -29,10 +29,6 @@ public class ProxyProvider
 {
     static java_environment env= new java_environment(null);
 
-    /** Creates a new instance of ProxyProvider */
-    public ProxyProvider()
-    {
-    }
     /** returns Holder proxy objects for the specified interface. If the method is called
      * several times with the same arguments then each time a new HolderProxy is returned.
      * Then all HolderProxy s refer to the same Proxy object.

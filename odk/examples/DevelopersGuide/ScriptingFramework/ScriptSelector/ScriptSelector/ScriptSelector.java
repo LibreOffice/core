@@ -53,10 +53,6 @@ public class ScriptSelector {
 
     private ScriptSelectorPanel selectorPanel;
 
-    public ScriptSelector()
-    {
-    }
-
     public void show(final XScriptContext ctxt)
     {
         try {

@@ -27,11 +27,6 @@ import com.sun.star.uno.XAdapter;
 public class WeakBase_Test
 {
 
-    /** Creates a new instance of WeakBase_Test */
-    public WeakBase_Test()
-    {
-    }
-
     public boolean getTypes()
     {
         System.out.println("Testing WeakBase.getTypes");

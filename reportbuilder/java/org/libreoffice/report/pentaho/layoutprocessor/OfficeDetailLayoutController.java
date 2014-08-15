@@ -44,10 +44,6 @@ public class OfficeDetailLayoutController extends SectionLayoutController
     private boolean waitForJoin;
     private int state;
 
-    public OfficeDetailLayoutController()
-    {
-    }
-
     /**
      * Initializes the layout controller. This method is called exactly once. It
      * is the creators responsibility to call this method.

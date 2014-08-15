@@ -30,10 +30,6 @@ import org.pentaho.reporting.libraries.formula.typing.coretypes.TextType;
 public class TitleFunction implements Function
 {
 
-    public TitleFunction()
-    {
-    }
-
     public String getCanonicalName()
     {
         return "TITLE";

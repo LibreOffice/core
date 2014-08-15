@@ -25,10 +25,6 @@ import org.jfree.layouting.input.style.keys.font.FontStyleKeys;
 public class FontReliefMapper implements StyleMapper
 {
 
-    public FontReliefMapper()
-    {
-    }
-
     public void updateStyle(final String uri, final String attrName, final String attrValue,
             final CSSDeclarationRule targetRule)
     {

@@ -30,10 +30,6 @@ import org.jfree.report.modules.factories.report.base.JFreeReportXmlResourceFact
 public class OfficeDocumentXmlResourceFactory extends JFreeReportXmlResourceFactory
 {
 
-    public OfficeDocumentXmlResourceFactory()
-    {
-    }
-
     @Override
     public Class getFactoryType()
     {

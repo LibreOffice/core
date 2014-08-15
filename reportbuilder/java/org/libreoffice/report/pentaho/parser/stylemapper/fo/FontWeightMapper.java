@@ -25,10 +25,6 @@ import org.jfree.layouting.input.style.keys.font.FontStyleKeys;
 public class FontWeightMapper implements StyleMapper
 {
 
-    public FontWeightMapper()
-    {
-    }
-
     public void updateStyle(final String uri, final String attrName, final String attrValue,
             final CSSDeclarationRule targetRule)
     {

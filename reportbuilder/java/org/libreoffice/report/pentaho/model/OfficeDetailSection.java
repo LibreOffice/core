@@ -27,7 +27,4 @@ import org.jfree.report.structure.DetailSection;
 public class OfficeDetailSection extends DetailSection
 {
 
-    public OfficeDetailSection()
-    {
-    }
 }

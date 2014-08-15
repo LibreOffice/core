@@ -50,10 +50,6 @@ public class OpenQuery {
     private XComponentContext xContext = null;
     private XMultiComponentFactory xMCF = null;
 
-    /** Creates a new instance of OpenQuery */
-    public OpenQuery() {
-    }
-
     /**
      * @param args the command line arguments
      */

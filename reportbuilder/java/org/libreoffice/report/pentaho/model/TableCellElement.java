@@ -27,7 +27,4 @@ import org.jfree.report.structure.Section;
 public class TableCellElement extends Section
 {
 
-    public TableCellElement()
-    {
-    }
 }
