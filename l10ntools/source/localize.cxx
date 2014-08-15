@@ -91,8 +91,6 @@ bool passesPositiveList(const OUString& rUrl) {
         { RTL_CONSTASCII_STRINGPARAM(
             "/chart2/source/controller/dialogs/res_ErrorBar_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM(
-            "/dbaccess/source/ui/dlg/AutoControls_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM(
             "/dbaccess/source/ui/inc/toolbox_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/description.xml") },
         { RTL_CONSTASCII_STRINGPARAM("/svx/inc/globlmn_tmpl.hrc") },
