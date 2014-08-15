@@ -19,6 +19,7 @@
 
 #include "datanavi.hrc"
 #include "globlmn.hrc"
+#include "svx/dialogs.hrc"
 #include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 
@@ -43,138 +44,20 @@ ImageList RID_SVXIMGLIST_XFORMS_TBX
 };
 #undef IMG_LST
 
-Window RID_SVXWIN_DATANAVIGATOR
+ImageList RID_SVXIL_DATANAVI
 {
-    OutputSize = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    DialogControl = TRUE ;
-    HelpId = HID_DATA_NAVIGATOR_WIN ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 300 , 400 ) ;
-    ListBox LB_MODELS
+    Prefix = "da";
+    MASKCOLOR
+    IdList =
     {
-        HelpId = HID_XFORMS_MODELS_LIST ;
-        Pos = MAP_APPFONT ( 3 , 4 ) ;
-        Size = MAP_APPFONT ( 63 , 45 ) ;
-        DropDown = TRUE ;
-        DDExtraWidth = TRUE ;
+        IID_GROUP_CLOSED ;
+        IID_GROUP_OPEN ;
+        IID_ELEMENT ;
+        IID_ATTRIBUTE ;
+        IID_TEXT ;
+        IID_OTHER ;
     };
-    MenuButton MB_MODELS
-    {
-        HelpId = HID_XFORMS_MODELS_MENUBTN ;
-        Pos = MAP_APPFONT ( 69 , 3 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Models";
-        ButtonMenu = Menu
-        {
-            ItemList =
-            {
-                MenuItem
-                {
-                    Identifier = MID_MODELS_ADD ;
-                    HelpId = HID_MN_XFORMS_MODELS_ADD ;
-                    Text [ en-US ] = "~Add..." ;
-                };
-                MenuItem
-                {
-                    Identifier = MID_MODELS_EDIT ;
-                    HelpId = HID_MN_XFORMS_MODELS_EDIT ;
-                    Text [ en-US ] = "~Edit..." ;
-                };
-                MenuItem
-                {
-                    Identifier = MID_MODELS_REMOVE ;
-                    HelpId = HID_MN_XFORMS_MODELS_REMOVE ;
-                    Text [ en-US ] = "~Remove" ;
-                };
-            };
-        };
-    };
-    TabControl TC_ITEMS
-    {
-        HelpId = HID_XFORMS_TAB_CONTROL ;
-        Pos = MAP_APPFONT ( 3, 20 ) ;
-        TabStop = TRUE;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = TID_INSTANCE ;
-                Text [ en-US ] = "Instance";
-            };
-            PageItem
-            {
-                Identifier = TID_SUBMISSION ;
-                Text [ en-US ] = "Submissions";
-            };
-            PageItem
-            {
-                Identifier = TID_BINDINGS ;
-                Text [ en-US ] = "Bindings";
-            };
-        };
-    };
-    MenuButton MB_INSTANCES
-    {
-        HelpId = HID_XFORMS_INSTANCES_MENUBTN ;
-        Pos = MAP_APPFONT ( 69 , 133 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Instances";
-        ButtonMenu = Menu
-        {
-            ItemList =
-            {
-                MenuItem
-                {
-                    Identifier = MID_INSTANCES_ADD ;
-                    HelpId = HID_MN_XFORMS_INSTANCES_ADD ;
-                    Text [ en-US ] = "~Add..." ;
-                };
-                MenuItem
-                {
-                    Identifier = MID_INSTANCES_EDIT ;
-                    HelpId = HID_MN_XFORMS_INSTANCES_EDIT ;
-                    Text [ en-US ] = "~Edit..." ;
-                };
-                MenuItem
-                {
-                    Identifier = MID_INSTANCES_REMOVE ;
-                    HelpId = HID_MN_XFORMS_INSTANCES_REMOVE ;
-                    Text [ en-US ] = "~Remove" ;
-                };
-                MenuItem
-                {
-                    Separator = TRUE;
-                };
-                MenuItem
-                {
-                    Identifier = MID_SHOW_DETAILS ;
-                    HelpId = HID_MN_XFORMS_SHOW_DETAILS ;
-                    Text [ en-US ] = "~Show Details" ;
-                };
-            };
-        };
-    };
-
-#define IMG_LST2            \
-IdList =                    \
-{                           \
-    IID_GROUP_CLOSED ;      \
-    IID_GROUP_OPEN ;        \
-    IID_ELEMENT ;           \
-    IID_ATTRIBUTE ;         \
-    IID_TEXT ;              \
-    IID_OTHER ;             \
-};                          \
-IdCount = { 6 ; } ;
-
-    ImageList IL_ITEM_BMPS
-    {
-        Prefix = "da";
-        MASKCOLOR
-        IMG_LST2
-    };
+    IdCount = { 6 ; } ;
 };
 
 QueryBox RID_QRY_REMOVE_MODEL

@@ -63,8 +63,6 @@
 // Dialog-Id's -----------------------------------------------------------
 #define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 6)
 
-#define RID_SVXWIN_DATANAVIGATOR                    (RID_FORMS_START + 19)
-
 // Toolbars ------------------------------------------------------------
 #define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START +  1)
 #define RID_SVXTBX_FORM_FILTER                      (RID_FORMS_START +  2)

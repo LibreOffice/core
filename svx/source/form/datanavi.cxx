@@ -41,6 +41,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <vcl/layout.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -1342,61 +1343,39 @@ namespace svxform
         }
     }
 
-
-
     // class DataNavigatorWindow
-
-    DataNavigatorWindow::DataNavigatorWindow( Window* pParent, SfxBindings* pBindings ) :
-
-        Window( pParent, SVX_RES( RID_SVXWIN_DATANAVIGATOR ) ),
-
-        m_aModelsBox        ( this, SVX_RES( LB_MODELS ) ),
-        m_aModelBtn         ( this, SVX_RES( MB_MODELS ) ),
-        m_aTabCtrl          ( this, SVX_RES( TC_ITEMS ) ),
-        m_aInstanceBtn      ( this, SVX_RES( MB_INSTANCES ) ),
-
-        m_pInstPage         ( NULL ),
-        m_pSubmissionPage   ( NULL ),
-        m_pBindingPage      ( NULL ),
-
-        m_nMinWidth         ( 0 ),
-        m_nMinHeight        ( 0 ),
-        m_nBorderHeight     ( 0 ),
-        m_nLastSelectedPos  ( LISTBOX_ENTRY_NOTFOUND ),
-        m_bShowDetails      ( false ),
-        m_bIsNotifyDisabled ( false ),
-
-        m_aItemImageList    (       SVX_RES( IL_ITEM_BMPS ) ),
-        m_xDataListener     ( new DataListener( this ) )
-
+    DataNavigatorWindow::DataNavigatorWindow(Window* pParent, SfxBindings* pBindings)
+        : Window(pParent)
+        , m_pInstPage(NULL)
+        , m_pSubmissionPage(NULL)
+        , m_pBindingPage(NULL)
+        , m_nLastSelectedPos(LISTBOX_ENTRY_NOTFOUND)
+        , m_bShowDetails(false)
+        , m_bIsNotifyDisabled(false)
+        , m_aItemImageList(SVX_RES(RID_SVXIL_DATANAVI))
+        , m_xDataListener(new DataListener(this))
     {
-        FreeResource();
-
-        // init minimal metric
-        m_a2Size = LogicToPixel( Size( 2, 2 ), MAP_APPFONT );
-        m_a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
-        Size aOutSz = GetOutputSizePixel();
-        Size aLogSize = PixelToLogic( aOutSz, MAP_APPFONT );
-        m_nMinWidth = aLogSize.Width();
-        m_nMinHeight = aLogSize.Height();
-        m_nBorderHeight = 4*m_a3Size.Height() +
-            m_aModelBtn.GetSizePixel().Height() + m_aInstanceBtn.GetSizePixel().Height();
+        m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "svx/ui/datanavigator.ui", "DataNavigator");
+        get(m_pModelsBox, "modelslist");
+        get(m_pModelBtn, "modelsbutton");
+        get(m_pTabCtrl, "tabcontrol");
+        get(m_pInstanceBtn, "instances");
 
         // handler
-        m_aModelsBox.SetSelectHdl( LINK( this, DataNavigatorWindow, ModelSelectHdl ) );
+        m_pModelsBox->SetSelectHdl( LINK( this, DataNavigatorWindow, ModelSelectHdl ) );
         Link aLink = LINK( this, DataNavigatorWindow, MenuSelectHdl );
-        m_aModelBtn.SetSelectHdl( aLink );
-        m_aInstanceBtn.SetSelectHdl( aLink );
+        m_pModelBtn->SetSelectHdl( aLink );
+        m_pInstanceBtn->SetSelectHdl( aLink );
         aLink = LINK( this, DataNavigatorWindow, MenuActivateHdl );
-        m_aModelBtn.SetActivateHdl( aLink );
-        m_aInstanceBtn.SetActivateHdl( aLink );
-        m_aTabCtrl.SetActivatePageHdl( LINK( this, DataNavigatorWindow, ActivatePageHdl ) );
+        m_pModelBtn->SetActivateHdl( aLink );
+        m_pInstanceBtn->SetActivateHdl( aLink );
+        m_pTabCtrl->SetActivatePageHdl( LINK( this, DataNavigatorWindow, ActivatePageHdl ) );
         m_aUpdateTimer.SetTimeout( 2000 );
         m_aUpdateTimer.SetTimeoutHdl( LINK( this, DataNavigatorWindow, UpdateHdl ) );
 
         // init tabcontrol
-        m_aTabCtrl.Show();
-        sal_Int32 nPageId = TID_INSTANCE;
+        m_pTabCtrl->Show();
+        sal_Int32 nPageId = m_pTabCtrl->GetPageId("instance");
         SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
         if ( aViewOpt.Exists() )
         {
@@ -1404,12 +1383,13 @@ namespace svxform
             aViewOpt.GetUserItem(CFGNAME_SHOWDETAILS) >>= m_bShowDetails;
         }
 
-        Menu* pMenu = m_aInstanceBtn.GetPopupMenu();
-        pMenu->SetItemBits( MID_SHOW_DETAILS, MIB_CHECKABLE );
-        pMenu->CheckItem( MID_SHOW_DETAILS, m_bShowDetails );
+        Menu* pMenu = m_pInstanceBtn->GetPopupMenu();
+        sal_uInt16 nInstancesDetailsId = pMenu->GetItemId("instancesdetails");
+        pMenu->SetItemBits(nInstancesDetailsId, MIB_CHECKABLE );
+        pMenu->CheckItem(nInstancesDetailsId, m_bShowDetails );
 
-        m_aTabCtrl.SetCurPageId( static_cast< sal_uInt16 >( nPageId ) );
-        ActivatePageHdl( &m_aTabCtrl );
+        m_pTabCtrl->SetCurPageId( static_cast< sal_uInt16 >( nPageId ) );
+        ActivatePageHdl(m_pTabCtrl);
 
         // get our frame
         DBG_ASSERT( pBindings != NULL,
@@ -1430,7 +1410,7 @@ namespace svxform
     DataNavigatorWindow::~DataNavigatorWindow()
     {
         SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
-        aViewOpt.SetPageID( static_cast< sal_Int32 >( m_aTabCtrl.GetCurPageId() ) );
+        aViewOpt.SetPageID( static_cast< sal_Int32 >( m_pTabCtrl->GetCurPageId() ) );
         Any aAny;
         aAny <<= m_bShowDetails;
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS,aAny);
@@ -1452,7 +1432,7 @@ namespace svxform
 
     IMPL_LINK( DataNavigatorWindow, ModelSelectHdl, ListBox *, pBox )
     {
-        sal_Int32 nPos = m_aModelsBox.GetSelectEntryPos();
+        sal_Int32 nPos = m_pModelsBox->GetSelectEntryPos();
         // pBox == NULL, if you want to force a new fill.
         if ( nPos != m_nLastSelectedPos || !pBox )
         {
@@ -1469,8 +1449,8 @@ namespace svxform
     {
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
-        sal_Int32 nSelectedPos = m_aModelsBox.GetSelectEntryPos();
-        OUString sSelectedModel( m_aModelsBox.GetEntry( nSelectedPos ) );
+        sal_Int32 nSelectedPos = m_pModelsBox->GetSelectEntryPos();
+        OUString sSelectedModel( m_pModelsBox->GetEntry( nSelectedPos ) );
         Reference< css::xforms::XModel > xModel;
         try
         {
@@ -1486,112 +1466,47 @@ namespace svxform
 
         m_bIsNotifyDisabled = true;
 
-        if ( &m_aModelBtn == pBtn )
+        if (m_pModelBtn == pBtn)
         {
-            switch ( pBtn->GetCurItemId() )
+            OString sIdent(pBtn->GetCurItemIdent());
+            if (sIdent == "modelsadd")
             {
-                case MID_MODELS_ADD :
+                AddModelDialog aDlg( this, false );
+                bool bShowDialog = true;
+                while ( bShowDialog )
                 {
-                    AddModelDialog aDlg( this, false );
-                    bool bShowDialog = true;
-                    while ( bShowDialog )
-                    {
-                        bShowDialog = false;
-                        if ( aDlg.Execute() == RET_OK )
-                        {
-                            OUString sNewName = aDlg.GetName();
-                            bool bDocumentData = aDlg.GetModifyDoc();
-
-                            if ( m_aModelsBox.GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
-                            {
-                                // error: model name already exists
-                                ErrorBox aErrBox( this, SVX_RES( RID_ERR_DOUBLE_MODELNAME ) );
-                                OUString sMessText = aErrBox.GetMessText();
-                                sMessText = sMessText.replaceFirst( MSG_VARIABLE, sNewName );
-                                aErrBox.SetMessText( sMessText );
-                                aErrBox.Execute();
-                                bShowDialog = true;
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    // add new model to frame model
-                                    Reference< css::xforms::XModel > xNewModel(
-                                        xUIHelper->newModel( m_xFrameModel, sNewName ), UNO_SET_THROW );
-
-                                    Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
-                                    xModelProps->setPropertyValue(
-                                        OUString( "ExternalData" ),
-                                        makeAny( !bDocumentData ) );
-
-                                    sal_Int32 nNewPos = m_aModelsBox.InsertEntry( sNewName );
-                                    m_aModelsBox.SelectEntryPos( nNewPos );
-                                    ModelSelectHdl( &m_aModelsBox );
-                                    bIsDocModified = true;
-                                }
-                                catch ( Exception& )
-                                {
-                                    SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
-                                }
-                            }
-                        }
-                    }
-                    break;
-                }
-                case MID_MODELS_EDIT :
-                {
-                    AddModelDialog aDlg( this, true );
-                    aDlg.SetName( sSelectedModel );
-
-                    bool bDocumentData( false );
-                    try
-                    {
-                        Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
-                        Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
-                        Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
-                        bool bExternalData = false;
-                        OSL_VERIFY( xModelProps->getPropertyValue(
-                            OUString( "ExternalData" ) ) >>= bExternalData );
-                        bDocumentData = !bExternalData;
-                    }
-                    catch( const Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION();
-                    }
-                    aDlg.SetModifyDoc( bDocumentData );
-
+                    bShowDialog = false;
                     if ( aDlg.Execute() == RET_OK )
                     {
-                        if ( aDlg.GetModifyDoc() != bool( bDocumentData ) )
+                        OUString sNewName = aDlg.GetName();
+                        bool bDocumentData = aDlg.GetModifyDoc();
+
+                        if ( m_pModelsBox->GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
                         {
-                            bDocumentData = aDlg.GetModifyDoc();
+                            // error: model name already exists
+                            ErrorBox aErrBox( this, SVX_RES( RID_ERR_DOUBLE_MODELNAME ) );
+                            OUString sMessText = aErrBox.GetMessText();
+                            sMessText = sMessText.replaceFirst( MSG_VARIABLE, sNewName );
+                            aErrBox.SetMessText( sMessText );
+                            aErrBox.Execute();
+                            bShowDialog = true;
+                        }
+                        else
+                        {
                             try
                             {
-                                Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
-                                Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
-                                Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
+                                // add new model to frame model
+                                Reference< css::xforms::XModel > xNewModel(
+                                    xUIHelper->newModel( m_xFrameModel, sNewName ), UNO_SET_THROW );
+
+                                Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
                                 xModelProps->setPropertyValue(
                                     OUString( "ExternalData" ),
                                     makeAny( !bDocumentData ) );
-                                bIsDocModified = true;
-                            }
-                            catch( const Exception& )
-                            {
-                                DBG_UNHANDLED_EXCEPTION();
-                            }
-                        }
 
-                        OUString sNewName = aDlg.GetName();
-                        if ( !sNewName.isEmpty() && ( sNewName != sSelectedModel ) )
-                        {
-                            try
-                            {
-                                xUIHelper->renameModel( m_xFrameModel, sSelectedModel, sNewName );
-
-                                m_aModelsBox.RemoveEntry( nSelectedPos );
-                                nSelectedPos = m_aModelsBox.InsertEntry( sNewName );
-                                m_aModelsBox.SelectEntryPos( nSelectedPos );
+                                sal_Int32 nNewPos = m_pModelsBox->InsertEntry( sNewName );
+                                m_pModelsBox->SelectEntryPos( nNewPos );
+                                ModelSelectHdl(m_pModelsBox);
                                 bIsDocModified = true;
                             }
                             catch ( Exception& )
@@ -1600,170 +1515,225 @@ namespace svxform
                             }
                         }
                     }
-                    break;
                 }
-                case MID_MODELS_REMOVE :
+            }
+            else if (sIdent == "modelsedit")
+            {
+                AddModelDialog aDlg( this, true );
+                aDlg.SetName( sSelectedModel );
+
+                bool bDocumentData( false );
+                try
                 {
-                    QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_MODEL ) );
-                    OUString sText = aQBox.GetMessText();
-                    sText = sText.replaceFirst( MODELNAME, sSelectedModel );
-                    aQBox.SetMessText( sText );
-                    if ( aQBox.Execute() == RET_YES )
+                    Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
+                    Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
+                    Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
+                    bool bExternalData = false;
+                    OSL_VERIFY( xModelProps->getPropertyValue(
+                        OUString( "ExternalData" ) ) >>= bExternalData );
+                    bDocumentData = !bExternalData;
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+                aDlg.SetModifyDoc( bDocumentData );
+
+                if ( aDlg.Execute() == RET_OK )
+                {
+                    if ( aDlg.GetModifyDoc() != bool( bDocumentData ) )
+                    {
+                        bDocumentData = aDlg.GetModifyDoc();
+                        try
+                        {
+                            Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
+                            Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
+                            Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
+                            xModelProps->setPropertyValue(
+                                OUString( "ExternalData" ),
+                                makeAny( !bDocumentData ) );
+                            bIsDocModified = true;
+                        }
+                        catch( const Exception& )
+                        {
+                            DBG_UNHANDLED_EXCEPTION();
+                        }
+                    }
+
+                    OUString sNewName = aDlg.GetName();
+                    if ( !sNewName.isEmpty() && ( sNewName != sSelectedModel ) )
                     {
                         try
                         {
-                            xUIHelper->removeModel( m_xFrameModel, sSelectedModel );
+                            xUIHelper->renameModel( m_xFrameModel, sSelectedModel, sNewName );
+
+                            m_pModelsBox->RemoveEntry( nSelectedPos );
+                            nSelectedPos = m_pModelsBox->InsertEntry( sNewName );
+                            m_pModelsBox->SelectEntryPos( nSelectedPos );
+                            bIsDocModified = true;
                         }
                         catch ( Exception& )
                         {
                             SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                         }
-                        m_aModelsBox.RemoveEntry( nSelectedPos );
-                        if ( m_aModelsBox.GetEntryCount() <= nSelectedPos )
-                            nSelectedPos = m_aModelsBox.GetEntryCount() - 1;
-                        m_aModelsBox.SelectEntryPos( nSelectedPos );
-                        ModelSelectHdl( &m_aModelsBox );
-                        bIsDocModified = true;
                     }
-                    break;
-                }
-                default:
-                {
-                    SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
                 }
             }
-        }
-        else if ( &m_aInstanceBtn == pBtn )
-        {
-            switch ( pBtn->GetCurItemId() )
+            else if (sIdent == "modelsremove")
             {
-                case MID_INSTANCES_ADD :
+                QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_MODEL ) );
+                OUString sText = aQBox.GetMessText();
+                sText = sText.replaceFirst( MODELNAME, sSelectedModel );
+                aQBox.SetMessText( sText );
+                if ( aQBox.Execute() == RET_YES )
                 {
-                    AddInstanceDialog aDlg( this, false );
+                    try
+                    {
+                        xUIHelper->removeModel( m_xFrameModel, sSelectedModel );
+                    }
+                    catch ( Exception& )
+                    {
+                        SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                    }
+                    m_pModelsBox->RemoveEntry( nSelectedPos );
+                    if ( m_pModelsBox->GetEntryCount() <= nSelectedPos )
+                        nSelectedPos = m_pModelsBox->GetEntryCount() - 1;
+                    m_pModelsBox->SelectEntryPos( nSelectedPos );
+                    ModelSelectHdl(m_pModelsBox);
+                    bIsDocModified = true;
+                }
+            }
+            else
+            {
+                SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
+            }
+        }
+        else if (m_pInstanceBtn == pBtn)
+        {
+            OString sIdent(pBtn->GetCurItemIdent());
+            if (sIdent == "instancesadd")
+            {
+                AddInstanceDialog aDlg( this, false );
+                if ( aDlg.Execute() == RET_OK )
+                {
+                    sal_uInt16 nInst = GetNewPageId();
+                    OUString sName = aDlg.GetName();
+                    OUString sURL = aDlg.GetURL();
+                    bool bLinkOnce = aDlg.IsLinkInstance();
+                    try
+                    {
+                        Reference< css::xml::dom::XDocument > xNewInst =
+                            xUIHelper->newInstance( sName, sURL, !bLinkOnce );
+                    }
+                    catch ( Exception& )
+                    {
+                        SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                    }
+                    ModelSelectHdl( NULL );
+                    m_pTabCtrl->SetCurPageId( nInst );
+                    XFormsPage* pPage = GetCurrentPage( nInst );
+                    pPage->SetInstanceName(sName);
+                    pPage->SetInstanceURL(sURL);
+                    pPage->SetLinkOnce(bLinkOnce);
+                    ActivatePageHdl(m_pTabCtrl);
+                    bIsDocModified = true;
+                }
+            }
+            else if (sIdent == "instancesedit")
+            {
+                sal_uInt16 nId = 0;
+                XFormsPage* pPage = GetCurrentPage( nId );
+                if ( pPage )
+                {
+                    AddInstanceDialog aDlg( this, true );
+                    aDlg.SetName( pPage->GetInstanceName() );
+                    aDlg.SetURL( pPage->GetInstanceURL() );
+                    aDlg.SetLinkInstance( pPage->GetLinkOnce() );
+                    OUString sOldName = aDlg.GetName();
                     if ( aDlg.Execute() == RET_OK )
                     {
-                        sal_uInt16 nInst = GetNewPageId();
-                        OUString sName = aDlg.GetName();
+                        OUString sNewName = aDlg.GetName();
                         OUString sURL = aDlg.GetURL();
                         bool bLinkOnce = aDlg.IsLinkInstance();
                         try
                         {
-                            Reference< css::xml::dom::XDocument > xNewInst =
-                                xUIHelper->newInstance( sName, sURL, !bLinkOnce );
+                            xUIHelper->renameInstance( sOldName,
+                                                       sNewName,
+                                                       sURL,
+                                                       !bLinkOnce );
                         }
                         catch ( Exception& )
                         {
                             SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                         }
-                        ModelSelectHdl( NULL );
-                        m_aTabCtrl.SetCurPageId( nInst );
-                        XFormsPage* pPage = GetCurrentPage( nInst );
-                        pPage->SetInstanceName(sName);
+                        pPage->SetInstanceName(sNewName);
                         pPage->SetInstanceURL(sURL);
                         pPage->SetLinkOnce(bLinkOnce);
-                        ActivatePageHdl( &m_aTabCtrl );
+                        m_pTabCtrl->SetPageText( nId, sNewName );
                         bIsDocModified = true;
                     }
-                    break;
                 }
-                case MID_INSTANCES_EDIT :
+            }
+            else if (sIdent == "instancesremove")
+            {
+                sal_uInt16 nId = 0;
+                XFormsPage* pPage = GetCurrentPage( nId );
+                if ( pPage )
                 {
-                    sal_uInt16 nId = 0;
-                    XFormsPage* pPage = GetCurrentPage( nId );
-                    if ( pPage )
+                    OUString sInstName = pPage->GetInstanceName();
+                    QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_INSTANCE ) );
+                    OUString sMessText = aQBox.GetMessText();
+                    sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
+                    aQBox.SetMessText( sMessText );
+                    if ( aQBox.Execute() == RET_YES )
                     {
-                        AddInstanceDialog aDlg( this, true );
-                        aDlg.SetName( pPage->GetInstanceName() );
-                        aDlg.SetURL( pPage->GetInstanceURL() );
-                        aDlg.SetLinkInstance( pPage->GetLinkOnce() );
-                        OUString sOldName = aDlg.GetName();
-                        if ( aDlg.Execute() == RET_OK )
+                        bool bDoRemove = false;
+                        if (IsAdditionalPage(nId))
                         {
-                            OUString sNewName = aDlg.GetName();
-                            OUString sURL = aDlg.GetURL();
-                            bool bLinkOnce = aDlg.IsLinkInstance();
+                            PageList::iterator aPageListEnd = m_aPageList.end();
+                            PageList::iterator aFoundPage =
+                                std::find( m_aPageList.begin(), aPageListEnd, pPage );
+                            if ( aFoundPage != aPageListEnd )
+                            {
+                                m_aPageList.erase( aFoundPage );
+                                delete pPage;
+                                bDoRemove = true;
+                            }
+                        }
+                        else
+                        {
+                            DELETEZ( m_pInstPage );
+                            bDoRemove = true;
+                        }
+
+                        if ( bDoRemove )
+                        {
                             try
                             {
-                                xUIHelper->renameInstance( sOldName,
-                                                           sNewName,
-                                                           sURL,
-                                                           !bLinkOnce );
+                                xUIHelper->removeInstance( sInstName );
                             }
-                            catch ( Exception& )
+                            catch (const Exception&)
                             {
                                 SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                             }
-                            pPage->SetInstanceName(sNewName);
-                            pPage->SetInstanceURL(sURL);
-                            pPage->SetLinkOnce(bLinkOnce);
-                            m_aTabCtrl.SetPageText( nId, sNewName );
+                            m_pTabCtrl->RemovePage( nId );
+                            m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("instance"));
+                            ModelSelectHdl( NULL );
                             bIsDocModified = true;
                         }
                     }
-                    break;
                 }
-                case MID_INSTANCES_REMOVE :
-                {
-                    sal_uInt16 nId = 0;
-                    XFormsPage* pPage = GetCurrentPage( nId );
-                    if ( pPage )
-                    {
-                        OUString sInstName = pPage->GetInstanceName();
-                        QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_INSTANCE ) );
-                        OUString sMessText = aQBox.GetMessText();
-                        sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
-                        aQBox.SetMessText( sMessText );
-                        if ( aQBox.Execute() == RET_YES )
-                        {
-                            bool bDoRemove = false;
-                            if ( nId > TID_INSTANCE )
-                            {
-                                PageList::iterator aPageListEnd = m_aPageList.end();
-                                PageList::iterator aFoundPage =
-                                    std::find( m_aPageList.begin(), aPageListEnd, pPage );
-                                if ( aFoundPage != aPageListEnd )
-                                {
-                                    m_aPageList.erase( aFoundPage );
-                                    delete pPage;
-                                    bDoRemove = true;
-                                }
-                            }
-                            else
-                            {
-                                DELETEZ( m_pInstPage );
-                                bDoRemove = true;
-                            }
-
-                            if ( bDoRemove )
-                            {
-                                try
-                                {
-                                    xUIHelper->removeInstance( sInstName );
-                                }
-                                catch ( Exception& )
-                                {
-                                    SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
-                                }
-                                m_aTabCtrl.RemovePage( nId );
-                                m_aTabCtrl.SetCurPageId( TID_INSTANCE );
-                                ModelSelectHdl( NULL );
-                                bIsDocModified = true;
-                            }
-                        }
-                    }
-                    break;
-                }
-                case MID_SHOW_DETAILS :
-                {
-                    m_bShowDetails = !m_bShowDetails;
-                    m_aInstanceBtn.GetPopupMenu()->CheckItem( MID_SHOW_DETAILS, m_bShowDetails );
-                    ModelSelectHdl( &m_aModelsBox );
-                    break;
-                }
-                default:
-                {
-                    SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
-                }
+            }
+            else if (sIdent == "instancesdetails")
+            {
+                m_bShowDetails = !m_bShowDetails;
+                PopupMenu* pMenu = m_pInstanceBtn->GetPopupMenu();
+                pMenu->CheckItem(pMenu->GetItemId("instancesdetails"), m_bShowDetails );
+                ModelSelectHdl(m_pModelsBox);
+            }
+            else
+            {
+                SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
             }
         }
         else
@@ -1778,22 +1748,28 @@ namespace svxform
         return 0;
     }
 
+    bool DataNavigatorWindow::IsAdditionalPage(sal_uInt16 nId) const
+    {
+        return m_pTabCtrl->GetPagePos(nId) >= 3;
+    }
+
     IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, MenuButton *, pBtn )
     {
         Menu* pMenu = pBtn->GetPopupMenu();
 
-        if ( &m_aInstanceBtn == pBtn )
+        if (m_pInstanceBtn == pBtn)
         {
-            bool bIsInstPage = ( m_aTabCtrl.GetCurPageId() >= TID_INSTANCE );
-            pMenu->EnableItem( MID_INSTANCES_EDIT, bIsInstPage );
-            pMenu->EnableItem( MID_INSTANCES_REMOVE,
-                bIsInstPage && m_aTabCtrl.GetPageCount() > MIN_PAGE_COUNT );
-            pMenu->EnableItem( MID_SHOW_DETAILS, bIsInstPage );
+            sal_uInt16 nId(m_pTabCtrl->GetCurPageId());
+            bool bIsInstPage = (IsAdditionalPage(nId) || m_pTabCtrl->GetPageName(nId) == "instance");
+            pMenu->EnableItem( "instancesedit", bIsInstPage );
+            pMenu->EnableItem( "instancesremove",
+                bIsInstPage && m_pTabCtrl->GetPageCount() > MIN_PAGE_COUNT );
+            pMenu->EnableItem( "instancesdetails", bIsInstPage );
         }
-        else if ( &m_aModelBtn == pBtn )
+        else if (m_pModelBtn == pBtn)
         {
             // we need at least one model!
-            pMenu->EnableItem( MID_MODELS_REMOVE, m_aModelsBox.GetEntryCount() > 1 );
+            pMenu->EnableItem("modelsremove", m_pModelsBox->GetEntryCount() > 1 );
         }
         else
         {
@@ -1808,7 +1784,7 @@ namespace svxform
         XFormsPage* pPage = GetCurrentPage( nId );
         if ( pPage )
         {
-            m_aTabCtrl.SetTabPage( nId, pPage );
+            m_pTabCtrl->SetTabPage( nId, pPage );
             if ( m_xDataContainer.is() && !pPage->HasModel() )
                 SetPageModel();
         }
@@ -1824,45 +1800,37 @@ namespace svxform
 
     XFormsPage* DataNavigatorWindow::GetCurrentPage( sal_uInt16& rCurId )
     {
-        rCurId = m_aTabCtrl.GetCurPageId();
+        rCurId = m_pTabCtrl->GetCurPageId();
         XFormsPage* pPage = NULL;
-        switch ( rCurId )
+        OString sName(m_pTabCtrl->GetPageName(rCurId));
+        if (sName == "submissions")
         {
-            case TID_SUBMISSION:
-            {
-                if ( !m_pSubmissionPage )
-                    m_pSubmissionPage = new XFormsPage( &m_aTabCtrl, this, DGTSubmission );
-                pPage = m_pSubmissionPage;
-                break;
-            }
-
-            case TID_BINDINGS:
-            {
-                if ( !m_pBindingPage )
-                    m_pBindingPage = new XFormsPage( &m_aTabCtrl, this, DGTBinding );
-                pPage = m_pBindingPage;
-                break;
-            }
-
-            case TID_INSTANCE:
-            {
-                if ( !m_pInstPage )
-                    m_pInstPage = new XFormsPage( &m_aTabCtrl, this, DGTInstance );
-                pPage = m_pInstPage;
-                break;
-            }
+            if ( !m_pSubmissionPage )
+                m_pSubmissionPage = new XFormsPage(m_pTabCtrl, this, DGTSubmission);
+            pPage = m_pSubmissionPage;
         }
-
-        if ( rCurId > TID_INSTANCE )
+        else if (sName == "bindings")
         {
-            sal_uInt16 nPos = m_aTabCtrl.GetPagePos( rCurId );
+            if ( !m_pBindingPage )
+                m_pBindingPage = new XFormsPage(m_pTabCtrl, this, DGTBinding);
+            pPage = m_pBindingPage;
+        }
+        else if (sName == "instance")
+        {
+            if ( !m_pInstPage )
+                m_pInstPage = new XFormsPage(m_pTabCtrl, this, DGTInstance);
+            pPage = m_pInstPage;
+        }
+        else
+        {
+            sal_uInt16 nPos = m_pTabCtrl->GetPagePos( rCurId );
             if ( HasFirstInstancePage() && nPos > 0 )
                 nPos--;
             if ( m_aPageList.size() > nPos )
                 pPage = m_aPageList[nPos];
             else
             {
-                pPage = new XFormsPage( &m_aTabCtrl, this, DGTInstance );
+                pPage = new XFormsPage(m_pTabCtrl, this, DGTInstance);
                 m_aPageList.push_back( pPage );
             }
         }
@@ -1908,7 +1876,7 @@ namespace svxform
                             Any aAny = m_xDataContainer->getByName( pNames[i] );
                             Reference< css::xforms::XModel > xFormsModel;
                             if ( aAny >>= xFormsModel )
-                                m_aModelsBox.InsertEntry( xFormsModel->getID() );
+                                m_pModelsBox->InsertEntry( xFormsModel->getID() );
                         }
                     }
                 }
@@ -1919,16 +1887,16 @@ namespace svxform
             }
         }
 
-        if ( m_aModelsBox.GetEntryCount() > 0 )
+        if ( m_pModelsBox->GetEntryCount() > 0 )
         {
-            m_aModelsBox.SelectEntryPos(0);
-            ModelSelectHdl( &m_aModelsBox );
+            m_pModelsBox->SelectEntryPos(0);
+            ModelSelectHdl(m_pModelsBox);
         }
     }
 
     void DataNavigatorWindow::SetPageModel()
     {
-        OUString sModel( m_aModelsBox.GetSelectEntry() );
+        OUString sModel( m_pModelsBox->GetSelectEntry() );
         try
         {
             Any aAny = m_xDataContainer->getByName( sModel );
@@ -1939,17 +1907,17 @@ namespace svxform
                 sal_uInt16 nId = 0;
                 XFormsPage* pPage = GetCurrentPage( nId );
                 DBG_ASSERT( pPage, "DataNavigatorWindow::SetPageModel(): no page" );
-                if ( nId >= TID_INSTANCE )
+                if (IsAdditionalPage(nId) || m_pTabCtrl->GetPageName(nId) == "instance")
                     // instance page
-                    nPagePos = m_aTabCtrl.GetPagePos( nId );
+                    nPagePos = m_pTabCtrl->GetPagePos( nId );
                 m_bIsNotifyDisabled = true;
                 OUString sText = pPage->SetModel( xFormsModel, nPagePos );
                 m_bIsNotifyDisabled = false;
                 if ( !sText.isEmpty() )
-                    m_aTabCtrl.SetPageText( nId, sText );
+                    m_pTabCtrl->SetPageText( nId, sText );
             }
         }
-        catch ( NoSuchElementException& )
+        catch (const NoSuchElementException& )
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::SetPageModel(): no such element" );
         }
@@ -1961,7 +1929,7 @@ namespace svxform
 
     void DataNavigatorWindow::InitPages()
     {
-        OUString sModel( m_aModelsBox.GetSelectEntry() );
+        OUString sModel( m_pModelsBox->GetSelectEntry() );
         try
         {
             Any aAny = m_xDataContainer->getByName( sModel );
@@ -2029,8 +1997,8 @@ namespace svxform
         if ( bClearPages )
         {
             m_aPageList.clear();
-            while ( m_aTabCtrl.GetPageCount() > MIN_PAGE_COUNT )
-                m_aTabCtrl.RemovePage( m_aTabCtrl.GetPageId( 1 ) );
+            while ( m_pTabCtrl->GetPageCount() > MIN_PAGE_COUNT )
+                m_pTabCtrl->RemovePage( m_pTabCtrl->GetPageId( 1 ) );
         }
     }
 
@@ -2057,56 +2025,40 @@ namespace svxform
             sTemp += OUString::number( nPageId );
             sInstName = sTemp;
         }
-        m_aTabCtrl.InsertPage( nPageId, sInstName, m_aTabCtrl.GetPageCount() - 2 );
+        m_pTabCtrl->InsertPage( nPageId, sInstName, m_pTabCtrl->GetPageCount() - 2 );
     }
-
 
     bool DataNavigatorWindow::HasFirstInstancePage() const
     {
-        return ( m_aTabCtrl.GetPageId( 0 ) == TID_INSTANCE );
+        return (m_pTabCtrl->GetPageName(m_pTabCtrl->GetPageId(0)) == "instance");
     }
-
 
     sal_uInt16 DataNavigatorWindow::GetNewPageId() const
     {
-        sal_uInt16 i, nMax = 0, nCount = m_aTabCtrl.GetPageCount();
+        sal_uInt16 i, nMax = 0, nCount = m_pTabCtrl->GetPageCount();
         for ( i = 0; i < nCount; ++i )
         {
-            if ( nMax < m_aTabCtrl.GetPageId(i) )
-                nMax = m_aTabCtrl.GetPageId(i);
+            if ( nMax < m_pTabCtrl->GetPageId(i) )
+                nMax = m_pTabCtrl->GetPageId(i);
         }
         return ( nMax + 1 );
     }
 
-
     void DataNavigatorWindow::Resize()
     {
-        Window::Resize();
-
-        Size aOutSz = GetOutputSizePixel();
-        long nWidth = std::max( aOutSz.Width(), m_nMinWidth );
-        long nHeight = std::max( aOutSz.Height(), m_nMinHeight );
-
-        Size aSz = m_aModelsBox.GetSizePixel();
-        aSz.Width() = nWidth - 3*m_a3Size.Width() - m_aModelBtn.GetSizePixel().Width();
-        m_aModelsBox.SetSizePixel( aSz );
-        Point aPos = m_aModelBtn.GetPosPixel();
-        aPos.X() = m_aModelsBox.GetPosPixel().X() + aSz.Width() + m_a3Size.Width();
-        m_aModelBtn.SetPosPixel( aPos );
-
-        aSz = m_aTabCtrl.GetSizePixel();
-        aSz.Width() = nWidth - 2*m_a3Size.Width();
-        aSz.Height() = nHeight - m_nBorderHeight;
-        m_aTabCtrl.SetSizePixel( aSz );
-        // Instance button positioning
-        aPos = m_aInstanceBtn.GetPosPixel();
-        // right aligned
-        aPos.X() = nWidth - m_aInstanceBtn.GetSizePixel().Width() - m_a3Size.Width();
-        // under the tabcontrol
-        aPos.Y() = m_aTabCtrl.GetPosPixel().Y() + aSz.Height() + m_a3Size.Height();
-        m_aInstanceBtn.SetPosPixel( aPos );
+        Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+        if (!pChild)
+            return;
+        VclContainer::setLayoutAllocation(*pChild, Point(0,0), GetSizePixel());
     }
 
+    Size DataNavigatorWindow::GetOptimalSize() const
+    {
+        const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+        if (!pChild)
+            return Window::GetOptimalSize();
+        return VclContainer::getLayoutRequisition(*pChild);
+    }
 
     void DataNavigatorWindow::SetDocModified()
     {
@@ -2115,7 +2067,6 @@ namespace svxform
         if ( !pCurrentDoc->IsModified() && pCurrentDoc->IsEnableSetModified() )
             pCurrentDoc->SetModified();
     }
-
 
     void DataNavigatorWindow::NotifyChanges( bool _bLoadAll )
     {
@@ -2127,7 +2078,7 @@ namespace svxform
                 RemoveBroadcaster();
                 m_xDataContainer.clear();
                 m_xFrameModel.clear();
-                m_aModelsBox.Clear();
+                m_pModelsBox->Clear();
                 m_nLastSelectedPos = LISTBOX_ENTRY_NOTFOUND;
                 // for a reload
                 LoadModels();
@@ -2192,7 +2143,6 @@ namespace svxform
 
     {
 
-        SetHelpId( HID_DATA_NAVIGATOR_WIN );
         SetText( SVX_RES( RID_STR_DATANAVIGATOR ) );
 
         Size aSize = m_aDataWin.GetOutputSizePixel();

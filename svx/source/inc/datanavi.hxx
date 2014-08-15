@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_DATANAVI_HXX
 #define INCLUDED_SVX_SOURCE_INC_DATANAVI_HXX
 
+#include <vcl/builder.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
@@ -36,6 +37,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/fmresids.hrc>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
@@ -322,27 +324,21 @@ namespace svxform
     typedef std::vector< XFormsPage* >          PageList;
     typedef ::rtl::Reference < DataListener >   DataListener_ref;
 
-    class DataNavigatorWindow : public Window
+    class DataNavigatorWindow : public Window, public VclBuilderContainer
     {
     private:
-
-        ListBox                     m_aModelsBox;
-        MenuButton                  m_aModelBtn;
-        TabControl                  m_aTabCtrl;
-        MenuButton                  m_aInstanceBtn;
+        ListBox*                    m_pModelsBox;
+        MenuButton*                 m_pModelBtn;
+        TabControl*                 m_pTabCtrl;
+        MenuButton*                 m_pInstanceBtn;
 
         XFormsPage*                 m_pInstPage;
         XFormsPage*                 m_pSubmissionPage;
         XFormsPage*                 m_pBindingPage;
 
-        long                        m_nMinWidth;
-        long                        m_nMinHeight;
-        long                        m_nBorderHeight;
         sal_Int32                   m_nLastSelectedPos;
         bool                        m_bShowDetails;
         bool                        m_bIsNotifyDisabled;
-        Size                        m_a2Size;
-        Size                        m_a3Size;
         ImageList                   m_aItemImageList;
         PageList                    m_aPageList;
         ContainerList               m_aContainerList;
@@ -367,10 +363,13 @@ namespace svxform
         void                        InitPages();
         void                        CreateInstancePage( const PropertyValue_seq& _xPropSeq );
         bool                        HasFirstInstancePage() const;
-        sal_uInt16                      GetNewPageId() const;
+        sal_uInt16                  GetNewPageId() const;
+
+        bool                        IsAdditionalPage(sal_uInt16 nPageId) const;
 
     protected:
         virtual void                Resize() SAL_OVERRIDE;
+        virtual Size                GetOptimalSize() const SAL_OVERRIDE;
 
     public:
         DataNavigatorWindow( Window* pParent, SfxBindings* pBindings );

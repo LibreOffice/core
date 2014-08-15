@@ -138,6 +138,7 @@
 #define RID_SVXSW_FRAMEPOSITIONS            (RID_SVX_START + 289)
 
 #define RID_SVXIL_FRAME                     (RID_SVX_START +  65)
+#define RID_SVXIL_DATANAVI                  (RID_SVX_START +  66)
 
 #define RID_SVXFLOAT_3D                     (RID_SVX_START + 209)
 
