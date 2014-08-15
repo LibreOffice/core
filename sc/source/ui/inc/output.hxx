@@ -48,6 +48,7 @@ class ScTabViewShell;
 class ScPageBreakData;
 class FmFormView;
 class ScFieldEditEngine;
+class ScViewData;
 class SdrPaintWindow;
 
 #define SC_SCENARIO_HSPACE      60
@@ -143,6 +144,11 @@ private:
     OutputDevice* mpDev;        // Device
     OutputDevice* mpRefDevice;  // printer if used for preview
     OutputDevice* pFmtDevice;   // reference for text formatting
+
+    // This may be NULL -- i.e. it should be used when available,
+    // but otherwise ignored.
+    ScViewData* mpViewData;
+
     ScTableInfo& mrTabInfo;
     RowInfo* pRowInfo;          // Info block
     SCSIZE nArrCount;           // occupied lines in info block
@@ -258,6 +264,7 @@ private:
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
+                                  ScViewData* pViewData,
                                     ScTableInfo& rTabInfo, ScDocument* pNewDoc,
                                     SCTAB nNewTab, long nNewScrX, long nNewScrY,
                                     SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,

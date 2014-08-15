@@ -141,6 +141,7 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
 }
 
 ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
+                            ScViewData* pViewData,
                             ScTableInfo& rTabInfo, ScDocument* pNewDoc,
                             SCTAB nNewTab, long nNewScrX, long nNewScrY,
                             SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
@@ -149,6 +150,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     mpDev( pNewDev ),
     mpRefDevice( pNewDev ),      // default is output device
     pFmtDevice( pNewDev ),      // default is output device
+    mpViewData( pViewData ),
     mrTabInfo( rTabInfo ),
     pRowInfo( rTabInfo.mpRowInfo ),
     nArrCount( rTabInfo.mnArrCount ),
