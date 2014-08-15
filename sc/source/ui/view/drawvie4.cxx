@@ -443,7 +443,7 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
     double nPPTY = ScGlobal::nScreenPPTY;
 
     if (pViewData)
-        nPPTX /= pViewData->GetDocShell()->GetOutputFactor();
+        nPPTX /= static_cast< double >( pViewData->GetDocShell()->GetOutputFactor() );
 
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;

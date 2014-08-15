@@ -1238,7 +1238,8 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                             aWinSize.Height() += GetGridHeight( SC_SPLIT_TOP );
 
                         ScDocShell* pDocSh = aViewData.GetDocShell();
-                        double nPPTX = ScGlobal::nScreenPPTX / pDocSh->GetOutputFactor();
+                        double nPPTX = ScGlobal::nScreenPPTX /
+                            static_cast< double >( pDocSh->GetOutputFactor() );
                         double nPPTY = ScGlobal::nScreenPPTY;
 
                         sal_uInt16 nMin = MINZOOM;
@@ -1331,7 +1332,8 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                 aWinSize.Height() = nOtherHeight;
                         }
 
-                        double nPPTX = ScGlobal::nScreenPPTX / aViewData.GetDocShell()->GetOutputFactor();
+                        double nPPTX = ScGlobal::nScreenPPTX /
+                            static_cast< double >( aViewData.GetDocShell()->GetOutputFactor() );
                         double nPPTY = ScGlobal::nScreenPPTY;
 
                         long nZoomX = (long) ( aWinSize.Width() * 100 /

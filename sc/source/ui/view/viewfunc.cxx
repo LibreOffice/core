@@ -2185,7 +2185,9 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                         nMargin = sal::static_int_cast<sal_uInt16>(
                             nMargin + static_cast<const SfxUInt16Item&>(pPattern->GetItem(ATTR_INDENT)).GetValue() );
 
-                    nWidth = (sal_uInt16)(nEdit * pDocSh->GetOutputFactor() / HMM_PER_TWIPS)
+                    nWidth = (sal_uInt16)( nEdit *
+                                          static_cast< double>( pDocSh->GetOutputFactor() ) /
+                                          HMM_PER_TWIPS )
                                 + nMargin + STD_EXTRA_WIDTH;
                 }
             }

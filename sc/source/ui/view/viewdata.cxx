@@ -2404,7 +2404,8 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
                 rSplitPos = Point( bHSplit ? pViewTab->nHSplitPos : 0, bVSplit ? pViewTab->nVSplitPos : 0 );
                 rSplitPos = Application::GetDefaultDevice()->PixelToLogic( rSplitPos, MapMode( MAP_TWIP ) );
                 if( pDocShell )
-                    rSplitPos.X() = (long)((double)rSplitPos.X() / pDocShell->GetOutputFactor());
+                    rSplitPos.X() = (long)((double)rSplitPos.X() /
+                                           static_cast< double >( pDocShell->GetOutputFactor()) );
             }
             else if( bFrozen )
             {
@@ -2543,7 +2544,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                 // effectively results in the nFactor = 1.0 regardless of the Option setting.
                 if( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())
                 {
-                    double nFactor = pDocShell->GetOutputFactor();
+                    double nFactor = static_cast< double >( pDocShell->GetOutputFactor() );
                     aPixel.X() = (long)( aPixel.X() * nFactor + 0.5 );
                 }
 
