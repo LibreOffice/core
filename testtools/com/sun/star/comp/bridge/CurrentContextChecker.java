@@ -25,7 +25,7 @@ import com.sun.star.uno.XCurrentContext;
 import test.testtools.bridgetest.XCurrentContextChecker;
 
 final class CurrentContextChecker implements XCurrentContextChecker {
-    public CurrentContextChecker() {}
+
 
     public boolean perform(
         XCurrentContextChecker other, int setSteps, int checkSteps)

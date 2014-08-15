@@ -34,11 +34,6 @@ public class ControlValidation extends complexlib.ComplexTestCase implements com
     private DocumentHelper          m_document;         /// our current test document
     private XMultiServiceFactory    m_orb;              /// our service factory
 
-    /** Creates a new instance of ControlValidation */
-    public ControlValidation()
-    {
-    }
-
     @Override
     public String[] getTestMethodNames()
     {

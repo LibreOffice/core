@@ -29,10 +29,6 @@ import org.jfree.layouting.input.style.keys.box.BoxStyleKeys;
 public class ColumnWidthMapper implements StyleMapper
 {
 
-    public ColumnWidthMapper()
-    {
-    }
-
     public void updateStyle(final String uri,
             final String attrName,
             final String attrValue,

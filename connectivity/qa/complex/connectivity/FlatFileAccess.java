@@ -33,11 +33,6 @@ import java.util.List;
 
 public class FlatFileAccess extends ComplexTestCase
 {
-    public FlatFileAccess()
-    {
-        super();
-    }
-
     @Override
     public String[] getTestMethodNames()
     {
