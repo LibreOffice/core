@@ -221,9 +221,9 @@ String STR_QRY_TOO_MANY_COLUMNS
     Text [ en-US ] = "There are too many columns.";
 };
 
-ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
+String STR_QRY_CRITERIA_ON_ASTERISK
 {
-    Message [ en-US ] = "A condition cannot be applied to field [*]" ;
+    Text [ en-US ] = "A condition cannot be applied to field [*]" ;
 };
 
 String STR_QRY_TOO_LONG_STATEMENT
@@ -251,9 +251,9 @@ String STR_QRY_SYNTAX
     Text [ en-US ] = "SQL syntax error" ;
 };
 
-ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
+String STR_QRY_ORDERBY_ON_ASTERISK
 {
-    Message [ en-US ] = "[*] cannot be used as a sort criterion.";
+    Text [ en-US ] = "[*] cannot be used as a sort criterion.";
 };
 
 String STR_QRY_TOO_MANY_TABLES
