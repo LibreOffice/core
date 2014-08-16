@@ -29,9 +29,6 @@
 #undef Folder
 #undef GradientStyle_RECT
 
-#define WIN_MOUSE_MOVED 0x0001
-#undef MOUSE_MOVED
-
 #define WIN_WB_LEFT               0
 #define WIN_WB_RIGHT              1
 #undef WB_LEFT
