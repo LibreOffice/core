@@ -39,7 +39,7 @@ public:
         pTempStreamName - this is useful when creating the test, to dump the
         file for examination.
     */
-    xmlDocPtr dumpAndParse(drawinglayer::primitive2d::Primitive2DSequence aPrimitive2DSequence, const OUString& rTempStreamName = OUString());
+    xmlDocPtr dumpAndParse(const drawinglayer::primitive2d::Primitive2DSequence& aPrimitive2DSequence, const OUString& rTempStreamName = OUString());
 };
 
 #endif // INCLUDED_TEST_PRIMITIVE2DXMLDUMP_HXX
