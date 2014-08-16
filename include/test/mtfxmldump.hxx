@@ -17,9 +17,13 @@
 #include <vcl/gdimtf.hxx>
 #include <vector>
 
+class XmlWriter;
+
 class OOO_DLLPUBLIC_TEST MetafileXmlDump
 {
     std::vector<bool> maFilter;
+
+    void writeXml(GDIMetaFile& rMetaFile, XmlWriter& rWriter);
 
 public:
     MetafileXmlDump();

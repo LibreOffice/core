@@ -260,6 +260,20 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
     aWriter.startDocument();
     aWriter.startElement("metafile");
 
+    writeXml(rMetaFile, aWriter);
+
+    aWriter.endElement();
+    aWriter.endDocument();
+
+    pStream->Seek(STREAM_SEEK_TO_BEGIN);
+
+    xmlDocPtr pDoc = XmlTestTools::parseXmlStream(pStream.get());
+
+    return pDoc;
+}
+
+void MetafileXmlDump::writeXml(GDIMetaFile& rMetaFile, XmlWriter& rWriter)
+{
     for(MetaAction* pAction = rMetaFile.FirstAction(); pAction != NULL; pAction = rMetaFile.NextAction())
     {
         const sal_uInt16 nActionType = pAction->GetType();
@@ -273,281 +287,271 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_LINE_ACTION:
             {
                 MetaLineAction* pMetaLineAction = static_cast<MetaLineAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
-                aWriter.attribute("startx", pMetaLineAction->GetStartPoint().X());
-                aWriter.attribute("starty", pMetaLineAction->GetStartPoint().Y());
-                aWriter.attribute("endx", pMetaLineAction->GetEndPoint().X());
-                aWriter.attribute("endy", pMetaLineAction->GetEndPoint().Y());
+                rWriter.attribute("startx", pMetaLineAction->GetStartPoint().X());
+                rWriter.attribute("starty", pMetaLineAction->GetStartPoint().Y());
+                rWriter.attribute("endx", pMetaLineAction->GetEndPoint().X());
+                rWriter.attribute("endy", pMetaLineAction->GetEndPoint().Y());
 
                 LineInfo aLineInfo = pMetaLineAction->GetLineInfo();
-                aWriter.attribute("style", convertLineStyleToString(aLineInfo.GetStyle()));
-                aWriter.attribute("width", aLineInfo.GetWidth());
-                aWriter.attribute("dashlen", aLineInfo.GetDashLen());
-                aWriter.attribute("dotlen", aLineInfo.GetDotLen());
-                aWriter.attribute("distance", aLineInfo.GetDistance());
+                rWriter.attribute("style", convertLineStyleToString(aLineInfo.GetStyle()));
+                rWriter.attribute("width", aLineInfo.GetWidth());
+                rWriter.attribute("dashlen", aLineInfo.GetDashLen());
+                rWriter.attribute("dotlen", aLineInfo.GetDotLen());
+                rWriter.attribute("distance", aLineInfo.GetDistance());
 
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_PUSH_ACTION:
             {
                 MetaPushAction* pMetaPushAction = static_cast<MetaPushAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
-                aWriter.attribute("flags", collectPushFlags(pMetaPushAction->GetFlags()));
+                rWriter.attribute("flags", collectPushFlags(pMetaPushAction->GetFlags()));
             }
             break;
 
             case META_POP_ACTION:
             {
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_RASTEROP_ACTION:
             {
                 MetaRasterOpAction* pMetaRasterOpAction = static_cast<MetaRasterOpAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
                 if (pMetaRasterOpAction->GetRasterOp() != ROP_OVERPAINT)
                 {
-                    aWriter.attribute("operation", convertRopToString(pMetaRasterOpAction->GetRasterOp()));
+                    rWriter.attribute("operation", convertRopToString(pMetaRasterOpAction->GetRasterOp()));
                 }
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_TEXTLINECOLOR_ACTION:
             {
                 MetaTextLineColorAction* pMetaTextLineColorAction = static_cast<MetaTextLineColorAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
-                aWriter.attribute("color", convertColorToString(pMetaTextLineColorAction->GetColor()));
-                aWriter.endElement();
+                rWriter.attribute("color", convertColorToString(pMetaTextLineColorAction->GetColor()));
+                rWriter.endElement();
             }
             break;
 
             case META_TEXTFILLCOLOR_ACTION:
             {
                 MetaTextFillColorAction* pMetaTextFillColorAction = static_cast<MetaTextFillColorAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
-                aWriter.attribute("color", convertColorToString(pMetaTextFillColorAction->GetColor()));
+                rWriter.attribute("color", convertColorToString(pMetaTextFillColorAction->GetColor()));
 
                 if (pMetaTextFillColorAction->IsSetting())
-                    aWriter.attribute("setting", OUString("true"));
+                    rWriter.attribute("setting", OUString("true"));
 
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_FONT_ACTION:
             {
                 MetaFontAction* pMetaFontAction = static_cast<MetaFontAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
                 Font aFont = pMetaFontAction->GetFont();
 
-                aWriter.attribute("color", convertColorToString(aFont.GetColor()));
-                aWriter.attribute("fillcolor", convertColorToString(aFont.GetFillColor()));
-                aWriter.attribute("name", aFont.GetName());
-                aWriter.attribute("stylename", aFont.GetStyleName());
-                aWriter.attribute("width", aFont.GetSize().Width());
-                aWriter.attribute("height", aFont.GetSize().Height());
-                aWriter.attribute("orientation", aFont.GetOrientation());
-                aWriter.attribute("weight", convertFontWeigthToString(aFont.GetWeight()));
+                rWriter.attribute("color", convertColorToString(aFont.GetColor()));
+                rWriter.attribute("fillcolor", convertColorToString(aFont.GetFillColor()));
+                rWriter.attribute("name", aFont.GetName());
+                rWriter.attribute("stylename", aFont.GetStyleName());
+                rWriter.attribute("width", aFont.GetSize().Width());
+                rWriter.attribute("height", aFont.GetSize().Height());
+                rWriter.attribute("orientation", aFont.GetOrientation());
+                rWriter.attribute("weight", convertFontWeigthToString(aFont.GetWeight()));
 
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_TEXTALIGN_ACTION:
             {
                 MetaTextAlignAction* pMetaTextAlignAction = static_cast<MetaTextAlignAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
                 OUString sAlign = convertTextAlignToString(pMetaTextAlignAction->GetTextAlign());
                 if (!sAlign.isEmpty())
-                    aWriter.attribute("align", sAlign);
-                aWriter.endElement();
+                    rWriter.attribute("align", sAlign);
+                rWriter.endElement();
             }
             break;
 
             case META_TEXTCOLOR_ACTION:
             {
                 MetaTextColorAction* pMetaTextColorAction = static_cast<MetaTextColorAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
-                aWriter.attribute("color", convertColorToString(pMetaTextColorAction->GetColor()));
-                aWriter.endElement();
+                rWriter.attribute("color", convertColorToString(pMetaTextColorAction->GetColor()));
+                rWriter.endElement();
             }
             break;
 
             case META_TEXTARRAY_ACTION:
             {
                 MetaTextArrayAction* pMetaTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
                 sal_Int32 aIndex = pMetaTextArrayAction->GetIndex();
                 sal_Int32 aLength = pMetaTextArrayAction->GetLen();
 
-                aWriter.attribute("x", pMetaTextArrayAction->GetPoint().X());
-                aWriter.attribute("y", pMetaTextArrayAction->GetPoint().Y());
-                aWriter.attribute("index", aIndex);
-                aWriter.attribute("length", aLength);
+                rWriter.attribute("x", pMetaTextArrayAction->GetPoint().X());
+                rWriter.attribute("y", pMetaTextArrayAction->GetPoint().Y());
+                rWriter.attribute("index", aIndex);
+                rWriter.attribute("length", aLength);
 
-                aWriter.startElement("dxarray");
+                rWriter.startElement("dxarray");
                 OUString sDxLengthString;
                 for (sal_Int32 i = 0; i < aLength; ++i)
                 {
                     sDxLengthString += OUString::number(pMetaTextArrayAction->GetDXArray()[aIndex+i]);
                     sDxLengthString += " ";
                 }
-                aWriter.content(sDxLengthString);
-                aWriter.endElement();
+                rWriter.content(sDxLengthString);
+                rWriter.endElement();
 
-                aWriter.startElement("text");
-                aWriter.content(pMetaTextArrayAction->GetText());
-                aWriter.endElement();
+                rWriter.startElement("text");
+                rWriter.content(pMetaTextArrayAction->GetText());
+                rWriter.endElement();
 
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_LINECOLOR_ACTION:
             {
                 MetaLineColorAction* pMetaLineColorAction = static_cast<MetaLineColorAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
-                aWriter.attribute("color", convertColorToString(pMetaLineColorAction->GetColor()));
-                aWriter.endElement();
+                rWriter.attribute("color", convertColorToString(pMetaLineColorAction->GetColor()));
+                rWriter.endElement();
             }
             break;
 
             case META_FILLCOLOR_ACTION:
             {
                 MetaFillColorAction* pMetaFillColorAction = static_cast<MetaFillColorAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
-                aWriter.attribute("color", convertColorToString(pMetaFillColorAction->GetColor()));
-                aWriter.endElement();
+                rWriter.attribute("color", convertColorToString(pMetaFillColorAction->GetColor()));
+                rWriter.endElement();
             }
             break;
 
             case META_CLIPREGION_ACTION:
             {
                 const MetaClipRegionAction* pA = static_cast< const MetaClipRegionAction* >(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
                 // FIXME for now we dump only the bounding box; this is
                 // enough for the tests we have, but may need extending to
                 // dumping the real polypolygon in the future
                 Rectangle aRectangle = pA->GetRegion().GetBoundRect();
-                aWriter.attribute("top",    aRectangle.Top());
-                aWriter.attribute("left",   aRectangle.Left());
-                aWriter.attribute("bottom", aRectangle.Bottom());
-                aWriter.attribute("right",  aRectangle.Right());
+                rWriter.attribute("top",    aRectangle.Top());
+                rWriter.attribute("left",   aRectangle.Left());
+                rWriter.attribute("bottom", aRectangle.Bottom());
+                rWriter.attribute("right",  aRectangle.Right());
 
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_ISECTRECTCLIPREGION_ACTION:
             {
                 MetaISectRectClipRegionAction* pMetaISectRectClipRegionAction = static_cast<MetaISectRectClipRegionAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
                 Rectangle aRectangle = pMetaISectRectClipRegionAction->GetRect();
-                aWriter.attribute("top",    aRectangle.Top());
-                aWriter.attribute("left",   aRectangle.Left());
-                aWriter.attribute("bottom", aRectangle.Bottom());
-                aWriter.attribute("right",  aRectangle.Right());
+                rWriter.attribute("top",    aRectangle.Top());
+                rWriter.attribute("left",   aRectangle.Left());
+                rWriter.attribute("bottom", aRectangle.Bottom());
+                rWriter.attribute("right",  aRectangle.Right());
 
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_POLYLINE_ACTION:
             {
                 MetaPolyLineAction* pMetaPolyLineAction = static_cast<MetaPolyLineAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
                 Polygon aPolygon = pMetaPolyLineAction->GetPolygon();
                 for (sal_uInt16 i = 0; i < aPolygon.GetSize(); i++)
                 {
-                    aWriter.startElement("point");
-                    aWriter.attribute("x", aPolygon[i].X());
-                    aWriter.attribute("y", aPolygon[i].Y());
-                    aWriter.endElement();
+                    rWriter.startElement("point");
+                    rWriter.attribute("x", aPolygon[i].X());
+                    rWriter.attribute("y", aPolygon[i].Y());
+                    rWriter.endElement();
                 }
 
                 LineInfo aLineInfo = pMetaPolyLineAction->GetLineInfo();
-                aWriter.attribute("style", convertLineStyleToString(aLineInfo.GetStyle()));
-                aWriter.attribute("width", aLineInfo.GetWidth());
-                aWriter.attribute("dashlen", aLineInfo.GetDashLen());
-                aWriter.attribute("dotlen", aLineInfo.GetDotLen());
-                aWriter.attribute("distance", aLineInfo.GetDistance());
+                rWriter.attribute("style", convertLineStyleToString(aLineInfo.GetStyle()));
+                rWriter.attribute("width", aLineInfo.GetWidth());
+                rWriter.attribute("dashlen", aLineInfo.GetDashLen());
+                rWriter.attribute("dotlen", aLineInfo.GetDotLen());
+                rWriter.attribute("distance", aLineInfo.GetDistance());
 
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_POLYGON_ACTION:
             {
                 MetaPolygonAction* pMetaPolygonAction = static_cast<MetaPolygonAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
                 Polygon aPolygon = pMetaPolygonAction->GetPolygon();
                 for (sal_uInt16 i = 0; i < aPolygon.GetSize(); i++)
                 {
-                    aWriter.startElement("point");
-                    aWriter.attribute("x", aPolygon[i].X());
-                    aWriter.attribute("y", aPolygon[i].Y());
-                    aWriter.endElement();
+                    rWriter.startElement("point");
+                    rWriter.attribute("x", aPolygon[i].X());
+                    rWriter.attribute("y", aPolygon[i].Y());
+                    rWriter.endElement();
                 }
 
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             case META_COMMENT_ACTION:
             {
                 MetaCommentAction* pMetaCommentAction = static_cast<MetaCommentAction*>(pAction);
-                aWriter.startElement(sCurrentElementTag);
+                rWriter.startElement(sCurrentElementTag);
 
                 if (pMetaCommentAction->GetDataSize() > 0)
                 {
-                    aWriter.attribute("datasize", pMetaCommentAction->GetDataSize());
+                    rWriter.attribute("datasize", pMetaCommentAction->GetDataSize());
                 }
                 if (!pMetaCommentAction->GetComment().isEmpty())
                 {
-                    aWriter.startElement("comment");
-                    aWriter.content(pMetaCommentAction->GetComment());
-                    aWriter.endElement();
+                    rWriter.startElement("comment");
+                    rWriter.content(pMetaCommentAction->GetComment());
+                    rWriter.endElement();
                 }
 
-                aWriter.endElement();
+                rWriter.endElement();
             }
             break;
 
             default:
             {
-                aWriter.element(sCurrentElementTag);
+                rWriter.element(sCurrentElementTag);
             }
             break;
         }
-
     }
-
-    aWriter.endElement();
-    aWriter.endDocument();
-
-    pStream->Seek(STREAM_SEEK_TO_BEGIN);
-
-    xmlDocPtr pDoc = XmlTestTools::parseXmlStream(pStream.get());
-
-    return pDoc;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
