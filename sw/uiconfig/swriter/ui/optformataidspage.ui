@@ -57,7 +57,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="hyphens">
-                            <property name="label" translatable="yes">Custom h_yphens</property>
+                            <property name="label" translatable="yes">Soft h_yphens</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
