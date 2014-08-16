@@ -30,7 +30,6 @@
 #define Pattern MacOSPattern
 #define Point MacOSPoint
 #define Polygon MacOSPolygon
-#define Ptr MacOSPtr
 #define Region MacOSRegion
 #define SetCursor MacOSSetCursor
 #define Size MacOSSize

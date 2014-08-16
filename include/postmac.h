@@ -30,7 +30,6 @@
 #undef Pattern
 #undef Point
 #undef Polygon
-#undef Ptr
 #undef Region
 #undef SetCursor
 #undef Size
