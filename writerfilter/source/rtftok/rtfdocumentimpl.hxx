@@ -139,6 +139,8 @@ public:
     int nWrap;
     /// If shape is below text (true) or text is below shape (false).
     bool bInBackground;
+    /// Wrap polygon, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().
+    RTFSprms aWrapPolygonSprms;
 };
 
 /// Stores the properties of a drawing object.

@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -1900,6 +1901,21 @@ DECLARE_RTFIMPORT_TEST(testBehindDoc, "behind-doc.rtf")
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xShape, "Surround"));
     // This was true.
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xShape, "Opaque"));
+}
+
+DECLARE_RTFIMPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.rtf")
+{
+    // The problem was that the wrap polygon was ignored during import.
+    drawing::PointSequenceSequence aSeqSeq = getProperty<drawing::PointSequenceSequence>(getShape(1), "ContourPolyPolygon");
+    // This was 0: the polygon list was empty.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeqSeq.getLength());
+
+    drawing::PointSequence aSeq = aSeqSeq[0];
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aSeq.getLength());
+
+    // The shape also didn't have negative top / left coordinates.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-1177)), getProperty<sal_Int32>(getShape(1), "HoriOrientPosition"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-67)), getProperty<sal_Int32>(getShape(1), "VertOrientPosition"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

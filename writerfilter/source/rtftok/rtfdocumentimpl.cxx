@@ -900,6 +900,11 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
             if (i->first == NS_ooxml::LN_EG_WrapType_wrapNone || i->first == NS_ooxml::LN_EG_WrapType_wrapTight)
             {
                 nWrap = i->first;
+
+                // If there is a wrap polygon prepared by RTFSdrImport, pick it up here.
+                if (i->first == NS_ooxml::LN_EG_WrapType_wrapTight && !m_aStates.top().aShape.aWrapPolygonSprms.empty())
+                    i->second->getSprms().set(NS_ooxml::LN_CT_WrapTight_wrapPolygon, RTFValue::Pointer_t(new RTFValue(RTFSprms(), m_aStates.top().aShape.aWrapPolygonSprms)));
+
                 aAnchorSprms.set(i->first, i->second);
             }
         }

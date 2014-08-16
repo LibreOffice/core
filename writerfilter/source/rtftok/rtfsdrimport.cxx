@@ -712,6 +712,44 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(nHoriOrient));
             }
         }
+        else if (i->first == "pWrapPolygonVertices")
+        {
+            RTFSprms aPolygonSprms;
+            sal_Int32 nSize = 0; // Size of a token
+            sal_Int32 nCount = 0; // Number of tokens
+            sal_Int32 nCharIndex = 0; // Character index
+            do
+            {
+                OUString aToken = i->second.getToken(0, ';', nCharIndex);
+                if (!nSize)
+                    nSize = aToken.toInt32();
+                else if (!nCount)
+                    nCount = aToken.toInt32();
+                else if (aToken.getLength())
+                {
+                    // The coordinates are in an (x,y) form.
+                    aToken = aToken.copy(1, aToken.getLength() - 2);
+                    sal_Int32 nI = 0;
+                    boost::optional<sal_Int32> oX;
+                    boost::optional<sal_Int32> oY;
+                    do
+                    {
+                        OUString aPoint = aToken.getToken(0, ',', nI);
+                        if (!oX)
+                            oX.reset(aPoint.toInt32());
+                        else
+                            oY.reset(aPoint.toInt32());
+                    }
+                    while (nI >= 0);
+                    RTFSprms aPathAttributes;
+                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, RTFValue::Pointer_t(new RTFValue(*oX)));
+                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_y, RTFValue::Pointer_t(new RTFValue(*oY)));
+                    aPolygonSprms.set(NS_ooxml::LN_CT_WrapPath_lineTo, RTFValue::Pointer_t(new RTFValue(aPathAttributes)), OVERWRITE_NO_APPEND);
+                }
+            }
+            while (nCharIndex >= 0);
+            rShape.aWrapPolygonSprms = aPolygonSprms;
+        }
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
