@@ -38,7 +38,9 @@ class SvXMLAttributeList;
 class SvNumberFormatter;
 class SvNumberformat;
 class SvXMLNumUsedList_Impl;
-class SvXMLEmbeddedTextEntryArr;
+
+struct SvXMLEmbeddedTextEntry;
+typedef boost::ptr_vector<SvXMLEmbeddedTextEntry> SvXMLEmbeddedTextEntryArr;
 
 class XMLOFF_DLLPUBLIC SvXMLNumFmtExport
 {

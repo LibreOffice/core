@@ -98,8 +98,6 @@ struct SvXMLEmbeddedTextEntry
         nSourcePos(nSP), nFormatPos(nFP), aText(rT) {}
 };
 
-class SvXMLEmbeddedTextEntryArr : public boost::ptr_vector<SvXMLEmbeddedTextEntry> {};
-
 //! SvXMLNumUsedList_Impl should be optimized!
 
 SvXMLNumUsedList_Impl::SvXMLNumUsedList_Impl() :
