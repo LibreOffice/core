@@ -68,7 +68,7 @@
 
 #include "OGLTrans_TransitionImpl.hxx"
 
-#if defined( UNX )
+#if defined( UNX ) && !defined( MACOSX )
     #include <X11/keysym.h>
     #include <X11/X.h>
 #endif
@@ -153,7 +153,7 @@ int calcComponentOrderIndex(const uno::Sequence<sal_Int8>& rTags)
     return -1;
 }
 
-#ifdef UNX
+#if defined( UNX ) && !defined( MACOSX )
 
 // not thread safe
 static bool errorTriggered;
@@ -258,7 +258,7 @@ private:
     bool mbUseEnteringPixmap;
     bool mbFreeLeavingPixmap;
     bool mbFreeEnteringPixmap;
-#ifdef UNX
+#if defined( UNX ) && !defined( MACOSX )
     Pixmap maLeavingPixmap;
     Pixmap maEnteringPixmap;
 #endif
@@ -362,6 +362,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     aDeviceParams[1] >>= aVal;
 
     mpContext = boost::make_shared<OpenGLContext>();
+    mpContext->requestLegacyContext();
 
     if( !mpContext->init( reinterpret_cast< Window* >( aVal ) ) )
         return false;
@@ -513,7 +514,7 @@ void OGLTransitionerImpl::impl_prepareSlides()
 
     mpContext->sync();
 
-#ifdef UNX
+#if defined( UNX ) && !defined( MACOSX )
     // synchronized X still gives us much smoother play
     // I suspect some issues in above code in slideshow
     // synchronize whole transition for now
@@ -1297,7 +1298,7 @@ void OGLTransitionerImpl::disposing()
     }
 #endif
 
-#ifdef UNX
+#if defined( UNX ) && !defined( MACOSX )
     if( mbRestoreSync && bool(mpContext) ) {
         // try to reestablish synchronize state
         char* sal_synchronize = getenv("SAL_SYNCHRONIZE");
@@ -1331,7 +1332,7 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , mbUseEnteringPixmap(false)
     , mbFreeLeavingPixmap(false)
     , mbFreeEnteringPixmap(false)
-#ifdef UNX
+#if defined( UNX ) && !defined( MACOSX )
     , maLeavingPixmap(0)
     , maEnteringPixmap(0)
 #endif
