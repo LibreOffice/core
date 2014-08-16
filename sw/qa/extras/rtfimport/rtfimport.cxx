@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -1877,6 +1878,13 @@ DECLARE_RTFIMPORT_TEST(testFdo82106, "fdo82106.rtf")
 {
     // Tab was missing after footnote not containing a tab.
     getParagraph(2, "before\tafter");
+}
+
+DECLARE_RTFIMPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.rtf")
+{
+    // The shape also didn't have negative top / left coordinates.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-1177)), getProperty<sal_Int32>(getShape(1), "HoriOrientPosition"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-67)), getProperty<sal_Int32>(getShape(1), "VertOrientPosition"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
