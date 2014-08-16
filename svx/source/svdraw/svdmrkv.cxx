@@ -522,21 +522,19 @@ sal_uIntPtr SdrMarkView::GetMarkableObjCount() const
 
 bool SdrMarkView::HasMarkableObj() const
 {
-    size_t nCount=0;
-
     SdrPageView* pPV = GetSdrPageView();
     if(pPV)
     {
         SdrObjList* pOL=pPV->GetObjList();
         const size_t nObjAnz = pOL->GetObjCount();
-        for (size_t nObjNum = 0; nObjNum<nObjAnz && nCount==0; ++nObjNum) {
+        for (size_t nObjNum = 0; nObjNum<nObjAnz; ++nObjNum) {
             SdrObject* pObj=pOL->GetObj(nObjNum);
             if (IsObjMarkable(pObj,pPV)) {
-                nCount++;
+                return true;
             }
         }
     }
-    return nCount!=0;
+    return false;
 }
 
 void SdrMarkView::hideMarkHandles()
