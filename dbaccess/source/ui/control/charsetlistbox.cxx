@@ -25,22 +25,8 @@
 
 namespace dbaui
 {
-    // CharSetListBox
-    CharSetListBox::CharSetListBox( Window* _pParent, const ResId& _rResId )
-        :ListBox( _pParent, _rResId )
-    {
-        SetDropDownLineCount( 20 );
-
-        OCharsetDisplay::const_iterator charSet = m_aCharSets.begin();
-        while ( charSet != m_aCharSets.end() )
-        {
-            InsertEntry( (*charSet).getDisplayName() );
-            ++charSet;
-        }
-    }
-
     CharSetListBox::CharSetListBox( Window* _pParent, WinBits _nBits = WB_DROPDOWN )
-        :ListBox( _pParent, _nBits )
+        : ListBox( _pParent, _nBits )
     {
         SetDropDownLineCount( 20 );
 

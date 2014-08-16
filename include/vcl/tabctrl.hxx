@@ -109,8 +109,6 @@ public:
     void                SetItemsOffset( const Point& rOffs );
     Point               GetItemsOffset() const;
 
-    void                InsertPage( const ResId& rResId,
-                                    sal_uInt16 nPos = TAB_APPEND );
     void                InsertPage( sal_uInt16 nPageId, const OUString& rText,
                                     sal_uInt16 nPos = TAB_APPEND );
     void                RemovePage( sal_uInt16 nPageId );

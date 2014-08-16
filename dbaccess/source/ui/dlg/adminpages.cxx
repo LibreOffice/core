@@ -56,17 +56,6 @@ namespace dbaui
     {
     }
 
-    // OGenericAdministrationPage
-    OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
-        :SfxTabPage(_pParent, _rId, _rAttrSet)
-        ,m_abEnableRoadmap(false)
-        ,m_pAdminDialog(NULL)
-        ,m_pItemSetHelper(NULL)
-    {
-
-        SetExchangeSupport(true);
-    }
-
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rUIXMLDescription, &_rAttrSet)
         ,m_abEnableRoadmap(false)

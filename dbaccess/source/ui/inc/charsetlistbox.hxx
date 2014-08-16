@@ -33,7 +33,6 @@ namespace dbaui
     class CharSetListBox : public ListBox
     {
     public:
-        CharSetListBox( Window* _pParent, const ResId& _rResId );
         CharSetListBox( Window* _pParent, WinBits _nBits );
         virtual ~CharSetListBox();
 

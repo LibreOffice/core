@@ -47,6 +47,9 @@ SvtListener::IsListening(SvtBroadcaster&) const
 SvxFontListBox::GetSelectEntry() const
 SvxOpenGLObject::getRenderer()
 SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
+SwDoc::GetDocumentFieldsMAnager() const
+SwDoc::GetDocumentStateManager()
+SwDoc::GetDocumentStateManager() const
 SwLayHelper::CheckPageFlyCache(SwPageFrm*&, SwFlyFrm*)
 SwTxtPaintInfo::DrawSpecial(SwLinePortion const&, unsigned short, Color const&) const
 SwUpdateAttr::SwUpdateAttr(int, int, unsigned short, std::__debug::vector<unsigned short, std::allocator<unsigned short> >)
@@ -181,9 +184,6 @@ canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const
 chart::ChartTypeUnoDlg::Create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 chart::InternalData::isDefaultData()
 chart::ShapeToolbarController::create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
-chart::opengl3D::OpenGL3DRenderer::SetScroll()
-chart::opengl3D::OpenGL3DRenderer::SetScrollDistance(float)
-chart::opengl3D::OpenGL3DRenderer::SetScrollSpeed(float)
 comphelper::OAccessibleImplementationAccess::setStateBit(short, bool)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const

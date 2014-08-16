@@ -1614,31 +1614,6 @@ Size TabControl::GetTabPageSizePixel() const
     return aRect.GetSize();
 }
 
-void TabControl::InsertPage( const ResId& rResId, sal_uInt16 nPos )
-{
-    GetRes( rResId.SetRT( RSC_TABCONTROLITEM ) );
-
-    sal_uLong nObjMask = ReadLongRes();
-    sal_uInt16 nItemId  = 1;
-
-    // ID
-    if ( nObjMask & RSC_TABCONTROLITEM_ID )
-        nItemId = sal::static_int_cast<sal_uInt16>(ReadLongRes());
-
-    // Text
-    OUString aTmpStr;
-    if( nObjMask & RSC_TABCONTROLITEM_TEXT )
-        aTmpStr = ReadStringRes();
-    InsertPage( nItemId, aTmpStr, nPos );
-
-    // PageResID
-    if ( nObjMask & RSC_TABCONTROLITEM_PAGERESID )
-    {
-        //skip unused TabPageResId value
-        ReadLongRes();
-    }
-}
-
 void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
                              sal_uInt16 nPos )
 {

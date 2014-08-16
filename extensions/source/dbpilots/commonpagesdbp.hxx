@@ -79,7 +79,6 @@ namespace dbp
         ListBox*        m_pList;
 
     public:
-        OMaybeListSelectionPage( OControlWizard* _pParent, const ResId& _rId );
         OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription );
 
     protected:

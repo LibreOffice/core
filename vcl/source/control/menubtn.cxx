@@ -80,33 +80,6 @@ MenuButton::MenuButton( Window* pParent, WinBits nWinBits )
     ImplInit( pParent, nWinBits );
 }
 
-MenuButton::MenuButton( Window* pParent, const ResId& rResId )
-    : PushButton( WINDOW_MENUBUTTON )
-{
-    ImplInitMenuButtonData();
-    rResId.SetRT( RSC_MENUBUTTON );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-void MenuButton::ImplLoadRes( const ResId& rResId )
-{
-    Control::ImplLoadRes( rResId );
-
-    sal_uLong nObjMask = ReadLongRes();
-
-    if ( RSCMENUBUTTON_MENU & nObjMask )
-    {
-        mpOwnMenu = new PopupMenu( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) );
-        SetPopupMenu( mpOwnMenu );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
-    }
-}
-
 MenuButton::~MenuButton()
 {
     delete mpMenuTimer;
