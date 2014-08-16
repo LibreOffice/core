@@ -112,7 +112,7 @@ public:
     const OUString& getCurRegionName () const { return maCurRegionName;}
 
     // Check if the root region is visible or not.
-    bool isNonRootRegionVisible () const { return mnCurRegionId;}
+    bool isNonRootRegionVisible () const { return mnCurRegionId > 0;}
 
     void setOpenRegionHdl(const Link &rLink);
 
