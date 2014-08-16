@@ -76,36 +76,36 @@ class Window;
 // common types
 
 // displaying a database exception for the user
-// display info about a simple ::com::sun::star::sdbc::SQLException
-void displayException(const ::com::sun::star::sdbc::SQLException&, Window* _pParent = NULL);
-void displayException(const ::com::sun::star::sdbc::SQLWarning&, Window* _pParent = NULL);
-SVX_DLLPUBLIC void displayException(const ::com::sun::star::sdb::SQLContext&, Window* _pParent = NULL);
-void displayException(const ::com::sun::star::sdb::SQLErrorEvent&, Window* _pParent = NULL);
-void displayException(const ::com::sun::star::uno::Any&, Window* _pParent = NULL);
+// display info about a simple css::sdbc::SQLException
+void displayException(const css::sdbc::SQLException&, Window* _pParent = NULL);
+void displayException(const css::sdbc::SQLWarning&, Window* _pParent = NULL);
+SVX_DLLPUBLIC void displayException(const css::sdb::SQLContext&, Window* _pParent = NULL);
+void displayException(const css::sdb::SQLErrorEvent&, Window* _pParent = NULL);
+void displayException(const css::uno::Any&, Window* _pParent = NULL);
 
-sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& xCont, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElement);
+sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< css::uno::XInterface>& xElement);
 
-SVX_DLLPUBLIC OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel);
+SVX_DLLPUBLIC OUString getLabelName(const css::uno::Reference< css::beans::XPropertySet>& xControlModel);
 
 
-// = class CursorWrapper - a helper class which works in common with a ::com::sun::star::uno::Reference<XDatabaseUpdateCursor>,
+// = class CursorWrapper - a helper class which works in common with a css::uno::Reference<XDatabaseUpdateCursor>,
 //                          XDatabaseBookmarkCursor and XDatabaseDirectCursor each
 
 
 class CursorWrapper
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xGeneric;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>               m_xMoveOperations;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>              m_xBookmarkOperations;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>        m_xColumnsSupplier;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>            m_xPropertyAccess;
+    css::uno::Reference< css::uno::XInterface>                m_xGeneric;
+    css::uno::Reference< css::sdbc::XResultSet>               m_xMoveOperations;
+    css::uno::Reference< css::sdbcx::XRowLocate>              m_xBookmarkOperations;
+    css::uno::Reference< css::sdbcx::XColumnsSupplier>        m_xColumnsSupplier;
+    css::uno::Reference< css::beans::XPropertySet>            m_xPropertyAccess;
 
 public:
     // Construction/Destruction
     CursorWrapper() { }
-    CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, bool bUseCloned = false);
-    SVX_DLLPUBLIC CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
+    CursorWrapper(const css::uno::Reference< css::sdbc::XRowSet>& _rxCursor, bool bUseCloned = false);
+    SVX_DLLPUBLIC CursorWrapper(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
         // if bUseCloned == sal_True, the cursor is first doubled over the XCloneable interface (which it must implement)
         // and then used
 
@@ -118,34 +118,34 @@ public:
     bool Is() const { return m_xMoveOperations.is(); }
 
     CursorWrapper* operator ->() { return this; }
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& () const{ return m_xGeneric; }
+    operator const css::uno::Reference< css::uno::XInterface>& () const{ return m_xGeneric; }
 
     // 'Conversions'
-    const CursorWrapper& operator=(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xCursor);
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& () const          { return m_xMoveOperations; }
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>& () const         { return m_xBookmarkOperations; }
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& () const   { return m_xColumnsSupplier; }
+    const CursorWrapper& operator=(const css::uno::Reference< css::sdbc::XRowSet>& xCursor);
+    operator const css::uno::Reference< css::sdbc::XResultSet>& () const          { return m_xMoveOperations; }
+    operator const css::uno::Reference< css::sdbcx::XRowLocate>& () const         { return m_xBookmarkOperations; }
+    operator const css::uno::Reference< css::sdbcx::XColumnsSupplier>& () const   { return m_xColumnsSupplier; }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&        getPropertySet() const      { return m_xPropertyAccess; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&           getResultSet() const        { return m_xMoveOperations; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate >&          getRowLocate() const        { return m_xBookmarkOperations; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >&    getColumnsSupplier() const  { return m_xColumnsSupplier; }
+    const css::uno::Reference< css::beans::XPropertySet >&        getPropertySet() const      { return m_xPropertyAccess; }
+    const css::uno::Reference< css::sdbc::XResultSet >&           getResultSet() const        { return m_xMoveOperations; }
+    const css::uno::Reference< css::sdbcx::XRowLocate >&          getRowLocate() const        { return m_xBookmarkOperations; }
+    const css::uno::Reference< css::sdbcx::XColumnsSupplier >&    getColumnsSupplier() const  { return m_xColumnsSupplier; }
 
     // the usual queryInterface
-    ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) throw ( css::uno::RuntimeException )
     { return m_xMoveOperations->queryInterface(type); }
 
-    // ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>
-    ::com::sun::star::uno::Any getBookmark(void)
-        throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
+    // css::uno::Reference< css::sdbcx::XRowLocate>
+    css::uno::Any getBookmark(void)
+        throw( css::sdbc::SQLException, css::uno::RuntimeException )
     { return m_xBookmarkOperations->getBookmark(); }
-    bool moveToBookmark(const ::com::sun::star::uno::Any& bookmark) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
-    bool moveRelativeToBookmark(const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->moveRelativeToBookmark(bookmark, rows); }
-    sal_Int32 compareBookmarks(const ::com::sun::star::uno::Any& lhs, const ::com::sun::star::uno::Any& rhs) const throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->compareBookmarks(lhs, rhs); }
-    sal_Int32 hasOrderedBookmarks(void) const throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->hasOrderedBookmarks(); }
-    sal_Int32 hashBookmark(const ::com::sun::star::uno::Any& bookmark) const throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->hashBookmark(bookmark); }
+    bool moveToBookmark(const css::uno::Any& bookmark) throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
+    bool moveRelativeToBookmark(const css::uno::Any& bookmark, sal_Int32 rows) throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->moveRelativeToBookmark(bookmark, rows); }
+    sal_Int32 compareBookmarks(const css::uno::Any& lhs, const css::uno::Any& rhs) const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->compareBookmarks(lhs, rhs); }
+    sal_Int32 hasOrderedBookmarks(void) const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->hasOrderedBookmarks(); }
+    sal_Int32 hashBookmark(const css::uno::Any& bookmark) const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->hashBookmark(bookmark); }
 
-    // ::com::sun::star::sdbc::XResultSet
+    // css::sdbc::XResultSet
     bool isBeforeFirst() const              { return m_xMoveOperations->isBeforeFirst(); }
     bool isAfterLast() const                { return m_xMoveOperations->isAfterLast(); }
     bool isFirst() const                    { return m_xMoveOperations->isFirst(); }
@@ -162,11 +162,11 @@ public:
     bool rowUpdated()                       { return m_xMoveOperations->rowUpdated(); }
     bool rowInserted()                      { return m_xMoveOperations->rowInserted(); }
     bool rowDeleted()                       { return m_xMoveOperations->rowDeleted(); }
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> getStatement()         { return m_xMoveOperations->getStatement(); }
-    // ::com::sun::star::sdbcx::XColumnsSupplier
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getColumns() const throw( ::com::sun::star::uno::RuntimeException ) { return m_xColumnsSupplier->getColumns(); }
+    css::uno::Reference< css::uno::XInterface> getStatement()         { return m_xMoveOperations->getStatement(); }
+    // css::sdbcx::XColumnsSupplier
+    css::uno::Reference< css::container::XNameAccess> getColumns() const throw( css::uno::RuntimeException ) { return m_xColumnsSupplier->getColumns(); }
 private:
-    void ImplConstruct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, bool bUseCloned);
+    void ImplConstruct(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned);
 };
 
 
@@ -182,7 +182,7 @@ public:
     FmXDisposeListener(::osl::Mutex& _rMutex) : m_pAdapter(NULL), m_rMutex(_rMutex) { }
     virtual ~FmXDisposeListener();
 
-    virtual void disposing(const ::com::sun::star::lang::EventObject& _rEvent, sal_Int16 _nId) throw( ::com::sun::star::uno::RuntimeException ) = 0;
+    virtual void disposing(const css::lang::EventObject& _rEvent, sal_Int16 _nId) throw( css::uno::RuntimeException ) = 0;
 
 protected:
     void setAdapter(FmXDisposeMultiplexer* pAdapter);
@@ -190,34 +190,34 @@ protected:
 
 
 
-class FmXDisposeMultiplexer :public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener>
+class FmXDisposeMultiplexer :public ::cppu::WeakImplHelper1< css::lang::XEventListener>
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       m_xObject;
+    css::uno::Reference< css::lang::XComponent>       m_xObject;
     FmXDisposeListener* m_pListener;
     sal_Int16           m_nId;
 
     virtual ~FmXDisposeMultiplexer();
 public:
-    FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId = -1);
+    FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const css::uno::Reference< css::lang::XComponent>& _rxObject, sal_Int16 _nId = -1);
 
-// ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::lang::XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void dispose();
 };
 
 
 
-sal_Int16       getControlTypeByObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject);
+sal_Int16       getControlTypeByObject(const css::uno::Reference< css::lang::XServiceInfo>& _rxObject);
     // get the object type (OBJ_FM_...) from the services the object supports
 
 
-bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxRowSet);
-    // checks if the ::com::sun::star::sdbcx::XColumnsSupplier provided by _rxRowSet supllies any columns
+bool isRowSetAlive(const css::uno::Reference< css::uno::XInterface>& _rxRowSet);
+    // checks if the css::sdbcx::XColumnsSupplier provided by _rxRowSet supllies any columns
 
 
-typedef ::std::set  < ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                    , ::comphelper::OInterfaceCompare< ::com::sun::star::uno::XInterface >
+typedef ::std::set  < css::uno::Reference< css::uno::XInterface >
+                    , ::comphelper::OInterfaceCompare< css::uno::XInterface >
                     > InterfaceBag;
 
 #endif // INCLUDED_SVX_FMTOOLS_HXX
