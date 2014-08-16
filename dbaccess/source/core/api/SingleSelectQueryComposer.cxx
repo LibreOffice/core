@@ -1679,7 +1679,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         }
         else
         {
-            throw e;
+            throw;
         }
     }
 }
