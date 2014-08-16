@@ -144,7 +144,7 @@ protected:
     // fuer DismantleMarkedObjects
     bool ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPpolygon, bool bMakeLines) const;
     bool ImpCanDismantle(const SdrObject* pObj, bool bMakeLines) const;
-    void ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, sal_uIntPtr& rPos, SdrPageView* pPV, bool bMakeLines);
+    void ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, size_t& rPos, SdrPageView* pPV, bool bMakeLines);
     void ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad, SdrCrookMode eMode,
         bool bVertical, bool bNoContortion, bool bRotate, const Rectangle& rMarkRect);
     void ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion);
