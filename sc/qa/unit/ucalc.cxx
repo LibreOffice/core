@@ -6864,6 +6864,40 @@ void Test::testCondCopyPaste()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondCopyPasteSingleCell()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,3,3,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->AddRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    sal_uLong nIndex = m_pDoc->AddCondFormat(pFormat, 0);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
+
+    ScRange aTargetRange(4,4,0,4,4,0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(4,4,0);
+    CPPUNIT_ASSERT(pPastedFormat);
+
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(aTargetRange), pPastedFormat->GetRange());
+    CPPUNIT_ASSERT( nIndex != pPastedFormat->GetKey());
+    const SfxPoolItem* pItem = m_pDoc->GetAttr( 4, 4, 0, ATTR_CONDITIONAL );
+    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+
+    CPPUNIT_ASSERT(pCondFormatItem);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+    CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testIconSet()
 {
     m_pDoc->InsertTab(0, "Test");
