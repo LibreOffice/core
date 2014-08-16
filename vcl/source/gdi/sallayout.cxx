@@ -1277,7 +1277,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
     }
 }
 
-sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor ) const
 {
     int nCharCapacity = mnEndCharPos - mnMinCharPos;
     DeviceCoordinate* pCharWidths = (DeviceCoordinate*)alloca( nCharCapacity * sizeof(DeviceCoordinate) );
@@ -1907,7 +1907,7 @@ void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
     // NOTE: now the baselevel font is active again
 }
 
-sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor ) const
 {
     if( mnLevel <= 0 )
         return -1;

@@ -681,7 +681,7 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr_segment * pSegment)
     return true;
 }
 
-sal_Int32 GraphiteLayout::GetTextBreak(DeviceCoordinate maxmnWidth, long char_extra, int factor) const
+sal_Int32 GraphiteLayout::GetTextBreak(DeviceCoordinate maxmnWidth, DeviceCoordinate char_extra, int factor) const
 {
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"Gr::GetTextBreak c[%d-%d) maxWidth %ld char extra %ld factor %d\n",

@@ -76,9 +76,9 @@ public:
         {
             return maImpl.FillDXArray(dxa);
         }
-        virtual sal_Int32 GetTextBreak(DeviceCoordinate mw, long ce, int f) const SAL_OVERRIDE
+        virtual sal_Int32 GetTextBreak(DeviceCoordinate max_width, DeviceCoordinate extra, int factor) const SAL_OVERRIDE
         {
-            return maImpl.GetTextBreak(mw, ce, f);
+            return maImpl.GetTextBreak(max_width, extra, factor);
         }
         virtual void    GetCaretPositions( int as, long* cxa ) const SAL_OVERRIDE
         {
