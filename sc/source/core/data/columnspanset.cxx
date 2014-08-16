@@ -278,9 +278,17 @@ void SingleColumnSpanSet::scan(const ScMarkData& rMark, SCTAB nTab, SCCOL nCol)
         return;
 
     ScRangeList aRanges = rMark.GetMarkedRanges();
-    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    scan(aRanges, nTab, nCol);
+}
+
+void SingleColumnSpanSet::scan(const ScRangeList& rRanges, SCTAB nTab, SCCOL nCol)
+{
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
-        const ScRange* p = aRanges[i];
+        const ScRange* p = rRanges[i];
+        if (nTab < p->aStart.Tab() || p->aEnd.Tab() < nTab)
+            continue;
+
         if (nCol < p->aStart.Col() || p->aEnd.Col() < nCol)
             // This column is not in this range. Skip it.
             continue;

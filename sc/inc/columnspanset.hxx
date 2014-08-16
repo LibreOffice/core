@@ -20,6 +20,7 @@ class ScDocument;
 class ScColumn;
 class ScMarkData;
 class ScRange;
+class ScRangeList;
 
 namespace sc {
 
@@ -131,6 +132,8 @@ public:
      * Scan all marked data and tag all marked segments in specified column.
      */
     void scan(const ScMarkData& rMark, SCTAB nTab, SCCOL nCol);
+
+    void scan(const ScRangeList& rRanges, SCTAB nTab, SCCOL nCol);
 
     void set(SCROW nRow1, SCROW nRow2, bool bVal);
 
