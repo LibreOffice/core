@@ -180,11 +180,11 @@ private:
 
 inline bool LwpDocument::IsChildDoc()
 {
-    return (m_nPersistentFlags & DOC_CHILDDOC);
+    return (m_nPersistentFlags & DOC_CHILDDOC) != 0;
 }
 inline bool LwpDocument::HonorProtection()
 {
-    return m_nPersistentFlags & DOC_PROTECTED;
+    return (m_nPersistentFlags & DOC_PROTECTED) != 0;
 }
 inline LwpObjectID& LwpDocument::GetContentList()
 {
