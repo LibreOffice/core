@@ -69,15 +69,6 @@ const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
-//const char TEMPLATEBAR_SAVE[] = "template_save";
-//const char TEMPLATEBAR_OPEN[] = "open";
-//const char TEMPLATEBAR_EDIT[] = "edit";
-//const char TEMPLATEBAR_PROPERTIES[] = "properties";
-//const char TEMPLATEBAR_DEFAULT[] = "default";
-//const char TEMPLATEBAR_MOVE[] = "move";
-//const char TEMPLATEBAR_EXPORT[] = "export";
-//const char TEMPLATEBAR_DELETE[] = "template_delete";
-
 float fMultiplier = 1.4f;
 const Color aButtonsBackground(114, 168, 84); // TDF green
 const Color aButtonsText(COL_WHITE);
@@ -629,7 +620,6 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem)
         try
         {
             dispatchURL( pTemplateItem->getPath(), "_default", xFrame, aArgs );
-            //mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
         }
         catch( const uno::Exception& )
         {
