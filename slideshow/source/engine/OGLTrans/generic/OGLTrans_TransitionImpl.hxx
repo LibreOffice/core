@@ -33,7 +33,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
