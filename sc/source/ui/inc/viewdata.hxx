@@ -285,8 +285,8 @@ public:
     SCCOL           GetFixPosX() const                      { return pThisTab->nFixPosX; }
     SCROW           GetFixPosY() const                      { return pThisTab->nFixPosY; }
     bool            IsPagebreakMode() const                 { return bPagebreak; }
-    bool            IsPasteMode() const                     { return nPasteFlags & SC_PASTE_MODE; }
-    bool            ShowPasteSource() const                 { return nPasteFlags & SC_PASTE_BORDER; }
+    bool            IsPasteMode() const                     { return (nPasteFlags & SC_PASTE_MODE) != 0; }
+    bool            ShowPasteSource() const                 { return (nPasteFlags & SC_PASTE_BORDER) != 0; }
 
     void            SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX );
     void            SetPosY( ScVSplitPos eWhich, SCROW nNewPosY );
