@@ -53,9 +53,6 @@ typedef short RSWND_STYLE;
 // For "FixedImage" resource:
 #define RSC_FIXEDIMAGE_IMAGE            0x0001
 
-// For "MenuButton" resources:
-#define RSCMENUBUTTON_MENU              0x01
-
 // For all menu resources:
 #define RSC_MENU_ITEMS                  0x01
 #define RSC_MENU_TEXT                   0x02
