@@ -59,7 +59,9 @@ void Primitive2dXmlDump::filterAllActionTypes()
     maFilter.assign(constMaxActionType, true);
 }
 
-xmlDocPtr Primitive2dXmlDump::dumpAndParse(const Primitive2DSequence& rPrimitive2DSequence, const OUString& rTempStreamName)
+xmlDocPtr Primitive2dXmlDump::dumpAndParse(
+    const drawinglayer::primitive2d::Primitive2DSequence& rPrimitive2DSequence,
+    const OUString& rTempStreamName)
 {
     boost::scoped_ptr<SvStream> pStream;
 
@@ -84,7 +86,9 @@ xmlDocPtr Primitive2dXmlDump::dumpAndParse(const Primitive2DSequence& rPrimitive
     return pDoc;
 }
 
-void Primitive2dXmlDump::decomposeAndWrite(const Primitive2DSequence& rPrimitive2DSequence, XmlWriter& rWriter)
+void Primitive2dXmlDump::decomposeAndWrite(
+    const drawinglayer::primitive2d::Primitive2DSequence& rPrimitive2DSequence,
+    XmlWriter& rWriter)
 {
     for (int i = 0; i < rPrimitive2DSequence.getLength(); i++)
     {
