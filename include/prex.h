@@ -27,7 +27,6 @@
 /* Types from <X11/X.h> that clash with LO's identifiers
  * and we don't need.
  */
-#define Boolean     HIDE_XLIB_Boolean
 #define Font        HIDE_XLIB_Font
 #define Icon        HIDE_XLIB_Icon
 

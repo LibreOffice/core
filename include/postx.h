@@ -32,7 +32,6 @@
 #undef Region
 #undef Icon
 #undef Time
-#undef Boolean
 
 #undef Min
 #undef Max
