@@ -77,13 +77,13 @@ public:
                const OUString& rServiceName );
     ~SfxFilter();
 
-    bool IsAllowedAsTemplate() const { return nFormatType & SFX_FILTER_TEMPLATE; }
-    bool IsOwnFormat() const { return nFormatType & SFX_FILTER_OWN; }
-    bool IsOwnTemplateFormat() const { return nFormatType & SFX_FILTER_TEMPLATEPATH; }
-    bool IsAlienFormat() const { return nFormatType & SFX_FILTER_ALIEN; }
-    bool CanImport() const { return nFormatType & SFX_FILTER_IMPORT; }
-    bool CanExport() const { return nFormatType & SFX_FILTER_EXPORT; }
-    bool IsInternal() const { return nFormatType & SFX_FILTER_INTERNAL; }
+    bool IsAllowedAsTemplate() const { return (nFormatType & SFX_FILTER_TEMPLATE) != 0; }
+    bool IsOwnFormat() const { return (nFormatType & SFX_FILTER_OWN) != 0; }
+    bool IsOwnTemplateFormat() const { return (nFormatType & SFX_FILTER_TEMPLATEPATH) != 0; }
+    bool IsAlienFormat() const { return (nFormatType & SFX_FILTER_ALIEN) != 0; }
+    bool CanImport() const { return (nFormatType & SFX_FILTER_IMPORT) != 0; }
+    bool CanExport() const { return (nFormatType & SFX_FILTER_EXPORT) != 0; }
+    bool IsInternal() const { return (nFormatType & SFX_FILTER_INTERNAL) != 0; }
     SfxFilterFlags  GetFilterFlags() const  { return nFormatType; }
     const OUString& GetFilterName() const { return maFilterName; }
     const OUString& GetMimeType() const { return aMimeType; }
