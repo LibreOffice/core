@@ -20,7 +20,7 @@
   <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="officeRel"/>
   <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/relationships" alias="officeRel"/>
-  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="vmlOffice"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing"/>
   <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/wordprocessingDrawing" alias="wordprocessingDrawing"/>
@@ -10431,35 +10431,35 @@
       <action name="end" action="handleOLE"/>
     </resource>
     <resource name="ST_Angle" resource="List">
-      <value tokenid="ooxml:Value_office_ST_Angle_any">any</value>
-      <value tokenid="ooxml:Value_office_ST_Angle_30">30</value>
-      <value tokenid="ooxml:Value_office_ST_Angle_45">45</value>
-      <value tokenid="ooxml:Value_office_ST_Angle_60">60</value>
-      <value tokenid="ooxml:Value_office_ST_Angle_90">90</value>
-      <value tokenid="ooxml:Value_office_ST_Angle_auto">auto</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_Angle_any">any</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_Angle_30">30</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_Angle_45">45</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_Angle_60">60</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_Angle_90">90</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_Angle_auto">auto</value>
     </resource>
     <resource name="ST_OLELinkType" resource="List">
-      <value tokenid="ooxml:Value_office_ST_OLELinkType_Picture">Picture</value>
-      <value tokenid="ooxml:Value_office_ST_OLELinkType_Bitmap">Bitmap</value>
-      <value tokenid="ooxml:Value_office_ST_OLELinkType_EnhancedMetaFile">EnhancedMetaFile</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_OLELinkType_Picture">Picture</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_OLELinkType_Bitmap">Bitmap</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_OLELinkType_EnhancedMetaFile">EnhancedMetaFile</value>
     </resource>
     <resource name="ST_TrueFalseBlank" resource="List">
-      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_"/>
-      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_t">t</value>
-      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_f">f</value>
-      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_true">true</value>
-      <value tokenid="ooxml:Value_office_ST_TrueFalseBlank_false">false</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_TrueFalseBlank_"/>
+      <value tokenid="ooxml:Value_vmlOffice_ST_TrueFalseBlank_t">t</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_TrueFalseBlank_f">f</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_TrueFalseBlank_true">true</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_TrueFalseBlank_false">false</value>
     </resource>
     <resource name="ST_FillType" resource="List">
-      <value tokenid="ooxml:Value_office_ST_FillType_gradientCenter">gradientCenter</value>
-      <value tokenid="ooxml:Value_office_ST_FillType_solid">solid</value>
-      <value tokenid="ooxml:Value_office_ST_FillType_pattern">pattern</value>
-      <value tokenid="ooxml:Value_office_ST_FillType_tile">tile</value>
-      <value tokenid="ooxml:Value_office_ST_FillType_frame">frame</value>
-      <value tokenid="ooxml:Value_office_ST_FillType_gradientUnscaled">gradientUnscaled</value>
-      <value tokenid="ooxml:Value_office_ST_FillType_gradientRadial">gradientRadial</value>
-      <value tokenid="ooxml:Value_office_ST_FillType_gradient">gradient</value>
-      <value tokenid="ooxml:Value_office_ST_FillType_background">background</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_FillType_gradientCenter">gradientCenter</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_FillType_solid">solid</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_FillType_pattern">pattern</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_FillType_tile">tile</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_FillType_frame">frame</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_FillType_gradientUnscaled">gradientUnscaled</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_FillType_gradientRadial">gradientRadial</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_FillType_gradient">gradient</value>
+      <value tokenid="ooxml:Value_vmlOffice_ST_FillType_background">background</value>
     </resource>
   </namespace>
   <namespace name="mce">

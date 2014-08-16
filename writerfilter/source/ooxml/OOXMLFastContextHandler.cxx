@@ -1804,7 +1804,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     {
         case NMSP_doc:
         case NMSP_vml_wordprocessingDrawing:
-        case NMSP_office:
+        case NMSP_vmlOffice:
             if (!bGroupShape)
                 xContextHandler.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
         // no break;
@@ -1823,7 +1823,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                     {
                         pWrapper->addNamespace(NMSP_doc);
                         pWrapper->addNamespace(NMSP_vml_wordprocessingDrawing);
-                        pWrapper->addNamespace(NMSP_office);
+                        pWrapper->addNamespace(NMSP_vmlOffice);
                         pWrapper->addToken( NMSP_vml|XML_textbox );
                     }
 
