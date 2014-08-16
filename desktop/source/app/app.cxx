@@ -92,7 +92,7 @@
 #include <svtools/menuoptions.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/help.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
@@ -768,7 +768,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 
         OUString const aMessage(aDiagnosticMessage + "\n");
 
-        ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
+        MessageDialog aBootstrapFailedBox(NULL, aMessage);
         aBootstrapFailedBox.SetText( aProductKey );
         aBootstrapFailedBox.Execute();
     }
@@ -1173,7 +1173,7 @@ void restartOnMac(bool passArguments) {
     ResMgr *resMgr = Desktop::GetDesktopResManager();
     OUString aMessage = ResId(STR_LO_MUST_BE_RESTARTED, *resMgr).toString();
 
-    ErrorBox aRestartBox( NULL, WB_OK, aMessage );
+    MessageDialog aRestartBox(NULL, aMessage);
     aRestartBox.Execute();
 #else
     OUString execUrl;
@@ -2434,7 +2434,7 @@ void Desktop::OpenClients()
             ResMgr* pDtResMgr = GetDesktopResManager();
             if( pDtResMgr )
             {
-                ErrorBox aBox( NULL, ResId( EBX_ERR_PRINTDISABLED, *pDtResMgr ) );
+                MessageDialog aBox(NULL, ResId(STR_ERR_PRINTDISABLED, *pDtResMgr));
                 aBox.Execute();
             }
         }
