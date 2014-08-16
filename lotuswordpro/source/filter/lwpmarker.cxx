@@ -300,7 +300,7 @@ bool LwpCHBlkMarker::IsHasFilled()
 
 bool LwpCHBlkMarker::IsBubbleHelp()
 {
-    return (CHB_HELP & m_nFlag);
+    return (CHB_HELP & m_nFlag) != 0;
 }
 
 void LwpCHBlkMarker::EnumAllKeywords()

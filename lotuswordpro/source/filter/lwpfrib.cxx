@@ -132,7 +132,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
             break;
         case FRIB_TAG_TEXT:
         {
-            newFrib = new LwpFribText (pPara, fribtag & FRIB_TAG_NOUNICODE);
+            newFrib = new LwpFribText (pPara, (fribtag & FRIB_TAG_NOUNICODE) != 0);
             break;
         }
         case FRIB_TAG_TABLE:

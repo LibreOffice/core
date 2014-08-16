@@ -170,7 +170,7 @@ void LwpTextAttributeOverride::Read(LwpObjectStream* pStrm)
 
 bool LwpTextAttributeOverride::IsHighlight()
 {
-    return (m_nValues & TAO_HIGHLIGHT);
+    return (m_nValues & TAO_HIGHLIGHT) != 0;
 }
 
 /*class LwpKinsokuOptsOverride*/

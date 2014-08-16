@@ -148,13 +148,13 @@ void LwpIndexSection::Read()
 
 bool LwpIndexSection::IsFormatRunin()
 {
-    return (m_nFlags & RUN_IN);
+    return (m_nFlags & RUN_IN) != 0;
 
 }
 
 bool LwpIndexSection::IsFormatSeparator()
 {
-    return (m_nFlags & SEPARATORS);
+    return (m_nFlags & SEPARATORS) != 0;
 
 }
 

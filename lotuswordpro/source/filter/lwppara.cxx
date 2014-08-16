@@ -166,7 +166,7 @@ void LwpPara::Read()
     if(LwpFileHeader::m_nFileRevision<0x0006)
         Simple = false;
     else if(LwpFileHeader::m_nFileRevision<0x000B)
-        Simple = m_pObjStrm->QuickReaduInt8();
+        Simple = m_pObjStrm->QuickReaduInt8() != 0;
     else
     {
         sal_uInt8 Flag = m_pObjStrm->QuickReaduInt8();
