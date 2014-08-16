@@ -18,7 +18,6 @@
  */
 
 #undef Button
-#undef Byte
 #undef Control
 #undef Cursor
 #undef DirInfo

@@ -18,7 +18,6 @@
  */
 
 #define Button MacOSButton
-#define Byte MacOSByte
 #define Control MacOSControl
 #define Cursor MacOSCursor
 #define DirInfo MacOSDirInfo
