@@ -92,7 +92,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
 {
     for (int i = 0; i < rPrimitive2DSequence.getLength(); i++)
     {
-        Primitive2DReference xPrimitive2DReference = rPrimitive2DSequence[i];
+        drawinglayer::primitive2d::Primitive2DReference xPrimitive2DReference = rPrimitive2DSequence[i];
         const BasePrimitive2D* pBasePrimitive = dynamic_cast<const BasePrimitive2D* >(xPrimitive2DReference.get());
 
         sal_uInt32 nId = pBasePrimitive->getPrimitive2DID();
