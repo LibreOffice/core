@@ -43,20 +43,7 @@
 #pragma warning(push, 1)
 #endif
 
-#ifdef __MINGW32__
-#ifdef GetObject
-#undef GetObject
-#endif
-#define GetObject GetObjectA
-#endif
-
 #include <gdiplus.h>
-
-#ifdef __MINGW32__
-#ifdef GetObject
-#undef GetObject
-#endif
-#endif
 
 #if defined _MSC_VER
 #pragma warning(pop)
@@ -555,7 +542,7 @@ bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
     {
         BITMAP  aDDBInfo;
 
-        if( WIN_GetObject( mhDDB, sizeof( BITMAP ), &aDDBInfo ) )
+        if( GetObjectA( mhDDB, sizeof( BITMAP ), &aDDBInfo ) )
         {
             maSize = Size( aDDBInfo.bmWidth, aDDBInfo.bmHeight );
             mnBitCount = aDDBInfo.bmPlanes * aDDBInfo.bmBitsPixel;
@@ -651,7 +638,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 
         GlobalUnlock( rSalBmp.mhDIB );
 
-        if( hNewDDB && WIN_GetObject( hNewDDB, sizeof( BITMAP ), &aDDBInfo ) )
+        if( hNewDDB && GetObjectA( hNewDDB, sizeof( BITMAP ), &aDDBInfo ) )
         {
             mhDDB = hNewDDB;
             maSize = Size( aDDBInfo.bmWidth, aDDBInfo.bmHeight );
@@ -839,7 +826,7 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
         BITMAP aBmp;
 
         // find out size of source bitmap
-        WIN_GetObject( hHdl, sizeof( BITMAP ), (LPSTR) &aBmp );
+        GetObjectA( hHdl, sizeof( BITMAP ), (LPSTR) &aBmp );
 
         // create destination bitmap
         if ( (hCopy = CreateBitmapIndirect( &aBmp )) != 0 )

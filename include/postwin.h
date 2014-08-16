@@ -34,16 +34,7 @@
 #undef WB_LEFT
 #undef WB_RIGHT
 
-#ifdef GetObject
 #undef GetObject
-#ifdef UNICODE
-#define WIN_GetObject   GetObjectW
-#else
-#define WIN_GetObject   GetObjectA
-#endif
-#else
-#define WIN_GetObject   GetObject
-#endif
 
 #ifdef SetPrinter
 #undef SetPrinter
