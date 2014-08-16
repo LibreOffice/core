@@ -736,7 +736,7 @@ public:
     bool            IsObjectMemoryOwner() { return bOwnsData; }
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }
     sal_Size        GetResizeOffset() const { return nResize; }
-    virtual sal_uInt64 remainingSize() SAL_OVERRIDE { return GetBufSize() - Tell(); }
+    virtual sal_uInt64 remainingSize() SAL_OVERRIDE { return GetEndOfData() - Tell(); }
 };
 
 class TOOLS_DLLPUBLIC SvScriptStream: public SvStream
