@@ -1140,7 +1140,7 @@ inline const SwFrm *SwFrm::FindPrev() const
 
 inline bool SwFrm::IsLayoutFrm() const
 {
-    return GetType() & FRM_LAYOUT;
+    return (GetType() & FRM_LAYOUT) != 0;
 }
 inline bool SwFrm::IsRootFrm() const
 {
@@ -1156,7 +1156,7 @@ inline bool SwFrm::IsColumnFrm() const
 }
 inline bool SwFrm::IsFtnBossFrm() const
 {
-    return GetType() & FRM_FTNBOSS;
+    return (GetType() & FRM_FTNBOSS) != 0;
 }
 inline bool SwFrm::IsHeaderFrm() const
 {
@@ -1200,7 +1200,7 @@ inline bool SwFrm::IsCellFrm() const
 }
 inline bool SwFrm::IsCntntFrm() const
 {
-    return GetType() & FRM_CNTNT;
+    return (GetType() & FRM_CNTNT) != 0;
 }
 inline bool SwFrm::IsTxtFrm() const
 {
@@ -1212,15 +1212,15 @@ inline bool SwFrm::IsNoTxtFrm() const
 }
 inline bool SwFrm::IsFlowFrm() const
 {
-    return GetType() & 0xCA00;   //TabFrm, CntntFrm, SectionFrm
+    return (GetType() & 0xCA00) != 0;   //TabFrm, CntntFrm, SectionFrm
 }
 inline bool SwFrm::IsRetoucheFrm() const
 {
-    return GetType() & 0xCA40;   //TabFrm, CntntFrm, SectionFrm, Ftnfrm
+    return (GetType() & 0xCA40) != 0;   //TabFrm, CntntFrm, SectionFrm, Ftnfrm
 }
 inline bool SwFrm::IsAccessibleFrm() const
 {
-    return GetType() & FRM_ACCESSIBLE;
+    return (GetType() & FRM_ACCESSIBLE) != 0;
 }
 #endif
 
