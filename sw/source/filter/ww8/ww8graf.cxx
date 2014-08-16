@@ -2748,7 +2748,7 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         // Objekt ist Bestandteil einer Gruppe?
         SdrObject* pGroupObject = pSdrTextObj->GetUpGroup();
 
-        sal_uInt32 nOrdNum = pSdrTextObj->GetOrdNum();
+        const size_t nOrdNum = pSdrTextObj->GetOrdNum();
         bool bEraseThisObject;
         InsertTxbxText( pSdrTextObj, &aObjSize, pRecord->aTextId.nTxBxS,
             pRecord->aTextId.nSequence, nGrafAnchorCp, pRetFrmFmt,

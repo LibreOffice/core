@@ -688,9 +688,9 @@ bool SwView::HasDrwObj(SdrObject *pSdrObj) const
     if (pSdrObj->IsGroupObject())
     {
         SdrObjList* pList = pSdrObj->GetSubList();
-        sal_uInt32 nCnt = pList->GetObjCount();
+        const size_t nCnt = pList->GetObjCount();
 
-        for (sal_uInt32 i = 0; i < nCnt; i++)
+        for (size_t i = 0; i < nCnt; ++i)
             if ((bRet = HasDrwObj(pList->GetObj(i))))
                 break;
     }
@@ -707,9 +707,9 @@ bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
     if (pSdrObj->IsGroupObject())
     {
         SdrObjList* pList = pSdrObj->GetSubList();
-        sal_uInt32 nCnt = pList->GetObjCount();
+        const size_t nCnt = pList->GetObjCount();
 
-        for (sal_uInt32 i = 0; i < nCnt; i++)
+        for (size_t i = 0; i < nCnt; ++i)
             if ((bRet = HasOnlyObj(pList->GetObj(i), eObjInventor)) == false)
                 break;
     }

@@ -785,7 +785,7 @@ namespace svxform
         if ( pObject->ISA(SdrObjGroup) )
         {   // rekursiv absteigen
             const SdrObjList *pChildren = ((SdrObjGroup*)pObject)->GetSubList();
-            for ( sal_uInt16 i=0; i<pChildren->GetObjCount(); ++i )
+            for ( size_t i=0; i<pChildren->GetObjCount(); ++i )
             {
                 SdrObject* pCurrent = pChildren->GetObj(i);
                 if (!InsertFormComponent(rHint, pCurrent))

@@ -2115,7 +2115,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     aMouseRect.Right() +=aHalfConSiz.Width();
     aMouseRect.Bottom()+=aHalfConSiz.Height();
     sal_uInt16 nBoundHitTol=(sal_uInt16)aHalfConSiz.Width()/2; if (nBoundHitTol==0) nBoundHitTol=1;
-    sal_uIntPtr no=pOL->GetObjCount();
+    size_t no=pOL->GetObjCount();
     bool bFnd = false;
     SdrObjConnection aTestCon;
     SdrObjConnection aBestCon;

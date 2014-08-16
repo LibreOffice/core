@@ -91,7 +91,7 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
     else if(pObj->IsGroupObject())
     {
         SdrObjList* pList = pObj->GetSubList();
-        for(sal_uInt32 a(0); a < pList->GetObjCount(); a++)
+        for(size_t a = 0; a < pList->GetObjCount(); ++a)
             Imp_E3dView_InorderRun3DObjects(pList->GetObj(a), rMask);
     }
 }

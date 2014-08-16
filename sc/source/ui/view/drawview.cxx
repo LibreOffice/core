@@ -330,8 +330,8 @@ void ScDrawView::RecalcScale()
     {
         if ( SdrPage* pPage = pPV->GetPage() )
         {
-            sal_uLong nCount = pPage->GetObjCount();
-            for ( sal_uLong i = 0; i < nCount; i++ )
+            const size_t nCount = pPage->GetObjCount();
+            for ( size_t i = 0; i < nCount; ++i )
             {
                 SdrObject* pObj = pPage->GetObj( i );
                 // Align objects to nearset grid position
@@ -433,7 +433,7 @@ void ScDrawView::MarkListHasChanged()
             if ( pObj->ISA( SdrObjGroup ) )
             {
                 const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
-                sal_uLong nListCount = pLst->GetObjCount();
+                const size_t nListCount = pLst->GetObjCount();
                 if ( nListCount == 0 )
                 {
                     //  An empty group (may occur during Undo) is no control or graphics object.
@@ -441,7 +441,7 @@ void ScDrawView::MarkListHasChanged()
                     bOnlyControls = false;
                     bOnlyGraf = false;
                 }
-                for ( sal_uInt16 j = 0; j < nListCount; ++j )
+                for ( size_t j = 0; j < nListCount; ++j )
                 {
                     SdrObject *pSubObj = pLst->GetObj( j );
 
@@ -902,7 +902,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     if ( pObj->ISA( SdrObjGroup ) )
     {
         SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
-        for ( sal_uLong i = 0, nCount = pLst->GetObjCount(); i < nCount; ++i )
+        for ( size_t i = 0, nCount = pLst->GetObjCount(); i < nCount; ++i )
             SyncForGrid( pLst->GetObj( i ) );
     }
 

@@ -61,7 +61,7 @@ SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode,
 
 void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, bool bUseZOrder)
 {
-    for( sal_uIntPtr nIdx = 0, nCount = rObjList.GetObjCount(); nIdx < nCount; ++nIdx )
+    for( size_t nIdx = 0, nCount = rObjList.GetObjCount(); nIdx < nCount; ++nIdx )
     {
         SdrObject* pObj = bUseZOrder ?
             rObjList.GetObj( nIdx ) : rObjList.GetObjectForNavigationPosition( nIdx );

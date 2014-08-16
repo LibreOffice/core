@@ -197,15 +197,15 @@ public:
     void            CreateTitleAndLayout(bool bInit=false, bool bCreate=false);
     SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit );
 
-    virtual void       NbcInsertObject(SdrObject* pObj, sal_uLong nPos=CONTAINER_APPEND,
+    virtual void       NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE,
                                        const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
-    virtual SdrObject* NbcRemoveObject(sal_uLong nObjNum) SAL_OVERRIDE;
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum) SAL_OVERRIDE;
+    virtual SdrObject* NbcRemoveObject(size_t nObjNum) SAL_OVERRIDE;
+    virtual SdrObject* RemoveObject(size_t nObjNum) SAL_OVERRIDE;
 
     /** Also overload ReplaceObject methods to realize when
     objects are removed with this mechanism instead of RemoveObject*/
-    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum) SAL_OVERRIDE;
-    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum) SAL_OVERRIDE;
+    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum) SAL_OVERRIDE;
+    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, size_t nObjNum) SAL_OVERRIDE;
 
     void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const OUString& rStr );
 

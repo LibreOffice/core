@@ -146,7 +146,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
     SdrViewEvent aVEvt;
     mpView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
 
-    sal_uLong nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
+    const size_t nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
 
     if (mpView->IsInsObjPoint())
     {
@@ -161,7 +161,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
     {
         bReturn = true;
 
-        if (nCount == (mpView->GetSdrPageView()->GetObjList()->GetObjCount() - 1))
+        if (nCount+1 == mpView->GetSdrPageView()->GetObjList()->GetObjCount())
         {
             bCreated = true;
         }

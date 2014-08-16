@@ -294,8 +294,8 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
         if (pObj)
         {
             // remove SdrObject from page
-            sal_uInt32 nCount = mpPage->GetObjCount();
-            for( sal_uInt32 nNum = 0; nNum < nCount; nNum++ )
+            const size_t nCount = mpPage->GetObjCount();
+            for( size_t nNum = 0; nNum < nCount; ++nNum )
             {
                 if(mpPage->GetObj(nNum) == pObj)
                 {
@@ -336,7 +336,7 @@ sal_Int32 SAL_CALL SvxDrawPage::getCount()
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
 
-    return( (sal_Int32) mpPage->GetObjCount() );
+    return static_cast<sal_Int32>( mpPage->GetObjCount() );
 }
 
 uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
@@ -347,7 +347,7 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
 
-    if ( Index < 0 || Index >= (sal_Int32)mpPage->GetObjCount() )
+    if ( Index < 0 || static_cast<size_t>(Index) >= mpPage->GetObjCount() )
         throw lang::IndexOutOfBoundsException();
 
     SdrObject* pObj = mpPage->GetObj( Index );

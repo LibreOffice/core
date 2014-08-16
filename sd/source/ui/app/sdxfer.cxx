@@ -325,7 +325,7 @@ void SdTransferable::CreateData()
             Point   aOrigin( ( maVisArea = mpSdViewIntern->GetAllMarkedBoundRect() ).TopLeft() );
             Size    aVector( -aOrigin.X(), -aOrigin.Y() );
 
-            for( sal_uLong nObj = 0, nObjCount = pPage->GetObjCount(); nObj < nObjCount; nObj++ )
+            for( size_t nObj = 0, nObjCount = pPage->GetObjCount(); nObj < nObjCount; ++nObj )
             {
                 SdrObject* pObj = pPage->GetObj( nObj );
                 pObj->NbcMove( aVector );

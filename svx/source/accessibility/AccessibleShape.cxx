@@ -1517,8 +1517,8 @@ throw (uno::RuntimeException, std::exception)
     std::vector< uno::Reference<drawing::XShape> > vXShapes;
     if (pGrpList)
     {
-        const sal_Int32 nObj = pGrpList->GetObjCount();
-        for(sal_Int32 i = 0 ; i < nObj ; ++i)
+        const size_t nObj = pGrpList->GetObjCount();
+        for(size_t i = 0 ; i < nObj ; ++i)
         {
             SdrObject *pSubObj = pGrpList->GetObj(i);
             if (pSubObj &&

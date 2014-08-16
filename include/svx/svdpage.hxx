@@ -127,23 +127,23 @@ public:
     // Neuberechnung der Objekt-Ordnungsnummern
     void     RecalcObjOrdNums();
     bool IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND
+    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE
                                  , const SdrInsertReason* pReason=NULL
                                                                       );
-    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND
+    virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE
                               , const SdrInsertReason* pReason=NULL
                                                                      );
     // aus Liste entfernen ohne delete
-    virtual SdrObject* NbcRemoveObject(sal_uIntPtr nObjNum);
-    virtual SdrObject* RemoveObject(sal_uIntPtr nObjNum);
+    virtual SdrObject* NbcRemoveObject(size_t nObjNum);
+    virtual SdrObject* RemoveObject(size_t nObjNum);
     // Vorhandenes Objekt durch ein anderes ersetzen.
     // Wie Remove&Insert jedoch performanter, da die Ordnungsnummern
     // nicht Dirty gesetzt werden muessen.
-    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum);
-    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum);
+    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum);
+    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, size_t nObjNum);
     // Die Z-Order eines Objekts veraendern
-    virtual SdrObject* NbcSetObjectOrdNum(sal_uIntPtr nOldObjNum, sal_uIntPtr nNewObjNum);
-    virtual SdrObject* SetObjectOrdNum(sal_uIntPtr nOldObjNum, sal_uIntPtr nNewObjNum);
+    virtual SdrObject* NbcSetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
+    virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
 
     virtual void SetRectsDirty();
 
@@ -160,14 +160,14 @@ public:
     // Die Vorlagenattribute der Zeichenobjekte in harte Attribute verwandeln.
     void BurnInStyleSheetAttributes();
 
-    sal_uIntPtr      GetObjCount() const;
-    SdrObject* GetObj(sal_uIntPtr nNum) const;
+    size_t GetObjCount() const;
+    SdrObject* GetObj(size_t nNum) const;
 
     // Gelinkte Seite oder gelinktes Gruppenobjekt
     virtual bool IsReadOnly() const;
 
     // Zaehlt alle Objekte inkl. Objekte in Objektgruppen, ...
-    sal_uIntPtr   CountAllObjects() const;
+    size_t CountAllObjects() const;
 
     // Alle aufgelagerten Teile (z.B. Grafiken) der Liste in den
     // Speicher laden.
@@ -194,7 +194,7 @@ public:
         operation is performed recursively, such that the content of
         the given object contains no groups afterwards.
      */
-    virtual void UnGroupObj( sal_uIntPtr nObjNum );
+    virtual void UnGroupObj( size_t nObjNum );
 
     /** Return whether there is an explicit, user defined, object navigation
         order.  When there is one this method returns <TRUE/> and the

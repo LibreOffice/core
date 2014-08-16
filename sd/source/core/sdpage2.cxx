@@ -143,9 +143,9 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     boost::ptr_vector<StyleReplaceData> aReplList;
     bool bListsFilled = false;
 
-    sal_uLong nObjCount = GetObjCount();
+    const size_t nObjCount = GetObjCount();
 
-    for (sal_uLong nObj = 0; nObj < nObjCount; nObj++)
+    for (size_t nObj = 0; nObj < nObjCount; ++nObj)
     {
         SdrTextObj* pObj = (SdrTextObj*) GetObj(nObj);
 
@@ -565,8 +565,8 @@ OString SdPage::stringify() const
              append((sal_Int32)meOrientation).append((sal_Int32)mnTransitionType).append((sal_Int32)mnTransitionSubtype).append(mbTransitionDirection).
              append(mnTransitionFadeColor).append(mfTransitionDuration);//.append(mbIsPrecious);
 
-    sal_Int32 n = GetObjCount();
-    for(sal_Int32 i = 0; i < n; i++)
+    const size_t n = GetObjCount();
+    for(size_t i = 0; i < n; ++i)
         aString.append(GetObj(i)->stringify());
     return aString.makeStringAndClear();
 }

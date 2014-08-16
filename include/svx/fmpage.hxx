@@ -56,10 +56,10 @@ public:
     virtual SdrPage* Clone() const SAL_OVERRIDE;
     using SdrPage::Clone;
 
-    virtual void    InsertObject(SdrObject* pObj, sal_uLong nPos = CONTAINER_APPEND,
+    virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE,
                                     const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
 
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum) SAL_OVERRIDE;
+    virtual SdrObject* RemoveObject(size_t nObjNum) SAL_OVERRIDE;
 
     // access to all forms
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& GetForms( bool _bForceCreate = true ) const;

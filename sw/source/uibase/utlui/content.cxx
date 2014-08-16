@@ -419,8 +419,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
-                sal_uInt32 nCount = pPage->GetObjCount();
-                for( sal_uInt32 i=0; i< nCount; i++ )
+                const size_t nCount = pPage->GetObjCount();
+                for( size_t i=0; i<nCount; ++i )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
@@ -747,8 +747,8 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
-                sal_uInt32 nCount = pPage->GetObjCount();
-                for( sal_uInt32 i=0; i< nCount; i++ )
+                const size_t nCount = pPage->GetObjCount();
+                for( size_t i=0; i<nCount; ++i )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
@@ -873,8 +873,8 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
                 {
                     SwDrawModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                     SdrPage* pPage = pDrawModel->GetPage(0);
-                    const sal_uInt32 nCount = pPage->GetObjCount();
-                    for( sal_uInt32 i=0; i< nCount; i++ )
+                    const size_t nCount = pPage->GetObjCount();
+                    for( size_t i=0; i<nCount; ++i )
                     {
                         pTemp = pPage->GetObj(i);
                         sal_uInt16 nCmpId;
@@ -965,8 +965,8 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
                 {
                     SwDrawModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                     SdrPage* pPage = pDrawModel->GetPage(0);
-                    sal_uInt32 nCount = pPage->GetObjCount();
-                    for( sal_uInt32 i=0; i< nCount; i++ )
+                    const size_t nCount = pPage->GetObjCount();
+                    for( size_t i=0; i<nCount; ++i )
                     {
                         pTemp = pPage->GetObj(i);
                         sal_uInt16 nCmpId;
@@ -1407,9 +1407,9 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
             {
                 SwDrawModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                 SdrPage* pPage = pDrawModel->GetPage(0);
-                sal_uInt32 nCount = pPage->GetObjCount();
+                const size_t nCount = pPage->GetObjCount();
 
-                for( sal_uInt32 i=0; i< nCount; i++ )
+                for( size_t i=0; i<nCount; ++i )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     if( pTemp->GetName() == pCnt->GetName())
@@ -2669,7 +2669,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 
                             SwDrawModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                             SdrPage* pPage = pDrawModel->GetPage(0);
-                            sal_uInt32 nCount = pPage->GetObjCount();
+                            const size_t nCount = pPage->GetObjCount();
                             bool hasObjectMarked = false;
 
                             SdrObject* pObject = NULL;
@@ -2684,7 +2684,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 
                                 }
                             }
-                            for( sal_uInt32 i=0; i< nCount; i++ )
+                            for( size_t i=0; i<nCount; ++i )
                             {
                                 SdrObject* pTemp = pPage->GetObj(i);
                                 bool bMark = pDrawView->IsObjMarked(pTemp);
@@ -3343,8 +3343,8 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                 pDrawView->UnmarkAll();
                 SwDrawModel* _pModel = pActiveShell->getIDocumentDrawModelAccess()->GetDrawModel();
                 SdrPage* pPage = _pModel->GetPage(0);
-                sal_uInt32 nCount = pPage->GetObjCount();
-                for( sal_uInt32 i=0; i< nCount; i++ )
+                const size_t nCount = pPage->GetObjCount();
+                for( size_t i=0; i<nCount; ++i )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now

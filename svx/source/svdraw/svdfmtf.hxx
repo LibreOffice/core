@@ -162,10 +162,10 @@ public:
         const Rectangle& rRect);
     ~ImpSdrGDIMetaFileImport();
 
-    sal_uInt32 DoImport(
+    size_t DoImport(
         const GDIMetaFile& rMtf,
         SdrObjList& rDestList,
-        sal_uLong nInsPos = CONTAINER_APPEND,
+        size_t nInsPos = SAL_MAX_SIZE,
         SvdProgressInfo* pProgrInfo = 0);
 };
 

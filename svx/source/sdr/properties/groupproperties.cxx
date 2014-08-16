@@ -82,9 +82,9 @@ namespace sdr
 
             // collect all ItemSets in mpItemSet
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 const SfxItemSet& rSet = pSub->GetObj(a)->GetMergedItemSet();
                 SfxWhichIter aIter(rSet);
@@ -114,9 +114,9 @@ namespace sdr
         {
             // iterate over contained SdrObjects
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 SdrObject* pObj = pSub->GetObj(a);
 
@@ -155,9 +155,9 @@ namespace sdr
         void GroupProperties::SetMergedItem(const SfxPoolItem& rItem)
         {
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 pSub->GetObj(a)->GetProperties().SetMergedItem(rItem);
             }
@@ -166,9 +166,9 @@ namespace sdr
         void GroupProperties::ClearMergedItem(const sal_uInt16 nWhich)
         {
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 pSub->GetObj(a)->GetProperties().ClearMergedItem(nWhich);
             }
@@ -205,9 +205,9 @@ namespace sdr
             SfxStyleSheet* pRetval = 0L;
 
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 SfxStyleSheet* pCandidate = pSub->GetObj(a)->GetStyleSheet();
 
@@ -231,9 +231,9 @@ namespace sdr
         void GroupProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
             }
@@ -249,9 +249,9 @@ namespace sdr
             if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
             {
                 const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-                const sal_uInt32 nCount(pSub->GetObjCount());
+                const size_t nCount(pSub->GetObjCount());
 
-                for(sal_uInt32 a(0L); a < nCount; a++)
+                for(size_t a = 0; a < nCount; ++a)
                 {
                     pSub->GetObj(a)->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
                 }
@@ -274,9 +274,9 @@ namespace sdr
         void GroupProperties::ForceStyleToHardAttributes()
         {
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 pSub->GetObj(a)->GetProperties().ForceStyleToHardAttributes();
             }

@@ -674,7 +674,7 @@ bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
             {
                 bool bGroupIsMarkable(false);
 
-                for(sal_uInt32 a(0L); !bGroupIsMarkable && a < pObjList->GetObjCount(); a++)
+                for(size_t a = 0; !bGroupIsMarkable && a < pObjList->GetObjCount(); ++a)
                 {
                     SdrObject* pCandidate = pObjList->GetObj(a);
 
@@ -816,7 +816,7 @@ bool SdrPageView::EnterGroup(SdrObject* pObj)
         // else select nothing and let the user decide what to do next
         if(pNewObjList && pNewObjList->GetObjCount() == 1)
         {
-            SdrObject* pFirstObject = pNewObjList->GetObj(0L);
+            SdrObject* pFirstObject = pNewObjList->GetObj(0);
 
             if(GetView().GetSdrPageView())
             {

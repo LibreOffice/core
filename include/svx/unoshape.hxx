@@ -392,7 +392,7 @@ class SvxShapeGroup : public SvxShape,
 private:
     rtl::Reference< SvxDrawPage> mxPage;
 
-    void addUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, sal_uIntPtr nPos );
+    void addUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, size_t nPos );
 
 public:
     SvxShapeGroup( SdrObject* pObj,SvxDrawPage* pDrawPage ) throw ();

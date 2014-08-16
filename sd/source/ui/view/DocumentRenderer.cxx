@@ -1628,7 +1628,7 @@ private:
                     continue;
 
                 SdrTextObj* pTextObj = NULL;
-                sal_uInt32 nObj (0);
+                size_t nObj (0);
 
                 while (pTextObj==NULL && nObj < pPage->GetObjCount())
                 {

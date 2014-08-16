@@ -127,8 +127,8 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
             if(!pTO)
             {
                 // determines the SdrTextObject with the layout text of this page
-                const sal_uLong nObjectCount = pPage->GetObjCount();
-                for (sal_uLong nObject = 0; nObject < nObjectCount; nObject++)
+                const size_t nObjectCount = pPage->GetObjCount();
+                for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
                 {
                     SdrObject* pObject = pPage->GetObj(nObject);
                     if (pObject->GetObjInventor() == SdrInventor && pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)

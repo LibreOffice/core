@@ -658,8 +658,8 @@ void SdrObject::getMergedHierarchyLayerSet(SetOfByte& rSet) const
     rSet.Set(GetLayer());
     SdrObjList* pOL=GetSubList();
     if (pOL!=NULL) {
-        sal_uIntPtr nObjAnz=pOL->GetObjCount();
-        for (sal_uIntPtr nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
+        const size_t nObjAnz = pOL->GetObjCount();
+        for (size_t nObjNum = 0; nObjNum<nObjAnz; ++nObjNum) {
             pOL->GetObj(nObjNum)->getMergedHierarchyLayerSet(rSet);
         }
     }
@@ -2699,7 +2699,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
         SdrObject* pGroup = new SdrObjGroup;
         pGroup->SetModel(pRet->GetModel());
 
-        for(sal_uInt32 a=0;a<pObjList2->GetObjCount();a++)
+        for(size_t a=0; a<pObjList2->GetObjCount(); ++a)
         {
             SdrObject* pIterObj = pObjList2->GetObj(a);
             pGroup->GetSubList()->NbcInsertObject(ConvertToContourObj(pIterObj, bForceLineDash));

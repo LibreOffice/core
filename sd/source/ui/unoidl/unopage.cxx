@@ -2580,7 +2580,7 @@ void SdGenericDrawPage::setNavigationOrder( const Any& rValue )
 
             return;
         }
-        else if( xIA->getCount() == static_cast< sal_Int32 >( GetPage()->GetObjCount() ) )
+        else if( static_cast<size_t>(xIA->getCount()) == GetPage()->GetObjCount() )
         {
             GetPage()->SetNavigationOrder(xIA);
             return;
@@ -2607,13 +2607,12 @@ private:
 };
 
 SdNavigationOrderAccess::SdNavigationOrderAccess( SdrPage* pPage )
-: maShapes( static_cast< sal_uInt32 >( pPage ? pPage->GetObjCount() : 0 ) )
+: maShapes( pPage ? pPage->GetObjCount() : 0 )
 {
     if( pPage )
     {
-        sal_uInt32 nIndex;
-        const sal_uInt32 nCount = static_cast< sal_uInt32 >( pPage->GetObjCount() );
-        for( nIndex = 0; nIndex < nCount; ++nIndex )
+        const size_t nCount = pPage->GetObjCount();
+        for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
         {
             SdrObject* pObj = pPage->GetObj( nIndex );
             sal_uInt32 nNavPos = pObj->GetNavigationPosition();

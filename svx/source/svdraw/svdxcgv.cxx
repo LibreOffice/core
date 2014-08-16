@@ -288,15 +288,15 @@ bool SdrExchangeView::Paste(
             ResizeRect(aR,aPt0,xResize,yResize);
         Point aDist(aPos-aR.Center());
         Size  aSiz(aDist.X(),aDist.Y());
-        sal_uIntPtr nCloneErrCnt=0;
-        sal_uIntPtr nOb,nObAnz=pSrcPg->GetObjCount();
+        size_t nCloneErrCnt = 0;
+        const size_t nObAnz = pSrcPg->GetObjCount();
         bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
 
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
         CloneList aCloneList;
 
-        for (nOb=0; nOb<nObAnz; nOb++)
+        for (size_t nOb=0; nOb<nObAnz; ++nOb)
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
@@ -344,7 +344,7 @@ bool SdrExchangeView::Paste(
                 }
 
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
-                pDstLst->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
+                pDstLst->InsertObject(pNeuObj, SAL_MAX_SIZE, &aReason);
 
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
@@ -422,7 +422,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     Rectangle aR(aPos.X(),aPos.Y(),aPos.X()+xs,aPos.Y()+ys);
     pObj->SetLogicRect(aR);
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
-    rLst.InsertObject(pObj,CONTAINER_APPEND,&aReason);
+    rLst.InsertObject(pObj, SAL_MAX_SIZE, &aReason);
 
     if( IsUndoEnabled() )
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
@@ -766,7 +766,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
             }
 
             SdrInsertReason aReason(SDRREASON_VIEWCALL);
-            pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
+            pNeuPag->InsertObject(pNeuObj, SAL_MAX_SIZE, &aReason);
 
             // #i13033#
             aCloneList.AddPair(pObj, pNeuObj);

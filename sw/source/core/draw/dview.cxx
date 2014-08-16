@@ -257,7 +257,7 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
                 const SwPageFrm *pPage = pFly->FindPageFrm();
                 if ( pPage->GetSortedObjs() )
                 {
-                    sal_uInt32 nOrdNum = 0;
+                    size_t nOrdNum = 0;
                     for ( sal_uInt16 i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
                     {
                         const SdrObject *pO =
@@ -317,8 +317,8 @@ sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
     OSL_ENSURE( pDrawPage,
             "<SwDrawView::_GetMaxChildOrdNum(..) - missing drawing page at parent object - crash!" );
 
-    sal_uInt32 nObjCount = pDrawPage->GetObjCount();
-    for ( sal_uInt32 i = nObjCount-1; i > _rParentObj.GetDrawObj()->GetOrdNum() ; --i )
+    const size_t nObjCount = pDrawPage->GetObjCount();
+    for ( size_t i = nObjCount-1; i > _rParentObj.GetDrawObj()->GetOrdNum() ; --i )
     {
         const SdrObject* pObj = pDrawPage->GetObj( i );
 
@@ -358,7 +358,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
         SdrPage* pDrawPage = GetModel()->GetPage( 0 );
 
         // move 'repeated' ones to the same order number as the already moved one.
-        sal_uInt32 nNewPos = _rMovedAnchoredObj.GetDrawObj()->GetOrdNum();
+        const size_t nNewPos = _rMovedAnchoredObj.GetDrawObj()->GetOrdNum();
         while ( !aAnchoredObjs.empty() )
         {
             SwAnchoredObject* pAnchoredObj = aAnchoredObjs.back();
@@ -395,7 +395,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                 pContact->GetAnchoredObjs( aAnchoredObjs );
             }
             // move 'repeated' ones to the same order number as the already moved one.
-            const sal_uInt32 nTmpNewPos = pChildObj->GetOrdNum();
+            const size_t nTmpNewPos = pChildObj->GetOrdNum();
             while ( !aAnchoredObjs.empty() )
             {
                 SwAnchoredObject* pAnchoredObj = aAnchoredObjs.back();
@@ -437,7 +437,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     SdrPage* pDrawPage = GetModel()->GetPage( 0 );
     if ( pDrawPage->IsObjOrdNumsDirty() )
         pDrawPage->RecalcObjOrdNums();
-    const sal_uInt32 nObjCount = pDrawPage->GetObjCount();
+    const size_t nObjCount = pDrawPage->GetObjCount();
 
     SwAnchoredObject* pMovedAnchoredObj =
                                 ::GetUserCall( pObj )->GetAnchoredObj( pObj );
@@ -451,7 +451,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     {
         if ( bMovedForward )
         {
-            sal_uInt32 nMaxChildOrdNumWithoutMoved =
+            const size_t nMaxChildOrdNumWithoutMoved =
                     _GetMaxChildOrdNum( *pParentAnchoredObj, pMovedAnchoredObj->GetDrawObj() );
             if ( nNewPos > nMaxChildOrdNumWithoutMoved+1 )
             {
@@ -462,7 +462,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
         }
         else
         {
-            const sal_uInt32 nParentOrdNum = pParentAnchoredObj->GetDrawObj()->GetOrdNum();
+            const size_t nParentOrdNum = pParentAnchoredObj->GetDrawObj()->GetOrdNum();
             if ( nNewPos < nParentOrdNum )
             {
                 // set position to the bottom of the 'child' object group
@@ -482,7 +482,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
                 pDrawPage->GetObj( bMovedForward ? nNewPos - 1 : nNewPos + 1 );
         if ( pTmpObj )
         {
-            sal_uInt32 nTmpNewPos( nNewPos );
+            size_t nTmpNewPos( nNewPos );
             if ( bMovedForward )
             {
                 // move before the top 'repeated' object
@@ -519,7 +519,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
         {
             // determine position before the object before its top 'child' object
             const SdrObject* pTmpObj = pDrawPage->GetObj( nMaxChildOrdNum );
-            sal_uInt32 nTmpNewPos = ::GetUserCall( pTmpObj )->GetMaxOrdNum() + 1;
+            size_t nTmpNewPos = ::GetUserCall( pTmpObj )->GetMaxOrdNum() + 1;
             if ( nTmpNewPos >= nObjCount )
             {
                 --nTmpNewPos;
@@ -538,7 +538,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     if ( ( bMovedForward && nNewPos < nObjCount - 1 ) ||
          ( !bMovedForward && nNewPos > 0 ) )
     {
-        sal_uInt32 nTmpNewPos( nNewPos );
+        size_t nTmpNewPos( nNewPos );
         const SwFrmFmt* pParentFrmFmt =
                 pParentAnchoredObj ? &(pParentAnchoredObj->GetFrmFmt()) : 0L;
         const SdrObject* pTmpObj = pDrawPage->GetObj( nNewPos + 1 );
@@ -590,7 +590,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
         rImp.AddAccessibleFrm( pFlyFrm );
 
         const sal_uInt32 nChildNewPos = bMovedForward ? nNewPos : nNewPos+1;
-        sal_uInt32 i = bMovedForward ? nOldPos : nObjCount-1;
+        size_t i = bMovedForward ? nOldPos : nObjCount-1;
         do
         {
             SdrObject* pTmpObj = pDrawPage->GetObj( i );

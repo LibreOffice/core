@@ -318,14 +318,14 @@ void SwUiWriterTest::testShapeTextboxDelete()
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     pWrtShell->SelectObj(Point(), 0, pObject);
-    sal_Int32 nActual = pPage->GetObjCount();
+    size_t nActual = pPage->GetObjCount();
     // Two objects on the draw page: the shape and its textbox.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nActual);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), nActual);
 
     pWrtShell->DelSelectedObj();
     nActual = pPage->GetObjCount();
     // Both (not only the shape) should be removed by now (the textbox wasn't removed, so this was 1).
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nActual);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), nActual);
 }
 
 void SwUiWriterTest::testCp1000071()

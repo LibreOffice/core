@@ -1036,11 +1036,11 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 // get SdrTextObject with layout text of this page
 SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
 {
-    sal_uLong           nObjectCount = pPage->GetObjCount();
+    const size_t nObjectCount = pPage->GetObjCount();
     SdrObject*      pObject      = NULL;
     SdrTextObj*     pResult      = NULL;
 
-    for (sal_uLong nObject = 0; nObject < nObjectCount; nObject++)
+    for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
     {
         pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor &&
@@ -1213,7 +1213,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
 {
     OUStringBuffer aStr;
 
-    for (sal_uInt32 i = 0; i <pPage->GetObjCount(); i++ )
+    for (size_t i = 0; i <pPage->GetObjCount(); ++i )
     {
         SdrObject* pObject = pPage->GetObj(i);
         PresObjKind eKind = pPage->GetPresObjKind(pObject);

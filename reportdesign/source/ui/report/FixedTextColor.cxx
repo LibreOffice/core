@@ -165,7 +165,7 @@ namespace rptui
             if ( xSection.is() )
             {
                 OReportPage *pPage = pModel->getPage(xSection);
-                sal_uLong nIndex = pPage->getIndexOf(_xFixedText.get());
+                const size_t nIndex = pPage->getIndexOf(_xFixedText.get());
                 if (nIndex < pPage->GetObjCount() )
                 {
                     SdrObject *pObject = pPage->GetObj(nIndex);

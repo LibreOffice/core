@@ -186,7 +186,7 @@ void SAL_CALL SvxShapeGroup::leaveGroup(  ) throw(uno::RuntimeException, std::ex
 //  pDrView->LeaveOneGroup();
 }
 
-void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape, sal_uIntPtr nPos )
+void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape, size_t nPos )
 {
     if (!mpObj.is() || !mxPage.is())
     {
@@ -235,7 +235,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
     ::SolarMutexGuard aGuard;
 
     // Add to the top of the stack (i.e. bottom of the list) by default.
-    addUnoShape(xShape, 0xFFFF);
+    addUnoShape(xShape, SAL_MAX_SIZE);
 }
 
 
@@ -255,8 +255,8 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 
     SdrObjList& rList = *pSdrShape->GetObjList();
 
-    const sal_uInt32 nObjCount = rList.GetObjCount();
-    sal_uInt32 nObjNum = 0;
+    const size_t nObjCount = rList.GetObjCount();
+    size_t nObjNum = 0;
     while( nObjNum < nObjCount )
     {
         if(rList.GetObj( nObjNum ) == pSdrShape )
@@ -297,7 +297,7 @@ void SAL_CALL SvxShapeGroup::addTop( const uno::Reference< drawing::XShape >& xS
     SolarMutexGuard aGuard;
 
     // Add to the top of the stack (i.e. bottom of the list).
-    addUnoShape(xShape, 0xFFFF);
+    addUnoShape(xShape, SAL_MAX_SIZE);
 }
 
 void SAL_CALL SvxShapeGroup::addBottom( const uno::Reference< drawing::XShape >& xShape )
@@ -335,7 +335,7 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
     if( !mpObj.is() || mpObj->GetSubList() == NULL )
         throw uno::RuntimeException();
 
-    if( mpObj->GetSubList()->GetObjCount() <= (sal_uInt32)Index )
+    if( Index<0 || mpObj->GetSubList()->GetObjCount() <= static_cast<size_t>(Index) )
         throw lang::IndexOutOfBoundsException();
 
     SdrObject* pDestObj = mpObj->GetSubList()->GetObj( Index );

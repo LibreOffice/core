@@ -1569,10 +1569,10 @@ void ScFiltersTest::testCellAnchoredShapesODS()
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
-    sal_uIntPtr nCount = pPage->GetObjCount();
+    const size_t nCount = pPage->GetObjCount();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "There should be 2 objects.", sal_uIntPtr(2), nCount);
-    for (sal_uIntPtr i = 0; i < nCount; ++i)
+        "There should be 2 objects.", static_cast<size_t>(2), nCount);
+    for (size_t i = 0; i < nCount; ++i)
     {
         SdrObject* pObj = pPage->GetObj(i);
         CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);

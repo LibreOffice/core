@@ -1083,9 +1083,8 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
             // Sort into group and return ONLY those objects that can be created from the MetaFile.
             ImpSdrGDIMetaFileImport aFilter(*GetModel(), GetLayer(), aRect);
             SdrObjGroup* pGrp = new SdrObjGroup();
-            sal_uInt32 nInsAnz = aFilter.DoImport(aMtf, *pGrp->GetSubList(), 0);
 
-            if(nInsAnz)
+            if(aFilter.DoImport(aMtf, *pGrp->GetSubList(), 0))
             {
                 {
                         // copy transformation

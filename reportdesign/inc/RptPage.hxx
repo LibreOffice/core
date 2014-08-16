@@ -60,8 +60,8 @@ public:
     virtual SdrPage* Clone() const SAL_OVERRIDE;
     using SdrPage::Clone;
 
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason) SAL_OVERRIDE;
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum) SAL_OVERRIDE;
+    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason) SAL_OVERRIDE;
+    virtual SdrObject* RemoveObject(size_t nObjNum) SAL_OVERRIDE;
 
     /** returns the index inside the object list which belongs to the report component.
         @param  _xObject    the report component

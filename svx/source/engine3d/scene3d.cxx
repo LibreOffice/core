@@ -126,9 +126,9 @@ Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene& rScene)
 {
     // only called when rScene.GetSubList() and nObjCount > 1L
     SdrObjList* pList = rScene.GetSubList();
-    const sal_uInt32 nObjCount(pList->GetObjCount());
+    const size_t nObjCount(pList->GetObjCount());
 
-    for(sal_uInt32 a(0L); a < nObjCount; a++)
+    for(size_t a = 0; a < nObjCount; ++a)
     {
         SdrObject* pCandidate = pList->GetObj(a);
 
@@ -269,9 +269,9 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 {
     if(!mp3DDepthRemapper)
     {
-        const sal_uInt32 nObjCount(GetSubList() ? GetSubList()->GetObjCount() : 0L);
+        const size_t nObjCount(GetSubList() ? GetSubList()->GetObjCount() : 0);
 
-        if(nObjCount > 1L)
+        if(nObjCount > 1)
         {
             ((E3dScene*)this)->mp3DDepthRemapper = new Imp3DDepthRemapper((E3dScene&)(*this));
         }
@@ -406,7 +406,7 @@ void E3dScene::removeAllNonSelectedObjects()
 {
     E3DModifySceneSnapRectUpdater aUpdater(this);
 
-    for(sal_uInt32 a(0); a < maSubList.GetObjCount(); a++)
+    for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
     {
         SdrObject* pObj = maSubList.GetObj(a);
 
@@ -422,7 +422,7 @@ void E3dScene::removeAllNonSelectedObjects()
                 pScene->removeAllNonSelectedObjects();
 
                 // check object count. Empty scenes can be deleted
-                const sal_uInt32 nObjCount(pScene->GetSubList() ? pScene->GetSubList()->GetObjCount() : 0);
+                const size_t nObjCount(pScene->GetSubList() ? pScene->GetSubList()->GetObjCount() : 0);
 
                 if(!nObjCount)
                 {

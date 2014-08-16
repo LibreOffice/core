@@ -119,7 +119,7 @@ SdrPage* FmFormPage::Clone() const
 }
 
 
-void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
+void FmFormPage::InsertObject(SdrObject* pObj, size_t nPos,
                               const SdrInsertReason* pReason)
 {
     SdrPage::InsertObject( pObj, nPos, pReason );
@@ -206,7 +206,7 @@ bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
 }
 
 
-SdrObject* FmFormPage::RemoveObject(sal_uLong nObjNum)
+SdrObject* FmFormPage::RemoveObject(size_t nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
     if (pObj && GetModel())

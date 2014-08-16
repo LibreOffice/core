@@ -668,10 +668,10 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
 
     pPage->RecalcObjOrdNums();
 
-    sal_uLong nObjCount = pPage->GetObjCount();
+    const size_t nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
-        long nDelCount = 0;
+        size_t nDelCount = 0;
         boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -688,11 +688,10 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
             pObject = aIter.Next();
         }
 
-        long i;
-        for (i=1; i<=nDelCount; i++)
+        for (size_t i=1; i<=nDelCount; ++i)
             pModel->AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
 
-        for (i=1; i<=nDelCount; i++)
+        for (size_t i=1; i<=nDelCount; ++i)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
         ppObj.reset();
@@ -732,10 +731,10 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
 
     pPage->RecalcObjOrdNums();
 
-    sal_uLong nObjCount = pPage->GetObjCount();
+    const size_t nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
-        long nDelCount = 0;
+        size_t nDelCount = 0;
         boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -754,11 +753,10 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
             pObject = aIter.Next();
         }
 
-        long i;
-        for (i=1; i<=nDelCount; i++)
+        for (size_t i=1; i<=nDelCount; ++i)
             pModel->AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
 
-        for (i=1; i<=nDelCount; i++)
+        for (size_t i=1; i<=nDelCount; ++i)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
         ppObj.reset();
@@ -1241,8 +1239,8 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
 
     pPage->RecalcObjOrdNums();
 
-    long    nDelCount = 0;
-    sal_uLong   nObjCount = pPage->GetObjCount();
+    size_t nDelCount = 0;
+    const size_t nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
         boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
@@ -1276,11 +1274,10 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
             pObject = aIter.Next();
         }
 
-        long i;
-        for (i=1; i<=nDelCount; i++)
+        for (size_t i=1; i<=nDelCount; ++i)
             pModel->AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
 
-        for (i=1; i<=nDelCount; i++)
+        for (size_t i=1; i<=nDelCount; ++i)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
         ppObj.reset();
@@ -1545,7 +1542,7 @@ bool ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
     if( pObject && pObject->GetPage() && (pObject->GetPage() == pObject->GetObjList()) )
     {
         // Is there a previous object?
-        const sal_uInt32 nOrdNum(pObject->GetOrdNum());
+        const size_t nOrdNum = pObject->GetOrdNum();
 
         if(nOrdNum > 0)
         {

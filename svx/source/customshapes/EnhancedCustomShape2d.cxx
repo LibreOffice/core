@@ -2185,7 +2185,6 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
     }
 
     SdrObject* pRet = NULL;
-    sal_uInt32 i;
 
     if ( !vObjectList.empty() )
     {
@@ -2198,7 +2197,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         {
             std::vector< SdrPathObj* > vTempList;
 
-            for(i = 0L; i < vObjectList.size(); i++)
+            for(size_t i = 0; i < vObjectList.size(); ++i)
             {
                 SdrPathObj* pObj(vObjectList[i]);
                 const XLineStyle eLineStyle = ((const XLineStyleItem&)pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
@@ -2225,7 +2224,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             sal_Int32 nAreaObjectCount = 0;
 
             // correct some values and collect content data
-            for ( i = 0; i < vObjectList.size(); i++ )
+            for ( size_t i = 0; i < vObjectList.size(); ++i )
             {
                 SdrPathObj* pObj( vObjectList[ i ] );
 
@@ -2250,7 +2249,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             {
                 std::vector< SdrPathObj* > vTempList;
 
-                for ( i = 0; i < vObjectList.size(); i++ )
+                for ( size_t i = 0; i < vObjectList.size(); ++i )
                 {
                     SdrPathObj* pObj( vObjectList[ i ] );
 
@@ -2260,7 +2259,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
                     }
                 }
 
-                for ( i = 0; i < vObjectList.size(); i++ )
+                for ( size_t i = 0; i < vObjectList.size(); ++i )
                 {
                     SdrPathObj* pObj( vObjectList[ i ] );
 
@@ -2279,17 +2278,17 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
     if(!vObjectList.empty())
     {
         // copy remaining objects to pRet
-        if(vObjectList.size() > 1L)
+        if(vObjectList.size() > 1)
         {
             pRet = new SdrObjGroup;
 
-            for (i = 0L; i < vObjectList.size(); i++)
+            for (size_t i = 0; i < vObjectList.size(); ++i)
             {
                 SdrObject* pObj(vObjectList[i]);
                 pRet->GetSubList()->NbcInsertObject(pObj);
             }
         }
-        else if(1L == vObjectList.size())
+        else if(1 == vObjectList.size())
         {
             pRet = vObjectList[0L];
         }

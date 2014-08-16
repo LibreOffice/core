@@ -84,10 +84,10 @@ public:
     SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
     SVX_DLLPUBLIC virtual ~E3dObjList();
 
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
-    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
-    virtual SdrObject* NbcRemoveObject(sal_uIntPtr nObjNum) SAL_OVERRIDE;
-    virtual SdrObject* RemoveObject(sal_uIntPtr nObjNum) SAL_OVERRIDE;
+    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
+    virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
+    virtual SdrObject* NbcRemoveObject(size_t nObjNum) SAL_OVERRIDE;
+    virtual SdrObject* RemoveObject(size_t nObjNum) SAL_OVERRIDE;
 };
 
 /*************************************************************************

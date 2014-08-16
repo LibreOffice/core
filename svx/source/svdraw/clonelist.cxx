@@ -48,7 +48,7 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
         if(pOriginalList && pCloneList
             && pOriginalList->GetObjCount() == pCloneList->GetObjCount())
         {
-            for(sal_uInt32 a(0); a < pOriginalList->GetObjCount(); a++)
+            for(size_t a = 0; a < pOriginalList->GetObjCount(); ++a)
             {
                 // recursive call
                 AddPair(pOriginalList->GetObj(a), pCloneList->GetObj(a));

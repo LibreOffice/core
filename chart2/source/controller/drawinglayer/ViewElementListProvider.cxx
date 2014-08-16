@@ -139,7 +139,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
         return Graphic();
     if(nStandardSymbol<0)
         nStandardSymbol*=-1;
-    if( nStandardSymbol >= static_cast<sal_Int32>(pSymbolList->GetObjCount()) )
+    if( static_cast<size_t>(nStandardSymbol) >= pSymbolList->GetObjCount() )
         nStandardSymbol %= pSymbolList->GetObjCount();
     SdrObject* pObj = pSymbolList->GetObj(nStandardSymbol);
 

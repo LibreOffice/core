@@ -3046,7 +3046,7 @@ void Test::testGraphicsOnSheetMove()
     pPage->InsertObject(pObj);
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one object on the 1st sheet.", pPage->GetObjCount(), static_cast<sal_uIntPtr>(1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one object on the 1st sheet.", pPage->GetObjCount(), static_cast<size_t>(1));
 
     const ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Object meta-data doesn't exist.", pData);

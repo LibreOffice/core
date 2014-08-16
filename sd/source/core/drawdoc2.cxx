@@ -223,9 +223,9 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
         // number
         if (pPage && pPage->GetPageKind() == PK_NOTES)
         {
-            sal_uLong nObjCount = pPage->GetObjCount();
+            const size_t nObjCount = pPage->GetObjCount();
             SdrObject* pObj = NULL;
-            for (sal_uLong nObj = 0; nObj < nObjCount; nObj++)
+            for (size_t nObj = 0; nObj < nObjCount; ++nObj)
             {
                 pObj = pPage->GetObj(nObj);
                 if (pObj->GetObjIdentifier() == OBJ_PAGE &&

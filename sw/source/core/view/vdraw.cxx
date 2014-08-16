@@ -207,8 +207,8 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
 
     OSL_ENSURE( pSh->getIDocumentDrawModelAccess()->GetDrawModel(), "NotifySizeChg without DrawModel" );
     SdrPage* pPage = pSh->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
-    const sal_uLong nObjs = pPage->GetObjCount();
-    for( sal_uLong nObj = 0; nObj < nObjs; ++nObj )
+    const size_t nObjs = pPage->GetObjCount();
+    for( size_t nObj = 0; nObj < nObjs; ++nObj )
     {
         SdrObject *pObj = pPage->GetObj( nObj );
         if( !pObj->ISA(SwVirtFlyDrawObj) )

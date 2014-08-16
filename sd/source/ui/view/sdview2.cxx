@@ -424,7 +424,7 @@ void View::DragFinished( sal_Int8 nDropAction )
 
             if( pObj && pObj->GetPage() )
             {
-                sal_uInt32 nOrdNum=pObj->GetOrdNumDirect();
+                const size_t nOrdNum = pObj->GetOrdNumDirect();
 #ifdef DBG_UTIL
                 SdrObject* pChkObj =
 #endif
@@ -939,8 +939,7 @@ void ImplProcessObjectList(SdrObject* pObj, SdrObjectVector& rVector )
     if(bIsGroup)
     {
         SdrObjList* pObjList = pObj->GetSubList();
-        sal_uInt32 a;
-        for( a = 0; a < pObjList->GetObjCount(); a++)
+        for( size_t a = 0; a < pObjList->GetObjCount(); ++a)
             ImplProcessObjectList(pObjList->GetObj(a), rVector);
     }
 }

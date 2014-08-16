@@ -98,7 +98,7 @@ SdrObject* SdrObjListPrimitiveHit(
     const SetOfByte* pVisiLayer,
     bool bTextOnly)
 {
-    sal_uInt32 nObjNum(rList.GetObjCount());
+    size_t nObjNum(rList.GetObjCount());
     SdrObject* pRetval = 0;
 
     while(!pRetval && nObjNum > 0)

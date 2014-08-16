@@ -311,7 +311,7 @@ private:
 
     mutable ::accessibility::AccessibleShapeTreeInfo maShapeTreeInfo;
     mutable com::sun::star::uno::Reference<com::sun::star::view::XSelectionSupplier> xSelectionSupplier;
-    mutable sal_uInt32 mnSdrObjCount;
+    mutable size_t mnSdrObjCount;
     mutable sal_uInt32 mnShapesSelected;
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccessibleDocument;
@@ -544,7 +544,7 @@ sal_Int32 ScChildrenShapes::GetCount() const
     {
         mnSdrObjCount = pDrawPage->GetObjCount();
         maZOrderedShapes.reserve(mnSdrObjCount + 1); // the table is always in
-        for (sal_uInt32 i = 0; i < mnSdrObjCount; ++i)
+        for (size_t i = 0; i < mnSdrObjCount; ++i)
         {
             SdrObject* pObj = pDrawPage->GetObj(i);
             if (pObj/* && (pObj->GetLayer() != SC_LAYER_INTERN)*/)

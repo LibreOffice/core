@@ -49,7 +49,7 @@ public:
     void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
 
-    virtual SdrObject* SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum) SAL_OVERRIDE;
+    virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum) SAL_OVERRIDE;
 };
 
 } // namespace basctl

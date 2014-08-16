@@ -411,9 +411,9 @@ SdrModel* E3dView::GetMarkedObjModel() const
         for(sal_uInt16 nPg(0); nPg < pNewModel->GetPageCount(); nPg++)
         {
             const SdrPage* pSrcPg=pNewModel->GetPage(nPg);
-            const sal_uInt32 nObAnz(pSrcPg->GetObjCount());
+            const size_t nObAnz(pSrcPg->GetObjCount());
 
-            for(sal_uInt32 nOb(0); nOb < nObAnz; nOb++)
+            for(size_t nOb = 0; nOb < nObAnz; ++nOb)
             {
                 const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
@@ -466,14 +466,14 @@ bool E3dView::Paste(
         for(sal_uInt16 nPg(0); nPg < rMod.GetPageCount(); nPg++)
         {
             const SdrPage* pSrcPg=rMod.GetPage(nPg);
-            sal_uInt32 nObAnz(pSrcPg->GetObjCount());
+            const size_t nObAnz(pSrcPg->GetObjCount());
 
             // calculate offset for paste
             Rectangle aR = pSrcPg->GetAllObjBoundRect();
             Point aDist(aPos - aR.Center());
 
             // Insert sub-objects for scenes
-            for(sal_uInt32 nOb(0); nOb < nObAnz; nOb++)
+            for(size_t nOb = 0; nOb < nObAnz; ++nOb)
             {
                 const SdrObject* pSrcOb = pSrcPg->GetObj(nOb);
                 if(pSrcOb->ISA(E3dScene))
@@ -506,7 +506,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
         const sdr::contact::ViewContactOfE3dScene& rVCSceneSrc = static_cast< sdr::contact::ViewContactOfE3dScene& >(pSrcScene->GetViewContact());
         const drawinglayer::geometry::ViewInformation3D aViewInfo3DSrc(rVCSceneSrc.getViewInformation3D());
 
-        for(sal_uInt32 i(0); i < pSrcScene->GetSubList()->GetObjCount(); i++)
+        for(size_t i = 0; i < pSrcScene->GetSubList()->GetObjCount(); ++i)
         {
             E3dCompoundObject* pCompoundObj = dynamic_cast< E3dCompoundObject* >(pSrcScene->GetSubList()->GetObj(i));
 

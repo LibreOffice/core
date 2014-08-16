@@ -401,7 +401,7 @@ void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, Rectangle& aRect
     CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("No page instance for the 1st sheet.", pPage);
-    CPPUNIT_ASSERT_EQUAL( sal_uIntPtr(1), pPage->GetObjCount() );
+    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(1), pPage->GetObjCount() );
 
     SdrObject* pObj = pPage->GetObj(0);
     const Rectangle& aSnap = pObj->GetSnapRect();

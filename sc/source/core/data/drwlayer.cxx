@@ -472,8 +472,8 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
 
     bool bNegativePage = pDoc && pDoc->IsNegativePage( nTab );
 
-    sal_uLong nCount = pPage->GetObjCount();
-    for ( sal_uLong i = 0; i < nCount; i++ )
+    const size_t nCount = pPage->GetObjCount();
+    for ( size_t i = 0; i < nCount; ++i )
     {
         SdrObject* pObj = pPage->GetObj( i );
         ScDrawObjData* pData = GetObjDataTab( pObj, nTab );
@@ -522,8 +522,8 @@ void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpda
 
         bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
 
-        sal_uLong nCount = pPage->GetObjCount();
-        for ( sal_uLong i = 0; i < nCount; i++ )
+        const size_t nCount = pPage->GetObjCount();
+        for ( size_t i = 0; i < nCount; ++i )
         {
             SdrObject* pObj = pPage->GetObj( i );
             ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
@@ -1148,10 +1148,10 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
 
     pPage->RecalcObjOrdNums();
 
-    sal_uLong   nObjCount = pPage->GetObjCount();
+    const size_t nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
-        long nDelCount = 0;
+        size_t nDelCount = 0;
         Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
 
         boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
@@ -1172,12 +1172,11 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
             pObject = aIter.Next();
         }
 
-        long i;
         if (bRecording)
-            for (i=1; i<=nDelCount; i++)
+            for (size_t i=1; i<=nDelCount; ++i)
                 AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
 
-        for (i=1; i<=nDelCount; i++)
+        for (size_t i=1; i<=nDelCount; ++i)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
     }
 }
@@ -1203,10 +1202,10 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
         if (pPage)
         {
             pPage->RecalcObjOrdNums();
-            sal_uLong   nObjCount = pPage->GetObjCount();
+            const size_t nObjCount = pPage->GetObjCount();
             if (nObjCount)
             {
-                long nDelCount = 0;
+                size_t nDelCount = 0;
                 //  Rechteck um die ganze Selektion
                 Rectangle aMarkBound = pDoc->GetMMRect(
                             aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
@@ -1236,12 +1235,11 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
 
                 //  Objekte loeschen (rueckwaerts)
 
-                long i;
                 if (bRecording)
-                    for (i=1; i<=nDelCount; i++)
+                    for (size_t i=1; i<=nDelCount; ++i)
                         AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
 
-                for (i=1; i<=nDelCount; i++)
+                for (size_t i=1; i<=nDelCount; ++i)
                     pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
             }
         }

@@ -514,9 +514,9 @@ bool SdrMarkList::InsertPageView(const SdrPageView& rPV)
     DeletePageView(rPV); // delete all of them, then append the entire page
     SdrObject* pObj;
     const SdrObjList* pOL = rPV.GetObjList();
-    sal_uLong nObjAnz(pOL->GetObjCount());
+    const size_t nObjAnz(pOL->GetObjCount());
 
-    for(sal_uLong nO(0L); nO < nObjAnz; nO++)
+    for(size_t nO = 0; nO < nObjAnz; ++nO)
     {
         pObj = pOL->GetObj(nO);
         bool bDoIt(rPV.IsObjMarkable(pObj));
@@ -830,7 +830,7 @@ namespace sdr
             {
                 SdrObjList* pList = pObj->GetSubList();
 
-                for(sal_uLong a(0L); a < pList->GetObjCount(); a++)
+                for(size_t a = 0; a < pList->GetObjCount(); ++a)
                 {
                     SdrObject* pObj2 = pList->GetObj(a);
                     ImplCollectCompleteSelection(pObj2);

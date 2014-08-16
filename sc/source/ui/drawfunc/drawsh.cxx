@@ -354,8 +354,8 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
             if ( pObj->IsGroupObject() )
             {
                 SdrObjList* pOL = pObj->GetSubList();
-                sal_uLong nObj = pOL->GetObjCount();
-                for ( sal_uLong index=0; index<nObj; ++index )
+                const size_t nObj = pOL->GetObjCount();
+                for ( size_t index=0; index<nObj; ++index )
                 {
                     pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), true );
                     pInfo->SetMacro( sMacro );

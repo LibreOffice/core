@@ -430,13 +430,13 @@ void FuMorph::ImpInsertPolygons(
 
             pNewObj->SetMergedItemSetAndBroadcast(aSet);
 
-            pObjList->InsertObject( pNewObj, CONTAINER_APPEND );
+            pObjList->InsertObject( pNewObj );
         }
 
         if ( nCount )
         {
             pObjList->InsertObject( pObj1->Clone(), 0 );
-            pObjList->InsertObject( pObj2->Clone(), CONTAINER_APPEND );
+            pObjList->InsertObject( pObj2->Clone() );
             mpView->DeleteMarked();
             mpView->InsertObjectAtView( pObjGroup, *pPageView, SDRINSERT_SETDEFLAYER );
         }

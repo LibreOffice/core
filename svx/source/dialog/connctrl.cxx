@@ -215,7 +215,7 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
         // New stuff: Use a ObjectContactOfObjListPainter.
         sdr::contact::SdrObjectVector aObjectVector;
 
-        for(sal_uInt32 a(0L); a < pObjList->GetObjCount(); a++)
+        for(size_t a = 0; a < pObjList->GetObjCount(); ++a)
         {
             SdrObject* pObject = pObjList->GetObj(a);
             DBG_ASSERT(pObject,

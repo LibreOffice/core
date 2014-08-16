@@ -99,7 +99,7 @@ E3dObjList::~E3dObjList()
 {
 }
 
-void E3dObjList::NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrInsertReason* pReason)
+void E3dObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
 {
     // Get owner
     DBG_ASSERT(GetOwnerObj()->ISA(E3dObject), "Insert 3D object in parent != 3DObject");
@@ -118,7 +118,7 @@ void E3dObjList::NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrIns
     }
 }
 
-void E3dObjList::InsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrInsertReason* pReason)
+void E3dObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
 {
     OSL_ENSURE(GetOwnerObj()->ISA(E3dObject), "Insert 3D object in non-3D Parent");
 
@@ -132,7 +132,7 @@ void E3dObjList::InsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrInsert
     }
 }
 
-SdrObject* E3dObjList::NbcRemoveObject(sal_uIntPtr nObjNum)
+SdrObject* E3dObjList::NbcRemoveObject(size_t nObjNum)
 {
     DBG_ASSERT(GetOwnerObj()->ISA(E3dObject), "Remove 3D object from Parent != 3DObject");
 
@@ -148,7 +148,7 @@ SdrObject* E3dObjList::NbcRemoveObject(sal_uIntPtr nObjNum)
     return pRetval;
 }
 
-SdrObject* E3dObjList::RemoveObject(sal_uIntPtr nObjNum)
+SdrObject* E3dObjList::RemoveObject(size_t nObjNum)
 {
     OSL_ENSURE(GetOwnerObj()->ISA(E3dObject), "3D object is removed from non-3D Parent");
 
@@ -200,7 +200,7 @@ void E3dObject::SetSelected(bool bNew)
         mbIsSelected = bNew;
     }
 
-    for(sal_uInt32 a(0); a < maSubList.GetObjCount(); a++)
+    for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
     {
         E3dObject* pCandidate = dynamic_cast< E3dObject* >(maSubList.GetObj(a));
 
@@ -230,7 +230,7 @@ void E3dObject::SetRectsDirty(bool bNotMyself)
     // call parent
     SdrAttrObj::SetRectsDirty(bNotMyself);
 
-    for(sal_uInt32 a(0); a < maSubList.GetObjCount(); a++)
+    for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
     {
         E3dObject* pCandidate = dynamic_cast< E3dObject* >(maSubList.GetObj(a));
 
@@ -289,7 +289,7 @@ void E3dObject::NbcSetLayer(SdrLayerID nLayer)
 {
     SdrAttrObj::NbcSetLayer(nLayer);
 
-    for(sal_uInt32 a(0); a < maSubList.GetObjCount(); a++)
+    for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
     {
         E3dObject* pCandidate = dynamic_cast< E3dObject* >(maSubList.GetObj(a));
 
@@ -432,7 +432,7 @@ void E3dObject::RecalcSnapRect()
 {
     maSnapRect = Rectangle();
 
-    for(sal_uInt32 a(0); a < maSubList.GetObjCount(); a++)
+    for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
     {
         E3dObject* pCandidate = dynamic_cast< E3dObject* >(maSubList.GetObj(a));
 
@@ -515,11 +515,11 @@ E3dScene* E3dObject::GetScene() const
 basegfx::B3DRange E3dObject::RecalcBoundVolume() const
 {
     basegfx::B3DRange aRetval;
-    const sal_uInt32 nObjCnt(maSubList.GetObjCount());
+    const size_t nObjCnt(maSubList.GetObjCount());
 
     if(nObjCnt)
     {
-        for(sal_uInt32 a(0); a < nObjCnt; a++)
+        for(size_t a = 0; a < nObjCnt; ++a)
         {
             const E3dObject* p3DObject = dynamic_cast< const E3dObject* >(maSubList.GetObj(a));
 
@@ -578,7 +578,7 @@ void E3dObject::SetBoundVolInvalid()
 {
     InvalidateBoundVolume();
 
-    for(sal_uInt32 a(0); a < maSubList.GetObjCount(); a++)
+    for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
     {
         E3dObject* pCandidate = dynamic_cast< E3dObject* >(maSubList.GetObj(a));
 
@@ -596,7 +596,7 @@ void E3dObject::SetTransformChanged()
     InvalidateBoundVolume();
     mbTfHasChanged = true;
 
-    for(sal_uInt32 a(0); a < maSubList.GetObjCount(); a++)
+    for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
     {
         E3dObject* pCandidate = dynamic_cast< E3dObject* >(maSubList.GetObj(a));
 

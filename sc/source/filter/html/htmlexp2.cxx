@@ -67,8 +67,7 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
 void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
         SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
 {
-    sal_uLong   nObjCount = pPage->GetObjCount();
-    if ( nObjCount )
+    if ( pPage->GetObjCount() )
     {
         Rectangle aRect;
         if ( !bAll )

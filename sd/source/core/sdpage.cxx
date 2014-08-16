@@ -1435,11 +1435,10 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
             SdrObject* pObj = 0;
             bool bFound = false;
 
-            const int nShapeCount = rPage.GetObjCount();
-            int nShapeIndex = 0;
-            while((nShapeIndex < nShapeCount) && !bFound )
+            const size_t nShapeCount = rPage.GetObjCount();
+            for(size_t nShapeIndex = 0; nShapeIndex < nShapeCount && !bFound; ++nShapeIndex )
             {
-                pObj = rPage.GetObj(nShapeIndex++);
+                pObj = rPage.GetObj(nShapeIndex);
 
                 if( pObj->IsEmptyPresObj() )
                     continue;
@@ -1626,7 +1625,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
 |*
 \************************************************************************/
 
-void SdPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason)
+void SdPage::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
 {
     FmFormPage::NbcInsertObject(pObj, nPos, pReason);
 
@@ -1651,7 +1650,7 @@ void SdPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertRea
 |*
 \************************************************************************/
 
-SdrObject* SdPage::RemoveObject(sal_uLong nObjNum)
+SdrObject* SdPage::RemoveObject(size_t nObjNum)
 {
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::RemoveObject(nObjNum);
@@ -1663,7 +1662,7 @@ SdrObject* SdPage::RemoveObject(sal_uLong nObjNum)
 |*
 \************************************************************************/
 
-SdrObject* SdPage::NbcRemoveObject(sal_uLong nObjNum)
+SdrObject* SdPage::NbcRemoveObject(size_t nObjNum)
 {
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::NbcRemoveObject(nObjNum);
@@ -1671,7 +1670,7 @@ SdrObject* SdPage::NbcRemoveObject(sal_uLong nObjNum)
 
 // Also overload ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
-SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum)
+SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::NbcReplaceObject(pNewObj, nObjNum);
@@ -1679,7 +1678,7 @@ SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum)
 
 // Also overload ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
-SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum)
+SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::ReplaceObject(pNewObj, nObjNum);
@@ -1847,9 +1846,9 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     Fraction aFractX = Fraction(aNewPageSize.Width(), nOldWidth);
     Fraction aFractY = Fraction(aNewPageSize.Height(), nOldHeight);
 
-    sal_uLong nObjCnt = (mbScaleObjects ? GetObjCount() : 0);
+    const size_t nObjCnt = (mbScaleObjects ? GetObjCount() : 0);
 
-    for (sal_uLong nObj = 0; nObj < nObjCnt; nObj++)
+    for (size_t nObj = 0; nObj < nObjCnt; ++nObj)
     {
         bool bIsPresObjOnMaster = false;
 

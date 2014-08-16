@@ -167,8 +167,8 @@ void SdFiltersTest::testSmoketest()
     const SdrPage *pPage = pDoc->GetPage (1);
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
 
-    sal_uIntPtr nObjs = pPage->GetObjCount();
-    for (sal_uIntPtr i = 0; i < nObjs; i++)
+    const size_t nObjs = pPage->GetObjCount();
+    for (size_t i = 0; i < nObjs; i++)
     {
         SdrObject *pObj = pPage->GetObj(i);
         SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();

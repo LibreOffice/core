@@ -1329,8 +1329,8 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException, std::exception)
 
             SdrPage* pPage = mpObj->GetPage();
             // SdrObject aus der Page loeschen
-            sal_uInt32 nCount = pPage->GetObjCount();
-            for ( sal_uInt32 nNum = 0; nNum < nCount; ++nNum )
+            const size_t nCount = pPage->GetObjCount();
+            for ( size_t nNum = 0; nNum < nCount; ++nNum )
             {
                 if ( pPage->GetObj( nNum ) == mpObj.get() )
                 {
@@ -2201,7 +2201,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 #ifdef DBG_UTIL
                 SdrObject* pCheck =
 #endif
-                            pObjList->SetObjectOrdNum( mpObj->GetOrdNum(), (sal_uIntPtr)nNewOrdNum );
+                            pObjList->SetObjectOrdNum( mpObj->GetOrdNum(), static_cast<size_t>(nNewOrdNum) );
                 DBG_ASSERT( pCheck == mpObj.get(), "GetOrdNum() failed!" );
             }
             return true;

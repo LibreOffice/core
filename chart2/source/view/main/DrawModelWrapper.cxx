@@ -345,8 +345,8 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rObjectCID, SdrO
 {
     if(!pSearchList || rObjectCID.isEmpty())
         return 0;
-    sal_uLong nCount = pSearchList->GetObjCount();
-    for( sal_uLong nN=0; nN<nCount; nN++  )
+    const size_t nCount = pSearchList->GetObjCount();
+    for( size_t nN=0; nN<nCount; ++nN )
     {
         SdrObject* pObj = pSearchList->GetObj(nN);
         if(!pObj)

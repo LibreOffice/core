@@ -1101,8 +1101,8 @@ void ScShapeChildren::FillShapes(const Rectangle& aPixelPaintRect, const MapMode
         maShapeRanges[nRangeId].maMapMode = aMapMode;
         ScIAccessibleViewForwarder aViewForwarder(mpViewShell, mpAccDoc, aMapMode);
         maShapeRanges[nRangeId].maViewForwarder = aViewForwarder;
-        sal_uInt32 nCount(pPage->GetObjCount());
-        for (sal_uInt32 i = 0; i < nCount; ++i)
+        const size_t nCount(pPage->GetObjCount());
+        for (size_t i = 0; i < nCount; ++i)
         {
             SdrObject* pObj = pPage->GetObj(i);
             if (pObj)

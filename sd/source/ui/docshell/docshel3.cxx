@@ -116,8 +116,8 @@ static void lcl_setLanguage( const SdDrawDocument *pDoc, const OUString &rLangua
     for( sal_uInt16 nPage = 0; nPage < nPageCount; nPage++ )
     {
         const SdrPage *pPage = pDoc->GetPage( nPage );
-        sal_uIntPtr nObjCount = pPage->GetObjCount();
-        for( sal_uInt16 nObj = 0; nObj < nObjCount; nObj++ )
+        const size_t nObjCount = pPage->GetObjCount();
+        for( size_t nObj = 0; nObj < nObjCount; ++nObj )
         {
             SdrObject *pObj = pPage->GetObj( nObj );
             lcl_setLanguageForObj( pObj, nLang, bLanguageNone );

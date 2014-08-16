@@ -652,7 +652,7 @@ namespace
         bool bRet(false);
         bool bMaster(rList.GetPage() && rList.GetPage()->IsMasterPage());
 
-        for(sal_uIntPtr no(rList.GetObjCount()); !bRet && no > 0; )
+        for(size_t no(rList.GetObjCount()); !bRet && no > 0; )
         {
             no--;
             SdrObject* pObj = rList.GetObj(no);

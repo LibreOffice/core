@@ -213,10 +213,10 @@ void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* 
     }
 }
 
-sal_uInt32 ImpSdrGDIMetaFileImport::DoImport(
+size_t ImpSdrGDIMetaFileImport::DoImport(
     const GDIMetaFile& rMtf,
     SdrObjList& rOL,
-    sal_uLong nInsPos,
+    size_t nInsPos,
     SvdProgressInfo* pProgrInfo)
 {
     // setup some global scale parameter
@@ -290,14 +290,11 @@ sal_uInt32 ImpSdrGDIMetaFileImport::DoImport(
     nActionsToReport = 0;
 
     // insert all objects cached in aTmpList now into rOL from nInsPos
-    if(nInsPos > rOL.GetObjCount())
-    {
-        nInsPos = rOL.GetObjCount();
-    }
+    nInsPos = std::min(nInsPos, rOL.GetObjCount());
 
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
 
-    for(sal_uInt32 i(0); i < maTmpList.size(); i++)
+    for(size_t i = 0; i < maTmpList.size(); ++i)
     {
         SdrObject* pObj = maTmpList[i];
         rOL.NbcInsertObject(pObj, nInsPos, &aReason);

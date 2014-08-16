@@ -341,7 +341,7 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup (const SdrObject* pObj)
     SdrObjList* pObjList = pObj->GetSubList();
     if (pObjList)
     {
-        const sal_uLong nSubObjCount (pObjList->GetObjCount());
+        const size_t nSubObjCount (pObjList->GetObjCount());
 
         if (nSubObjCount>0)
         {
@@ -357,7 +357,7 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup (const SdrObject* pObj)
             if (IsTextObjType(nResultType))
                 nResultType = OBJ_TEXT;
 
-            for (sal_uInt16 nIndex=1; nIndex<nSubObjCount; ++nIndex)
+            for (size_t nIndex=1; nIndex<nSubObjCount; ++nIndex)
             {
                 pSubObj = pObjList->GetObj(nIndex);
                 sal_uInt16 nType (pSubObj->GetObjIdentifier());

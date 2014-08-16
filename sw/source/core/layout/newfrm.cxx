@@ -609,7 +609,7 @@ SwRootFrm::~SwRootFrm()
 void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 {
     // Remove all master objects from the Page. But don't delete!
-    for( sal_uLong i = pPg ? pPg->GetObjCount() : 0; i; )
+    for( size_t i = pPg ? pPg->GetObjCount() : 0; i; )
     {
         SdrObject* pObj = pPg->GetObj( --i );
         if( pObj->ISA(SwFlyDrawObj ) )

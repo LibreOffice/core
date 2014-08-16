@@ -540,9 +540,9 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
                 pDlgEdForm->StartListening();
 
                 // set position and size of controls
-                if (sal_uLong nObjCount = pDlgEdPage->GetObjCount())
+                if (const size_t nObjCount = pDlgEdPage->GetObjCount())
                 {
-                    for ( sal_uLong i = 0 ; i < nObjCount ; i++ )
+                    for ( size_t i = 0 ; i < nObjCount ; ++i )
                         if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pDlgEdPage->GetObj(i)))
                             if (!dynamic_cast<DlgEdForm*>(pDlgEdObj))
                                 pDlgEdObj->SetRectFromProps();

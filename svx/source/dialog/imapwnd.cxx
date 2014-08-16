@@ -151,12 +151,15 @@ const ImageMap& IMapWindow::GetImageMap()
 
         if ( pPage )
         {
-            const long nCount = pPage->GetObjCount();
+            const size_t nCount = pPage->GetObjCount();
 
             aIMap.ClearImageMap();
 
-            for ( long i = nCount - 1; i > -1; i-- )
+            for ( size_t i = nCount; i; )
+            {
+                --i;
                 aIMap.InsertIMapObject( *( ( (IMapUserData*) pPage->GetObj( i )->GetUserData( 0 ) )->GetObject() ) );
+            }
         }
 
         pModel->SetChanged( false );
@@ -426,12 +429,11 @@ SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
     if ( Rectangle( Point(), GetGraphicSize() ).IsInside( aPt ) )
     {
         SdrPage* pPage = (SdrPage*) pModel->GetPage( 0 );
-        sal_uIntPtr  nCount;
-
-        if ( pPage && ( ( nCount = pPage->GetObjCount() ) > 0 ) )
+        if ( pPage )
         {
-            for ( long i = nCount - 1; i >= 0; i-- )
+            for ( size_t i = pPage->GetObjCount(); i > 0; )
             {
+                --i;
                 SdrObject*  pTestObj = pPage->GetObj( i );
                 IMapObject* pIMapObj = GetIMapObj( pTestObj );
 

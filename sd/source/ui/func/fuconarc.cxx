@@ -140,7 +140,7 @@ bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        sal_uLong nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
+        const size_t nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
 
         if (mpView->EndCreateObj(SDRCREATE_NEXTPOINT) )
         {

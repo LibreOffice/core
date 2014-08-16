@@ -101,7 +101,7 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
 
         if ( pPage && pPage->GetObjCount() )
         {
-            SdrPathObj* pPathObj = (SdrPathObj*)pPage->GetObj(0L);
+            SdrPathObj* pPathObj = (SdrPathObj*)pPage->GetObj(0);
             // Not sure if subdivision is needed for ContourWindow, but maybe it cannot handle
             // curves at all. Keeping subdivision here for security
             const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(pPathObj->GetPathPoly()));

@@ -799,7 +799,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
     const SdrMarkList& rMarkList   = rView.GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
     SdPage*            pPage       = pMyDoc->GetSdPage(0, PK_STANDARD);
-    sal_uLong              nCloneCount = pPage->GetObjCount();
+    const size_t nCloneCount = pPage->GetObjCount();
 
     if (nMarkCount > 0)
     {
@@ -866,7 +866,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 // several objects
                 SdrObjList* pObjList = ((SdrObjGroup*)pObject)->GetSubList();
 
-                for( sal_uLong nObject = 0; nObject < pObjList->GetObjCount(); nObject++ )
+                for( size_t nObject = 0; nObject < pObjList->GetObjCount(); ++nObject )
                 {
                     SdrObject* pSnapShot = (SdrObject*) pObjList->GetObj( nObject );
 
@@ -944,7 +944,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 SdrObjList*  pObjList    = pCloneGroup->GetSubList();
 
                 for (size_t nObject= 0; nObject < nMarkCount; ++nObject)
-                    pObjList->InsertObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj()->Clone(), CONTAINER_APPEND);
+                    pObjList->InsertObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj()->Clone());
 
                 pPage->InsertObject(pCloneGroup, m_nCurrentFrame + 1);
             }
@@ -1163,14 +1163,14 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             SdrObjGroup* pGroup   = new SdrObjGroup;
             SdrObjList*  pObjList = pGroup->GetSubList();
 
-            for (size_t i = 0; i < nCount; i++)
+            for (size_t i = 0; i < nCount; ++i)
             {
                 // the clone remains in the animatior; we insert a clone of the
                 // clone into the group
                 pClone = pPage->GetObj(i);
                 SdrObject* pCloneOfClone = pClone->Clone();
                 //SdrObject* pCloneOfClone = pPage->GetObj(i)->Clone();
-                pObjList->InsertObject(pCloneOfClone, CONTAINER_APPEND);
+                pObjList->InsertObject(pCloneOfClone);
             }
 
             // until now the top left corner of the group is in the window center;

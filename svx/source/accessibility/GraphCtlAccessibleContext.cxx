@@ -293,7 +293,7 @@ SdrObject* SvxGraphCtrlAccessibleContext::getSdrObject( sal_Int32 nIndex )
     if( NULL == mpPage )
         throw DisposedException();
 
-    if( (nIndex < 0) || ( static_cast<sal_uInt32>(nIndex) >= mpPage->GetObjCount() ) )
+    if( (nIndex < 0) || ( static_cast<size_t>(nIndex) >= mpPage->GetObjCount() ) )
         throw lang::IndexOutOfBoundsException();
 
     return mpPage->GetObj( nIndex );

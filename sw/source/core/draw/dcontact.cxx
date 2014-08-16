@@ -311,7 +311,7 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
                 static_cast<SdrObjGroup*>(_pDrawObj)->GetSubList();
         if ( pLst )
         {
-            for ( sal_uInt16 i = 0; i < pLst->GetObjCount(); ++i )
+            for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
             {
                 _MoveObjToLayer( _bToVisible, pLst->GetObj( i ) );
             }
@@ -564,7 +564,7 @@ bool CheckControlLayer( const SdrObject *pObj )
     if ( pObj->ISA( SdrObjGroup ) )
     {
         const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
-        for ( sal_uInt16 i = 0; i < pLst->GetObjCount(); ++i )
+        for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
         {
             if ( ::CheckControlLayer( pLst->GetObj( i ) ) )
             {

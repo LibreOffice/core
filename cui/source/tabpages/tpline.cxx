@@ -340,7 +340,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
         pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
 
-        for(long i=0;; ++i)
+        for(size_t i=0;; ++i)
         {
             SdrObject *pObj=pSymbolList->GetObj(i);
             if(pObj==NULL)
@@ -1123,12 +1123,12 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
         SdrObject *pObj=NULL;
-        long nSymTmp=nSymType;
+        size_t nSymTmp = static_cast<size_t>(nSymType);
         if(pSymbolList)
         {
             if(pSymbolList->GetObjCount())
             {
-                nSymTmp=nSymTmp%pSymbolList->GetObjCount(); // Treat list as cyclic!
+                nSymTmp %= pSymbolList->GetObjCount(); // Treat list as cyclic!
                 pObj=pSymbolList->GetObj(nSymTmp);
                 if(pObj)
                 {

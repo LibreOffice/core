@@ -333,7 +333,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         GetIDocumentUndoRedo().AppendUndo(pUndo);
                     }
 
-                    for ( sal_uInt16 i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
+                    for ( size_t i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
                     {
                         SdrObject* pSubObj = pLst->GetObj( i2 );
                         SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
@@ -345,7 +345,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         pFmtsAndObjs[i].push_back( std::pair< SwDrawFrmFmt*, SdrObject* >( pFmt, pSubObj ) );
 
                         if( bUndo )
-                            pUndo->AddObj( i2, pFmt );
+                            pUndo->AddObj( static_cast<sal_uInt16>(i2), pFmt );
                     }
                 }
             }

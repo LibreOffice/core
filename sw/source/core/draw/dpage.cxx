@@ -61,7 +61,7 @@ SwDPage::~SwDPage()
     delete pGridLst;
 }
 
-SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum )
+SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
 {
     SdrObject *pOld = GetObj( nObjNum );
     OSL_ENSURE( pOld, "Oups, Object not replaced" );

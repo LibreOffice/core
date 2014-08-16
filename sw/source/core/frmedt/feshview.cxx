@@ -1149,7 +1149,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
             if ( bRet )
             {
                 const SdrPage* pPage = pIDDMA->GetDrawModel()->GetPage(0);
-                for(sal_uInt32 a(pObj->GetOrdNum() + 1); bRet && a < pPage->GetObjCount(); a++)
+                for(size_t a = pObj->GetOrdNum()+1; bRet && a < pPage->GetObjCount(); ++a)
                 {
                     SdrObject *pCandidate = pPage->GetObj(a);
 
@@ -1181,7 +1181,7 @@ static bool lcl_IsControlGroup( const SdrObject *pObj )
     {
         bRet = true;
         const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
-        for ( sal_uInt16 i = 0; i < pLst->GetObjCount(); ++i )
+        for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
             if( !::lcl_IsControlGroup( pLst->GetObj( i ) ) )
                 return false;
     }

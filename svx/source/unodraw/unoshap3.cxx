@@ -172,8 +172,8 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
     {
         SdrObjList& rList = *pSdrShape->GetObjList();
 
-        const sal_uInt32 nObjCount = rList.GetObjCount();
-        sal_uInt32 nObjNum = 0;
+        const size_t nObjCount = rList.GetObjCount();
+        size_t nObjNum = 0;
         while( nObjNum < nObjCount )
         {
             if(rList.GetObj( nObjNum ) == pSdrShape )
@@ -216,7 +216,7 @@ uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
     if( !mpObj.is() || mpObj->GetSubList() == NULL )
         throw uno::RuntimeException();
 
-    if( mpObj->GetSubList()->GetObjCount() <= (sal_uInt32)Index )
+    if( Index<0 || mpObj->GetSubList()->GetObjCount() <= static_cast<size_t>(Index) )
         throw lang::IndexOutOfBoundsException();
 
     SdrObject* pDestObj = mpObj->GetSubList()->GetObj( Index );

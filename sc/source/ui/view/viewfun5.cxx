@@ -500,7 +500,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             SvxDrawingLayerImport( pModel.get(), xInputStream );
 
             // set everything to right layer:
-            sal_uLong nObjCount = 0;
+            size_t nObjCount = 0;
             sal_uInt16 nPages = pModel->GetPageCount();
             for (sal_uInt16 i=0; i<nPages; i++)
             {

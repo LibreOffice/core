@@ -74,9 +74,9 @@ namespace sdr
 
             // collect all ItemSets of contained 3d objects
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 SdrObject* pObj = pSub->GetObj(a);
 
@@ -115,7 +115,7 @@ namespace sdr
         {
             // Set SDRATTR_3DOBJ_ range at contained objects.
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
             if(nCount)
             {
@@ -131,7 +131,7 @@ namespace sdr
 
                 if(pNewSet->Count())
                 {
-                    for(sal_uInt32 a(0L); a < nCount; a++)
+                    for(size_t a = 0; a < nCount; ++a)
                     {
                         SdrObject* pObj = pSub->GetObj(a);
 
@@ -151,9 +151,9 @@ namespace sdr
         void E3dSceneProperties::SetMergedItem(const SfxPoolItem& rItem)
         {
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 pSub->GetObj(a)->SetMergedItem(rItem);
             }
@@ -165,9 +165,9 @@ namespace sdr
         void E3dSceneProperties::ClearMergedItem(const sal_uInt16 nWhich)
         {
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 pSub->GetObj(a)->ClearMergedItem(nWhich);
             }
@@ -239,7 +239,7 @@ namespace sdr
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
             }
@@ -250,9 +250,9 @@ namespace sdr
             SfxStyleSheet* pRetval = 0L;
 
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 SfxStyleSheet* pCandidate = pSub->GetObj(a)->GetStyleSheet();
 

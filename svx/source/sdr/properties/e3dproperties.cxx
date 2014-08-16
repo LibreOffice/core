@@ -82,9 +82,9 @@ namespace sdr
 
             // propagate call to contained objects
             const SdrObjList* pSub = ((const E3dObject&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const size_t nCount(pSub->GetObjCount());
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(size_t a = 0; a < nCount; ++a)
             {
                 pSub->GetObj(a)->GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
             }

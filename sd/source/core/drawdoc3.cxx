@@ -926,7 +926,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             for(sal_uInt32 p = nInsertPos; p < (nInsertPos + nBMSdPageCount); p++)
             {
                 SdPage *pPg = (SdPage *) GetPage(p);
-                for(sal_uIntPtr i = 0; i < pPg->GetObjCount(); i++)
+                for(size_t i = 0; i < pPg->GetObjCount(); ++i)
                 {
                     if(pPg->GetObj(i)->GetStyleSheet())
                     {
@@ -1082,7 +1082,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
             aObjPos = Rectangle(Point(), pPage->GetSize()).Center();
         }
 
-        sal_uLong nCountBefore = 0;
+        size_t nCountBefore = 0;
 
         if (!rExchangeList.empty() || bCalcObjCount)
         {
@@ -1108,10 +1108,10 @@ bool SdDrawDocument::InsertBookmarkAsObject(
         if (!rExchangeList.empty())
         {
             // Get number of objects after inserting.
-            sal_uLong nCount = pPage->GetObjCount();
+            const size_t nCount = pPage->GetObjCount();
 
             std::vector<OUString>::const_iterator pIter = rExchangeList.begin();
-            for (sal_uLong nObj = nCountBefore; nObj < nCount; nObj++)
+            for (size_t nObj = nCountBefore; nObj < nCount; ++nObj)
             {
                 // Get the name to use from the Exchange list
                 if (pIter != rExchangeList.end())

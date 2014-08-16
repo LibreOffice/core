@@ -123,9 +123,8 @@ SdrLayer* SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
 bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
 {
     bool bDelAll(true);
-    sal_uInt32 nObjAnz(pOL->GetObjCount());
 
-    for(sal_uInt32 nObjNum(nObjAnz); nObjNum > 0 && bDelAll;)
+    for(size_t nObjNum = pOL->GetObjCount(); nObjNum > 0 && bDelAll;)
     {
         nObjNum--;
         SdrObject* pObj = pOL->GetObj(nObjNum);
@@ -153,13 +152,13 @@ bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
 
 void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
 {
-    sal_uInt32 nObjAnz(pOL->GetObjCount());
+    const size_t nObjAnz(pOL->GetObjCount());
     // make sure OrdNums are correct
     pOL->GetObj(0)->GetOrdNum();
 
     const bool bUndo = GetModel()->IsUndoEnabled();
 
-    for(sal_uInt32 nObjNum(nObjAnz); nObjNum > 0;)
+    for(size_t nObjNum = nObjAnz; nObjNum > 0;)
     {
         nObjNum--;
         SdrObject* pObj = pOL->GetObj(nObjNum);
@@ -223,13 +222,13 @@ void SdrEditView::DeleteLayer(const OUString& rName)
             {
                 // over all pages
                 SdrPage* pPage = (bMaPg) ? pMod->GetMasterPage(nPgNum) : pMod->GetPage(nPgNum);
-                sal_uInt32 nObjAnz(pPage->GetObjCount());
+                const size_t nObjAnz(pPage->GetObjCount());
 
                 // make sure OrdNums are correct
                 if(nObjAnz)
                     pPage->GetObj(0)->GetOrdNum();
 
-                for(sal_uInt32 nObjNum(nObjAnz); nObjNum > 0;)
+                for(size_t nObjNum(nObjAnz); nObjNum > 0;)
                 {
                     nObjNum--;
                     SdrObject* pObj = pPage->GetObj(nObjNum);
@@ -672,7 +671,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
             {
                 pM->GetPageView()->GetObjList()->RemoveObject(pObj->GetOrdNum());
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
-                pPV->GetObjList()->InsertObject(pObj,CONTAINER_APPEND,&aReason);
+                pPV->GetObjList()->InsertObject(pObj, SAL_MAX_SIZE, &aReason);
                 pM->SetPageView(pPV);
                 InvalidateAllWin(aObjRect);
                 bFlg=true;
@@ -726,7 +725,7 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
                 SdrMark* pM = rMark.GetMark(nm);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
                 SdrObjList*  pOL = pObj->GetObjList();
-                const sal_uInt32 nOrdNum(pObj->GetOrdNumDirect());
+                const size_t nOrdNum(pObj->GetOrdNumDirect());
 
                 bool bIs3D = dynamic_cast< E3dObject* >(pObj);
                 // set up a scene updater if object is a 3d object
@@ -902,7 +901,7 @@ void SdrEditView::CopyMarkedObj()
         SdrObject* pO=pM->GetMarkedSdrObj()->Clone();
         if (pO!=NULL) {
             SdrInsertReason aReason(SDRREASON_VIEWCALL);
-            pM->GetPageView()->GetObjList()->InsertObject(pO,CONTAINER_APPEND,&aReason);
+            pM->GetPageView()->GetObjList()->InsertObject(pO, SAL_MAX_SIZE, &aReason);
 
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoCopyObject(*pO));
@@ -967,9 +966,9 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_uInt
     if (!pObj->IsInserted()) {
         SdrInsertReason aReason(SDRREASON_VIEWCALL);
         if ((nOptions & SDRINSERT_NOBROADCAST)!=0) {
-            rPV.GetObjList()->NbcInsertObject(pObj,CONTAINER_APPEND,&aReason);
+            rPV.GetObjList()->NbcInsertObject(pObj, SAL_MAX_SIZE, &aReason);
         } else {
-            rPV.GetObjList()->InsertObject(pObj,CONTAINER_APPEND,&aReason);
+            rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE, &aReason);
         }
     }
     if( IsUndoEnabled() )

@@ -126,11 +126,10 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     Clear();
     bObjOrdNumsDirty=false;
     bRectsDirty     =false;
-    sal_uIntPtr nCloneErrCnt=0;
-    sal_uIntPtr nAnz=rSrcList.GetObjCount();
+    size_t nCloneErrCnt = 0;
+    const size_t nAnz = rSrcList.GetObjCount();
     SdrInsertReason aReason(SDRREASON_COPY);
-    sal_uIntPtr no;
-    for (no=0; no<nAnz; no++) {
+    for (size_t no=0; no<nAnz; ++no) {
         SdrObject* pSO=rSrcList.GetObj(no);
 
         SdrObject* pDO = pSO->Clone();
@@ -138,7 +137,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         if (pDO!=NULL) {
             pDO->SetModel(pModel);
             pDO->SetPage(pPage);
-            NbcInsertObject(pDO,CONTAINER_APPEND,&aReason);
+            NbcInsertObject(pDO, SAL_MAX_SIZE, &aReason);
         } else {
             nCloneErrCnt++;
         }
@@ -153,7 +152,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     //    BOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
     //    void SdrEditView::CopyMarked()
     if (nCloneErrCnt==0) {
-        for (no=0; no<nAnz; no++) {
+        for (size_t no=0; no<nAnz; ++no) {
             const SdrObject* pSrcOb=rSrcList.GetObj(no);
             SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pSrcOb);
             if (pSrcEdge!=NULL) {
@@ -254,8 +253,8 @@ void SdrObjList::SetPage(SdrPage* pNewPage)
 {
     if (pPage!=pNewPage) {
         pPage=pNewPage;
-        sal_uIntPtr nAnz=GetObjCount();
-        for (sal_uIntPtr no=0; no<nAnz; no++) {
+        const size_t nAnz = GetObjCount();
+        for (size_t no=0; no<nAnz; ++no) {
             SdrObject* pObj=GetObj(no);
             pObj->SetPage(pPage);
         }
@@ -271,8 +270,8 @@ void SdrObjList::SetModel(SdrModel* pNewModel)
 {
     if (pModel!=pNewModel) {
         pModel=pNewModel;
-        sal_uIntPtr nAnz=GetObjCount();
-        for (sal_uIntPtr i=0; i<nAnz; i++) {
+        const size_t nAnz = GetObjCount();
+        for (size_t i=0; i<nAnz; ++i) {
             SdrObject* pObj=GetObj(i);
             pObj->SetModel(pModel);
         }
@@ -281,8 +280,8 @@ void SdrObjList::SetModel(SdrModel* pNewModel)
 
 void SdrObjList::RecalcObjOrdNums()
 {
-    sal_uIntPtr nAnz=GetObjCount();
-    for (sal_uIntPtr no=0; no<nAnz; no++) {
+    const size_t nAnz = GetObjCount();
+    for (size_t no=0; no<nAnz; ++no) {
         SdrObject* pObj=GetObj(no);
         pObj->SetOrdNum(no);
     }
@@ -293,9 +292,8 @@ void SdrObjList::RecalcRects()
 {
     aOutRect=Rectangle();
     aSnapRect=aOutRect;
-    sal_uIntPtr nAnz=GetObjCount();
-    sal_uIntPtr i;
-    for (i=0; i<nAnz; i++) {
+    const size_t nAnz = GetObjCount();
+    for (size_t i=0; i<nAnz; ++i) {
         SdrObject* pObj=GetObj(i);
         if (i==0) {
             aOutRect=pObj->GetCurrentBoundRect();
@@ -323,12 +321,12 @@ void SdrObjList::impChildInserted(SdrObject& rChild) const
     }
 }
 
-void SdrObjList::NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrInsertReason* /*pReason*/)
+void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* /*pReason*/)
 {
     DBG_ASSERT(pObj!=NULL,"SdrObjList::NbcInsertObject(NULL)");
     if (pObj!=NULL) {
         DBG_ASSERT(!pObj->IsInserted(),"ZObjekt already has the status Inserted.");
-        sal_uIntPtr nAnz=GetObjCount();
+        const size_t nAnz = GetObjCount();
         if (nPos>nAnz) nPos=nAnz;
         InsertObjectIntoContainer(*pObj,nPos);
 
@@ -349,7 +347,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrIns
     }
 }
 
-void SdrObjList::InsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrInsertReason* pReason)
+void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
 {
     DBG_ASSERT(pObj!=NULL,"SdrObjList::InsertObject(NULL)");
 
@@ -391,7 +389,7 @@ void SdrObjList::InsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrInsert
     }
 }
 
-SdrObject* SdrObjList::NbcRemoveObject(sal_uIntPtr nObjNum)
+SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
 {
     if (nObjNum >= maList.size())
     {
@@ -399,7 +397,7 @@ SdrObject* SdrObjList::NbcRemoveObject(sal_uIntPtr nObjNum)
         return NULL;
     }
 
-    sal_uIntPtr nAnz=GetObjCount();
+    const size_t nAnz = GetObjCount();
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
@@ -413,7 +411,7 @@ SdrObject* SdrObjList::NbcRemoveObject(sal_uIntPtr nObjNum)
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
         if (!bObjOrdNumsDirty) { // optimizing for the case that the last object has to be removed
-            if (nObjNum!=sal_uIntPtr(nAnz-1)) {
+            if (nObjNum+1!=nAnz) {
                 bObjOrdNumsDirty=true;
             }
         }
@@ -422,7 +420,7 @@ SdrObject* SdrObjList::NbcRemoveObject(sal_uIntPtr nObjNum)
     return pObj;
 }
 
-SdrObject* SdrObjList::RemoveObject(sal_uIntPtr nObjNum)
+SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
 {
     if (nObjNum >= maList.size())
     {
@@ -430,7 +428,7 @@ SdrObject* SdrObjList::RemoveObject(sal_uIntPtr nObjNum)
         return NULL;
     }
 
-    sal_uIntPtr nAnz=GetObjCount();
+    const size_t nAnz = GetObjCount();
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
@@ -454,7 +452,7 @@ SdrObject* SdrObjList::RemoveObject(sal_uIntPtr nObjNum)
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
         if (!bObjOrdNumsDirty) { // optimization for the case that the last object is removed
-            if (nObjNum!=sal_uIntPtr(nAnz-1)) {
+            if (nObjNum+1!=nAnz) {
                 bObjOrdNumsDirty=true;
             }
         }
@@ -470,7 +468,7 @@ SdrObject* SdrObjList::RemoveObject(sal_uIntPtr nObjNum)
     return pObj;
 }
 
-SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum)
+SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
     if (nObjNum >= maList.size() || pNewObj == NULL)
     {
@@ -505,7 +503,7 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum)
     return pObj;
 }
 
-SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum)
+SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
     if (nObjNum >= maList.size())
     {
@@ -561,7 +559,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum)
     return pObj;
 }
 
-SdrObject* SdrObjList::NbcSetObjectOrdNum(sal_uIntPtr nOldObjNum, sal_uIntPtr nNewObjNum)
+SdrObject* SdrObjList::NbcSetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
 {
     if (nOldObjNum >= maList.size() || nNewObjNum >= maList.size())
     {
@@ -589,7 +587,7 @@ SdrObject* SdrObjList::NbcSetObjectOrdNum(sal_uIntPtr nOldObjNum, sal_uIntPtr nN
     return pObj;
 }
 
-SdrObject* SdrObjList::SetObjectOrdNum(sal_uIntPtr nOldObjNum, sal_uIntPtr nNewObjNum)
+SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
 {
     if (nOldObjNum >= maList.size() || nNewObjNum >= maList.size())
     {
@@ -648,8 +646,8 @@ const Rectangle& SdrObjList::GetAllObjBoundRect() const
 
 void SdrObjList::NbcReformatAllTextObjects()
 {
-    sal_uIntPtr nAnz=GetObjCount();
-    sal_uIntPtr nNum=0;
+    size_t nAnz=GetObjCount();
+    size_t nNum=0;
 
     while (nNum<nAnz)
     {
@@ -689,13 +687,13 @@ void SdrObjList::ReformatAllEdgeObjects()
 
 void SdrObjList::BurnInStyleSheetAttributes()
 {
-    for(sal_uInt32 a(0L); a < GetObjCount(); a++)
+    for(size_t a = 0; a < GetObjCount(); ++a)
     {
         GetObj(a)->BurnInStyleSheetAttributes();
     }
 }
 
-sal_uIntPtr SdrObjList::GetObjCount() const
+size_t SdrObjList::GetObjCount() const
 {
     return maList.size();
 }
@@ -703,7 +701,7 @@ sal_uIntPtr SdrObjList::GetObjCount() const
 
 
 
-SdrObject* SdrObjList::GetObj(sal_uIntPtr nNum) const
+SdrObject* SdrObjList::GetObj(size_t nNum) const
 {
     if (nNum >= maList.size())
     {
@@ -724,11 +722,11 @@ bool SdrObjList::IsReadOnly() const
     return bRet;
 }
 
-sal_uIntPtr SdrObjList::CountAllObjects() const
+size_t SdrObjList::CountAllObjects() const
 {
-    sal_uIntPtr nCnt=GetObjCount();
-    sal_uIntPtr nAnz=nCnt;
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
+    const size_t nAnz=GetObjCount();
+    size_t nCnt=nAnz;
+    for (size_t nNum=0; nNum<nAnz; nNum++) {
         SdrObjList* pSubOL=GetObj(nNum)->GetSubList();
         if (pSubOL!=NULL) {
             nCnt+=pSubOL->CountAllObjects();
@@ -739,8 +737,7 @@ sal_uIntPtr SdrObjList::CountAllObjects() const
 
 void SdrObjList::ForceSwapInObjects() const
 {
-    sal_uIntPtr nObjAnz=GetObjCount();
-    for (sal_uIntPtr nObjNum=nObjAnz; nObjNum>0;) {
+    for (size_t nObjNum=GetObjCount(); nObjNum>0;) {
         SdrObject* pObj=GetObj(--nObjNum);
         SdrGrafObj* pGrafObj=PTR_CAST(SdrGrafObj,pObj);
         if (pGrafObj!=NULL) {
@@ -755,8 +752,8 @@ void SdrObjList::ForceSwapInObjects() const
 
 void SdrObjList::ForceSwapOutObjects() const
 {
-    sal_uIntPtr nObjAnz=GetObjCount();
-    for (sal_uIntPtr nObjNum=nObjAnz; nObjNum>0;) {
+    const size_t nObjAnz = GetObjCount();
+    for (size_t nObjNum=nObjAnz; nObjNum>0;) {
         SdrObject* pObj=GetObj(--nObjNum);
         SdrGrafObj* pGrafObj=PTR_CAST(SdrGrafObj,pObj);
         if (pGrafObj!=NULL) {
@@ -771,13 +768,12 @@ void SdrObjList::ForceSwapOutObjects() const
 
 void SdrObjList::FlattenGroups()
 {
-    sal_Int32 nObj = GetObjCount();
-    sal_Int32 i;
-    for( i=nObj-1; i>=0; --i)
-        UnGroupObj(i);
+    const size_t nObj = GetObjCount();
+    for( size_t i = nObj; i>0; )
+        UnGroupObj(--i);
 }
 
-void SdrObjList::UnGroupObj( sal_uIntPtr nObjNum )
+void SdrObjList::UnGroupObj( size_t nObjNum )
 {
     // if the given object is no group, this method is a noop
     SdrObject* pUngroupObj = GetObj( nObjNum );
@@ -794,11 +790,11 @@ void SdrObjList::UnGroupObj( sal_uIntPtr nObjNum )
             pSrcLst->FlattenGroups();
 
             // the position at which we insert the members of rUngroupGroup
-            sal_Int32 nInsertPos( pUngroupGroup->GetOrdNum() );
+            size_t nInsertPos( pUngroupGroup->GetOrdNum() );
 
             SdrObject* pObj;
-            sal_Int32 i, nAnz = pSrcLst->GetObjCount();
-            for( i=0; i<nAnz; ++i )
+            const size_t nAnz = pSrcLst->GetObjCount();
+            for( size_t i=0; i<nAnz; ++i )
             {
                 pObj = pSrcLst->RemoveObject(0);
                 SdrInsertReason aReason(SDRREASON_VIEWCALL, pUngroupGroup);

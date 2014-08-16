@@ -1400,12 +1400,12 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 
 void DlgEdForm::UpdateStep()
 {
-    sal_uLong nObjCount;
     SdrPage* pSdrPage = GetPage();
 
-    if ( pSdrPage && ( ( nObjCount = pSdrPage->GetObjCount() ) > 0 ) )
+    if ( pSdrPage )
     {
-        for ( sal_uLong i = 0 ; i < nObjCount ; i++ )
+        const size_t nObjCount = pSdrPage->GetObjCount();
+        for ( size_t i = 0 ; i < nObjCount ; i++ )
         {
             DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrPage->GetObj(i));
             if (pDlgEdObj && !dynamic_cast<DlgEdForm*>(pDlgEdObj))

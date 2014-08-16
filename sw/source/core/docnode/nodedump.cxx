@@ -140,8 +140,8 @@ void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
         writer.writeFormatAttribute("ptr", "%p", pPage);
         if (pPage)
         {
-            sal_Int32 nObjCount = pPage->GetObjCount();
-            for (sal_Int32 i = 0; i < nObjCount; ++i)
+            const size_t nObjCount = pPage->GetObjCount();
+            for (size_t i = 0; i < nObjCount; ++i)
             {
                 const SdrObject* pObject = pPage->GetObj(i);
                 writer.startElement("sdrObject");
