@@ -452,26 +452,6 @@ RscTop * RscTypCont::InitClassTriStateBox( RscTop * pSuper,
     return pClassTriStateBox;
 }
 
-RscTop * RscTypCont::InitClassMenuButton( RscTop * pSuper,
-                                          RscTop * pClassMenu )
-{
-    Atom        nId;
-    RscTop *    pClassMenuButton;
-
-    nId = pHS->getID( "MenuButton" );
-    pClassMenuButton = new RscClass( nId, RSC_MENUBUTTON, pSuper );
-    pClassMenuButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassMenuButton );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "ButtonMenu", VARNAME );
-    pClassMenuButton->SetVariable( nId, pClassMenu, NULL, 0,
-                                                                        RSCMENUBUTTON_MENU );
-
-    return pClassMenuButton;
-}
-
-
 RscTop * RscTypCont::InitClassImageButton( RscTop * pSuper,
                                            RscTop * pClassImage,
                                            RscEnum * pTriState )

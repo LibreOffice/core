@@ -95,7 +95,6 @@ void RscTypCont::Init()
     RscTop   *  pClassAccel;
     RscTop   *  pClassMenuItem;
     RscTop   *  pClassMenu;
-    RscTop   *  pClassMenuButton;
     RscTop   *  pClassMessBox;
     RscTop   *  pClassInfoBox;
     RscTop   *  pClassWarningBox;
@@ -477,9 +476,6 @@ void RscTypCont::Init()
     nId = aNmTb.Put( "SubMenu", VARNAME );
     pClassMenuItem->SetVariable( nId, pClassMenu, NULL, VAR_SVDYNAMIC,
                                  RSC_MENUITEM_MENU );
-
-    pClassMenuButton = InitClassMenuButton( pClassControl, pClassMenu );
-    pRoot->Insert( pClassMenuButton );
 
     pClassMessBox = InitClassMessBox( pClassMgr, pMessButtons,
                                          pMessDefButton );

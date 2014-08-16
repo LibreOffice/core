@@ -67,7 +67,6 @@
 #define RSC_CANCELBUTTON        (RSC_NOTYPE + 0x48)
 #define RSC_HELPBUTTON          (RSC_NOTYPE + 0x49)
 #define RSC_IMAGEBUTTON         (RSC_NOTYPE + 0x4a)
-#define RSC_MENUBUTTON          (RSC_NOTYPE + 0x4b)
 
 #define RSC_SPINBUTTON          (RSC_NOTYPE + 0x4d)
 #define RSC_RADIOBUTTON         (RSC_NOTYPE + 0x4e)
