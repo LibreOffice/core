@@ -912,14 +912,14 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         RTFSprms aPoshSprms;
         if (m_aStates.top().aShape.nHoriOrientRelationToken > 0)
             aPoshSprms.set(NS_ooxml::LN_CT_PosH_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nHoriOrientRelationToken)));
-        if (m_aStates.top().aShape.nLeft > 0)
+        if (m_aStates.top().aShape.nLeft != 0)
             writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nLeft)), false);
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionH, RTFValue::Pointer_t(new RTFValue(aPoshSprms)));
 
         RTFSprms aPosvSprms;
         if (m_aStates.top().aShape.nVertOrientRelationToken > 0)
             aPosvSprms.set(NS_ooxml::LN_CT_PosV_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nVertOrientRelationToken)));
-        if (m_aStates.top().aShape.nTop > 0)
+        if (m_aStates.top().aShape.nTop != 0)
             writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nTop)), true);
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionV, RTFValue::Pointer_t(new RTFValue(aPosvSprms)));
 
