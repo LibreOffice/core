@@ -50,6 +50,7 @@
 #include "refupdatecontext.hxx"
 #include "scopetools.hxx"
 #include "tabprotection.hxx"
+#include "columnspanset.hxx"
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
 
@@ -1887,10 +1888,17 @@ bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
 
 bool ScTable::HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const
 {
-    bool bFound = false;
-    for (SCCOL i=0; i<=MAXCOL && !bFound; i++)
-        bFound |= aCol[i].HasAttribSelection( rMark, nMask );
-    return bFound;
+    std::vector<sc::ColRowSpan> aSpans = rMark.GetMarkedColSpans();
+
+    for (size_t i = 0; i < aSpans.size(); ++i)
+    {
+        for (SCCOLROW j = aSpans[i].mnStart; j < aSpans[i].mnEnd; ++j)
+        {
+            if (aCol[j].HasAttribSelection(rMark, nMask))
+              return true;
+        }
+    }
+    return false;
 }
 
 
@@ -2161,10 +2169,17 @@ bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 
 bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 {
-    bool bFound = false;
-    for (SCCOL i=0; i<=MAXCOL && !bFound; i++)
-        bFound |= aCol[i].HasSelectionMatrixFragment(rMark);
-    return bFound;
+    std::vector<sc::ColRowSpan> aSpans = rMark.GetMarkedColSpans();
+
+    for ( size_t i=0; i<aSpans.size(); i++ )
+    {
+        for ( SCCOLROW j=aSpans[i].mnStart; j<aSpans[i].mnEnd; j++ )
+        {
+            if ( aCol[j].HasSelectionMatrixFragment(rMark) )
+                return true;
+        }
+    }
+    return false;
 }
 
 
