@@ -162,11 +162,6 @@ typedef short RSWND_STYLE;
 #define RSC_DOCKINGWINDOW_Y             0x04
 #define RSC_DOCKINGWINDOW_FLOATING      0x08
 
-// For "TabControlItem" resources:
-#define RSC_TABCONTROLITEM_ID           0x0001
-#define RSC_TABCONTROLITEM_TEXT         0x0002
-#define RSC_TABCONTROLITEM_PAGERESID    0x0008
-
 // For "ImageButtons":
 #define RSC_IMAGEBUTTON_IMAGE           0x01
 #define RSC_IMAGEBUTTON_SYMBOL          0x02

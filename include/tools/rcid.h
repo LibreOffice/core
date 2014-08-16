@@ -100,8 +100,6 @@
 
 #define RSC_TABPAGE             (RSC_NOTYPE + 0x74)
 
-#define RSC_TABCONTROLITEM      (RSC_NOTYPE + 0x77)
-
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
 
 // (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) reserved for Sfx
