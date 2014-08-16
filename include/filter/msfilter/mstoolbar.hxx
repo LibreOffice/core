@@ -275,7 +275,7 @@ public:
     sal_uInt8 getTct() const { return tct; }
     sal_uInt16 getTcID() const { return tcid; }
     bool isVisible() { return !( bFlagsTCR & 0x1 ); }
-    bool isBeginGroup() { return ( bFlagsTCR & 0x2 ); }
+    bool isBeginGroup() { return ( bFlagsTCR & 0x2 ) != 0; }
     bool Read(SvStream &rS) SAL_OVERRIDE;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) SAL_OVERRIDE;
