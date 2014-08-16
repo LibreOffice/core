@@ -25,15 +25,14 @@ const size_t constMaxActionType = 513;
 int lclWriteCallback(void* pContext, const char* sBuffer, int nLen)
 {
     SvStream* pStream = static_cast<SvStream*>(pContext);
-    pStream->Write(sBuffer, nLen);
-    return nLen;
+    return (int) pStream->Write(sBuffer, nLen);
 }
 
 int lclCloseCallback(void* pContext)
 {
     SvStream* pStream = static_cast<SvStream*>(pContext);
-    pStream->WriteChar('\0');
-    return 0;
+    pStream->Flush();
+    return 0; // 0 or -1 in case of error
 }
 
 OUString flagToString(sal_uInt16 nFlag)
