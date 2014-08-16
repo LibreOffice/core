@@ -432,26 +432,6 @@ RscTop * RscTypCont::InitClassPushButton( RscTop * pSuper )
     return pClassPushButton;
 }
 
-RscTop * RscTypCont::InitClassTriStateBox( RscTop * pSuper,
-                                           RscEnum * pTriState )
-{
-    Atom        nId;
-    RscTop *    pClassTriStateBox;
-
-    nId = pHS->getID( "TriStateBox" );
-    pClassTriStateBox = new RscClass( nId, RSC_TRISTATEBOX, pSuper );
-    pClassTriStateBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassTriStateBox );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "State", VARNAME );
-    pClassTriStateBox->SetVariable( nId, pTriState );
-    nId = aNmTb.Put( "TriStateDisable", VARNAME );
-    pClassTriStateBox->SetVariable( nId, &aBool );
-
-    return pClassTriStateBox;
-}
-
 RscTop * RscTypCont::InitClassImageButton( RscTop * pSuper,
                                            RscTop * pClassImage,
                                            RscEnum * pTriState )

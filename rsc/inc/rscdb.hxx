@@ -176,7 +176,6 @@ class RscTypCont
     RscTop *    InitClassControl( RscTop * pSuper );
     RscTop *    InitClassCheckBox( RscTop * pSuper );
     RscTop *    InitClassPushButton( RscTop * pSuper );
-    RscTop *    InitClassTriStateBox( RscTop * pSuper, RscEnum * pTriState );
     RscTop *    InitClassImageButton( RscTop * pSuper, RscTop * pClassImage,
                                     RscEnum * pTriState );
     RscTop *    InitClassEdit( RscTop * pSuper );

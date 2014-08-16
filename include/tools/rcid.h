@@ -72,7 +72,7 @@
 #define RSC_RADIOBUTTON         (RSC_NOTYPE + 0x4e)
 
 #define RSC_CHECKBOX            (RSC_NOTYPE + 0x50)
-#define RSC_TRISTATEBOX         (RSC_NOTYPE + 0x51)
+
 #define RSC_EDIT                (RSC_NOTYPE + 0x52)
 
 #define RSC_COMBOBOX            (RSC_NOTYPE + 0x54)

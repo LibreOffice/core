@@ -2984,13 +2984,10 @@ void CheckBox::ImplLoadRes( const ResId& rResId )
 {
     Button::ImplLoadRes( rResId );
 
-    if ( rResId.GetRT() != RSC_TRISTATEBOX )
-    {
-        sal_uInt16 nChecked = ReadShortRes();
-        //anderer Wert als Default ?
-        if( nChecked )
-            Check( true );
-    }
+    sal_uInt16 nChecked = ReadShortRes();
+    //anderer Wert als Default ?
+    if( nChecked )
+        Check( true );
 }
 
 void CheckBox::ImplInvalidateOrDrawCheckBoxState()
