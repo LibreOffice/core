@@ -494,6 +494,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemTokenMap()
         static const SvXMLTokenMapEntry aStyleElemMap[] =
         {
             //  elements in a style
+            { XML_NAMESPACE_LO_EXT, XML_TEXT,               XML_TOK_STYLE_TEXT              },
             { XML_NAMESPACE_NUMBER, XML_TEXT,               XML_TOK_STYLE_TEXT              },
             { XML_NAMESPACE_LO_EXT, XML_FILL_CHARACTER,     XML_TOK_STYLE_FILL_CHARACTER    },
             { XML_NAMESPACE_NUMBER, XML_FILL_CHARACTER,     XML_TOK_STYLE_FILL_CHARACTER    },
