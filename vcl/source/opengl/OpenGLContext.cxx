@@ -29,7 +29,8 @@ GLWindow::~GLWindow()
 OpenGLContext::OpenGLContext():
     mpWindow(NULL),
     m_pChildWindow(NULL),
-    mbInitialized(false)
+    mbInitialized(false),
+    mbRequestLegacyContext(false)
 {
 }
 
@@ -58,6 +59,11 @@ OpenGLContext::~OpenGLContext()
         glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
     }
 #endif
+}
+
+void OpenGLContext::requestLegacyContext()
+{
+    mbRequestLegacyContext = true;
 }
 
 #if defined( _WIN32 )
@@ -490,6 +496,9 @@ bool OpenGLContext::ImplInit()
         kCGLPFASampleBuffers, (CGLPixelFormatAttribute) 4,
         (CGLPixelFormatAttribute) 0
         };
+
+    if (mbRequestLegacyContext)
+        pixelFormatAttributes[1] = (CGLPixelFormatAttribute) kCGLOGLPVersion_Legacy;
 
     CGLPixelFormatObj pixelFormat;
     GLint numberOfPixels;

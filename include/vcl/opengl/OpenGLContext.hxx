@@ -149,6 +149,8 @@ public:
     OpenGLContext();
     ~OpenGLContext();
 
+    void requestLegacyContext();
+
     bool init(Window* pParent = 0);
     bool init(SystemChildWindow* pChildWindow);
 
@@ -186,6 +188,7 @@ private:
     SystemChildWindow* m_pChildWindow;
     boost::scoped_ptr<SystemChildWindow> m_pChildWindowGC;
     bool mbInitialized;
+    bool mbRequestLegacyContext;
 };
 
 #endif
