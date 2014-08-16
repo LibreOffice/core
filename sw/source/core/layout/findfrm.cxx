@@ -1310,10 +1310,10 @@ void SwFrm::SetDirFlags( bool bVert )
 
             if( pAsk )
             {
-                mbVertical = pAsk->IsVertical() ? 1 : 0;
-                mbReverse  = pAsk->IsReverse()  ? 1 : 0;
+                mbVertical = pAsk->IsVertical();
+                mbReverse  = pAsk->IsReverse();
 
-                mbVertLR  = pAsk->IsVertLR() ? 1 : 0;
+                mbVertLR  = pAsk->IsVertLR();
 
                 if ( !pAsk->mbInvalidVert )
                     mbInvalidVert = false;
@@ -1335,7 +1335,7 @@ void SwFrm::SetDirFlags( bool bVert )
             OSL_ENSURE( pAsk != this, "Oops! Stack overflow is about to happen" );
 
             if( pAsk )
-                mbRightToLeft = pAsk->IsRightToLeft() ? 1 : 0;
+                mbRightToLeft = pAsk->IsRightToLeft();
             if( !pAsk || pAsk->mbInvalidR2L )
                 bInv = mbInvalidR2L;
         }

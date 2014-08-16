@@ -549,21 +549,21 @@ public:
     bool IsInBalancedSection() const;
 
     inline bool IsReverse() const { return mbReverse; }
-    inline void SetReverse( bool bNew ){ mbReverse = bNew ? 1 : 0; }
+    inline void SetReverse( bool bNew ){ mbReverse; }
     inline bool IsVertical() const;
 
     inline bool IsVertLR() const;
     inline bool GetVerticalFlag() const { return mbVertical; }
-    inline void SetVertical( bool bNew ){ mbVertical = bNew ? 1 : 0; }
+    inline void SetVertical( bool bNew ){ mbVertical; }
 
-    inline void SetbVertLR( bool bNew ) { mbVertLR = bNew ? 1 : 0; }
-    inline void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew ? 1 : 0; }
-    inline void SetInvalidVert( bool bNew) { mbInvalidVert = bNew ? 1 : 0; }
+    inline void SetbVertLR( bool bNew ) { mbVertLR = bNew; }
+    inline void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew; }
+    inline void SetInvalidVert( bool bNew) { mbInvalidVert = bNew; }
     inline bool IsRightToLeft() const;
     inline bool GetRightToLeftFlag() const { return mbRightToLeft; }
-    inline void SetRightToLeft( bool bNew ){ mbRightToLeft = bNew ? 1 : 0; }
-    inline void SetDerivedR2L( bool bNew ) { mbDerivedR2L  = bNew ? 1 : 0; }
-    inline void SetInvalidR2L( bool bNew ) { mbInvalidR2L  = bNew ? 1 : 0; }
+    inline void SetRightToLeft( bool bNew ){ mbRightToLeft = bNew; }
+    inline void SetDerivedR2L( bool bNew ) { mbDerivedR2L  = bNew; }
+    inline void SetInvalidR2L( bool bNew ) { mbInvalidR2L  = bNew; }
 
     void CheckDirChange();
     // returns upper left frame position for LTR and

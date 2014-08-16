@@ -372,10 +372,10 @@ namespace connectivity
         }
 
         bool        isBound() const                     { return m_bBound;      }
-        void        setBound(bool _bBound)              { m_bBound = _bBound ? 1 : 0; }
+        void        setBound(bool _bBound)              { m_bBound = _bBound; }
 
         bool        isModified() const                  { return m_bModified;   }
-        void        setModified(bool _bMod=true)        { m_bModified = _bMod ? 1 : 0;  }
+        void        setModified(bool _bMod=true)        { m_bModified = _bMod;  }
 
         bool        isSigned() const                    { return m_bSigned; }
         void        setSigned(bool _bSig=true);
