@@ -8,7 +8,11 @@
  */
 
 #include <sal/config.h>
+
 #include <test/bootstrapfixture.hxx>
+#include <test/primitive2dxmldump.hxx>
+#include <test/xmltesttools.hxx>
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 
@@ -28,8 +32,10 @@ using namespace css::io;
 using namespace css::graphic;
 using drawinglayer::primitive2d::arePrimitive2DSequencesEqual;
 
-class Test : public test::BootstrapFixture
+class Test : public test::BootstrapFixture, public XmlTestTools
 {
+    void checkRectPrimitive(Primitive2DSequence& rPrimitive);
+
     void testStyles();
 
     Primitive2DSequence parseSvg(const char* aSource);
@@ -72,27 +78,46 @@ void Test::tearDown()
     BootstrapFixture::tearDown();
 }
 
+void Test::checkRectPrimitive(Primitive2DSequence& rPrimitive)
+{
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(rPrimitive);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#00cc00"); // rect background color
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#ff0000"); // rect stroke color
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "3"); // rect stroke width
+
+}
+
 // Attributes for an object (like rect as in this case) can be defined
 // in different ways (directly with xml attributes, or with CSS styles),
 // however the end result should be the same.
 void Test::testStyles()
 {
-    Primitive2DSequence maSequenceRect = parseSvg("/svgio/qa/cppunit/data/Rect.svg");
-    CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRect.getLength());
+    Primitive2DSequence aSequenceRect = parseSvg("/svgio/qa/cppunit/data/Rect.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRect.getLength());
+    checkRectPrimitive(aSequenceRect);
 
-    Primitive2DSequence maSequenceRectWithStyle = parseSvg("/svgio/qa/cppunit/data/RectWithStyles.svg");
-    CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRectWithStyle.getLength());
+    Primitive2DSequence aSequenceRectWithStyle = parseSvg("/svgio/qa/cppunit/data/RectWithStyles.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRectWithStyle.getLength());
+    checkRectPrimitive(aSequenceRectWithStyle);
 
-    Primitive2DSequence maSequenceRectWithParentStyle = parseSvg("/svgio/qa/cppunit/data/RectWithParentStyles.svg");
-    CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRectWithParentStyle.getLength());
+    Primitive2DSequence aSequenceRectWithParentStyle = parseSvg("/svgio/qa/cppunit/data/RectWithParentStyles.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRectWithParentStyle.getLength());
+    checkRectPrimitive(aSequenceRectWithParentStyle);
 
-    Primitive2DSequence maSequenceRectWithStylesByGroup = parseSvg("/svgio/qa/cppunit/data/RectWithStylesByGroup.svg");
-    CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRectWithStylesByGroup.getLength());
+    Primitive2DSequence aSequenceRectWithStylesByGroup = parseSvg("/svgio/qa/cppunit/data/RectWithStylesByGroup.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRectWithStylesByGroup.getLength());
+    checkRectPrimitive(aSequenceRectWithStylesByGroup);
 
-    CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithStyle));
-    CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithParentStyle));
-    CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(maSequenceRect, maSequenceRectWithStylesByGroup));
+    CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithStyle));
+    CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithParentStyle));
+    CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithStylesByGroup));
+
 }
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

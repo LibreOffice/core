@@ -14,7 +14,10 @@ $(eval $(call gb_CppunitTest_set_include,svgio_import_test,\
     -I$(SRCDIR)/svgio/inc \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,svgio_import_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,svgio_import_test,\
+    boost_headers \
+    libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_api,svgio_import_test,\
     offapi \
