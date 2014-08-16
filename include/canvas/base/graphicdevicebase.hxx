@@ -57,11 +57,11 @@ namespace canvas
 
         <pre>
         Example:
-        typedef ::cppu::WeakComponentImplHelper5< ::com::sun::star::rendering::XGraphicDevice,
-                                                  ::com::sun::star::rendering::XColorSpace,
-                                                  ::com::sun::star::rendering::XPropertySet,
-                                                  ::com::sun::star::lang::XServiceInfo,
-                                                  ::com::sun::star::lang::XServiceName > GraphicDeviceBase_Base;
+        typedef ::cppu::WeakComponentImplHelper5< css::rendering::XGraphicDevice,
+                                                  css::rendering::XColorSpace,
+                                                  css::rendering::XPropertySet,
+                                                  css::lang::XServiceInfo,
+                                                  css::lang::XServiceName > GraphicDeviceBase_Base;
         typedef ::canvas::internal::GraphicDeviceBase< GraphicDeviceBase, DeviceHelper > ExampleDevice_Base;
 
         class ExampleDevice : public ExampleDevice_Base
@@ -101,7 +101,7 @@ namespace canvas
     template< class Base,
               class DeviceHelper,
               class Mutex=::osl::MutexGuard,
-              class UnambiguousBase=::com::sun::star::uno::XInterface > class GraphicDeviceBase :
+              class UnambiguousBase=css::uno::XInterface > class GraphicDeviceBase :
         public Base
     {
     public:
@@ -147,48 +147,48 @@ namespace canvas
         }
 
         // XGraphicDevice
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBufferController > SAL_CALL getBufferController(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XBufferController > SAL_CALL getBufferController(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
-            return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBufferController >();
+            return css::uno::Reference< css::rendering::XBufferController >();
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XColorSpace > SAL_CALL getDeviceColorSpace(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getDeviceColorSpace(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.getColorSpace();
         }
 
-        virtual ::com::sun::star::geometry::RealSize2D SAL_CALL getPhysicalResolution(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::geometry::RealSize2D SAL_CALL getPhysicalResolution(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.getPhysicalResolution();
         }
 
-        virtual ::com::sun::star::geometry::RealSize2D SAL_CALL getPhysicalSize(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::geometry::RealSize2D SAL_CALL getPhysicalSize(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.getPhysicalSize();
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XLinePolyPolygon2D > SAL_CALL createCompatibleLinePolyPolygon( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > >& points ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > SAL_CALL createCompatibleLinePolyPolygon( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& points ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.createCompatibleLinePolyPolygon( this, points );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBezierPolyPolygon2D > SAL_CALL createCompatibleBezierPolyPolygon( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealBezierSegment2D > >& points ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XBezierPolyPolygon2D > SAL_CALL createCompatibleBezierPolyPolygon( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > >& points ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.createCompatibleBezierPolyPolygon( this, points );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL createCompatibleBitmap( const ::com::sun::star::geometry::IntegerSize2D& size ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                         ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL createCompatibleBitmap( const css::geometry::IntegerSize2D& size ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                                                                         css::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyBitmapSize(size,
                                     BOOST_CURRENT_FUNCTION,
@@ -199,8 +199,8 @@ namespace canvas
             return maDeviceHelper.createCompatibleBitmap( this, size );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > SAL_CALL createVolatileBitmap( const ::com::sun::star::geometry::IntegerSize2D& size ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                               ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XVolatileBitmap > SAL_CALL createVolatileBitmap( const css::geometry::IntegerSize2D& size ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                                                                               css::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyBitmapSize(size,
                                     BOOST_CURRENT_FUNCTION,
@@ -211,8 +211,8 @@ namespace canvas
             return maDeviceHelper.createVolatileBitmap( this, size );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL createCompatibleAlphaBitmap( const ::com::sun::star::geometry::IntegerSize2D& size ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                              ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                                                                              css::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyBitmapSize(size,
                                     BOOST_CURRENT_FUNCTION,
@@ -223,8 +223,8 @@ namespace canvas
             return maDeviceHelper.createCompatibleAlphaBitmap( this, size );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > SAL_CALL createVolatileAlphaBitmap( const ::com::sun::star::geometry::IntegerSize2D& size ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                    ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XVolatileBitmap > SAL_CALL createVolatileAlphaBitmap( const css::geometry::IntegerSize2D& size ) throw (css::lang::IllegalArgumentException,
+                                                                                                                                                                                                    css::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyBitmapSize(size,
                                     BOOST_CURRENT_FUNCTION,
@@ -235,19 +235,19 @@ namespace canvas
             return maDeviceHelper.createVolatileAlphaBitmap( this, size );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL getParametricPolyPolygonFactory(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::lang::XMultiServiceFactory > SAL_CALL getParametricPolyPolygonFactory(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             return this;
         }
 
-        virtual sal_Bool SAL_CALL hasFullScreenMode(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL hasFullScreenMode(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.hasFullScreenMode();
         }
 
-        virtual sal_Bool SAL_CALL enterFullScreenMode( sal_Bool bEnter ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL enterFullScreenMode( sal_Bool bEnter ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -255,23 +255,23 @@ namespace canvas
         }
 
         // XMultiServiceFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw (css::uno::Exception, css::uno::RuntimeException) SAL_OVERRIDE
         {
-            return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
+            return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
                                               aServiceSpecifier,
-                                              ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >()));
+                                              css::uno::Sequence< css::uno::Any >()));
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) throw (css::uno::Exception, css::uno::RuntimeException) SAL_OVERRIDE
         {
-            return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
+            return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
                                               aServiceSpecifier,
                                               Arguments));
         }
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             return ParametricPolyPolygon::getAvailableServiceNames();
         }
@@ -288,35 +288,35 @@ namespace canvas
 
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
             return maPropHelper.getPropertySetInfo();
         }
 
         virtual void SAL_CALL setPropertyValue( const OUString&                   aPropertyName,
-                                                const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                  ::com::sun::star::beans::PropertyVetoException,
-                                                                                                  ::com::sun::star::lang::IllegalArgumentException,
-                                                                                                  ::com::sun::star::lang::WrappedTargetException,
-                                                                                                  ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException,
+                                                                                                  css::beans::PropertyVetoException,
+                                                                                                  css::lang::IllegalArgumentException,
+                                                                                                  css::lang::WrappedTargetException,
+                                                                                                  css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
             maPropHelper.setPropertyValue( aPropertyName, aValue );
         }
 
-        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                    ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                    ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& aPropertyName ) throw (css::beans::UnknownPropertyException,
+                                                                                                                    css::lang::WrappedTargetException,
+                                                                                                                    css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
             return maPropHelper.getPropertyValue( aPropertyName );
         }
 
         virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName,
-                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                                                                        ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                                                                        ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                         const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw (css::beans::UnknownPropertyException,
+                                                                                                                                                                        css::lang::WrappedTargetException,
+                                                                                                                                                                        css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
             maPropHelper.addPropertyChangeListener( aPropertyName,
@@ -324,9 +324,9 @@ namespace canvas
         }
 
         virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName,
-                                                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                                                                           ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                                                                           ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw (css::beans::UnknownPropertyException,
+                                                                                                                                                                           css::lang::WrappedTargetException,
+                                                                                                                                                                           css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
             maPropHelper.removePropertyChangeListener( aPropertyName,
@@ -334,9 +334,9 @@ namespace canvas
         }
 
         virtual void SAL_CALL addVetoableChangeListener( const OUString& aPropertyName,
-                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                                                                        ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                                                                        ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                         const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener ) throw (css::beans::UnknownPropertyException,
+                                                                                                                                                                        css::lang::WrappedTargetException,
+                                                                                                                                                                        css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
             maPropHelper.addVetoableChangeListener( aPropertyName,
@@ -344,9 +344,9 @@ namespace canvas
         }
 
         virtual void SAL_CALL removeVetoableChangeListener( const OUString& aPropertyName,
-                                                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                                                                           ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                                                                           ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener ) throw (css::beans::UnknownPropertyException,
+                                                                                                                                                                           css::lang::WrappedTargetException,
+                                                                                                                                                                           css::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
             maPropHelper.removeVetoableChangeListener( aPropertyName,
@@ -356,12 +356,12 @@ namespace canvas
     protected:
         ~GraphicDeviceBase() {} // we're a ref-counted UNO class. _We_ destroy ourselves.
 
-        ::com::sun::star::uno::Any getDumpScreenContent() const
+        css::uno::Any getDumpScreenContent() const
         {
-            return ::com::sun::star::uno::makeAny( mbDumpScreenContent );
+            return css::uno::makeAny( mbDumpScreenContent );
         }
 
-        void setDumpScreenContent( const ::com::sun::star::uno::Any& rAny )
+        void setDumpScreenContent( const css::uno::Any& rAny )
         {
             // TODO(Q1): this was mbDumpScreenContent =
             // rAny.get<bool>(), only that gcc3.3 wouldn't eat it
