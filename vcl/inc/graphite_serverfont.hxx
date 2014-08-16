@@ -68,7 +68,7 @@ public:
             maImpl.DrawOffset() = maDrawOffset;
             maImpl.AdjustLayout(rArgs);
         };
-        virtual long GetTextWidth() const SAL_OVERRIDE
+        virtual DeviceCoordinate GetTextWidth() const SAL_OVERRIDE
         {
             return maImpl.GetTextWidth();
         }

@@ -173,7 +173,7 @@ public:
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra=0, int nFactor=1) const = 0;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
-    virtual long    GetTextWidth() const { return FillDXArray( NULL ); }
+    virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( NULL ); }
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
@@ -323,13 +323,13 @@ public:
     void            Reserve(int size) { m_GlyphItems.reserve(size + 1); }
     virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    ApplyDXArray( ImplLayoutArgs& );
-    virtual void    Justify( long nNewWidth );
+    virtual void    Justify( DeviceCoordinate nNewWidth );
     void            KashidaJustify( long nIndex, int nWidth );
     void            ApplyAsianKerning( const sal_Unicode*, int nLength );
     void            SortGlyphItems();
 
     // used by upper layers
-    virtual long    GetTextWidth() const SAL_OVERRIDE;
+    virtual DeviceCoordinate GetTextWidth() const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;

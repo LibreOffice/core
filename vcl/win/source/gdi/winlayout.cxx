@@ -155,7 +155,7 @@ public:
     virtual void    Simplify( bool bIsBase );
 
 protected:
-    void            Justify( long nNewWidth );
+    void            Justify( DeviceCoordinate nNewWidth );
     void            ApplyDXArray( const ImplLayoutArgs& );
 
 private:
@@ -709,9 +709,9 @@ void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
     }
 }
 
-void SimpleWinLayout::Justify( long nNewWidth )
+void SimpleWinLayout::Justify( DeviceCoordinate nNewWidth )
 {
-    long nOldWidth = mnWidth;
+    DeviceCoordinate nOldWidth = mnWidth;
     mnWidth = nNewWidth;
 
     if( mnGlyphCount <= 0 )
@@ -732,12 +732,12 @@ void SimpleWinLayout::Justify( long nNewWidth )
             ++nStretchable;
 
     // stretch these glyphs
-    int nDiffWidth = nNewWidth - nOldWidth;
+    DeviceCoordinate nDiffWidth = nNewWidth - nOldWidth;
     for( i = 0; (i < nRight) && (nStretchable > 0); ++i )
     {
         if( mpGlyphAdvances[i] <= 0 )
             continue;
-        int nDeltaWidth = nDiffWidth / nStretchable;
+        DeviceCoordinate nDeltaWidth = nDiffWidth / nStretchable;
         mpGlyphAdvances[i] += nDeltaWidth;
         --nStretchable;
         nDiffWidth -= nDeltaWidth;
@@ -980,7 +980,7 @@ public:
 protected:
     virtual         ~UniscribeLayout();
 
-    void            Justify( long nNewWidth );
+    void            Justify( DeviceCoordinate nNewWidth );
     void            ApplyDXArray( const ImplLayoutArgs& );
 
     bool            GetItemSubrange( const VisualItem&,
@@ -2515,9 +2515,9 @@ bool UniscribeLayout::KashidaWordFix ( int nMinGlyphPos, int nEndGlyphPos, int* 
     return true;
 }
 
-void UniscribeLayout::Justify( long nNewWidth )
+void UniscribeLayout::Justify( DeviceCoordinate nNewWidth )
 {
-    long nOldWidth = 0;
+    DeviceCoordinate nOldWidth = 0;
     int i;
     for( i = mnMinCharPos; i < mnEndCharPos; ++i )
         nOldWidth += mpCharWidths[ i ];

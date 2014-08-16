@@ -42,7 +42,7 @@ public:
                                    DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
                                    const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
 
-    virtual long    GetTextWidth() const SAL_OVERRIDE;
+    virtual DeviceCoordinate GetTextWidth() const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
@@ -56,7 +56,6 @@ public:
 private:
     void            drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, const CoreTextStyle* const pStyle) const;
     CGPoint         GetTextDrawPosition(void) const;
-    double          GetWidth(void) const;
     bool            CacheGlyphLayout(void) const;
     void            ApplyDXArray( ImplLayoutArgs& rArgs);
 
@@ -327,7 +326,7 @@ CGPoint CTLayout::GetTextDrawPosition(void) const
     {
         // text is always drawn at its leftmost point
         const Point aPos = DrawBase();
-        fPosX = aPos.X() + mfBaseAdv - GetWidth();
+        fPosX = aPos.X() + mfBaseAdv - GetTextWidth();
         fPosY = aPos.Y();
     }
     else
@@ -695,7 +694,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
 
 }
 
-double CTLayout::GetWidth() const
+DeviceCoordinate CTLayout::GetTextWidth() const
 {
     if( (mnCharCount <= 0) || !mpCTLine )
         return 0;
@@ -708,14 +707,9 @@ double CTLayout::GetWidth() const
     return mfCachedWidth;
 }
 
-long CTLayout::GetTextWidth() const
-{
-    return lrint(GetWidth());
-}
-
 DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
 {
-    DeviceCoordinate nPixWidth = GetWidth();
+    DeviceCoordinate nPixWidth = GetTextWidth();
     // short circuit requests which don't need full details
     if( !pDXArray )
         return nPixWidth;
@@ -771,7 +765,6 @@ sal_Int32 CTLayout::GetTextBreak( DeviceCoordinate nMaxWidth, long nCharExtra, i
     }
     CTTypesetterRef aCTTypeSetter = CTTypesetterCreateWithAttributedString( mpAttrString );
     CFIndex nBestGuess = (nCharExtra >= 0) ? 0 : mnCharCount;
-    SAL_INFO("vcl.ct", "GetTextBreak nMaxWidth:" << nMaxWidth << " nBestGuess:" << nBestGuess << " nCharExtra:" << nCharExtra << " nFactor:" << nFactor);
     for( int i = 1; i <= mnCharCount; i *= 2 )
     {
         // guess the target width considering char-extra expansion/condensation
@@ -779,7 +772,6 @@ sal_Int32 CTLayout::GetTextBreak( DeviceCoordinate nMaxWidth, long nCharExtra, i
         const double fCTMaxWidth = nTargetWidth / nFactor;
         // calculate the breaking index for the guessed target width
         const CFIndex nNewIndex = CTTypesetterSuggestClusterBreak( aCTTypeSetter, 0, fCTMaxWidth );
-        SAL_INFO("vcl.ct", "GetTextBreak nTargetWidth:" << nTargetWidth << " fCTMaxWidth:" << fCTMaxWidth << " nNewIndex:" << nNewIndex);
         if( nNewIndex >= mnCharCount )
         {
             CFRelease( aCTTypeSetter );

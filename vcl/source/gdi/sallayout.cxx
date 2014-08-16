@@ -916,24 +916,23 @@ DeviceCoordinate GenericSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) 
         if( !GetCharWidths( pCharWidths ) )
             return 0;
 
-    long nWidth = GetTextWidth();
-    return nWidth;
+    return GetTextWidth();
 }
 
 // the text width is the maximum logical extent of all glyphs
-long GenericSalLayout::GetTextWidth() const
+DeviceCoordinate GenericSalLayout::GetTextWidth() const
 {
     if( m_GlyphItems.empty() )
         return 0;
 
     // initialize the extent
-    long nMinPos = 0;
-    long nMaxPos = 0;
+    DeviceCoordinate nMinPos = 0;
+    DeviceCoordinate nMaxPos = 0;
 
     for( GlyphVector::const_iterator pG = m_GlyphItems.begin(), end = m_GlyphItems.end(); pG != end ; ++pG )
     {
         // update the text extent with the glyph extent
-        long nXPos = pG->maLinearPos.X();
+        DeviceCoordinate nXPos = pG->maLinearPos.X();
         if( nMinPos > nXPos )
             nMinPos = nXPos;
         nXPos += pG->mnNewWidth - pG->mnXOffset;
@@ -941,7 +940,7 @@ long GenericSalLayout::GetTextWidth() const
             nMaxPos = nXPos;
     }
 
-    long nWidth = nMaxPos - nMinPos;
+    DeviceCoordinate nWidth = nMaxPos - nMinPos;
     return nWidth;
 }
 
@@ -1081,10 +1080,10 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     }
 }
 
-void GenericSalLayout::Justify( long nNewWidth )
+void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
 {
     nNewWidth *= mnUnitsPerPixel;
-    int nOldWidth = GetTextWidth();
+    DeviceCoordinate nOldWidth = GetTextWidth();
     if( !nOldWidth || nNewWidth==nOldWidth )
         return;
 
