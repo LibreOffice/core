@@ -44,16 +44,10 @@ $(eval $(call gb_Library_use_externals,OGLTrans,\
 $(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/OGLTrans/ogltrans))
 
 ifeq ($(strip $(OS)),MACOSX)
-$(eval $(call gb_Library_add_objcobjects,OGLTrans,\
-    slideshow/source/engine/OGLTrans/mac/aquaOpenGLView \
-    slideshow/source/engine/OGLTrans/mac/OGLTrans_Shaders \
-    ,\
-))
 
-$(eval $(call gb_Library_add_objcxxobjects,OGLTrans,\
-    slideshow/source/engine/OGLTrans/mac/OGLTrans_TransitionerImpl \
-    slideshow/source/engine/OGLTrans/mac/OGLTrans_TransitionImpl \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) \
+$(eval $(call gb_Library_add_exception_objects,OGLTrans,\
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,OGLTrans,\
