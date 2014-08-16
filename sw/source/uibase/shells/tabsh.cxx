@@ -741,7 +741,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     }
                     default:
                         OSL_ENSURE( false, "unknown return value MergeTab.");
-                        break
+                        break;
                 }
             break;
         case FN_TABLE_ADJUST_CELLS:
