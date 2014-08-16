@@ -1011,7 +1011,7 @@ void GL3DBarChart::updateClickEvent()
     {
         std::list<float>& aList = maBarHistory[mSelectBarId];
         sal_uInt32 idex = 0;
-        for (std::list<float>::iterator it = aList.begin();it != aList.end();it++)
+        for (std::list<float>::iterator it = aList.begin();it != aList.end();++it)
         {
             OUString aBarValue;
             if (idex + 1 == aList.size())
