@@ -15,6 +15,13 @@ uniform sampler1D t_stopArray1d;
 uniform mat3x2    m_transform;
 varying vec2      v_textureCoords2d;
 
+int max(int x, int y)
+{
+    if(x > y)
+        return x;
+    return y;
+}
+
 int findBucket(float t)
 {
     int nMinBucket=0;
@@ -26,12 +33,12 @@ int findBucket(float t)
 
 void main(void)
 {
-    const vec2  v = abs( vec2(m_transform * vec3(v_textureCoords2d,1)) );
-    const float fAlpha = 1 - max(v.x, v.y);
+    vec2  v = abs( vec2(m_transform * vec3(v_textureCoords2d,1)) );
+    float fAlpha = 1 - max(v.x, v.y);
 
-    const int nMinBucket=findBucket( fAlpha );
+    int nMinBucket=findBucket( fAlpha );
 
-    const float fLerp =
+    float fLerp =
         (fAlpha-texture1D(t_stopArray1d, nMinBucket).s) /
         (texture1D(t_stopArray1d, nMinBucket+1).s -
          texture1D(t_stopArray1d, nMinBucket).s);
