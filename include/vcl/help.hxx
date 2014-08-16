@@ -50,11 +50,8 @@ class Window;
 #define QUICKHELP_BIDI_RTL          ((sal_uInt16)0x8000)
 
 #define OOO_HELP_INDEX          ".help:index"
-#define OOO_HELP_HELPONHELP     ".help:helponhelp"
-
 
 // - Help -
-
 
 class VCL_DLLPUBLIC Help
 {
