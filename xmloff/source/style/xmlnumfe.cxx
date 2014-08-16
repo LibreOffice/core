@@ -46,7 +46,6 @@
 #include <xmloff/xmlexp.hxx>
 
 #include <set>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -338,11 +337,12 @@ void SvXMLNumFmtExport::AddToTextElement_Impl( const OUString& rString )
     sTextContent.append( rString );
 }
 
-void SvXMLNumFmtExport::FinishTextElement_Impl()
+void SvXMLNumFmtExport::FinishTextElement_Impl(bool bUseExtensionNS)
 {
     if ( !sTextContent.isEmpty() )
     {
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_TEXT,
+        sal_uInt16 nNS = bUseExtensionNS ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER;
+        SvXMLElementExport aElem( rExport, nNS, XML_TEXT,
                                   sal_True, sal_False );
         rExport.Characters( sTextContent.makeStringAndClear() );
     }
@@ -502,7 +502,7 @@ void SvXMLNumFmtExport::WriteMinutesElement_Impl( sal_Bool bLong )
 
 void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
 {
-    FinishTextElement_Impl();
+    FinishTextElement_Impl(sal_True);
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_LO_EXT, XML_FILL_CHARACTER,
                                   sal_True, sal_False );
     rExport.Characters( OUString( nChar ) );
