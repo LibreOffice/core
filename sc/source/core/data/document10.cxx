@@ -203,7 +203,12 @@ bool ScDocument::CopyOneCellFromClip(
 
     SCTAB nTabEnd = rCxt.getTabEnd();
     for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); ++i)
+    {
         maTabs[i]->CopyOneCellFromClip(rCxt, nCol1, nRow1, nCol2, nRow2);
+        if (rCxt.getInsertFlag() & IDF_ATTRIB)
+            maTabs[i]->CopyConditionalFormat(nCol1, nRow1, nCol2, nRow2, nCol1 - aClipRange.aStart.Col(),
+                    nRow1 - aClipRange.aStart.Row(), pSrcTab);
+    }
 
     return true;
 }
