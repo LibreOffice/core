@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 
     def startElement(self, name, attrs):
         if name == "namespace-alias":
-            token = """const sal_uInt32 NS_%s = %s;""" % (attrs["alias"], attrs["id"])
+            token = """const sal_Int32 NMSP_%s = %s;""" % (attrs["alias"], attrs["id"])
             if token not in self.tokens:
                 self.tokens.append(token)
                 print(token)

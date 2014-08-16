@@ -129,7 +129,7 @@ string fastTokenToId(sal_uInt32 nToken)
     for alias in [a.getAttribute("alias") for a in model.getElementsByTagName("namespace-alias")]:
         if not alias in aliases:
             aliases.append(alias)
-            print("""    case NS_%s:
+            print("""    case NMSP_%s:
         sResult += "%s:";
         break;""" % (alias, alias))
     print("""    }
@@ -161,7 +161,7 @@ def getFastParser(model):
         mxFastParser = css::xml::sax::FastParser::create(mxContext);
 """)
     for alias in model.getElementsByTagName("namespace-alias"):
-        print("""        mxFastParser->registerNamespace("%s", NS_%s);""" % (alias.getAttribute("name"), alias.getAttribute("alias")))
+        print("""        mxFastParser->registerNamespace("%s", NMSP_%s);""" % (alias.getAttribute("name"), alias.getAttribute("alias")))
     print("""    }
 
     return mxFastParser;
