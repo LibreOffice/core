@@ -542,26 +542,6 @@ RscTop * RscTypCont::InitClassEdit( RscTop * pSuper )
     return pClassEdit;
 }
 
-RscTop * RscTypCont::InitClassMultiLineEdit( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassMultiLineEdit;
-
-    // Klasse anlegen
-    nId = pHS->getID( "MultiLineEdit" );
-    pClassMultiLineEdit = new RscClass( nId, RSC_MULTILINEEDIT, pSuper );
-    pClassMultiLineEdit->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassMultiLineEdit );
-
-    INS_WINBIT( pClassMultiLineEdit, HScroll );
-    INS_WINBIT( pClassMultiLineEdit, VScroll );
-    INS_WINBIT( pClassMultiLineEdit, IgnoreTab );
-    INS_WINBIT( pClassMultiLineEdit, AutoVScroll )
-
-    return pClassMultiLineEdit;
-}
-
 RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
 {
     Atom        nId;

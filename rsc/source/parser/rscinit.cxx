@@ -84,7 +84,6 @@ void RscTypCont::Init()
     RscTop   *  pClassImageButton;
     RscTop   *  pClassTriStateBox;
     RscTop   *  pClassEdit;
-    RscTop   *  pClassMultiLineEdit;
     RscTop   *  pClassListBox;
     RscTop   *  pClassComboBox;
     RscTop   *  pClassFixedText;
@@ -427,9 +426,6 @@ void RscTypCont::Init()
 
     pClassEdit = InitClassEdit( pClassControl );
     pRoot->Insert( pClassEdit );
-
-    pClassMultiLineEdit = InitClassMultiLineEdit( pClassEdit );
-    pRoot->Insert( pClassMultiLineEdit );
 }
 {
     pClassListBox = InitClassListBox( pClassControl, pLangStringLongTupelList );

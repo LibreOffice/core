@@ -180,7 +180,6 @@ class RscTypCont
     RscTop *    InitClassImageButton( RscTop * pSuper, RscTop * pClassImage,
                                     RscEnum * pTriState );
     RscTop *    InitClassEdit( RscTop * pSuper );
-    RscTop *    InitClassMultiLineEdit( RscTop * pSuper );
     RscTop *    InitClassScrollBar( RscTop * pSuper );
     RscTop *    InitClassListBox( RscTop * pSuper, RscArray * pStrLst );
     RscTop *    InitClassComboBox( RscTop * pSuper, RscArray * pStrLst );

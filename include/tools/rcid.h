@@ -74,7 +74,7 @@
 #define RSC_CHECKBOX            (RSC_NOTYPE + 0x50)
 #define RSC_TRISTATEBOX         (RSC_NOTYPE + 0x51)
 #define RSC_EDIT                (RSC_NOTYPE + 0x52)
-#define RSC_MULTILINEEDIT       (RSC_NOTYPE + 0x53)
+
 #define RSC_COMBOBOX            (RSC_NOTYPE + 0x54)
 #define RSC_LISTBOX             (RSC_NOTYPE + 0x55)
 

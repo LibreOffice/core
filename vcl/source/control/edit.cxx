@@ -177,9 +177,7 @@ Edit::Edit( Window* pParent, const ResId& rResId ) :
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
-    // Derived MultiLineEdit takes care to call Show only after MultiLineEdit
-    // ctor has already started:
-    if ( !(nStyle & WB_HIDE) && rResId.GetRT() != RSC_MULTILINEEDIT )
+    if ( !(nStyle & WB_HIDE) )
         Show();
 }
 

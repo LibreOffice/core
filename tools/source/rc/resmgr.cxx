@@ -1483,7 +1483,6 @@ OString ResMgr::GetAutoHelpId()
                     case RSC_CHECKBOX:          aHID.append( "CheckBox" );         break;
                     case RSC_TRISTATEBOX:       aHID.append( "TriStateBox" );      break;
                     case RSC_EDIT:              aHID.append( "Edit" );             break;
-                    case RSC_MULTILINEEDIT:     aHID.append( "MultiLineEdit" );    break;
                     case RSC_LISTBOX:           aHID.append( "ListBox" );          break;
                     case RSC_COMBOBOX:          aHID.append( "ComboBox" );         break;
                     case RSC_PUSHBUTTON:        aHID.append( "PushButton" );       break;
