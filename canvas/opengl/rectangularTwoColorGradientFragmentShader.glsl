@@ -15,8 +15,8 @@ uniform mat3x2 m_transform;
 varying vec2   v_textureCoords2d;
 void main(void)
 {
-    const vec2 v = abs( vec2(m_transform * vec3(v_textureCoords2d,1)) );
-    const float t = max(v.x, v.y);
+    vec2 v = abs( vec2(m_transform * vec3(v_textureCoords2d,1)) );
+    float t = max(v.x, v.y);
     gl_FragColor = mix(v_startColor4d,
             v_endColor4d,
             1.0-t);
