@@ -22,19 +22,6 @@ namespace
 
 const size_t constMaxActionType = 513;
 
-int lclWriteCallback(void* pContext, const char* sBuffer, int nLen)
-{
-    SvStream* pStream = static_cast<SvStream*>(pContext);
-    return (int) pStream->Write(sBuffer, nLen);
-}
-
-int lclCloseCallback(void* pContext)
-{
-    SvStream* pStream = static_cast<SvStream*>(pContext);
-    pStream->Flush();
-    return 0; // 0 or -1 in case of error
-}
-
 OUString flagToString(sal_uInt16 nFlag)
 {
     if (nFlag & PUSH_LINECOLOR)
@@ -253,10 +240,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
     else
         pStream.reset(new SvFileStream(rTempStreamName, STREAM_STD_READWRITE | STREAM_TRUNC));
 
-    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, pStream.get(), NULL);
-    xmlTextWriterPtr xmlWriter = xmlNewTextWriter(xmlOutBuffer);
-
-    XmlWriter aWriter(xmlWriter);
+    XmlWriter aWriter(pStream.get());
     aWriter.startDocument();
     aWriter.startElement("metafile");
 

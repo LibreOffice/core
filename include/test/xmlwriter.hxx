@@ -16,13 +16,16 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
+#include <tools/stream.hxx>
+
 class OOO_DLLPUBLIC_TEST XmlWriter
 {
 private:
+    SvStream* mpStream;
     xmlTextWriterPtr mpWriter;
 
 public:
-    XmlWriter(xmlTextWriterPtr pWriter);
+    XmlWriter(SvStream* pStream);
     virtual ~XmlWriter();
 
     void startDocument();

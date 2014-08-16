@@ -20,8 +20,27 @@
 #include <libxml/xmlstring.h>
 #include <test/xmlwriter.hxx>
 
-XmlWriter::XmlWriter(xmlTextWriterPtr pWriter) :
-    mpWriter(pWriter)
+namespace
+{
+
+int lclWriteCallback(void* pContext, const char* sBuffer, int nLen)
+{
+    SvStream* pStream = static_cast<SvStream*>(pContext);
+    return (int) pStream->Write(sBuffer, nLen);
+}
+
+int lclCloseCallback(void* pContext)
+{
+    SvStream* pStream = static_cast<SvStream*>(pContext);
+    pStream->Flush();
+    return 0; // 0 or -1 in case of error
+}
+
+} // anonymous namespace
+
+XmlWriter::XmlWriter(SvStream* pStream) :
+    mpStream(pStream),
+    mpWriter(NULL)
 {}
 
 XmlWriter::~XmlWriter()
@@ -29,8 +48,13 @@ XmlWriter::~XmlWriter()
 
 void XmlWriter::startDocument()
 {
-    xmlTextWriterSetIndent(mpWriter, 1);
-    xmlTextWriterStartDocument(mpWriter, NULL, "UTF-8", NULL);
+    if (mpWriter == NULL && mpStream != NULL)
+    {
+        xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, mpStream, NULL);
+        mpWriter = xmlNewTextWriter(xmlOutBuffer);
+        xmlTextWriterSetIndent(mpWriter, 1);
+        xmlTextWriterStartDocument(mpWriter, NULL, "UTF-8", NULL);
+    }
 }
 
 void XmlWriter::endDocument()
