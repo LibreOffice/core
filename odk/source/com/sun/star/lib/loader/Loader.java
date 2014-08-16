@@ -124,6 +124,7 @@ public final class Loader {
             ClassLoader cl = getCustomLoader();
             Thread.currentThread().setContextClassLoader(cl);
             Class c = cl.loadClass( className );
+            @SuppressWarnings("unchecked")
             Method m = c.getMethod( "main", new Class[] { String[].class } );
             m.invoke( null, new Object[] { args } );
         }
