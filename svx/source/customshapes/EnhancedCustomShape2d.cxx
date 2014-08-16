@@ -2248,6 +2248,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             if ( bSortFilledObjectsToBack )
             {
                 std::vector< SdrPathObj* > vTempList;
+                vTempList.reserve(vObjectList.size());
 
                 for ( size_t i = 0; i < vObjectList.size(); ++i )
                 {
