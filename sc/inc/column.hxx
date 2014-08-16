@@ -24,6 +24,7 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "rangenam.hxx"
+#include "rangelst.hxx"
 #include "types.hxx"
 #include "mtvelements.hxx"
 #include <formula/types.hxx>
@@ -262,7 +263,7 @@ public:
     ScAttrIterator* CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
 
     void UpdateSelectionFunction(
-        const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows );
+        const ScRangeList& rRanges, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows );
 
     void CopyToColumn(
         sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,

@@ -61,6 +61,7 @@
 #include <refhint.hxx>
 #include <listenerquery.hxx>
 #include <bcaslot.hxx>
+#include "rangelst.hxx"
 
 #include <svl/sharedstringpool.hxx>
 
@@ -2971,12 +2972,13 @@ sal_Int32 ScTable::GetMaxNumberStringLen(
 
 void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& rMark )
 {
+    ScRangeList aRanges = rMark.GetMarkedRanges();
     for (SCCOL nCol = 0; nCol <= MAXCOL && !rData.bError; ++nCol)
     {
         if (pColFlags && ColHidden(nCol))
             continue;
 
-        aCol[nCol].UpdateSelectionFunction(rMark, rData, *mpHiddenRows);
+        aCol[nCol].UpdateSelectionFunction(aRanges, rData, *mpHiddenRows);
     }
 }
 

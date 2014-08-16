@@ -3069,10 +3069,10 @@ public:
 
 //  multiple selections:
 void ScColumn::UpdateSelectionFunction(
-    const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows )
+    const ScRangeList& rRanges, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows )
 {
     sc::SingleColumnSpanSet aSpanSet;
-    aSpanSet.scan(rMark, nTab, nCol); // mark all selected rows.
+    aSpanSet.scan(rRanges, nTab, nCol); // mark all selected rows.
 
     // Exclude all hidden rows.
     ScFlatBoolRowSegments::RangeData aRange;
