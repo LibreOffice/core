@@ -30,9 +30,7 @@
 #undef GradientStyle_RECT
 
 /* rename help IDs */
-#define WIN_HELP_INDEX       0x0003
 #define WIN_HELP_HELPONHELP  0x0004
-#undef HELP_INDEX
 #undef HELP_HELPONHELP
 
 #define WIN_MOUSE_MOVED 0x0001
