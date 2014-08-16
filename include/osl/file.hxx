@@ -621,7 +621,7 @@ public:
     */
     bool isCaseSensitiveFileSystem() const
     {
-        return (_aInfo.uAttributes & osl_Volume_Attribute_Case_Sensitive);
+        return (_aInfo.uAttributes & osl_Volume_Attribute_Case_Sensitive) != 0;
     }
 
     /** Return whether the file system preserves the case of
@@ -633,7 +633,7 @@ public:
     */
     bool isCasePreservingFileSystem() const
     {
-        return (_aInfo.uAttributes & osl_Volume_Attribute_Case_Is_Preserved);
+        return (_aInfo.uAttributes & osl_Volume_Attribute_Case_Is_Preserved) != 0;
     }
 
     friend class Directory;
