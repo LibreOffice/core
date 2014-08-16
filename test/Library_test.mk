@@ -22,6 +22,7 @@ $(eval $(call gb_Library_use_externals,test,\
 ))
 
 $(eval $(call gb_Library_use_libraries,test,\
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \
@@ -32,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,test,\
 	utl \
 	unotest \
 	vcl \
+	drawinglayer \
 	$(gb_UWINAPI) \
 ))
 
@@ -42,6 +44,7 @@ $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/htmltesttools \
     test/source/mtfxmldump \
     test/source/xmlwriter \
+    test/source/primitive2dxmldump \
 ))
 
 # vim: set noet sw=4 ts=4:
