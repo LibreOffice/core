@@ -97,16 +97,16 @@ public:
                                    OUString& resolvedName);
 
     bool isDeleted() const
-        { return m_bDeleted != 0; }
+        { return m_bDeleted; }
 
     void setDeleted (bool bKeyDeleted)
-        { m_bDeleted = bKeyDeleted ? 1 : 0; }
+        { m_bDeleted = bKeyDeleted; }
 
     bool isModified() const
-        { return m_bModified != 0; }
+        { return m_bModified; }
 
     void setModified (bool bModified = true)
-        { m_bModified = bModified ? 1 : 0; }
+        { m_bModified = bModified; }
 
     bool        isReadOnly() const
                     { return m_pRegistry->isReadOnly(); }
@@ -132,8 +132,8 @@ public:
 private:
     sal_uInt32              m_refCount;
     OUString           m_name;
-    int                     m_bDeleted:1;
-    int                     m_bModified:1;
+    bool                     m_bDeleted:1;
+    bool                     m_bModified:1;
     ORegistry*              m_pRegistry;
 };
 
