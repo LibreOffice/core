@@ -74,6 +74,7 @@ namespace dbaui
         OWizTypeSelectList( Window* pParent, WinBits nStyle = WB_BORDER )
             : MultiListBox(pParent,nStyle)
             , m_bPKey(false)
+            , m_pParentTabPage(NULL)
             {}
         void                    SetPKey(bool bPKey) { m_bPKey = bPKey; }
         void                    SetParentTabPage(Window* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
