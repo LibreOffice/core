@@ -108,18 +108,18 @@ public:
     inline sal_uInt16 GetWhichPor( ) const        { return nWhichPor; }
 
 // Group queries
-    inline bool InTxtGrp() const { return nWhichPor & PORGRP_TXT; }
-    inline bool InGlueGrp() const { return nWhichPor & PORGRP_GLUE; }
-    inline bool InTabGrp() const { return nWhichPor & PORGRP_TAB; }
-    inline bool InHyphGrp() const { return nWhichPor & PORGRP_HYPH; }
-    inline bool InNumberGrp() const { return nWhichPor & PORGRP_NUMBER; }
-    inline bool InFixGrp() const { return nWhichPor & PORGRP_FIX; }
-    inline bool InFldGrp() const { return nWhichPor & PORGRP_FLD; }
-    inline bool InToxRefGrp() const { return nWhichPor & PORGRP_TOXREF; }
-    inline bool InToxRefOrFldGrp() const { return nWhichPor & ( PORGRP_FLD | PORGRP_TOXREF ); }
-    inline bool InExpGrp() const { return nWhichPor & PORGRP_EXP; }
-    inline bool InTabnLftGrp() const { return nWhichPor & PORGRP_TABNOTLFT; }
-    inline bool InFixMargGrp() const { return nWhichPor & PORGRP_FIXMARG; }
+    inline bool InTxtGrp() const { return (nWhichPor & PORGRP_TXT) != 0; }
+    inline bool InGlueGrp() const { return (nWhichPor & PORGRP_GLUE) != 0; }
+    inline bool InTabGrp() const { return (nWhichPor & PORGRP_TAB) != 0; }
+    inline bool InHyphGrp() const { return (nWhichPor & PORGRP_HYPH) != 0; }
+    inline bool InNumberGrp() const { return (nWhichPor & PORGRP_NUMBER) != 0; }
+    inline bool InFixGrp() const { return (nWhichPor & PORGRP_FIX) != 0; }
+    inline bool InFldGrp() const { return (nWhichPor & PORGRP_FLD) != 0; }
+    inline bool InToxRefGrp() const { return (nWhichPor & PORGRP_TOXREF) != 0; }
+    inline bool InToxRefOrFldGrp() const { return (nWhichPor & ( PORGRP_FLD | PORGRP_TOXREF )) != 0; }
+    inline bool InExpGrp() const { return (nWhichPor & PORGRP_EXP) != 0; }
+    inline bool InTabnLftGrp() const { return (nWhichPor & PORGRP_TABNOTLFT) != 0; }
+    inline bool InFixMargGrp() const { return (nWhichPor & PORGRP_FIXMARG) != 0; }
     inline bool InSpaceGrp() const { return InTxtGrp() || IsMultiPortion(); }
 // Individual queries
     inline bool IsGrfNumPortion() const { return nWhichPor == POR_GRFNUM; }
