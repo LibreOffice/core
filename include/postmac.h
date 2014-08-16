@@ -20,11 +20,8 @@
 #undef Button
 #undef Control
 #undef Cursor
-#undef DirInfo
 #undef FontInfo
-#undef LSize
 #undef Line
-#undef MemoryBlock
 #undef ModalDialog
 #undef Palette
 #undef Pattern

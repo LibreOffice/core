@@ -20,11 +20,8 @@
 #define Button MacOSButton
 #define Control MacOSControl
 #define Cursor MacOSCursor
-#define DirInfo MacOSDirInfo
 #define FontInfo MacOSFontInfo
-#define LSize MacOSLSize
 #define Line MacOSLine
-#define MemoryBlock MacOSMemoryBlock
 #define ModalDialog MacOSModalDialog
 #define Palette MacOSPalette
 #define Pattern MacOSPattern
