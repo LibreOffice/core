@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustrbuf.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #define XML_WRITTENNUMBERSTYLES "WrittenNumberStyles"
 
@@ -59,7 +60,7 @@ private:
     SAL_DLLPRIVATE void AddLanguageAttr_Impl( sal_Int32 nLang );
 
     SAL_DLLPRIVATE void AddToTextElement_Impl( const OUString& rString );
-    SAL_DLLPRIVATE void FinishTextElement_Impl();
+    SAL_DLLPRIVATE void FinishTextElement_Impl(bool bUseExtensionNS = false);
 
     SAL_DLLPRIVATE void WriteColorElement_Impl( const Color& rColor );
     SAL_DLLPRIVATE void WriteNumberElement_Impl( sal_Int32 nDecimals, sal_Int32 nInteger,
