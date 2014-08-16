@@ -104,6 +104,7 @@ namespace oglcanvas
                 VCLUnoHelper::GetInterface(&rWindow),
                 uno::UNO_QUERY_THROW) );
 
+        maContext.requestLegacyContext();
         maContext.init(&rWindow);
         // init window context
         initContext();
