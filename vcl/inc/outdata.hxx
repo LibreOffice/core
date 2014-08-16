@@ -28,9 +28,9 @@ inline SalColor ImplColorToSal( Color aColor )
     return MAKE_SALCOLOR( aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue() );
 }
 
-inline int ImplIsColorTransparent( Color aColor )
+inline bool ImplIsColorTransparent( Color aColor )
 {
-    return aColor.GetTransparency();
+    return aColor.GetTransparency() != 0;
 }
 
 #endif // INCLUDED_VCL_INC_OUTDATA_HXX
