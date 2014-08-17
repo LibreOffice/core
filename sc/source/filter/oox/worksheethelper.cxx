@@ -218,7 +218,7 @@ public:
     /** Returns the type of this sheet. */
     inline WorksheetType getSheetType() const { return meSheetType; }
     /** Returns the index of the current sheet. */
-    inline sal_Int16    getSheetIndex() const { return maUsedArea.Sheet; }
+    inline sal_Int32    getSheetIndex() const { return maUsedArea.Sheet; }
     /** Returns the XSpreadsheet interface of the current sheet. */
     inline const Reference< XSpreadsheet >& getSheet() const { return mxSheet; }
 
@@ -1386,7 +1386,7 @@ WorksheetType WorksheetHelper::getSheetType() const
     return mrSheetGlob.getSheetType();
 }
 
-sal_Int16 WorksheetHelper::getSheetIndex() const
+sal_Int32 WorksheetHelper::getSheetIndex() const
 {
     return mrSheetGlob.getSheetIndex();
 }

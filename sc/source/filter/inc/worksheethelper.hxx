@@ -193,7 +193,7 @@ public:
     /** Returns the type of this sheet. */
     WorksheetType       getSheetType() const;
     /** Returns the index of the current sheet. */
-    sal_Int16           getSheetIndex() const;
+    sal_Int32           getSheetIndex() const;
     /** Returns the XSpreadsheet interface of the current sheet. */
     const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >&
                         getSheet() const;
