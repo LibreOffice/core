@@ -563,8 +563,6 @@ public:
             const uno::Reference< text::XTextRange > & xTextPosition)
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    SwXMeta & GetXMeta() { return m_rMeta; }
-
 };
 
 SwXMetaText::SwXMetaText(SwDoc & rDoc, SwXMeta & rMeta)
