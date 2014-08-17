@@ -525,8 +525,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
     {
         case  SW_SERVICE_TYPE_TEXTTABLE:
         {
-            SwXTextTable* pTextTable = new SwXTextTable();
-            xRet =  (cppu::OWeakObject*)pTextTable;
+            xRet = SwXTextTable::CreateXTextTable(0);
         }
         break;
         case  SW_SERVICE_TYPE_TEXTFRAME:
@@ -981,13 +980,10 @@ uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( u
     return aRet;
 }
 
-XTextTable* SwXTextTables::GetObject( SwFrmFmt& rFmt )
+uno::Reference<text::XTextTable> SwXTextTables::GetObject(SwFrmFmt& rFmt)
 {
     SolarMutexGuard aGuard;
-    SwXTextTable* pTbl = SwIterator<SwXTextTable,SwFmt>::FirstElement( rFmt );
-    if( !pTbl )
-        pTbl = new SwXTextTable(rFmt);
-    return pTbl ;
+    return SwXTextTable::CreateXTextTable(& rFmt);
 }
 
 namespace

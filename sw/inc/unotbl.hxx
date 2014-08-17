@@ -320,9 +320,12 @@ private:
     bool                        bFirstColumnAsLabel :1;
 protected:
     virtual ~SwXTextTable();
-public:
     SwXTextTable();
     SwXTextTable(SwFrmFmt& rFrmFmt);
+
+public:
+    static css::uno::Reference<css::text::XTextTable>
+            CreateXTextTable(SwFrmFmt * pFrmFmt);
 
     SW_DLLPUBLIC static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

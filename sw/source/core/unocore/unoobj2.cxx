@@ -664,10 +664,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
             // this is a foreign table
             SwFrmFmt* pTableFmt =
                 static_cast<SwFrmFmt*>(pTblNode->GetTable().GetFrmFmt());
-            text::XTextTable *const pTable =
-                SwXTextTables::GetObject( *pTableFmt );
-            xRef = static_cast<text::XTextContent*>(
-                    static_cast<SwXTextTable*>(pTable));
+            xRef = SwXTextTable::CreateXTextTable(pTableFmt);
         }
         else
         {

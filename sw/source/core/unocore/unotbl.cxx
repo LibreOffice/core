@@ -2220,6 +2220,27 @@ SwXTextTable::~SwXTextTable()
     delete pTableProps;
 }
 
+uno::Reference<text::XTextTable>
+SwXTextTable::CreateXTextTable(SwFrmFmt *const pFrmFmt)
+{
+    uno::Reference<text::XTextTable> xTable;
+    if (pFrmFmt)
+    {
+        xTable.set(pFrmFmt->GetXObject(), uno::UNO_QUERY); // cached?
+    }
+    if (!xTable.is())
+    {
+        SwXTextTable *const pNew(
+            (pFrmFmt) ? new SwXTextTable(*pFrmFmt) : new SwXTextTable());
+        xTable.set(pNew);
+        if (pFrmFmt)
+        {
+            pFrmFmt->SetXObject(xTable);
+        }
+    }
+    return xTable;
+}
+
 void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC) throw( uno::RuntimeException, std::exception )
 {
     if(!bIsDescriptor || nR <= 0 || nC <= 0 || nR >= USHRT_MAX || nC >= USHRT_MAX )

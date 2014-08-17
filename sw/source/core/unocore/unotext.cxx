@@ -2252,9 +2252,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     if (!pTable)
         return uno::Reference< text::XTextTable >();
 
-    SwXTextTable *const pTextTable = new SwXTextTable( *pTable->GetFrmFmt() );
-    const uno::Reference< text::XTextTable > xRet = pTextTable;
-    const uno::Reference< beans::XPropertySet > xPrSet = pTextTable;
+    uno::Reference<text::XTextTable> const xRet =
+        SwXTextTable::CreateXTextTable(pTable->GetFrmFmt());
+    uno::Reference<beans::XPropertySet> const xPrSet(xRet, uno::UNO_QUERY);
     // set properties to the table
     // catch lang::WrappedTargetException and lang::IndexOutOfBoundsException
     try
@@ -2296,6 +2296,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         lcl_DebugCellProperties(rCellProperties);
 #endif
 
+        uno::Reference<table::XCellRange> const xCR(xRet, uno::UNO_QUERY_THROW);
         //apply cell properties
         for (sal_Int32 nRow = 0; nRow < rCellProperties.getLength(); ++nRow)
         {
@@ -2306,7 +2307,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             {
                 lcl_ApplyCellProperties(nCell,
                     aRowSeparators[nRow], aCurrentRow[nCell],
-                    pTextTable->getCellByPosition(nCell, nRow),
+                    xCR->getCellByPosition(nCell, nRow),
                     aMergedCells);
             }
         }
@@ -2322,7 +2323,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     assert(SwTable::FindTable(pTable->GetFrmFmt()) == pTable);
-    assert(pTable->GetFrmFmt() == pTextTable->GetFrmFmt());
+    assert(pTable->GetFrmFmt() ==
+            dynamic_cast<SwXTextTable*>(xRet.get())->GetFrmFmt());
     return xRet;
 }
 
