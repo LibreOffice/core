@@ -249,33 +249,12 @@ UUIInteractionHelper::replaceMessageWithArguments(
     std::vector< OUString > const & rArguments )
 {
     OUString aMessage = _aMessage;
-    for (sal_Int32 i = 0;;)
-    {
-        i = aMessage.indexOf("$(ARG", i);
-        if (i == -1)
-            break;
-        if (aMessage.getLength() - i >= RTL_CONSTASCII_LENGTH("$(ARGx)")
-            && aMessage[i + RTL_CONSTASCII_LENGTH("$(ARGx")] == ')')
-        {
-            sal_Unicode c = aMessage[i + RTL_CONSTASCII_LENGTH("$(ARG")];
-            if (c >= '1' && c <= '2')
-            {
-                std::vector< OUString >::size_type nIndex
-                    = static_cast< std::vector< OUString >::size_type >(
-                        c - '1');
-                if (nIndex < rArguments.size())
-                {
-                    aMessage
-                        = aMessage.replaceAt(i,
-                                             RTL_CONSTASCII_LENGTH("$(ARGx)"),
-                                             rArguments[nIndex]);
-                    i += rArguments[nIndex].getLength();
-                    continue;
-                }
-            }
-        }
-        ++i;
-    }
+
+    SAL_WARN_IF(rArguments.size() == 0, "uui", "replaceMessageWithArguments: No arguments passed!");
+    if (rArguments.size() > 0)
+        aMessage = aMessage.replaceAll("$(ARG1)", rArguments[0]);
+    if (rArguments.size() > 1)
+        aMessage = aMessage.replaceAll("$(ARG2)", rArguments[1]);
 
     return aMessage;
 }
