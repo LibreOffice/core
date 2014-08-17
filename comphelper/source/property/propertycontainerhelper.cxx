@@ -366,7 +366,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
 }
 
 
-void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const Any& _rValue)
+bool OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const Any& _rValue)
 {
     // get the property somebody is asking for
     PropertiesIterator aPos = searchHandle(_nHandle);
@@ -375,8 +375,10 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
         OSL_FAIL( "OPropertyContainerHelper::setFastPropertyValue: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
-        return;
+        return false;
     }
+
+    bool bSuccess = true;
 
     switch (aPos->eLocated)
     {
@@ -389,11 +391,8 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
             break;
 
         case PropertyDescription::ltDerivedClassRealType:
-#if OSL_DEBUG_LEVEL > 0
-            bool bSuccess =
-#endif
             // copy the data from the to-be-set value
-            uno_type_assignData(
+            bSuccess = uno_type_assignData(
                 aPos->aLocation.pDerivedClassMember,        aPos->aProperty.Type.getTypeLibType(),
                 const_cast< void* >( _rValue.getValue() ),  _rValue.getValueType().getTypeLibType(),
                 reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
@@ -405,8 +404,9 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
 
             break;
     }
-}
 
+    return bSuccess;
+}
 
 void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {

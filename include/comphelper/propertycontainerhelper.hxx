@@ -153,7 +153,7 @@ protected:
                     const ::com::sun::star::uno::Any& rValue
                 );
 
-    void        setFastPropertyValue(
+    bool        setFastPropertyValue(
                         sal_Int32 nHandle,
                         const ::com::sun::star::uno::Any& rValue
                     );
