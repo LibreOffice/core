@@ -1,0 +1,30 @@
+diff -ur libgltf.org/src/Shaders.cpp libgltf/src/Shaders.cpp
+--- libgltf.org/src/Shaders.cpp	2014-08-17 09:15:17.379255115 +0200
++++ libgltf/src/Shaders.cpp	2014-08-17 09:16:43.323258781 +0200
+@@ -11,6 +11,7 @@
+ 
+ #include <GL/glew.h>
+ #include <cstdio>
++#include <cstring>
+ 
+ namespace libgltf
+ {
+@@ -166,7 +167,17 @@
+                                   unsigned int shaderId)
+ {
+     GLint iGLSize = iSize;
+-    glShaderSource(shaderId, 1, &pShader, &iGLSize);
++    const GLchar* aSources[] = {
++        "#version 130\n",
++        pShader,
++    };
++
++    const GLint aSizes[] = {
++        strlen("#version 130\n"),
++        iGLSize,
++    };
++
++    glShaderSource(shaderId, 2, &aSources[0], &aSizes[0]);
+     glCompileShader(shaderId);
+     int iStatus = 0;
+     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &iStatus);

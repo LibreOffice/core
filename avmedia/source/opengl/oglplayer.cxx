@@ -234,18 +234,7 @@ awt::Size SAL_CALL OGLPlayer::getPreferredPlayerWindowSize() throw ( uno::Runtim
 
 static bool lcl_CheckOpenGLRequirements()
 {
-    float fVersion = OpenGLHelper::getGLVersion();
-
-    if( fVersion >= 3.0 )
-    {
-        return true;
-    }
-    else if( fVersion >= 2.1 )
-    {
-        return glewIsSupported("GL_ARB_framebuffer_object GL_ARB_vertex_array_object");
-    }
-
-    return false;
+    return OpenGLHelper::getGLVersion() >= 3.0;
 }
 
 uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& rArguments )
