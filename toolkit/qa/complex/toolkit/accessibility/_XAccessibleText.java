@@ -25,6 +25,7 @@ import com.sun.star.awt.Point;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.accessibility.AccessibleTextType;
 import com.sun.star.accessibility.TextSegment;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 
@@ -235,6 +236,9 @@ public class _XAccessibleText {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             System.out.println("Expected exception");
             res &= true;
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            System.out.println("unexpected exception => FAILED");
+            res &= false;
         }
 
         try {
@@ -245,6 +249,9 @@ public class _XAccessibleText {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             System.out.println("Expected exception");
             res &= true;
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            System.out.println("unexpected exception => FAILED");
+            res &= false;
         }
 
         try {
@@ -256,6 +263,9 @@ public class _XAccessibleText {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             System.out.println("Unexpected exception");
             e.printStackTrace();
+            res &= false;
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            System.out.println("unexpected exception => FAILED");
             res &= false;
         }
 
