@@ -126,7 +126,7 @@ namespace canvas
             return BaseType::maDeviceHelper.showBuffer( mbIsVisible, bUpdateAll );
         }
 
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
