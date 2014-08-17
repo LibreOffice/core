@@ -84,9 +84,6 @@
 #define RID_STR_DATE                    (RID_OFA_START + 108)
 #define RID_DESKTOP                     (RID_OFA_START + 109)
 
-#define RID_RIDER_SLL_SITE              (RID_OFA_START + 100)
-#define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)
-
 // "Uberlaufkontrolle der HID's
 #define ACT_HID_END     HID_OFA_TP_MEMORY
 #if ACT_HID_END > HID_OFA_END

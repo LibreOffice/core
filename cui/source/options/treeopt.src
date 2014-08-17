@@ -177,13 +177,5 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
     };
 };
-String RID_RIDER_SLL_SITE
-{
-    Text [ en-US ] = "Site certificates" ;
-};
-String RID_RIDER_SLL_PERSONAL
-{
-    Text [ en-US ] = "Personal certificates" ;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
