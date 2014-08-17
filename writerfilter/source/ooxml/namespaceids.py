@@ -14,7 +14,7 @@ import sys
 
 class ContentHandler(xml.sax.handler.ContentHandler):
     def __init__(self):
-        self.tokens = []
+        self.tokens = {}
 
     def startDocument(self):
         print("""
@@ -35,6 +35,8 @@ using namespace ::com::sun::star;
 """)
 
     def endDocument(self):
+        for alias in sorted(self.tokens.keys()):
+            print(self.tokens[alias])
         print("""
 }}
 #endif //INCLUDED_OOXML_NAMESPACESIDS_HXX""")
@@ -43,8 +45,7 @@ using namespace ::com::sun::star;
         if name == "namespace-alias":
             token = """const sal_Int32 NMSP_%s = %s;""" % (attrs["alias"], attrs["id"])
             if token not in self.tokens:
-                self.tokens.append(token)
-                print(token)
+                self.tokens[attrs["alias"]] = token
 
 parser = xml.sax.make_parser()
 parser.setContentHandler(ContentHandler())
