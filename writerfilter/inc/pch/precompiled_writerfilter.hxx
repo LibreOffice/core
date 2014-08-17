@@ -196,7 +196,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/vml/vmlformatting.hxx>
-#include <ooxml/OOXMLnamespaceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

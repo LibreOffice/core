@@ -49,7 +49,6 @@ writerfilter_ALL = \
 	$(writerfilter_GEN_ooxml_Factory_cxx) \
 	$(writerfilter_GEN_ooxml_Factory_hxx) \
 	$(writerfilter_GEN_ooxml_FactoryValues_hxx) \
-	$(writerfilter_GEN_ooxml_NamespaceIds_hxx) \
 	$(writerfilter_GEN_ooxml_QNameToStr_cxx) \
 	$(writerfilter_GEN_ooxml_ResourceIds_hxx) \
 	$(writerfilter_GEN_ooxml_Model_validated) \
@@ -63,7 +62,6 @@ writerfilter_GEN_ooxml_Factory_cxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_gener
 writerfilter_GEN_ooxml_Factory_hxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_generated.hxx
 writerfilter_GEN_ooxml_Model_validated=$(writerfilter_WORK)/ooxml/model.validated
 writerfilter_GEN_ooxml_Model_processed=$(writerfilter_WORK)/ooxml/model_preprocessed.xml
-writerfilter_GEN_ooxml_NamespaceIds_hxx=$(writerfilter_WORK)/ooxml/OOXMLnamespaceids.hxx
 writerfilter_GEN_ooxml_QNameToStr_cxx=$(writerfilter_WORK)/ooxml/qnametostr.cxx
 writerfilter_GEN_ooxml_ResourceIds_hxx=$(writerfilter_WORK)/ooxml/resourceids.hxx
 writerfilter_SRC_ooxml_Model=$(writerfilter_SRC)/ooxml/model.xml
@@ -88,10 +86,6 @@ $(writerfilter_GEN_ooxml_Model_validated) : $(writerfilter_SRC_ooxml_Model)
 $(writerfilter_GEN_ooxml_Model_processed) : $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_GEN_ooxml_Model_validated)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_SRC_ooxml_Model)) > $@
-
-$(writerfilter_GEN_ooxml_NamespaceIds_hxx) : $(writerfilter_SRC)/ooxml/namespaceids.py $(writerfilter_GEN_ooxml_Model_processed) | $(writerfilter_WORK)/ooxml/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
 $(writerfilter_GEN_ooxml_QNameToStr_cxx): $(writerfilter_SRC_ooxml_QNameToStr_py) $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
