@@ -3054,7 +3054,7 @@ void Test::testGraphicsOnSheetMove()
 
     pPage = pDrawLayer->GetPage(1);
     CPPUNIT_ASSERT_MESSAGE("No page instance for the 2nd sheet.", pPage);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd sheet shouldn't have any object.", pPage->GetObjCount(), static_cast<sal_uIntPtr>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd sheet shouldn't have any object.", pPage->GetObjCount(), static_cast<size_t>(0));
 
     // Insert a new sheet at left-end, and make sure the object has moved to
     // the 2nd page.
