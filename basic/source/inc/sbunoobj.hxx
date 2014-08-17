@@ -60,7 +60,7 @@ public:
     bool isEmpty() { return (mnPos == -1); }
 
     ::com::sun::star::uno::Any getValue();
-    void setValue( const ::com::sun::star::uno::Any& );
+    bool setValue( const ::com::sun::star::uno::Any& );
 };
 
 class SbUnoStructRefObject: public SbxObject
