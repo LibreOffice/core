@@ -982,7 +982,6 @@ uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( u
 
 uno::Reference<text::XTextTable> SwXTextTables::GetObject(SwFrmFmt& rFmt)
 {
-    SolarMutexGuard aGuard;
     return SwXTextTable::CreateXTextTable(& rFmt);
 }
 
