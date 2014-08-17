@@ -800,6 +800,18 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     if (!pSep)
         return;
 
+    if (!maSegments.empty() && mrReader.lastAnchorPos.get() && *mrReader.lastAnchorPos == *mrReader.pPaM->GetPoint())
+    {
+        bool insert = true;
+        SwPaM pam( *mrReader.lastAnchorPos );
+        if( pam.Move(fnMoveBackward, fnGoNode))
+            if( SwTxtNode* txtNode = pam.GetPoint()->nNode.GetNode().GetTxtNode())
+                if( txtNode->Len() == 0 )
+                    insert = false;
+        if( insert )
+            mrReader.AppendTxtNode(*mrReader.pPaM->GetPoint());
+    }
+
     ww::WordVersion eVer = mrReader.GetFib().GetFIBVersion();
 
     // M.M. Create a linked section if the WkbPLCF
@@ -1739,7 +1751,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
                             const sal_Int32 nIniFlyDx,
                             const sal_Int32 nIniFlyDy )
 {
-    (void) rPaM;
     (void) nPgLeft;
 
     memset( this, 0, sizeof( WW8SwFlyPara ) );  // Initialisieren
@@ -1807,6 +1818,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     //#i53725# - absolute positioned objects have to be
     // anchored at-paragraph to assure its correct anchor position.
     eAnchor = FLY_AT_PARA;
+    rIo.lastAnchorPos.reset( new SwPosition(*rPaM.GetPoint()));
 
     switch (nYBind)
     {
