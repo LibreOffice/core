@@ -256,9 +256,9 @@ void OOXMLFastContextHandler::lcl_startFastElement
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     OOXMLFactory::getInstance()->startAction(this, Element);
-    if( Element == (NMSP_wordprocessingDrawing|XML_positionV) )
+    if( Element == (NMSP_dmlWordDr|XML_positionV) )
         inPositionV = true;
-    else if( Element == (NMSP_wordprocessingDrawing|XML_positionH) )
+    else if( Element == (NMSP_dmlWordDr|XML_positionH) )
         inPositionV = false;
 
 }
@@ -1748,7 +1748,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
             newProperty(NS_ooxml::LN_shape, pValue);
             m_bShapeSent = true;
 
-            bool bIsPicture = Element == ( NMSP_picture | XML_pic );
+            bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
 
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
@@ -1773,7 +1773,7 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
     OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
 
     // Ending the shape should be the last thing to do
-    bool bIsPicture = Element == ( NMSP_picture | XML_pic );
+    bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
     if ( !bIsPicture && m_bShapeStarted)
         mpStream->endShape( );
 }
@@ -1803,7 +1803,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     switch (nNamespace)
     {
         case NMSP_doc:
-        case NMSP_vml_wordprocessingDrawing:
+        case NMSP_vmlWord:
         case NMSP_vmlOffice:
             if (!bGroupShape)
                 xContextHandler.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
@@ -1822,7 +1822,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                     if (!bGroupShape)
                     {
                         pWrapper->addNamespace(NMSP_doc);
-                        pWrapper->addNamespace(NMSP_vml_wordprocessingDrawing);
+                        pWrapper->addNamespace(NMSP_vmlWord);
                         pWrapper->addNamespace(NMSP_vmlOffice);
                         pWrapper->addToken( NMSP_vml|XML_textbox );
                     }
@@ -1989,7 +1989,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     // processed by writerfilter (instead of oox), but we have no method to
     // filter out a single token. Just hardwire the wrap token here till we
     // need a more generic solution.
-    bool bIsWrap = Element == static_cast<sal_Int32>(NMSP_vml_wordprocessingDrawing | XML_wrap);
+    bool bIsWrap = Element == static_cast<sal_Int32>(NMSP_vmlWord | XML_wrap);
     if ( bInNamespaces && ((pShapeCtx->isShapeSent() && bIsWrap) || !bIsWrap) )
         xResult.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
     else if (mxContext.is())
