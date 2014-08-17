@@ -336,6 +336,13 @@ DECLARE_WW8IMPORT_TEST(testFdp80333, "fdo80333.doc")
 
 #endif
 
+DECLARE_WW8IMPORT_TEST(testBnc787942, "bnc787942.doc")
+{
+    // The frame ended up on the second page instead of first.
+    parseDump("/root/page[1]/body/txt[4]/anchored");
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
