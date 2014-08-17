@@ -467,6 +467,10 @@ void RTFDocumentImpl::checkNeedPap()
     if (m_bNeedPap)
     {
         m_bNeedPap = false; // reset early, so we can avoid recursion when calling ourselves
+
+        if (m_aStates.empty())
+            return;
+
         if (!m_aStates.top().pCurrentBuffer)
         {
             writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
