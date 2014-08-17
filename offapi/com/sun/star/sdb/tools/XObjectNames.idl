@@ -124,7 +124,8 @@ interface XObjectNames
         @see checkNameIsUsed
     */
     boolean isNameUsed( [in] long CommandType, [in] string Name )
-        raises ( com::sun::star::lang::IllegalArgumentException );
+        raises ( com::sun::star::lang::IllegalArgumentException,
+                 com::sun::star::sdbc::SQLException );
 
     /** checks whether a given name is valid as table or query name
 
