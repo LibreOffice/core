@@ -271,6 +271,7 @@ namespace canvas
                 }
                 virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) SAL_OVERRIDE
                 {
+                    SAL_WARN_IF(deviceColor.getLength() == 0, "canvas", "empty deviceColor argument");
                     const double*  pIn( deviceColor.getConstArray() );
                     const sal_Size nLen( deviceColor.getLength() );
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
