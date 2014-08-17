@@ -292,6 +292,10 @@ public class _XAccessibleText extends MultiMethodTest {
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Expected exception");
             res &= true;
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            log.println("unexpected exception => FAILED");
+            e.printStackTrace(log);
+            res &= false;
         }
 
         try {
@@ -302,6 +306,10 @@ public class _XAccessibleText extends MultiMethodTest {
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Expected exception");
             res &= true;
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            log.println("unexpected exception => FAILED");
+            e.printStackTrace(log);
+            res &= false;
         }
 
         try {
@@ -313,6 +321,10 @@ public class _XAccessibleText extends MultiMethodTest {
             res &= (props != null);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Unexpected exception");
+            e.printStackTrace(log);
+            res &= false;
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            log.println("unexpected exception => FAILED");
             e.printStackTrace(log);
             res &= false;
         }

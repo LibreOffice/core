@@ -444,6 +444,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("expected exception => OK");
             res &= true;
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            log.println("unexpected exception => FAILED");
+            e.printStackTrace(log);
+            res &= false;
         }
 
         try {
@@ -480,6 +484,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
                 log.println("Text attributes can't be changed.");
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("unexpected exception => FAILED");
+            e.printStackTrace(log);
+            res &= false;
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
             log.println("unexpected exception => FAILED");
             e.printStackTrace(log);
             res &= false;

@@ -1231,7 +1231,7 @@ namespace accessibility
         return OCommonAccessibleText::getCharacter( nIndex );
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& rRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& rRequestedAttributes ) throw (lang::IndexOutOfBoundsException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
