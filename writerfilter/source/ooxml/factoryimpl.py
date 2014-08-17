@@ -117,10 +117,10 @@ public:
 }
 
 #ifdef DEBUG_DOMAINMAPPER
-string fastTokenToId(sal_uInt32 nToken)
+std::string fastTokenToId(sal_uInt32 nToken)
 {
 
-    string sResult;
+    std::string sResult;
 
     switch (nToken & 0xffff0000)
     {""")
@@ -129,7 +129,7 @@ string fastTokenToId(sal_uInt32 nToken)
     for alias in [a.getAttribute("alias") for a in model.getElementsByTagName("namespace-alias")]:
         if not alias in aliases:
             aliases.append(alias)
-            print("""    case NMSP_%s:
+            print("""    case oox::NMSP_%s:
         sResult += "%s:";
         break;""" % (alias, alias))
     print("""    }
