@@ -808,7 +808,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         break;
         case FN_EDIT_HYPERLINK:
-            GetView().GetViewFrame()->ToggleChildWindow(SID_HYPERLINK_DIALOG);
+            GetView().GetViewFrame()->SetChildWindow(SID_HYPERLINK_DIALOG, true);
         break;
         case FN_REMOVE_HYPERLINK:
         {
