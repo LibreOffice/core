@@ -425,13 +425,13 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getSt
     return getStructuredCondition(F_tmp);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (SQLException, WrappedTargetException, RuntimeException, std::exception)
 {
     ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString&> F_tmp(&OSingleSelectQueryComposer::implSetHavingClause);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw(SQLException, WrappedTargetException, RuntimeException, std::exception)
 {
     ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString&> F_tmp(&OSingleSelectQueryComposer::implSetFilter);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);

@@ -198,6 +198,11 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("appendFilterByColumn()", false);
         }
+        catch (com.sun.star.lang.WrappedTargetException e)
+        {
+            log.println("unexpected Exception: " + e.toString());
+            tRes.tested("appendFilterByColumn()", false);
+        }
 
         try
         {
@@ -218,6 +223,11 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("appendFilterByColumn()", false);
         }
+        catch (com.sun.star.lang.WrappedTargetException e)
+        {
+            log.println("unexpected Exception: " + e.toString());
+            tRes.tested("appendFilterByColumn()", false);
+        }
 
         try{
 
@@ -226,6 +236,10 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
             ok = ok && (xQueryAna.getFilter().indexOf(colName) > 0);
 
         } catch (SQLException e){
+            log.println("unexpected Exception: " + e.toString());
+            tRes.tested("appendFilterByColumn()", false);
+        } catch (com.sun.star.lang.WrappedTargetException e)
+        {
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("appendFilterByColumn()", false);
         }
@@ -239,7 +253,12 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         } catch (SQLException e){
             log.println("expected Exception");
             ok = ok && true;
+        } catch (com.sun.star.lang.WrappedTargetException e)
+        {
+            log.println("unexpected Exception: " + e.toString());
+            tRes.tested("appendFilterByColumn()", false);
         }
+
         try
         {
             xReSet.beforeFirst();
@@ -391,6 +410,10 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         {
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("appendHavingClauseByColumn()", false);
+        } catch (com.sun.star.lang.WrappedTargetException e)
+        {
+            log.println("unexpected Exception: " + e.toString());
+            tRes.tested("appendHavingClauseByColumn()", false);
         }
 
         try
@@ -411,8 +434,11 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         } catch (SQLException e){
             log.println("unexpected Exception: " + e.toString());
             tRes.tested("appendHavingClauseByColumn()", false);
+        } catch (com.sun.star.lang.WrappedTargetException e)
+        {
+            log.println("unexpected Exception: " + e.toString());
+            tRes.tested("appendHavingClauseByColumn()", false);
         }
-
 
         try{
             XPropertySet dummy = null;
@@ -423,6 +449,10 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         } catch (SQLException e){
             log.println("expected Exception");
             ok = ok && true;
+        } catch (com.sun.star.lang.WrappedTargetException e)
+        {
+            log.println("unexpected Exception: " + e.toString());
+            tRes.tested("appendHavingClauseByColumn()", false);
         }
 
         // cleanup

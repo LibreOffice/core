@@ -20,11 +20,9 @@
 #define __com_sun_star_sdb_XSingleSelectQueryComposer_idl__
 
 #include <com/sun/star/beans/XPropertySet.idl>
-
 #include <com/sun/star/beans/PropertyValue.idl>
-
+#include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/sdbc/SQLException.idl>
-
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.idl>
 
 
@@ -84,7 +82,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
             if a database access error occurs.
      */
     void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria,[in] long filterOperator)
-            raises (com::sun::star::sdbc::SQLException);
+            raises (com::sun::star::sdbc::SQLException, com::sun::star::lang::WrappedTargetException);
 
     // GROUP BY
 
@@ -153,7 +151,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
             if a database access error occurs.
      */
     void appendHavingClauseByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria,[in] long filterOperator)
-            raises (com::sun::star::sdbc::SQLException);
+            raises (com::sun::star::sdbc::SQLException, com::sun::star::lang::WrappedTargetException);
 
     // ORDER BY
 
