@@ -1958,6 +1958,7 @@ private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
+    uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OMultiTypeInterfaceContainerHelper m_Listeners;
 
     Impl() : m_Listeners(m_Mutex) { }
@@ -2237,6 +2238,8 @@ SwXTextTable::CreateXTextTable(SwFrmFmt *const pFrmFmt)
         {
             pFrmFmt->SetXObject(xTable);
         }
+        // need a permanent Reference to initialize m_wThis
+        pNew->m_pImpl->m_wThis = xTable;
     }
     return xTable;
 }
@@ -3702,7 +3705,12 @@ void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
         ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
     {
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        uno::Reference<uno::XInterface> const xThis(m_pImpl->m_wThis);
+        if (!xThis.is())
+        {   // fdo#72695: if UNO object is already dead, don't revive it with event
+            return;
+        }
+        lang::EventObject const ev(xThis);
         m_pImpl->m_Listeners.disposeAndClear(ev);
     }
     else
