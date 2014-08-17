@@ -86,9 +86,9 @@ protected:
             xParentText,
         TextRangeList_t const*const pPortions);
 
-public:
-
     SwXMeta(SwDoc *const pDoc);
+
+public:
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     static ::com::sun::star::uno::Reference<
@@ -100,6 +100,9 @@ public:
             ::std::auto_ptr<TextRangeList_t const> pPortions =
                 ::std::auto_ptr<TextRangeList_t const>(0));
     SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    static css::uno::Reference<css::rdf::XMetadatable>
+        CreateXMeta(SwDoc & rDoc, bool isField);
 
     /// init params with position of the attribute content (w/out CH_TXTATR)
     bool SetContentRange(
@@ -260,9 +263,12 @@ private:
             xParentText,
         TextRangeList_t const*const pPortions);
 
-public:
+    friend css::uno::Reference<css::rdf::XMetadatable>
+        SwXMeta::CreateXMeta(SwDoc &, bool);
 
     SwXMetaField(SwDoc *const pDoc);
+
+public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

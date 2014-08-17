@@ -649,6 +649,7 @@ private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
+    uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<const TextRangeList_t> m_pTextPortions;
@@ -694,14 +695,20 @@ void SwXMeta::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
     ClientModify(this, pOld, pNew);
 
-    if (!GetRegisteredIn()) // removed => dispose
+    if (GetRegisteredIn())
     {
-        m_bIsDisposed = true;
-        lang::EventObject const ev(
-                static_cast< ::cppu::OWeakObject&>(m_Text.GetXMeta()));
-        m_EventListeners.disposeAndClear(ev);
-        m_Text.Invalidate();
+        return; // core object still alive
     }
+
+    m_bIsDisposed = true;
+    m_Text.Invalidate();
+    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
+    }
+    lang::EventObject const ev(xThis);
+    m_EventListeners.disposeAndClear(ev);
 }
 
 uno::Reference<text::XText> SwXMeta::GetParentText() const
@@ -723,6 +730,18 @@ SwXMeta::SwXMeta(SwDoc *const pDoc)
 
 SwXMeta::~SwXMeta()
 {
+}
+
+uno::Reference<rdf::XMetadatable>
+SwXMeta::CreateXMeta(SwDoc & rDoc, bool const isField)
+{
+    SwXMeta *const pXMeta((isField)
+            ? new SwXMetaField(& rDoc) : new SwXMeta(& rDoc));
+    // this is why the constructor is private: need to acquire pXMeta here
+    uno::Reference<rdf::XMetadatable> const xMeta(pXMeta);
+    // need a permanent Reference to initialize m_wThis
+    pXMeta->m_pImpl->m_wThis = xMeta;
+    return xMeta;
 }
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -779,6 +798,8 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     xMeta.set(pXMeta);
     // in order to initialize the weak pointer cache in the core object
     rMeta.SetXMeta(xMeta);
+    // need a permanent Reference to initialize m_wThis
+    pXMeta->m_pImpl->m_wThis = xMeta;
     return xMeta;
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP

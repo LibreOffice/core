@@ -821,10 +821,10 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 xRet = (cppu::OWeakObject*) pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ );
         break;
         case SW_SERVICE_TYPE_META:
-            xRet = static_cast< ::cppu::OWeakObject* >( new SwXMeta(pDoc) );
+            xRet = SwXMeta::CreateXMeta(*pDoc, false);
         break;
         case SW_SERVICE_FIELDTYPE_METAFIELD:
-            xRet = static_cast< ::cppu::OWeakObject* >(new SwXMetaField(pDoc));
+            xRet = SwXMeta::CreateXMeta(*pDoc, true);
         break;
         default:
             throw uno::RuntimeException();
