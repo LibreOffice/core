@@ -199,7 +199,8 @@ REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _OptionGroup(ByVal pvGroupName As Variant _
 					, ByVal psParentType As String _
-					, pvForm As Object _
+					, poComponent As Object _
+					, poDatabaseForm As Object _
 					) As Variant
 &apos;	Return either an error or an object of type OPTIONGROUP based on its name
 
@@ -215,57 +216,53 @@ Dim lXY() As Long, iIndex() As Integer		&apos;	Two indexes X-Y coordinates
 Dim oView As Object
 
 Const cstPixels = 10							&apos;	Tolerance on coordinates when drawed approximately
-	With pvForm
-		bFound = False
-		For i = 0 To .DatabaseForm.GroupCount - 1		&apos;	Does a group with the right name exist ?
-			.DatabaseForm.getGroup(i, vOptionButtons, sGroupName)
-			If UCase(sGroupName) = UCase(Utils._Trim(pvGroupName)) Then
-				bFound = True
-				Exit For
+	bFound = False
+	For i = 0 To poDatabaseForm.GroupCount - 1		&apos;	Does a group with the right name exist ?
+		poDatabaseForm.getGroup(i, vOptionButtons, sGroupName)
+		If UCase(sGroupName) = UCase(Utils._Trim(pvGroupName)) Then
+			bFound = True
+			Exit For
+		End If
+	Next i
+
+	If bFound Then
+		ogGroup = New Optiongroup
+		ogGroup._Name = sGroupName
+		ogGroup._ButtonsGroup = vOptionButtons
+		ogGroup._Count = UBound(vOptionButtons) + 1
+		ogGroup._ParentType = psParentType
+		Set ogGroup._ParentComponent = poComponent
+
+		ReDim lXY(1, ogGroup._Count - 1)
+		ReDim iIndex(ogGroup._Count - 1)
+		For i = 0 To ogGroup._Count - 1			&apos;	Find the position of each radiobutton
+			Set oView = poComponent.CurrentController.getControl(ogGroup._ButtonsGroup(i))
+			lXY(0, i) = oView.PosSize.X
+			lXY(1, i) = oView.PosSize.Y
+		Next i
+		For i = 0 To ogGroup._Count - 1			&apos;	Sort them on XY coordinates		
+			If i = 0 Then
+				iIndex(0) = 0
+			Else
+				iIndex(i) = i
+				For j = i - 1 To 0 Step -1
+					If lXY(1, i) - lXY(1, j) &lt; - cstPixels Or ( Abs(lXY(1, i) - lXY(1, j)) &lt;= cstPixels And lXY(0, i) - lXY(0, j) &lt; - cstPixels ) Then
+						iIndex(i) = iIndex(j)
+						iIndex(j) = iIndex(j) + 1
+					End If
+				Next j
 			End If
 		Next i
+		ogGroup._ButtonsIndex = iIndex()
 
-		If bFound Then
-			ogGroup = New Optiongroup
-			ogGroup._Name = sGroupName
-			ogGroup._ButtonsGroup = vOptionButtons
-			ogGroup._Count = UBound(vOptionButtons) + 1
-			ogGroup._ParentType = psParentType
-			Set ogGroup._ParentComponent = .Component
-			ogGroup._DocEntry = ._DocEntry
-			ogGroup._DbEntry = ._DbEntry
+		Set _OptionGroup = ogGroup
 
-			ReDim lXY(1, ogGroup._Count - 1)
-			ReDim iIndex(ogGroup._Count - 1)
-			For i = 0 To ogGroup._Count - 1			&apos;	Find the position of each radiobutton
-				Set oView = .Component.CurrentController.getControl(ogGroup._ButtonsGroup(i))
-				lXY(0, i) = oView.PosSize.X
-				lXY(1, i) = oView.PosSize.Y
-			Next i
-			For i = 0 To ogGroup._Count - 1			&apos;	Sort them on XY coordinates		
-				If i = 0 Then
-					iIndex(0) = 0
-				Else
-					iIndex(i) = i
-					For j = i - 1 To 0 Step -1
-						If lXY(1, i) - lXY(1, j) &lt; - cstPixels Or ( Abs(lXY(1, i) - lXY(1, j)) &lt;= cstPixels And lXY(0, i) - lXY(0, j) &lt; - cstPixels ) Then
-							iIndex(i) = iIndex(j)
-							iIndex(j) = iIndex(j) + 1
-						End If
-					Next j
-				End If
-			Next i
-			ogGroup._ButtonsIndex = iIndex()
+	Else
 
-			Set _OptionGroup = ogGroup
+		Set _OptionGroup = Nothing
+		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvGroupName))
 
-		Else
-
-			Set _OptionGroup = Nothing
-			TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvGroupName))
-
-		End If
-	End With
+	End If
 	
 Exit_Function:
 	Exit Function

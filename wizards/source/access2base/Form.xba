@@ -15,7 +15,6 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be FORM
-Private _This					As Object
 Private	_Shortcut				As String
 Private	_Name					As String
 Private _DocEntry				As Integer				&apos;	Doc- and DbContainer entries in Root structure
@@ -32,7 +31,6 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJFORM
-	Set _This = Nothing
 	_Shortcut = &quot;&quot;
 	_Name = &quot;&quot;
 	_DocEntry = -1
@@ -225,11 +223,17 @@ Public Function OptionGroup(ByVal Optional pvGroupName As Variant) As Variant
 &apos;	Return either an error or an object of type OPTIONGROUP based on its name
 
 Const cstThisSub = &quot;Form.OptionGroup&quot;
+Dim ogGroup As Object
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pvGroupName) Then Call _TraceArguments()
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	
-	Set OptionGroup = _OptionGroup(pvGroupName, CTLPARENTISFORM, _This)
+	Set ogGroup = _OptionGroup(pvGroupName, CTLPARENTISFORM, Component, DatabaseForm)
+	If Not IsNull(ogGroup) Then
+		ogGroup._DocEntry = _DocEntry
+		ogGroup._DbEntry = _DbEntry
+	End If
+	Set OptionGroup = ogGroup
 	
 Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)

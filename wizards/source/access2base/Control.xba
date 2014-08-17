@@ -1223,7 +1223,6 @@ Dim vSelection As Variant, sSelectedText As String
 		Case UCase(&quot;Form&quot;)
 			Set ofSubForm = New SubForm		&apos;	Start building the SUBFORM object
 			With ofSubForm
-				Set ._This = ofSubForm
 				Set .DatabaseForm = ControlModel
 				._Name = _Name
 				._Shortcut = _Shortcut &amp; &quot;.Form&quot;

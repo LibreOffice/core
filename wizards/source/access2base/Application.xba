@@ -329,7 +329,6 @@ Dim iCurrentDoc As Integer, vCurrentDoc As Variant, oForms As Variant, oCounter 
 &apos; Process when ARGUMENT = STRING or INDEX =&gt; Initialize form object
 Dim ofForm As Object
 	Set ofForm = New Form
-	Set ofForm._This = ofForm
 Dim sAllForms As Variant, i As Integer, vName As Variant, oDatabase As Object, bFound As Boolean
 	Select Case vCurrentDoc.DbConnect
 		Case DBCONNECTBASE
@@ -1096,7 +1095,6 @@ Dim i As Integer, iCount As Integer, iAllCount As Integer, ofForm As Variant
 	iCount = 0
 	If iAllCount &gt; 0 Then
 		Set ofForm = New Form
-		Set ofForm._This = ofForm
 		For i = 0 To iAllCount - 1
 			Set ofForm = Application.AllForms(i)
 			If ofForm.IsLoaded Then iCount = iCount + 1
