@@ -342,7 +342,12 @@ BitmapBuffer* StretchAndConvert(
         ( nDstScanlineFormat == BMP_FORMAT_4BIT_LSN_PAL ) ||
         ( nDstScanlineFormat == BMP_FORMAT_8BIT_PAL ) )
     {
-        DBG_ASSERT( pDstPal, "destination buffer requires palette" );
+        assert(pDstPal && "destination buffer requires palette");
+        if (!pDstPal)
+        {
+            delete pDstBuffer;
+            return NULL;
+        }
         pDstBuffer->maPalette = *pDstPal;
     }
     else if( ( nDstScanlineFormat == BMP_FORMAT_8BIT_TC_MASK ) ||
@@ -351,7 +356,12 @@ BitmapBuffer* StretchAndConvert(
              ( nDstScanlineFormat == BMP_FORMAT_24BIT_TC_MASK ) ||
              ( nDstScanlineFormat == BMP_FORMAT_32BIT_TC_MASK ) )
     {
-        DBG_ASSERT( pDstMask, "destination buffer requires color mask" );
+        assert(pDstMask && "destination buffer requires color mask");
+        if (!pDstMask)
+        {
+            delete pDstBuffer;
+            return NULL;
+        }
         pDstBuffer->maColorMask = *pDstMask;
     }
 
