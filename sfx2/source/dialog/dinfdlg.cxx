@@ -1650,11 +1650,9 @@ bool CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
             m_aDurationField.SetSizePixel(aDurationSize);
             aDurationPos.X() = aPos.X() - m_aEditButton.GetSizePixel().Width() + aSize.Width();
             m_aEditButton.SetPosPixel(aDurationPos);
-            aSize = m_aYesNoButton.GetSizePixel();
-            aPos = m_aYesNoButton.GetPosPixel();
-            aSize.Width() = nWidth;
-            aPos.X() = aRect.getX() + ( nOffset / 2 );
+
             m_aYesNoButton.SetPosSizePixel( aPos, aSize );
+
             aSize.Width() /= 2;
             aSize.Width() -= 2;
             m_aDateField.SetPosSizePixel( aPos, aSize );
