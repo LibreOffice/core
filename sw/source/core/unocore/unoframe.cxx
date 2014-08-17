@@ -1111,6 +1111,7 @@ private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
+    uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
 
     Impl() : m_EventListeners(m_Mutex) { }
@@ -1249,6 +1250,8 @@ SwXFrame::CreateXFrame(SwDoc & rDoc, SwFrmFmt *const pFrmFmt)
         {
             pFrmFmt->SetXObject(xFrame);
         }
+        // need a permanent Reference to initialize m_wThis
+        pNew->SwXFrame::m_pImpl->m_wThis = xFrame;
     }
     return xFrame;
 }
@@ -2592,17 +2595,23 @@ throw (uno::RuntimeException, std::exception)
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
-void    SwXFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXFrame::Modify(const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
+    if (GetRegisteredIn())
     {
-        mxStyleData.clear();
-        mxStyleFamily.clear();
-        m_pDoc = 0;
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
-        m_pImpl->m_EventListeners.disposeAndClear(ev);
+        return; // core object still alive
     }
+    mxStyleData.clear();
+    mxStyleFamily.clear();
+    m_pDoc = 0;
+    uno::Reference<uno::XInterface> const xThis(m_pImpl->m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
+    }
+    lang::EventObject const ev(xThis);
+    m_pImpl->m_EventListeners.disposeAndClear(ev);
 }
 
 void SwXFrame::dispose(void) throw( uno::RuntimeException, std::exception )
