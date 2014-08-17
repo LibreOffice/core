@@ -110,6 +110,7 @@ private:
 
 public:
     SwXParagraph &              m_rThis;
+    uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     SfxItemPropertySet const&   m_rPropSet;
     bool                        m_bIsDescriptor;
@@ -181,11 +182,18 @@ protected:
 void SwXParagraph::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 {
     ClientModify(this, pOld, pNew);
-    if (!GetRegisteredIn())
+    if (GetRegisteredIn())
     {
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
-        m_EventListeners.disposeAndClear(ev);
+        return; // core object still alive
     }
+
+    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
+    }
+    lang::EventObject const ev(xThis);
+    m_EventListeners.disposeAndClear(ev);
 }
 
 SwXParagraph::SwXParagraph()
@@ -217,16 +225,16 @@ bool SwXParagraph::IsDescriptor() const
 }
 
 uno::Reference<text::XTextContent>
-SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTxtNode& rTxtNode,
+SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTxtNode *const pTxtNode,
         uno::Reference< text::XText> const& i_xParent,
         const sal_Int32 nSelStart, const sal_Int32 nSelEnd)
 {
     // re-use existing SwXParagraph
     // #i105557#: do not iterate over the registered clients: race condition
     uno::Reference<text::XTextContent> xParagraph;
-    if ((-1 == nSelStart) && (-1 == nSelEnd)) // only use cache if no selection!
-    {
-        xParagraph.set(rTxtNode.GetXParagraph());
+    if (pTxtNode && (-1 == nSelStart) && (-1 == nSelEnd))
+    {   // only use cache if no selection!
+        xParagraph.set(pTxtNode->GetXParagraph());
     }
     if (xParagraph.is())
     {
@@ -235,20 +243,23 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTxtNode& rTxtNode,
 
     // create new SwXParagraph
     uno::Reference<text::XText> xParentText(i_xParent);
-    if (!xParentText.is())
+    if (!xParentText.is() && pTxtNode)
     {
-        SwPosition Pos( rTxtNode );
+        SwPosition Pos(*pTxtNode);
         xParentText.set(::sw::CreateParentXText( rDoc, Pos ));
     }
-    SwXParagraph *const pXPara(
-            new SwXParagraph(xParentText, rTxtNode, nSelStart, nSelEnd) );
+    SwXParagraph *const pXPara( (pTxtNode)
+            ? new SwXParagraph(xParentText, *pTxtNode, nSelStart, nSelEnd)
+            : new SwXParagraph);
     // this is why the constructor is private: need to acquire pXPara here
     xParagraph.set(pXPara);
     // in order to initialize the weak pointer cache in the core object
-    if ((-1 == nSelStart) && (-1 == nSelEnd))
+    if (pTxtNode && (-1 == nSelStart) && (-1 == nSelEnd))
     {
-        rTxtNode.SetXParagraph(xParagraph);
+        pTxtNode->SetXParagraph(xParagraph);
     }
+    // need a permanent Reference to initialize m_wThis
+    pXPara->m_pImpl->m_wThis = xParagraph;
     return xParagraph;
 }
 

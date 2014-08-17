@@ -1349,7 +1349,7 @@ SwXText::Impl::finishOrAppendParagraph(
     OSL_ENSURE(pTxtNode, "no SwTxtNode?");
     if (pTxtNode)
     {
-        xRet.set(SwXParagraph::CreateXParagraph(*m_pDoc, *pTxtNode, &m_rThis),
+        xRet.set(SwXParagraph::CreateXParagraph(*m_pDoc, pTxtNode, &m_rThis),
                 uno::UNO_QUERY);
     }
 

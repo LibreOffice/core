@@ -670,7 +670,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         {
             text::XText *const pText = m_xParentText.get();
             xRef = SwXParagraph::CreateXParagraph(*pUnoCrsr->GetDoc(),
-                *pStart->nNode.GetNode().GetTxtNode(),
+                pStart->nNode.GetNode().GetTxtNode(),
                 static_cast<SwXText*>(pText), nFirstContent, nLastContent);
         }
     }

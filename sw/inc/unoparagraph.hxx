@@ -77,14 +77,14 @@ private:
             SwTxtNode & rTxtNode,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = - 1);
 
-public:
-
     /// descriptor
     SwXParagraph();
 
+public:
+
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XTextContent>
-        CreateXParagraph(SwDoc & rDoc, SwTxtNode& rTxtNode,
+        CreateXParagraph(SwDoc & rDoc, SwTxtNode * pTxtNode,
             ::com::sun::star::uno::Reference< ::com::sun::star::text::XText>
                 const& xParentText = 0,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = - 1);

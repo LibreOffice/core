@@ -5037,7 +5037,7 @@ uno::Reference< rdf::XMetadatable >
 SwTxtNode::MakeUnoObject()
 {
     const uno::Reference<rdf::XMetadatable> xMeta(
-            SwXParagraph::CreateXParagraph(*GetDoc(), *this), uno::UNO_QUERY);
+            SwXParagraph::CreateXParagraph(*GetDoc(), this), uno::UNO_QUERY);
     return xMeta;
 }
 

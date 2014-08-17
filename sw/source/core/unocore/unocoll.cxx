@@ -789,7 +789,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         }
         break;
         case SW_SERVICE_PARAGRAPH :
-            xRet = (cppu::OWeakObject*)new SwXParagraph();
+            xRet = SwXParagraph::CreateXParagraph(*pDoc, 0);
         break;
         case SW_SERVICE_NUMBERING_RULES :
             xRet = (cppu::OWeakObject*)new SwXNumberingRules(*pDoc);
