@@ -698,4 +698,109 @@ void ScOrcusAutoFilter::commit()
 {
 }
 
+ScOrcusTable::ScOrcusTable(SCTAB nTab):
+    mnTab(nTab)
+{
+}
+
+ScOrcusTable::~ScOrcusTable()
+{
+}
+
+os::iface::import_auto_filter* ScOrcusTable::get_auto_filter()
+{
+    return NULL;
+}
+
+void ScOrcusTable::set_identifier(size_t id)
+{
+    SAL_INFO("sc.orcus.table", "set_identifier :" << id);
+}
+
+void ScOrcusTable::set_range(const char* p_ref, size_t n_ref)
+{
+    OUString aRange(p_ref, n_ref, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sc.orcus.table", "set_range: " << aRange);
+}
+
+void ScOrcusTable::set_totals_row_count(size_t row_count)
+{
+    SAL_INFO("sc.orcus.table", "set_totals_row_count: " << row_count);
+}
+
+void ScOrcusTable::set_name(const char* p, size_t n)
+{
+    OUString aName(p, n, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sc.orcus.table", "set_name: " << aName);
+}
+
+void ScOrcusTable::set_display_name(const char* p, size_t n)
+{
+    OUString aName(p, n, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sc.orcus.table", "set_display_name: " << aName);
+}
+
+void ScOrcusTable::set_column_count(size_t n)
+{
+    SAL_INFO("sc.orcus.table", "set_column_count: " << n);
+}
+
+void ScOrcusTable::set_column_identifier(size_t id)
+{
+    SAL_INFO("sc.orcus.table", "set_column_identifier: " << id);
+}
+
+void ScOrcusTable::set_column_name(const char* p, size_t n)
+{
+    OUString aName(p, n, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sc.orcus.table", "set_column_name: " << aName);
+}
+
+void ScOrcusTable::set_column_totals_row_label(const char* p, size_t n)
+{
+    OUString aLabel(p, n, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sc.orcus.table", "set_column_totals_row_label: " << aLabel);
+}
+
+void ScOrcusTable::set_column_totals_row_function(os::totals_row_function_t )
+{
+    SAL_INFO("sc.orcus.table", "set_column_totals_row_function");
+}
+
+void ScOrcusTable::commit_column()
+{
+    SAL_INFO("sc.orcus.table", "commit_column");
+}
+
+void ScOrcusTable::set_style_name(const char* p, size_t n)
+{
+    OUString aName(p, n, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sc.orcus.table", "set_style_name: " << aName);
+}
+
+void ScOrcusTable::set_style_show_first_column(bool b)
+{
+    SAL_INFO("sc.orcus.table", "set_style_show_first_column: " << b);
+}
+
+void ScOrcusTable::set_style_show_last_column(bool b)
+{
+    SAL_INFO("sc.orcus.table", "set_style_show_last_column: " << b);
+}
+
+void ScOrcusTable::set_style_show_row_stripes(bool b)
+{
+    SAL_INFO("sc.orcus.table", "set_style_show_row_stripes: " << b);
+}
+
+void ScOrcusTable::set_style_show_column_stripes(bool b)
+{
+    SAL_INFO("sc.orcus.table", "set_style_show_column_stripes: " << b);
+}
+
+void ScOrcusTable::commit()
+{
+    SAL_INFO("sc.orcus.table", "commit");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
