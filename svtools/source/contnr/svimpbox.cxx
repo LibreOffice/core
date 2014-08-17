@@ -2237,8 +2237,13 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_RIGHT:
         {
-            if( bSubLstOpLR && IsNowExpandable() )
-                pView->Expand( pCursor );
+            if( bSubLstOpLR )
+            {
+                // only try to expand if sublist is expandable,
+                // otherwise ignore the key press
+                if( IsNowExpandable() )
+                    pView->Expand( pCursor );
+            }
             else if ( bIsCellFocusEnabled && pCursor )
             {
                 if ( nCurTabPos < ( pView->TabCount() - 1 /*!2*/ ) )
@@ -2304,8 +2309,17 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     }
                 }
             }
-            else if( bSubLstOpLR && IsExpandable() )
-                pView->Collapse( pCursor );
+            else if( bSubLstOpLR )
+            {
+                if( IsExpandable() && pView->IsExpanded( pCursor ) )
+                    pView->Collapse( pCursor );
+                else
+                {
+                    pNewCursor = pView->GetParent( pCursor );
+                    if( pNewCursor )
+                        SetCursor( pNewCursor );
+                }
+            }
             else
                 bKeyUsed = false;
             break;
