@@ -846,7 +846,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             {
                 pFld = aFldArr[i];
                 uno::Reference<text::XTextField> const xField =
-                    SwXTextField::CreateXTextField(*m_pImpl->m_pDoc, *pFld);
+                    SwXTextField::CreateXTextField(m_pImpl->m_pDoc, pFld);
 
                 pRetSeq[i] = uno::Reference<text::XDependentTextField>(xField,
                         uno::UNO_QUERY);
@@ -1065,20 +1065,6 @@ OUString SwXFieldMaster::LocalizeFormula(
     return rFormula;
 }
 
-uno::Reference<text::XTextField>
-SwXTextField::CreateXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
-{
-    // re-use existing SwXTextField
-    uno::Reference<text::XTextField> xField(rFmt.GetXTextField());
-    if (!xField.is())
-    {
-        SwXTextField *const pField(new SwXTextField(rFmt, rDoc));
-        xField.set(pField);
-        const_cast<SwFmtFld &>(rFmt).SetXTextField(xField);
-    }
-    return xField;
-}
-
 struct SwFieldProperties_Impl
 {
     OUString    sPar1;
@@ -1131,9 +1117,9 @@ class SwXTextField::Impl
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
-    SwXTextField & m_rThis;
 
 public:
+    uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
 
     SwFmtFld const*     m_pFmtFld;
@@ -1148,10 +1134,9 @@ public:
     OUString            m_sTypeName;
     boost::scoped_ptr<SwFieldProperties_Impl> m_pProps;
 
-    Impl(SwXTextField & rThis, SwDoc *const pDoc, SwFmtFld const*const pFmt,
+    Impl(SwDoc *const pDoc, SwFmtFld const*const pFmt,
             sal_uInt16 const nServiceId)
         : SwClient((pFmt) ? pDoc->GetUnoCallBack() : 0)
-        , m_rThis(rThis)
         , m_EventListeners(m_Mutex)
         , m_pFmtFld(pFmt)
         , m_pDoc(pDoc)
@@ -1202,7 +1187,7 @@ throw (uno::RuntimeException, std::exception)
 SwXTextField::SwXTextField(
     sal_uInt16 nServiceId,
     SwDoc* pDoc)
-    : m_pImpl(new Impl(*this, pDoc, 0, nServiceId))
+    : m_pImpl(new Impl(pDoc, 0, nServiceId))
 {
     //Set visible as default!
     if ( SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId
@@ -1225,12 +1210,40 @@ SwXTextField::SwXTextField(
 SwXTextField::SwXTextField(
     const SwFmtFld& rFmt,
     SwDoc & rDoc)
-    : m_pImpl(new Impl(*this, &rDoc, &rFmt, USHRT_MAX))
+    : m_pImpl(new Impl(&rDoc, &rFmt, USHRT_MAX))
 {
 }
 
 SwXTextField::~SwXTextField()
 {
+}
+
+uno::Reference<text::XTextField>
+SwXTextField::CreateXTextField(SwDoc *const pDoc, SwFmtFld const* pFmt,
+        sal_uInt16 const nServiceId)
+{
+    assert(!pFmt || pDoc);
+    assert(pFmt || nServiceId != 0xFFFF);
+    // re-use existing SwXTextField
+    uno::Reference<text::XTextField> xField;
+    if (pFmt)
+    {
+        xField = pFmt->GetXTextField();
+    }
+    if (!xField.is())
+    {
+        SwXTextField *const pField( (pFmt)
+                ? new SwXTextField(*pFmt, *pDoc)
+                : new SwXTextField(nServiceId, pDoc));
+        xField.set(pField);
+        if (pFmt)
+        {
+            const_cast<SwFmtFld *>(pFmt)->SetXTextField(xField);
+        }
+        // need a permanent Reference to initialize m_wThis
+        pField->m_pImpl->m_wThis = xField;
+    }
+    return xField;
 }
 
 sal_uInt16 SwXTextField::GetServiceId() const
@@ -1317,6 +1330,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
     // if a FieldMaster was attached, then the document is already fixed!
+    // NOTE: sw.SwXAutoTextEntry unoapi test depends on m_pDoc = 0 being valid
     if (!pDoc || (m_pImpl->m_pDoc && m_pImpl->m_pDoc != pDoc))
         throw lang::IllegalArgumentException();
 
@@ -2585,7 +2599,12 @@ void SwXTextField::Impl::Invalidate()
         GetRegisteredInNonConst()->Remove(this);
         m_pFmtFld = 0;
         m_pDoc = 0;
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        if (!xThis.is())
+        {   // fdo#72695: if UNO object is already dead, don't revive it with event
+            return;
+        }
+        lang::EventObject const ev(xThis);
         m_EventListeners.disposeAndClear(ev);
     }
 }
@@ -2990,7 +3009,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
                          !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
             if (!bSkip)
                 pItems[ nFillPos++ ] = SwXTextField::CreateXTextField(
-                        *m_pImpl->m_pDoc, *pCurFldFmt);
+                        m_pImpl->m_pDoc, pCurFldFmt);
             pCurFldFmt = aIter.Next();
 
             // enlarge sequence if necessary

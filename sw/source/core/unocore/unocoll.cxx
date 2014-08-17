@@ -755,10 +755,11 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS       :
         case SW_SERVICE_FIELDTYPE_DROPDOWN                  :
         case SW_SERVICE_FIELDTYPE_TABLE_FORMULA:
-            xRet = (cppu::OWeakObject*)new SwXTextField(nObjectType);
+            // NOTE: the sw.SwXAutoTextEntry unoapi test depends on pDoc = 0
+            xRet = SwXTextField::CreateXTextField(0, 0, nObjectType);
             break;
         case SW_SERVICE_FIELDTYPE_ANNOTATION:
-            xRet = (cppu::OWeakObject*)new SwXTextField(nObjectType, pDoc);
+            xRet = SwXTextField::CreateXTextField(pDoc, 0, nObjectType);
             break;
         case SW_SERVICE_FIELDMASTER_USER:
         case SW_SERVICE_FIELDMASTER_DDE:

@@ -170,15 +170,16 @@ private:
 
     SwXTextField(const SwFmtFld& rFmt, SwDoc & rDoc);
 
-public:
     /// descriptor
     SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=0);
 
+public:
     sal_uInt16 GetServiceId() const;
 
     /// @return an SwXTextField, either an already existing one or a new one
     static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField>
-        CreateXTextField(SwDoc & rDoc, SwFmtFld const& rFmt);
+        CreateXTextField(SwDoc * pDoc, SwFmtFld const* pFmt,
+                sal_uInt16 nServiceId = 0xFFFF);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

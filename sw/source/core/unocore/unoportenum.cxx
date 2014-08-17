@@ -273,8 +273,9 @@ namespace
                     rAnnotationStartArr.insert(
                         SwAnnotationStartPortion_ImplSharedPtr(
                             new SwAnnotationStartPortion_Impl(
-                            SwXTextField::CreateXTextField( rDoc, *pAnnotationFmtFld ),
-                            rStartPos ) ) );
+                                SwXTextField::CreateXTextField(&rDoc,
+                                    pAnnotationFmtFld),
+                                rStartPos)));
                 }
             }
         }
@@ -810,7 +811,8 @@ lcl_ExportHints(
                             new SwXTextPortion(
                                 pUnoCrsr, xParent, PORTION_FIELD);
                         Reference<XTextField> const xField =
-                            SwXTextField::CreateXTextField(*pDoc, pAttr->GetFmtFld());
+                            SwXTextField::CreateXTextField(pDoc,
+                                    &pAttr->GetFmtFld());
                         pPortion->SetTextField(xField);
                     }
                     break;
@@ -835,7 +837,8 @@ lcl_ExportHints(
                         {
                             SwXTextPortion* pPortion = new SwXTextPortion( pUnoCrsr, xParent, PORTION_ANNOTATION );
                             Reference<XTextField> xField =
-                                SwXTextField::CreateXTextField(*pDoc, pAttr->GetFmtFld());
+                                SwXTextField::CreateXTextField(pDoc,
+                                        &pAttr->GetFmtFld());
                             pPortion->SetTextField(xField);
                             xRef = pPortion;
                         }
@@ -857,7 +860,8 @@ lcl_ExportHints(
                             new SwXTextPortion( pUnoCrsr, xParent, PORTION_FIELD);
                         xRef = pPortion;
                         Reference<XTextField> xField =
-                            SwXTextField::CreateXTextField(*pDoc, pAttr->GetFmtFld());
+                            SwXTextField::CreateXTextField(pDoc,
+                                    &pAttr->GetFmtFld());
                         pPortion->SetTextField(xField);
                     }
                     break;
