@@ -161,7 +161,7 @@ namespace
                     ? BKM_TYPE_START : BKM_TYPE_START_END;
                 rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
                     new SwXBookmarkPortion_Impl(
-                            SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
+                            SwXBookmark::CreateXBookmark(rDoc, pBkmk),
                             nType, rStartPos)));
             }
 
@@ -189,7 +189,7 @@ namespace
                 {
                     rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
                         new SwXBookmarkPortion_Impl(
-                                SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
+                                SwXBookmark::CreateXBookmark(rDoc, pBkmk),
                                 BKM_TYPE_END, *pEndPos)));
                 }
             }
@@ -439,7 +439,8 @@ lcl_ExportFieldMark(
         xRef = pPortion;
         if (pPortion && pFieldmark && pDoc)
         {
-            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
+            pPortion->SetBookmark(
+                SwXFieldmark::CreateXFieldmark(*pDoc, pFieldmark));
         }
     }
     else if (CH_TXT_ATR_FIELDEND == Char)
@@ -454,7 +455,10 @@ lcl_ExportFieldMark(
             pUnoCrsr, i_xParentText, PORTION_FIELD_END);
         xRef = pPortion;
         if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
+        {
+            pPortion->SetBookmark(
+                SwXFieldmark::CreateXFieldmark(*pDoc, pFieldmark));
+        }
     }
     else if (CH_TXT_ATR_FORMELEMENT == Char)
     {
@@ -467,7 +471,10 @@ lcl_ExportFieldMark(
             pUnoCrsr, i_xParentText, PORTION_FIELD_START_END);
         xRef = pPortion;
         if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
+        {
+            pPortion->SetBookmark(
+                SwXFieldmark::CreateXFieldmark(*pDoc, pFieldmark));
+        }
     }
     else
     {
@@ -820,7 +827,8 @@ lcl_ExportHints(
                         if ( pAnnotationMark != NULL )
                         {
                             SwXTextPortion* pPortion = new SwXTextPortion( pUnoCrsr, xParent, PORTION_ANNOTATION_END );
-                            pPortion->SetBookmark( SwXBookmark::CreateXBookmark( *pDoc, *pAnnotationMark ) );
+                            pPortion->SetBookmark(SwXBookmark::CreateXBookmark(
+                                        *pDoc, pAnnotationMark));
                             xRef = pPortion;
                         }
                         else

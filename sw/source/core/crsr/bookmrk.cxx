@@ -300,7 +300,7 @@ namespace sw { namespace mark
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
         OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
         const uno::Reference< rdf::XMetadatable> xMeta(
-                SwXBookmark::CreateXBookmark(*pDoc, *this), uno::UNO_QUERY);
+                SwXBookmark::CreateXBookmark(*pDoc, this), uno::UNO_QUERY);
         return xMeta;
     }
 

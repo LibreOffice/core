@@ -547,20 +547,17 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case  SW_SERVICE_TYPE_BOOKMARK :
         {
-            SwXBookmark* pBookmark = new SwXBookmark;
-            xRet =  (cppu::OWeakObject*)pBookmark;
+            xRet = SwXBookmark::CreateXBookmark(*pDoc, 0);
         }
         break;
         case  SW_SERVICE_TYPE_FIELDMARK :
         {
-            SwXFieldmark* pFieldmark = new SwXFieldmark(false);
-            xRet =  (cppu::OWeakObject*)pFieldmark;
+            xRet = SwXFieldmark::CreateXFieldmark(*pDoc, 0, false);
         }
         break;
         case  SW_SERVICE_TYPE_FORMFIELDMARK :
         {
-            SwXFieldmark* pFieldmark = new SwXFieldmark(true);
-            xRet =  (cppu::OWeakObject*)pFieldmark;
+            xRet = SwXFieldmark::CreateXFieldmark(*pDoc, 0, true);
         }
         break;
         case  SW_SERVICE_VBAOBJECTPROVIDER :
@@ -1629,7 +1626,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
             {
                 uno::Any aRet;
                 const uno::Reference< text::XTextContent > xRef =
-                    SwXBookmark::CreateXBookmark(*GetDoc(), **ppMark);
+                    SwXBookmark::CreateXBookmark(*GetDoc(), ppMark->get());
                 aRet <<= xRef;
                 return aRet;
             }
@@ -1653,7 +1650,7 @@ uno::Any SwXBookmarks::getByName(const OUString& rName)
 
     uno::Any aRet;
     const uno::Reference< text::XTextContent > xRef =
-        SwXBookmark::CreateXBookmark(*GetDoc(), *(ppBkmk->get()));
+        SwXBookmark::CreateXBookmark(*GetDoc(), ppBkmk->get());
     aRet <<= xRef;
     return aRet;
 }
