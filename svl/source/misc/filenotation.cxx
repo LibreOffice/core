@@ -25,7 +25,6 @@
 namespace svt
 {
 
-    //= OFileNotation
     OFileNotation::OFileNotation( const OUString& _rUrlOrPath )
     {
         construct( _rUrlOrPath );

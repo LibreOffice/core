@@ -24,9 +24,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
-/*************************************************************************
-    UNO III Implementation
-*************************************************************************/
+/*
+ * UNO III Implementation
+ */
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;

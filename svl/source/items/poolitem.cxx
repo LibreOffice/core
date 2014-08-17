@@ -40,7 +40,6 @@ const char* pw5 = "Wow! 10.000.000 items!";
 
 IMPL_PTRHINT(SfxPoolItemHint,SfxPoolItem)
 
-// SfxPoolItem -----------------------------------------------------------
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
@@ -207,13 +206,11 @@ bool SfxPoolItem::GetPresentation
     return false;
 }
 
-// SfxVoidItem ------------------------------------------------------------
 SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
     SfxPoolItem(which)
 {
 }
 
-// SfxVoidItem ------------------------------------------------------------
 SfxVoidItem::SfxVoidItem( const SfxVoidItem& rCopy):
     SfxPoolItem(rCopy)
 {
@@ -250,9 +247,8 @@ SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
     return new SfxVoidItem(*this);
 }
 
-// SfxInvalidItem ---------------------------------------------------------
+// SfxInvalidItem
 
-// SfxItemHandle ----------------------------------------------------------
 SfxItemHandle::SfxItemHandle(SfxPoolItem &rItem):
     pRef(new sal_uInt16(1)),
     pItem(rItem.Clone())

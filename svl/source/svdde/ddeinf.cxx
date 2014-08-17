@@ -24,8 +24,6 @@
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
 
-// --- DdeInternal::InfCallback() ----------------------------------
-
 HDDEDATA CALLBACK DdeInternal::InfCallback(
                 WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD )
 {

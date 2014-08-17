@@ -187,9 +187,6 @@ sal_uInt16 SvNumberFormatter::nSystemCurrencyPosition = 0;
 // language dependent.
 #define NF_BANKSYMBOL_FIX_POSITION 1
 
-
-/************* SvNumberFormatter functions **************************/
-
 const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION   = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limits<sal_uInt16>::max()-1;
 
@@ -3920,10 +3917,6 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
     }
     return nDefault;
 }
-
-
-//--- NfCurrencyEntry ----------------------------------------------------
-
 
 NfCurrencyEntry::NfCurrencyEntry( const LocaleDataWrapper& rLocaleData, LanguageType eLang )
 {

@@ -44,8 +44,6 @@ SfxImpStringList::~SfxImpStringList()
     nRefCount = 0xffff;
 }
 
-// class SfxStringListItem -----------------------------------------------
-
 SfxStringListItem::SfxStringListItem() :
     pImp(NULL)
 {

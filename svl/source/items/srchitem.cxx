@@ -54,7 +54,7 @@ using namespace com::sun::star::util;
 #define SRCH_PARA_CONTENT   "Content"
 #define SRCH_PARA_ASIANOPT  "AsianOptions"
 
-// STATIC DATA -----------------------------------------------------------
+// STATIC DATA
 
 TYPEINIT1_FACTORY(SvxSearchItem, SfxPoolItem, new SvxSearchItem(0));
 

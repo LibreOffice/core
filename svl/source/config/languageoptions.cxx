@@ -33,11 +33,9 @@
 #endif
 
 using namespace ::com::sun::star;
-// global ----------------------------------------------------------------------
+// global
 
 namespace { struct ALMutex : public rtl::Static< ::osl::Mutex, ALMutex > {}; }
-
-// class SvtLanguageOptions ----------------------------------------------------
 
 SvtLanguageOptions::SvtLanguageOptions( bool _bDontLoad )
 {
@@ -60,7 +58,7 @@ SvtLanguageOptions::~SvtLanguageOptions()
     delete m_pCJKOptions;
     delete m_pCTLOptions;
 }
-// CJK options -----------------------------------------------------------------
+// CJK options
 bool SvtLanguageOptions::IsCJKFontEnabled() const
 {
     return m_pCJKOptions->IsCJKFontEnabled();
@@ -85,7 +83,7 @@ bool SvtLanguageOptions::IsAnyEnabled() const
 {
     return m_pCJKOptions->IsAnyEnabled();
 }
-// CTL options -----------------------------------------------------------------
+// CTL options
 void SvtLanguageOptions::SetCTLFontEnabled( bool _bEnabled )
 {
     m_pCTLOptions->SetCTLFontEnabled( _bEnabled );

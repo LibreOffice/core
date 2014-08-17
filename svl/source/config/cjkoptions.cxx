@@ -378,14 +378,11 @@ bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
     return bReadOnly;
 }
 
-// global ----------------------------------------------------------------
+// global
 
 static SvtCJKOptions_Impl*  pCJKOptions = NULL;
 static sal_Int32            nCJKRefCount = 0;
 namespace { struct theCJKOptionsMutex : public rtl::Static< ::osl::Mutex , theCJKOptionsMutex >{}; }
-
-
-// class SvtCJKOptions --------------------------------------------------
 
 SvtCJKOptions::SvtCJKOptions(bool bDontLoad)
 {
