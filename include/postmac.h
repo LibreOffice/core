@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#undef Cursor
+#undef Line
 #undef Point
 #undef Polygon
 #undef Size
