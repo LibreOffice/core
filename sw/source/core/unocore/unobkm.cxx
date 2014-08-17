@@ -56,7 +56,6 @@ class SwXBookmark::Impl
     : public SwClient
 {
 private:
-    SwXBookmark & m_rThis;
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
@@ -66,10 +65,8 @@ public:
     ::sw::mark::IMark *         m_pRegisteredBookmark;
     OUString             m_sMarkName;
 
-    Impl(   SwXBookmark & rThis,
-            SwDoc *const pDoc, ::sw::mark::IMark *const /*pBookmark*/)
+    Impl(   SwDoc *const pDoc, ::sw::mark::IMark *const /*pBookmark*/)
         : SwClient()
-        , m_rThis(rThis)
         , m_EventListeners(m_Mutex)
         , m_pDoc(pDoc)
         , m_pRegisteredBookmark(0)
@@ -141,12 +138,12 @@ const ::sw::mark::IMark* SwXBookmark::GetBookmark() const
 SwXBookmark::SwXBookmark(
     ::sw::mark::IMark *const pBkmk,
     SwDoc *const pDoc)
-    : m_pImpl( new SwXBookmark::Impl(*this, pDoc, pBkmk) )
+    : m_pImpl( new SwXBookmark::Impl(pDoc, pBkmk) )
 {
 }
 
 SwXBookmark::SwXBookmark()
-    : m_pImpl( new SwXBookmark::Impl(*this, 0, 0) )
+    : m_pImpl( new SwXBookmark::Impl(0, 0) )
 {
 }
 
