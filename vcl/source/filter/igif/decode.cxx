@@ -49,12 +49,14 @@ GIFLZWDecompressor::GIFLZWDecompressor( sal_uInt8 cDataSize ) :
 
     pTable = new GIFLZWTableEntry[ 4098 ];
 
-    for( sal_uInt16 i = 0; i < nTableSize; i++ )
+    for (sal_uInt16 i = 0; i < nTableSize; ++i)
     {
         pTable[i].pPrev = NULL;
         pTable[i].pFirst = pTable + i;
         pTable[i].nData = (sal_uInt8) i;
     }
+
+    memset(pTable + nTableSize, 0, sizeof(GIFLZWTableEntry) * (4098 - nTableSize));
 }
 
 // ------------------------------------------------------------------------
@@ -111,9 +113,7 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
     return pTarget;
 }
 
-// ------------------------------------------------------------------------
-
-void GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData )
+bool GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData )
 {
     GIFLZWTableEntry* pE;
 
@@ -122,12 +122,16 @@ void GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirst
         pE = pTable + nTableSize;
         pE->pPrev = pTable + nPrevCode;
         pE->pFirst = pE->pPrev->pFirst;
-        pE->nData = pTable[ nCodeFirstData ].pFirst->nData;
+        GIFLZWTableEntry *pEntry = pTable[nCodeFirstData].pFirst;
+        if (!pEntry)
+            return false;
+        pE->nData = pEntry->nData;
         nTableSize++;
 
         if ( ( nTableSize == (sal_uInt16) (1 << nCodeSize) ) && ( nTableSize < 4096 ) )
             nCodeSize++;
     }
+    return true;
 }
 
 // ------------------------------------------------------------------------
@@ -161,17 +165,23 @@ bool GIFLZWDecompressor::ProcessOneCode()
 
         if ( nCode < nClearCode )
         {
+            bool bOk = true;
             if ( nOldCode != 0xffff )
-                AddToTable( nOldCode, nCode );
+                bOk = AddToTable(nOldCode, nCode);
+            if (!bOk)
+                return false;
         }
         else if ( ( nCode > nEOICode ) && ( nCode <= nTableSize ) )
         {
             if ( nOldCode != 0xffff )
             {
+                bool bOk;
                 if ( nCode == nTableSize )
-                    AddToTable( nOldCode, nOldCode );
+                    bOk = AddToTable( nOldCode, nOldCode );
                 else
-                    AddToTable( nOldCode, nCode );
+                    bOk = AddToTable( nOldCode, nCode );
+                if (!bOk)
+                    return false;
             }
         }
         else
