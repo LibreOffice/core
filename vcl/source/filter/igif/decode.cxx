@@ -47,12 +47,14 @@ GIFLZWDecompressor::GIFLZWDecompressor(sal_uInt8 cDataSize)
 
     pTable = new GIFLZWTableEntry[ 4098 ];
 
-    for( sal_uInt16 i = 0; i < nTableSize; i++ )
+    for (sal_uInt16 i = 0; i < nTableSize; ++i)
     {
         pTable[i].pPrev = NULL;
         pTable[i].pFirst = pTable + i;
         pTable[i].nData = (sal_uInt8) i;
     }
+
+    memset(pTable + nTableSize, 0, sizeof(GIFLZWTableEntry) * (4098 - nTableSize));
 }
 
 GIFLZWDecompressor::~GIFLZWDecompressor()
