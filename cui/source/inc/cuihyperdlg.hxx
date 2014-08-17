@@ -68,12 +68,14 @@ private:
     bool            mbReadOnly  : 1;
     bool            mbIsHTMLDoc : 1;
 
+    DECL_LINK (ClickOkHdl_Impl, void * );
     DECL_LINK (ClickApplyHdl_Impl, void * );
     DECL_LINK (ClickCloseHdl_Impl, void * );
 
 protected:
     virtual bool            Close() SAL_OVERRIDE;
     virtual void            Move() SAL_OVERRIDE;
+    void Apply();
 
 public:
     SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings );

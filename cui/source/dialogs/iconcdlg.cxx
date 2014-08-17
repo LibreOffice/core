@@ -190,9 +190,10 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
     bItemsReset     ( false )
 {
     get(m_pOKBtn, "ok");
+    get(m_pApplyBtn, "apply");
     get(m_pCancelBtn, "cancel");
     get(m_pHelpBtn, "help");
-    get(m_pResetBtn, "back");
+    get(m_pResetBtn, "reset");
     get(m_pIconCtrl, "icon_control");
     get(m_pTabContainer, "tab");
 
@@ -213,11 +214,13 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
     // Buttons
     m_pOKBtn->SetClickHdl   ( LINK( this, IconChoiceDialog, OkHdl ) );
     m_pOKBtn->SetHelpId( HID_ICCDIALOG_OK_BTN );
+    m_pApplyBtn->SetClickHdl   ( LINK( this, IconChoiceDialog, ApplyHdl ) );
+    //m_pApplyBtn->SetHelpId( HID_ICCDIALOG_APPLY_BTN );
     m_pCancelBtn->SetHelpId( HID_ICCDIALOG_CANCEL_BTN );
     m_pResetBtn->SetClickHdl( LINK( this, IconChoiceDialog, ResetHdl ) );
-    m_pResetBtn->SetText( CUI_RESSTR(RID_SVXSTR_ICONCHOICEDLG_RESETBUT) );
     m_pResetBtn->SetHelpId( HID_ICCDIALOG_RESET_BTN );
     m_pOKBtn->Show();
+    m_pApplyBtn->Show();
     m_pCancelBtn->Show();
     m_pHelpBtn->Show();
     m_pResetBtn->Show();
@@ -392,6 +395,22 @@ IMPL_LINK_NOARG(IconChoiceDialog, OkHdl)
 }
 
 
+IMPL_LINK_NOARG(IconChoiceDialog, ApplyHdl)
+{
+    bInOK = true;
+
+    if ( OK_Impl() )
+    {
+        if ( bModal )
+            EndDialog( Ok() );
+        else
+        {
+            Ok();
+            Close();
+        }
+    }
+    return 0;
+}
 
 IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
 {

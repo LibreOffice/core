@@ -134,6 +134,7 @@ private :
 
     // Buttons
     OKButton                *m_pOKBtn;
+    PushButton              *m_pApplyBtn;
     CancelButton            *m_pCancelBtn;
     HelpButton              *m_pHelpBtn;
     PushButton              *m_pResetBtn;
@@ -151,6 +152,7 @@ private :
 
     DECL_LINK ( ChosePageHdl_Impl, void * );
     DECL_LINK(OkHdl, void *);
+    DECL_LINK(ApplyHdl, void *);
     DECL_LINK(ResetHdl, void *);
     DECL_LINK(CancelHdl, void *);
 
@@ -201,6 +203,8 @@ public :
 
     const OKButton&     GetOKButton() const { return *m_pOKBtn; }
     OKButton&           GetOKButton() { return *m_pOKBtn; }
+    const PushButton&   GetApplyButton() const { return *m_pApplyBtn; }
+    PushButton&         GetApplyButton() { return *m_pApplyBtn; }
     const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
     CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
     const HelpButton&   GetHelpButton() const { return *m_pHelpBtn; }
