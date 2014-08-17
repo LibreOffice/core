@@ -164,7 +164,7 @@ namespace dbaui
         virtual OUString SAL_CALL getDestinationTableName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL setDestinationTableName( const OUString& _destinationTableName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Optional< OUString > SAL_CALL getCreatePrimaryKey() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL getUseHeaderLineAsColumnNames() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -492,7 +492,7 @@ Optional< OUString > SAL_CALL CopyTableWizard::getCreatePrimaryKey() throw (Runt
     return m_aPrimaryKeyName;
 }
 
-void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
 

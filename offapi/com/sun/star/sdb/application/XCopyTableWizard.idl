@@ -22,8 +22,8 @@
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/sdbc/SQLException.idl>
 #include <com/sun/star/beans/Optional.idl>
-
 
 module com { module sun { module star { module sdb { module application {
 
@@ -108,7 +108,8 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
     [attribute] ::com::sun::star::beans::Optional< string >
                         CreatePrimaryKey
     {
-        set raises ( ::com::sun::star::lang::IllegalArgumentException );
+        set raises ( ::com::sun::star::lang::IllegalArgumentException,
+                     ::com::sun::star::sdbc::SQLException );
     };
 
     /** specifies that the first row should be used to identify column names.
