@@ -108,6 +108,7 @@ private:
 
 public:
     SwXTextSection &            m_rThis;
+    uno::WeakReference<uno::XInterface> m_wThis;
     const SfxItemPropertySet &  m_rPropSet;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     const bool                  m_bIndexHeader;
@@ -163,11 +164,18 @@ protected:
 void SwXTextSection::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
-    if (!GetRegisteredIn())
+    if (GetRegisteredIn())
     {
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
-        m_EventListeners.disposeAndClear(ev);
+        return; // core object still alive
     }
+
+    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
+    }
+    lang::EventObject const ev(xThis);
+    m_EventListeners.disposeAndClear(ev);
 }
 
 SwSectionFmt * SwXTextSection::GetFmt() const
@@ -194,6 +202,8 @@ SwXTextSection::CreateXTextSection(
         {
             pFmt->SetXTextSection(xSection);
         }
+        // need a permanent Reference to initialize m_wThis
+        pNew->m_pImpl->m_wThis = xSection;
     }
     return xSection;
 }
