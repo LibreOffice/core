@@ -50,7 +50,7 @@ com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL
 css::uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw();
 OUString SAL_CALL ScDocument_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface > SAL_CALL ScDocument_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, const sal_uInt64 _nCreationFlags ) throw( css::uno::Exception );
+            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, const sal_uInt64 _nCreationFlags ) throw( css::uno::Exception, std::exception );
 
 // Calc XML import
 css::uno::Sequence< OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw();
