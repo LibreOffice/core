@@ -38,11 +38,14 @@ class XStatusIndicator;
 class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_settings
 {
     ScDocumentImport& mrDoc;
+    orcus::spreadsheet::formula_grammar_t meGrammar;
 
 public:
     ScOrcusGlobalSettings(ScDocumentImport& rDoc);
 
     virtual void set_origin_date(int year, int month, int day) SAL_OVERRIDE;
+    virtual void set_default_formula_grammar(orcus::spreadsheet::formula_grammar_t) SAL_OVERRIDE;
+    virtual orcus::spreadsheet::formula_grammar_t get_default_formula_grammar() const SAL_OVERRIDE;
 };
 
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
@@ -123,6 +126,7 @@ public:
 
     virtual void set_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n) SAL_OVERRIDE;
     virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) SAL_OVERRIDE;
+    virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value) SAL_OVERRIDE;
 
     virtual void set_shared_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,

@@ -35,6 +35,16 @@ void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
     mrDoc.setOriginDate(year, month, day);
 }
 
+void ScOrcusGlobalSettings::set_default_formula_grammar(os::formula_grammar_t eGrammar)
+{
+    meGrammar = eGrammar;
+}
+
+os::formula_grammar_t ScOrcusGlobalSettings::get_default_formula_grammar() const
+{
+    return meGrammar;
+}
+
 ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t nIndex) :
     maPos(rPos), mnIndex(nIndex) {}
 
@@ -270,15 +280,17 @@ formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t 
     formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
     switch(grammar)
     {
-        case orcus::spreadsheet::ods:
+        case orcus::spreadsheet::formula_grammar_ods:
             eGrammar = formula::FormulaGrammar::GRAM_ODFF;
             break;
-        case orcus::spreadsheet::xlsx_2007:
-        case orcus::spreadsheet::xlsx_2010:
+        case orcus::spreadsheet::formula_grammar_xlsx_2007:
+        case orcus::spreadsheet::formula_grammar_xlsx_2010:
             eGrammar = formula::FormulaGrammar::GRAM_OOXML;
             break;
-        case orcus::spreadsheet::gnumeric:
+        case orcus::spreadsheet::formula_grammar_gnumeric:
             eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
+            break;
+        default:
             break;
     }
 
@@ -307,6 +319,18 @@ void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, const char* 
     }
     OUString aResult( p, n, RTL_TEXTENCODING_UTF8);
     pCell->SetHybridString(mrDoc.getDoc().GetSharedStringPool().intern(aResult));
+}
+
+void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, double value)
+{
+    ScFormulaCell* pCell = mrDoc.getDoc().GetFormulaCell(ScAddress(col, row, mnTab));
+    if (!pCell)
+    {
+        SAL_WARN("sc", "trying to set formula result for non formula \
+                cell! Col: " << col << ";Row: " << row << ";Tab: " << mnTab);
+        return;
+    }
+    pCell->SetHybridDouble(value);
 }
 
 void ScOrcusSheet::set_shared_formula(
