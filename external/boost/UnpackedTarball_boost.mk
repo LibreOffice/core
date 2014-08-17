@@ -35,13 +35,13 @@ boost_patches += boost.date_time.Wshadow.warnings.patch
 boost_patches += boost.date_time.Wunused-local-typedefs.warnings.patch
 # fixed upstream
 boost_patches += boost.math.Wdeprecated-register.patch.0
-# https://svn.boost.org/trac/boost/ticket/9884
+# fixed upstream
 boost_patches += boost.math.Wunused-local-typedefs.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9885
 boost_patches += boost.multi_array.C4510.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9886
 boost_patches += boost.multi_array.Wshadow.warnings.patch.2
-# https://svn.boost.org/trac/boost/ticket/9887
+# fixed upstream
 boost_patches += boost.multi_array.Wundef.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9888
 boost_patches += boost.multi_array.Wunused-local-typedefs.warnings.patch
@@ -76,7 +76,7 @@ boost_patches += boost.spirit.Wunused-parameter.warnings.patch
 boost_patches += boost.date_time.Wshadow.warnings.patch.1
 # fixed upstream
 boost_patches += boost.unordered.Wshadow.warnings.patch
-# https://svn.boost.org/trac/boost/ticket/9902
+# fixed upstream
 boost_patches += boost.tuple.Wunused-local-typedefs.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9903
 boost_patches += boost.utility.Wundef.warnings.patch
