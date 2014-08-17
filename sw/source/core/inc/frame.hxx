@@ -549,12 +549,12 @@ public:
     bool IsInBalancedSection() const;
 
     inline bool IsReverse() const { return mbReverse; }
-    inline void SetReverse( bool bNew ){ mbReverse; }
+    inline void SetReverse( bool bNew ){ mbReverse = bNew; }
     inline bool IsVertical() const;
 
     inline bool IsVertLR() const;
     inline bool GetVerticalFlag() const { return mbVertical; }
-    inline void SetVertical( bool bNew ){ mbVertical; }
+    inline void SetVertical( bool bNew ){ mbVertical = bNew; }
 
     inline void SetbVertLR( bool bNew ) { mbVertLR = bNew; }
     inline void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew; }
