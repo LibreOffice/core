@@ -225,6 +225,8 @@ class SectionPropertyMap : public PropertyMap
     ::com::sun::star::uno::Reference< com::sun::star::text::XTextColumns > ApplyColumnProperties(
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xFollowPageStyle, DomainMapper_Impl& rDM_Impl );
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
+    void CopyHeaderFooter( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPrevStyle,
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle );
     void PrepareHeaderFooterProperties( bool bFirstPage );
     bool HasHeader( bool bFirstPage ) const;
     bool HasFooter( bool bFirstPage ) const;
