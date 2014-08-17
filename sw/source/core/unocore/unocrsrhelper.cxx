@@ -482,7 +482,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     const uno::Reference< text::XDocumentIndexMark > xRef =
                         SwXDocumentIndexMark::CreateXDocumentIndexMark(
                             *rPam.GetDoc(),
-                            *const_cast<SwTOXType*>(rMark.GetTOXType()), rMark);
+                            const_cast<SwTOXType*>(rMark.GetTOXType()), &rMark);
                     (*pAny) <<= xRef;
                 }
             }

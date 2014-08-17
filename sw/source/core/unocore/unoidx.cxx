@@ -1184,7 +1184,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     SwTOXMark* pMark = aMarks[i];
                     pxMarks[i] = SwXDocumentIndexMark::CreateXDocumentIndexMark(
                         *m_pImpl->m_pDoc,
-                        *const_cast<SwTOXType*>(pType), *pMark);
+                        const_cast<SwTOXType*>(pType), pMark);
                 }
                 aRet <<= aXMarks;
             }
@@ -1529,6 +1529,7 @@ private:
 
 public:
 
+    uno::WeakReference<uno::XInterface> m_wThis;
     SfxItemPropertySet const&   m_rPropSet;
     const TOXTypes              m_eTOXType;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
@@ -1619,8 +1620,13 @@ void SwXDocumentIndexMark::Impl::Invalidate()
     }
     if (!m_bInReplaceMark) // #i109983# only dispose on delete, not on replace!
     {
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
-        m_EventListeners.disposeAndClear(ev);
+        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        // fdo#72695: if UNO object is already dead, don't revive it with event
+        if (xThis.is())
+        {
+            lang::EventObject const ev(xThis);
+            m_EventListeners.disposeAndClear(ev);
+        }
     }
     m_pDoc = 0;
     m_pTOXMark = 0;
@@ -1654,18 +1660,30 @@ SwXDocumentIndexMark::~SwXDocumentIndexMark()
 
 uno::Reference<text::XDocumentIndexMark>
 SwXDocumentIndexMark::CreateXDocumentIndexMark(
-        SwDoc & rDoc, SwTOXType & rType, SwTOXMark & rMark)
+        SwDoc & rDoc, SwTOXType *const pType, SwTOXMark *const pMark,
+        TOXTypes const eType)
 {
+    assert((pType != 0) == (pMark != 0));
     // re-use existing SwXDocumentIndexMark
     // NB: xmloff depends on this caching to generate ID from the address!
     // #i105557#: do not iterate over the registered clients: race condition
-    uno::Reference< text::XDocumentIndexMark > xTOXMark(rMark.GetXTOXMark());
+    uno::Reference<text::XDocumentIndexMark> xTOXMark;
+    if (pMark)
+    {
+        xTOXMark = pMark->GetXTOXMark();
+    }
     if (!xTOXMark.is())
     {
-        SwXDocumentIndexMark *const pNew =
-            new SwXDocumentIndexMark(rDoc, rType, rMark);
+        SwXDocumentIndexMark *const pNew((pMark)
+            ? new SwXDocumentIndexMark(rDoc, *pType, *pMark)
+            : new SwXDocumentIndexMark(eType));
         xTOXMark.set(pNew);
-        rMark.SetXTOXMark(xTOXMark);
+        if (pMark)
+        {
+            pMark->SetXTOXMark(xTOXMark);
+        }
+        // need a permanent Reference to initialize m_wThis
+        pNew->m_pImpl->m_wThis = xTOXMark;
     }
     return xTOXMark;
 }

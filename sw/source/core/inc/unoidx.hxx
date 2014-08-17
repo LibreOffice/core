@@ -213,15 +213,15 @@ private:
     SwXDocumentIndexMark(SwDoc & rDoc,
                 SwTOXType & rType, SwTOXMark & rMark);
 
-public:
-
     /// descriptor
     SwXDocumentIndexMark(const TOXTypes eToxType);
+
+public:
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XDocumentIndexMark>
         CreateXDocumentIndexMark(SwDoc & rDoc,
-                SwTOXType & rType, SwTOXMark & rMark);
+            SwTOXType * pType, SwTOXMark * pMark, TOXTypes eType = TOX_INDEX);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
