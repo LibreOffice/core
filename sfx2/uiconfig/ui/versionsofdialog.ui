@@ -20,6 +20,7 @@
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -99,7 +100,6 @@
                 <property name="position">5</property>
               </packing>
             </child>
-
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
@@ -329,6 +329,7 @@
       <action-widget response="0">show</action-widget>
       <action-widget response="0">delete</action-widget>
       <action-widget response="0">compare</action-widget>
+      <action-widget response="0">cmis</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
   </object>
