@@ -43,7 +43,7 @@ class GIFLZWDecompressor
     sal_uInt8               nBlockBufSize;
     sal_uInt8               nBlockBufPos;
 
-    void                AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
+    bool                AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
     bool                ProcessOneCode();
 
 public:
