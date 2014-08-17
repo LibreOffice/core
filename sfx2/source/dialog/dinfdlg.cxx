@@ -1468,13 +1468,15 @@ IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
     pLine->m_aDurationField.Show( CUSTOM_TYPE_DURATION == nType );
     pLine->m_aEditButton.Show( CUSTOM_TYPE_DURATION == nType );
     pLine->m_aYesNoButton.Show( CUSTOM_TYPE_BOOLEAN == nType );
+
     //adjust positions of date and time controls
     if ( nType == CUSTOM_TYPE_DATE )
-        pLine->m_aDateField.SetPosSizePixel(pLine->m_aValueEdit.GetPosPixel(), pLine->m_aValueEdit.GetSizePixel());
+        pLine->m_aDateField.SetSizePixel( pLine->m_aValueEdit.GetSizePixel() );
     else if ( nType == CUSTOM_TYPE_DATETIME)
     {
-        pLine->m_aDateField.SetPosSizePixel( pLine->m_aDatePos, pLine->m_aDateTimeSize );
-        pLine->m_aTimeField.SetPosSizePixel(pLine->m_aTimePos, pLine->m_aDateTimeSize );
+        // because m_aDateField and m_aTimeField have the same size for type "DateTime",
+        // we just rely on m_aTimeField here.
+        pLine->m_aDateField.SetSizePixel( pLine->m_aTimeField.GetSizePixel() );
     }
 
     return 0;
@@ -1753,10 +1755,6 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
         pCurrent++;
         pNewCurrent++;
     }
-
-    pNewLine->m_aDatePos = pNewLine->m_aDateField.GetPosPixel();
-    pNewLine->m_aTimePos = pNewLine->m_aTimeField.GetPosPixel();
-    pNewLine->m_aDateTimeSize = pNewLine->m_aDateField.GetSizePixel();
 
     double nTmpValue = 0;
     bool bTmpValue = false;

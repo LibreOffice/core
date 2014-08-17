@@ -390,10 +390,6 @@ struct CustomPropertyLine
     CustomPropertiesYesNoButton     m_aYesNoButton;
     CustomPropertiesRemoveButton    m_aRemoveButton;
 
-    Point                           m_aDatePos;
-    Point                           m_aTimePos;
-    Size                            m_aDateTimeSize;
-
     bool                            m_bIsRemoved;
     bool                            m_bTypeLostFocus;
 
