@@ -21,6 +21,7 @@
 #define __com_sun_star_sdb_tools_XDataSourceMetaData_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sdbc/SQLException.idl>
 
 module com {  module sun {  module star {  module sdb { module tools {
 
@@ -29,7 +30,7 @@ interface XDataSourceMetaData
     /** determines whether the data source supports queries in the <code>FROM</code>
         part of a <code>SELECT</code> statement.
     */
-    boolean supportsQueriesInFrom( );
+    boolean supportsQueriesInFrom() raises ( com::sun::star::sdbc::SQLException );
 };
 
 }; }; }; }; };

@@ -762,14 +762,12 @@ public class DBMetaData
         }
     }
 
-
-
-    public boolean supportsQueriesInFrom()
+    public boolean supportsQueriesInFrom() throws SQLException
     {
         return m_connectionTools.getDataSourceMetaData().supportsQueriesInFrom();
     }
 
-    public String suggestName( final int i_objectType, final String i_baseName ) throws IllegalArgumentException
+    public String suggestName( final int i_objectType, final String i_baseName ) throws IllegalArgumentException, SQLException
     {
         return m_connectionTools.getObjectNames().suggestName( i_objectType, i_baseName );
     }

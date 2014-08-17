@@ -21,6 +21,7 @@ import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sdb.CommandType;
+import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.Helper;
@@ -143,6 +144,11 @@ public class Finalizer
             return sCurQueryName;
         }
         catch (IllegalArgumentException exception)
+        {
+            exception.printStackTrace(System.err);
+            return PropertyNames.EMPTY_STRING;
+        }
+        catch (SQLException exception)
         {
             exception.printStackTrace(System.err);
             return PropertyNames.EMPTY_STRING;
