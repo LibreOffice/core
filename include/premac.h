@@ -17,18 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define Button MacOSButton
-#define Control MacOSControl
-#define Cursor MacOSCursor
-#define FontInfo MacOSFontInfo
-#define Line MacOSLine
-#define ModalDialog MacOSModalDialog
-#define Palette MacOSPalette
-#define Pattern MacOSPattern
 #define Point MacOSPoint
 #define Polygon MacOSPolygon
-#define Region MacOSRegion
-#define SetCursor MacOSSetCursor
 #define Size MacOSSize
 #define TimeValue MacOSTimeValue
 

@@ -17,18 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#undef Button
-#undef Control
-#undef Cursor
-#undef FontInfo
-#undef Line
-#undef ModalDialog
-#undef Palette
-#undef Pattern
 #undef Point
 #undef Polygon
-#undef Region
-#undef SetCursor
 #undef Size
 #undef TimeValue
 
