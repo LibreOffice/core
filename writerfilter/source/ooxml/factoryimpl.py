@@ -185,6 +185,8 @@ def createImpl(model):
     print("""namespace writerfilter {
 namespace ooxml {
 
+using namespace com::sun::star;
+
 /// @cond GENERATED
 """)
 

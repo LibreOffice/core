@@ -700,6 +700,8 @@ def createImpl(modelNode, nsName):
 namespace writerfilter {
 namespace ooxml {
 
+using namespace com::sun::star;
+
 /// @cond GENERATED""" % nsName)
     print()
 

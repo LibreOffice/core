@@ -21,17 +21,10 @@ class ContentHandler(xml.sax.handler.ContentHandler):
 #ifndef INCLUDED_OOXML_NAMESPACESIDS_HXX
 #define INCLUDED_OOXML_NAMESPACESIDS_HXX
 
-#include <map>
-#include <vector>
-#include <boost/shared_ptr.hpp>
-#include <string>
-
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <sal/types.h>
 
 namespace writerfilter {
 namespace ooxml {
-using namespace ::std;
-using namespace ::com::sun::star;
 """)
 
     def endDocument(self):
