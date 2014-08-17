@@ -377,7 +377,7 @@ namespace sdbtools
     {
     }
 
-    OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 _CommandType, const OUString& _BaseName ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 _CommandType, const OUString& _BaseName ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 

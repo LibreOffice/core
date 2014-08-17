@@ -83,7 +83,8 @@ interface XObjectNames
             if CommandType specifies an invalid command type.
     */
     string  suggestName( [in] long CommandType, [in] string BaseName )
-        raises ( com::sun::star::lang::IllegalArgumentException );
+        raises ( com::sun::star::lang::IllegalArgumentException,
+                 com::sun::star::sdbc::SQLException );
 
     /** converts the given object name to a name which is valid in the database.
 
