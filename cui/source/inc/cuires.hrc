@@ -180,9 +180,6 @@
 #define RID_SVXSTR_HYPERDLG_FORM_BUTTON     (RID_SVX_START +  813)
 #define RID_SVXSTR_HYPERDLG_FROM_TEXT       (RID_SVX_START +  814)
 
-// icon choice
-#define RID_SVXSTR_ICONCHOICEDLG_RESETBUT   (RID_SVX_START + 580)
-
 // multi path dialog
 #define RID_MULTIPATH_DBL_ERR               (RID_SVX_START + 207)
 #define RID_SVXSTR_ARCHIVE_TITLE            (RID_SVX_START + 484)
