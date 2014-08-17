@@ -1377,6 +1377,7 @@ CustomPropertyLine::CustomPropertyLine( Window* pParent ) :
     m_aEditButton(    pParent, SfxResId( SFX_PB_EDIT ), this),
     m_aYesNoButton  ( pParent, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
     m_aRemoveButton ( pParent, SfxResId( SFX_PB_PROPERTY_REMOVE ), this ),
+    m_bIsDate       ( false ),
     m_bIsRemoved    ( false ),
     m_bTypeLostFocus( false )
 
@@ -1471,11 +1472,15 @@ IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
 
     //adjust positions of date and time controls
     if ( nType == CUSTOM_TYPE_DATE )
+    {
+        pLine->m_bIsDate = true;
         pLine->m_aDateField.SetSizePixel( pLine->m_aValueEdit.GetSizePixel() );
+    }
     else if ( nType == CUSTOM_TYPE_DATETIME)
     {
         // because m_aDateField and m_aTimeField have the same size for type "DateTime",
         // we just rely on m_aTimeField here.
+        pLine->m_bIsDate = false;
         pLine->m_aDateField.SetSizePixel( pLine->m_aTimeField.GetSizePixel() );
     }
 
@@ -1711,6 +1716,10 @@ void CustomPropertiesWindow::updateLineWidth()
             pCurrent++;
             pNewCurrent++;
         }
+
+        // if we have type "Date", we use the full width, not only the half
+        if (pNewLine->m_bIsDate)
+            pNewLine->m_aDateField.SetSizePixel( pNewLine->m_aValueEdit.GetSizePixel() );
     }
 }
 
