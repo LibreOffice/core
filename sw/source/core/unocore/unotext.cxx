@@ -1670,8 +1670,9 @@ SwXText::convertToTextFrame(
             aAnchoredFrames.insert(pFrmFmt->GetName());
     }
 
-    SwXTextFrame *const pNewFrame = new SwXTextFrame(m_pImpl->m_pDoc);
-    const uno::Reference< text::XTextFrame > xNewFrame = pNewFrame;
+    const uno::Reference<text::XTextFrame> xNewFrame(
+            SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, 0));
+    SwXTextFrame *const pNewFrame = dynamic_cast<SwXTextFrame*>(xNewFrame.get());
     pNewFrame->SetSelection( aStartPam );
     try
     {

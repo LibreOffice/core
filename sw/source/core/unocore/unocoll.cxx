@@ -531,22 +531,19 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case  SW_SERVICE_TYPE_TEXTFRAME:
         {
-            SwXTextFrame* pTextFrame = new SwXTextFrame( pDoc );
-            xRet =  (cppu::OWeakObject*)(SwXFrame*)pTextFrame;
+            xRet = SwXTextFrame::CreateXTextFrame(*pDoc, 0);
         }
         break;
         case  SW_SERVICE_TYPE_GRAPHIC  :
         case  SW_SERVICE_TYPE_TEXT_GRAPHIC /* #i47503# */ :
         {
-            SwXTextGraphicObject* pGraphic = new SwXTextGraphicObject( pDoc );
-            xRet =  (cppu::OWeakObject*)(SwXFrame*)pGraphic;
+            xRet = SwXTextGraphicObject::CreateXTextGraphicObject(*pDoc, 0);
 
         }
         break;
         case  SW_SERVICE_TYPE_OLE      :
         {
-            SwXTextEmbeddedObject* pOle = new SwXTextEmbeddedObject( pDoc );
-            xRet =  (cppu::OWeakObject*)(SwXFrame*)pOle;
+            xRet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*pDoc, 0);
         }
         break;
         case  SW_SERVICE_TYPE_BOOKMARK :

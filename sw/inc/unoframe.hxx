@@ -85,6 +85,10 @@ protected:
     SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet,
                 const SfxItemPropertySet*    pPropSet);
 
+    template<class Interface, class Impl>
+    static css::uno::Reference<Interface>
+    CreateXFrame(SwDoc & rDoc, SwFrmFmt *const pFrmFmt);
+
 public:
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -163,6 +167,8 @@ class SwXTextFrame : public SwXTextFrameBaseClass,
     public SwXFrame
 {
 protected:
+    friend class SwXFrame; // just for CreateXFrame
+
     virtual const SwStartNode *GetStartNode() const SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference<
@@ -171,10 +177,11 @@ protected:
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     virtual ~SwXTextFrame();
-public:
+
     SwXTextFrame(SwDoc *pDoc);
     SwXTextFrame(SwFrmFmt& rFmt);
 
+public:
     static SW_DLLPUBLIC css::uno::Reference<css::text::XTextFrame>
             CreateXTextFrame(SwDoc & rDoc, SwFrmFmt * pFrmFmt);
 
@@ -240,10 +247,14 @@ class SwXTextGraphicObject : public SwXTextGraphicObjectBaseClass,
                             public SwXFrame
 {
 protected:
+    friend class SwXFrame; // just for CreateXFrame
+
     virtual ~SwXTextGraphicObject();
-public:
+
     SwXTextGraphicObject( SwDoc *pDoc );
     SwXTextGraphicObject(SwFrmFmt& rFmt);
+
+public:
 
     static css::uno::Reference<css::text::XTextContent>
         CreateXTextGraphicObject(SwDoc & rDoc, SwFrmFmt * pFrmFmt);
@@ -288,11 +299,14 @@ class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass,
                                 public SwXFrame
 {
 protected:
+    friend class SwXFrame; // just for CreateXFrame
+
     virtual ~SwXTextEmbeddedObject();
 
-public:
     SwXTextEmbeddedObject( SwDoc *pDoc );
     SwXTextEmbeddedObject(SwFrmFmt& rFmt);
+
+public:
 
     static css::uno::Reference<css::text::XTextContent>
         CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrmFmt * pFrmFmt);

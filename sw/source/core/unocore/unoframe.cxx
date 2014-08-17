@@ -1233,7 +1233,7 @@ SwXFrame::~SwXFrame()
 
 template<class Interface, class Impl>
 uno::Reference<Interface>
-CreateXFrame(SwDoc & rDoc, SwFrmFmt *const pFrmFmt)
+SwXFrame::CreateXFrame(SwDoc & rDoc, SwFrmFmt *const pFrmFmt)
 {
     assert(!pFrmFmt || &rDoc == pFrmFmt->GetDoc());
     uno::Reference<Interface> xFrame;
